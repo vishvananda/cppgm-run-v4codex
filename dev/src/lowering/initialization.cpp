@@ -186,8 +186,14 @@ void Procedural::object(EntityId e)
         Value base = address(location);
         construct(sem.object_constructor(e), 0, base);
     }
-    finish_full_expression(initial_live);
-    if (lifetime) live = lifetime;
+    // Initialization has succeeded. Constructor-argument temporaries are
+    // destroyed next, while this complete destination is already owned here.
+    // Earlier unwind snapshots still name the old, unconstructed prefix.
+    if (lifetime) {
+        semantic::Index retired, cache;
+        live = retire_construction(live,initial_live,retired,cache,lifetime);
+    }
+    finish_full_expression(lifetime ? lifetime : initial_live);
 }
 void Procedural::initialize(NodeId n, TypeId t, Value location)
 {

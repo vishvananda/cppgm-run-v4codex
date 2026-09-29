@@ -82,9 +82,7 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
     }
     if (action.kind == InitKind::Value) {
         if (auto ctor = sem.value_constructor(action.type)) {
-            auto saved_live = live;
             construct(ctor, 0, address(location));
-            clean_inline(live, saved_live);
         }
         else store(initialization_value(0, action.type), location);
         return;
@@ -103,12 +101,19 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
         }
         return;
     }
+    auto initial = live;
+    semantic::Index retired;
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
+        bool cleanup = sem.destructor_needed(sem.type_destructor(item.type));
+        bool later = cleanup && !sem.initializer_suffix_nonthrowing(item.next);
         if (item.count > 8 / initialization_expansion) {
             auto offset = item.index*sem.object_size(item.type);
             Value at = offset ? emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(offset)}) : base;
-            at.type = item.type; at.address = true; repeat_initializer(child, at); continue;
+            at.type = item.type; at.address = true;
+            auto count = repeat_initializer(child, at);
+            if (later) activate_subobject(item.type,address(at),count,retired);
+            continue;
         }
         auto saved_expansion = initialization_expansion;
         initialization_expansion *= item.count;
@@ -118,22 +123,26 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
             Value at = !item.field && !offset ? base : emit(index, {base.operand, Operand::integer(offset)});
             at.type = item.type; at.address = true; at.init_offset = location.init_offset+offset;
             if (sem.field_fact(item.field).bit_field) { at.bit_field = item.field; at.initializing = true; }
-            if (target.kind == TypeKind::Array && call_aggregate_helper(child, at)) continue;
-            initialize_plan(child, at);
+            auto before = live;
+            if (!(target.kind == TypeKind::Array && call_aggregate_helper(child, at))) initialize_plan(child, at);
+            bool retain = later || (cleanup && j+1 < item.count && !sem.initializer_nonthrowing(child));
+            bool defaults = target.kind == TypeKind::Array && item.kind == InitKind::Value && sem.value_constructor(item.type);
+            complete_subobject(item.type,address(at),before,retain,defaults,retired);
         }
         initialization_expansion = saved_expansion;
     }
+    if (!retired.empty()) {
+        close_expression_region(); semantic::Index cache;
+        live = retire_construction(live,initial,retired,cache);
+    }
 }
-void Procedural::aggregate_plan(std::uint32_t plan, Value root, bool indirect, std::vector<InitProjection>& path)
+void Procedural::aggregate_plan(std::uint32_t plan, Value root, bool indirect, std::vector<InitProjection>& path, Value* initialized)
 {
     auto action = sem.initializers[plan];
     auto target = sem.types[action.type];
-    if (action.kind == InitKind::Value || action.kind == InitKind::Converted) {
+    if (action.kind == InitKind::Value || action.kind == InitKind::Converted || action.kind == InitKind::Constructor) {
         Value at = initialization_address(root, indirect, path); at.type = action.type;
-        initialize_plan(plan, at); return;
-    }
-    if (action.kind == InitKind::Constructor) {
-        aggregate_initialize(action.source, action.type, root, indirect, path); return;
+        initialize_plan(plan, at); if (initialized) *initialized = at; return;
     }
     if (action.kind == InitKind::Scalar) {
         // Nested constructor aggregate bindings establish the reference member's
@@ -161,34 +170,54 @@ void Procedural::aggregate_plan(std::uint32_t plan, Value root, bool indirect, s
         }
         return;
     }
+    auto initial = live;
+    semantic::Index retired;
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
+        bool destruction = sem.destructor_needed(sem.type_destructor(item.type));
+        bool later = destruction && !sem.initializer_suffix_nonthrowing(item.next);
         if (item.count > 8 / initialization_expansion) {
             path.push_back(InitProjection(item.index*sem.object_size(item.type), false));
             Value at = initialization_address(root, indirect, path); at.type = item.type;
-            repeat_initializer(child, at); path.pop_back(); continue;
+            auto count = repeat_initializer(child, at);
+            if (later) activate_subobject(item.type,address(at),count,retired);
+            path.pop_back(); continue;
         }
         auto saved_expansion = initialization_expansion;
         initialization_expansion *= item.count;
         for (std::uint64_t j = 0; j < item.count; ++j) {
             InitProjection step(item.field ? sem.entities[item.field].member_offset : (item.index+j)*sem.object_size(item.type), item.field != 0, item.field);
             if (!item.field) { step.offset = item.index+j; step.element = item.type; }
-            path.push_back(step); aggregate_plan(child, root, indirect, path); path.pop_back();
+            bool cleanup = later || (destruction && j+1 < item.count && !sem.initializer_nonthrowing(child));
+            bool defaults = target.kind == TypeKind::Array && item.kind == InitKind::Value && sem.value_constructor(item.type);
+            Value at;
+            auto before = live;
+            path.push_back(step); aggregate_plan(child, root, indirect, path,cleanup || defaults ? &at : nullptr); path.pop_back();
+            if (cleanup || defaults) complete_subobject(item.type,address(at),before,cleanup,defaults,retired);
         }
         initialization_expansion = saved_expansion;
     }
+    if (!retired.empty()) {
+        close_expression_region(); semantic::Index cache;
+        live = retire_construction(live,initial,retired,cache);
+    }
+    if (initialized) *initialized = initialization_address(root,indirect,path);
 }
-void Procedural::repeat_initializer(std::uint32_t plan, Value location, std::uint64_t count, TypeId type)
+SlotId Procedural::repeat_initializer(std::uint32_t plan, Value location, std::uint64_t count, TypeId type)
 {
     auto action = sem.initializers[plan];
     if (!plan) { action.type = type; action.count = count; action.kind = InitKind::Value; }
     Value base = address(location);
-    if (!action.source && sem.zero_value(action.type)) {
+    if (!action.source && sem.zero_value(action.type) && (!plan || sem.constant_plan(plan))) {
         Instruction zero(Opcode::ZeroInit); zero.bytes = action.count*sem.object_size(action.type);
-        zero.alignment = sem.object_alignment(action.type); emit(zero, {base.operand}); return;
+        zero.alignment = sem.object_alignment(action.type); emit(zero, {base.operand}); return SlotId();
     }
     SlotId counter = builder->add_slot(0, IRType::I64);
     emit(Opcode::Store, IRType::I64, {Operand::integer(0), Operand::slot(counter)});
+    auto initial = live;
+    semantic::Index retired;
+    if (plan && !sem.initializer_nonthrowing(plan)) activate_subobject(action.type,base,counter,retired);
+    auto prefix = live;
     BlockId test = block(), body = block(), end = block(); jump(test); start(test);
     Value current = emit(Opcode::Load, IRType::I64, {Operand::slot(counter)});
     Value condition = emit(Opcode::Compare, IRType::I64, {current.operand, Operand::integer(action.count)}, Operation::Ult);
@@ -199,6 +228,11 @@ void Procedural::repeat_initializer(std::uint32_t plan, Value location, std::uin
     if (plan) initialize_plan(plan, at);
     else store(initialization_value(0,action.type), at);
     Value next = emit(Opcode::Binary, IRType::I64, {current.operand, Operand::integer(1)}, Operation::Add);
-    emit(Opcode::Store, IRType::I64, {next.operand, Operand::slot(counter)}); jump(test); start(end);
+    emit(Opcode::Store, IRType::I64, {next.operand, Operand::slot(counter)});
+    clean_inline(live,prefix); close_expression_region(); jump(test); start(end);
+    if (!retired.empty()) {
+        semantic::Index cache; live = retire_construction(live,initial,retired,cache);
+    }
+    return counter;
 }
 } }

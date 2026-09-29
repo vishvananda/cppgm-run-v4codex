@@ -92,17 +92,17 @@ void Procedural::initialize_closure(NodeId n, Value destination)
     }
 }
 std::uint32_t Procedural::retire_construction(std::uint32_t state, std::uint32_t stop,
-    const semantic::Index& retired, semantic::Index& cache)
+    const semantic::Index& retired, semantic::Index& cache, std::uint32_t replacement)
 {
-    if (state == stop) return stop;
+    if (state == stop) return replacement ? replacement : stop;
     if (auto known = cache.get(state)) return known-1;
     auto record = temporary_states[(state & 0x7fffffffu)-1];
-    auto tail = retire_construction(record.tail,stop,retired,cache);
+    auto tail = retire_construction(record.tail,stop,retired,cache,replacement);
     auto result = tail;
     if (!retired.get(state)) {
         if (record.selector) {
-            record.yes = retire_construction(record.yes,stop,retired,cache);
-            record.no = retire_construction(record.no,stop,retired,cache);
+            record.yes = retire_construction(record.yes,stop,retired,cache,replacement);
+            record.no = retire_construction(record.no,stop,retired,cache,replacement);
         }
         record.tail = tail; record.depth = lifetime_state(tail).depth+1;
         temporary_states.push_back(record); result = 0x80000000u | temporary_states.size();

@@ -33,6 +33,25 @@ void Procedural::constructor_cleanup(semantic::SubobjectAction action)
     if (!constructed_subobjects.empty()) emit(Opcode::EhEnd,IRType(),{});
     BlockId handler = block(); constructed_subobjects.push_back({action, handler});
     emit(Opcode::EhCleanup, IRType(), {Operand::label(handler)});
+    // The raw constructor handler changes the native region stack. Future
+    // temporary suffixes need a resume in this region, not a terminal emitted
+    // for an earlier subobject. Prefix caches already include terminal identity.
+    resume_terminal = BlockId(); resume_emitted = false;
+}
+void Procedural::finish_subobject(semantic::SubobjectAction action)
+{
+    // The destination has completed before argument-temporary destruction.
+    // Publish its constructor cleanup outside the old expression region so
+    // a throwing temporary destructor reaches the newly completed subobject.
+    bool throwing = false;
+    for (auto state = live; state; state = lifetime_state(state).tail)
+        throwing |= !sem.function_nonthrowing(lifetime_state(state).destructor);
+    if (throwing && !sem.trivial_destructor(action.type)) {
+        close_expression_region(); constructor_cleanup(action);
+        finish_full_expression(0);
+    } else {
+        finish_full_expression(0); constructor_cleanup(action);
+    }
 }
 void Procedural::finish_constructor_handlers()
 {

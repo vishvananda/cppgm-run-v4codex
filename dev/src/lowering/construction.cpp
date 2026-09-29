@@ -47,7 +47,7 @@ void Procedural::constructor_body(EntityId e, bool base)
         begin_full_expression(action.initializer);
         Value object = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         construct(m.delegated_constructor, action.initializer, object, base);
-        finish_full_expression(0); constructor_cleanup(action);
+        finish_subobject(action);
         return;
     }
     EntityId cls = sem.scopes[sem.entities[e].owner].entity;
@@ -64,14 +64,13 @@ void Procedural::constructor_body(EntityId e, bool base)
         if (t.kind == TypeKind::Array && !action.initializer) {
             array_construct(action.constructor, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
                 {{action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[cls].type,action.type), action.field != 0}});
-            finish_full_expression(0);
-            constructor_cleanup(action); continue;
+            finish_subobject(action); continue;
         }
         if (action.initializer && (t.kind == TypeKind::Array || (t.kind == TypeKind::Named && sem.entities[t.entity].class_info)) &&
             !sem.facts[action.initializer].entity) {
             std::vector<InitProjection> path(1, {action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[cls].type,action.type), action.field != 0, action.field});
             aggregate_initialize(action.initializer, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true, path);
-            finish_full_expression(0); constructor_cleanup(action); continue;
+            finish_subobject(action); continue;
         }
         bool scalar = t.kind != TypeKind::Array && !(t.kind == TypeKind::Named && sem.entities[t.entity].class_info);
         Value value;
@@ -85,7 +84,7 @@ void Procedural::constructor_body(EntityId e, bool base)
             Value at; at.type = action.type; at.bit_field = action.field; at.initializing = true;
             at.init_offset = sem.entities[action.field].member_offset;
             store_bit_field(value,at,this_slot);
-            finish_full_expression(0); constructor_cleanup(action); continue;
+            finish_subobject(action); continue;
         }
         Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
@@ -106,7 +105,7 @@ void Procedural::constructor_body(EntityId e, bool base)
             inherited_call(e,at);
         }
         else { at.address = false; construct(action.constructor, 0, at, !action.field); }
-        finish_full_expression(0); constructor_cleanup(action);
+        finish_subobject(action);
     }
     if (!vptr_written) vpointer_store(cls);
 }

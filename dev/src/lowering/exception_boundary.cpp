@@ -56,6 +56,8 @@ void Procedural::finish_exception_boundary()
         auto ptr = sem.types.compound(TypeKind::Pointer,sem.types.fundamental(FT_VOID));
         auto sig = sem.types.function(sem.types.fundamental(FT_VOID),{ptr},false);
         FunctionId owner(p.functions.size()+1); f.signature = signature(sig,owner);
+        p.signatures[f.signature.index-1].boundary.unwind = CUM_NO;
+        p.signatures[f.signature.index-1].boundary.returns = CRM_NORETURN;
         p.functions.push_back(f); linkage.terminate_adapter = f.symbol;
         auto& s = p.symbols[f.symbol.index-1]; s.kind = Symbol::FunctionSymbol; s.entity = owner.index;
         s.metadata.binding = SBM_INTERNAL;

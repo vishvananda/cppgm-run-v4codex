@@ -17,9 +17,24 @@ records the inherited completed group; current owner ledger:
 | Construction / aggregate plans and helper transfers | Selected member constructors + completed prefix → ordered construction and reverse cleanup. Work follows member edges and output, bounded array expansion. Native self pointers, throwing copies and partial construction. |
 | Deferred owners | List backing identities, nested local template bindings, source handler continuation composition; inspect while shared ownership knowledge applies. |
 
-Entry compiler and failure log frozen in `/tmp/pa21-108`; no course inputs or
-comparison rules changed. Performance will use frozen A/B, A/A and ABBA, compiler
-latency/RSS plus checked supplied-backend runtime/text evidence under spec §9.
+108 increment `2e392cec`: result ownership, explicit nonthrowing boundaries,
+empty aggregate return and `T(*this)()` prediction; **106/116**, earlier
+**3596/3596**. The next group reaches **108/116** with completed aggregate
+prefixes, conservative independent helper transfers and a proved reference
+correction. Default-argument temporary failures extend this same ownership
+transition through locals, arrays, heap arrays, members and delegation.
+
+| Extension / owner | Data flow, complexity, validation |
+|---|---|
+| `aggregate_lifetimes`, initializer plans | Typed completed subobject and persistent address → immutable cleanup prefix; retire on aggregate completion. Cached suffix exception facts avoid needless saved addresses. Bounded eight-element expansion, counted loops above the cap; nested/member/copy failure controls. |
+| `initialization`, arrays, constructor cleanup | Successful destination → cleanup owner **before** argument-temporary destruction; array default temporaries end before next element. Prefix rebase preserves published failing-constructor snapshots. Native throwing/normal controls at 1/3/8/9/32 elements. |
+| Semantic initializer independence | Completed constructor/action identity plus proof mode → cached private-object operand proof. Actual constructors preserve self pointers; aliases, side effects and potentially throwing early transfers keep ordered lowering. |
+
+Entry compiler/log frozen in `/tmp/pa21-108`; unchanged course source coverage.
+Reference correction [108](reference-corrections108.md) is independent of student
+output and follows [except.ctor]; original/revised execution and reconstruction
+will be pinned in final validation. A/B, A/A and ABBA compiler latency/RSS and
+checked runtime/size evidence are prepared under spec §9.
 
 107 entry: clean `1422565795ca5d689fe63bbfbaaba7afa0607858`, **92/116**.
 Current: **101/116**, **15 remaining**, **9 original failures resolved**.

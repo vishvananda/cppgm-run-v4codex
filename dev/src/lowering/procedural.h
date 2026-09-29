@@ -125,7 +125,9 @@ class Procedural {
     semantic::Index cleanup_index, return_terminals;
     struct Cleanup { std::uint32_t state; BlockId next, block; };
     std::vector<Cleanup> cleanup_blocks;
-    struct TemporaryState : semantic::LifetimeState { lowir_model::ValueId location; SlotId selector, constructed; std::uint32_t yes = 0, no = 0; };
+    struct TemporaryState : semantic::LifetimeState { lowir_model::ValueId location; SlotId selector, constructed, saved_location; std::uint32_t yes = 0, no = 0; TypeId destroyed_type = 0; };
+    void activate_subobject(TypeId type, Value address, SlotId count, semantic::Index& retired);
+    void complete_subobject(TypeId type, Value address, std::uint32_t before, bool retain, bool defaults, semantic::Index& retired);
     std::vector<TemporaryState> temporary_states;
     struct ExceptionContext { std::uint32_t parent = 0, live = 0; NodeId node = 0; BlockId entry; bool handler = false; };
     std::vector<ExceptionContext> exception_contexts = std::vector<ExceptionContext>(1);
@@ -164,7 +166,7 @@ class Procedural {
     void finish_full_expression(std::uint32_t stop);
     void closure_adapter(EntityId e);
     void initialize_closure(NodeId n, Value destination);
-    std::uint32_t retire_construction(std::uint32_t state, std::uint32_t stop, const semantic::Index& retired, semantic::Index& cache);
+    std::uint32_t retire_construction(std::uint32_t state, std::uint32_t stop, const semantic::Index& retired, semantic::Index& cache, std::uint32_t replacement = 0);
     Value captured_address(unsigned capture);
     void guard_expression(NodeId n, bool storage_ready = false);
     void open_expression_region();
@@ -225,6 +227,7 @@ class Procedural {
     void destroy_subobjects(EntityId e);
     void finish_constructor_handlers();
     void constructor_cleanup(semantic::SubobjectAction action);
+    void finish_subobject(semantic::SubobjectAction action);
     semantic::Index initialized_units;
     unsigned initialization_expansion = 1;
     struct InitProjection { std::uint64_t offset; bool field; EntityId entity; TypeId element = 0;
@@ -242,8 +245,8 @@ class Procedural {
     bool call_aggregate_helper(std::uint32_t plan, Value location);
     void emit_aggregate_helpers();
     void initialize_plan(std::uint32_t plan, Value location);
-    void repeat_initializer(std::uint32_t plan, Value base, std::uint64_t count = 0, TypeId type = 0);
-    void aggregate_plan(std::uint32_t plan, Value root, bool indirect, std::vector<InitProjection>& path);
+    SlotId repeat_initializer(std::uint32_t plan, Value base, std::uint64_t count = 0, TypeId type = 0);
+    void aggregate_plan(std::uint32_t plan, Value root, bool indirect, std::vector<InitProjection>& path, Value* initialized = nullptr);
     void global_plan(std::uint32_t plan);
     void global_bit_field(std::uint32_t plan, std::uint64_t& bytes);
     void global_bit_field_value(EntityId field, std::uint64_t offset, std::uint64_t value, std::uint64_t& bytes);

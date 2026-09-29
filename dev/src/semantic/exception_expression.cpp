@@ -57,6 +57,20 @@ bool Analyzer::list_nonthrowing(std::uint32_t id)
     }
     list_exception_facts.put(id,result ? 2 : 1); return result;
 }
+bool Analyzer::default_construction_nonthrowing(EntityId ctor)
+{
+    if (!ctor) return true;
+    if (auto known = default_construction_exception_facts.get(ctor)) return known == 2;
+    ++exception_work;
+    bool result = function_nonthrowing(ctor);
+    auto f = types[entities[ctor].type];
+    for (unsigned i = 0; i < f.count; ++i) {
+        Conversion c;
+        result &= expression_nonthrowing(default_argument(ctor,i,&c,DefaultReason::Recipe));
+        result &= conversion_nonthrowing(c);
+    }
+    default_construction_exception_facts.put(ctor,result ? 2 : 1); return result;
+}
 bool Analyzer::initializer_nonthrowing(std::uint32_t id)
 {
     if (!id) return true;
@@ -65,15 +79,7 @@ bool Analyzer::initializer_nonthrowing(std::uint32_t id)
     bool result = true;
     if (plan.kind == InitKind::Value) {
         auto ctor = value_constructor(plan.type);
-        if (ctor) {
-            result = function_nonthrowing(ctor);
-            auto f = types[entities[ctor].type];
-            for (unsigned i = 0; i < f.count; ++i) {
-                Conversion c;
-                result &= expression_nonthrowing(default_argument(ctor,i,&c,DefaultReason::Recipe));
-                result &= conversion_nonthrowing(c);
-            }
-        }
+        result = default_construction_nonthrowing(ctor);
     } else if (plan.kind == InitKind::Group) {
         for (auto child = plan.first; child; child = initializers[child].next) result &= initializer_nonthrowing(child);
     } else {
@@ -85,6 +91,14 @@ bool Analyzer::initializer_nonthrowing(std::uint32_t id)
         }
     }
     initializer_exception_facts.put(id,result ? 2 : 1); return result;
+}
+bool Analyzer::initializer_suffix_nonthrowing(std::uint32_t id)
+{
+    if (!id) return true;
+    if (auto known = initializer_suffix_exception_facts.get(id)) return known == 2;
+    ++exception_work;
+    bool result = initializer_nonthrowing(id) && initializer_suffix_nonthrowing(initializers[id].next);
+    initializer_suffix_exception_facts.put(id,result ? 2 : 1); return result;
 }
 bool Analyzer::expression_nonthrowing(NodeId n)
 {

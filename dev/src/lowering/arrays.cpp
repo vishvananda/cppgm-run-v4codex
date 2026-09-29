@@ -15,7 +15,44 @@ void Procedural::array_construct(EntityId ctor, TypeId t, Value root, bool indir
     while (sem.types[t].kind == TypeKind::Array) { count *= sem.types[t].bound; t = sem.types[t].child; }
     auto stride = sem.object_size(t);
     EntityId dtor = sem.type_destructor(t);
-    bool may_throw = !sem.function_nonthrowing(ctor), partial = may_throw && sem.destructor_needed(dtor);
+    bool may_throw = !sem.default_construction_nonthrowing(ctor);
+    bool temporary_defaults = false;
+    for (unsigned i = 0; i < sem.types[sem.entities[ctor].type].count; ++i)
+        temporary_defaults |= cleanup_expression(sem.default_argument_value(ctor,i));
+    if (temporary_defaults) {
+        // Default-argument temporaries and the completed element use the same
+        // immutable prefix owner. Mixing raw array regions with those suffixes
+        // would share a resume block across different protected-region stacks.
+        auto initial = live;
+        semantic::Index retired;
+        if (count <= array_unroll_limit) {
+            for (std::uint64_t j = 0; j < count; ++j) {
+                auto before = live;
+                Value at = array_element(root,indirect,path,Operand::integer(j),stride);
+                construct(ctor,0,at);
+                complete_subobject(t,at,before,j+1 < count && may_throw,true,retired);
+            }
+        } else {
+            SlotId index = builder->add_slot(0,IRType::I64);
+            emit(Opcode::Store,IRType::I64,{Operand::integer(0),Operand::slot(index)});
+            if (may_throw) activate_subobject(t,initialization_address(root,indirect,path),index,retired);
+            auto prefix = live;
+            BlockId cond = block(), body = block(), end = block(); jump(cond); start(cond);
+            Value current = emit(Opcode::Load,IRType::I64,{Operand::slot(index)});
+            Value test = emit(Opcode::Compare,IRType::I64,{current.operand,Operand::integer(count)},Operation::Ult);
+            emit(Opcode::Branch,IRType(),{test.operand,Operand::label(body),Operand::label(end)}); start(body);
+            construct(ctor,0,array_element(root,indirect,path,current.operand,stride));
+            Value next = emit(Opcode::Binary,IRType::I64,{current.operand,Operand::integer(1)},Operation::Add);
+            emit(Opcode::Store,IRType::I64,{next.operand,Operand::slot(index)});
+            clean_inline(live,prefix); close_expression_region(); jump(cond); start(end);
+        }
+        if (!retired.empty()) {
+            close_expression_region(); semantic::Index cache;
+            live = retire_construction(live,initial,retired,cache);
+        }
+        return;
+    }
+    bool partial = may_throw && sem.destructor_needed(dtor);
     bool enclosing = may_throw && live;
     auto saved_live = live;
     auto open_enclosing = [&]() {

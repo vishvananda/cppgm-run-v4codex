@@ -101,10 +101,17 @@ Value Procedural::array_new(NodeId n, const semantic::PlacementNew& use)
         Value at = emit(Opcode::Index,IRType::I8,{data.operand,offset});
         emit(Opcode::EhTry,IRType(),{Operand::label(cleanup)});
         auto saved_live = live; live = 0;
-        construct(use.constructor,0,at); clean_inline(live,0); live = saved_live;
+        construct(use.constructor,0,at);
+        bool temporaries = live != 0;
+        auto advance = [&]() {
+            Value next = emit(Opcode::Binary,IRType::I64,{current.operand,Operand::integer(1)},Operation::Add);
+            emit(Opcode::Store,IRType::I64,{next.operand,Operand::slot(index)});
+        };
+        if (temporaries) advance();
+        clean_inline(live,0); live = saved_live;
         emit(Opcode::EhEnd,IRType(),{});
-        Value next = emit(Opcode::Binary,IRType::I64,{current.operand,Operand::integer(1)},Operation::Add);
-        emit(Opcode::Store,IRType::I64,{next.operand,Operand::slot(index)}); jump(cond);
+        if (!temporaries) advance();
+        jump(cond);
         start(end); jump(continuation); start(cleanup);
         exception_clauses(exception_context,true);
         current = emit(Opcode::Load,IRType::I64,{Operand::slot(index)});

@@ -164,6 +164,7 @@ struct InitAction {
     InitKind kind = InitKind::Scalar;
     bool helper_safe = true; // Evaluating arguments cannot observe delayed destination stores.
     bool helper_copy = false; // Proven independent, trivially copyable class representation.
+    bool helper_commutes = false; // Transfer has no throwing/external effects before later clauses.
 };
 struct Entity {
     Access access = Access::Public;

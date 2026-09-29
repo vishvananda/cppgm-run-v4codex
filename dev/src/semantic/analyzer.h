@@ -109,6 +109,9 @@ public:
     EntityId bound_temporary(NodeId n) const;
     bool destructor_member(EntityId e) const;
     bool function_nonthrowing(EntityId e);
+    bool initializer_nonthrowing(std::uint32_t plan);
+    bool default_construction_nonthrowing(EntityId constructor);
+    bool initializer_suffix_nonthrowing(std::uint32_t plan);
     bool scalar_transfer_source(EntityId transfer, NodeId source) const;
     EntityId object_destructor(EntityId e) const { return object_destructors.get(e); }
     const LifetimeUse& lifetime_use(NodeId n) const { return lifetime_uses[lifetime_index.get(n)]; }
@@ -320,7 +323,9 @@ private:
     Index independent_initializers;
     std::size_t initializer_independence_work = 0, initializer_independence_hits = 0;
     bool independent_initializer(NodeId source);
-    bool independent_constructor(EntityId constructor);
+    bool independent_constructor(EntityId constructor, bool local_objects = false);
+    bool constructor_local_operand(NodeId source, EntityId constructor, bool object = false);
+    bool independent_materialization(NodeId source);
     Index initializer_index, zero_value_index, value_contexts;
     Index constant_arrays, constant_array_plans;
     Index static_initialization_facts, static_plan_facts;
@@ -468,10 +473,11 @@ private:
     bool expression_nonthrowing(NodeId node);
     bool query_nonthrowing(QueryId query, bool temporary = true);
     bool conversion_nonthrowing(Conversion conversion);
-    bool initializer_nonthrowing(std::uint32_t plan);
     bool list_nonthrowing(std::uint32_t plan);
     bool default_constructor_nonthrowing(EntityId function);
     Index expression_exception_facts, query_exception_facts, default_exception_facts, list_exception_facts, initializer_exception_facts;
+    Index initializer_suffix_exception_facts;
+    Index default_construction_exception_facts;
     std::size_t exception_work = 0;
     void require_destructor_class(EntityId cls);
     bool variant_destruction_effects(TypeId t);

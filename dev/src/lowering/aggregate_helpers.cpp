@@ -79,17 +79,24 @@ bool Procedural::call_aggregate_helper(std::uint32_t plan, Value location)
     // distinct object storage, but there is no helper body or call to emit.
     if (!action.first) return true;
     bool all = full_parameters(sem,plan);
+    bool transfer = false;
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
         if (!item.field) return false;
         // A by-value class argument is initialized before the helper call.
         // Its transfer into the member must precede later initializer clauses.
-        // Keep the established single trailing transfer ABI; interleaved or
-        // multiple class members use their ordered destination construction.
-        if (item.helper_transfer && item.next) return false;
+        // A transfer may precede later clauses only with a checked proof that
+        // it cannot throw or publish observable effects outside these objects.
+        if (item.helper_transfer && item.next && !item.helper_commutes) return false;
+        transfer |= item.helper_transfer && !sem.trivial_destructor(item.type);
         if (array_parameter(item.type)) continue;
         if ((!type(item.type).scalar() && !item.helper_transfer && !item.helper_copy) ||
             (item.kind != InitKind::Scalar && item.kind != InitKind::Converted && !(all && item.kind == InitKind::Value))) return false;
+    }
+    if (transfer) {
+        // The helper owns destructible by-value parameters. Retain the O0
+        // protected argument boundary, including an empty caller live prefix.
+        full_expression.enabled = true; open_expression_region();
     }
     SymbolId callee = aggregate_helper(plan);
     std::size_t begin = call_work.size();
@@ -137,6 +144,8 @@ void Procedural::emit_aggregate_helpers()
                 activate_temporary(action.helper_parameter);
             } else emit(Opcode::Store, parameter.type, {Operand::value(parameter.value), Operand::slot(slot)});
         }
+        auto parameters = live;
+        semantic::Index retired;
         for (unsigned j = 0; j < helper.count; ++j) {
             auto action = sem.initializers[aggregate_actions[helper.actions+j]];
             EntityId field = action.field; TypeId t = action.type;
@@ -172,8 +181,33 @@ void Procedural::emit_aggregate_helpers()
                     guarded_call(Instruction(Opcode::Call,IRType::Void),call_work.data()+begin,call_work.size()-begin); call_work.resize(begin);
                 }
             } else store(value, at);
+            if (!sem.initializer_suffix_nonthrowing(action.next))
+                activate_subobject(t,address(at),SlotId(),retired);
         }
-        clean_inline(live,0); emit(Opcode::Return, IRType(), {}); emit_cleanups(); builder.reset();
+        if (!retired.empty()) {
+            close_expression_region(); semantic::Index cache;
+            live = retire_construction(live,parameters,retired,cache);
+        }
+        // The aggregate is complete, but argument destruction can still fail
+        // before this helper returns ownership to its caller.
+        auto temporaries = live; live = 0;
+        bool throwing_cleanup = false;
+        for (unsigned j = 0; j < helper.count; ++j) {
+            auto item = sem.initializers[aggregate_actions[helper.actions+j]];
+            throwing_cleanup |= item.helper_parameter && !sem.function_nonthrowing(sem.object_destructor(item.helper_parameter));
+            throwing_cleanup |= item.helper_transfer && sem.types[sem.entities[item.helper_transfer].type].count > 1;
+        }
+        if (temporaries && throwing_cleanup && sem.destructor_needed(sem.type_destructor(helper.type))) {
+            Value target = emit(Opcode::Load,IRType::Ptr,{Operand::slot(slots[0])});
+            activate_subobject(helper.type,target,SlotId(),retired);
+        }
+        auto completed = live;
+        if (temporaries) {
+            semantic::Index empty, cache;
+            live = retire_construction(temporaries,0,empty,cache,completed);
+        }
+        clean_inline(live,completed); live = 0;
+        emit(Opcode::Return, IRType(), {}); emit_cleanups(); builder.reset();
     }
 }
 } }

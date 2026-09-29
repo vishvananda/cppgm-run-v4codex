@@ -37,7 +37,7 @@ cases.update({
  'nrvo_const_object':'int live,copies;struct R{R(){++live;}R(const R&){++live;++copies;}~R(){--live;}};R f(){const R r;return r;}int main(){{R r=f();if(live!=1||copies)return 1;}return live;}',
  'nrvo_polymorphic':'int live,copies;struct R{R(){++live;}R(const R&){++live;++copies;}virtual ~R(){--live;}virtual int f(){return 7;}};R f(){R r;return r;}int main(){{R r=f();if(live!=1||copies||r.f()!=7)return 1;}return live;}',
 })
-for name in ('100-nested-class-template-local-class-argument','200-class-value-argument-transfers-caller-cleanup','200-hidden-eh-const-ref-bound-temp-dtor','200-empty-aggregate-return-through-switch'):
+for name in ('100-nested-class-template-local-class-argument','200-class-value-argument-transfers-caller-cleanup','200-hidden-eh-const-ref-bound-temp-dtor','200-empty-aggregate-return-through-switch','200-aggregate-nontrivial-members-use-constructors'):
  cases[name]=(ROOT/'pa21/tests/general'/ (name+'.t')).read_text()
 cases.update({
  'temporary_dereferenced_this':'int count;struct G{int n;G(int v):n(v){}struct Call{G&g;Call(G&x):g(x){}void operator()(){count+=g.n;}};void f(){Call(*this)();}};int main(){G g(7);g.f();return count!=7;}',
@@ -57,6 +57,37 @@ cases.update({
  'aggregate_lvalue_copy_prefix':'int live,copies,trace;struct M{int n;M(int n):n(n){++live;}M(const M&m):n(m.n){if(++copies==3)throw 7;++live;}~M(){--live;trace=trace*10+n;}};struct A{M a,b,c;};int main(){M x(1),y(2),z(3);try{A a={x,y,z};}catch(int n){return n!=7||live!=3||trace!=21;}return 1;}',
  'aggregate_nested_prefix':'int live,trace;struct M{int n;M(int n):n(n){if(n==4)throw n;++live;}~M(){--live;trace=trace*10+n;}};struct B{M a,b;};struct A{B a,b;};int main(){try{A a={{M(1),M(2)},{M(3),M(4)}};}catch(int n){return n!=4||live||trace!=321;}return 1;}',
 })
+cases.update({
+ 'aggregate_alias_later_initializer':'struct M{int n;M(int x)noexcept:n(x){}M(const M&m)noexcept:n(m.n){}~M(){}};struct A{M first;int next;};int main(){A a={M(7),a.first.n};return a.next!=7;}',
+ 'aggregate_alias_source_pointer':'struct M{int n;M(int*p)noexcept:n(*p){}M(const M&m)noexcept:n(m.n){}~M(){}};struct A{int n;M m;};int main(){A a={7,M(&a.n)};return a.m.n!=7;}',
+ 'aggregate_copy_effect_order':'int seen;struct M{int n;M(int x)noexcept:n(x){}M(const M&m)noexcept:n(m.n){++seen;}~M(){}};struct A{M first;int next;};int main(){A a={M(7),seen};return a.next!=seen;}',
+ 'aggregate_constructor_temporary_failure':'int live;struct G{~G()noexcept(false){throw 7;}};struct M{M(const G& g=G()){++live;}~M(){--live;}};struct A{M m;};int main(){try{A a{};}catch(int n){return n!=7||live;}return 1;}',
+ 'local_constructor_temporary_failure':'int live;struct G{~G()noexcept(false){throw 7;}};struct M{M(const G& g=G()){++live;}~M(){--live;}};int main(){try{M m;}catch(int n){return n!=7||live;}return 1;}',
+})
+for count in (1,3,8,9,32):
+ for fail in (False,True):
+  source='int live,temps,made,bad;struct G{G(){++temps;}~G()noexcept(false){--temps;'+('throw 7;' if fail else '')+'}};'
+  source+='struct M{M(const G&g=G()){if(temps!=1)bad=1;++live;++made;}~M(){--live;}};struct A{M m['+str(count)+'];};'
+  source+='int main(){try{A a{};}catch(int n){return n!=7||live||temps||made!=1||bad;}return '+('1' if fail else 'live||temps||bad||made!='+str(count))+';}'
+  cases['array_default_temporary_%s_%s'%(count,'throws' if fail else 'order')]=source
+  cases['local_array_default_temporary_%s_%s'%(count,'throws' if fail else 'order')]=source.replace('A a{};','M a['+str(count)+'];')
+  cases['heap_array_default_temporary_%s_%s'%(count,'throws' if fail else 'order')]=source.replace('A a{};','M*p=new M['+str(count)+'];delete[]p;')
+  cases['member_array_default_temporary_%s_%s'%(count,'throws' if fail else 'order')]=source.replace('};int main(){try{A a{};','A(){}};int main(){try{A a;')
+cases['member_constructor_temporary_failure']=cases['aggregate_constructor_temporary_failure'].replace('struct A{M m;};','struct A{M m;A(){}};')
+cases['delegated_constructor_temporary_failure']='int live;struct G{~G()noexcept(false){throw 7;}};struct A{A(const G&g){++live;}A():A(G()){}~A(){--live;}};int main(){try{A a;}catch(int n){return n!=7||live;}return 1;}'
+for name,source in list(cases.items()):
+ if 'default_temporary' in name and name.endswith('_throws') and '_3_' in name:
+  cases[name+'_noexcept_constructor']=source.replace('M(const G&g=G()){','M(const G&g=G())noexcept{')
+cases['aggregate_helper_throwing_later_copy']='int drops;struct X{int n;X(int x)noexcept:n(x){}X(const X&x)noexcept:n(x.n){}~X(){++drops;}};struct Y{Y(int)noexcept{}Y(const Y&){throw 7;}~Y(){}};struct A{X x;Y y;};A make(){return {X(1),Y(2)};}int main(){try{A a=make();}catch(int n){return n!=7||drops!=2;}return drops!=1;}'
+for count in (3,9):
+ for fail in (2,count):
+  for mode in ('argument','destructor'):
+   source='int live,temps,made,calls,drops;struct G{G(){'+('if(++calls=='+str(fail)+')throw 7;' if mode=='argument' else '')+'++temps;}~G()noexcept(false){--temps;'+('if(++drops=='+str(fail)+')throw 7;' if mode=='destructor' else '')+'}};struct M{M(const G&g=G()){++live;++made;}~M(){--live;}};struct A{M m['+str(count)+'];};'
+   source+='int main(){try{A a{};}catch(int n){return n!=7||live||temps||made!='+str(fail-(mode=='argument'))+';}return 1;}'
+   for kind,body in (('aggregate','A a{};'),('local','M a['+str(count)+'];'),('heap','M*p=new M['+str(count)+'];delete[]p;')):
+    cases['array_default_prefix_%s_%s_%s_%s'%(count,fail,mode,kind)]=source.replace('A a{};',body)
+   if count==3:
+    cases['member_default_prefix_%s_%s'%(fail,mode)]=source.replace('struct A{M m[3];};','struct A{M a,b,c;A(){}};').replace('A a{};','A a;')
 rows=[]
 def run(cmd):
  try:

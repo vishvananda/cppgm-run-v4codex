@@ -110,13 +110,17 @@ void Procedural::merge_temporaries(std::uint32_t common, std::uint32_t yes, std:
 void Procedural::destroy_lifetime(std::uint32_t id)
 {
     auto action = lifetime_state(id);
-    if (action.object) {
-        if (!emitting_cleanup && action.object == returning_object) return;
-        auto temporary = id & 0x80000000u ? temporary_states[(id & 0x7fffffffu)-1] : TemporaryState();
+    auto temporary = id & 0x80000000u ? temporary_states[(id & 0x7fffffffu)-1] : TemporaryState();
+    if (action.object || temporary.destroyed_type) {
+        if (!emitting_cleanup && returning_object && action.object == returning_object) return;
         auto location = temporary.location;
+        if (temporary.saved_location)
+            location = lowir_model::ValueId(emit(Opcode::Load,IRType::Ptr,{Operand::slot(temporary.saved_location)}).operand.ref);
+        auto type = temporary.destroyed_type ? temporary.destroyed_type : sem.entities[action.object].type;
         if (temporary.constructed) {
-            auto leaf = sem.entities[action.object].type;
-            while (sem.types[leaf].kind == TypeKind::Array) leaf = sem.types[leaf].child;
+            auto leaf = type;
+            if (!temporary.destroyed_type)
+                while (sem.types[leaf].kind == TypeKind::Array) leaf = sem.types[leaf].child;
             auto test = block(), body = block(), end = block(); jump(test); start(test);
             auto count = emit(Opcode::Load,IRType::I64,{Operand::slot(temporary.constructed)});
             auto more = emit(Opcode::Compare,IRType::I64,{count.operand,Operand::integer(0)},Operation::Ne);
@@ -127,7 +131,7 @@ void Procedural::destroy_lifetime(std::uint32_t id)
             destroy(action.destructor,leaf,array_element(Value(Operand::value(location),IRType::Ptr),false,{},next.operand,sem.object_size(leaf)));
             jump(test); start(end); return;
         }
-        if (location) destroy(action.destructor,sem.entities[action.object].type,Value(Operand::value(location),IRType::Ptr));
+        if (location) destroy(action.destructor,type,Value(Operand::value(location),IRType::Ptr));
         else destroy_object(action.object,action.destructor);
         return;
     }

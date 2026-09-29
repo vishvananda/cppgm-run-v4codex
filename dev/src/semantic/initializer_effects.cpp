@@ -1,13 +1,13 @@
 #include "semantic/analyzer.h"
 namespace cppgm { namespace semantic {
-bool Analyzer::independent_constructor(EntityId ctor)
+bool Analyzer::independent_constructor(EntityId ctor, bool local_objects)
 {
     auto m = members[entities[ctor].member_info];
     // Only completed bodies/actions are stable facts. An unavailable body is
     // a conservative answer for this use, not a cached negative fact.
     if (entities[ctor].body_state != FactState::Success || m.actions_state != FactState::Success)
         return false;
-    auto identity = (std::uint64_t(1) << 63) | ctor;
+    auto identity = (std::uint64_t(1) << 63) | (std::uint64_t(local_objects) << 62) | ctor;
     if (auto known = independent_initializers.get(identity)) { ++initializer_independence_hits; return known == 2; }
     ++initializer_independence_work;
     using syntax::Kind;
@@ -22,10 +22,54 @@ bool Analyzer::independent_constructor(EntityId ctor)
         while (ast[source].kind == Kind::Initializer || ast[source].kind == Kind::ParenInitializer ||
             ast[source].kind == Kind::ParenArguments || ast[source].kind == Kind::BracedInit)
             source = ast[source].first;
-        safe &= independent_initializer(source);
+        safe &= independent_initializer(source) || (local_objects && constructor_local_operand(source,ctor));
     }
     independent_initializers.put(identity,safe ? 2 : 1);
     return safe;
+}
+bool Analyzer::constructor_local_operand(NodeId n, EntityId ctor, bool object)
+{
+    using syntax::Kind;
+    auto x = expressions[n];
+    if (!x.ready || x.form != ExpressionForm::Ordinary || (types[x.type].cv & 2)) return false;
+    auto c = conversions[x.incoming];
+    if (c.function || (c.kind != Conversion::Kind::Standard && c.kind != Conversion::Kind::Explicit)) return false;
+    switch (ast[n].kind) {
+    case Kind::IdExpression:
+        return (entities[x.entity].kind == EntityKind::Parameter && entities[x.entity].owner == entities[ctor].scope &&
+            (object || !class_value(x.type))) ||
+            (nonstatic_field(x.entity) && entities[x.entity].owner == entities[ctor].owner);
+    case Kind::KeywordLiteral: return object && ast[n].op == KW_THIS;
+    case Kind::Member:
+        // A direct member of the fresh source object, or of this destination,
+        // is private construction state. Following an arbitrary pointer is not.
+        if (ast[n].op == OP_ARROW && ast[ast[n].first].op != KW_THIS) return false;
+        return nonstatic_field(x.entity) && constructor_local_operand(ast[n].first,ctor,true);
+    case Kind::Unary:
+        if (ast[n].op == OP_AMP) return constructor_local_operand(ast[n].first,ctor,true);
+        if (ast[n].op != OP_PLUS && ast[n].op != OP_MINUS && ast[n].op != OP_COMPL && ast[n].op != OP_LNOT) return false;
+        // fall through
+    case Kind::Parenthesized: case Kind::Binary: case Kind::Conditional:
+        for (unsigned i = 0; i < x.count; ++i) {
+            auto c = conversions[x.conversions+i];
+            if (c.function || c.kind != Conversion::Kind::Standard) return false;
+        }
+        for (auto child = ast[n].first; child; child = ast[child].next)
+            if (!independent_initializer(child) && !constructor_local_operand(child,ctor,object)) return false;
+        return true;
+    default: return false;
+    }
+}
+bool Analyzer::independent_materialization(NodeId n)
+{
+    if (independent_initializer(n)) return true;
+    auto x = expressions[n]; auto ctor = facts[n].entity;
+    if (x.form != ExpressionForm::Construction || !independent_constructor(ctor,true)) return false;
+    for (unsigned i = 0; i < x.argument_count; ++i) {
+        auto c = conversions[x.conversions+i];
+        if (c.kind != Conversion::Kind::Standard || c.function || !independent_initializer(call_argument(x,i))) return false;
+    }
+    return true;
 }
 bool Analyzer::independent_initializer(NodeId n)
 {

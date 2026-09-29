@@ -301,7 +301,10 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
                 item.helper_parameter = conversion_objects[selected.materialization].temporary;
                 demand_member(item.helper_transfer);
                 prepare_value_boundary(item.type);
-                item.helper_safe = independent_initializer(item.source);
+                item.helper_safe = independent_materialization(item.source);
+                item.helper_commutes = function_nonthrowing(item.helper_transfer) &&
+                    conversion_objects[selected.materialization].call.argument_count == 1 &&
+                    independent_constructor(item.helper_transfer,true);
             }
             root.helper_safe &= item.helper_safe;
             auto next = initializers.size(); initializers.push_back(item);
