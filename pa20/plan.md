@@ -1,79 +1,76 @@
-# PA20 implementation plan — implementation 95
+# PA20 implementation plan — handoff 95
 
 Stage base commit: `a9b24ab68f1a75288df10161cb171fa239e1409a`.
 Last reviewed commit: `a9b24ab68f1a75288df10161cb171fa239e1409a`.
-Target: **PA20 full-stage**. Phase: **implementation; stage incomplete**.
-Turn entry: `ef897177cd34e8bf1e878a7eb94208237240c0f1`, **91/144 pass,
-53 failures**; PA1–19 and file audit pass. Previous turn made verified progress
-(18 original failures fixed); no background process is assumed live.
+Target: **PA20 full-stage**. Phase: **implementation handoff; stage incomplete**.
+Turn entry: `ef897177cd34e8bf1e878a7eb94208237240c0f1`, **91/144**,
+53 failures. Previous turn made verified progress (18 original failures fixed);
+its [ledger](../student.tests/pa20/validation94.json) remains preserved.
 
-Current group: range statements. Owner: semantic range plan keyed by source
-occurrence/enclosing specialization. Data flow: one checked range initializer →
-hidden range/iterator identities, selected member-or-ADL calls and conversions,
-iteration binding and lexical lifetime facts → direct typed LowIR. Work budget:
-constant plan size per loop plus actual overload candidates and initializer/body
-work; no rewritten syntax or repeated lowering lookup. Validate arrays/lists,
-references/value categories, member/ADL/inherited lookup, template composition,
-single evaluation and normal/abrupt lifetime exits. Extend related initialization
-and closure composition defects as this owner exposes them. Freeze entry binary
-at `/tmp/pa20-entry95-cppgm`; collect compiler and native evidence before handoff.
+## Design/spec alignment and remaining groups
 
-## Design and remaining groups
-
-| Owner | Data flow / complexity | Validation |
+| Owner | Data flow / complexity | Validation / remaining implementation |
 |---|---|---|
-| Placeholder deduction (implemented) | Source declarator + checked initializer/returns → canonical type → recorded conversions; function/specialization body state owns recursion/failure, cached type predicate, O(returns + type shape) work | Ordinary/member/template/lambda returns, pointer/reference/cv/collapse, addresses, constexpr obligations, recursive/conflicting returns, condition declarations |
-| Expression initialization / conversion (implemented) | Clauses → completed canonical array type and typed list plan; one constructor selection before aggregate fallback; selected modifiable-reference conversion + computation type → direct LowIR | Unknown-bound/nested/pack/string array expressions, unevaluated queries, aggregate construction, alias conversion using-declarations, prefix/postfix including volatile/pointer results |
-| Aggregate helpers / initialization shape (partly implemented) | Scalar helper key = target + explicit prefix; transfer helper key = full semantic plan. O(fields), at most fields+1 scalar shapes per target; existing array expansion budget remains 8 | Distinct omitted prefixes pass; remaining nested-array/member-transfer/constant-image LowIR contracts need separate emission work |
-| Range statements (unfinished) | Range fact owns single evaluation, begin/end selection, iterator operations, iteration variable and lifetimes; typed operations must feed lowering without fake syntax | Arrays/lists/member/ADL/inherited ranges; references, prvalue lifetime, template composition |
-| Closures (unfinished) | Source occurrence + enclosing specialization → closure identity, captures/call/conversion/ABI facts → helper emission | Captures including nested this/local, return deduction, defaults, special members, local statics, helper shape |
-| Retained declarations / lifecycle (unfinished) | Complete enclosing environment → declaration/probe fact → local lifecycle validation; reuse by complete context | Dependent-owner lifecycle and repeated local declaration probes |
+| Placeholder deduction and expression conversion (handoff 94) | Checked initializer/returns → canonical type/conversions → direct LowIR; cached facts by complete semantic identity | [Evidence](performance94.md); inherited controls rerun |
+| Range statements (implemented) | Source occurrence/context → single initializer, canonical range/iterator identities, selected operations/conversions and lexical lifetimes → direct LowIR; O(body + initializer + required candidates), constant-size loop plan | All range fixtures; arrays/lists/member/ADL/inherited lookup, value/ref/cv, single evaluation, defaults, class iterators, normal/abrupt exits, reference-created temporaries, lambda/template composition |
+| Fixed template ranges (implemented) | One source recipe owns nondependent endpoint/operator selections; concrete occurrences create only storage/demand/lifetime facts; flat source/occurrence indices | Definition-time rejection, shared fixed facts, dependent range demand, one body per specialization; measured 2n+2 candidate work for member-range workloads |
+| Aggregate initialization helpers (unfinished: 3 failures) | Existing typed member plans need array-argument and nontrivial member-transfer helper emission, including omitted class tails; preserve earlier helper contracts | Nested array-member aggregate fixture, braced aggregate return copies, omitted class tail |
+| Closures (unfinished: 29 failures) | Occurrence + enclosing specialization → closure capture/access/special-member/default/static facts → callable/conversion helpers | Local/this/nested captures, defaults, traits/assignment, context/access/pack composition, local statics, remaining helper shapes |
+| Retained declarations/lifecycle (unfinished: 2 failures) | Complete enclosing environment → retained local declaration/probe → lifecycle checking | Dependent-owner lifecycle and repeated local declaration probe |
 
-Extended the deduction owner through array/aggregate operand construction and
-selected lvalue conversions. Existing typed graph,
-canonical IDs, scoped fact caches and direct LowIR remain the production path.
-No references, fixtures, statuses or comparison rules changed. All 637 tracked
-contract/harness files match stage base, including all 144 stage inputs.
+No parser rewrite, synthesized source graph, textual phase transport or lowering
+lookup was added. New sources are registered in `dev/frontend_source_sets.mk`.
+The [reference correction proof](reference-corrections95.md) and independent
+[reconstruction](../student.tests/pa20/reference95.py) carry forward PA16's
+mandatory readonly-array representation in eleven oracles. All 144 source
+inputs and statuses, all comparison rules and all other contract files remain
+unchanged. This is a documented course-contract correction, not a claim that
+ordinary element stores violate C++.
 
-## Performance and handoff ledger
+## Performance evidence and handoff ledger
 
-Frozen entry binary `/tmp/pa20-entry-cppgm` (SHA256
-`1a181c95ee97d646d41c1009780200049e776d67e1d715840d5526b3d10e1d40`).
-[Performance and source-to-native evidence](performance94.md) retains all A/A
-and ABBA observations, compiler latency/RSS and checked runtime/payload sizes.
-Final compiler SHA256 `29cfe4f4ced25eabdc3d652a91b275c74455f855a090029d3497207ed88bf5bc`;
-text +6,336 bytes (0.316%). Eight comparable native files are byte-identical.
-Final 9,600-specialization compiler medians 632/664 ms, peak RSS 107,016/106,012
-KiB; noisy paired ratios 0.926–1.060. Body checks remain n+1, deductions n,
-placeholder-type work 2. No general speedup is claimed. Required semantic costs
-are bounded; no optional optimizer is added. Inherited percentage diagnostics
-are not extra PA20 gates under spec §9; mandated limits remain in force.
+[Performance/architecture evidence](performance95.md) retains frozen binaries,
+432 observations, 48 warmups, compiler latency/RSS, native runtime/payload size
+and a source-to-native trace. Final compiler text grows 48,576 bytes (2.414%).
+All nine comparable native files are byte-identical. The 9,600-specialization
+common compiler medians are 834.15/713.17 ms and peak RSS 105,728/105,876 KiB;
+substantial timing noise and two earlier full runs remain disclosed. New 800/3,200 member-range compiler medians
+are 179.61/693.51 ms, with one source recipe, n concrete plans and n+3 body checks.
+No speedup is claimed. Required costs are bounded; no optional optimizer is
+added. Spec §9 stage scoping applies; inherited percentage diagnostics are not
+extra gates. Required limits and earlier evidence are preserved.
 
-`dbd1a8f6` implements placeholder return facts, including shared lambda returns.
-`df239d8e` extends typed array/list construction, functional aggregate fallback,
-selected increment/decrement conversions, using lookup and scalar helper keys.
-`0dd795a1` removes scratch substitution tables for bare value placeholders.
-This evidence commit records the validated handoff and unchanged coverage.
-[Required checks](../student.tests/pa20/validation94.json): personal controls
-**83/83** (59 native, 24 required rejections), plus a native architecture trace.
-`make test-pa20`: **91/144**, exit 2; through report:
-**3543/3596**, all **3452 earlier tests pass**, PA20 **91/144** (53 failures,
-18 original failures fixed, no new failures). File audit passes with three
-inherited header warnings. Stage-progress criterion passes; the full stage does not.
+- `2cbd6b8d`: typed range operations, single-evaluation storage, lexical cleanup,
+  native controls, and independently reconstructed array-contract corrections.
+- `14fff139`: fixed source range recipes, definition-time checking, conversion-
+  created reference lifetimes, and bounded recipe application.
+- `58c89851`: implicit iterator increment consumes the selected pointer or
+  arithmetic computation type, including bool and volatile arithmetic.
+- `fe0c1722`: class-valued conversion results construct directly in their
+  iteration variable, preserving self-pointers and destruction count.
+- Final evidence commit: [validation ledger](../student.tests/pa20/validation95.json),
+  compiler/native measurements, trace, unchanged-coverage proof and this boundary.
 
-Remaining failures by owner: **17 ranges, 29 closures, 5 initialization output
-contracts, 2 retained-declaration/lifecycle cases**. Exact names and the original
-failure-set comparison are in the validation ledger; these are implementation work.
+Required checks: `make test-pa20` **110/144** (exit 2); PA1–19 **3452/3452**;
+through-PA20 **3562/3596** (exit 2); file audit passes with three inherited header
+warnings. **19 original failures removed, no new failures**, with no reduced
+coverage (eight retain original oracles; eleven use the documented contract
+corrections). Personal controls: **136/136** (83 inherited + 53 range), plus native
+oracle/reducer checks and the architecture trace. Stage progress passes; the
+whole stage and full through-PA20 gate do not yet pass.
 
-Handoff boundary: the completed type/conversion owners have native and rejection
-controls. Range-for has no semantic/lowering owner yet; captures require new
-closure environment/lifetime facts; remaining initialization shape requires
-separate aggregate transfer/array image emission decisions. Broadening scalar
-helpers into value initialization caused an earlier-PA regression during work;
-that extension was removed and the earlier suite revalidated. More shortcuts
-in deduction/conversion cannot supply these missing owners and their lifetime/
-output contracts. Full through-PA20 remains required before stage advancement.
+Handoff boundary: range behavior, fixed/dependent template formation, implicit
+conversion lifetimes and related scalar-array representation are implemented
+and validated. The remaining groups require closure environment/access and
+special-member ownership, aggregate helper argument/transfer ABI work, or
+retained-declaration context handling. They cannot be supplied by further
+range-operation or loop cleanup changes. Full-stage implementation continues
+with those owners; this boundary does not waive any remaining failure.
 
-Independent review remains pending for all three implementation commits, including
-placeholder demand in unevaluated contexts, query/source parity, helper keys and
-performance evidence. The preserved review marker does not waive any finding.
+Independent review remains pending for all four new implementation commits and
+handoff 94's `dbd1a8f6`, `df239d8e`, `0dd795a1`. Review should assess fixed range
+recipe keys/demand, implicit conversion lifetime and ABI consumption, reference
+proofs, stage-scoped performance evidence, and the prior deduction/helper
+questions. These are independent review obligations, distinct from the 34
+known unfinished implementation cases. Both review markers stay unchanged;
+whole-stage audit and a passing through report remain required for advancement.

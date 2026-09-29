@@ -1,0 +1,306 @@
+{
+  "base": "a9b24ab68f1a75288df10161cb171fa239e1409a",
+  "entry": "ef897177cd34e8bf1e878a7eb94208237240c0f1",
+  "compiler_sha256": "4c711932525cd7afa0d8b673e897c03f69183d0f1d89b8ee3a3b38b746854c4c",
+  "checks": {
+    "stageTests": {
+      "command": [
+        "make",
+        "test-pa20"
+      ],
+      "exit": 2,
+      "elapsed_s": 6.386987403035164,
+      "log": "/tmp/pa20-validation95/stageTests.log",
+      "log_sha256": "3e9aa89e2a3645464aa62abfabee54d8aab40a833f76e1bf8b17658295b77c88",
+      "summaries": [
+        "===== pa20 =====",
+        "===== TEST SUMMARY: 110 / 144 TESTS PASSED ====="
+      ]
+    },
+    "priorThroughTests": {
+      "command": [
+        "bash",
+        "-c",
+        "n=20; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi"
+      ],
+      "exit": 0,
+      "elapsed_s": 15.305905174463987,
+      "log": "/tmp/pa20-validation95/priorThroughTests.log",
+      "log_sha256": "f1be13783d841578b22047536c434ff801099c16cc99c4cf6a08b5d0dff5492b",
+      "summaries": [
+        "===== pa1 =====",
+        "===== pa2 =====",
+        "===== pa3 =====",
+        "===== pa4 =====",
+        "===== pa5 =====",
+        "===== pa6 =====",
+        "===== pa7 =====",
+        "===== pa8 =====",
+        "===== pa9 =====",
+        "===== pa10 =====",
+        "===== pa11 =====",
+        "===== pa12 =====",
+        "===== pa13 =====",
+        "===== pa14 =====",
+        "===== pa15 =====",
+        "===== pa16 =====",
+        "===== pa17 =====",
+        "===== pa18 =====",
+        "===== pa19 =====",
+        "===== ALL TESTS PASSED SUCCESSFULLY! (3452 / 3452) ====="
+      ]
+    },
+    "fileAudit": {
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa20",
+        "--paths",
+        "dev/src"
+      ],
+      "exit": 0,
+      "elapsed_s": 3.0611401461064816,
+      "log": "/tmp/pa20-validation95/fileAudit.log",
+      "log_sha256": "9b824c1e52998daec991a8fc1fafe55b56a0c83cc6d56b6592f66b02bae9fc7d",
+      "summaries": [
+        "File audit passed for pa20 with 3 warning(s).",
+        "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+      ]
+    },
+    "throughPA20": {
+      "command": [
+        "make",
+        "test-report-through-pa20"
+      ],
+      "exit": 2,
+      "elapsed_s": 10.271952161565423,
+      "log": "/tmp/pa20-validation95/throughPA20.log",
+      "log_sha256": "802412d38ef10d77982cc8944ce0fe9b3039ec200eacbe8c97186e3e5d3c1df5",
+      "summaries": [
+        "===== pa1 =====",
+        "===== pa2 =====",
+        "===== pa3 =====",
+        "===== pa4 =====",
+        "===== pa5 =====",
+        "===== pa6 =====",
+        "===== pa7 =====",
+        "===== pa8 =====",
+        "===== pa9 =====",
+        "===== pa10 =====",
+        "===== pa11 =====",
+        "===== pa12 =====",
+        "===== pa13 =====",
+        "===== pa14 =====",
+        "===== pa15 =====",
+        "===== pa16 =====",
+        "===== pa17 =====",
+        "===== pa18 =====",
+        "===== pa19 =====",
+        "===== pa20 =====",
+        "===== TEST SUMMARY: 3562 / 3596 TESTS PASSED ====="
+      ]
+    },
+    "deduction": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa20/deduction94.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa20-validation95/deduction"
+      ],
+      "exit": 0,
+      "elapsed_s": 4.045720495283604,
+      "log": "/tmp/pa20-validation95/deduction.log",
+      "log_sha256": "22964b4ed65bc983bf57e8cf6a57439331ea6b4e315e5a909cc905f086171597",
+      "summaries": []
+    },
+    "initialization": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa20/initialization94.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa20-validation95/initialization"
+      ],
+      "exit": 0,
+      "elapsed_s": 3.1635202448815107,
+      "log": "/tmp/pa20-validation95/initialization.log",
+      "log_sha256": "0d6fec4225f5e5606d360c796f1a8e7ee1695c1151bedb3c1afd76503e639bbf",
+      "summaries": []
+    },
+    "range": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa20/range95.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa20-validation95/range"
+      ],
+      "exit": 0,
+      "elapsed_s": 5.241449100896716,
+      "log": "/tmp/pa20-validation95/range.log",
+      "log_sha256": "7f85e75e53793037f81f16c9e4264c027ffefbe122c25457dc2008bba095187e",
+      "summaries": []
+    },
+    "referenceReconstruction": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa20/reference95.py"
+      ],
+      "exit": 0,
+      "elapsed_s": 0.111134372651577,
+      "log": "/tmp/pa20-validation95/referenceReconstruction.log",
+      "log_sha256": "bd62ec5c6663091fa0681a4b4996c9bce3931e4f38b1dfafb149a1dff5491a85",
+      "summaries": []
+    },
+    "nativeRange": {
+      "command": [
+        "python3",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa20/native95.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa20-validation95/native",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa20/native95.json"
+      ],
+      "exit": 0,
+      "elapsed_s": 7.334098352119327,
+      "log": "/tmp/pa20-validation95/nativeRange.log",
+      "log_sha256": "36d9e15ccda43e87391e151a86145ce5880b6525e4eac0c847af86c655afa264",
+      "summaries": []
+    }
+  },
+  "progress": {
+    "entry_pass": 91,
+    "total": 144,
+    "entry_failures": [
+      "pa20/tests/general/100-aggregate-element-array-member-braced-init.t",
+      "pa20/tests/general/100-array-brace-init.t",
+      "pa20/tests/general/100-array-brace-string-literal.t",
+      "pa20/tests/general/100-conversion-operator-reference-initialization.t",
+      "pa20/tests/general/100-range-for-adl-const-reference-begin-copy.t",
+      "pa20/tests/general/100-range-for-adl-ignores-local-end-object.t",
+      "pa20/tests/general/100-range-for-array.t",
+      "pa20/tests/general/100-range-for-braced-list.t",
+      "pa20/tests/general/200-aggregate-braced-return-copies-class-members.t",
+      "pa20/tests/general/200-aggregate-omitted-class-tail.t",
+      "pa20/tests/general/200-cached-lambda-rebinds-automatic-capture.t",
+      "pa20/tests/general/200-captureless-lambda-auto-decltype-closure.t",
+      "pa20/tests/general/200-captureless-lambda-default-parameter.t",
+      "pa20/tests/general/200-captureless-lambda-implicit-return-parameter-member.t",
+      "pa20/tests/general/200-captureless-lambda-no-declarator-template-reference.t",
+      "pa20/tests/general/200-captureless-lambda-private-member-object-call.t",
+      "pa20/tests/general/200-captureless-lambda-trailing-return-decltype-parameter.t",
+      "pa20/tests/general/200-captureless-lambda-wrapper-conversion.t",
+      "pa20/tests/general/200-class-template-lambda-static-member-template-call.t",
+      "pa20/tests/general/200-default-capture-unqualified-member-template-call.t",
+      "pa20/tests/general/200-hidden-friend-lambda-static-member-call.t",
+      "pa20/tests/general/200-included-template-member-dual-capturing-lambda-call.t",
+      "pa20/tests/general/200-lambda-captures-this-for-out-of-class-member-call.t",
+      "pa20/tests/general/200-lambda-closure-assignment-sfinae.t",
+      "pa20/tests/general/200-lambda-constructor-template-preferred.t",
+      "pa20/tests/general/200-lambda-copy-move-constructible-traits.t",
+      "pa20/tests/general/200-lambda-enumerator-default-capture.t",
+      "pa20/tests/general/200-lambda-implicitly-captures-this-for-member-call.t",
+      "pa20/tests/general/200-lambda-inherits-friend-class-access.t",
+      "pa20/tests/general/200-lambda-local-static-per-specialization.t",
+      "pa20/tests/general/200-lambda-user-range-for-implicit-return.t",
+      "pa20/tests/general/200-nested-lambda-captures-outer-local.t",
+      "pa20/tests/general/200-nested-lambda-helper-capture.t",
+      "pa20/tests/general/200-nested-lambda-implicit-member-call.t",
+      "pa20/tests/general/200-nested-lambda-this-capture.t",
+      "pa20/tests/general/200-range-for-adl-begin-end.t",
+      "pa20/tests/general/200-range-for-adl-ignores-enclosing-member-begin.t",
+      "pa20/tests/general/200-range-for-array-const-auto-ref.t",
+      "pa20/tests/general/200-range-for-array-const-ref.t",
+      "pa20/tests/general/200-range-for-array-reference-single-evaluation.t",
+      "pa20/tests/general/200-range-for-array-value-categories.t",
+      "pa20/tests/general/200-range-for-inherited-member-begin-end.t",
+      "pa20/tests/general/200-range-for-member-begin-end.t",
+      "pa20/tests/general/200-range-for-prvalue-range-lifetime.t",
+      "pa20/tests/general/200-template-member-range-for-local.t",
+      "pa20/tests/general/200-unqualified-static-member-template-call-in-lambda.t",
+      "pa20/tests/general/300-capturing-lambda-enclosing-pack-forward-call.t",
+      "pa20/tests/general/300-capturing-lambda-forward-pack-call.t",
+      "pa20/tests/general/300-explicit-template-lambda-closure-return-type.t",
+      "pa20/tests/general/400-dependent-owner-lifecycle-validation.t",
+      "pa20/tests/general/400-repeated-local-declaration-template-probe.t",
+      "pa20/tests/spec/100-range-for-member-begin-end.t",
+      "pa20/tests/spec/200-captureless-lambda-binary-pointer-conversion.t"
+    ],
+    "current_failures": [
+      "pa20/tests/general/100-aggregate-element-array-member-braced-init.t",
+      "pa20/tests/general/200-aggregate-braced-return-copies-class-members.t",
+      "pa20/tests/general/200-aggregate-omitted-class-tail.t",
+      "pa20/tests/general/200-cached-lambda-rebinds-automatic-capture.t",
+      "pa20/tests/general/200-captureless-lambda-auto-decltype-closure.t",
+      "pa20/tests/general/200-captureless-lambda-default-parameter.t",
+      "pa20/tests/general/200-captureless-lambda-implicit-return-parameter-member.t",
+      "pa20/tests/general/200-captureless-lambda-no-declarator-template-reference.t",
+      "pa20/tests/general/200-captureless-lambda-private-member-object-call.t",
+      "pa20/tests/general/200-captureless-lambda-trailing-return-decltype-parameter.t",
+      "pa20/tests/general/200-captureless-lambda-wrapper-conversion.t",
+      "pa20/tests/general/200-class-template-lambda-static-member-template-call.t",
+      "pa20/tests/general/200-default-capture-unqualified-member-template-call.t",
+      "pa20/tests/general/200-hidden-friend-lambda-static-member-call.t",
+      "pa20/tests/general/200-included-template-member-dual-capturing-lambda-call.t",
+      "pa20/tests/general/200-lambda-captures-this-for-out-of-class-member-call.t",
+      "pa20/tests/general/200-lambda-closure-assignment-sfinae.t",
+      "pa20/tests/general/200-lambda-constructor-template-preferred.t",
+      "pa20/tests/general/200-lambda-copy-move-constructible-traits.t",
+      "pa20/tests/general/200-lambda-enumerator-default-capture.t",
+      "pa20/tests/general/200-lambda-implicitly-captures-this-for-member-call.t",
+      "pa20/tests/general/200-lambda-inherits-friend-class-access.t",
+      "pa20/tests/general/200-lambda-local-static-per-specialization.t",
+      "pa20/tests/general/200-nested-lambda-captures-outer-local.t",
+      "pa20/tests/general/200-nested-lambda-helper-capture.t",
+      "pa20/tests/general/200-nested-lambda-implicit-member-call.t",
+      "pa20/tests/general/200-nested-lambda-this-capture.t",
+      "pa20/tests/general/200-unqualified-static-member-template-call-in-lambda.t",
+      "pa20/tests/general/300-capturing-lambda-enclosing-pack-forward-call.t",
+      "pa20/tests/general/300-capturing-lambda-forward-pack-call.t",
+      "pa20/tests/general/300-explicit-template-lambda-closure-return-type.t",
+      "pa20/tests/general/400-dependent-owner-lifecycle-validation.t",
+      "pa20/tests/general/400-repeated-local-declaration-template-probe.t",
+      "pa20/tests/spec/200-captureless-lambda-binary-pointer-conversion.t"
+    ],
+    "fixed": [
+      "pa20/tests/general/100-array-brace-init.t",
+      "pa20/tests/general/100-array-brace-string-literal.t",
+      "pa20/tests/general/100-conversion-operator-reference-initialization.t",
+      "pa20/tests/general/100-range-for-adl-const-reference-begin-copy.t",
+      "pa20/tests/general/100-range-for-adl-ignores-local-end-object.t",
+      "pa20/tests/general/100-range-for-array.t",
+      "pa20/tests/general/100-range-for-braced-list.t",
+      "pa20/tests/general/200-lambda-user-range-for-implicit-return.t",
+      "pa20/tests/general/200-range-for-adl-begin-end.t",
+      "pa20/tests/general/200-range-for-adl-ignores-enclosing-member-begin.t",
+      "pa20/tests/general/200-range-for-array-const-auto-ref.t",
+      "pa20/tests/general/200-range-for-array-const-ref.t",
+      "pa20/tests/general/200-range-for-array-reference-single-evaluation.t",
+      "pa20/tests/general/200-range-for-array-value-categories.t",
+      "pa20/tests/general/200-range-for-inherited-member-begin-end.t",
+      "pa20/tests/general/200-range-for-member-begin-end.t",
+      "pa20/tests/general/200-range-for-prvalue-range-lifetime.t",
+      "pa20/tests/general/200-template-member-range-for-local.t",
+      "pa20/tests/spec/100-range-for-member-begin-end.t"
+    ],
+    "new_failures": [],
+    "current_pass": 110,
+    "accepted": true
+  },
+  "coverage": {
+    "files": 637,
+    "unchanged_files": 626,
+    "proved_reference_corrections": 11,
+    "manifest_sha256": "b9bc57574c9bdc4f8c6ac6c63524c7e37f39103a8c03956dd14a405407b6ee55",
+    "source_inputs": 144,
+    "status_sidecars": 144,
+    "references": 144,
+    "comparison": "unchanged"
+  },
+  "controls": {
+    "total": 130,
+    "native": 93,
+    "rejections": 37,
+    "passed": 130
+  }
+}
