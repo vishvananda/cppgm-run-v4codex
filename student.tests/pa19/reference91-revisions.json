@@ -1,0 +1,14 @@
+{
+  "base_commit": "e5f4c3ed78972c8d161671d145bf525cb99033f4",
+  "bundle_revision": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "local_revision": "pa19-defaulted-pack-91",
+  "path": "pa19/tests/spec/200-defaulted-class-template-argument-pack-prefix-deduction.ref",
+  "before_sha256": "ea039dfddfdf2fd8d8c87fb36cb25df81fa542d4152307b4cff5a7b91739a095",
+  "after_sha256": "e03a5453d5b0783bddb0990010aa1d2d89edb1d2f1177c8e5b88b138ba7f7199",
+  "source_sha256": "9250a1e01a048709419d5672b77a34fc3e6995f37db4d3a3a20cdf78d74be487",
+  "changes": [
+    "pack cardinality 2 -> 9",
+    "ABI template argument pack and dependent expansion encoding"
+  ],
+  "proof": "pa19/reference-correction91.md"
+}
