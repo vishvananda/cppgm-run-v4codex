@@ -56,6 +56,11 @@ Expression Analyzer::member_pointer_expression(NodeId n, ScopeId s)
     auto operand = pointer;
     while (ast[operand].kind == syntax::Kind::Parenthesized) operand = ast[operand].first;
     auto e = expressions[operand].entity;
+    if (current_function && result.form == ExpressionForm::BoundMember && nonstatic_field(e) &&
+        !member_pointer_flow_requests.get(current_function)) {
+        member_pointer_flow_requests.put(current_function,1);
+        member_pointer_flow_functions.push_back(current_function);
+    }
     if (result.form == ExpressionForm::BoundMember && ast[operand].kind == syntax::Kind::IdExpression &&
         e && entities[e].kind == EntityKind::Enumerator && entities[e].constant.valid) {
         auto value = static_value(pointer,expressions[pointer].type);

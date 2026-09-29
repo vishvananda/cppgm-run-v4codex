@@ -265,6 +265,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_transfer_unit_fields\":" << unit_transfer_fields
         << ",\"member_pointer_proof_work\":" << member_pointer_proof_work
         << ",\"member_pointer_proof_hits\":" << member_pointer_proof_hits
+        << ",\"member_pointer_flow_work\":" << member_pointer_flow_work
+        << ",\"member_pointer_flow_reads\":" << member_pointer_flow_reads
         << ",\"semantic_member_constant_values\":" << member_constants.size()-1
         << ",\"semantic_member_constant_bytes\":" << member_constants.capacity()*sizeof(MemberConstant)
         << ",\"semantic_member_receiver_work\":" << member_receiver_work

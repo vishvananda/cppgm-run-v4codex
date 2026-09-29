@@ -157,6 +157,7 @@ Value Procedural::expression(NodeId n, bool location)
             // Preserve the captured receiver's object projection separately
             // from the selected member projection in the O0 LowIR view.
             if (capture) base = emit(Opcode::Index,IRType::I8,{base.operand,Operand::integer(0)});
+            base = base_projection(base,sem.object_fact(n).qualifier_adjustment);
             Value v = field(base, fact.entity, sem.object_fact(n).adjustment); v.type = fact.type; return v;
         }
         return binding(fact.entity);
@@ -192,7 +193,9 @@ Value Procedural::expression(NodeId n, bool location)
             return binding(fact.entity);
         }
         Value base = node.op == OP_ARROW ? arrow_object(a,sem.object_fact(n).arrow) : address(expression(a, true));
-        Value v = field(base, fact.entity, sem.object_fact(n).adjustment); v.type = fact.type; return v;
+        base = base_projection(base,sem.object_fact(n).qualifier_adjustment);
+        Value v = field(base, fact.entity, sem.object_fact(n).adjustment); v.type = fact.type;
+        v.member_zero_adjustment = sem.member_pointer_read_zero(n); return v;
     }
     case Kind::BracedInit: case Kind::ParenInitializer: case Kind::Initializer:
         if (a) return expression(a, location);

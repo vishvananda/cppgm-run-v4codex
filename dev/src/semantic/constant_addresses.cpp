@@ -175,10 +175,10 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
     }
     if (ast[n].kind == Kind::IdExpression && !nonstatic_field(x.entity)) return constant_entity_address(x.entity);
     if ((ast[n].kind == Kind::IdExpression || ast[n].kind == Kind::Member) && nonstatic_field(x.entity)) {
-        auto use = object_uses[x.object_use];
+        auto use = object_fact(n);
         auto base = use.node ? constant_arrow(use.node,use.arrow) : active_constant ? constant_activations[active_constant].object : 0;
         if (!base) return 0;
-        base = constant_base_address(base,entities[scopes[entities[x.entity].owner].entity].type);
+        base = constant_base_projection(constant_base_projection(base,use.qualifier_adjustment),use.adjustment);
         auto result = constant_subobject(base,entities[x.entity].type,x.entity);
         auto kind = types[entities[x.entity].type].kind;
         if (kind == TypeKind::LRef || kind == TypeKind::RRef) { auto v = constant_read(result); return v.valid ? v.bits : 0; }

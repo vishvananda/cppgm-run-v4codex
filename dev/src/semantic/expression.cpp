@@ -159,7 +159,11 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
                 derived_from(types[object].child,owner));
             if (related_object) {
                 size(types[object].child);
-                record_object(r, 0, object, base_steps(types[object].child, scopes[entities[e].owner].entity));
+                auto naming = name_owner(ast[n].detail,s);
+                bool qualified = ast[ast[n].detail].first != ast[ast[n].detail].last;
+                if (qualified && base_adjustments[base_path(types[object].child,scopes[entities[e].owner].entity)].ambiguous)
+                    record_member_receiver(r,0,types[object].child,e,naming,true,s);
+                else record_object(r, 0, object, base_steps(types[object].child, scopes[entities[e].owner].entity));
                 if (types[entities[e].type].kind != TypeKind::LRef && types[entities[e].type].kind != TypeKind::RRef)
                     r.type = types.qualify(r.type, types[types[object].child].cv & (entities[e].mutable_field ? 2 : 3));
             } else if (!unevaluated_depth && !class_facts[entities[scopes[entities[e].owner].entity].class_info].storage) throw std::runtime_error("field requires object");
@@ -262,7 +266,12 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         facts.edit(n).entity = e;
         ScopeId naming = name_owner(name, entities[types[t].entity].scope);
         if (!function_binding(e)) check_access(e, s, naming, t);
-        if (nonstatic_field(e)) record_object(r, first, t, base_steps(t, scopes[entities[e].owner].entity));
+        if (nonstatic_field(e)) {
+            bool qualified = ast[name].first != ast[name].last;
+            if (qualified && base_adjustments[base_path(t,scopes[entities[e].owner].entity)].ambiguous)
+                record_member_receiver(r,first,t,e,naming,true,s);
+            else record_object(r, first, t, base_steps(t, scopes[entities[e].owner].entity));
+        }
         if (!r.object_use) record_object(r, 0, 0, 0);
         object_uses[r.object_use].naming_scope = naming;
         object_uses[r.object_use].arrow = arrow;

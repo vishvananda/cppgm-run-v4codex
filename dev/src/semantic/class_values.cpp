@@ -54,6 +54,7 @@ void Analyzer::prepare_function_boundaries()
         }
     }
     for (EntityId object : scalars) prepare_scalar_consumption(object);
+    prepare_member_pointer_flows();
 }
 void Analyzer::class_result(NodeId n, Expression& result, ScopeId s)
 {

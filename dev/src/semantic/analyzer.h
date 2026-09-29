@@ -91,6 +91,7 @@ public:
     std::uint32_t virtual_class_id(EntityId e) const { return class_facts[entities[e].class_info].virtual_info; }
     std::size_t virtual_class_count() const { return virtual_classes.size(); }
     bool member_pointer_zero_adjustment(EntityId object) const;
+    bool member_pointer_read_zero(NodeId expression) const;
     std::size_t class_count() const { return class_facts.size(); }
     std::size_t member_count() const { return members.size(); }
     const std::vector<EntityId>& demanded_vtables() const { return vtable_emission; }
@@ -264,6 +265,8 @@ private:
     void record_member_pointer_write(NodeId destination, NodeId source);
     void prepare_member_pointer_value(EntityId object, unsigned* remaining = nullptr);
     bool prove_member_pointer_value(NodeId source, TypeId target, unsigned& budget);
+    struct MemberPointerFlow;
+    void prepare_member_pointer_flows();
     bool direct_class_call(NodeId expression);
     unsigned char scalar_truth(NodeId expression);
     void prepare_scalar_consumption(EntityId object);
@@ -376,6 +379,9 @@ private:
     struct MemberPointerWrite { NodeId source; std::uint32_t next; };
     std::vector<MemberPointerWrite> member_pointer_writes = std::vector<MemberPointerWrite>(1);
     Index member_pointer_write_heads, member_pointer_exposed, member_pointer_value_states;
+    Index member_pointer_flow_requests, member_pointer_read_facts;
+    std::vector<EntityId> member_pointer_flow_functions;
+    std::size_t member_pointer_flow_work = 0, member_pointer_flow_reads = 0;
     Index member_constant_index, member_receiver_index;
     std::vector<MemberConstant> member_constants = std::vector<MemberConstant>(1);
     std::uint32_t constant_member_receiver(std::uint32_t object, Constant member);
