@@ -43,7 +43,9 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
             std::cerr << ",\"lower_local_statics\":" << lower.local_static_count()
                 << ",\"lower_constant_data_records\":" << lower.constant_data_count()
                 << ",\"lower_constant_data_work\":" << lower.constant_data_work
-                << ",\"lower_constant_data_hits\":" << lower.constant_data_hits;
+                << ",\"lower_constant_data_hits\":" << lower.constant_data_hits
+                << ",\"lower_aggregate_array_work\":" << lower.aggregate_array_work
+                << ",\"lower_aggregate_array_hits\":" << lower.aggregate_array_hits;
             std::cerr << "}\n";
         }
     }

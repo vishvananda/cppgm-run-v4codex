@@ -1,15 +1,21 @@
 #include "lowering/procedural.h"
 namespace cppgm { namespace lowering {
 using semantic::InitKind;
-namespace {
-bool array_parameter(semantic::Analyzer& sem, TypeId type)
+bool Procedural::array_parameter(TypeId type)
 {
     if (sem.types[type].kind != TypeKind::Array) return false;
-    while (sem.types[type].kind == TypeKind::Array) type = sem.types[type].child;
+    if (auto known = aggregate_array_parameters.get(type)) { ++aggregate_array_hits; return known == 2; }
+    ++aggregate_array_work;
+    auto element = sem.types[type].child;
     // The helper transports the representation of scalar array members only.
     // Class construction and volatile element accesses keep their ordered path.
-    return !(sem.types[type].cv & 2) && !sem.class_value(type);
+    // Canonical types are immutable; each shared array tail is classified once
+    // for this translation unit, independently of initializer multiplicity.
+    bool safe = sem.types[element].kind == TypeKind::Array ? array_parameter(element) :
+        !(sem.types[element].cv & 2) && !sem.class_value(element);
+    aggregate_array_parameters.put(type,safe ? 2 : 1); return safe;
 }
+namespace {
 bool full_parameters(semantic::Analyzer& sem, std::uint32_t plan)
 {
     bool omitted = false;
@@ -42,7 +48,7 @@ SymbolId Procedural::aggregate_helper(std::uint32_t plan)
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
         aggregate_actions.push_back(child); ++helper.count;
-        if (all || item.source) parameters.push_back(array_parameter(sem,item.type) ?
+        if (all || item.source) parameters.push_back(array_parameter(item.type) ?
             sem.types.compound(TypeKind::Pointer,item.type) : item.type);
     }
     helper.function = FunctionId(p.functions.size()+1);
@@ -74,7 +80,7 @@ bool Procedural::call_aggregate_helper(std::uint32_t plan, Value location)
         // Keep the established single trailing transfer ABI; interleaved or
         // multiple class members use their ordered destination construction.
         if (item.helper_transfer && item.next) return false;
-        if (array_parameter(sem,item.type)) continue;
+        if (array_parameter(item.type)) continue;
         if ((!type(item.type).scalar() && !item.helper_transfer) ||
             (item.kind != InitKind::Scalar && item.kind != InitKind::Converted && !(all && item.kind == InitKind::Value))) return false;
     }
@@ -84,7 +90,7 @@ bool Procedural::call_aggregate_helper(std::uint32_t plan, Value location)
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
         if (!all && !item.source) continue;
-        if (array_parameter(sem,item.type)) {
+        if (array_parameter(item.type)) {
             auto slot = builder->add_slot(0,type(item.type));
             Value at = address(Value(Operand::slot(slot),type(item.type),item.type,true));
             at.address = true; at.type = item.type;
@@ -105,7 +111,7 @@ void Procedural::emit_aggregate_helpers()
         for (unsigned j = 0; j < signature.parameters.count; ++j) {
             auto parameter = p.parameters[signature.parameters.begin+j];
             auto action = j ? sem.initializers[aggregate_actions[helper.actions+j-1]] : semantic::InitAction();
-            auto slot = builder->add_slot(0, j && !array_parameter(sem,action.type) ? type(action.type) : parameter.type); slots.push_back(slot);
+            auto slot = builder->add_slot(0, j && !array_parameter(action.type) ? type(action.type) : parameter.type); slots.push_back(slot);
             if (action.helper_parameter) {
                 objects[action.helper_parameter] = slot;
                 object_addresses[action.helper_parameter] = lowir_model::ValueId();
@@ -122,7 +128,7 @@ void Procedural::emit_aggregate_helpers()
             auto action = sem.initializers[aggregate_actions[helper.actions+j]];
             EntityId field = action.field; TypeId t = action.type;
             Value value;
-            bool array = array_parameter(sem,t);
+            bool array = array_parameter(t);
             if (!action.helper_transfer && !array) {
                 value = j+1 < slots.size() ? emit(Opcode::Load,type(t),{Operand::slot(slots[j+1])}) : initialization_value(0,t);
                 value.type = t;

@@ -197,10 +197,11 @@ class Procedural {
     void array_destroy(EntityId dtor, TypeId t, Value root, bool indirect, const std::vector<InitProjection>& path, bool subobject = false);
     Value initialization_address(Value root, bool indirect, const std::vector<InitProjection>& path);
     struct AggregateHelper { TypeId type; FunctionId function; std::uint32_t actions, count; };
-    semantic::Index aggregate_helpers;
+    semantic::Index aggregate_helpers, aggregate_array_parameters;
     std::vector<AggregateHelper> aggregate_definitions;
     std::vector<std::uint32_t> aggregate_actions;
     SymbolId aggregate_helper(std::uint32_t plan);
+    bool array_parameter(TypeId type);
     bool call_aggregate_helper(std::uint32_t plan, Value location);
     void emit_aggregate_helpers();
     void initialize_plan(std::uint32_t plan, Value location);
@@ -310,6 +311,7 @@ public:
     std::size_t local_static_count() const { return local_statics.size()-1; }
     std::size_t constant_data_count() const { return constant_data_records.size()-1; }
     std::size_t constant_data_work = 0, constant_data_hits = 0;
+    std::size_t aggregate_array_work = 0, aggregate_array_hits = 0;
     std::size_t control_work = 0, discard_work = 0;
     std::size_t full_expression_work = 0, full_expression_regions = 0;
     Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, lowir_model::Program& out, Linkage& links);
