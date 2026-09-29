@@ -110,6 +110,10 @@ void Analyzer::prepare_transfer(EntityId e)
             while (types[element].kind == TypeKind::Array) element = types[element].child;
             if (action.kind == TransferAction::Empty || action.kind == TransferAction::Reference || action.kind == TransferAction::Unit || field_fact(action.field).bit_field || (types[element].cv & 2)) break;
             if (action.function && (!trivial_transfer(action.function) || !copy_storage_type(element))) break;
+            // A bulk prefix has one storage action and no subobject lifetime
+            // identities. Keep effectful destructor boundaries when a later
+            // initialization can throw, even if this copy itself is trivial.
+            if (!assignment && !no_throw && !trivial_destructor(action.type)) break;
             storage_subobject |= action.function || types[action.type].kind == TypeKind::Array || types[element].kind == TypeKind::Pointer;
             bool ref = types[element].kind == TypeKind::LRef || types[element].kind == TypeKind::RRef;
             std::uint64_t end = (action.field ? entities[action.field].member_offset : 0) + (ref ? 8 : size(action.type));

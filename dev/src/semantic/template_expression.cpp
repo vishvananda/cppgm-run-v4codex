@@ -42,12 +42,12 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         break;
     }
     case Kind::Cast: {
-        if (node.op == KW_DYNAMIC_CAST) return;
         auto target = type_id(first,s);
         if (dependent_type(target)) return;
         first = ast[first].next;
         if (!first) return;
         if (!fixed(first)) return;
+        if (node.op == KW_DYNAMIC_CAST) break;
         auto source_type = expressions[fixed(first)].type;
         if ((class_value(source_type) || class_value(target)) && check_fixed_cast(n,s,target,first)) {
             template_fixed_expressions.put(source,n); ++template_fixed_work; return;
@@ -66,9 +66,9 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         break;
     }
     case Kind::Sizeof: case Kind::TypeTrait:
-        if (node.op == KW_TYPEID && ast[first].kind != Kind::TypeId) return;
         if (ast[first].kind == Kind::TypeId) {
-            if (types[type_id(first,s)].kind != TypeKind::Fundamental) return;
+            auto type = type_id(first,s);
+            if (node.op == KW_TYPEID ? dependent_type(type) : types[type].kind != TypeKind::Fundamental) return;
         } else if (!fixed(first)) return;
         break;
     case Kind::Parenthesized:
@@ -112,6 +112,15 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     auto node = ast[n];
     if (node.kind == Kind::Call) { reuse_fixed_call(n,source,s,result); return true; }
     result = expressions[source]; result.incoming = 0;
+    if (result.form == ExpressionForm::Typeid || result.form == ExpressionForm::DynamicCast) {
+        // The retained recipe owns formation, RTTI types and cast reachability.
+        // Only evaluated operands acquire this occurrence's object/body demands.
+        auto use = rtti_expression(source);
+        if (use.dynamic) expression(result.form == ExpressionForm::Typeid ? node.first : ast[node.first].next,s);
+        demand_rtti(use);
+        facts.edit(n).type = facts[source].type;
+        return true;
+    }
     if (reuse_template_field(n,s,result)) {
         { auto& published = facts.edit(n); published.type = facts[source].type; published.entity = result.entity; }
         return true;

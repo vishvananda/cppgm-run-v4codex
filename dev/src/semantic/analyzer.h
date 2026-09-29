@@ -28,11 +28,8 @@ public:
     Expression expression_fact(NodeId n) const { return expressions[n]; }
     Index rtti_expression_index;
     std::vector<RttiExpression> rtti_expressions = std::vector<RttiExpression>(1);
-    RttiExpression rtti_expression(NodeId n) const {
-        auto id = rtti_expression_index.get(n);
-        if (!id) id = rtti_expression_index.get(template_fixed_expressions.get(ast.nodes.occurrences[n].source));
-        return rtti_expressions[id];
-    }
+    RttiExpression rtti_expression(NodeId n) const;
+    void demand_rtti(const RttiExpression& use);
     TypeId typeinfo_result_type();
     Expression rtti_operand(QueryId query);
     Expression typeid_expression(NodeId n, ScopeId s);

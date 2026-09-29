@@ -137,7 +137,7 @@ bool Analyzer::bind_template_expression(NodeId n, ScopeId s, bool callee)
         // fixed operand facts before publishing its source semantic decision.
         bool scalar = kind == Kind::IdExpression || kind == Kind::Binary || kind == Kind::Assignment || kind == Kind::Conditional ||
             kind == Kind::Unary || kind == Kind::Postfix || kind == Kind::Parenthesized || kind == Kind::Subscript ||
-            kind == Kind::Call || kind == Kind::Member || kind == Kind::Cast;
+            kind == Kind::Call || kind == Kind::Member || kind == Kind::Cast || ast[n].op == KW_TYPEID;
         if (!dependent || (template_body_values && scalar)) check_fixed_expression(n,s);
     }
     return dependent;

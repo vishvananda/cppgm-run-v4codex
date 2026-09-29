@@ -2,6 +2,20 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+RttiExpression Analyzer::rtti_expression(NodeId n) const
+{
+    auto id = rtti_expression_index.get(n);
+    if (!id) id = rtti_expression_index.get(template_fixed_expressions.get(ast.nodes.occurrences[n].source));
+    if (!id) throw std::logic_error("missing checked RTTI expression");
+    return rtti_expressions[id];
+}
+void Analyzer::demand_rtti(const RttiExpression& use)
+{
+    if (unevaluated_depth) return;
+    for (auto t : {use.type,use.source})
+        if (class_value(t) && !entities[types[t].entity].specialization)
+            demand_vtable(types[t].entity,VtableReason::Rtti);
+}
 Expression Analyzer::rtti_operand(QueryId id)
 {
     auto fact = query_fact(id);
@@ -57,8 +71,7 @@ Expression Analyzer::typeid_expression(NodeId n, ScopeId s)
     }
     if (!use.type) throw std::runtime_error("typeid requires a resolved type");
     if (class_value(use.type)) size(use.type);
-    if (!unevaluated_depth && class_value(use.type) && !entities[types[use.type].entity].specialization)
-        demand_vtable(types[use.type].entity,VtableReason::Rtti);
+    demand_rtti(use);
     use.type = types.unqualified(use.type);
     Expression result; result.type = typeinfo_result_type();
     result.category = ValueCategory::Lvalue; result.form = ExpressionForm::Typeid;
@@ -102,10 +115,7 @@ Expression Analyzer::dynamic_cast_expression(NodeId n, ScopeId s, TypeId to, Nod
     facts.edit(n).type = to;
     if (!use.dynamic) { result.form = ExpressionForm::Cast; record_conversion(result,operand,c); return result; }
     result.form = ExpressionForm::DynamicCast;
-    if (!unevaluated_depth) {
-        if (!entities[types[use.source].entity].specialization) demand_vtable(types[use.source].entity,VtableReason::Rtti);
-        if (!entities[types[use.type].entity].specialization) demand_vtable(types[use.type].entity,VtableReason::Rtti);
-    }
+    demand_rtti(use);
     rtti_expression_index.put(n,rtti_expressions.size()); rtti_expressions.push_back(use);
     return result;
 }
