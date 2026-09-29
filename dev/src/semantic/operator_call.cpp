@@ -158,12 +158,18 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         throw std::runtime_error("deleted operator");
     check_access(selected.entity, s, naming, object);
     require_deduced_return(selected.entity);
-    if (!recipe) { demand_member(selected.entity); demand_specialization(selected.entity); }
+    NodeId receiver = args[0];
+    while (ast[receiver].kind == syntax::Kind::Parenthesized) receiver = ast[receiver].first;
+    auto closure = this->closure(types[object].entity);
+    EntityId entry = op == OP_LPAREN && closure.thunk && selected.entity == closure.function &&
+        ast[receiver].kind == syntax::Kind::Lambda ? closure.thunk : 0;
+    if (!recipe) { demand_member(entry ? entry : selected.entity); demand_specialization(selected.entity); }
     if (selected.member) {
         record_object(result, args[0], types.parameters[types[call_type(selected.entity)].offset],
             base_steps(object, scopes[entities[selected.entity].owner].entity));
         object_uses[result.object_use].virtual_slot = members[entities[selected.entity].member_info].virtual_slot;
         object_uses[result.object_use].source_owned = recipe;
+        object_uses[result.object_use].callable_entry = entry;
     }
     result.form = ExpressionForm::OperatorCall;
     std::vector<NodeId> arguments;

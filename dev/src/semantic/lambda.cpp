@@ -14,8 +14,6 @@ void check_declarator(const syntax::AstView& ast, NodeId d)
         if (k != Kind::Parameters) continue;
         for (auto p = ast[q].first; p; p = ast[p].next) {
             if (ast[p].kind != Kind::Parameter) continue;
-            for (auto c = ast[p].first; c; c = ast[c].next)
-                if (ast[c].kind == Kind::DefaultArgument) throw std::runtime_error("lambda parameter default");
             for (auto c = ast[ast[p].first].first; c; c = ast[c].next)
                 if (ast[c].op == KW_AUTO) throw std::runtime_error("generic lambda is not C++11");
         }
@@ -42,6 +40,7 @@ void Analyzer::bind_lambda_body(NodeId n, ScopeId s)
     auto fn = make_entity(EntityKind::Function,s,0,body);
     entities[fn].type = types.function(result,params,f.variadic);
     entities[fn].template_pattern = true;
+    bind_template_defaults(d,s,0);
     bind_template_body({body,d,s,fn,body});
 }
 Expression Analyzer::lambda_expression(NodeId n, ScopeId s)
@@ -86,6 +85,7 @@ Expression Analyzer::lambda_expression(NodeId n, ScopeId s)
     class_facts[info].local_function = closure.enclosing;
     auto id = closures.size(); closures.push_back(closure);
     closure_entities.put(cls,id); closure_functions.put(fn,id); closure_occurrences.put(n,id);
+    function_defaults(fn,d,s,n);
     // Check the retained body immediately, but keep its odr-use edges dormant
     // until the call operator is selected. This is a body scope, never a copy
     // of syntax disguised as an ordinary class declaration.

@@ -9,6 +9,15 @@ Value Procedural::user_conversion(NodeId n, const semantic::Conversion& c, Value
     bool supplied = destination.ir != IRType::Void;
     if (!supplied && record.use == semantic::ConversionUse::Destination)
         throw std::logic_error("user conversion lacks its existing destination");
+    auto closure = sem.closure_adapter(c.function);
+    if (closure.conversion == c.function) {
+        if (!record.object_entity) discard(n,false);
+        auto value = emit(Opcode::Addr,IRType(),{Operand::symbol(symbol(closure.thunk))});
+        value.type = returned;
+        if (!supplied) return converted_value(value,record.result);
+        destination.type = c.target; destination.address = true;
+        store(converted_value(value,record.result),destination); destination.address = false; return destination;
+    }
     auto known = sem.conversion_result(c.function);
     if (known.valid && !record.virtual_slot && record.result.kind == semantic::Conversion::Kind::Standard) {
         // Calling the receiver can still construct temporaries, throw or have

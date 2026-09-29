@@ -48,7 +48,8 @@ void Procedural::range_statement(NodeId n)
         Instruction projection(Opcode::Index,element_type); projection.projection = ir_model::IPK_ARRAY_ELEMENT;
         auto value = emit(projection,{base.operand,current.operand}); value.type = t; value.address = true;
         auto target = sem.entities[plan.variable].type;
-        if (!objects[plan.variable]) objects[plan.variable] = source_slot(plan.variable);
+        if (!objects[plan.variable] || p.slots[objects[plan.variable].index-1].owner.index != function.index)
+            objects[plan.variable] = source_slot(plan.variable);
         Value location(Operand::slot(objects[plan.variable]),type(target),target,true);
         auto c = sem.conversion_fact(plan.element_conversion);
         full_expression.enabled = full_expression.lexical = live != 0;

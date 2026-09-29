@@ -312,7 +312,7 @@ void Procedural::statement(NodeId n)
         live = lifetime.entry; return;
     }
     if (k == Kind::Label) {
-        if (!labels[n]) labels[n] = block();
+        if (!labels[n] || p.blocks[labels[n].index-1].owner.index != function.index) labels[n] = block();
         jump(labels[n]); start(labels[n]); statement(ast[n].first); return;
     }
     if (k == Kind::Case || k == Kind::Default) {
@@ -349,7 +349,7 @@ void Procedural::statement(NodeId n)
     case Kind::Return: return_statement(n); return;
     case Kind::Goto: {
         NodeId target = sem.facts[n].target;
-        if (!labels[target]) labels[target] = block();
+        if (!labels[target] || p.blocks[labels[target].index-1].owner.index != function.index) labels[target] = block();
         clean_inline(lifetime.entry, lifetime.target);
         jump(labels[target]); return;
     }

@@ -116,7 +116,8 @@ Value Procedural::range_operation(const semantic::RangeOperation& op, const std:
 void Procedural::range_initialize(EntityId object, const semantic::RangeOperation& op, const std::vector<EntityId>& entities, std::uint32_t conversion)
 {
     auto t = sem.entities[object].type;
-    if (!objects[object]) objects[object] = source_slot(object);
+    if (!objects[object] || p.slots[objects[object].index-1].owner.index != function.index)
+        objects[object] = source_slot(object);
     Value location(Operand::slot(objects[object]),type(t),t,true);
     auto c = sem.conversion_fact(conversion);
     bool direct = sem.class_value(t) && op.result.category == semantic::ValueCategory::Prvalue &&

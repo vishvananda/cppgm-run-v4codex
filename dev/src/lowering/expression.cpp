@@ -366,7 +366,10 @@ Value Procedural::call(NodeId n, Value destination)
     // own region using the completed receiver's live suffix.
     full_expression.argument_storage |= storage_only;
     Value member_function;
-    if (object_use.member_pointer) {
+    if (object_use.callable_entry) {
+        // An immediately invoked captureless lambda has no receiver effects.
+        // Its already selected ABI entry owns the parameter-only signature.
+    } else if (object_use.member_pointer) {
         auto object = member_pointer_object(object_use,&member_function);
         call_work.push_back(object.operand);
     } else if (object_use.type) {
@@ -398,7 +401,10 @@ Value Procedural::call(NodeId n, Value destination)
     NodeId callee = object_use.callee ? object_use.callee : node.first;
     EntityId selected = sem.facts[n].entity;
     Instruction i(Opcode::Call, indirect_result ? IRType(IRType::Void) : type(sem.facts[n].type));
-    if (object_use.member_pointer) {
+    if (object_use.callable_entry) {
+        call_work[begin] = emit(Opcode::Addr,IRType(),{Operand::symbol(symbol(object_use.callable_entry))}).operand;
+        i.signature = signature(sem.entities[object_use.callable_entry].type);
+    } else if (object_use.member_pointer) {
         call_work[begin] = member_function.operand;
         i.signature = signature(sem.expression_fact(object_use.member_pointer).type);
     } else if (object_use.virtual_slot) {

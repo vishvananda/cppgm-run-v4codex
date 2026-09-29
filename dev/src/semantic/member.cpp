@@ -134,7 +134,8 @@ void Analyzer::demand_member(EntityId e, MemberDemandReason reason)
     if (first_use) activate_deferred_function_uses(e);
     if (first_use && closure_adapter(e).function) {
         auto adapter = closure_adapter(e);
-        use_selected_function(e == adapter.conversion ? adapter.thunk : adapter.function,true);
+        if (e == adapter.conversion) use_selected_function(adapter.thunk,true);
+        else activate_deferred_function_uses(adapter.function);
     }
     if (definitions && entities[e].specialization && !entities[e].template_info) demand_specialization(e);
     std::uint32_t m = entities[e].member_info;

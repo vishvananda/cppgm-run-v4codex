@@ -311,7 +311,7 @@ void Procedural::run()
         if (member && entity.kind == semantic::EntityKind::Variable && entity.constant.valid && !entity.definition) continue;
         if (entity.kind == semantic::EntityKind::Variable) symbol(e);
         if (entity.kind != semantic::EntityKind::Function || entity.template_info) continue;
-        if (sem.conversion_result(e).valid && entity.inline_function &&
+        if ((sem.conversion_result(e).valid || sem.closure_adapter(e).conversion == e) && entity.inline_function &&
             !entity.instantiation_definition && !sem.member_fact(e).retained_root) {
             deferred_conversions.push_back(e); continue;
         }
@@ -375,10 +375,15 @@ void Procedural::run()
 }
 void Procedural::function_body(EntityId e, bool base)
 {
-    if (sem.closure_adapter(e).function) { closure_adapter(e); return; }
-    if (sem.entities[e].body) sem.require_body_facts(e);
+    auto closure = sem.closure_adapter(e);
+    if (closure.conversion == e) { closure_adapter(e); return; }
+    auto body_owner = closure.function ? closure.function : e;
+    if (sem.entities[body_owner].body) sem.require_body_facts(body_owner);
     function = FunctionId(p.symbols[(base ? base_symbols[e] : symbols[e]).index-1].entity);
     builder.reset(new FunctionBuilder(p, function));
+    // The pointer-call entry consumes the same checked body and parameter
+    // identities, with its own ABI signature and no implicit closure receiver.
+    e = body_owner;
     reset_lifetime(e);
     returned = sem.types[sem.entities[e].type].child;
     start(block());
@@ -390,7 +395,7 @@ void Procedural::function_body(EntityId e, bool base)
         return_destination = Value(Operand::value(param.value),IRType::Ptr,returned);
         if (auto local = sem.return_object(e)) object_addresses[local] = param.value;
     }
-    if (sem.entities[e].member_info && !sem.entities[e].is_static) {
+    if (!closure.function && sem.entities[e].member_info && !sem.entities[e].is_static) {
         auto param = p.parameters[sig.parameters.begin+j++];
         this_slot = builder->add_slot(0, IRType::Ptr);
         emit(Opcode::Store, IRType::Ptr, {Operand::value(param.value), Operand::slot(this_slot)});
