@@ -122,9 +122,12 @@ void Analyzer::write(std::ostream& out) const { out << "translation-unit\n"; wri
 void Analyzer::telemetry(std::ostream& out) const
 {
     std::size_t virtual_views = 0, virtual_slots = 0, virtual_storage = virtual_classes.capacity()*sizeof(VirtualClass);
+    std::size_t vtable_definitions = 0, external_vtables = 0;
     for (const auto& cls : virtual_classes) {
         virtual_views += cls.views.size(); virtual_slots += cls.slots.size();
         virtual_storage += cls.views.capacity()*sizeof(VirtualView)+cls.slots.capacity()*sizeof(VirtualSlot);
+        vtable_definitions += cls.demand == FactState::Success;
+        external_vtables += cls.referenced && cls.demand != FactState::Success;
     }
     out << ",\"semantic_ms\":" << analysis_ms
         << ",\"semantic_angle_names\":" << angle_name_work
@@ -306,7 +309,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_virtual_demands\":" << virtual_demands
         << ",\"semantic_key_vtable_notifications\":" << key_vtable_demand.size()
         << ",\"semantic_key_vtable_processed\":" << key_vtable_cursor
-        << ",\"semantic_vtable_emissions\":" << vtable_emission.size()
+        << ",\"semantic_vtable_emissions\":" << vtable_definitions
+        << ",\"semantic_external_vtable_references\":" << external_vtables
         << ",\"semantic_vtable_queue_bytes\":" << (key_vtable_demand.capacity()+vtable_emission.capacity())*sizeof(EntityId)
         << ",\"semantic_member_demands\":" << demand_queue.size()
         << ",\"semantic_friend_definitions\":" << friend_definitions.size()

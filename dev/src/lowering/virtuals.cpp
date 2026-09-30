@@ -9,8 +9,14 @@ DataItem relocation(SymbolId symbol, std::int64_t addend = 0) { DataItem d; d.ki
 void publish(Program& p, SymbolId symbol, const std::vector<DataItem>& data)
 {
     Global g; g.symbol = symbol; g.structured = true; g.data.begin = p.data.size(); g.data.count = data.size();
-    for (const auto& item : data) p.data.push_back(item); p.globals.push_back(g);
-    auto& s = p.symbols[symbol.index-1]; s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size();
+    for (const auto& item : data) p.data.push_back(item);
+    auto& s = p.symbols[symbol.index-1];
+    if (s.kind == Symbol::GlobalSymbol) {
+        if (!p.globals[s.entity-1].declaration) throw std::logic_error("duplicate vtable definition");
+        p.globals[s.entity-1] = g;
+    } else {
+        p.globals.push_back(g); s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size();
+    }
 }
 }
 SymbolId Procedural::abi_global(EntityId cls, abi_mangle::TargetKind kind)
@@ -53,15 +59,18 @@ void Procedural::emit_vtables()
 {
     for (EntityId cls : sem.demanded_vtables()) {
         SymbolId table = vtable_symbol(cls);
-        if (p.symbols[table.index-1].kind != Symbol::Unknown) continue;
+        auto prior = p.symbols[table.index-1];
+        if (prior.kind == Symbol::GlobalSymbol && !p.globals[prior.entity-1].declaration) continue;
         sem.object_size(sem.entities[cls].type);
         const auto& model = sem.virtual_class(cls);
         if (model.demand != semantic::FactState::Success) {
+            if (prior.kind == Symbol::GlobalSymbol) continue;
             Global g; g.symbol = table; g.declaration = true; p.globals.push_back(g);
             auto& s = p.symbols[table.index-1]; s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size();
             s.metadata.binding = SBM_STRONG;
             continue;
         }
+        p.symbols[table.index-1].metadata.binding = internal_entity(cls) ? SBM_INTERNAL : SBM_WEAK;
         // Key-owned tables have one cross-TU ABI group. Unkeyed course views
         // retain their private emission identities.
         bool grouped = model.key_function && !sem.entities[cls].specialization;

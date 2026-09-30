@@ -244,15 +244,16 @@ void Analyzer::layout_virtual_views(EntityId cls)
 {
     auto id = virtual_class_id(cls);
     Index stored;
-    std::uint64_t group_end = 16 + virtual_classes[id].primary_count*8;
-    for (auto& view : virtual_classes[id].views) {
+    std::uint64_t group_end = 16 + std::uint64_t(virtual_classes[id].primary_count)*8;
+    for (unsigned j = 0; j < virtual_classes[id].views.size(); ++j) {
+        auto& view = virtual_classes[id].views[j];
         view.offset = (view.parent ? virtual_classes[id].views[view.parent-1].offset : 0) + bases[view.edge].offset;
         view.store = view.offset && !stored.get(view.offset);
         if (view.store) {
             view.group_address_point = group_end + 16;
-            stored.put(view.offset,view.group_address_point);
-            group_end += 16 + view.count*8;
-        } else view.group_address_point = view.offset ? stored.get(view.offset) : 16;
+            stored.put(view.offset,j+1);
+            group_end += 16 + std::uint64_t(view.count)*8;
+        } else view.group_address_point = view.offset ? virtual_classes[id].views[stored.get(view.offset)-1].group_address_point : 16;
     }
     auto adjust = [&](unsigned begin, unsigned count, std::uint64_t offset) {
         for (unsigned j = 0; j < count; ++j) {

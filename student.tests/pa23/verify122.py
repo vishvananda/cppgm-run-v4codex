@@ -22,6 +22,8 @@ cases['separate-key-owner']=[header+'int main(){D d;B&b=d;return b.g()!=7;}',own
 cases['separate-delete-owner']=[header+'int main(){B*b=new D;int n=b->g();delete b;return n!=7;}',owner]
 header2='struct A{virtual int f(){return 1;}};struct B{virtual int g(){return 2;}};struct Mid:A,B{virtual int h(){return 3;}};struct P{virtual int p(){return 4;}};struct D:P,Mid{int g();};'
 cases['separate-nested-secondary']=[header2+'int main(){D d;B&b=d;Mid&m=d;return b.g()!=7||m.h()!=3;}',header2+'int D::g(){return 7;}']
+# Exercise both publication orders in the merged Program.
+cases['key-owner-before-use']=list(reversed(cases['separate-key-owner']))
 for count in (4,16,64):
  source='int destroyed;'+''.join('struct B%d{virtual ~B%d(){++destroyed;}};'%(i,i) for i in range(count))
  source+='struct D:'+','.join('B%d'%i for i in range(count))+'{};'
