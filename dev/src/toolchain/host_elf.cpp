@@ -29,7 +29,7 @@ void HostElf::relocate(unsigned section, std::size_t offset, unsigned symbol, un
     Elf64_Rela r = {}; r.r_offset = offset; r.r_info = ELF64_R_INFO(symbol,type); r.r_addend = addend;
     append(sections[section].bytes,r);
 }
-HostElf::HostElf(const Object& obj) : mapping(obj.symbols.size()), section_symbols(Count)
+HostElf::HostElf(Object&& obj) : mapping(obj.symbols.size()), section_symbols(Count)
 {
     const char* names[] = {"",".text",".data",".eh_frame",".gcc_except_table",".data.rel.local",".init_array",".fini_array",
         ".rela.text",".rela.data",".rela.eh_frame",".rela.gcc_except_table",".rela.data.rel.local",".rela.init_array",".rela.fini_array",
@@ -51,7 +51,11 @@ HostElf::HostElf(const Object& obj) : mapping(obj.symbols.size()), section_symbo
         if (n == Strtab || n == Shstrtab) s.header.sh_type = SHT_STRTAB;
         if (n <= Fini) section_symbols[n] = symbol("",STB_LOCAL,STT_SECTION,n,0);
     }
-    sections[Text].bytes = obj.image.code; sections[Data].bytes = obj.image.data; sections[Lsda].bytes = obj.image.lsda;
+    // Native bytes have one owner across this phase boundary. Relocation and
+    // unwind records below consume offsets, so they do not need old buffers.
+    sections[Text].bytes = std::move(obj.image.code);
+    sections[Data].bytes = std::move(obj.image.data);
+    sections[Lsda].bytes = std::move(obj.image.lsda);
     std::vector<bool> used(obj.symbols.size()); std::vector<std::uint64_t> sizes(obj.symbols.size());
     for (const auto* fixes : {&obj.image.code_fixups,&obj.image.data_fixups,&obj.image.lsda_fixups})
         for (const auto& fix : *fixes) used[fix.symbol] = true;
@@ -112,16 +116,32 @@ void HostElf::write(const std::string& path)
     }
     Elf64_Ehdr h = {}; std::memcpy(h.e_ident,ELFMAG,SELFMAG); h.e_ident[EI_CLASS] = ELFCLASS64; h.e_ident[EI_DATA] = ELFDATA2LSB; h.e_ident[EI_VERSION] = EV_CURRENT;
     h.e_type = ET_REL; h.e_machine = EM_X86_64; h.e_version = EV_CURRENT; h.e_ehsize = sizeof(h); h.e_shentsize = sizeof(Elf64_Shdr); h.e_shnum = Count; h.e_shstrndx = Shstrtab;
-    std::vector<unsigned char> bytes(sizeof(h));
+    std::uint64_t offset = sizeof(h);
     for (unsigned n = 1; n < Count; ++n) {
         auto& s = sections[n]; auto a = s.header.sh_addralign;
-        bytes.resize((bytes.size()+a-1)&~(a-1),0); s.header.sh_offset = bytes.size(); s.header.sh_size = s.bytes.size();
-        bytes.insert(bytes.end(),s.bytes.begin(),s.bytes.end());
+        offset = (offset+a-1)&~(a-1); s.header.sh_offset = offset; s.header.sh_size = s.bytes.size();
+        offset += s.bytes.size();
     }
-    bytes.resize((bytes.size()+7)&~std::size_t(7),0); h.e_shoff = bytes.size();
-    for (const auto& s : sections) append(bytes,s.header);
-    std::memcpy(bytes.data(),&h,sizeof(h));
-    std::ofstream out(path,std::ios::binary); out.write(reinterpret_cast<const char*>(bytes.data()),bytes.size()); out.close(); lowir_model::require(bool(out),"cannot write host ELF object");
+    h.e_shoff = (offset+7)&~std::uint64_t(7);
+    // Layout is complete before writing. Stream each section exactly once;
+    // no second whole-object byte vector is needed to patch the ELF header.
+    std::ofstream out(path,std::ios::binary);
+    lowir_model::require(bool(out),"cannot create host ELF object");
+    out.write(reinterpret_cast<const char*>(&h),sizeof(h)); offset = sizeof(h);
+    const char zeros[4096] = {};
+    auto pad = [&](std::uint64_t end) {
+        while (offset < end) {
+            auto count = std::min<std::uint64_t>(end-offset,sizeof(zeros));
+            out.write(zeros,count); offset += count;
+        }
+    };
+    for (unsigned n = 1; n < Count; ++n) {
+        const auto& s = sections[n]; pad(s.header.sh_offset);
+        out.write(reinterpret_cast<const char*>(s.bytes.data()),s.bytes.size()); offset += s.bytes.size();
+    }
+    pad(h.e_shoff);
+    for (const auto& s : sections) out.write(reinterpret_cast<const char*>(&s.header),sizeof(s.header));
+    out.close(); lowir_model::require(bool(out),"cannot write host ELF object");
 }
-void write_host_object(const Object& obj, const std::string& path) { HostElf(obj).write(path); }
+void write_host_object(Object&& obj, const std::string& path) { HostElf(std::move(obj)).write(path); }
 } }

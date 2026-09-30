@@ -22,7 +22,7 @@ struct Object {
     lowir_model::Name intern(const std::string& text);
 };
 Object compile_object(const lowir_model::Program&, native::Statistics&, bool host = false);
-void write_host_object(const Object&, const std::string&);
+void write_host_object(Object&&, const std::string&);
 void write_object(const Object&, const std::string&);
 Object read_object(const std::string&);
 Object read_elf(const std::vector<unsigned char>&);

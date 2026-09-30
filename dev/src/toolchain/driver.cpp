@@ -68,7 +68,7 @@ int run(const std::vector<std::string>& args)
 {
     auto start = std::chrono::steady_clock::now(); auto o = options(args);
     native::Statistics stats, runtime_stats; std::size_t text = 0, link_definitions = 0, link_relocations = 0;
-    if (o.compile) { auto obj = source(o.inputs[0],o,stats); text = obj.image.code.size(); if (o.host) write_host_object(obj,o.output); else write_object(obj,o.output); }
+    if (o.compile) { auto obj = source(o.inputs[0],o,stats); text = obj.image.code.size(); if (o.host) write_host_object(std::move(obj),o.output); else write_object(obj,o.output); }
     else {
         Linker linker;
         for (const auto& input : o.inputs)
