@@ -18,7 +18,7 @@ Invocation invocation(int argc, char** argv)
     for (int k = 1; k < argc; ++k) {
         std::string a = argv[k];
         if (a == "--stats") i.stats = true;
-        else if (a == "-O0") {}
+        else if (a == "-O0" || a == "-O1" || a == "-O2" || a == "-O3") {}
         else if (a == "-o" || a == "--dump-machine-ir" || a == "--dump-native-plan" || a == "--target") {
             lowir_model::require(++k < argc,"missing option value");
             std::string value = argv[k];
@@ -51,12 +51,12 @@ int main(int argc, char** argv)
         if (!i.dump.empty()) { mir.close(); lowir_model::require(bool(mir),"cannot write MIR dump"); }
         if (i.stats) {
             rusage usage; getrusage(RUSAGE_SELF,&usage);
-            std::cerr << "{\"read_validate_ms\":" << std::chrono::duration<double,std::milli>(parsed-begin).count()
-                << ",\"selection_ms\":" << stats.selection_ms << ",\"encoding_ms\":" << stats.encoding_ms
-                << ",\"peak_rss_kib\":" << usage.ru_maxrss << ",\"functions\":" << stats.functions
-                << ",\"instructions\":" << stats.instructions << ",\"frame_bytes\":" << stats.frame_bytes
-                << ",\"text_bytes\":" << stats.text_bytes << ",\"value_visits\":" << stats.value_visits
-                << ",\"scratch_carried_reloads\":" << stats.scratch_carried_reloads << "}\n";
+            std::cerr << "native_stats read_validate_ms=" << std::chrono::duration<double,std::milli>(parsed-begin).count()
+                << " selection_ms=" << stats.selection_ms << " encoding_ms=" << stats.encoding_ms
+                << " peak_rss_kib=" << usage.ru_maxrss << " functions=" << stats.functions
+                << " instructions=" << stats.instructions << " frame_bytes=" << stats.frame_bytes
+                << " text_bytes=" << stats.text_bytes << " value_visits=" << stats.value_visits
+                << " scratch_carried_reloads=" << stats.scratch_carried_reloads << "\n";
         }
         return 0;
     } catch (const std::exception& e) { std::cerr << "ERROR: " << e.what() << '\n'; return 1; }

@@ -16,7 +16,7 @@ struct Operand {
     std::int64_t displacement = 0;
     std::uint64_t bits = 0;
     std::uint32_t id = 0;
-    bool address = false;
+    bool address = false, temporary = false;
     static Operand r(int n);
     static Operand imm(std::uint64_t n);
     static Operand mem(int base, std::int64_t offset = 0);

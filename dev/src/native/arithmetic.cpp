@@ -19,6 +19,10 @@ static Op binary_op(Operation op)
 void Selector::arithmetic(const lowir_model::Instruction& i)
 {
     require(scalar_integer(i.type), "native arithmetic class not implemented");
+    if (state(i.destination.index).compare_branch) {
+        auto left = in_register(value(arg(i,0),i.type),value_type(arg(i,0),i.type),XR_R10);
+        emit(Op::Compare,i.type,{left,Operand::imm(0)}); return;
+    }
     Operand dest = allocate(i.destination.index,i.type);
     Operand result = dest.kind == Operand::Reg ? dest : Operand::r(XR_R10);
     auto lhs = value(arg(i,0),i.type);
@@ -102,6 +106,8 @@ void Selector::conversion(const lowir_model::Instruction& i)
     Operand result = dest.kind == Operand::Reg ? dest : Operand::r(XR_R10);
     auto src = value(arg(i,0),i.source_type);
     if (src.address) src = in_register(src,Type::Ptr,XR_R11);
+    else if (src.kind == Operand::Memory && value_type(arg(i,0),i.source_type) != i.source_type)
+        src = in_register(src,value_type(arg(i,0),i.source_type),XR_R11);
     Type width = i.operation == Operation::Trunc ? i.type : i.source_type;
     bool sign = i.operation == Operation::Sext || (i.operation == Operation::Trunc && !unsigned_type(i.type));
     if (width.width() == 64) move(result,src,width);
@@ -116,7 +122,9 @@ void Selector::index(const lowir_model::Instruction& i)
     std::uint64_t scale = i.type.bytes();
     if (offset.kind == Operand::Immediate && base.address) {
         base.displacement += offset.bits*scale;
-        state(i.destination.index).location = base;
+        if (state(i.destination.index).address_only || base.kind == Operand::Symbol || base.reg == XR_RBP)
+            state(i.destination.index).location = base;
+        else move(allocate(i.destination.index,Type::Ptr),base,Type::Ptr);
         return;
     }
     base = in_register(base,Type::Ptr,XR_R11);
@@ -130,6 +138,10 @@ void Selector::index(const lowir_model::Instruction& i)
             offset = Operand::r(XR_R10); scale = 1;
         }
         address.index = offset.reg; address.scale = scale;
+    }
+    if (state(i.destination.index).folded_index &&
+        ((base.reg != XR_R10 && base.reg != XR_R11) || state(i.destination.index).last == position+1)) {
+        address.address = true; state(i.destination.index).location = address; return;
     }
     auto dest = allocate(i.destination.index,Type::Ptr);
     auto result = dest.kind == Operand::Reg ? dest : Operand::r(XR_R10);

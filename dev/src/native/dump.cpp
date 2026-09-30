@@ -43,7 +43,7 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
     if (typed) out << '.' << type_name(i.type);
     if (i.op == Op::CopyBytes || i.op == Op::ZeroBytes) out << ' ' << i.bytes << 'x' << i.alignment;
     for (unsigned n = 0; n < i.count; ++n) {
-        out << (n ? ", " : " ");
+        out << (n || i.op == Op::CopyBytes || i.op == Op::ZeroBytes ? ", " : " ");
         if (i.op == Op::Call && i.args[n].kind != Operand::Symbol) out << '*';
         operand(p,i.args[n],out);
     }

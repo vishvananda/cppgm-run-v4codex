@@ -3,15 +3,19 @@
 namespace native {
 struct ValueState {
     Operand location;
-    unsigned definition = 0, last = 0, uses = 0, block = 0, call_epoch = 0;
+    unsigned definition = 0, last = 0, uses = 0, block = 0, call_epoch = 0, alias = 0, other_block = 0;
+    bool folded_load = false, folded_index = false, address_only = true, single_edge = false;
     bool crosses_block = false, crosses_call = false, compare_branch = false;
 };
 // Unit-owned dense identity tables, initialized once, reused by functions. No
 // whole-unit scan per function and no string-keyed placement decisions.
+struct SlotState { unsigned stored = 0, position = 0; bool escape = false, observed = false; };
 struct Workspace {
-    std::vector<ValueState> values;
+    std::vector<unsigned> value_indices;
     std::vector<Operand> slots;
-    explicit Workspace(const lowir_model::Program& p) : values(p.values.size()+1), slots(p.slots.size()+1) {}
+    std::vector<SlotState> slot_facts;
+    std::vector<unsigned> block_epochs, predecessor_count, successor, next_block;
+    explicit Workspace(const lowir_model::Program& p) : value_indices(p.values.size()+1), slots(p.slots.size()+1), slot_facts(p.slots.size()+1), block_epochs(p.blocks.size()+1), predecessor_count(p.blocks.size()+1), successor(p.blocks.size()+1), next_block(p.blocks.size()+1) {}
 };
 class Selector {
     const lowir_model::Program& p;
@@ -19,8 +23,15 @@ class Selector {
     Workspace& workspace;
     Statistics& stats;
     Function f;
+    std::vector<ValueState> values;
+    void initialize_values();
     std::array<unsigned,16> live_until = {{0}};
     unsigned position = 0, block_id = 0;
+    std::array<unsigned,16> first_clobber;
+    void promote_parameters();
+    void aliases();
+    void folds();
+    unsigned root(unsigned v) const { return state(v).alias ? state(v).alias : v; }
     DebugLocation debug;
     std::vector<unsigned> definitions;
     struct EdgeMove { unsigned pred, target, destination; lowir_model::Operand source; Operand staging; };
@@ -31,6 +42,7 @@ class Selector {
     void edge_transfers(unsigned pred, unsigned target);
     unsigned edge_target(unsigned target);
     void analyze();
+    void control_edges();
     void analyze_instruction(const lowir_model::Instruction& i, unsigned epoch);
     void parameters();
     Operand home(Name name, Type type, bool temporary);
@@ -54,7 +66,8 @@ class Selector {
     void begin_block(unsigned id, Name name);
     void finish_frame();
     lowir_model::Operand arg(const lowir_model::Instruction& i, unsigned n) const { return p.operands[i.operands.begin+n]; }
-    ValueState& state(unsigned v) { return workspace.values[v]; }
+    ValueState& state(unsigned v) { return values[workspace.value_indices[v]]; }
+    const ValueState& state(unsigned v) const { return values[workspace.value_indices[v]]; }
 public:
     Selector(const lowir_model::Program& p, const lowir_model::Function& source, Workspace& workspace, Statistics& stats)
         : p(p), source(source), workspace(workspace), stats(stats) {}

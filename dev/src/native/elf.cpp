@@ -29,9 +29,10 @@ void encode_data(const lowir_model::Program& p, Image& image)
     for (const auto& g : p.globals) {
         if (g.declaration) continue;
         require(p.symbols[g.symbol.index-1].metadata.storage != GSM_THREAD_LOCAL, "native TLS not implemented");
-        unsigned alignment = 1;
+        unsigned alignment = 1; bool typed = false;
         for (unsigned n = g.data.begin; n != g.data.end(); ++n)
-            if (p.data[n].kind != DataItem::Zero) alignment = std::max(alignment,p.data[n].type.alignment());
+            if (p.data[n].kind != DataItem::Zero) { alignment = std::max(alignment,p.data[n].type.alignment()); typed = true; }
+        if (g.structured && !typed) alignment = 16;
         if (!g.structured) alignment = g.type.alignment();
         image.data.resize(aligned(image.data.size(),alignment),0);
         image.symbols[g.symbol.index] = image.data.size(); image.defined[g.symbol.index] = true; image.data_symbols[g.symbol.index] = true;

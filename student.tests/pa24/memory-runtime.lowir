@@ -1,0 +1,26 @@
+global @cell : i64 = 0
+function @step(%base : ptr) -> i64 {
+  block ^entry:
+    %old = load i64 %base
+    %next = binary add i64 %old, 1
+    store i64 %next, %base
+    return i64 %next
+}
+function @main(%argc : i64) -> i64 [role=entry] {
+  block ^entry:
+    %n = binary mul i64 %argc, 10000000
+    %cell = addr @cell
+    jump ^loop
+  block ^loop:
+    %i = phi i64 [^entry: 0, ^body: %next]
+    %more = cmp ult i64 %i, %n
+    branch %more, ^body, ^done
+  block ^body:
+    %ignored = call i64 @step(%cell)
+    %next = binary add i64 %i, 1
+    jump ^loop
+  block ^done:
+    %value = load i64 @cell
+    %wrong = cmp ne i64 %value, %n
+    return i64 %wrong
+}

@@ -152,3 +152,6 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/construction_vtables
 
 FRONTEND_OBJ_BASENAMES_lowir2native := $(filter-out lowir/exercises,$(FRONTEND_OBJ_BASENAMES_lowir))
 FRONTEND_OBJ_BASENAMES_lowir2native += native/model native/placement native/selection native/arithmetic native/control native/calls native/encoding native/integer_encoding native/layout native/elf native/dump native/driver
+FRONTEND_OBJ_BASENAMES_lowir2native += native/parameter_slots
+FRONTEND_OBJ_BASENAMES_lowir2native += native/bulk_encoding
+FRONTEND_OBJ_BASENAMES_lowir2native += native/builtins

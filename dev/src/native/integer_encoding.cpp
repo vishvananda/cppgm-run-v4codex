@@ -34,6 +34,7 @@ void Encoder::arithmetic(const Instruction& i)
 {
     auto dst = i.args[0], rhs = i.args[1];
     unsigned width = std::max(8u,i.type.width());
+    if (i.op == Op::And && rhs.kind == Operand::Immediate && rhs.bits <= UINT32_MAX && width == 64) width = 32;
     if (i.op == Op::Mul) { multiply(i); return; }
     if (i.op == Op::Shl || i.op == Op::Shr || i.op == Op::Sar) {
         unsigned ext = i.op == Op::Shl ? 4 : i.op == Op::Shr ? 5 : 7;
@@ -54,7 +55,8 @@ void Encoder::arithmetic(const Instruction& i)
         bool small = std::int64_t(rhs.bits) >= -128 && std::int64_t(rhs.bits) <= 127;
         form(width == 8 ? 0x80 : small ? 0x83 : 0x81,width,ext,dst,
             width == 8 || small ? 1 : width == 16 ? 2 : 4,rhs.bits);
-    } else form(ext*8 + (width == 8 ? 2 : 3),width,dst.reg,rhs);
+    } else if (rhs.kind == Operand::Reg) form(ext*8 + (width == 8 ? 0 : 1),width,rhs.reg,dst);
+    else form(ext*8 + (width == 8 ? 2 : 3),width,dst.reg,rhs);
 }
 void Encoder::instruction(const Instruction& i)
 {
@@ -71,6 +73,7 @@ void Encoder::instruction(const Instruction& i)
     case Op::Compare: case Op::Shl: case Op::Shr: case Op::Sar: arithmetic(i); break;
     case Op::Neg: case Op::Not: form(width == 8 ? 0xf6 : 0xf7,width,i.op == Op::Neg ? 3 : 2,a); break;
     case Op::Bswap:
+        if (width == 16) { form(0xc1,16,1,a,1,8); break; }
         byte((width == 64 ? 0x48 : 0x40) | (a.reg >= 8)); byte(0x0f); byte(0xc8+(a.reg&7)); break;
     case Op::Set: form(0x0f90+i.condition,8,0,a); break;
     case Op::SignDividend: byte(0x48); byte(0x99); break;
@@ -89,10 +92,7 @@ void Encoder::instruction(const Instruction& i)
     case Op::Xadd: case Op::Cmpxchg:
         form(i.op == Op::Xadd ? (width == 8 ? 0x0fc0 : 0x0fc1) : (width == 8 ? 0x0fb0 : 0x0fb1),width,b.reg,a,0,0,0xf0); break;
     case Op::Exchange: form(width == 8 ? 0x86 : 0x87,width,b.reg,a); break;
-    case Op::CopyBytes:
-        mov(Operand::r(XR_RCX),Operand::imm(i.bytes)); byte(0xf3); byte(0xa4); break;
-    case Op::ZeroBytes:
-        mov(Operand::r(XR_RCX),Operand::imm(i.bytes)); mov(Operand::r(XR_RAX),Operand::imm(0)); byte(0xf3); byte(0xaa); break;
+    case Op::CopyBytes: case Op::ZeroBytes: bulk(i); break;
     default: throw lowir_model::ParseError("unencoded native instruction");
     }
 }

@@ -42,6 +42,7 @@ void Encoder::form(unsigned opcode, unsigned width, unsigned reg, Operand rm, un
 void Encoder::mov(Operand to, Operand from)
 {
     require(to.kind == Operand::Reg, "mov destination must be a register");
+    if (from.kind == Operand::Symbol) { form(0x8d,64,to.reg,from); return; }
     if (from.kind == Operand::Reg) { if (to.reg != from.reg) form(0x89,64,from.reg,to); return; }
     require(from.kind == Operand::Immediate, "mov requires register or immediate source");
     if (from.bits <= UINT32_MAX) {

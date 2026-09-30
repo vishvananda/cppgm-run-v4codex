@@ -46,3 +46,10 @@ PA8's explicit src/dst and expected-pointer contracts. Extended shared validatio
 for integer consumers, by-address scalar actuals and bounded typed slot reads;
 phi types and unmarked pointer parameters retain strict checks. Remaining native
 scalar failures are primarily placement/quality, not a handoff boundary yet.
+
+Progress 2: 221/296 root oracle fixtures and 14/14 focused controls pass.
+Integer arithmetic, narrow memory, calls, phi cycles, small bulk operations and
+atomic expected-pointer updates are executable. Remaining scalar canonical-dump
+policies are explicit unfinished implementation (not review questions). Function
+placement state now releases per function; only compact unit identity indexes
+remain. Personal arithmetic: 1820 deterministic cases, all passing.

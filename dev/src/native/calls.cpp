@@ -14,6 +14,17 @@ void Selector::call(const lowir_model::Instruction& i)
     const auto& signature = p.signatures[signature_id.index-1];
     require(signature.result == Type() || scalar_integer(signature.result), "native call result class not implemented");
     Operand target = value(target_input,Type::Ptr);
+    if (target_input.kind == lowir_model::Operand::Temporary) {
+        const auto& origin = state(root(target_input.ref));
+        if (origin.definition) {
+            const auto& def = p.instructions[origin.definition-1];
+            if (def.opcode == Opcode::Addr && arg(def,0).kind == lowir_model::Operand::Symbol &&
+                p.symbols[arg(def,0).ref-1].kind == lowir_model::Symbol::GlobalSymbol && target.kind != Operand::Symbol) {
+                target = in_register(target,Type::Ptr,XR_R11);
+                move(Operand::r(XR_R11),Operand::mem(target.reg),Type::Ptr); target = Operand::r(XR_R11);
+            }
+        }
+    }
     if (target.kind == Operand::Symbol && p.symbols[target.id-1].kind == lowir_model::Symbol::GlobalSymbol) {
         target.address = false;
         move(Operand::r(XR_R11),target,Type::Ptr); target = Operand::r(XR_R11);
@@ -35,7 +46,7 @@ void Selector::call(const lowir_model::Instruction& i)
         if (fixed && p.parameters[signature.parameters.begin+n].passing != PPM_DIRECT) {
             if (a.kind == lowir_model::Operand::Slot) from.address = true;
             else if (actual != Type::Ptr) {
-                Operand storage = home(0,actual,true);
+                Operand storage = home(a.kind == lowir_model::Operand::Temporary ? p.values[a.ref-1].name : 0,actual,true);
                 move(storage,from,actual); from = storage; from.address = true;
             }
             actual = Type::Ptr;
@@ -71,7 +82,7 @@ void Selector::call(const lowir_model::Instruction& i)
     site.bytes = stack; site.boundary = signature.boundary;
     for (unsigned n = 0; n < count && n < 6; ++n) site.arg_registers |= 1u << registers[n];
     if (stack) emit(Op::Add,Type::I64,{Operand::r(XR_RSP),Operand::imm(stack)});
-    if (i.destination) {
+    if (i.destination && state(i.destination.index).uses) {
         auto dest = allocate(i.destination.index,i.type);
         normalize_register(Operand::r(XR_RAX),i.type);
         move(dest,Operand::r(XR_RAX),i.type);
@@ -79,19 +90,15 @@ void Selector::call(const lowir_model::Instruction& i)
 }
 void Selector::bulk(const lowir_model::Instruction& i)
 {
-    // Capture both addresses before fixed copy registers are overwritten.
-    auto dst = memory(arg(i,i.opcode == Opcode::CopyObject ? 1 : 0)); dst.address = true;
-    move(Operand::r(XR_R10),dst,Type::Ptr);
+    auto dst = memory(arg(i,i.opcode == Opcode::CopyObject ? 1 : 0),XR_R10);
     if (i.opcode == Opcode::CopyObject) {
-        auto src = memory(arg(i,0)); src.address = true;
-        move(Operand::r(XR_R11),src,Type::Ptr);
+        auto src = memory(arg(i,0),XR_R11);
+        auto& instruction = emit(Op::CopyBytes,Type(),{dst,src});
+        instruction.bytes = i.bytes; instruction.alignment = i.alignment;
+    } else {
+        auto& instruction = emit(Op::ZeroBytes,Type(),{dst});
+        instruction.bytes = i.bytes; instruction.alignment = i.alignment;
     }
-    move(Operand::r(XR_RDI),Operand::r(XR_R10),Type::Ptr);
-    if (i.opcode == Opcode::CopyObject) move(Operand::r(XR_RSI),Operand::r(XR_R11),Type::Ptr);
-    auto& instruction = emit(i.opcode == Opcode::CopyObject ? Op::CopyBytes : Op::ZeroBytes,Type(),
-        i.opcode == Opcode::CopyObject ? std::initializer_list<Operand>{Operand::r(XR_RDI),Operand::r(XR_RSI)} :
-        std::initializer_list<Operand>{Operand::r(XR_RDI)});
-    instruction.bytes = i.bytes; instruction.alignment = i.alignment;
 }
 void Selector::atomic(const lowir_model::Instruction& i)
 {

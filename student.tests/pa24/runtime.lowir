@@ -1,0 +1,27 @@
+# The iteration count is obtained from the process's runtime argc.
+# With one extra argument n=20000000. Every loop result contributes to the check.
+function @step(%value : i64) -> i64 {
+  block ^entry:
+    %held = binary add i64 %value, 3
+    jump ^next
+  block ^next:
+    %result = binary sub i64 %held, 2
+    return i64 %result
+}
+function @main(%argc : i64, %argv : ptr) -> i64 [role=entry] {
+  block ^entry:
+    %n = binary mul i64 %argc, 10000000
+    jump ^loop
+  block ^loop:
+    %i = phi i64 [^entry: 0, ^body: %next]
+    %sum = phi i64 [^entry: 0, ^body: %value]
+    %more = cmp ult i64 %i, %n
+    branch %more, ^body, ^done
+  block ^body:
+    %value = call i64 @step(%sum)
+    %next = binary add i64 %i, 1
+    jump ^loop
+  block ^done:
+    %wrong = cmp ne i64 %sum, %n
+    return i64 %wrong
+}

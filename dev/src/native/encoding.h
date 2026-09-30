@@ -31,6 +31,7 @@ class Encoder {
     void store(Operand to, Operand from, Type type);
     void arithmetic(const Instruction& i);
     void multiply(const Instruction& i);
+    void bulk(const Instruction& i);
     void instruction(const Instruction& i);
     void branch(unsigned label, int condition = -1);
     void call(Operand target);
