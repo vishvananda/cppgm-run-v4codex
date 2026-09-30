@@ -1,0 +1,130 @@
+[
+  {
+    "cpu": 15,
+    "busy_fraction": 0.8484848484848485
+  },
+  {
+    "cpu": 23,
+    "busy_fraction": 0.8712871287128713
+  },
+  {
+    "cpu": 22,
+    "busy_fraction": 0.900990099009901
+  },
+  {
+    "cpu": 13,
+    "busy_fraction": 0.9081632653061225
+  },
+  {
+    "cpu": 12,
+    "busy_fraction": 0.91
+  },
+  {
+    "cpu": 20,
+    "busy_fraction": 0.92
+  },
+  {
+    "cpu": 2,
+    "busy_fraction": 0.9306930693069306
+  },
+  {
+    "cpu": 3,
+    "busy_fraction": 0.9306930693069306
+  },
+  {
+    "cpu": 31,
+    "busy_fraction": 0.9306930693069306
+  },
+  {
+    "cpu": 5,
+    "busy_fraction": 0.94
+  },
+  {
+    "cpu": 9,
+    "busy_fraction": 0.94
+  },
+  {
+    "cpu": 24,
+    "busy_fraction": 0.9411764705882353
+  },
+  {
+    "cpu": 19,
+    "busy_fraction": 0.9696969696969697
+  },
+  {
+    "cpu": 25,
+    "busy_fraction": 0.97
+  },
+  {
+    "cpu": 4,
+    "busy_fraction": 0.9797979797979798
+  },
+  {
+    "cpu": 0,
+    "busy_fraction": 0.98989898989899
+  },
+  {
+    "cpu": 11,
+    "busy_fraction": 0.99
+  },
+  {
+    "cpu": 30,
+    "busy_fraction": 0.99
+  },
+  {
+    "cpu": 16,
+    "busy_fraction": 0.9900990099009901
+  },
+  {
+    "cpu": 1,
+    "busy_fraction": 1.0
+  },
+  {
+    "cpu": 6,
+    "busy_fraction": 1.0
+  },
+  {
+    "cpu": 7,
+    "busy_fraction": 1.0
+  },
+  {
+    "cpu": 8,
+    "busy_fraction": 1.0
+  },
+  {
+    "cpu": 10,
+    "busy_fraction": 1.0
+  },
+  {
+    "cpu": 14,
+    "busy_fraction": 1.0
+  },
+  {
+    "cpu": 17,
+    "busy_fraction": 1.0
+  },
+  {
+    "cpu": 18,
+    "busy_fraction": 1.0
+  },
+  {
+    "cpu": 21,
+    "busy_fraction": 1.0
+  },
+  {
+    "cpu": 26,
+    "busy_fraction": 1.0
+  },
+  {
+    "cpu": 27,
+    "busy_fraction": 1.0
+  },
+  {
+    "cpu": 28,
+    "busy_fraction": 1.0
+  },
+  {
+    "cpu": 29,
+    "busy_fraction": 1.0
+  }
+]

@@ -1,83 +1,63 @@
-# PA28 implementation plan and handoff153
+# PA28 implementation handoff153
 
-Target: **PA28 full-stage**. Phase: **implementation**.
+Target: **PA28 full-stage**. Phase: **validated full-stage implementation handoff**.
 Stage base commit: `bec9389f62014dfecac8b41d330de142e0904b8c`.
 Last reviewed commit: `bec9389f62014dfecac8b41d330de142e0904b8c`.
 Review markers remain fixed until independent review.
-Turn entry: `fefbf8a7`, **96/97**. Previous goal turn: progress (five
-required failures resolved and a validated ownership/EH handoff committed).
-Loop153 owns the remaining covariant/virtual-primary layout group. Before edits,
-freeze the entry compiler and failing-test evidence. Preserve all review markers.
+Turn entry: `fefbf8a7`, **96/97**. Implementation: `764721cd`, **97/97**.
+Previous goal turn: progress (five required failures resolved in evidence152).
 
-## Design/spec alignment and groups
+## Design/spec alignment
 
-| Status / owner | Data flow, complexity and validation |
+| Group and owner | Data flow, complexity and validation |
 |---|---|
-| Complete, inherited naming/attributes | Canonical tags/effects and typed Itanium naming → ELF; previous implementation/performance151 evidence retained. Naming controls rerun. |
-| Complete: lifetime contexts → native cleanup regions | Persistent live prefix and complete handler context → shared cleanup suffixes; explicit region retirement, outer-local cleanup and selector-preserving resume. Existing linear/cached lowering owners; host/private controls pass. Course textual adapter retains its existing ABI convention. |
-| Complete: exception-specification facts → host LSDA | Callable/specialization identity → adjusted canonical TypeId set → typed LowIR filters → signed native selectors and ELF type lists. O(k log k) set canonicalization, linear table emission, TU/function release. Permitted/converted/empty specifications, redeclarations, templates and ordered cleanup controls pass. |
-| Complete: imported support ownership and static demand | Key-definition owner → imported table/VTT declarations; construction prerequisites only on definition demand. Completed dynamic-class facts prove required vptr initialization without draining unrelated member actions. Existing deduplicated queues and IDs; mixed host ownership and recursive-template scalar/array statics pass. |
-| Active: covariant virtual-primary layout (1) | Canonical class/base identity → primary selection and physical allocation → typed mixed prefix rows → projections, covariance, RTTI and construction/VTT segments. Publish once per completed class, index rows by identity, and keep work proportional to actual subobjects/table rows. Validate required fixture and mixed host producer/consumer controls, then earlier PAs, native inspection, file audit and stage progress. |
+| Complete, inherited naming/effects | Canonical entities and attributes → typed Itanium ABI → ELF. Naming151 controls rerun; evidence151 retained. |
+| Complete, inherited EH/ownership | Canonical exception sets and persistent lifetime regions → typed filters/LSDA; precise imported VTT and local-static demand. Exceptions152 and ownership152 controls rerun; evidence152 retained. |
+| Complete, virtual-primary layout | Class/base IDs → primary selection, nearly-empty/storage claims and prefix rows → projections, covariant thunks, RTTI, VTT/construction segments and host table groups. Graph/claim/row work follows actual identities; fixed tails are memoized, physical ordering O(v log v). No textual transport, lookup replay in lowering, optimizer pass or host implementation delegation. |
 
-[Implementation trace](../student.tests/pa28/implementation152.md) and
-[adapter evidence](../student.tests/pa28/adapter152.md) record ownership and limits.
-Direct typed source → LowIR → MIR → ELF remains; no production text transport or
-external implementation delegation. Native MIR now retains unnamed block IDs.
+[Implementation trace](../student.tests/pa28/implementation153.md) documents
+owners, publication/lifetimes, ABI proof and the explicit course/host layout
+policies. Related displaced primaries, inherited receivers, VTT order, dynamic
+base tail padding, alignment and imported table groups were completed together.
+No known implementation failure remains in this group.
 
-## Stage-scoped performance
+## Validation and performance
 
-Frozen entry/final binaries, unchanged common template/loop/call/memory/FP/EH
-inputs, A/A calibration and six ABBA blocks measure compiler latency/peak RSS
-and checked runtime/text size. New filter and imported/static ownership workloads
-measure standalone correct-behavior costs because entry behavior is wrong or
-unsupported. All intermediate and final observations (**520**) are retained in evidence152;
-[performance152](../student.tests/pa28/performance152.md) records all four dimensions.
-Paired compile medians are 1.013, .996, 1.028 and 1.011; spreads/noise and
-standalone new-feature costs are disclosed.
-No optimization speedup is claimed. Common output is byte-identical; required
-semantic work is bounded by actual declarations/clauses/regions. Spec §9 governs
-acceptance: inherited 15% and zero-growth diagnostics are not mandated gates.
-Mandated limits, correctness and coverage remain intact; PA32/33/34 retain their
-stage-owned optimization/self-hosting obligations.
+PA28 **97/97**, PA1–27 **4441/4441**, root through-PA28 **4538/4538**.
+[Validation evidence](../student.tests/pa28/evidence153/validation.json) records all checks.
+File audit passes with the same four inherited header warnings. Explicit naming,
+EH, ownership and bidirectional host controls pass. Native inspection validates
+LowIR, requires fixed/virtual thunk ABI names, and proves native-view/ordinary
+object byte equality. Coverage remains 97 anchors and 20,288 tracked contract
+paths; no tests, references, status sidecars or comparison rules changed.
 
-## Handoff ledger and boundary
+[Performance evidence](../student.tests/pa28/performance153.md) retains 520 observations from frozen entry/final compilers,
+fixed common inputs, A/A calibration and six ABBA blocks. Compiler latency/RSS
+and checked runtime/text size are measured together; newly correct virtual
+primary/secondary behavior has standalone measurements. Common objects and
+executables are byte-identical. Paired compile medians range from .962 to 1.023;
+substantial host contention and all outliers are disclosed. New feature costs:
+0.7322 s / 68,188 KiB compilation, 0.1240 s runtime /
+1,009,166 text bytes. No optimization benefit is claimed. Spec §9
+stage-scoped acceptance applies: inherited 15%/zero-growth
+diagnostics are not mandated gates. All measurements, mandated limits,
+correctness and coverage are preserved. PA32/33 optimization and PA34
+self-hosting remain later-stage obligations.
 
-| Commit | Disposition |
+## Handoff ledger and review boundary
+
+| Commit/evidence | Disposition |
 |---|---|
-| `100de24b` | Recorded entry, ownership groups and validation plan; preserved review markers. |
-| `ed85fc94` | EH cleanup and allowed-exception filter implementation; three failures resolved. |
-| `017675aa` | Imported VTT ownership and dynamic local-static demand; two more failures resolved. |
-| `810ef2d8` | Preserved the course ABI adapter and restored original references; insufficient reference-correction proof was rejected. |
-| `5f8483c7` | Made native inspection retain actual block identities. |
-| Evidence commit | Final required checks, personal controls, performance and coverage inventory; no further implementation changes. |
+| `fefbf8a7` and earlier PA28 commits | Inherited validated 96/97 handoff; evidence151/152 and their complete ledgers remain in history and student.tests. |
+| `3f7bae40` | Recorded entry and layout owner before stage edits; preserved review markers. |
+| `a5c53a88` | Completed the required layout failure and related physical sharing, prefix, receiver, VTT and table-group behavior. |
+| `764721cd` | Preserved ordinary secondary vptr stores in base entries; constructor/destructor dispatch control proves the correction. |
+| Final evidence commit | Required checks, explicit controls, native inspection, fixed performance observations and coverage inventory. |
 
-The completed owners are EH regions/filters and support-object demand/ownership.
-Further covariant work needs a new physical class/table representation spanning
-allocation, primary sharing, prefix identity and projections, with mixed host
-producer/consumer proofs. It is impractical to extend the completed ownership
-and cleanup fixes into that separate representation change in this handoff.
-
-Independent audit remains pending for all PA28 commits: canonical publication,
-cache/demand lifetimes, source-to-ELF ownership, adapter equivalence, LSDA filters,
-substitution ordering and performance evidence. These questions are separate
-from the one known implementation failure. Neither is waived; this handoff
-returns control to Ralph and does not certify PA28 or permit advancement.
-
-## Loop153 work and evidence
-
-Implement primary sharing and mixed prefix ownership together; extend to related
-construction and inherited projection defects exposed by host controls. Freeze
-A/B inputs and compilers; measure common correct workloads with A/A and ABBA,
-and record standalone latency/RSS/runtime/text costs for newly correct behavior.
-No optional optimization is planned. Prior performance observations stay intact.
-
-Handoff requires all 97 required tests (one failure at entry), earlier tests,
-file audit, explicit personal controls, preserved coverage and clean commits.
-Independent whole-stage architecture/performance audit remains pending and is
-separate from unfinished implementation; this turn does not waive it.
-
-Loop153 implementation: all 97 required tests and 12 bidirectional host-control
-commands pass. The completed layout group also fixes displaced primary
-claimants, inherited receivers, VTT order, dynamic tail padding, alignment and
-exported table groups. See `student.tests/pa28/implementation153.md`. Required
-earlier-stage, inspection and performance evidence are still pending.
+The implementation boundary is the completed host virtual-primary/layout group;
+no unfinished implementation is being recategorized as review. Whole-stage
+independent audit remains pending for all PA28 commits: canonical publication,
+demand/cache lifetimes, ABI layout policy, RTTI/table/VTT ownership, EH filters,
+naming/substitution, source-to-ELF tracing and performance evidence. Neither
+these questions nor whole-stage spec requirements are waived. This handoff
+returns control to Ralph for its full audit and does not authorize advancement.

@@ -1,0 +1,30 @@
+{
+  "stage_base": "bec9389f62014dfecac8b41d330de142e0904b8c",
+  "last_reviewed": "bec9389f62014dfecac8b41d330de142e0904b8c",
+  "implementation": "764721cd939723de7614957d09f5af2f8230dd74",
+  "binary": "d472892b7a45a7cf5c62ba272e34d0636b78f6f8b1e8007fd83c036890f69ca9",
+  "contract_inventory_sha256": "24cb3a8e20b8ff82ea4b8fb609b3b93352a64b9b6c35af151260c86234abe404",
+  "contract_paths": 20288,
+  "stage_anchors": 97,
+  "reference_changes": [],
+  "coverage_changes": [],
+  "evidence": {
+    "cpu-calibration.json": "240e28e6263944beaa12670d9732412fd90b209f565bbabc8f2f684020dfaa31",
+    "primary-performance.json": "f1100e52e6d97c1e632bfe474d1c5f470f0d8e329b7335a1ac3f3a70389ee9b7",
+    "intermediate-primary-performance.json": "894b29c7bf5326786422313e4883f2b00f23914c56d05dd64a6614f612a4e82f",
+    "intermediate-primary-controls.json": "90a5ebbc8b967af3eb66a2541c71a8b85a70c913b256a59c953939344818dd01",
+    "intermediate-comparison.json": "3db1d32c1f25938564fdddc19dd9daa7ae9fded2609d9fc677bb86772012a1a4",
+    "intermediate-primary-input.cpp": "24292e00c4991605a44ba52515db6145dd097137c92502322a35e41d0b6c5cb9",
+    "primary-controls.json": "bac4807d858311b65d03d8eaffa1e06ba03bf06bf98427dd3bc03641a8b7f959",
+    "counter-comparison.json": "82969cda3bb8047d182c0a7925f970837e6b2e3d2662d8be45c9ca524d0f8818",
+    "intermediate-common-performance.json": "3670b3341ecad9128470ac36458d2394b560a2791a092e3f3ad2eab2828c6da3",
+    "inspection.json": "59588ec5331049facce2bef372dec2ae1cf1ec80c099cdfb008788c31f16bc1e",
+    "intermediate-inspection.json": "6aa615add184a7db275d7913b6df48b040d3dcf7f54148d71363f722ecc4172c",
+    "comparison.json": "3db1d32c1f25938564fdddc19dd9daa7ae9fded2609d9fc677bb86772012a1a4",
+    "primary-input.cpp": "744f467d3409dff5ca5f268cb6354916292a4638a18ee1ce79ee6ddebad9ef6a",
+    "common-performance.json": "49bde0c67bab914682de2937f716a39dcc1348b226bd6c8ab70327fe4dd603f5",
+    "validation.json": "da10c4d4b3f9ff6cb77a92b8f51f60f74010d8da27099ef9943860ea9ba48780",
+    "intermediate-validation.json": "9a6de2f4ab5423ed9e47effe55301d19a6fb247786d072a7696e25913c95f100",
+    "final-simple-primary-performance.json": "9385aa7586c0891edf2de7ac4f40bedab1b6f0b93cfe5120a21f047b3011ad42"
+  }
+}

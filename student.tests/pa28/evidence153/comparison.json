@@ -1,0 +1,26 @@
+{
+  "memory": {
+    "object_sha256": true,
+    "executable_sha256": true,
+    "object_text_bytes": true,
+    "executable_text_bytes": true
+  },
+  "floating": {
+    "object_sha256": true,
+    "executable_sha256": true,
+    "object_text_bytes": true,
+    "executable_text_bytes": true
+  },
+  "exceptions": {
+    "object_sha256": true,
+    "executable_sha256": true,
+    "object_text_bytes": true,
+    "executable_text_bytes": true
+  },
+  "pruning": {
+    "object_sha256": true,
+    "executable_sha256": true,
+    "object_text_bytes": true,
+    "executable_text_bytes": true
+  }
+}

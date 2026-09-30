@@ -1,0 +1,26 @@
+{
+  "exceptions": {
+    "semantic_virtual_storage_bytes": [
+      136,
+      256
+    ]
+  },
+  "floating": {
+    "semantic_virtual_storage_bytes": [
+      136,
+      256
+    ]
+  },
+  "memory": {
+    "semantic_virtual_storage_bytes": [
+      136,
+      256
+    ]
+  },
+  "pruning": {
+    "semantic_virtual_storage_bytes": [
+      136,
+      256
+    ]
+  }
+}

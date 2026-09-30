@@ -1,0 +1,136 @@
+{
+  "commands": [
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/virtual-primary153-producer.cpp",
+        "-o",
+        "/tmp/pa28-153/validation/primary/H-producer.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/virtual-primary153-consumer.cpp",
+        "-o",
+        "/tmp/pa28-153/validation/primary/H-consumer.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/virtual-primary153-producer.cpp",
+        "-o",
+        "/tmp/pa28-153/validation/primary/S-producer.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/virtual-primary153-consumer.cpp",
+        "-o",
+        "/tmp/pa28-153/validation/primary/S-consumer.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa28-153/validation/primary/H-producer.o",
+        "/tmp/pa28-153/validation/primary/H-consumer.o",
+        "-o",
+        "/tmp/pa28-153/validation/primary/HH"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa28-153/validation/primary/HH"
+      ],
+      "status": 0,
+      "stdout": "aligned 32 32 0\nlife 1 10 10 1\nlife 17 111 111 1\nlife 3 10 10 1\nlife 27 172 172 1\nchoice 24 8 8 0 172 1 1\nlife 28 172 172 1\nlife 4 10 10 1\nlife 18 111 111 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\ninline-key 16 0 8 10 122 161 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 23 141 141 1\nlife 25 292 292 1\nvirtualmulti 40 16 24 292 293 1 1\nlife 26 292 292 1\nlife 24 141 141 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 15 101 101 1\nnested 8 0 101 1 1\nlife 16 101 101 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 17 111 111 1\nlife 19 112 112 1\nindirect 24 8 0 112 112 1\nlife 20 112 112 1\nlife 18 111 111 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 21 131 131 1\nmixed 24 0 16 131 132 1 1\nlife 22 131 131 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 5 37 37 1\nlife 7 37 37 1\nmore 104 104 0 37 1 1 1 1\nnull 1\nlife 8 37 37 1\nlife 6 37 37 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 5 37 37 1\nlife 7 37 37 1\nmore 104 104 0 37 1 1 1 1\nnull 1\nlife 8 37 37 1\nlife 6 37 37 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 9 61 61 1\nlife 11 71 71 1\nlife 13 213 213 1\ndiamond 32 32 0 16 213 213 1 1 1\nlife 14 213 213 1\nlife 12 71 71 1\nlife 10 61 61 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 9 61 61 1\nlife 11 71 71 1\nlife 13 213 213 1\ndiamond 32 32 0 16 213 213 1 1 1\nlife 14 213 213 1\nlife 12 71 71 1\nlife 10 61 61 1\nlife 2 10 10 1\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa28-153/validation/primary/S-producer.o",
+        "/tmp/pa28-153/validation/primary/H-consumer.o",
+        "-o",
+        "/tmp/pa28-153/validation/primary/SH"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa28-153/validation/primary/SH"
+      ],
+      "status": 0,
+      "stdout": "aligned 32 32 0\nlife 1 10 10 1\nlife 17 111 111 1\nlife 3 10 10 1\nlife 27 172 172 1\nchoice 24 8 8 0 172 1 1\nlife 28 172 172 1\nlife 4 10 10 1\nlife 18 111 111 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\ninline-key 16 0 8 10 122 161 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 23 141 141 1\nlife 25 292 292 1\nvirtualmulti 40 16 24 292 293 1 1\nlife 26 292 292 1\nlife 24 141 141 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 15 101 101 1\nnested 8 0 101 1 1\nlife 16 101 101 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 17 111 111 1\nlife 19 112 112 1\nindirect 24 8 0 112 112 1\nlife 20 112 112 1\nlife 18 111 111 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 21 131 131 1\nmixed 24 0 16 131 132 1 1\nlife 22 131 131 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 5 37 37 1\nlife 7 37 37 1\nmore 104 104 0 37 1 1 1 1\nnull 1\nlife 8 37 37 1\nlife 6 37 37 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 5 37 37 1\nlife 7 37 37 1\nmore 104 104 0 37 1 1 1 1\nnull 1\nlife 8 37 37 1\nlife 6 37 37 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 9 61 61 1\nlife 11 71 71 1\nlife 13 213 213 1\ndiamond 32 32 0 16 213 213 1 1 1\nlife 14 213 213 1\nlife 12 71 71 1\nlife 10 61 61 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 9 61 61 1\nlife 11 71 71 1\nlife 13 213 213 1\ndiamond 32 32 0 16 213 213 1 1 1\nlife 14 213 213 1\nlife 12 71 71 1\nlife 10 61 61 1\nlife 2 10 10 1\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa28-153/validation/primary/H-producer.o",
+        "/tmp/pa28-153/validation/primary/S-consumer.o",
+        "-o",
+        "/tmp/pa28-153/validation/primary/HS"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa28-153/validation/primary/HS"
+      ],
+      "status": 0,
+      "stdout": "aligned 32 32 0\nlife 1 10 10 1\nlife 17 111 111 1\nlife 3 10 10 1\nlife 27 172 172 1\nchoice 24 8 8 0 172 1 1\nlife 28 172 172 1\nlife 4 10 10 1\nlife 18 111 111 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\ninline-key 16 0 8 10 122 161 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 23 141 141 1\nlife 25 292 292 1\nvirtualmulti 40 16 24 292 293 1 1\nlife 26 292 292 1\nlife 24 141 141 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 15 101 101 1\nnested 8 0 101 1 1\nlife 16 101 101 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 17 111 111 1\nlife 19 112 112 1\nindirect 24 8 0 112 112 1\nlife 20 112 112 1\nlife 18 111 111 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 21 131 131 1\nmixed 24 0 16 131 132 1 1\nlife 22 131 131 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 5 37 37 1\nlife 7 37 37 1\nmore 104 104 0 37 1 1 1 1\nnull 1\nlife 8 37 37 1\nlife 6 37 37 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 5 37 37 1\nlife 7 37 37 1\nmore 104 104 0 37 1 1 1 1\nnull 1\nlife 8 37 37 1\nlife 6 37 37 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 9 61 61 1\nlife 11 71 71 1\nlife 13 213 213 1\ndiamond 32 32 0 16 213 213 1 1 1\nlife 14 213 213 1\nlife 12 71 71 1\nlife 10 61 61 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 9 61 61 1\nlife 11 71 71 1\nlife 13 213 213 1\ndiamond 32 32 0 16 213 213 1 1 1\nlife 14 213 213 1\nlife 12 71 71 1\nlife 10 61 61 1\nlife 2 10 10 1\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa28-153/validation/primary/S-producer.o",
+        "/tmp/pa28-153/validation/primary/S-consumer.o",
+        "-o",
+        "/tmp/pa28-153/validation/primary/SS"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa28-153/validation/primary/SS"
+      ],
+      "status": 0,
+      "stdout": "aligned 32 32 0\nlife 1 10 10 1\nlife 17 111 111 1\nlife 3 10 10 1\nlife 27 172 172 1\nchoice 24 8 8 0 172 1 1\nlife 28 172 172 1\nlife 4 10 10 1\nlife 18 111 111 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\ninline-key 16 0 8 10 122 161 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 23 141 141 1\nlife 25 292 292 1\nvirtualmulti 40 16 24 292 293 1 1\nlife 26 292 292 1\nlife 24 141 141 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 15 101 101 1\nnested 8 0 101 1 1\nlife 16 101 101 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 17 111 111 1\nlife 19 112 112 1\nindirect 24 8 0 112 112 1\nlife 20 112 112 1\nlife 18 111 111 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 21 131 131 1\nmixed 24 0 16 131 132 1 1\nlife 22 131 131 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 5 37 37 1\nlife 7 37 37 1\nmore 104 104 0 37 1 1 1 1\nnull 1\nlife 8 37 37 1\nlife 6 37 37 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 3 10 10 1\nlife 5 37 37 1\nlife 7 37 37 1\nmore 104 104 0 37 1 1 1 1\nnull 1\nlife 8 37 37 1\nlife 6 37 37 1\nlife 4 10 10 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 9 61 61 1\nlife 11 71 71 1\nlife 13 213 213 1\ndiamond 32 32 0 16 213 213 1 1 1\nlife 14 213 213 1\nlife 12 71 71 1\nlife 10 61 61 1\nlife 2 10 10 1\nlife 1 10 10 1\nlife 9 61 61 1\nlife 11 71 71 1\nlife 13 213 213 1\ndiamond 32 32 0 16 213 213 1 1 1\nlife 14 213 213 1\nlife 12 71 71 1\nlife 10 61 61 1\nlife 2 10 10 1\n",
+      "stderr": ""
+    }
+  ]
+}
