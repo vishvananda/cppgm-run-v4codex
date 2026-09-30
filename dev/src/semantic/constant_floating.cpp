@@ -18,7 +18,7 @@ bool Analyzer::constant_truth(Constant v) const
 {
     return floating_type(v.type) ? floating_value(v) != 0 : v.bits != 0;
 }
-Constant Analyzer::floating_constant(TypeId t, long double v, bool special)
+Constant Analyzer::floating_constant(TypeId t, long double v, bool special, bool signaling)
 {
     // Each operation/conversion observes the destination precision. The host
     // and target are Linux x86-64 (IEEE float/double and 80-bit long double).
@@ -31,16 +31,16 @@ Constant Analyzer::floating_constant(TypeId t, long double v, bool special)
     auto hash = significand ^ (std::uint64_t(exponent)*0x9e3779b97f4a7c15ULL);
     auto head = floating_constant_index.get(hash);
     for (auto i = head; i; i = floating_constants[i].next)
-        if (floating_constants[i].significand == significand && floating_constants[i].exponent == exponent) return Constant(t,i);
+        if (floating_constants[i].significand == significand && floating_constants[i].exponent == exponent && floating_constants[i].signaling == signaling) return Constant(t,i);
     auto id = floating_constants.size();
-    floating_constants.push_back({v,significand,exponent,head}); floating_constant_index.put(hash,id);
+    floating_constants.push_back({v,significand,exponent,head,signaling}); floating_constant_index.put(hash,id);
     return Constant(t,id);
 }
 Constant Analyzer::floating_conversion(Constant v, TypeId to)
 {
     if ((!integral(v.type) && !floating_type(v.type)) || (!integral(to) && !floating_type(to))) return Constant();
     auto value = floating_value(v);
-    if (floating_type(to)) return floating_constant(to,value,!std::isfinite(value));
+    if (floating_type(to)) return floating_constant(to,value,!std::isfinite(value),types.unqualified(to) == types.unqualified(v.type) && floating_signaling(v));
     if (fundamental(to,FT_BOOL)) return Constant(to,value != 0);
     if (!std::isfinite(value)) return Constant();
     // Test the truncated value before any host cast; out-of-range conversion

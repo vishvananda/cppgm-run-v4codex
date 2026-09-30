@@ -144,7 +144,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         auto intrinsic = intrinsic_function(e);
         bool atomic_family = (intrinsic == Intrinsic::AtomicFetchAdd || intrinsic == Intrinsic::AtomicAddFetch) &&
             !types[entities[e].type].count;
-        if (entities[e].kind == EntityKind::Overload || (definitions && entities[e].template_info) || atomic_family) {
+        if (entities[e].kind == EntityKind::Overload || (definitions && entities[e].template_info) || atomic_family || (intrinsic >= Intrinsic::Clzg && intrinsic <= Intrinsic::Popcountg)) {
             r.form = ExpressionForm::Overload; r.category = ValueCategory::Lvalue;
             ScopeId naming = naming_class(name_owner(ast[n].detail, s));
             if (naming) { record_object(r, 0, 0, 0); object_uses[r.object_use].naming_scope = naming; }

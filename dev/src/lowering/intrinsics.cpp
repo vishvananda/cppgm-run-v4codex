@@ -3,6 +3,8 @@
 namespace cppgm { namespace lowering {
 Value Procedural::intrinsic_call(NodeId n, semantic::Intrinsic intrinsic)
 {
+    if (intrinsic >= semantic::Intrinsic::Clz && intrinsic <= semantic::Intrinsic::Popcountg)
+        return integer_builtin(n,intrinsic);
     auto fact = sem.expression_fact(n);
     auto argument = [&](unsigned i) {
         return converted(sem.call_argument(fact,i),sem.conversion_fact(fact.conversions+i));

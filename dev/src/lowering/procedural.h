@@ -344,6 +344,7 @@ class Procedural {
     Value arrow_object(NodeId n, std::uint32_t chain);
     Value call(NodeId n, Value destination = Value());
     Value floating_builtin(NodeId n);
+    Value integer_builtin(NodeId n, semantic::Intrinsic intrinsic);
     Value placement_new(NodeId n);
     Value delete_expression(NodeId n);
     Value array_new(NodeId n, const semantic::PlacementNew& use);

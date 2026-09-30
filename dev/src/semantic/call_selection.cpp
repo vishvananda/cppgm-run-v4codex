@@ -19,6 +19,11 @@ CallSelection Analyzer::select_call(EntityId family, const std::vector<Expressio
             e = atomic_signature(e,nodes ? expressions[(*nodes)[0]].type : values[0].type);
             if (!e) continue;
         }
+        if (intrinsic >= Intrinsic::Clzg && intrinsic <= Intrinsic::Popcountg) {
+            if (explicit_arguments || !count) continue;
+            e = integer_signature(e,nodes ? expressions[(*nodes)[0]].type : values[0].type,count);
+            if (!e) continue;
+        }
         if (entities[e].template_info) {
             if (explicit_arguments) {
                 auto pack = argument_packs[explicit_arguments];

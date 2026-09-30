@@ -45,7 +45,11 @@ Operand Operand::floating(lowir_model::Operand value, Type type, const lowir_mod
     else std::memcpy(bytes,&n,10);
     if (value.signaling_nan && std::isnan(n)) {
         bytes[type == Type::F32 ? 2 : type == Type::F64 ? 6 : 7] &= ~(type == Type::F64 ? 8 : 64);
-        bytes[0] |= 1;
+        bool payload = false;
+        unsigned last = type == Type::F32 ? 2 : type == Type::F64 ? 6 : 7;
+        for (unsigned j = 0; j < last; ++j) payload |= bytes[j] != 0;
+        payload |= (bytes[last] & (type == Type::F32 ? 0x3f : type == Type::F64 ? 7 : 0x3f)) != 0;
+        if (!payload) bytes[0] |= 1;
     }
     std::memcpy(&o.bits,bytes,8); std::memcpy(&o.displacement,bytes+8,2);
     if (p && value.kind == lowir_model::Operand::Floating && value.ref) {

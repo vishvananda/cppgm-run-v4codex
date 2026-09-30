@@ -5,7 +5,7 @@ namespace cppgm {
 inline bool hosted_builtin(TextView name)
 {
     return builtin_trait(name) != BuiltinTrait::None || function_builtin(name) != FunctionBuiltin::None ||
-        floating_builtin_kind(name) != FloatingBuiltin::None || name.equals("__builtin_va_arg") || integer_pack_builtin(name);
+        integer_builtin(name).operation != IntegerBuiltin::None || libm_builtin(name).shape != LibmShape::None || floating_builtin_kind(name) != FloatingBuiltin::None || name.equals("__builtin_va_arg") || integer_pack_builtin(name);
 }
 inline bool hosted_feature(TextView name, bool exceptions)
 {

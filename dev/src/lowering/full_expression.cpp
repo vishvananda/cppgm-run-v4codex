@@ -17,7 +17,8 @@ bool Procedural::unwind_expression(NodeId n, bool body_proof)
     bool call = (ast[n].kind == Kind::Call && x.form != semantic::ExpressionForm::Cast &&
         x.form != semantic::ExpressionForm::ListValue && x.form != semantic::ExpressionForm::PseudoDestructor) ||
         x.form == semantic::ExpressionForm::OperatorCall || (callee && sem.constructor_member(callee));
-    if (call && x.form != semantic::ExpressionForm::Expect) result = !callee || ((sem.constructor_member(callee) ? sem.constructor_needed(callee) : true) && !sem.function_nonthrowing(callee));
+    bool inline_intrinsic = x.form >= semantic::ExpressionForm::FloatFinite && x.form <= semantic::ExpressionForm::FloatClassify;
+    if (call && x.form != semantic::ExpressionForm::Expect && !inline_intrinsic) result = !callee || ((sem.constructor_member(callee) ? sem.constructor_needed(callee) : true) && !sem.function_nonthrowing(callee));
     if (call && body_proof && callee && !sem.object_fact(n).virtual_slot &&
         !sem.object_fact(n).member_pointer && sem.scalar_body_nonthrowing(callee)) result = false;
     auto arrow = sem.arrow_chains[sem.object_fact(n).arrow];

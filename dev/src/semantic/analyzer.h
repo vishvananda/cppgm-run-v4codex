@@ -96,6 +96,7 @@ public:
     bool static_initialization(EntityId e);
     std::size_t static_requests = 0, static_hits = 0;
     long double floating_value(Constant value) const;
+    bool floating_signaling(Constant v) const { return floating_type(v.type) && floating_constants[v.bits].signaling; }
     using WideInteger = unsigned __int128;
     WideInteger integer_value(Constant value) const;
     bool integral_type(TypeId t) const { return integral(t); }
@@ -641,7 +642,7 @@ private:
     std::vector<Constant> constants;
     // Floating payloads are interned separately; common constants and entity
     // records retain their compact size. Identity excludes x87 padding bytes.
-    struct FloatingConstant { long double value; std::uint64_t significand; std::uint16_t exponent; std::uint32_t next; };
+    struct FloatingConstant { long double value; std::uint64_t significand; std::uint16_t exponent; std::uint32_t next; bool signaling; };
     std::vector<FloatingConstant> floating_constants = std::vector<FloatingConstant>(1);
     Index floating_constant_index;
     struct WideConstant { WideInteger value; std::uint32_t next; };
@@ -649,12 +650,16 @@ private:
     Index wide_constant_index;
     void constant_telemetry(std::ostream& out) const;
     bool floating_type(TypeId type) const;
-    Constant floating_constant(TypeId type, long double value, bool special = false);
+    Constant floating_constant(TypeId type, long double value, bool special = false, bool signaling = false);
     TypeId variadic_list_type = 0;
     Index intrinsic_functions, predefined_strings, atomic_signatures;
     EntityId predefined_function_name(NodeId n, ScopeId s);
     TypeQueryFact query_builtin_operand(const TypeQuery& q, const std::vector<TypeQueryFact>& children);
     EntityId builtin_function(IdentifierId name);
+    EntityId runtime_builtin(IdentifierId name);
+    EntityId integer_builtin_function(IdentifierId name);
+    EntityId integer_signature(EntityId family, TypeId operand, unsigned count);
+    Constant integer_builtin_constant(NodeId n, ScopeId s);
     EntityId atomic_signature(EntityId family, TypeId operand);
     void validate_intrinsic(EntityId selected, const std::vector<NodeId>& args, ScopeId s);
     Expression va_arg_expression(NodeId n, ScopeId s);

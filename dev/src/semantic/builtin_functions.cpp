@@ -15,6 +15,8 @@ EntityId Analyzer::builtin_function(IdentifierId name)
 {
     auto text = ids.spelling(name);
     auto builtin = function_builtin(text);
+    if (auto runtime = runtime_builtin(name)) return runtime;
+    if (auto integer = integer_builtin_function(name)) return integer;
     if ((builtin == FunctionBuiltin::AtomicFetchAdd) || (builtin == FunctionBuiltin::AtomicAddFetch)) {
         // A builtin family has no source template body. Call selection asks
         // its typed signature owner for the first operand's pointee type.

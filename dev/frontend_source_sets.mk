@@ -195,3 +195,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/builtin_traits
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/builtin_functions
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/intrinsics
+
+FRONTEND_OBJ_BASENAMES_preproc += support/builtin_registry
+FRONTEND_OBJ_BASENAMES_cppgm++ += support/builtin_registry semantic/runtime_builtins
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/integer_builtins lowering/integer_builtins

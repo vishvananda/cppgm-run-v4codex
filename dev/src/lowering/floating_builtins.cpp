@@ -37,7 +37,16 @@ Value Procedural::floating_builtin(NodeId n)
         return binary(Operation::And, finite(), magnitude);
     };
     Value result;
-    if (fact.form == semantic::ExpressionForm::FloatFinite) result = finite();
+    if (fact.form == semantic::ExpressionForm::FloatSignbit) {
+        // Read the representation: comparisons lose the sign of -0 and NaNs.
+        auto slot = builder->add_slot(0,x.ir);
+        emit(Opcode::Store,x.ir,{x.operand,Operand::slot(slot)});
+        auto byte = emit(Opcode::Index,IRType::I8,{Operand::slot(slot),Operand::integer(x.ir == IRType::F80 ? 9 : x.ir == IRType::F64 ? 7 : 3)});
+        auto bits = emit(Opcode::Load,IRType::U8,{byte.operand});
+        bits = emit(Opcode::Binary,IRType::U8,{bits.operand,Operand::integer(7)},Operation::Ushr);
+        result = coerce(bits,IRType::I32);
+    }
+    else if (fact.form == semantic::ExpressionForm::FloatFinite) result = finite();
     else if (fact.form == semantic::ExpressionForm::FloatNaN) result = nan();
     else if (fact.form == semantic::ExpressionForm::FloatInfinite) result = infinite();
     else if (fact.form == semantic::ExpressionForm::FloatNormal) result = normal();
