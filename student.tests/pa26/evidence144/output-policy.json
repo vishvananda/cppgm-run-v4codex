@@ -1,0 +1,32 @@
+{
+  "compiler_sha256": "017f0d6982d42f0e6e73ef06891d736725d2a38ddde6935c691c1fc55470456a",
+  "source_sha256": "b5d0fc8ff7086c32c7f7dc92c61da11ffa7f9d6392535e6365287b1fbbdd05a7",
+  "cases": [
+    {
+      "name": "output.o",
+      "compile_status": 0,
+      "elf": true,
+      "link_status": 0,
+      "run_status": 0
+    },
+    {
+      "name": "output.obj",
+      "compile_status": 0,
+      "elf": false
+    },
+    {
+      "name": "output",
+      "compile_status": 0,
+      "elf": true,
+      "link_status": 0,
+      "run_status": 0
+    },
+    {
+      "name": "output.bin",
+      "compile_status": 0,
+      "elf": true,
+      "link_status": 0,
+      "run_status": 0
+    }
+  ]
+}

@@ -1,0 +1,432 @@
+{
+  "compiler_sha256": "017f0d6982d42f0e6e73ef06891d736725d2a38ddde6935c691c1fc55470456a",
+  "cases": 9,
+  "records": [
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144/controls/incoming.o",
+        "/tmp/pa26-144/controls/incoming.cpp"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-144/controls/incoming-host.cpp",
+        "/tmp/pa26-144/controls/incoming.o",
+        "-o",
+        "/tmp/pa26-144/controls/incoming"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/tmp/pa26-144/controls/incoming"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-144/controls/incoming.o"
+      ],
+      "status": 0,
+      "stdout_sha256": "ca0c9cb2d3aca340ee98118933c89fdb6efa8f7a4a88a885a13f681c74f3cf47",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144/controls/outgoing.o",
+        "/tmp/pa26-144/controls/outgoing.cpp"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-144/controls/outgoing-host.cpp",
+        "/tmp/pa26-144/controls/outgoing.o",
+        "-o",
+        "/tmp/pa26-144/controls/outgoing"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/tmp/pa26-144/controls/outgoing"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-144/controls/outgoing.o"
+      ],
+      "status": 0,
+      "stdout_sha256": "f3abcf3339cc7a7d486309a0f12ec6191e2da5999c9270c41600af9fe3fc95b3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144/controls/unprotected-frame.o",
+        "/tmp/pa26-144/controls/unprotected-frame.cpp"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-144/controls/unprotected-frame-host.cpp",
+        "/tmp/pa26-144/controls/unprotected-frame.o",
+        "-o",
+        "/tmp/pa26-144/controls/unprotected-frame"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/tmp/pa26-144/controls/unprotected-frame"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-144/controls/unprotected-frame.o"
+      ],
+      "status": 0,
+      "stdout_sha256": "1a46a053889d1f597d05381587b48adeb8506516259db39e77ba65908ff9eaad",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144/controls/terminate.o",
+        "/tmp/pa26-144/controls/terminate.cpp"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-144/controls/terminate-host.cpp",
+        "/tmp/pa26-144/controls/terminate.o",
+        "-o",
+        "/tmp/pa26-144/controls/terminate"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/tmp/pa26-144/controls/terminate"
+      ],
+      "status": 17,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-144/controls/terminate.o"
+      ],
+      "status": 0,
+      "stdout_sha256": "362aaec1b23a8b7c36f266a00b0c6d4b18824f9a48e00a4baba429d24506b766",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144/controls/runtime-alias.o",
+        "/tmp/pa26-144/controls/runtime-alias.cpp"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-144/controls/runtime-alias-host.cpp",
+        "/tmp/pa26-144/controls/runtime-alias.o",
+        "-o",
+        "/tmp/pa26-144/controls/runtime-alias"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/tmp/pa26-144/controls/runtime-alias"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-144/controls/runtime-alias.o"
+      ],
+      "status": 0,
+      "stdout_sha256": "9e8f475e087bae820083c008e04ca93ff9f2f6dc7d7d0948e45206d7a98adfc0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144/controls/implicit-cleanup.o",
+        "/tmp/pa26-144/controls/implicit-cleanup.cpp"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-144/controls/implicit-cleanup-host.cpp",
+        "/tmp/pa26-144/controls/implicit-cleanup.o",
+        "-o",
+        "/tmp/pa26-144/controls/implicit-cleanup"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/tmp/pa26-144/controls/implicit-cleanup"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-144/controls/implicit-cleanup.o"
+      ],
+      "status": 0,
+      "stdout_sha256": "7a85a31f2c475b67e1cddeedee567b9686db8b8320763b2c1afb37466c626652",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144/controls/large-actions.o",
+        "/tmp/pa26-144/controls/large-actions.cpp"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-144/controls/large-actions-host.cpp",
+        "/tmp/pa26-144/controls/large-actions.o",
+        "-o",
+        "/tmp/pa26-144/controls/large-actions"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/tmp/pa26-144/controls/large-actions"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-144/controls/large-actions.o"
+      ],
+      "status": 0,
+      "stdout_sha256": "85489b7560fff3ba2be4457da90f60ba8124f48612a3b69946ea023dc44189ef",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144/controls/selectors.o",
+        "/tmp/pa26-144/controls/selectors.cpp"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-144/controls/selectors-host.cpp",
+        "/tmp/pa26-144/controls/selectors.o",
+        "-o",
+        "/tmp/pa26-144/controls/selectors"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/tmp/pa26-144/controls/selectors"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-144/controls/selectors.o"
+      ],
+      "status": 0,
+      "stdout_sha256": "d0f69f6834a6f6d0a8915ff3f5d2126265c501976b5cf353dbaef25f5379c5fe",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144/controls/legacy.obj",
+        "/tmp/pa26-144/controls/format.cpp"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-o",
+        "/tmp/pa26-144/controls/private-main",
+        "/tmp/pa26-144/controls/legacy.obj"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/tmp/pa26-144/controls/private-main"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--object-format=elf",
+        "-o",
+        "/tmp/pa26-144/controls/explicit.obj",
+        "/tmp/pa26-144/controls/format.cpp"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa26-144/controls/explicit.obj",
+        "-o",
+        "/tmp/pa26-144/controls/host-main"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "/tmp/pa26-144/controls/host-main"
+      ],
+      "status": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sources": {
+    "implicit-cleanup.cpp": "d6aad239d1484045ff6ab6a2b8c6b435f04adcdf1bc069c33690926a6e7eb516",
+    "outgoing-host.cpp": "fd70af551df667bf422c1545f112c44d49cc99c7765fe929715291fdb25bc44d",
+    "unprotected-frame.cpp": "0591eae3d6e7e61ad079b65ad387d5f026242505d67d4c8e07df567a3dd03ca1",
+    "incoming-host.cpp": "23328f6593fd970ac8fb8e505724e4b35fb2111915fad5762028f878b6cd571a",
+    "incoming.cpp": "9077adfaa91f133313f0acf45857cb51b7dbbe578ddba728bbee3a06cf6fedad",
+    "selectors-host.cpp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "implicit-cleanup-host.cpp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "format.cpp": "85d5d0c9e29f65e3fe6fbf25b7939530fb5b397ec258df70e9cf0068a673a45b",
+    "unprotected-frame-host.cpp": "1e44295ed1f8819e9a3b1ba2244d3e061f753d282e0216cbcc03c53e6a0353da",
+    "terminate.cpp": "baffe47f91d54a11cc91cc586e122886551672f1dd6272a3af7d252f4e05631e",
+    "large-actions.cpp": "be2fe4f98546bf0bb5d83cacd1a011763493b9c3c91e811cc8b2da1275fbfa42",
+    "large-actions-host.cpp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "outgoing.cpp": "9663f9e863821a9c1bc4bf2d0235c767c6733eea664681ef63e250869ca3c43a",
+    "runtime-alias.cpp": "51b95884feda09e68c4cc61632ba895f0f0d2b33e20a1492a010ee5623c2db66",
+    "terminate-host.cpp": "5ae2878e18267958af5a423ea27b0a9e344a63104a1489e23990dab99b811548",
+    "runtime-alias-host.cpp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "selectors.cpp": "76d143bdbe08ebcdb086e7fdd17889acb4a7959afb57561abf3703c474b5a9ce"
+  }
+}

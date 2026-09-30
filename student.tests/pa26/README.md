@@ -8,6 +8,15 @@ tables, selector identity across functions, and explicit object format selection
 Generated files default to `/tmp/pa26-142/controls`.
 Run `python3 student.tests/pa26/native_inspection.py` for the demanded-template trace.
 
+Audit144: `writer_audit144.py OUT ENTRY FINAL` compares all PA26 translation
+units and five additional layout controls byte for byte and checks write errors.
+`writer_performance144.py OUT ENTRY FINAL` measures a fixed large data object
+with A/A calibration and six ABBA blocks, including checked runtime and text
+size. [Performance144](performance144.md) and `evidence144/` retain the results.
+`output_policy144.py OUT COMPILER` checks arbitrary output names against the
+handout; it currently fails for `.obj`. The full audit remains open in
+[audit144](../../pa26/audit144.md).
+
 `dump.cpp` is an inspection adapter: link it against cppgm++'s frontend source
 set, then pass one source filename, optionally followed by `--mir`. It prints the production host LowIR after
 all semantic and lowering work, without making text part of the object pipeline.

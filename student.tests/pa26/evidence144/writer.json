@@ -1,0 +1,250 @@
+{
+  "binaries": [
+    {
+      "path": "/tmp/pa26-144/entry-cppgm",
+      "sha256": "f057adc7ca5ed77791e42e388fc1eb1c9e2d07337c0cfb3637e11737571f6ce7"
+    },
+    {
+      "path": "/tmp/pa26-144/writer-cppgm",
+      "sha256": "017f0d6982d42f0e6e73ef06891d736725d2a38ddde6935c691c1fc55470456a"
+    }
+  ],
+  "flags": [
+    "-O0",
+    "-c"
+  ],
+  "objects": [
+    {
+      "source": "pa26/tests/general/100-host-eh-compact-unwind-callee-save.t.1",
+      "source_sha256": "01f98559d8fa063982f60632f1c895f47688c19beac2c907cb14e949a1b5336e",
+      "sha256": "abf42054b4d2b461d4475e31dd1ec031ad84b4ae59d49282551614bafbbb10e8",
+      "bytes": 11096
+    },
+    {
+      "source": "pa26/tests/general/100-host-eh-cross-tu-throw-catch.t.1",
+      "source_sha256": "e2de27a5074bd500fcce99dcc8154bb623feeb8bce2206d39f279ff775273089",
+      "sha256": "e51427b95cd67505a5808784d7beabae49326cc87c7d49a37550bf3d00cb48fd",
+      "bytes": 2088
+    },
+    {
+      "source": "pa26/tests/general/100-host-eh-cross-tu-throw-catch.t.2",
+      "source_sha256": "7891fe72f058ebdc5b37e14be26d2ff4b6572edec464a06d906c74fd1727c689",
+      "sha256": "68e1f49f13a510aa550e21b01b8914678337349bcaf05083f014e3df88a7355c",
+      "bytes": 2568
+    },
+    {
+      "source": "pa26/tests/general/100-host-eh-runtime-declaration-reuse.t.1",
+      "source_sha256": "6422b074f9738fa10e8c887b5b3c7a18d564d5623ba36b755e8a7e3fdfa19a6d",
+      "sha256": "97e563708cbd17b06d255a5218edb0bf3f47a594d9e1d4e56b888244fc96a647",
+      "bytes": 2848
+    },
+    {
+      "source": "pa26/tests/general/100-host-eh-runtime-relocation-facts.t.1",
+      "source_sha256": "15a7797860c30de7ee76a0343b023302575ae0fa75182daf23f61d4dd8c32540",
+      "sha256": "48148dfae11c35da48647c6785b546629f99d4dcec49cee4796af9e8d92050a4",
+      "bytes": 3424
+    },
+    {
+      "source": "pa26/tests/general/100-host-eh-same-tu-throw-catch.t.1",
+      "source_sha256": "51b64ae7a78bcb88d7ce4de53df6dbb8a7dcf248265371291ccdbff254a38e07",
+      "sha256": "5c334982e4a3b87bc228cf9530bf80c0925e5696babc13da35c65912e910c7ac",
+      "bytes": 2872
+    },
+    {
+      "source": "pa26/tests/general/100-host-eh-text-lowir-object.t.1",
+      "source_sha256": "51b64ae7a78bcb88d7ce4de53df6dbb8a7dcf248265371291ccdbff254a38e07",
+      "sha256": "5c334982e4a3b87bc228cf9530bf80c0925e5696babc13da35c65912e910c7ac",
+      "bytes": 2872
+    },
+    {
+      "source": "pa26/tests/general/100-host-eh-typeinfo-lsda-facts.t.1",
+      "source_sha256": "b4fb9951e4a9aa861c26d904e029467a59642432b2f7ef79132c0bd2ebbde809",
+      "sha256": "0d64bd78e624967245e5f2ef5cb05d592235fae485438efaa17da7dd79963d6c",
+      "bytes": 2888
+    },
+    {
+      "source": "pa26/tests/general/100-host-eh-unhandled-throw-smoke.t.1",
+      "source_sha256": "9d4c83d8984ca0d2f0e920d9a62fa2fe479d21080fd6006af2ab908acec18196",
+      "sha256": "0bdb9c6cd994ce7e1e6ccb7bb9c528f2815ec95abe8452c937c30a313f6c80da",
+      "bytes": 2200
+    },
+    {
+      "source": "pa26/tests/general/100-host-eh-unwind-cleanup.t.1",
+      "source_sha256": "eadb02b7606191a169317ef02697eabed7675a2093c7f983508175e12319a742",
+      "sha256": "abf63b3f21074784003dac0d7de4c219616b63880f43170f8459b3e76c6bec28",
+      "bytes": 2696
+    },
+    {
+      "source": "pa26/tests/general/100-host-eh-unwind-cleanup.t.2",
+      "source_sha256": "968083ac6150f05029a99a38ee68e365af1dd851ae84319f69ec06fec2df59ee",
+      "sha256": "3ba2b90e30362e33d1a7f7a32b5f4cd72a0803c424df9d17df3d1bc8ba88a1f4",
+      "bytes": 2624
+    },
+    {
+      "source": "pa26/tests/general/200-host-eh-class-conditional-arm-temporary.t.1",
+      "source_sha256": "3f91df1107b369952bab8c2d52fe39f2f9d42588837b49e4433016a75da0956b",
+      "sha256": "fe0b9cf04376fffac13d104b3d510ca6517022f7261c9eb4916da10a208b8957",
+      "bytes": 4040
+    },
+    {
+      "source": "pa26/tests/general/200-host-eh-class-result-condition-loop-merge.t.1",
+      "source_sha256": "0e46dce2f7a0854f42b95b42765619952de4b0ad47d216a20e03d4b2cd4780d9",
+      "sha256": "c0cb8b10bc65c8376fdc55ff2baff99075142be518dbc36f741ed7fd30b16262",
+      "bytes": 3304
+    },
+    {
+      "source": "pa26/tests/general/200-host-eh-cleanup-only-resume-facts.t.1",
+      "source_sha256": "edd764bcb1378b62711734d79fa66e8369c62e02f08c13b49b6f2648cbe0f04e",
+      "sha256": "52e60c1bf40b4880a45ef9d8036b3aea55dc03c64f509ddb2fcf5a4e908cb9df",
+      "bytes": 2544
+    },
+    {
+      "source": "pa26/tests/general/200-host-eh-cleanup-only-resume-facts.t.2",
+      "source_sha256": "ca2b406ca2c348abfab1a61dbccb253184a52e8236658162f20397c855a1e29b",
+      "sha256": "bf3846943d19f03935dd71c4e16941d7911457bd132e48c864a7e101e4b0e42a",
+      "bytes": 2720
+    },
+    {
+      "source": "pa26/tests/general/200-host-eh-discarded-class-call-branch.t.1",
+      "source_sha256": "7d62e734c2378c239bf855a6e2c552dc728dfbd8e4a7d4606349b3c95e7e8a67",
+      "sha256": "ec0ca5ebe79e31317f4ee4b1502993affcc6515f0638c03a36581d2cebbf3724",
+      "bytes": 3408
+    },
+    {
+      "source": "pa26/tests/general/200-host-eh-logical-rhs-region-merge.t.1",
+      "source_sha256": "167887234a1eec9a87a86ef97c4c8e692fde5936042527d5f733b4845fe0d56c",
+      "sha256": "e686a865db044dfc7f9b91dade3c3e3b0b075cbe3a0695eb0ced63c7c04fa079",
+      "bytes": 3384
+    },
+    {
+      "source": "pa26/tests/general/200-host-eh-personality-indirect-relocation.t.1",
+      "source_sha256": "b6680b18da3827a4c3fe68d84fc991eccf8b52303dc25769e96f109988bcfef6",
+      "sha256": "58ee2b1dbfb6ae3570728c0539807d218c1ef01ae788b45ba74d2a6faa5bbb71",
+      "bytes": 2896
+    },
+    {
+      "source": "pa26/tests/general/200-host-eh-reactive-spill.t.1",
+      "source_sha256": "6145420e4d52c8eb67001f9be1980662b425acde9a5e207356079b641d79f004",
+      "sha256": "f32ed795a28faabc4b5ad4fd8ede1b9947e0af111ac476adacb08fc89d02e87f",
+      "bytes": 2992
+    },
+    {
+      "source": "pa26/tests/general/300-adjacent-lsda-call-site-coalescing.t.1",
+      "source_sha256": "2471165f843bab1f566c6b30b996dba99faf9251cdad4018cf329eafcde52ad4",
+      "sha256": "2b66fbed40eafc01013cae407c4b466c219896d52de8bfde2a73ae38f478c323",
+      "bytes": 3792
+    },
+    {
+      "source": "pa26/tests/general/300-conditional-temporary-cleanup-across-try.t.1",
+      "source_sha256": "1cff2380ff3599c3cbe4dae2e512adb1b936204abc259c8c7e3010a056afc271",
+      "sha256": "5179bcce34c7ddf93f8f8f16187aaf150ba357cf64d80e99d4da57e0625ca0f4",
+      "bytes": 6168
+    },
+    {
+      "source": "pa26/tests/general/300-host-eh-multiple-typed-catches.t.1",
+      "source_sha256": "4525ce8f49e2bf0781d7161ea296afb7a28d1697bfaec75da4eae99c1f010983",
+      "sha256": "9076cb11cf1a8578d526fcf40427786899eb7c279b9c5917afa839274746794e",
+      "bytes": 2976
+    },
+    {
+      "source": "pa26/tests/general/300-host-eh-nested-catch-forward-at-o1.t.1",
+      "source_sha256": "4776e450465a2d6dfef8383edd4ba8d81af81ca375c8dde794aed5dcfa9534ee",
+      "sha256": "8a47d75272cba132265a5d00012e89b7641035129d71b5fa999f736320efcfed",
+      "bytes": 4232
+    },
+    {
+      "source": "pa26/tests/general/300-lsda-distinct-catch-actions.t.1",
+      "source_sha256": "95d76b8666d3af85f41076a2f2fbc5c67648066ff93bdb385fc6e49881f74873",
+      "sha256": "21169a47ee281b3d1ab26773d73886c5e0e6604dfe3fecfa78ce4e56379fb509",
+      "bytes": 3472
+    },
+    {
+      "source": "pa26/tests/general/300-lsda-distinct-cleanup-landings.t.1",
+      "source_sha256": "a54678891fa6f974ec1ecda18d4e5ad56a9121ff917d3d1afc87cce571cf45d0",
+      "sha256": "8f9d9f9240150d780158edda51ec9c4fbadf78ebd9b649bd0aa5c3f008550041",
+      "bytes": 4624
+    },
+    {
+      "source": "pa26/tests/general/300-runtime-builtin-and-foreign-memcpy-object-alias.t.1",
+      "source_sha256": "b36f44a99a98e72fe2896528b6743f86a7329773fa0ab7b9431af3b2943ccfab",
+      "sha256": "a59c8dbffd993284dd560b00f09193cd652a2b388d42199b19349beb74a8c7fc",
+      "bytes": 2288
+    },
+    {
+      "source": "pa26/tests/general/300-shared-cleanup-suffix-landing-entry.t.1",
+      "source_sha256": "44e88d1c592fa2018a0ba46704e020dfb83bbd5b874cf7dfa83ee0e0bedb5945",
+      "sha256": "f369a7bf9734c967e8b9572260ee188da084aa628995f0c7c6104c2f50b5d66c",
+      "bytes": 4448
+    },
+    {
+      "source": "pa26/tests/general/300-shared-conditional-cleanup-resume.t.1",
+      "source_sha256": "6515d74cb5fe04b9b4cd19fcd39cba0cd1491078ec2b4cc1764237ca43457d46",
+      "sha256": "f5c2d86b3ccc9d7ac43c8d5de6897c438fe7ce8be9c27987c4b4dbbc1be2306e",
+      "bytes": 131152
+    },
+    {
+      "source": "pa26/tests/general/300-unwind-resume-coalescing-barrier.t.1",
+      "source_sha256": "fc4bf2e8489a653ec7d200d314dc9eb49e7f0d3b0555af98e519fae0bfc7b513",
+      "sha256": "cf721b868d790a755fd8b561afc94ef1caece592171225cbe8b4f9898d91bfd9",
+      "bytes": 4032
+    },
+    {
+      "source": "pa26/tests/general/400-shared-resume-after-stack-call-cleanup.t.1",
+      "source_sha256": "a04b6e2853db2989d4a384fab12c3a11a8ed42814c728d38c1a57d0faf919a8f",
+      "sha256": "68e1ca997c259c0173ee6709df85b5f10dca4251684b490902dba366fab6609f",
+      "bytes": 5032
+    },
+    {
+      "source": "pa26/tests/general/400-shared-terminate-action.t.1",
+      "source_sha256": "1e79a2fc04019c1e3717cb5d68ce6228553f8be1488ad4b036e9cf1499fb84c5",
+      "sha256": "65aa8eb5065d8cdaa14e5e8913e45d4f2f050791f0f08c5d08830a5dcc53906e",
+      "bytes": 3288
+    },
+    {
+      "source": "pa26/tests/general/400-sparse-unprotected-lsda-coverage.t.1",
+      "source_sha256": "8bdd3b73e3cb669fcb4de83e4e5e9d64c27b96ee0ada2f275b1412dc3a7fcc7c",
+      "sha256": "91232e1360eb78c2ed988a785fe30713f4af9d1863162acc93d84fcc543603ba",
+      "bytes": 4152
+    },
+    {
+      "source": "/tmp/pa26-144/writer-audit/empty.cpp",
+      "source_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "sha256": "90d15801133530dec72a48ebff128456d709921619d89a599a48d9af5dfd481d",
+      "bytes": 1712
+    },
+    {
+      "source": "/tmp/pa26-144/writer-audit/alignment.cpp",
+      "source_sha256": "2d86db6ee27a463c32206848cbc3ca49eb8943955edaaa1a03005ca8ab96242c",
+      "sha256": "47a74e849751376064e37701fbccab5d8d007c29cd4ff4c803707049907a1ffa",
+      "bytes": 14120
+    },
+    {
+      "source": "/tmp/pa26-144/writer-audit/lifecycle.cpp",
+      "source_sha256": "32dc3f8d6f6501d77bbc05977551f6c8d5f2ee8ed9f423613c86f26a81ec0021",
+      "sha256": "1597505fb36cec8067e0e4757b54abce1eff9143580106a45e76984feda48408",
+      "bytes": 2472
+    },
+    {
+      "source": "/tmp/pa26-144/writer-audit/aliases.cpp",
+      "source_sha256": "11adb599de4aeea932e8356a82f016f8073f04caad8c194a6931d19a94c5a9b3",
+      "sha256": "866c5a61c287b2994350e91be4f7ecc3db4636c969a83a46cf7f1e7953fcc748",
+      "bytes": 1848
+    },
+    {
+      "source": "/tmp/pa26-144/writer-audit/storage.cpp",
+      "source_sha256": "ec8a3503ed9b69590f2dc6b2cda250efae556855872fa59260eb639ee351a4ed",
+      "sha256": "dc564876dd1b979f9e65a5dc702c4722554a9bc233be2c25abe65f4b3b443aff",
+      "bytes": 33556352
+    }
+  ],
+  "write_failures": [
+    {
+      "binary": "/tmp/pa26-144/entry-cppgm",
+      "status": 1
+    },
+    {
+      "binary": "/tmp/pa26-144/writer-cppgm",
+      "status": 1
+    }
+  ]
+}
