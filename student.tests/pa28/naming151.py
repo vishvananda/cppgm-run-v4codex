@@ -32,6 +32,10 @@ for i,arg in enumerate(['1','"ok", 1','L"wide"','""','"bad-tag"','"x",']):
     source = out/('invalid'+str(i)+'.cpp')
     source.write_text('struct __attribute__((abi_tag('+arg+'))) C {}; int main(){}')
     run([compiler,'-c',source,'-o',out/'invalid.o'],1)
+names = out/'unnamed.names'
+run([root/'dev/abimangle','-o',names,here/'unnamed151.abi'])
+assert names.read_text().splitlines() == [
+    'Z5scopevEUt_', 'Z5scopevEUt0_', 'Z5scopevEUt1_B5alphaB4beta']
 (out/'results.json').write_text(json.dumps(dict(
     binary_sha256=hashlib.sha256(compiler.read_bytes()).hexdigest(),checks=checks,
     effects=functions,status='pass'),indent=2)+'\n')

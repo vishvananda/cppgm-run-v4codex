@@ -1,0 +1,10 @@
+case first
+let-context owner function scope
+type unnamed-local-type owner 0
+case second
+let-context owner function scope
+type unnamed-local-type owner 1
+case tagged
+let-context owner function scope
+let-type Third unnamed-local-type owner 2
+type tagged Third alpha beta

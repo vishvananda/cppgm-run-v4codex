@@ -1,0 +1,190 @@
+{
+  "binary_sha256": "d10d9691602a574ab7c5183c2b6ac71ab657bf693d57d9e2a30a873ff0254686",
+  "checks": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/attributes151.cpp",
+        "-o",
+        "/tmp/pa28-151/final-validation/naming/attributes.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/attributes151-host.cpp",
+        "/tmp/pa28-151/final-validation/naming/attributes.o",
+        "-o",
+        "/tmp/pa28-151/final-validation/naming/attributes"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa28-151/final-validation/naming/attributes"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/attributes151.cpp",
+        "-o",
+        "/tmp/pa28-151/final-validation/naming/effects.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/decay151.cpp",
+        "-o",
+        "/tmp/pa28-151/final-validation/naming/decay.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa28-151/final-validation/naming/decay.o",
+        "-o",
+        "/tmp/pa28-151/final-validation/naming/decay"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa28-151/final-validation/naming/decay"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "/tmp/pa28-151/final-validation/naming/decay.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 W _Z6resultIiEu7__decayIT_EPS0_\n0000000000000000 T main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa28-151/final-validation/naming/invalid0.cpp",
+        "-o",
+        "/tmp/pa28-151/final-validation/naming/invalid.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: abi_tag requires a nonempty narrow string\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa28-151/final-validation/naming/invalid1.cpp",
+        "-o",
+        "/tmp/pa28-151/final-validation/naming/invalid.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: abi_tag requires a nonempty narrow string\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa28-151/final-validation/naming/invalid2.cpp",
+        "-o",
+        "/tmp/pa28-151/final-validation/naming/invalid.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: abi_tag requires a nonempty narrow string\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa28-151/final-validation/naming/invalid3.cpp",
+        "-o",
+        "/tmp/pa28-151/final-validation/naming/invalid.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: abi_tag requires a nonempty narrow string\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa28-151/final-validation/naming/invalid4.cpp",
+        "-o",
+        "/tmp/pa28-151/final-validation/naming/invalid.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: abi_tag requires an identifier\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa28-151/final-validation/naming/invalid5.cpp",
+        "-o",
+        "/tmp/pa28-151/final-validation/naming/invalid.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: abi_tag requires string arguments\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/abimangle",
+        "-o",
+        "/tmp/pa28-151/final-validation/naming/unnamed.names",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/unnamed151.abi"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "effects": [
+    "function @Record__1(%v12 : ptr [object_bytes=16], %v13 : i32) -> void [binding=strong, object=_ZN6RecordB5alphaB4zetaC2Ei, object_root=yes] {",
+    "function @Record(%v1 : ptr [object_bytes=16], %v2 : i32) -> void [binding=strong, object=_ZN6RecordB5alphaB4zetaC1Ei] {",
+    "function @_Record__2(%v14 : ptr [object_bytes=16]) -> void [unwind=no, binding=strong, object=_ZN6RecordB5alphaB4zetaD2Ev, object_root=yes] {",
+    "function @deleting_destructor(%v15 : ptr) -> void [binding=strong, object=_ZN6RecordB5alphaB4zetaD0Ev] {",
+    "function @_Record(%v3 : ptr [object_bytes=16]) -> void [unwind=no, binding=strong, object=_ZN6RecordB5alphaB4zetaD1Ev] {",
+    "function @read(%v4 : ptr [object_bytes=16]) -> i32 [binding=strong, object=_ZNK6RecordB5alphaB4zeta4readEv] {",
+    "function @tagged(%v5 : i32) -> i32 [binding=strong, object=_Z6taggedB7versioni] {",
+    "function @reader() -> i32 [binding=strong, object=_Z6readerv, effects=readonly] {",
+    "function @strongest(%v7 : i32) -> i32 [binding=strong, object=_Z9strongesti, effects=readnone] {",
+    "function @untouched(%v8 : i32) -> i32 [binding=strong, object=_Z9untouchedi] {",
+    "function @use_effects(%v9 : i32) -> i32 [binding=strong, object=_Z11use_effectsi] {",
+    "function @identity(%v10 : i32) -> i32 [binding=weak, object=_Z8identityIiET_S0_, effects=readnone] {",
+    "function @demand_early() -> i32 [binding=strong, object=_Z12demand_earlyv] {",
+    "function @later(%v11 : i32) -> i32 [binding=weak, object=_Z5laterIiET_S0_, effects=readnone] {"
+  ],
+  "status": "pass"
+}

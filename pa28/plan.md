@@ -1,45 +1,59 @@
-# PA28 implementation plan
+# PA28 implementation plan and handoff151
 
-Target: PA28 full-stage. Phase: implement, handoff151 in progress.
+Target: **PA28 full-stage**. Phase: **validated incomplete implementation handoff**.
 Stage base commit: `bec9389f62014dfecac8b41d330de142e0904b8c`.
 Last reviewed commit: `bec9389f62014dfecac8b41d330de142e0904b8c`.
-Entry result: **81/97**, 16 failures; earlier PA1–27 **4441/4441**.
 Review markers remain fixed until independent review.
 
-## Design and remaining groups
+Entry **81/97** → final **91/97**: ten existing failures resolved, six remain.
+Earlier PA1–27 **4441/4441**; file audit passes with four inherited header warnings.
+Final [validation](../student.tests/pa28/evidence151/validation.json) records the
+required commands, exact remaining/resolved fixtures, binary/source hashes and
+unchanged coverage. Fifteen explicit personal checks pass. No contract/reference
+correction or harness/comparison change was made.
 
-| Group / owner | Data flow, complexity and validation |
+## Design/spec alignment and groups
+
+| Status / owner | Data flow, complexity and validation |
 |---|---|
-| ABI naming: declaration attributes, canonical semantic ABI facts, Itanium encoder | Publish tags and dependent/local identities once; feed typed facts to shared mangler and ELF. Work proportional to declarations and encoded names, TU-owned caches. Inspect required raw symbols and host-link behavior, including rejection and template controls. Initial group: tagged constructors/destructors/support objects, template parameter and local/lambda names. |
-| Virtual objects: semantic completion/layout, lowering projections | Final layout owns covariance adjustments and vtable projections; lazy template bases must provide RTTI. Work follows demanded classes, slots and inheritance edges. Validate layout-finalization, lazy-base cross-cast and virtual-base return-condition cases. |
-| Exceptions: semantic lifetime facts, lowering EH regions, native LSDA | Cleanup follows active lifetime/handler state; dynamic exception specifications retain host filter semantics. Validate rethrow outer local, resume lexical lifetime and unexpected cases with object/runtime controls. |
+| Complete: declaration attributes → semantic facts → shared Itanium graph | Interned source tags, sparse EntityId tag heads and membership, canonical callable effects, class/template publication and strongest redeclarations. Typed names feed ordinary/special symbols and ELF. O(actual tags), O(k log k) tag sorting, TU release. Required raw-symbol checks plus host-built consumer and LowIR effect inspection pass. |
+| Complete: template/query/local identities → ABI graph | Parameter ordinals, dependent class pack lists, __decay query facts, local unnamed ordinals and lambda prefix substitutions. Existing query/graph caches and source occurrences; no grammar replay or rendered-name keys. Required naming fixtures, decay assertions and ABI adapter controls pass. |
+| Unfinished: virtual completion/layout/projections (3) | Covariant virtual result row -24 vs required -32; external auxiliary vtable views; unavailable lazy template-base RTTI prerequisite. Own consistent address points, support objects and precise class-demand edges before changing output. |
+| Unfinished: lifetime/EH regions and host LSDA (3) | Rethrow outer-local cleanup, resume past later lexical local, dynamic exception-specification unexpected handling. Own active lifetime/handler state and host filter facts; validate runtime and unwind interactions. |
 
-Preserve direct typed source → LowIR → MIR → ELF, canonical identity, demand
-states and bounded work from spec §§1–8. Complete related fixes at each owner;
-no fixture-specific implementation or reduced coverage. GNU callable effects
-and already-passing ABI behavior remain required.
+[Implementation evidence](../student.tests/pa28/implementation151.md) traces
+owners and lifetimes. Direct typed source → LowIR → MIR → ELF, canonical identity,
+precise demand and bounded work remain; no external implementation delegation.
 
-## Performance and validation
+## Stage-scoped performance
 
-Freeze entry/final compilers and input hashes. Measure separate compiler latency,
-peak RSS, executable runtime and text size using A/A and ABBA observations on
-equivalent correct workloads; newly supported cases provide standalone costs.
-Retain raw observations and spread. No optional optimization is planned. Spec §9
-stage scope applies: inherited blanket 15%/zero-growth targets are diagnostics,
-not mandated limits; existing work/growth limits, correctness and coverage stay.
-Run explicit personal controls, `make test-pa28`, the root through report and
-`perl scripts/cppgm_file_audit.pl --stage pa28 --paths dev/src` before handoff.
+[Performance151](../student.tests/pa28/performance151.md) retains **744 observations**,
+including all pre-packing runs. Final frozen A/A + six ABBA blocks cover compiler
+latency/RSS and checked runtime/text size on four fixed workloads. A/B common
+objects and executable text are identical; Entity remains **120 bytes**. Paired
+compiler medians are .991, 1.015, .996 and .997, with full spread disclosed.
+New naming behavior has standalone costs because A cannot compile it.
 
-## Handoff ledger
+No timing speedup or optional runtime transform is claimed. Tags have linear
+storage and bounded sorting; common code growth is zero. Spec §9 keeps inherited
+15%/zero-growth diagnostics distinct from mandated limits. Existing limits,
+correctness and coverage stay required; PA32/33/34 acceptance stays stage-owned.
 
-151 implementation increment: ABI attributes, dependent template identities,
-type-producing builtin queries and local/lambda naming now pass the ten owning
-fixtures. PA28 **91/97** and the through report **4532/4538** show no earlier
-failures. Fourteen explicit naming/effect controls pass, including a host-built
-consumer and effects added after an instance was declared. Final validation and
-frozen performance evidence are pending.
+## Handoff ledger and boundary
 
-Implementation unfinished: virtual layout/completion (3) and EH (3), with the
-same six entry fixtures still failing. Independent review pending: cumulative
-PA28 architecture, semantic and performance evidence; no review requirement is
-waived. The naming increment does not claim these separate owners are complete.
+| Commits | Disposition |
+|---|---|
+| `b7743532` | Recorded entry/review markers before implementation edits. |
+| `2a87fba0` | Completed naming/attribute group; 10 required failures resolved. |
+| `ef7f93de..e58612a4` | Sparse tag storage and packed effect byte; final compiler revalidated and remeasured. |
+| Evidence/plan commit | Required checks, personal controls, performance records and coverage manifest; no further compiler changes. |
+
+This handoff ends at the naming/attribute boundary. The covariant spelling is
+already faithful to its semantic row; remaining fixes require physical vtable
+layout, class-completion scheduling, or EH/LSDA state and new runtime proofs.
+They cannot be completed by extending name encoding or declaration attributes.
+
+Independent review remains pending for all PA28 commits: semantic publication,
+cache/lifetime and source-to-ELF ownership, substitution ordering and performance
+evidence. Those review questions are separate from the six known implementation
+failures above. Neither is waived; PA28 has not passed its full-stage exit.

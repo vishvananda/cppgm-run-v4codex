@@ -1,0 +1,54 @@
+{
+  "memory": {
+    "object_bytes_identical": true,
+    "text_hashes": {
+      "A": "5bcb1f544fe09791813d5412cd509e656dfeb462f54d38c1555eba8a75fa750f",
+      "B": "5bcb1f544fe09791813d5412cd509e656dfeb462f54d38c1555eba8a75fa750f"
+    },
+    "counter_differences": {
+      "semantic_entity_bytes": [
+        120,
+        128
+      ]
+    }
+  },
+  "floating": {
+    "object_bytes_identical": true,
+    "text_hashes": {
+      "A": "ab814a6c0a9c6e1e74007467ef1f7a3e7f5175c5b8b01164b3f01c3a360eb88b",
+      "B": "ab814a6c0a9c6e1e74007467ef1f7a3e7f5175c5b8b01164b3f01c3a360eb88b"
+    },
+    "counter_differences": {
+      "semantic_entity_bytes": [
+        120,
+        128
+      ]
+    }
+  },
+  "exceptions": {
+    "object_bytes_identical": true,
+    "text_hashes": {
+      "A": "8a7f4db9c4f7dd332d8976b3d68037d01954d3387c67dab65cf93c8409cb4878",
+      "B": "8a7f4db9c4f7dd332d8976b3d68037d01954d3387c67dab65cf93c8409cb4878"
+    },
+    "counter_differences": {
+      "semantic_entity_bytes": [
+        120,
+        128
+      ]
+    }
+  },
+  "pruning": {
+    "object_bytes_identical": true,
+    "text_hashes": {
+      "A": "5bcb1f544fe09791813d5412cd509e656dfeb462f54d38c1555eba8a75fa750f",
+      "B": "5bcb1f544fe09791813d5412cd509e656dfeb462f54d38c1555eba8a75fa750f"
+    },
+    "counter_differences": {
+      "semantic_entity_bytes": [
+        120,
+        128
+      ]
+    }
+  }
+}

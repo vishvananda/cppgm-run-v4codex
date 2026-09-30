@@ -1,0 +1,166 @@
+{
+  "stage_base": "bec9389f62014dfecac8b41d330de142e0904b8c",
+  "code_tip": "e58612a455a8616a45d7a596f0dcd1047a745daf",
+  "binary_sha256": "d10d9691602a574ab7c5183c2b6ac71ab657bf693d57d9e2a30a873ff0254686",
+  "baseline": {
+    "passed": 81,
+    "total": 97,
+    "failures": [
+      "pa28/tests/general/200-host-abi-tag-copy-ctor-base-alias.t",
+      "pa28/tests/general/200-host-abi-tag-dtor-base-alias.t",
+      "pa28/tests/general/200-host-builtin-transform-alias-mangling.t",
+      "pa28/tests/general/200-host-class-abi-tag-special-symbols.t",
+      "pa28/tests/general/200-host-covariant-return-layout-finalization.t",
+      "pa28/tests/general/200-host-dependent-ratio-and-fn-mangling.t",
+      "pa28/tests/general/200-host-eh-dynamic-exception-spec-unexpected.t",
+      "pa28/tests/general/200-host-eh-rethrow-cleans-outer-local.t",
+      "pa28/tests/general/200-host-lazy-template-base-rtti-cross-cast.t",
+      "pa28/tests/general/200-host-nested-lambda-parameter-substitution-mangling.t",
+      "pa28/tests/general/200-host-template-template-parameter-mangling.t",
+      "pa28/tests/general/200-host-unnamed-local-class-template-constructor-mangling.t",
+      "pa28/tests/general/200-host-virtual-base-return-condition.t",
+      "pa28/tests/general/200-invalid-abi-tag-argument.t",
+      "pa28/tests/general/200-multi-abi-tag-member-publication.t",
+      "pa28/tests/general/300-host-eh-resume-skips-later-lexical-local.t"
+    ],
+    "log_sha256": "735a303ac86b4dd1a3375a48819a3eb7f0a2d67d65004f9edabac5c7038c0c78"
+  },
+  "checks": [
+    {
+      "name": "priorThroughTests",
+      "command": [
+        "bash",
+        "-c",
+        "n=28; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi"
+      ],
+      "status": 0,
+      "seconds": 13.47218507528305,
+      "log": "/tmp/pa28-151/final-validation/priorThroughTests.log",
+      "log_sha256": "4f535f666a3264a6c70c0fc7bb2529ffabe7a35c56c1ba49f6584a9dce9fa958",
+      "tail": "  LINK    lowiropt\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== pa21 =====\n===== pa22 =====\n===== pa23 =====\n===== pa24 =====\nPA24 native contract properties: PASS (14/14)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\n===== pa25 =====\n===== pa26 =====\n===== pa27 =====\nPA27 global-section properties: PASS (3/3)\n===== ALL TESTS PASSED SUCCESSFULLY! (4441 / 4441) =====\n"
+    },
+    {
+      "name": "stageTests",
+      "command": [
+        "make",
+        "test-pa28"
+      ],
+      "status": 2,
+      "seconds": 3.32913651317358,
+      "log": "/tmp/pa28-151/final-validation/stageTests.log",
+      "log_sha256": "656453bbf55401e6a86ee0bf142c51cc14373e77b47350c85511de2aea666ea0",
+      "tail": "  LINK    lowiropt\n===== pa28 =====\npa28/tests/general/200-host-covariant-return-layout-finalization.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got 255)\npa28/tests/general/200-host-eh-dynamic-exception-spec-unexpected.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))\npa28/tests/general/200-host-eh-rethrow-cleans-outer-local.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))\npa28/tests/general/200-host-lazy-template-base-rtti-cross-cast.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))\npa28/tests/general/200-host-virtual-base-return-condition.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))\npa28/tests/general/300-host-eh-resume-skips-later-lexical-local.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))\n===== TEST SUMMARY: 91 / 97 TESTS PASSED =====\nmake[1]: *** [Makefile:292: test-report-nobuild] Error 1\nmake: *** [Makefile:483: test-pa28] Error 2\n"
+    },
+    {
+      "name": "fileAudit",
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa28",
+        "--paths",
+        "dev/src"
+      ],
+      "status": 0,
+      "seconds": 4.151682700961828,
+      "log": "/tmp/pa28-151/final-validation/fileAudit.log",
+      "log_sha256": "f3fc99a889e12af99240ff43d0e7be2f5bd18420efb59d1417ab539cc2ef0341",
+      "tail": "File audit passed for pa28 with 4 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n"
+    },
+    {
+      "name": "naming",
+      "command": [
+        "python3",
+        "student.tests/pa28/naming151.py",
+        "/tmp/pa28-151/final-validation/naming"
+      ],
+      "status": 0,
+      "seconds": 0.3727210871875286,
+      "log": "/tmp/pa28-151/final-validation/naming.log",
+      "log_sha256": "04e85c1d69243e5a24fb4663c991007414df5ca750f23ed4ac56c8b9d6b147fb",
+      "tail": "naming/effects controls PASS: 15 commands\n"
+    },
+    {
+      "name": "diffCheck",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "status": 0,
+      "seconds": 0.022096212953329086,
+      "log": "/tmp/pa28-151/final-validation/diffCheck.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tail": ""
+    }
+  ],
+  "stageProgress": {
+    "status": "pass",
+    "passed": 91,
+    "total": 97,
+    "remaining": [
+      "pa28/tests/general/200-host-covariant-return-layout-finalization.t",
+      "pa28/tests/general/200-host-eh-dynamic-exception-spec-unexpected.t",
+      "pa28/tests/general/200-host-eh-rethrow-cleans-outer-local.t",
+      "pa28/tests/general/200-host-lazy-template-base-rtti-cross-cast.t",
+      "pa28/tests/general/200-host-virtual-base-return-condition.t",
+      "pa28/tests/general/300-host-eh-resume-skips-later-lexical-local.t"
+    ],
+    "resolved": [
+      "pa28/tests/general/200-host-abi-tag-copy-ctor-base-alias.t",
+      "pa28/tests/general/200-host-abi-tag-dtor-base-alias.t",
+      "pa28/tests/general/200-host-builtin-transform-alias-mangling.t",
+      "pa28/tests/general/200-host-class-abi-tag-special-symbols.t",
+      "pa28/tests/general/200-host-dependent-ratio-and-fn-mangling.t",
+      "pa28/tests/general/200-host-nested-lambda-parameter-substitution-mangling.t",
+      "pa28/tests/general/200-host-template-template-parameter-mangling.t",
+      "pa28/tests/general/200-host-unnamed-local-class-template-constructor-mangling.t",
+      "pa28/tests/general/200-invalid-abi-tag-argument.t",
+      "pa28/tests/general/200-multi-abi-tag-member-publication.t"
+    ]
+  },
+  "earlier": {
+    "passed": 4441,
+    "total": 4441,
+    "stages": 27
+  },
+  "coverage": {
+    "stage_anchors": 97,
+    "tracked_contract_paths": 20288,
+    "inventory_sha256": "24cb3a8e20b8ff82ea4b8fb609b3b93352a64b9b6c35af151260c86234abe404",
+    "changes": []
+  },
+  "implementation_hashes": {
+    "dev/frontend_source_sets.mk": "a8b278fb627eb32a0a2c6db6594480aec104f84fb79bf4828c9618a122f8cd95",
+    "dev/src/abi/itanium/encoder.cpp": "c85afcec109ee970ffdcc951a417d43297ea4d48ce0a2eee41bad117cd7a93b3",
+    "dev/src/abi/itanium/fact_writer.cpp": "4f7c62f31f15d1663b5f400867a427b9349d1942857b08e97c7680fa20c1ef1f",
+    "dev/src/abi/itanium/function_encoder.cpp": "4f0a232792e8403768563e5925fbd0f1c948cdca72ff505acef90811df698fc0",
+    "dev/src/abi/itanium/graph_validation.cpp": "f58a9ff52b97b730c1c41cf87d555b35790f481cf9e7fe38d9ef51141c1150bd",
+    "dev/src/abi/itanium/type_reader.cpp": "2d0fa1b88cda99ada4c24dd89e44a66721bfa17481cfeefbf2be13f029915b11",
+    "dev/src/lowering/function_declaration.cpp": "5dd0ccda36d3818f8d0ebb84c09876f0b36ea0f9d293fed0d85798468f477dfa",
+    "dev/src/lowering/lifecycle_abi.cpp": "dd2172d0590ab0db738c107bdd843fbb8e586bc9c3a762a6a49a82dead0cf9a1",
+    "dev/src/lowering/local_abi.cpp": "ca9227371658e5fdef49c3e9ceb78571e07c5864dc0c230640272eca5eeedd7b",
+    "dev/src/lowering/procedural.h": "27e4037b13c08b8364d1441730040c24c4911af7c21a56b46942a0f73e8e0bca",
+    "dev/src/lowering/symbols.cpp": "798c4ac10652fee8234e11398bd1afb04d9d12a2391f5f9a895b12d299a37b3e",
+    "dev/src/lowering/virtuals.cpp": "401bccdd8f29c28441bb169a67da27819ccdbc8bd7a810c287ae949c0e3552c4",
+    "dev/src/semantic/analyzer.h": "47be435bc1f64dbdc54e3291edb20f58053077d5d78e9f41eb53e9c10538947c",
+    "dev/src/semantic/builtin_traits.cpp": "c1c04e9aef1b34b571aa3b870cc5f39919b62a33d4736344c460348245c1b357",
+    "dev/src/semantic/class_enum.cpp": "e2e01d0a2e523444b76a1140c30fc553e89bfa5a5bf2eebdfd1159b65e4a9d7c",
+    "dev/src/semantic/model.h": "667a864f9665dedf73ecfce1f396e5bbb9dca12571131892ef2e3abac1b9631c",
+    "dev/src/semantic/native_attributes.cpp": "dd145ee9cfeb48bd2f4df688ca3f579ec249eaf90c3417e944b9f1b13fb2ebc6",
+    "dev/src/semantic/template_binding_declarations.cpp": "4e8a1ab381d7a8b42fe99b16fd8b92c18a46fc88e452b6ba6d918ee61acbdcc0",
+    "dev/src/semantic/template_call.cpp": "9833df34c0d9914aaeb7ad403f9c7c7b61cce2689e1446efd565289f437d2513",
+    "dev/src/semantic/template_class.cpp": "4e19af097e0c53005dd30d115b1363134a172bc31f4608e45c82de804582f989",
+    "dev/src/semantic/template_definition.cpp": "4dc5b85464d3ca1933c53918ee0a039d52d10969eeecff41c9f54d08d39e775f",
+    "dev/src/semantic/type_builder.cpp": "ee18ab56b967bb1fc3e1f51e3eda1c0bca37586f27652022d38ff2410ec64686",
+    "dev/src/semantic/type_query.cpp": "03de474521c88c9788bdb5b7186e91349203fc871db5f84e2c8ac2a48baf3c3a",
+    "dev/src/support/type_traits.h": "6081a2008c726f812f9fb7d96d9820ef6bcd1efea142eeed547a6068a6ecf805",
+    "dev/src/syntax/ast.h": "9ead7c815c559ca70b6b8e5455193547e4427cb89add4be75e08eb637e2e68e9",
+    "dev/src/syntax/attributes.cpp": "0525e5d0ac4e2130a56302bcd8cd84f9b809507ac90064a868d0bf77c994cc97",
+    "dev/src/syntax/class_parser.cpp": "5268232c571beca00b9528a919f4291e5dfde8af81267885685d44dfcd593075",
+    "dev/src/syntax/declarator.cpp": "a364749981fae11f62283b777d601b2004fbddd8da840623448332401818592e",
+    "dev/src/syntax/parser.cpp": "24875b4a53a6fef232e5e1b3d28f27ef35b033bb3b90b4b02a8aa4b41c50c58a",
+    "dev/src/syntax/prediction.cpp": "bffff562e7b69317adcb94747127548f0d7050a08cac95323d3a2db80bd03b4f"
+  },
+  "handoff_status": "validated incomplete implementation"
+}
