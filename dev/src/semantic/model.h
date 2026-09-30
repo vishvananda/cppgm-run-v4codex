@@ -263,6 +263,7 @@ struct VirtualView {
     std::uint32_t parent = 0, edge = 0;
     std::uint32_t begin = 0, count = 0; // Slice of the owning class's slot arena.
     std::uint64_t offset = 0;
+    std::uint64_t group_address_point = 16;
     bool store = false;
 };
 struct VirtualClass {
@@ -273,7 +274,7 @@ struct VirtualClass {
     std::vector<VirtualView> views;
     Index signatures;
     EntityId key_function = 0;
-    bool abstract = false;
+    bool abstract = false, referenced = false;
     FactState demand = FactState::NotStarted;
     unsigned char reasons = 0;
 };

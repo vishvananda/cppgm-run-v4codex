@@ -193,6 +193,16 @@ void Analyzer::demand_vtable(EntityId cls, VtableReason reason)
     if (!polymorphic(cls)) return;
     auto v = class_facts[entities[cls].class_info].virtual_info;
     virtual_classes[v].reasons |= static_cast<unsigned char>(reason);
+    if (!virtual_classes[v].referenced) {
+        virtual_classes[v].referenced = true;
+        vtable_emission.push_back(cls);
+    }
+    // A key declaration fixes external ownership until its definition arrives.
+    // Its reverse dependency wakes this one table; referencing an external
+    // table must not instantiate its slots or their RTTI as a side effect.
+    auto key_function = virtual_classes[v].key_function;
+    if (key_function && !entities[key_function].body && !members[entities[key_function].member_info].body &&
+        !entities[cls].specialization) return;
     if (virtual_classes[v].demand == FactState::Failure)
         throw FailedSemanticFact(SemanticFact::Vtable,cls,entities[cls].source);
     if (virtual_classes[v].demand != FactState::NotStarted) return;
@@ -222,7 +232,6 @@ void Analyzer::demand_vtable(EntityId cls, VtableReason reason)
         }
     }
     record_rtti_type(entities[cls].type);
-    vtable_emission.push_back(cls);
     virtual_classes[v].demand = FactState::Success;
     } catch (...) {
         virtual_classes[v].demand = FactState::Failure; throw;
@@ -235,10 +244,15 @@ void Analyzer::layout_virtual_views(EntityId cls)
 {
     auto id = virtual_class_id(cls);
     Index stored;
+    std::uint64_t group_end = 16 + virtual_classes[id].primary_count*8;
     for (auto& view : virtual_classes[id].views) {
         view.offset = (view.parent ? virtual_classes[id].views[view.parent-1].offset : 0) + bases[view.edge].offset;
         view.store = view.offset && !stored.get(view.offset);
-        if (view.store) stored.put(view.offset,1);
+        if (view.store) {
+            view.group_address_point = group_end + 16;
+            stored.put(view.offset,view.group_address_point);
+            group_end += 16 + view.count*8;
+        } else view.group_address_point = view.offset ? stored.get(view.offset) : 16;
     }
     auto adjust = [&](unsigned begin, unsigned count, std::uint64_t offset) {
         for (unsigned j = 0; j < count; ++j) {
@@ -278,6 +292,7 @@ void Analyzer::layout_virtual_views(EntityId cls)
         v.slots.insert(v.slots.begin()+count,additional.begin(),additional.end());
         for (auto& view : v.views) view.begin += additional.size();
         v.primary_count += additional.size();
+        for (auto& view : v.views) if (view.offset) view.group_address_point += additional.size()*8;
     }
 }
 } }

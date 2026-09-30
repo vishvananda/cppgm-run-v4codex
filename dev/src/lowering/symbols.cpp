@@ -95,8 +95,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     auto e = sem.entities[id];
     bool external = e.member_info && !e.body && !sem.synthetic_member(id);
     bool separate = separate_base(id);
-    bool base_only = e.member_info && (external || e.template_member || sem.member_fact(id).inherited_constructor) &&
-        sem.member_fact(id).base_entry && !sem.member_fact(id).complete_entry;
+    bool base_only = e.member_info && sem.member_fact(id).base_entry && !sem.member_fact(id).complete_entry;
     base = base && separate;
     if (deleting) return deleting_symbol(id);
     if ((base ? base_symbols[id] : symbols[id])) return base ? base_symbols[id] : symbols[id];
@@ -374,8 +373,10 @@ void Procedural::run()
         auto before = definitions.size(); declare_function(e);
         if (definitions.size() != before) function_body(e);
     }
-    order_lifecycle_entries();
     emit_terminate_adapter();
+    // The adapter can introduce runtime declarations. Publish the presentation
+    // schedule only after every emission queue has finished.
+    order_lifecycle_entries();
 }
 void Procedural::function_body(EntityId e, bool base)
 {

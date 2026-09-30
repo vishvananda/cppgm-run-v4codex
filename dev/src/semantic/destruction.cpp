@@ -58,7 +58,10 @@ EntityId Analyzer::default_destructor(TypeId t, ScopeId s, bool demand)
     if (members[entities[dtor].member_info].deleted) throw std::runtime_error("deleted destructor");
     check_default_destructor(dtor);
     check_access(dtor, s, entities[dtor].owner);
-    if (demand) demand_member(dtor);
+    if (demand) {
+        members[entities[dtor].member_info].emission_reference = true;
+        demand_member(dtor);
+    }
     return dtor;
 }
 EntityId Analyzer::destination_destructor(TypeId t, ScopeId s)
@@ -155,11 +158,11 @@ void Analyzer::destructor_actions(EntityId e)
         }
         std::reverse(work.begin()+base_begin,work.end());
     }
-    // Small empty bodies may share their prepared single-base suffix with D0.
-    // Otherwise D0 calls D1 once: linear cleanup work, with no body cloning.
+    // O0 expands at most two prepared subobject actions in D0. The fixed cap
+    // bounds cleanup suffix growth; larger destructors call D1 exactly once.
     unsigned nontrivial = 0;
     for (const auto& action : work) nontrivial += !trivial_destructor(action.type);
-    members[m].deleting_complete = (members[m].body && (ast[members[m].body].kind != Kind::Compound || ast[members[m].body].first)) || nontrivial > 1;
+    members[m].deleting_complete = (members[m].body && (ast[members[m].body].kind != Kind::Compound || ast[members[m].body].first)) || nontrivial > 2;
     members[m].destruction_begin = destruction_actions.size(); members[m].destruction_count = work.size();
     destruction_actions.insert(destruction_actions.end(), work.begin(), work.end());
     members[m].actions_state = FactState::Success;
