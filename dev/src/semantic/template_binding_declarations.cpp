@@ -43,9 +43,12 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
         auto binding = bind_template_name(name,parent);
         template_base_dependence.put(ast.nodes.occurrences[b].source,binding.dependent ? 2 : 1);
         auto base = binding.entity;
-        if (base && entities[base].kind == EntityKind::Alias) base = types[entities[base].type].entity;
         if (binding.dependent && !pattern_class_type(entities[base].type)) {
             template_pattern_open_bases.put(entity,1); continue;
+        }
+        if (base && entities[base].kind == EntityKind::Alias) {
+            auto type = types[entities[base].type];
+            base = type.kind == TypeKind::Named ? type.entity : 0;
         }
         if (template_pattern_open_bases.get(base)) template_pattern_open_bases.put(entity,1);
         if (base && entities[base].class_info) complete_class(base);

@@ -398,17 +398,7 @@ Value Procedural::call(NodeId n, Value destination)
         return value;
     }
     auto intrinsic = sem.intrinsic_function(sem.facts[n].entity);
-    if (intrinsic != semantic::Intrinsic::None) {
-        auto first = converted(sem.call_argument(fact),sem.conversion_fact(fact.conversions));
-        if (intrinsic == semantic::Intrinsic::VaStart) return emit(Opcode::VaStart,IRType(),{first.operand});
-        if (intrinsic == semantic::Intrinsic::StackAlloc) return emit(Opcode::StackAlloc,IRType::Ptr,{first.operand});
-        if (intrinsic == semantic::Intrinsic::VaCopy) {
-            auto second = converted(sem.call_argument(fact,1),sem.conversion_fact(fact.conversions+1));
-            Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(sem.variadic_type());
-            copy.alignment = sem.object_alignment(sem.variadic_type()); emit(copy,{second.operand,first.operand});
-        }
-        return Value(Operand(),IRType::Void,fact.type);
-    }
+    if (intrinsic != semantic::Intrinsic::None) return intrinsic_call(n,intrinsic);
     bool class_result = sem.class_value(sem.facts[n].type);
     SlotId result_slot = !class_result && type(sem.facts[n].type) != IRType::Void && full_expression.enabled && (unwind_expression(n) || cleanup_expression(n,false,true)) ? builder->add_slot(0,type(sem.facts[n].type)) : SlotId();
     bool indirect_result = sem.indirect_value(sem.facts[n].type);

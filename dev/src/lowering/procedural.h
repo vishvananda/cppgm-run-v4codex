@@ -337,6 +337,7 @@ class Procedural {
     void discard(NodeId n, bool access = true);
     Value unary(NodeId n);
     Value binary(NodeId n, bool location);
+    Value intrinsic_call(NodeId n, semantic::Intrinsic intrinsic);
     Value conditional(NodeId n, bool location, Value destination = Value(), std::uint32_t branches = 0, bool terminal = false, const semantic::ScalarConsumption* consumption = nullptr);
     Value logical(NodeId n);
     Value arrow_object(NodeId n, std::uint32_t chain);

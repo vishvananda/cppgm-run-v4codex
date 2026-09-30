@@ -41,7 +41,7 @@ public:
     std::size_t spelling_storage_bytes() const { return translated_.capacity(); }
 
 private:
-    enum class Directive { line_start, after_hash, after_include, other };
+    enum class Directive { line_start, after_hash, after_include, after_header_probe, other };
     const SourceBuffer& source_;
     IdentifierTable& identifiers_;
     LexStats* stats_;

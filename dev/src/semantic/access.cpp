@@ -39,6 +39,11 @@ bool Analyzer::privileged(ScopeId context, EntityId cls) const
         // canonical declaration; it is not copied to every instantiation.
         if (scope.entity && entities[scope.entity].specialization &&
             friendships.get(key(cls,specializations[entities[scope.entity].specialization].pattern))) return true;
+        // A partial specialization's definition is checked before any concrete
+        // specialization exists. Friendship to the primary covers that source
+        // definition too ([temp.friend]), via its canonical primary identity.
+        auto head = scope.entity ? entities[scope.entity].template_info : 0;
+        if (head && templates[head].primary && friendships.get(key(cls,templates[head].primary))) return true;
     }
     return false;
 }
@@ -77,7 +82,13 @@ bool Analyzer::base_accessible(EntityId cls, EntityId target, ScopeId context)
 }
 void Analyzer::check_access(EntityId e, ScopeId context, ScopeId naming, TypeId object)
 {
-    if (!accessible(e,context,naming,object)) throw std::runtime_error("inaccessible class member");
+    if (!accessible(e,context,naming,object)) {
+        auto name = ids.spelling(entities[e].name);
+        const auto& location = static_cast<const syntax::Ast&>(ast).locations[ast[entities[e].source].location];
+        auto file = ids.spelling(location.presumed_file);
+        throw std::runtime_error("inaccessible class member: " + std::string(name.data,name.size) +
+            " declared in " + std::string(file.data,file.size) + ":" + std::to_string(location.line));
+    }
 }
 unsigned Analyzer::using_member_access(ScopeId scope, EntityId member) const
 {

@@ -54,3 +54,11 @@ Implementation unfinished: hosted-library prerequisites and final fixture behavi
 Independent review: final combined changes still require Ralph's full-stage audit;
 this is separate from implementation completion and does not waive any finding.
 Handoff ledger: 149 in progress; no completion claim yet.
+
+149 increment: GNU string/atomic builtin signatures, named variadics/header probes,
+null/enum parsing, dependent alias bases, partial-specialization friendship and
+explicit-instantiation ordering implemented with 40 explicit control commands.
+Initial through report: **4440/4441** (PA1–PA26 still **4283/4283**; PA27 still
+**157/158**, unchanged coverage). This is not stage progress or a handoff boundary.
+The stream fixture now reaches a retained member-signature parameter mapping
+invariant; continue through that semantic owner and the final object demand.

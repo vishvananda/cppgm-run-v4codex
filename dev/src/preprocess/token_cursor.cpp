@@ -250,6 +250,9 @@ void PPTokenCursor::update_directive()
             (text.equals("#") || text.equals("%:"))) directive_ = Directive::after_hash;
         else if (directive_ == Directive::after_hash && token_.kind == PPTokenKind::identifier &&
                  (text.equals("include") || text.equals("include_next"))) directive_ = Directive::after_include;
+        else if (token_.kind == PPTokenKind::identifier &&
+                 (text.equals("__has_include") || text.equals("__has_include_next"))) directive_ = Directive::after_header_probe;
+        else if (directive_ == Directive::after_header_probe && text.equals("(")) directive_ = Directive::after_include;
         else directive_ = Directive::other;
     }
 }

@@ -13,6 +13,12 @@ CallSelection Analyzer::select_call(EntityId family, const std::vector<Expressio
     auto declarations = candidates(family);
     for (auto e : declarations) {
         ++candidate_work;
+        auto intrinsic = intrinsic_function(e);
+        if (intrinsic == Intrinsic::AtomicFetchAdd || intrinsic == Intrinsic::AtomicAddFetch) {
+            if (explicit_arguments || count != 3) continue;
+            e = atomic_signature(e,nodes ? expressions[(*nodes)[0]].type : values[0].type);
+            if (!e) continue;
+        }
         if (entities[e].template_info) {
             if (explicit_arguments) {
                 auto pack = argument_packs[explicit_arguments];

@@ -62,7 +62,7 @@ private:
         bool ready = false;
     };
     struct Invocation {
-        bool active = false;
+        bool active = false, omitted_variadic = false;
         ExpansionToken head;
         std::uint32_t replacement_context = 0;
         IdentifierId macro = 0;
@@ -159,6 +159,7 @@ private:
     void define(const std::vector<ExpansionToken>& line);
     bool condition(const std::vector<ExpansionToken>& tokens);
     void include(const std::string& path);
+    std::string find_header(const std::string& name, bool quoted, bool resume, int& index) const;
     void pragma(const std::string& text, IdentifierId filename);
     void pragma(const std::vector<ExpansionToken>& tokens, IdentifierId filename);
     bool once(const std::string& path, bool insert);

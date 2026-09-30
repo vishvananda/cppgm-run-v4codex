@@ -121,7 +121,37 @@ ExpansionToken Preprocessor::builtin(const ExpansionToken& head, unsigned kind, 
     if (kind == 1) return generated(quote_pp_string(spelling(head.filename)), head);
     if (kind == 2) return generated(std::to_string(head.token.line), head);
     if (kind == 3) return generated(std::to_string(counter_++), head);
-    if (!expansion.take().is("(")) throw std::runtime_error("attribute probe requires parentheses");
+    if (!expansion.take().is("(")) throw std::runtime_error("preprocessor probe requires parentheses");
+    if (kind == 6 || kind == 7) {
+        std::vector<ExpansionToken> operand;
+        unsigned depth = 1;
+        while (depth) {
+            auto token = expansion.take();
+            if (token.token.kind == PPTokenKind::eof) throw std::runtime_error("unterminated header probe");
+            if (token.is("(")) ++depth;
+            if (token.is(")")) --depth;
+            if (depth) operand.push_back(token);
+        }
+        MacroExpander argument(*this); argument.push(operand);
+        auto header = argument.next();
+        std::string name; bool quoted = true;
+        if (header.token.kind == PPTokenKind::header) {
+            auto text = header.token.spelling;
+            name.assign(text.data+1,text.size-2); quoted = text.data[0] == '"';
+        } else if (header.is("<")) {
+            quoted = false;
+            for (;;) {
+                auto token = argument.next();
+                if (token.is(">")) break;
+                if (token.token.kind == PPTokenKind::eof) throw std::runtime_error("unterminated header name");
+                name.append(token.token.spelling.data,token.token.spelling.size);
+            }
+        } else name = decode_pp_string(header);
+        if (name.empty() || argument.next().token.kind != PPTokenKind::eof)
+            throw std::runtime_error("invalid header probe");
+        int index = -1;
+        return generated(find_header(name,quoted,kind == 7,index).empty() ? "0" : "1",head);
+    }
     ExpansionToken attribute = expansion.take();
     bool recognized = attribute.is("no_unique_address") || attribute.is("__no_unique_address__");
     unsigned value = recognized ? 201803 :
@@ -154,6 +184,27 @@ bool Preprocessor::condition(const std::vector<ExpansionToken>& tokens)
     if (result.empty || !result.valid) throw std::runtime_error("invalid controlling expression in " +
         spelling(files_.back()->filename) + ":" + std::to_string(next_line_));
     return result.value.bits != 0;
+}
+
+std::string Preprocessor::find_header(const std::string& name, bool quoted, bool resume, int& index) const
+{
+    const auto& file = *files_.back();
+    struct stat info;
+    auto exists = [&](const std::string& path) { return !stat(path.c_str(),&info) && S_ISREG(info.st_mode); };
+    if (!name.empty() && name[0] == '/' && exists(name)) return name;
+    if (quoted && !resume) {
+        std::string current = spelling(file.physical_filename);
+        auto slash = current.rfind('/');
+        auto relative = (slash == std::string::npos ? "" : current.substr(0,slash+1)) + name;
+        if (exists(relative)) { index = file.include_index; return relative; }
+    }
+    for (std::size_t i = resume ? file.include_index+1 : 0; i < include_paths_.size(); ++i) {
+        auto path = include_paths_[i] + "/" + name;
+        if (exists(path)) { index = i; return path; }
+    }
+    // Preserve PA4's explicit-tool search convention.
+    if (!resume && exists(name)) return name;
+    return {};
 }
 
 void Preprocessor::directive()
@@ -227,23 +278,8 @@ void Preprocessor::directive()
             next.assign(text.data + 1, text.size - 2);
         } else next = decode_pp_string(rest[0]);
         const bool quoted = rest[0].token.kind != PPTokenKind::header || rest[0].token.spelling.data[0] == '"';
-        std::string found;
         bool resume = command.is("include_next"); int include_index = -1;
-        struct stat info;
-        if (!next.empty() && next[0] == '/' && !stat(next.c_str(), &info)) found = next;
-        if (found.empty() && quoted && !resume) {
-            std::string current = spelling(f.physical_filename);
-            std::size_t slash = current.rfind('/');
-            std::string relative = (slash == std::string::npos ? "" : current.substr(0,slash+1)) + next;
-            if (!stat(relative.c_str(), &info)) { found = relative; include_index = f.include_index; }
-        }
-        if (found.empty()) for (std::size_t i = resume ? f.include_index+1 : 0; i < include_paths_.size(); ++i) {
-            std::string candidate = include_paths_[i] + "/" + next;
-            if (!stat(candidate.c_str(), &info)) { found = candidate; include_index = i; break; }
-        }
-        // Preserve the early PA explicit-tool search convention when no driver
-        // search paths were supplied.
-        if (found.empty() && !resume && !stat(next.c_str(), &info)) found = next;
+        auto found = find_header(next,quoted,resume,include_index);
         if (found.empty()) throw std::runtime_error("cannot find header " + next);
         next = found;
         if (!once(next, false)) { include(next); files_.back()->include_index = include_index; }

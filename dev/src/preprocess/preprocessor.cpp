@@ -78,7 +78,8 @@ Preprocessor::Preprocessor(const std::string& path, const std::string& date,
     : telemetry_(telemetry), identifiers_(telemetry ? &lex_stats_ : 0), expander_(*this, true)
 {
     reset_contexts();
-    const char* dynamic[] = {"__FILE__", "__LINE__", "__COUNTER__", "__has_cpp_attribute", "__has_attribute"};
+    const char* dynamic[] = {"__FILE__", "__LINE__", "__COUNTER__", "__has_cpp_attribute", "__has_attribute",
+        "__has_include", "__has_include_next"};
     for (unsigned i = 0; i < sizeof(dynamic)/sizeof(*dynamic); ++i) {
         IdentifierId id = name(dynamic[i]);
         macros_.resize(id + 1);

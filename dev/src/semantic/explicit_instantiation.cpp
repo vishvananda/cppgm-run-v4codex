@@ -68,6 +68,7 @@ void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
                 auto cls = entities[scopes[owner].entity].class_info;
                 binding = ast[ast[name].last].op == OP_COMPL ? class_facts[cls].destructor : class_facts[cls].constructor;
             }
+            std::vector<EntityId> matching;
             for (auto candidate : candidates(binding)) {
                 auto e = candidate;
                 if (entities[e].template_info) {
@@ -76,9 +77,14 @@ void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
                 } else if (list) continue;
                 if (!e || entities[e].type != type) continue;
                 if (!entities[e].specialization && !entities[e].template_member) continue;
-                if (selected && selected != e) throw std::runtime_error("ambiguous explicit instantiation");
-                selected = e;
+                matching.push_back(e);
+                if (!selected || template_more_specialized(e,selected)) selected = e;
             }
+            // Matching a complete signature can deduce several overloads.
+            // [temp.deduct.decl] chooses the unique most specialized template,
+            // using the same full-signature ordering as address deduction.
+            for (auto e : matching) if (e != selected && !template_more_specialized(selected,e))
+                throw std::runtime_error("ambiguous explicit instantiation");
         } else {
             selected = local(owner,terminal(name));
             if (!selected || entities[selected].kind != EntityKind::Variable || !entities[selected].template_member ||

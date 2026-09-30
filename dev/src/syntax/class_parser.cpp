@@ -91,8 +91,10 @@ NodeId Parser::enum_specifier()
 {
     in.require("enum");
     NodeId result = make(Kind::Enum);
+    attributes();
     bool scoped = in.is("class") || in.is("struct");
     if (scoped) ast.append(result, leaf(Kind::EnumKey));
+    attributes();
     if (identifier()) {
         NodeId n = name();
         ast[result].detail = n;
@@ -113,6 +115,7 @@ NodeId Parser::enum_specifier()
     while (!in.is("}")) {
         if (!identifier()) throw std::runtime_error("expected enumerator");
         NodeId value = leaf(Kind::Enumerator);
+        attributes();
         if (!scoped) names.bind(owner, ast[value].text, Category::Value);
         names.bind(child, ast[value].text, Category::Value);
         if (in.eat("=")) ast.append(value, expression(2));

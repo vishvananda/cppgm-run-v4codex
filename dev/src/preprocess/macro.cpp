@@ -44,6 +44,11 @@ void Preprocessor::define(const std::vector<ExpansionToken>& line)
                     throw std::runtime_error("duplicate macro parameter");
                 parameter_index_[p] = m.parameters.size();
                 m.parameters.push_back(p);
+                // GNU named variadic parameters use the same final argument
+                // slice as __VA_ARGS__, including stringize and comma paste.
+                if (i < line.size() && line[i].is("...")) {
+                    m.variadic = true; ++i; break;
+                }
                 if (i == line.size() || !line[i].is(",")) break;
                 ++i;
             }
@@ -58,7 +63,8 @@ void Preprocessor::define(const std::vector<ExpansionToken>& line)
     for (std::size_t p = 0; p < m.parameters.size(); ++p) parameter_index_[m.parameters[p]] = p;
     for (; i < line.size(); ++i) {
         ExpansionToken t = line[i];
-        if (t.is("__VA_ARGS__") && !m.variadic) throw std::runtime_error("invalid __VA_ARGS__");
+        if (t.is("__VA_ARGS__") && (!m.variadic || m.parameters.back() != t.token.identifier))
+            throw std::runtime_error("invalid __VA_ARGS__");
         if (t.token.identifier) t.parameter = parameter_index_[t.token.identifier];
         if (m.replacement.empty()) t.space = false;
         m.replacement.push_back(t);
@@ -166,6 +172,7 @@ void MacroExpander::collect(const ExpansionToken& open, const MacroDefinition& m
 {
     Task& task = this->task();
     Invocation& invocation = task.invocation;
+    invocation.omitted_variadic = false;
     if (macro.parameters.empty()) {
         // No argument can be deferred or prescanned. Consume the required close
         // directly, keeping the same context boundary without allocating an index.
@@ -218,8 +225,11 @@ void MacroExpander::collect(const ExpansionToken& open, const MacroDefinition& m
     if (macro.variadic && invocation.argument_count >= macro.parameters.size()) {
         args[macro.parameters.size() - 1].raw.end = position;
         invocation.argument_count = macro.parameters.size();
+        // With no fixed parameters GNU treats an empty invocation as omitted.
+        invocation.omitted_variadic = macro.parameters.size() == 1 && args[0].raw.begin == position;
     }
     if (macro.variadic && invocation.argument_count + 1 == macro.parameters.size()) {
+        invocation.omitted_variadic = true;
         if (invocation.argument_count == args.size()) {
             if (owner_.telemetry_ && args.size() == args.capacity()) ++owner_.stats_.argument_growths;
             args.emplace_back();
@@ -296,7 +306,7 @@ void MacroExpander::substitute(Invocation& invocation, const MacroDefinition& m)
                 bool comma = left.is(",") && t.parameter >= 0 && m.variadic &&
                     static_cast<std::size_t>(t.parameter) + 1 == m.parameters.size();
                 if (comma) {
-                    if (!e.placemarker) result.push_back(left);
+                    if (!e.placemarker || !invocation.omitted_variadic) result.push_back(left);
                 } else if (left.placemarker) e.space = left.space;
                 else if (e.placemarker) e = left;
                 else {

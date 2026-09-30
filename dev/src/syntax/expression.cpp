@@ -133,6 +133,14 @@ NodeId Parser::postfix(NodeId base)
 NodeId Parser::primary()
 {
     Token token = in.peek();
+    if (in.is("__null")) {
+        // GNU's null constant has the target pointer-sized integer type.
+        // Retain its source spelling/location with an ordinary zero literal.
+        auto result = leaf(Kind::Literal);
+        LiteralValue value{}; value.kind = LiteralKind::integer; value.type = FT_LONG_INT;
+        ast[result].literal = ast.literals.size(); ast.literals.push_back(value);
+        return result;
+    }
     if (in.is("__func__") || in.is("__FUNCTION__") || in.is("__PRETTY_FUNCTION__")) return leaf(Kind::FunctionName);
     if (in.is("__builtin_addressof")) {
         auto result = leaf(Kind::Unary); ast[result].op = OP_AMP; ast[result].flags = 1;

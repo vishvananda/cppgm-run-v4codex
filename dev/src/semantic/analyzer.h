@@ -635,10 +635,11 @@ private:
     bool floating_type(TypeId type) const;
     Constant floating_constant(TypeId type, long double value, bool special = false);
     TypeId variadic_list_type = 0;
-    Index intrinsic_functions, predefined_strings;
+    Index intrinsic_functions, predefined_strings, atomic_signatures;
     EntityId predefined_function_name(NodeId n, ScopeId s);
     TypeQueryFact query_builtin_operand(const TypeQuery& q, const std::vector<TypeQueryFact>& children);
     EntityId builtin_function(IdentifierId name);
+    EntityId atomic_signature(EntityId family, TypeId operand);
     void validate_intrinsic(EntityId selected, const std::vector<NodeId>& args, ScopeId s);
     Expression va_arg_expression(NodeId n, ScopeId s);
     bool floating_builtin(NodeId n, ScopeId scope, IdentifierId name, const std::vector<NodeId>& args, Expression& result);
