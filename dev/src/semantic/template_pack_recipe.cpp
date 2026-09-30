@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include <stdexcept>
 namespace cppgm { namespace semantic {
 void Analyzer::substitute_arguments(ArgumentId arg, const Index& bindings, Index& cache,
     std::uint32_t frame, std::vector<ArgumentId>& out)
@@ -8,6 +9,22 @@ void Analyzer::substitute_arguments(ArgumentId arg, const Index& bindings, Index
     }
     auto recipe = types[arg];
     auto pattern = ArgumentId(recipe.bound);
+    if (value_argument(pattern) && type_queries[argument_query(pattern)].kind == QueryKind::IntegerPack) {
+        auto query = substitute_query(argument_query(pattern),bindings,cache,frame);
+        if (!query) { out.push_back(0); return; }
+        auto bound = query_edges[type_queries[query].offset];
+        if (query_fact(bound).dependent) { out.push_back(types.pack_expansion(value_argument_id(query),0)); return; }
+        auto value = constants[query_value(bound)];
+        if (!value.valid || !integral(value.type) || negative_constant(value) || integer_value(value) > 1048576)
+            throw std::runtime_error("integer_pack bound must be a constant between 0 and 1048576");
+        auto count = std::uint64_t(integer_value(value));
+        out.reserve(out.size()+count);
+        for (std::uint64_t i = 0; i < count; ++i) {
+            TypeQuery item; item.type = types.fundamental(FT_UNSIGNED_LONG_INT); item.value = i;
+            out.push_back(value_argument_id(intern_query(item,{})));
+        }
+        return;
+    }
     auto original_frame = frame;
     auto captures = argument_packs[recipe.entity];
     for (unsigned j = 0; j < captures.count; j += 2) {

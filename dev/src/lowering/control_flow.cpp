@@ -270,6 +270,8 @@ bool Procedural::mark_control_entries(NodeId n)
     if (!n) return false;
     ++control_work;
     Kind k = ast[n].kind;
+    if (k == Kind::If && (ast[n].flags & 1) && sem.facts[n].value)
+        return control_entries[n] = mark_control_entries(child(n,sem.constant_fact(n).bits ? Kind::Then : Kind::Else));
     bool entry = k == Kind::Label || k == Kind::Case || k == Kind::Default;
     switch (k) {
     case Kind::Compound: case Kind::Then: case Kind::Else: case Kind::Label:
@@ -379,6 +381,13 @@ void Procedural::statement(NodeId n)
     case Kind::Break: exit_exception_contexts(sem.jump_exception_targets.get(n),lifetime.target); jump(break_target); return;
     case Kind::Continue: exit_exception_contexts(sem.jump_exception_targets.get(n),lifetime.target); jump(continue_target); return;
     case Kind::If: {
+        if (ast[n].flags & 1) {
+            if (!sem.facts[n].value) throw std::logic_error("constexpr if lacks selection fact");
+            auto selected = sem.constant_fact(n).bits ? Kind::Then : Kind::Else;
+            statement(child(n,selected));
+            if (!ended) clean_inline(lifetime.exit,lifetime.entry);
+            return;
+        }
         BlockId yes = block(), no = block(), end;
         condition(child(n, Kind::Condition), yes, no);
         start(yes); statement(child(n, Kind::Then));

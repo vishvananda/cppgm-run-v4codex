@@ -11,7 +11,8 @@ ArgumentId Analyzer::value_argument_id(QueryId query)
     // supplies its target. Reading an lvalue here would lose reference NTTPs;
     // an overload set similarly needs its target function signature first.
     if (!fact.dependent && fact.expression.category == ValueCategory::Prvalue &&
-        integral(fact.expression.type) && types[type_queries[query].type].kind != TypeKind::LRef) {
+        integral(fact.expression.type) && types[type_queries[query].type].kind != TypeKind::LRef &&
+        type_queries[query].kind != QueryKind::IntegerPack) {
         auto value = constants[query_value(query)];
         if (!value.valid || !integral(value.type)) {
             if (immediate_query_probe) return 0;
@@ -92,8 +93,19 @@ ArgumentId Analyzer::template_argument_node(NodeId n, ScopeId scope)
 }
 ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
 {
-    if (ast[n].kind == Kind::PackExpression)
-        return types.compound(TypeKind::PackExpansion,0,template_argument_node(ast[n].first,scope));
+    if (ast[n].kind == Kind::PackExpression) {
+        auto operand = ast[n].first, callee = ast[operand].first;
+        auto name = ast[callee].detail;
+        if (ast[operand].kind == Kind::Call && ast[callee].kind == Kind::IdExpression &&
+            ast[name].first == ast[name].last && ids.spelling(terminal(name)).equals("__integer_pack")) {
+            auto list = ast[callee].next, count = ast[list].first;
+            if (!count || ast[count].next) throw std::runtime_error("integer_pack takes one bound");
+            TypeQuery q; q.kind = QueryKind::IntegerPack;
+            auto id = intern_query(q,{expression_query(count,scope)});
+            return types.compound(TypeKind::PackExpansion,0,value_argument_id(id));
+        }
+        return types.compound(TypeKind::PackExpansion,0,template_argument_node(operand,scope));
+    }
     if (ast[n].kind == Kind::Call && ast[ast[n].first].kind == Kind::IdExpression) {
         auto callee = ast[n].first, name = ast[callee].detail;
         auto list = ast[callee].next;

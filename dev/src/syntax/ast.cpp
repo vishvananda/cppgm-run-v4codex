@@ -193,6 +193,8 @@ const char* kind_name(Kind kind)
         "name-part",
         "template-arguments",
         "capture",
+        "va-arg-expression",
+        "function-name",
     };
     return names[static_cast<unsigned>(kind)];
 }

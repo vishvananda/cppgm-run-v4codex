@@ -46,3 +46,18 @@ compiling a user input never invokes host preprocessing or code generation.
 Unsupported host floating extensions and language-feature macros are not
 advertised. GNU compatibility selects conservative header paths. No header or
 library body is replaced. Full `<string>` remains in progress.
+
+`python3 student.tests/pa26/intrinsic_controls.py` compiles and executes the
+trait, variadic and header-intrinsic sources here, including host va_list
+consumption and rejected invalid calls. Type traits use GCC's documented
+[type-trait builtins](https://gcc.gnu.org/onlinedocs/gcc/Type-Traits.html) and
+C++11 class/initialization rules. `__func__` is a local static constant array;
+the GNU function-name aliases currently use the same unqualified name format.
+The compiler owns these data and operations; it does not replace library code.
+
+Integer-pack expansion is linear in the generated argument count and diagnoses
+bounds outside 0..1048576. GCC 15 headers use `if constexpr` in C++11 mode;
+expression conditions are supported as an extension, with discarded template
+branches excluded from instantiation and emission. Condition declarations in
+this extension currently diagnose unsupported use. `noexcept_parameter.cpp`
+checks that exception specifications see constructor prototype parameters.

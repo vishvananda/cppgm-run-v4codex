@@ -11,6 +11,11 @@ Value Procedural::expression(NodeId n, bool location)
     auto fact = sem.expression_fact(n);
     if (node.kind == Kind::StatementExpression) return statement_expression(n);
     NodeId a = node.first;
+    if (node.kind == Kind::FunctionName) return Value(Operand::symbol(symbol(fact.entity)),IRType::Ptr,fact.type,true);
+    if (node.kind == Kind::VaArg) {
+        auto list = converted(a,sem.conversion_fact(fact.conversions));
+        return emit(Opcode::VaArg,type(fact.type),{list.operand});
+    }
     if (fact.form == semantic::ExpressionForm::Typeid || fact.form == semantic::ExpressionForm::DynamicCast)
         return rtti_expression(n);
     if (fact.form == semantic::ExpressionForm::TypeinfoEqual || fact.form == semantic::ExpressionForm::TypeinfoUnequal) {
@@ -392,6 +397,18 @@ Value Procedural::call(NodeId n, Value destination)
         auto value = converted(sem.call_argument(fact,0),sem.conversion_fact(fact.conversions));
         converted(sem.call_argument(fact,1),sem.conversion_fact(fact.conversions+1));
         return value;
+    }
+    auto intrinsic = sem.intrinsic_function(sem.facts[n].entity);
+    if (intrinsic != semantic::Intrinsic::None) {
+        auto first = converted(sem.call_argument(fact),sem.conversion_fact(fact.conversions));
+        if (intrinsic == semantic::Intrinsic::VaStart) return emit(Opcode::VaStart,IRType(),{first.operand});
+        if (intrinsic == semantic::Intrinsic::StackAlloc) return emit(Opcode::StackAlloc,IRType::Ptr,{first.operand});
+        if (intrinsic == semantic::Intrinsic::VaCopy) {
+            auto second = converted(sem.call_argument(fact,1),sem.conversion_fact(fact.conversions+1));
+            Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(sem.variadic_type());
+            copy.alignment = sem.object_alignment(sem.variadic_type()); emit(copy,{second.operand,first.operand});
+        }
+        return Value(Operand(),IRType::Void,fact.type);
     }
     bool class_result = sem.class_value(sem.facts[n].type);
     SlotId result_slot = !class_result && type(sem.facts[n].type) != IRType::Void && full_expression.enabled && (unwind_expression(n) || cleanup_expression(n,false,true)) ? builder->add_slot(0,type(sem.facts[n].type)) : SlotId();

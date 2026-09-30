@@ -142,6 +142,8 @@ enum class Kind : unsigned char {
     NamePart,
     TemplateArguments,
     Capture,
+    VaArg,
+    FunctionName,
 };
 
 struct Location {

@@ -184,3 +184,5 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/host_config
 FRONTEND_OBJ_BASENAMES_lowir2native += support/id_index
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/builtin_traits
+
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/builtin_functions

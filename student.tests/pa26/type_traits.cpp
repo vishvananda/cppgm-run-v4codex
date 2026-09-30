@@ -74,4 +74,6 @@ static_assert(Constructs<User,int>::value,"type pack trait");
 static_assert(!Constructs<NoDefault>::value,"empty pack trait");
 template<class T> struct Typeof { typedef __typeof((*(T*)0)) type; };
 static_assert(__is_same(Typeof<const int>::type,const int),"typeof removes reference, preserves cv");
+template<class T,class U> struct Promoted { typedef __typeof(T()+U()) type; };
+static_assert(__is_same(Promoted<int,double>::type,double),"typeof additive construction");
 int main(){return classify<Empty>() && !classify<int>() ? 0:1;}

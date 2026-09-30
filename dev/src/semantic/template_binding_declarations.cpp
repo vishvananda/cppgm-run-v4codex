@@ -212,9 +212,11 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             bool function = child(d,Kind::Parameters) || body || special;
             bool dep = dependent;
             // Parameters bind inside the function scope, not in the surrounding
-            // declaration environment. Other declarator operands are type uses.
+            // declaration environment. Exception specifications use that same
+            // parameter environment when their existing deferred fact is demanded.
+            // Other declarator operands are type uses.
             for (auto c = ast[d].first; c; c = ast[c].next)
-                if (ast[c].kind != Kind::Parameters && ast[c].kind != Kind::Identifier && ast[c].kind != Kind::TrailingReturn)
+                if (ast[c].kind != Kind::Parameters && ast[c].kind != Kind::Identifier && ast[c].kind != Kind::TrailingReturn && ast[c].kind != Kind::FunctionQualifier)
                     dep |= bind_template_expression(c,s);
             bool placeholder = !function && spec_has(specs,KW_AUTO);
             if (placeholder) dep = true;

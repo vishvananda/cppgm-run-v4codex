@@ -43,6 +43,7 @@ NodeId Parser::selection()
     ScopeId saved = scope;
     scope = names.enter(scope);
     NodeId result = make(is_if ? Kind::If : Kind::Switch);
+    if (is_if && in.eat("constexpr")) ast[result].flags |= 1;
     in.require("(");
     ast.append(result, condition());
     in.require(")");

@@ -94,6 +94,10 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     ++expression_work;
     NodeId first = ast[n].first;
     switch (ast[n].kind) {
+    case Kind::FunctionName:
+        r.entity = predefined_function_name(n,s); facts.edit(n).entity = r.entity;
+        r.type = entities[r.entity].type; r.category = ValueCategory::Lvalue; return r;
+    case Kind::VaArg: return va_arg_expression(n,s);
     case Kind::StatementExpression: return statement_expression(n,s);
     case Kind::Throw: return throw_expression(n,s);
     case Kind::Lambda: return lambda_expression(n,s);
@@ -126,6 +130,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         auto op = operator_token(ast[n].detail);
         if (op == KW_NEW || op == KW_DELETE) global_allocation(op,array_operator(ast[n].detail));
         EntityId e = resolve(ast[n].detail,s);
+        if (!e && ast[ast[n].detail].first == ast[ast[n].detail].last)
+            e = builtin_function(terminal(ast[n].detail));
         if (!e) {
             auto name = terminal(ast[n].detail);
             if (!name) throw std::runtime_error("expression requires a value name");

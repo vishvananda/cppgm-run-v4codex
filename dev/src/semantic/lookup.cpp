@@ -36,7 +36,7 @@ Analyzer::Analyzer(syntax::Ast& tree, IdentifierTable& identifiers, bool with_ca
     class_facts[entities[tag].class_info].definition_state = FactState::Success;
     auto va_name = ids.intern(TextView("__builtin_va_list",17));
     auto va = make_entity(EntityKind::Alias,global,va_name,0);
-    entities[va].type = types.compound(TypeKind::Array,entities[tag].type,1);
+    variadic_list_type = entities[va].type = types.compound(TypeKind::Array,entities[tag].type,1);
     bind(global,va_name,va);
     if (calls) {
         IdentifierId name = ids.intern(TextView("nullptr_t", 9));

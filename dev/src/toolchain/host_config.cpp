@@ -27,7 +27,7 @@ void host_environment(std::vector<std::string>& includes, std::vector<std::strin
     defaults.push_back("-D__GNUC_PATCHLEVEL__=1");
     defaults.push_back("-D__GNUG__=4");
     const char* aliases[] = {"__extension__=", "__restrict=", "__restrict__=",
-        "__inline=inline", "__inline__=inline", "__const=const", "__const__=const",
+        "__decltype=decltype", "__inline=inline", "__inline__=inline", "__const=const", "__const__=const",
         "__volatile=volatile", "__volatile__=volatile", "__signed=signed", "__signed__=signed"};
     for (auto alias : aliases) defaults.push_back(std::string("-D")+alias);
     defaults.insert(defaults.end(),macros.begin(),macros.end());

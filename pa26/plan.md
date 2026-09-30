@@ -41,7 +41,19 @@ a separate unfinished group; independent audit remains pending below.
   host `<string>`. GNU type traits and typeof now use canonical typed queries;
   structural properties demand completed layout, and operation traits use
   ordinary overload/conversion facts in an unrelated access context. Empty
-  `throw()` is nonthrowing. Required next owner: source variadic intrinsics.
+  `throw()` is nonthrowing. Typed source variadic/stack intrinsics now reuse the
+  existing LowIR/native ABI; predefined function names use local constant
+  objects, and addressof bypasses overloaded address operators. Work is bounded
+  per builtin/argument list; constant name bytes are produced once per owner.
+  Controls cover host register/stack varargs, copies, scalar type queries,
+  function names, address operations and invalid uses. PA1–25 passes again.
+  Integer generators reuse canonical pack recipes (linear output, maximum
+  1048576 indices). GCC 15 headers require constexpr-if as a C++11 extension;
+  its selection fact controls instantiated branches, lifetimes and lowering.
+  Parameter-dependent exception specifications use their existing deferred
+  prototype/body scope. Seventeen explicit controls and PA1–25 4253/4253 pass.
+  Remaining owner: builtin expressions used by dependent type queries in real
+  headers; the current required fixture reaches `__builtin_expect`.
   Nine prerequisite controls pass; PA1–25 4253/4253 and file audit pass after
   configured include roots/macros, namespace/parameter attributes, asm labels,
   typed SysV va_list and block-function linkage fixes. PA26 remains 29/30:

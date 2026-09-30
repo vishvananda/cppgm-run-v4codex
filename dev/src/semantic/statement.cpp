@@ -100,6 +100,17 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
         bool sw = ast[n].kind == Kind::Switch;
         ScopeId control = make_scope(ScopeKind::Control, s);
         facts.edit(n).scope = control;
+        if (ast[n].kind == Kind::If && (ast[n].flags & 1)) {
+            auto cond = child(n,Kind::Condition); resolve_condition(cond,control,false);
+            if (facts[cond].entity) throw std::runtime_error("constexpr if requires an expression condition");
+            auto value = execute_constant_condition(cond,control);
+            if (!value.valid) throw std::runtime_error("constexpr if condition is not constant");
+            facts.edit(n).value = constants.size(); constants.push_back(value);
+            auto selected = constant_truth(value) ? Kind::Then : Kind::Else;
+            for (auto c = ast[cond].next; c; c = ast[c].next)
+                if (!ast.nodes.occurrences[n].context || ast[c].kind == selected) resolve_statement(c,control);
+            return;
+        }
         if (loop) ++loop_depth;
         if (sw) { ++switch_depth; switches.emplace_back(); }
         for (NodeId c = ast[n].first; c; c = ast[c].next) {

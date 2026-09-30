@@ -147,6 +147,7 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
     if (!n) return false;
     ++template_binding_work;
     auto node = ast[n];
+    if (node.kind == Kind::FunctionName) return true;
     if (node.kind == Kind::StatementExpression) { bind_template_statement(node.first,s); return true; }
     if (node.kind == Kind::Lambda) { bind_lambda_body(n,s); return true; }
     if (node.kind == Kind::ClassForward && !(node.flags & 2)) {
@@ -168,7 +169,13 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
         auto binding = bind_template_name(name,s);
         auto e = binding.entity;
         if (!binding.dependent && check_template_field(n,s,e)) return false;
-        if (!binding.dependent && !e && !callee) throw std::runtime_error("unbound template value name");
+        if (!binding.dependent && !e && !callee) {
+            auto text = ids.spelling(terminal(name));
+            auto location = static_cast<const syntax::Ast&>(ast).locations[node.location];
+            auto path = ids.spelling(location.presumed_file);
+            throw std::runtime_error("unbound template value name: " + std::string(text.data,text.size) +
+                " at " + std::string(path.data,path.size) + ":" + std::to_string(location.line));
+        }
         if (e && !callee && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias ||
             entities[e].kind == EntityKind::Namespace || entities[e].kind == EntityKind::NamespaceAlias))
             throw std::runtime_error("template expression requires a value name");

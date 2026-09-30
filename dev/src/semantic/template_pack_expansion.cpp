@@ -5,7 +5,10 @@ using syntax::Kind;
 void Analyzer::append_template_argument(NodeId node, ScopeId, ArgumentId arg, std::vector<ArgumentId>& out)
 {
     auto context = ast.nodes.occurrences[node].context;
-    if (context && !value_argument(arg) && types[arg].kind == TypeKind::PackExpansion) {
+    auto pattern = value_argument(arg) ? 0 : types[arg].bound;
+    bool generator = value_argument(pattern) && type_queries[argument_query(pattern)].kind == QueryKind::IntegerPack;
+    if (!context && generator && dependent_argument(pattern)) { out.push_back(arg); return; }
+    if ((context || generator) && !value_argument(arg) && types[arg].kind == TypeKind::PackExpansion) {
         Index bindings, cache;
         substitute_arguments(arg,bindings,cache,template_type_contexts.get(context),out);
     } else out.push_back(arg);

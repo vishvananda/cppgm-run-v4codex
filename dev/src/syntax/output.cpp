@@ -160,7 +160,7 @@ void write_inline(std::ostream& out, const Ast& ast, NodeId id, const Identifier
     else if (n.kind == Kind::PackExpression) {
         children_inline(out, ast, id, ids);
         out << "...";
-    } else if (n.kind == Kind::Sizeof || n.kind == Kind::TypeTrait || n.kind == Kind::Decltype) {
+    } else if (n.kind == Kind::VaArg || n.kind == Kind::Sizeof || n.kind == Kind::TypeTrait || n.kind == Kind::Decltype) {
         if (n.kind == Kind::Sizeof) out << "sizeof";
         else if (n.kind == Kind::Decltype) out << "decltype";
         else spelling(out, ids, n.text);

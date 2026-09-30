@@ -83,6 +83,7 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             break;
         }
         auto e = resolve(name,s);
+        if (!e && ast[name].first == ast[name].last) e = builtin_function(terminal(name));
         if (!e && (!callee || ast[name].first != ast[name].last || ast[name].op == OP_COLON2))
             throw std::runtime_error("unbound name in type query");
         auto entity = entities[e];
@@ -177,6 +178,7 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         q.kind = node.kind == Kind::Unary || node.kind == Kind::Postfix ? QueryKind::Unary : QueryKind::Binary; q.op = node.op;
         if (node.kind == Kind::Unary && node.op == OP_AMP && ast[first].kind == Kind::IdExpression)
             q.value = ast[ast[first].detail].first != ast[ast[first].detail].last;
+        if (node.kind == Kind::Unary && node.flags) q.value = 2;
         if (node.kind == Kind::Subscript) q.op = OP_LSQUARE;
         q.name = q.op == OP_DOTSTAR ? 0 : operator_name(q.op); q.context = s;
         while (!template_object_context_index.get(q.context) &&
@@ -265,6 +267,11 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         }
         break;
     }
+    case Kind::FunctionName:
+        q.kind = QueryKind::Name; q.entity = predefined_function_name(n,s); q.type = entities[q.entity].type; break;
+    case Kind::VaArg:
+        q.kind = QueryKind::VaArg; q.type = type_id(ast[first].next,s);
+        children.push_back(expression_query(first,s)); break;
     case Kind::Sizeof: case Kind::TypeTrait: {
         auto id = type_operation_query(n,s); source_index.put(key(s,n),id); return id;
     }
@@ -477,7 +484,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         for (unsigned i = 0; i < pack.count; ++i) r.dependent |= dependent_argument(argument_types[pack.offset+i]);
     }
     auto& x = r.expression;
-    if (q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack)
+    if (q.kind == QueryKind::IntegerPack || q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack)
         x.type = types.fundamental(q.op == KW_NOEXCEPT ? FT_BOOL : FT_UNSIGNED_LONG_INT);
     if (q.kind == QueryKind::BuiltinTrait && q.value != unsigned(BuiltinTrait::Underlying))
         x.type = types.fundamental(FT_BOOL);
@@ -523,11 +530,9 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         }
     }
     if (inspect) switch (q.kind) {
+    case QueryKind::IntegerPack: x.type = types.fundamental(FT_UNSIGNED_LONG_INT); break;
+    case QueryKind::VaArg: case QueryKind::Typeof: r = query_builtin_operand(q,children); break;
     case QueryKind::BuiltinTrait: r = query_builtin_trait(id,q); break;
-    case QueryKind::Typeof:
-        x.type = children[0].expression.type;
-        if (!x.type && children[0].declared_type) x.type = value_type(children[0].declared_type);
-        break;
     case QueryKind::List:
         x.form = ExpressionForm::InitializerList; x.inputs = CallInputs::Query;
         x.arguments = id; x.argument_count = q.count; break;
@@ -677,7 +682,9 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     if (r.state == FactState::Failure) {
         query_facts[id] = r;
         if (immediate_query_probe) return r;
-        throw std::runtime_error("invalid type-query expression");
+        auto name = q.kind == QueryKind::Call && q.count ? type_queries[query_edges[q.offset]].name : q.name;
+        auto text = ids.spelling(name);
+        throw std::runtime_error("invalid type-query expression: " + std::string(text.data,text.size));
     }
     r.dependent |= r.expression.type && dependent_type(r.expression.type);
     r.state = FactState::Success; query_facts[id] = r; return r;

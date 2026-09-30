@@ -18,16 +18,21 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         if (e && entities[e].kind == EntityKind::Function && !entities[e].template_info) {
             if (deleted_transfer(e)) return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
             if (!accessible(e,q.context,object_uses[args[0].object_use].naming_scope,
-                q.value ? entities[scopes[naming_class(object_uses[args[0].object_use].naming_scope)].entity].type : 0))
+                q.value == 1 ? entities[scopes[naming_class(object_uses[args[0].object_use].naming_scope)].entity].type : 0))
                 return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
             bool member = entities[e].member_info && !entities[e].is_static;
-            if (member && !q.value) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+            if (member && q.value != 1) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
             result.expression.type = member ? types.member_pointer(scopes[entities[e].owner].entity,entities[e].type) :
                 types.compound(TypeKind::Pointer,entities[e].type);
             result.expression.form = ExpressionForm::Ordinary;
             result.expression.category = ValueCategory::Prvalue;
         }
         return result;
+    }
+    if (q.op == OP_AMP && q.kind == QueryKind::Unary && q.value == 2) {
+        if (args[0].category != ValueCategory::Lvalue || field_fact(args[0].entity).bit_field)
+            return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+        TypeQueryFact result; result.expression.type = types.compound(TypeKind::Pointer,args[0].type); return result;
     }
     if (q.op == OP_DOTSTAR) return member_pointer_value(args[0],args[1],q.op,q.context);
     auto object = args[0].type;

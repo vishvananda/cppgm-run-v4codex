@@ -91,7 +91,15 @@ void Procedural::global(EntityId e)
     if (!g.declaration) {
         bool local = sem.local_static(e);
         bool dynamic = !sem.static_initialization(e);
-        if (dynamic) {
+        if (auto name = sem.predefined_string(e)) {
+            auto text = spelling(name); g.data.begin = p.data.size();
+            for (unsigned j = 0; j <= text.size(); ++j) {
+                DataItem d; d.kind = DataItem::Scalar; d.type = IRType::I8;
+                d.value = Operand::integer(j < text.size() ? (unsigned char)text[j] : 0); p.data.push_back(d);
+            }
+            g.data.count = p.data.size()-g.data.begin;
+        }
+        else if (dynamic) {
             if (!local) {
                 if (entity.thread_local_storage) prepare_tls(e);
                 else global_initializers.push_back(e);

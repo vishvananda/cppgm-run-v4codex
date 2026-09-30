@@ -14,7 +14,7 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
 {
     NodeId operand = ast[n].first;
     ETokenType op = ast[n].op;
-    bool qualified_address = op == OP_AMP && ast[operand].kind == Kind::IdExpression &&
+    bool qualified_address = !ast[n].flags && op == OP_AMP && ast[operand].kind == Kind::IdExpression &&
         ast[ast[operand].detail].first != ast[ast[operand].detail].last;
     if (qualified_address) ++unevaluated_depth;
     Expression a = expression(operand, s), r;
@@ -25,7 +25,7 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
             if (definitions) demand_template_storage(a.entity);
         }
     }
-    if (types[a.type].kind == TypeKind::Named) {
+    if (!ast[n].flags && types[a.type].kind == TypeKind::Named) {
         std::vector<NodeId> args(1, operand);
         if (ast[n].kind == Kind::Postfix) args.push_back(0);
         if (operator_expression(n, s, op, args, r)) return r;
@@ -36,6 +36,7 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         if (a.form == ExpressionForm::Overload) return a;
         if (a.entity && types[a.type].kind == TypeKind::Function) select_function(operand,a.entity,true);
         else if (a.entity) demand_specialization(a.entity);
+        if (ast[n].flags && a.category != ValueCategory::Lvalue) throw std::runtime_error("addressof requires lvalue");
         if (a.category == ValueCategory::Prvalue) throw std::runtime_error("address of rvalue");
         if (a.entity && !entities[a.entity].is_static && (entities[a.entity].member_info || (qualified_address && nonstatic_field(a.entity)))) {
             if (!qualified_address) throw std::runtime_error("member pointer requires a qualified member name");

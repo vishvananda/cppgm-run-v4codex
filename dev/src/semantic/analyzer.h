@@ -177,6 +177,9 @@ public:
     bool indirect_parameter(TypeId t) const;
     const ScalarConsumption& scalar_consumption(EntityId object) const;
     bool empty_class(TypeId t) const;
+    Intrinsic intrinsic_function(EntityId e) const { return Intrinsic(intrinsic_functions.get(e)); }
+    IdentifierId predefined_string(EntityId e) const { return predefined_strings.get(e); }
+    TypeId variadic_type() const { return variadic_list_type; }
     bool parameter_cleanup(EntityId e) const;
     EntityId reference_temporary(EntityId e) const { return reference_temporaries.get(e); }
     struct ReferenceAlternative { EntityId object; std::uint32_t next; };
@@ -619,6 +622,13 @@ private:
     void constant_telemetry(std::ostream& out) const;
     bool floating_type(TypeId type) const;
     Constant floating_constant(TypeId type, long double value, bool special = false);
+    TypeId variadic_list_type = 0;
+    Index intrinsic_functions, predefined_strings;
+    EntityId predefined_function_name(NodeId n, ScopeId s);
+    TypeQueryFact query_builtin_operand(const TypeQuery& q, const std::vector<TypeQueryFact>& children);
+    EntityId builtin_function(IdentifierId name);
+    void validate_intrinsic(EntityId selected, const std::vector<NodeId>& args, ScopeId s);
+    Expression va_arg_expression(NodeId n, ScopeId s);
     bool floating_builtin(NodeId n, ScopeId scope, IdentifierId name, const std::vector<NodeId>& args, Expression& result);
     Constant floating_conversion(Constant value, TypeId target);
     Constant floating_binary(ETokenType op, Constant left, Constant right, bool converted);

@@ -96,6 +96,11 @@ Constant Analyzer::constant_read(std::uint32_t id)
         auto slot = storage.builder->slots.get(a.selector);
         return slot ? storage.builder->parts[slot-1].value : Constant();
     }
+    if (auto name = predefined_strings.get(storage.entity)) {
+        auto text = ids.spelling(name);
+        if (a.parent && a.selector <= text.size && !constant_addresses[a.parent].parent)
+            return Constant(a.type,a.selector < text.size ? (unsigned char)text.data[a.selector] : 0);
+    }
     if (!storage.live || !storage.readable || (types[a.type].cv & 2)) return Constant();
     if (!a.parent) return storage.value;
     if (a.selector == ~std::uint64_t(0)) return Constant();
@@ -173,7 +178,7 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         auto id = constant_storage_address(x.type,Constant(),0,n,true);
         constant_literal_storage.put(ast[n].literal,id); return id;
     }
-    if (ast[n].kind == Kind::IdExpression && !nonstatic_field(x.entity)) return constant_entity_address(x.entity);
+    if ((ast[n].kind == Kind::FunctionName || ast[n].kind == Kind::IdExpression) && !nonstatic_field(x.entity)) return constant_entity_address(x.entity);
     if ((ast[n].kind == Kind::IdExpression || ast[n].kind == Kind::Member) && nonstatic_field(x.entity)) {
         auto use = object_fact(n);
         auto base = use.node ? constant_arrow(use.node,use.arrow) : active_constant ? constant_activations[active_constant].object : 0;

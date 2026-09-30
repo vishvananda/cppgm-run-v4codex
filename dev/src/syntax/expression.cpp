@@ -133,6 +133,16 @@ NodeId Parser::postfix(NodeId base)
 NodeId Parser::primary()
 {
     Token token = in.peek();
+    if (in.is("__func__") || in.is("__FUNCTION__") || in.is("__PRETTY_FUNCTION__")) return leaf(Kind::FunctionName);
+    if (in.is("__builtin_addressof")) {
+        auto result = leaf(Kind::Unary); ast[result].op = OP_AMP; ast[result].flags = 1;
+        in.require("("); ast.append(result,expression(2)); in.require(")"); return result;
+    }
+    if (in.is("__builtin_va_arg")) {
+        auto result = leaf(Kind::VaArg); in.require("(");
+        ast.append(result,expression(2)); in.require(",");
+        ast.append(result,type_id()); in.require(")"); return result;
+    }
     if (builtin_trait(ids.spelling(token.text)) != BuiltinTrait::None && in.is("(",1)) return type_trait();
     if (token.kind == PostTokenKind::literal || token.kind == PostTokenKind::user_literal)
         return leaf(Kind::Literal);

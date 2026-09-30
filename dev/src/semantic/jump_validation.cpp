@@ -152,6 +152,9 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             k == Kind::Switch || k == Kind::While || k == Kind::For || k == Kind::Do || k == Kind::Try || k == Kind::Handler;
         if (k == Kind::Switch) switch_entry = active;
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
+            if (!binding_only && k == Kind::If && (ast[n].flags & 1) &&
+                ast[c].kind != Kind::Condition && ast[c].kind !=
+                (constant_truth(constants[facts[n].value]) ? Kind::Then : Kind::Else)) continue;
             bool header = (loop || k == Kind::Switch) &&
                 (ast[c].kind == Kind::Condition || ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration);
             auto loop_break = break_live, loop_continue = continue_live;
