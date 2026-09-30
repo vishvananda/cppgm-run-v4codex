@@ -95,6 +95,21 @@ void Selector::compare(const lowir_model::Instruction& i, bool branch)
     Type lt = consumed_type(arg(i,0),i.type), rt = consumed_type(arg(i,1),i.type);
     left = in_register(left,lt,XR_R10);
     if (right.address || (right.kind == Operand::Memory && rt != i.type)) right = in_register(right,rt,XR_R11);
+    const auto& placement = state(i.destination.index);
+    bool converted_return = placement.converted_boolean && placement.uses == 1 &&
+        placement.last == position+2 && p.instructions[placement.last-1].opcode == Opcode::Return &&
+        !f.frame_bytes && !f.preserved;
+    if (converted_return) {
+        // The general converted-Boolean path uses fixed compare carriers and
+        // the conversion scratch frame; the redundant 0/1 conversion is gone.
+        f.scratch_bytes = 48;
+        if (right.kind == Operand::Reg && right.reg == XR_RAX) {
+            move(Operand::r(XR_RDX),right,rt); move(Operand::r(XR_RAX),left,lt);
+        } else {
+            move(Operand::r(XR_RAX),left,lt); move(Operand::r(XR_RDX),right,rt);
+        }
+        left = Operand::r(XR_RAX); right = Operand::r(XR_RDX);
+    }
     emit(Op::Compare,i.type,{left,right});
     if (branch) return;
     Operand dest = allocate(i.destination.index,Type::I64);

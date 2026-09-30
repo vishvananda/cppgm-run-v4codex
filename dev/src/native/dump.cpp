@@ -57,10 +57,13 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
         "fmov","fadd","fsub","fmul","fdiv","fneg","fcmp","fset",
         "sitofp","uitofp","fptosi","fptoui","fpext","fptrunc","fret","fstp",
         "eh_push","eh_pop","throw","resume","stack_alloc","tls_addr"};
-    out << "    " << names[unsigned(i.op)];
+    // The scalar Boolean materialization has the canonical byte-to-register
+    // spelling. Its typed ExtendUnsigned fact is also consumed by encoding.
+    bool boolean_extend = i.op == Op::ExtendUnsigned && i.type == Type::U8;
+    out << "    " << (boolean_extend ? "movzx" : names[unsigned(i.op)]);
     if (i.op == Op::Jcc || i.op == Op::Set || i.op == Op::Fset) out << cc(i.condition);
     bool typed = i.op == Op::Load || i.op == Op::Store || i.op == Op::Compare ||
-        i.op == Op::ExtendSigned || i.op == Op::ExtendUnsigned || i.op == Op::Xadd || i.op == Op::Exchange || i.op == Op::Cmpxchg;
+        i.op == Op::ExtendSigned || (i.op == Op::ExtendUnsigned && !boolean_extend) || i.op == Op::Xadd || i.op == Op::Exchange || i.op == Op::Cmpxchg;
     if (i.op >= Op::Sitofp && i.op <= Op::Fptrunc) out << '.' << type_name(i.source_type);
     if ((i.op >= Op::Fmov && i.op <= Op::Fpop) || i.op == Op::Throw) typed = true;
     if (typed) out << '.' << type_name(i.type);

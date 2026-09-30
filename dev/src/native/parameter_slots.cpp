@@ -65,6 +65,17 @@ void Selector::aliases()
             const auto& slot = workspace.slot_facts[arg(i,0).ref];
             if (slot.stored && !slot.escape) v.alias = slot.stored;
         }
+        // Compare values are exactly 0/1. Integer conversions whose source and
+        // destination can represent both values preserve that representation.
+        if (i.opcode == Opcode::Convert && scalar_integer(i.type) && i.type.width() > 1 &&
+            scalar_integer(i.source_type) && i.source_type.width() > 1 &&
+            arg(i,0).kind == lowir_model::Operand::Temporary) {
+            unsigned input = root(arg(i,0).ref);
+            auto& origin = state(input);
+            if (origin.definition && p.instructions[origin.definition-1].opcode == Opcode::Compare) {
+                v.alias = input; origin.converted_boolean = true;
+            }
+        }
         if (i.opcode != Opcode::Copy || arg(i,0).kind != lowir_model::Operand::Temporary) continue;
         Type from = value_type(arg(i,0),i.type);
         bool same = from == i.type || (from.width() == 64 && i.type.width() == 64 && scalar_integer(from) && scalar_integer(i.type));

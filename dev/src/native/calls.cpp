@@ -2,6 +2,15 @@
 #include "native/abi.h"
 namespace native {
 using namespace lowir_model;
+static unsigned reads(Operand a)
+{
+    unsigned mask = 0;
+    if (a.kind == Operand::Reg || a.kind == Operand::Memory) {
+        if (a.reg >= 0) mask |= 1u<<a.reg;
+        if (a.index >= 0) mask |= 1u<<a.index;
+    }
+    return mask;
+}
 void Selector::call(const lowir_model::Instruction& i)
 {
     SignatureId signature_id = i.signature;
@@ -28,7 +37,7 @@ void Selector::call(const lowir_model::Instruction& i)
     if (target.kind == Operand::Symbol && p.symbols[target.id-1].kind == lowir_model::Symbol::GlobalSymbol) {
         target = memory(target_input);
         move(Operand::r(XR_R11),target,Type::Ptr); target = Operand::r(XR_R11);
-    } else if (target.kind != Operand::Symbol) {
+    } else if (target.kind != Operand::Symbol && target.kind != Operand::Reg) {
         move(Operand::r(XR_R11),target,Type::Ptr); target = Operand::r(XR_R11);
     }
     unsigned count = i.operands.count-1;
@@ -88,6 +97,14 @@ void Selector::call(const lowir_model::Instruction& i)
     bool bulk_stack = false;
     for (const auto& m : stack_moves) if (m.type.kind() == Type::Object &&
         m.type.bytes() > 32 && (m.type.bytes() > 64 || m.type.alignment() < 8)) bulk_stack = true;
+    unsigned destinations = 0;
+    for (const auto& m : moves) destinations |= 1u<<m.to.reg;
+    // Keep a genuinely indirect target in its selected carrier when the
+    // complete setup leaves it intact. rax/r10/r11 are setup/encoder scratch.
+    if (target.kind == Operand::Reg && (bulk_stack ||
+        ((destinations | (1u<<XR_RAX) | (1u<<XR_R10)) & reads(target)))) {
+        move(Operand::r(XR_R11),target,Type::Ptr); target = Operand::r(XR_R11);
+    }
     // REP copies clobber ABI argument carriers. Snapshot each pending dependency
     // before the first copy, including addresses of subsequent stack objects.
     auto capture = [&](Assignment& m) {
@@ -112,13 +129,27 @@ void Selector::call(const lowir_model::Instruction& i)
     if (stack) emit(Op::Sub,Type::I64,{Operand::r(XR_RSP),Operand::imm(stack)});
     if (abi.stack_alignment > 16)
         emit(Op::And,Type::I64,{Operand::r(XR_RSP),Operand::imm(-std::uint64_t(abi.stack_alignment))});
-    for (const auto& m : stack_moves) {
+    // Independent scalar stack transfers can follow register setup. Otherwise
+    // capture them first, before argument carriers or their address bases die.
+    bool late_stack = !bulk_stack;
+    for (const auto& m : stack_moves)
+        late_stack &= scalar_integer(m.type) && !(reads(m.from) &
+            (destinations | (1u<<XR_RAX) | (1u<<XR_R10) | (1u<<XR_R11)));
+    auto stack_transfer = [&](const Assignment& m) {
         auto from = m.from;
         if (m.address_home.kind != Operand::None) {
             move(Operand::r(XR_R10),m.address_home,Type::Ptr); from = Operand::mem(XR_R10);
         }
+        if (scalar_integer(m.type) && from.kind != Operand::Reg) {
+            int scratch = target.kind == Operand::Reg && target.reg == XR_R11 ? XR_R10 : XR_R11;
+            move(Operand::r(scratch),from,m.type); from = Operand::r(scratch);
+        }
         move(m.to,from,m.type);
-    }
+    };
+    if (!late_stack) for (const auto& m : stack_moves) stack_transfer(m);
+    // Canonical setup orders independent GPR assignments before XMM ones.
+    // This is bounded by the fourteen ABI carriers, not the argument count.
+    std::stable_partition(moves.begin(),moves.end(),[](const Assignment& m) { return m.to.reg < 16; });
     // At most fourteen scalar carriers: bounded parallel move scheduling, with one
     // reserved scratch to break cycles. Stack arguments are captured first.
     unsigned pending = moves.size();
@@ -128,19 +159,22 @@ void Selector::call(const lowir_model::Instruction& i)
             if (m.done) continue;
             bool needed = false;
             for (const auto& other : moves)
-                if (!other.done && &m != &other && other.from.kind == Operand::Reg && other.from.reg == m.to.reg) needed = true;
+                if (!other.done && &m != &other && (reads(other.from) & (1u<<m.to.reg))) needed = true;
             if (needed) continue;
             move(m.to,m.from,m.type); m.done = true; --pending; progress = true;
         }
         if (progress) continue;
         for (auto& m : moves) if (!m.done) {
             auto scratch = Operand::r(m.to.reg >= 16 ? xmm(15) : XR_R10);
-            move(scratch,m.to,m.type);
-            for (auto& other : moves) if (!other.done && other.from.kind == Operand::Reg && other.from.reg == m.to.reg)
-                other.from = scratch;
+            move(scratch,m.to,m.to.reg >= 16 ? Type::F64 : Type::I64);
+            for (auto& other : moves) if (!other.done && (reads(other.from) & (1u<<m.to.reg))) {
+                if (other.from.reg == m.to.reg) other.from.reg = scratch.reg;
+                if (other.from.index == m.to.reg) other.from.index = scratch.reg;
+            }
             break;
         }
     }
+    if (late_stack) for (const auto& m : stack_moves) stack_transfer(m);
     if (signature.boundary.arity == CAM_VARIADIC)
         emit(Op::Mov,Type::I64,{Operand::r(XR_RAX),Operand::imm(abi.fp)});
     if (target_home.kind != Operand::None) move(target,target_home,Type::Ptr);
@@ -150,6 +184,11 @@ void Selector::call(const lowir_model::Instruction& i)
     if (saved_stack.kind != Operand::None) move(Operand::r(XR_RSP),saved_stack,Type::Ptr);
     else if (stack) emit(Op::Add,Type::I64,{Operand::r(XR_RSP),Operand::imm(stack)});
     if (i.destination && state(i.destination.index).uses) {
+        auto& result = state(i.destination.index);
+        if (stack && scalar_integer(i.type) && result.location.kind == Operand::None) {
+            result.location = home(p.values[i.destination.index-1].name,i.type,true);
+            result.location.temporary = false;
+        }
         auto dest = allocate(i.destination.index,i.type);
         if (aggregate(i.type)) {
             if (!indirect_return(i.type)) {

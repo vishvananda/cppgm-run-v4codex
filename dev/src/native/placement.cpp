@@ -13,12 +13,24 @@ void Selector::initialize_values()
         workspace.value_indices[id] = values.size(); values.push_back(ValueState());
     };
     const auto& sig = p.signatures[source.signature.index-1];
+    bool integer_parameter = false, float_parameter = false, numeric_conversion = false;
+    for (unsigned k = sig.parameters.begin; k != sig.parameters.end(); ++k) {
+        integer_parameter |= scalar_integer(p.parameters[k].type);
+        float_parameter |= p.parameters[k].type.floating();
+    }
     for (unsigned k = sig.parameters.begin; k != sig.parameters.end(); ++k) insert(p.parameters[k].value.index);
     for (unsigned b = source.blocks.begin; b != source.blocks.end(); ++b) {
         const auto& block = p.blocks[p.block_order[b].index-1];
-        for (unsigned n = block.instructions.begin; n != block.instructions.end(); ++n)
+        for (unsigned n = block.instructions.begin; n != block.instructions.end(); ++n) {
+            const auto& i = p.instructions[n];
+            numeric_conversion |= i.opcode == Opcode::Convert && i.source_type.floating() && i.type.integer();
             if (p.instructions[n].destination) insert(p.instructions[n].destination.index);
+        }
     }
+    // The canonical O0 mixed conversion boundary keeps FP inputs in explicit
+    // parameter homes and integer inputs in dedicated incoming carriers. r8
+    // is outside this conservative conversion placement pool.
+    mixed_conversion_abi = integer_parameter && float_parameter && numeric_conversion;
 }
 void Selector::analyze_instruction(const lowir_model::Instruction& i, unsigned epoch)
 {
@@ -166,6 +178,7 @@ void Selector::parameters()
         auto& v = state(param.value.index);
         v.location = incoming;
         if (!v.uses) continue;
+        if (param.type.scalar()) parameter_bytes += (param.type.bytes()+7)&~std::uint64_t(7);
         if (aggregate(param.type)) {
             if (!placement.memory) {
                 v.location = home(p.values[param.value.index-1].name,param.type,true);
@@ -175,10 +188,19 @@ void Selector::parameters()
             }
             continue;
         }
-        bool retain = incoming.kind == Operand::Reg &&
+        if (placement.memory && scalar_integer(param.type)) {
+            v.location = home(p.values[param.value.index-1].name,param.type,true);
+            f.frame.back().parameter = true;
+            // ABI homes are stable storage, not private reload-carry windows.
+            v.location.temporary = false;
+            move(Operand::r(XR_RAX),incoming,param.type);
+            move(v.location,Operand::r(XR_RAX),param.type);
+            continue;
+        }
+        bool retain = incoming.kind == Operand::Reg && !(vector && mixed_conversion_abi) &&
             (vector || v.last < first_clobber[incoming.reg]) && !v.crosses_block && !v.crosses_call;
         if (retain) {
-            live_until[incoming.reg] = v.last;
+            live_until[incoming.reg] = mixed_conversion_abi ? ~0u : v.last;
             normalize_register(incoming, param.type);
         } else if (incoming.kind == Operand::Reg) {
             if (!vector && v.crosses_block && v.crosses_call && retained_parameters >= 5) {
@@ -200,10 +222,12 @@ void Selector::parameters()
                 }
             }
             v.location = home(p.values[param.value.index-1].name,param.type,true);
+            f.frame.back().parameter = vector;
             normalize_register(incoming,param.type); move(v.location,incoming,param.type);
         }
     }
     vararg_gp = abi.gp*8; vararg_fp = 48+abi.fp*16; vararg_stack = abi.stack;
+    if (mixed_conversion_abi) live_until[XR_R8] = ~0u;
 }
 Operand Selector::allocate(unsigned id, Type t)
 {
@@ -235,6 +259,15 @@ Operand Selector::allocate(unsigned id, Type t)
     require(scalar_integer(t), "native result class not implemented");
     if (v.crosses_block && !v.single_edge) return v.location = home(p.values[id-1].name,t,true);
     const auto& definition = p.instructions[v.definition-1];
+    // A sole adjacent scalar compare/return consumes the ABI result before
+    // any fixed-register setup can invalidate it. Other intervals use normal
+    // placement, including calls, wide conversions and exceptional edges.
+    if (definition.opcode == Opcode::Call && v.uses == 1 && v.last == position+1) {
+        const auto& consumer = p.instructions[v.last-1];
+        if ((consumer.opcode == Opcode::Compare && scalar_integer(consumer.type) && consumer.type == t) ||
+            (consumer.opcode == Opcode::Return && consumer.type == t))
+            return v.location = Operand::r(XR_RAX);
+    }
     if (definition.opcode == Opcode::Binary || definition.opcode == Opcode::Unary) {
         auto input = arg(definition,0);
         if (input.kind == lowir_model::Operand::Temporary) {
@@ -248,7 +281,10 @@ Operand Selector::allocate(unsigned id, Type t)
             }
         }
     }
-    if (v.uses == 1 && v.last == position+1 && p.instructions[v.last-1].opcode == Opcode::Return)
+    bool frame_input = definition.opcode == Opcode::Binary &&
+        arg(definition,0).kind == lowir_model::Operand::Temporary &&
+        state(root(arg(definition,0).ref)).location.kind == Operand::Memory;
+    if (!frame_input && v.uses == 1 && (v.last == position+1 || (v.converted_boolean && v.last == position+2)) && p.instructions[v.last-1].opcode == Opcode::Return)
         return v.location = Operand::r(XR_RAX);
     static const int pool[] = {XR_R8,XR_R9,XR_RDI,XR_RSI,XR_RBX,XR_R12,XR_R13,XR_R14,XR_R15};
     for (int reg : pool) {
@@ -266,7 +302,9 @@ void Selector::finish_frame()
     // Reserve save homes below ordinary slots. RBP is always established before
     // accessing any frame operand; calls see a 16-byte-aligned stack.
     unsigned saved = __builtin_popcount(f.preserved);
-    f.stack_size = (f.frame_bytes + saved*8 + f.scratch_bytes + 15 +
+    // O0 retains capacity for each consumed scalar parameter even when its
+    // selected incoming register makes an actual home unnecessary.
+    f.stack_size = (std::max(parameter_bytes,f.frame_bytes + saved*8 + f.scratch_bytes) + 15 +
         (f.frame_alignment > 16 ? f.frame_alignment-1 : 0)) & ~std::uint64_t(15);
     require(f.stack_size < 0x70000000,"native aligned frame too large");
     stats.frame_bytes += f.stack_size;

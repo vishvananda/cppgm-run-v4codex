@@ -6,6 +6,7 @@ struct ValueState {
     unsigned definition = 0, last = 0, uses = 0, block = 0, call_epoch = 0, alias = 0, other_block = 0;
     bool folded_load = false, folded_index = false, address_only = true, single_edge = false;
     bool crosses_block = false, crosses_call = false, compare_branch = false;
+    bool converted_boolean = false;
 };
 // Unit-owned dense identity tables, initialized once, reused by functions. No
 // whole-unit scan per function and no string-keyed placement decisions.
@@ -28,6 +29,8 @@ class Selector {
     Workspace& workspace;
     Statistics& stats;
     Function f;
+    bool mixed_conversion_abi = false;
+    std::uint64_t parameter_bytes = 0;
     Operand vararg_save, indirect_result, atomic_scratch;
     unsigned vararg_gp = 0, vararg_fp = 0, vararg_stack = 16;
     std::vector<ValueState> values;

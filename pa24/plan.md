@@ -3,6 +3,23 @@
 Stage base commit: bde9eb3e128e24923a1de40bb63b8e348a13553b
 Last reviewed commit: 9f3f9b5caaec9677af0e8431b51cacebcf823dce
 
+Implementation133 entered at clean `18721ea79d6283dda2351101f2c50b54cac7cf10`.
+The previous turn is verified progress (TLS commits and terminal test evidence);
+no build/test process is live at entry. Review markers above remain unchanged.
+Entry course result is 290/296, six canonical-MIR failures; inventory 290/435.
+
+133 working scope: close the **canonical placement/frame protocol** together.
+Function selection owns scalar/XMM parameter homes, complete value intervals,
+ABI result forwarding and normalized Boolean facts. Call setup consumes typed
+ABI fragments and explicit register/address dependencies; final MIR owns the
+preserve list and stack layout used by encoding. Use bounded per-function walks,
+fixed register pools and bounded parallel-transfer scheduling; no name matching,
+text transport or fixture-specific lowering. Validate all six shapes plus mixed
+width/pressure/CFG/stack/indirect consumers, inherited personal suites, the course
+suite, prior-through and file audit. Freeze entry/final compilers for compiler
+latency/RSS and runtime/text A/A plus ABBA evidence; disclose required canonical
+costs and avoidable regressions separately. No reference change is planned.
+
 Implementation132 entered at clean `bcf1e3b5`; code is `db965a86` and `03eeff9e`.
 The preceding turn made validated EH/frame progress; no live work was abandoned.
 Audit130 remains the last independent review. Preserve both markers and do not

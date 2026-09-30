@@ -9,6 +9,15 @@ bool Selector::call_effect(const lowir_model::Instruction& i) const
 }
 unsigned Selector::clobbers(const lowir_model::Instruction& i) const
 {
+    if (i.opcode == Opcode::Compare) {
+        unsigned next = &i-p.instructions.data()+1;
+        if (next < p.instructions.size()) {
+            const auto& conversion = p.instructions[next];
+            if (conversion.opcode == Opcode::Convert && conversion.type.integer() &&
+                conversion.source_type.integer() && arg(conversion,0).kind == lowir_model::Operand::Temporary &&
+                arg(conversion,0).ref == i.destination.index) return 1u<<XR_RDX;
+        }
+    }
     if (call_effect(i))
         return (1u<<XR_RDI)|(1u<<XR_RSI)|(1u<<XR_RDX)|(1u<<XR_RCX)|(1u<<XR_R8)|(1u<<XR_R9);
     if (i.opcode == Opcode::Convert && (i.type == Type::I128 || i.source_type == Type::I128) &&
