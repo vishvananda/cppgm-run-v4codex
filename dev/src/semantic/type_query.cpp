@@ -47,6 +47,25 @@ QueryId Analyzer::intern_query(TypeQuery q, const std::vector<QueryId>& children
     auto id = type_queries.size(); query_slots[pos] = id;
     type_queries.push_back(q); query_hashes.push_back(hash); query_facts.push_back(TypeQueryFact()); return id;
 }
+QueryId Analyzer::qualified_value_query(NodeId name, ScopeId scope, TypeId owner)
+{
+    TypeQuery q;
+    q.kind = QueryKind::QualifiedValue; q.type = owner; q.name = terminal(name); q.context = scope;
+    // Equivalent redeclarations retain the first signature's lookup,
+    // but each source declaration still owes its own access check.
+    // Share the signature-access recipe path with dependent type names.
+    retain_type_access(ast[name].last,owner,scope,q.name);
+    while (!template_object_context_index.get(q.context) &&
+        (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
+        q.context = scopes[q.context].parent;
+    if (auto list = child(ast[name].last,Kind::TemplateArguments)) {
+        std::vector<ArgumentId> args;
+        for (auto a = ast[list].first; a; a = ast[a].next)
+            append_template_argument(a,scope,template_argument_node(a,scope),args);
+        q.arguments = intern_arguments(args);
+    }
+    return intern_query(q,{});
+}
 QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
 {
     auto& source_index = callee ? query_callee_sources : query_sources;
@@ -83,17 +102,8 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         if (definitions && !ast.nodes.occurrences[n].context && last != ast[name].last && bind_template_name(name,s,last).dependent) {
             auto owner = type_name(name,s,last);
             if (!owner && template_type_probe) return 0;
-            q.kind = QueryKind::QualifiedValue; q.type = owner; q.name = terminal(name); q.context = s;
-            while (!template_object_context_index.get(q.context) &&
-            (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
-                q.context = scopes[q.context].parent;
-            if (auto list = child(ast[name].last,Kind::TemplateArguments)) {
-                std::vector<ArgumentId> args;
-                for (auto a = ast[list].first; a; a = ast[a].next)
-                    append_template_argument(a,s,template_argument_node(a,s),args);
-                q.arguments = intern_arguments(args);
-            }
-            break;
+            auto id = qualified_value_query(name,s,owner);
+            source_index.put(key(s,n),id); return id;
         }
         auto e = resolve(name,s);
         if (!e && ast[name].first == ast[name].last) e = builtin_function(terminal(name));
@@ -372,7 +382,8 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
         }
         results.put(cache_key,result); return result;
     }
-    if (owner && q.context) q.context = substitution_scope(owner,q.context);
+    if (owner && q.context) q.context = substitution_scope(owner,q.context,
+        q.kind == QueryKind::QualifiedValue ? ScopeProjection::Access : ScopeProjection::Instantiated);
     if (owner && q.naming) q.naming = substitution_scope(owner,q.naming);
     if (owner && q.entity) {
         auto spec = specializations[entities[q.entity].specialization];

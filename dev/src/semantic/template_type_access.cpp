@@ -1,11 +1,11 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
-void Analyzer::retain_type_access(NodeId part, TypeId qualifier, ScopeId scope)
+void Analyzer::retain_type_access(NodeId part, TypeId qualifier, ScopeId scope, IdentifierId name)
 {
     auto occurrence = ast.nodes.occurrences[part];
     if (occurrence.context || template_type_access_sources.get(occurrence.source)) return;
-    TemplateTypeAccess use; use.qualifier = qualifier; use.name = ast[part].text;
+    TemplateTypeAccess use; use.qualifier = qualifier; use.name = name;
     use.scope = access_override ? access_override : scope;
     template_type_access_sources.put(occurrence.source,template_type_accesses.size());
     template_type_accesses.push_back(use);
@@ -74,7 +74,7 @@ bool Analyzer::substituted_type_access(NodeId node, std::uint32_t frame)
                         }
                         auto scope = entities[types[qualifier].entity].scope;
                         auto member = qualified_type_member(qualifier,use.name);
-                        if (!member || !accessible(member,substitution_scope(environment,use.scope),scope)) {
+                        if (!member || !accessible(member,substitution_scope(environment,use.scope,ScopeProjection::Access),scope)) {
                             template_type_access_states.put(k,unsigned(FactState::Failure)); return false;
                         }
                         ++template_type_access_work;

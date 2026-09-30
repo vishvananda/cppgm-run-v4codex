@@ -846,6 +846,7 @@ private:
     std::size_t value_conversion_variants = 0, value_conversion_records = 0;
     QueryId intern_query(TypeQuery query, const std::vector<QueryId>& children);
     QueryId expression_query(NodeId n, ScopeId s, bool callee = false);
+    QueryId qualified_value_query(NodeId name, ScopeId scope, TypeId owner);
     QueryId substitute_query(QueryId id, const Index& bindings, Index& cache, std::uint32_t owner = 0);
     TypeQueryFact query_fact(QueryId id);
     TypeId query_decltype(QueryId id, bool direct);
@@ -902,7 +903,9 @@ private:
     void attach_template_context(std::uint32_t context, std::uint32_t frame);
     EntityId substitution_entity(std::uint32_t frame, EntityId source) const;
     EntityId substitution_binding(std::uint32_t frame, EntityId source);
-    ScopeId substitution_scope(std::uint32_t frame, ScopeId source) const;
+    enum class ScopeProjection { Instantiated, Access };
+    ScopeId substitution_scope(std::uint32_t frame, ScopeId source,
+        ScopeProjection role = ScopeProjection::Instantiated) const;
     bool pattern_scope(ScopeId scope) const;
     Index template_type_sources, template_signature_sources;
     Index injected_type_facts;
@@ -1067,7 +1070,7 @@ private:
     void explicit_instantiation(NodeId n, ScopeId s);
     bool instantiation_suppressed(EntityId entity) const;
     bool explicit_instantiation_naming = false;
-    void retain_type_access(NodeId part, TypeId qualifier, ScopeId scope);
+    void retain_type_access(NodeId part, TypeId qualifier, ScopeId scope, IdentifierId name);
     bool type_access_subtree(NodeId node);
     void check_substituted_type_access(NodeId node, std::uint32_t frame);
     bool substituted_type_access(NodeId node, std::uint32_t frame);

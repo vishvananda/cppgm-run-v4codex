@@ -7,9 +7,9 @@ Reviewed all three accumulated handoffs, all 15 entry commits, their combined
 implementation and audit repair `cbe7871e`. Previous goal turn: **progress**;
 no previous compiler/test process was live at entry.
 
-The stage remains **157/158**, with the same one failing fixture as audit entry;
-PA1–PA26 pass **4283/4283**. Section controls pass **3/3**. Coverage and comparisons
-are preserved. The stage cannot advance until its through report passes.
+Implementation149 now passes **158/158**; PA1–PA27 pass **4441/4441**.
+Section controls pass **3/3**. Coverage and comparisons are preserved.
+Final performance evidence and handoff bookkeeping remain in progress.
 
 | Group | Accepted checkpoint state |
 |---|---|
@@ -25,13 +25,10 @@ All prior145–147 observations remain intact. Inherited 15% latency/RSS and
 zero-growth targets remain diagnostics under spec §9; mandated limits,
 correctness, coverage and comparison rules remain required.
 
-Remaining work is one broad **hosted-library/extern-template integration** group:
-`200-host-extern-template-vtable-reference.t` still fails at `__builtin_strcmp`
-in `<typeinfo>`, before its vtable behavior can be tested. The README excludes
-general hosted-header support, but this checked-in fixture remains a required,
-unwaived failure. Preserve it and resolve its prerequisites and object demand
-together, then pass `make test-report-through-pa27`. No further anonymous-storage
-handoff is needed for this checkpoint.
+The **hosted-library/extern-template integration** group now passes
+`200-host-extern-template-vtable-reference.t`, including host linking/runtime.
+The README excludes general hosted-header support; the checked-in fixture was
+retained as a required, unwaived behavior. No fixture or reference changed.
 
 ELF and naming were useful separate groups. The storage handoff's follow-on
 scope, reference-dependency and buffer repairs were avoidable fragmentation;
@@ -50,7 +47,7 @@ unchanged. This handoff must resolve the remaining failure, not merely add tests
 | Hosted template demand / object ownership | Parsed dependent graph → canonical specialization/member demand → recorded ABI and suppression facts → typed LowIR/ELF. Resolve prerequisites exposed by the stream fixture together; preserve parse-once, demand-only work and extern-template ownership. Check reduced controls and host linking/inspection. |
 | Evidence and closure | Freeze entry/final binaries and inputs; A/A plus ABBA compiler latency/RSS and checked runtime/text measurements. Preserve prior evidence and stage-scoped budgets. Run PA27, through-PA27, file audit and personal controls explicitly. |
 
-Implementation unfinished: hosted-library prerequisites and final fixture behavior.
+Implementation unfinished: final performance evidence and handoff checks.
 Independent review: final combined changes still require Ralph's full-stage audit;
 this is separate from implementation completion and does not waive any finding.
 Handoff ledger: 149 in progress; no completion claim yet.
@@ -62,3 +59,14 @@ Initial through report: **4440/4441** (PA1–PA26 still **4283/4283**; PA27 stil
 **157/158**, unchanged coverage). This is not stage progress or a handoff boundary.
 The stream fixture now reaches a retained member-signature parameter mapping
 invariant; continue through that semantic owner and the final object demand.
+
+149 second increment: normalize sole-void raw parameter lists; separate lexical
+access contexts from required concrete receiver scopes in retained friend
+signatures; check dependent value/type names with the selected declaration head,
+its own source privileges and canonical operator identifiers. First-declaration
+lookup remains shared. Access facts use the existing `(frame, recipe)` memo and
+subtree pruning; source/frame lifetime remains TU-local. No repeated grammar,
+whole-program lookup or optional optimization was introduced. Reduced controls
+cover renamed heads, both void spellings, unrelated friend redeclarations,
+permitted private access, denied access and SFINAE fallback. The full through
+report passes **4441/4441**; file audit passes with four inherited warnings.

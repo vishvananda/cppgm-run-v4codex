@@ -159,7 +159,7 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typena
                 // A known nondependent base member is looked up again in the
                 // instantiation context when a dependent base can add a
                 // conflicting name ([temp.dep.type]/7).
-                if (template_pattern_open_bases.get(scopes[current].entity)) retain_type_access(p,prefix,s);
+                if (template_pattern_open_bases.get(scopes[current].entity)) retain_type_access(p,prefix,s,ast[p].text);
                 owner = current; qualified = true; prefix = 0;
             }
         }
@@ -168,7 +168,7 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typena
                 if (list && !(ast[p].flags & 1)) throw std::runtime_error("dependent member template requires template");
                 if (p == last && require_typename) throw std::runtime_error("dependent qualified type requires typename");
             }
-            retain_type_access(p,prefix,s);
+            retain_type_access(p,prefix,s,ast[p].text);
             std::vector<TypeId> args;
             for (auto a = ast[list].first; a; a = ast[a].next) {
                 auto type = template_argument_node(a,s);

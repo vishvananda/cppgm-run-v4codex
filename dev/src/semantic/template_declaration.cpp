@@ -62,6 +62,12 @@ bool Analyzer::apply_template_signature(NodeId original, NodeId current, TypeId 
             if (auto p = child(d,Kind::Parameters)) result = p;
             d = ast[child(d,Kind::NestedDeclarator)].first;
         }
+        // A sole unnamed void parameter denotes an empty parameter list.
+        // The raw source recipe may use (void) where the first declaration
+        // uses (), even when dependent return types need reconciliation.
+        auto first = ast[result].first;
+        if (first && !ast[first].next && ast[first].kind == Kind::Parameter &&
+            fundamental(facts[first].type,FT_VOID)) return NodeId(0);
         return result;
     };
     // The common redeclaration has exactly the same substituted semantics.
@@ -256,6 +262,7 @@ EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, N
             // select the defining head as the owner of the retained body.
             entities[e].type = first_template_signature(e,source,environment);
             template_facts(e,environment);
+            templates[entities[e].template_info].source = source;
             auto condition = members[entities[e].member_info].explicit_condition;
             if (condition) {
                 auto head = templates[entities[e].template_info];
@@ -272,6 +279,7 @@ EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, N
         e = make_entity(EntityKind::Function,scope,name,source);
         entities[e].type = type;
         template_facts(e,environment);
+        templates[entities[e].template_info].source = source;
         merge_template_defaults(e,environment);
         if (!family) { family = e; template_families.put(key(scope,name),family); }
         template_signatures.put(key(family,signature),e);

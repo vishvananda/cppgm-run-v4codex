@@ -99,7 +99,7 @@ EntityId Analyzer::substitution_binding(std::uint32_t frame, EntityId source)
     if (!result) throw std::logic_error("missing substituted query declaration");
     substitution_binding_cache.put(k,result); return result;
 }
-ScopeId Analyzer::substitution_scope(std::uint32_t frame, ScopeId source) const
+ScopeId Analyzer::substitution_scope(std::uint32_t frame, ScopeId source, ScopeProjection role) const
 {
     while (substitution_frames[frame].overlay) frame = substitution_frames[frame].parent;
     for (auto scope = source; scope; scope = scopes[scope].parent) {
@@ -121,7 +121,13 @@ ScopeId Analyzer::substitution_scope(std::uint32_t frame, ScopeId source) const
         // member signature's access context.
         if (scopes[entities[concrete].owner].kind == ScopeKind::Class) return entities[concrete].owner;
     }
-    if (pattern_scope(source)) throw std::logic_error("missing substituted query context");
+    // A retained first declaration can carry a lexical access context from an
+    // unrelated template (e.g. the same friend declared in two class templates).
+    // Qualified lookup consumes its recorded receiver type; this context only
+    // supplies lexical privileges and must not demand the unrelated class.
+    // Receiver/body contexts still require a concrete projection.
+    if (role == ScopeProjection::Instantiated && pattern_scope(source))
+        throw std::logic_error("missing substituted query context");
     return source;
 }
 TypeId Analyzer::bind_template_type(NodeId specs, NodeId d, ScopeId scope)

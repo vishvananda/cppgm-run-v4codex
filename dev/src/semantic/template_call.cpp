@@ -376,7 +376,10 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
         if (incomplete_substitution) retain_query_prerequisite(incomplete_specializations,index);
         return 0;
     }
-    if (!partial && !substituted_type_access(entities[pattern].source,frame)) {
+    // Access recipes use the selected head's source, whose parameters this
+    // frame binds. Entity::source can be an earlier friend declaration with
+    // a different head and different privileges; its lookup lives in type.
+    if (!partial && !substituted_type_access(t.source ? t.source : entities[pattern].source,frame)) {
         specializations[index].declaration = FactState::Failure; return 0;
     }
     EntityId e = make_entity(EntityKind::Function, entities[pattern].owner == t.environment ? scopes[t.environment].parent : entities[pattern].owner, entities[pattern].name, entities[pattern].source);

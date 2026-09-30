@@ -23,11 +23,16 @@ for name in ('one','two'): (out/name).mkdir(exist_ok=True)
 #error spurious next header
 #endif
 ''')
-for source in ('hosted-prerequisites','header-probe','friend-partial','extern-overload'):
+for source in ('hosted-prerequisites','header-probe','friend-partial','extern-overload','void-member-signature','friend-redeclaration','friend-access'):
  for label,binary in [('student',compiler),('host','g++')]:
   obj=out/(source+label+'.o');exe=out/(source+label)
   run([binary,'-std=c++11','-I',out/'one','-I',out/'two','-c',root/'student.tests/pa27'/(source+'.cpp'),'-o',obj])
   run(['g++',obj,'-o',exe]);run([exe])
+for binary in (compiler,'g++'):
+ source=root/'student.tests/pa27/friend-access-private.cpp'
+ run([binary,'-std=c++11','-c',source,'-o',out/'access.o'],False)
+ run([binary,'-std=c++11','-DSFINAE_CONTROL','-c',source,'-o',out/'access.o'])
+ run(['g++',out/'access.o','-o',out/'access']);run([out/'access'])
 # Both builtin spellings have ordinary signatures and diagnose invalid arguments.
 for name,source in [('strcmp-arity','int f(){return __builtin_strcmp("a");}'),
  ('strncmp-type','int f(){return __builtin_strncmp(7,"a",1);}'),
