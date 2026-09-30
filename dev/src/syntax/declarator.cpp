@@ -121,7 +121,13 @@ NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts, 
         } else pointer = leaf(Kind::Pointer);
         ast.append(result, pointer);
         has_pointer = true;
-        while (in.is("const") || in.is("volatile")) ast.append(result, leaf(Kind::CvQualifier));
+        for (;;) {
+            NativeAttributes native;
+            ast[result].flags |= attributes(0,&native);
+            native_attributes(result,native);
+            if (in.is("const") || in.is("volatile")) ast.append(result, leaf(Kind::CvQualifier));
+            else break;
+        }
     }
     if (in.eat("...")) ast.append(result, make(Kind::ParameterPack));
     if (nested_declarator_ahead() || (typedef_name && in.is("(") && identifier(1) && in.is(")",2))) {
