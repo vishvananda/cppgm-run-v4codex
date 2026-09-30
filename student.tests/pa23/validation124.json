@@ -1,0 +1,483 @@
+{
+  "stage_base": "f33dd0775073bf5db6665fb2f4f504783159df76",
+  "review_entry": "2bba72734caa8bdf772418ad6e96775e76ed984d",
+  "last_reviewed_commit": "36e612a07bae32eb20d10ffc76bb03529555d4bb",
+  "previous_goal_turn": "progress: committed handoff 123 improved 20/45 to 24/45; no live interrupted process at audit entry",
+  "compiler_sha256": "24688bccd2cc1b6926654b33d9aec6a8f92ddcdce419ef1f898fa2aca2022106",
+  "entry_compiler_sha256": "c2affdc75eda82241426b85c254d853027f987b2c4a4a866cf2580f417a6e9d5",
+  "stage_passed": 24,
+  "stage_total": 45,
+  "entry_failures": [
+    "pa23/tests/general/100-complete-constructor-reference-vbase-parameter.t",
+    "pa23/tests/general/100-constructor-prvalue-virtual-base-forwarding.t",
+    "pa23/tests/general/100-constructor-template-vbase-hidden-argument.t",
+    "pa23/tests/general/100-converting-constructor-vbase-hidden-argument.t",
+    "pa23/tests/general/100-declared-member-reference-virtual-base-argument.t",
+    "pa23/tests/general/100-forwarded-virtual-base-parameter-layout-union.t",
+    "pa23/tests/general/100-hidden-virtual-base-reference-argument-declaration.t",
+    "pa23/tests/general/100-member-pointer-reference-vbase-hidden-argument.t",
+    "pa23/tests/general/100-multiple-reference-virtual-base-parameters.t",
+    "pa23/tests/general/100-null-pointer-vbase-hidden-argument.t",
+    "pa23/tests/general/100-overload-set-reference-vbase-hidden-argument.t",
+    "pa23/tests/general/100-placement-new-vbase-hidden-argument.t",
+    "pa23/tests/general/100-polymorphic-pointer-virtual-base-argument.t",
+    "pa23/tests/general/100-reference-member-hidden-virtual-base-layout.t",
+    "pa23/tests/general/100-reference-pointer-virtual-base-argument.t",
+    "pa23/tests/general/100-virtual-base-constructor-vptr-hidden-target.t",
+    "pa23/tests/general/100-virtual-base-manipulator-hidden-argument.t",
+    "pa23/tests/general/100-virtual-base-parameter-hidden-layout.t",
+    "pa23/tests/general/100-virtual-inheritance-fields.t",
+    "pa23/tests/general/200-multi-level-virtual-base-diamond-lifecycle.t",
+    "pa23/tests/general/300-lifecycle-base-entry-inline-policy.t"
+  ],
+  "final_failures": [
+    "pa23/tests/general/100-complete-constructor-reference-vbase-parameter.t",
+    "pa23/tests/general/100-constructor-prvalue-virtual-base-forwarding.t",
+    "pa23/tests/general/100-constructor-template-vbase-hidden-argument.t",
+    "pa23/tests/general/100-converting-constructor-vbase-hidden-argument.t",
+    "pa23/tests/general/100-declared-member-reference-virtual-base-argument.t",
+    "pa23/tests/general/100-forwarded-virtual-base-parameter-layout-union.t",
+    "pa23/tests/general/100-hidden-virtual-base-reference-argument-declaration.t",
+    "pa23/tests/general/100-member-pointer-reference-vbase-hidden-argument.t",
+    "pa23/tests/general/100-multiple-reference-virtual-base-parameters.t",
+    "pa23/tests/general/100-null-pointer-vbase-hidden-argument.t",
+    "pa23/tests/general/100-overload-set-reference-vbase-hidden-argument.t",
+    "pa23/tests/general/100-placement-new-vbase-hidden-argument.t",
+    "pa23/tests/general/100-polymorphic-pointer-virtual-base-argument.t",
+    "pa23/tests/general/100-reference-member-hidden-virtual-base-layout.t",
+    "pa23/tests/general/100-reference-pointer-virtual-base-argument.t",
+    "pa23/tests/general/100-virtual-base-constructor-vptr-hidden-target.t",
+    "pa23/tests/general/100-virtual-base-manipulator-hidden-argument.t",
+    "pa23/tests/general/100-virtual-base-parameter-hidden-layout.t",
+    "pa23/tests/general/100-virtual-inheritance-fields.t",
+    "pa23/tests/general/200-multi-level-virtual-base-diamond-lifecycle.t",
+    "pa23/tests/general/300-lifecycle-base-entry-inline-policy.t"
+  ],
+  "new_failures": [],
+  "prior_passed": 3811,
+  "prior_total": 3811,
+  "prior_stages": 22,
+  "through_passed": 3835,
+  "through_total": 3856,
+  "file_audit": "pass; three inherited header organization warnings",
+  "controls": {
+    "audit124-final.json": {
+      "passed": 21,
+      "total": 21,
+      "failures": []
+    },
+    "controls124-semantic.json": {
+      "passed": 26,
+      "total": 26,
+      "failures": []
+    },
+    "controls124-layout.json": {
+      "passed": 17,
+      "total": 19,
+      "failures": [
+        "construct-shared-once",
+        "construct-hidden-vptr-target"
+      ]
+    },
+    "controls124-lifecycle.json": {
+      "passed": 20,
+      "total": 20,
+      "failures": []
+    },
+    "controls124-inherited.json": {
+      "passed": 32,
+      "total": 33,
+      "failures": [
+        "virtual-member-pointer"
+      ]
+    }
+  },
+  "deep_overrider": {
+    "semantic_checks_passed": 2,
+    "total": 2,
+    "entry_runtime_exit": -11,
+    "final_runtime_exit": -11,
+    "remaining_owner": "virtual-base lifecycle: retained nested variant of the incomplete C2 construction path"
+  },
+  "roundtrips": 44,
+  "historical_performance": [
+    {
+      "path": "performance121-common.json",
+      "sha256": "2ad48ac28f13dc404deac7c01a2349a81a6b3d345319e5ee5ba19ee0d0b98242",
+      "frozen_binaries_verified": true
+    },
+    {
+      "path": "performance121-views.json",
+      "sha256": "1976aecc4209628466c3ecdecd542ebb68351bb33583d9dd3b216561816aab0e",
+      "frozen_binaries_verified": true
+    },
+    {
+      "path": "performance122.json",
+      "sha256": "b6049a22f20333bddc35bef5200dd19059ac34301632b2d4fe10b9af7c7ded5a",
+      "frozen_binaries_verified": true
+    },
+    {
+      "path": "performance122-repeat.json",
+      "sha256": "231f5fd31fadf47d1c7f9824c83fdc0ec68ece3d5d710ecc28f31f55fc66620e",
+      "frozen_binaries_verified": true
+    },
+    {
+      "path": "performance123.json",
+      "sha256": "0de851acf0bd35e423166c491de8a24ad8bd2a8d718a975ed8abfd8c0db47c3c",
+      "frozen_binaries_verified": true
+    },
+    {
+      "path": "performance123-repeat.json",
+      "sha256": "d3d641a32a2e449cef32ddab7b84269ed1d928c8fbc3b6e4e1a2228ab126da59",
+      "frozen_binaries_verified": true
+    }
+  ],
+  "reference_changes_this_audit": [],
+  "accumulated_reference_correction": "pa23/tests/general/100-diamond-virtual-destructor-slot-merge.ref",
+  "reference_proof": "pa23/reference-correction122.md",
+  "reference_bundle_revision": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "compiler_build_config": "-std=gnu++11 -Wall -O3 \n-std=gnu++11 -Wall -O3  -Dmain=test_runner_real_main\n",
+  "implementation_tree": "f49c42fdad963192056de6060b19b02fe67f1d87",
+  "reviewed_commits": [
+    "b28e12ce308afd54a70882079b8247d07319359b",
+    "b1aed715ce12ab00793f83dd0ffa16ac6f3dec93",
+    "55e2053ac106648e2a05bd9312c69d3d64f9064e",
+    "72433afa72a6cf129b590d1b828eb04deea7de44",
+    "6ae0646175655becaea2dc7148f9fcc7a4ca333f",
+    "26b96f27e05f82f3cde2e6bf6877288c596f3d06",
+    "b20109158ee21001fd6a7c359002a66933e7241c",
+    "9417f88f93e8cc7275f7d9f15f33c1be72771614",
+    "8b505a75ebb8e7f5fdd6a458527db65eedce54d1",
+    "3b9cf2b55eb55a03a6d23998b7bc1318605f9345",
+    "a04a8cae6f404de9d62bd9f9393b354facae72ee",
+    "9688f9e54a2b206b9add41ce78acd9b5f0452c62",
+    "2f27c0e58920dbb6eb4a8d6a8cd08c79eeafddf2",
+    "c7944d232e6df7255afde3f54a9cebf95b60f815",
+    "67354b79d703e20aa7cf14f623695f8f473c3d14",
+    "08cb86577dc5e655ab241fe644a6baee1968febc",
+    "6a762f2502aefada1082b181f5fdf51a49fd246f",
+    "2bba72734caa8bdf772418ad6e96775e76ed984d",
+    "36e612a07bae32eb20d10ffc76bb03529555d4bb"
+  ],
+  "checks": [
+    {
+      "command": "make test-pa23",
+      "observed_exit": 2,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa23-audit124/stage-final.log",
+      "log_sha256": "28cd43e9a9d8de1d6149a0f72a0d843ee028fb7bb15c2ee2e49db337d6ddbc44"
+    },
+    {
+      "command": "n=23; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi",
+      "observed_exit": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa23-audit124/prior-final.log",
+      "log_sha256": "0d6c46e60abae86f39d31a98b8f9394b15236df5af3f2265736cebaf29ff255f"
+    },
+    {
+      "command": "make test-report-through-pa23",
+      "observed_exit": 2,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa23-audit124/through-final.log",
+      "log_sha256": "0bac1125eec65d0a3d72ccc8c387e473742ca7383d31fa17de1c35fbb08ff7de"
+    },
+    {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa23 --paths dev/src",
+      "observed_exit": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa23-audit124/audit-final.log",
+      "log_sha256": "288932b05be54f7dbd9f8567a9b5a74a7daabd88e8da3c4d7577d2f0185ce181"
+    }
+  ],
+  "fixture_manifest": [
+    {
+      "path": "pa23/tests/general/100-base-subobject-cast-virtual-dispatch.t",
+      "source_sha256": "d9fe3437b87f16d590218c776d25b818df363a3be2cfefd3208a6080e234d0d0",
+      "reference_sha256": "7875f43e684e86d6624b0ec6fa3ff8ead8971fc64ccd0ad46646043bcc0df1c4",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-complete-constructor-reference-vbase-parameter.t",
+      "source_sha256": "73b725f06a0fa08caa40bc8046d2becccf547d964c7c22748580059f6e1b295f",
+      "reference_sha256": "132092afda9447078617b7871b86bef184c11800b23aa52e7509fcd90cfd5440",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-constructor-prvalue-virtual-base-forwarding.t",
+      "source_sha256": "4b8efbb556af91d6061cd3882a12a1b01234a4537a849a56d007f8e16b39830e",
+      "reference_sha256": "fa698bec41a648bf3e50bce5c53e3acb95943d578b10ac88f330267f09c50fae",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-constructor-template-vbase-hidden-argument.t",
+      "source_sha256": "d821879f8b9237b73d611e8d00626d3849920f95da078d4cd61206e2556f1976",
+      "reference_sha256": "2ce0c6738c8d7efdfd1b5c264d9cd23d317bb51b5318bb39224a297dbdb4cb2b",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-converting-constructor-vbase-hidden-argument.t",
+      "source_sha256": "2c5f649c9af88f28be0720377ad4182b9c68501dba0d9a20c3a7cc4d3ea1e1d9",
+      "reference_sha256": "1cbf22cb9850fafb5e8acb18bd46f6cfbbabb4c12caae18c8d90761cb6007930",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-declared-member-reference-virtual-base-argument.t",
+      "source_sha256": "dd11fc0ed669bd94e247b5f0db300e6f3517c53519418aa610655975eb90a7b1",
+      "reference_sha256": "5114ecc19da200256c5c5abee62c4342a823957cf1b1dfd8019df797f8202b37",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-diamond-virtual-destructor-slot-merge.t",
+      "source_sha256": "76994268fb7f31e62f72a1228c97154c6e29fbb831462c865b1bba0ddfbdfb1e",
+      "reference_sha256": "30cc381e6ed15c949718464a7bdc9464de692d8ef68f5accf06e2aad4dcea3e9",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-forwarded-virtual-base-parameter-layout-union.t",
+      "source_sha256": "9298f76cd6d3ba32b79059223051b8403e62d3c6ef9b7c42e0ce7a63b0b29aee",
+      "reference_sha256": "1334f1c775cdf86f94dc797a678908c3efefca325e7a0159fd457e6066d49a69",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-hidden-virtual-base-reference-argument-declaration.t",
+      "source_sha256": "ed76a0572c95da63695a813304c8731f9976054f70ec45d1f449dc9bbf3c806e",
+      "reference_sha256": "9ba13a017fb95e80b5482f41d0dd8a175bb2d7f6515c9edf9dfd788547642099",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-inherited-virtual-base-dispatch-uses-converted-receiver.t",
+      "source_sha256": "7fc876058fce9c1af271d0e50bd9f09fa31ff474a7866f55657f2f7abe173d7a",
+      "reference_sha256": "d242a8f4e7aa4d0c87b19e6aecb95c59fcfd7d40d3c681f5ad19ccc253b1572f",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-member-pointer-reference-vbase-hidden-argument.t",
+      "source_sha256": "88d5ef1c894a2502bccefe02efaaa056d04c2a7365f0e1d869280bec6bafd21a",
+      "reference_sha256": "9dc1a19bd54f3bdec63ec90a7493140cc84c577a04e25379cd165739a2cc54c0",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-multibase-class-return-adjustor-thunk.t",
+      "source_sha256": "2675afe9010adb4ec98bdfc8e74484652a2d36077da8822be1095a3dd4ec97e9",
+      "reference_sha256": "882c69e5594fdd476ead3348ba6e663bb3931d645fb542aa3474aaa6438f5d97",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-multibase-destructor-primary-pure-slot-concrete-call.t",
+      "source_sha256": "e32ad06fc6fb0d7c44e9b1df078e587e48c34a72f71a7037c7c67eafe44db179",
+      "reference_sha256": "36879c59380d445775ede091c76b8f12f009806e9889b3e53931205a47992c26",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-multibase-implicit-virtual-destructor-slot-merge.t",
+      "source_sha256": "bbb02c9ed18a611ab4eec0a7765158338089aaf0ab5a40fe1192c8f0d6a437e3",
+      "reference_sha256": "96053d078ca5df1124dad6d3b0ff307e42fc61ab0b9b2c899f00ff662ccdbbbe",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-multibase-inherited-virtual-slot-identity.t",
+      "source_sha256": "997aafb53ef346218ddef351efb93a8f4504d0a6d3616f82f18d6d33a5a2a699",
+      "reference_sha256": "87e8bf4b44db422fcb3e71b13ff8b1ccc1766d1bbc26e0dbe2a32592bcf06d6d",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-multiple-reference-virtual-base-parameters.t",
+      "source_sha256": "e9db474e18e5af792c7d2a35d0f7ab4962a2dbba4dc66de06648215d9f07a1ff",
+      "reference_sha256": "93ca30c3dc66511a372e9064eb9b9a494f3b4935ad1383582534b3287d0c13eb",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-nonprimary-direct-base-ctor-vtable-offset.t",
+      "source_sha256": "0758598beededde4210e79dafbaf1f378d6e75d41edcc9c5e5d708ca555f9af8",
+      "reference_sha256": "54fc9ee7501b384e269926e1eed881b7d54cad627df29cee03e63fa89997e2fb",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-nonprimary-virtual-dispatch.t",
+      "source_sha256": "757fb203ece45deb166488a08fc0eb92beef8d1616208139a0acc02581b12ebd",
+      "reference_sha256": "17ee1be75d8337e48df50c4aeadcb1655f815abaa5703f0fa12d36632186b8f8",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-null-pointer-vbase-hidden-argument.t",
+      "source_sha256": "2afbb5234975ee9308a26e52ea9d7f6269c7b7e07cd759ca3720676663e03648",
+      "reference_sha256": "da371aed614c8b1221279b69bd8cb1f9be4bea9226297c8cce3ef28d32c5bbbd",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-null-static-pointer-downcast-nonprimary-base.t",
+      "source_sha256": "7048a6f5cb5c7c91b2d14ff8afa900ddd9b27f85d1aa1fb1e93e6c87cf17322f",
+      "reference_sha256": "cce86196b05dc36a6ca9a28f426c19da421641f06355370fd2e9c58ac6e247cb",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-overload-set-reference-vbase-hidden-argument.t",
+      "source_sha256": "4cd9a55fad24d7df5260d8467712db63760d1c5aa6c95f5015b4b047aa196483",
+      "reference_sha256": "acb3ceaecbf67e9e11787d5e1958f052061c27f49955a80a19730543428296fd",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-placement-new-vbase-hidden-argument.t",
+      "source_sha256": "46c8cfd5febfa598454f83e08a471daee5929a041dd3db027d9ae16fbb9751a4",
+      "reference_sha256": "03fd63ddbd88673efbe10a1f921f26d29fa455e1a5ac350f471383d64b06a2a2",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-polymorphic-pointer-virtual-base-argument.t",
+      "source_sha256": "8f7982101bc78c97ba954ec82532496661e2ce092622990ee8e5bebb66bfdd6e",
+      "reference_sha256": "0d760990558a2f27c9dde22f9b19904a76a7308545ff5722694140e570dbb367",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-primary-polymorphic-base-before-nonpoly-static-cast.t",
+      "source_sha256": "d2d38431156a187039a8780a6ec7cfba7965878d42d036f1c6ad54fd86ce400e",
+      "reference_sha256": "b2180bc575742bcbc4a8a26bd8085c90586ff9954d9e4bc7595508a598d40a00",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-private-crtp-static-pointer-downcast.t",
+      "source_sha256": "84a21a69dcacc0e881394dead6d60f657874208b7bf1d611804309c604054f71",
+      "reference_sha256": "56d2e62074e86853ac4dfc74fccf92e19d562a3d6f640e84c9860c03af32ea50",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-reference-member-hidden-virtual-base-layout.t",
+      "source_sha256": "1604bcf43fbf13dc174045f95b3859714a84c4febc3910d8f90ae4313e7e5169",
+      "reference_sha256": "8a2e142d015fac8ca8298cd60659634f92d046cb26987f8cdabf742a2e988e38",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-reference-pointer-virtual-base-argument.t",
+      "source_sha256": "20e179e02b9ea44ed1e7cab48df70dc4f90c0e4dec9ba20b685ddaaf345dcd1e",
+      "reference_sha256": "097d1f505ffb33ccaeb0deb91934b49d94b761d8bc04735d66e765b7ed656a3f",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-secondary-primary-base-vptr-overwrite.t",
+      "source_sha256": "8e5a386d940564f3381f999669813053447484726d081b8222bf1b0d17f385e6",
+      "reference_sha256": "e10170564b615b20113010b771fcbb7eb1d1fdaf7578ccbedd8186d08645047e",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-sibling-dynamic-cast.t",
+      "source_sha256": "d80a9b404e111c585a058dc4e6e1a47c5c8da8be82a84d69d48bb60b99f0cbfd",
+      "reference_sha256": "82228cf13018725abb02f41e26217cc9d080eb86f5e67858b0310d067257f243",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-static-pointer-downcast-nonprimary-base.t",
+      "source_sha256": "103dc2ea47d3fa43f5f7ab5c9b47ecb85ac9e1e24f35a741dc14fb7f9effc6bc",
+      "reference_sha256": "a895a3d1cd49f50b951c535a9f4ee9494d21d75bfd64dee4e44c698a1e009458",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-static-reference-downcast-nonprimary-base.t",
+      "source_sha256": "1448d1478e40226527badfef2939984a8d262341c9e543f391c087e218143574",
+      "reference_sha256": "0c72bee9dbd8bd579a61f97a11507fe6be4285a6776be8fa0e52cab4d136b8ec",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-typeid-nonprimary-view.t",
+      "source_sha256": "7947056f8221ae99fbf85878dea427f2a74ad4cdcb25bcd888536b9c343f4f53",
+      "reference_sha256": "b4f3a8c7a083f66d89b045386b0bc36c36662c0a1f23c07bd03a4bb5455ca248",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-unrelated-virtual-roots-final-overrider.t",
+      "source_sha256": "2cbc9e04c7e00aba52899513f0748f184073de7cdcfd1943879c81616eb2e299",
+      "reference_sha256": "966b0c61cade9cb393243a8e1c105ba6fa6e69372b9495a9d04938b02c5a54ea",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-using-base-field-primary-base-offset.t",
+      "source_sha256": "5ed21a66a814c4ebe4abdfb855401513fbd406775810130d2ce5006fc33d8f53",
+      "reference_sha256": "8af51ecfee83ae83bf2dda10efa3070f12e8dfd742ce7a00e2d4bedd98340bf0",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-virtual-base-constructor-vptr-hidden-target.t",
+      "source_sha256": "71a7b35a33e0d790572ac0b460494e5e9fd23d53827a8b9d30698fca663005d0",
+      "reference_sha256": "d66062ddb7d9c69d76675e6a1f1787b9c659ba82f4954d2b5689bd0017c19f8e",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-virtual-base-manipulator-hidden-argument.t",
+      "source_sha256": "b18fcf78235ea71a27caf2fe8c40fc2c437ce44e158c4d5616b67438b9a52924",
+      "reference_sha256": "e75c17db12203f936b969df4c545511e57c1b7fa5a47fb213b41363bb15ab903",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-virtual-base-parameter-hidden-layout.t",
+      "source_sha256": "4842e7b5132c277f04b33b1f8607358cbf1d51649b9ad0da24e3f99d0707f232",
+      "reference_sha256": "5f3115e8633e7cc056c543e10fcfefe2a703e24bd25ab8adfc622d623f3412df",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-virtual-dispatch-incomplete-vbase-parameter.t",
+      "source_sha256": "83385c2ac0a077442f530620dfe0174cf57ba43b544889de0365c5dfae10bd0d",
+      "reference_sha256": "0a1f214d4a4e49c89117ab21549fbfc5d573c90cc21287b550e3007ada468cb5",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/100-virtual-inheritance-fields.t",
+      "source_sha256": "99a83ea81b8c63ec13ea6cd210b1c181662cbabf64e196cc73d88e97837c4f03",
+      "reference_sha256": "9933beaf3e732d2b273f72ce7f05301169cdcda27cc65fed57944f4bab7197ca",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/200-multi-level-virtual-base-diamond-lifecycle.t",
+      "source_sha256": "bacee207bc2ec7b60966f334036e445ebc8b3416aee86d21d377e8f0debf2118",
+      "reference_sha256": "da871fbada2ddbab3ddddca2f322fff6d0acb2fb6dd56b61f7599ae3ec58ce08",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/200-virtual-base-override-preserves-new-slot.t",
+      "source_sha256": "42ddf3d0a854c82e9b9d2b619335bf03e1cd0a9cbfb7f09baa68eeca72d99325",
+      "reference_sha256": "6887f64c98f67e3122af5fa6007c9226b0720e9a3089414d779f7be39e9fc052",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/200-virtual-base-rich-vtable-second-slot-dispatch.t",
+      "source_sha256": "375112096a8434f511acdad793b3b2248fdac40b0c22ac4b4c9b65ec92722a94",
+      "reference_sha256": "9285bc8a0fc60d2d334e2bc4921041a0468d29aa5eb24f665fe3800cb7ea7618",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/300-ambiguous-virtual-diamond-final-overrider-bad.t",
+      "source_sha256": "61cb117f87d230394767a1b42cabd9faa3241f3e46caf1467ad90f5fdcdfd251",
+      "reference_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expected_status": "EXIT_FAILURE"
+    },
+    {
+      "path": "pa23/tests/general/300-lifecycle-base-entry-inline-policy.t",
+      "source_sha256": "afb7125c7d1fa98fb5f8fab0c13ed38514c47ee2ad6607bcb4efcd4347a52114",
+      "reference_sha256": "98eb0e4051cccfc47ff49ec631928ab8c7151a8e282f215a8e98f6f73e52044c",
+      "expected_status": "EXIT_SUCCESS"
+    },
+    {
+      "path": "pa23/tests/general/300-virtual-base-destructor-exception-specification.t",
+      "source_sha256": "12a165f83c25b75d4a7325ffc533897e264277304d6935d544cd238dacb41e1e",
+      "reference_sha256": "485fc8e3251fe7b25d56cc0db4e5cc73da7486c3984948de64f662839846898f",
+      "expected_status": "EXIT_SUCCESS"
+    }
+  ],
+  "evidence": {
+    "student.tests/pa23/audit124-before-shared-views.json": "5d0a481faa1de6c4921b07fe2538e565870ec1e5d35db68b64b752dccc42d136",
+    "student.tests/pa23/audit124-before-view-ownership.json": "19eb1b208dabeebd2a752564d57d8a24f1d4c03e168d9cedc46339437c4124fb",
+    "student.tests/pa23/audit124-entry.json": "d8c4b60b6efb1e3908306422b3d2de7d03a569e6c7d40a0877054a00b44bfd38",
+    "student.tests/pa23/audit124-final.json": "8af3284743c012b9dfb7dd9d4139b7af58cf20e4b32fc465eb35dc970beb97c7",
+    "student.tests/pa23/backend-limit124.json": "8245623137df4ed71f322dca9ab0ed29a2536b88afc58d37fd6b0eaa4671ca66",
+    "student.tests/pa23/controls124-inherited.json": "3cdead0e3dbdce007ddf86fa81165b1ff96dc0522a32dc4c64a0baebed6b41f0",
+    "student.tests/pa23/controls124-layout.json": "be41cea0505e1b0a630bd5dba83b6d37dd29ad9aa1cc383d71c6fc84890ccd28",
+    "student.tests/pa23/controls124-lifecycle.json": "f380257310510b6b9c7f0c396f7229ad26e40b05d8d27f9b607014028f90f129",
+    "student.tests/pa23/controls124-semantic.json": "075b6d6f4b0e85599138b1c2659b43c26ab5bcaf2f76c53f8410a4d10902fabd",
+    "student.tests/pa23/deep124-entry.json": "1728d0356f5667fc610573819237f0779d667d1ac9f632dcc5dbd47d340ee9a5",
+    "student.tests/pa23/deep124-final.json": "adb7c8796588c9caf40c408b7b3e659172ec0b08ec4ba96d6d92ec4d1bcd9d82",
+    "student.tests/pa23/native124.json": "8fd0d95fbb18c6930e271dbd16e59a73ade0752a9ffb209ee58bd6596c71138d",
+    "student.tests/pa23/performance124-before-shared-views.json": "e1bfa4dd86f64aa7d6a3b784132ddd1e302a136538f3462f7a420e3274339208",
+    "student.tests/pa23/performance124-forest.json": "79206a78e09a427f954770704aca0d15ae61b2425142acdd84842776f265066c",
+    "student.tests/pa23/performance124.json": "68b792a4c4739727458d2ae9d16990068f6f870d5d8ce75f652c74aa6057477c",
+    "student.tests/pa23/roundtrips124.json": "8ac17c1dcbbf295945f50d35a0511f85dba81a8804d8d3e6cdc12c8b8fc457f5"
+  },
+  "abi_reference": {
+    "url": "https://itanium-cxx-abi.github.io/cxx-abi/abi.html#rtti-layout",
+    "snapshot": "/home/vishvananda/work/private/v4codex/artifacts/pa23-audit124/itanium-abi.html",
+    "sha256": "f342de5630d98f208f165cb3231554f4850d1b7af3397c219aa642a340b684bf"
+  }
+}

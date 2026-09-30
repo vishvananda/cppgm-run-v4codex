@@ -1,102 +1,64 @@
-# PA23 compact plan — implementation handoff 123
+# PA23 compact plan — checkpoint audit 124
 
-Target: **PA23 full-stage**. Phase: **incomplete implementation handoff**.
+Target: **PA23 full-stage**. Phase: **checkpoint audit complete; implementation incomplete**.
 Stage base commit: `f33dd0775073bf5db6665fb2f4f504783159df76`.
-Last reviewed commit: `f33dd0775073bf5db6665fb2f4f504783159df76`.
-Turn entry: `9688f9e54a2b206b9add41ce78acd9b5f0452c62`, clean, **20/45**,
-**25 failures**. Handoff: **24/45**, **21 failures**; four original failures
-resolved, no new failures and no coverage reduction. Previous turn and this
-turn made verified implementation progress; no interrupted build remains live.
+Last reviewed commit: `36e612a07bae32eb20d10ffc76bb03529555d4bb`.
 
-## Completed group and spec alignment
+[Audit124](audit.md) reviews all 18 commits from the stage base through
+`2bba7273`, their combined 32-file implementation range and interactions, and
+fix `36e612a0`. The following records commit changes no implementation code.
+The previous goal turn was verified implementation progress; no interrupted
+process was live at entry. Entry and final PA23 results are **24/45**, with
+identical **21** failure names and all fixtures/comparison rules retained.
 
-[Handoff 123](handoff123.md) completes shared-subobject identity/final overriders,
-complete-object layout, segment-local table facts, RTTI and dynamic projections.
-Canonical virtual anchors/nonvirtual paths own base identity. Separate
-nonvirtual extents place shared bases once; per-segment rows/address points feed
-typed lowering. Inherited overrides retain required primary slots. Covariant
-return thunks consume dynamic result projections with null preservation and
-complete typed cache keys. C++ polymorphism stays separate from needing a
-virtual-base layout pointer.
+The audit fixed program ownership of adjustor thunks and secondary views,
+external key-owned virtual-base view publication, exponential repetition of
+shared views, and repeated base-path layout summation. Final-overrider candidates
+are all checked before canonical physical views are coalesced. Linkage caches
+use program symbol/adjustment identities, preserve internal targets, and survive
+merged TUs; semantic facts and scratch keep their narrower owners. Both TU
+orders, covariance/null results, templates and nested shared graphs are covered.
 
-Work follows imported base/slot edges, receiver paths and emitted rows. Flat
-identity indexes live in the TU; receiver-containment facts live for one class
-completion. Candidate selection/verification and publication are linear scans;
-repeated receiver relations reuse their completed facts. No grammar replay,
-text transport, source-body cloning, global retry/invalidation or optimizer was
-added. [Handoff 121](handoff121.md) and [handoff 122](handoff122.md) retain the
-ordinary-view/lifecycle ownership history and earlier reference correction.
+[Validation124](../student.tests/pa23/validation124.json): earlier PAs
+**3811/3811**, **22/22** stages; file audit passes with three inherited warnings;
+through PA23 **3835/3856**. New audit controls **21/21**; semantic **26/26**;
+completed layout **17/17**; lifecycle **20/20**; inherited **32/33**; all **44**
+accepted outputs roundtrip. The two original lifecycle failures, the inherited
+member-pointer failure and a deeper lifecycle runtime fault reproduced on both
+entry/final binaries stay explicit. Deep ambiguity/resolution checks pass.
+The standalone shared-RTTI limit is reproduced with both reference/student IR,
+and both pass hosted execution. These are retained observations, not waivers.
 
-## Remaining implementation — requirements retained
+[Performance124](performance124.md) freezes 19 correct A/B workloads with A/A
+calibration, ABBA wall/RSS, checked runtime and native text. The long shared
+forest improves **566→258 ms**, **208,624→54,400 KiB**; native text is identical
+on every measured input. Compiler text grows 4,352 bytes; ordinary RSS at most
+236 KiB. The 16-level graph falls from **786,358→578** retained views.
+All historical/intermediate samples remain preserved. Apply spec §9's
+**PA23/O0** acceptance: +15%, +16 MiB and 5.5× historical targets are diagnostics,
+not extra gates. Correctness, coverage, mandated complexity/growth and evidence
+remain required; native/debug/self-host work stays with its owning stages.
 
-1. **Virtual-base lifecycle/parameter ABI:** complete/base construction,
-   destruction and transfer actions; construction tables and VTT slices;
-   by-value hidden pointers across declarations, ordinary/conversion/inherited
-   calls, placement-new and cleanup paths. Reference/pointer accesses now use
-   the object table and acquire no hidden ABI argument.
-2. **Reference reconciliation:** [the reduced proof](reference-observation123.md)
-   shows the pinned reference reading a sibling field through a nonpolymorphic
-   virtual-base reference. Full affected oracles need correction with completed
-   lifecycle output. No fixture, oracle, status or comparator changed this turn.
-3. **Virtual member-function pointers:** inherited formation, conversions,
-   value proofs and dispatch decoding still bypass final overriders. The
-   preserved failing control remains implementation work.
+Remaining implementation is grouped by complete owner:
 
-The scope extended through layout, RTTI, table demand, dynamic access,
-inherited primary slots, covariance and reuse of receiver-containment facts.
-Two explicit lifecycle probes still fail: duplicate shared-base construction
-and a base constructor overwriting a sibling vptr. Further work requires one
-consistent ABI/action representation across entry-local parameter binding,
-construction-table selection and all forwarding/cleanup paths. Static C2 calls
-cannot consume the new complete-object layout facts correctly. This concrete
-owner boundary explains the incomplete handoff; it does not waive any failure.
+1. **Virtual-base lifecycle and parameter ABI, including oracle reconciliation.**
+   Complete/base construction, destruction and transfers; construction tables,
+   VTT slices and one-time shared-base actions; by-value hidden pointers across
+   declarations, ordinary/conversion/inherited calls, placement-new and cleanup.
+   Reference/pointer access continues through the object table with no hidden
+   argument. Complete the affected oracles using the retained reduced proof,
+   C++11/contract citations and pinned bundle revision. No oracle changed here;
+   the earlier one-field RTTI correction was independently confirmed.
+2. **Virtual member-function pointer representation.** Formation, static data,
+   conversions (including a nonpolymorphic named owner), value proofs and call
+   decoding must use a consistent representation and select final overriders.
+3. **Full-stage closure.** Preserve every remaining failure/fixture, validate
+   these complete groups, and pass the required root through report before PA24.
+   Recheck performance on the resulting correct implementation without inventing
+   additional exit gates.
 
-## Performance and validation
-
-[Performance 123](performance123.md) retains frozen A/B binaries/inputs, A/A
-calibration, ABBA compiler wall/RSS and checked runtime/text across 11 workloads; a focused repeat retains compiler
-latency uncertainty.
-Common native text is unchanged. Required dynamic-access workloads cost +20 and
-+62 text bytes with disclosed runtime increases. Compiler text grows 15,360
-bytes; comparable peak RSS rises at most 264 KiB. New-capability scaling has
-linear work/storage counters. No optimization or speedup is claimed.
-[Performance 121](performance121.md), [performance 122](performance122.md) and
-all intermediate measurement series remain preserved.
-
-Apply spec §9's **PA23/O0** acceptance. Historical +15%, +16 MiB and 5.5× targets
-remain diagnostics, not extra gates. Correctness, coverage, mandated complexity
-and growth limits remain required; later native/debug/self-host work stays with
-its owning stages.
-
-[Sealed validation](../student.tests/pa23/validation123.json): `make test-pa23`
-**24/45**; earlier through report **3811/3811**, **22/22** stages; through PA23
-**3835/3856**; file audit passes with three inherited warnings. Semantic controls
-**26/26**, completed layout/dispatch controls **17/17**, prior lifecycle controls
-**20/20**, inherited controls **32/33**. The two new lifecycle failures and the
-inherited member-pointer failure remain explicit. All **44** accepted stage
-outputs roundtrip stably. Native observations compile our LowIR with the
-supplied backend; the source frontend does not delegate implementation. The
-standalone backend passes **16/17** completed controls; its shared-base RTTI
-scan failure is reproduced with reference IR and both IRs pass hosted execution
-([probe](../student.tests/pa23/backend-limit123.json)).
-
-## Handoff ledger and independent review
-
-| Commit/group | Implementation disposition | Independent review |
-|---|---|---|
-| `b28e12ce` | Original stage/review markers recorded before edits | Pending |
-| Handoff 121: `b1aed715` through `26b96f27` | Ordinary views, dispatch/covariance and RTTI | Pending |
-| Handoff 122: `b2010915`, `9417f88f`, `8b505a75`, `3b9cf2b5`, `a04a8cae`, `9688f9e5` | Lifecycle entries, key ownership, TU publication, RTTI oracle proof and evidence | Pending |
-| `2f27c0e5` | Frozen turn-123 baseline and owner/data-flow plan | Pending |
-| `c7944d23` | Canonical subobjects, final overriders and semantic controls | Pending |
-| `67354b79` | Shared extents, table rows, RTTI, projections and covariance | Pending |
-| `08cb8657` | Completion-local reuse of receiver-containment facts | Pending |
-| `6a762f25` | Correct virtual-path RTTI hints and nonpolymorphic table entries | Pending |
-| Delivery commit | Sealed checks/evidence, reference observation and retained boundary | Pending |
-
-Independent review must assess identity/cache completeness, demand and ABI
-boundaries, layout/table ownership, RTTI, thunk keys, storage lifetimes,
-inherited pipeline alignment and performance evidence. Whole-stage findings
-must be resolved before advancement. Neither review marker moved and no review
-was waived. This handoff returns control to Ralph without certifying PA23 or
-advancing to PA24.
+The three earlier handoffs exposed real owner boundaries, but repeated partial
+publication fixes and sealing were avoidable fragmentation. The next delivery
+should span each owner across all its consumers, with TU order and nested-depth
+controls together. The audit's single ledger row and complete commit coverage
+are in [audit.md](audit.md). Checkpoint acceptance does not certify PA23 completion.
