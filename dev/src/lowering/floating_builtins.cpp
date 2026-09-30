@@ -37,6 +37,20 @@ Value Procedural::floating_builtin(NodeId n)
         return binary(Operation::And, finite(), magnitude);
     };
     Value result;
+    if (fact.form >= semantic::ExpressionForm::FloatGreater && fact.form <= semantic::ExpressionForm::FloatUnordered) {
+        auto left = converted(sem.call_argument(fact,0),sem.conversion_fact(fact.conversions));
+        auto unordered = binary(Operation::Or,nan(),compare(Operation::Ne,left.operand,left.operand));
+        if (fact.form == semantic::ExpressionForm::FloatUnordered) result = unordered;
+        else {
+            auto form = fact.form;
+            auto op = form == semantic::ExpressionForm::FloatGreater ? Operation::Gt :
+                form == semantic::ExpressionForm::FloatGreaterEqual ? Operation::Ge :
+                form == semantic::ExpressionForm::FloatLess ? Operation::Lt :
+                form == semantic::ExpressionForm::FloatLessEqual ? Operation::Le : Operation::Ne;
+            result = binary(Operation::And,invert(unordered),compare(op,left.operand,x.operand));
+        }
+        result.type = fact.type; return result;
+    }
     if (fact.form == semantic::ExpressionForm::FloatSignbit) {
         // Read the representation: comparisons lose the sign of -0 and NaNs.
         auto slot = builder->add_slot(0,x.ir);

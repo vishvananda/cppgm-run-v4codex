@@ -33,6 +33,10 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
     auto binding_scope = owner;
     while (scopes[owner].kind != ScopeKind::Namespace && scopes[owner].kind != ScopeKind::Class &&
         scopes[owner].kind != ScopeKind::Template) owner = scopes[owner].parent;
+    if (source && owner == global) {
+        auto spelling = ids.spelling(name);
+        if (spelling.size > 10 && TextView(spelling.data,10).equals("__builtin_")) builtin_function(name);
+    }
     Type t = types[type];
     std::vector<TypeId> params(types.parameters.begin() + t.offset, types.parameters.begin() + t.offset + t.count);
     TypeId shape = types.function(types.fundamental(FT_VOID), params, t.variadic, t.cv, t.ref);

@@ -652,11 +652,14 @@ private:
     bool floating_type(TypeId type) const;
     Constant floating_constant(TypeId type, long double value, bool special = false, bool signaling = false);
     TypeId variadic_list_type = 0;
-    Index intrinsic_functions, predefined_strings, atomic_signatures;
+    Index intrinsic_functions, predefined_strings, atomic_signatures, integer_signatures, overflow_signatures;
     EntityId predefined_function_name(NodeId n, ScopeId s);
     TypeQueryFact query_builtin_operand(const TypeQuery& q, const std::vector<TypeQueryFact>& children);
     EntityId builtin_function(IdentifierId name);
+    Constant floating_builtin_constant(const Expression& call, ScopeId scope);
     EntityId runtime_builtin(IdentifierId name);
+    EntityId overflow_signature(EntityId family, const std::vector<Expression>& values, const std::vector<NodeId>* nodes);
+    EntityId hint_builtin(IdentifierId name);
     EntityId integer_builtin_function(IdentifierId name);
     EntityId integer_signature(EntityId family, TypeId operand, unsigned count);
     Constant integer_builtin_constant(NodeId n, ScopeId s);

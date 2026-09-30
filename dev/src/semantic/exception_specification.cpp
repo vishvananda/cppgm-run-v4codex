@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "support/builtin_registry.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
@@ -33,6 +34,10 @@ void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
     }
     fact.previous = exception_specification_index.get(e);
     fact.prior_specification = entities[e].exception_spec;
+    if (!fact.specification && !fact.expression && fact.prior_specification == 129 && !fact.previous &&
+        entities[e].owner == global && !entities[e].source &&
+        (function_builtin(ids.spelling(entities[e].name)) != FunctionBuiltin::None ||
+         libm_builtin(ids.spelling(entities[e].name)).shape != LibmShape::None)) fact.specification = 1;
     if (!fact.specification && !fact.expression && entities[e].key == KW_DELETE) fact.specification = 1;
     if (!fact.expression && !fact.dynamic_types && !fact.previous) {
         check_exception_redeclaration(e,fact.prior_specification,fact.specification,fact.destructor);

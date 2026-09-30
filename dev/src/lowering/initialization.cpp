@@ -51,7 +51,7 @@ DataItem Procedural::constant_data(NodeId n, TypeId t)
     if (value.kind == semantic::StaticValue::Address) { d.kind = DataItem::Address; d.symbol = symbol(value.entity); d.addend = value.addend; }
     else if (value.kind == semantic::StaticValue::String) { string_literal(value.string); d.kind = DataItem::Address; d.symbol = strings[value.string]; d.addend = value.addend; }
     else if (value.kind == semantic::StaticValue::Integer) { d.kind = DataItem::Scalar; d.value = integer_operand(semantic::Constant(t,value.bits)); }
-    else if (value.kind == semantic::StaticValue::Floating) { d.kind = DataItem::Scalar; d.value = Operand::floating(value.floating); }
+    else if (value.kind == semantic::StaticValue::Floating) { d = floating_data(d.type,value.floating,value.signaling); }
     else throw std::runtime_error("unsupported static initializer");
     return d;
 }
@@ -113,7 +113,9 @@ void Procedural::global(EntityId e)
                 Global temp;
                 temp.symbol = fresh_symbol("@__reference_" + std::to_string(p.symbols.size()+1));
                 temp.type = type(sem.types[t].child); temp.data.begin = p.data.size(); temp.data.count = 1;
-                p.data.push_back(constant_data(entity.initializer, sem.types[t].child)); p.globals.push_back(temp);
+                auto data = constant_data(entity.initializer, sem.types[t].child);
+                if (data.type != temp.type) { temp.structured = true; temp.type = IRType::object(temp.type.bytes(),sem.object_alignment(sem.types[t].child)); }
+                p.data.push_back(data); p.globals.push_back(temp);
                 auto& sym = p.symbols[temp.symbol.index-1]; sym.kind = Symbol::GlobalSymbol; sym.entity = p.globals.size(); sym.metadata.binding = ir_model::SBM_INTERNAL;
                 g.data.begin = p.data.size(); g.data.count = 1;
                 DataItem d; d.kind = DataItem::Address; d.type = IRType::Ptr; d.symbol = temp.symbol; p.data.push_back(d);
@@ -146,13 +148,21 @@ void Procedural::global(EntityId e)
             }
             else if (!entity.initializer && entity.constant.valid) {
                 DataItem d; d.kind = DataItem::Scalar; d.type = g.type;
-                d.value = type(entity.constant.type).floating() ? Operand::floating(sem.floating_value(entity.constant),sem.floating_signaling(entity.constant)) : integer_operand(entity.constant); p.data.push_back(d);
+                if (d.type.floating()) d = floating_data(d.type,sem.floating_value(entity.constant),sem.floating_signaling(entity.constant));
+                else d.value = integer_operand(entity.constant);
+                p.data.push_back(d);
             }
             else if (!entity.initializer && sem.types[t].kind == TypeKind::MemberPointer) global_data(0,t);
             else if (!entity.initializer && !g.structured) { DataItem d; d.zero_bytes = g.type.bytes(); p.data.push_back(d); }
             else global_data(entity.initializer, t);
             g.data.count = p.data.size() - g.data.begin;
         }
+    }
+    // A payload-bearing NaN uses integer storage items of the same byte width.
+    // Structured object storage keeps those bits in the ordinary LowIR grammar.
+    if (!g.declaration && !g.structured && g.data.count == 1 && p.data[g.data.begin].kind == DataItem::Scalar &&
+        p.data[g.data.begin].type != g.type) {
+        g.structured = true; g.type = IRType::object(sem.object_size(t),sem.object_alignment(t));
     }
     // Completed aggregates and explicitly aligned objects carry exact byte
     // layout. The native writer must not re-pad their individual scalar items.

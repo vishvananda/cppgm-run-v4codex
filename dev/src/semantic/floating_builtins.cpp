@@ -64,33 +64,58 @@ bool Analyzer::floating_builtin(NodeId n, ScopeId scope, IdentifierId name,
         builtin == FloatingBuiltin::Infinite ? ExpressionForm::FloatInfinite :
         builtin == FloatingBuiltin::Normal ? ExpressionForm::FloatNormal :
         builtin >= FloatingBuiltin::Signbit && builtin <= FloatingBuiltin::Signbitl ? ExpressionForm::FloatSignbit :
+        builtin == FloatingBuiltin::Greater ? ExpressionForm::FloatGreater :
+        builtin == FloatingBuiltin::GreaterEqual ? ExpressionForm::FloatGreaterEqual :
+        builtin == FloatingBuiltin::Less ? ExpressionForm::FloatLess :
+        builtin == FloatingBuiltin::LessEqual ? ExpressionForm::FloatLessEqual :
+        builtin == FloatingBuiltin::LessGreater ? ExpressionForm::FloatLessGreater :
+        builtin == FloatingBuiltin::Unordered ? ExpressionForm::FloatUnordered :
         builtin == FloatingBuiltin::Classify ? ExpressionForm::FloatClassify : ExpressionForm::Ordinary;
     if (form == ExpressionForm::Ordinary) return false;
-    if (args.size() != (form == ExpressionForm::FloatClassify ? 6U : 1U)) throw std::runtime_error("floating builtin arity");
+    bool binary = form >= ExpressionForm::FloatGreater && form <= ExpressionForm::FloatUnordered;
+    if (args.size() != (form == ExpressionForm::FloatClassify ? 6U : binary ? 2U : 1U)) throw std::runtime_error("floating builtin arity");
     auto t = expressions[args.back()].type;
+    if (binary) {
+        auto first = expressions[args[0]].type;
+        if ((!floating_type(t) && !floating_type(first)) ||
+            (!floating_type(t) && !integral(t)) || (!floating_type(first) && !integral(first)))
+            throw std::runtime_error("floating comparison operand types");
+        t = arithmetic_type(first,t);
+    }
     if (!floating_type(t)) throw std::runtime_error("floating builtin argument type");
     std::vector<Conversion> chosen;
     for (unsigned i = 0; i < args.size(); ++i) {
-        auto c = conversion(args[i],i+1 == args.size() ? t : types.fundamental(FT_INT));
+        auto c = conversion(args[i],binary || i+1 == args.size() ? t : types.fundamental(FT_INT));
         if (!c.valid()) throw std::runtime_error("floating classification result type");
         chosen.push_back(c);
     }
     record_call(result,args,chosen);
     result.type = types.fundamental(FT_INT); result.form = form;
-    auto constant = evaluate(args.back(),scope);
-    if (constant.valid) {
-        auto x = floating_value(constant);
-        auto minimum = fundamental(t,FT_FLOAT) ? std::numeric_limits<float>::min() :
-            fundamental(t,FT_DOUBLE) ? std::numeric_limits<double>::min() : std::numeric_limits<long double>::min();
-        bool normal = std::isfinite(x) && std::fabs(x) >= minimum;
-        auto value = form == ExpressionForm::FloatClassify ? convert(evaluate(args[std::isnan(x) ? 0 :
-            std::isinf(x) ? 1 : normal ? 2 : x == 0 ? 4 : 3],scope),result.type) :
-            Constant(result.type,form == ExpressionForm::FloatNaN ? std::isnan(x) :
-                form == ExpressionForm::FloatFinite ? std::isfinite(x) :
-                form == ExpressionForm::FloatInfinite ? std::isinf(x) :
-                form == ExpressionForm::FloatSignbit ? std::signbit(x) : normal);
-        if (value.valid) { facts.edit(n).value = constants.size(); constants.push_back(value); }
-    }
     return true;
+}
+Constant Analyzer::floating_builtin_constant(const Expression& call, ScopeId scope)
+{
+    std::vector<Constant> args;
+    for (unsigned j = 0; j < call.argument_count; ++j) {
+        auto c = constant_node_conversion(call_argument(call,j),conversions[call.conversions+j],scope);
+        if (!c.valid) return Constant();
+        args.push_back(c);
+    }
+    auto form = call.form;
+    auto x = floating_value(args.back());
+    if (form >= ExpressionForm::FloatGreater && form <= ExpressionForm::FloatUnordered) {
+        auto a = floating_value(args[0]); bool unordered = std::isnan(a) || std::isnan(x);
+        return Constant(call.type,form == ExpressionForm::FloatUnordered ? unordered : !unordered &&
+            (form == ExpressionForm::FloatGreater ? a > x : form == ExpressionForm::FloatGreaterEqual ? a >= x :
+            form == ExpressionForm::FloatLess ? a < x : form == ExpressionForm::FloatLessEqual ? a <= x : a != x));
+    }
+    auto t = args.back().type;
+    auto minimum = fundamental(t,FT_FLOAT) ? std::numeric_limits<float>::min() :
+        fundamental(t,FT_DOUBLE) ? std::numeric_limits<double>::min() : std::numeric_limits<long double>::min();
+    bool normal = std::isfinite(x) && std::fabs(x) >= minimum;
+    if (form == ExpressionForm::FloatClassify) return args[std::isnan(x) ? 0 : std::isinf(x) ? 1 : normal ? 2 : x == 0 ? 4 : 3];
+    return Constant(call.type,form == ExpressionForm::FloatNaN ? std::isnan(x) :
+        form == ExpressionForm::FloatFinite ? std::isfinite(x) : form == ExpressionForm::FloatInfinite ? std::isinf(x) :
+        form == ExpressionForm::FloatSignbit ? std::signbit(x) : normal);
 }
 } }

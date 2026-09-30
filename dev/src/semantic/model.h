@@ -404,9 +404,9 @@ struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool 
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
 enum class Intrinsic : unsigned char {
     None, VaStart, VaEnd, VaCopy, StackAlloc, Expect, Abort, Unreachable, AtomicFetchAdd, AtomicAddFetch,
-    Clz, Ctz, Popcount, Parity, Ffs, Bswap, Clzg, Ctzg, Popcountg
+    Clz, Ctz, Popcount, Parity, Ffs, Bswap, Clzg, Ctzg, Popcountg, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow
 };
-enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatNaN, FloatInfinite, FloatNormal, FloatSignbit, FloatClassify, InitializerList, ListValue, BoundMember, Expect, Typeid, DynamicCast, TypeinfoEqual, TypeinfoUnequal };
+enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatNaN, FloatInfinite, FloatNormal, FloatSignbit, FloatGreater, FloatGreaterEqual, FloatLess, FloatLessEqual, FloatLessGreater, FloatUnordered, FloatClassify, InitializerList, ListValue, BoundMember, Expect, Typeid, DynamicCast, TypeinfoEqual, TypeinfoUnequal };
 struct RttiExpression {
     TypeId type = 0, source = 0;
     std::int64_t hint = -1;
@@ -579,6 +579,7 @@ struct StaticValue {
     enum Kind : unsigned char { Invalid, Integer, Floating, Address, String, MemberFunction, Vtable } kind = Invalid;
     std::uint64_t bits = 0;
     long double floating = 0;
+    bool signaling = false;
     EntityId entity = 0;
     NodeId string = 0;
     std::int64_t addend = 0;

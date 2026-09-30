@@ -29,14 +29,12 @@ EntityId Analyzer::integer_signature(EntityId family, TypeId operand, unsigned c
     operand = types.unqualified(operand);
     if (types[operand].kind != TypeKind::Fundamental || !integral(operand) || !is_unsigned(operand) || fundamental(operand,FT_BOOL)) return 0;
     auto identity = key(unsigned(kind)*4+count,operand);
-    // Distinct from the fixed atomic signature namespace.
-    identity |= std::uint64_t(1) << 63;
-    if (auto old = atomic_signatures.get(identity)) return old;
+    if (auto old = integer_signatures.get(identity)) return old;
     auto i = types.fundamental(FT_INT);
     std::vector<TypeId> args{operand}; if (count == 2) args.push_back(i);
     auto e = make_entity(EntityKind::Function,global,entities[family].name,0);
     entities[e].type = types.function(i,args,false); entities[e].exception_spec = 129;
-    intrinsic_functions.put(e,unsigned(kind)); atomic_signatures.put(identity,e); return e;
+    intrinsic_functions.put(e,unsigned(kind)); integer_signatures.put(identity,e); return e;
 }
 Constant Analyzer::integer_builtin_constant(NodeId n, ScopeId s)
 {

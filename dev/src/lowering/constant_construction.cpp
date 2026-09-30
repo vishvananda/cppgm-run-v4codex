@@ -33,7 +33,8 @@ void Procedural::global_constant_fields(const semantic::ConstantObject& plan, Ty
         lowir_model::DataItem item; item.type = type(field.type);
         if (value.kind == semantic::StaticValue::Address) { item.kind = lowir_model::DataItem::Address; item.symbol = symbol(value.entity); item.addend = value.addend; }
         else if (value.kind == semantic::StaticValue::String) { string_literal(value.string); item.kind = lowir_model::DataItem::Address; item.symbol = strings[value.string]; item.addend = value.addend; }
-        else { item.kind = lowir_model::DataItem::Scalar; item.value = value.kind == semantic::StaticValue::Floating ? Operand::floating(value.floating) : integer_operand(semantic::Constant(field.type,value.bits)); }
+        else if (value.kind == semantic::StaticValue::Floating) item = floating_data(item.type,value.floating,value.signaling);
+        else { item.kind = lowir_model::DataItem::Scalar; item.value = integer_operand(semantic::Constant(field.type,value.bits)); }
         p.data.push_back(item); end = offset + type(field.type).bytes();
     }
     if (sem.object_size(t) > end) { lowir_model::DataItem zero; zero.zero_bytes = sem.object_size(t)-end; p.data.push_back(zero); }
@@ -65,6 +66,7 @@ Value Procedural::constant_operand(semantic::Constant c, TypeId t)
         result.type = t; result.address = reference(c.type); return result;
     }
     if (v.kind == semantic::StaticValue::Invalid) throw std::logic_error("missing lowered scalar constant fact");
-    return Value(v.kind == semantic::StaticValue::Floating ? Operand::floating(v.floating) : integer_operand(semantic::Constant(c.type,v.bits)),type(t),t);
+    if (v.kind == semantic::StaticValue::Floating) return floating_literal(t,v.floating,v.signaling);
+    return Value(integer_operand(semantic::Constant(c.type,v.bits)),type(t),t);
 }
 } }

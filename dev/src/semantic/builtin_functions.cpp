@@ -15,6 +15,17 @@ EntityId Analyzer::builtin_function(IdentifierId name)
 {
     auto text = ids.spelling(name);
     auto builtin = function_builtin(text);
+    if (builtin == FunctionBuiltin::OperatorNew || builtin == FunctionBuiltin::OperatorDelete) {
+        auto e = global_allocation(builtin == FunctionBuiltin::OperatorNew ? KW_NEW : KW_DELETE,false);
+        bind(global,name,e); return e;
+    }
+    if (builtin >= FunctionBuiltin::AddOverflow && builtin <= FunctionBuiltin::MulOverflow) {
+        auto e = declare_function(global,name,0,types.function(types.fundamental(FT_BOOL),{},false));
+        auto kind = builtin == FunctionBuiltin::AddOverflow ? Intrinsic::AddOverflow :
+            builtin == FunctionBuiltin::SubOverflow ? Intrinsic::SubOverflow : Intrinsic::MulOverflow;
+        entities[e].exception_spec = 129; intrinsic_functions.put(e,unsigned(kind)); return e;
+    }
+    if (auto hint = hint_builtin(name)) return hint;
     if (auto runtime = runtime_builtin(name)) return runtime;
     if (auto integer = integer_builtin_function(name)) return integer;
     if ((builtin == FunctionBuiltin::AtomicFetchAdd) || (builtin == FunctionBuiltin::AtomicAddFetch)) {
@@ -97,7 +108,15 @@ EntityId Analyzer::atomic_signature(EntityId family, TypeId operand)
 }
 void Analyzer::validate_intrinsic(EntityId e, const std::vector<NodeId>& args, ScopeId s)
 {
-    if (Intrinsic(intrinsic_functions.get(e)) != Intrinsic::VaStart) return;
+    auto kind = intrinsic_function(e);
+    if (kind == Intrinsic::Prefetch) {
+        for (unsigned j = 1; j < args.size(); ++j) {
+            auto value = evaluate(args[j],s);
+            if (!value.valid || !integral(value.type) || negative_constant(value) || integer_value(value) > (j == 1 ? 1u : 3u))
+                throw std::runtime_error("invalid prefetch hint");
+        }
+    }
+    if (kind != Intrinsic::VaStart) return;
     if (args.size() != 2) throw std::runtime_error("va_start takes two arguments");
     EntityId fn = 0;
     for (auto scope = s; scope; scope = scopes[scope].parent)

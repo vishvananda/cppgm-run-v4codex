@@ -30,7 +30,7 @@ StaticValue Analyzer::static_value(NodeId n, TypeId target)
         result.bits = value.bits; result.kind = value.valid ? StaticValue::Integer : StaticValue::Invalid;
     }
     if (result.kind == StaticValue::Floating && floating_type(scalar)) {
-        auto value = floating_constant(scalar,result.floating);
+        auto value = floating_constant(scalar,result.floating,true,result.signaling);
         if (value.valid) result.floating = floating_value(value);
         else result.kind = StaticValue::Invalid;
     }
@@ -81,7 +81,7 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
         (integral(x.type) || floating_type(x.type))) {
         auto value = convert(evaluate(n,facts[n].scope),target,true);
         if (!value.valid) return r;
-        if (floating_type(value.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(value); }
+        if (floating_type(value.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(value); r.signaling = floating_signaling(value); }
         else { r.kind = StaticValue::Integer; r.bits = value.bits; }
         return r;
     }
@@ -152,7 +152,7 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     } else {
         Constant c = evaluate(n, facts[n].scope);
         if (c.valid) {
-            if (floating_type(c.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(c); }
+            if (floating_type(c.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(c); r.signaling = floating_signaling(c); }
             else return constant_static_value(c);
         }
     }

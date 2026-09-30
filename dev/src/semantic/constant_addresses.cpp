@@ -339,7 +339,7 @@ StaticValue Analyzer::constant_static_value(Constant v)
         } else {
             r.kind = StaticValue::Integer; r.bits = v.bits ? entities[value.member].member_offset + 1 + r.addend : 0;
         }
-    } else if (floating_type(v.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(v); }
+    } else if (floating_type(v.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(v); r.signaling = floating_signaling(v); }
     else if (integral(v.type) || fundamental(v.type,FT_NULLPTR_T)) { r.kind = StaticValue::Integer; r.bits = v.bits; }
     return r;
 }

@@ -6,7 +6,7 @@ EntityId Analyzer::runtime_builtin(IdentifierId name)
     auto text = ids.spelling(name);
     auto libm = libm_builtin(text);
     auto memory = function_builtin(text);
-    if (libm.shape == LibmShape::None && memory < FunctionBuiltin::Memcpy) return 0;
+    if (libm.shape == LibmShape::None && (memory < FunctionBuiltin::Memcpy || memory > FunctionBuiltin::Strpbrk)) return 0;
     auto v = types.fundamental(FT_VOID), i = types.fundamental(FT_INT);
     auto ptr = types.compound(TypeKind::Pointer,v);
     auto cp = types.compound(TypeKind::Pointer,types.qualify(v,1));
@@ -42,7 +42,7 @@ EntityId Analyzer::runtime_builtin(IdentifierId name)
             auto string = types.compound(TypeKind::Pointer,types.qualify(c,1));
             args.push_back(string);
             result = memory == FunctionBuiltin::Strlen ? size : types.compound(TypeKind::Pointer,c);
-            if (memory != FunctionBuiltin::Strlen) args.push_back(i);
+            if (memory != FunctionBuiltin::Strlen) args.push_back(memory == FunctionBuiltin::Strstr || memory == FunctionBuiltin::Strpbrk ? string : i);
             break;
         }
         }

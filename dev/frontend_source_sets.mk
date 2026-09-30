@@ -199,3 +199,6 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/intrinsics
 FRONTEND_OBJ_BASENAMES_preproc += support/builtin_registry
 FRONTEND_OBJ_BASENAMES_cppgm++ += support/builtin_registry semantic/runtime_builtins
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/integer_builtins lowering/integer_builtins
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/hint_builtins
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/overflow_builtins lowering/overflow_builtins
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/floating_constants

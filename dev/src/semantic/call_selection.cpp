@@ -24,6 +24,11 @@ CallSelection Analyzer::select_call(EntityId family, const std::vector<Expressio
             e = integer_signature(e,nodes ? expressions[(*nodes)[0]].type : values[0].type,count);
             if (!e) continue;
         }
+        if (intrinsic >= Intrinsic::AddOverflow && intrinsic <= Intrinsic::MulOverflow) {
+            if (explicit_arguments || count != 3) continue;
+            e = overflow_signature(e,values,nodes);
+            if (!e) continue;
+        }
         if (entities[e].template_info) {
             if (explicit_arguments) {
                 auto pack = argument_packs[explicit_arguments];
