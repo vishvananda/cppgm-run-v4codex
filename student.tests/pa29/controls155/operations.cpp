@@ -27,3 +27,16 @@ static_assert(__is_convertible(int[2],int*) && !__is_convertible(int*,int[2]), "
 static_assert(__is_convertible(Function,Function*) && !__is_convertible(Function*,Function), "functions");
 static_assert(__is_convertible(int,int&&) && !__is_convertible(int,int&), "categories");
 int main(){return 0;}
+
+struct Protected {
+ protected: Protected() noexcept {} Protected(const Protected&) noexcept {};
+ Protected& operator=(const Protected&) noexcept {return *this;}
+};
+struct Derived : Protected {};
+struct Member { Protected value; };
+static_assert(__is_nothrow_constructible(Derived), "base construction in definition context");
+static_assert(!__is_constructible(Protected), "direct protected access");
+static_assert(!__is_constructible(Member), "member protected access");
+static_assert(__is_nothrow_constructible(Derived, const Derived&), "copy definition context");
+static_assert(__is_nothrow_assignable(Derived&, const Derived&), "assignment definition context");
+Derived make_derived() { Derived a; Derived b(a); b=a; return b; }

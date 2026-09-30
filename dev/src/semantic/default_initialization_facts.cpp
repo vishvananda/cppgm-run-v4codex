@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "semantic/definition_access.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
@@ -16,6 +17,7 @@ bool Analyzer::default_constructor_valid(EntityId e)
     if (state == BooleanFact::True || state == BooleanFact::False) return true;
     if (state == BooleanFact::Failure) return false;
     if (state == BooleanFact::Active) return false;
+    DefinitionAccess access(explicit_instantiation_naming,access_override);
     members[m].default_properties = BooleanFact::Active;
     try {
         auto cls = scopes[entities[e].owner].entity;

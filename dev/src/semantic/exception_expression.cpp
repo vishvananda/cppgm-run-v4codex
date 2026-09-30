@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "semantic/definition_access.h"
 #include <stdexcept>
 
 namespace cppgm { namespace semantic {
@@ -235,6 +236,7 @@ bool Analyzer::default_constructor_nonthrowing(EntityId e)
     if (state == BooleanFact::Active) throw std::logic_error("recursive default constructor exception fact");
     auto cls = scopes[entities[e].owner].entity;
     require_destructor_class(cls);
+    DefinitionAccess access(explicit_instantiation_naming,access_override);
     default_exception_facts.put(e,unsigned(BooleanFact::Active));
     ++unevaluated_depth;
     try {

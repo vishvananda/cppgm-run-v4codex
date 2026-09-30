@@ -136,7 +136,7 @@ std::size_t Parser::probe_type(std::size_t ahead)
             base = true;
             ++ahead;
         } else if (in.is("const", ahead) || in.is("volatile", ahead)) ++ahead;
-        else if (!base && (in.is("decltype", ahead) || type_transform(builtin_trait(ids.spelling(in.peek(ahead).text))) || in.is("typeof",ahead) || in.is("__typeof",ahead) || in.is("__typeof__",ahead))) {
+        else if (!base && (in.is("decltype", ahead) || (in.is("(",ahead+1) && type_transform(builtin_trait(ids.spelling(in.peek(ahead).text)))) || in.is("typeof",ahead) || in.is("__typeof",ahead) || in.is("__typeof__",ahead))) {
             ahead = in.matching(ahead + 1) + 1;
             base = true;
         } else if (!base) {

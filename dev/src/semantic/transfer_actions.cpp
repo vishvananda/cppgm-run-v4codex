@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "semantic/definition_access.h"
 #include <algorithm>
 #include <stdexcept>
 namespace cppgm { namespace semantic {
@@ -14,6 +15,7 @@ void Analyzer::prepare_transfer(EntityId e)
     // analysis (for example after declaring a move). Its completed negative
     // fact needs neither a function scope nor transfer actions.
     if (members[m].deleted) { members[m].transfer_state = FactState::Success; return; }
+    DefinitionAccess access(explicit_instantiation_naming,access_override);
     members[m].transfer_state = FactState::Active;
     try {
     bool assignment = members[m].transfer == TransferKind::CopyAssignment || members[m].transfer == TransferKind::MoveAssignment;

@@ -157,7 +157,10 @@ ExpansionToken Preprocessor::builtin(const ExpansionToken& head, unsigned kind, 
         int index = -1;
         return generated(find_header(name,quoted,kind == 7,index).empty() ? "0" : "1",head);
     }
-    ExpansionToken attribute = expansion.take();
+    // Attribute probes expand their argument tokens; feature/builtin names and
+    // warning-string probes use their own raw operand grammar.
+    auto operand = [&]() { return kind == 4 || kind == 5 ? expansion.next() : expansion.take(); };
+    ExpansionToken attribute = operand();
     if (kind == 12) {
         decode_pp_string(attribute);
         if (!expansion.take().is(")")) throw std::runtime_error("invalid warning probe");
@@ -174,11 +177,11 @@ ExpansionToken Preprocessor::builtin(const ExpansionToken& head, unsigned kind, 
         builtin_trait(attribute.token.spelling) == BuiltinTrait::None;
     if (kind == 8) value = hosted_builtin(attribute.token.spelling);
     if (kind == 9 || kind == 10) value = hosted_feature(attribute.token.spelling);
-    ExpansionToken close = expansion.take();
+    ExpansionToken close = operand();
     if (kind == 4 && close.is("::")) {
-        attribute = expansion.take();
+        attribute = operand();
         if (attribute.token.kind != PPTokenKind::identifier) throw std::runtime_error("invalid attribute name");
-        value = 0; close = expansion.take();
+        value = 0; close = operand();
     }
     if (!close.is(")")) throw std::runtime_error("invalid preprocessor probe");
     return generated(std::to_string(value), head);
@@ -217,7 +220,7 @@ std::string Preprocessor::find_header(const std::string& name, bool quoted, bool
         if (exists(path)) { index = i; return path; }
     }
     // Preserve PA4's explicit-tool search convention.
-    if (!resume && exists(name)) return name;
+    if (!hosted_ && !resume && exists(name)) return name;
     return {};
 }
 

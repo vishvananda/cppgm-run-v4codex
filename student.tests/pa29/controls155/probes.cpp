@@ -13,6 +13,12 @@
 #if !__has_feature(__cxx_binary_literals__) || !__has_extension(cxx_variadic_templates)
 #error missing existing language feature
 #endif
+#define ATTR packed
+#define CPPATTR noreturn
+#define SCOPED vendor::anything
+#if !__has_attribute(ATTR) || __has_cpp_attribute(CPPATTR) != 200809 || __has_cpp_attribute(SCOPED)
+#error attribute argument expansion
+#endif
 _Pragma("GCC diagnostic ignored \"-Wunknown-pragmas\"")
 #warning hosted warning
 int main() { return 0; }

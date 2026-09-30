@@ -425,6 +425,10 @@ int run_emit_semantics_mode(const vector<string> & args)
 
 int run_emit_lowir_mode(const vector<string> & args)
 {
+  if (has_arg(args,"-c")) {
+    auto hosted = args; hosted.push_back("--emit-lowir");
+    return cppgm::toolchain::run(hosted);
+  }
   vector<string> inputs;
   string output;
   bool stats = false, audit = false;

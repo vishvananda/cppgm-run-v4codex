@@ -78,6 +78,12 @@ run('constexpr literal categories',[compiler,'-c',s,'-o',work/'udl.o'])
 a=source('multi-a','int a(){return 1;}');b=source('multi-b','int b(){return 2;}')
 run('multiple compile inputs',[compiler,'-c',a,b],cwd=work)
 assert (work/'multi-a.o').exists() and (work/'multi-b.o').exists()
+for name in ['literals','traits','operations','shape-extension']:
+    src=root/('student.tests/pa29/controls155/'+name+'.cpp');ir=work/(name+'.lowir');roundtrip=work/(name+'-roundtrip.lowir');exe=work/(name+'-lowir')
+    if run(name+' hosted LowIR',[compiler,'-c','--emit-lowir','--validate-lowir',src,'-o',ir]):
+        if run(name+' LowIR roundtrip',[root/'dev/lowir','-o',roundtrip,ir]):
+            if run(name+' native inspection',[root/'dev/lowir2native','--dump-machine-ir',work/(name+'.mir'),'-o',exe,roundtrip]):
+                run(name+' LowIR runtime',[exe])
 result=dict(compiler_sha256=hashlib.sha256(compiler.read_bytes()).hexdigest(),checks=rows,passed=sum(r['passed'] for r in rows),total=len(rows))
 (root/'student.tests/pa29/evidence155/controls.json').write_text(json.dumps(result,indent=2)+'\n')
 print(result['passed'], '/',result['total'])

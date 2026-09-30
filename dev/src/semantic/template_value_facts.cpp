@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "support/type_traits.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
@@ -15,7 +16,9 @@ bool Analyzer::bind_template_size(NodeId node, ScopeId scope)
     auto query = expression_query(node,scope);
     if (!query) return false; // Local identity or another expression owner is not yet typed.
     template_value_queries.put(source,query); ++template_value_work;
-    Expression result; result.type = types.fundamental(ast[node].op == KW_NOEXCEPT || (ast[node].kind == Kind::TypeTrait && ast[node].flags) ? FT_BOOL : FT_UNSIGNED_LONG_INT); result.ready = true;
+    bool boolean = ast[node].op == KW_NOEXCEPT || (ast[node].kind == Kind::TypeTrait &&
+        ast[node].flags && BuiltinTrait(ast[node].flags) != BuiltinTrait::ArrayRank);
+    Expression result; result.type = types.fundamental(boolean ? FT_BOOL : FT_UNSIGNED_LONG_INT); result.ready = true;
     expressions.set(node,result); { auto& published = facts.edit(node); published.type = result.type; published.scope = scope; }
     template_fixed_expressions.put(source,node); ++template_fixed_work;
     return true;

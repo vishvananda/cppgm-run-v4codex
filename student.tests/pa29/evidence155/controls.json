@@ -1,5 +1,5 @@
 {
-  "compiler_sha256": "5a3619a03d16ee9be8634728ef8f281080371fd211c9092f937aef061469ff80",
+  "compiler_sha256": "27e99d88963b16e497364537f9a11d20393bdde818706bc21f8a20a6b0c20554",
   "checks": [
     {
       "name": "literals compile",
@@ -106,6 +106,43 @@
       "name": "probes runtime",
       "args": [
         "/tmp/pa29-155/controls/probes"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/shape-extension.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/shape-extension.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension host link",
+      "args": [
+        "g++",
+        "/tmp/pa29-155/controls/shape-extension.o",
+        "-o",
+        "/tmp/pa29-155/controls/shape-extension"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension runtime",
+      "args": [
+        "/tmp/pa29-155/controls/shape-extension"
       ],
       "status": 0,
       "stdout": "",
@@ -723,8 +760,224 @@
       "stdout": "",
       "stderr": "",
       "passed": true
+    },
+    {
+      "name": "literals hosted LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/literals.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/literals.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "literals LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "-o",
+        "/tmp/pa29-155/controls/literals-roundtrip.lowir",
+        "/tmp/pa29-155/controls/literals.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "literals native inspection",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-155/controls/literals.mir",
+        "-o",
+        "/tmp/pa29-155/controls/literals-lowir",
+        "/tmp/pa29-155/controls/literals-roundtrip.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "literals LowIR runtime",
+      "args": [
+        "/tmp/pa29-155/controls/literals-lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits hosted LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/traits.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/traits.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "-o",
+        "/tmp/pa29-155/controls/traits-roundtrip.lowir",
+        "/tmp/pa29-155/controls/traits.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits native inspection",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-155/controls/traits.mir",
+        "-o",
+        "/tmp/pa29-155/controls/traits-lowir",
+        "/tmp/pa29-155/controls/traits-roundtrip.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits LowIR runtime",
+      "args": [
+        "/tmp/pa29-155/controls/traits-lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations hosted LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/operations.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/operations.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "-o",
+        "/tmp/pa29-155/controls/operations-roundtrip.lowir",
+        "/tmp/pa29-155/controls/operations.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations native inspection",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-155/controls/operations.mir",
+        "-o",
+        "/tmp/pa29-155/controls/operations-lowir",
+        "/tmp/pa29-155/controls/operations-roundtrip.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations LowIR runtime",
+      "args": [
+        "/tmp/pa29-155/controls/operations-lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension hosted LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/shape-extension.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/shape-extension.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "-o",
+        "/tmp/pa29-155/controls/shape-extension-roundtrip.lowir",
+        "/tmp/pa29-155/controls/shape-extension.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension native inspection",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-155/controls/shape-extension.mir",
+        "-o",
+        "/tmp/pa29-155/controls/shape-extension-lowir",
+        "/tmp/pa29-155/controls/shape-extension-roundtrip.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension LowIR runtime",
+      "args": [
+        "/tmp/pa29-155/controls/shape-extension-lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
     }
   ],
-  "passed": 56,
-  "total": 56
+  "passed": 75,
+  "total": 75
 }

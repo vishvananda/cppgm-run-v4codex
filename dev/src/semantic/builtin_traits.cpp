@@ -97,6 +97,13 @@ TypeQueryFact Analyzer::query_builtin_trait(QueryId id, const TypeQuery& query)
         throw std::runtime_error("invalid type trait arity");
     auto t = argument_types[args.offset];
     TypeQueryFact result; result.expression.type = types.fundamental(FT_BOOL);
+    if (trait == BuiltinTrait::ArrayRank) {
+        unsigned rank = 0;
+        while (types[t].kind == TypeKind::Array) { ++rank; t = types[t].child; }
+        result.expression.type = types.fundamental(FT_UNSIGNED_LONG_INT);
+        builtin_trait_values.put(id,constants.size()); constants.push_back(Constant(result.expression.type,rank));
+        return result;
+    }
     if (trait == BuiltinTrait::Decay) {
         if (types[t].kind == TypeKind::LRef || types[t].kind == TypeKind::RRef) t = types[t].child;
         result.expression.type = types.unqualified(decay(t)); return result;
@@ -279,6 +286,7 @@ bool Analyzer::builtin_type_property(unsigned operation, TypeId t)
         if (!entities[type.entity].complete) throw std::runtime_error("type trait requires a complete class");
     }
     switch (trait) {
+    case BuiltinTrait::Aggregate: return aggregate_type(t);
     case BuiltinTrait::Empty:
         if (!cls || entities[type.entity].key == KW_UNION) return false;
         class_layout(type.entity); return empty_class(t);
