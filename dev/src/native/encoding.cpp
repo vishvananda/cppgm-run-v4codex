@@ -93,7 +93,7 @@ void Encoder::call(Operand target)
 {
     if (target.kind == Operand::Symbol) {
         byte(0xe8);
-        Fixup fix; fix.symbol = target.id; fix.offset = code.size(); fix.end = code.size()+4;
+        Fixup fix; if (image.host) fix.kind = Fixup::CallSymbol; fix.symbol = target.id; fix.offset = code.size(); fix.end = code.size()+4;
         image.code_fixups.push_back(fix); number(0,4);
     } else form(0xff,64,2,target);
 }

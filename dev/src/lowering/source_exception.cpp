@@ -26,7 +26,7 @@ SymbolId Procedural::exception_function(unsigned role)
     std::vector<TypeId> params;
     if (role == 0) params.push_back(sem.types.fundamental(FT_UNSIGNED_LONG_INT));
     if (role == 1 || role == 6) params.push_back(ptr);
-    if (role == 1 && !linkage.presentation) params.push_back(ptr);
+    if (role == 1 && !linkage.presentation && !linkage.host) params.push_back(ptr);
     if (role == 4) params = {ptr,ptr,ptr};
     auto sig = sem.types.function(role < 2 ? ptr : sem.types.fundamental(FT_VOID),params,false);
     Function f; f.symbol = fresh_symbol("@exception_runtime"); f.declaration = true;
@@ -224,7 +224,7 @@ void Procedural::try_statement(NodeId n)
                 emit(Opcode::EhEnd,IRType(),{}); exception_fallback();
                 start(ready);
                 if (auto state = object_lifetime(e)) live = state;
-            } else if (linkage.presentation && reference(t) && sem.types[sem.types[t].child].kind == TypeKind::Pointer) {
+            } else if ((linkage.presentation || linkage.host) && reference(t) && sem.types[sem.types[t].child].kind == TypeKind::Pointer) {
                 // The Itanium runtime returns the adjusted pointer value for
                 // pointer exceptions. A reference parameter needs an address
                 // of pointer storage, not that pointee address.

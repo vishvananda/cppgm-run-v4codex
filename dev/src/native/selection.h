@@ -103,8 +103,8 @@ class Selector {
     ValueState& state(unsigned v) { return values[workspace.value_indices[v]]; }
     const ValueState& state(unsigned v) const { return values[workspace.value_indices[v]]; }
 public:
-    Selector(const lowir_model::Program& p, const lowir_model::Function& source, Workspace& workspace, Statistics& stats)
-        : p(p), source(source), workspace(workspace), stats(stats) {}
+    Selector(const lowir_model::Program& p, const lowir_model::Function& source, Workspace& workspace, Statistics& stats, bool host = false)
+        : p(p), source(source), workspace(workspace), stats(stats) { f.host = host; }
     Function run();
 };
 } // namespace native

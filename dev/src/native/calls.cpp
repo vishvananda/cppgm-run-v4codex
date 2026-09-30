@@ -17,6 +17,7 @@ void Selector::call(const lowir_model::Instruction& i)
     auto target_input = arg(i,0);
     if (!signature_id && target_input.kind == lowir_model::Operand::Symbol) {
         const auto& symbol = p.symbols[target_input.ref-1];
+        require(symbol.kind == lowir_model::Symbol::FunctionSymbol && symbol.entity,"call lacks a published function fact");
         signature_id = p.functions[symbol.entity-1].signature;
     }
     require(bool(signature_id), "call has no ABI signature");

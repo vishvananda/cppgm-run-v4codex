@@ -1,6 +1,7 @@
 #include "native/encoding.h"
 #include <algorithm>
 #include <climits>
+#include "support/id_index.h"
 namespace native {
 using lowir_model::require;
 void Encoder::startup(const std::vector<Instruction>& instructions)
@@ -12,6 +13,9 @@ void Encoder::startup(const std::vector<Instruction>& instructions)
 }
 void Encoder::epilogue_code()
 {
+    if (image.host) {
+        cfi_advance(unwind_record.cfi_pc,code.size()); unwind_record.cfi.push_back(0x0a);
+    }
     if (function->exception_base.kind != Operand::None) {
         load(Operand::r(XR_R11),function->exception_base,Type::Ptr,false);
         store(image.runtime(RuntimeEntity::ExceptionTop),Operand::r(XR_R11),Type::Ptr);
@@ -20,21 +24,46 @@ void Encoder::epilogue_code()
     for (unsigned reg = 0; reg < 16; ++reg) if (function->preserved & (1u << reg)) {
         auto slot = Operand::mem(XR_RBP,-std::int64_t((function->frame_base == XR_RBP ? function->frame_bytes : 0)+8*++n));
         load(Operand::r(reg),slot,Type::I64,false);
+        if (image.host) {
+            static const unsigned dwarf[] = {0,2,1,3,7,6,4,5,8,9,10,11,12,13,14,15};
+            cfi_advance(unwind_record.cfi_pc,code.size()); unwind_record.cfi.push_back(0xc0+dwarf[reg]);
+        }
     }
-    if (function->frame_pointer) { byte(0xc9); }
+    if (function->frame_pointer) {
+        byte(0xc9);
+        if (image.host) { cfi_advance(unwind_record.cfi_pc,code.size()); unwind_record.cfi.insert(unwind_record.cfi.end(),{0x0c,7,8,0xc6}); }
+    }
     else if (function->stack_size) form(0x81,64,0,Operand::r(XR_RSP),4,function->stack_size);
     byte(0xc3);
+    if (image.host) { cfi_advance(unwind_record.cfi_pc,code.size()); unwind_record.cfi.push_back(0x0b); }
 }
 void Encoder::encode(const Function& f)
 {
     auto first_fixup = image.code_fixups.size();
     function = &f;
+    unwind_record = UnwindRecord(); unwind_record.symbol = f.symbol.index; unwind_record.begin = unwind_record.cfi_pc = code.size();
+    host_sites.clear(); host_landings.clear(); host_landing_offsets.assign(f.blocks.size(),0);
+    resume_label = 0;
     image.symbols[f.symbol.index] = code.size(); image.defined[f.symbol.index] = true;
-    if (f.frame_pointer) { byte(0x55); form(0x89,64,XR_RSP,Operand::r(XR_RBP)); }
+    auto cfi_at = code.size();
+    if (f.frame_pointer) {
+        byte(0x55);
+        if (image.host) { cfi_advance(cfi_at,code.size()); cfi_at = code.size(); unwind_record.cfi.insert(unwind_record.cfi.end(),{0x0e,16,0x86,2}); }
+        form(0x89,64,XR_RSP,Operand::r(XR_RBP));
+        if (image.host) { cfi_advance(cfi_at,code.size()); cfi_at = code.size(); unwind_record.cfi.insert(unwind_record.cfi.end(),{0x0d,6}); }
+    }
     if (f.stack_size) form(0x81,64,5,Operand::r(XR_RSP),4,f.stack_size);
     unsigned n = 0;
-    for (unsigned reg = 0; reg < 16; ++reg) if (f.preserved & (1u << reg))
+    for (unsigned reg = 0; reg < 16; ++reg) if (f.preserved & (1u << reg)) {
         store(Operand::mem(XR_RBP,-std::int64_t((f.frame_base == XR_RBP ? f.frame_bytes : 0)+8*++n)),Operand::r(reg),Type::I64);
+        if (image.host) {
+            static const unsigned dwarf[] = {0,2,1,3,7,6,4,5,8,9,10,11,12,13,14,15};
+            cfi_advance(cfi_at,code.size()); cfi_at = code.size();
+            unwind_record.cfi.push_back(0x80+dwarf[reg]);
+            auto offset = ((f.frame_base == XR_RBP ? f.frame_bytes : 0)+8*n+16)/8;
+            do { auto b = offset&127; offset >>= 7; unwind_record.cfi.push_back(b|(offset ? 128 : 0)); } while (offset);
+        }
+    }
     if (f.frame_base != XR_RBP) {
         form(0x8d,64,f.frame_base,Operand::mem(XR_RBP,-std::int64_t(8*n)));
         form(0x81,64,4,Operand::r(f.frame_base),4,-std::uint64_t(f.frame_alignment));
@@ -46,6 +75,13 @@ void Encoder::encode(const Function& f)
     if (f.stack_floor.kind != Operand::None) store(f.stack_floor,Operand::r(XR_RSP),Type::Ptr);
     epilogue = 0;
     for (const auto& b : f.blocks) epilogue = std::max(epilogue,b.id+1);
+    if (image.host) {
+        for (const auto& i : f.instructions) if (i.op == Op::Resume) resume_label = epilogue+1;
+        if (labels.size() <= epilogue+1) { labels.resize(epilogue+2); label_owners.resize(epilogue+2); }
+        cppgm::IdIndex targets;
+        for (const auto& i : f.instructions) if (i.op == Op::EhPush) targets.put(i.args[0].id,1);
+        for (unsigned b = 0; b < f.blocks.size(); ++b) if (targets.get(f.blocks[b].id)) host_landings.push_back(b);
+    }
     if (labels.size() <= epilogue) { labels.resize(epilogue+1); label_owners.resize(epilogue+1); }
     branches.clear();
     for (unsigned k = 0; k < f.blocks.size(); ++k) {
@@ -55,11 +91,14 @@ void Encoder::encode(const Function& f)
             // The fallthrough target is already selected; suppressing its jump
             // changes neither MIR control flow nor label identity.
             if (i.op == Op::Jump && k+1 < f.blocks.size() && i.args[0].id == f.blocks[k+1].id) continue;
-            instruction(i);
+            auto begin = code.size(); instruction(i);
+            if (image.host && i.op == Op::Call && i.host_handler != ~0u && i.boundary.unwind != ir_model::CUM_NO)
+                host_sites.push_back({begin,code.size(),i.host_handler});
         }
     }
     labels[epilogue] = code.size(); label_owners[epilogue] = f.symbol;
     if (f.shared_epilogue) epilogue_code();
+    if (image.host) { host_landing_pads(); host_tables(); }
     for (const auto& fix : branches) {
         require(fix.label < label_owners.size() && label_owners[fix.label] == f.symbol,"undefined native branch target");
         std::int64_t relative = std::int64_t(labels.at(fix.label)) - std::int64_t(fix.offset+4);

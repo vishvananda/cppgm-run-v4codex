@@ -52,6 +52,7 @@ struct Instruction {
     unsigned arg_registers = 0;
     std::uint64_t bytes = 0;
     unsigned alignment = 1;
+    unsigned host_handler = 0;
     ir_model::FunctionBoundaryMetadata boundary;
     DebugLocation debug;
     explicit Instruction(Op op = Op::Mov, Type type = Type::I64) : op(op), type(type) {}
@@ -59,7 +60,7 @@ struct Instruction {
 struct FrameBinding { Name name; Type type; std::int64_t offset; bool temporary; bool parameter; };
 struct Parameter { Name name; Type type; Operand location; Operand second; };
 struct Block { std::uint32_t id; Name name; lowir_model::Range instructions; };
-struct ExceptionClause { SymbolId type; unsigned selector; ir_model::CatchBinding binding; };
+struct ExceptionClause { SymbolId type; unsigned selector; ir_model::CatchBinding binding; unsigned host_selector; };
 struct ExceptionHandler { lowir_model::Range clauses; bool cleanup = false; };
 struct Function {
     SymbolId symbol;
@@ -72,7 +73,9 @@ struct Function {
     unsigned preserved = 0;
     unsigned frame_alignment = 16;
     int frame_base = XR_RBP;
-    Operand exception_base, stack_floor;
+    Operand exception_base, stack_floor, host_exception, host_selector;
+    bool host = false;
+    std::vector<SymbolId> host_types;
     std::vector<ExceptionClause> exception_clauses;
     std::vector<ExceptionHandler> exception_handlers;
     std::uint64_t frame_bytes = 0, stack_size = 0, scratch_bytes = 0;
@@ -84,6 +87,7 @@ struct Statistics {
     std::uint64_t parameter_flow_visits = 0, carry_window_visits = 0, xmm_reuses = 0;
     double selection_ms = 0, encoding_ms = 0;
 };
+void prepare_host_eh(Function&);
 const char* register_name(int reg);
 std::string type_name(Type type);
 bool unsigned_type(Type type);

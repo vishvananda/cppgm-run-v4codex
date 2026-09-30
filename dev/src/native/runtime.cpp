@@ -12,13 +12,13 @@ void Selector::runtime(const lowir_model::Instruction& i)
     switch (i.opcode) {
     case Opcode::EhTry: case Opcode::EhCleanup:
         if (!i.operands.count) break;
-        require(f.exception_base.kind != Operand::None,"missing handler frame fact");
+        require(f.host || f.exception_base.kind != Operand::None,"missing handler frame fact");
         emit(Op::EhPush,Type(),{Operand::label(arg(i,0).ref),Operand::imm(i.opcode == Opcode::EhCleanup ||
             (workspace.exception_handlers[arg(i,0).ref] && f.exception_handlers[workspace.exception_handlers[arg(i,0).ref]-1].cleanup))});
         break;
     case Opcode::EhCatch: case Opcode::EhCatchAll: break; // indexed landing-pad facts
     case Opcode::ExceptionSelector:
-        move(allocate(i.destination.index,i.type),runtime_operand(p,RuntimeEntity::ExceptionSelector),i.type); break;
+        move(allocate(i.destination.index,i.type),(f.host ? f.host_selector : runtime_operand(p,RuntimeEntity::ExceptionSelector)),i.type); break;
     case Opcode::EhEnd: emit(Op::EhPop,Type(),{}); break;
     case Opcode::Throw: {
         auto payload = runtime_operand(p,RuntimeEntity::ExceptionValue);
@@ -34,7 +34,7 @@ void Selector::runtime(const lowir_model::Instruction& i)
     }
     case Opcode::Resume: emit(Op::Resume,Type(),{}); break;
     case Opcode::Exception:
-        move(allocate(i.destination.index,i.type),runtime_operand(p,RuntimeEntity::ExceptionValue),i.type);
+        move(allocate(i.destination.index,i.type),(f.host ? f.host_exception : runtime_operand(p,RuntimeEntity::ExceptionValue)),i.type);
         break;
     case Opcode::StackAlloc: {
         auto size = value(arg(i,0),Type::I64);

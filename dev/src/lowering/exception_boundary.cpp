@@ -61,6 +61,7 @@ void Procedural::finish_exception_boundary()
         p.functions.push_back(f); linkage.terminate_adapter = f.symbol;
         auto& s = p.symbols[f.symbol.index-1]; s.kind = Symbol::FunctionSymbol; s.entity = owner.index;
         s.metadata.binding = SBM_INTERNAL;
+        if (linkage.host) s.metadata.object = p.intern("@cppgm_call_terminate");
     }
     emit(Opcode::Call,IRType::Void,{Operand::symbol(linkage.terminate_adapter),exception.operand});
     exception_fallback();

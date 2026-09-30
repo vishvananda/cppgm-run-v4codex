@@ -185,13 +185,15 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
         metadata.role = e.builtin == semantic::Entity::Malloc ? SR_MALLOC : SR_FREE_MEMORY;
     } else if (e.builtin != semantic::Entity::NoBuiltin && e.builtin != semantic::Entity::Malloc && e.builtin != semantic::Entity::Free) {
         if (e.builtin == semantic::Entity::Strlen) metadata.builtin = lowir_model::SymbolMetadata::Builtin::Strlen;
-        metadata.object = p.intern(e.builtin == semantic::Entity::Memcpy ? "cppgm_builtin_memcpy" : e.builtin == semantic::Entity::Strlen ? "cppgm_builtin_strlen" : "cppgm_builtin_memmove");
+        metadata.object = p.intern(linkage.host ?
+            (e.builtin == semantic::Entity::Memcpy ? "memcpy" : e.builtin == semantic::Entity::Strlen ? "strlen" : "memmove") :
+            (e.builtin == semantic::Entity::Memcpy ? "cppgm_builtin_memcpy" : e.builtin == semantic::Entity::Strlen ? "cppgm_builtin_strlen" : "cppgm_builtin_memmove"));
         metadata.linkage = LLM_C;
     }
     SymbolId allocation_runtime; unsigned allocation_role = 2;
     if (e.allocation_runtime && !e.definition) {
         const char* runtime[] = {"", "cppgm_builtin_operator_new", "cppgm_builtin_operator_new_array", "cppgm_builtin_operator_delete", "cppgm_builtin_operator_delete_array"};
-        metadata.object = p.intern(runtime[e.allocation_runtime]);
+        if (!linkage.host) metadata.object = p.intern(runtime[e.allocation_runtime]);
         allocation_role = e.key == KW_NEW ? 0 : 1;
         allocation_runtime = linkage.allocation_roles[allocation_role];
         if (!allocation_runtime) {

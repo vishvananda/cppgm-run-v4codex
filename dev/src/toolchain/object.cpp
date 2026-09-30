@@ -10,9 +10,10 @@ std::string Object::name(unsigned id) const {
     auto view = names.spelling(symbols[id].name);
     return std::string(view.data,view.size);
 }
-Object compile_object(const lowir_model::Program& p, native::Statistics& stats)
+Object compile_object(const lowir_model::Program& p, native::Statistics& stats, bool host)
 {
-    Object obj(p.symbols.size());
+    Object obj(p.symbols.size()); obj.image.host = host;
+    obj.image.host_resume = obj.image.runtime_begin;
     for (const auto& g : p.globals) if (!g.declaration && g.type.kind() == lowir_model::Type::Object) {
         require(g.type.alignment() <= 4096,"unsupported native object alignment");
         obj.alignment = std::max(obj.alignment,g.type.alignment());
@@ -36,6 +37,10 @@ Object compile_object(const lowir_model::Program& p, native::Statistics& stats)
             const auto& f = p.functions[s.entity-1];
             symbol.parameters = p.signatures[f.signature.index-1].parameters.count;
         }
+    }
+    if (host) {
+        auto& resume = obj.symbols[obj.image.host_resume];
+        resume.name = obj.intern("_Unwind_Resume"); resume.binding = ir_model::SBM_STRONG;
     }
     // An alias is another exported identity for the exact same native location.
     for (const auto& alias : p.aliases) {

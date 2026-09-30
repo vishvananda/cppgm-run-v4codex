@@ -7,12 +7,12 @@
 #include <sys/resource.h>
 namespace cppgm { namespace lowering {
 void build_program(lowir_model::Program& program, const std::vector<std::string>& inputs, bool stats,
-    const std::vector<std::string>& includes, const std::vector<std::string>& macros, bool presentation)
+    const std::vector<std::string>& includes, const std::vector<std::string>& macros, bool presentation, bool host)
 {
     typedef std::chrono::steady_clock Clock;
     const std::time_t now = std::time(0);
     const std::string stamp = std::asctime(std::localtime(&now));
-    Linkage linkage(inputs.size() > 1,presentation);
+    Linkage linkage(inputs.size() > 1,presentation); linkage.host = host;
     double frontend_ms = 0, lowering_ms = 0;
     std::size_t nodes = 0, static_requests = 0, static_hits = 0;
     std::size_t control_work = 0, discard_work = 0;

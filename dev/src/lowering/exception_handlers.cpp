@@ -14,7 +14,7 @@ unsigned Procedural::exception_selector(NodeId handler)
 Value Procedural::begin_catch(Operand object, NodeId handler)
 {
     auto function = Operand::symbol(exception_function(1));
-    if (linkage.presentation) return emit(Opcode::Call,IRType::Ptr,{function,object});
+    if (linkage.presentation || linkage.host) return emit(Opcode::Call,IRType::Ptr,{function,object});
     Operand storage = Operand::null();
     // A converted const pointer reference owns its temporary in this handler's
     // frame. Nested catches/rethrows must not overwrite another live binding.

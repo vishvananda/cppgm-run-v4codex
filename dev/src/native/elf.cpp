@@ -76,7 +76,7 @@ void encode_data(const lowir_model::Program& p, Image& image)
     bool exceptions = false;
     for (const auto& i : p.instructions)
         exceptions |= i.opcode >= Opcode::EhTry && i.opcode <= Opcode::Resume;
-    if (exceptions) {
+    if (exceptions && !image.host) {
         for (unsigned k = 0; k < unsigned(RuntimeEntity::Count); ++k) {
             if (k == unsigned(RuntimeEntity::ThreadPointer)) continue;
             image.data.resize(aligned(image.data.size(),16),0);

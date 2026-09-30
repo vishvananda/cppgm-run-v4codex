@@ -48,6 +48,7 @@ struct Linkage {
     std::size_t requests = 0, hits = 0;
     std::uint64_t disambiguator = 0;
     bool merge, presentation;
+    bool host = false;
     SymbolId allocation_roles[2], rtti_roles[9], rtti_functions[3];
     SymbolId exception_functions[7];
     SymbolId terminate_adapter;
@@ -420,6 +421,6 @@ public:
     Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, lowir_model::Program& out, Linkage& links);
     void run();
 };
-void build_program(lowir_model::Program&, const std::vector<std::string>&, bool stats, const std::vector<std::string>& includes, const std::vector<std::string>& macros, bool presentation = false);
+void build_program(lowir_model::Program&, const std::vector<std::string>&, bool stats, const std::vector<std::string>& includes, const std::vector<std::string>& macros, bool presentation = false, bool host = false);
 int emit_lowir(const std::string& output, const std::vector<std::string>& inputs, bool stats, bool audit = false);
 } }

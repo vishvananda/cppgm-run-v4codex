@@ -5,6 +5,9 @@ void Procedural::destroy(EntityId dtor, TypeId t, Value object)
 {
     // Callers select an effectful step or a required object/array boundary.
     if (!dtor) return;
+    // Declaration emission omits effect-free implicit destructor bodies. Use
+    // the same completed semantic effect fact before publishing a call.
+    if (!linkage.presentation && sem.synthetic_member(dtor) && !sem.destructor_needed(dtor)) return;
     if (sem.types[t].kind == TypeKind::Array) {
         array_destroy(dtor, t, object, false, {}); return;
     }

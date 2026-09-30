@@ -3,12 +3,18 @@
 namespace native {
 constexpr unsigned executable_code_offset = 64+2*56;
 struct Fixup {
-    enum Kind { RelativeSymbol, AbsoluteSymbol, ThreadOffset, Absolute32, Absolute32Signed } kind = RelativeSymbol;
+    enum Kind { RelativeSymbol, AbsoluteSymbol, ThreadOffset, Absolute32, Absolute32Signed, CallSymbol } kind = RelativeSymbol;
     std::size_t offset = 0, end = 0;
     unsigned symbol = 0;
     std::int64_t addend = 0;
     // Producer-recorded definition identity; zero denotes unconditional bytes.
     unsigned owner = 0;
+};
+struct UnwindRecord {
+    unsigned symbol = 0;
+    std::size_t begin = 0, end = 0, lsda = 0, cfi_pc = 0;
+    bool has_lsda = false;
+    std::vector<unsigned char> cfi;
 };
 struct Image {
     std::vector<unsigned char> code, data;
@@ -16,7 +22,11 @@ struct Image {
     std::vector<std::uint64_t> symbols;
     std::vector<bool> data_symbols, defined;
     std::vector<unsigned> tls_targets;
-    bool has_tls = false;
+    bool has_tls = false, host = false;
+    std::vector<UnwindRecord> unwind;
+    std::vector<unsigned char> lsda;
+    std::vector<Fixup> lsda_fixups;
+    unsigned host_resume = 0;
     unsigned runtime_begin;
     explicit Image(std::size_t count) : symbols(count+1+unsigned(RuntimeEntity::Count)), data_symbols(symbols.size()), defined(symbols.size()), tls_targets(symbols.size()), runtime_begin(count+1) {}
     Operand runtime(RuntimeEntity entity) const { return Operand::symbol(SymbolId(runtime_begin+unsigned(entity)),false); }
@@ -29,7 +39,16 @@ class Encoder {
     std::vector<std::size_t> labels;
     std::vector<SymbolId> label_owners;
     const Function* function = nullptr;
-    unsigned epilogue = 0;
+    unsigned epilogue = 0, resume_label = 0;
+    struct HostSite { std::size_t begin, end; unsigned handler; };
+    std::vector<HostSite> host_sites;
+    std::vector<unsigned> host_landings;
+    std::vector<std::size_t> host_landing_offsets;
+    UnwindRecord unwind_record;
+    void host_landing_pads();
+    void host_tables();
+    void cfi_advance(std::size_t from, std::size_t to);
+    void host_runtime(const Instruction&);
     void byte(unsigned n);
     void number(std::uint64_t n, unsigned width);
     void modrm(unsigned reg, const Operand& operand);

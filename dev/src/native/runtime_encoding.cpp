@@ -2,6 +2,7 @@
 namespace native {
 void Encoder::runtime(const Instruction& i)
 {
+    if (image.host && i.op != Op::StackAlloc) { host_runtime(i); return; }
     // Cleanup records stay installed while their landing pad runs. Resume
     // retires an active cleanup; eh.end can retire it explicitly first.
     const unsigned record_bytes = 96;

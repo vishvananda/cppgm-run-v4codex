@@ -14,7 +14,7 @@ void compile_image(const lowir_model::Program& p, Image& image, const std::vecto
     if (mir) dump_header(p,start,*mir,image.defined[image.runtime_begin]);
     for (const auto& source : p.functions) if (!source.declaration) {
         time = Clock::now();
-        Function f = Selector(p,source,workspace,stats).run();
+        Function f = Selector(p,source,workspace,stats,image.host).run();
         stats.selection_ms += ms(time);
         if (mir) dump_function(p,f,*mir);
         time = Clock::now(); encoder.encode(f); stats.encoding_ms += ms(time);
@@ -25,6 +25,7 @@ void compile_image(const lowir_model::Program& p, Image& image, const std::vecto
     for (const auto& fix : image.data_fixups) demanded[fix.symbol] = true;
     for (const auto& source : p.functions) if (source.declaration && demanded[source.symbol.index]) {
         const auto& metadata = p.symbols[source.symbol.index-1].metadata;
+        if (image.host && metadata.builtin != lowir_model::SymbolMetadata::Builtin::None) continue;
         if (!metadata.tls_for && metadata.builtin != lowir_model::SymbolMetadata::Builtin::Strlen) continue;
         time = Clock::now();
         Function f = metadata.tls_for ? builtin_tls(p,source) : builtin_strlen(p,source);

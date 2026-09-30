@@ -149,6 +149,7 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
             out << "\n    catch ";
             if (clause.type) out << p.name(p.symbols[clause.type.index-1].name); else out << "all";
             out << " selector=" << clause.selector << " binding=" << unsigned(clause.binding);
+            if (f.host) out << " host_selector=" << clause.host_selector;
         }
     }
     out << "\n  abi\n";
@@ -162,6 +163,10 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
     out << "    return " << type_name(f.result) << " -> " << (f.result == Type() ? "void" : f.result == Type::F80 ? "st0" : f.result.floating() ? "xmm0" : "rax") << '\n';
     out << "  frame\n    stack_size " << f.stack_size << "\n    scratch_bytes " << f.scratch_bytes << "\n    frame_pointer " << (f.frame_pointer ? "keep" : "omit")
         << "\n    epilogues " << (f.shared_epilogue ? "shared" : "direct") << '\n';
+    if (f.host_exception.kind != Operand::None) {
+        out << "    host_exception "; operand(p,f.host_exception,out); out << '\n';
+        out << "    host_selector "; operand(p,f.host_selector,out); out << '\n';
+    }
     if (f.exception_base.kind != Operand::None) {
         out << "    exception_base "; operand(p,f.exception_base,out); out << '\n';
     }
@@ -182,7 +187,17 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
     }
     for (const auto& b : f.blocks) {
         out << "\n  block "; operand(p,Operand::label(b.id),out); out << '\n';
-        for (unsigned n = b.instructions.begin; n != b.instructions.end(); ++n) instruction(p,f.instructions[n],out);
+        for (unsigned n = b.instructions.begin; n != b.instructions.end(); ++n) {
+            const auto& i = f.instructions[n];
+            if (f.host && i.op == Op::Call && i.boundary.unwind != ir_model::CUM_NO) {
+                out << "    host_eh ";
+                if (i.host_handler == ~0u) out << "unreachable";
+                else if (!i.host_handler) out << "unprotected";
+                else { out << "landing "; operand(p,Operand::label(i.host_handler),out); }
+                out << '\n';
+            }
+            instruction(p,i,out);
+        }
     }
 }
 } // namespace native

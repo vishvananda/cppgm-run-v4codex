@@ -287,6 +287,7 @@ Function Selector::run()
     }
     carry_reloads();
     finish_frame();
+    if (f.host) prepare_host_eh(f);
     ++stats.functions; stats.instructions += f.instructions.size();
     return std::move(f);
 }

@@ -344,7 +344,7 @@ DriverInvocation parse_driver_invocation(const vector<string> & args)
       explicit_outfile = true;
       continue;
     }
-    if(args[i] == "--stats" || consume_preprocess_option(args, i) ||
+    if(args[i] == "--stats" || starts_with(args[i], "--object-format=") || consume_preprocess_option(args, i) ||
        consume_search_option(args, i) ||
        consume_dependency_option(args, i) ||
        consume_toolchain_option(args, i) ||

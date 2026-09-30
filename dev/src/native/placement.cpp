@@ -90,7 +90,8 @@ void Selector::analyze()
         }
     }
     if (handlers) {
-        f.exception_base = home(0,Type::Ptr,true);
+        if (f.host) { f.host_exception = home(0,Type::Ptr,true); f.host_selector = home(0,Type::I32,true); }
+        else f.exception_base = home(0,Type::Ptr,true);
         if (dynamic_stack) f.stack_floor = home(0,Type::Ptr,true);
     }
     // Epochs at predecessor exits place phi uses on incoming edges.

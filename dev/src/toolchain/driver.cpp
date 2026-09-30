@@ -16,8 +16,8 @@ std::string argument(const std::vector<std::string>& args, unsigned& i, const ch
     return args[i];
 }
 struct Options {
-    bool compile = false, stats = false;
-    std::string output;
+    bool compile = false, stats = false, host = false;
+    std::string output, format;
     std::vector<std::string> inputs, includes, libraries, paths, macros;
 };
 Options options(const std::vector<std::string>& args)
@@ -26,6 +26,10 @@ Options options(const std::vector<std::string>& args)
     for (unsigned i = 0; i < args.size(); ++i) {
         const auto& a = args[i];
         if (a == "-c") o.compile = true;
+        else if (prefix(a,"--object-format=")) {
+            o.format = a.substr(16);
+            if (o.format != "elf" && o.format != "private") throw std::runtime_error("unsupported object format");
+        }
         else if (a == "--stats") o.stats = true;
         else if (a == "-o") o.output = argument(args,i,"-o");
         else if (a == "--target" || prefix(a,"--target=")) {
@@ -39,7 +43,7 @@ Options options(const std::vector<std::string>& args)
             if (a[1] == 'I') o.includes.push_back(value);
             else if (a[1] == 'L') o.paths.push_back(value);
             else o.libraries.push_back(value);
-        } else if (a == "-O0" || a == "-Wall" || prefix(a,"-W") || a == "-w" ||
+        } else if (a == "-O0" || a == "-O1" || a == "-O2" || a == "-O3" || a == "-Wall" || prefix(a,"-W") || a == "-w" ||
             a == "-fvisibility=hidden" || a == "-fvisibility-inlines-hidden" || a == "-pedantic" || a == "-pedantic-errors" || a == "-std=c++11" || a == "-std=gnu++11" || a == "-pipe") continue;
         else if (!a.empty() && a[0] == '-') throw std::runtime_error("unsupported driver option: " + a);
         else o.inputs.push_back(a);
@@ -49,19 +53,20 @@ Options options(const std::vector<std::string>& args)
         o.output = "a.out";
         if (o.compile) { auto s = o.inputs[0]; auto slash = s.rfind('/'); s = s.substr(slash == std::string::npos ? 0 : slash+1); o.output = s.substr(0,s.rfind('.')) + ".o"; }
     }
+    o.host = o.compile && (o.format == "elf" || (o.format.empty() && (o.output.size() < 4 || o.output.substr(o.output.size()-4) != ".obj")));
     return o;
 }
 Object source(const std::string& path, const Options& o, native::Statistics& stats) {
     lowir_model::Program program;
-    lowering::build_program(program,{path},o.stats,o.includes,o.macros);
-    return compile_object(program,stats);
+    lowering::build_program(program,{path},o.stats,o.includes,o.macros,false,o.host);
+    return compile_object(program,stats,o.host);
 }
 }
 int run(const std::vector<std::string>& args)
 {
     auto start = std::chrono::steady_clock::now(); auto o = options(args);
     native::Statistics stats, runtime_stats; std::size_t text = 0, link_definitions = 0, link_relocations = 0;
-    if (o.compile) { auto obj = source(o.inputs[0],o,stats); text = obj.image.code.size(); write_object(obj,o.output); }
+    if (o.compile) { auto obj = source(o.inputs[0],o,stats); text = obj.image.code.size(); if (o.host) write_host_object(obj,o.output); else write_object(obj,o.output); }
     else {
         Linker linker;
         for (const auto& input : o.inputs)

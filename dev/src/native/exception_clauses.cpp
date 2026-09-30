@@ -12,10 +12,10 @@ void Selector::index_exception_clauses()
             const auto& i = p.instructions[n];
             if (i.opcode == Opcode::EhCatch) {
                 require(i.operands.count == 2,"native typed catch requires an explicit selector");
-                f.exception_clauses.push_back({SymbolId(arg(i,0).ref),unsigned(arg(i,1).data.integer),i.catch_binding});
+                f.exception_clauses.push_back({SymbolId(arg(i,0).ref),unsigned(arg(i,1).data.integer),i.catch_binding,0});
             } else if (i.opcode == Opcode::EhCatchAll) {
                 require(i.operands.count == 1,"native catch-all requires an explicit selector");
-                f.exception_clauses.push_back({SymbolId(),unsigned(arg(i,0).data.integer),ir_model::CatchBinding::Value});
+                f.exception_clauses.push_back({SymbolId(),unsigned(arg(i,0).data.integer),ir_model::CatchBinding::Value,0});
             } else if (i.opcode == Opcode::EhCleanup && !i.operands.count) handler.cleanup = true;
             else break;
             present = true;
