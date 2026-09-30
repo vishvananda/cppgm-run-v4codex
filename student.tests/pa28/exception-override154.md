@@ -39,8 +39,13 @@ matching. Remaining O(a*b) comparisons are the language-required relation
 between the actual and allowed declared exception types, not unrelated global
 entities. Public-path results are memoized by class pair during the comparison;
 implicit destructor traversal deduplicates class and function identities.
-All temporary storage dies with the check. Class-local pair memoization dies
-with class completion. It never caches a miss across declaration mutation,
+All traversal storage dies with the check. Class-local callable-pair memoization
+dies with class completion. Handler compatibility results have a TU-owned flat
+cache keyed by the adjusted exception/handler TypeId pair; all class base edges
+are fixed before matching, including for the enclosing class still being defined.
+The cache therefore needs no declaration-generation invalidation. Work/hit
+counters observe the existing query and trigger no additional analysis.
+It never caches a miss across a change to its semantic inputs,
 clears another owner's cache, reparses grammar, or requests member bodies.
 
 Valid input keeps the same typed signatures, LSDA, code and relocation path.

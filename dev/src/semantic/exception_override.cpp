@@ -82,7 +82,7 @@ void Analyzer::check_exception_override(EntityId function, EntityId base)
         // instantiation access overrides, including private shared paths.
         public_paths.put(k,found ? 2 : 1); return found;
     };
-    auto matches = [&](TypeId from, TypeId to) {
+    auto match = [&](TypeId from, TypeId to) {
         if (public_base(from,to)) return true;
         if (fundamental(from,FT_NULLPTR_T))
             return pointer(to) || types[to].kind == TypeKind::MemberPointer;
@@ -96,6 +96,16 @@ void Analyzer::check_exception_override(EntityId function, EntityId base)
         };
         if (cv(a) & ~cv(b)) return false;
         return (fundamental(b,FT_VOID) && types[a].kind != TypeKind::Function) || public_base(a,b);
+    };
+    auto matches = [&](TypeId from, TypeId to) {
+        auto identity = key(from,to);
+        if (auto old = exception_handler_matches.get(identity)) { ++exception_match_hits; return old == 2; }
+        // Adjusted types are immutable. Exception declarations require their
+        // classes complete or currently being defined; either way all base
+        // edges are fixed before this query. Lookup privileges are not inputs.
+        ++exception_match_work;
+        bool result = match(from,to);
+        exception_handler_matches.put(identity,result ? 2 : 1); return result;
     };
     for (auto type : actual) {
         if (std::binary_search(allowed.begin(),allowed.end(),type)) continue;

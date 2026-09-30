@@ -594,6 +594,8 @@ private:
     void exception_specification(EntityId e, NodeId declarator, ScopeId scope);
     void demand_exception_specification(EntityId function);
     void check_exception_override(EntityId function, EntityId base);
+    Index exception_handler_matches;
+    std::size_t exception_match_work = 0, exception_match_hits = 0;
     unsigned evaluate_exception_specification(EntityId function, std::uint32_t fact);
     void evaluate_dynamic_exceptions(EntityId function, std::uint32_t fact);
     QueryId template_exception_query(EntityId function, std::uint32_t fact);
