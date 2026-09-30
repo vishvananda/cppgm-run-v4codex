@@ -1,0 +1,1546 @@
+{
+  "audit": 138,
+  "target": "pa25 full-stage",
+  "phase": "checkpointAudit",
+  "stage_base_commit": "fee6ad9076ff35c5272526e1c4c4df235fbf3bfe",
+  "previous_last_reviewed_commit": "fee6ad9076ff35c5272526e1c4c4df235fbf3bfe",
+  "entry_commit": "34fe77a31e8bc73d46e425a48266b7537f21d773",
+  "last_reviewed_commit": "4530fe939e95a45ff6a46d5e53c76807b5bdd352",
+  "reviewed_range": "fee6ad9076ff35c5272526e1c4c4df235fbf3bfe..4530fe939e95a45ff6a46d5e53c76807b5bdd352",
+  "commits_reviewed": [
+    {
+      "commit": "b6eae7349095e893e5106b3dad1e8b6a3192e674",
+      "subject": "Record PA25 implementation boundary and owner plan",
+      "changed_paths": [
+        "pa25/plan.md"
+      ]
+    },
+    {
+      "commit": "ce08119c8ee6b6a6e293d0e74e396489f1d56b25",
+      "subject": "Implement PA25 native object driver and typed compile/link integration",
+      "changed_paths": [
+        "dev/cppgm++.cpp",
+        "dev/frontend_source_sets.mk",
+        "dev/src/lowering/driver.cpp",
+        "dev/src/lowering/procedural.h",
+        "dev/src/native/driver.cpp",
+        "dev/src/native/elf.cpp",
+        "dev/src/native/encoding.h",
+        "dev/src/native/layout.cpp",
+        "dev/src/preprocess/directive.cpp",
+        "dev/src/preprocess/macro.cpp",
+        "dev/src/preprocess/preprocessor.cpp",
+        "dev/src/preprocess/preprocessor.h",
+        "dev/src/toolchain/driver.cpp",
+        "dev/src/toolchain/elf_input.cpp",
+        "dev/src/toolchain/linker.cpp",
+        "dev/src/toolchain/object.cpp",
+        "dev/src/toolchain/object.h",
+        "pa25/plan.md",
+        "student.tests/pa25/driver.py"
+      ]
+    },
+    {
+      "commit": "ff3e384895ab0834b2e16f6ec30e8881b7d3103e",
+      "subject": "Preserve foreign function alignment and measure PA25 driver integration",
+      "changed_paths": [
+        "dev/src/native/elf.cpp",
+        "dev/src/native/encoding.h",
+        "dev/src/toolchain/linker.cpp",
+        "student.tests/pa25/driver.py",
+        "student.tests/pa25/performance.py"
+      ]
+    },
+    {
+      "commit": "cf26b48b3f4c2e8bb037ee6185727f4b8f59e9d1",
+      "subject": "Record validated PA25 driver handoff and remaining stage owners",
+      "changed_paths": [
+        "pa25/plan.md",
+        "student.tests/pa25/floating-differences135.json",
+        "student.tests/pa25/performance135.md",
+        "student.tests/pa25/remaining135.json",
+        "student.tests/pa25/unused-dependent-local.cc",
+        "student.tests/pa25/validation135.json"
+      ]
+    },
+    {
+      "commit": "da31a87645144cb0f8fce56d74d616180df563b7",
+      "subject": "Plan PA25 wide scalar semantic ownership and validation",
+      "changed_paths": [
+        "pa25/plan.md"
+      ]
+    },
+    {
+      "commit": "1cc95b471a99ea328c66d6edf1b02d928a574918",
+      "subject": "Connect canonical 128-bit source scalars through constants and native lowering",
+      "changed_paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/abi/itanium/expression_encoder.cpp",
+        "dev/src/abi/itanium/graph.cpp",
+        "dev/src/abi/itanium/graph.h",
+        "dev/src/abi/itanium/graph_validation.cpp",
+        "dev/src/lowering/bit_fields.cpp",
+        "dev/src/lowering/constant_construction.cpp",
+        "dev/src/lowering/control_flow.cpp",
+        "dev/src/lowering/expression.cpp",
+        "dev/src/lowering/initialization.cpp",
+        "dev/src/lowering/procedural.h",
+        "dev/src/lowering/query_abi.cpp",
+        "dev/src/lowering/static_bit_fields.cpp",
+        "dev/src/lowering/symbols.cpp",
+        "dev/src/lowering/values.cpp",
+        "dev/src/posttoken/token_types.cpp",
+        "dev/src/posttoken/token_types.h",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/class_enum.cpp",
+        "dev/src/semantic/constant.cpp",
+        "dev/src/semantic/constant_addresses.cpp",
+        "dev/src/semantic/constant_array.cpp",
+        "dev/src/semantic/constant_floating.cpp",
+        "dev/src/semantic/constant_integer.cpp",
+        "dev/src/semantic/conversion.cpp",
+        "dev/src/semantic/fields.cpp",
+        "dev/src/semantic/initializers.cpp",
+        "dev/src/semantic/literal_constants.cpp",
+        "dev/src/semantic/output.cpp",
+        "dev/src/semantic/resolved_output.cpp",
+        "dev/src/semantic/static_initializer.cpp",
+        "dev/src/semantic/template_arguments.cpp",
+        "dev/src/semantic/template_call.cpp",
+        "dev/src/semantic/template_value_facts.cpp",
+        "dev/src/semantic/type_builder.cpp",
+        "dev/src/syntax/name_parser.cpp",
+        "dev/src/syntax/parser.cpp",
+        "pa25/plan.md",
+        "student.tests/pa25/scalars.py",
+        "student.tests/pa25/wide-fields.cc",
+        "student.tests/pa25/wide.cc"
+      ]
+    },
+    {
+      "commit": "bcdd0b7268057d61b0ad8bce5167f2c99b3921ba",
+      "subject": "Complete scalar builtins and full-width ABI fact adapters",
+      "changed_paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/abi/itanium/argument_reader.cpp",
+        "dev/src/abi/itanium/expression_encoder.cpp",
+        "dev/src/abi/itanium/fact_reader.h",
+        "dev/src/abi/itanium/fact_writer.cpp",
+        "dev/src/abi/itanium/graph.cpp",
+        "dev/src/abi/itanium/graph.h",
+        "dev/src/abi/itanium/graph_validation.cpp",
+        "dev/src/lowering/floating_builtins.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/constant.cpp",
+        "dev/src/semantic/constant_floating.cpp",
+        "dev/src/semantic/exception_expression.cpp",
+        "dev/src/semantic/floating_builtins.cpp",
+        "dev/src/semantic/model.h",
+        "dev/src/semantic/output.cpp",
+        "dev/src/semantic/overload.cpp",
+        "dev/src/semantic/template_value_facts.cpp",
+        "pa25/plan.md",
+        "student.tests/pa25/floating-builtins.cc",
+        "student.tests/pa25/floating-rounding.cc",
+        "student.tests/pa25/performance.py",
+        "student.tests/pa25/scalars.py",
+        "student.tests/pa25/wide.cc"
+      ]
+    },
+    {
+      "commit": "ba608c4fa918d45563b553149c4b708f189b7c9e",
+      "subject": "Report constant-pool telemetry within its owner and document rounding boundary",
+      "changed_paths": [
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/constant_integer.cpp",
+        "dev/src/semantic/output.cpp",
+        "student.tests/pa25/rounding136.md"
+      ]
+    },
+    {
+      "commit": "11aee2da5df69efed3bc1822e568a9fedbc995be",
+      "subject": "Record validated PA25 scalar handoff and remaining full-stage work",
+      "changed_paths": [
+        "pa25/plan.md",
+        "student.tests/pa25/performance136.md",
+        "student.tests/pa25/remaining136.json",
+        "student.tests/pa25/validation136.json"
+      ]
+    },
+    {
+      "commit": "832d2d85a62145dfd685758446d82c231a085378",
+      "subject": "Plan PA25 statement-expression ownership and validation",
+      "changed_paths": [
+        "pa25/plan.md"
+      ]
+    },
+    {
+      "commit": "2705e57b19159115e9abe3fb2b16194b73596de0",
+      "subject": "Implement scoped statement expressions with value, template and lifetime facts",
+      "changed_paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/lowering/branch_lifetimes.cpp",
+        "dev/src/lowering/class_values.cpp",
+        "dev/src/lowering/cleanup.cpp",
+        "dev/src/lowering/control_flow.cpp",
+        "dev/src/lowering/driver.cpp",
+        "dev/src/lowering/expression.cpp",
+        "dev/src/lowering/full_expression.cpp",
+        "dev/src/lowering/initialization.cpp",
+        "dev/src/lowering/procedural.h",
+        "dev/src/lowering/range_statement.cpp",
+        "dev/src/lowering/source_exception.cpp",
+        "dev/src/lowering/statement_expression.cpp",
+        "dev/src/lowering/typed_operations.cpp",
+        "dev/src/lowering/values.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/class_values.cpp",
+        "dev/src/semantic/converting_constructors.cpp",
+        "dev/src/semantic/exception_expression.cpp",
+        "dev/src/semantic/expression.cpp",
+        "dev/src/semantic/jump_validation.cpp",
+        "dev/src/semantic/model.h",
+        "dev/src/semantic/statement.cpp",
+        "dev/src/semantic/statement_expression.cpp",
+        "dev/src/semantic/template_binding.cpp",
+        "dev/src/semantic/template_binding_statements.cpp",
+        "dev/src/semantic/type_query.cpp",
+        "dev/src/semantic/type_query.h",
+        "dev/src/syntax/ast.cpp",
+        "dev/src/syntax/ast.h",
+        "dev/src/syntax/expression.cpp",
+        "student.tests/pa25/statements.py"
+      ]
+    },
+    {
+      "commit": "34fe77a31e8bc73d46e425a48266b7537f21d773",
+      "subject": "Record PA25 statement handoff, required checks and performance evidence",
+      "changed_paths": [
+        "pa25/plan.md",
+        "student.tests/pa25/performance.py",
+        "student.tests/pa25/performance137.md",
+        "student.tests/pa25/remaining137.json",
+        "student.tests/pa25/statement-expressions137.md",
+        "student.tests/pa25/statement-trace.cc",
+        "student.tests/pa25/validation137.json"
+      ]
+    },
+    {
+      "commit": "4530fe939e95a45ff6a46d5e53c76807b5bdd352",
+      "subject": "Repair PA25 constants, ABI literals and native definition ownership",
+      "changed_paths": [
+        "dev/src/abi/itanium/argument_reader.cpp",
+        "dev/src/abi/itanium/expression_encoder.cpp",
+        "dev/src/abi/itanium/fact_writer.cpp",
+        "dev/src/abi/itanium/graph.cpp",
+        "dev/src/abi/itanium/graph.h",
+        "dev/src/abi/itanium/graph_validation.cpp",
+        "dev/src/lowering/query_abi.cpp",
+        "dev/src/lowering/symbols.cpp",
+        "dev/src/lowir/metadata.cpp",
+        "dev/src/lowir/model.h",
+        "dev/src/native/builtins.cpp",
+        "dev/src/native/driver.cpp",
+        "dev/src/native/elf.cpp",
+        "dev/src/native/encoding.h",
+        "dev/src/native/layout.cpp",
+        "dev/src/semantic/class_enum.cpp",
+        "dev/src/semantic/constant_floating.cpp",
+        "dev/src/semantic/initializers.cpp",
+        "dev/src/semantic/resolved_output.cpp",
+        "dev/src/toolchain/driver.cpp",
+        "dev/src/toolchain/elf_input.cpp",
+        "dev/src/toolchain/linker.cpp",
+        "dev/src/toolchain/object.cpp",
+        "dev/src/toolchain/object.h",
+        "student.tests/pa25/audit138.py"
+      ]
+    }
+  ],
+  "combined_dev_paths_reviewed": [
+    "dev/cppgm++.cpp",
+    "dev/frontend_source_sets.mk",
+    "dev/src/abi/itanium/argument_reader.cpp",
+    "dev/src/abi/itanium/expression_encoder.cpp",
+    "dev/src/abi/itanium/fact_reader.h",
+    "dev/src/abi/itanium/fact_writer.cpp",
+    "dev/src/abi/itanium/graph.cpp",
+    "dev/src/abi/itanium/graph.h",
+    "dev/src/abi/itanium/graph_validation.cpp",
+    "dev/src/lowering/bit_fields.cpp",
+    "dev/src/lowering/branch_lifetimes.cpp",
+    "dev/src/lowering/class_values.cpp",
+    "dev/src/lowering/cleanup.cpp",
+    "dev/src/lowering/constant_construction.cpp",
+    "dev/src/lowering/control_flow.cpp",
+    "dev/src/lowering/driver.cpp",
+    "dev/src/lowering/expression.cpp",
+    "dev/src/lowering/floating_builtins.cpp",
+    "dev/src/lowering/full_expression.cpp",
+    "dev/src/lowering/initialization.cpp",
+    "dev/src/lowering/procedural.h",
+    "dev/src/lowering/query_abi.cpp",
+    "dev/src/lowering/range_statement.cpp",
+    "dev/src/lowering/source_exception.cpp",
+    "dev/src/lowering/statement_expression.cpp",
+    "dev/src/lowering/static_bit_fields.cpp",
+    "dev/src/lowering/symbols.cpp",
+    "dev/src/lowering/typed_operations.cpp",
+    "dev/src/lowering/values.cpp",
+    "dev/src/lowir/metadata.cpp",
+    "dev/src/lowir/model.h",
+    "dev/src/native/builtins.cpp",
+    "dev/src/native/driver.cpp",
+    "dev/src/native/elf.cpp",
+    "dev/src/native/encoding.h",
+    "dev/src/native/layout.cpp",
+    "dev/src/posttoken/token_types.cpp",
+    "dev/src/posttoken/token_types.h",
+    "dev/src/preprocess/directive.cpp",
+    "dev/src/preprocess/macro.cpp",
+    "dev/src/preprocess/preprocessor.cpp",
+    "dev/src/preprocess/preprocessor.h",
+    "dev/src/semantic/analyzer.h",
+    "dev/src/semantic/class_enum.cpp",
+    "dev/src/semantic/class_values.cpp",
+    "dev/src/semantic/constant.cpp",
+    "dev/src/semantic/constant_addresses.cpp",
+    "dev/src/semantic/constant_array.cpp",
+    "dev/src/semantic/constant_floating.cpp",
+    "dev/src/semantic/constant_integer.cpp",
+    "dev/src/semantic/conversion.cpp",
+    "dev/src/semantic/converting_constructors.cpp",
+    "dev/src/semantic/exception_expression.cpp",
+    "dev/src/semantic/expression.cpp",
+    "dev/src/semantic/fields.cpp",
+    "dev/src/semantic/floating_builtins.cpp",
+    "dev/src/semantic/initializers.cpp",
+    "dev/src/semantic/jump_validation.cpp",
+    "dev/src/semantic/literal_constants.cpp",
+    "dev/src/semantic/model.h",
+    "dev/src/semantic/output.cpp",
+    "dev/src/semantic/overload.cpp",
+    "dev/src/semantic/resolved_output.cpp",
+    "dev/src/semantic/statement.cpp",
+    "dev/src/semantic/statement_expression.cpp",
+    "dev/src/semantic/static_initializer.cpp",
+    "dev/src/semantic/template_arguments.cpp",
+    "dev/src/semantic/template_binding.cpp",
+    "dev/src/semantic/template_binding_statements.cpp",
+    "dev/src/semantic/template_call.cpp",
+    "dev/src/semantic/template_value_facts.cpp",
+    "dev/src/semantic/type_builder.cpp",
+    "dev/src/semantic/type_query.cpp",
+    "dev/src/semantic/type_query.h",
+    "dev/src/syntax/ast.cpp",
+    "dev/src/syntax/ast.h",
+    "dev/src/syntax/expression.cpp",
+    "dev/src/syntax/name_parser.cpp",
+    "dev/src/syntax/parser.cpp",
+    "dev/src/toolchain/driver.cpp",
+    "dev/src/toolchain/elf_input.cpp",
+    "dev/src/toolchain/linker.cpp",
+    "dev/src/toolchain/object.cpp",
+    "dev/src/toolchain/object.h"
+  ],
+  "artifact_directory": "/home/vishvananda/work/private/v4codex/artifacts/pa25-138",
+  "binary_sha256": {
+    "dev/cppgm++": "8ec48c55121ff284ee82238203e17a9e5b482c96dc87cdd3d346ba7d981fff3f",
+    "dev/lowir2native": "4c961d5e58252d363dcccff512b2ed51906939bc97399beb77eb15367e97def7",
+    "dev/abimangle": "0142f1ce7d807b9922d0a7b981075047a94b8dd7f0395c1d51823ddebbd46caa"
+  },
+  "frozen_binary_sha256": {
+    "cppgm-before": "7a52b4b8ec8aedefc0a51596512a78ac0f121728f3612bb55ae6b02a9e9c668d",
+    "compiler-code-tip": "8ec48c55121ff284ee82238203e17a9e5b482c96dc87cdd3d346ba7d981fff3f"
+  },
+  "required_checks": {
+    "stageTests": {
+      "name": "stage-complete",
+      "command": "make test-pa25",
+      "exit_code": 2,
+      "passed": 74,
+      "total": 101,
+      "failed": 27
+    },
+    "priorThroughTests": {
+      "name": "prior-complete",
+      "command": "n=25; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi",
+      "exit_code": 0,
+      "passed": 4152,
+      "total": 4152,
+      "stages_passed": 24
+    },
+    "fileAudit": {
+      "name": "file-audit-complete",
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa25 --paths dev/src",
+      "exit_code": 0,
+      "warnings": 4
+    },
+    "stageProgressPreserved": {
+      "pass": true,
+      "baseline_failed": 27,
+      "current_failed": 27,
+      "baseline_total": 101,
+      "current_total": 101,
+      "before_failed_cases": [
+        "pa25/tests/general/100-multiple-inheritance-vtable-layout.t",
+        "pa25/tests/general/100-polymorphic-constant-init-cross-tu-order.t",
+        "pa25/tests/general/100-secondary-base-virtual-class-return.t",
+        "pa25/tests/general/100-sibling-dynamic-cast.t",
+        "pa25/tests/general/200-runtime-ctor-member-throw-destroys-prior-member.t",
+        "pa25/tests/general/200-runtime-ctor-throw-destroys-constructed-member.t",
+        "pa25/tests/general/200-runtime-float-calculator.t",
+        "pa25/tests/general/200-runtime-throw-catch-ellipsis.t",
+        "pa25/tests/general/200-runtime-thrown-class-catch-by-value.t",
+        "pa25/tests/general/200-runtime-unnamed-catch-by-value-copy-lifetime.t",
+        "pa25/tests/general/200-template-member-destructor-required-by-constructor-unwind.t",
+        "pa25/tests/general/300-inherited-template-slot-respects-key-function-owner.t",
+        "pa25/tests/general/300-key-function-vtable-object-link.t",
+        "pa25/tests/general/300-runtime-catch-by-value-nested-throw-copy-ctor.t",
+        "pa25/tests/general/300-runtime-constructor-call-unwind-cleanup.t",
+        "pa25/tests/general/300-runtime-constructor-function-try-block-catches-init-throw.t",
+        "pa25/tests/general/300-runtime-constructor-function-try-block.t",
+        "pa25/tests/general/300-runtime-destructor-function-try-block.t",
+        "pa25/tests/general/300-runtime-dynamic-exception-spec-pure-override-vtable.t",
+        "pa25/tests/general/300-runtime-eh-handler-preserves-this.t",
+        "pa25/tests/general/300-runtime-free-function-try-block.t",
+        "pa25/tests/general/300-runtime-pure-virtual-detection-ignores-body-initializers.t",
+        "pa25/tests/general/300-runtime-template-do-try-base-catch-before-catch-all.t",
+        "pa25/tests/general/300-runtime-virtual-member-pointer-multiple-inheritance.t",
+        "pa25/tests/general/300-secondary-vtable-declare-only-constructor.t",
+        "pa25/tests/general/300-template-secondary-primary-base-vptr.t",
+        "pa25/tests/general/300-vtt-retained-across-separate-object.t"
+      ],
+      "after_failed_cases": [
+        "pa25/tests/general/100-multiple-inheritance-vtable-layout.t",
+        "pa25/tests/general/100-polymorphic-constant-init-cross-tu-order.t",
+        "pa25/tests/general/100-secondary-base-virtual-class-return.t",
+        "pa25/tests/general/100-sibling-dynamic-cast.t",
+        "pa25/tests/general/200-runtime-ctor-member-throw-destroys-prior-member.t",
+        "pa25/tests/general/200-runtime-ctor-throw-destroys-constructed-member.t",
+        "pa25/tests/general/200-runtime-float-calculator.t",
+        "pa25/tests/general/200-runtime-throw-catch-ellipsis.t",
+        "pa25/tests/general/200-runtime-thrown-class-catch-by-value.t",
+        "pa25/tests/general/200-runtime-unnamed-catch-by-value-copy-lifetime.t",
+        "pa25/tests/general/200-template-member-destructor-required-by-constructor-unwind.t",
+        "pa25/tests/general/300-inherited-template-slot-respects-key-function-owner.t",
+        "pa25/tests/general/300-key-function-vtable-object-link.t",
+        "pa25/tests/general/300-runtime-catch-by-value-nested-throw-copy-ctor.t",
+        "pa25/tests/general/300-runtime-constructor-call-unwind-cleanup.t",
+        "pa25/tests/general/300-runtime-constructor-function-try-block-catches-init-throw.t",
+        "pa25/tests/general/300-runtime-constructor-function-try-block.t",
+        "pa25/tests/general/300-runtime-destructor-function-try-block.t",
+        "pa25/tests/general/300-runtime-dynamic-exception-spec-pure-override-vtable.t",
+        "pa25/tests/general/300-runtime-eh-handler-preserves-this.t",
+        "pa25/tests/general/300-runtime-free-function-try-block.t",
+        "pa25/tests/general/300-runtime-pure-virtual-detection-ignores-body-initializers.t",
+        "pa25/tests/general/300-runtime-template-do-try-base-catch-before-catch-all.t",
+        "pa25/tests/general/300-runtime-virtual-member-pointer-multiple-inheritance.t",
+        "pa25/tests/general/300-secondary-vtable-declare-only-constructor.t",
+        "pa25/tests/general/300-template-secondary-primary-base-vptr.t",
+        "pa25/tests/general/300-vtt-retained-across-separate-object.t"
+      ],
+      "new_failures": [],
+      "removed_cases": 0,
+      "protected_paths_changed": []
+    }
+  },
+  "build": {
+    "name": "build-complete",
+    "command": "make -j2 build",
+    "exit_code": 0
+  },
+  "explicit_controls": {
+    "audit": {
+      "passed": 122,
+      "total": 122,
+      "check": {
+        "name": "controls-complete",
+        "command": "python3 student.tests/pa25/audit138.py dev/cppgm++ /home/vishvananda/work/private/v4codex/artifacts/pa25-138/controls-complete",
+        "exit_code": 0
+      }
+    },
+    "driver": 61,
+    "scalar": 19,
+    "randomized_full_width_pairs": 96,
+    "statements": 49,
+    "abi_API_and_fact_roundtrips": 4,
+    "trace": 16,
+    "reuse_note": "Driver/scalar/statement and ABI controls precede the final semantic-view-only correction; final required suites, 122 audit controls and all 16 traces use the exact code-tip binary."
+  },
+  "trace_counters": {
+    "statement": {
+      "tokens": 165,
+      "parsed_nodes": 273,
+      "nodes": 473,
+      "semantic_specializations": 2,
+      "template_body_transitions": 2,
+      "template_source_regions": 2,
+      "semantic_template_fixed_expressions": 8,
+      "semantic_template_fixed_uses": 16,
+      "statement_regions": 4,
+      "lifetime_mapping_work": 2,
+      "lifetime_mapping_hits": 22,
+      "native_functions": 5,
+      "native_instructions": 158,
+      "text_bytes": 1581,
+      "link_definition_work": 9,
+      "link_relocation_work": 53
+    },
+    "wide": {
+      "tokens": 104,
+      "parsed_nodes": 126,
+      "nodes": 234,
+      "semantic_specializations": 2,
+      "template_body_transitions": 2,
+      "template_source_regions": 2,
+      "semantic_template_fixed_expressions": 6,
+      "semantic_template_fixed_uses": 12,
+      "statement_regions": 2,
+      "lifetime_mapping_work": 0,
+      "lifetime_mapping_hits": 0,
+      "native_functions": 3,
+      "native_instructions": 109,
+      "text_bytes": 559,
+      "link_definition_work": 4,
+      "link_relocation_work": 2
+    }
+  },
+  "layout_bytes": {
+    "entry": [
+      36,
+      32
+    ],
+    "final": [
+      36,
+      32
+    ]
+  },
+  "performance_policy": "O0; required work bounded by source/fact/IR and symbol/relocation size; no optional pass. Inherited 15% latency/RSS and zero optional text-growth targets are diagnostics, not stage gates. No speedup claim; preserve all observations. PA34 owns self-hosting.",
+  "performance": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-135/performance.json",
+      "sha256": "2791899a05de706bde755483a6d1850b083e72de190226c182c0f5b01e98fc6a",
+      "observations": 168,
+      "manifest_entries": 13,
+      "manifest_verified": true,
+      "summary": {
+        "templates": {
+          "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+          "text_bytes": 384567,
+          "file_bytes": 385024,
+          "compile": {
+            "ratio_median": 1.020571905011808,
+            "ratio_range": [
+              0.947390629575814,
+              1.1019288422097437
+            ],
+            "AA_range_s": [
+              0.2615582309663296,
+              0.292140357196331
+            ],
+            "B_median_s": 0.2527507496997714,
+            "B_peak_rss_kib": 14656
+          },
+          "runtime": {
+            "ratio_median": 1.0016377291913083,
+            "ratio_range": [
+              0.9921069959617358,
+              1.0337126050593801
+            ],
+            "AA_range_s": [
+              0.11718214116990566,
+              0.11792632564902306
+            ],
+            "B_median_s": 0.11805654317140579,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "memory": {
+          "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+          "text_bytes": 521,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9987030903979881,
+            "ratio_range": [
+              0.9563810014376205,
+              1.0691067866160306
+            ],
+            "AA_range_s": [
+              0.4082679506391287,
+              0.4429054297506809
+            ],
+            "B_median_s": 0.40989651530981064,
+            "B_peak_rss_kib": 6688
+          },
+          "runtime": {
+            "ratio_median": 1.0005675916950065,
+            "ratio_range": [
+              0.9905879208065117,
+              1.1195179875565777
+            ],
+            "AA_range_s": [
+              0.14785644225776196,
+              0.15032310038805008
+            ],
+            "B_median_s": 0.14979460462927818,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "floating": {
+          "sha256": "011f58efcad1503f06e6cf81a88548ca27ac88ba7e724ba2cab8d4d82e185dcb",
+          "text_bytes": 340,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9973184867086021,
+            "ratio_range": [
+              0.9654186525617054,
+              1.0266360205991771
+            ],
+            "AA_range_s": [
+              0.3693805355578661,
+              0.3910307548940182
+            ],
+            "B_median_s": 0.37233594711869955,
+            "B_peak_rss_kib": 6784
+          },
+          "runtime": {
+            "ratio_median": 0.9989349517736603,
+            "ratio_range": [
+              0.9930691446996264,
+              1.0087385549587011
+            ],
+            "AA_range_s": [
+              0.13803758472204208,
+              0.13862183317542076
+            ],
+            "B_median_s": 0.13842121977359056,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-136/performance/performance.json",
+      "sha256": "7eb6dab5d43d84e242be70b32860b8951b4fc41ff25d52d97f48fe5b9bc64292",
+      "observations": 168,
+      "manifest_entries": 13,
+      "manifest_verified": true,
+      "summary": {
+        "templates": {
+          "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+          "text_bytes": 384567,
+          "file_bytes": 385024,
+          "compile": {
+            "ratio_median": 1.0104160500208321,
+            "ratio_range": [
+              0.9928567177982921,
+              1.0280395478564985
+            ],
+            "AA_range_s": [
+              0.22908361442387104,
+              0.2482308428734541
+            ],
+            "B_median_s": 0.23658727202564478,
+            "B_peak_rss_kib": 15680
+          },
+          "runtime": {
+            "ratio_median": 1.003143072732151,
+            "ratio_range": [
+              1.0008865610565998,
+              1.0185997383416507
+            ],
+            "AA_range_s": [
+              0.11689429543912411,
+              0.11874788627028465
+            ],
+            "B_median_s": 0.11761833168566227,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "memory": {
+          "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+          "text_bytes": 521,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9547417987968142,
+            "ratio_range": [
+              0.6163856854423475,
+              1.008157364296616
+            ],
+            "AA_range_s": [
+              0.38533814065158367,
+              0.39165843464434147
+            ],
+            "B_median_s": 0.41333925165235996,
+            "B_peak_rss_kib": 6760
+          },
+          "runtime": {
+            "ratio_median": 1.0019934716183796,
+            "ratio_range": [
+              0.9923913816853123,
+              1.0432178519574873
+            ],
+            "AA_range_s": [
+              0.14998269453644753,
+              0.15298812836408615
+            ],
+            "B_median_s": 0.14987329673022032,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "floating": {
+          "sha256": "011f58efcad1503f06e6cf81a88548ca27ac88ba7e724ba2cab8d4d82e185dcb",
+          "text_bytes": 340,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9299935925301237,
+            "ratio_range": [
+              0.8988260297462746,
+              0.9837514648458643
+            ],
+            "AA_range_s": [
+              0.3553219046443701,
+              0.37939057126641273
+            ],
+            "B_median_s": 0.35672328528016806,
+            "B_peak_rss_kib": 6848
+          },
+          "runtime": {
+            "ratio_median": 1.00113953232044,
+            "ratio_range": [
+              0.9910753296199587,
+              1.0397140960407076
+            ],
+            "AA_range_s": [
+              0.13823077455163002,
+              0.1399620771408081
+            ],
+            "B_median_s": 0.1388251706957817,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-136/wide-performance/performance.json",
+      "sha256": "6a39e340677bc2a7d04792848dbc52e76c8d6e6896b7a82a6388e44fae6146b3",
+      "observations": 56,
+      "manifest_entries": 13,
+      "manifest_verified": true,
+      "summary": {
+        "wide": {
+          "sha256": "1cd920f005c6bc46918baa5bb2926920bf15a76b983e81657875a2583cda41cf",
+          "text_bytes": 977,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 1.014094051129355,
+            "ratio_range": [
+              0.9101009118391236,
+              1.0510764386275004
+            ],
+            "AA_range_s": [
+              0.41383454389870167,
+              0.44453675113618374
+            ],
+            "B_median_s": 0.4075027108192444,
+            "B_peak_rss_kib": 6764
+          },
+          "runtime": {
+            "ratio_median": 1.0007163092021454,
+            "ratio_range": [
+              0.9960572473332215,
+              1.0070761961395833
+            ],
+            "AA_range_s": [
+              0.2917691748589277,
+              0.29276040755212307
+            ],
+            "B_median_s": 0.2924876119941473,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-137/performance/performance.json",
+      "sha256": "eda550ff52b26a0893bac2a2c2361f209614284f45efa733d4070819f7e57df4",
+      "observations": 168,
+      "manifest_entries": 13,
+      "manifest_verified": true,
+      "summary": {
+        "templates": {
+          "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+          "text_bytes": 384567,
+          "file_bytes": 385024,
+          "compile": {
+            "ratio_median": 1.0106753634625232,
+            "ratio_range": [
+              0.9859409897053788,
+              1.0192768306985336
+            ],
+            "AA_range_s": [
+              0.23191368952393532,
+              0.24996952153742313
+            ],
+            "B_median_s": 0.23988217674195766,
+            "B_peak_rss_kib": 15704
+          },
+          "runtime": {
+            "ratio_median": 0.9829889380794578,
+            "ratio_range": [
+              0.8588181126556297,
+              1.048456250402964
+            ],
+            "AA_range_s": [
+              0.14192484691739082,
+              0.2068180236965418
+            ],
+            "B_median_s": 0.17852204572409391,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "memory": {
+          "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+          "text_bytes": 521,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9758742964199887,
+            "ratio_range": [
+              0.9442396020123313,
+              0.9866056450980609
+            ],
+            "AA_range_s": [
+              0.3824031688272953,
+              0.4146776217967272
+            ],
+            "B_median_s": 0.3711085971444845,
+            "B_peak_rss_kib": 6836
+          },
+          "runtime": {
+            "ratio_median": 0.997372720959693,
+            "ratio_range": [
+              0.9216910262222408,
+              1.125845265262993
+            ],
+            "AA_range_s": [
+              0.15116329304873943,
+              0.15316682122647762
+            ],
+            "B_median_s": 0.15068648662418127,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "floating": {
+          "sha256": "011f58efcad1503f06e6cf81a88548ca27ac88ba7e724ba2cab8d4d82e185dcb",
+          "text_bytes": 340,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.964534282889749,
+            "ratio_range": [
+              0.9376056649941185,
+              1.2297415028560656
+            ],
+            "AA_range_s": [
+              0.3718470595777035,
+              0.440710362046957
+            ],
+            "B_median_s": 0.364338219165802,
+            "B_peak_rss_kib": 6936
+          },
+          "runtime": {
+            "ratio_median": 1.0003222147784958,
+            "ratio_range": [
+              0.9941523642156418,
+              1.004602595193021
+            ],
+            "AA_range_s": [
+              0.13827646896243095,
+              0.1385469064116478
+            ],
+            "B_median_s": 0.13823409285396338,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-137/statements-performance/performance.json",
+      "sha256": "7b06b2ce9de444349a8e55e9a855ddc326b01afa779f17c936c01fe7629258fc",
+      "observations": 56,
+      "manifest_entries": 13,
+      "manifest_verified": true,
+      "summary": {
+        "statements": {
+          "sha256": "2843408ce129cfa5eed2d596a30d2e82adf9761c82b9be9bf8de10c3b456a76e",
+          "text_bytes": 503,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 1.0020041719138322,
+            "ratio_range": [
+              0.9595785434522497,
+              1.0431807489190879
+            ],
+            "AA_range_s": [
+              0.3765574563294649,
+              0.43384943902492523
+            ],
+            "B_median_s": 0.3842506380751729,
+            "B_peak_rss_kib": 6832
+          },
+          "runtime": {
+            "ratio_median": 0.9945589731919111,
+            "ratio_range": [
+              0.9182036428935114,
+              1.0041732476465826
+            ],
+            "AA_range_s": [
+              0.12750520184636116,
+              0.13762238807976246
+            ],
+            "B_median_s": 0.12587892543524504,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-138/performance-audit/performance.json",
+      "sha256": "8a6fca21022cd941a84884d88ee96bdf69824169bafa0d0539bd23cf68ffa921",
+      "observations": 168,
+      "manifest_entries": 13,
+      "manifest_verified": true,
+      "summary": {
+        "templates": {
+          "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+          "text_bytes": 384567,
+          "file_bytes": 385024,
+          "compile": {
+            "ratio_median": 0.9763494679068228,
+            "ratio_range": [
+              0.9048662317077637,
+              1.0990128077316874
+            ],
+            "AA_range_s": [
+              0.43241454288363457,
+              0.4958623871207237
+            ],
+            "B_median_s": 0.5465082665905356,
+            "B_peak_rss_kib": 14788
+          },
+          "runtime": {
+            "ratio_median": 1.0195756375469809,
+            "ratio_range": [
+              0.9431629934807586,
+              1.1108772557841433
+            ],
+            "AA_range_s": [
+              0.21868642419576645,
+              0.24468828924000263
+            ],
+            "B_median_s": 0.21988899260759354,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "memory": {
+          "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+          "text_bytes": 521,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9458913255180315,
+            "ratio_range": [
+              0.804066262537121,
+              1.0405735980289292
+            ],
+            "AA_range_s": [
+              0.6466772723942995,
+              0.6811484154313803
+            ],
+            "B_median_s": 0.6263803336769342,
+            "B_peak_rss_kib": 6836
+          },
+          "runtime": {
+            "ratio_median": 0.9496585036995244,
+            "ratio_range": [
+              0.901299291255295,
+              1.0232787230727067
+            ],
+            "AA_range_s": [
+              0.2419916968792677,
+              0.2673687767237425
+            ],
+            "B_median_s": 0.22051414847373962,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "floating": {
+          "sha256": "011f58efcad1503f06e6cf81a88548ca27ac88ba7e724ba2cab8d4d82e185dcb",
+          "text_bytes": 340,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9597862136152384,
+            "ratio_range": [
+              0.9056480969026177,
+              4.290213851703681
+            ],
+            "AA_range_s": [
+              0.5747181940823793,
+              0.6469810493290424
+            ],
+            "B_median_s": 0.7242285208776593,
+            "B_peak_rss_kib": 6932
+          },
+          "runtime": {
+            "ratio_median": 1.0098267939602192,
+            "ratio_range": [
+              0.9517263055763315,
+              1.0336992943447567
+            ],
+            "AA_range_s": [
+              0.22543441876769066,
+              0.2617815490812063
+            ],
+            "B_median_s": 0.21805072110146284,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-138/performance-code-tip/performance.json",
+      "sha256": "b2169833bec35577795424b12db29fe456d76bf3ff20510b300045d8d18bb8a7",
+      "observations": 168,
+      "manifest_entries": 13,
+      "manifest_verified": true,
+      "summary": {
+        "templates": {
+          "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+          "text_bytes": 384567,
+          "file_bytes": 385024,
+          "compile": {
+            "ratio_median": 1.0611079102797316,
+            "ratio_range": [
+              0.7941866959477888,
+              1.3038294342837329
+            ],
+            "AA_range_s": [
+              0.2727839294821024,
+              0.458135349676013
+            ],
+            "B_median_s": 0.3279755553230643,
+            "B_peak_rss_kib": 14900
+          },
+          "runtime": {
+            "ratio_median": 0.990184425350597,
+            "ratio_range": [
+              0.9723780830659597,
+              1.0703055824614016
+            ],
+            "AA_range_s": [
+              0.12080221436917782,
+              0.13186409883201122
+            ],
+            "B_median_s": 0.1262022675946355,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "memory": {
+          "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+          "text_bytes": 521,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9454304285712092,
+            "ratio_range": [
+              0.818291004247542,
+              1.056848937061772
+            ],
+            "AA_range_s": [
+              0.3851235192269087,
+              0.39811746403574944
+            ],
+            "B_median_s": 0.36813624016940594,
+            "B_peak_rss_kib": 6812
+          },
+          "runtime": {
+            "ratio_median": 0.9865537889092801,
+            "ratio_range": [
+              0.9350410661920926,
+              1.022547615551564
+            ],
+            "AA_range_s": [
+              0.1531473509967327,
+              0.16852054931223392
+            ],
+            "B_median_s": 0.15608871262520552,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "floating": {
+          "sha256": "011f58efcad1503f06e6cf81a88548ca27ac88ba7e724ba2cab8d4d82e185dcb",
+          "text_bytes": 340,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9521072060826385,
+            "ratio_range": [
+              0.9098744343089872,
+              1.0066444783809128
+            ],
+            "AA_range_s": [
+              0.3638827297836542,
+              0.4093100558966398
+            ],
+            "B_median_s": 0.3739701574668288,
+            "B_peak_rss_kib": 6932
+          },
+          "runtime": {
+            "ratio_median": 0.9969740796272669,
+            "ratio_range": [
+              0.9197307342960267,
+              1.0343517615373716
+            ],
+            "AA_range_s": [
+              0.1410209946334362,
+              0.14436104334890842
+            ],
+            "B_median_s": 0.14089421555399895,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-138/performance-cumulative/performance.json",
+      "sha256": "df364f9dfa7d5f23d4da18cdfbffb37eeb0ea340fb5c36d12d82f50905c2344c",
+      "observations": 168,
+      "manifest_entries": 13,
+      "manifest_verified": true,
+      "summary": {
+        "templates": {
+          "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+          "text_bytes": 384567,
+          "file_bytes": 385024,
+          "compile": {
+            "ratio_median": 0.9535357449157325,
+            "ratio_range": [
+              0.9081278274312522,
+              1.0985893875989876
+            ],
+            "AA_range_s": [
+              0.42342885211110115,
+              0.5105038452893496
+            ],
+            "B_median_s": 0.46403064765036106,
+            "B_peak_rss_kib": 14436
+          },
+          "runtime": {
+            "ratio_median": 1.0204144039960363,
+            "ratio_range": [
+              0.9946310051981054,
+              1.0828410650717248
+            ],
+            "AA_range_s": [
+              0.1772908754646778,
+              0.18798424117267132
+            ],
+            "B_median_s": 0.21046928968280554,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "memory": {
+          "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+          "text_bytes": 521,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9286750950847049,
+            "ratio_range": [
+              0.8927952463235934,
+              1.0193238659084387
+            ],
+            "AA_range_s": [
+              0.6709129568189383,
+              0.7775213345885277
+            ],
+            "B_median_s": 0.6737826624885201,
+            "B_peak_rss_kib": 6868
+          },
+          "runtime": {
+            "ratio_median": 1.0059442087840382,
+            "ratio_range": [
+              0.9404889262744205,
+              1.1777780910004496
+            ],
+            "AA_range_s": [
+              0.20866425335407257,
+              0.2616238072514534
+            ],
+            "B_median_s": 0.28615320660173893,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "floating": {
+          "sha256": "011f58efcad1503f06e6cf81a88548ca27ac88ba7e724ba2cab8d4d82e185dcb",
+          "text_bytes": 340,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9571670964970986,
+            "ratio_range": [
+              0.923508779689021,
+              1.0215048848312274
+            ],
+            "AA_range_s": [
+              0.6779053620994091,
+              0.805495573207736
+            ],
+            "B_median_s": 0.6640360951423645,
+            "B_peak_rss_kib": 6932
+          },
+          "runtime": {
+            "ratio_median": 1.0316695949639647,
+            "ratio_range": [
+              0.9843530207321519,
+              1.1220553476270019
+            ],
+            "AA_range_s": [
+              0.2295740284025669,
+              0.2501803897321224
+            ],
+            "B_median_s": 0.23198756203055382,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-138/performance-final/performance.json",
+      "sha256": "3479d0ae193b0bf09b970fd86198ae6ebe830da6040db676a2c299fa8a5b0c41",
+      "observations": 168,
+      "manifest_entries": 13,
+      "manifest_verified": true,
+      "summary": {
+        "templates": {
+          "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+          "text_bytes": 384567,
+          "file_bytes": 385024,
+          "compile": {
+            "ratio_median": 1.0691676302010884,
+            "ratio_range": [
+              0.9335519398982174,
+              1.133389147882047
+            ],
+            "AA_range_s": [
+              0.23836912773549557,
+              0.24878384917974472
+            ],
+            "B_median_s": 0.25368780456483364,
+            "B_peak_rss_kib": 14856
+          },
+          "runtime": {
+            "ratio_median": 0.9953335518234021,
+            "ratio_range": [
+              0.979856056820686,
+              1.0125771180438996
+            ],
+            "AA_range_s": [
+              0.11872849427163601,
+              0.12605336122214794
+            ],
+            "B_median_s": 0.11888255830854177,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "memory": {
+          "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+          "text_bytes": 521,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.954308630918884,
+            "ratio_range": [
+              0.9186453249959046,
+              0.987591535557762
+            ],
+            "AA_range_s": [
+              0.40821875631809235,
+              0.42729181982576847
+            ],
+            "B_median_s": 0.3908444792032242,
+            "B_peak_rss_kib": 6784
+          },
+          "runtime": {
+            "ratio_median": 0.980891261097077,
+            "ratio_range": [
+              0.8476222962991483,
+              1.0064585435754503
+            ],
+            "AA_range_s": [
+              0.15019448846578598,
+              0.1566859669983387
+            ],
+            "B_median_s": 0.15184978768229485,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "floating": {
+          "sha256": "011f58efcad1503f06e6cf81a88548ca27ac88ba7e724ba2cab8d4d82e185dcb",
+          "text_bytes": 340,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9866166525662783,
+            "ratio_range": [
+              0.7642749058372101,
+              1.1750026554107895
+            ],
+            "AA_range_s": [
+              0.3699865974485874,
+              0.50456827506423
+            ],
+            "B_median_s": 0.4187600165605545,
+            "B_peak_rss_kib": 6900
+          },
+          "runtime": {
+            "ratio_median": 1.0427749263068735,
+            "ratio_range": [
+              0.9757906530366681,
+              1.196834123651416
+            ],
+            "AA_range_s": [
+              0.14447952806949615,
+              0.1533595770597458
+            ],
+            "B_median_s": 0.1537321275100112,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-138/performance-reviewed-audit/performance.json",
+      "sha256": "dbcab73dc59c2ba81d876d4ffb1cbb635f94399307abc5814006180a4e52ed9a",
+      "observations": 168,
+      "manifest_entries": 13,
+      "manifest_verified": true,
+      "summary": {
+        "templates": {
+          "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+          "text_bytes": 384567,
+          "file_bytes": 385024,
+          "compile": {
+            "ratio_median": 1.0344825814741827,
+            "ratio_range": [
+              0.9468003698961973,
+              1.4515937568021229
+            ],
+            "AA_range_s": [
+              0.3972025830298662,
+              0.43392568826675415
+            ],
+            "B_median_s": 0.5166718885302544,
+            "B_peak_rss_kib": 15596
+          },
+          "runtime": {
+            "ratio_median": 0.9884871285820896,
+            "ratio_range": [
+              0.9191765847083108,
+              1.1872174723497
+            ],
+            "AA_range_s": [
+              0.18471688032150269,
+              0.21969620883464813
+            ],
+            "B_median_s": 0.2053007548674941,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "memory": {
+          "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+          "text_bytes": 521,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9359155666432295,
+            "ratio_range": [
+              0.8261461261818661,
+              1.0727212921161071
+            ],
+            "AA_range_s": [
+              0.7207637224346399,
+              0.8714679777622223
+            ],
+            "B_median_s": 0.7363474955782294,
+            "B_peak_rss_kib": 6812
+          },
+          "runtime": {
+            "ratio_median": 0.9772485226589058,
+            "ratio_range": [
+              0.7978659259989501,
+              1.049320957437197
+            ],
+            "AA_range_s": [
+              0.2327568493783474,
+              0.3226673975586891
+            ],
+            "B_median_s": 0.2386624999344349,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "floating": {
+          "sha256": "011f58efcad1503f06e6cf81a88548ca27ac88ba7e724ba2cab8d4d82e185dcb",
+          "text_bytes": 340,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 1.0028451527472773,
+            "ratio_range": [
+              0.8855827713147582,
+              1.2254858992264421
+            ],
+            "AA_range_s": [
+              0.6394638661295176,
+              0.6812435369938612
+            ],
+            "B_median_s": 0.7465175641700625,
+            "B_peak_rss_kib": 6944
+          },
+          "runtime": {
+            "ratio_median": 0.9723239323314878,
+            "ratio_range": [
+              0.9174714250893817,
+              1.0285392378886762
+            ],
+            "AA_range_s": [
+              0.22119822353124619,
+              0.2656506020575762
+            ],
+            "B_median_s": 0.21789861656725407,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-138/performance-reviewed-cumulative/performance.json",
+      "sha256": "494b4504092a322d0881c71e5426463c07a42f4917b5bae13998e6dedf61e8d1",
+      "observations": 168,
+      "manifest_entries": 13,
+      "manifest_verified": true,
+      "summary": {
+        "templates": {
+          "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+          "text_bytes": 384567,
+          "file_bytes": 385024,
+          "compile": {
+            "ratio_median": 1.028001222898527,
+            "ratio_range": [
+              0.8640677563112154,
+              1.152659164618361
+            ],
+            "AA_range_s": [
+              0.5217609722167253,
+              0.6868833303451538
+            ],
+            "B_median_s": 0.5579072069376707,
+            "B_peak_rss_kib": 15180
+          },
+          "runtime": {
+            "ratio_median": 0.97651156832541,
+            "ratio_range": [
+              0.9242653430109934,
+              0.9985749248193795
+            ],
+            "AA_range_s": [
+              0.21819729916751385,
+              0.22969172894954681
+            ],
+            "B_median_s": 0.22694831527769566,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "memory": {
+          "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+          "text_bytes": 521,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9428742641562478,
+            "ratio_range": [
+              0.8800310984338149,
+              1.0327450274800112
+            ],
+            "AA_range_s": [
+              0.6935030166059732,
+              0.718816015869379
+            ],
+            "B_median_s": 0.6926293158903718,
+            "B_peak_rss_kib": 6784
+          },
+          "runtime": {
+            "ratio_median": 0.9613671098398858,
+            "ratio_range": [
+              0.8788097138378318,
+              1.0409092557270474
+            ],
+            "AA_range_s": [
+              0.21866497211158276,
+              0.23724225908517838
+            ],
+            "B_median_s": 0.24170844443142414,
+            "B_peak_rss_kib": 312
+          }
+        },
+        "floating": {
+          "sha256": "011f58efcad1503f06e6cf81a88548ca27ac88ba7e724ba2cab8d4d82e185dcb",
+          "text_bytes": 340,
+          "file_bytes": 4096,
+          "compile": {
+            "ratio_median": 0.9809114768889431,
+            "ratio_range": [
+              0.8645352974946752,
+              1.0248929538413065
+            ],
+            "AA_range_s": [
+              0.6587606184184551,
+              0.8563726712018251
+            ],
+            "B_median_s": 0.6512688687071204,
+            "B_peak_rss_kib": 6944
+          },
+          "runtime": {
+            "ratio_median": 0.9989463337068603,
+            "ratio_range": [
+              0.942050693174141,
+              1.06256405766084
+            ],
+            "AA_range_s": [
+              0.20852075330913067,
+              0.23107905685901642
+            ],
+            "B_median_s": 0.22912326827645302,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    }
+  ],
+  "evidence_sha256": {
+    "checks-complete.json": "0b31ec0c2575e46f47d2b58719b483d3033e995126994e9465e635a775d0c3e9",
+    "baseline.json": "b13d0122057bc6c24186e1f56348cf8b5997025e61b4ca9cf444e27c9426fae6",
+    "stage-before.log": "21e45537075a624c379dd9c47fb42167e0f14db964212fe44a70813b8f4a688a",
+    "build-complete.log": "2636c55e5b032af8c13e1602d825565699fde0a70ee409b9f1147bf46ab4f3a0",
+    "stage-complete.log": "0b92b28e4c9c012c78a0168b0e29c481f6a6891f889f1694857cfc7109967793",
+    "prior-complete.log": "fd8e4c636cf72a2708dde0e0ae16f51251bec1ac24fe92c82d3e78d8ccef6817",
+    "file-audit-complete.log": "ecb5c8691e9459cff3673d47a336904ae2681678f41dcec312d8491a4667ac13",
+    "controls-complete/results.json": "8adb60faeccece53e0f96020dbc0ad49f487e809658eed3f0f8a36d88417f3fa",
+    "driver-packed.log": "cb4a49605b7f29681a49d143c9dede29bfca3d6dd562396388f5ac6afcf1d935",
+    "scalars-packed.log": "0f018dccbccc9acf4bd3df7dcdd8ad7ffa6d26f6aeb3ce3b0198a52ea06b3510",
+    "statements-packed.log": "7b71a6479082f4200931e6fc5b0a6628f430e6086210747640cf81e274101e85",
+    "abi-api-final-results.json": "ffd83f9a9d0bb67ba83a157af5be92bdea731170e83d77ba00972cfb145e012d",
+    "trace-complete/results.json": "bc49d76c1b6bb5fff4989aaea8c6c0a97e6d576a758881b9e92501d923ed1e17",
+    "layout/sizes.json": "d0a81619240a69d6312f59bd6557ec01fe1e3657925c6c6e7aca1dff91c4d8a0",
+    "source-manifest.json": "15616d0f258e21c9940da9c956f22b25e11223b78298c39c6687d9d304d07b49",
+    "fixture-manifest.json": "cd9741e32d86089623ff4e3bb661be935ec5d610f3fb92796bc491b9a8a353b4"
+  },
+  "reference_corrections": [],
+  "remaining": {
+    "native_class_runtime_cases": 12,
+    "source_EH_runtime_cases": 14,
+    "floating_oracle_cases": 1,
+    "inherited_outside_fixture_reducer": "student.tests/pa25/unused-dependent-local.cc"
+  },
+  "acceptance": "Checkpoint audit only; PA25 remains incomplete at 74/101; no stage advancement."
+}
