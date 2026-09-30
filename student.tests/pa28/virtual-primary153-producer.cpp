@@ -41,8 +41,8 @@ Mixed153::Mixed153():member(131){observe153(21,this,value());}
 Mixed153::~Mixed153(){observe153(22,this,value());}
 long Mixed153::value(){return member;}
 long Mixed153::other(){return member+1;}
-Multi153::Multi153():member(141){observe153(23,this,value());}
-Multi153::~Multi153(){observe153(24,this,value());}
+Multi153::Multi153():member(141){observe153(23,this,value());observe_other153(23,this,member+1);}
+Multi153::~Multi153(){observe153(24,this,value());observe_other153(24,this,member+1);}
 long Multi153::value(){return member;}
 long Multi153::other(){return member+1;}
 VirtualMulti153::VirtualMulti153():extra(151){observe153(25,this,value());}
@@ -54,3 +54,7 @@ Choice153::Choice153(){observe153(27,this,value());}
 Choice153::~Choice153(){observe153(28,this,value());}
 long Choice153::value(){return member+61;}
 Aligned153::~Aligned153(){}
+NonvirtualMix153::NonvirtualMix153(){observe_other153(29,this,171);}
+NonvirtualMix153::~NonvirtualMix153(){observe_other153(30,this,171);}
+long NonvirtualMix153::other(){return 171;}
+long MoreMix153::other(){return 181;}

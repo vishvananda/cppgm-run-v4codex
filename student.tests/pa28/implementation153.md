@@ -41,7 +41,11 @@ needed by host-generated inline constructors referencing a key-owned table.
 Construction segments use the same typed rows with complete-object offsets;
 shared addresses alias an existing segment. No semantic lookup is repeated in
 lowering. Inherited callable receivers retain their actual virtual occurrence,
-even after that occurrence loses primary sharing.
+even after that occurrence loses primary sharing. Base entry emission keeps
+ordinary secondary vptr stores as well as VTT-selected stores; the latter also
+include virtual primary aliases that may move. The lifetime control checks
+secondary virtual dispatch during construction and destruction both with and
+without a VTT.
 
 `ReturnDerived::self` consumes the finalized fixed offset of 32. The virtual
 `VirtualResult` destructor's vcall row precedes the `VirtualOwner` virtual-base
@@ -74,7 +78,7 @@ proofs, not a reference correction; the pinned reference bundle is untouched.
 
 `virtual-primary153.py` compiles producer and consumer independently with the
 host and student compilers, and checks all four link combinations against the
-host control. It covers 11 hierarchies: fixed layout/covariance, pointer-null and
+host control. It covers ten complete-object hierarchies plus the required covariance fixture: fixed layout/covariance, pointer-null and
 reference results, nearly-empty and non-nearly-empty virtual bases, diamonds,
 nested and indirect primaries, multiple vcall functions and secondary bases,
 a later selected primary that loses inherited sharing, alignment, RTTI cross

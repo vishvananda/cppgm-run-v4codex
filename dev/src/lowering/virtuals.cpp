@@ -170,7 +170,7 @@ void Procedural::vpointer_store(EntityId cls)
         } else if (offset) object = emit(Opcode::Index,IRType::I8,{object.operand,Operand::integer(offset)});
         }
         Value point;
-        if (active_base_entry && sem.virtual_base_count(cls)) {
+        if (active_base_entry && sem.virtual_base_count(cls) && (!linkage.host || (!offset && !anchor) || vtt_index)) {
             auto location = lifecycle_vtt(vtt_index);
             point = emit(Opcode::Load,IRType::Ptr,{location.operand});
         } else {
@@ -184,9 +184,15 @@ void Procedural::vpointer_store(EntityId cls)
     bool grouped = linkage.host || (model.key_function && !sem.entities[cls].specialization && !sem.virtual_base_count(cls));
     const auto& views = sem.virtual_class(cls).views;
     unsigned vtt_index = sem.vtt_secondary(cls);
-    const auto& stores = linkage.host && active_base_entry ? model.vtt_order : model.store_order;
-    for (unsigned j : stores)
+    auto store_view = [&](unsigned j) {
         store(grouped ? symbol : view_symbol(cls,j+1),views[j].offset,grouped ? views[j].group_address_point : views[j].address_point,views[j].virtual_anchor,views[j].virtual_tail,linkage.host ? views[j].vtt_index : vtt_index++);
+    };
+    if (linkage.host && active_base_entry && sem.virtual_base_count(cls)) {
+        // VTT entries include primary virtual aliases that can be displaced.
+        // Ordinary secondary bases still use their fixed group address point.
+        for (unsigned j : model.vtt_order) store_view(j);
+        for (unsigned j : model.store_order) if (!views[j].vtt_index) store_view(j);
+    } else for (unsigned j : model.store_order) store_view(j);
 }
 Value Procedural::virtual_function(Value object, unsigned slot)
 {

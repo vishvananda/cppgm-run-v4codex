@@ -1,4 +1,5 @@
 #include "virtual-primary153.h"
+void observe_other153(int n,Another153* p,long expected){printf("other-life %d %ld %ld\n",n,p->other(),expected);}
 void observe153(int n,VRoot* root,long expected){
   printf("life %d %ld %ld %d\n",n,root->value(),expected,root->address()==root);
 }
@@ -17,6 +18,9 @@ void check_diamond(Diamond153* p){
     dynamic_cast<Right153*>(root)==right,dynamic_cast<Left153*>(right)==left,dynamic_cast<void*>(right)==p);
 }
 int main(){
+  { MoreMix153 p;VRoot* root=&p;Another153* other=&p;
+    printf("nonvirtualmix %ld %ld %ld %d\n",long(sizeof(p)),root->value(),other->other(),dynamic_cast<Another153*>(root)==other); }
+
   { AlignOwner153 p;Aligned153* base=&p;
     printf("aligned %ld %ld %ld\n",long(sizeof(p)),long(alignof(AlignOwner153)),long(reinterpret_cast<char*>(base)-reinterpret_cast<char*>(&p))); }
 

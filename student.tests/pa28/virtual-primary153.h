@@ -50,3 +50,9 @@ struct Choice153 : virtual Nonempty153, virtual VOwner {
 };
 struct alignas(32) Aligned153 { virtual ~Aligned153(); };
 struct AlignOwner153 : virtual Aligned153 { int data; };
+
+void observe_other153(int,Another153*,long);
+struct NonvirtualMix153 : VOwner, Another153 {
+  NonvirtualMix153(); ~NonvirtualMix153(); long other();
+};
+struct MoreMix153 : NonvirtualMix153 { long other(); };
