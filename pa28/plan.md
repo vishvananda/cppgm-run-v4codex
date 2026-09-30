@@ -1,16 +1,13 @@
-# PA28 implementation plan and handoff152
+# PA28 implementation plan and handoff153
 
-Target: **PA28 full-stage**. Phase: **validated incomplete implementation handoff**.
+Target: **PA28 full-stage**. Phase: **implementation**.
 Stage base commit: `bec9389f62014dfecac8b41d330de142e0904b8c`.
 Last reviewed commit: `bec9389f62014dfecac8b41d330de142e0904b8c`.
 Review markers remain fixed until independent review.
-Turn entry: `bed2be54be95a64037bc09dca8867dab996a9c88`, **91/97**.
-Final required behavior: **96/97**; earlier PA1–27 **4441/4441**.
-[Validation](../student.tests/pa28/evidence152/validation.json): earlier tests,
-file audit (four inherited warnings), 42 personal commands and unchanged
-coverage pass; [native inspection](../student.tests/pa28/evidence152/inspection.json) passes.
-Five existing failures resolved; no fixture, reference or comparison changes.
-Previous turn classification: progress (ten required failures resolved in evidence151).
+Turn entry: `fefbf8a7`, **96/97**. Previous goal turn: progress (five
+required failures resolved and a validated ownership/EH handoff committed).
+Loop153 owns the remaining covariant/virtual-primary layout group. Before edits,
+freeze the entry compiler and failing-test evidence. Preserve all review markers.
 
 ## Design/spec alignment and groups
 
@@ -20,7 +17,7 @@ Previous turn classification: progress (ten required failures resolved in eviden
 | Complete: lifetime contexts → native cleanup regions | Persistent live prefix and complete handler context → shared cleanup suffixes; explicit region retirement, outer-local cleanup and selector-preserving resume. Existing linear/cached lowering owners; host/private controls pass. Course textual adapter retains its existing ABI convention. |
 | Complete: exception-specification facts → host LSDA | Callable/specialization identity → adjusted canonical TypeId set → typed LowIR filters → signed native selectors and ELF type lists. O(k log k) set canonicalization, linear table emission, TU/function release. Permitted/converted/empty specifications, redeclarations, templates and ordered cleanup controls pass. |
 | Complete: imported support ownership and static demand | Key-definition owner → imported table/VTT declarations; construction prerequisites only on definition demand. Completed dynamic-class facts prove required vptr initialization without draining unrelated member actions. Existing deduplicated queues and IDs; mixed host ownership and recursive-template scalar/array statics pass. |
-| Unfinished: covariant virtual-primary layout (1) | Nearly-empty virtual-primary sharing and inherited mixed vcall/vbase prefixes are missing. Required row is -32; current model supplies -24. Must change primary selection, physical allocation, projections, VTT segments and RTTI coherently; a thunk-name/padding workaround is insufficient. |
+| Active: covariant virtual-primary layout (1) | Canonical class/base identity → primary selection and physical allocation → typed mixed prefix rows → projections, covariance, RTTI and construction/VTT segments. Publish once per completed class, index rows by identity, and keep work proportional to actual subobjects/table rows. Validate required fixture and mixed host producer/consumer controls, then earlier PAs, native inspection, file audit and stage progress. |
 
 [Implementation trace](../student.tests/pa28/implementation152.md) and
 [adapter evidence](../student.tests/pa28/adapter152.md) record ownership and limits.
@@ -65,3 +62,16 @@ cache/demand lifetimes, source-to-ELF ownership, adapter equivalence, LSDA filte
 substitution ordering and performance evidence. These questions are separate
 from the one known implementation failure. Neither is waived; this handoff
 returns control to Ralph and does not certify PA28 or permit advancement.
+
+## Loop153 work and evidence
+
+Implement primary sharing and mixed prefix ownership together; extend to related
+construction and inherited projection defects exposed by host controls. Freeze
+A/B inputs and compilers; measure common correct workloads with A/A and ABBA,
+and record standalone latency/RSS/runtime/text costs for newly correct behavior.
+No optional optimization is planned. Prior performance observations stay intact.
+
+Handoff requires all 97 required tests (one failure at entry), earlier tests,
+file audit, explicit personal controls, preserved coverage and clean commits.
+Independent whole-stage architecture/performance audit remains pending and is
+separate from unfinished implementation; this turn does not waive it.
