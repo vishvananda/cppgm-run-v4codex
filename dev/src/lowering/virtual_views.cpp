@@ -8,7 +8,9 @@ SymbolId Procedural::view_symbol(EntityId cls, unsigned view)
     auto symbol = fresh_symbol("@vtable_view"); view_symbols.put(key,symbol.index);
     auto& meta = p.symbols[symbol.index-1].metadata;
     meta.binding = SBM_INTERNAL;
-    meta.object = p.symbols[symbol.index-1].name;
+    // Keep the backend object identity distinct from its optional LowIR alias.
+    // These private views have no externally mandated Itanium symbol name.
+    meta.object = p.intern("__cppgm_vtable_view_"+std::to_string(symbol.index));
     return symbol;
 }
 SymbolId Procedural::virtual_target(const semantic::VirtualSlot& slot, bool deleting)
@@ -21,6 +23,7 @@ SymbolId Procedural::virtual_target(const semantic::VirtualSlot& slot, bool dele
             f.signature = signature(sem.call_type(e)); p.functions.push_back(f);
             auto& s = p.symbols[pure_virtual.index-1]; s.kind = Symbol::FunctionSymbol; s.entity = p.functions.size();
             s.metadata.binding = SBM_STRONG; s.metadata.object = p.intern("__cxa_pure_virtual");
+            s.metadata.role = SR_PURE_VIRTUAL;
         }
         return pure_virtual;
     }
