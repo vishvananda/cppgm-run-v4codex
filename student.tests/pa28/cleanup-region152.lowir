@@ -1,0 +1,18 @@
+function @main() -> i32 [role=entry] {
+  block ^entry:
+    eh_try ^outer
+    eh_cleanup ^catch_exit
+    eh_try ^expression_exit
+    throw i32 2
+  block ^expression_exit:
+    eh_end
+    eh_end
+    resume
+  block ^catch_exit:
+    eh_end
+    resume
+  block ^outer:
+    %value = exception i32
+    %bad = cmp ne i32 %value, 2
+    return i32 %bad
+}

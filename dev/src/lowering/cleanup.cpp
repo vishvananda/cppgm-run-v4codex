@@ -108,7 +108,7 @@ Value Procedural::guarded_call(Instruction i, const Operand* args, std::size_t c
     if ((!unwind_live() && !(exception_context && full_expression.enabled)) || emitting_cleanup || no_throw || full_expression.scalar_unreachable) return emit(i, args, count);
     if (full_expression.enabled) { open_expression_region(); return emit(i,args,count); }
     auto cleanup = unwind_target();
-    auto op = exception_context && !exception_contexts[exception_context].has_catches ? Opcode::EhCleanup : Opcode::EhTry;
+    auto op = !linkage.presentation && exception_context && !exception_contexts[exception_context].has_catches ? Opcode::EhCleanup : Opcode::EhTry;
     emit(op, IRType(), {Operand::label(cleanup)});
     Value result = emit(i, args, count);
     emit(Opcode::EhEnd, IRType(), {});

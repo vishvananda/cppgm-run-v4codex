@@ -252,7 +252,10 @@ void Procedural::try_statement(NodeId n)
         exception_context = parent;
         start(cleanup); exception_clauses(parent);
         emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(2))});
-        resume_exception(initial,parent,true);
+        // The native catch-exit landing owns the outer lexical prefix. The
+        // course view uses its separate call-unwind continuation for that
+        // prefix, and retains the established handler-only fallback view.
+        resume_exception(linkage.presentation && !parent ? 0 : initial,parent,true);
         start(next);
     }
     if (catches_all && (!parent || (!exception_contexts[parent].handler && !exception_contexts[parent].cleanup_dispatch))) {

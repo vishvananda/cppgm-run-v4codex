@@ -126,7 +126,8 @@ void Procedural::open_expression_region()
     // A handler-only continuation has no catch clauses. It still explicitly
     // retires this region before ending the active catch, so register it as
     // cleanup-style rather than an already-popped catch-style landing.
-    auto op = exception_context && !exception_contexts[exception_context].has_catches ? Opcode::EhCleanup : Opcode::EhTry;
+    // The course text adapter uses its retained eh_try convention instead.
+    auto op = !linkage.presentation && exception_context && !exception_contexts[exception_context].has_catches ? Opcode::EhCleanup : Opcode::EhTry;
     emit(op,IRType(),{Operand::label(cleanup)});
 }
 void Procedural::close_expression_region()

@@ -47,8 +47,9 @@ Validation: all three original PA28 EH failures pass (94/97 overall at this
 increment). `exceptions152.py` executes 18 explicit controls covering permitted
 scalar/base types, converted unexpected values, ordered local cleanup, nested
 rethrow, templates, empty specifications, private cleanup, and invalid type/set
-rejections. Two earlier LowIR fixture corrections have independent contract
-proof in `reference-corrections152.md`. Performance and full final checks remain
+rejections. The course text adapter retains its established handler registration/exit
+convention; native production uses explicit cleanup registrations and live-prefix
+catch exits. See `adapter152.md`; all references remain unchanged. Performance and full final checks remain
 handoff work, separate from implementation correctness checks.
 
 ## Imported support ownership and local-static demand
@@ -81,7 +82,7 @@ The remaining covariant fixture requires a virtual-result row at -32 rather than
 virtual base allocation always appends their storage. It also represents the
 primary table prefix as a contiguous virtual-base list, with vcall rows limited
 to secondary views. It therefore lacks nearly-empty virtual primary sharing and
-the inherited mixed vcall/vbase prefix needed by Itanium ABI §2.4 and §2.5.3
+the inherited mixed vcall/vbase prefix needed by [Itanium ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html) §2.4 and §2.5.3
 Category 4. Merely renaming the thunk or inserting a padding word would conceal
 that physical-layout mismatch. A coherent fix must change primary selection,
 shared virtual-base allocation, prefix identities, base/result projections,
