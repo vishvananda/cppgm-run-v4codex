@@ -2,7 +2,7 @@
 
 Stage base commit: `f833cf1ff361529147361cada33eca62e55330cf`
 Last reviewed commit: `cbe7871e211c284ef4a1c571de12db5f26c29777`
-Target: **PA27 full-stage**. Phase: **checkpointAudit complete; stage incomplete**.
+Target: **PA27 full-stage**. Phase: **implementation149 active**.
 Reviewed all three accumulated handoffs, all 15 entry commits, their combined
 implementation and audit repair `cbe7871e`. Previous goal turn: **progress**;
 no previous compiler/test process was live at entry.
@@ -36,3 +36,21 @@ handoff is needed for this checkpoint.
 ELF and naming were useful separate groups. The storage handoff's follow-on
 scope, reference-dependency and buffer repairs were avoidable fragmentation;
 review their shared receiver/lifetime/cache invariants as one group next time.
+
+## Implementation149
+
+Entry HEAD: `226b88668284e116a4d273627bf4810bd682226e`; prior turn classified
+**progress** (audit repairs/evidence), with no live compiler/check at entry.
+Turn baseline: **157/158**. The stage-base and last-reviewed markers above remain
+unchanged. This handoff must resolve the remaining failure, not merely add tests.
+
+| Owner / group | Data flow, bound and validation |
+|---|---|
+| Semantic builtin declarations | Interned builtin name → canonical function/signature and runtime symbol → ordinary selected calls. TU-owned facts, constant-size builtin dispatch, no library-type recognition. Reduce missing builtins and check runtime and rejection behavior. |
+| Hosted template demand / object ownership | Parsed dependent graph → canonical specialization/member demand → recorded ABI and suppression facts → typed LowIR/ELF. Resolve prerequisites exposed by the stream fixture together; preserve parse-once, demand-only work and extern-template ownership. Check reduced controls and host linking/inspection. |
+| Evidence and closure | Freeze entry/final binaries and inputs; A/A plus ABBA compiler latency/RSS and checked runtime/text measurements. Preserve prior evidence and stage-scoped budgets. Run PA27, through-PA27, file audit and personal controls explicitly. |
+
+Implementation unfinished: hosted-library prerequisites and final fixture behavior.
+Independent review: final combined changes still require Ralph's full-stage audit;
+this is separate from implementation completion and does not waive any finding.
+Handoff ledger: 149 in progress; no completion claim yet.
