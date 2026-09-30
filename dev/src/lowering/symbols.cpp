@@ -129,6 +129,8 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     SymbolMetadata metadata;
     metadata.object_root = e.instantiation_definition;
     metadata.binding = internal ? SBM_INTERNAL : (e.inline_function || (!e.explicit_specialization && (e.specialization || e.template_member))) ? SBM_WEAK : SBM_STRONG;
+    if (sem.weak_symbols.get(id) && !internal) metadata.binding = SBM_WEAK;
+    if (auto section = sem.section_names.get(id)) metadata.section = p.intern(spelling(section));
     metadata.inline_hint = e.inline_function; metadata.no_inline = e.no_inline; metadata.force_inline = e.force_inline && !e.no_inline;
     if (e.member_info) metadata.object_root |= base || (!separate && !external && sem.member_fact(id).base_entry);
     if (e.member_info) {

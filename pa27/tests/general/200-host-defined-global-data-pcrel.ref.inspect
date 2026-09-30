@@ -1,2 +1,2 @@
-defined_symbol_canonical 1 _Z1g 1
-relocation_class_canonical 1 data_pcrel _Z1g 1
+defined_symbol_canonical 1 g 1
+relocation_class_canonical 1 data_pcrel g 1

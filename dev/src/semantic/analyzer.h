@@ -29,6 +29,7 @@ public:
     bool builtin_type_property(unsigned trait, TypeId type);
     Index builtin_trait_values, builtin_type_properties;
     Index assembler_names; // EntityId -> interned explicit object name.
+    Index section_names, weak_symbols; // EntityId -> immutable object attributes.
     LiteralCallKind literal_call_kind(NodeId n) const { auto k = literal_call_kinds.get(n); return k ? LiteralCallKind(k-1) : LiteralCallKind::String; }
     Expression expression_fact(NodeId n) const { return expressions[n]; }
     Index throw_index, try_scopes, constructor_handler_scopes, handler_initializations, handler_bindings, jump_exception_targets;
@@ -1267,7 +1268,7 @@ private:
     TypeId declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array = 0, bool name_resolved = false, NodeId specs = 0);
     TypeId parameter(NodeId n, ScopeId s);
     EntityId declare_object(NodeId d, NodeId init, TypeId t, NodeId specs, ScopeId s, NodeId source);
-    void declaration_attributes(EntityId e, NodeId specs, NodeId source);
+    void declaration_attributes(EntityId e, NodeId specs, NodeId source, NodeId declarator = 0);
     Constant evaluate(NodeId n, ScopeId s);
     Constant evaluate_value(NodeId n, ScopeId s);
     Constant binary(ETokenType op, Constant a, Constant b, bool converted = false);

@@ -48,12 +48,14 @@ Options options(const std::vector<std::string>& args)
                 throw std::runtime_error("unsupported target: " + target);
         } else if (prefix(a,"-D") || prefix(a,"-U")) {
             o.macros.push_back(a.size() == 2 ? a + argument(args,i,a.c_str()) : a);
+        } else if (prefix(a,"-isystem")) {
+            o.includes.push_back(a.size() == 8 ? argument(args,i,"-isystem") : a.substr(8));
         } else if (prefix(a,"-I") || prefix(a,"-L") || prefix(a,"-l")) {
             auto value = a.size() == 2 ? argument(args,i,a.c_str()) : a.substr(2);
             if (a[1] == 'I') o.includes.push_back(value);
             else if (a[1] == 'L') o.paths.push_back(value);
             else o.libraries.push_back(value);
-        } else if (a == "-O0" || a == "-O1" || a == "-O2" || a == "-O3" || a == "-Wall" || prefix(a,"-W") || a == "-w" ||
+        } else if (a == "-g0" || a == "-O0" || a == "-O1" || a == "-O2" || a == "-O3" || a == "-Wall" || prefix(a,"-W") || a == "-w" ||
             a == "-fvisibility=hidden" || a == "-fvisibility-inlines-hidden" || a == "-pedantic" || a == "-pedantic-errors" || a == "-std=c++11" || a == "-std=gnu++11" || a == "-pipe") continue;
         else if (!a.empty() && a[0] == '-') throw std::runtime_error("unsupported driver option: " + a);
         else o.inputs.push_back(a);

@@ -43,7 +43,7 @@ void Encoder::mov(Operand to, Operand from)
 {
     require(to.kind == Operand::Reg, "mov destination must be a register");
     if (from.kind == Operand::Symbol) {
-        if (image.host && image.indirect_functions[from.id]) {
+        if (image.host && image.indirect_addresses[from.id]) {
             auto offset = from.displacement; from.displacement = 0;
             form(0x8b,64,to.reg,from);
             image.code_fixups.back().kind = Fixup::GotSymbol;

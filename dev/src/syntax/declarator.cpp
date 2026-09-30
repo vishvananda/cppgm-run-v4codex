@@ -9,7 +9,9 @@ NodeId Parser::specifiers(bool type_only, NodeId result)
     if (!result) result = make(type_only ? Kind::TypeSpecifiers : Kind::DeclSpecifiers);
     std::uint32_t alignment = 0;
     for (;;) {
-        attributes(&alignment);
+        NativeAttributes native;
+        ast[result].flags |= attributes(&alignment,&native);
+        native_attributes(result,native);
         Kind kind = type_only ? Kind::TypeSpecifier : Kind::DeclSpecifier;
         if (!have_type && (in.is("typeof") || in.is("__typeof") || in.is("__typeof__"))) {
             in.take(); in.require("("); unsigned saved = angle_expression; angle_expression = 0;
@@ -141,7 +143,9 @@ NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts, 
         }
     }
     for (;;) {
-        attributes();
+        NativeAttributes native;
+        ast[result].flags |= attributes(0,&native);
+        native_attributes(result,native);
         if (in.eat("[")) {
             unsigned saved = angle_expression;
             angle_expression = 0;
@@ -237,7 +241,9 @@ NodeId Parser::parameters(ScopeId& parameter_scope)
 void Parser::function_suffix(NodeId owner)
 {
     for (;;) {
-        attributes();
+        NativeAttributes native;
+        ast[owner].flags |= attributes(0,&native);
+        native_attributes(owner,native);
         if (in.is("const") || in.is("volatile")) ast.append(owner, leaf(Kind::CvQualifier));
         else if (in.is("&") || in.is("&&")) ast.append(owner, leaf(Kind::FunctionQualifier));
         else if (in.is("override") || in.is("final")) ast.append(owner, leaf(Kind::VirtSpecifier));

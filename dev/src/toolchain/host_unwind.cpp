@@ -43,7 +43,8 @@ void HostElf::unwind(const Object& obj)
         }
         auto start = out.size(); host_number(out,0,4); host_number(out,out.size()-cies[eh],4);
         fdes.push_back(start);
-        relocate(RelaEh,out.size(),section_symbols[Text],R_X86_64_PC32,u.begin);
+        const auto& location = placement[u.symbol];
+        relocate(RelaEh,out.size(),section_symbols[location.section],R_X86_64_PC32,location.offset);
         host_number(out,0,4); host_number(out,u.end-u.begin,4);
         host_uleb(out,eh ? 4 : 0);
         if (eh) { relocate(RelaEh,out.size(),section_symbols[Lsda],R_X86_64_PC32,u.lsda); host_number(out,0,4); }

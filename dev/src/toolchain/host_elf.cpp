@@ -63,7 +63,8 @@ HostElf::HostElf(Object&& obj) : ElfModule(Count,Strtab), mapping(obj.symbols.si
     for (unsigned i = 1; i < sizes.size(); ++i) sizes[i] = obj.symbols[i].size;
     for (const auto* fixes : {&obj.image.code_fixups,&obj.image.data_fixups,&obj.image.tls_fixups,&obj.image.lsda_fixups})
         for (const auto& fix : *fixes) used[fix.symbol] = true;
-    for (const auto& u : obj.image.unwind) sizes[u.symbol] = u.end-u.begin;
+    for (const auto& u : obj.image.unwind) sizes[u.symbol] = obj.symbols[u.symbol].size = u.end-u.begin;
+    place(obj);
     IdIndex exports;
     for (unsigned i = 1; i < obj.symbols.size(); ++i) {
         if (!used[i] && !obj.image.defined[i]) continue;
@@ -71,17 +72,17 @@ HostElf::HostElf(Object&& obj) : ElfModule(Count,Strtab), mapping(obj.symbols.si
         auto binding = s.binding == ir_model::SBM_INTERNAL ? STB_LOCAL : s.binding == ir_model::SBM_WEAK ? STB_WEAK : STB_GLOBAL;
         bool defined = obj.image.defined[i];
         bool tls = obj.image.tls_targets[i] == i;
-        unsigned section = tls ? Tdata : obj.image.data_symbols[i] ? Data : Text;
+        unsigned section = placement[i].section;
         unsigned type = tls ? STT_TLS : defined ? (obj.image.data_symbols[i] ? STT_OBJECT : STT_FUNC) : STT_NOTYPE;
         if (binding != STB_LOCAL && s.name) if (auto old = exports.get(s.name)) {
             mapping[i] = old;
             lowir_model::require(!defined || !symbols[old].st_shndx,"duplicate host object definition");
-            if (defined) { symbols[old].st_shndx = section; symbols[old].st_value = obj.image.symbols[i]; symbols[old].st_size = sizes[i]; symbols[old].st_info = ELF64_ST_INFO(binding,type); }
+            if (defined) { symbols[old].st_shndx = section; symbols[old].st_value = placement[i].offset; symbols[old].st_size = sizes[i]; symbols[old].st_info = ELF64_ST_INFO(binding,type); }
             continue;
         }
         lowir_model::require(s.name || !used[i],"host relocation has no symbol identity");
         mapping[i] = symbol(s.name ? obj.name(i) : "",binding,type,
-            defined ? section : 0,obj.image.symbols[i],sizes[s.definition ? s.definition : i]);
+            defined ? section : 0,placement[i].offset,sizes[s.definition ? s.definition : i]);
         if (binding != STB_LOCAL && s.name) exports.put(s.name,mapping[i]);
         if (defined && (s.role == ir_model::SR_INIT || s.role == ir_model::SR_FINI)) {
             unsigned section = s.role == ir_model::SR_INIT ? Init : Fini;
@@ -101,9 +102,13 @@ HostElf::HostElf(Object&& obj) : ElfModule(Count,Strtab), mapping(obj.symbols.si
                 if (f.kind == native::Fixup::GotSymbol) type = R_X86_64_GOTPCREL;
             }
             if (f.kind == native::Fixup::ThreadOffset) type = R_X86_64_TPOFF32;
-            relocate(lane == 2 ? RelaTdata : lane ? RelaData : RelaText,f.offset,mapping[f.symbol],type,addend);
+            auto owner = f.owner;
+            unsigned target = owner ? placement[owner].section : lane == 2 ? Tdata : lane ? Data : Text;
+            auto offset = owner ? f.offset-obj.image.symbols[owner]+placement[owner].offset : f.offset;
+            relocate(relocation_section(target),offset,mapping[f.symbol],type,addend);
         }
     }
+    for (const auto& g : groups) sections[g.section].header.sh_info = mapping[g.owner];
     unwind(obj);
     if (sections[Lsda].bytes.empty()) sections[Lsda].header.sh_name = 0;
     if (sections[EhFrame].bytes.empty()) sections[EhFrame].header.sh_name = 0;
@@ -117,13 +122,17 @@ void HostElf::write(const std::string& path)
     auto first = std::stable_partition(order.begin(),order.end(),[&](unsigned n) { return ELF64_ST_BIND(symbols[n].st_info) == STB_LOCAL; });
     sections[Symtab].header.sh_info = first-order.begin();
     for (unsigned n = 0; n < order.size(); ++n) { renumber[order[n]] = n; append(sections[Symtab].bytes,symbols[order[n]]); }
-    for (unsigned n = RelaText; n <= RelaTdata; ++n) for (auto r : sections[n].relocations) {
-        r.r_info = ELF64_R_INFO(renumber[ELF64_R_SYM(r.r_info)],ELF64_R_TYPE(r.r_info)); append(sections[n].bytes,r);
+    for (unsigned n = 1; n < sections.size(); ++n) {
+        if (sections[n].header.sh_type == SHT_GROUP) sections[n].header.sh_info = renumber[sections[n].header.sh_info];
+        for (auto r : sections[n].relocations) {
+            r.r_info = ELF64_R_INFO(renumber[ELF64_R_SYM(r.r_info)],ELF64_R_TYPE(r.r_info)); append(sections[n].bytes,r);
+        }
     }
     Elf64_Ehdr h = {}; std::memcpy(h.e_ident,ELFMAG,SELFMAG); h.e_ident[EI_CLASS] = ELFCLASS64; h.e_ident[EI_DATA] = ELFDATA2LSB; h.e_ident[EI_VERSION] = EV_CURRENT;
-    h.e_type = ET_REL; h.e_machine = EM_X86_64; h.e_version = EV_CURRENT; h.e_ehsize = sizeof(h); h.e_shentsize = sizeof(Elf64_Shdr); h.e_shnum = Count; h.e_shstrndx = Shstrtab;
+    lowir_model::require(sections.size() < SHN_LORESERVE,"too many ELF sections");
+    h.e_type = ET_REL; h.e_machine = EM_X86_64; h.e_version = EV_CURRENT; h.e_ehsize = sizeof(h); h.e_shentsize = sizeof(Elf64_Shdr); h.e_shnum = sections.size(); h.e_shstrndx = Shstrtab;
     std::uint64_t offset = sizeof(h);
-    for (unsigned n = 1; n < Count; ++n) {
+    for (unsigned n = 1; n < sections.size(); ++n) {
         auto& s = sections[n]; auto a = s.header.sh_addralign;
         offset = (offset+a-1)&~(a-1); s.header.sh_offset = offset; s.header.sh_size = s.bytes.size();
         offset += s.bytes.size();
@@ -141,7 +150,7 @@ void HostElf::write(const std::string& path)
             out.write(zeros,count); offset += count;
         }
     };
-    for (unsigned n = 1; n < Count; ++n) {
+    for (unsigned n = 1; n < sections.size(); ++n) {
         const auto& s = sections[n]; pad(s.header.sh_offset);
         out.write(reinterpret_cast<const char*>(s.bytes.data()),s.bytes.size()); offset += s.bytes.size();
     }

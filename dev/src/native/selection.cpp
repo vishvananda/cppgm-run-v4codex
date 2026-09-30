@@ -119,10 +119,20 @@ void Selector::move(Operand to, Operand from, Type t)
         emit(Op::Load,t,{to,from});
     } else emit(Op::Mov,t,{to,from});
 }
+bool Selector::imported_data(unsigned id) const
+{
+    const auto& symbol = p.symbols[id-1];
+    return f.host && symbol.kind == lowir_model::Symbol::GlobalSymbol &&
+        (p.globals[symbol.entity-1].declaration || symbol.metadata.binding == ir_model::SBM_WEAK) && !tls_symbol(id);
+}
 Operand Selector::memory(lowir_model::Operand o, int scratch)
 {
     if (o.kind == lowir_model::Operand::Slot) return value(o,Type::Ptr);
     if (o.kind == lowir_model::Operand::Symbol) {
+        if (imported_data(o.ref)) {
+            move(Operand::r(scratch),Operand::symbol(SymbolId(o.ref)),Type::Ptr);
+            return Operand::mem(scratch);
+        }
         if (!tls_symbol(o.ref)) return Operand::symbol(SymbolId(o.ref),false);
         tls_address(Operand::r(scratch),Operand::symbol(SymbolId(o.ref)));
         return Operand::mem(scratch);
@@ -131,6 +141,9 @@ Operand Selector::memory(lowir_model::Operand o, int scratch)
     if (value_type(o,Type::Ptr).kind() == Type::Object) return base;
     if (base.kind == Operand::Symbol && tls_symbol(base.id)) {
         tls_address(Operand::r(scratch),base); return Operand::mem(scratch);
+    }
+    if (base.kind == Operand::Symbol && imported_data(base.id)) {
+        move(Operand::r(scratch),base,Type::Ptr); return Operand::mem(scratch);
     }
     if (base.address) { base.address = false; return base; }
     base = in_register(base,Type::Ptr,scratch);
@@ -165,7 +178,7 @@ void Selector::select(const lowir_model::Instruction& i)
         break;
     case Opcode::Phi: break;
     case Opcode::Addr: {
-        if (arg(i,0).kind == lowir_model::Operand::Symbol && tls_symbol(arg(i,0).ref)) {
+        if (arg(i,0).kind == lowir_model::Operand::Symbol && (tls_symbol(arg(i,0).ref) || imported_data(arg(i,0).ref))) {
             if (state(i.destination.index).uses)
                 move(allocate(i.destination.index,Type::Ptr),value(arg(i,0),Type::Ptr),Type::Ptr);
             break;

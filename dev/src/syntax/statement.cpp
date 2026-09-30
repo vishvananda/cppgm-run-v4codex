@@ -136,9 +136,11 @@ NodeId Parser::try_block(bool function)
 NodeId Parser::statement()
 {
     std::uint32_t alignment = 0;
-    unsigned flags = attributes(&alignment);
-    if (alignment) {
+    NativeAttributes native;
+    unsigned flags = attributes(&alignment,&native);
+    if (alignment || native.section || native.weak) {
         auto result = declaration();
+        native_attributes(result,native);
         ast.alignment_owners.put(result,alignment); ast[result].flags |= flags;
         return result;
     }

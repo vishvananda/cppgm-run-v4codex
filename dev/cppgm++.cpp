@@ -433,7 +433,7 @@ int run_emit_lowir_mode(const vector<string> & args)
     else if (args[i] == "--stats") stats = true;
     else if (args[i] == "-o") {
       consume_required_option_argument(args, i, "-o", "output file"); output = args[i];
-    } else if (args[i] == "-O0") continue;
+    } else if (args[i] == "-O0" || args[i] == "-g0") continue;
     else if (starts_with(args[i], "-")) throw logic_error("unsupported LowIR option");
     else inputs.push_back(args[i]);
   }

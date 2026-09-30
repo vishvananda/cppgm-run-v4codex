@@ -299,8 +299,24 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
     { auto& published = facts.edit(n); published.type = base; published.scope = s; }
     return base;
 }
-void Analyzer::declaration_attributes(EntityId e, NodeId specs, NodeId source)
+void Analyzer::declaration_attributes(EntityId e, NodeId specs, NodeId source, NodeId declarator)
 {
+    for (auto n : {source,specs,declarator}) if (n) {
+        // Section names are non-dependent literals on the immutable source
+        // node, shared by all projected template occurrences.
+        auto a = ast.native_attribute_owners.get(ast.nodes.occurrences[n].source);
+        if (!a) continue;
+        auto value = ast.native_attributes[a];
+        if (value.weak) weak_symbols.put(e,1);
+        if (!value.section) continue;
+        const auto& entity = entities[e];
+        if (entity.kind != EntityKind::Variable ||
+            (scopes[entity.owner].kind != ScopeKind::Namespace && !entity.is_static))
+            throw std::runtime_error("section requires static storage object");
+        auto prior = section_names.get(e);
+        if (prior && prior != value.section) throw std::runtime_error("conflicting section redeclaration");
+        section_names.put(e,value.section);
+    }
     entities[e].c_linkage |= c_linkage;
     entities[e].no_inline |= ast[source].flags & 64;
     entities[e].force_inline |= ast[source].flags & 128;
@@ -449,7 +465,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         throw std::runtime_error("static member cannot be ref qualified");
     entities[e].mutable_field |= spec_has(specs, KW_MUTABLE);
     if (calls && function) declare_operator(e, name);
-    declaration_attributes(e,specs,source);
+    declaration_attributes(e,specs,source,d);
     for (auto label = ast[d].first; label; label = ast[label].next) {
         if (ast[label].kind != Kind::Specifier || ast[label].op != KW_ASM) continue;
         const auto& literal = ast.literals[ast[ast[label].first].literal];

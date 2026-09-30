@@ -177,6 +177,7 @@ struct Node {
 };
 
 struct AlignmentAttribute { NodeId operand; std::uint32_t next; bool type; };
+struct NativeAttributes { IdentifierId section = 0; bool weak = false; };
 
 struct ClassRegion { std::size_t begin, end; };
 
@@ -261,6 +262,8 @@ public:
     bool telemetry;
     std::size_t node_growths = 0, location_growths = 0, literal_growths = 0;
     IdIndex alignment_owners, class_packing;
+    IdIndex native_attribute_owners;
+    std::vector<NativeAttributes> native_attributes = std::vector<NativeAttributes>(1);
     std::vector<AlignmentAttribute> alignments = std::vector<AlignmentAttribute>(1);
     NodePool nodes;
     std::vector<Location> locations;
@@ -275,7 +278,8 @@ class AstView {
 public:
     explicit AstView(Ast& a) : tree(a), telemetry(a.telemetry), nodes(a.nodes),
         literals(a.literals), literal_bytes(a.literal_bytes), class_regions(a.class_regions),
-        alignment_owners(a.alignment_owners), class_packing(a.class_packing), alignments(a.alignments) {}
+        alignment_owners(a.alignment_owners), class_packing(a.class_packing), alignments(a.alignments),
+        native_attribute_owners(a.native_attribute_owners), native_attributes(a.native_attributes) {}
     Node operator[](NodeId id) const { return tree.view(id); }
     operator const Ast&() const { return tree; }
     NodeId instantiate(NodeId root, std::uint32_t context) { return tree.instantiate(root,context); }
@@ -296,6 +300,8 @@ public:
     IdIndex& alignment_owners;
     IdIndex& class_packing;
     std::vector<AlignmentAttribute>& alignments;
+    IdIndex& native_attribute_owners;
+    std::vector<NativeAttributes>& native_attributes;
 };
 
 const char* kind_name(Kind kind);

@@ -13,6 +13,8 @@ struct Symbol {
     bool lazy = false; // synthetic GOT slots are demanded by live relocations
     unsigned object_type = 0;
     std::uint64_t size = 0;
+    lowir_model::Name section = 0;
+    unsigned alignment = 1;
 };
 struct ObjectUnwind { unsigned symbol; std::int64_t addend; std::size_t offset; };
 struct ObjectReference { unsigned symbol; std::int64_t addend; };

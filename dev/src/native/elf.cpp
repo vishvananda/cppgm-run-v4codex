@@ -45,6 +45,7 @@ void encode_data(const lowir_model::Program& p, Image& image)
             require(alignment <= 4096,"unsupported native global alignment");
         }
         if (tls) image.tls_alignment = std::max(image.tls_alignment,alignment);
+        image.symbol_alignments[g.symbol.index] = alignment;
         data.resize(aligned(data.size(),alignment),0);
         image.symbols[g.symbol.index] = data.size(); image.defined[g.symbol.index] = true; image.data_symbols[g.symbol.index] = true;
         for (unsigned n = g.data.begin; n != g.data.end(); ++n) {

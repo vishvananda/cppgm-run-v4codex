@@ -26,6 +26,8 @@ Object compile_object(const lowir_model::Program& p, native::Statistics& stats, 
         auto& symbol = obj.symbols[i];
         symbol.name = obj.intern(s.metadata.object ? p.name(s.metadata.object) : p.name(s.name).substr(1));
         symbol.binding = s.metadata.binding;
+        if (s.metadata.section) symbol.section = obj.intern(p.name(s.metadata.section));
+        symbol.alignment = obj.image.symbol_alignments[i];
         // Backend-provided definitions (TLS address wrapper, strlen) have one
         // runtime identity, even when independently demanded in multiple TUs.
         if (obj.image.defined[i] && s.kind == lowir_model::Symbol::FunctionSymbol &&

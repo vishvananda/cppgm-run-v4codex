@@ -77,6 +77,7 @@ class Selector {
     Type consumed_type(lowir_model::Operand o, Type context) const;
     Operand memory(lowir_model::Operand o, int scratch = XR_R11);
     bool tls_symbol(unsigned id) const;
+    bool imported_data(unsigned id) const;
     void tls_address(Operand to, Operand symbol);
     Operand in_register(Operand o, Type type, int reg);
     void move(Operand to, Operand from, Type type);

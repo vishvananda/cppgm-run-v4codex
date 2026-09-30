@@ -155,6 +155,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/construction_vtables
 FRONTEND_OBJ_BASENAMES_lowir2native := $(filter-out lowir/exercises,$(FRONTEND_OBJ_BASENAMES_lowir))
 FRONTEND_OBJ_BASENAMES_lowir2native += native/model native/placement native/selection native/arithmetic native/control native/calls native/encoding native/integer_encoding native/layout native/elf native/dump native/driver
 FRONTEND_OBJ_BASENAMES_lowir2native += native/parameter_slots
+FRONTEND_OBJ_BASENAMES_lowir2native += native/object_demand
 FRONTEND_OBJ_BASENAMES_lowir2native += native/bulk_encoding
 FRONTEND_OBJ_BASENAMES_lowir2native += native/builtins
 FRONTEND_OBJ_BASENAMES_lowir2native += native/floating native/float_encoding native/float_conversion
@@ -180,6 +181,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/runtime_exception
 FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/runtime_eh_match toolchain/runtime_failure
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/host_elf toolchain/host_unwind
+FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/host_sections
 FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/host_config
 FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/elf_link_input
 FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/dynamic_symbols toolchain/dynamic_relocations toolchain/dynamic_metadata toolchain/dynamic_writer
