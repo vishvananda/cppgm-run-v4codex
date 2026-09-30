@@ -11,7 +11,7 @@ unsigned HostElf::section(const std::string& name, unsigned type, std::uint64_t 
     auto& strings = sections[Shstrtab].bytes;
     s.header.sh_name = strings.size(); strings.insert(strings.end(),name.begin(),name.end()); strings.push_back(0);
     section_symbols.push_back(type == SHT_PROGBITS ? symbol("",STB_LOCAL,STT_SECTION,id,0) : 0);
-    relocation_sections.push_back(0); return id;
+    relocation_sections.push_back(0); section_groups.push_back(0); return id;
 }
 unsigned HostElf::relocation_section(unsigned target)
 {
@@ -19,11 +19,12 @@ unsigned HostElf::relocation_section(unsigned target)
     auto id = section(".rela"+sections[target].name,SHT_RELA,sections[target].header.sh_flags&SHF_GROUP,8);
     sections[id].header.sh_link = Symtab; sections[id].header.sh_info = target;
     sections[id].header.sh_entsize = sizeof(Elf64_Rela);
+    if (auto group = section_groups[target]) host_number(sections[group].bytes,id,4);
     relocation_sections[target] = id; return id;
 }
 void HostElf::place(const Object& obj)
 {
-    placement.resize(obj.symbols.size()); relocation_sections.resize(Count);
+    placement.resize(obj.symbols.size()); relocation_sections.resize(Count); section_groups.resize(Count);
     for (unsigned s = Text; s <= Tdata; ++s) relocation_sections[s] = RelaText+s-Text;
     IdIndex named;
     for (unsigned lane : {Text,Data,Tdata}) {
@@ -57,12 +58,11 @@ void HostElf::place(const Object& obj)
                     target = section(name,SHT_PROGBITS,sections[lane].header.sh_flags|(weak ? SHF_GROUP : 0),s.alignment);
                     if (s.section && !weak) named.put(s.section,target);
                     if (weak) {
-                        auto rel = relocation_section(target);
                         auto group = section(".group",SHT_GROUP,0,4);
                         sections[group].header.sh_link = Symtab; sections[group].header.sh_entsize = 4;
                         host_number(sections[group].bytes,GRP_COMDAT,4);
                         host_number(sections[group].bytes,target,4);
-                        host_number(sections[group].bytes,rel,4);
+                        section_groups[target] = group;
                         groups.push_back({group,owner});
                     }
                 }

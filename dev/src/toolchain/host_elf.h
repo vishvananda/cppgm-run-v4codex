@@ -7,7 +7,7 @@ struct HostElf : ElfModule {
     std::vector<unsigned> mapping, section_symbols;
     struct Placement { unsigned section = 0; std::uint64_t offset = 0; };
     std::vector<Placement> placement;
-    std::vector<unsigned> relocation_sections;
+    std::vector<unsigned> relocation_sections, section_groups;
     struct Group { unsigned section, owner; };
     std::vector<Group> groups;
     explicit HostElf(Object&&);
