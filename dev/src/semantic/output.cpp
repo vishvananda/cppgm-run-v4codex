@@ -120,6 +120,7 @@ void Analyzer::write_scope(std::ostream& out, ScopeId s, unsigned depth) const
 void Analyzer::write(std::ostream& out) const { out << "translation-unit\n"; write_scope(out, global, 1); }
 void Analyzer::telemetry(std::ostream& out) const
 {
+    constant_telemetry(out);
     std::size_t virtual_views = 0, virtual_slots = 0, virtual_storage = virtual_classes.capacity()*sizeof(VirtualClass);
     std::size_t vtable_definitions = 0, external_vtables = 0;
     for (const auto& cls : virtual_classes) {
@@ -182,17 +183,6 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_static_initialization_work\":" << static_initialization_work
         << ",\"semantic_static_plan_work\":" << static_plan_work
         << ",\"semantic_constant_array_index_entries\":" << constant_array_children.size()
-        << ",\"semantic_floating_constants\":" << floating_constants.size()-1
-        << ",\"semantic_wide_constants\":" << wide_constants.size()-1
-        << ",\"semantic_wide_constant_bytes\":" << wide_constants.capacity()*sizeof(WideConstant)
-        << ",\"semantic_constant_bodies\":" << constant_bodies.size()-1
-        << ",\"semantic_constant_activations\":" << constant_activations.size()-1
-        << ",\"semantic_constant_execution_steps\":" << constant_steps
-        << ",\"semantic_constant_object_work\":" << constant_object_work
-        << ",\"semantic_constant_address_work\":" << constant_address_work
-        << ",\"semantic_constant_dependency_work\":" << constant_dependency_work
-        << ",\"semantic_constant_persistence_work\":" << constant_persistence_work
-        << ",\"semantic_constant_execution_hits\":" << constant_hits
         << ",\"semantic_initializer_recipe_work\":" << initializer_recipe_work
         << ",\"semantic_initializer_recipe_uses\":" << initializer_recipe_uses
         << ",\"semantic_default_initialization_work\":" << default_initialization_work

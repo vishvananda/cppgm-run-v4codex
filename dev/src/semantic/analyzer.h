@@ -607,6 +607,7 @@ private:
     struct WideConstant { WideInteger value; std::uint32_t next; };
     std::vector<WideConstant> wide_constants = std::vector<WideConstant>(1);
     Index wide_constant_index;
+    void constant_telemetry(std::ostream& out) const;
     bool floating_type(TypeId type) const;
     Constant floating_constant(TypeId type, long double value, bool special = false);
     bool floating_builtin(NodeId n, ScopeId scope, IdentifierId name, const std::vector<NodeId>& args, Expression& result);

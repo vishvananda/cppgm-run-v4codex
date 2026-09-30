@@ -1,5 +1,6 @@
 #include "semantic/analyzer.h"
 #include <algorithm>
+#include <ostream>
 
 namespace cppgm { namespace semantic {
 Analyzer::WideInteger Analyzer::integer_value(Constant v) const
@@ -43,5 +44,20 @@ std::string Analyzer::integer_text(Constant v) const
     do { text += char('0'+value%10); value /= 10; } while (value);
     if (negative) text += '-';
     std::reverse(text.begin(),text.end()); return text;
+}
+void Analyzer::constant_telemetry(std::ostream& out) const
+{
+    out        << ",\"semantic_floating_constants\":" << floating_constants.size()-1
+        << ",\"semantic_wide_constants\":" << wide_constants.size()-1
+        << ",\"semantic_wide_constant_bytes\":" << wide_constants.capacity()*sizeof(WideConstant)
+        << ",\"semantic_constant_bodies\":" << constant_bodies.size()-1
+        << ",\"semantic_constant_activations\":" << constant_activations.size()-1
+        << ",\"semantic_constant_execution_steps\":" << constant_steps
+        << ",\"semantic_constant_object_work\":" << constant_object_work
+        << ",\"semantic_constant_address_work\":" << constant_address_work
+        << ",\"semantic_constant_dependency_work\":" << constant_dependency_work
+        << ",\"semantic_constant_persistence_work\":" << constant_persistence_work
+        << ",\"semantic_constant_execution_hits\":" << constant_hits
+;
 }
 } }
