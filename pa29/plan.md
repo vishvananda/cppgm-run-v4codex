@@ -1,11 +1,25 @@
-# PA29 implementation / handoff156
+# PA29 implementation / handoff157 (in progress)
 
 Target: **PA29 full-stage**. Phase: implementation handoff; stage unfinished.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
-Turn entry: `6afc84f76c09cf336a4302af368d5b6ea44c0da0`, clean, **272/403**.
-Exit: **301/403**, 102 failing; **29 existing failures resolved, no new failures**.
+Turn entry: `0bad8c207712b2077afc78f209a469c55b07847b`, clean, **301/403**, 102 failing.
+Previous handoff: 29 original failures resolved, no new failures.
 Prior turn was verified progress; review markers remain unchanged.
+
+## Active work
+
+Complete declaration attributes and empty-member layout, then extend related
+parser/declaration fixes while the same semantic owners apply. No fixture edits.
+
+| Owner | Data flow / complexity | Validation |
+|---|---|---|
+| Attribute parser / declaration prediction | Parse alignment operands once into source graph; bounded token lookahead recognizes attributed declarations and pointer annotations. O(tokens + attribute operands). | Condition/for/range, namespace/parameter placement, dependent alignment and negative constants |
+| Layout / object facts | Canonical member identity owns overlap permission; class layout consumes alignment and empty-subobject summaries once. Preserve bounded conflict work and nonoverlap of equal types. | Empty/repeated/nested objects, generated copies and constructors, source LowIR/native execution |
+| Performance | Freeze turn-entry binary; measure common equivalent A/B plus new layout costs under spec §9. No optional optimization budget. | Latency/RSS, runtime/text, A/A and ABBA with checked outputs |
+
+Implementation gaps and independent review questions below remain open; the
+existing Stage base / Last reviewed markers are unchanged.
 
 ## Design/spec alignment
 
