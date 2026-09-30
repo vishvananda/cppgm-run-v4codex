@@ -2,6 +2,7 @@
 #include "toolchain/elf_model.h"
 #include "toolchain/host_config.h"
 #include "lowering/procedural.h"
+#include "toolchain/preprocess_output.h"
 #include <chrono>
 #include <iostream>
 #include <fstream>
@@ -26,9 +27,10 @@ std::string argument(const std::vector<std::string>& args, unsigned& i, const ch
     return args[i];
 }
 struct Options {
-    bool compile = false, stats = false, host = false;
+    bool compile = false, preprocess = false, stats = false, host = false;
+    bool standard_includes = true, cxx_includes = true;
     std::string output, format;
-    std::vector<std::string> inputs, includes, libraries, paths, macros;
+    std::vector<std::string> inputs, includes, libraries, paths, macros, system_includes;
 };
 Options options(const std::vector<std::string>& args)
 {
@@ -36,6 +38,9 @@ Options options(const std::vector<std::string>& args)
     for (unsigned i = 0; i < args.size(); ++i) {
         const auto& a = args[i];
         if (a == "-c") o.compile = true;
+        else if (a == "-E") o.preprocess = true;
+        else if (a == "-nostdinc") o.standard_includes = false;
+        else if (a == "-nostdinc++") o.cxx_includes = false;
         else if (prefix(a,"--object-format=")) {
             o.format = a.substr(16);
             if (o.format != "elf" && o.format != "private") throw std::runtime_error("unsupported object format");
@@ -49,7 +54,25 @@ Options options(const std::vector<std::string>& args)
         } else if (prefix(a,"-D") || prefix(a,"-U")) {
             o.macros.push_back(a.size() == 2 ? a + argument(args,i,a.c_str()) : a);
         } else if (prefix(a,"-isystem")) {
-            o.includes.push_back(a.size() == 8 ? argument(args,i,"-isystem") : a.substr(8));
+            o.system_includes.push_back(a.size() == 8 ? argument(args,i,"-isystem") : a.substr(8));
+        } else if (a == "-include") {
+            o.macros.push_back("-include"); o.macros.push_back(argument(args,i,"-include"));
+        } else if (a == "-stdlib" || prefix(a,"-stdlib=")) {
+            check_stdlib(a == "-stdlib" ? argument(args,i,"-stdlib") : a.substr(8));
+        } else if (a == "-std" || prefix(a,"-std=")) {
+            auto standard = a == "-std" ? argument(args,i,"-std") : a.substr(5);
+            auto year = standard == "c++11" || standard == "gnu++11" ? "201103L" :
+                standard == "c++14" || standard == "gnu++14" ? "201402L" :
+                standard == "c++17" || standard == "gnu++17" ? "201703L" : nullptr;
+            if (!year) throw std::runtime_error("unsupported language standard");
+            o.macros.push_back(std::string("-D__cplusplus=")+year);
+            o.macros.push_back(standard.compare(0,3,"gnu") == 0 ? "-U__STRICT_ANSI__" : "-D__STRICT_ANSI__=1");
+        } else if (a == "-pthread") o.macros.push_back("-D_REENTRANT=1");
+        else if (a == "-fno-exceptions") o.macros.push_back("-U__EXCEPTIONS");
+        else if (a == "-fexceptions") o.macros.push_back("-D__EXCEPTIONS=1");
+        else if (a == "-MMD" || a == "-MD" || a == "-MP") continue;
+        else if (prefix(a,"-MF") || prefix(a,"-MT") || prefix(a,"-MQ")) {
+            if (a.size() == 3) argument(args,i,a.c_str());
         } else if (prefix(a,"-I") || prefix(a,"-L") || prefix(a,"-l")) {
             auto value = a.size() == 2 ? argument(args,i,a.c_str()) : a.substr(2);
             if (a[1] == 'I') o.includes.push_back(value);
@@ -60,13 +83,14 @@ Options options(const std::vector<std::string>& args)
         else if (!a.empty() && a[0] == '-') throw std::runtime_error("unsupported driver option: " + a);
         else o.inputs.push_back(a);
     }
-    if (o.inputs.empty() || (o.compile && (o.inputs.size() != 1 || object_path(o.inputs[0])))) throw std::runtime_error("invalid compile/link inputs");
-    if (o.output.empty()) {
+    if (o.inputs.empty() || ((o.compile || o.preprocess) && !o.output.empty() && o.inputs.size() != 1)) throw std::runtime_error("invalid compile/link inputs");
+    if (o.output.empty() && !o.preprocess && !o.compile) {
         o.output = "a.out";
         if (o.compile) { auto s = o.inputs[0]; auto slash = s.rfind('/'); s = s.substr(slash == std::string::npos ? 0 : slash+1); o.output = s.substr(0,s.rfind('.')) + ".o"; }
     }
+    o.includes.insert(o.includes.end(),o.system_includes.begin(),o.system_includes.end());
     o.host = o.format != "private";
-    if (o.host) host_environment(o.includes,o.macros);
+    if (o.host) host_environment(o.includes,o.macros,o.standard_includes,o.cxx_includes);
     return o;
 }
 Object source(const std::string& path, const Options& o, native::Statistics& stats) {
@@ -78,8 +102,20 @@ Object source(const std::string& path, const Options& o, native::Statistics& sta
 int run(const std::vector<std::string>& args)
 {
     auto start = std::chrono::steady_clock::now(); auto o = options(args);
+    if (o.preprocess) return preprocess_output(o.inputs,o.output,o.includes,o.macros,o.stats);
     native::Statistics stats, runtime_stats; std::size_t text = 0, link_definitions = 0, link_relocations = 0;
-    if (o.compile) { auto obj = source(o.inputs[0],o,stats); text = obj.image.code.size(); if (o.host) write_host_object(std::move(obj),o.output); else write_object(obj,o.output); }
+    if (o.compile) {
+        for (const auto& input : o.inputs) {
+            if (object_path(input)) throw std::runtime_error("object input in compile mode");
+            auto output = o.output;
+            if (output.empty()) {
+                auto slash = input.rfind('/'); auto name = input.substr(slash == std::string::npos ? 0 : slash+1);
+                output = name.substr(0,name.rfind('.')) + ".o";
+            }
+            auto obj = source(input,o,stats); text += obj.image.code.size();
+            if (o.host) write_host_object(std::move(obj),output); else write_object(obj,output);
+        }
+    }
     else {
         Linker linker(o.host);
         for (const auto& input : o.inputs) {

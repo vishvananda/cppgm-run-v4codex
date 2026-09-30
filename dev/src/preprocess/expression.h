@@ -35,7 +35,7 @@ class PPExpressionEvaluator {
 public:
     PPExpressionEvaluator(IdentifierTable& identifiers, DefinedQuery defined,
                           void* context, PPExpressionStats* stats = 0,
-                          PostStats* literal_stats = 0);
+                          PostStats* literal_stats = 0, bool hosted = false);
     void push(const PPToken& token);
     PPExpressionResult finish();
     std::size_t storage_bytes() const;
@@ -55,6 +55,7 @@ private:
     void* context_;
     PPExpressionStats* stats_;
     PostStats* literal_stats_;
+    bool hosted_;
     std::vector<PPValue> values_;
     std::vector<Operator> operators_;
     DefinedState defined_state_ = DefinedState::none;

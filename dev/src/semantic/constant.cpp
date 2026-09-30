@@ -161,7 +161,25 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
     case Kind::Literal: {
         const syntax::LiteralValue& literal = ast.literals[ast[n].literal];
         TypeId t = types.fundamental(literal.type);
-        if (literal.suffix || (!integral(t) && !floating_type(t)) || literal.kind == LiteralKind::string) return Constant();
+        if (literal.suffix) {
+            if (!calls) return Constant();
+            auto kind = literal_call_kind(n);
+            auto fn = facts[n].entity;
+            if (!fn || !entities[fn].constexpr_function) return Constant();
+            if (kind == LiteralCallKind::Pack) return constant_indirect(execute_constant(fn,{},0));
+            if (kind != LiteralCallKind::Scalar) return Constant();
+            Constant value;
+            if (literal.kind == LiteralKind::floating) {
+                long double number = 0; std::memcpy(&number,literal.scalar.data(),10);
+                value = floating_constant(t,number);
+            } else {
+                std::uint64_t bits = 0; std::memcpy(&bits,literal.scalar.data(),fundamental_width(literal.type));
+                value = convert(Constant(t,bits),t);
+            }
+            value = convert(value,conversions[expressions[n].conversions].target);
+            return constant_indirect(execute_constant(fn,{value},0));
+        }
+        if ((!integral(t) && !floating_type(t)) || literal.kind == LiteralKind::string) return Constant();
         if (floating_type(t)) {
             long double value = 0;
             if (literal.type == FT_FLOAT) { float f; std::memcpy(&f,literal.scalar.data(),sizeof f); value = f; }

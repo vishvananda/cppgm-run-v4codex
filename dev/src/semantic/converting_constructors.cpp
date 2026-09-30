@@ -16,6 +16,10 @@ Conversion Analyzer::converting_constructor_value(Expression source, TypeId targ
     for (EntityId e : candidates(class_facts[entities[cls].class_info].constructor)) {
         if (!e) continue;
         ++candidate_work;
+        // A nondependent explicit constructor cannot be an implicit conversion;
+        // exclude it before substitution of defaults can recursively demand this
+        // same conversion trait.
+        if (members[entities[e].member_info].explicit_constructor) continue;
         if (entities[e].template_info) {
             e = deduce_function(e,std::vector<Expression>{source});
             if (!e) continue;

@@ -1,6 +1,7 @@
 // Floating extraction follows the CPPGM PA2 starter; see NOTICE.
 #include "posttoken/number.h"
 #include <cstring>
+#include <cstdlib>
 #include <istream>
 #include <limits>
 #include <streambuf>
@@ -50,22 +51,24 @@ static float PA2Decode_float(TextView s) { return decode_floating<float>(s); }
 static double PA2Decode_double(TextView s) { return decode_floating<double>(s); }
 static long double PA2Decode_long_double(TextView s) { return decode_floating<long double>(s); }
 
-static void floating_value(PostToken& token, TextView prefix, TextView suffix)
+static void floating_value(PostToken& token, TextView prefix, TextView suffix, bool hexadecimal = false)
 {
     token.kind = PostTokenKind::literal;
+    std::string hex;
+    if (hexadecimal) hex.assign(prefix.data,prefix.size);
     if (suffix.equals("f") || suffix.equals("F")) {
         token.type = FT_FLOAT;
-        float value = PA2Decode_float(prefix);
+        float value = hexadecimal ? std::strtof(hex.c_str(),nullptr) : PA2Decode_float(prefix);
         std::memcpy(token.scalar.data(), &value, 4);
     } else if (suffix.equals("l") || suffix.equals("L")) {
         token.type = FT_LONG_DOUBLE;
-        long double value = PA2Decode_long_double(prefix);
+        long double value = hexadecimal ? std::strtold(hex.c_str(),nullptr) : PA2Decode_long_double(prefix);
         // x86-64's 80-bit value has six ABI padding bytes, canonicalized to 0.
         static_assert(sizeof(value) == 16, "PA2 requires the x86-64 host ABI");
         std::memcpy(token.scalar.data(), &value, 10);
     } else if (!suffix.size) {
         token.type = FT_DOUBLE;
-        double value = PA2Decode_double(prefix);
+        double value = hexadecimal ? std::strtod(hex.c_str(),nullptr) : PA2Decode_double(prefix);
         std::memcpy(token.scalar.data(), &value, 8);
     } else token.kind = PostTokenKind::invalid;
 }
@@ -110,15 +113,32 @@ static void integer_value(PostToken& token, TextView digits, TextView suffix, un
     }
 }
 
-void decode_number(PostToken& token, IdentifierTable& identifiers, NumberDomain domain)
+void decode_number(PostToken& token, IdentifierTable& identifiers, NumberDomain domain, bool hosted)
 {
     TextView s = token.source.spelling;
     std::size_t p = 0, digit_begin = 0;
     unsigned base = 10;
-    bool floating = false;
+    bool floating = false, hexadecimal = false;
     if (s.size >= 2 && s.data[0] == '0' && (s.data[1] == 'x' || s.data[1] == 'X')) {
         base = 16; p = digit_begin = 2;
         while (p < s.size && hex_value(s.data[p]) >= 0) ++p;
+        bool digits = p != digit_begin;
+        if (hosted && p < s.size && s.data[p] == '.') {
+            floating = true; ++p; auto start = p;
+            while (p < s.size && hex_value(s.data[p]) >= 0) ++p;
+            digits |= p != start;
+        }
+        if (!digits) return;
+        if (hosted && p < s.size && (s.data[p] == 'p' || s.data[p] == 'P')) {
+            floating = hexadecimal = true; ++p;
+            if (p < s.size && (s.data[p] == '+' || s.data[p] == '-')) ++p;
+            auto start = p;
+            while (p < s.size && decimal_digit(s.data[p])) ++p;
+            if (p == start) return;
+        } else if (floating) return;
+    } else if (hosted && s.size >= 2 && s.data[0] == '0' && (s.data[1] == 'b' || s.data[1] == 'B')) {
+        base = 2; p = digit_begin = 2;
+        while (p < s.size && (s.data[p] == '0' || s.data[p] == '1')) ++p;
         if (p == digit_begin) return;
     } else {
         while (p < s.size && decimal_digit(s.data[p])) ++p;
@@ -142,6 +162,12 @@ void decode_number(PostToken& token, IdentifierTable& identifiers, NumberDomain 
         }
     }
     TextView suffix(s.data + p, s.size - p);
+    if (hosted && floating) {
+        if (suffix.equals("q") || suffix.equals("Q") || suffix.equals("F128") || suffix.equals("f128") ||
+            suffix.equals("F64x") || suffix.equals("f64x")) suffix = TextView("L",1);
+        else if (suffix.equals("F32") || suffix.equals("f32") || suffix.equals("F16") || suffix.equals("f16")) suffix = TextView("F",1);
+        else if (suffix.equals("F64") || suffix.equals("f64") || suffix.equals("F32x") || suffix.equals("f32x")) suffix = TextView();
+    }
     if (domain == NumberDomain::integral) {
         // All floating and user-defined numbers are invalid in a controlling
         // expression, even in unselected arms. No float extraction or suffix
@@ -157,7 +183,7 @@ void decode_number(PostToken& token, IdentifierTable& identifiers, NumberDomain 
         // Retain both forms once: literal templates need the source characters,
         // while cooked operators consume the phase-7 numeric value. Overflow
         // only rejects a later cooked call; raw/template operators can use it.
-        if (floating) floating_value(token,token.prefix,TextView("L",1));
+        if (floating) floating_value(token,token.prefix,TextView("L",1),hexadecimal);
         else {
             integer_value(token,TextView(s.data+digit_begin,p-digit_begin),TextView(),base);
             if (token.kind != PostTokenKind::literal)
@@ -165,7 +191,7 @@ void decode_number(PostToken& token, IdentifierTable& identifiers, NumberDomain 
         }
         token.cooked_valid = token.kind == PostTokenKind::literal;
         token.kind = PostTokenKind::user_literal;
-    } else if (floating) floating_value(token, token.prefix, suffix);
+    } else if (floating) floating_value(token, token.prefix, suffix, hexadecimal);
     else integer_value(token, TextView(s.data + digit_begin, p - digit_begin), suffix, base);
 }
 

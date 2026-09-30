@@ -59,4 +59,5 @@ public:
     std::size_t finish(const std::string&);
 };
 int run(const std::vector<std::string>&);
+int query(const std::string&);
 } }

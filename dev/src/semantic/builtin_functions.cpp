@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "support/builtin_registry.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 ExpressionForm Analyzer::intrinsic_expression(EntityId e) const
@@ -13,35 +14,36 @@ ExpressionForm Analyzer::intrinsic_expression(EntityId e) const
 EntityId Analyzer::builtin_function(IdentifierId name)
 {
     auto text = ids.spelling(name);
-    if (text.equals("__atomic_fetch_add") || text.equals("__atomic_add_fetch")) {
+    auto builtin = function_builtin(text);
+    if ((builtin == FunctionBuiltin::AtomicFetchAdd) || (builtin == FunctionBuiltin::AtomicAddFetch)) {
         // A builtin family has no source template body. Call selection asks
         // its typed signature owner for the first operand's pointee type.
         auto e = declare_function(global,name,0,types.function(types.fundamental(FT_VOID),{},false));
         entities[e].exception_spec = 129;
-        intrinsic_functions.put(e,unsigned(text.equals("__atomic_fetch_add") ? Intrinsic::AtomicFetchAdd : Intrinsic::AtomicAddFetch));
+        intrinsic_functions.put(e,unsigned((builtin == FunctionBuiltin::AtomicFetchAdd) ? Intrinsic::AtomicFetchAdd : Intrinsic::AtomicAddFetch));
         return e;
     }
-    if (text.equals("__builtin_strcmp") || text.equals("__builtin_strncmp")) {
+    if ((builtin == FunctionBuiltin::Strcmp) || (builtin == FunctionBuiltin::Strncmp)) {
         auto cp = types.compound(TypeKind::Pointer,types.qualify(types.fundamental(FT_CHAR),1));
         std::vector<TypeId> args{cp,cp};
-        if (text.equals("__builtin_strncmp")) args.push_back(types.fundamental(FT_UNSIGNED_LONG_INT));
+        if ((builtin == FunctionBuiltin::Strncmp)) args.push_back(types.fundamental(FT_UNSIGNED_LONG_INT));
         auto e = declare_function(global,name,0,types.function(types.fundamental(FT_INT),args,false));
         entities[e].c_linkage = true; entities[e].exception_spec = 129;
         assembler_names.put(e,ids.intern(TextView(text.data+10,text.size-10)));
         return e;
     }
-    auto kind = text.equals("__builtin_va_start") ? Intrinsic::VaStart :
-        text.equals("__builtin_va_end") ? Intrinsic::VaEnd :
-        text.equals("__builtin_va_copy") ? Intrinsic::VaCopy :
-        text.equals("__builtin_alloca") ? Intrinsic::StackAlloc :
-        text.equals("__builtin_expect") ? Intrinsic::Expect :
-        text.equals("__builtin_abort") ? Intrinsic::Abort :
-        text.equals("__builtin_unreachable") ? Intrinsic::Unreachable : Intrinsic::None;
-    bool bounded = text.equals("__builtin_vsnprintf"), print = text.equals("__builtin_vsprintf");
-    auto absolute = text.equals("__builtin_fabs") ? FT_DOUBLE : text.equals("__builtin_fabsf") ? FT_FLOAT :
-        text.equals("__builtin_fabsl") ? FT_LONG_DOUBLE :
-        text.equals("__builtin_abs") ? FT_INT : text.equals("__builtin_labs") ? FT_LONG_INT :
-        text.equals("__builtin_llabs") ? FT_LONG_LONG_INT : FT_VOID;
+    auto kind = (builtin == FunctionBuiltin::VaStart) ? Intrinsic::VaStart :
+        (builtin == FunctionBuiltin::VaEnd) ? Intrinsic::VaEnd :
+        (builtin == FunctionBuiltin::VaCopy) ? Intrinsic::VaCopy :
+        (builtin == FunctionBuiltin::Alloca) ? Intrinsic::StackAlloc :
+        (builtin == FunctionBuiltin::Expect) ? Intrinsic::Expect :
+        (builtin == FunctionBuiltin::Abort) ? Intrinsic::Abort :
+        (builtin == FunctionBuiltin::Unreachable) ? Intrinsic::Unreachable : Intrinsic::None;
+    bool bounded = (builtin == FunctionBuiltin::Vsnprintf), print = (builtin == FunctionBuiltin::Vsprintf);
+    auto absolute = (builtin == FunctionBuiltin::Fabs) ? FT_DOUBLE : (builtin == FunctionBuiltin::Fabsf) ? FT_FLOAT :
+        (builtin == FunctionBuiltin::Fabsl) ? FT_LONG_DOUBLE :
+        (builtin == FunctionBuiltin::Abs) ? FT_INT : (builtin == FunctionBuiltin::Labs) ? FT_LONG_INT :
+        (builtin == FunctionBuiltin::Llabs) ? FT_LONG_LONG_INT : FT_VOID;
     if (absolute != FT_VOID) {
         auto t = types.fundamental(absolute);
         auto e = declare_function(global,name,0,types.function(t,{t},false));

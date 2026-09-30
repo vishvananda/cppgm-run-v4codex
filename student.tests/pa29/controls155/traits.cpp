@@ -1,0 +1,27 @@
+struct Incomplete;
+using Function = int(double);
+using QualifiedFunction = int() const &;
+using Array = const volatile int[2][3];
+static_assert(__is_object(Incomplete), "incomplete object");
+static_assert(__is_const(Array) && __is_volatile(Array), "array cv");
+static_assert(!__is_const(const int&) && !__is_volatile(volatile int&&), "reference cv");
+static_assert(__is_signed(double) && __is_unsigned(bool), "signedness");
+static_assert(!__is_integral(int&) && !__is_arithmetic(double&&), "reference shapes");
+static_assert(__is_function(QualifiedFunction), "qualified function");
+static_assert(!__is_referenceable(QualifiedFunction), "unreferenceable function");
+static_assert(__is_same(__add_pointer(QualifiedFunction), QualifiedFunction), "unpointerable function");
+static_assert(__is_same(__add_lvalue_reference(void), void), "void ref transform");
+static_assert(__is_same(__add_rvalue_reference(int&), int&), "collapse");
+static_assert(__is_same(__add_pointer(int&), int*), "remove ref before pointer");
+static_assert(__is_same(__remove_const(Array), volatile int[2][3]), "array remove const");
+static_assert(__is_same(__remove_volatile(Array), const int[2][3]), "array remove volatile");
+static_assert(__is_same(__remove_cvref(const int(&)[2]), int[2]), "cvref array");
+static_assert(__is_same(__remove_extent(Array), const volatile int[3]), "one extent");
+static_assert(__is_same(__remove_all_extents(Array), const volatile int), "all extents");
+static_assert(__is_same(__make_unsigned(const long long), const unsigned long long), "rank cv");
+static_assert(__is_same(__make_signed(volatile unsigned __int128), volatile __int128), "wide signedness");
+enum class E : unsigned short {};
+static_assert(__is_same(__make_signed(E), short), "enum signedness");
+static_assert(__is_same(__decay(Array&), const volatile int(*)[3]), "array decay");
+static_assert(__is_same(__decay(Function&), Function*), "function decay");
+int main() { return 0; }

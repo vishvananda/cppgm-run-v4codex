@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "support/builtin_registry.h"
 #include <cmath>
 #include <cstring>
 #include <limits>
@@ -8,15 +9,13 @@ namespace cppgm { namespace semantic {
 bool Analyzer::floating_builtin(NodeId n, ScopeId scope, IdentifierId name,
     const std::vector<NodeId>& args, Expression& result)
 {
-    auto text = ids.spelling(name);
+    auto builtin = floating_builtin_kind(ids.spelling(name));
     EFundamentalType type = FT_VOID;
     bool nan = false;
-    const char* const generators[] = {"__builtin_nan", "__builtin_nanf", "__builtin_nanl",
-        "__builtin_inf", "__builtin_inff", "__builtin_infl",
-        "__builtin_huge_val", "__builtin_huge_valf", "__builtin_huge_vall"};
     const EFundamentalType types_by_suffix[] = {FT_DOUBLE,FT_FLOAT,FT_LONG_DOUBLE};
-    for (unsigned i = 0; i < 9; ++i) if (text.equals(generators[i])) {
-        type = types_by_suffix[i%3]; nan = i < 3; break;
+    if (builtin >= FloatingBuiltin::Nan && builtin <= FloatingBuiltin::Hugel) {
+        auto index = unsigned(builtin)-unsigned(FloatingBuiltin::Nan);
+        type = types_by_suffix[index%3]; nan = index < 3;
     }
     if (type != FT_VOID) {
         if (args.size() != unsigned(nan)) throw std::runtime_error("floating constant builtin arity");
@@ -57,11 +56,11 @@ bool Analyzer::floating_builtin(NodeId n, ScopeId scope, IdentifierId name,
         facts.edit(n).value = constants.size(); constants.push_back(floating_constant(result.type,value,true));
         return true;
     }
-    auto form = text.equals("__builtin_isfinite") ? ExpressionForm::FloatFinite :
-        text.equals("__builtin_isnan") || text.equals("__builtin_isnanf") || text.equals("__builtin_isnanl") ? ExpressionForm::FloatNaN :
-        text.equals("__builtin_isinf") ? ExpressionForm::FloatInfinite :
-        text.equals("__builtin_isnormal") ? ExpressionForm::FloatNormal :
-        text.equals("__builtin_fpclassify") ? ExpressionForm::FloatClassify : ExpressionForm::Ordinary;
+    auto form = builtin == FloatingBuiltin::Finite ? ExpressionForm::FloatFinite :
+        builtin == FloatingBuiltin::IsNan || builtin == FloatingBuiltin::IsNanf || builtin == FloatingBuiltin::IsNanl ? ExpressionForm::FloatNaN :
+        builtin == FloatingBuiltin::Infinite ? ExpressionForm::FloatInfinite :
+        builtin == FloatingBuiltin::Normal ? ExpressionForm::FloatNormal :
+        builtin == FloatingBuiltin::Classify ? ExpressionForm::FloatClassify : ExpressionForm::Ordinary;
     if (form == ExpressionForm::Ordinary) return false;
     if (args.size() != (form == ExpressionForm::FloatClassify ? 6U : 1U)) throw std::runtime_error("floating builtin arity");
     auto t = expressions[args.back()].type;

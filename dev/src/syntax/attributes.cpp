@@ -1,4 +1,5 @@
 #include "syntax/parser.h"
+#include "support/attributes.h"
 #include <algorithm>
 #include <stdexcept>
 namespace cppgm { namespace syntax {
@@ -77,6 +78,7 @@ unsigned Parser::balanced(const char* open, const char* close, NativeAttributes*
             if (native && (in.is("pure") || in.is("__pure__"))) native->effects = std::max(native->effects,FunctionEffects::ReadOnly);
             if (native && (in.is("const") || in.is("__const__"))) native->effects = FunctionEffects::ReadNone;
             if (native && (in.is("weak") || in.is("__weak__"))) native->weak = true;
+            if (using_if_exists_attribute(ids.spelling(in.peek().text))) result |= UsingIfExists;
             if (in.is("packed") || in.is("__packed__")) result |= 32;
             if (in.is("noinline") || in.is("__noinline__")) result |= 64;
             if (in.is("always_inline") || in.is("__always_inline__")) result |= 128;

@@ -170,8 +170,12 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             q.kind = QueryKind::String; q.value = node.literal; break;
         }
         if (node.kind == Kind::Literal && ast.literals[node.literal].suffix) {
-            if (template_type_probe) return 0;
-            throw std::runtime_error("literal operator call is not an integral constant query");
+            auto constant = evaluate(n,s);
+            if (!constant.valid) {
+                if (template_type_probe) return 0;
+                throw std::runtime_error("literal operator call is not a constant query");
+            }
+            q.value = constant.bits; break;
         }
         auto constant = evaluate(n,s); q.value = constant.valid ? constant.bits : 0;
         q.null_pointer_constant = node.kind == Kind::Literal && constant.valid && !constant.bits && integral(q.type) &&

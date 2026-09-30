@@ -11,14 +11,14 @@ namespace cppgm {
 class PostTokenCursor {
 public:
     PostTokenCursor(PPTokenSource& input, IdentifierTable& identifiers,
-                    bool retain_source = false, PostStats* stats = 0, bool multicharacter = false);
+                    bool retain_source = false, PostStats* stats = 0, bool multicharacter = false, bool hosted = false);
     PostToken next();
     std::size_t storage_bytes() const;
 private:
     PPTokenSource& input_;
     IdentifierTable& identifiers_;
     bool retain_source_;
-    bool multicharacter_;
+    bool multicharacter_, hosted_;
     PostStats* stats_;
     PPToken pending_;
     bool has_pending_ = false, after_operator_ = false;

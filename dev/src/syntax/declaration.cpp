@@ -1,4 +1,5 @@
 #include "syntax/parser.h"
+#include "support/attributes.h"
 #include <stdexcept>
 
 namespace cppgm { namespace syntax {
@@ -153,8 +154,10 @@ NodeId Parser::namespace_declaration()
 NodeId Parser::using_declaration()
 {
     in.require("using");
-    if (identifier() && in.is("=", 1)) {
+    if (identifier() && (in.is("=", 1) || (in.is("[",1) && in.is("[",2)) ||
+        in.is("__attribute__",1) || in.is("__attribute",1))) {
         NodeId result = leaf(Kind::Alias);
+        NativeAttributes native; attributes(nullptr,&native); native_attributes(result,native);
         in.require("=");
         NodeId type = type_id();
         ast.append(result, type);
@@ -168,6 +171,7 @@ NodeId Parser::using_declaration()
     NodeId n = name();
     NodeId result = wrap(directive ? Kind::UsingDirective : Kind::UsingDeclaration, named(Kind::Target, n));
     if (type) ast[result].flags |= 1;
+    ast[result].flags |= attributes() & UsingIfExists;
     Binding binding = name_binding(n);
     if (directive && binding.target) names.import(scope, binding.target, true);
     else if (!directive) names.bind(scope, final_name(n), type ? Category::Type : binding.category, binding.target);

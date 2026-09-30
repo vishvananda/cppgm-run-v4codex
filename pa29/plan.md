@@ -25,7 +25,23 @@ percentage gate is assumed. Keep inherited measurements and mandated limits.
 
 ## Handoff ledger
 
-- Implementation unfinished: all groups above; first boundary is the complete
+- Working checkpoint: full runs **240/403 → 258/403**, 56/56 explicit controls;
+  preprocessing run **44/49** before using-if-exists. Nine related course reducers pass. Driver/probe mechanics, hosted numeric
+  decoding and shape/transform facts are implemented. Remaining preprocessing
+  mismatches belong to atomic/integer intrinsics, reference-temporary/destructor
+  traits and using-if-exists, whose probes must not claim absent semantics.
+  PA1–28 **4538/4538** passed at the first increment; file audit passes with four inherited warnings.
+  The audit caught a redundant runtime include-path environment import; removed
+  it because the harness already passes explicit `-nostdinc -isystem` options.
+- Typed traits now cover shape, cv/reference/extent/signedness transforms,
+  destruction and implicit conversion. Shared conversion selection rejects
+  reference-related temporary repair and excludes known explicit templates
+  before deduction; late defaulting preserves declared exception behavior.
+  ABI trait operands are typed edges, not template-argument wrappers. No body
+  replay or name-based lowering was added. Query facts/cache lifetime remain TU
+  owned; shape work is O(1), nested arrays O(rank), operation work follows the
+  selected ordinary candidate/dependency owner.
+- Implementation unfinished: other groups above; first boundary is the complete
   hosted preprocessor group, extended into directly related defects as evidence
   supports. A minimum count improvement is not a stopping criterion.
 - Independent review pending: whole-stage source-to-ELF/spec audit; no reviewed

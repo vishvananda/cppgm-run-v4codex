@@ -4,8 +4,8 @@
 namespace cppgm {
 
 PostTokenCursor::PostTokenCursor(PPTokenSource& input, IdentifierTable& identifiers,
-                                 bool retain_source, PostStats* stats, bool multicharacter)
-    : input_(input), identifiers_(identifiers), retain_source_(retain_source), multicharacter_(multicharacter), stats_(stats) {}
+                                 bool retain_source, PostStats* stats, bool multicharacter, bool hosted)
+    : input_(input), identifiers_(identifiers), retain_source_(retain_source), multicharacter_(multicharacter), hosted_(hosted), stats_(stats) {}
 
 std::size_t PostTokenCursor::storage_bytes() const
 {
@@ -125,7 +125,7 @@ PostToken PostTokenCursor::next()
         break;
     case PPTokenKind::number:
         if (stats_) stats_->number_bytes += pp.spelling.size;
-        decode_number(token, identifiers_);
+        decode_number(token, identifiers_, NumberDomain::all, hosted_);
         break;
     case PPTokenKind::character:
     case PPTokenKind::user_character:

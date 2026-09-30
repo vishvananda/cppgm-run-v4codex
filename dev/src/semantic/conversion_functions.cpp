@@ -200,6 +200,10 @@ Conversion Analyzer::conversion_value(Expression source, TypeId to, bool user, N
     if (result.valid() || !user) return result;
     bool ref = types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef;
     if (ref) {
+        // A failed binding to a reference-related object cannot be repaired by
+        // copying that same object into a temporary ([dcl.init.ref]).
+        auto target = types[to].child;
+        if (types.unqualified(source.type) == types.unqualified(target) || derived_from(source.type,target)) return result;
         auto direct = conversion_function_value(source,to,false,true);
         if (direct.valid()) return direct;
     }

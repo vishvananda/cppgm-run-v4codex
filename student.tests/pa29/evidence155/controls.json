@@ -1,0 +1,730 @@
+{
+  "compiler_sha256": "5a3619a03d16ee9be8634728ef8f281080371fd211c9092f937aef061469ff80",
+  "checks": [
+    {
+      "name": "literals compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/literals.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/literals.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "literals host link",
+      "args": [
+        "g++",
+        "/tmp/pa29-155/controls/literals.o",
+        "-o",
+        "/tmp/pa29-155/controls/literals"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "literals runtime",
+      "args": [
+        "/tmp/pa29-155/controls/literals"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/operations.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/operations.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations host link",
+      "args": [
+        "g++",
+        "/tmp/pa29-155/controls/operations.o",
+        "-o",
+        "/tmp/pa29-155/controls/operations"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations runtime",
+      "args": [
+        "/tmp/pa29-155/controls/operations"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "probes compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/probes.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/probes.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "probes host link",
+      "args": [
+        "g++",
+        "/tmp/pa29-155/controls/probes.o",
+        "-o",
+        "/tmp/pa29-155/controls/probes"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "probes runtime",
+      "args": [
+        "/tmp/pa29-155/controls/probes"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/traits.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/traits.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits host link",
+      "args": [
+        "g++",
+        "/tmp/pa29-155/controls/traits.o",
+        "-o",
+        "/tmp/pa29-155/controls/traits"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits runtime",
+      "args": [
+        "/tmp/pa29-155/controls/traits"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "--version",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--version"
+      ],
+      "status": 0,
+      "stdout": "cppgm++ C++11 compiler\nTarget: x86_64-linux-gnu\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "-v",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-v"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "cppgm++ C++11 compiler\nTarget: x86_64-linux-gnu\n",
+      "passed": true
+    },
+    {
+      "name": "-dumpmachine",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-dumpmachine"
+      ],
+      "status": 0,
+      "stdout": "x86_64-linux-gnu\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "-dumpversion",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-dumpversion"
+      ],
+      "status": 0,
+      "stdout": "15\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "-print-search-dirs",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-print-search-dirs"
+      ],
+      "status": 0,
+      "stdout": "install: /usr/lib/gcc/x86_64-linux-gnu/15/\nprograms: =/usr/libexec/gcc/x86_64-linux-gnu/15/:/usr/libexec/gcc/x86_64-linux-gnu/15/:/usr/libexec/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/15/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/bin/x86_64-linux-gnu/15/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/bin/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/bin/\nlibraries: =/usr/lib/gcc/x86_64-linux-gnu/15/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/15/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../x86_64-linux-gnu/15/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../lib/:/lib/x86_64-linux-gnu/15/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/15/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/lib/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../:/lib/:/usr/lib/\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "ordered macro controls",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-DVALUE=2",
+        "-UVALUE",
+        "-D",
+        "VALUE=9",
+        "-DGONE",
+        "-U",
+        "GONE",
+        "-std=c++14",
+        "/tmp/pa29-155/controls/macros.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/macros.cpp\nidentifier macro_ok\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "independent preprocessing units",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/first.cpp",
+        "/tmp/pa29-155/controls/second.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 2\nsof /tmp/pa29-155/controls/first.cpp\nidentifier first\neof\nsof /tmp/pa29-155/controls/second.cpp\nidentifier second\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "multiple outputs rejected",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/first.cpp",
+        "/tmp/pa29-155/controls/second.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/bad"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: cannot specify -o when generating multiple output files\n",
+      "passed": true
+    },
+    {
+      "name": "conflicting modes",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-c",
+        "/tmp/pa29-155/controls/first.cpp"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: cannot combine -c and -E\n",
+      "passed": true
+    },
+    {
+      "name": "output failure",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/first.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/missing/out"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: cannot create preprocessing output\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -D",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/first.cpp",
+        "-D"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing macro definition after -D\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -U",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/first.cpp",
+        "-U"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing macro name after -U\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -include",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/first.cpp",
+        "-include"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing file after -include\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -isystem",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/first.cpp",
+        "-isystem"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing path after -isystem\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -o",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/first.cpp",
+        "-o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing output file after -o\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -stdlib",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/first.cpp",
+        "-stdlib"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing standard library name after -stdlib\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -std",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/first.cpp",
+        "-std"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing language standard after -std\n",
+      "passed": true
+    },
+    {
+      "name": "frozen standard library refusal",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-stdlib=definitely-not-a-library",
+        "/tmp/pa29-155/controls/first.cpp"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: stdlib differs from the build-time selection\n",
+      "passed": true
+    },
+    {
+      "name": "frozen standard library match",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-stdlib=libstdc++",
+        "/tmp/pa29-155/controls/first.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/first.cpp\nidentifier first\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "forced include output",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-include",
+        "/tmp/pa29-155/controls/forced1.cpp",
+        "-include",
+        "/tmp/pa29-155/controls/forced2.cpp",
+        "/tmp/pa29-155/controls/forced-use.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/forced-use.cpp\nsimple int KW_INT\nidentifier main\nsimple ( OP_LPAREN\nsimple ) OP_RPAREN\nsimple { OP_LBRACE\nsimple return KW_RETURN\nliteral 0 int 00000000\nsimple ; OP_SEMICOLON\nsimple } OP_RBRACE\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "forced include object",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-include",
+        "/tmp/pa29-155/controls/forced1.cpp",
+        "-include",
+        "/tmp/pa29-155/controls/forced2.cpp",
+        "/tmp/pa29-155/controls/forced-use.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/forced.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "include ordering and macro angle",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-nostdinc",
+        "-isystem",
+        "/tmp/pa29-155/controls/system",
+        "-I",
+        "/tmp/pa29-155/controls/user",
+        "-I",
+        "/tmp/pa29-155/controls/user",
+        "/tmp/pa29-155/controls/include-search.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/include-search.cpp\nidentifier user_header\nidentifier system_header\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "malformed __has_cpp_attribute(123)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-probe.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-probe.cpp\n",
+      "stderr": "ERROR: probe requires an identifier\n",
+      "passed": true
+    },
+    {
+      "name": "malformed __has_cpp_attribute(a::b::c)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-probe.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-probe.cpp\n",
+      "stderr": "ERROR: invalid preprocessor probe\n",
+      "passed": true
+    },
+    {
+      "name": "malformed __has_builtin(a,b)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-probe.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-probe.cpp\n",
+      "stderr": "ERROR: invalid preprocessor probe\n",
+      "passed": true
+    },
+    {
+      "name": "malformed __has_feature(a::b)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-probe.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-probe.cpp\n",
+      "stderr": "ERROR: invalid preprocessor probe\n",
+      "passed": true
+    },
+    {
+      "name": "malformed __has_warning(name)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-probe.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-probe.cpp\n",
+      "stderr": "ERROR: expected string literal\n",
+      "passed": true
+    },
+    {
+      "name": "malformed __has_declspec_attribute(\"name\")",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-probe.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-probe.cpp\n",
+      "stderr": "ERROR: probe requires an identifier\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0b",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0b102",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0x.p1",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0x1.p",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0x1p+",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0x1.0",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0x1p3z",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 1.0F128junk",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "discarded comment bytes",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/comment.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/comment.cpp\nsimple int KW_INT\nidentifier ok\nsimple ; OP_SEMICOLON\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "invalid source bytes",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-155/controls/comment.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/comment.cpp\nsimple int KW_INT\n",
+      "stderr": "ERROR: invalid UTF-8 leading byte\n",
+      "passed": true
+    },
+    {
+      "name": "invalid trait __is_const(int,int)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-155/controls/bad-trait.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/bad.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n",
+      "passed": true
+    },
+    {
+      "name": "invalid trait __remove_cv()",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-155/controls/bad-trait.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/bad.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n",
+      "passed": true
+    },
+    {
+      "name": "invalid trait __make_signed(bool)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-155/controls/bad-trait.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/bad.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __make_signed\n",
+      "passed": true
+    },
+    {
+      "name": "invalid trait __make_unsigned(float)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-155/controls/bad-trait.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/bad.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __make_unsigned\n",
+      "passed": true
+    },
+    {
+      "name": "constexpr literal categories",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-155/controls/constexpr-udl.cpp",
+        "-o",
+        "/tmp/pa29-155/controls/udl.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "multiple compile inputs",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-155/controls/multi-a.cpp",
+        "/tmp/pa29-155/controls/multi-b.cpp"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    }
+  ],
+  "passed": 56,
+  "total": 56
+}

@@ -97,7 +97,7 @@ bool is_debug_info_flag(const string & arg)
 
 bool is_benign_driver_flag(const string & arg)
 {
-  return arg == "-Wall" ||
+  return arg == "-nostdinc" || arg == "-nostdinc++" || arg == "-Wall" ||
       arg == "-Winvalid-offsetof" ||
       arg == "-pipe" ||
       arg == "-w" ||
@@ -302,7 +302,7 @@ bool consume_toolchain_option(const vector<string> & args, size_t & i)
     return true;
   }
   if(args[i] == "-pthread") {
-    throw logic_error("option not yet supported: -pthread");
+    return true;
   }
   return false;
 }
@@ -446,9 +446,9 @@ int run_driver_mode(const vector<string> & args)
   const DriverInvocation invocation = parse_driver_invocation(args);
   switch(invocation.mode) {
   case DriverMode::Query:
-    return run_unimplemented_mode("driver query mode", "PA29");
+    return cppgm::toolchain::query(args[0]);
   case DriverMode::Preprocess:
-    return run_unimplemented_mode("hosted preprocess driver mode (-E)", "PA29");
+    return cppgm::toolchain::run(args);
   case DriverMode::Compile:
     return cppgm::toolchain::run(args);
   case DriverMode::Link:

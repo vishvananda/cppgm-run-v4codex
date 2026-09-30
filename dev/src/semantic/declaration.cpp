@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "support/attributes.h"
 #include <stdexcept>
 #include <chrono>
 #include <algorithm>
@@ -346,6 +347,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         bool conversion = calls && ast[part].op == KW_OPERATOR && ast[part].detail;
         auto owner = conversion ? name_owner(name,s) : 0;
         EntityId e = conversion ? conversion_lookup(owner,type_id(ast[part].detail,s),false) : resolve(name,s);
+        if (!e && (ast[n].flags & UsingIfExists)) break;
         if (!e) throw std::runtime_error("unknown using target");
         if (calls && scopes[s].kind == ScopeKind::Class) {
             for (EntityId member : candidates(e)) {

@@ -74,8 +74,8 @@ std::string decode_pp_string(const ExpansionToken& token)
 }
 
 Preprocessor::Preprocessor(const std::string& path, const std::string& date,
-                           const std::string& time, bool telemetry)
-    : telemetry_(telemetry), identifiers_(telemetry ? &lex_stats_ : 0), expander_(*this, true)
+                           const std::string& time, bool telemetry, bool hosted)
+    : telemetry_(telemetry), hosted_(hosted), identifiers_(telemetry ? &lex_stats_ : 0), expander_(*this, true)
 {
     reset_contexts();
     const char* dynamic[] = {"__FILE__", "__LINE__", "__COUNTER__", "__has_cpp_attribute", "__has_attribute",
@@ -85,6 +85,14 @@ Preprocessor::Preprocessor(const std::string& path, const std::string& date,
         macros_.resize(id + 1);
         macros_[id].defined = true;
         macros_[id].builtin = i + 1;
+    }
+    if (hosted) {
+        const char* probes[] = {"__has_builtin", "__has_feature", "__has_extension", "__building_module",
+            "__has_warning", "__has_declspec_attribute", "__has_constexpr_builtin", "__has_rmw_builtin", "__is_identifier"};
+        for (unsigned i = 0; i < sizeof(probes)/sizeof(*probes); ++i) {
+            auto id = name(probes[i]); macros_.resize(id+1);
+            macros_[id].defined = true; macros_[id].builtin = i+8;
+        }
     }
     const std::string fixed[][2] = {
         {"__CPPGM__", "201303L"}, {"__cplusplus", "201103L"}, {"__STDC_HOSTED__", "1"},
@@ -104,7 +112,14 @@ Preprocessor::Preprocessor(const std::string& path, const std::string& date,
 
 void Preprocessor::command_options(const std::vector<std::string>& options)
 {
-    for (const auto& option : options) {
+    for (std::size_t i = 0; i < options.size(); ++i) {
+        const auto& option = options[i];
+        if (option == "-include") {
+            if (++i == options.size()) throw std::runtime_error("missing forced include file");
+            forced_includes_.push_back(options[i]); continue;
+        }
+        if (option.size() < 3 || option[0] != '-' || (option[1] != 'D' && option[1] != 'U'))
+            throw std::runtime_error("invalid preprocessing option");
         bool undefine = option[1] == 'U';
         std::string text = option.substr(2);
         auto equal = text.find('=');
@@ -114,7 +129,7 @@ void Preprocessor::command_options(const std::vector<std::string>& options)
         }
         text = (undefine ? "undef " : "define ") + text + "\n";
         SourceBuffer source(text);
-        PPTokenCursor cursor(source,identifiers_,nullptr);
+        PPTokenCursor cursor(source,identifiers_,nullptr,false,false,hosted_);
         std::vector<ExpansionToken> line; bool space = false;
         for (;;) {
             auto token = cursor.next();
@@ -197,7 +212,7 @@ std::uint32_t Preprocessor::intersect(std::uint32_t a, std::uint32_t b)
 ExpansionToken Preprocessor::generated(const std::string& text, const ExpansionToken& origin)
 {
     SourceBuffer source(text);
-    PPTokenCursor cursor(source, identifiers_, 0, false, true);
+    PPTokenCursor cursor(source, identifiers_, 0, false, true, hosted_);
     ExpansionToken result = origin;
     PPToken t = cursor.next();
     if (t.kind == PPTokenKind::whitespace || t.kind == PPTokenKind::newline || t.kind == PPTokenKind::eof)
@@ -243,7 +258,7 @@ void Preprocessor::include(const std::string& path)
     if (telemetry_) { stats_.source_bytes += bytes.size(); ++stats_.files; }
     sources_.emplace_back(std::move(bytes), sources_.size() + 1);
     IdentifierId filename = name(path);
-    files_.emplace_back(new FileFrame(sources_.back(), identifiers_, telemetry_ ? &lex_stats_ : 0, filename));
+    files_.emplace_back(new FileFrame(sources_.back(), identifiers_, telemetry_ ? &lex_stats_ : 0, filename, hosted_));
 }
 
 ExpansionToken Preprocessor::raw()
@@ -251,6 +266,14 @@ ExpansionToken Preprocessor::raw()
     ExpansionToken end;
     end.token.kind = PPTokenKind::eof;
     if (boundary_ || files_.empty()) return end;
+    while (files_.size() == 1 && next_forced_include_ < forced_includes_.size()) {
+        auto path = forced_includes_[next_forced_include_++];
+        // -include searches the working directory first, then the configured paths.
+        struct stat info; int index = -1;
+        if (stat(path.c_str(),&info) || !S_ISREG(info.st_mode)) path = find_header(path,false,false,index);
+        if (path.empty()) throw std::runtime_error("cannot find forced include");
+        if (!once(path,false)) { include(path); files_.back()->include_index = index; }
+    }
     FileFrame& f = *files_.back();
     for (;;) {
         PPToken t = f.cursor.next();

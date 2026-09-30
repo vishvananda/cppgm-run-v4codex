@@ -101,7 +101,7 @@ private:
 class Preprocessor : public PPTokenSource {
 public:
     Preprocessor(const std::string& path, const std::string& date, const std::string& time,
-                 bool telemetry = false);
+                 bool telemetry = false, bool hosted = false);
     void command_options(const std::vector<std::string>&);
     void include_paths(const std::vector<std::string>& paths);
     PPToken next();
@@ -119,8 +119,8 @@ private:
         int include_index = -1;
         bool line_start = true, space = false;
         std::vector<Conditional> conditions;
-        FileFrame(const SourceBuffer& s, IdentifierTable& ids, LexStats* stats, IdentifierId name)
-            : source(s), cursor(s, ids, stats), filename(name), physical_filename(name) {}
+        FileFrame(const SourceBuffer& s, IdentifierTable& ids, LexStats* stats, IdentifierId name, bool hosted)
+            : source(s), cursor(s, ids, stats, false, false, hosted), filename(name), physical_filename(name) {}
         bool active() const { return conditions.empty() || conditions.back().active; }
     };
     struct ContextNode { std::uint32_t child[2]; };
@@ -132,7 +132,9 @@ private:
         void rewind();
     };
     std::vector<std::string> include_paths_;
-    bool telemetry_;
+    bool telemetry_, hosted_;
+    std::vector<std::string> forced_includes_;
+    std::size_t next_forced_include_ = 0;
     LexStats lex_stats_;
     PreprocessStats stats_;
     IdentifierTable identifiers_;

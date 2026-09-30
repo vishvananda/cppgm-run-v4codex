@@ -260,7 +260,8 @@ bool Analyzer::function_nonthrowing(EntityId e)
     demand_exception_specification(e);
     auto spec = entities[e].exception_spec & 3;
     if (spec) return spec == 1 || spec == 3;
-    if (transfer_member(e) && members[entities[e].member_info].synthetic) {
+    if (transfer_member(e) && members[entities[e].member_info].synthetic &&
+        !members[entities[e].member_info].defaulted_late) {
         prepare_transfer(e); return members[entities[e].member_info].transfer_noexcept;
     }
     if (constructor_member(e) && members[entities[e].member_info].synthetic &&

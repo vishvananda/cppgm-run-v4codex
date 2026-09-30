@@ -2,6 +2,71 @@
 #include "support/type_traits.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+namespace {
+struct TraitProbe {
+    bool& immediate; bool old_immediate; bool& explicit_access; bool old_explicit;
+    ScopeId& access; ScopeId old_access;
+    TraitProbe(bool& i, bool& e, ScopeId& a, ScopeId global) : immediate(i), old_immediate(i),
+        explicit_access(e), old_explicit(e), access(a), old_access(a) { i=true; e=false; a=global; }
+    ~TraitProbe(){immediate=old_immediate; explicit_access=old_explicit; access=old_access;}
+};
+bool referenceable(const Type& t)
+{
+    return !(t.kind == TypeKind::Fundamental && t.fundamental == FT_VOID) &&
+        !(t.kind == TypeKind::Function && (t.cv || t.ref != RefQualifier::None));
+}
+TypeId remove_cv(Types& types, TypeId t, unsigned removed)
+{
+    auto type = types[t];
+    if (type.kind == TypeKind::Array) return types.compound(TypeKind::Array,remove_cv(types,type.child,removed),type.bound);
+    return types.qualify(types.unqualified(t),type.cv & ~removed);
+}
+TypeId transform_type(Analyzer& sem, BuiltinTrait trait, TypeId t)
+{
+    auto& types = sem.types; auto type = types[t];
+    bool ref = type.kind == TypeKind::LRef || type.kind == TypeKind::RRef;
+    switch (trait) {
+    case BuiltinTrait::RemoveCV: return types.unqualified(t);
+    case BuiltinTrait::RemoveConst: return remove_cv(types,t,1);
+    case BuiltinTrait::RemoveVolatile: return remove_cv(types,t,2);
+    case BuiltinTrait::RemoveReference: return ref ? type.child : t;
+    case BuiltinTrait::RemoveCVRef: return types.unqualified(ref ? type.child : t);
+    case BuiltinTrait::RemovePointer: return type.kind == TypeKind::Pointer ? type.child : t;
+    case BuiltinTrait::RemoveExtent: return type.kind == TypeKind::Array ? type.child : t;
+    case BuiltinTrait::RemoveAllExtents:
+        while (types[t].kind == TypeKind::Array) t = types[t].child;
+        return t;
+    case BuiltinTrait::AddPointer:
+        if (ref) t = type.child;
+        if (referenceable(types[t]) || (types[t].kind == TypeKind::Fundamental && types[t].fundamental == FT_VOID))
+            return types.compound(TypeKind::Pointer,t);
+        return t;
+    case BuiltinTrait::AddLRef: case BuiltinTrait::AddRRef:
+        return referenceable(type) ? types.compound(trait == BuiltinTrait::AddLRef ? TypeKind::LRef : TypeKind::RRef,t) : t;
+    case BuiltinTrait::MakeSigned: case BuiltinTrait::MakeUnsigned: {
+        bool enumeration = type.kind == TypeKind::Named && sem.entities[type.entity].key == KW_ENUM;
+        if (enumeration) type = types[sem.entities[type.entity].underlying];
+        auto f = type.fundamental;
+        if (type.kind != TypeKind::Fundamental || f == FT_BOOL ||
+            !(f < FT_BOOL || f == FT_INT128 || f == FT_UINT128)) return 0;
+        bool uns = trait == BuiltinTrait::MakeUnsigned;
+        // Named character types and enums use the first integer rank of their
+        // width. Ordinary integers retain their rank (long versus long long).
+        if (enumeration || f == FT_CHAR || f == FT_WCHAR_T || f == FT_CHAR16_T || f == FT_CHAR32_T) {
+            auto width = sem.type_width(t);
+            f = width == 8 ? FT_SIGNED_CHAR : width == 16 ? FT_SHORT_INT : width == 32 ? FT_INT :
+                width == 64 ? FT_LONG_INT : FT_INT128;
+        }
+        if (f == FT_INT128 || f == FT_UINT128) f = uns ? FT_UINT128 : FT_INT128;
+        else if (uns && f <= FT_LONG_LONG_INT) f = EFundamentalType(unsigned(f)+unsigned(FT_UNSIGNED_CHAR));
+        else if (!uns && f >= FT_UNSIGNED_CHAR && f <= FT_UNSIGNED_LONG_LONG_INT)
+            f = EFundamentalType(unsigned(f)-unsigned(FT_UNSIGNED_CHAR));
+        return types.qualify(types.fundamental(f),types[t].cv);
+    }
+    default: return 0;
+    }
+}
+}
 QueryId Analyzer::type_operation_query(NodeId n, ScopeId s)
 {
     auto node = ast[n]; auto first = node.first;
@@ -24,7 +89,8 @@ TypeQueryFact Analyzer::query_builtin_trait(QueryId id, const TypeQuery& query)
 {
     auto trait = BuiltinTrait(query.value);
     auto args = argument_packs[query.arguments];
-    bool binary = trait == BuiltinTrait::Same || trait == BuiltinTrait::BaseOf ||
+    bool convertible = trait == BuiltinTrait::Convertible || trait == BuiltinTrait::NothrowConvertible;
+    bool binary = convertible || trait == BuiltinTrait::Same || trait == BuiltinTrait::BaseOf ||
         trait == BuiltinTrait::Assignable || trait == BuiltinTrait::NothrowAssignable || trait == BuiltinTrait::TriviallyAssignable;
     bool construct = trait == BuiltinTrait::Constructible || trait == BuiltinTrait::NothrowConstructible || trait == BuiltinTrait::TriviallyConstructible;
     if (!args.count || (binary ? args.count != 2 : !construct && args.count != 1))
@@ -40,6 +106,11 @@ TypeQueryFact Analyzer::query_builtin_trait(QueryId id, const TypeQuery& query)
             return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
         result.expression.type = entities[types[t].entity].underlying; return result;
     }
+    if (type_transform(trait)) {
+        auto transformed = transform_type(*this,trait,t);
+        if (!transformed) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+        result.expression.type = transformed; return result;
+    }
     bool value = false;
     if (trait == BuiltinTrait::Same) value = t == argument_types[args.offset+1];
     else if (trait == BuiltinTrait::BaseOf) {
@@ -54,13 +125,22 @@ TypeQueryFact Analyzer::query_builtin_trait(QueryId id, const TypeQuery& query)
         // Probe a typed hypothetical expression in an unrelated access context.
         // Expected overload rejection stays in TypeQueryFact; no fake AST and
         // no function body demand are needed to answer an operation trait.
-        struct Probe {
-            bool& immediate; bool old_immediate; bool& explicit_access; bool old_explicit;
-            ScopeId& access; ScopeId old_access;
-            Probe(bool& i, bool& e, ScopeId& a, ScopeId global) : immediate(i), old_immediate(i),
-                explicit_access(e), old_explicit(e), access(a), old_access(a) { i=true; e=false; a=global; }
-            ~Probe(){immediate=old_immediate; explicit_access=old_explicit; access=old_access;}
-        } probe(immediate_query_probe,explicit_instantiation_naming,access_override,global);
+        TraitProbe probe(immediate_query_probe,explicit_instantiation_naming,access_override,global);
+        if (convertible) {
+            auto target = argument_types[args.offset+1];
+            if (fundamental(t,FT_VOID) || fundamental(target,FT_VOID))
+                value = fundamental(t,FT_VOID) && fundamental(target,FT_VOID);
+            else if (types[target].kind != TypeKind::Array && types[target].kind != TypeKind::Function && referenceable(types[t])) {
+                TypeQuery source; source.kind = QueryKind::Value;
+                source.type = types.compound(TypeKind::RRef,t);
+                auto x = query_fact(intern_query(source,{})).expression;
+                auto c = conversion_value(x,target);
+                value = valid_fixed_conversion(x,0,c,global);
+                if (value && trait == BuiltinTrait::NothrowConvertible) value = conversion_nonthrowing(c);
+            }
+            builtin_trait_values.put(id,constants.size()); constants.push_back(Constant(result.expression.type,value));
+            return result;
+        }
         std::vector<QueryId> operands;
         std::vector<Expression> values;
         for (unsigned j = construct ? 1 : 0; j < args.count; ++j) {
@@ -138,11 +218,61 @@ bool Analyzer::builtin_type_property(unsigned operation, TypeId t)
     bool named = type.kind == TypeKind::Named;
     bool enumeration = named && entities[type.entity].key == KW_ENUM;
     bool cls = named && !enumeration;
+    bool ref = type.kind == TypeKind::LRef || type.kind == TypeKind::RRef;
+    bool integer = type.kind == TypeKind::Fundamental && integral(t);
+    bool floating = type.kind == TypeKind::Fundamental && floating_type(t);
+    bool number = integer || floating;
+    bool function = type.kind == TypeKind::Function;
+    bool ptr = type.kind == TypeKind::Pointer, member = type.kind == TypeKind::MemberPointer;
     switch (trait) {
+    case BuiltinTrait::Const: case BuiltinTrait::Volatile:
+        while (type.kind == TypeKind::Array) type = types[type.child];
+        return !ref && !function && (type.cv & (trait == BuiltinTrait::Const ? 1 : 2));
+    case BuiltinTrait::Void: return fundamental(t,FT_VOID);
+    case BuiltinTrait::Array: return type.kind == TypeKind::Array;
+    case BuiltinTrait::BoundedArray: return type.kind == TypeKind::Array && type.bound;
+    case BuiltinTrait::UnboundedArray: return type.kind == TypeKind::Array && !type.bound;
+    case BuiltinTrait::LvalueReference: return type.kind == TypeKind::LRef;
+    case BuiltinTrait::RvalueReference: return type.kind == TypeKind::RRef;
+    case BuiltinTrait::Reference: return ref;
+    case BuiltinTrait::Pointer: return ptr;
+    case BuiltinTrait::Function: return function;
+    case BuiltinTrait::Object: return !ref && !function && !fundamental(t,FT_VOID);
+    case BuiltinTrait::Integral: return integer;
+    case BuiltinTrait::Floating: return floating;
+    case BuiltinTrait::Arithmetic: return number;
+    case BuiltinTrait::Fundamental: return type.kind == TypeKind::Fundamental;
+    case BuiltinTrait::Compound: return type.kind != TypeKind::Fundamental;
+    case BuiltinTrait::Referenceable: return referenceable(type);
+    case BuiltinTrait::Signed: return floating || (integer && !is_unsigned(t));
+    case BuiltinTrait::Unsigned: return integer && is_unsigned(t);
+    case BuiltinTrait::Scalar: return number || enumeration || ptr || member || fundamental(t,FT_NULLPTR_T);
+    case BuiltinTrait::MemberPointer: return member;
+    case BuiltinTrait::MemberObjectPointer: return member && types[type.child].kind != TypeKind::Function;
+    case BuiltinTrait::MemberFunctionPointer: return member && types[type.child].kind == TypeKind::Function;
     case BuiltinTrait::Enum: return enumeration;
     case BuiltinTrait::Union: return cls && entities[type.entity].key == KW_UNION;
     case BuiltinTrait::Class: return cls && entities[type.entity].key != KW_UNION;
     default: break;
+    }
+    if (trait == BuiltinTrait::Destructible || trait == BuiltinTrait::TriviallyDestructible || trait == BuiltinTrait::NothrowDestructible) {
+        if (ref) return true;
+        if (type.kind == TypeKind::Array) return type.bound && builtin_type_property(operation,type.child);
+        if (function || fundamental(t,FT_VOID)) return false;
+        if (!cls) return true;
+        TraitProbe probe(immediate_query_probe,explicit_instantiation_naming,access_override,global);
+        TypeQuery receiver; receiver.kind = QueryKind::Value; receiver.type = types.compound(TypeKind::LRef,t);
+        TypeQuery destructor; destructor.kind = QueryKind::Destructor; destructor.type = t;
+        destructor.context = global; destructor.value = 1; destructor.op = OP_DOT;
+        auto query = intern_query(destructor,{intern_query(receiver,{})});
+        auto fact = query_fact(query);
+        if (fact.state != FactState::Success) return false;
+        if (trait == BuiltinTrait::TriviallyDestructible) return trivial_destructor(t);
+        if (trait == BuiltinTrait::NothrowDestructible) {
+            TypeQuery call; call.kind = QueryKind::Call; call.context = global;
+            return query_nonthrowing(intern_query(call,{query}));
+        }
+        return true;
     }
     if (cls) {
         complete_class(type.entity);

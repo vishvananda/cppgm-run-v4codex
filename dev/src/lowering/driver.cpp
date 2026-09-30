@@ -19,9 +19,9 @@ void build_program(lowir_model::Program& program, const std::vector<std::string>
     std::size_t full_expression_work = 0, full_expression_regions = 0;
     for (const std::string& input : inputs) {
         auto start = Clock::now();
-        Preprocessor pp(input, stamp.substr(4, 7) + stamp.substr(20, 4), stamp.substr(11, 8), stats);
+        Preprocessor pp(input, stamp.substr(4, 7) + stamp.substr(20, 4), stamp.substr(11, 8), stats, host);
         pp.include_paths(includes); pp.command_options(macros);
-        PostTokenCursor post(pp, pp.identifiers(), false, 0, true);
+        PostTokenCursor post(pp, pp.identifiers(), false, 0, true, host);
         syntax::Ast ast(stats);
         syntax::Cursor cursor(post, pp.identifiers(), ast);
         syntax::Parser parser(cursor, ast, pp.identifiers());

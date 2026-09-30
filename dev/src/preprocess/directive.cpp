@@ -1,5 +1,7 @@
 // Adapted from CPPGM PA4 directive and file-identity rules; see NOTICE.
 #include "preprocess/preprocessor.h"
+#include "preprocess/hosted_probes.h"
+#include "support/attributes.h"
 #include <cstdlib>
 #include <algorithm>
 #include <tuple>
@@ -156,20 +158,29 @@ ExpansionToken Preprocessor::builtin(const ExpansionToken& head, unsigned kind, 
         return generated(find_header(name,quoted,kind == 7,index).empty() ? "0" : "1",head);
     }
     ExpansionToken attribute = expansion.take();
-    bool recognized = attribute.is("no_unique_address") || attribute.is("__no_unique_address__");
-    unsigned value = recognized ? 201803 :
-        (attribute.is("noreturn") || attribute.is("carries_dependency") ? 200809 : 0);
-    if (kind == 5) value = attribute.is("cppgm_stable_prefix") || attribute.is("__cppgm_stable_prefix__") ||
+    if (kind == 12) {
+        decode_pp_string(attribute);
+        if (!expansion.take().is(")")) throw std::runtime_error("invalid warning probe");
+        return generated("0",head);
+    }
+    if (attribute.token.kind != PPTokenKind::identifier) throw std::runtime_error("probe requires an identifier");
+    unsigned value = 0;
+    if (kind == 4) value = attribute.is("no_unique_address") || attribute.is("__no_unique_address__") ? 201803 :
+        attribute.is("noreturn") || attribute.is("carries_dependency") ? 200809 : 0;
+    if (kind == 5) value = using_if_exists_attribute(attribute.token.spelling) || attribute.is("cppgm_stable_prefix") || attribute.is("__cppgm_stable_prefix__") ||
         attribute.is("packed") || attribute.is("__packed__") || attribute.is("noinline") || attribute.is("__noinline__") ||
-        attribute.is("always_inline") || attribute.is("__always_inline__");
+        (!hosted_ && (attribute.is("always_inline") || attribute.is("__always_inline__")));
+    if (kind == 16) value = classify_simple(attribute.token.spelling) == TOK_INVALID &&
+        builtin_trait(attribute.token.spelling) == BuiltinTrait::None;
+    if (kind == 8) value = hosted_builtin(attribute.token.spelling);
+    if (kind == 9 || kind == 10) value = hosted_feature(attribute.token.spelling);
     ExpansionToken close = expansion.take();
-    if (close.is("::")) {
+    if (kind == 4 && close.is("::")) {
         attribute = expansion.take();
         if (attribute.token.kind != PPTokenKind::identifier) throw std::runtime_error("invalid attribute name");
-        value = 0;
-        close = expansion.take();
+        value = 0; close = expansion.take();
     }
-    if (!close.is(")")) throw std::runtime_error("invalid attribute probe");
+    if (!close.is(")")) throw std::runtime_error("invalid preprocessor probe");
     return generated(std::to_string(value), head);
 }
 
@@ -177,7 +188,7 @@ bool Preprocessor::condition(const std::vector<ExpansionToken>& tokens)
 {
     MacroExpander expansion(*this, false, true);
     expansion.push(tokens);
-    PPExpressionEvaluator evaluator(identifiers_, query, this);
+    PPExpressionEvaluator evaluator(identifiers_, query, this, nullptr, nullptr, hosted_);
     for (;;) {
         ExpansionToken token = expansion.next();
         if (token.token.kind == PPTokenKind::eof) break;
@@ -259,6 +270,7 @@ void Preprocessor::directive()
         if (id < macros_.size()) macros_[id] = MacroDefinition();
         return;
     }
+    if (hosted_ && command.is("warning")) return;
     if (command.is("error")) throw std::runtime_error("active error directive");
     if (command.is("pragma")) {
         pragma(rest, f.filename);
@@ -274,13 +286,18 @@ void Preprocessor::directive()
         rest.push_back(token);
     }
     if (command.is("include") || command.is("include_next")) {
-        if (rest.size() != 1) throw std::runtime_error("expected one header name");
+        if (rest.empty()) throw std::runtime_error("expected header name");
         std::string next;
-        if (rest[0].token.kind == PPTokenKind::header) {
+        bool expanded_angle = rest.size() >= 3 && rest.front().is("<") && rest.back().is(">");
+        if (expanded_angle) {
+            for (std::size_t i = 1; i+1 < rest.size(); ++i)
+                next.append(rest[i].token.spelling.data,rest[i].token.spelling.size);
+        } else if (rest.size() != 1) throw std::runtime_error("expected one header name");
+        else if (rest[0].token.kind == PPTokenKind::header) {
             TextView text = rest[0].token.spelling;
             next.assign(text.data + 1, text.size - 2);
         } else next = decode_pp_string(rest[0]);
-        const bool quoted = rest[0].token.kind != PPTokenKind::header || rest[0].token.spelling.data[0] == '"';
+        const bool quoted = !expanded_angle && (rest[0].token.kind != PPTokenKind::header || rest[0].token.spelling.data[0] == '"');
         bool resume = command.is("include_next"); int include_index = -1;
         auto found = find_header(next,quoted,resume,include_index);
         if (found.empty()) throw std::runtime_error("cannot find header " + next);
@@ -289,7 +306,7 @@ void Preprocessor::directive()
     } else {
         if (rest.empty() || rest.size() > 2 || rest[0].token.kind != PPTokenKind::number)
             throw std::runtime_error("invalid line directive");
-        PPExpressionEvaluator evaluator(identifiers_, query, this);
+        PPExpressionEvaluator evaluator(identifiers_, query, this, nullptr, nullptr, hosted_);
         evaluator.push(rest[0].token);
         PPExpressionResult line = evaluator.finish();
         if (!line.valid || !line.value.bits || line.value.bits > 2147483647)

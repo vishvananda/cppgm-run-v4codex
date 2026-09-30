@@ -46,6 +46,9 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     case QueryKind::VaArg: throw std::runtime_error("dependent va_arg ABI expression is unsupported");
     case QueryKind::Typeof: throw std::runtime_error("dependent typeof ABI expression is unsupported");
     case QueryKind::BuiltinTrait:
+        args.clear();
+        for (unsigned j = 0; j < pack.count; ++j)
+            args.push_back(abi_type(sem.template_argument(pack.offset+j)));
         result = abi.make(Kind::TypeTrait,abi.string(spelling(q.name)),0,0,0,args); break;
     case QueryKind::List:
         args.clear();

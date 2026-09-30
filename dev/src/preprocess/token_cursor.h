@@ -36,7 +36,7 @@ class PPTokenCursor : public PPTokenSource {
 public:
     PPTokenCursor(const SourceBuffer& source, IdentifierTable& identifiers,
                   LexStats* stats = 0, bool recover_empty_character = false,
-                  bool translated_input = false);
+                  bool translated_input = false, bool hosted = false);
     PPToken next();
     std::size_t spelling_storage_bytes() const { return translated_.capacity(); }
 
@@ -50,7 +50,7 @@ private:
     PPToken token_;
     std::string translated_;
     bool copied_ = false;
-    bool recover_empty_character_;
+    bool recover_empty_character_, hosted_;
 
     int peek(std::size_t ahead = 0) { return characters_.peek(ahead).value; }
     int take(bool spelling = true);

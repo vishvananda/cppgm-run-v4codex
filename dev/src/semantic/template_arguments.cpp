@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "support/builtin_registry.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
@@ -97,7 +98,7 @@ ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
         auto operand = ast[n].first, callee = ast[operand].first;
         auto name = ast[callee].detail;
         if (ast[operand].kind == Kind::Call && ast[callee].kind == Kind::IdExpression &&
-            ast[name].first == ast[name].last && ids.spelling(terminal(name)).equals("__integer_pack")) {
+            ast[name].first == ast[name].last && integer_pack_builtin(ids.spelling(terminal(name)))) {
             auto list = ast[callee].next, count = ast[list].first;
             if (!count || ast[count].next) throw std::runtime_error("integer_pack takes one bound");
             TypeQuery q; q.kind = QueryKind::IntegerPack;

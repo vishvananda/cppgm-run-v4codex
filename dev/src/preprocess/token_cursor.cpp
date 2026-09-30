@@ -36,9 +36,9 @@ static bool word_operator(TextView text)
 }
 
 PPTokenCursor::PPTokenCursor(const SourceBuffer& source, IdentifierTable& identifiers,
-                             LexStats* stats, bool recover_empty_character, bool translated_input)
+                             LexStats* stats, bool recover_empty_character, bool translated_input, bool hosted)
     : source_(source), identifiers_(identifiers), stats_(stats), characters_(source, stats),
-      recover_empty_character_(recover_empty_character)
+      recover_empty_character_(recover_empty_character), hosted_(hosted)
 {
     if (translated_input) characters_.translated_input();
 }
@@ -69,15 +69,19 @@ void PPTokenCursor::whitespace()
     for (;;) {
         if (horizontal_space(peek())) take(false);
         else if (peek() == '/' && peek(1) == '/') {
+            characters_.comment_mode(hosted_);
             take(false); take(false);
             while (peek() != '\n' && peek() != -1) take(false);
+            characters_.comment_mode(false);
         } else if (peek() == '/' && peek(1) == '*') {
+            characters_.comment_mode(hosted_);
             take(false); take(false);
             while (!(peek() == '*' && peek(1) == '/')) {
                 if (peek() == -1) throw std::runtime_error("unterminated block comment");
                 take(false);
             }
             take(false); take(false);
+            characters_.comment_mode(false);
         } else break;
     }
 }
@@ -113,7 +117,7 @@ void PPTokenCursor::number()
     for (;;) {
         int c = peek();
         if (identifier_continue(c) || c == '.' ||
-            ((previous == 'e' || previous == 'E') && (c == '+' || c == '-')))
+            ((previous == 'e' || previous == 'E' || (hosted_ && (previous == 'p' || previous == 'P'))) && (c == '+' || c == '-')))
             previous = take();
         else break;
     }

@@ -101,7 +101,7 @@ SourceCharacter CharacterCursor::decode(Position& p)
     if (p.offset == source_.bytes.size()) return result;
     const unsigned char lead = source_.bytes[p.offset++];
     std::uint32_t c = lead;
-    if (lead >= 0x80) {
+    if (lead >= 0x80 && !comment_) {
         int continuation;
         std::uint32_t minimum;
         if (lead >= 0xc2 && lead <= 0xdf) {
@@ -218,6 +218,13 @@ void CharacterCursor::raw_mode(bool enabled)
     raw_ = enabled;
     scanned_ = consumed_;
     head_ = count_ = 0;
+}
+
+void CharacterCursor::comment_mode(bool enabled)
+{
+    if (comment_ == enabled) return;
+    comment_ = enabled;
+    scanned_ = consumed_; head_ = count_ = 0;
 }
 
 void CharacterCursor::ucn_mode(bool enabled)

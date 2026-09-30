@@ -7,8 +7,8 @@
 namespace cppgm {
 
 PPExpressionEvaluator::PPExpressionEvaluator(IdentifierTable& identifiers, DefinedQuery defined,
-                                           void* context, PPExpressionStats* stats, PostStats* literal_stats)
-    : identifiers_(identifiers), defined_(defined), context_(context), stats_(stats), literal_stats_(literal_stats) {}
+                                           void* context, PPExpressionStats* stats, PostStats* literal_stats, bool hosted)
+    : identifiers_(identifiers), defined_(defined), context_(context), stats_(stats), literal_stats_(literal_stats), hosted_(hosted) {}
 
 std::size_t PPExpressionEvaluator::storage_bytes() const
 {
@@ -139,7 +139,7 @@ void PPExpressionEvaluator::push(const PPToken& token)
     converted.source = token;
     if (token.kind == PPTokenKind::number) {
         if (literal_stats_) literal_stats_->number_bytes += token.spelling.size;
-        decode_number(converted, identifiers_, NumberDomain::integral);
+        decode_number(converted, identifiers_, NumberDomain::integral, hosted_);
     } else if (token.kind == PPTokenKind::character) {
         if (literal_stats_) literal_stats_->literal_bytes += token.spelling.size;
         decode_character(converted, identifiers_, literal_stats_);
