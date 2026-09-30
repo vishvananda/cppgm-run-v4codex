@@ -103,7 +103,7 @@ void Selector::analyze()
         if ((i.opcode == Opcode::Compare || (i.opcode == Opcode::Unary && i.operation == Operation::Not)) && s.uses == 1 && s.last == s.definition+1)
             s.compare_branch = p.instructions[s.last-1].opcode == Opcode::Branch;
         if (i.opcode != Opcode::Phi) continue;
-        require(scalar_integer(i.type), "native phi class not implemented");
+        require(scalar_integer(i.type) || i.type.floating(), "native phi class not implemented");
         s.location = home(p.values[v-1].name, i.type, true);
         for (unsigned k = 0; k < i.operands.count; k += 2) {
             EdgeMove move;
@@ -137,42 +137,58 @@ void Selector::parameters()
 {
     static const int registers[] = {XR_RDI,XR_RSI,XR_RDX,XR_RCX,XR_R8,XR_R9};
     const auto& signature = p.signatures[source.signature.index-1];
-    unsigned ordinal = 0;
-    for (unsigned k = signature.parameters.begin; k != signature.parameters.end(); ++k, ++ordinal) {
+    if (signature.boundary.arity == CAM_VARIADIC) save_variadic_registers();
+    unsigned gp = 0, fp = 0, stack = 16;
+    for (unsigned k = signature.parameters.begin; k != signature.parameters.end(); ++k) {
         const auto& param = p.parameters[k];
-        require(scalar_integer(param.type), "native parameter ABI class not implemented");
-        Operand incoming = ordinal < 6 ? Operand::r(registers[ordinal]) : Operand::mem(XR_RBP,16+(ordinal-6)*8);
+        require(scalar_integer(param.type) || param.type.floating(), "native parameter ABI class not implemented");
+        bool vector = param.type == Type::F32 || param.type == Type::F64;
+        Operand incoming;
+        if (vector && fp < 8) incoming = Operand::r(xmm(fp++));
+        else if (scalar_integer(param.type) && gp < 6) incoming = Operand::r(registers[gp++]);
+        else {
+            unsigned alignment = std::max(8u,param.type.alignment());
+            stack = (stack+alignment-1)&~(alignment-1);
+            incoming = Operand::mem(XR_RBP,stack); stack += std::max(8u,param.type.bytes());
+        }
         f.params.push_back({p.values[param.value.index-1].name,param.type,incoming});
         auto& v = state(param.value.index);
         v.location = incoming;
         if (!v.uses) continue;
-        // rcx/rdx are fixed-effect scratch. Other argument registers are retained
-        // only inside one block and without calls or bulk-memory clobbers.
-        bool retain = ordinal < 6 && v.last < first_clobber[incoming.reg] &&
-            !v.crosses_block && !v.crosses_call;
+        bool retain = incoming.kind == Operand::Reg &&
+            (vector || v.last < first_clobber[incoming.reg]) && !v.crosses_block && !v.crosses_call;
         if (retain) {
             live_until[incoming.reg] = v.last;
             normalize_register(incoming, param.type);
-        } else if (ordinal < 6) {
-            int preserved = -1;
-            for (int r : {XR_RBX,XR_R12,XR_R13,XR_R14,XR_R15}) if (!live_until[r]) { preserved = r; break; }
-            if (preserved >= 0) {
-                v.location = Operand::r(preserved);
-                f.preserved |= 1u<<preserved;
-                live_until[preserved] = ~0u;
-                move(v.location,incoming,param.type); normalize_register(v.location,param.type);
-                continue;
+        } else if (incoming.kind == Operand::Reg) {
+            if (!vector) {
+                int preserved = -1;
+                for (int r : {XR_RBX,XR_R12,XR_R13,XR_R14,XR_R15}) if (!live_until[r]) { preserved = r; break; }
+                if (preserved >= 0) {
+                    v.location = Operand::r(preserved);
+                    f.preserved |= 1u<<preserved; live_until[preserved] = ~0u;
+                    move(v.location,incoming,param.type); normalize_register(v.location,param.type); continue;
+                }
             }
             v.location = home(p.values[param.value.index-1].name,param.type,true);
-            normalize_register(incoming,param.type);
-            move(v.location,incoming,param.type);
+            normalize_register(incoming,param.type); move(v.location,incoming,param.type);
         }
     }
+    vararg_gp = gp*8; vararg_fp = 48+fp*16; vararg_stack = stack;
 }
 Operand Selector::allocate(unsigned id, Type t)
 {
     auto& v = state(id);
     if (v.location.kind != Operand::None) return v.location;
+    if (t.floating()) {
+        f.scratch_bytes = 48;
+        if (t != Type::F80 && !v.crosses_call && (!v.crosses_block || v.single_edge)) {
+            for (int reg = xmm(0); reg < xmm(14); ++reg) if (live_until[reg] < position) {
+                live_until[reg] = v.last; return v.location = Operand::r(reg);
+            }
+        }
+        return v.location = home(p.values[id-1].name,t,true);
+    }
     require(scalar_integer(t), "native result class not implemented");
     if (v.crosses_block && !v.single_edge) return v.location = home(p.values[id-1].name,t,true);
     const auto& definition = p.instructions[v.definition-1];
@@ -206,7 +222,7 @@ void Selector::finish_frame()
     // Reserve save homes below ordinary slots. RBP is always established before
     // accessing any frame operand; calls see a 16-byte-aligned stack.
     unsigned saved = __builtin_popcount(f.preserved);
-    f.stack_size = (f.frame_bytes + saved*8 + 15) & ~std::uint64_t(15);
+    f.stack_size = (f.frame_bytes + saved*8 + f.scratch_bytes + 15) & ~std::uint64_t(15);
     stats.frame_bytes += f.stack_size;
 }
 } // namespace native

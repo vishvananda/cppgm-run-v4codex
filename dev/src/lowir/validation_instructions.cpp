@@ -42,7 +42,10 @@ void Validator::instruction(const Instruction& i) const
         require(arg(0).kind == Operand::Slot || arg(0).kind == Operand::Symbol, "invalid addressable");
         value_type(arg(0)); break;
     case Opcode::Load: count(1); scalar(); storage(arg(0), i.type); break;
-    case Opcode::Store: count(2); scalar(); value(arg(0), i.type); storage(arg(1), i.type); break;
+    case Opcode::Store:
+        count(2); scalar();
+        if (!(i.type.floating() && !arg(0).literal() && value_type(arg(0)).floating())) value(arg(0), i.type);
+        storage(arg(1), i.type); break;
     case Opcode::Index:
         count(2); require(i.type != Type(), "void index element"); pointer(arg(0), true); integer(arg(1)); break;
     case Opcode::Unary:
@@ -119,7 +122,7 @@ void Validator::instruction(const Instruction& i) const
     case Opcode::Return:
         require(i.type == p_.signatures[p_.functions[function_.index-1].signature.index-1].result, "return boundary mismatch");
         count(i.type == Type() ? 0 : 1);
-        if (i.type != Type()) value(arg(0), i.type);
+        if (i.type != Type() && !(i.type.floating() && !arg(0).literal() && value_type(arg(0)).floating())) value(arg(0), i.type);
         break;
     case Opcode::EhEnd: case Opcode::Resume: case Opcode::Unreachable: count(0); break;
     }

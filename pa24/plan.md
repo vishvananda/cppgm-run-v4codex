@@ -3,6 +3,28 @@
 Stage base commit: bde9eb3e128e24923a1de40bb63b8e348a13553b
 Last reviewed commit: bde9eb3e128e24923a1de40bb63b8e348a13553b
 
+## Active implementation 128
+
+Entry HEAD: 9d8113ebe734f947d577e5ec6309dbbdd3fbbdbf. Previous turn:
+verified implementation progress, no surviving build process. Entry course
+baseline 221/296 (75 failures); required controls retain the same coverage.
+Group owner: native value placement and ABI selection, then shared MIR encoding.
+Extend typed locations to XMM and conservative x87 frame values; classify mixed
+calls once per boundary; preserve aliases, call liveness and parallel transfers.
+Arithmetic, ordered/unordered comparisons, conversions, stack arguments and
+variadic register saves share this data flow. Work stays bounded per instruction
+and per ABI carrier, with function-owned storage and reserved scratch effects.
+Validate course outcomes/envelopes, independent numerical/ABI reducers, prior
+stages and file audit. Freeze entry A for compiler/RSS and existing runtime/text
+regression evidence; new floating behavior needs a correct implementation before
+it can be a runtime baseline. No optional optimizer is introduced by this group.
+First increment: scalar floating arithmetic, comparisons, exact per-format
+literal rounding, conversions and mixed/variadic ABI execute; 250/296 course
+cases and 1214 independent numerical/ABI programs pass. Five canonical MIR
+policies still reject otherwise correct execution (three inherited, two mixed
+ABI fixtures plus the related forwarding fixture); these remain implementation
+requirements. Next: bounded carried reloads and measured XMM selection costs.
+
 ## Design / completed implementation group
 
 Scalar native execution foundation: PA8 typed Unit -> function-owned placement

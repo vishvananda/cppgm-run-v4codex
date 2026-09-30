@@ -124,7 +124,17 @@ Operand Reader::literal()
             value = std::strtold(s.c_str(), &end);
             require(end != s.c_str() && end == s.c_str() + s.size(), "invalid floating literal");
         }
-        return Operand::floating(negative ? -value : value, signaling);
+        Operand result = Operand::floating(negative ? -value : value, signaling);
+        if (!special) {
+            std::string signed_text = negative ? "-"+s : s;
+            float f32 = std::strtof(signed_text.c_str(),0);
+            double f64 = std::strtod(signed_text.c_str(),0);
+            FloatingLiteral formats;
+            std::memcpy(&formats.f32,&f32,4); std::memcpy(&formats.f64,&f64,8);
+            formats.spelling = p_.intern(signed_text);
+            p_.floating_literals.push_back(formats); result.ref = p_.floating_literals.size();
+        }
+        return result;
     }
     require(!s.empty() && s[0] >= '0' && s[0] <= '9', "expected scalar literal");
     char* end = 0;

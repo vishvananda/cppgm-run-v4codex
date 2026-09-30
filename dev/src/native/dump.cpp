@@ -8,6 +8,10 @@ static void operand(const lowir_model::Program& p, Operand o, std::ostream& out)
 {
     switch (o.kind) {
     case Operand::Reg: out << register_name(o.reg); break;
+    case Operand::Floating: {
+        out << std::setprecision(std::numeric_limits<long double>::max_digits10) << o.floating_value();
+        break;
+    }
     case Operand::Immediate: out << std::int64_t(o.bits); break;
     case Operand::Symbol:
         out << p.name(p.symbols[o.id-1].name);
@@ -38,11 +42,15 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
 {
     static const char* const names[] = {"mov","load","store","lea","add","sub","imul","and","or","xor","neg","not","bswap",
         "cmp","test","set","sext","zext","cqo","idiv","div","shl","shr","sar","jmp","j","call","ret","exit","ud2",
-        "copy_bytes","zero_bytes","mfence","lock_xadd","xchg","lock_cmpxchg"};
+        "copy_bytes","zero_bytes","mfence","lock_xadd","xchg","lock_cmpxchg",
+        "fmov","fadd","fsub","fmul","fdiv","fneg","fcmp","fset",
+        "sitofp","uitofp","fptosi","fptoui","fpext","fptrunc","fret","fstp"};
     out << "    " << names[unsigned(i.op)];
-    if (i.op == Op::Jcc || i.op == Op::Set) out << cc(i.condition);
+    if (i.op == Op::Jcc || i.op == Op::Set || i.op == Op::Fset) out << cc(i.condition);
     bool typed = i.op == Op::Load || i.op == Op::Store || i.op == Op::Compare ||
         i.op == Op::ExtendSigned || i.op == Op::ExtendUnsigned || i.op == Op::Xadd || i.op == Op::Exchange || i.op == Op::Cmpxchg;
+    if (i.op >= Op::Sitofp && i.op <= Op::Fptrunc) out << '.' << type_name(i.source_type);
+    if (i.op >= Op::Fmov) typed = true;
     if (typed) out << '.' << type_name(i.type);
     if (i.op == Op::CopyBytes || i.op == Op::ZeroBytes) out << ' ' << i.bytes << 'x' << i.alignment;
     for (unsigned n = 0; n < i.count; ++n) {
@@ -53,7 +61,7 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
     if (i.op == Op::Call) {
         out << " [args=(";
         bool first = true;
-        for (unsigned reg = 0; reg < 16; ++reg) if (i.arg_registers & (1u<<reg)) {
+        for (unsigned reg = 0; reg < 32; ++reg) if (i.arg_registers & (1u<<reg)) {
             if (!first) out << ',';
             first = false; out << register_name(reg);
         }
@@ -90,8 +98,7 @@ void dump_header(const lowir_model::Program& p, const std::vector<Instruction>& 
                     long double value = d.value.kind == lowir_model::Operand::Floating ? d.value.data.floating :
                         d.value.negative_integer ? static_cast<long double>(std::int64_t(d.value.data.integer)) :
                         static_cast<long double>(d.value.data.integer);
-                    if (d.type == Type::F32) value = static_cast<float>(value);
-                    if (d.type == Type::F64) value = static_cast<double>(value);
+                    value = Operand::floating(d.value,d.type,&p).floating_value();
                     if (d.value.signaling_nan) out << (std::signbit(value) ? "-snan" : "snan");
                     else out << std::setprecision(std::numeric_limits<long double>::max_digits10) << value;
                 }
@@ -109,8 +116,8 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
         out << "    param " << p.name(param.name) << " -> "; operand(p,param.location,out);
         out << " : " << type_name(param.type) << '\n';
     }
-    out << "    return " << type_name(f.result) << " -> " << (f.result == Type() ? "void" : "rax") << '\n';
-    out << "  frame\n    stack_size " << f.stack_size << "\n    scratch_bytes 0\n    frame_pointer " << (f.frame_pointer ? "keep" : "omit")
+    out << "    return " << type_name(f.result) << " -> " << (f.result == Type() ? "void" : f.result == Type::F80 ? "st0" : f.result.floating() ? "xmm0" : "rax") << '\n';
+    out << "  frame\n    stack_size " << f.stack_size << "\n    scratch_bytes " << f.scratch_bytes << "\n    frame_pointer " << (f.frame_pointer ? "keep" : "omit")
         << "\n    epilogues " << (f.shared_epilogue ? "shared" : "direct") << '\n';
     if (f.preserved) {
         out << "    preserve";

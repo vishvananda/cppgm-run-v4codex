@@ -23,9 +23,11 @@ class Selector {
     Workspace& workspace;
     Statistics& stats;
     Function f;
+    Operand vararg_save;
+    unsigned vararg_gp = 0, vararg_fp = 0, vararg_stack = 16;
     std::vector<ValueState> values;
     void initialize_values();
-    std::array<unsigned,16> live_until = {{0}};
+    std::array<unsigned,32> live_until = {{0}};
     unsigned position = 0, block_id = 0;
     std::array<unsigned,16> first_clobber;
     void promote_parameters();
@@ -45,6 +47,8 @@ class Selector {
     void control_edges();
     void analyze_instruction(const lowir_model::Instruction& i, unsigned epoch);
     void parameters();
+    void save_variadic_registers();
+    void variadic(const lowir_model::Instruction& i);
     Operand home(Name name, Type type, bool temporary);
     Operand allocate(unsigned value, Type type);
     Operand value(lowir_model::Operand o, Type context);
@@ -58,6 +62,10 @@ class Selector {
     void arithmetic(const lowir_model::Instruction& i);
     void compare(const lowir_model::Instruction& i, bool branch);
     void conversion(const lowir_model::Instruction& i);
+    void floating_arithmetic(const lowir_model::Instruction& i);
+    void floating_compare(const lowir_model::Instruction& i, bool branch);
+    Operand convert_value(Operand from, Type source, Type target, bool unsigned_input = false, bool unsigned_output = false);
+    void convert_to(Operand to, Operand from, Type source, Type target, bool unsigned_input = false, bool unsigned_output = false);
     void index(const lowir_model::Instruction& i);
     void call(const lowir_model::Instruction& i);
     void atomic(const lowir_model::Instruction& i);

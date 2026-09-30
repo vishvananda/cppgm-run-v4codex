@@ -25,6 +25,7 @@ void Writer::operand(const Operand& v, Type context)
         break;
     case Operand::Null: out_ << "nullptr"; break;
     case Operand::Floating: {
+        if (v.ref) { out_ << p_.name(p_.floating_literals.at(v.ref-1).spelling); break; }
         long double n = v.data.floating;
         if (std::isnan(n)) {
             if (std::signbit(n)) out_ << '-';

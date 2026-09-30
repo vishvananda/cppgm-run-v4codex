@@ -10,7 +10,7 @@ using lowir_model::Name;
 using lowir_model::SymbolId;
 using lowir_model::DebugLocation;
 struct Operand {
-    enum Kind { None, Reg, Immediate, Memory, Symbol, Label } kind = None;
+    enum Kind { None, Reg, Immediate, Memory, Symbol, Label, Floating } kind = None;
     int reg = -1, index = -1;
     unsigned scale = 1;
     std::int64_t displacement = 0;
@@ -22,16 +22,21 @@ struct Operand {
     static Operand mem(int base, std::int64_t offset = 0);
     static Operand symbol(SymbolId id, bool address = true);
     static Operand label(std::uint32_t id);
+    static Operand floating(lowir_model::Operand value, Type type, const lowir_model::Program* program = nullptr);
+    long double floating_value() const;
 };
 enum class Op {
     Mov, Load, Store, Lea, Add, Sub, Mul, And, Or, Xor, Neg, Not, Bswap,
     Compare, Test, Set, ExtendSigned, ExtendUnsigned, SignDividend, Div, Udiv,
     Shl, Shr, Sar, Jump, Jcc, Call, Return, Exit, Trap,
-    CopyBytes, ZeroBytes, Fence, Xadd, Exchange, Cmpxchg
+    CopyBytes, ZeroBytes, Fence, Xadd, Exchange, Cmpxchg,
+    Fmov, Fadd, Fsub, Fmul, Fdiv, Fneg, Fcompare, Fset,
+    Sitofp, Uitofp, Fptosi, Fptoui, Fpext, Fptrunc, Freturn, Fpop
 };
 struct Instruction {
     Op op;
     Type type;
+    Type source_type;
     std::array<Operand,3> args;
     unsigned count = 0;
     X86Condition condition = XC_E;
@@ -54,7 +59,7 @@ struct Function {
     std::vector<Block> blocks;
     std::vector<Instruction> instructions;
     unsigned preserved = 0;
-    std::uint64_t frame_bytes = 0, stack_size = 0;
+    std::uint64_t frame_bytes = 0, stack_size = 0, scratch_bytes = 0;
     bool frame_pointer = true, shared_epilogue = true;
 };
 struct Statistics {
@@ -67,6 +72,8 @@ std::string type_name(Type type);
 bool unsigned_type(Type type);
 std::uint64_t normalize(std::uint64_t value, Type type);
 bool scalar_integer(Type type);
+// Registers 16..29 are ordinary XMM values; 30/31 are reserved encoder scratch.
+inline int xmm(unsigned n) { return 16+n; }
 void dump_header(const lowir_model::Program& p, const std::vector<Instruction>& startup, std::ostream& out);
 void dump_function(const lowir_model::Program& p, const Function& f, std::ostream& out);
 } // namespace native

@@ -170,6 +170,9 @@ struct Symbol {
     SymbolMetadata metadata;
 };
 struct ObjectAlias { Name name = 0; SymbolId target; };
+// External decimal text is rounded once for each supported target format at
+// the read boundary. Literal operands use ref as this compact table identity.
+struct FloatingLiteral { std::uint64_t f64; std::uint32_t f32; Name spelling; };
 struct Statistics {
     std::uint64_t source_bytes = 0, tokens = 0, validated_instructions = 0, cfg_edges = 0;
 };
@@ -214,6 +217,7 @@ struct Program {
     Pool<Global> globals;
     Pool<DataItem> data;
     Pool<ObjectAlias> aliases;
+    Pool<FloatingLiteral> floating_literals;
     Statistics stats;
     Name intern(const std::string& name);
     std::string name(Name id) const;

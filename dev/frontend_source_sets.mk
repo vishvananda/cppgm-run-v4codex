@@ -155,3 +155,5 @@ FRONTEND_OBJ_BASENAMES_lowir2native += native/model native/placement native/sele
 FRONTEND_OBJ_BASENAMES_lowir2native += native/parameter_slots
 FRONTEND_OBJ_BASENAMES_lowir2native += native/bulk_encoding
 FRONTEND_OBJ_BASENAMES_lowir2native += native/builtins
+FRONTEND_OBJ_BASENAMES_lowir2native += native/floating native/float_encoding native/float_conversion
+FRONTEND_OBJ_BASENAMES_lowir2native += native/variadic

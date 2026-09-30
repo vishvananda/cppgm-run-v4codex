@@ -43,7 +43,14 @@ void Selector::control(const lowir_model::Instruction& i)
     case Opcode::Branch: {
         auto cond = arg(i,0);
         X86Condition cc = XC_NE;
-        if (cond.kind == lowir_model::Operand::Temporary && state(cond.ref).compare_branch)
+        if (cond.kind == lowir_model::Operand::Temporary && state(cond.ref).compare_branch &&
+            p.instructions[state(cond.ref).definition-1].type.floating()) {
+            const auto& comparison = p.instructions[state(cond.ref).definition-1];
+            auto op = comparison.operation;
+            cc = op == Operation::Eq ? XC_E : op == Operation::Ne ? XC_NE :
+                op == Operation::Lt ? XC_B : op == Operation::Le ? XC_BE : op == Operation::Gt ? XC_A : XC_AE;
+            emit(Op::Jcc,Type(),{Operand::label(edge_target(arg(i,op == Operation::Ne ? 1 : 2).ref))}).condition = XC_P;
+        } else if (cond.kind == lowir_model::Operand::Temporary && state(cond.ref).compare_branch)
             cc = p.instructions[state(cond.ref).definition-1].operation == Operation::Not ? XC_E :
                 branch_condition(p.instructions[state(cond.ref).definition-1].operation);
         else {
@@ -69,7 +76,12 @@ void Selector::control(const lowir_model::Instruction& i)
     }
     case Opcode::Return:
         if (i.type == Type()) emit(Op::Return,i.type,{});
-        else {
+        else if (i.type.floating()) {
+            auto result = convert_value(value(arg(i,0),i.type),value_type(arg(i,0),i.type),i.type);
+            f.scratch_bytes = 48;
+            if (i.type == Type::F80) emit(Op::Freturn,i.type,{result});
+            else { move(Operand::r(xmm(0)),result,i.type); emit(Op::Return,Type(),{}); }
+        } else {
             auto result = in_register(value(arg(i,0),i.type),value_type(arg(i,0),i.type),XR_RAX);
             emit(Op::Return,i.type,{result});
         }

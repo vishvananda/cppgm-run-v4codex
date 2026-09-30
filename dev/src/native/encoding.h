@@ -32,6 +32,16 @@ class Encoder {
     void arithmetic(const Instruction& i);
     void multiply(const Instruction& i);
     void bulk(const Instruction& i);
+    void floating(const Instruction& i);
+    void fmove(Operand to, Operand from, Type type);
+    void sse(unsigned opcode, Type type, int reg, Operand rm);
+    Operand scratch(unsigned offset = 0) const;
+    void x87_load(Operand from, Type type, unsigned scratch_offset = 0);
+    void x87_store(Operand to, Type type);
+    void float_compare(Operand left, Operand right, Type type);
+    void float_convert(const Instruction& i);
+    std::size_t local_jump(int condition);
+    void local_target(std::size_t offset);
     void instruction(const Instruction& i);
     void branch(unsigned label, int condition = -1);
     void call(Operand target);

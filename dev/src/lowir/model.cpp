@@ -92,14 +92,14 @@ std::size_t Program::pool_allocations() const
     return symbols.allocations + functions.allocations + signatures.allocations + parameters.allocations +
         values.allocations + slots.allocations + blocks.allocations + slot_order.allocations +
         block_order.allocations + instructions.allocations + operands.allocations + globals.allocations +
-        data.allocations + aliases.allocations;
+        data.allocations + aliases.allocations + floating_literals.allocations;
 }
 std::size_t Program::pool_storage_bytes() const
 {
     return symbols.storage_bytes() + functions.storage_bytes() + signatures.storage_bytes() + parameters.storage_bytes() +
         values.storage_bytes() + slots.storage_bytes() + blocks.storage_bytes() + slot_order.storage_bytes() +
         block_order.storage_bytes() + instructions.storage_bytes() + operands.storage_bytes() + globals.storage_bytes() +
-        data.storage_bytes() + aliases.storage_bytes() + function_order.capacity()*sizeof(FunctionId);
+        data.storage_bytes() + aliases.storage_bytes() + floating_literals.storage_bytes() + function_order.capacity()*sizeof(FunctionId);
 }
 ValueId FunctionBuilder::value(Name name)
 {

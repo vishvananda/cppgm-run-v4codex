@@ -25,6 +25,7 @@ Type Selector::value_type(lowir_model::Operand o, Type fallback) const
 }
 Operand Selector::value(lowir_model::Operand o, Type t)
 {
+    if (o.literal() && t.floating()) return Operand::floating(o,t,&p);
     switch (o.kind) {
     case lowir_model::Operand::Integer: return Operand::imm(normalize(o.data.integer,t));
     case lowir_model::Operand::Null: return Operand::imm(0);
@@ -50,6 +51,10 @@ Operand Selector::in_register(Operand o, Type t, int reg)
 void Selector::move(Operand to, Operand from, Type t)
 {
     if (to.kind == Operand::Reg && from.kind == Operand::Reg && to.reg == from.reg) return;
+    if (t.floating()) {
+        f.scratch_bytes = 48;
+        emit(Op::Fmov,t,{to,from}); return;
+    }
     if (to.kind == Operand::Memory || (to.kind == Operand::Symbol && !to.address)) {
         if (from.kind != Operand::Reg && from.kind != Operand::Immediate)
             from = in_register(from,t,XR_R10);
@@ -84,7 +89,7 @@ Operand Selector::memory(lowir_model::Operand o, int scratch)
 }
 void Selector::normalize_register(Operand o, Type t)
 {
-    if (t.width() >= 64) return;
+    if (!scalar_integer(t) || t.width() >= 64) return;
     emit(unsigned_type(t) ? Op::ExtendUnsigned : Op::ExtendSigned,t,{o,o});
 }
 void Selector::select(const lowir_model::Instruction& i)
@@ -93,7 +98,9 @@ void Selector::select(const lowir_model::Instruction& i)
     if (i.destination && state(i.destination.index).alias) return;
     switch (i.opcode) {
     case Opcode::Const:
-        require(scalar_integer(i.type), "native floating/wide constant not implemented"); break;
+        if (i.type.floating()) state(i.destination.index).location = value(arg(i,0),i.type);
+        else require(scalar_integer(i.type), "native wide constant not implemented");
+        break;
     case Opcode::Phi: break;
     case Opcode::Addr: {
         Operand address = memory(arg(i,0)); address.address = true;
@@ -108,6 +115,9 @@ void Selector::select(const lowir_model::Instruction& i)
     }
     case Opcode::Copy: {
         auto src = value(arg(i,0),i.type);
+        if (i.type.floating() || value_type(arg(i,0),i.type).floating()) {
+            convert_to(allocate(i.destination.index,i.type),src,value_type(arg(i,0),i.type),i.type); break;
+        }
         if (src.kind == Operand::Immediate) state(i.destination.index).location = Operand::imm(normalize(src.bits,i.type));
         else if (src.address) state(i.destination.index).location = src;
         else {
@@ -119,20 +129,22 @@ void Selector::select(const lowir_model::Instruction& i)
         break;
     }
     case Opcode::Load: {
-        require(scalar_integer(i.type), "native load class not implemented");
+        require(scalar_integer(i.type) || i.type.floating(), "native load class not implemented");
         auto m = memory(arg(i,0));
         if (state(i.destination.index).folded_load) { state(i.destination.index).location = m; break; }
         auto dst = allocate(i.destination.index,i.type);
+        if (i.type.floating()) { move(dst,m,i.type); break; }
         auto reg = dst.kind == Operand::Reg ? dst : Operand::r(XR_R10);
         emit(Op::Load,i.type,{reg,m}); move(dst,reg,i.type); break;
     }
     case Opcode::Store: {
         if (arg(i,1).kind == lowir_model::Operand::Slot && !workspace.slot_facts[arg(i,1).ref].observed) break;
         if (arg(i,1).kind == lowir_model::Operand::Slot && workspace.slot_facts[arg(i,1).ref].stored && !workspace.slot_facts[arg(i,1).ref].escape) break;
-        require(scalar_integer(i.type), "native store class not implemented");
+        require(scalar_integer(i.type) || i.type.floating(), "native store class not implemented");
         auto m = memory(arg(i,1));
         auto src = value(arg(i,0),i.type);
         Type st = value_type(arg(i,0),i.type);
+        if (i.type.floating() || st.floating()) { convert_to(m,src,st,i.type); break; }
         if (src.kind == Operand::Memory && st != i.type) src = in_register(src,st,XR_R10);
         move(m,src,i.type); break;
     }
@@ -141,6 +153,7 @@ void Selector::select(const lowir_model::Instruction& i)
     case Opcode::Compare: compare(i,state(i.destination.index).compare_branch); break;
     case Opcode::Convert: conversion(i); break;
     case Opcode::Call: call(i); break;
+    case Opcode::VaStart: case Opcode::VaArg: variadic(i); break;
     case Opcode::CopyObject: case Opcode::ZeroInit: bulk(i); break;
     case Opcode::AtomicLoad: case Opcode::AtomicStore: case Opcode::AtomicAddFetch:
     case Opcode::AtomicExchange: case Opcode::AtomicCompareExchange:
@@ -155,7 +168,7 @@ Function Selector::run()
     initialize_values();
     f.symbol = source.symbol; f.debug = source.debug;
     f.result = p.signatures[source.signature.index-1].result;
-    require(f.result == Type() || scalar_integer(f.result), "native return ABI class not implemented");
+    require(f.result == Type() || scalar_integer(f.result) || f.result.floating(), "native return ABI class not implemented");
     block_id = p.block_order[source.blocks.begin].index;
     for (unsigned k = p.signatures[source.signature.index-1].parameters.begin;
          k != p.signatures[source.signature.index-1].parameters.end(); ++k)

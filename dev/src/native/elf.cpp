@@ -12,22 +12,12 @@ static void append(std::vector<unsigned char>& v, std::uint64_t bits, unsigned b
     for (unsigned n = 0; n < bytes; ++n) { v.push_back(bits); bits >>= 8; }
 }
 static std::uint64_t aligned(std::uint64_t n, unsigned a) { return (n+a-1)&~std::uint64_t(a-1); }
-static void scalar_data(std::vector<unsigned char>& data, const DataItem& item)
+static void scalar_data(std::vector<unsigned char>& data, const DataItem& item, const Program& p)
 {
     if (item.type.floating()) {
         unsigned char bytes[16] = {};
-        long double n = item.value.kind == lowir_model::Operand::Floating ? item.value.data.floating :
-            item.value.negative_integer ? static_cast<long double>(std::int64_t(item.value.data.integer)) :
-            static_cast<long double>(item.value.data.integer);
-        if (item.type == Type::F32) { float f = n; std::memcpy(bytes,&f,4); }
-        else if (item.type == Type::F64) { double f = n; std::memcpy(bytes,&f,8); }
-        else std::memcpy(bytes,&n,10);
-        if (item.value.signaling_nan && std::isnan(n)) {
-            if (item.type == Type::F32) bytes[2] &= ~0x40;
-            else if (item.type == Type::F64) bytes[6] &= ~0x08;
-            else bytes[7] &= ~0x40;
-            bytes[0] |= 1;
-        }
+        auto value = native::Operand::floating(item.value,item.type,&p);
+        std::memcpy(bytes,&value.bits,8); std::memcpy(bytes+8,&value.displacement,2);
         data.insert(data.end(),bytes,bytes+item.type.bytes());
     } else {
         require(scalar_integer(item.type), "native wide initializer not implemented");
@@ -53,7 +43,7 @@ void encode_data(const lowir_model::Program& p, Image& image)
                 require(count < 0x70000000, "native data too large"); image.data.resize(image.data.size()+count,0);
             } else {
                 image.data.resize(aligned(image.data.size(),item.type.alignment()),0);
-                if (item.kind == DataItem::Scalar) scalar_data(image.data,item);
+                if (item.kind == DataItem::Scalar) scalar_data(image.data,item,p);
                 else {
                     Fixup fix; fix.kind = Fixup::AbsoluteSymbol; fix.offset = image.data.size();
                     fix.symbol = item.symbol.index; fix.addend = item.addend; image.data_fixups.push_back(fix);
