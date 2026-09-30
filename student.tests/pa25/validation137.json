@@ -1,0 +1,208 @@
+{
+  "entry_commit": "11aee2da5df69efed3bc1822e568a9fedbc995be",
+  "production_commit": "2705e57b19159115e9abe3fb2b16194b73596de0",
+  "stage_base_commit": "fee6ad9076ff35c5272526e1c4c4df235fbf3bfe",
+  "last_reviewed_commit": "fee6ad9076ff35c5272526e1c4c4df235fbf3bfe",
+  "dev_source_manifest_sha256": "24062a164c44b3ca186f26002117c880839a68d264bae354eaef652ffaa44ba9",
+  "fixture_manifest_sha256": "57911da8dc6571cd407c1e6eabd559a9a7692b58989bfa0fa2b7df0410533965",
+  "binaries": {
+    "cppgm++": "7a52b4b8ec8aedefc0a51596512a78ac0f121728f3612bb55ae6b02a9e9c668d",
+    "lowir2native": "d87ac30bca0097488cbb17451733a156fee9c84cbf1bde0e72900165743eaec2",
+    "abimangle": "05d7c20d1efd9de9b563cbd5091d8f1b5426946eda157951dad0aaebf86876c0"
+  },
+  "required_checks": {
+    "stageTests": {
+      "command": "make test-pa25",
+      "exit_code": 2,
+      "passed": 74,
+      "total": 101,
+      "failed": 27
+    },
+    "priorThroughTests": {
+      "command": "make test-report-through-pa24",
+      "exit_code": 0,
+      "passed": 4152,
+      "total": 4152,
+      "stages_passed": 24
+    },
+    "fileAudit": {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa25 --paths dev/src",
+      "exit_code": 0,
+      "warnings": 4
+    },
+    "stageProgress": {
+      "baseline_failed": 30,
+      "current_failed": 27,
+      "fixed_original_cases": [
+        "pa25/tests/general/200-runtime-gnu-statement-expression-class-rhs.t",
+        "pa25/tests/general/200-runtime-gnu-statement-expression-enclosing-return.t",
+        "pa25/tests/general/300-runtime-statement-expression-unreachable-result.t"
+      ],
+      "new_failures": [],
+      "required_cases": 101,
+      "removed_cases": 0,
+      "fixtures_references_harnesses_unchanged": true,
+      "pass": true
+    },
+    "throughCurrent": {
+      "command": "make test-report-through-pa25",
+      "exit_code": 2,
+      "passed": 4226,
+      "total": 4253
+    }
+  },
+  "explicit_controls": {
+    "statements": 49,
+    "driver": 61,
+    "scalar": 19,
+    "wide_operand_pairs": 96,
+    "empty_PATH_template_trace_exit": 0,
+    "validated_LowIR_exit": 0,
+    "AST_view_exit": 0
+  },
+  "performance_policy": "O0; no new optional optimization; startup-dominating template acceptance plus all diagnostics retained; new behavior correct final/final baseline",
+  "performance": {
+    "equivalent": {
+      "templates": {
+        "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+        "text_bytes": 384567,
+        "file_bytes": 385024,
+        "compile": {
+          "ratio_median": 1.0106753634625232,
+          "ratio_range": [
+            0.9859409897053788,
+            1.0192768306985336
+          ],
+          "AA_range_s": [
+            0.23191368952393532,
+            0.24996952153742313
+          ],
+          "B_median_s": 0.23988217674195766,
+          "B_peak_rss_kib": 15704
+        },
+        "runtime": {
+          "ratio_median": 0.9829889380794578,
+          "ratio_range": [
+            0.8588181126556297,
+            1.048456250402964
+          ],
+          "AA_range_s": [
+            0.14192484691739082,
+            0.2068180236965418
+          ],
+          "B_median_s": 0.17852204572409391,
+          "B_peak_rss_kib": 256
+        }
+      },
+      "memory": {
+        "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+        "text_bytes": 521,
+        "file_bytes": 4096,
+        "compile": {
+          "ratio_median": 0.9758742964199887,
+          "ratio_range": [
+            0.9442396020123313,
+            0.9866056450980609
+          ],
+          "AA_range_s": [
+            0.3824031688272953,
+            0.4146776217967272
+          ],
+          "B_median_s": 0.3711085971444845,
+          "B_peak_rss_kib": 6836
+        },
+        "runtime": {
+          "ratio_median": 0.997372720959693,
+          "ratio_range": [
+            0.9216910262222408,
+            1.125845265262993
+          ],
+          "AA_range_s": [
+            0.15116329304873943,
+            0.15316682122647762
+          ],
+          "B_median_s": 0.15068648662418127,
+          "B_peak_rss_kib": 256
+        }
+      },
+      "floating": {
+        "sha256": "011f58efcad1503f06e6cf81a88548ca27ac88ba7e724ba2cab8d4d82e185dcb",
+        "text_bytes": 340,
+        "file_bytes": 4096,
+        "compile": {
+          "ratio_median": 0.964534282889749,
+          "ratio_range": [
+            0.9376056649941185,
+            1.2297415028560656
+          ],
+          "AA_range_s": [
+            0.3718470595777035,
+            0.440710362046957
+          ],
+          "B_median_s": 0.364338219165802,
+          "B_peak_rss_kib": 6936
+        },
+        "runtime": {
+          "ratio_median": 1.0003222147784958,
+          "ratio_range": [
+            0.9941523642156418,
+            1.004602595193021
+          ],
+          "AA_range_s": [
+            0.13827646896243095,
+            0.1385469064116478
+          ],
+          "B_median_s": 0.13823409285396338,
+          "B_peak_rss_kib": 256
+        }
+      }
+    },
+    "new_behavior": {
+      "statements": {
+        "sha256": "2843408ce129cfa5eed2d596a30d2e82adf9761c82b9be9bf8de10c3b456a76e",
+        "text_bytes": 503,
+        "file_bytes": 4096,
+        "compile": {
+          "ratio_median": 1.0020041719138322,
+          "ratio_range": [
+            0.9595785434522497,
+            1.0431807489190879
+          ],
+          "AA_range_s": [
+            0.3765574563294649,
+            0.43384943902492523
+          ],
+          "B_median_s": 0.3842506380751729,
+          "B_peak_rss_kib": 6832
+        },
+        "runtime": {
+          "ratio_median": 0.9945589731919111,
+          "ratio_range": [
+            0.9182036428935114,
+            1.0041732476465826
+          ],
+          "AA_range_s": [
+            0.12750520184636116,
+            0.13762238807976246
+          ],
+          "B_median_s": 0.12587892543524504,
+          "B_peak_rss_kib": 256
+        }
+      }
+    }
+  },
+  "logs": {
+    "stage.log": "21e45537075a624c379dd9c47fb42167e0f14db964212fe44a70813b8f4a688a",
+    "prior.log": "e4673491d9eb3727989e87819921a190a537f694bcb1449ca9a26b02cb1e4616",
+    "through.log": "ba28b55a282c77ebc7c27a458b5d48bd847e208a6337c0843d7c7a8c3e93edef",
+    "audit-final.log": "ecb5c8691e9459cff3673d47a336904ae2681678f41dcec312d8491a4667ac13",
+    "statements-verified/results.json": "142e7e566aa807e14c1fc63371babf6dc72aabd5d5466772da6c13681869149b",
+    "driver.log": "cb4a49605b7f29681a49d143c9dede29bfca3d6dd562396388f5ac6afcf1d935",
+    "scalars.log": "0f018dccbccc9acf4bd3df7dcdd8ad7ffa6d26f6aeb3ce3b0198a52ea06b3510",
+    "trace.jsonl": "46dafa28e2421bc1d91b2f528bdcd2f40f0184392c00cd63770d1fcdda4dcfe6",
+    "performance/performance.json": "eda550ff52b26a0893bac2a2c2361f209614284f45efa733d4070819f7e57df4",
+    "statements-performance/performance.json": "7b06b2ce9de444349a8e55e9a855ddc326b01afa779f17c936c01fe7629258fc"
+  },
+  "handoff_boundary": "Statement/result/control/lifetime group complete; 27 class-runtime, source-EH and floating-evaluation failures remain; independent whole-stage review pending.",
+  "artifact_directory": "/home/vishvananda/work/private/v4codex/artifacts/pa25-137"
+}

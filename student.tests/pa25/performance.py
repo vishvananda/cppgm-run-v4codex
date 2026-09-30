@@ -49,6 +49,18 @@ for(int i=0;i<argc*{count};++i)x=step(x,i);
 return x==((U({x>>64}ULL)<<64)|U({x&((1<<64)-1)}ULL))?0:1;}}
 ''')
     workloads={'wide':([wide],64)}
+if '--statements-baseline' in sys.argv[4:]:
+    assert A.read_bytes()==B.read_bytes(), 'statement baseline requires the same correct binary'
+    count=3000000
+    expected=sum((i%97)*(3 if (i%97)&1 else 2) for i in range(count))
+    statements=save('statements.cc',f'''struct Guard {{ int& dead;
+Guard(int& x) noexcept:dead(x){{}} ~Guard() noexcept{{++dead;}} }};
+int step(int n,int& dead){{return ({{Guard g(dead);if(n&1)return n*3;n*2;}});}}
+int main(int argc,char**){{int dead=0;long long sum=0;
+for(int i=0;i<argc*{count};++i)sum+=step(i%97,dead);
+return sum=={expected}LL && dead==argc*{count}?0:1;}}
+''')
+    workloads={'statements':([statements],64)}
 def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def run(args):
     p=subprocess.run(list(map(str,args)),stdout=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -56,7 +68,7 @@ def run(args):
     return p
 # Preserve ordinary ELF images from each frozen binary for equality and timing.
 manifest={str(p):digest(p) for p in [A,B,*inputs.glob('*.cc')]}
-results={'manifest':manifest,'flags':['-O0'],'policy':'O0; no optional transforms or speedup claim; wide mode is final/final calibration', 'runs':[],'images':{}}
+results={'manifest':manifest,'flags':['-O0'],'policy':'O0; no optional transforms or speedup claim; new-behavior modes are final/final calibration', 'runs':[],'images':{}}
 for name,(sources,_) in workloads.items():
     images=[]
     for label,binary in [('A',A),('B',B)]:
