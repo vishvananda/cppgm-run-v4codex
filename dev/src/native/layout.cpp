@@ -41,9 +41,11 @@ void Encoder::encode(const Function& f)
 {
     auto first_fixup = image.code_fixups.size();
     function = &f;
-    unwind_record = UnwindRecord(); unwind_record.symbol = f.symbol.index; unwind_record.begin = unwind_record.cfi_pc = code.size();
-    host_sites.clear(); host_landings.clear(); host_landing_offsets.assign(f.blocks.size(),0);
-    resume_label = 0;
+    if (image.host) {
+        unwind_record = UnwindRecord(); unwind_record.symbol = f.symbol.index; unwind_record.begin = unwind_record.cfi_pc = code.size();
+        host_sites.clear(); host_landings.clear(); host_landing_offsets.assign(f.blocks.size(),0);
+        resume_label = 0;
+    }
     image.symbols[f.symbol.index] = code.size(); image.defined[f.symbol.index] = true;
     auto cfi_at = code.size();
     if (f.frame_pointer) {
