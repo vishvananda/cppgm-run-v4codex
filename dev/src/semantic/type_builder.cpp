@@ -56,7 +56,13 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         }
         if (node.kind == Kind::Enum) { result = enum_type(c, s, anonymous_name, node.flags & 1); continue; }
         if (node.op == KW_DECLTYPE) {
-            result = expression_type(node.first, s, true);
+            if (node.flags & 2) {
+                if (ast[node.first].kind == Kind::TypeId) result = type_id(node.first,s);
+                else {
+                    TypeQuery query; query.kind = QueryKind::Typeof;
+                    result = query_decltype(intern_query(query,{expression_query(node.first,s)}),false);
+                }
+            } else result = expression_type(node.first, s, true);
             if (template_type_probe && !result) return 0;
             continue;
         }

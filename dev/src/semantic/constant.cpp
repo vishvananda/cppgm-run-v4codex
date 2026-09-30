@@ -214,6 +214,7 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
     }
     case Kind::SizeofPack: return constants[query_value(expression_query(n,s))];
     case Kind::Sizeof: case Kind::TypeTrait: {
+        if (ast[n].kind == Kind::TypeTrait && ast[n].flags) return constants[query_value(expression_query(n,s))];
         if (ast[n].op == KW_TYPEID) return Constant();
         if (ast[n].op == KW_NOEXCEPT) return constants[facts[n].value];
         TypeId t = ast[first].kind == Kind::TypeId ? type_id(first, s) : expression_type(first, s);

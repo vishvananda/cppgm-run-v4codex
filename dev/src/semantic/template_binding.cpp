@@ -244,6 +244,12 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
         return true;
     }
     if (node.kind == Kind::Identifier) return false; // A declaration's own name.
+    if (node.kind == Kind::TypeTrait && node.flags) {
+        bool dependent = false;
+        for (auto c = node.first; c; c = ast[c].next)
+            dependent |= dependent_argument(template_argument_node(c,s));
+        return dependent;
+    }
     if (node.kind == Kind::Sizeof || node.kind == Kind::TypeTrait) {
         ++unevaluated_depth; bool dependent = false;
         try { for (auto c = node.first; c; c = ast[c].next) dependent |= bind_template_expression(c,s); }

@@ -360,7 +360,12 @@ void Analyzer::declaration(NodeId n, ScopeId s)
     case Kind::StaticAssert: {
         struct Unevaluated { unsigned& depth; Unevaluated(unsigned& d):depth(d){++depth;} ~Unevaluated(){--depth;} } guard(unevaluated_depth);
         Constant v = evaluate(ast[n].first, s);
-        if (!v.valid || scoped_enum(v.type) || !constant_truth(v)) throw std::runtime_error("static assertion is not a true integral constant");
+        if (!v.valid || scoped_enum(v.type) || !constant_truth(v)) {
+            const auto& loc = static_cast<const syntax::Ast&>(ast).locations[ast[n].location];
+            auto file = ids.spelling(loc.presumed_file);
+            throw std::runtime_error("static assertion is not a true integral constant in " +
+                std::string(file.data,file.size) + ":" + std::to_string(loc.line));
+        }
         break;
     }
     case Kind::SpecialMember: case Kind::SpecialDefinition: {

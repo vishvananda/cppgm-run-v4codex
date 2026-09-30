@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "support/type_traits.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
@@ -264,14 +265,9 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         }
         break;
     }
-    case Kind::Sizeof: case Kind::TypeTrait:
-        q.kind = node.op == KW_TYPEID ? QueryKind::Typeid : QueryKind::Sizeof; q.op = node.op;
-        if (ast[first].kind == Kind::TypeId) {
-            q.type = type_id(first,s);
-            if (template_type_probe && !q.type) return 0;
-        }
-        else children.push_back(expression_query(first,s));
-        break;
+    case Kind::Sizeof: case Kind::TypeTrait: {
+        auto id = type_operation_query(n,s); source_index.put(key(s,n),id); return id;
+    }
     default:
         if (template_type_probe) return 0;
         throw std::runtime_error("unsupported dependent type query operation");
@@ -483,6 +479,8 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     auto& x = r.expression;
     if (q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack)
         x.type = types.fundamental(q.op == KW_NOEXCEPT ? FT_BOOL : FT_UNSIGNED_LONG_INT);
+    if (q.kind == QueryKind::BuiltinTrait && q.value != unsigned(BuiltinTrait::Underlying))
+        x.type = types.fundamental(FT_BOOL);
     if (q.kind == QueryKind::Typeid) {
         x.type = typeinfo_result_type(); x.category = ValueCategory::Lvalue;
     }
@@ -525,6 +523,11 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         }
     }
     if (inspect) switch (q.kind) {
+    case QueryKind::BuiltinTrait: r = query_builtin_trait(id,q); break;
+    case QueryKind::Typeof:
+        x.type = children[0].expression.type;
+        if (!x.type && children[0].declared_type) x.type = value_type(children[0].declared_type);
+        break;
     case QueryKind::List:
         x.form = ExpressionForm::InitializerList; x.inputs = CallInputs::Query;
         x.arguments = id; x.argument_count = q.count; break;
@@ -540,6 +543,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::Value:
         x.type = value_type(q.type); x.null_pointer_constant = q.null_pointer_constant;
         if (types[q.type].kind == TypeKind::LRef) x.category = ValueCategory::Lvalue;
+        if (types[q.type].kind == TypeKind::RRef) x.category = ValueCategory::Xvalue;
         r.declared_type = q.type; break;
     case QueryKind::TemplateValueParameter:
         x.type = value_type(q.type); r.declared_type = q.type; x.entity = q.entity;

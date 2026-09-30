@@ -188,6 +188,11 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     case Kind::Binary: case Kind::Assignment: case Kind::Conditional: return binary_expression(n, s);
     case Kind::Cast: return cast_expression(n, s, type_id(first, s), ast[first].next);
     case Kind::TypeTrait: case Kind::Sizeof: {
+        if (ast[n].kind == Kind::TypeTrait && ast[n].flags) {
+            auto query = expression_query(n,s); r = query_fact(query).expression;
+            r.form = ExpressionForm::ConstantQuery;
+            facts.edit(n).value = query_value(query); return r;
+        }
         if (ast[n].op == KW_TYPEID) return typeid_expression(n,s);
         ++unevaluated_depth;
         TypeId t = ast[first].kind == Kind::TypeId ? type_id(first, s) : expression(first, s).type;

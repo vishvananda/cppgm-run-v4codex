@@ -15,7 +15,7 @@ bool Analyzer::bind_template_size(NodeId node, ScopeId scope)
     auto query = expression_query(node,scope);
     if (!query) return false; // Local identity or another expression owner is not yet typed.
     template_value_queries.put(source,query); ++template_value_work;
-    Expression result; result.type = types.fundamental(ast[node].op == KW_NOEXCEPT ? FT_BOOL : FT_UNSIGNED_LONG_INT); result.ready = true;
+    Expression result; result.type = types.fundamental(ast[node].op == KW_NOEXCEPT || (ast[node].kind == Kind::TypeTrait && ast[node].flags) ? FT_BOOL : FT_UNSIGNED_LONG_INT); result.ready = true;
     expressions.set(node,result); { auto& published = facts.edit(node); published.type = result.type; published.scope = scope; }
     template_fixed_expressions.put(source,node); ++template_fixed_work;
     return true;
@@ -41,7 +41,9 @@ std::uint32_t Analyzer::query_value(QueryId id)
         }
         if (fact.dependent) throw std::logic_error("dependent query demanded as a concrete value");
         auto query = type_queries[id]; Constant value;
-        if (query.kind == QueryKind::Sizeof) {
+        if (query.kind == QueryKind::BuiltinTrait) {
+            value = constants[builtin_trait_values.get(id)];
+        } else if (query.kind == QueryKind::Sizeof) {
             auto type = query.type ? query.type : query_fact(query_edges[query.offset]).expression.type;
             value = query.op == KW_NOEXCEPT ? Constant(types.fundamental(FT_BOOL),query_nonthrowing(query_edges[query.offset])) :
                 Constant(types.fundamental(FT_UNSIGNED_LONG_INT),size(type,query.op == KW_ALIGNOF));
@@ -148,6 +150,7 @@ bool Analyzer::reuse_template_value(NodeId node, ScopeId scope, Expression& resu
     auto value = query_value(query); ++template_value_uses;
     result.type = constants[value].type;
     { auto& published = facts.edit(node); published.type = result.type; published.scope = scope; published.value = value; }
+    if (type_queries[query].kind == QueryKind::BuiltinTrait) { result.form = ExpressionForm::ConstantQuery; return true; }
     auto operand = type_queries[query].type;
     if (!operand) operand = query_fact(query_edges[type_queries[query].offset]).expression.type;
     facts.edit(ast[node].first).type = operand;

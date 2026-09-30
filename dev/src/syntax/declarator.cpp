@@ -11,7 +11,16 @@ NodeId Parser::specifiers(bool type_only, NodeId result)
     for (;;) {
         attributes(&alignment);
         Kind kind = type_only ? Kind::TypeSpecifier : Kind::DeclSpecifier;
-        if (builtin()) {
+        if (!have_type && (in.is("typeof") || in.is("__typeof") || in.is("__typeof__"))) {
+            in.take(); in.require("("); unsigned saved = angle_expression; angle_expression = 0;
+            auto operand = type_operand(true) ? type_id() : expression();
+            in.require(")"); angle_expression = saved;
+            auto spec = wrap(type_only ? Kind::Decltype : Kind::DeclSpecifier,operand);
+            ast[spec].op = KW_DECLTYPE; ast[spec].flags |= 2; ast.append(result,spec); have_type = true;
+        } else if (!have_type && in.is("__underlying_type")) {
+            auto spec = wrap(type_only ? Kind::Decltype : Kind::DeclSpecifier,type_trait());
+            ast[spec].op = KW_DECLTYPE; ast.append(result,spec); have_type = true;
+        } else if (builtin()) {
             ast.append(result, leaf(kind));
             have_type = true;
         } else if (in.is("const") || in.is("volatile")) ast.append(result, leaf(type_only ? Kind::CvQualifier : kind));

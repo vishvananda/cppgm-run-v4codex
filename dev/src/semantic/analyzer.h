@@ -24,6 +24,10 @@ public:
     std::vector<Scope> scopes;
     std::vector<Declaration> declarations;
     FactStore facts;
+    QueryId type_operation_query(NodeId n, ScopeId s);
+    TypeQueryFact query_builtin_trait(QueryId id, const TypeQuery& query);
+    bool builtin_type_property(unsigned trait, TypeId type);
+    Index builtin_trait_values, builtin_type_properties;
     Index assembler_names; // EntityId -> interned explicit object name.
     LiteralCallKind literal_call_kind(NodeId n) const { auto k = literal_call_kinds.get(n); return k ? LiteralCallKind(k-1) : LiteralCallKind::String; }
     Expression expression_fact(NodeId n) const { return expressions[n]; }

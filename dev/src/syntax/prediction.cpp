@@ -135,7 +135,7 @@ std::size_t Parser::probe_type(std::size_t ahead)
             base = true;
             ++ahead;
         } else if (in.is("const", ahead) || in.is("volatile", ahead)) ++ahead;
-        else if (!base && in.is("decltype", ahead)) {
+        else if (!base && (in.is("decltype", ahead) || in.is("__underlying_type",ahead) || in.is("typeof",ahead) || in.is("__typeof",ahead) || in.is("__typeof__",ahead))) {
             ahead = in.matching(ahead + 1) + 1;
             base = true;
         } else if (!base) {

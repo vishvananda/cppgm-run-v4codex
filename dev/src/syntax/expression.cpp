@@ -1,4 +1,5 @@
 #include "syntax/parser.h"
+#include "support/type_traits.h"
 #include <stdexcept>
 
 namespace cppgm { namespace syntax {
@@ -132,6 +133,7 @@ NodeId Parser::postfix(NodeId base)
 NodeId Parser::primary()
 {
     Token token = in.peek();
+    if (builtin_trait(ids.spelling(token.text)) != BuiltinTrait::None && in.is("(",1)) return type_trait();
     if (token.kind == PostTokenKind::literal || token.kind == PostTokenKind::user_literal)
         return leaf(Kind::Literal);
     if (in.is("true") || in.is("false") || in.is("nullptr") || in.is("this"))
@@ -213,7 +215,17 @@ NodeId Parser::type_trait()
     if (gnu_alignment) keyword.op = KW_ALIGNOF;
     bool size = keyword.op == KW_SIZEOF;
     NodeId result = size ? make(Kind::Sizeof) : ast.make(Kind::TypeTrait, keyword);
-    if (size && in.eat("...")) {
+    auto trait = builtin_trait(ids.spelling(keyword.text));
+    if (trait != BuiltinTrait::None) {
+        ast[result].flags = unsigned(trait);
+        in.require("("); unsigned saved = angle_expression; angle_expression = 0;
+        if (!in.is(")")) do {
+            auto operand = type_id();
+            if (in.eat("...")) operand = wrap(Kind::PackExpression,operand);
+            ast.append(result,operand);
+        } while (in.eat(","));
+        in.require(")"); angle_expression = saved;
+    } else if (size && in.eat("...")) {
         ast[result].kind = Kind::SizeofPack;
         in.require("(");
         ast[result].text = in.take().text;

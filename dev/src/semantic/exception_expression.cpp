@@ -196,7 +196,7 @@ bool Analyzer::query_nonthrowing(QueryId id, bool temporary)
     }
     if (q.kind == QueryKind::Cast && q.op == KW_DYNAMIC_CAST)
         return types[q.type].kind == TypeKind::Pointer && query_nonthrowing(query_edges[q.offset]);
-    if (q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack) return true;
+    if (q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack || q.kind == QueryKind::BuiltinTrait) return true;
     bool result = true;
     if (fact.surrogate) result = false; // The converted function pointer has a potentially-throwing call type.
     if (fact.selected) result &= function_nonthrowing(fact.selected);

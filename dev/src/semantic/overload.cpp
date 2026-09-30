@@ -247,6 +247,20 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             bool copy = spelling.equals("__builtin_memcpy");
             bool move = spelling.equals("__builtin_memmove");
             bool length = spelling.equals("__builtin_strlen");
+            const char* library = spelling.equals("__builtin_memcmp") ? "memcmp" :
+                spelling.equals("__builtin_memchr") ? "memchr" :
+                spelling.equals("__builtin_memset") ? "memset" : nullptr;
+            if (library) {
+                auto v = types.fundamental(FT_VOID), i = types.fundamental(FT_INT);
+                auto ptr = types.compound(TypeKind::Pointer,v);
+                auto cp = types.compound(TypeKind::Pointer,types.qualify(v,1));
+                auto size = types.fundamental(FT_UNSIGNED_LONG_INT);
+                bool compare = library[3] == 'c' && library[4] == 'm';
+                bool set = library[3] == 's';
+                e = declare_function(global,name,0,types.function(compare ? i : ptr,{set ? ptr : cp,compare ? cp : i,size},false));
+                entities[e].c_linkage = true; entities[e].exception_spec = 129;
+                assembler_names.put(e,ids.intern(TextView(library,std::char_traits<char>::length(library))));
+            }
             if (length) {
                 TypeId cp = types.compound(TypeKind::Pointer, types.qualify(types.fundamental(FT_CHAR), 1));
                 e = declare_function(global, name, 0, types.function(types.fundamental(FT_UNSIGNED_LONG_INT), {cp}, false));

@@ -38,12 +38,16 @@ failures while this ownership chain supports them. Driver format migration is
 a separate unfinished group; independent audit remains pending below.
 
 - Required `300-shared-conditional-cleanup-resume` still fails inside the real
-  host `<type_traits>` included by `<string>`. Header discovery now works.
-  GNU type-trait syntax and dependent semantic queries are the next owner.
+  host `<string>`. GNU type traits and typeof now use canonical typed queries;
+  structural properties demand completed layout, and operation traits use
+  ordinary overload/conversion facts in an unrelated access context. Empty
+  `throw()` is nonthrowing. Required next owner: source variadic intrinsics.
   Nine prerequisite controls pass; PA1–25 4253/4253 and file audit pass after
   configured include roots/macros, namespace/parameter attributes, asm labels,
   typed SysV va_list and block-function linkage fixes. PA26 remains 29/30:
   this increment is progress toward implementation, not an accepted handoff.
+  Trait controls (classification, structural, operation, substitution, packs,
+  typeof) and header prerequisites pass; PA1–25 passes again after traits.
   Final performance evidence and all final required checks remain outstanding.
 - Driver migration remains unfinished: `.obj` preserves PA25 private objects;
   other output names select host ELF. `--object-format=elf|private` overrides

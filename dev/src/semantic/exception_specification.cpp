@@ -22,6 +22,10 @@ void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
     ExceptionSpecificationFact fact; fact.declarator = d; fact.scope = s;
     fact.destructor = ast[ast[decl_name(d)].last].op == OP_COMPL;
     for (auto c = ast[d].first; c; c = ast[c].next) {
+        if (ast[c].kind == Kind::FunctionQualifier && ast[c].op == KW_THROW) {
+            fact.specification = ast[ast[c].detail].first ? 2 : 1;
+            continue;
+        }
         if ((ast[c].kind != Kind::FunctionQualifier && ast[c].kind != Kind::Noexcept) || ast[c].op != KW_NOEXCEPT) continue;
         if (!ast[c].first) fact.specification = 1;
         else fact.expression = ast[c].first;

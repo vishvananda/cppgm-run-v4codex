@@ -66,6 +66,10 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         break;
     }
     case Kind::Sizeof: case Kind::TypeTrait:
+        if (node.kind == Kind::TypeTrait && node.flags) {
+            if (query_fact(expression_query(n,s)).dependent) return;
+            break;
+        }
         if (ast[first].kind == Kind::TypeId) {
             auto type = type_id(first,s);
             if (node.op == KW_TYPEID ? dependent_type(type) : types[type].kind != TypeKind::Fundamental) return;
@@ -124,6 +128,9 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     if (reuse_template_field(n,s,result)) {
         { auto& published = facts.edit(n); published.type = facts[source].type; published.entity = result.entity; }
         return true;
+    }
+    if (node.kind == Kind::TypeTrait && node.flags) {
+        facts.edit(n).type = result.type; facts.edit(n).value = facts[source].value; return true;
     }
     auto first = node.first;
     if (node.kind == Kind::Member) {
