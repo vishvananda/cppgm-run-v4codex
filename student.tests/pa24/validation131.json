@@ -1,0 +1,153 @@
+{
+  "stage": "pa24 implementation handoff131",
+  "entry_commit": "8c10ee78f9b301ceaba73d6c31c197339745e6ba",
+  "stage_base_commit": "bde9eb3e128e24923a1de40bb63b8e348a13553b",
+  "last_reviewed_commit": "9f3f9b5caaec9677af0e8431b51cacebcf823dce",
+  "implementation_commits": [
+    "45774fa2f63063f5019356109fcf0f30b6a1e861",
+    "c7587f72d44917a89a5ece3d6118473ce60103bb"
+  ],
+  "artifact_directory": "/home/vishvananda/work/private/v4codex/artifacts/pa24-131",
+  "checks": [
+    {
+      "name": "stage-final",
+      "command": "make test-pa24",
+      "exit_code": 2,
+      "log_sha256": "421120c95f03ced9afc5d2e1484f2bc243905a9319df614cb6b6efc28e512184"
+    },
+    {
+      "name": "prior-final",
+      "command": "n=24; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi",
+      "exit_code": 0,
+      "log_sha256": "4c662c56ee5a753f284ba8febfd524d2af760e74bf151ec790709fa63891cb73"
+    },
+    {
+      "name": "file-audit-final",
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa24 --paths dev/src",
+      "exit_code": 0,
+      "log_sha256": "09991cae3876c91c905a9d48086986cd7bf75a6f2e2dfb20654472296390380d"
+    },
+    {
+      "name": "runtime-final",
+      "command": "python3 student.tests/pa24/runtime131.py dev/lowir2native /home/vishvananda/work/private/v4codex/artifacts/pa24-131/runtime-final",
+      "exit_code": 1,
+      "log_sha256": "847a317ae08d559b3d2abab9276fbbba12ec7eb33be5098bc7317c359519f087",
+      "disposition": "Evidence destination collided with a runtime benchmark executable before any tests ran; superseded by runtime-controls-final."
+    },
+    {
+      "name": "coverage-final",
+      "command": "git diff --exit-code 8c10ee78f9b301ceaba73d6c31c197339745e6ba -- pa24/tests pa24/scripts scripts",
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "runtime-controls-final",
+      "command": "python3 student.tests/pa24/runtime131.py dev/lowir2native /home/vishvananda/work/private/v4codex/artifacts/pa24-131/runtime-controls-final",
+      "exit_code": 0,
+      "log_sha256": "012f81c67c0a4fb17162bf63039e595bce0ef063e32c7e07dab734527a243417"
+    }
+  ],
+  "progress": {
+    "baseline_passing": 282,
+    "current_passing": 287,
+    "total": 296,
+    "baseline_failures": [
+      "pa24/tests/behavior/600-defined-and-declared-tls-wrappers.t",
+      "pa24/tests/behavior/600-generic-cleanup-resume.t",
+      "pa24/tests/behavior/700-thread-local-store-register-pressure.t",
+      "pa24/tests/behavior/800-frame-dividend-direct-return.t",
+      "pa24/tests/behavior/800-wide-forwarded-call-argument-home.t",
+      "pa24/tests/behavior/900-folded-narrow-load-normalization.t",
+      "pa24/tests/behavior/900-parameter-home-address-clobber.t",
+      "pa24/tests/strict/100-object-abi-lowered.t",
+      "pa24/tests/strict/600-thread-local-direct-native-runtime.t",
+      "pa24/tests/structural/200-stack-arguments-beyond-six.t",
+      "pa24/tests/structural/500-mixed-gpr-xmm-call-abi.t",
+      "pa24/tests/structural/600-indirect-mixed-gpr-xmm-call-abi.t",
+      "pa24/tests/structural/700-call-setup-forwarding-no-preserve.t",
+      "pa24/tests/structural/800-single-edge-callee-saved-retention.t"
+    ],
+    "current_failures": [
+      "pa24/tests/behavior/600-defined-and-declared-tls-wrappers.t",
+      "pa24/tests/behavior/700-thread-local-store-register-pressure.t",
+      "pa24/tests/strict/100-object-abi-lowered.t",
+      "pa24/tests/strict/600-thread-local-direct-native-runtime.t",
+      "pa24/tests/structural/200-stack-arguments-beyond-six.t",
+      "pa24/tests/structural/500-mixed-gpr-xmm-call-abi.t",
+      "pa24/tests/structural/600-indirect-mixed-gpr-xmm-call-abi.t",
+      "pa24/tests/structural/700-call-setup-forwarding-no-preserve.t",
+      "pa24/tests/structural/800-single-edge-callee-saved-retention.t"
+    ],
+    "fixed_failures": [
+      "pa24/tests/behavior/600-generic-cleanup-resume.t",
+      "pa24/tests/behavior/800-frame-dividend-direct-return.t",
+      "pa24/tests/behavior/800-wide-forwarded-call-argument-home.t",
+      "pa24/tests/behavior/900-folded-narrow-load-normalization.t",
+      "pa24/tests/behavior/900-parameter-home-address-clobber.t"
+    ],
+    "new_failures": [],
+    "controls_passed": 17,
+    "prior_passing": 3856,
+    "prior_total": 3856,
+    "personal_runtime_cases": 75,
+    "unchanged_course_coverage": true
+  },
+  "binary_hashes": {
+    "before": "a87d22b8e2a3997eee5130001d2f23c8c228ec292edb2b75012011f3272b3a13",
+    "after": "ae41f3ca50dd3df0a25dfa84a454c72dffc555be53f77f66edd60eb2a6b77f91",
+    "final": "ebe4f004cf548dfb698e53215e5844260f1656b04fb109d12d448b1afd93bb40"
+  },
+  "source_hashes": {
+    "dev/frontend_source_sets.mk": "eda7414af681f7134e0b270e983cd002b12bfa52164cd5fe6d6c9cfe69c7575e",
+    "dev/src/native/abi.h": "49a35af885ee542f97cb0fce6542d83f32c31a8c4b95282ab35e7cffca36a89e",
+    "dev/src/native/calls.cpp": "523da3ef88eafce05d20873fdec52724e9b78ad26c6b42f16a5b9c8790db6098",
+    "dev/src/native/driver.cpp": "dde2aef03f71459a6bdeda60966ac17dd368192c1c75d587d395135f098b45d1",
+    "dev/src/native/dump.cpp": "3a0f30ef80381def51be5cd785a8ed431412afd0cbb4371009c71408dc5f7fb9",
+    "dev/src/native/elf.cpp": "0c7fffe9b052a9e3025034d6b66b08970109bb54971a1eb1f8f7cc0b9b4323c0",
+    "dev/src/native/encoding.h": "d72a6f259d3ff40c0bc38b2b6081c2e5f788b83d24f750ac31efb370a16d51d7",
+    "dev/src/native/float_encoding.cpp": "4b483aa00e691f7ccc2d104f5bec5c66357d112ada062995a7c693851872c28f",
+    "dev/src/native/integer_encoding.cpp": "6d07f2a28860ec2e003983b4ee36fcc4d191551adbedd6fcd895100df62bb300",
+    "dev/src/native/layout.cpp": "19fc41916aa6b156bdf0c5eed0a73b364e892f1addfc660c03db48acffe822ce",
+    "dev/src/native/model.h": "71396a9c0a312ccd33d94af4b9319bc8efa0f016c76ffdf50151ae05816a64fe",
+    "dev/src/native/parameter_slots.cpp": "c538a05634241bd11c7d3f1a20f7555797535b640c20431767682a6108f056b8",
+    "dev/src/native/placement.cpp": "1de53cb655444131f4f14da5514f430267093d70eea89c6bc51cdb4819be9959",
+    "dev/src/native/runtime.cpp": "88d396516e6e0e530c89eac4f8c77ce487ba5bade86479baea79d30bb99c7987",
+    "dev/src/native/runtime_encoding.cpp": "bfd69f470bdada709809e465f99b6a7ecd1219d66f4ee81f2721519d09cdcdb4",
+    "dev/src/native/selection.cpp": "7f5d3779dc5b445febade8ff8154213316514443b3f76ec2be24b810f89b0d93",
+    "dev/src/native/selection.h": "81728780a9882afeeba2d6b5206283a750cabba2383c5d64370a4db653f53de5",
+    "student.tests/pa24/README.md": "23a52d60caa6b7a4eb90075fc6af16bcf8404191d9a1057d5c3e1a7419e044cd",
+    "student.tests/pa24/benchmark.py": "5a16b3e92eaa5ed5eb43503588136e36c5b1bc7edc7e101065071d8855c5f3bd",
+    "student.tests/pa24/exception-runtime.lowir": "bb43fe64a10e50abbd82b4452c7ba84d0cdeb46bbb6d2ca8a478f26ccca96311",
+    "student.tests/pa24/runtime131.py": "ab31f794b35b2dfbce9608228066162b6aac53e977b7b5a5ad827e9d60323f55",
+    "student.tests/pa24/trace131.cpp": "6ab4c538b06a3fb4b53d7d627479cf19d70c3a838b42f319fd263d4848d490a2"
+  },
+  "evidence_hashes": {
+    "entry-stage.log": "900142c235326ae604fe0767eb47703511ab73ae5a5d6094a1b51b9f62f27960",
+    "stage-final.log": "421120c95f03ced9afc5d2e1484f2bc243905a9319df614cb6b6efc28e512184",
+    "prior-final.log": "4c662c56ee5a753f284ba8febfd524d2af760e74bf151ec790709fa63891cb73",
+    "file-audit-final.log": "09991cae3876c91c905a9d48086986cd7bf75a6f2e2dfb20654472296390380d",
+    "coverage-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runtime-controls-final.log": "012f81c67c0a4fb17162bf63039e595bce0ef063e32c7e07dab734527a243417",
+    "scalar.log": "21e62ccd5a615c886496fb20667e2485895bae5ceccb391555aecb36f879c9e2",
+    "floating.log": "764a5d87ab5279532d91f9dad2f3f2e5ad9b362b47b1c172c1850be19ce2859c",
+    "wide.log": "e9c176ff49931734369b1a76938038d2e7bfc5c37459c46525a0ac0abec2dac8",
+    "objects.log": "82b4b42864845d4691e0aec8cd1c298681e93aea68eb64006fc5bb030d4cb97f",
+    "integration.log": "f3735ea515dea551c05c717cc0ade3737c72d8347d47c823ce533ee0151a4b47",
+    "audit-controls.log": "51c3fa48db71d128b2c0cc6072d9e0a83efd352eab6cc9e4a2acfd41811d6f64",
+    "native-inspection.json": "611340028f430b049b86a7e8fc5b63b2d5bf71a18e1444bc53506ada8a6ed9d8",
+    "runtime-debug.json": "e4551ffc9ee8c9f6bf14091228b3bed5c6012c3a62216982e02cef3309586aa7",
+    "final-runtime-identity.json": "db5c941a57f77efa3f553792e19d4267a953aa565f503ec96b1ccaf512b6d493",
+    "final-checks.json": "a6a348ab64d3a02edeae0a5b3a891e35a75db630913046dec667dd3359dfe3f9",
+    "trace131.lowir": "7d06be7eb290f946f596cb9edf7826fda5d799f4902e13aba606793b8de746ee",
+    "trace131.mir": "d55a442d79c78af28111fc5474b823c3867d773c75ada20d9328814a321200e8",
+    "bench-scalar/observations.json": "6d0b3d69df8092c8bdb6adb175ccb5f8e9f9c45f92d3eac77a328d43a1f772e5",
+    "bench-floating/observations.json": "933f31ae1c128d31229a3175610ad563174f69b6a66b4b0098bb21d01997531d",
+    "bench-wide/observations.json": "8b5586119209ef41df76bcdbf773dafd20a25cb79a490fdf38571df63268a955",
+    "bench-runtime/observations.json": "d885fae8d04b732554ebe405066a21a3d2354a4b2666175148efed80cb89eb0f",
+    "final-scalar/observations.json": "ce76d89fae604620d6ce842c27e6e28f01eb843ef6768e4bd7b762281bbd3931",
+    "final-floating/observations.json": "a92e1abe140400963067529c46e2cce4a7a1728828bf0660bb1528228e997c1a",
+    "final-wide/observations.json": "b35259320dbe04cc9b6d7a5dde3f1e86c6b1cf92d3e0ddf69321cff6b1d396db",
+    "final-runtime/observations.json": "57e691ef69638de6ffeb465bcfd85a0da296aa3ff1adef9c68cab7807215af9a"
+  },
+  "handoff_boundary": "Generic EH and frame/allocation/aligned ABI group complete. TLS and six mandatory canonical MIR mismatches are unfinished implementation. Independent review of accumulated changes remains pending; review markers are unchanged."
+}

@@ -3,95 +3,103 @@
 Stage base commit: bde9eb3e128e24923a1de40bb63b8e348a13553b
 Last reviewed commit: 9f3f9b5caaec9677af0e8431b51cacebcf823dce
 
-Implementation131 entry: `8c10ee78f9b301ceaba73d6c31c197339745e6ba`.
-The preceding audit turn made progress (eleven independent correctness failures
-were repaired); fresh entry validation confirms 282/296 and the same fourteen
-course failures. The 435 inventory also counts excluded regression/control inputs.
-Review markers above remain unchanged.
+Implementation131 entered at `8c10ee78`; code commits are `45774fa2` and
+`c7587f72`. Audit130 made concrete correctness progress and remains the last
+independent review. These markers are preserved; PA24 must not advance to PA25.
+[Audit130](audit.md), [validation131](../student.tests/pa24/validation131.json),
+and [performance131](../student.tests/pa24/performance131.md) retain evidence.
 
-Current work: generic EH and stack lifetime. Selector owns exceptional edges and
-stable homes; per-function MIR records handler/frame facts; encoder owns native
-handler records, restoration and typed payload transport; image owns reserved
-runtime storage. All work is linear in instructions/edges, with constant-size
-handler operations. Validate nested/cross-function cleanup, payload widths,
-pressure, normal exits, dynamic storage and alignment explicitly, then rerun the
-course and prior suites and frozen compiler/runtime measurements. Canonical MIR
-placement/frame protocol and TLS image/wrapper binding remain implementation,
-not independent-review waivers.
+## Design and completed behavior
 
-Checkpoint audit130 reviews the entire first-stage range, including all nine
-commits through entry `5bbf5325` and the audit fix `9f3f9b5c`. The checkpoint
-review is complete; PA24 is incomplete and must not advance to PA25.
-[Audit](audit.md), [validation](../student.tests/pa24/validation130.json), and
-[performance](../student.tests/pa24/performance130.md) retain the evidence.
+Typed PA8 Program -> function-owned placement/flat MIR -> direct x86 encoding
+and typed image fixups -> ELF. Text is confined to explicit LowIR/MIR adapters.
+Unit-owned compact indexes survive across functions; selection and MIR release
+after each function. No reference, host compiler or assembler implements output.
 
-## Architecture and completed groups
+Inherited groups cover scalar/wide integer, pointer and f32/f64/f80 execution,
+parallel phis, atomics, globals, bulk memory, direct/indirect calls, variadics and
+shared object ABI classification. Audit130 repaired fixed-register effects,
+implicit widening, indexed stores and unsafe reload carrying. Prior evidence
+and measurements remain in the audit and performance127–130 records.
 
-PA8 typed Program -> function-owned placement and flat MIR -> direct x86 encoder
-and typed fixups -> ELF. Explicit LowIR input and MIR output are adapters, not
-production phase transport. Unit-owned compact indexes survive across functions;
-selector facts/MIR release after each function. No reference/host delegation.
+131 completes **generic EH and stack lifetime**, including related alignment
+and call-boundary behavior:
 
-Handoffs127–129 implement scalar and wide integer/pointer/f32/f64/f80 execution,
-parallel phis, atomics, globals, fixed bulk memory, direct/indirect calls, mixed
-variadic state and shared object/integer ABI classification. Whole-argument
-register rollback, padded object homes, distinct parameter identities and direct
-frame chunks are preserved. Decimal floating literals round once per target
-format; integer payloads retain all 128 bits without enlarging Operand.
+- Selector records exceptional targets, parameter unavailability and stable
+  value homes. Handler edges never qualify as adjacent ordinary retention edges.
+- Flat MIR owns push/pop/throw/resume/stack-allocation operations and explicit
+  exception-base, allocation-floor and aligned-frame facts. Debug locations
+  survive selection; reserved runtime storage is visible in the dump.
+- Encoder installs 80-byte dynamic handler records and restores the target
+  stack, frame and preserved GPRs. Cleanup and catch pop before entry; resume
+  continues the same payload. Normal pop and early return remove stale handlers.
+- The image owns generic exception-top/payload storage. Payload transport covers
+  every scalar width through i128 and f80. This standalone generic ABI is separate
+  from later host exception metadata and private runtime calls.
+- Dynamic storage lives until function return, including after catch or normal
+  pop. Only functions combining handlers and allocation need a floor home.
+- An aligned frame base preserves incoming ABI offsets. Caller and callee share
+  one stack-argument origin; over-aligned outgoing arguments align the call stack
+  and restore its prior value. Floating scratch follows the selected frame base.
 
-The audit repaired five correctness paths: prepare implicitly widened RHS values
-before fixed arithmetic carriers; widen scalar slots by their own type; check
-fixed effects over a reused register's new interval; preserve indexed destination
-addresses while loading/widening store values; reject reload carrying across
-hidden byte-multiply scratch effects. Fixed-effect classification now has one
-owner shared by placement and parameter flow. The 21 independent controls expose
-11 entry failures, all repaired; 21 canonical LowIR roundtrips also execute.
+Work remains O(N + E log E): linear fact/selection walks, fixed register pools,
+monotonic six-bit parameter flow, bounded reload probes and constant native work
+per handler operation. Alignment padding is bounded by alignment-minus-one.
+No optional optimization, global retry, IR text transport or broad invalidation
+was added. Higher optimization levels retain the current O0 policy.
 
-Work remains O(N + E log E): fixed linear walks, nine GPR/fourteen XMM allocation
-choices, at most fourteen call carriers, six-bit monotonic parameter flow and
-three 64-instruction carry probes per eligible store. Wide division emits constant
-code with 128 target iterations; FP-to-wide splits four digits. Unknown proofs
-retain conservative locations. Higher levels currently use the O0 policy;
-PA32/33 optimization remains later work.
+## Validation and performance
 
-## Validation and performance acceptance
+- Final `make test-pa24`: **287/296**, up from **282/296**; failures **14 -> 9**,
+  with no new failing fixture. All five formerly blocked EH cases now pass.
+  Focused properties remain **17/17**. Required fixtures/comparators are unchanged.
+- The 435-file inventory includes 125 excluded solution regressions and 14
+  control inputs; it is not the course denominator. On that inventory's counting
+  convention progress is 282/435 -> 287/435 (153 -> 148).
+- Final prior-through: **3856/3856**, **23/23** stages. File audit passes with four
+  inherited header warnings. Personal scalar 1820, floating 1259, wide 1495,
+  objects 160, ABI/debug/ELF integration and 21 audit controls pass.
+- New final runtime/frame suite: **75/75**. Aligned class-template source trace,
+  two argument counts, reserved-state/debug inspection, disassembly and six
+  MIR/native byte-identity controls pass. A test evidence-path collision was
+  corrected and the complete personal suite rerun; its failed invocation remains
+  recorded separately and is not counted as passing validation.
+- Frozen A/A + six ABBA blocks measure all four performance dimensions. Final
+  paired compiler ratios are **0.971 / 1.076 / 0.988** (scalar/float/wide), with
+  unchanged peak RSS. Broad host noise prevents a speedup or regression claim.
+  Six inherited executable images are byte-identical. The new mixed exception
+  workload checks eight million calls in about **0.166 s**, with **726** text bytes.
+  Full spreads, noise calibration, hashes and observations are preserved.
+- Inherited 15% compiler latency/RSS and zero optional text-growth targets remain
+  diagnostics; mandated correctness, MIR limits and finite work budgets bind.
+  Source/native driver integration, host EH and self-hosting belong to later stages.
 
-- `make test-pa24`: **282/296**, the exact same **14** failing fixtures as entry;
-  **17/17** focused properties pass. All **287** successfully compiled positive
-  fixtures execute correctly, including the six canonical-MIR failures.
-- Earlier PAs: `make test-report-through-pa23` **3856/3856**, **23/23** stages.
-  File audit passes with four inherited header warnings. Coverage and all
-  fixture/reference/comparison files are unchanged.
-- Explicit personal suites: scalar 1820, floating 1259, wide 1495, objects 160;
-  ABI/debug/ELF integration, parameter flow, audit controls and source/template
-  trace pass. Native/MIR output identity and raw instruction bytes were inspected.
-- Frozen A/A + six ABBA blocks measure compilation separately from execution.
-  Paired compiler ratios: scalar **0.952**, floating **0.964**, wide **0.982**;
-  peak RSS is unchanged or lower. All six runtime images are byte-identical.
-  Historical measurements and their demonstrated improvements remain preserved.
-  No new speedup is claimed. The inherited 15% latency/RSS and zero optional
-  text-growth targets are diagnostics, not exit gates; course limits still bind.
-  Driver-integrated native/template and self-hosting benchmarks remain later-stage
-  work, not invented PA24 gates.
+## Remaining implementation and handoff boundary
 
-## Broad remaining work
+- **TLS storage and wrappers (3 failures):** definitions, declared/defined wrapper
+  binding and pressure-safe access. This needs a thread-storage/image/startup ABI,
+  distinct from completed function-local handler and stack restoration.
+- **Canonical placement/frame protocol (6 failures):** strict object-ABI frame;
+  stack arguments; mixed direct/indirect calls; setup forwarding; single-edge
+  retention. Programs execute correctly but mandatory MIR shapes still fail.
+  Closing these requires coordinated placement/setup policy, not further changes
+  to generic EH semantics. Exact comparisons remain required.
 
-- **Runtime and layout completion:** TLS definitions/wrapper binding; generic EH
-  regions, cleanup/resume and required runtime operations; dynamic and over-aligned
-  stack storage. Three positive failures stop at TLS and five at `eh_try`.
-  Required behavior must be implemented, never replaced with empty operations or
-  reference fallback. Later host EH metadata and object linking are separate.
-- **Scalar placement and final frame protocol:** strict `100-object-abi-lowered`;
-  structural `200-stack-arguments-beyond-six`, `500-mixed-gpr-xmm-call-abi`,
-  `600-indirect-mixed-gpr-xmm-call-abi`, `700-call-setup-forwarding-no-preserve`,
-  `800-single-edge-callee-saved-retention`. Their execution passes; their mandatory
-  canonical MIR contracts remain unsatisfied. Finish this group together, retain
-  scratch/ABI correctness and revalidate affected performance.
+This boundary completes the shared EH/frame group and its alignment consumers.
+Further related fixes within that owner are not known; proceeding now would
+start either independent TLS image/runtime ownership or canonical placement
+policy and its performance validation. These are unfinished implementation, not
+review questions or waived requirements. Whole-stage completion is not claimed.
 
-The three accepted handoffs covered coherent behavior groups, but repeatedly
-revisiting scratch effects, incoming parameters and wide consumers was avoidable
-fragmentation. Future handoffs should close shared ownership paths with mixed
-width/pressure/CFG controls before recording evidence. There is one cumulative
-review baseline now; the records-only successor does not move it past code.
+Independent review remains pending for the accumulated 131 code: verify handler
+nesting/exceptional value ownership, restored allocation lifetimes and aligned
+ABI/frame facts against the handout/spec, including interactions with inherited
+wide/FP/call behavior and the recorded work/performance bounds. Implementation
+validation does not replace that review and does not move Last reviewed commit.
 
-Evidence directory: `/home/vishvananda/work/private/v4codex/artifacts/pa24-audit130/`.
+| Handoff | Code / evidence | Disposition |
+|---|---|---|
+| Audit130 | through `9f3f9b5c`; audit.md | Independently reviewed; 14 failures remained |
+| 131 | `45774fa2`, `c7587f72`; validation131/performance131 | EH/frame group complete; 9 failures; independent review pending |
+
+Evidence directory: `/home/vishvananda/work/private/v4codex/artifacts/pa24-131/`.
