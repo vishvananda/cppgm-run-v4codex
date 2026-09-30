@@ -97,3 +97,28 @@ it keeps every reduced input, MIR view and executable there. The source trace
 checks ordinary field access and a demanded class-template member while an
 invalid unused dependent member remains dormant. These are explicit tool-boundary
 checks; source/native driver integration remains a later milestone.
+
+Handoff131 adds generic native exception and frame lifetime checks:
+
+```
+python3 student.tests/pa24/runtime131.py
+dev/cppgm++ --validate-lowir --emit-lowir -o /tmp/pa24-trace131.lowir student.tests/pa24/trace131.cpp
+dev/lowir2native --dump-machine-ir /tmp/pa24-trace131.mir -o /tmp/pa24-trace131 /tmp/pa24-trace131.lowir
+/tmp/pa24-trace131
+/tmp/pa24-trace131 input
+```
+
+The 75 runtime/frame cases cover scalar payload widths, nested cleanup/resume,
+cross-function transfer, normal and early returns, bounded handler loops,
+dynamic-allocation lifetimes, high-pressure parameter homes, over-aligned
+storage and stack-passed objects. The runner accepts a compiler and evidence
+directory and retains inputs, MIR, executables and a JSON result list. The source
+trace checks the layout of a demanded aligned class template; dynamic allocation
+is tested at the explicit LowIR boundary.
+
+`PA24_RUNTIME_COMPILER=1` selects the fixed 4096-function compiler workload with
+handler regions, dynamic allocation and aligned storage. `exception-runtime`
+checks an input-dependent sum through eight million mixed normal/throwing calls
+at the timed argument count. Entry binaries cannot execute this new surface;
+use the same frozen completed binary as A and B to measure its absolute costs
+and noise, without claiming a speedup. See [performance131.md](performance131.md).

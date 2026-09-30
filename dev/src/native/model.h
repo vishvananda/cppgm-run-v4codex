@@ -87,6 +87,6 @@ std::uint64_t normalize(std::uint64_t value, Type type);
 bool scalar_integer(Type type);
 // Registers 16..29 are ordinary XMM values; 30/31 are reserved encoder scratch.
 inline int xmm(unsigned n) { return 16+n; }
-void dump_header(const lowir_model::Program& p, const std::vector<Instruction>& startup, std::ostream& out);
+void dump_header(const lowir_model::Program& p, const std::vector<Instruction>& startup, std::ostream& out, bool exceptions = false);
 void dump_function(const lowir_model::Program& p, const Function& f, std::ostream& out);
 } // namespace native

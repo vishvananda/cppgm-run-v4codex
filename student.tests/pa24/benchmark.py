@@ -19,16 +19,25 @@ def run(cmd, record):
 # Large typed LowIR input amortizes process startup and covers repeated per-function
 # release. Every function contains real arithmetic; only one is the entry point.
 floating_compiler=os.environ.get('PA24_FLOAT_COMPILER')=='1'
+runtime_compiler=os.environ.get('PA24_RUNTIME_COMPILER')=='1'
 source=d/'compiler.lowir'
 with source.open('w') as out:
     for f in range(4096):
         typ='f64' if floating_compiler else 'i128' if os.environ.get('PA24_WIDE_COMPILER')=='1' else 'i64'
-        out.write(f'function @f{f}(%seed : {typ}) -> {typ} {{\nblock ^entry:\n')
+        out.write(f'function @f{f}(%seed : {typ}) -> {typ} {{\n')
+        if runtime_compiler: out.write('slot $aligned : obj<64x64>\n')
+        out.write('block ^entry:\n')
+        if runtime_compiler:
+            assert typ=='i64'
+            out.write('eh_try ^caught\n%slot = addr $aligned\nstore i64 %seed, %slot\n%dynamic = stack_alloc 64\nstore i64 %seed, %dynamic\n')
         prior='%seed'
         for k in range(64):
             literal=str(k+1)+('.25' if floating_compiler else '')
             out.write(f'%v{k} = binary add {typ} {prior}, {literal}\n'); prior=f'%v{k}'
-        out.write(f'jump ^next\nblock ^next:\nreturn {typ} {prior}\n}}\n')
+        if runtime_compiler: out.write('eh_end\n')
+        out.write(f'jump ^next\nblock ^next:\nreturn {typ} {prior}\n')
+        if runtime_compiler: out.write('block ^caught:\n%payload = exception i64\nreturn i64 %payload\n')
+        out.write('}\n')
     out.write(f'function @main() -> i64 [role=entry] {{\nblock ^entry:\n%x = call {typ} @f0(0)\n%bad = cmp ne {typ} %x, '+('2096.0' if floating_compiler else '2080')+'\nreturn i64 %bad\n}\n')
 manifest={'binaries':{k:{'path':str(v),'sha256':digest(v)} for k,v in compilers.items()},'flags':['-O0','--stats'],
           'inputs':{'compiler':digest(source)},'runs':[], 'runtime_arguments':['input'], 'cpu':cpu, 'platform':os.uname()._asdict() if hasattr(os.uname(),'_asdict') else list(os.uname())}

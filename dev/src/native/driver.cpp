@@ -12,8 +12,8 @@ void compile(const lowir_model::Program& p, const std::string& output, std::ostr
     Image image(p.symbols.size());
     Encoder encoder(image);
     Workspace workspace(p);
-    if (mir) dump_header(p,start,*mir);
     auto time = Clock::now(); encoder.startup(start); encode_data(p,image); stats.encoding_ms += ms(time);
+    if (mir) dump_header(p,start,*mir,image.defined[image.runtime_begin]);
     for (const auto& source : p.functions) if (!source.declaration) {
         time = Clock::now();
         Function f = Selector(p,source,workspace,stats).run();

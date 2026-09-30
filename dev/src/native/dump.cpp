@@ -86,7 +86,7 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
     }
     debug(p,i.debug,out); out << '\n';
 }
-void dump_header(const lowir_model::Program& p, const std::vector<Instruction>& start, std::ostream& out)
+void dump_header(const lowir_model::Program& p, const std::vector<Instruction>& start, std::ostream& out, bool exceptions)
 {
     out << "machine_ir x86_64 linux\n";
     if (!start.empty()) {
@@ -119,6 +119,12 @@ void dump_header(const lowir_model::Program& p, const std::vector<Instruction>& 
             }
             out << '\n';
         }
+    }
+    if (exceptions) {
+        out << "\nglobal " << runtime_name(unsigned(RuntimeEntity::ExceptionTop))
+            << "\n  storage scalar ptr\n  init ptr 0\n";
+        out << "\nglobal " << runtime_name(unsigned(RuntimeEntity::ExceptionValue))
+            << "\n  storage data\n  item zero 16\n";
     }
 }
 void dump_function(const lowir_model::Program& p, const Function& f, std::ostream& out)

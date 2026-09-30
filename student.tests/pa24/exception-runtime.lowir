@@ -1,0 +1,61 @@
+function @raise(%value : i64) -> void {
+  block ^entry:
+    throw i64 %value
+}
+
+function @step(%n : i64) -> i64 {
+  slot $aligned : obj<64x64>
+  block ^entry:
+    eh_try ^caught
+    %small = binary and i64 %n, 31
+    %size = binary add i64 %small, 16
+    %p = stack_alloc %size
+    store i64 %n, %p
+    %q = addr $aligned
+    store i64 7, %q
+    %odd = binary and i64 %n, 1
+    branch %odd, ^throwing, ^normal
+  block ^normal:
+    eh_end
+    %v = load i64 %p
+    %b = load i64 %q
+    %sum = binary add i64 %v, %b
+    return i64 %sum
+  block ^throwing:
+    call void @raise(%n)
+    eh_end
+    return i64 0
+  block ^caught:
+    %value = load i64 %p
+    %base = load i64 %q
+    %payload = exception i64
+    %wrong = cmp ne i64 %payload, %n
+    %check = binary mul i64 %wrong, 1024
+    %partial = binary add i64 %value, %base
+    %result = binary add i64 %partial, %check
+    return i64 %result
+}
+
+function @main(%argc : i64, %argv : ptr) -> i64 [role=entry] {
+  block ^entry:
+    %limit = binary mul i64 %argc, 4000000
+    jump ^loop
+  block ^loop:
+    %n = phi i64 [^entry: 0, ^body: %next]
+    %total = phi i64 [^entry: 0, ^body: %sum]
+    %more = cmp lt i64 %n, %limit
+    branch %more, ^body, ^done
+  block ^body:
+    %value = call i64 @step(%n)
+    %sum = binary add i64 %total, %value
+    %next = binary add i64 %n, 1
+    jump ^loop
+  block ^done:
+    %last = binary sub i64 %limit, 1
+    %product = binary mul i64 %last, %limit
+    %triangular = binary div i64 %product, 2
+    %bias = binary mul i64 %limit, 7
+    %expected = binary add i64 %triangular, %bias
+    %bad = cmp ne i64 %total, %expected
+    return i64 %bad
+}
