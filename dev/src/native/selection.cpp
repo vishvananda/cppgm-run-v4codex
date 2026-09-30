@@ -97,7 +97,10 @@ void Selector::select(const lowir_model::Instruction& i)
     case Opcode::Phi: break;
     case Opcode::Addr: {
         Operand address = memory(arg(i,0)); address.address = true;
-        if (address.kind == Operand::Symbol && !state(i.destination.index).address_only && state(i.destination.index).uses) {
+        // A constant symbol address never needs a spill home. When a control-
+        // flow interval has no retained register, materialize at its consumers.
+        if (address.kind == Operand::Symbol && !state(i.destination.index).address_only && state(i.destination.index).uses &&
+            (!state(i.destination.index).crosses_block || state(i.destination.index).single_edge)) {
             auto dest = allocate(i.destination.index,Type::Ptr);
             move(dest,address,Type::Ptr);
         } else state(i.destination.index).location = address;

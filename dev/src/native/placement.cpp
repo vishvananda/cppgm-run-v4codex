@@ -164,6 +164,7 @@ void Selector::parameters()
                 continue;
             }
             v.location = home(p.values[param.value.index-1].name,param.type,true);
+            normalize_register(incoming,param.type);
             move(v.location,incoming,param.type);
         }
     }

@@ -28,9 +28,11 @@ unsigned Selector::edge_target(unsigned target)
         return a.pred != b.pred ? a.pred < b.pred : a.target < b.target;
     });
     if (found == edge_moves.end() || found->pred != block_id || found->target != target) return target;
-    unsigned id = next_label++;
-    edge_blocks.push_back({block_id,target,id});
-    return id;
+    if (!found->label) {
+        found->label = next_label++;
+        edge_blocks.push_back({block_id,target,found->label});
+    }
+    return found->label;
 }
 void Selector::control(const lowir_model::Instruction& i)
 {

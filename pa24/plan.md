@@ -3,53 +3,86 @@
 Stage base commit: bde9eb3e128e24923a1de40bb63b8e348a13553b
 Last reviewed commit: bde9eb3e128e24923a1de40bb63b8e348a13553b
 
-## Design and current group
+## Design / completed implementation group
 
-Initial state: scaffold driver; 0/435 reported passing. No native implementation.
-Implement the common integer execution path before extending other ABI classes.
-Owners/data flow: PA8 typed Unit -> per-function native selection/placement ->
-compact typed MIR -> shared MIR dump and x86 encoder -> label/fixup ELF layout.
-No text phase transport, host assembler/compiler, or reference delegation.
-Function-local state is released after encoding; program symbols and fixups survive
-until image layout. Selection/allocation/encoding should be linear or near-linear;
-constant-size target register sets and conservative frame homes bound placement.
-Validate scalar widths, memory/addressing, branches/phi, calls and register effects
-as related groups rather than recognizing individual fixtures.
+Scalar native execution foundation: PA8 typed Unit -> function-owned placement
+facts and flat MIR -> shared MIR view/x86 encoder -> typed fixups and direct ELF.
+No host/reference compiler, assembler, text transport or fixture recognition.
+Unit tables retain compact IDs; placement/MIR die after each function. Reserved
+GPR/XMM scratch effects, actual callee saves and frame policy drive encoding.
 
-## Remaining implementation
+This group covers integer/pointer widths through 64 bits, scalar loads/stores and
+conversions, direct compare/branch/switch, parallel phi edges, scalar direct and
+indirect calls (including stack/by-address arguments), hooks, globals/relocations,
+fixed bulk copies/zeros, scalar atomics and canonical strlen runtime support.
+Related extensions include parameter-slot promotion, alias lifetime sharing,
+safe indexed operands, bounded forward-edge retention and immediate store-reload
+carrying. Floating global data encoding is tested; floating execution is unfinished.
+The LowIR validator now accepts the course's integer consumption, by-address
+actuals and bounded slot reads, retaining strict phi and pointer-parameter checks.
 
-- Driver, scalar integer MIR, encoder, executable/data layout and symbol fixups.
-- Control flow, scalar memory/address forms, integer call ABI and liveness.
-- Floating/f80, i128, direct/indirect object ABI, variadics, atomics/bulk memory.
-- Required MIR quality/layout controls and complete course validation.
+Work bounds: six linear body walks, three value walks, one CFG walk; nine register
+probes per placement; O(E log E) edge ordering; at most two phi transfers per input.
+Repeated switch cases share one phi transfer block. Zero-form costing inspects
+at most 32 bytes. No fixed-point scans, inlining or unrolling. O1/O2/O3 currently
+use the conservative O0 policy; later optimizer work remains stage scoped.
 
-## Performance and acceptance
+## Unfinished implementation (all requirements retained)
 
-O0 native selection only; no optional optimization pipeline in PA24. Measure
-latency/RSS plus executable runtime/text bytes for fixed checked integer workloads.
-Freeze binaries and inputs, retain raw ABBA/A-A observations when comparing correct
-implementations. The initial scaffold has no executable baseline; do not claim a
-speedup against failure. No self-selected timing limit overrides spec stage scope.
+- ABI/value classes: XMM f32/f64, x87 f80, i128, multi-eightbyte objects/results,
+  variadic save areas and wider atomic operations. Owner: native selection/ABI.
+- Runtime/storage: TLS, dynamic stack and EH/runtime instructions required by the
+  remaining course inputs. Owner: target runtime/layout, consuming typed IR facts.
+- Canonical MIR policies: `strict/100-object-abi-lowered`,
+  `structural/200-stack-arguments-beyond-six`,
+  `structural/800-single-edge-callee-saved-retention`; these execute correctly but
+  still require their mandated dump shapes. Owner: call/result/frame placement.
+- Extra behavior controls: scratch-carried-frame-reloads is blocked by floating
+  execution; deferred-address-parameter-carrier-reuse still needs its required
+  parameter carrier/home relationship. These are implementation work, not waivers.
 
-## Handoff / independent review
+Handoff boundary: executable scalar foundation plus bounded selection. Further
+expansion requires split/XMM value locations and coordinated ABI call/frame
+classification. The remaining canonical frame/result policies share that owner;
+printing unused fictitious frame facts would violate the MIR/encoder invariant.
+Resume with that coherent ABI group, not per-fixture rendering patches.
 
-Implementation ongoing; no handoff yet. Independent audit must inspect the typed
-boundary, register/ABI effects, complexity and performance evidence; review markers
-above remain unchanged during implementation. Missing implementation is not an
-independent-review question and no assignment requirement is waived.
+## Performance evidence
 
-Progress 1: implemented scalar native foundation, 199/296 root oracle fixtures
-passing (baseline 0/296); focused controls reached the frame-copy shape check.
-The larger Ralph inventory includes additional checks; coverage is unchanged.
-First-pass bugs in copy direction and atomic operands were corrected against
-PA8's explicit src/dst and expected-pointer contracts. Extended shared validation
-for integer consumers, by-address scalar actuals and bounded typed slot reads;
-phi types and unmarked pointer parameters retain strict checks. Remaining native
-scalar failures are primarily placement/quality, not a handoff boundary yet.
+See `student.tests/pa24/README.md` and `performance.md` for frozen A/B inputs,
+raw observations, paired ABBA results and A/A calibration. The initial scaffold
+cannot be a runtime baseline. All historical measurements remain available.
+Diagnostic budgets are <=15% compiler latency/RSS increase, no text growth for
+forward-edge retention, and a repeatable affected-runtime benefit. These are not
+extra course exit gates. A measured global-address spill regression was removed;
+rematerialization restores the memory benchmark's original executable bytes.
 
-Progress 2: 221/296 root oracle fixtures and 14/14 focused controls pass.
-Integer arithmetic, narrow memory, calls, phi cycles, small bulk operations and
-atomic expected-pointer updates are executable. Remaining scalar canonical-dump
-policies are explicit unfinished implementation (not review questions). Function
-placement state now releases per function; only compact unit identity indexes
-remain. Personal arithmetic: 1820 deterministic cases, all passing.
+## Handoff ledger / independent review
+
+- Previous interrupted turn: no verifiable PA24 implementation; clean scaffold at
+  the stage base. This turn made authoritative implementation/test progress.
+- `f9ff5dd4`: typed scalar backend and shared contract validation, 199/296.
+- `7d1be282`: bounded placement/phi/bulk selection, 221/296 plus 14/14 controls.
+- Final handoff: current validation and evidence recorded below; no test/reference
+  changes, coverage cuts or comparison-rule changes. Personal tests do not count
+  toward the progress gate. The 435-item initial inventory includes 125 excluded
+  design regressions; the unchanged course oracle denominator is 296 plus controls.
+
+Independent audit remains due: trace scratch effects and alias carrier lifetimes,
+phi-edge parallelism, shared validation compatibility, typed fixups/MIR fidelity,
+and function-state release/work bounds. These are review questions; the explicit
+unfinished implementation above is separate and cannot be cleared by this handoff.
+Review markers remain unchanged. This is not whole-stage completion or advancement.
+
+Final evidence:
+- `make test-pa24`: 221/296 oracle cases, versus 0/296 at entry; 14/14 focused
+  controls. The stage still fails: 72 missing-feature cases and three MIR policies.
+  All 223 successfully compiled positive fixtures match runtime exit/stdout even
+  when their MIR comparison fails. Extra fixed-zero control passes; two extra
+  controls remain unfinished as listed above.
+- `make test-report-through-pa23`: 3856/3856; file audit: pass, three inherited
+  warnings. Personal arithmetic (1820), integration and runtime-outcome audit pass.
+- Frozen current B: compiler ratio 0.959 (no speedup claim), RSS essentially equal;
+  forward-edge runtime ratio 0.592 with 176 -> 161 text bytes. The corrected
+  memory workload is byte-identical to A. Raw spread and historical regressions
+  are retained in the performance report. No unsupported extra gate is imposed.

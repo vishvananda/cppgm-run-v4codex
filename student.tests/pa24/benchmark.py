@@ -4,6 +4,8 @@ import hashlib, json, os, pathlib, re, statistics, subprocess, sys, time
 root=pathlib.Path(__file__).resolve().parents[2]
 a,b,d=map(lambda s:pathlib.Path(s).resolve(),sys.argv[1:4]); d.mkdir(parents=True,exist_ok=True)
 compilers={'A':a,'B':b}
+# Keep every compiler and executable sample on one permitted logical CPU.
+cpu=min(os.sched_getaffinity(0)); os.sched_setaffinity(0,{cpu})
 def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def run(cmd, record):
     stamp=time.perf_counter()
@@ -26,11 +28,12 @@ with source.open('w') as out:
         out.write(f'jump ^next\nblock ^next:\nreturn i64 {prior}\n}}\n')
     out.write('function @main() -> i64 [role=entry] {\nblock ^entry:\n%x = call i64 @f0(0)\n%bad = cmp ne i64 %x, 2080\nreturn i64 %bad\n}\n')
 manifest={'binaries':{k:{'path':str(v),'sha256':digest(v)} for k,v in compilers.items()},'flags':['-O0','--stats'],
-          'inputs':{'compiler':digest(source)},'runs':[], 'runtime_arguments':['input'], 'platform':os.uname()._asdict() if hasattr(os.uname(),'_asdict') else list(os.uname())}
+          'inputs':{'compiler':digest(source)},'runs':[], 'runtime_arguments':['input'], 'cpu':cpu, 'platform':os.uname()._asdict() if hasattr(os.uname(),'_asdict') else list(os.uname())}
 # Compiler correctness is checked before timing; executables remain frozen for runtime.
 executables={}
 for name in ['runtime','memory-runtime']:
-    input=root/f'student.tests/pa24/{name}.lowir'; manifest['inputs'][name]=digest(input)
+    input=d/f'{name}.lowir'; input.write_bytes((root/f'student.tests/pa24/{name}.lowir').read_bytes())
+    manifest['inputs'][name]=digest(input)
     for label,cc in compilers.items():
         exe=d/f'{name}-{label}'
         rec=run([cc,'-O0','--stats','-o',exe,input],{'phase':'small_compile','input':name,'binary':label})

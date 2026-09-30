@@ -34,7 +34,7 @@ class Selector {
     unsigned root(unsigned v) const { return state(v).alias ? state(v).alias : v; }
     DebugLocation debug;
     std::vector<unsigned> definitions;
-    struct EdgeMove { unsigned pred, target, destination; lowir_model::Operand source; Operand staging; };
+    struct EdgeMove { unsigned pred, target, destination, label = 0; lowir_model::Operand source; Operand staging; };
     struct EdgeBlock { unsigned pred, target, label; };
     std::vector<EdgeMove> edge_moves;
     std::vector<EdgeBlock> edge_blocks;

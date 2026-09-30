@@ -28,9 +28,11 @@ void compile(const lowir_model::Program& p, const std::string& output, std::ostr
     for (const auto& source : p.functions) if (source.declaration && demanded[source.symbol.index]) {
         const auto& metadata = p.symbols[source.symbol.index-1].metadata;
         if (p.name(metadata.object) != "cppgm_builtin_strlen") continue;
+        time = Clock::now();
         Function f = builtin_strlen(p,source);
+        stats.selection_ms += ms(time);
         if (mir) dump_function(p,f,*mir);
-        encoder.encode(f); ++stats.functions; stats.instructions += f.instructions.size();
+        time = Clock::now(); encoder.encode(f); stats.encoding_ms += ms(time); ++stats.functions; stats.instructions += f.instructions.size();
     }
     stats.text_bytes = image.code.size();
     if (!output.empty()) {

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <climits>
 #include <cstring>
+#include <cmath>
 #include <fstream>
 #include <sys/stat.h>
 namespace native {
@@ -15,9 +16,18 @@ static void scalar_data(std::vector<unsigned char>& data, const DataItem& item)
 {
     if (item.type.floating()) {
         unsigned char bytes[16] = {};
-        if (item.type == Type::F32) { float f = item.value.data.floating; std::memcpy(bytes,&f,4); }
-        else if (item.type == Type::F64) { double f = item.value.data.floating; std::memcpy(bytes,&f,8); }
-        else { long double f = item.value.data.floating; std::memcpy(bytes,&f,10); }
+        long double n = item.value.kind == lowir_model::Operand::Floating ? item.value.data.floating :
+            item.value.negative_integer ? static_cast<long double>(std::int64_t(item.value.data.integer)) :
+            static_cast<long double>(item.value.data.integer);
+        if (item.type == Type::F32) { float f = n; std::memcpy(bytes,&f,4); }
+        else if (item.type == Type::F64) { double f = n; std::memcpy(bytes,&f,8); }
+        else std::memcpy(bytes,&n,10);
+        if (item.value.signaling_nan && std::isnan(n)) {
+            if (item.type == Type::F32) bytes[2] &= ~0x40;
+            else if (item.type == Type::F64) bytes[6] &= ~0x08;
+            else bytes[7] &= ~0x40;
+            bytes[0] |= 1;
+        }
         data.insert(data.end(),bytes,bytes+item.type.bytes());
     } else {
         require(scalar_integer(item.type), "native wide initializer not implemented");

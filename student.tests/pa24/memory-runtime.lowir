@@ -8,7 +8,7 @@ function @step(%base : ptr) -> i64 {
 }
 function @main(%argc : i64) -> i64 [role=entry] {
   block ^entry:
-    %n = binary mul i64 %argc, 10000000
+    %n = binary mul i64 %argc, 50000000
     %cell = addr @cell
     jump ^loop
   block ^loop:
