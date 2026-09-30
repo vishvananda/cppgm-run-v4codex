@@ -3,131 +3,109 @@
 Stage base commit: bde9eb3e128e24923a1de40bb63b8e348a13553b
 Last reviewed commit: bde9eb3e128e24923a1de40bb63b8e348a13553b
 
-## Active handoff129
+## Design / completed behavior groups
 
-Entry HEAD: c88bfaebb06afebb6459595fb1455ab8e782fe4f. Previous turn made
-verified implementation progress; no surviving build at entry. Baseline is
-250/296 course cases (46 failures), Ralph inventory 250/435. Review markers stay.
-Work group: multiword values and object ABI, extended through shared call/frame
-placement and scratch effects. Unit owns complete numeric literal payloads;
-Selector owns value fragments, argument classification, homes and liveness;
-Encoder consumes explicit typed chunks. Register classification is bounded by
-six GPR/eight XMM carriers; object copying is linear in produced chunks, with
-bounded bulk-copy fallback. No name-based semantic recovery or textual phases.
-Validate required stage/prior reports and file audit, explicit personal wide/ABI
-tests, and frozen compiler latency/RSS plus executable runtime/text evidence.
-Known unfinished runtime/TLS/EH and canonical MIR policies remain requirements.
-First increment: typed 128-bit literals, fragment arithmetic/compare/shifts/atomics,
-shared object/wide ABI classification and bounded stack-copy dependency snapshots.
-Stage 282/296, prior 3856/3856, independent wide 1175, object 160, floating 1259.
-Audit passes; work continues through wide numeric completeness and ABI pressure.
-A converting parameter store is no longer incorrectly promoted as an identity.
-Second increment closes wide integer semantics: bounded division/remainder,
-float conversions with rounding protection, truth/switch, implicit integer
-width boundaries, parallel phis and variadic two-word register rollback.
-Current personal wide suite is 1495 programs; object suite 160. Stage remains
-282/296 with no new failures. Final compiler/runtime evidence is being collected.
-
-
-
-## Design / completed execution groups
-
-PA8 typed Unit -> function-owned placement and flat MIR -> shared MIR view/x86
+PA8 typed Unit -> function-owned placement/flat MIR -> shared MIR view and x86
 encoder -> typed fixups/direct ELF. No host/reference compiler, assembler, text
-transport or fixture recognition. Unit tables retain compact IDs; function facts
-and MIR die after encoding. Actual frame/scratch/save facts drive the encoder.
+transport, fixture recognition or name-based semantic recovery. Function facts,
+move schedules and MIR die after encoding; Unit tables retain compact identities.
 
-The scalar foundation covers integer/pointer widths through 64 bits, loads/stores,
-conversions, compare/branch/switch, parallel phi edges, direct/indirect calls,
-stack/by-address arguments, hooks, globals, bulk memory and scalar atomics.
-This handoff adds f32/f64 XMM and conservative f80/x87 arithmetic, signed-zero
-negation, NaN-aware comparisons/truth, integer/float and float-width conversions,
-mixed calls, call-crossing homes, variadic GPR/XMM saves and overflow arguments.
-Implicit floating-width store/return conversion follows the required course
-fixture. External decimal literals acquire per-format numeric payloads at the
-reader boundary, eliminating double rounding; their spelling is a rendering view.
+Handoffs127/128 established scalar integer/pointer and f32/f64/f80 execution,
+parallel phis, call/variadic boundaries, atomics, hooks, globals and bulk memory.
+Handoff129 adds complete 128-bit literal payloads without growing Operand,
+two-word integer arithmetic/division/shifts/comparisons, scalar/FP conversions,
+truth/switch/phis/variadic overflow and cmpxchg16b-based atomic operations. Direct
+compare-fed branches decide signed/unsigned high words and unsigned low words;
+value comparisons have a frame fallback. Float conversion retains rounding bits,
+avoiding an intermediate rounding error; integer decimal parsing checks overflow.
+A converting parameter store no longer aliases an incompatible incoming value.
 
-Placement reserves xmm14/xmm15 and GPR rax/r10/r11 for encoder effects. A dying
-XMM lhs can share its destination; otherwise operands remain distinct. Complete
-private scalar-home windows of at most 64 MIR instructions may replace stores
-and reloads with reserved-register moves. Calls, floating/bulk/EH operations,
-globals, large-immediate effects, escaping homes and carrier conflicts retain
-the frame form. MIR records the resulting moves and telemetry counts the reloads.
-When live parameters would occupy all five preserved GPRs, immutable parameter
-homes plus incoming-carrier availability avoid unnecessary pre-call reloads.
-Clobber bits propagate through joins/backedges; calls restore later reads from
-homes, and derived addresses require carriers valid for their entire interval.
+One ABI cursor classifies both caller and callee: one/two-eightbyte objects and
+integers, whole-argument GPR rollback, stack arguments and indirect large-object
+returns. Addressable/padded homes preserve partial tails and distinct parameter
+identities. Direct results load/store their ABI chunks from frame storage.
+Pending scalar/address dependencies are captured before a large outgoing object
+copy can clobber copy registers. Narrow stack arguments acquire the boundary's
+width. Object loads and stores participate in the same effect/parameter flow.
 
-Owners/data flow: literal payloads belong to Unit; placement, home IDs, move
-schedules and flow facts belong to Selector; Encoder consumes these typed facts.
-Work is O(N + E log E): fixed linear walks, at most nine GPR/fourteen XMM probes,
-at most fourteen ABI carrier moves, six monotonic clobber bits per CFG edge,
-and three bounded 64-instruction carry probes per candidate. No global retries,
-fixed-point body rescans, inlining, unrolling or text transport. O0 selection is
-also the conservative policy for higher levels; later optimization remains due.
+Owners/data flow: Unit owns numeric payloads; Selector owns fragment locations,
+ABI cursors, homes, live intervals and fixed effects; Encoder consumes typed
+chunks and conversion operations. Allocation probes at most nine GPR/fourteen
+XMM choices; call register schedules contain at most fourteen carriers. Work is
+O(N + E log E), including fixed linear walks and existing six-bit clobber worklists.
+Wide division emits constant code with 128 target iterations; float-to-wide uses
+four 32-bit digits. Literal work is linear in input digits. No global retries,
+body fixed-point rescans or semantic searches. Existing carry windows remain
+bounded to three 64-instruction probes; new complex effects keep frame traffic.
+O0 is also the conservative policy for higher levels; optimization remains later.
 
 ## Unfinished implementation (requirements retained)
 
-- Wide values and object ABI: i128 literals/arithmetic/conversions/atomics;
-  one/two-eightbyte and larger object parameters/results, padding and slot aliases.
-  Owner: shared value representation and ABI classification. Needs explicit
-  fragments, aggregate register rollback and coordinated caller/callee storage.
-- Runtime/storage: TLS, required EH/runtime operations and dynamic-stack paths.
-  Owner: runtime/layout, consuming typed LowIR facts; later host metadata remains
-  outside PA24. No empty operation or reference fallback substitutes for this work.
-- Six canonical MIR policies still fail despite correct execution: strict
-  `100-object-abi-lowered`; structural `200-stack-arguments-beyond-six`,
-  `500-mixed-gpr-xmm-call-abi`, `600-indirect-mixed-gpr-xmm-call-abi`,
-  `700-call-setup-forwarding-no-preserve`, `800-single-edge-callee-saved-retention`.
-  Owner: ABI/frame/result placement protocol, not the dump renderer. These are
-  unfinished implementation, including the scalar cases; no shape waiver applies.
+- Runtime/layout: TLS definitions and wrapper binding; generic EH regions,
+  cleanup/resume and required runtime operations; dynamic/overaligned stack paths.
+  The eight current execution failures stop at TLS or `eh_try`. An empty operation
+  or reference fallback cannot substitute for these features. Later host exception
+  metadata and object linking remain outside PA24.
+- Scalar placement/frame protocol: strict `100-object-abi-lowered`; structural
+  `200-stack-arguments-beyond-six`, `500-mixed-gpr-xmm-call-abi`,
+  `600-indirect-mixed-gpr-xmm-call-abi`, `700-call-setup-forwarding-no-preserve`,
+  `800-single-edge-callee-saved-retention`. Their programs execute correctly but
+  their canonical MIR policies still fail. No shape waiver applies.
 
-Handoff boundary: floating numerical execution, mixed/variadic scalar boundaries,
-and bounded scalar pressure handling are coherent and validated. The work expanded
-through literal input, shared validation, variadic overflow, phi/call lifetimes,
-reload carrying and parameter flow. Further instruction-local extensions cannot
-finish the remaining failures: multiword/object storage requires a new fragment
-representation and the canonical cases require a coordinated placement/frame
-protocol revision. Those are separate implementation groups, not small rendering
-fixes. This handoff does not complete PA24 or advance to PA25.
+Handoff boundary: wide numeric execution and object/integer ABI transport are
+complete for this behavior group, including partial tails, register rollback,
+fixed effects and shared validation. Work extended beyond initial failures through
+all integer operations, FP rounding, variadics, implicit widths and control-flow
+transfers. Further related instruction-local changes cannot finish the remaining
+failures: TLS/EH need runtime storage and region/unwind state; the six canonical
+cases require a coordinated scalar placement/frame protocol revision, with
+performance revalidation of already-correct scalar paths. These are unfinished
+implementation, distinct from independent review below. PA24 remains incomplete.
 
 ## Validation / performance
 
-- Entry HEAD: 9d8113ebe734f947d577e5ec6309dbbdd3fbbdbf; previous turn classified
-  as verified implementation progress. No surviving build process at entry.
-- `make test-pa24`: 250/296, versus 221/296 at entry. Failures fall 75 -> 46;
-  29 original failures resolved, no new failures. All 17 focused native controls
-  pass. All 255 compiled positive fixtures match runtime exit/stdout, including
-  canonical-MIR failures. Forty feature cases and six MIR policies remain.
-- `make test-report-through-pa23`: 3856/3856. File audit passes with three
-  inherited warnings. Personal floating suite: 1259 programs; scalar suite: 1820
-  cases; integration and parameter-flow tests pass. No fixture/reference edits,
-  coverage cuts or comparison changes. The inventory of 435 includes 125 excluded
-  design regressions and the original 14 controls; course denominator stays 296.
-- `student.tests/pa24/performance.md` preserves handoff127 measurements.
-  `performance128.md` records frozen current A/B data, A/A and six ABBA blocks,
-  latency/RSS and runtime/text measurements. Final paired compiler ratios are
-  0.971 integer / 0.917 floating (no speedup claim); max RSS changes by at most
-  8 KiB. Floating runtime ratio is 0.458, text 2169 -> 1522 bytes. Pressure
-  timing is inconclusive, with text 567 -> 557 bytes. Diagnostic budgets: <=15% compiler
-  latency/RSS increase and no text growth for local selection. They are not extra
-  exit gates; mandated course bounds remain binding. Existing loop/memory output
-  is byte-identical to entry. XMM coalescing gives a repeatable runtime benefit.
-  Source/template/self-host benchmarks belong to later native-driver stages.
+- Entry HEAD: c88bfaebb06afebb6459595fb1455ab8e782fe4f. Previous turn was verified
+  implementation progress; no surviving build at entry.
+- `make test-pa24`: 282/296 versus 250/296. Original failures fall 46 -> 14;
+  32 resolved, no new failures. All 17 focused controls pass. All 287 compiled
+  positive fixtures match runtime exit/stdout, including canonical-MIR failures.
+  Ralph's inventory of 435 includes excluded design regressions; coverage and
+  comparison rules are unchanged. No course fixtures or references were edited.
+- `make test-report-through-pa23`: 3856/3856. File audit passes (four warnings,
+  including the enlarged LowIR model header; no fatal findings). Personal suites:
+  wide 1495, objects 160, scalar 1820, floating 1259; ABI/debug/ELF integration
+  passes. `readelf` and raw `objdump` confirm separate RX/RW segments and actual
+  cmpxchg16b, carry/borrow, scaling and conversion instruction encodings.
+- `student.tests/pa24/performance129.md` records frozen final evidence. Existing
+  handoff127/128 observations remain intact. Compiler wall/RSS and executable
+  runtime/text are measured separately with A/A and six ABBA blocks, fixed inputs
+  and flags. The entry compiler cannot execute wide values; new-wide measurements
+  compare the correct final binary with itself and make no speedup claim.
+  Final paired compiler ratios are 0.996 integer / 0.997 floating; peak RSS does
+  not increase. Four inherited runtime images are byte-identical. New-wide
+  baselines measure 308-byte call/phi and 2211-byte numeric workloads.
+  Diagnostic targets are <=15% compiler latency/RSS growth and no optional text
+  growth, not additional exit gates. Course bounds remain binding. Necessary
+  wide semantic costs do not excuse avoidable regressions. Source/template-native
+  and self-hosting benchmarks remain owned by later driver stages.
 
 ## Handoff ledger / independent review
 
-- Handoff127: `f9ff5dd4` scalar foundation 199/296; `7d1be282` bounded placement
-  221/296; `9d8113eb` evidence. Review markers above remain unchanged.
-- Handoff128: `2425715e` floating execution, typed literals and mixed/variadic ABI;
-  `ae72c874` bounded pressure/parameter-flow; the final telemetry/evidence
-  commit closes this implementation turn. No claims about unfinished groups are waived.
-- Independent audit remains due: scratch-effect completeness; XMM alias and
-  call lifetimes; NaN/rounding and numeric-payload fidelity; parameter clobber
-  worklists; private-home carry legality; shared LowIR validation compatibility;
-  MIR/encoder fidelity; function-state release and measured work bounds.
-  These review questions are distinct from the unfinished implementation above.
+- Handoff127: `f9ff5dd4` scalar foundation; `7d1be282` bounded placement;
+  `9d8113eb` evidence. Handoff128: `2425715e` floating/variadic execution;
+  `ae72c874` pressure/parameter flow; `c88bfaeb` evidence. Review markers unchanged.
+- Handoff129: `7e9d4569` numeric payloads, fragments and object ABI;
+  `7def93ba` complete wide numeric lowering and extended boundaries; final evidence
+  commit records the validated boundary. This returns implementation control to
+  Ralph and does not certify the assignment or advance to PA25.
+- Independent audit still due: scratch-effect completeness, XMM/call lifetimes,
+  numeric payload/NaN/rounding fidelity, parameter worklists and carry legality,
+  shared LowIR validation compatibility, MIR/encoder fidelity and state release.
+  Added questions: ABI rollback and padded homes, large-copy dependency capture,
+  two-word carry/borrow/division, conversion rounding/control-word restoration,
+  atomic alignment/fixed-register preservation and value/edge identity.
+  These questions neither replace nor waive unfinished implementation.
 
-Evidence directory: `/home/vishvananda/work/private/v4codex/artifacts/pa24-handoff128/`.
-`stage-accepted.log`, `prior-final.log`, `file-audit-accepted.log`, `progress.json` and frozen
-performance observations record this boundary. Independent review is not waived.
+Evidence: `/home/vishvananda/work/private/v4codex/artifacts/pa24-handoff129/`.
+`progress.json`, stage/prior logs, explicit personal runs, disassemblies and frozen
+performance observations preserve this boundary. Independent review is not waived.

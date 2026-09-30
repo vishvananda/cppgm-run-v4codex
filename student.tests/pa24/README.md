@@ -60,3 +60,22 @@ for the current frozen experiments, including all earlier observations.
 `PA24_COMPILE_ONLY=1` reruns compiler measurements alone after telemetry-only
 changes. Executable hash identity establishes reuse of the frozen runtime
 measurements; it never substitutes for checking both runtime input counts.
+
+Handoff129 adds wide numeric and object ABI checks:
+
+```
+python3 student.tests/pa24/wide.py
+python3 student.tests/pa24/objects.py
+```
+
+`wide.py` independently computes modular arithmetic, signed/unsigned division,
+ordered comparisons, shifts and nearest-even FP results. It also covers atomic
+success/failure updates, wide variadic overflow, parallel phis, direct branches,
+switches, narrow/wide call boundaries and full-width decimal literals.
+`objects.py` checks every byte across partial tails, direct/indirect calls,
+register exhaustion and large stack objects (160 programs).
+
+`PA24_WIDE_COMPILER=1` selects 4096 helpers with 64 wide operations each.
+`wide-runtime` checks high-word call/phi traffic; `wide-numeric-runtime` checks
+input-dependent division and all three FP conversion formats. Both check results
+with two runtime argument counts. See [performance129.md](performance129.md).
