@@ -50,7 +50,7 @@ struct Linkage {
     bool merge, presentation;
     bool host = false;
     SymbolId allocation_roles[2], rtti_roles[9], rtti_functions[3];
-    SymbolId exception_functions[7];
+    SymbolId exception_functions[8];
     SymbolId terminate_adapter;
     SymbolId abort_runtime;
     std::vector<FunctionId> initializers, finalizers;

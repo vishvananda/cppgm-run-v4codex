@@ -79,3 +79,11 @@ Frozen entry compiler: `/tmp/pa28-152/cppgm-before`, SHA-256
 4. Run earlier PAs, current suite, file audit and explicit personal controls;
    commit coherent increments, refresh this compact ledger and retain review
    markers. Independent review remains pending separately from implementation.
+
+Loop152 EH increment: **94/97** required PA28 cases now pass. Cleanup-only
+expression registration, outer-local handler exit, canonical allowed-exception
+sets and host LSDA filters are implemented. Eighteen personal commands pass;
+file audit passes. Two PA21 LowIR reference corrections are documented in
+`student.tests/pa28/reference-corrections152.md`; no source/status/coverage or
+comparison changes. Full revalidation and frozen performance remain pending.
+Continuing with the three virtual layout/RTTI failures, not ending at progress.

@@ -130,6 +130,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/constant_floating
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/constexpr_validity
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/exception_expression
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/exception_specification
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/dynamic_exceptions
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_type_access
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_definition_owner

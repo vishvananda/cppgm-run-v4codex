@@ -507,6 +507,8 @@ struct DefaultArgumentFact {
 };
 struct ExceptionSpecificationFact {
     NodeId expression = 0, declarator = 0;
+    NodeId dynamic_types = 0;
+    std::uint32_t allowed_begin = 0, allowed_count = 0;
     ScopeId scope = 0;
     std::uint32_t previous = 0;
     EntityId pattern = 0;

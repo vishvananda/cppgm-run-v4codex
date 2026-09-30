@@ -3,7 +3,10 @@ namespace cppgm { namespace lowering {
 using namespace lowir_model;
 void Procedural::finish_exception_boundary()
 {
-    if (!sem.function_nonthrowing(active_function)) return;
+    bool nonthrowing = sem.function_nonthrowing(active_function);
+    const auto spec = sem.function_exception_specification(active_function);
+    bool dynamic = linkage.host && spec.dynamic_types;
+    if (!nonthrowing && !dynamic) return;
     auto blocks = p.functions[function.index-1].blocks;
     // O0 retains the source deallocation boundary even when the selected
     // allocation runtime refines the free call to unwind=no.
@@ -46,11 +49,31 @@ void Procedural::finish_exception_boundary()
         }
         block.instructions.count = p.instructions.size()-block.instructions.begin;
     }
-    start(handler); emit(Opcode::EhCatchAll,IRType(),{Operand::integer(1)});
+    start(handler);
+    if (dynamic) {
+        std::vector<Operand> types;
+        for (unsigned i = 0; i < spec.allowed_count; ++i)
+            types.push_back(Operand::symbol(exception_type(sem.allowed_exception_types[spec.allowed_begin+i])));
+        types.push_back(Operand::integer(-1));
+        emit(Instruction(Opcode::EhFilter),types.data(),types.size());
+        // A same-frame cleanup forwards the original selector here even when
+        // this specification allows the exception. Only its negative filter
+        // selector is a violation; a permitted exception resumes to the caller.
+        auto selector = emit(Opcode::ExceptionSelector,IRType::I32,{});
+        auto violation = emit(Opcode::Compare,IRType::I32,{selector.operand,Operand::integer(-1)},Operation::Eq);
+        auto unexpected = block(), allowed = block();
+        emit(Opcode::Branch,IRType(),{violation.operand,Operand::label(unexpected),Operand::label(allowed)});
+        start(allowed); emit(Opcode::Resume,IRType(),{});
+        start(unexpected);
+    } else emit(Opcode::EhCatchAll,IRType(),{Operand::integer(1)});
     auto exception = emit(Opcode::Exception,IRType::Ptr,{});
     emit(Opcode::Store,IRType::Ptr,{exception.operand,Operand::slot(storage)});
     auto invoke = block(); jump(invoke); start(invoke);
     exception = emit(Opcode::Load,IRType::Ptr,{Operand::slot(storage)});
+    if (dynamic) {
+        emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(7)),exception.operand});
+        exception_fallback(); return;
+    }
     if (!linkage.terminate_adapter) {
         Function f; f.symbol = fresh_symbol("@__terminate_exception");
         auto ptr = sem.types.compound(TypeKind::Pointer,sem.types.fundamental(FT_VOID));

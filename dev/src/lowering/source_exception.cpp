@@ -20,18 +20,18 @@ SymbolId Procedural::exception_function(unsigned role)
 {
     if (linkage.exception_functions[role]) return linkage.exception_functions[role];
     if (role == 5 && linkage.abort_runtime) p.symbols[linkage.abort_runtime.index-1].metadata.role = SR_NONE;
-    static const char* names[] = {"__cxa_allocate_exception","__cxa_begin_catch","__cxa_end_catch","__cxa_rethrow","__cxa_throw","_ZSt9terminatev","__cxa_free_exception"};
-    static const SymbolRole roles[] = {SR_EH_ALLOCATE_EXCEPTION,SR_EH_BEGIN_CATCH,SR_EH_END_CATCH,SR_EH_RETHROW,SR_EH_THROW,SR_TERMINATE,SR_EH_FREE_EXCEPTION};
+    static const char* names[] = {"__cxa_allocate_exception","__cxa_begin_catch","__cxa_end_catch","__cxa_rethrow","__cxa_throw","_ZSt9terminatev","__cxa_free_exception","__cxa_call_unexpected"};
+    static const SymbolRole roles[] = {SR_EH_ALLOCATE_EXCEPTION,SR_EH_BEGIN_CATCH,SR_EH_END_CATCH,SR_EH_RETHROW,SR_EH_THROW,SR_TERMINATE,SR_EH_FREE_EXCEPTION,SR_NONE};
     auto ptr = sem.types.compound(TypeKind::Pointer,sem.types.fundamental(FT_VOID));
     std::vector<TypeId> params;
     if (role == 0) params.push_back(sem.types.fundamental(FT_UNSIGNED_LONG_INT));
-    if (role == 1 || role == 6) params.push_back(ptr);
+    if (role == 1 || role == 6 || role == 7) params.push_back(ptr);
     if (role == 1 && !linkage.presentation && !linkage.host) params.push_back(ptr);
     if (role == 4) params = {ptr,ptr,ptr};
     auto sig = sem.types.function(role < 2 ? ptr : sem.types.fundamental(FT_VOID),params,false);
     Function f; f.symbol = fresh_symbol("@exception_runtime"); f.declaration = true;
     FunctionId owner(p.functions.size()+1); f.signature = signature(sig,owner);
-    if (role >= 3 && role <= 5) p.signatures[f.signature.index-1].boundary.returns = ir_model::CRM_NORETURN;
+    if ((role >= 3 && role <= 5) || role == 7) p.signatures[f.signature.index-1].boundary.returns = ir_model::CRM_NORETURN;
     if (role == 5 || role == 6) p.signatures[f.signature.index-1].boundary.unwind = ir_model::CUM_NO;
     p.functions.push_back(f); linkage.exception_functions[role] = f.symbol;
     auto& s = p.symbols[f.symbol.index-1]; s.kind = Symbol::FunctionSymbol; s.entity = owner.index;
@@ -252,7 +252,7 @@ void Procedural::try_statement(NodeId n)
         exception_context = parent;
         start(cleanup); exception_clauses(parent);
         emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(2))});
-        resume_exception(parent ? initial : 0,parent,true);
+        resume_exception(initial,parent,true);
         start(next);
     }
     if (catches_all && (!parent || (!exception_contexts[parent].handler && !exception_contexts[parent].cleanup_dispatch))) {

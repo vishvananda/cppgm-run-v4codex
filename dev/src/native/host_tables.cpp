@@ -21,7 +21,7 @@ void Encoder::host_tables()
         // A same-frame cleanup must expose its outer catches during the
         // unwinder's search phase. Share action suffixes by region identity;
         // do not duplicate all ancestor clauses at each nested landing.
-        auto prepend = [&](unsigned filter, unsigned next) {
+        auto prepend = [&](int filter, unsigned next) {
             auto begin = actions.size(); sleb(actions,filter);
             auto at = actions.size(); sleb(actions,next ? std::int64_t(next-1)-std::int64_t(at) : 0);
             return unsigned(begin+1);
@@ -42,7 +42,8 @@ void Encoder::host_tables()
                     const auto& h = f.exception_handlers[f.instructions[block.instructions.begin].args[0].bits];
                     // A source catch-all exhausts this search before ancestors.
                     auto end = h.clauses.end();
-                    for (unsigned n = h.clauses.begin; n < end; ++n) if (!f.exception_clauses[n].type) { end = n+1; chain = 0; break; }
+                    for (unsigned n = h.clauses.begin; n < end; ++n)
+                        if (!f.exception_clauses[n].type && !f.exception_clauses[n].filtered) { end = n+1; chain = 0; break; }
                     if (h.cleanup) chain = prepend(0,chain);
                     for (unsigned n = end; n != h.clauses.begin;) chain = prepend(f.exception_clauses[--n].host_selector,chain);
                 } else if (chain) chain = prepend(0,chain);
@@ -65,16 +66,18 @@ void Encoder::host_tables()
         auto& out = image.lsda;
         unwind_record.lsda = out.size(); unwind_record.has_lsda = true;
         out.push_back(0xff); // LPStart is the FDE start
-        out.push_back(f.host_types.empty() ? 0xff : 0x9b); // indirect pcrel sdata4
+        bool types = !f.host_types.empty() || !f.host_filters.empty();
+        out.push_back(types ? 0x9b : 0xff); // indirect pcrel sdata4
         std::vector<unsigned char> body;
         body.push_back(1); uleb(body,sites.size()); body.insert(body.end(),sites.begin(),sites.end());
         body.insert(body.end(),actions.begin(),actions.end());
-        if (!f.host_types.empty()) uleb(out,body.size()+4*f.host_types.size());
+        if (types) uleb(out,body.size()+4*f.host_types.size());
         out.insert(out.end(),body.begin(),body.end());
         for (auto it = f.host_types.rbegin(); it != f.host_types.rend(); ++it) {
             if (*it) { Fixup fix; fix.offset = out.size(); fix.symbol = it->index; image.lsda_fixups.push_back(fix); }
             out.insert(out.end(),4,0);
         }
+        out.insert(out.end(),f.host_filters.begin(),f.host_filters.end());
     }
     unwind_record.end = code.size(); image.unwind.push_back(std::move(unwind_record));
 }

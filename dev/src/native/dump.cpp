@@ -146,8 +146,11 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
         out << "\n  handler " << h << " cleanup=" << handler.cleanup;
         for (unsigned n = handler.clauses.begin; n < handler.clauses.end(); ++n) {
             const auto& clause = f.exception_clauses[n];
-            out << "\n    catch ";
-            if (clause.type) out << p.name(p.symbols[clause.type.index-1].name); else out << "all";
+            out << (clause.filtered ? "\n    filter" : "\n    catch ");
+            if (clause.filtered) {
+                for (unsigned i = clause.filter.begin; i < clause.filter.end(); ++i)
+                    out << ' ' << p.name(p.symbols[f.exception_filter_types[i].index-1].name);
+            } else if (clause.type) out << p.name(p.symbols[clause.type.index-1].name); else out << "all";
             out << " selector=" << clause.selector << " binding=" << unsigned(clause.binding);
             if (f.host) out << " host_selector=" << clause.host_selector;
         }

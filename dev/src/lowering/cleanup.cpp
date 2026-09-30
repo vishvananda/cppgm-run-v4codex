@@ -20,6 +20,7 @@ void Procedural::reset_lifetime(EntityId e)
     constructor_block_boundary = 0;
     exception_contexts.resize(1); exception_context = 0;
     nonthrowing_parameters = e && sem.function_nonthrowing(e) ? lifetime_use(sem.entities[e].body).entry : 0;
+    if (linkage.host && sem.function_exception_specification(e).dynamic_types) nonthrowing_parameters = 0;
     exception_selectors = semantic::Index(); exception_selector_count = 0;
     unwind_continuations.clear(); unwind_cursor = 0;
     unwind_terminals = semantic::Index(); unwind_dispatches = semantic::Index();
@@ -107,7 +108,8 @@ Value Procedural::guarded_call(Instruction i, const Operand* args, std::size_t c
     if ((!unwind_live() && !(exception_context && full_expression.enabled)) || emitting_cleanup || no_throw || full_expression.scalar_unreachable) return emit(i, args, count);
     if (full_expression.enabled) { open_expression_region(); return emit(i,args,count); }
     auto cleanup = unwind_target();
-    emit(Opcode::EhTry, IRType(), {Operand::label(cleanup)});
+    auto op = exception_context && !exception_contexts[exception_context].has_catches ? Opcode::EhCleanup : Opcode::EhTry;
+    emit(op, IRType(), {Operand::label(cleanup)});
     Value result = emit(i, args, count);
     emit(Opcode::EhEnd, IRType(), {});
     auto continuation = block(); jump(continuation); flush_cleanups(); start(continuation);

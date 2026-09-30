@@ -7,11 +7,23 @@ void prepare_host_eh(Function& f)
     cppgm::IdIndex blocks, selectors, stacks;
     f.host_outer.assign(f.blocks.size(),0);
     for (unsigned b = 0; b < f.blocks.size(); ++b) blocks.put(f.blocks[b].id,b+1);
-    for (auto& c : f.exception_clauses) {
-        auto key = (std::uint64_t(c.type.index)<<32)+c.selector+1;
+    auto type_index = [&](SymbolId type, unsigned selector) {
+        auto key = (std::uint64_t(type.index)<<32)+selector+1;
         auto index = selectors.get(key);
-        if (!index) { index = f.host_types.size()+1; f.host_types.push_back(c.type); selectors.put(key,index); }
-        c.host_selector = index;
+        if (!index) { index = f.host_types.size()+1; f.host_types.push_back(type); selectors.put(key,index); }
+        return index;
+    };
+    auto filter_type = [&](unsigned index) {
+        do { auto b = index&127; index >>= 7; f.host_filters.push_back(b|(index ? 128 : 0)); } while (index);
+    };
+    for (auto& c : f.exception_clauses) {
+        if (!c.filtered) { c.host_selector = type_index(c.type,c.selector); continue; }
+        // Negative actions index zero-terminated ULEB type-index lists after
+        // TType; positive actions index backwards into its pointer table.
+        require(f.host_filters.size() < INT32_MAX,"host exception filter table overflow");
+        c.host_selector = -int(f.host_filters.size())-1;
+        for (unsigned n = c.filter.begin; n < c.filter.end(); ++n) filter_type(type_index(f.exception_filter_types[n],0));
+        filter_type(0);
     }
     // Persistent region stack: one node per push instruction, no copied stacks
     // at edges. Every reachable block is visited once; joins require identity.

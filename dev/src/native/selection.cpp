@@ -250,7 +250,7 @@ void Selector::select(const lowir_model::Instruction& i)
     case Opcode::Jump: case Opcode::Branch: case Opcode::Switch:
     case Opcode::Return: case Opcode::Unreachable: control(i); break;
     case Opcode::EhTry: case Opcode::EhCleanup: case Opcode::EhEnd:
-    case Opcode::EhCatch: case Opcode::EhCatchAll: case Opcode::ExceptionSelector:
+    case Opcode::EhCatch: case Opcode::EhCatchAll: case Opcode::EhFilter: case Opcode::ExceptionSelector:
     case Opcode::Throw: case Opcode::Resume: case Opcode::Exception:
     case Opcode::StackAlloc: runtime(i); break;
     default: throw ParseError(std::string("native operation not implemented: ")+spelling(i.opcode));

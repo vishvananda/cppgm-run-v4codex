@@ -157,6 +157,10 @@ public:
     EntityId bound_temporary(NodeId n) const;
     bool destructor_member(EntityId e) const;
     bool function_nonthrowing(EntityId e);
+    const ExceptionSpecificationFact& function_exception_specification(EntityId e) const {
+        return exception_specifications[exception_specification_index.get(e)];
+    }
+    std::vector<TypeId> allowed_exception_types;
     bool scalar_body_nonthrowing(EntityId e) const { return scalar_body_exception_facts.get(e) != 0; }
     bool initializer_nonthrowing(std::uint32_t plan);
     bool default_construction_nonthrowing(EntityId constructor);
@@ -589,6 +593,7 @@ private:
     void exception_specification(EntityId e, NodeId declarator, ScopeId scope);
     void demand_exception_specification(EntityId function);
     unsigned evaluate_exception_specification(EntityId function, std::uint32_t fact);
+    void evaluate_dynamic_exceptions(EntityId function, std::uint32_t fact);
     QueryId template_exception_query(EntityId function, std::uint32_t fact);
     Index template_exception_queries;
     void check_exception_redeclaration(EntityId function, unsigned prior, unsigned current, bool destructor);

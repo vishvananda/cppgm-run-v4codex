@@ -109,7 +109,7 @@ function @choose(%first : u8) -> i32 [binding=strong, object=_Z6chooseb] {
   block ^catch_body_16:
     %t11 = call ptr @__external_runtime____cxa_begin_catch(%t8)
     eh_cleanup ^catch_cleanup_18
-    eh_try ^call_unwind_dispatch_20
+    eh_cleanup ^call_unwind_dispatch_20
     %t12 = addr $arg__6
     call void @Value__Value(%t12, 11)
     eh_end
@@ -125,7 +125,7 @@ function @choose(%first : u8) -> i32 [binding=strong, object=_Z6chooseb] {
     jump ^cleanup_resume_19
 
   block ^call_unwind_end_21:
-    eh_try ^call_unwind_dispatch_23
+    eh_cleanup ^call_unwind_dispatch_23
     %t13 = call i32 @read(%t12)
     store i32 %t13, $call__3
     %t14 = load i32 $call__3

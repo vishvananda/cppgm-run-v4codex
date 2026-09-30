@@ -60,7 +60,12 @@ struct Instruction {
 struct FrameBinding { Name name; Type type; std::int64_t offset; bool temporary; bool parameter; };
 struct Parameter { Name name; Type type; Operand location; Operand second; };
 struct Block { std::uint32_t id; Name name; lowir_model::Range instructions; };
-struct ExceptionClause { SymbolId type; unsigned selector; ir_model::CatchBinding binding; unsigned host_selector; };
+struct ExceptionClause {
+    SymbolId type; unsigned selector; ir_model::CatchBinding binding; int host_selector;
+    lowir_model::Range filter;
+    bool filtered = false;
+    ExceptionClause(SymbolId t, unsigned s, ir_model::CatchBinding b, int h) : type(t), selector(s), binding(b), host_selector(h) {}
+};
 struct ExceptionHandler { lowir_model::Range clauses; bool cleanup = false; };
 struct Function {
     SymbolId symbol;
@@ -78,6 +83,8 @@ struct Function {
     std::vector<SymbolId> host_types;
     std::vector<unsigned> host_outer;
     std::vector<ExceptionClause> exception_clauses;
+    std::vector<SymbolId> exception_filter_types;
+    std::vector<unsigned char> host_filters;
     std::vector<ExceptionHandler> exception_handlers;
     std::uint64_t frame_bytes = 0, stack_size = 0, scratch_bytes = 0;
     bool frame_pointer = true, shared_epilogue = true;

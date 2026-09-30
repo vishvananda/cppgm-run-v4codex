@@ -23,6 +23,7 @@ void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
     fact.destructor = ast[ast[decl_name(d)].last].op == OP_COMPL;
     for (auto c = ast[d].first; c; c = ast[c].next) {
         if (ast[c].kind == Kind::FunctionQualifier && ast[c].op == KW_THROW) {
+            fact.dynamic_types = ast[c].detail;
             fact.specification = ast[ast[c].detail].first ? 2 : 1;
             continue;
         }
@@ -33,7 +34,7 @@ void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
     fact.previous = exception_specification_index.get(e);
     fact.prior_specification = entities[e].exception_spec;
     if (!fact.specification && !fact.expression && entities[e].key == KW_DELETE) fact.specification = 1;
-    if (!fact.expression && !fact.previous) {
+    if (!fact.expression && !fact.dynamic_types && !fact.previous) {
         check_exception_redeclaration(e,fact.prior_specification,fact.specification,fact.destructor);
         entities[e].exception_spec = 128 | (fact.specification ? fact.specification : fact.destructor ? fact.prior_specification & 3 : 0);
         return;
@@ -60,6 +61,7 @@ unsigned Analyzer::evaluate_exception_specification(EntityId e, std::uint32_t id
     try {
         ++exception_work;
         unsigned spec = fact.specification;
+        if (fact.dynamic_types) evaluate_dynamic_exceptions(e,id);
         if (fact.expression) {
             auto node = fact.expression; auto scope = fact.scope;
             Constant value;
@@ -110,6 +112,19 @@ unsigned Analyzer::evaluate_exception_specification(EntityId e, std::uint32_t id
         }
         auto old = fact.previous ? 128 | evaluate_exception_specification(e,fact.previous) : fact.prior_specification;
         check_exception_redeclaration(e,old,spec,fact.destructor);
+        if (fact.previous) {
+            const auto& previous = exception_specifications[fact.previous];
+            const auto& current = exception_specifications[id];
+            if ((previous.dynamic_types || current.dynamic_types) && ((old & 3) == 2 || spec == 2)) {
+                if (bool(previous.dynamic_types) != bool(current.dynamic_types) ||
+                    previous.allowed_count != current.allowed_count ||
+                    !std::equal(allowed_exception_types.begin()+previous.allowed_begin,
+                        allowed_exception_types.begin()+previous.allowed_begin+previous.allowed_count,
+                        allowed_exception_types.begin()+current.allowed_begin))
+                    throw std::runtime_error("conflicting allowed exception types");
+            }
+        } else if (fact.dynamic_types && spec == 2 && (fact.prior_specification & 128))
+            throw std::runtime_error("dynamic exception specification added on redeclaration");
         exception_specifications[id].specification = spec;
         exception_specifications[id].state = FactState::Success;
         --unevaluated_depth; active_constant = saved_constant; return spec;
