@@ -146,3 +146,6 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/source_exception lowering/source_exce
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/exception_boundary
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/aggregate_lifetimes
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/exception_continuation
+
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/member_thunks
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/construction_vtables

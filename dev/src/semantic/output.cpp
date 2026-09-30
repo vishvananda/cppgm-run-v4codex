@@ -305,6 +305,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_virtual_slots\":" << virtual_slots
         << ",\"semantic_virtual_storage_bytes\":" << virtual_storage
         << ",\"semantic_subobject_storage_bytes\":" << subobjects.capacity()*sizeof(SubobjectIdentity)+subobject_paths.capacity()*sizeof(SubobjectPath)+virtual_bases.capacity()*sizeof(EntityId)+virtual_base_offsets.capacity()*sizeof(std::uint64_t)
+        << ",\"semantic_lifecycle_base_entries\":" << lifecycle_bases.size()
+        << ",\"semantic_lifecycle_storage_bytes\":" << lifecycle_bases.capacity()*sizeof(LifecycleBase)
         << ",\"semantic_virtual_base_entries\":" << virtual_bases.size()
         << ",\"semantic_virtual_base_work\":" << virtual_base_work
         << ",\"semantic_final_overrider_work\":" << final_overrider_work

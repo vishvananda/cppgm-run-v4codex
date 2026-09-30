@@ -420,6 +420,7 @@ void Procedural::run()
         auto before = definitions.size(); declare_function(e);
         if (definitions.size() != before) function_body(e);
     }
+    emit_member_thunks();
     emit_terminate_adapter();
     // The adapter can introduce runtime declarations. Publish the presentation
     // schedule only after every emission queue has finished.

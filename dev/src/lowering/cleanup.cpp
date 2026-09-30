@@ -209,7 +209,11 @@ void Procedural::emit_cleanups()
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
         Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : sem.lifecycle_bases[action.base].offset)});
         EntityId dtor = sem.type_destructor(action.type);
-        std::vector<Operand> args = {Operand::symbol(symbol(dtor,!action.field)),at.operand};
+        // A leaf virtual base has identical complete/base destruction. Keep
+        // the established cleanup entry when no virtual-base tail is omitted.
+        bool leaf_virtual = action.base && sem.lifecycle_bases[action.base].virtual_base &&
+            !sem.virtual_base_count(sem.lifecycle_bases[action.base].type);
+        std::vector<Operand> args = {Operand::symbol(symbol(dtor,!action.field && !leaf_virtual)),at.operand};
         if (!action.field) lifecycle_arguments(dtor,args,action.base);
         guarded_call(Instruction(Opcode::Call,IRType::Void),args.data(),args.size());
         if (previous) jump(previous);

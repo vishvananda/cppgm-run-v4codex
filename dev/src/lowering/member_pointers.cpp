@@ -8,7 +8,7 @@ Value Procedural::member_pointer_value(EntityId member, TypeId target, std::int6
     if (sem.types[sem.types[target].child].kind != TypeKind::Function)
         result = emit(Opcode::Const,IRType::I64,{Operand::integer(sem.entities[member].member_offset+1+adjustment)});
     else {
-        result = emit(Opcode::Addr,IRType(),{Operand::symbol(symbol(member))});
+        result = emit(Opcode::Addr,IRType(),{Operand::symbol(member_function_symbol(member))});
         result = emit(Opcode::Copy,IRType::I64,{result.operand});
         result = coerce(result,IRType::I128,true,true);
         if (adjustment) {
@@ -29,7 +29,7 @@ void Procedural::member_pointer_data(const semantic::StaticValue& value)
 {
     lowir_model::DataItem item; item.type = IRType::Ptr;
     item.kind = value.entity ? lowir_model::DataItem::Address : lowir_model::DataItem::Scalar;
-    if (value.entity) item.symbol = symbol(value.entity);
+    if (value.entity) item.symbol = member_function_symbol(value.entity);
     else item.value = Operand::integer(0);
     p.data.push_back(item);
     item = lowir_model::DataItem(); item.kind = lowir_model::DataItem::Scalar;

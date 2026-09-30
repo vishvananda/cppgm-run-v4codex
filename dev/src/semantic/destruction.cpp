@@ -70,7 +70,7 @@ EntityId Analyzer::destination_destructor(TypeId t, ScopeId s)
     if (dtor) {
         auto& member = members[entities[dtor].member_info];
         member.complete_entry = true;
-        if (member.virtual_member) member.base_entry = true;
+        if (member.virtual_member || virtual_base_count(scopes[entities[dtor].owner].entity)) member.base_entry = true;
     }
     return dtor;
 }
@@ -159,6 +159,7 @@ void Analyzer::destructor_actions(EntityId e)
             TypeId base = entities[lifecycle_bases[id].type].type;
             EntityId dtor = default_destructor(base, entities[e].scope);
             members[entities[dtor].member_info].base_entry = true;
+            members[entities[dtor].member_info].polymorphic_base_entry |= virtual_base_count(cls) != 0;
             work.push_back({0, base, dtor, id});
         }
         std::reverse(work.begin()+base_begin,work.end());

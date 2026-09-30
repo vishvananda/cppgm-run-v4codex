@@ -259,6 +259,12 @@ void Analyzer::demand_vtable(EntityId cls, VtableReason reason)
         virtual_classes[v].referenced = true;
         vtable_emission.push_back(cls);
     }
+    if (virtual_base_count(cls)) {
+        for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next)
+            if (!bases[b].virtual_base && virtual_base_count(bases[b].base)) demand_construction_vtable(bases[b].base);
+        for (unsigned j = 0; j < virtual_base_count(cls); ++j)
+            if (virtual_base_count(virtual_base_type(cls,j))) demand_construction_vtable(virtual_base_type(cls,j));
+    }
     // A key declaration fixes external ownership until its definition arrives.
     // Its reverse dependency wakes this one table; referencing an external
     // table must not instantiate its slots or their RTTI as a side effect.

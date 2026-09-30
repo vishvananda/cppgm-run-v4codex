@@ -932,6 +932,7 @@ private:
     void complete_virtuals(EntityId cls);
     void vtable_definition_available(EntityId e);
     void demand_vtable(EntityId cls, VtableReason reason);
+    void demand_construction_vtable(EntityId cls);
     unsigned virtual_dispatch(EntityId member);
     void check_covariance(EntityId e, EntityId base);
     void reject_abstract(TypeId t);

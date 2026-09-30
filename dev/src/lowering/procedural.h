@@ -35,7 +35,7 @@ struct Value {
 // Program-owned linkage identities survive individual semantic TUs. Keys use
 // canonical typed ABI entities, never their rendered manglings.
 struct Linkage {
-    semantic::Index construction_symbols;
+    semantic::Index construction_symbols, member_thunk_symbols;
     struct ValueBaseArgument { unsigned parameter; std::uint64_t offset; };
     struct ParameterAbi { unsigned visible; lowir_model::Range hidden; };
     std::vector<ValueBaseArgument> value_base_arguments;
@@ -362,6 +362,10 @@ class Procedural {
     Value virtual_function(Value object, unsigned slot);
     SignatureId virtual_signature(EntityId e);
     std::vector<SignatureId> virtual_signatures;
+    SymbolId member_function_symbol(EntityId member);
+    void emit_member_thunks();
+    struct MemberThunk { EntityId member; SymbolId symbol; unsigned slot; };
+    std::vector<MemberThunk> member_thunks;
     Value member_pointer_value(EntityId member, TypeId type, std::int64_t adjustment = 0);
     Value member_pointer_conversion(Value value, const semantic::Conversion& conversion);
     void member_pointer_data(const semantic::StaticValue& value);

@@ -5,10 +5,13 @@ void Procedural::order_lifecycle_entries()
 {
     using Group = std::array<FunctionId,3>;
     std::vector<Group> groups(1); semantic::Index owners;
-    for (EntityId e : deleting_entries) {
-        auto deleting = deleting_symbols[sem.entities[e].member_info];
-        Group entries = {{FunctionId(),FunctionId(p.symbols[deleting.index-1].entity),FunctionId(p.symbols[symbols[e].index-1].entity)}};
-        if (base_symbols[e]) entries[0] = FunctionId(p.symbols[base_symbols[e].index-1].entity);
+    for (EntityId e = 1; e < sem.entities.size(); ++e) {
+        auto member = sem.entities[e].member_info;
+        auto deleting = member ? deleting_symbols[member] : SymbolId();
+        if (!base_symbols[e] && !deleting) continue;
+        Group entries = {{base_symbols[e] ? FunctionId(p.symbols[base_symbols[e].index-1].entity) : FunctionId(),
+            deleting ? FunctionId(p.symbols[deleting.index-1].entity) : FunctionId(),
+            FunctionId(p.symbols[symbols[e].index-1].entity)}};
         for (auto entry : entries) if (entry) owners.put(entry.index,groups.size());
         groups.push_back(entries);
     }

@@ -446,7 +446,7 @@ Value Procedural::call(NodeId n, Value destination)
         i.signature = signature(sem.entities[object_use.callable_entry].type);
     } else if (object_use.member_pointer) {
         call_work[begin] = object_use.member_target ?
-            emit(Opcode::Addr,IRType(),{Operand::symbol(symbol(sem.member_target_value(object_use.member_target).entity))}).operand : member_function.operand;
+            emit(Opcode::Addr,IRType(),{Operand::symbol(member_function_symbol(sem.member_target_value(object_use.member_target).entity))}).operand : member_function.operand;
         i.signature = signature(sem.expression_fact(object_use.member_pointer).type);
     } else if (object_use.virtual_slot) {
         call_work[begin] = virtual_function(Value(call_work[begin+1+indirect_result],IRType::Ptr),object_use.virtual_slot).operand;

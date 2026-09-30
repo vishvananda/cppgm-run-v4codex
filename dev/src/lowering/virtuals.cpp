@@ -107,8 +107,11 @@ void Procedural::emit_vtables()
         };
         emit_view(table,cls,0,model.primary_count,0,0);
         const auto& views = sem.virtual_class(cls).views;
-        for (unsigned j = 0; j < views.size(); ++j)
-            if (grouped || sem.virtual_base_count(cls) ? views[j].store : views[j].offset != 0)
+        if (sem.virtual_base_count(cls)) {
+            for (unsigned j : model.store_order)
+                emit_view(view_symbol(cls,j+1),views[j].type,views[j].begin,views[j].count,views[j].offset,views[j].vcall_rows);
+        } else for (unsigned j = 0; j < views.size(); ++j)
+            if (grouped ? views[j].store : views[j].offset != 0)
                 emit_view(grouped ? table : view_symbol(cls,j+1),views[j].type,views[j].begin,views[j].count,views[j].offset,views[j].vcall_rows);
         if (grouped) publish(p,table,group);
         if (sem.virtual_base_count(cls)) emit_construction_tables(cls,table);
@@ -150,8 +153,8 @@ void Procedural::vpointer_store(EntityId cls)
     bool grouped = model.key_function && !sem.entities[cls].specialization && !sem.virtual_base_count(cls);
     const auto& views = sem.virtual_class(cls).views;
     unsigned vtt_index = sem.vtt_secondary(cls);
-    for (unsigned j = 0; j < views.size(); ++j)
-        if (views[j].store) store(grouped ? symbol : view_symbol(cls,j+1),views[j].offset,grouped ? views[j].group_address_point : views[j].address_point,views[j].virtual_anchor,views[j].virtual_tail,vtt_index++);
+    for (unsigned j : model.store_order)
+        store(grouped ? symbol : view_symbol(cls,j+1),views[j].offset,grouped ? views[j].group_address_point : views[j].address_point,views[j].virtual_anchor,views[j].virtual_tail,vtt_index++);
 }
 Value Procedural::virtual_function(Value object, unsigned slot)
 {

@@ -1,9 +1,19 @@
 #include "semantic/analyzer.h"
+#include <algorithm>
 namespace cppgm { namespace semantic {
 void Analyzer::layout_lifecycle(EntityId cls)
 {
     auto info = entities[cls].class_info;
     auto& facts = class_facts[info];
+    if (dynamic_class(cls)) {
+        auto& model = virtual_classes[facts.virtual_info];
+        for (unsigned j = 0; j < model.views.size(); ++j)
+            if (model.views[j].store) model.store_order.push_back(j);
+        if (virtual_base_count(cls))
+            std::sort(model.store_order.begin(),model.store_order.end(),[&](unsigned a, unsigned b) {
+                return model.views[a].offset < model.views[b].offset;
+            });
+    }
     facts.lifecycle_begin = lifecycle_bases.size();
     for (unsigned j = 0; j < virtual_base_count(cls); ++j) {
         auto base = virtual_base_type(cls,j);

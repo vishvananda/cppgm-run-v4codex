@@ -73,6 +73,8 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
             << ",\"control_work\":" << control_work << ",\"discard_work\":" << discard_work
             << ",\"full_expression_work\":" << full_expression_work << ",\"full_expression_regions\":" << full_expression_regions
             << ",\"linkage_requests\":" << linkage.requests << ",\"linkage_hits\":" << linkage.hits
+            << ",\"value_base_argument_facts\":" << linkage.value_base_arguments.size()
+            << ",\"value_parameter_abi_facts\":" << linkage.parameter_abis.size()-1
             << ",\"initializer_units\":" << linkage.initializers.size() << ",\"finalizer_units\":" << linkage.finalizers.size()
             << ",\"abi_nodes\":" << linkage.abi.size() << ",\"abi_bytes\":" << linkage.abi.storage_bytes()
             << ",\"instructions\":" << program.instructions.size() << ",\"operands\":" << program.operands.size()

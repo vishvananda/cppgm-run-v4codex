@@ -283,12 +283,13 @@ struct VirtualClass {
     std::vector<VirtualSlot> slots;
     std::uint32_t primary_count = 0;
     std::vector<VirtualView> views;
+    std::vector<unsigned> store_order; // Physical vptr order, completed with layout.
     Index signatures;
     EntityId key_function = 0;
     std::uint64_t address_point = 16;
     bool polymorphic = false;
     bool abstract = false, referenced = false;
-    FactState demand = FactState::NotStarted;
+    FactState demand = FactState::NotStarted, construction_demand = FactState::NotStarted;
     unsigned char reasons = 0;
 };
 struct TransferAction {

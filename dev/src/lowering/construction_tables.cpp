@@ -67,8 +67,7 @@ void Procedural::emit_construction_tables(EntityId complete, SymbolId table)
             if (!base.virtual_base && base.vtt) node(base.type,offset+base.offset,begin+base.vtt,false);
         }
         unsigned index = begin+sem.vtt_secondary(cls);
-        for (unsigned j = 0; j < model.views.size(); ++j)
-            if (model.views[j].store) segment(j+1,index++);
+        for (unsigned j : model.store_order) segment(j+1,index++);
         if (root) for (unsigned j = 0; j < sem.virtual_base_count(cls); ++j) {
             const auto& base = sem.lifecycle_bases[sem.lifecycle_begin(cls)+j];
             if (base.vtt) node(base.type,base.offset,begin+base.vtt,false);
