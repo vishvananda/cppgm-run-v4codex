@@ -18,23 +18,16 @@ Host output follows the [Itanium EH ABI](https://itanium-cxx-abi.github.io/cxx-a
 The writer uses indirect PC-relative personality/type references and actual
 machine offsets. No reference correction is made.
 
-At this implementation boundary, `.obj` keeps PA25's private object format;
-other output names select host ELF. `--object-format=elf` and
-`--object-format=private` override the extension. Host EH objects use the external
-host linker specified by PA26. The private driver/runtime remains available for
-PA25 compile/direct/mixed linking. Full integration of the host ELF link path
-into that private linker is unfinished and must be reviewed before stage closure.
+The known `.obj` default-format gap and independent whole-stage review are
+recorded in [the plan](../../pa26/plan.md). PA26 uses the host final linker;
+integrating host objects into the private driver/runtime is outside this stage.
 
-`python3 student.tests/pa26/validate.py` records the exact required checks plus
-controls/inspection. At this incomplete handoff it verifies the documented
-29/30 result and the one remaining required header case; it does not waive that
-failure or replace the root suite's nonzero exit status.
-
-Performance observations and interpretation are in [performance142.md](performance142.md).
-The candidate and accepted frozen binaries remain under `/tmp/pa26-142`; their
-hashes, generated input hashes, every A/A and ABBA observation and final validation
-are retained under `evidence142/`. The inspection helper is named
-`native_inspection.py` to avoid shadowing Python's standard `inspect` module.
+`python3 student.tests/pa26/validate.py` runs the prior suites, PA26, file audit,
+personal controls/inspection and the through-PA26 report. The current results
+are 30/30 and 4283/4283, with unchanged protected fixtures and references.
+Current observations and interpretation are in [performance143.md](performance143.md)
+and `evidence143/`; historical142 measurements remain unchanged. The inspection
+helper is named `native_inspection.py` to avoid shadowing Python's `inspect` module.
 
 Implementation143 header controls: `python3 student.tests/pa26/header_controls.py`.
 These exercise configured host include roots, user search/macro precedence,
@@ -45,7 +38,8 @@ Compiler build configuration probes only host target metadata/header roots;
 compiling a user input never invokes host preprocessing or code generation.
 Unsupported host floating extensions and language-feature macros are not
 advertised. GNU compatibility selects conservative header paths. No header or
-library body is replaced. Full `<string>` remains in progress.
+library body is replaced. The required `<string>` fixture and all four reduced
+conditional paths, heap-backed copies and concatenation now pass.
 
 `python3 student.tests/pa26/intrinsic_controls.py` compiles and executes the
 trait, variadic and header-intrinsic sources here, including host va_list
@@ -69,3 +63,9 @@ and duplicate physical search directories; see GCC's
 cover instantiation-owned local types, delayed enum bounds and exception facts
 completed before lowering. Intrinsic queries also cover expect, constant_p,
 abort/unreachable, and integral/floating absolute-value calls.
+
+`python3 student.tests/pa26/function_address.py` links against a host DSO and
+checks imported function-pointer identity, indirect calls, local addresses and
+GOT relocations in a default-PIE executable. `string_paths.cpp` is included in
+the intrinsic runner; `partial_cleanup.cpp` checks effectful cleanup beside an
+effect-free implicit destructor during constructor failure.

@@ -3,82 +3,67 @@
 Stage base commit: 369c57f19fa13c0394d4fb0345cf2bb79708fc67
 Last reviewed commit: 369c57f19fa13c0394d4fb0345cf2bb79708fc67
 
-Target: **PA26 full-stage**. Phase: **implementation143, in progress**.
+Target: **PA26 full-stage**. Phase: **implementation143 handoff**.
 Turn entry: `9063d5260c65bf6b1984ebae6028fef44251910a`, **29/30**.
-Previous code boundary: `041cf554f499c4574b72294d23af897459e0147a`.
-Entry **0/30** -> **29/30**; PA1–25 **4253/4253**; through PA26 **4282/4283**.
-No contract fixture, reference, harness, comparison rule or coverage was changed.
+Implementation boundary: `a624085e1f3823c590da657c2d17f596a301215e`.
+Final: **30/30**; PA1–25 **4253/4253**; through PA26 **4283/4283**;
+file audit passes (four inherited header-division warnings).
+No contract fixture, reference, harness, comparison rule or coverage changed.
 
-## Design and completed behavior group
+## Design/spec alignment and completed groups
 
-| Owner | Data flow / complexity | Evidence |
+| Owner | Data flow / complexity | Validation |
 |---|---|---|
-| Lowering/runtime identities | Typed host policy chooses RTTI imports, catch signature and runtime ABI spellings; ELF aliases share one output symbol. Existing local binding and terminate helper retained. Effect-free implicit destruction uses the same completed semantic fact as declaration emission. | Runtime declaration/builtin alias, local lambda, terminate and class-condition controls. |
-| Native EH | LowIR clauses/regions -> per-function MIR frame/selector facts -> exact encoded call ranges. Interned persistent region stacks, one visit per reachable block per analysis, identity-checked joins; inactive cleanup frames permit shared suffixes. Separate executable reachability prevents dead cleanup coverage. | Same/cross-TU catches, callee saves, stack-call cleanup, conditional lifetimes, 140-type actions and selector remapping. |
-| Host ELF writer | Native bytes/fixups -> ELF symbols/relocations, sparse LSDA and prologue/epilogue CFI. Indirect personality/type references support PIE. One physical resume terminal per function; cleanup paths remain distinct in LowIR/MIR. | Course inspection facts, host linking/runtime, production template LowIR/MIR/ELF trace. |
+| Streaming preprocessor / host configuration | Build-host metadata supplies target roots/predefines; user overrides retain precedence. Include-next carries the found-directory index; physical-root deduplication is O(d log d), once per TU. No host compilation of user input or library replacement. | Ten header controls, real installed `<string>`, include-next siblings/duplicate roots, labels and block linkage. |
+| Parser / canonical semantic graph | Traits, typeof, intrinsic queries and dependent enum/auto facts use typed queries/substitution. Scalar varargs, stack allocation and address operations reuse existing ABI facts. Integer packs are linear output, capped at 1048576. | Twenty-two trait/intrinsic controls, invalid cases, cross-host va_list, all string conditional paths and heap-backed copies. |
+| Semantic demand / lifetime lowering | Selected boundaries enqueue exception facts once, after evaluated bodies and before lowering table allocation. Constructor cleanup and ordinary destruction consume the same completed effect fact. No late reconstruction of callees. | Prototype/temporary noexcept, auto decltype, partial-construction unwind, source temporary lifetimes; prior suites pass. |
+| Native EH / ELF | Typed regions -> per-function frame/selector facts -> sparse LSDA, CFI, one physical resume terminal and local terminate action. GOT function-address facts use one symbol-identity pass; private output allocates no host GOT table. Work/storage is linear in emitted CFG, instructions, clauses and relocations. | All PA26 object facts and runtime cases, nine host ABI controls, DSO function-pointer identity/PIE control, production template LowIR/MIR/ELF trace. |
 
-Work/storage is linear in emitted instructions, edges, clauses, bytes and
-relocations, using flat identity indexes and final linear symbol partitioning.
-Selection state dies per function; only encoded bytes, fixups and compact unwind
-records survive to object writing. No text phase transport, host code-generation
-subprocess, optional optimization, global retry or new semantic name lookup.
-Private emission allocates no host landing-table storage.
+The unchanged final fixture is compiled through the real headers and this
+compiler's own frontend, lowering, backend and ELF writer; the host performs
+only the handout's final link. General hosted compatibility remains a later
+stage surface, as PA26 explicitly states. Expression-form constexpr-if is a
+header-required GNU extension; its condition-declaration form and aggregate
+va_arg remain unsupported extensions/surfaces, not claims of full library support.
 
-## Unfinished implementation and concrete boundary
+## Remaining implementation and independent audit
 
-Current group: hosted header discovery and demanded string-expression semantics.
-Driver-owned build configuration supplies target header roots/predefines to the
-streaming preprocessor; ordinary parser/semantic facts drive template demand,
-temporary construction/destruction and existing typed host EH lowering. No
-library spelling recognition or fixture-specific library replacement. Header
-processing must remain proportional to source/tokens and demanded facts; test
-the unchanged failing fixture plus reduced semantic/cleanup controls. Freeze
-entry/final compilers for latency/RSS, runtime/text evidence. Follow related
-failures while this ownership chain supports them. Driver format migration is
-a separate unfinished group; independent audit remains pending below.
+- **Known unfinished command-line requirement, not waived:** default `-c -o x.obj`
+  retains PA25 private output; other names produce host ELF, with explicit
+  `--object-format=elf|private` overrides. PA26's arbitrary-output-name wording
+  requires a uniform policy. This is a distinct driver/importer/runtime boundary:
+  PA25's compile/direct/mixed-link path consumes private EH/TLS/runtime objects.
+  Resolving the policy must preserve those earlier contracts; it is not another
+  local fix to the completed header/EH/relocation group. The 30/30 fixture result
+  does not establish that untested naming requirement.
+- **Scope correction to inherited plan:** integration of the host object path
+  into a private linker/runtime is explicitly out of scope in PA26's README.
+  It is not an additional PA26 performance or completion gate. This does not
+  remove the separate uniform-output requirement above.
+- **Independent audit questions remain pending:** whole-stage source-to-ELF
+  identity/lifetime ownership, demand precision, CFI/LSDA legality, exception
+  spill ownership, extension semantics, output policy and performance evidence.
+  These are review questions, distinct from the known implementation gap.
+  Review markers above remain unchanged; this handoff does not certify PA26.
 
-- Required `300-shared-conditional-cleanup-resume` now parses and completes
-  semantic analysis of the installed `<string>` headers. GNU traits/typeof,
-  typed scalar varargs/stack allocation, function names, addressof, integer packs
-  and expression-form constexpr-if use canonical facts and existing ABI lowering.
-  Preprocessor `include_next` retains the directory index and deduplicates physical
-  search roots once (O(d log d)); header traversal remains streaming.
-- Dependent builtin calls retain intrinsic semantics in source and type queries;
-  enum arithmetic waits for concrete underlying types; auto locals publish their
-  deduced type to substituted decltype queries. Selected function boundaries now
-  enqueue exception-specification demand once, closing prototype/temporary facts
-  before lowering allocates entity-indexed tables. Twenty-one explicit semantic controls
-  and ten header controls pass; PA1–25 is again 4253/4253 and file audit passes.
-- Partial-construction cleanup now uses the same completed destructor effect
-  fact as ordinary destruction and declaration emission. Nonlocal function
-  addresses use a typed GOT relocation for host PIE; classification is one pass
-  over function identities, with no private-path table allocation and no extra
-  instruction for zero-offset addresses. A DSO pointer-identity/indirect-call
-  control passes. **PA26 now passes 30/30**, removing the original remaining
-  failure with unchanged fixtures. Final through-report/performance evidence
-  remains in progress.
-- Driver migration remains unfinished: `.obj` preserves PA25 private objects;
-  other output names select host ELF. `--object-format=elf|private` overrides
-  this choice. Host objects use PA26's external host linker. Uniform host output
-  for arbitrary names and integration with the private compile/direct/mixed link
-  path require reconciling its private EH/TLS/runtime ABI with host objects.
-  Do not infer full command-line or host-link closure from the `.o` tests.
+## Performance and handoff ledger
 
-These boundaries need new header/library and link-driver work; they are not
-remaining local fixes to the completed host EH encoding group. The target has
-not been narrowed and PA26 is not certified complete.
+[Performance143](../student.tests/pa26/performance143.md) records frozen entry/final
+A/A + ABBA comparisons on common correct inputs and a final/final string baseline.
+Common objects/executables are byte-identical; compiler medians rise about 1%,
+RSS under 2%. Short-TU batches expose a 22.3% increase (about 1.04 ms/TU) for
+required host setup; direct compiler RSS is 6752/6932 KiB. The string baseline
+compiles in about 666 ms at 45 MiB RSS, runs in about 535 ms, and emits 35963
+executable text bytes. All samples/outliers and prior142 measurements survive.
+No optional transform or speedup claim. Inherited 15%/zero-growth targets are
+diagnostics under spec section 9, not new gates; mandatory limits remain intact.
 
-## Performance and ledger
-
-[Performance142](../student.tests/pa26/performance142.md) preserves candidate and
-final frozen A/A + ABBA observations, all four dimensions, exact flags/hashes and
-stage-scoped acceptance. No speedup is claimed and no optional transform added.
-Inherited 15% latency/RSS and blanket zero-growth diagnostics are not new gates;
-mandated facts, correctness and coverage remain required.
-[Validation142](../student.tests/pa26/evidence142/validation.json) records commands,
-checks, inventories and hashes. Personal controls and inspection are run explicitly.
+[Validation143](../student.tests/pa26/evidence143/validation.json) records required
+commands, zero failures, inventories and unchanged contract hashes. Personal
+controls and the typed inspection ran explicitly.
 
 | Handoff | Disposition |
 |---|---|
-| implementation142 | Host EH/ELF group committed; 29 original failures removed. Header/library and unified driver migration remain unfinished. |
-| Independent audit | **Pending**, not waived: review whole-stage source-to-ELF identity/lifetime flow, CFI/LSDA legality, exception spill ownership, format-policy compatibility and performance evidence. Review markers above are unchanged. |
+| implementation142 | Host EH group; original stage 0/30 -> 29/30. Historical measurements retained. |
+| implementation143 | Related header, semantic-demand, cleanup and PIE groups committed; turn 29/30 -> 30/30. Earlier suites and file audit pass. Implementation handoff complete; return to Ralph for full audit. |
+| Independent audit | Pending; uniform-output implementation gap is recorded separately above, not disguised as an audit question or waived by passing tests. |

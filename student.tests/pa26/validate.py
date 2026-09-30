@@ -2,7 +2,7 @@
 """Capture the exact PA26 implementation handoff checks without changing gates."""
 import hashlib,json,pathlib,re,subprocess,sys
 root=pathlib.Path(__file__).resolve().parents[2]
-out=pathlib.Path(sys.argv[1] if len(sys.argv)>1 else '/tmp/pa26-142/validation').resolve()
+out=pathlib.Path(sys.argv[1] if len(sys.argv)>1 else '/tmp/pa26-143/validation').resolve()
 out.mkdir(parents=True,exist_ok=True)
 base='369c57f19fa13c0394d4fb0345cf2bb79708fc67'
 def sha(data):return hashlib.sha256(data).hexdigest()
@@ -10,19 +10,21 @@ def git(*args):return subprocess.check_output(['git',*args],cwd=root)
 records=[]
 commands=[
  ('priorThroughTests', 'n=26; if [ "$n" -le 1 ]; then echo "===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====="; else make test-report-through-pa$((n - 1)); fi',0),
- ('stageTests','make test-pa26',2),
+ ('stageTests','make test-pa26',0),
  ('fileAudit','perl scripts/cppgm_file_audit.pl --stage pa26 --paths dev/src',0),
  ('personalControls','python3 student.tests/pa26/controls.py',0),
- ('typedInspection','python3 student.tests/pa26/native_inspection.py',0)]
+ ('typedInspection','python3 student.tests/pa26/native_inspection.py /tmp/pa26-143/inspect',0),
+ ('headerControls','python3 student.tests/pa26/header_controls.py',0),
+ ('intrinsicControls','python3 student.tests/pa26/intrinsic_controls.py',0),
+ ('functionAddress','python3 student.tests/pa26/function_address.py',0),
+ ('throughStage','make test-report-through-pa26',0)]
 for name,command,status in commands:
     r=subprocess.run(command,shell=True,executable='/bin/bash',cwd=root,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
     (out/(name+'.log')).write_bytes(r.stdout)
     assert r.returncode==status,(name,r.returncode,r.stdout.decode())
     text=r.stdout.decode()
     if name=='stageTests':
-        assert '29 / 30 TESTS PASSED' in text
-        errors=[x for x in text.splitlines() if ': ERROR:' in x]
-        assert len(errors)==1 and '300-shared-conditional-cleanup-resume.t:' in errors[0]
+        assert 'ALL TESTS PASSED SUCCESSFULLY! (30 / 30)' in text
     records.append(dict(name=name,command=command,exit_code=r.returncode,output_sha256=sha(r.stdout),
         result_lines=[x for x in text.splitlines() if any(k in x for k in ['PASSED','ERROR:','audit passed','controls passed','trace passed'])]))
 # No fixture, harness, comparison rule or reference modifications in any stage.
@@ -35,12 +37,13 @@ inventory={p:sha((root/p).read_bytes()) for p in paths}
 assert all(sha(git('show',base+':'+p))==s for p,s in inventory.items())
 changes=git('diff','--name-only',base,'--','dev').decode().splitlines()
 code={p:sha((root/p).read_bytes()) for p in changes}
-assert (root/'dev/cppgm++').read_bytes()==pathlib.Path('/tmp/pa26-142/accepted-cppgm').read_bytes()
+assert (root/'dev/cppgm++').read_bytes()==pathlib.Path('/tmp/pa26-143/accepted-cppgm').read_bytes()
 manifest=dict(stage_base=base,code_commit=git('rev-parse','HEAD').decode().strip(),
     compiler_sha256=sha((root/'dev/cppgm++').read_bytes()),build_flags=(root/'obj/dev/.compile_config').read_text(),
-    checks=records,stage_progress=dict(entry_passed=0,entry_failed=30,final_passed=29,final_failed=1,coverage_unchanged=True),
+    checks=records,stage_progress=dict(entry_passed=29,entry_failed=1,final_passed=30,final_failed=0,coverage_unchanged=True),
     contract_inventory=inventory,implementation_inventory=code,
     independent_audit='pending; Last reviewed commit remains the stage base',
-    remaining_implementation=['required <string> integration','uniform host/private object and link-driver migration'])
+    remaining_implementation=['uniform compile output for arbitrary file extensions; preserve PA25 format compatibility'],
+    out_of_scope=['private host-object link/runtime integration: PA26 handout explicitly excludes this'])
 (out/'validation.json').write_text(json.dumps(manifest,indent=2)+'\n')
-print('Handoff checks: prior 4253/4253; PA26 29/30; file audit pass; controls and typed inspection pass; unchanged coverage')
+print('Handoff checks: prior 4253/4253; PA26 30/30; file audit pass; controls and typed inspection pass; unchanged coverage')

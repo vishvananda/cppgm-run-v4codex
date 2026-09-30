@@ -1,0 +1,22 @@
+{
+  "status": "pass",
+  "source": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa26/trace.cpp",
+  "source_sha256": "6f7acee5878a13360bb9a23e611e19d9c3f55fd75d9df55ee5fbd3f1db16b479",
+  "lowir_sha256": "38d0ece417f44984c9f6db6e8001ff11b594d104ac2303b9d8b32b22e0a0fbd0",
+  "mir_sha256": "c1be0a91df099ef807523281869b4022eb4a85351b17a2f512ad062417e7059c",
+  "object_sha256": "bd785bc369cc7e13c54f00e4640782bc573a5e75e81e38a159c12ef346ecf1e7",
+  "symbols_sha256": "2b325e774f2f0ccbfeb0361cf8449ce76de6f780939c99b4f01cf2877b4c2ca9",
+  "frames_sha256": "0abcc829a2676077cff0e53d3e2ed5a31b471d6cebeb0474af28bac73d1ffccc",
+  "relocations_sha256": "f03902b42ea4cdba526cff48030b7bcb3f44d58bd83bae4e7de33b54f76e077b",
+  "verified_facts": [
+    "demanded calculate<11> specialization",
+    "typed EH clauses in production LowIR",
+    "MIR host frame slots and landing block identity",
+    "zPLR CIE",
+    "epilogue CFI restore state",
+    "PLT32 call relocations",
+    "host personality reference",
+    "host resume reference",
+    "program exits zero"
+  ]
+}
