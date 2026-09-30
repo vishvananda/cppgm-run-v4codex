@@ -73,9 +73,15 @@ bool Analyzer::contains_subobject(EntityId outer, std::uint32_t from, std::uint3
 void Analyzer::resolve_final_overriders(EntityId cls, VirtualClass& model)
 {
     if (!class_facts[entities[cls].class_info].virtual_bases_count) return;
-    Index winners;
+    Index winners, containment;
     auto dominates = [&](const VirtualSlot& a, const VirtualSlot& b) {
-        return contains_subobject(scopes[entities[a.function].owner].entity,a.implementation,b.implementation);
+        // The class-local occurrence pair includes the receiver type: each
+        // occurrence has exactly one class. Reuse this completed graph fact
+        // across unrelated virtual signatures on the same receiver pair.
+        auto k = key(a.implementation,b.implementation);
+        if (auto known = containment.get(k)) return known == 2;
+        bool result = contains_subobject(scopes[entities[a.function].owner].entity,a.implementation,b.implementation);
+        containment.put(k,result ? 2 : 1); return result;
     };
     // A maximum, if one exists, survives this tournament. A second linear
     // pass proves it dominates every required candidate. Distinct occurrences

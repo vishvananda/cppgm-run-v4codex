@@ -31,6 +31,7 @@ add('final-through-shared',base+'struct A:virtual R{int f()final{return 2;}};str
 add('covariant-shared','struct X{};struct Y:X{};struct R{virtual X* f(){return 0;}};struct A:virtual R{Y* f(){return 0;}};struct B:virtual R{};struct D:A,B{};')
 add('template-shared',base+'template<class T>struct A:virtual T{int f(){return 2;}};template<class T>struct B:virtual T{};struct D:A<R>,B<R>{};')
 add('template-ambiguous',base+'template<int I>struct A:virtual R{int f(){return I;}};struct D:A<2>,A<3>{};',False)
+add('virtual-inheritance-is-not-polymorphism','struct V{};struct B:virtual V{};struct D:B{};D*cast(B*b){return dynamic_cast<D*>(b);}',False)
 # Actual edge occurrence matters even if two derived types share an override name.
 for reverse in (False,True):
  branches='B,A' if reverse else 'A,B'
