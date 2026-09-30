@@ -5,6 +5,8 @@ namespace cppgm { namespace lowering {
 using namespace lowir_model;
 void Procedural::reset_lifetime(EntityId e)
 {
+    active_base_entry = false; construction_base = 0; vtt_argument = Value();
+    hidden_base_addresses = semantic::Index(); parameter_base_addresses = semantic::Index();
     active_function = e; live = 0; emitting_cleanup = false; resume_emitted = false; cleanup_cursor = 0; slot_names = semantic::Index();
     cleanup_return = class_return_slot = SlotId(); resume_terminal = destructor_handler = destructor_end = destructor_epilogue = BlockId();
     cleanup_index = semantic::Index(); return_terminals = semantic::Index();
@@ -198,17 +200,18 @@ void Procedural::emit_cleanups()
         auto action = entry.action;
         if (sem.types[action.type].kind == TypeKind::Array) {
             array_destroy(sem.type_destructor(action.type), action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
-                {{action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type,action.type), action.field != 0}});
+                {{action.field ? sem.entities[action.field].member_offset : sem.lifecycle_bases[action.base].offset, action.field != 0}});
             if (previous) jump(previous);
             else { emit(Opcode::EhEnd, IRType(), {}); emit(Opcode::Resume, IRType(), {}); }
             previous = entry.handler; continue;
         }
         Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
-        Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type,action.type))});
+        Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : sem.lifecycle_bases[action.base].offset)});
         EntityId dtor = sem.type_destructor(action.type);
-        Operand args[] = {Operand::symbol(symbol(dtor,!action.field)),at.operand};
-        guarded_call(Instruction(Opcode::Call,IRType::Void),args,2);
+        std::vector<Operand> args = {Operand::symbol(symbol(dtor,!action.field)),at.operand};
+        if (!action.field) lifecycle_arguments(dtor,args,action.base);
+        guarded_call(Instruction(Opcode::Call,IRType::Void),args.data(),args.size());
         if (previous) jump(previous);
         else { emit(Opcode::EhEnd, IRType(), {}); emit(Opcode::Resume, IRType(), {}); }
         previous = entry.handler;

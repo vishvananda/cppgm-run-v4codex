@@ -16,7 +16,7 @@ void Procedural::declare_function(EntityId e)
             // declaration. Refresh that function identity before any call
             // consumes its signature; unrelated declarations stay warm.
             if (prior.declaration && linkage.incomplete_signatures.get(existing.entity))
-                prior.signature = signature(sem.call_type(e),FunctionId(existing.entity));
+                prior.signature = function_signature(e,FunctionId(existing.entity));
             return;
         }
         if (!prior.declaration) {
@@ -24,12 +24,12 @@ void Procedural::declare_function(EntityId e)
             throw std::runtime_error("multiple function definitions");
         }
         prior.declaration = false;
-        prior.signature = signature(sem.call_type(e), FunctionId(existing.entity));
+        prior.signature = function_signature(e,FunctionId(existing.entity));
         definitions.push_back(e);
         return;
     }
     FunctionId id(p.functions.size()+1);
-    f.signature = signature(sem.call_type(e), id);
+    f.signature = function_signature(e,id);
     if (entity.stable_prefix) p.signatures[f.signature.index-1].boundary.query = CQM_STABLE_PREFIX;
     if (sem.function_nonthrowing(e)) p.signatures[f.signature.index-1].boundary.unwind = CUM_NO;
     if (entity.member_info && !entity.is_static)

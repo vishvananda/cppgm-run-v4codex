@@ -38,6 +38,7 @@ void Procedural::inherited_call(EntityId e, Value object)
         } else if (reference(parameter)) call_work.push_back(address(source).operand);
         else call_work.push_back(converted_value(source,c).operand);
     }
+    lifecycle_arguments(target,call_work,construction_base);
     guarded_call(Instruction(Opcode::Call,IRType::Void),call_work.data()+begin,call_work.size()-begin);
     call_work.resize(begin);
 }

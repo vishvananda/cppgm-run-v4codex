@@ -40,8 +40,8 @@ void Analyzer::prepare_transfer(EntityId e)
     std::vector<TransferAction> actions;
     std::uint64_t unit_offset = 0, unit_bytes = 0;
     bool prior_unit = false;
-    auto add = [&](EntityId field, TypeId type) {
-        TransferAction action; action.field = field; action.type = type;
+    auto add = [&](EntityId field, TypeId type, unsigned base) {
+        TransferAction action; action.field = field; action.type = type; action.base = base;
         TypeId element = type;
         while (types[element].kind == TypeKind::Array) element = types[element].child;
         bool ref = types[element].kind == TypeKind::LRef || types[element].kind == TypeKind::RRef;
@@ -94,11 +94,22 @@ void Analyzer::prepare_transfer(EntityId e)
         actions.push_back(action);
     };
     auto info = entities[cls].class_info;
-    for (auto b = class_facts[info].first_base; b; b = bases[b].next) add(0, entities[bases[b].base].type);
+    Index direct_actions;
+    for (unsigned j = 0; j < lifecycle_count(cls); ++j) {
+        auto id = lifecycle_begin(cls)+j;
+        const auto& base = lifecycle_bases[id];
+        if (!assignment) add(0,entities[base.type].type,id);
+        else direct_actions.put(key(base.type,base.virtual_base),id);
+    }
+    // Assignment follows direct-base declaration order. Repeated assignment
+    // of a shared virtual base through those direct bases is permitted.
+    if (assignment)
+        for (auto b = class_facts[info].first_base; b; b = bases[b].next)
+            add(0,entities[bases[b].base].type,direct_actions.get(key(bases[b].base,bases[b].virtual_base)));
     for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
         EntityId field = declarations[d].entity;
         if ((nonstatic_field(field) || field_fact(field).bit_field) && entities[field].owner == entities[cls].scope)
-            add(field, entities[field].type);
+            add(field, entities[field].type, 0);
     }
     if (is_union && !deleted) {
         actions.clear(); TransferAction storage; storage.kind = TransferAction::Storage;

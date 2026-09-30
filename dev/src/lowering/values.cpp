@@ -27,7 +27,7 @@ NodeId Procedural::child(NodeId n, Kind k) const
     for (NodeId c = ast[n].first; c; c = ast[c].next) if (ast[c].kind == k) return c;
     return 0;
 }
-Value Procedural::emit(Instruction i, const Operand* args, std::size_t count)
+Value Procedural::emit_raw(Instruction i, const Operand* args, std::size_t count)
 {
     if (full_expression.open && !emitting_cleanup && lowir_model::terminator(i.opcode)) close_expression_region();
     i.operands.begin = p.operands.size(); i.operands.count = count;
@@ -36,7 +36,12 @@ Value Procedural::emit(Instruction i, const Operand* args, std::size_t count)
     builder->append(i);
     if (lowir_model::terminator(i.opcode)) ended = true;
     Value result(Operand::value(i.destination), i.result_type());
-    result.nonnull = i.opcode == Opcode::Addr; return result;
+    result.nonnull = i.opcode == Opcode::Addr;
+    if (i.opcode == Opcode::Load && count == 1 && args[0].kind == Operand::Slot &&
+        this_slot && args[0].ref == this_slot.index &&
+        (sem.constructor_member(active_function) || sem.destructor_member(active_function)))
+        result.parameter_object = active_function;
+    return result;
 }
 Value Procedural::emit(Instruction i, const std::vector<Operand>& args) { return emit(i, args.data(), args.size()); }
 Value Procedural::emit(Instruction i, std::initializer_list<Operand> args) { return emit(i, args.begin(), args.size()); }
@@ -58,8 +63,10 @@ Value Procedural::load(Value v)
 Value Procedural::address(Value v)
 {
     if (!v.address) throw std::logic_error("missing addressable semantic value");
-    if (v.operand.kind == Operand::Slot || v.operand.kind == Operand::Symbol)
-        v = emit(Opcode::Addr, IRType(), {v.operand});
+    if (v.operand.kind == Operand::Slot || v.operand.kind == Operand::Symbol) {
+        auto object = v.parameter_object;
+        v = emit(Opcode::Addr, IRType(), {v.operand}); v.parameter_object = object;
+    }
     v.address = false; v.ir = IRType::Ptr; return v;
 }
 Value Procedural::store(Value v, Value location)
@@ -203,20 +210,31 @@ Value Procedural::base_projection(Value base, unsigned steps)
 {
     if (steps) {
         bool nonnull = base.nonnull;
+        auto parameter = base.parameter_object;
         const auto& path = sem.base_adjustments[steps];
         if (path.virtual_row) {
+            if (parameter && parameter == active_function) {
+                base = lifecycle_address(sem.base_virtual_anchor(steps));
+                base = emit(Opcode::Index,IRType::I8,{base.operand,Operand::integer(path.virtual_tail)});
+                base.nonnull = nonnull; base.parameter_object = parameter; return base;
+            }
+            auto hidden = parameter_base_addresses.get((std::uint64_t(parameter)<<32)|sem.base_virtual_anchor(steps));
+            if (parameter && hidden) {
+                base = emit(Opcode::Index,IRType::I8,{Operand::value(lowir_model::ValueId(hidden)),Operand::integer(path.virtual_tail)});
+                base.nonnull = nonnull; base.parameter_object = parameter; return base;
+            }
             auto table = emit(Opcode::Load,IRType::Ptr,{base.operand});
             auto row = Operand::integer(path.virtual_row); row.negative_integer = true;
             auto location = emit(Opcode::Index,IRType::I8,{table.operand,row});
             auto offset = emit(Opcode::Load,IRType::I64,{location.operand});
             base = emit(Opcode::Index,IRType::I8,{base.operand,offset.operand});
             base = emit(Opcode::Index,IRType::I8,{base.operand,Operand::integer(path.virtual_tail)});
-            base.nonnull = nonnull; return base;
+            base.nonnull = nonnull; base.parameter_object = parameter; return base;
         }
         auto offset = Operand::integer(path.total);
         offset.negative_integer = std::int64_t(sem.base_adjustments[steps].total) < 0;
         base = emit(Opcode::Index, IRType::I8,{base.operand, offset});
-        base.nonnull = nonnull;
+        base.nonnull = nonnull; base.parameter_object = parameter;
     }
     return base;
 }
@@ -239,7 +257,11 @@ Value Procedural::binding(EntityId e)
     const auto& entity = sem.entities[e];
     TypeId t = entity.type;
     if (sem.static_temporary(e).object) return Value(Operand::symbol(symbols[e]),type(t),t,true);
-    if (object_addresses[e]) return Value(Operand::value(object_addresses[e]),type(t),t,true);
+    if (object_addresses[e]) {
+        Value value(Operand::value(object_addresses[e]),type(t),t,true);
+        if (entity.kind == semantic::EntityKind::Parameter && sem.class_value(t)) value.parameter_object = e;
+        return value;
+    }
     if (sem.nonstatic_field(e)) {
         auto storage = sem.injected_storage(e);
         while (storage && sem.nonstatic_field(storage)) storage = sem.injected_storage(storage);
@@ -269,6 +291,7 @@ Value Procedural::binding(EntityId e)
     // Incomplete arrays are addressable without demanding a layout.
     IRType ir = sem.types[t].kind == TypeKind::Array ? IRType(IRType::Ptr) : type(t);
     Value result(location, ir, t, true);
+    if (entity.kind == semantic::EntityKind::Parameter && sem.class_value(t)) result.parameter_object = e;
     result.member_zero_adjustment = sem.member_pointer_zero_adjustment(e); return result;
 }
 BlockId Procedural::block() { return builder->block(0); }

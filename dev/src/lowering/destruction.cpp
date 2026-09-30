@@ -61,8 +61,11 @@ void Procedural::destructor_prologue(EntityId e)
 {
     auto m = sem.member_fact(e);
     bool needed = false;
-    for (unsigned j = 0; j < m.destruction_count; ++j)
-        needed |= sem.destructor_needed(sem.destruction_actions[m.destruction_begin+j].destructor);
+    for (unsigned j = 0; j < m.destruction_count; ++j) {
+        auto action = sem.destruction_actions[m.destruction_begin+j];
+        if (active_base_entry && action.base && sem.lifecycle_bases[action.base].virtual_base) continue;
+        needed |= sem.destructor_needed(action.destructor);
+    }
     if (!needed) return;
     destructor_handler = block(); destructor_end = block();
     emit(Opcode::EhCleanup, IRType(), {Operand::label(destructor_handler)});
@@ -73,6 +76,7 @@ void Procedural::destroy_subobjects(EntityId e)
     std::vector<semantic::DestructionAction> actions;
     for (unsigned j = 0; j < m.destruction_count; ++j) {
         auto action = sem.destruction_actions[m.destruction_begin+j];
+        if (active_base_entry && action.base && sem.lifecycle_bases[action.base].virtual_base) continue;
         if (sem.destructor_needed(action.destructor)) actions.push_back(action);
     }
     // Preserve the small O0 epilogue form, but bound duplicated cleanup work.
@@ -115,14 +119,15 @@ void Procedural::destroy_subobject(const semantic::DestructionAction& action)
 {
     if (sem.types[action.type].kind == TypeKind::Array) {
         array_destroy(action.destructor, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
-            {{action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type,action.type), action.field != 0}}, true);
+            {{action.field ? sem.entities[action.field].member_offset : sem.lifecycle_bases[action.base].offset, action.field != 0}}, true);
         return;
     }
     Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
     Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
-    Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type,action.type))});
-    Operand args[] = {Operand::symbol(symbol(action.destructor,!action.field)),at.operand};
-    guarded_call(Instruction(Opcode::Call,IRType::Void),args,2);
+    Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : sem.lifecycle_bases[action.base].offset)});
+    std::vector<Operand> args = {Operand::symbol(symbol(action.destructor,!action.field)),at.operand};
+    if (!action.field) lifecycle_arguments(action.destructor,args,action.base);
+    guarded_call(Instruction(Opcode::Call,IRType::Void),args.data(),args.size());
 }
 void Procedural::destructor_finish(EntityId e)
 {

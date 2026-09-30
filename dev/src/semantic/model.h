@@ -130,6 +130,8 @@ struct ClassFacts {
     std::uint32_t empty_types_begin = 0, empty_types_count = 0;
     bool aggregate = true, empty = true;
     std::uint32_t virtual_info = 0;
+    std::uint32_t lifecycle_begin = 0, lifecycle_count = 0;
+    std::uint32_t vtt_secondary = 0, vtt_base_size = 0, vtt_size = 0;
     std::uint64_t base_offset = 0;
     EntityId local_function = 0;
     unsigned local_ordinal = 0;
@@ -293,7 +295,7 @@ struct TransferAction {
     enum Kind : unsigned char { Scalar, Reference, Subobject, Unit, Storage, Empty } kind = Scalar;
     EntityId field = 0, function = 0;
     TypeId type = 0;
-    std::uint32_t default_conversions = 0;
+    std::uint32_t default_conversions = 0, base = 0;
     std::uint64_t bytes = 0, alignment = 1;
 };
 struct TypeArguments { std::uint32_t offset = 0, count = 0; std::uint64_t hash = 0; };
@@ -331,13 +333,24 @@ struct TemplateDefinitionOwner { EntityId specialization = 0; std::uint32_t path
 struct BaseRelation { EntityId base; std::uint32_t next; Access access = Access::Public; std::uint64_t offset = 0; bool virtual_base = false;
     BaseRelation(EntityId b, std::uint32_t n, Access a = Access::Public, bool v = false) : base(b), next(n), access(a), virtual_base(v) {} };
 struct ObjectAction { EntityId object, constructor; TypeId address_type; };
-struct SubobjectAction { EntityId field; TypeId type; NodeId initializer; EntityId constructor; };
+struct LifecycleBase {
+    EntityId type; std::uint64_t offset; std::uint32_t vtt; bool virtual_base;
+};
+struct SubobjectAction {
+    EntityId field; TypeId type; NodeId initializer; EntityId constructor; std::uint32_t base;
+    SubobjectAction(EntityId f, TypeId t, NodeId i, EntityId c, std::uint32_t b = 0)
+        : field(f), type(t), initializer(i), constructor(c), base(b) {}
+};
 struct InheritedArgument {
     EntityId parameter = 0, transfer = 0;
     NodeId value = 0;
     std::uint32_t conversion = 0, transfer_defaults = 0;
 };
-struct DestructionAction { EntityId field; TypeId type; EntityId destructor; };
+struct DestructionAction {
+    EntityId field; TypeId type; EntityId destructor; std::uint32_t base;
+    DestructionAction(EntityId f, TypeId t, EntityId d, std::uint32_t b = 0)
+        : field(f), type(t), destructor(d), base(b) {}
+};
 struct LifetimeState { EntityId object = 0, destructor = 0; std::uint32_t tail = 0, depth = 0; };
 struct ThrowUse { TypeId type = 0; NodeId source = 0; std::uint32_t conversion = 0; EntityId destructor = 0; };
 struct LifetimeUse { std::uint32_t entry = 0, exit = 0, target = 0; NodeId context = 0; };

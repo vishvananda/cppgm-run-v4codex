@@ -67,7 +67,11 @@ EntityId Analyzer::default_destructor(TypeId t, ScopeId s, bool demand)
 EntityId Analyzer::destination_destructor(TypeId t, ScopeId s)
 {
     auto dtor = default_destructor(t,s);
-    if (dtor && members[entities[dtor].member_info].virtual_member) members[entities[dtor].member_info].base_entry = true;
+    if (dtor) {
+        auto& member = members[entities[dtor].member_info];
+        member.complete_entry = true;
+        if (member.virtual_member) member.base_entry = true;
+    }
     return dtor;
 }
 void Analyzer::register_destruction(EntityId e)
@@ -150,11 +154,12 @@ void Analyzer::destructor_actions(EntityId e)
         }
         std::reverse(work.begin(), work.end());
         auto base_begin = work.size();
-        for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next) {
-            TypeId base = entities[bases[b].base].type;
+        for (unsigned j = 0; j < lifecycle_count(cls); ++j) {
+            auto id = lifecycle_begin(cls)+j;
+            TypeId base = entities[lifecycle_bases[id].type].type;
             EntityId dtor = default_destructor(base, entities[e].scope);
             members[entities[dtor].member_info].base_entry = true;
-            work.push_back({0, base, dtor});
+            work.push_back({0, base, dtor, id});
         }
         std::reverse(work.begin()+base_begin,work.end());
     }

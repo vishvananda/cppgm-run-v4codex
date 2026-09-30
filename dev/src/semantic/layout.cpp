@@ -150,6 +150,7 @@ void Analyzer::class_layout(EntityId e)
     empty.publish(info,class_facts[info].empty ? e : 0);
     class_facts[info].layout_state = FactState::Success;
     if (dynamic_class(e)) layout_virtual_views(e);
+    layout_lifecycle(e);
     } catch (...) {
         class_facts[info].layout_state = FactState::Failure; throw;
     }

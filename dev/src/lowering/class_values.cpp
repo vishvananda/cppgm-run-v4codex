@@ -41,12 +41,12 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
     }
     if (elided && fact.form == semantic::ExpressionForm::Construction) {
         if (terminal && result_type() == IRType::Void && sem.empty_class(fact.type) && !sem.constructor_needed(sem.facts[n].entity)) return;
-        construct(sem.facts[n].entity,n,destination); return;
+        construct(sem.facts[n].entity,n,destination,base); return;
     }
     if (elided && fact.form == semantic::ExpressionForm::Cast) {
         NodeId first = ast[n].first;
         NodeId operand = ast[n].kind == Kind::Cast ? ast[first].next : ast[ast[first].next].first;
-        construct_value(operand,sem.conversion_fact(fact.conversions),destination,terminal); return;
+        construct_value(operand,sem.conversion_fact(fact.conversions),destination,terminal,base); return;
     }
     if (elided && (ast[n].kind == Kind::Call || fact.form == semantic::ExpressionForm::OperatorCall)) {
         call(n,destination); return;
@@ -69,6 +69,7 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
     call_work.push_back(Operand::symbol(symbol(materialized.constructor, base))); call_work.push_back(destination.operand);
     for (unsigned j = 0; j < materialized.call.argument_count; ++j)
         call_work.push_back(converted(sem.call_argument(materialized.call,j),sem.conversion_fact(materialized.call.conversions+j)).operand);
+    if (base) lifecycle_arguments(materialized.constructor,call_work,construction_base);
     full_expression.suppress_guard = saved_guard;
     Instruction transfer(Opcode::Call,IRType::Void); transfer.copy_elision = materialized.elision_permission;
     if (scalar) emit(transfer,call_work.data()+begin,call_work.size()-begin);

@@ -23,7 +23,7 @@ struct Value {
     Operand operand;
     IRType ir;
     TypeId type = 0;
-    EntityId bit_field = 0;
+    EntityId bit_field = 0, parameter_object = 0;
     std::uint64_t init_offset = 0;
     bool address = false, cached = false, nonnull = false, member_zero_adjustment = false;
     bool initializing = false;
@@ -35,6 +35,12 @@ struct Value {
 // Program-owned linkage identities survive individual semantic TUs. Keys use
 // canonical typed ABI entities, never their rendered manglings.
 struct Linkage {
+    semantic::Index construction_symbols;
+    struct ValueBaseArgument { unsigned parameter; std::uint64_t offset; };
+    struct ParameterAbi { unsigned visible; lowir_model::Range hidden; };
+    std::vector<ValueBaseArgument> value_base_arguments;
+    std::vector<ParameterAbi> parameter_abis = std::vector<ParameterAbi>(1);
+    semantic::Index signature_parameter_abis;
     abi_mangle::Graph abi;
     semantic::Index external, native_names, incomplete_signatures;
     semantic::Index view_symbols, thunk_adjustments, thunk_result_pairs, thunk_pairs, thunk_symbols;
@@ -223,6 +229,15 @@ class Procedural {
     abi_mangle::AbiTerminalKind operator_terminal(EntityId id) const;
     SymbolId fresh_symbol(const std::string& preferred);
     SignatureId signature(TypeId t, FunctionId owner = FunctionId());
+    SignatureId function_signature(EntityId e, FunctionId owner, bool base = false);
+    void lifecycle_arguments(EntityId target, std::vector<Operand>& args, unsigned base);
+    Value lifecycle_address(EntityId base);
+    Value lifecycle_vtt(unsigned index);
+    bool active_base_entry = false;
+    unsigned construction_base = 0;
+    Value vtt_argument;
+    semantic::Index hidden_base_addresses, parameter_base_addresses;
+    void emit_construction_tables(EntityId cls, SymbolId table);
     void declare_function(EntityId e);
     void function_body(EntityId e, bool base = false);
     void reset_lifetime(EntityId e);
@@ -284,6 +299,7 @@ class Procedural {
     IRType type(TypeId t);
     bool reference(TypeId t) const;
     Value emit(Instruction i, const Operand* args, std::size_t count);
+    Value emit_raw(Instruction i, const Operand* args, std::size_t count);
     Value emit(Instruction i, const std::vector<Operand>& args);
     Value emit(Instruction i, std::initializer_list<Operand> args);
     Value emit(Opcode op, IRType t, std::initializer_list<Operand> args, Operation action = Operation::None);

@@ -99,6 +99,13 @@ public:
     unsigned local_ordinal(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_ordinal : local_enum_ordinals.get(e); }
     bool dynamic_class(EntityId e) const { return entities[e].class_info && class_facts[entities[e].class_info].virtual_info; }
     bool polymorphic(EntityId e) const { return dynamic_class(e) && virtual_class(e).polymorphic; }
+    std::vector<LifecycleBase> lifecycle_bases = std::vector<LifecycleBase>(1);
+    std::uint32_t lifecycle_begin(EntityId e) const { return class_facts[entities[e].class_info].lifecycle_begin; }
+    std::uint32_t lifecycle_count(EntityId e) const { return class_facts[entities[e].class_info].lifecycle_count; }
+    std::uint32_t vtt_secondary(EntityId e) const { return class_facts[entities[e].class_info].vtt_secondary; }
+    std::uint32_t vtt_base_size(EntityId e) const { return class_facts[entities[e].class_info].vtt_base_size; }
+    std::uint32_t vtt_size(EntityId e) const { return class_facts[entities[e].class_info].vtt_size; }
+    EntityId base_virtual_anchor(unsigned path) const { return subobjects[base_adjustments[path].subobject].anchor; }
     unsigned virtual_base_count(EntityId e) const { return class_facts[entities[e].class_info].virtual_bases_count; }
     EntityId virtual_base_type(EntityId e, unsigned i) const { return virtual_bases[class_facts[entities[e].class_info].virtual_bases_begin+i]; }
     std::uint64_t virtual_base_offset(EntityId e, EntityId base) const;
@@ -932,6 +939,7 @@ private:
     std::vector<VirtualClass> virtual_classes = std::vector<VirtualClass>(1);
     void layout_virtual_views(EntityId cls);
     void complete_virtual_bases(EntityId cls);
+    void layout_lifecycle(EntityId cls);
     void resolve_final_overriders(EntityId cls, VirtualClass& model);
     std::uint32_t prefix_subobject(std::uint32_t edge, std::uint32_t identity);
     bool contains_subobject(EntityId outer, std::uint32_t from, std::uint32_t to);

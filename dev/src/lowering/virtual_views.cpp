@@ -89,7 +89,7 @@ void Procedural::emit_adjustor_thunks()
         auto receiver = 1+unsigned(sem.indirect_value(returned));
         auto delta = Operand::integer(thunk.adjustment); delta.negative_integer = thunk.adjustment < 0;
         if (thunk.adjustment) args[receiver] = emit(Opcode::Index,IRType::I8,{args[receiver],delta}).operand;
-        auto result = emit(Instruction(Opcode::Call,sig.result),args.data(),args.size());
+        auto result = emit_raw(Instruction(Opcode::Call,sig.result),args.data(),args.size());
         if (thunk.result_adjustment || thunk.result_virtual_row) {
             auto project = [&](Value value) {
                 if (thunk.result_virtual_row) {

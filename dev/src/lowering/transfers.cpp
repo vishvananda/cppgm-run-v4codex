@@ -8,7 +8,7 @@ void Procedural::transfer_array(const semantic::TransferAction& action, Value so
     TypeId leaf = action.type;
     while (sem.types[leaf].kind == TypeKind::Array) { elements *= sem.types[leaf].bound; leaf = sem.types[leaf].child; }
     std::vector<InitProjection> path;
-    if (member_root) path.push_back({action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type,action.type), action.field != 0, action.field});
+    if (member_root) path.push_back({action.field ? sem.entities[action.field].member_offset : sem.lifecycle_bases[action.base].offset, action.field != 0, action.field});
     auto dtor = sem.type_destructor(leaf);
     bool partial = !assignment && !sem.function_nonthrowing(active_function) && sem.destructor_needed(dtor);
     SlotId cursor;
@@ -67,6 +67,7 @@ void Procedural::transfer_action(const semantic::TransferAction& action, Value s
             auto signature = sem.types[sem.entities[action.function].type];
             for (unsigned j = 1; j < signature.count; ++j)
                 args.push_back(converted(sem.default_argument_value(action.function,j),sem.conversion_fact(action.default_conversions+j-1)).operand);
+            if (!assignment && !action.field) lifecycle_arguments(action.function,args,action.base);
             guarded_call(Instruction(Opcode::Call, assignment ? type(signature.child) : IRType::Void), args.data(), args.size());
         }
         return;
@@ -85,14 +86,22 @@ void Procedural::transfer_body(EntityId e)
     bool vptr_written = assignment;
     auto project = [&](SlotId slot, const semantic::TransferAction& action) {
         Value root = emit(Opcode::Load, IRType::Ptr, {Operand::slot(slot)});
+        if (action.base && sem.lifecycle_bases[action.base].virtual_base && (assignment || slot == other)) {
+            auto row = Operand::integer(sem.virtual_base_row(cls,sem.lifecycle_bases[action.base].type)); row.negative_integer = true;
+            auto table = emit(Opcode::Load,IRType::Ptr,{root.operand});
+            auto at = emit(Opcode::Index,IRType::I8,{table.operand,row});
+            auto delta = emit(Opcode::Load,IRType::I64,{at.operand});
+            return emit(Opcode::Index,IRType::I8,{root.operand,delta.operand});
+        }
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
-        return emit(i, {root.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : sem.base_offset(sem.entities[sem.scopes[sem.entities[active_function].owner].entity].type,action.type))});
+        return emit(i, {root.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : sem.lifecycle_bases[action.base].offset)});
     };
     for (unsigned j = 0; j < m.transfer_count; ++j) {
         auto action = sem.transfers[m.transfer_begin+j];
+        if (!assignment && active_base_entry && action.base && sem.lifecycle_bases[action.base].virtual_base) continue;
         if (action.field && !vptr_written) { vpointer_store(cls); vptr_written = true; }
         if (action.kind == semantic::TransferAction::Empty) {
-            if (!assignment) constructor_cleanup({action.field,action.type,0,0});
+            if (!assignment) constructor_cleanup({action.field,action.type,0,0,action.base});
             continue;
         }
         if (action.kind == semantic::TransferAction::Storage) {
@@ -118,7 +127,7 @@ void Procedural::transfer_body(EntityId e)
         }
         if (!assignment && (j+1 < m.transfer_count || live)) {
             close_expression_region();
-            constructor_cleanup({action.field,action.type,0,action.function});
+            constructor_cleanup({action.field,action.type,0,action.function,action.base});
         }
         clean_inline(live,0); close_expression_region();
     }

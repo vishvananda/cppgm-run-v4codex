@@ -289,7 +289,7 @@ void Analyzer::constructor_actions(EntityId e)
         bool direct_base = false;
         for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next)
             direct_base |= bases[b].base == field;
-        if (!direct_member && !direct_base)
+        if (!direct_member && !direct_base && !virtual_base_index.get(key(cls,field)))
             throw std::runtime_error("initializer does not name a member or base");
         explicit_initializers.put(field, ast[id].next);
     }
@@ -303,7 +303,7 @@ void Analyzer::constructor_actions(EntityId e)
         }
         if (!variant) variant = class_facts[entities[cls].class_info].variant_initializer;
     }
-    auto add = [&](EntityId field, TypeId type, NodeId initial) {
+    auto add = [&](EntityId field, TypeId type, NodeId initial, unsigned base) {
         EntityId ctor = 0;
         if (!initial && field && class_value(type)) {
             auto info = entities[types[type].entity].class_info;
@@ -335,16 +335,17 @@ void Analyzer::constructor_actions(EntityId e)
                 members[entities[selected].member_info].polymorphic_base_entry |= dynamic_class(cls);
             }
         } else if (ctor) members[entities[ctor].member_info].complete_entry = true;
-        if (initial || ctor) work.push_back({field, type, initial, ctor});
+        if (initial || ctor) work.push_back({field, type, initial, ctor, base});
     };
-    for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next) {
-        EntityId base = bases[b].base;
+    for (unsigned j = 0; j < lifecycle_count(cls); ++j) {
+        auto id = lifecycle_begin(cls)+j;
+        EntityId base = lifecycle_bases[id].type;
         if (inherited && base == scopes[entities[inherited].owner].entity) {
             default_destructor(entities[base].type, scope);
             members[entities[inherited].member_info].base_entry = true;
             demand_member(inherited);
-            work.push_back({0, entities[base].type, 0, inherited});
-        } else add(0, entities[base].type, explicit_initializers.get(base));
+            work.push_back({0, entities[base].type, 0, inherited, id});
+        } else add(0, entities[base].type, explicit_initializers.get(base), id);
     }
     for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
         EntityId field = declarations[d].entity;
@@ -352,7 +353,7 @@ void Analyzer::constructor_actions(EntityId e)
         if (entities[cls].key == KW_UNION && field != variant) continue;
         NodeId init = explicit_initializers.get(field);
         if (!init) init = entities[field].initializer;
-        add(field, entities[field].type, init);
+        add(field, entities[field].type, init, 0);
     }
     members[m].action_begin = subobject_actions.size(); members[m].action_count = work.size();
     subobject_actions.insert(subobject_actions.end(), work.begin(), work.end());

@@ -96,6 +96,7 @@ bool Procedural::separate_base(EntityId id) const
     if (base_only_entry(id)) return false;
     if (e.member_info && sem.member_fact(id).defaulted_late && (sem.constructor_member(id) || sem.destructor_member(id))) return true;
     if (!e.member_info || !sem.member_fact(id).base_entry) return false;
+    if (sem.virtual_base_count(sem.scopes[e.owner].entity)) return true;
     if (sem.member_fact(id).virtual_member && sem.destructor_member(id)) return true;
     if (sem.member_fact(id).polymorphic_base_entry && !sem.synthetic_member(id)) return true;
     if (e.template_member && !sem.synthetic_member(id)) return sem.member_fact(id).complete_entry;
@@ -290,6 +291,28 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
         }
         p.parameters.push_back(param);
     }
+    Linkage::ParameterAbi plan; plan.visible = sig.parameters.count;
+    plan.hidden.begin = linkage.value_base_arguments.size();
+    for (unsigned j = 0; j < t.count; ++j) {
+        auto pt = sem.types.parameters[t.offset+j];
+        if (!sem.class_value(pt)) continue;
+        auto cls = sem.types[pt].entity;
+        if (!sem.entities[cls].complete) continue;
+        for (unsigned k = 0; k < sem.virtual_base_count(cls); ++k) {
+            linkage.value_base_arguments.push_back({j+unsigned(indirect_result)+unsigned(bool(member_owner)),
+                sem.virtual_base_offset(cls,sem.virtual_base_type(cls,k))});
+            Parameter param; param.type = IRType::Ptr;
+            lowir_model::Value value; value.type = IRType::Ptr; value.owner = owner; value.defined = true;
+            if (!owner) value.name = p.intern("%vbase"+std::to_string(sig.parameters.count));
+            p.values.push_back(value); param.value = ValueId(p.values.size()); p.parameters.push_back(param);
+            ++sig.parameters.count;
+        }
+    }
+    plan.hidden.count = linkage.value_base_arguments.size()-plan.hidden.begin;
+    if (plan.hidden.count) {
+        linkage.signature_parameter_abis.put(p.signatures.size()+1,linkage.parameter_abis.size());
+        linkage.parameter_abis.push_back(plan);
+    }
     p.signatures.push_back(sig);
     if (owner && (incomplete_signature || linkage.incomplete_signatures.get(owner.index)))
         linkage.incomplete_signatures.put(owner.index,incomplete_signature);
@@ -355,7 +378,7 @@ void Procedural::run()
             continue;
         }
         FunctionId id(p.functions.size()+1);
-        f.signature = signature(sem.call_type(e), id);
+        f.signature = function_signature(e,id,true);
         if (sem.function_nonthrowing(e)) p.signatures[f.signature.index-1].boundary.unwind = CUM_NO;
         p.parameters[p.signatures[f.signature.index-1].parameters.begin].object_bytes = sem.object_size(sem.entities[sem.scopes[sem.entities[e].owner].entity].type);
         if (sem.constructor_member(e) && sem.transfer_member(e))
@@ -414,6 +437,8 @@ void Procedural::function_body(EntityId e, bool base)
     // identities, with its own ABI signature and no implicit closure receiver.
     e = body_owner;
     reset_lifetime(e);
+    active_base_entry = base || base_only_entry(e);
+    construction_base = 0; hidden_base_addresses = semantic::Index(); vtt_argument = Value();
     returned = sem.types[sem.entities[e].type].child;
     start(block());
     Signature sig = p.signatures[p.functions[function.index-1].signature.index-1];
@@ -444,6 +469,23 @@ void Procedural::function_body(EntityId e, bool base)
             }
         } else emit(Opcode::Store, param.type, {Operand::value(param.value), Operand::slot(slot)});
     }
+    for (auto d = sem.scopes[sem.entities[e].scope].first_decl; d; d = sem.declarations[d].next) {
+        auto parameter = sem.declarations[d].entity;
+        auto pt = sem.entities[parameter].type;
+        if (sem.entities[parameter].kind != semantic::EntityKind::Parameter || !sem.class_value(pt)) continue;
+        auto cls = sem.types[pt].entity;
+        for (unsigned k = 0; k < sem.virtual_base_count(cls); ++k)
+            parameter_base_addresses.put((std::uint64_t(parameter)<<32)|sem.virtual_base_type(cls,k),
+                p.parameters[sig.parameters.begin+j++].value.index);
+    }
+    if (active_base_entry && (sem.constructor_member(e) || sem.destructor_member(e))) {
+        auto cls = sem.scopes[sem.entities[e].owner].entity;
+        if (sem.virtual_base_count(cls)) {
+            vtt_argument = Value(Operand::value(p.parameters[sig.parameters.begin+j++].value),IRType::Ptr);
+            for (unsigned k = 0; k < sem.virtual_base_count(cls); ++k)
+                hidden_base_addresses.put(sem.virtual_base_type(cls,k),p.parameters[sig.parameters.begin+j++].value.index);
+        }
+    }
     if (sem.member_fact(e).inherited_constructor)
         for (auto d = sem.scopes[sem.entities[e].scope].first_decl; d; d = sem.declarations[d].next) {
             auto parameter = sem.declarations[d].entity;
@@ -451,8 +493,7 @@ void Procedural::function_body(EntityId e, bool base)
                 activate_temporary(parameter);
         }
     if (sem.transfer_member(e) && sem.synthetic_member(e)) transfer_body(e);
-    else if (sem.constructor_member(e)) constructor_body(e,
-        base || (sem.member_fact(e).base_entry && !sem.member_fact(e).complete_entry));
+    else if (sem.constructor_member(e)) constructor_body(e,active_base_entry);
     if (sem.destructor_member(e)) {
         destructor_prologue(e);
         vpointer_store(sem.scopes[sem.entities[e].owner].entity);

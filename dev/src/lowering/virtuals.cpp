@@ -74,6 +74,7 @@ void Procedural::emit_vtables()
             if (sem.virtual_base_count(cls))
                 for (unsigned j = 0; j < model.views.size(); ++j)
                     if (model.views[j].store) declare(view_symbol(cls,j+1));
+            if (sem.virtual_base_count(cls)) emit_construction_tables(cls,table);
             continue;
         }
         p.symbols[table.index-1].metadata.binding = internal_entity(cls) ? SBM_INTERNAL : SBM_WEAK;
@@ -110,14 +111,7 @@ void Procedural::emit_vtables()
             if (grouped || sem.virtual_base_count(cls) ? views[j].store : views[j].offset != 0)
                 emit_view(grouped ? table : view_symbol(cls,j+1),views[j].type,views[j].begin,views[j].count,views[j].offset,views[j].vcall_rows);
         if (grouped) publish(p,table,group);
-        if (sem.virtual_base_count(cls)) {
-            auto vtt = abi_global(cls,abi_mangle::TargetKind::Vtt);
-            p.symbols[vtt.index-1].metadata.object_root = true;
-            std::vector<DataItem> entries = {relocation(table,model.address_point)};
-            for (unsigned j = 0; j < views.size(); ++j)
-                if (views[j].store) entries.push_back(relocation(view_symbol(cls,j+1),views[j].address_point));
-            publish(p,vtt,entries);
-        }
+        if (sem.virtual_base_count(cls)) emit_construction_tables(cls,table);
     }
 }
 void Procedural::vpointer_store(EntityId cls)
@@ -125,8 +119,13 @@ void Procedural::vpointer_store(EntityId cls)
     if (!sem.dynamic_class(cls)) return;
     auto symbol = vtables[sem.virtual_class_id(cls)];
     if (!symbol) throw std::logic_error("undemanded vtable in lifecycle entry");
-    auto store = [&](SymbolId symbol, std::uint64_t offset, std::uint64_t point_offset, EntityId anchor, std::uint64_t tail) {
-        Value object = emit(Opcode::Load,IRType::Ptr,{Operand::slot(this_slot)});
+    auto store = [&](SymbolId symbol, std::uint64_t offset, std::uint64_t point_offset, EntityId anchor, std::uint64_t tail, unsigned vtt_index) {
+        Value object;
+        if (anchor && active_base_entry) {
+            object = lifecycle_address(anchor);
+            object = emit(Opcode::Index,IRType::I8,{object.operand,Operand::integer(tail)});
+        } else {
+        object = emit(Opcode::Load,IRType::Ptr,{Operand::slot(this_slot)});
         if (anchor) {
             auto table = emit(Opcode::Load,IRType::Ptr,{object.operand});
             auto row = Operand::integer(sem.virtual_base_row(cls,anchor)); row.negative_integer = true;
@@ -135,16 +134,24 @@ void Procedural::vpointer_store(EntityId cls)
             object = emit(Opcode::Index,IRType::I8,{object.operand,delta.operand});
             object = emit(Opcode::Index,IRType::I8,{object.operand,Operand::integer(tail)});
         } else if (offset) object = emit(Opcode::Index,IRType::I8,{object.operand,Operand::integer(offset)});
-        Value table = emit(Opcode::Addr,IRType(),{Operand::symbol(symbol)});
-        Value point = emit(Opcode::Index,IRType::I8,{table.operand,Operand::integer(point_offset)});
+        }
+        Value point;
+        if (active_base_entry && sem.virtual_base_count(cls)) {
+            auto location = lifecycle_vtt(vtt_index);
+            point = emit(Opcode::Load,IRType::Ptr,{location.operand});
+        } else {
+            Value table = emit(Opcode::Addr,IRType(),{Operand::symbol(symbol)});
+            point = emit(Opcode::Index,IRType::I8,{table.operand,Operand::integer(point_offset)});
+        }
         emit(Opcode::Store,IRType::Ptr,{point.operand,object.operand});
     };
-    store(symbol,0,sem.virtual_class(cls).address_point,0,0);
+    store(symbol,0,sem.virtual_class(cls).address_point,0,0,0);
     const auto& model = sem.virtual_class(cls);
     bool grouped = model.key_function && !sem.entities[cls].specialization && !sem.virtual_base_count(cls);
     const auto& views = sem.virtual_class(cls).views;
+    unsigned vtt_index = sem.vtt_secondary(cls);
     for (unsigned j = 0; j < views.size(); ++j)
-        if (views[j].store) store(grouped ? symbol : view_symbol(cls,j+1),views[j].offset,grouped ? views[j].group_address_point : views[j].address_point,views[j].virtual_anchor,views[j].virtual_tail);
+        if (views[j].store) store(grouped ? symbol : view_symbol(cls,j+1),views[j].offset,grouped ? views[j].group_address_point : views[j].address_point,views[j].virtual_anchor,views[j].virtual_tail,vtt_index++);
 }
 Value Procedural::virtual_function(Value object, unsigned slot)
 {
@@ -244,6 +251,8 @@ SignatureId Procedural::virtual_signature(EntityId e)
     auto cls = sem.scopes[sem.entities[e].owner].entity;
     p.parameters[sig.parameters.begin + sem.indirect_value(sem.types[sem.entities[e].type].child)].object_bytes = sem.object_size(sem.entities[cls].type);
     if (sem.function_nonthrowing(e)) sig.boundary.unwind = ir_model::CUM_NO;
+    if (auto plan = linkage.signature_parameter_abis.get(source.index))
+        linkage.signature_parameter_abis.put(p.signatures.size()+1,plan);
     p.signatures.push_back(sig); return virtual_signatures[id] = SignatureId(p.signatures.size());
 }
 } }
