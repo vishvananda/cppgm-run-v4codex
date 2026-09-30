@@ -15,15 +15,17 @@ void Procedural::global_bit_field_value(EntityId member, std::uint64_t offset, s
 {
     using lowir_model::DataItem;
     auto field = sem.field_fact(member);
-    std::uint64_t mask = field.width == 64 ? ~std::uint64_t(0) : (std::uint64_t(1) << field.width)-1;
-    std::uint64_t packed = (value & mask) << field.shift;
+    using Wide = semantic::Analyzer::WideInteger;
+    Wide mask = field.width == 128 ? ~Wide(0) : (Wide(1) << field.width)-1;
+    auto decoded = sem.integer_value(semantic::Constant(field.storage_type,value));
+    Wide packed = (decoded & mask) << field.shift;
     mask <<= field.shift;
     auto end = offset + (field.shift + field.width + 7)/8;
     if (bytes < end) {
         DataItem zero; zero.zero_bytes = end-bytes; p.data.push_back(zero); bytes = end;
     }
     // Layout may place the storage unit over earlier ordinary scalar fields.
-    // Patch only the represented bits. At most eight trailing bytes are visited;
+    // Patch only the represented bits. At most sixteen trailing bytes are visited;
     // a large zero span is split without materializing its bytes.
     for (unsigned byte = 0; mask; ++byte, mask >>= 8, packed >>= 8) {
         unsigned bits = mask & 255;
@@ -48,8 +50,11 @@ void Procedural::global_bit_field_value(EntityId member, std::uint64_t offset, s
                 if (item.kind != DataItem::Scalar || !item.type.integer())
                     throw std::logic_error("bit-field overlaps nonscalar static data");
                 unsigned shift = (position-at)*8;
-                auto selected = std::uint64_t(bits) << shift;
-                p.data[index].value.data.integer = (item.value.data.integer & ~selected) | ((packed & bits) << shift);
+                auto selected = Wide(bits) << shift;
+                auto prior = (Wide(item.value.integer_high()) << 64) | item.value.data.integer;
+                auto merged = (prior & ~selected) | ((packed & bits) << shift);
+                p.data[index].value.data.integer = std::uint64_t(merged);
+                if (item.type == IRType::I128) p.data[index].value.integer_high(std::uint64_t(merged >> 64));
             }
             break;
         }

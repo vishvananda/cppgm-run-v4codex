@@ -15,7 +15,7 @@ IRType Procedural::type(TypeId id)
     case TypeKind::Fundamental: {
         static const IRType::Kind kinds[] = {IRType::I8, IRType::I16, IRType::I32, IRType::I64, IRType::I64,
             IRType::U8, IRType::U16, IRType::U32, IRType::I64, IRType::I64, IRType::I32, IRType::I8,
-            IRType::U16, IRType::U32, IRType::U8, IRType::F32, IRType::F64, IRType::F80, IRType::Void, IRType::I64};
+            IRType::U16, IRType::U32, IRType::U8, IRType::F32, IRType::F64, IRType::F80, IRType::Void, IRType::I64, IRType::I128, IRType::I128};
         return kinds[t.fundamental];
     }
     default: throw std::runtime_error("unsupported lowering type");
@@ -102,7 +102,10 @@ Value Procedural::coerce(Value v, IRType to, bool unsign, bool to_unsigned, bool
             if (!unsign && (bits & (std::uint64_t(1) << (v.ir.width()-1)))) bits |= ~mask;
         }
         if (to.width() < 64) bits &= (std::uint64_t(1) << to.width()) - 1;
-        return Value(Operand::integer(bits), to);
+        auto literal = Operand::integer(bits);
+        if (to == IRType::I128) literal.integer_high(v.ir == IRType::I128 ? v.operand.integer_high() :
+            !unsign && (bits >> 63) ? ~std::uint64_t(0) : 0);
+        return Value(literal, to);
     }
     return emit(i, {v.operand});
 }

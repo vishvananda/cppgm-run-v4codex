@@ -63,14 +63,16 @@ TypeId Analyzer::arithmetic_type(TypeId a, TypeId b)
     }
     // Rank is distinct from width: both long and long long are 64-bit on LP64.
     unsigned ar = types[a].fundamental, br = types[b].fundamental;
-    if (is_unsigned(a)) ar -= FT_UNSIGNED_CHAR;
-    if (is_unsigned(b)) br -= FT_UNSIGNED_CHAR;
+    if (width(a) == 128) ar = FT_LONG_LONG_INT+1;
+    else if (is_unsigned(a)) ar -= FT_UNSIGNED_CHAR;
+    if (width(b) == 128) br = FT_LONG_LONG_INT+1;
+    else if (is_unsigned(b)) br -= FT_UNSIGNED_CHAR;
     if (is_unsigned(a) == is_unsigned(b)) return ar >= br ? a : b;
     TypeId u = is_unsigned(a) ? a : b, s = is_unsigned(a) ? b : a;
     unsigned ur = is_unsigned(a) ? ar : br, sr = is_unsigned(a) ? br : ar;
     if (ur >= sr) return u;
     if (width(s) > width(u)) return s;
-    return types.fundamental(EFundamentalType(types[s].fundamental + FT_UNSIGNED_CHAR));
+    return types.fundamental(width(s) == 128 ? FT_UINT128 : EFundamentalType(types[s].fundamental + FT_UNSIGNED_CHAR));
 }
 bool Analyzer::object_pointer(TypeId t)
 {

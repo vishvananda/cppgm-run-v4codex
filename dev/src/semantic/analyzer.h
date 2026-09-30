@@ -80,6 +80,14 @@ public:
     bool static_initialization(EntityId e);
     std::size_t static_requests = 0, static_hits = 0;
     long double floating_value(Constant value) const;
+    using WideInteger = unsigned __int128;
+    WideInteger integer_value(Constant value) const;
+    bool integral_type(TypeId t) const { return integral(t); }
+    unsigned type_width(TypeId t) const { return width(t); }
+    Constant integer_constant(TypeId type, WideInteger value);
+    bool negative_constant(Constant value) const;
+    bool same_integer_value(Constant a, Constant b) const;
+    std::string integer_text(Constant value) const;
     Constant constant_fact(NodeId n) const { return facts[n].value ? constants[facts[n].value] : Constant(); }
     std::uint64_t object_size(TypeId t) { return size(t); }
     std::uint64_t object_alignment(TypeId t) { return size(t, true); }
@@ -596,6 +604,9 @@ private:
     struct FloatingConstant { long double value; std::uint64_t significand; std::uint16_t exponent; std::uint32_t next; };
     std::vector<FloatingConstant> floating_constants = std::vector<FloatingConstant>(1);
     Index floating_constant_index;
+    struct WideConstant { WideInteger value; std::uint32_t next; };
+    std::vector<WideConstant> wide_constants = std::vector<WideConstant>(1);
+    Index wide_constant_index;
     bool floating_type(TypeId type) const;
     Constant floating_constant(TypeId type, long double value);
     Constant floating_conversion(Constant value, TypeId target);

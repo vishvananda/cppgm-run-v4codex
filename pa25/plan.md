@@ -19,6 +19,16 @@ and final binaries for equivalent-workload A/A + ABBA compiler/RSS/runtime/text
 measurements. Extend adjacent scalar behavior as the same understanding permits.
 No optional optimization or speedup claim is planned.
 
+Wide scalar increment: all six original wide failures now execute successfully;
+intermediate PA25 **70/101**, earlier **4152/4152**. Canonical 128-bit payloads
+are interned per Analyzer (zero is ID 0); Constant and ABI Node sizes stay fixed.
+Arithmetic/conversion, static data, template keys/names, bounds, enum constants,
+switches and bit-fields consume typed payloads. Native pair selection is reused.
+16 explicit scalar controls include 96 seeded full-width pairs, signed-overflow
+rejections and a host-ABI symbol comparison (validation only). A concrete member
+comparison/cast parsing failure found there is fixed with the memoized delimiter
+probe. Compiler performance and final required checks remain pending.
+
 ## Design/spec alignment and completed group
 
 `toolchain/driver` owns options and one-source-TU compilation. Shared
@@ -53,7 +63,7 @@ output); there are no global retries or fixed-point transforms.
 |---|---:|---|
 | Native C++ runtime | 12 | Recorded RTTI/allocation/pure-virtual roles -> actual native support definitions; dynamic-cast must consume hierarchy data |
 | Source EH/runtime | 14 | Catch clauses, payload type/lifetime and function-try boundaries -> matching/unwind/runtime; PA24's scalar LowIR EH is insufficient |
-| Canonical wide source types | 6 | Token/type recognition, arithmetic conversion and source lowering -> existing native i128 operations |
+| Canonical wide source types | 0 | Completed scalar group; final validation/performance pending |
 | GNU statement expressions | 3 | Parser/typed statement result/lifetime -> lowering, including enclosing return |
 | Floating builtins | 1 | Semantic builtin identity for nanl/isnan -> typed constant/lowering |
 | Floating calculator | 1 | Five one-ULP f64 differences in 1M outputs; execution/oracle ownership still to establish, references preserved |

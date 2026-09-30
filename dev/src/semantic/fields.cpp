@@ -9,11 +9,12 @@ Constant Analyzer::constant_field_value(EntityId field, Constant value)
     if (!value.valid || !f.bit_field || !f.width) return value;
     // Match the target's stored bit-field value before any later initializer
     // or constexpr read observes it. Signed fields use the runtime sign policy.
-    if (f.width < 64) {
-        auto mask = (std::uint64_t(1) << f.width)-1;
-        value.bits &= mask;
-        if (!is_unsigned(f.storage_type) && (value.bits & (std::uint64_t(1) << (f.width-1))))
-            value.bits |= ~mask;
+    if (f.width < 128) {
+        auto mask = (WideInteger(1) << f.width)-1;
+        auto bits = integer_value(value) & mask;
+        if (!is_unsigned(f.storage_type) && (bits & (WideInteger(1) << (f.width-1))))
+            bits |= ~mask;
+        value = integer_constant(value.type,bits);
     }
     return value;
 }
@@ -26,9 +27,9 @@ std::uint64_t Analyzer::alignment_attributes(NodeId n, ScopeId s)
         if (attribute.type) value = size(type_id(attribute.operand, s), true);
         else {
             auto c = evaluate(attribute.operand, s);
-            if (!c.valid || !integral(c.type) || (!is_unsigned(c.type) && std::int64_t(c.bits) < 0))
+            if (!c.valid || !integral(c.type) || (negative_constant(c) || integer_value(c) > ~std::uint64_t(0)))
                 throw std::runtime_error("invalid alignment constant");
-            value = c.bits;
+            value = std::uint64_t(integer_value(c));
         }
         if (value && (value & (value-1))) throw std::runtime_error("alignment is not a power of two");
         result = std::max(result, value);
@@ -55,7 +56,7 @@ void Analyzer::bit_field_declaration(NodeId n, ScopeId s)
         TypeId t = declarator(d, base, s);
         if (!integral(t)) throw std::runtime_error("nonintegral bit-field");
         Constant count = evaluate(bound, s);
-        if (!count.valid || !integral(count.type) || (!is_unsigned(count.type) && std::int64_t(count.bits) < 0))
+        if (!count.valid || !integral(count.type) || (negative_constant(count) || integer_value(count) > ~std::uint64_t(0)))
             throw std::runtime_error("invalid bit-field width");
         IdentifierId name = terminal(decl_name(d));
         if (name && !count.bits) throw std::runtime_error("named zero-width bit-field");
@@ -72,11 +73,11 @@ void Analyzer::bit_field_properties(EntityId e, Constant count)
 {
     auto t = entities[e].type;
     if (!integral(t)) throw std::runtime_error("nonintegral bit-field");
-    if (!count.valid || !integral(count.type) || (!is_unsigned(count.type) && std::int64_t(count.bits) < 0))
+    if (!count.valid || !integral(count.type) || (negative_constant(count) || integer_value(count) > ~std::uint64_t(0)))
         throw std::runtime_error("invalid bit-field width");
     if (entities[e].name && !count.bits) throw std::runtime_error("named zero-width bit-field");
-    auto& f = field_metadata(e); f.bit_field = true; f.declared_width = count.bits;
+    auto& f = field_metadata(e); f.bit_field = true; f.declared_width = std::uint64_t(integer_value(count));
     f.storage_type = types[t].kind == TypeKind::Named ? entities[types[t].entity].underlying : types.unqualified(t);
-    f.width = std::min<std::uint64_t>(count.bits,width(f.storage_type));
+    f.width = std::min<std::uint64_t>(std::uint64_t(integer_value(count)),width(f.storage_type));
 }
 } }

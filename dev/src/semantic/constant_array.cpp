@@ -6,7 +6,7 @@ std::uint32_t Analyzer::constant_array_child(std::uint32_t plan, Constant index)
 {
     if (!plan || !index.valid || !integral(index.type)) return 0;
     auto action = initializers[plan]; auto type = types[action.type];
-    if (type.kind != TypeKind::Array || index.bits >= type.bound || action.kind != InitKind::Group) return 0;
+    if (type.kind != TypeKind::Array || integer_value(index) >= type.bound || action.kind != InitKind::Group) return 0;
     auto range_id = constant_array_indices.get(plan);
     if (!range_id) {
         ConstantArrayIndex range; range.first = constant_array_children.size();
@@ -16,10 +16,10 @@ std::uint32_t Analyzer::constant_array_child(std::uint32_t plan, Constant index)
     }
     auto range = constant_array_ranges[range_id];
     auto begin = constant_array_children.begin()+range.first, end = begin+range.count;
-    auto found = std::upper_bound(begin,end,index.bits,[&](std::uint64_t at,std::uint32_t child){ return at < initializers[child].index; });
+    auto found = std::upper_bound(begin,end,integer_value(index),[&](std::uint64_t at,std::uint32_t child){ return at < initializers[child].index; });
     if (found == begin) return 0;
     auto child = *--found;
-    return index.bits-initializers[child].index < initializers[child].count ? child : 0;
+    return integer_value(index)-initializers[child].index < initializers[child].count ? child : 0;
 }
 std::uint32_t Analyzer::constant_array_projection(NodeId n, ScopeId s)
 {
@@ -33,11 +33,11 @@ std::uint32_t Analyzer::constant_array_projection(NodeId n, ScopeId s)
 }
 Constant Analyzer::constant_array_element(std::uint32_t plan, Constant index)
 {
-    if (!plan || !index.valid || !integral(index.type) || index.bits >= types[initializers[plan].type].bound) return Constant();
+    if (!plan || !index.valid || !integral(index.type) || integer_value(index) >= types[initializers[plan].type].bound) return Constant();
     auto action = initializers[plan];
     if (action.kind == InitKind::String) {
         auto literal = ast[action.source].literal;
-        if (index.bits < ast.literals[literal].elements) return literal_element(literal,index);
+        if (integer_value(index) < ast.literals[literal].elements) return literal_element(literal,index);
         return convert(Constant(types.fundamental(FT_INT),0),types[action.type].child);
     }
     auto child = constant_array_child(plan,index);

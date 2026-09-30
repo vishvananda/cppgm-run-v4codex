@@ -63,10 +63,10 @@ void Analyzer::write_expression(std::ostream& out, NodeId n, unsigned depth, Typ
     if (kind == Kind::Literal) {
         out << ' ';
         if (zero_cast) out << 0;
-        else if (e.form == ExpressionForm::ConstantQuery) out << constants[facts[n].value].bits;
+        else if (e.form == ExpressionForm::ConstantQuery) out << integer_text(constants[facts[n].value]);
         else if (e.entity && entities[e.entity].kind == EntityKind::Enumerator) {
             Constant c = entities[e.entity].constant;
-            if (is_unsigned(c.type)) out << c.bits; else out << static_cast<std::int64_t>(c.bits);
+            out << integer_text(c);
         } else {
             if (node.kind == Kind::KeywordLiteral) out << simple_name(node.op) << ':';
             spelling(out, node.text);

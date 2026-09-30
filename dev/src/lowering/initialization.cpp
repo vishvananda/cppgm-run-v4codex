@@ -50,7 +50,7 @@ DataItem Procedural::constant_data(NodeId n, TypeId t)
     DataItem d; d.type = type(t);
     if (value.kind == semantic::StaticValue::Address) { d.kind = DataItem::Address; d.symbol = symbol(value.entity); d.addend = value.addend; }
     else if (value.kind == semantic::StaticValue::String) { string_literal(value.string); d.kind = DataItem::Address; d.symbol = strings[value.string]; d.addend = value.addend; }
-    else if (value.kind == semantic::StaticValue::Integer) { d.kind = DataItem::Scalar; d.value = Operand::integer(value.bits); }
+    else if (value.kind == semantic::StaticValue::Integer) { d.kind = DataItem::Scalar; d.value = integer_operand(semantic::Constant(t,value.bits)); }
     else if (value.kind == semantic::StaticValue::Floating) { d.kind = DataItem::Scalar; d.value = Operand::floating(value.floating); }
     else throw std::runtime_error("unsupported static initializer");
     return d;
@@ -137,7 +137,7 @@ void Procedural::global(EntityId e)
             }
             else if (!entity.initializer && entity.constant.valid) {
                 DataItem d; d.kind = DataItem::Scalar; d.type = g.type;
-                d.value = type(entity.constant.type).floating() ? Operand::floating(sem.floating_value(entity.constant)) : Operand::integer(entity.constant.bits); p.data.push_back(d);
+                d.value = type(entity.constant.type).floating() ? Operand::floating(sem.floating_value(entity.constant)) : integer_operand(entity.constant); p.data.push_back(d);
             }
             else if (!entity.initializer && sem.types[t].kind == TypeKind::MemberPointer) global_data(0,t);
             else if (!entity.initializer && !g.structured) { DataItem d; d.zero_bytes = g.type.bytes(); p.data.push_back(d); }

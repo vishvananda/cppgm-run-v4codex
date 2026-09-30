@@ -119,6 +119,12 @@ NodeId Parser::name_part(bool force_template, ScopeId owner, bool qualified)
             potential = end && in.is("(",end);
         }
     }
+    // A type-looking RHS can also be a functional cast in a relational
+    // expression (object.member < T(value)). Inferred template syntax must
+    // have a balanced angle suffix; explicit/known template names keep their
+    // grammatical obligation. The live cursor memoizes this delimiter probe.
+    if (binding.category == Category::Unknown && !force_template && in.is("<") &&
+        ast[part].op != KW_OPERATOR && ast[part].op != OP_COMPL && !probe_angles(0)) potential = false;
     if (in.is("<") && potential && (!binding.alternatives || force_template || probe_angles(0))) {
         if (qualified && !explicit_template) ++qualified_angles;
         ast.append(part, template_arguments());

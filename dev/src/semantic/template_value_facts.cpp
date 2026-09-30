@@ -59,9 +59,7 @@ std::uint32_t Analyzer::query_value(QueryId id)
                 auto result = constant_query_conversion(operand,conversions[fact.expression.conversions]);
                 value = convert(result,query.type,true);
                 if (value.valid && query.op == TOK_INVALID) {
-                    __int128 before = is_unsigned(result.type) ? __int128(result.bits) : __int128(static_cast<std::int64_t>(result.bits));
-                    __int128 after = is_unsigned(value.type) ? __int128(value.bits) : __int128(static_cast<std::int64_t>(value.bits));
-                    if (before != after) value = Constant();
+                    if (!same_integer_value(result,value)) value = Constant();
                 }
             } else if (query.op == TOK_INVALID) {
                 auto arg = convert_argument(value_argument_id(operand),query.type);
@@ -87,7 +85,7 @@ std::uint32_t Analyzer::query_value(QueryId id)
                 else {
                     value = convert(value,fact.expression.type,true);
                     if (query.op == OP_MINUS) value = floating_type(value.type) ? floating_constant(value.type,-floating_value(value)) : binary(OP_MINUS,Constant(value.type,0),value,true);
-                    else if (query.op == OP_COMPL) value = convert(Constant(value.type,~value.bits),value.type);
+                    else if (query.op == OP_COMPL) value = integer_constant(value.type,~integer_value(value));
                     else if (query.op != OP_PLUS) value = Constant();
                 }
             } else value = Constant();

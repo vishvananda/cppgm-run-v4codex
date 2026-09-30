@@ -240,7 +240,10 @@ Constant Analyzer::constant_pointer_binary(ETokenType op, Constant a, Constant b
     if (!a.valid || !b.valid) return Constant();
     if (op == OP_PLUS && !pointer(a.type)) std::swap(a,b);
     if (pointer(a.type) && integral(b.type) && (op == OP_PLUS || op == OP_MINUS)) {
-        __int128 delta = is_unsigned(b.type) ? __int128(b.bits) : __int128(std::int64_t(b.bits));
+        auto raw = integer_value(b);
+        if ((!negative_constant(b) && raw > ~std::uint64_t(0)) ||
+            (negative_constant(b) && 0-raw > ~std::uint64_t(0))) return Constant();
+        __int128 delta = __int128(raw);
         if (op == OP_MINUS) delta = -delta;
         if (!a.bits) return delta ? Constant() : a;
         auto address = constant_addresses[a.bits];

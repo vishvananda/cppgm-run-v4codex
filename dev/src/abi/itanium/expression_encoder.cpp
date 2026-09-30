@@ -24,6 +24,15 @@ const char* operation_code(Id op) {
 }
 void Encoder::literal(const Node& n) {
     output += 'L'; type(n.a);
+    if (n.kind == Kind::WideValue) {
+        unsigned __int128 bits = (static_cast<unsigned __int128>(n.c) << 96) |
+            (static_cast<unsigned __int128>(n.b) << 64) | n.value;
+        if (g[n.a].a == ABI_BUILTIN_TYPE_INT128 && (bits >> 127)) { output += 'n'; bits = 0-bits; }
+        char digits[40]; unsigned count = 0;
+        do { digits[count++] = char('0'+bits%10); bits /= 10; } while (bits);
+        while (count) output += digits[--count];
+        output += 'E'; return;
+    }
     std::uint64_t bits = n.value;
     bool negative = static_cast<std::int64_t>(bits) < 0;
     const Node& t = g[n.a];
@@ -46,7 +55,7 @@ void Encoder::argument(Id id) {
     ++g.stats.emitted_nodes;
     switch (n.kind) {
     case Kind::TypeArgument: type(n.a); break;
-    case Kind::Value: literal(n); break;
+    case Kind::Value: case Kind::WideValue: literal(n); break;
     case Kind::DependentValue:
         output += "Tn"; type(n.a); literal(g[n.b]); break;
     case Kind::ExpressionArgument: output += 'X'; expression(n.a); output += 'E'; break;
@@ -82,7 +91,7 @@ void Encoder::expression(Id id) {
     case Kind::ExprParameter: parameter(n.value); break;
     case Kind::ExprFunctionParameter:
         output += "fp"; if (n.value) output += std::to_string(n.value - 1); output += '_'; break;
-    case Kind::Value: literal(n); break;
+    case Kind::Value: case Kind::WideValue: literal(n); break;
     case Kind::Unary: output += operation_code(n.b); expression(n.a); break;
     case Kind::Binary:
         output += operation_code(n.c); expression(n.a); expression(n.b); break;

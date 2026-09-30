@@ -310,7 +310,7 @@ void Procedural::switch_statement(NodeId n)
     for (NodeId c : cases) {
         auto constant = sem.constant_fact(ast[c].first);
         if (!constant.valid) throw std::logic_error("missing semantic case value");
-        operands.push_back(Operand::integer(constant.bits)); operands.push_back(Operand::label(labels[c]));
+        operands.push_back(integer_operand(constant)); operands.push_back(Operand::label(labels[c]));
     }
     emit(Instruction(Opcode::Switch), operands);
     statement(body); jump(end); start(end); break_target = saved;

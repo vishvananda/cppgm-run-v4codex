@@ -26,7 +26,7 @@ void Procedural::global_constant_fields(const semantic::ConstantObject& plan, Ty
         lowir_model::DataItem item; item.type = type(field.type);
         if (value.kind == semantic::StaticValue::Address) { item.kind = lowir_model::DataItem::Address; item.symbol = symbol(value.entity); item.addend = value.addend; }
         else if (value.kind == semantic::StaticValue::String) { string_literal(value.string); item.kind = lowir_model::DataItem::Address; item.symbol = strings[value.string]; item.addend = value.addend; }
-        else { item.kind = lowir_model::DataItem::Scalar; item.value = value.kind == semantic::StaticValue::Floating ? Operand::floating(value.floating) : Operand::integer(value.bits); }
+        else { item.kind = lowir_model::DataItem::Scalar; item.value = value.kind == semantic::StaticValue::Floating ? Operand::floating(value.floating) : integer_operand(semantic::Constant(field.type,value.bits)); }
         p.data.push_back(item); end = offset + type(field.type).bytes();
     }
     if (sem.object_size(t) > end) { lowir_model::DataItem zero; zero.zero_bytes = sem.object_size(t)-end; p.data.push_back(zero); }
@@ -34,6 +34,14 @@ void Procedural::global_constant_fields(const semantic::ConstantObject& plan, Ty
 } }
 
 namespace cppgm { namespace lowering {
+Operand Procedural::integer_operand(semantic::Constant c)
+{
+    if (type(c.type) != IRType::I128 || sem.types[c.type].kind == TypeKind::MemberPointer)
+        return Operand::integer(c.bits);
+    auto bits = sem.integer_value(c);
+    auto result = Operand::integer(std::uint64_t(bits));
+    result.integer_high(std::uint64_t(bits >> 64)); return result;
+}
 Value Procedural::constant_operand(semantic::Constant c, TypeId t)
 {
     auto v = sem.constant_static_value(c);
@@ -50,6 +58,6 @@ Value Procedural::constant_operand(semantic::Constant c, TypeId t)
         result.type = t; result.address = reference(c.type); return result;
     }
     if (v.kind == semantic::StaticValue::Invalid) throw std::logic_error("missing lowered scalar constant fact");
-    return Value(v.kind == semantic::StaticValue::Floating ? Operand::floating(v.floating) : Operand::integer(v.bits),type(t),t);
+    return Value(v.kind == semantic::StaticValue::Floating ? Operand::floating(v.floating) : integer_operand(semantic::Constant(c.type,v.bits)),type(t),t);
 }
 } }

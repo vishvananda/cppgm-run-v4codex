@@ -193,9 +193,7 @@ ArgumentId Analyzer::convert_argument(ArgumentId arg, TypeId target)
     if (!value.valid || !integral(target)) return 0;
     if ((scoped_enum(value.type) || scoped_enum(target)) && types.unqualified(value.type) != types.unqualified(target)) return 0;
     auto converted = convert(value,types.unqualified(target));
-    __int128 before = is_unsigned(value.type) ? __int128(value.bits) : __int128(static_cast<std::int64_t>(value.bits));
-    __int128 after = is_unsigned(converted.type) ? __int128(converted.bits) : __int128(static_cast<std::int64_t>(converted.bits));
-    if (before != after) return 0;
+    if (!same_integer_value(value,converted)) return 0;
     TypeQuery q; q.type = converted.type; q.value = converted.bits;
     return value_argument_id(intern_query(q,{}));
 }

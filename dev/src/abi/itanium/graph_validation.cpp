@@ -8,9 +8,9 @@ enum class Role { Type, Argument, Expression, Context, Entity };
 bool accepts(Kind kind, Role role) {
     switch (role) {
     case Role::Type: return kind <= Kind::Lambda;
-    case Role::Argument: return kind >= Kind::TypeArgument && kind <= Kind::EntityArgument;
+    case Role::Argument: return kind == Kind::WideValue || (kind >= Kind::TypeArgument && kind <= Kind::EntityArgument);
     case Role::Expression:
-        return kind == Kind::Value || kind == Kind::AlignofType || kind == Kind::DestructorName || kind == Kind::ExprThis || kind == Kind::InitList || kind == Kind::TypeidType || kind == Kind::TypeidExpression || kind == Kind::NewExpression || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
+        return kind == Kind::Value || kind == Kind::WideValue || kind == Kind::AlignofType || kind == Kind::DestructorName || kind == Kind::ExprThis || kind == Kind::InitList || kind == Kind::TypeidType || kind == Kind::TypeidExpression || kind == Kind::NewExpression || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
     case Role::Context: return kind == Kind::RawContext || kind == Kind::FunctionEntity;
     case Role::Entity: return kind >= Kind::FunctionEntity && kind <= Kind::SymbolEntity;
     }
@@ -46,7 +46,7 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
         return;
     case Kind::Cv: require(b <= 3); edge(a, Role::Type); break;
     case Kind::Pointer: case Kind::Reference: case Kind::RvalueReference:
-    case Kind::Pack: case Kind::Vector: case Kind::TypeArgument: case Kind::Value:
+    case Kind::Pack: case Kind::Vector: case Kind::TypeArgument: case Kind::Value: case Kind::WideValue:
     case Kind::TemplateEntity: case Kind::SizeofType: case Kind::AlignofType: case Kind::TypeidType: edge(a, Role::Type); break;
     case Kind::TypeidExpression: edge(a, Role::Expression); break;
     case Kind::Vendor: edge(a, Role::Type); text(b); break;

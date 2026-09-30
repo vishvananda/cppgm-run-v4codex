@@ -111,8 +111,7 @@ void Analyzer::write_scope(std::ostream& out, ScopeId s, unsigned depth) const
         write_type(out, decl.type, decl.display_name, decl.key, decl.kind == EntityKind::Variable ? e.type : 0);
         if (decl.kind == EntityKind::Enumerator) {
             out << ' ';
-            if (is_unsigned(e.constant.type)) out << e.constant.bits;
-            else out << static_cast<std::int64_t>(e.constant.bits);
+            out << integer_text(e.constant);
         }
         out << '\n';
     }

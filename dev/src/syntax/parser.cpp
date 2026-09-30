@@ -44,7 +44,7 @@ bool Parser::builtin(std::size_t ahead)
     case KW_VOID: case KW_BOOL: case KW_CHAR: case KW_WCHAR_T:
     case KW_CHAR16_T: case KW_CHAR32_T: case KW_SHORT: case KW_INT:
     case KW_LONG: case KW_SIGNED: case KW_UNSIGNED: case KW_FLOAT:
-    case KW_DOUBLE: case KW_AUTO: return true;
+    case KW_DOUBLE: case KW_AUTO: case KW_INT128: case KW_UINT128: return true;
     default: return false;
     }
 }

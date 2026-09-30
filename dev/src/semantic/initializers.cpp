@@ -63,14 +63,13 @@ bool Analyzer::narrowing_conversion(TypeId from, TypeId target, Constant value)
     if (!narrowing_needs_value(from,target)) return false;
     if (!value.valid) return true;
     if (a && b) {
-        if (fundamental(target,FT_BOOL)) return value.bits > 1;
+        if (fundamental(target,FT_BOOL)) return integer_value(value) > 1;
         auto converted = convert(value,target,true), restored = convert(converted,from,true);
         return restored.bits != value.bits ||
-            (is_unsigned(target) && !is_unsigned(from) && std::int64_t(value.bits) < 0) ||
-            (!is_unsigned(target) && is_unsigned(from) && (converted.bits >> (width(target)-1)));
+            (is_unsigned(target) && !is_unsigned(from) && negative_constant(value)) ||
+            (!is_unsigned(target) && is_unsigned(from) && negative_constant(converted));
     }
-    long double exact = a ? (is_unsigned(from) ? static_cast<long double>(value.bits) :
-        static_cast<long double>(std::int64_t(value.bits))) : floating_value(value);
+    long double exact = floating_value(value);
     long double rounded = fundamental(target,FT_FLOAT) ? static_cast<long double>(float(exact)) :
         fundamental(target,FT_DOUBLE) ? static_cast<long double>(double(exact)) : exact;
     return rounded != exact;

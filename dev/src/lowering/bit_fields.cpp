@@ -1,7 +1,13 @@
 #include "lowering/procedural.h"
 namespace cppgm { namespace lowering {
 namespace {
-std::uint64_t mask(unsigned width) { return width == 64 ? ~std::uint64_t(0) : (std::uint64_t(1)<<width)-1; }
+using Wide = unsigned __int128;
+Wide mask(unsigned width) { return width == 128 ? ~Wide(0) : (Wide(1)<<width)-1; }
+Operand literal(Wide bits) {
+    auto value = Operand::integer(std::uint64_t(bits));
+    if (bits >> 64) value.integer_high(std::uint64_t(bits >> 64));
+    return value;
+}
 IRType access_type(IRType t) { return t == IRType::U32 ? IRType(IRType::I32) : t; }
 }
 Value Procedural::initialization_value(NodeId n, TypeId t)
@@ -32,7 +38,7 @@ Value Procedural::load_bit_field(Value location)
         Instruction read(Opcode::Load, storage); read.is_volatile = sem.types[location.type].cv & 2;
         value = emit(read, {location.operand});
         if (field.shift) value = emit(Opcode::Binary, storage, {value.operand, Operand::integer(field.shift)}, storage == IRType::U8 || storage == IRType::U16 || storage == IRType::U32 ? Operation::Ushr : Operation::Shr);
-        value = emit(Opcode::Binary, storage, {value.operand, Operand::integer(mask(field.width))}, Operation::And);
+        value = emit(Opcode::Binary, storage, {value.operand, literal(mask(field.width))}, Operation::And);
     }
     if (!sem.unsigned_type(field.storage_type) && field.width < storage.width()) {
         auto shift = Operand::integer(storage.width()-field.width);
@@ -69,15 +75,15 @@ Value Procedural::store_bit_field(Value value, Value location, SlotId container)
         Value at = project();
         Instruction read(Opcode::Load,storage); read.is_volatile = sem.types[location.type].cv & 2;
         Value old = emit(read,{at.operand});
-        return emit(Opcode::Binary,storage,{old.operand,Operand::integer(mask(storage.width()) & ~(bits << field.shift))},Operation::And);
+        return emit(Opcode::Binary,storage,{old.operand,literal(mask(storage.width()) & ~(bits << field.shift))},Operation::And);
     };
     // A demanded unit transfer supplies a complete storage action. Its
     // initializer has already been evaluated before reading retained bits.
     Value old;
     if (container && !first) old = retained();
     Value assigned = location.initializing ?
-        emit(Opcode::Binary, storage, {Operand::integer(bits), value.operand}, Operation::And) :
-        emit(Opcode::Binary, storage, {value.operand, Operand::integer(bits)}, Operation::And);
+        emit(Opcode::Binary, storage, {literal(bits), value.operand}, Operation::And) :
+        emit(Opcode::Binary, storage, {value.operand, literal(bits)}, Operation::And);
     Value packed = assigned;
     if (field.shift) packed = emit(Opcode::Binary, storage, {packed.operand, Operand::integer(field.shift)}, Operation::Shl);
     if (!first) {

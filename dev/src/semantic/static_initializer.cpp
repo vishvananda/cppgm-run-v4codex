@@ -34,10 +34,6 @@ StaticValue Analyzer::static_value(NodeId n, TypeId target)
         if (value.valid) result.floating = floating_value(value);
         else result.kind = StaticValue::Invalid;
     }
-    if (result.kind == StaticValue::Integer && integral(scalar)) {
-        Constant c = convert(Constant(types.fundamental(FT_UNSIGNED_LONG_LONG_INT), result.bits), scalar, true);
-        result.bits = c.bits;
-    }
     static_facts[index-1].value = result;
     static_facts[index-1].state = result.kind == StaticValue::Invalid ? FactState::Failure : FactState::Success;
     return result;
@@ -124,7 +120,7 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
         r = static_value(base, types.compound(TypeKind::Pointer, x.type));
         Constant c = evaluate(index, facts[index].scope);
         if (!c.valid || r.kind != StaticValue::Address) return StaticValue();
-        r.addend += static_cast<std::int64_t>(c.bits) * size(x.type); return r;
+        r.addend += static_cast<std::int64_t>(integer_value(c)) * size(x.type); return r;
     }
     if (kind == Kind::Binary && (ast[n].op == OP_PLUS || ast[n].op == OP_MINUS)) {
         NodeId right = ast[first].next;
@@ -134,7 +130,7 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
             r = static_value(first, left);
             Constant c = evaluate(right, facts[right].scope);
             if (!c.valid || r.kind != StaticValue::Address) return StaticValue();
-            std::int64_t delta = static_cast<std::int64_t>(c.bits) * size(types[left].child);
+            std::int64_t delta = static_cast<std::int64_t>(integer_value(c)) * size(types[left].child);
             r.addend += ast[n].op == OP_PLUS ? delta : -delta; return r;
         }
     }

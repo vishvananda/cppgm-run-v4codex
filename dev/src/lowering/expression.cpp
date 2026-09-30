@@ -103,8 +103,8 @@ Value Procedural::expression(NodeId n, bool location)
     if (fact.form == semantic::ExpressionForm::ConstantQuery || node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack || node.kind == Kind::TypeTrait) {
         auto c = sem.constant_fact(n);
         if (!c.valid) throw std::logic_error("missing semantic constant");
-        if (node.op == KW_NOEXCEPT) return Value(Operand::integer(c.bits),type(c.type),c.type);
-        Value v = emit(Opcode::Const, type(c.type), {(type(c.type).floating() ? Operand::floating(sem.floating_value(c)) : Operand::integer(c.bits))}); v.type = c.type; return v;
+        if (node.op == KW_NOEXCEPT) return Value(integer_operand(c),type(c.type),c.type);
+        Value v = emit(Opcode::Const, type(c.type), {(type(c.type).floating() ? Operand::floating(sem.floating_value(c)) : integer_operand(c))}); v.type = c.type; return v;
     }
     switch (node.kind) {
     case Kind::Throw: return throw_expression(n);

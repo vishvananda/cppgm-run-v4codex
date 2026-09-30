@@ -10,7 +10,7 @@ bool Analyzer::integral(TypeId id) const
     const Type& t = types[id];
     if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return integral(t.child);
     if (t.kind == TypeKind::Named) return entities[t.entity].key == KW_ENUM;
-    return t.kind == TypeKind::Fundamental && t.fundamental <= FT_BOOL;
+    return t.kind == TypeKind::Fundamental && (t.fundamental <= FT_BOOL || t.fundamental == FT_INT128 || t.fundamental == FT_UINT128);
 }
 bool Analyzer::scoped_enum(TypeId t) const { return types[t].kind == TypeKind::Named && entities[types[t].entity].scoped; }
 bool Analyzer::is_unsigned(TypeId id) const
@@ -18,7 +18,7 @@ bool Analyzer::is_unsigned(TypeId id) const
     const Type& t = types[id];
     if (t.kind == TypeKind::Named) return is_unsigned(entities[t.entity].underlying);
     return (t.fundamental >= FT_UNSIGNED_CHAR && t.fundamental <= FT_UNSIGNED_LONG_LONG_INT) ||
-        t.fundamental == FT_CHAR16_T || t.fundamental == FT_CHAR32_T || t.fundamental == FT_BOOL;
+        t.fundamental == FT_UINT128 || t.fundamental == FT_CHAR16_T || t.fundamental == FT_CHAR32_T || t.fundamental == FT_BOOL;
 }
 unsigned Analyzer::width(TypeId id) const
 {
@@ -38,7 +38,7 @@ Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
     }
     auto source = types[v.type];
     bool scalar = source.kind == TypeKind::Fundamental && target.kind == TypeKind::Fundamental &&
-        source.fundamental <= FT_LONG_DOUBLE && target.fundamental <= FT_LONG_DOUBLE;
+        (integral(v.type) || floating_type(v.type)) && (integral(to) || floating_type(to));
     if (!scalar) {
         v = constant_indirect(v);
         if (!v.valid) return v;
@@ -78,14 +78,9 @@ Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
     if (!integral(v.type) || !integral(to)) return Constant();
     if (!explicit_cast && (scoped_enum(v.type) || scoped_enum(to)) && types.unqualified(to) != types.unqualified(v.type))
         throw std::runtime_error("implicit scoped enum conversion");
-    unsigned bits = width(to);
-    if (types[to].kind == TypeKind::Fundamental && types[to].fundamental == FT_BOOL) v.bits = !!v.bits;
-    else if (bits < 64) {
-        std::uint64_t mask = (std::uint64_t(1) << bits) - 1;
-        v.bits &= mask;
-        if (!is_unsigned(to) && (v.bits & (std::uint64_t(1) << (bits - 1)))) v.bits |= ~mask;
-    }
-    v.type = to; return v;
+    auto bits = integer_value(v);
+    if (fundamental(to,FT_BOOL)) bits = bits != 0;
+    return integer_constant(to,bits);
 }
 TypeId Analyzer::expression_type(NodeId n, ScopeId s, bool decltype_form)
 {
@@ -258,7 +253,7 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         if (ast[n].op == OP_LNOT) return Constant(types.fundamental(FT_BOOL), !constant_truth(v));
         v = convert(v, calls ? expressions[n].type : promote(v.type));
         if (ast[n].op == OP_PLUS) return v;
-        if (ast[n].op == OP_COMPL) return convert(Constant(v.type, ~v.bits), v.type);
+        if (ast[n].op == OP_COMPL) return integer_constant(v.type, ~integer_value(v));
         if (ast[n].op == OP_MINUS) return floating_type(v.type) ? floating_constant(v.type,-floating_value(v)) : binary(OP_MINUS, Constant(v.type, 0), v, true);
         return Constant();
     }
@@ -315,52 +310,62 @@ Constant Analyzer::binary(ETokenType op, Constant a, Constant b, bool converted)
     if (op == OP_LSHIFT || op == OP_RSHIFT) common = at;
     a = convert(a, common, true); b = convert(b, (op == OP_LSHIFT || op == OP_RSHIFT) ? bt : common, true);
     bool unsign = is_unsigned(common);
-    __int128 x = unsign ? __int128(a.bits) : __int128(static_cast<std::int64_t>(a.bits));
-    __int128 y = is_unsigned(b.type) ? __int128(b.bits) : __int128(static_cast<std::int64_t>(b.bits));
-    __int128 result = 0;
+    auto x = integer_value(a), y = integer_value(b);
+    WideInteger result = 0;
+    auto bits = width(common);
+    auto sign = WideInteger(1) << (bits-1);
+    auto mask = bits == 128 ? ~WideInteger(0) : (WideInteger(1) << bits)-1;
+    bool negative_x = negative_constant(a), negative_y = negative_constant(b);
     bool boolean = compare || op == OP_LAND || op == OP_LOR;
     switch (op) {
-    case OP_PLUS: result = x + y; break;
-    case OP_MINUS: result = x - y; break;
+    case OP_PLUS: case OP_MINUS: {
+        result = op == OP_PLUS ? x+y : x-y;
+        if (!unsign) {
+            bool negative_result = (result & sign) != 0;
+            if (op == OP_PLUS ? (negative_x == negative_y && negative_result != negative_x) :
+                (negative_x != negative_y && negative_result != negative_x)) return Constant();
+        }
+        break;
+    }
     case OP_STAR: {
-        // Unsigned multiplication is modulo the result width, including uint64.
-        if (unsign) return convert(Constant(common, a.bits * b.bits), common);
-        result = x * y; break;
+        if (!unsign) {
+            auto ax = negative_x ? 0-x : x, ay = negative_y ? 0-y : y;
+            auto limit = negative_x != negative_y ? sign : sign-1;
+            if (ay && ax > limit/ay) return Constant();
+        }
+        result = x*y; break;
     }
     case OP_DIV: case OP_MOD:
-        if (!y) return Constant();
-        if (!unsign && x == -(__int128(1) << (width(common)-1)) && y == -1)
-            return Constant();
-        result = op == OP_DIV ? x / y : x % y; break;
-    case OP_AMP: result = a.bits & b.bits; break;
-    case OP_BOR: result = a.bits | b.bits; break;
-    case OP_XOR: result = a.bits ^ b.bits; break;
+        if (!y || (!unsign && x == (0-sign) && y == ~WideInteger(0))) return Constant();
+        if (unsign) result = op == OP_DIV ? x/y : x%y;
+        else {
+            auto ax = negative_x ? 0-x : x, ay = negative_y ? 0-y : y;
+            result = op == OP_DIV ? ax/ay : ax%ay;
+            if (op == OP_DIV ? negative_x != negative_y : negative_x) result = 0-result;
+        }
+        break;
+    case OP_AMP: result = x & y; break;
+    case OP_BOR: result = x | y; break;
+    case OP_XOR: result = x ^ y; break;
     case OP_EQ: result = x == y; break;
     case OP_NE: result = x != y; break;
-    case OP_LT: result = x < y; break;
-    case OP_GT: result = x > y; break;
-    case OP_LE: result = x <= y; break;
-    case OP_GE: result = x >= y; break;
+    case OP_LT: result = unsign ? x < y : __int128(x) < __int128(y); break;
+    case OP_GT: result = unsign ? x > y : __int128(x) > __int128(y); break;
+    case OP_LE: result = unsign ? x <= y : __int128(x) <= __int128(y); break;
+    case OP_GE: result = unsign ? x >= y : __int128(x) >= __int128(y); break;
     case OP_LAND: result = x && y; break;
     case OP_LOR: result = x || y; break;
     case OP_LSHIFT: case OP_RSHIFT:
-        if (y < 0 || y >= width(common) || (op == OP_LSHIFT && x < 0)) return Constant();
-        // [expr.shift]: signed left shift may enter the sign bit, but the
-        // product must be representable in the corresponding unsigned type.
-        // Unsigned shifting is modulo width and must not overflow host int128.
-        if (op == OP_LSHIFT && unsign) return convert(Constant(common,a.bits << unsigned(y)),common);
-        result = op == OP_LSHIFT ? x * (__int128(1) << unsigned(y)) : x >> unsigned(y);
-        if (op == OP_LSHIFT && result >= (__int128(1) << width(common)))
-            return Constant();
+        if (negative_y || y >= bits) return Constant();
+        if (op == OP_LSHIFT) {
+            // C++11 [expr.shift]: signed products may enter the sign bit but
+            // must fit the corresponding unsigned type. Unsigned wraps.
+            if (!unsign && (negative_x || x > (mask >> unsigned(y)))) return Constant();
+            result = x << unsigned(y);
+        } else result = unsign ? x >> unsigned(y) : WideInteger(__int128(x) >> unsigned(y));
         break;
     default: return Constant();
     }
-    if (boolean) return Constant(types.fundamental(FT_BOOL), result);
-    bool arithmetic = op == OP_PLUS || op == OP_MINUS || op == OP_STAR || op == OP_DIV || op == OP_MOD;
-    if (!unsign && arithmetic) {
-        __int128 limit = __int128(1) << (width(common) - 1);
-        if (result < -limit || result >= limit) return Constant();
-    }
-    return convert(Constant(common, std::uint64_t(result)), common);
+    return boolean ? Constant(types.fundamental(FT_BOOL),result != 0) : integer_constant(common,result);
 }
 } }

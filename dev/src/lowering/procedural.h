@@ -282,6 +282,7 @@ class Procedural {
     void global_construction(NodeId n, TypeId t);
     void global_constant_fields(const semantic::ConstantObject& fields, TypeId t);
     Value constant_operand(semantic::Constant value, TypeId t);
+    Operand integer_operand(semantic::Constant value);
     Value string_element(NodeId source, TypeId element, std::uint64_t index);
     void aggregate_initialize(NodeId n, TypeId t, Value root, bool indirect, std::vector<InitProjection>& path);
     void constructor_body(EntityId e, bool base);

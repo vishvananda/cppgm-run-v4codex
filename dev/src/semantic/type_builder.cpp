@@ -85,6 +85,8 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         case KW_CHAR16_T: fundamental = FT_CHAR16_T; break;
         case KW_CHAR32_T: fundamental = FT_CHAR32_T; break;
         case KW_BOOL: fundamental = FT_BOOL; break;
+        case KW_INT128: fundamental = FT_INT128; break;
+        case KW_UINT128: fundamental = FT_UINT128; break;
         case KW_FLOAT: fundamental = FT_FLOAT; break;
         case KW_DOUBLE: fundamental = FT_DOUBLE; break;
         case KW_VOID: fundamental = FT_VOID; break;
@@ -93,6 +95,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         }
     }
     if (!result) {
+        if (fundamental == FT_INT128 && unsign) fundamental = FT_UINT128;
         if (fundamental == FT_INT) {
             if (short_int) fundamental = unsign ? FT_UNSIGNED_SHORT_INT : FT_SHORT_INT;
             else if (longs > 1) fundamental = unsign ? FT_UNSIGNED_LONG_LONG_INT : FT_LONG_LONG_INT;
@@ -223,11 +226,11 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                 if (c == dynamic_array) {
                     auto x = expression(ast[c].first,s);
                     if (!integral(x.type) || scoped_enum(x.type)) throw std::runtime_error("array allocation bound must be integral");
-                    if (v.valid && !is_unsigned(v.type) && static_cast<std::int64_t>(v.bits) < 0) throw std::runtime_error("negative array allocation bound");
+                    if (v.valid && negative_constant(v)) throw std::runtime_error("negative array allocation bound");
                 } else if (!v.valid || !integral(v.type) || scoped_enum(v.type) || !v.bits ||
-                    (!is_unsigned(v.type) && static_cast<std::int64_t>(v.bits) < 0))
+                    (negative_constant(v) || integer_value(v) > ~std::uint64_t(0)))
                     throw std::runtime_error("array bound must be a positive integral constant");
-                bound = v.valid ? v.bits : 0;
+                bound = v.valid ? std::uint64_t(integer_value(v)) : 0;
             }
             base = types.compound(TypeKind::Array, base, bound);
         } else {

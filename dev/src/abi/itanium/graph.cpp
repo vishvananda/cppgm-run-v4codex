@@ -38,6 +38,9 @@ void Graph::grow() {
         slots_[p] = i;
     }
 }
+Id Graph::wide_value(Id type, std::uint64_t low, std::uint64_t high) {
+    return make(Kind::WideValue,type,Id(high),Id(high >> 32),low);
+}
 Id Graph::make(Kind kind, Id a, Id b, Id c, std::uint64_t value,
                const std::vector<Id>& children) {
     validate(kind, a, b, c, children);

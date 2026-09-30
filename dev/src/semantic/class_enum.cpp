@@ -270,18 +270,18 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
     }
     if (definition) {
         if (entities[e].complete) throw std::runtime_error("enum redefinition");
-        std::uint64_t next = 0;
+        WideInteger next = 0;
         bool negative = false;
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
             if (ast[c].kind != Kind::Enumerator) continue;
-            Constant value = ast[c].first ? evaluate(ast[c].first, entities[e].scope) : Constant(underlying, next);
+            Constant value = ast[c].first ? evaluate(ast[c].first, entities[e].scope) : integer_constant(underlying, next);
             if (!value.valid || !integral(value.type)) throw std::runtime_error("invalid enumerator initializer");
             if (!scoped && !underlying_node) {
-                bool sign = !is_unsigned(value.type) && static_cast<std::int64_t>(value.bits) < 0;
+                bool sign = negative_constant(value);
                 negative |= sign;
-                if (!sign && value.bits > 2147483647u) {
-                    if (value.bits <= 4294967295u && !negative && width(underlying) <= 32) underlying = types.fundamental(FT_UNSIGNED_INT);
-                    else underlying = types.fundamental(value.bits <= 9223372036854775807ull ? FT_LONG_INT : FT_UNSIGNED_LONG_INT);
+                if (!sign && integer_value(value) > 2147483647u) {
+                    if (integer_value(value) <= 4294967295u && !negative && width(underlying) <= 32) underlying = types.fundamental(FT_UNSIGNED_INT);
+                    else underlying = types.fundamental(integer_value(value) <= 9223372036854775807ull ? FT_LONG_INT : integer_value(value) <= ~std::uint64_t(0) ? FT_UNSIGNED_LONG_INT : FT_UINT128);
                 } else if (negative && is_unsigned(underlying)) underlying = types.fundamental(FT_LONG_INT);
                 entities[e].underlying = underlying;
             }
@@ -292,7 +292,7 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
             if (!scoped) bind(owner, ast[c].text, v);
             std::uint32_t d = record(scoped ? es : owner, v, c, t, EntityKind::Enumerator);
             if (qualified_definition) declarations[d].display_name = name;
-            next = value.bits + 1;
+            next = integer_value(value) + 1;
         }
         for (NodeId c = ast[n].first; c; c = ast[c].next)
             if (ast[c].kind == Kind::Enumerator) entities[facts[c].entity].constant.type = t;

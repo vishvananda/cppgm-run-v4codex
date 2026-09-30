@@ -11,7 +11,8 @@ bool Analyzer::floating_type(TypeId t) const
 long double Analyzer::floating_value(Constant v) const
 {
     if (floating_type(v.type)) return floating_constants[v.bits].value;
-    return is_unsigned(v.type) ? static_cast<long double>(v.bits) : static_cast<long double>(std::int64_t(v.bits));
+    auto bits = integer_value(v);
+    return is_unsigned(v.type) ? static_cast<long double>(bits) : static_cast<long double>(__int128(bits));
 }
 bool Analyzer::constant_truth(Constant v) const
 {
@@ -46,8 +47,7 @@ Constant Analyzer::floating_conversion(Constant v, TypeId to)
     auto truncated = std::trunc(value);
     auto limit = std::ldexp(1.0L,width(to)-(is_unsigned(to) ? 0 : 1));
     if (truncated >= limit || truncated < (is_unsigned(to) ? 0 : -limit)) return Constant();
-    return convert(Constant(types.fundamental(is_unsigned(to) ? FT_UNSIGNED_LONG_LONG_INT : FT_LONG_LONG_INT),
-        is_unsigned(to) ? std::uint64_t(truncated) : std::uint64_t(std::int64_t(truncated))),to,true);
+    return integer_constant(to,is_unsigned(to) ? WideInteger(truncated) : WideInteger(__int128(truncated)));
 }
 Constant Analyzer::floating_binary(ETokenType op, Constant a, Constant b, bool converted)
 {

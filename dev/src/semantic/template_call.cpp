@@ -128,11 +128,11 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         else {
             auto value = constants[query_value(query)];
             if (!value.valid || !integral(value.type) || scoped_enum(value.type) || !value.bits ||
-                (!is_unsigned(value.type) && static_cast<std::int64_t>(value.bits) < 0))
+                (negative_constant(value) || integer_value(value) > ~std::uint64_t(0)))
                 return 0;
             if (fundamental(child,FT_VOID) || types[child].kind == TypeKind::Function ||
                 types[child].kind == TypeKind::LRef || types[child].kind == TypeKind::RRef || abstract_value(child)) return 0;
-            result = types.compound(TypeKind::Array,child,value.bits);
+            result = types.compound(TypeKind::Array,child,std::uint64_t(integer_value(value)));
         }
         result = types.qualify(result,p.cv);
     } else if (p.kind == TypeKind::Decltype) {
