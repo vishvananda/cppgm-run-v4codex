@@ -147,10 +147,12 @@ void Analyzer::finish_closures()
         if (x.enclosing != y.enclosing) return x.enclosing < y.enclosing;
         return ast.nodes.occurrences[x.source].source < ast.nodes.occurrences[y.source].source;
     });
-    Index counts;
+    Index counts, local_counts;
     for (auto i : order) {
         auto& closure = closures[i]; auto identity = key(closure.enclosing,closure.signature);
         closure.ordinal = counts.get(identity); counts.put(identity,closure.ordinal+1);
+        closure.local_ordinal = local_counts.get(closure.enclosing);
+        local_counts.put(closure.enclosing,closure.local_ordinal+1);
     }
 }
 } }

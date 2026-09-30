@@ -31,7 +31,13 @@ SymbolId Procedural::abi_type_global(TypeId type, abi_mangle::TargetKind kind)
     // complete RTTI. Their name objects still share the canonical ABI identity.
     internal |= kind == abi_mangle::TargetKind::Typeinfo && rtti_incomplete_flags(type);
     auto key = (std::uint64_t(16+unsigned(kind)) << 32) | target.type;
-    if (!internal) if (auto prior = linkage.external.get(key)) return SymbolId(prior);
+    // Internal support entries still have one emission identity within the TU.
+    // Repeated VTT requests must reference the defined local symbol, while
+    // another TU with an equal ABI spelling owns a different internal object.
+    if (auto prior = abi_support_symbols.get(key)) return SymbolId(prior);
+    if (!internal) if (auto prior = linkage.external.get(key)) {
+        abi_support_symbols.put(key,prior); return SymbolId(prior);
+    }
     std::string name = kind == abi_mangle::TargetKind::Vtable ? "@vtable" : kind == abi_mangle::TargetKind::Vtt ? "@vtt" : kind == abi_mangle::TargetKind::Typeinfo ? "@typeinfo" : "@typeinfo_name";
     if (sem.types[type].kind == TypeKind::Fundamental)
         name = (kind == abi_mangle::TargetKind::Typeinfo ? "@__rtti_" : "@__typeinfo_name__")+support_type_name(type);
@@ -41,6 +47,7 @@ SymbolId Procedural::abi_type_global(TypeId type, abi_mangle::TargetKind kind)
     if (internal && linkage.merge) object += "." + std::to_string(sym.index);
     meta.object = p.intern(object);
     if (!internal) linkage.external.put(key,sym.index);
+    abi_support_symbols.put(key,sym.index);
     return sym;
 }
 SymbolId Procedural::typeinfo(EntityId cls)

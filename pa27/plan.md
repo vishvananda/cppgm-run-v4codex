@@ -84,3 +84,17 @@ using reduced inputs, C++11/ABI proof and the pinned bundle revision.
   owns substitution order. Personal linkage controls pass 22 commands. Extending
   the group to extern-template emission and local closure identities; root checks
   will run sequentially because their runner bookkeeping is shared.
+- Implementation146 emission checkpoint: 155/158. Extern-template suppression
+  now reaches function/global/constructor entries; ordinary undefined template
+  references are strong (archive extraction verified). TLS wrapper/init entries
+  use typed ABI targets and optional weak initialization hooks. TU-local closure
+  ordinals are separate from ODR signature ordinals. A TU-owned support-symbol
+  cache fixes duplicate internal VTT identities, resolving both virtual-base
+  crashes without changing the lifetime model. PA1–PA26 passed 4283/4283 after
+  template emission changes; final cache/TLS checks and performance are pending.
+- Remaining implementation boundary: two anonymous-storage initialization cases
+  require semantic constructor actions retaining the injected field's storage
+  path and lifetime owner; they currently reject before lowering. The remaining
+  hosted-vtable case stops parsing `/usr/include/c++/15/exception:87`. Neither
+  can be repaired by ABI naming, binding or support-symbol emission. Full-stage
+  implementation and independent review remain required.

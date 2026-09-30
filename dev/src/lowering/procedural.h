@@ -67,6 +67,7 @@ class Procedural {
     Linkage& linkage;
     abi_mangle::Graph& abi;
     std::vector<abi_mangle::Id> abi_types, abi_scopes;
+    semantic::Index abi_support_symbols;
     std::vector<unsigned char> internal_scopes, internal_entities, local_abi_scopes, local_abi_types;
     std::vector<SymbolId> symbols, strings, base_symbols;
     std::vector<SlotId> objects;

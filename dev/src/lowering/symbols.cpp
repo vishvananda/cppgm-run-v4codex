@@ -40,6 +40,14 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
         if (e.template_parameter) result = abi.make(abi_mangle::Kind::Parameter,0,1,0,sem.template_ordinal(t.entity));
         else if (sem.closure(t.entity).function && sem.closure(t.entity).enclosing) {
             auto closure = sem.closure(t.entity);
+            auto enclosing = sem.entities[closure.enclosing];
+            if (linkage.host && !enclosing.inline_function && !enclosing.specialization && !enclosing.template_member) {
+                // TU-unique closures have no prescribed external ABI encoding.
+                // Use a separate local ordinal, independent of signature groups.
+                result = abi.make(abi_mangle::Kind::Local,abi_function_context(closure.enclosing),
+                    abi.string("$_"+std::to_string(closure.local_ordinal)));
+                break;
+            }
             auto f = sem.types[closure.signature];
             std::vector<abi_mangle::Id> params;
             for (unsigned i = 0; i < f.count; ++i) params.push_back(abi_type(sem.types.parameters[f.offset+i]));
@@ -105,7 +113,8 @@ bool Procedural::separate_base(EntityId id) const
 SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
 {
     auto e = sem.entities[id];
-    bool external = e.member_info && !e.body && !sem.synthetic_member(id);
+    bool external = sem.emission_suppressed(id) ||
+        (e.kind == semantic::EntityKind::Function ? !e.body && !sem.synthetic_member(id) : !e.definition);
     bool separate = separate_base(id);
     bool base_only = base_only_entry(id);
     base = base && separate;
@@ -128,7 +137,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     bool entry = name == "main" && e.owner == sem.global && e.kind == semantic::EntityKind::Function;
     SymbolMetadata metadata;
     metadata.object_root = e.instantiation_definition;
-    metadata.binding = internal ? SBM_INTERNAL : (e.inline_function || (!e.explicit_specialization && (e.specialization || e.template_member))) ? SBM_WEAK : SBM_STRONG;
+    metadata.binding = internal ? SBM_INTERNAL : !external && (e.inline_function || (!e.explicit_specialization && (e.specialization || e.template_member))) ? SBM_WEAK : SBM_STRONG;
     if (sem.weak_symbols.get(id) && !internal) metadata.binding = SBM_WEAK;
     if (auto section = sem.section_names.get(id)) metadata.section = p.intern(spelling(section));
     metadata.inline_hint = e.inline_function; metadata.no_inline = e.no_inline; metadata.force_inline = e.force_inline && !e.no_inline;
@@ -218,7 +227,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     if (metadata.object && p.name(metadata.object) == p.name(p.symbols[sid.index-1].name).substr(1)) metadata.object = 0;
     if (key) linkage.external.put(key, sid.index);
     p.symbols[sid.index-1].metadata = metadata;
-    if (!separate && !base_only && (sem.constructor_member(id) || sem.destructor_member(id)) && (e.body || sem.synthetic_member(id))) {
+    if (!external && !separate && !base_only && (sem.constructor_member(id) || sem.destructor_member(id)) && (e.body || sem.synthetic_member(id))) {
         target.function.terminal = sem.destructor_member(id) ? abi_mangle::ABI_TERMINAL_DESTRUCTOR_BASE : abi_mangle::ABI_TERMINAL_CONSTRUCTOR_BASE;
         if (!internal && linkage.merge) {
             auto base_key = (std::uint64_t(1) << 32) | abi_mangle::function_entity(abi,target.function);
@@ -377,7 +386,7 @@ void Procedural::run()
     // Both entries consume the same semantic actions, with independent IR IDs.
     for (EntityId e = 1; e < sem.entities.size(); ++e) {
         if (!symbols[e] || !separate_base(e)) continue;
-        bool external = !sem.entities[e].body && !sem.synthetic_member(e);
+        bool external = sem.emission_suppressed(e) || (!sem.entities[e].body && !sem.synthetic_member(e));
         Function f; f.symbol = symbol(e, true);
         f.declaration = external;
         auto prior = p.symbols[f.symbol.index-1];
@@ -409,7 +418,7 @@ void Procedural::run()
     emit_vtables();
     for (EntityId e : definitions) {
         function_body(e);
-        if (base_symbols[e]) function_body(e, true);
+        if (base_symbols[e] && !p.functions[p.symbols[base_symbols[e].index-1].entity-1].declaration) function_body(e, true);
     }
     emit_deleting_entries();
     emit_adjustor_thunks();

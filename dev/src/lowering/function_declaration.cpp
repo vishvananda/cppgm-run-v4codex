@@ -7,11 +7,12 @@ void Procedural::declare_function(EntityId e)
 {
     auto entity = sem.entities[e];
     bool defined = entity.body || sem.closure_adapter(e).function || ((sem.constructor_member(e) || sem.destructor_member(e) || sem.transfer_member(e)) && sem.synthetic_member(e));
+    defined = defined && !sem.emission_suppressed(e);
     Function f; f.symbol = symbol(e); f.declaration = !defined;
     auto& existing = p.symbols[f.symbol.index-1];
     if (existing.kind == Symbol::FunctionSymbol) {
         auto& prior = p.functions[existing.entity-1];
-        if (!entity.body) {
+        if (!defined) {
             // A later TU can establish the value ABI of an earlier opaque
             // declaration. Refresh that function identity before any call
             // consumes its signature; unrelated declarations stay warm.

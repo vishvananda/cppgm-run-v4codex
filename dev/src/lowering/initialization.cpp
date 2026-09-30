@@ -80,7 +80,7 @@ void Procedural::global_data(NodeId n, TypeId t)
 void Procedural::global(EntityId e)
 {
     auto entity = sem.entities[e]; TypeId t = entity.type;
-    Global g; g.symbol = symbols[e]; g.declaration = !entity.definition;
+    Global g; g.symbol = symbols[e]; g.declaration = !entity.definition || sem.emission_suppressed(e);
     auto prior = p.symbols[g.symbol.index-1];
     if (prior.kind == Symbol::GlobalSymbol) {
         if (g.declaration) return;
@@ -164,6 +164,7 @@ void Procedural::global(EntityId e)
     p.globals.push_back(g);
     auto& sym = p.symbols[g.symbol.index-1]; sym.kind = Symbol::GlobalSymbol; sym.entity = p.globals.size();
     if (sem.local_static(e)) prepare_local_static(e,!sem.static_initialization(e));
+    else if (linkage.host && entity.thread_local_storage && !tls_wrappers.get(e)) prepare_tls(e);
 }
 void Procedural::object(EntityId e)
 {

@@ -72,6 +72,48 @@ for label,binary in [('student',compiler),('host','g++')]:
     run([binary,'-std=c++11','-c',s,'-o',out/(label+'.o')])
 a=run(['nm','--defined-only',out/'student.o']);b=run(['nm','--defined-only',out/'host.o'])
 assert {l.split()[-1] for l in a.splitlines()}=={l.split()[-1] for l in b.splitlines()},(a,b)
+# Suppressed declarations must remain strong undefined references so the host
+# linker extracts a weak template definition from a static archive.
+a=source('extern-user',"""template<class T> struct Box { int read(); Box(); ~Box(); static int value; };
+extern template struct Box<int>;
+int call(){Box<int> x;return x.read()+Box<int>::value;}
+""")
+b=source('extern-provider',"""template<class T> struct Box { int read(); Box(); ~Box(); static int value; };
+template<class T> int Box<T>::read(){return 3;}
+template<class T> Box<T>::Box(){} template<class T> Box<T>::~Box(){}
+template<class T> int Box<T>::value=4; template struct Box<int>;
+""")
+m=source('extern-main','int call();int main(){return call()-7;}\n')
+run(['g++','-std=c++11','-c',b,'-o',out/'provider.o'])
+run(['ar','rcs',out/'provider.a',out/'provider.o'])
+for level in ('-O0','-O2'):
+    run([compiler,level,'-c',a,'-o',out/'user.o'])
+    undefined=run(['nm','-u',out/'user.o'])
+    assert ' w ' not in undefined, undefined
+    run(['g++',m,out/'user.o',out/'provider.a','-o',out/'archive'])
+    run([out/'archive'])
+# TU-local closures with distinct signatures need distinct local ordinals.
+a=source('closures','int main(){auto a=[](int x){return x+1;};auto b=[](){return 2;};return a(1)-b();}\n')
+run([compiler,'-O0','-c',a,'-o',out/'closures.o'])
+run(['g++',out/'closures.o','-o',out/'closures']);run([out/'closures'])
+# Internal ABI support symbols are stable within a TU and isolated across TUs.
+model="""namespace {
+int observed;
+struct V {virtual int id(){return 0;} virtual ~V() {}};
+struct A : virtual V {A(){observed=id();} int id(){return VALUE;}};
+struct D : A {int id(){return VALUE+10;}};
+}
+"""
+a=source('vtt-a',model.replace('VALUE','3')+'int left(){D d;return observed==3 && d.id()==13;}\n')
+b=source('vtt-b',model.replace('VALUE','5')+'int left();int main(){D d;return !(left() && observed==5 && d.id()==15); }\n')
+for level in ('-O0','-O2'):
+    for name,p in [('a',a),('b',b)]:run([compiler,level,'-c',p,'-o',out/(name+'.o')])
+    for objects in ((out/'a.o',out/'b.o'),(out/'b.o',out/'a.o')):
+        run(['g++',*objects,'-o',out/'vtt']);run([out/'vtt'])
+run([compiler,'--emit-lowir',a,'-o',out/'vtt.lowir'])
+import re
+names=re.findall(r'object=(_ZTT[^,\] ]+)',(out/'vtt.lowir').read_text())
+assert len(names)==2 and len(set(names))==2,names
 report=dict(binary_sha256=hashlib.sha256(compiler.read_bytes()).hexdigest(),commands=records)
 (out/'linkage-controls.json').write_text(json.dumps(report,indent=2)+'\n')
 print('PA27 linkage controls PASS:',len(records),'commands')

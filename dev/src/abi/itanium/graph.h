@@ -86,7 +86,7 @@ struct Function {
 };
 enum class TargetKind : std::uint8_t {
     Type, Function, Variable, Typeinfo, TypeinfoName, Vtable, Vtt,
-    ConstructionVtable, TlsWrapper, Thunk, VirtualThunk
+    ConstructionVtable, TlsWrapper, Thunk, VirtualThunk, TlsInitializer
 };
 struct Target {
     TargetKind kind = TargetKind::Type;

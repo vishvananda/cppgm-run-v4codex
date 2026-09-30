@@ -1,6 +1,15 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+TypeId Analyzer::dependent_function_template_parameter_type(EntityId specialization, unsigned ordinal)
+{
+    auto pattern = specialization_pattern(specialization);
+    auto head = templates[entities[pattern].template_info];
+    auto parameter = template_parameters[head.offset+ordinal];
+    auto type = entities[parameter].type;
+    return entities[parameter].kind == EntityKind::Parameter && dependent_type(type) ? type : 0;
+}
+
 using syntax::Kind;
 void Analyzer::declare_template_parameters(NodeId params, ScopeId ts, std::uint32_t source_head, std::uint32_t frame)
 {

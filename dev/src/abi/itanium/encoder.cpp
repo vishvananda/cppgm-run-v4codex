@@ -181,7 +181,15 @@ void Encoder::type(Id id) {
 }
 void Encoder::context(Id id) {
     if (g[id].kind == Kind::RawContext) output += g.spelling(g[id].a);
-    else { output += 'Z'; function(entity_function(g, id)); output += 'E'; }
+    else {
+        output += 'Z';
+        auto f = entity_function(g,id);
+        // main has no function-type encoding in a local-name context.
+        if (f.name && g[f.name].kind == Kind::Name && !g[f.name].a && g.text(g[f.name].b).equals("main"))
+            source(g[f.name].b);
+        else function(f);
+        output += 'E';
+    }
 }
 void Encoder::local_component(Id id) {
     const Node n = g[id];
