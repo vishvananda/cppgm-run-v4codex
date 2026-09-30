@@ -20,13 +20,13 @@ enum class Kind : std::uint8_t {
     ExprParameter, ExprFunctionParameter, Unary, Binary, Conditional, Call,
     Conversion, Cast, TemplateId, TypeTrait, SizeofType, Member, ObjectMember,
     ExprPack, UnresolvedName, SizeofPack, EntityExpression, FunctionEntity, VariableEntity, SymbolEntity,
-    AlignofType, DestructorName, ExprThis, InitList, TypeidType, TypeidExpression, NewExpression, WideValue
+    AlignofType, DestructorName, ExprThis, InitList, TypeidType, TypeidExpression, NewExpression, WideValue, NegativeWideValue
 };
 struct Node {
     Kind kind = Kind::Name;
     Id a = 0, b = 0, c = 0; // kind-specific child IDs, string IDs, or enum values
-    // WideValue: a is the type, b/c are the low/high words of the high half;
-    // value is the low half. No text or larger common node is needed.
+    // WideValue/NegativeWideValue: a is the declared type, b/c the high half,
+    // value the low half. The kind records numeric sign, including enum values.
     // Lambda: a is the enclosing context, b marks the unsuffixed first
     // closure; otherwise value is the explicit ABI discriminator (0, 1, ...).
     // c marks an ellipsis in its parameter signature.
@@ -50,7 +50,7 @@ public:
     Id name(Id parent, const std::string& source);
     Id path(const std::string& qualified);
     Id builtin(AbiBuiltinTypeKind kind);
-    Id wide_value(Id type, std::uint64_t low, std::uint64_t high);
+    Id wide_value(Id type, std::uint64_t low, std::uint64_t high, bool negative);
     std::string wide_value_text(const Node& value) const;
     Id cv(Id type, unsigned qualifiers);
     const Node& operator[](Id id) const;

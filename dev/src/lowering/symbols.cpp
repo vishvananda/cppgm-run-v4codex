@@ -182,6 +182,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     if (internal && linkage.merge && metadata.object)
         metadata.object = p.intern(p.name(metadata.object) + "." + std::to_string(p.symbols.size()+1));
     if (e.builtin != semantic::Entity::NoBuiltin) {
+        if (e.builtin == semantic::Entity::Strlen) metadata.builtin = lowir_model::SymbolMetadata::Builtin::Strlen;
         metadata.object = p.intern(e.builtin == semantic::Entity::Memcpy ? "cppgm_builtin_memcpy" : e.builtin == semantic::Entity::Strlen ? "cppgm_builtin_strlen" : "cppgm_builtin_memmove");
         metadata.linkage = LLM_C;
     }

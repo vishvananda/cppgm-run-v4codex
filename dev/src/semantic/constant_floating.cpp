@@ -42,6 +42,7 @@ Constant Analyzer::floating_conversion(Constant v, TypeId to)
     auto value = floating_value(v);
     if (floating_type(to)) return floating_constant(to,value,!std::isfinite(value));
     if (fundamental(to,FT_BOOL)) return Constant(to,value != 0);
+    if (!std::isfinite(value)) return Constant();
     // Test the truncated value before any host cast; out-of-range conversion
     // is a core constant-expression failure, including the unsigned case.
     auto truncated = std::trunc(value);

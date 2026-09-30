@@ -24,7 +24,7 @@ const char* operation_code(Id op) {
 }
 void Encoder::literal(const Node& n) {
     output += 'L'; type(n.a);
-    if (n.kind == Kind::WideValue) {
+    if (n.kind == Kind::WideValue || n.kind == Kind::NegativeWideValue) {
         auto text = g.wide_value_text(n);
         if (text[0] == '-') text[0] = 'n';
         output += text;
@@ -52,7 +52,7 @@ void Encoder::argument(Id id) {
     ++g.stats.emitted_nodes;
     switch (n.kind) {
     case Kind::TypeArgument: type(n.a); break;
-    case Kind::Value: case Kind::WideValue: literal(n); break;
+    case Kind::Value: case Kind::WideValue: case Kind::NegativeWideValue: literal(n); break;
     case Kind::DependentValue:
         output += "Tn"; type(n.a); literal(g[n.b]); break;
     case Kind::ExpressionArgument: output += 'X'; expression(n.a); output += 'E'; break;
@@ -88,7 +88,7 @@ void Encoder::expression(Id id) {
     case Kind::ExprParameter: parameter(n.value); break;
     case Kind::ExprFunctionParameter:
         output += "fp"; if (n.value) output += std::to_string(n.value - 1); output += '_'; break;
-    case Kind::Value: case Kind::WideValue: literal(n); break;
+    case Kind::Value: case Kind::WideValue: case Kind::NegativeWideValue: literal(n); break;
     case Kind::Unary: output += operation_code(n.b); expression(n.a); break;
     case Kind::Binary:
         output += operation_code(n.c); expression(n.a); expression(n.b); break;

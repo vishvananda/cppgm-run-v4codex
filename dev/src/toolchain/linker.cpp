@@ -2,10 +2,11 @@
 #include <algorithm>
 namespace cppgm { namespace toolchain {
 using lowir_model::require;
-Linker::Linker() : image_(0), symbols_(image_.symbols.size()) {}
+Linker::Linker() : image_(0), symbols_(image_.symbols.size()), symbol_definitions_(symbols_.size()) {}
 unsigned Linker::new_symbol()
 {
     unsigned id = symbols_.size(); symbols_.push_back(Symbol());
+    symbol_definitions_.push_back(0);
     image_.symbols.push_back(0); image_.defined.push_back(false);
     image_.data_symbols.push_back(false); image_.tls_targets.push_back(0); return id;
 }
@@ -17,6 +18,10 @@ void Linker::add(Object&& obj)
     image_.data.resize((image_.data.size()+obj.alignment-1)&~std::size_t(obj.alignment-1),0);
     auto code_offset = image_.code.size(), data_offset = image_.data.size();
     std::vector<unsigned> map(obj.symbols.size());
+    std::vector<unsigned> definitions(obj.symbols.size());
+    for (unsigned i = 1; i < definitions.size(); ++i) if (obj.symbols[i].definition == i) {
+        definitions[i] = lazy_definitions_.size(); lazy_definitions_.push_back(obj.symbols[i].lazy);
+    }
     for (unsigned i = 1; i < map.size(); ++i) {
         auto record = obj.symbols[i];
         if (record.name) { auto text = obj.name(i); record.name = names_.intern({text.data(),text.size()}); }
@@ -41,56 +46,62 @@ void Linker::add(Object&& obj)
                 throw std::runtime_error("duplicate native definition: " + obj.name(i));
         }
         symbols_[id] = record; image_.defined[id] = true; image_.data_symbols[id] = source.data_symbols[i];
+        symbol_definitions_[id] = definitions[record.definition];
         image_.symbols[id] = source.symbols[i] + (source.data_symbols[i] ? data_offset : code_offset);
         if (record.role == ir_model::SR_ENTRY) {
             require(!entry_ || entry_ == id,"multiple entry functions"); entry_ = id; parameters_ = record.parameters;
         } else if (record.role == ir_model::SR_INIT) initializers_.push_back(id);
         else if (record.role == ir_model::SR_FINI) finalizers_.push_back(id);
     }
-    struct Definition { std::uint64_t offset; unsigned symbol; bool fragment; };
-    std::vector<Definition> code_owners, data_owners;
-    for (unsigned i = 1; i < map.size(); ++i) if (source.defined[i]) {
-        auto& owners = source.data_symbols[i] ? data_owners : code_owners;
-        owners.push_back({source.symbols[i],i,obj.symbols[i].fragment});
-    }
-    auto order = [](const Definition& a, const Definition& b) {
-        if (a.offset != b.offset) return a.offset < b.offset;
-        if (a.fragment != b.fragment) return !a.fragment;
-        return a.symbol > b.symbol;
-    };
-    std::sort(code_owners.begin(),code_owners.end(),order);
-    std::sort(data_owners.begin(),data_owners.end(),order);
-    auto fixes = [&](const std::vector<native::Fixup>& input, std::vector<native::Fixup>& output, std::size_t offset, const std::vector<Definition>& owners) {
+    auto fixes = [&](const std::vector<native::Fixup>& input, std::vector<native::Fixup>& output, std::size_t offset) {
         for (auto f : input) {
-            auto owner = std::upper_bound(owners.begin(),owners.end(),f.offset,
-                [](std::uint64_t address, const Definition& d) { return address < d.offset; });
-            if (owner != owners.begin()) {
-                --owner; f.owner = map[owner->symbol]; f.definition = owner->offset+offset;
-            }
+            f.owner = definitions.at(f.owner);
             f.symbol = map.at(f.symbol); f.offset += offset;
             if (f.kind == native::Fixup::RelativeSymbol) f.end += offset;
             output.push_back(f);
         }
     };
-    fixes(source.code_fixups,image_.code_fixups,code_offset,code_owners);
-    fixes(source.data_fixups,image_.data_fixups,data_offset,data_owners);
+    fixes(source.code_fixups,image_.code_fixups,code_offset);
+    fixes(source.data_fixups,image_.data_fixups,data_offset);
     image_.code.insert(image_.code.end(),source.code.begin(),source.code.end());
     image_.data.insert(image_.data.end(),source.data.begin(),source.data.end());
     image_.has_tls |= source.has_tls;
 }
+void Linker::retain_relocations()
+{
+    struct Edge { unsigned symbol, next; };
+    std::vector<Edge> edges(1);
+    std::vector<unsigned> heads(lazy_definitions_.size()), work;
+    std::vector<bool> live(heads.size());
+    auto demand = [&](unsigned definition) {
+        if (!live[definition]) { live[definition] = true; work.push_back(definition); ++definition_work; }
+    };
+    demand(0); // Unowned section bytes, including foreign unwind records.
+    for (unsigned id = 1; id < symbols_.size(); ++id)
+        if (image_.defined[id] && !lazy_definitions_[symbol_definitions_[id]]) demand(symbol_definitions_[id]);
+    for (const auto* fixes : {&image_.code_fixups,&image_.data_fixups}) for (const auto& f : *fixes) {
+        edges.push_back({f.symbol,heads[f.owner]}); heads[f.owner] = edges.size()-1;
+    }
+    // Each definition and dependency edge is visited at most once. A retained
+    // alias roots the same definition; a discarded weak body's GOT stays cold.
+    for (unsigned at = 0; at < work.size(); ++at) for (auto i = heads[work[at]]; i; i = edges[i].next) {
+        ++relocation_work;
+        auto symbol = edges[i].symbol;
+        if (!image_.defined[symbol]) {
+            auto name = symbols_[symbol].name ? names_.spelling(symbols_[symbol].name) : cppgm::TextView{"<runtime>",9};
+            throw std::runtime_error("unresolved native symbol: " + std::string(name.data,name.size));
+        }
+        demand(symbol_definitions_[symbol]);
+    }
+    for (auto* fixes : {&image_.code_fixups,&image_.data_fixups})
+        fixes->erase(std::remove_if(fixes->begin(),fixes->end(),[&](const native::Fixup& f) {
+            return !live[f.owner];
+        }),fixes->end());
+}
 std::size_t Linker::finish(const std::string& path)
 {
     require(entry_ && image_.defined[entry_],"missing main");
-    for (auto* fixes : {&image_.code_fixups,&image_.data_fixups})
-        fixes->erase(std::remove_if(fixes->begin(),fixes->end(),[&](const native::Fixup& f) {
-            return f.owner && image_.symbols[f.owner] != f.definition;
-        }),fixes->end());
-    // Relocations use the one resolved identity even from discarded weak bodies.
-    for (const auto* fixes : {&image_.code_fixups,&image_.data_fixups}) for (const auto& f : *fixes)
-        if (!image_.defined[f.symbol]) {
-            auto name = symbols_[f.symbol].name ? names_.spelling(symbols_[f.symbol].name) : cppgm::TextView{"<runtime>",9};
-            throw std::runtime_error("unresolved native symbol: " + std::string(name.data,name.size));
-        }
+    retain_relocations();
     std::vector<lowir_model::SymbolId> init, fini;
     for (auto id : initializers_) init.push_back(lowir_model::SymbolId(id));
     for (auto id : finalizers_) fini.push_back(lowir_model::SymbolId(id));

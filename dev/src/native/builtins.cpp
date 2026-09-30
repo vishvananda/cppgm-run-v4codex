@@ -1,6 +1,6 @@
 #include "native/encoding.h"
 namespace native {
-// Canonical builtin identity enters through explicit object metadata. This is a
+// Canonical builtin identity enters through typed symbol metadata. This is a
 // target runtime definition, constructed as MIR and consumed by the same encoder.
 Function builtin_strlen(const lowir_model::Program& p, const lowir_model::Function& source)
 {

@@ -8,9 +8,9 @@ enum class Role { Type, Argument, Expression, Context, Entity };
 bool accepts(Kind kind, Role role) {
     switch (role) {
     case Role::Type: return kind <= Kind::Lambda;
-    case Role::Argument: return kind == Kind::WideValue || (kind >= Kind::TypeArgument && kind <= Kind::EntityArgument);
+    case Role::Argument: return kind == Kind::WideValue || kind == Kind::NegativeWideValue || (kind >= Kind::TypeArgument && kind <= Kind::EntityArgument);
     case Role::Expression:
-        return kind == Kind::Value || kind == Kind::WideValue || kind == Kind::AlignofType || kind == Kind::DestructorName || kind == Kind::ExprThis || kind == Kind::InitList || kind == Kind::TypeidType || kind == Kind::TypeidExpression || kind == Kind::NewExpression || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
+        return kind == Kind::Value || kind == Kind::WideValue || kind == Kind::NegativeWideValue || kind == Kind::AlignofType || kind == Kind::DestructorName || kind == Kind::ExprThis || kind == Kind::InitList || kind == Kind::TypeidType || kind == Kind::TypeidExpression || kind == Kind::NewExpression || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
     case Role::Context: return kind == Kind::RawContext || kind == Kind::FunctionEntity;
     case Role::Entity: return kind >= Kind::FunctionEntity && kind <= Kind::SymbolEntity;
     }
@@ -48,9 +48,15 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
     case Kind::Pointer: case Kind::Reference: case Kind::RvalueReference:
     case Kind::Pack: case Kind::Vector: case Kind::TypeArgument: case Kind::Value:
     case Kind::TemplateEntity: case Kind::SizeofType: case Kind::AlignofType: case Kind::TypeidType: edge(a, Role::Type); break;
-    case Kind::WideValue:
-        require((*this)[a].kind == Kind::Builtin && ((*this)[a].a == ABI_BUILTIN_TYPE_INT128 ||
-            (*this)[a].a == ABI_BUILTIN_TYPE_UINT128)); break;
+    case Kind::WideValue: case Kind::NegativeWideValue:
+        edge(a, Role::Type);
+        if ((*this)[a].kind == Kind::Builtin) {
+            auto builtin = (*this)[a].a;
+            require(builtin == ABI_BUILTIN_TYPE_INT128 || builtin == ABI_BUILTIN_TYPE_UINT128);
+            require((kind == Kind::NegativeWideValue) == (builtin == ABI_BUILTIN_TYPE_INT128 && (c >> 31)));
+        }
+        if (kind == Kind::NegativeWideValue) require(c >> 31);
+        break;
     case Kind::TypeidExpression: edge(a, Role::Expression); break;
     case Kind::Vendor: edge(a, Role::Type); text(b); break;
     case Kind::Array: edge(a, Role::Type); if (b) edge(b, Role::Expression); break;
@@ -64,7 +70,7 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
     case Kind::Lambda: edge(a, Role::Context); sequence(Role::Type); return;
     case Kind::RawContext: case Kind::SymbolEntity: text(a); break;
     case Kind::DependentValue:
-        edge(a, Role::Type); require((*this)[b].kind == Kind::Value || (*this)[b].kind == Kind::WideValue); break;
+        edge(a, Role::Type); require((*this)[b].kind == Kind::Value || (*this)[b].kind == Kind::WideValue || (*this)[b].kind == Kind::NegativeWideValue); break;
     case Kind::ArgumentPack: sequence(Role::Argument); return;
     case Kind::MemberTemplateEntity: edge(a, Role::Type); text(b); break;
     case Kind::EntityArgument: case Kind::EntityExpression:

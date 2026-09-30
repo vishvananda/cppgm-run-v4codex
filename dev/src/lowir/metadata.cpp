@@ -67,6 +67,9 @@ SymbolMetadata Reader::metadata(bool function, FunctionBoundaryMetadata* boundar
         } while (accept(","));
         expect("]");
     }
+    // The explicit LowIR adapter decodes the legacy runtime spelling once.
+    // Source lowering records this typed fact directly from its builtin entity.
+    if (function && p_.name(m.object) == "cppgm_builtin_strlen") m.builtin = SymbolMetadata::Builtin::Strlen;
     return m;
 }
 void Reader::parameter_metadata(Parameter& p)

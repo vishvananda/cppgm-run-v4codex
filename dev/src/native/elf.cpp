@@ -49,7 +49,7 @@ void encode_data(const lowir_model::Program& p, Image& image)
                 if (item.kind == DataItem::Scalar) scalar_data(image.data,item,p);
                 else {
                     Fixup fix; fix.kind = Fixup::AbsoluteSymbol; fix.offset = image.data.size();
-                    fix.symbol = item.symbol.index; fix.addend = item.addend; image.data_fixups.push_back(fix);
+                    fix.symbol = item.symbol.index; fix.addend = item.addend; fix.owner = g.symbol.index; image.data_fixups.push_back(fix);
                     append(image.data,0,8);
                 }
             }
@@ -59,7 +59,7 @@ void encode_data(const lowir_model::Program& p, Image& image)
         image.data.resize(aligned(image.data.size(),16),0);
         unsigned id = image.runtime_begin+unsigned(RuntimeEntity::ThreadPointer);
         image.symbols[id] = image.data.size(); image.defined[id] = image.data_symbols[id] = true;
-        Fixup fix; fix.kind = Fixup::AbsoluteSymbol; fix.symbol = id; fix.offset = image.data.size();
+        Fixup fix; fix.kind = Fixup::AbsoluteSymbol; fix.symbol = id; fix.owner = id; fix.offset = image.data.size();
         image.data_fixups.push_back(fix); append(image.data,0,8);
     }
     for (const auto& f : p.functions) {

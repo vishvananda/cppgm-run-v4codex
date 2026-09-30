@@ -7,9 +7,8 @@ struct Fixup {
     std::size_t offset = 0, end = 0;
     unsigned symbol = 0;
     std::int64_t addend = 0;
-    // Link-only origin; discarded weak definitions do not demand relocations.
+    // Producer-recorded definition identity; zero denotes unconditional bytes.
     unsigned owner = 0;
-    std::uint64_t definition = 0;
 };
 struct Image {
     std::vector<unsigned char> code, data;

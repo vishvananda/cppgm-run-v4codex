@@ -271,31 +271,57 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
     if (definition) {
         if (entities[e].complete) throw std::runtime_error("enum redefinition");
         WideInteger next = 0;
-        bool negative = false;
+        WideInteger positive = 0, negative = 0;
+        bool next_negative = false, next_overflow = false;
+        TypeId previous_type = underlying;
+        auto storage = [&](WideInteger high, WideInteger low) {
+            for (auto ft : {FT_INT, FT_UNSIGNED_INT, FT_LONG_INT, FT_UNSIGNED_LONG_INT, FT_INT128, FT_UINT128}) {
+                auto type = types.fundamental(ft);
+                auto sign = WideInteger(1) << (width(type)-1);
+                auto maximum = is_unsigned(type) ? (sign-1)*2+1 : sign-1;
+                if (high <= maximum && low <= (is_unsigned(type) ? 0 : sign)) return type;
+            }
+            throw std::runtime_error("enumerators have no representable underlying type");
+        };
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
             if (ast[c].kind != Kind::Enumerator) continue;
-            Constant value = ast[c].first ? evaluate(ast[c].first, entities[e].scope) : integer_constant(underlying, next);
+            if (!ast[c].first && next_overflow) throw std::runtime_error("enumerator increment overflows");
+            auto next_type = storage(next_negative ? 0 : next,next_negative ? 0-next : 0);
+            Constant value = ast[c].first ? evaluate(ast[c].first, entities[e].scope) : integer_constant(next_type, next);
             if (!value.valid || !integral(value.type)) throw std::runtime_error("invalid enumerator initializer");
+            if (!ast[c].first) {
+                auto preceding = convert(value,previous_type,true);
+                if (same_integer_value(value,preceding)) value = preceding;
+            }
             if (!scoped && !underlying_node) {
                 bool sign = negative_constant(value);
-                negative |= sign;
-                if (!sign && integer_value(value) > 2147483647u) {
-                    if (integer_value(value) <= 4294967295u && !negative && width(underlying) <= 32) underlying = types.fundamental(FT_UNSIGNED_INT);
-                    else underlying = types.fundamental(integer_value(value) <= 9223372036854775807ull ? FT_LONG_INT : integer_value(value) <= ~std::uint64_t(0) ? FT_UNSIGNED_LONG_INT : FT_UINT128);
-                } else if (negative && is_unsigned(underlying)) underlying = types.fundamental(FT_LONG_INT);
+                auto bits = integer_value(value);
+                if (sign) negative = std::max(negative,0-bits);
+                else positive = std::max(positive,bits);
+                underlying = storage(positive,negative);
                 entities[e].underlying = underlying;
+            } else {
+                auto converted = convert(value,underlying,true);
+                if (!same_integer_value(value,converted)) throw std::runtime_error("enumerator outside underlying range");
+                value = converted;
             }
-            value = convert(value, underlying, true);
             EntityId v = make_entity(EntityKind::Enumerator, entities[e].scope, ast[c].text, c);
-            entities[v].type = t; entities[v].constant = Constant(underlying, value.bits);
+            entities[v].type = value.type; entities[v].constant = value;
             bind(entities[e].scope, ast[c].text, v);
             if (!scoped) bind(owner, ast[c].text, v);
             std::uint32_t d = record(scoped ? es : owner, v, c, t, EntityKind::Enumerator);
             if (qualified_definition) declarations[d].display_name = name;
             next = integer_value(value) + 1;
+            previous_type = value.type;
+            next_negative = negative_constant(value) && next;
+            next_overflow = !negative_constant(value) && !next;
         }
-        for (NodeId c = ast[n].first; c; c = ast[c].next)
-            if (ast[c].kind == Kind::Enumerator) entities[facts[c].entity].constant.type = t;
+        for (NodeId c = ast[n].first; c; c = ast[c].next) if (ast[c].kind == Kind::Enumerator) {
+            auto& enumerator = entities[facts[c].entity];
+            // Re-encode before publishing the enum type: bits may be a pool ID.
+            enumerator.constant = convert(enumerator.constant,underlying,true);
+            enumerator.constant.type = enumerator.type = t;
+        }
         entities[e].complete = true;
         entities[e].definition = n;
     }

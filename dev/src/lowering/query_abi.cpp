@@ -48,9 +48,10 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     case QueryKind::ListInitialization: throw std::logic_error("semantic initialization used as source ABI expression");
     case QueryKind::This: result = abi.make(Kind::ExprThis); break;
     case QueryKind::Value:
-        if (sem.integral_type(q.type) && sem.type_width(q.type) == 128) {
-            auto bits = sem.integer_value(semantic::Constant(q.type,q.value));
-            result = abi.wide_value(abi_type(q.type),std::uint64_t(bits),std::uint64_t(bits >> 64));
+        if (sem.integral_type(q.type) && (sem.type_width(q.type) == 128 || sem.types[q.type].kind == TypeKind::Named)) {
+            auto constant = semantic::Constant(q.type,q.value);
+            auto bits = sem.integer_value(constant);
+            result = abi.wide_value(abi_type(q.type),std::uint64_t(bits),std::uint64_t(bits >> 64),sem.negative_constant(constant));
         } else result = abi.make(Kind::Value,abi_type(q.type),0,0,q.value);
         break;
     case QueryKind::TemplateValueParameter: result = abi.make(Kind::ExprParameter,0,0,0,sem.template_ordinal(q.entity)); break;

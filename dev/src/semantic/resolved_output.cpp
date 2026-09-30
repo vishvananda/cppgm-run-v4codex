@@ -63,7 +63,11 @@ void Analyzer::write_expression(std::ostream& out, NodeId n, unsigned depth, Typ
     if (kind == Kind::Literal) {
         out << ' ';
         if (zero_cast) out << 0;
-        else if (e.form == ExpressionForm::ConstantQuery) out << integer_text(constants[facts[n].value]);
+        else if (e.form == ExpressionForm::ConstantQuery) {
+            auto value = constants[facts[n].value];
+            if (floating_type(value.type)) out << floating_value(value);
+            else out << integer_text(value);
+        }
         else if (e.entity && entities[e.entity].kind == EntityKind::Enumerator) {
             Constant c = entities[e.entity].constant;
             out << integer_text(c);

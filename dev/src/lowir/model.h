@@ -80,12 +80,14 @@ struct Operand {
 std::string integer_text(const Operand& value);
 struct DebugLocation { Name file = 0; std::uint32_t line = 0, column = 0; };
 struct SymbolMetadata {
+    enum class Builtin : unsigned char { None, Strlen };
     SymbolRole role = SR_NONE;
     LanguageLinkageMode linkage = LLM_DEFAULT;
     SymbolBindingMode binding = SBM_DEFAULT;
     GlobalStorageMode storage = GSM_DEFAULT;
     Name object = 0, section = 0;
     SymbolId tls_for;
+    Builtin builtin = Builtin::None;
     bool keep_alias = false, prefer_local = false, object_root = false;
     bool force_inline = false, inline_hint = false, no_inline = false;
 };

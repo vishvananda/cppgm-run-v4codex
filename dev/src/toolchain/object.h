@@ -8,7 +8,9 @@ struct Symbol {
     ir_model::SymbolBindingMode binding = ir_model::SBM_INTERNAL;
     ir_model::SymbolRole role = ir_model::SR_NONE;
     unsigned parameters = 0;
-    bool fragment = true;
+    // Aliases share their producer's definition; section anchors have none.
+    unsigned definition = 0;
+    bool lazy = false; // synthetic GOT slots are demanded by live relocations
 };
 struct Object {
     native::Image image;
@@ -28,10 +30,14 @@ class Linker {
     cppgm::IdentifierTable names_;
     lowir_model::NameIndex externals_;
     std::vector<Symbol> symbols_;
+    std::vector<unsigned> symbol_definitions_;
+    std::vector<bool> lazy_definitions_ = std::vector<bool>(1);
     std::vector<unsigned> initializers_, finalizers_;
     unsigned entry_ = 0, parameters_ = 0, alignment_ = 16;
     unsigned new_symbol();
+    void retain_relocations();
 public:
+    std::size_t definition_work = 0, relocation_work = 0;
     Linker();
     void add(Object&&);
     std::size_t finish(const std::string&);

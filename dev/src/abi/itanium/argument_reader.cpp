@@ -5,7 +5,7 @@
 namespace abi_mangle {
 Id FactReader::literal(Id type, const std::string& text) {
     auto t = g[type];
-    if (t.kind != Kind::Builtin || (t.a != ABI_BUILTIN_TYPE_INT128 && t.a != ABI_BUILTIN_TYPE_UINT128))
+    if (t.kind == Kind::Builtin && t.a != ABI_BUILTIN_TYPE_INT128 && t.a != ABI_BUILTIN_TYPE_UINT128)
         return g.make(Kind::Value,type,0,0,integral_value(text));
     using Wide = unsigned __int128;
     bool negative = !text.empty() && text[0] == '-';
@@ -17,10 +17,11 @@ Id FactReader::literal(Id type, const std::string& text) {
         if (digit > 9 || bits > (~Wide(0)-digit)/10) throw std::runtime_error("wide ABI value out of range");
         bits = bits*10+digit;
     }
-    if (t.a == ABI_BUILTIN_TYPE_INT128 && bits > (Wide(1)<<127)-!negative)
+    bool signed_type = t.kind != Kind::Builtin || t.a == ABI_BUILTIN_TYPE_INT128;
+    if (((t.kind == Kind::Builtin && signed_type) || (signed_type && negative)) && bits > (Wide(1)<<127)-!negative)
         throw std::runtime_error("signed wide ABI value out of range");
     if (negative) bits = 0-bits;
-    return g.wide_value(type,std::uint64_t(bits),std::uint64_t(bits>>64));
+    return g.wide_value(type,std::uint64_t(bits),std::uint64_t(bits>>64),signed_type && negative && bits);
 }
 Id FactReader::argument(const Words& w, std::size_t& p) {
     std::string op = take(w, p);

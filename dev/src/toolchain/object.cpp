@@ -13,6 +13,8 @@ Object compile_object(const lowir_model::Program& p, native::Statistics& stats)
 {
     Object obj(p.symbols.size());
     native::compile_image(p,obj.image,{},nullptr,stats);
+    for (unsigned i = 1; i < obj.symbols.size(); ++i)
+        if (obj.image.defined[i]) obj.symbols[i].definition = i;
     for (unsigned i = 1; i <= p.symbols.size(); ++i) {
         const auto& s = p.symbols[i-1];
         auto& symbol = obj.symbols[i];
@@ -34,7 +36,7 @@ Object compile_object(const lowir_model::Program& p, native::Statistics& stats)
     for (const auto& alias : p.aliases) {
         auto target = alias.target.index;
         Symbol record = obj.symbols[target]; record.name = obj.intern(p.name(alias.name));
-        record.role = ir_model::SR_NONE; record.fragment = false; obj.symbols.push_back(record);
+        record.role = ir_model::SR_NONE; obj.symbols.push_back(record);
         obj.image.symbols.push_back(obj.image.symbols[target]);
         obj.image.defined.push_back(obj.image.defined[target]);
         obj.image.data_symbols.push_back(obj.image.data_symbols[target]);
@@ -70,16 +72,19 @@ void write_fixes(std::ostream& out, const std::vector<native::Fixup>& fixes) {
     number(out,fixes.size());
     for (const auto& f : fixes) {
         number(out,f.kind); number(out,f.offset); number(out,f.end); number(out,f.symbol); number(out,f.addend);
+        number(out,f.owner);
     }
 }
 void read_fixes(Reader& r, std::vector<native::Fixup>& fixes, std::size_t bytes, unsigned symbols) {
-    auto count = r.count(40); fixes.reserve(count);
+    auto count = r.count(48); fixes.reserve(count);
     for (unsigned i = 0; i < count; ++i) {
         native::Fixup f; auto kind = r.number();
         require(kind <= native::Fixup::Absolute32Signed,"invalid object relocation");
         f.kind = native::Fixup::Kind(kind); f.offset = r.number(); f.end = r.number();
         auto id = r.number(); require(id && id < symbols,"invalid object relocation symbol"); f.symbol = id;
-        f.addend = r.number(); unsigned width = f.kind == native::Fixup::AbsoluteSymbol ? 8 : 4;
+        f.addend = r.number(); auto owner = r.number();
+        require(owner < symbols,"invalid object relocation owner"); f.owner = owner;
+        unsigned width = f.kind == native::Fixup::AbsoluteSymbol ? 8 : 4;
         require(f.offset <= bytes && width <= bytes-f.offset && f.end <= bytes,"invalid object relocation range");
         fixes.push_back(f);
     }
@@ -88,13 +93,13 @@ void read_fixes(Reader& r, std::vector<native::Fixup>& fixes, std::size_t bytes,
 void write_object(const Object& obj, const std::string& path)
 {
     std::ofstream out(path,std::ios::binary); require(bool(out),"cannot create compiler object");
-    out.write("CPPGMOBJ",8); number(out,1); number(out,62); // format, x86-64 target
+    out.write("CPPGMOBJ",8); number(out,2); number(out,62); // format, x86-64 target
     number(out,obj.image.runtime_begin); number(out,obj.alignment); number(out,obj.image.has_tls);
     number(out,obj.symbols.size());
     for (unsigned i = 0; i < obj.symbols.size(); ++i) {
         const auto& s = obj.symbols[i]; auto name = s.name ? obj.name(i) : std::string();
         number(out,name.size()); out.write(name.data(),name.size());
-        number(out,s.binding); number(out,s.role); number(out,s.parameters); number(out,s.fragment);
+        number(out,s.binding); number(out,s.role); number(out,s.parameters); number(out,s.definition); number(out,s.lazy);
         number(out,obj.image.symbols[i]); number(out,obj.image.defined[i]); number(out,obj.image.data_symbols[i]);
     }
     for (const auto* bytes : {&obj.image.code,&obj.image.data}) {
@@ -111,18 +116,18 @@ Object read_object(const std::string& path)
     if (bytes.size() >= 4 && bytes[0] == 127 && bytes[1] == 'E' && bytes[2] == 'L' && bytes[3] == 'F') return read_elf(bytes);
     require(bytes.size() >= 8 && std::string(bytes.begin(),bytes.begin()+8) == "CPPGMOBJ","invalid compiler object");
     Reader r{bytes}; r.pos = 8;
-    require(r.number() == 1 && r.number() == 62,"unsupported compiler object version/target");
+    require(r.number() == 2 && r.number() == 62,"unsupported compiler object version/target");
     auto runtime = r.number(), alignment = r.number(), tls = r.number();
-    auto count = r.count(64);
+    auto count = r.count(72);
     require(runtime && runtime <= count && count-runtime >= unsigned(native::RuntimeEntity::Count),"invalid runtime symbol range");
     require(alignment && alignment <= 4096 && !(alignment&(alignment-1)) && tls <= 1,"invalid object layout");
     Object obj(count-1-unsigned(native::RuntimeEntity::Count));
     obj.image.runtime_begin = runtime; obj.alignment = alignment; obj.image.has_tls = tls;
     for (unsigned i = 0; i < count; ++i) {
         auto name = r.text(); if (!name.empty()) obj.symbols[i].name = obj.intern(name);
-        auto binding = r.number(), role = r.number(), parameters = r.number(), fragment = r.number();
-        require(binding <= ir_model::SBM_WEAK && role <= ir_model::SR_RTTI_DATA && parameters <= 2 && fragment <= 1,"invalid object symbol metadata");
-        auto& s = obj.symbols[i]; s.binding = ir_model::SymbolBindingMode(binding); s.role = ir_model::SymbolRole(role); s.parameters = parameters; s.fragment = fragment;
+        auto binding = r.number(), role = r.number(), parameters = r.number(), definition = r.number(), lazy = r.number();
+        require(binding <= ir_model::SBM_WEAK && role <= ir_model::SR_RTTI_DATA && parameters <= 2 && definition < count && lazy <= 1,"invalid object symbol metadata");
+        auto& s = obj.symbols[i]; s.binding = ir_model::SymbolBindingMode(binding); s.role = ir_model::SymbolRole(role); s.parameters = parameters; s.definition = definition; s.lazy = lazy;
         obj.image.symbols[i] = r.number(); auto defined = r.number(), data = r.number();
         require(defined <= 1 && data <= 1,"invalid object symbol flags");
         obj.image.defined[i] = defined; obj.image.data_symbols[i] = data;
@@ -132,6 +137,11 @@ Object read_object(const std::string& path)
         require(obj.image.symbols[i] <= (obj.image.data_symbols[i] ? obj.image.data.size() : obj.image.code.size()),"invalid object symbol offset");
     read_fixes(r,obj.image.code_fixups,obj.image.code.size(),count);
     read_fixes(r,obj.image.data_fixups,obj.image.data.size(),count);
+    for (unsigned i = 0; i < count; ++i) if (auto owner = obj.symbols[i].definition)
+        require(obj.image.defined[i] && obj.image.defined[owner] && obj.symbols[owner].definition == owner &&
+            obj.image.data_symbols[i] == obj.image.data_symbols[owner] && obj.image.symbols[i] == obj.image.symbols[owner],"invalid object definition identity");
+    for (const auto* fixes : {&obj.image.code_fixups,&obj.image.data_fixups}) for (const auto& f : *fixes)
+        require(!f.owner || obj.symbols[f.owner].definition == f.owner,"invalid object fixup definition");
     require(r.pos == bytes.size(),"trailing compiler object data"); return obj;
 }
 } }

@@ -69,6 +69,12 @@ bool Analyzer::narrowing_conversion(TypeId from, TypeId target, Constant value)
             (is_unsigned(target) && !is_unsigned(from) && negative_constant(value)) ||
             (!is_unsigned(target) && is_unsigned(from) && negative_constant(converted));
     }
+    if (a) {
+        // Compare with the exact integer, not an already rounded host value.
+        auto converted = convert(value,target,true);
+        auto restored = convert(converted,from,true);
+        return !same_integer_value(value,restored);
+    }
     long double exact = floating_value(value);
     long double rounded = fundamental(target,FT_FLOAT) ? static_cast<long double>(float(exact)) :
         fundamental(target,FT_DOUBLE) ? static_cast<long double>(double(exact)) : exact;

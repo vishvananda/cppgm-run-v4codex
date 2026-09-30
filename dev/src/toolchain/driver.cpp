@@ -60,7 +60,7 @@ Object source(const std::string& path, const Options& o, native::Statistics& sta
 int run(const std::vector<std::string>& args)
 {
     auto start = std::chrono::steady_clock::now(); auto o = options(args);
-    native::Statistics stats; std::size_t text = 0;
+    native::Statistics stats; std::size_t text = 0, link_definitions = 0, link_relocations = 0;
     if (o.compile) { auto obj = source(o.inputs[0],o,stats); text = obj.image.code.size(); write_object(obj,o.output); }
     else {
         Linker linker;
@@ -76,12 +76,14 @@ int run(const std::vector<std::string>& args)
             linker.add(read_object(found));
         }
         text = linker.finish(o.output);
+        link_definitions = linker.definition_work; link_relocations = linker.relocation_work;
     }
     if (o.stats) {
         struct rusage usage; getrusage(RUSAGE_SELF,&usage);
         std::cerr << "{\"driver_ms\":" << std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count()
             << ",\"peak_rss_kib\":" << usage.ru_maxrss << ",\"text_bytes\":" << text
             << ",\"native_functions\":" << stats.functions << ",\"native_instructions\":" << stats.instructions
+            << ",\"link_definition_work\":" << link_definitions << ",\"link_relocation_work\":" << link_relocations
             << ",\"selection_ms\":" << stats.selection_ms << ",\"encoding_ms\":" << stats.encoding_ms << "}\n";
     }
     return 0;

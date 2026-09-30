@@ -21,6 +21,39 @@ struct ElfReader {
         require(end,"unterminated ELF string"); return std::string(begin,end);
     }
 };
+// ELF is an explicit input adapter. Resolve bounded symbol extents here once;
+// the linker consumes identities, never guesses ownership from byte addresses.
+struct ElfDefinitions {
+    struct Range { std::uint64_t begin, end; unsigned owner; };
+    std::vector<Range> code, data;
+    void add(bool is_data, std::uint64_t begin, std::uint64_t size, unsigned owner) {
+        if (size) (is_data ? data : code).push_back({begin,begin+size,owner});
+    }
+    void finish(Object& obj) {
+        for (auto* ranges : {&code,&data}) {
+            std::sort(ranges->begin(),ranges->end(),[](const Range& a,const Range& b) { return a.begin < b.begin; });
+            unsigned count = 0;
+            for (auto r : *ranges) {
+                if (count && (*ranges)[count-1].begin == r.begin) {
+                    auto& prior = (*ranges)[count-1]; prior.end = std::max(prior.end,r.end);
+                    obj.symbols[r.owner].definition = prior.owner;
+                } else {
+                    require(!count || (*ranges)[count-1].end <= r.begin,"overlapping ELF definitions");
+                    obj.symbols[r.owner].definition = r.owner;
+                    (*ranges)[count++] = r;
+                }
+            }
+            ranges->resize(count);
+        }
+    }
+    unsigned owner(bool is_data, std::uint64_t offset) const {
+        const auto& ranges = is_data ? data : code;
+        auto at = std::upper_bound(ranges.begin(),ranges.end(),offset,
+            [](std::uint64_t n,const Range& r) { return n < r.begin; });
+        if (at == ranges.begin()) return 0;
+        --at; return offset < at->end ? at->owner : 0;
+    }
+};
 }
 Object read_elf(const std::vector<unsigned char>& bytes)
 {
@@ -45,9 +78,9 @@ Object read_elf(const std::vector<unsigned char>& bytes)
     for (unsigned i = 1; i < sections.size(); ++i) {
         const auto& s = sections[i]; if (!(s.sh_flags & SHF_ALLOC)) continue;
         require(!(s.sh_flags & SHF_TLS),"foreign TLS requires the hosted object ABI");
-        unsigned alignment = std::max(std::uint64_t(1),s.sh_addralign);
+        auto alignment = std::max(std::uint64_t(1),s.sh_addralign);
         require(alignment <= 4096 && !(alignment&(alignment-1)),"unsupported ELF section alignment");
-        obj.alignment = std::max(obj.alignment,alignment);
+        obj.alignment = std::max(obj.alignment,unsigned(alignment));
         bool data = !(s.sh_flags & SHF_EXECINSTR);
         auto& out = data ? obj.image.data : obj.image.code;
         out.resize((out.size()+alignment-1)&~std::size_t(alignment-1),0); offsets[i] = out.size(); loaded[i] = true;
@@ -55,12 +88,12 @@ Object read_elf(const std::vector<unsigned char>& bytes)
         if (s.sh_type == SHT_NOBITS) out.resize(out.size()+s.sh_size,0);
         else { r.range(s.sh_offset,s.sh_size); out.insert(out.end(),bytes.begin()+s.sh_offset,bytes.begin()+s.sh_offset+s.sh_size); }
         auto id = count+i+1;
-        obj.symbols[id].fragment = false;
         obj.image.defined[id] = true; obj.image.data_symbols[id] = data; obj.image.symbols[id] = offsets[i];
     }
+    ElfDefinitions definitions;
     for (unsigned i = 1; i < count; ++i) {
         auto s = r.get<Elf64_Sym>(table.sh_offset+i*sizeof(Elf64_Sym)); auto id = i+1;
-        auto& record = obj.symbols[id]; record.fragment = ELF64_ST_TYPE(s.st_info) == STT_FUNC || ELF64_ST_TYPE(s.st_info) == STT_OBJECT; auto text = r.string(sections[table.sh_link],s.st_name);
+        auto& record = obj.symbols[id]; auto text = r.string(sections[table.sh_link],s.st_name);
         if (!text.empty()) record.name = obj.intern(text);
         auto binding = ELF64_ST_BIND(s.st_info);
         require(binding <= STB_WEAK,"unsupported ELF symbol binding");
@@ -69,10 +102,13 @@ Object read_elf(const std::vector<unsigned char>& bytes)
         if (ELF64_ST_TYPE(s.st_info) == STT_FILE) continue;
         require(s.st_shndx < sections.size(),"unsupported ELF special symbol section");
         if (!loaded[s.st_shndx]) continue;
-        require(s.st_value <= sections[s.st_shndx].sh_size,"invalid ELF symbol value");
+        require(s.st_value <= sections[s.st_shndx].sh_size && s.st_size <= sections[s.st_shndx].sh_size-s.st_value,"invalid ELF symbol extent");
         obj.image.defined[id] = true; obj.image.symbols[id] = offsets[s.st_shndx]+s.st_value;
         obj.image.data_symbols[id] = !(sections[s.st_shndx].sh_flags & SHF_EXECINSTR);
+        if (ELF64_ST_TYPE(s.st_info) == STT_FUNC || ELF64_ST_TYPE(s.st_info) == STT_OBJECT)
+            definitions.add(obj.image.data_symbols[id],obj.image.symbols[id],s.st_size,id);
     }
+    definitions.finish(obj);
     std::vector<unsigned> got(count);
     for (const auto& section : sections) {
         if (section.sh_type != SHT_RELA && section.sh_type != SHT_REL) continue;
@@ -91,6 +127,7 @@ Object read_elf(const std::vector<unsigned char>& bytes)
             unsigned width = kind == R_X86_64_64 ? 8 : 4;
             require(rel.r_offset <= target.sh_size && width <= target.sh_size-rel.r_offset,"invalid ELF relocation offset");
             f.offset = offsets[section.sh_info]+rel.r_offset;
+            f.owner = definitions.owner(data,f.offset);
             if (kind == R_X86_64_64) f.kind = native::Fixup::AbsoluteSymbol;
             else if (kind == R_X86_64_PC32 || kind == R_X86_64_PLT32) { f.kind = native::Fixup::RelativeSymbol; f.end = f.offset; }
             else if (kind == R_X86_64_32) f.kind = native::Fixup::Absolute32;
@@ -101,12 +138,13 @@ Object read_elf(const std::vector<unsigned char>& bytes)
                 if (!got[symbol]) {
                     auto id = obj.symbols.size(); got[symbol] = id;
                     obj.symbols.push_back(Symbol());
+                    obj.symbols.back().definition = id; obj.symbols.back().lazy = true;
                     obj.image.data.resize((obj.image.data.size()+7)&~std::size_t(7),0);
                     auto offset = obj.image.data.size();
                     obj.image.symbols.push_back(offset); obj.image.defined.push_back(true);
                     obj.image.data_symbols.push_back(true); obj.image.tls_targets.push_back(0);
                     native::Fixup slot; slot.kind = native::Fixup::AbsoluteSymbol;
-                    slot.symbol = symbol+1; slot.offset = offset;
+                    slot.symbol = symbol+1; slot.offset = offset; slot.owner = id;
                     obj.image.data_fixups.push_back(slot); obj.image.data.resize(offset+8,0);
                 }
                 f.kind = native::Fixup::RelativeSymbol; f.end = f.offset; f.symbol = got[symbol];

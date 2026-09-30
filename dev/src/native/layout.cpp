@@ -27,6 +27,7 @@ void Encoder::epilogue_code()
 }
 void Encoder::encode(const Function& f)
 {
+    auto first_fixup = image.code_fixups.size();
     function = &f;
     image.symbols[f.symbol.index] = code.size(); image.defined[f.symbol.index] = true;
     if (f.frame_pointer) { byte(0x55); form(0x89,64,XR_RSP,Operand::r(XR_RBP)); }
@@ -64,6 +65,8 @@ void Encoder::encode(const Function& f)
         require(relative >= INT32_MIN && relative <= INT32_MAX, "native branch out of range");
         for (unsigned k = 0; k < 4; ++k) code[fix.offset+k] = std::uint64_t(relative) >> (8*k);
     }
+    for (auto i = first_fixup; i < image.code_fixups.size(); ++i)
+        image.code_fixups[i].owner = f.symbol.index;
 }
 std::vector<Instruction> startup(const lowir_model::Program& p)
 {
