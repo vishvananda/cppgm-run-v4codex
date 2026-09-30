@@ -40,15 +40,13 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     TypeQuery q; std::vector<QueryId> children;
     auto node = ast[n]; auto first = node.first;
     switch (node.kind) {
+    case Kind::StatementExpression: case Kind::Lambda: {
+        auto id = statement_result_query(n,s); source_index.put(key(s,n),id); return id;
+    }
     case Kind::BracedInit:
         q.kind = QueryKind::List; q.context = s;
         for (auto c = first; c; c = ast[c].next) children.push_back(expression_query(c,s));
         break;
-    case Kind::Lambda:
-        // An unevaluated lambda is forbidden in C++11. The source binder may
-        // still ask for a dependent initializer's type before instantiation.
-        if (template_type_probe) return 0;
-        throw std::runtime_error("lambda in unevaluated operand");
     case Kind::PackExpression:
         q.kind = QueryKind::Expansion; children.push_back(expression_query(first,s)); break;
     case Kind::New: case Kind::Delete: {
@@ -295,6 +293,21 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
     auto& results = owner ? specialization_query_cache : cache;
     if (auto old = results.get(cache_key)) return old;
     auto q = type_queries[id];
+    if (q.kind == QueryKind::StatementResult && owner) {
+        auto context = substitution_frame_contexts.get(owner);
+        if (!context) throw std::logic_error("statement query has no occurrence context");
+        auto source = ast.projected(q.value,context);
+        if (!source) source = ast.instantiate(q.value,context);
+        demand_region(source);
+        facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
+        auto scope = substitution_scope(owner,q.context);
+        ++unevaluated_depth;
+        try { q.type = expression(source,scope).type; }
+        catch (...) { --unevaluated_depth; throw; }
+        --unevaluated_depth;
+        q.value = source; q.context = scope; q.dependent_name = false;
+        auto result = intern_query(q,{}); results.put(cache_key,result); return result;
+    }
     if (q.kind == QueryKind::SizeofPack) {
         auto frame = owner;
         while (frame && substitution_frames[frame].expansion) frame = substitution_frames[frame].parent;
@@ -448,6 +461,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     }
     r.dependent |= q.type && dependent_type(q.type);
     r.dependent |= q.kind == QueryKind::TemplateValueParameter || q.kind == QueryKind::SizeofPack || q.kind == QueryKind::Expansion;
+    r.dependent |= q.kind == QueryKind::StatementResult && q.dependent_name;
     // A template access context belongs to the key, but does not alone make
     // fixed operands dependent: unknown_call(1) must fail at definition time.
     if (q.entity && entities[q.entity].template_pattern) {
@@ -518,6 +532,9 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::Destructor: r = query_destructor(q,children); break;
     case QueryKind::New: r = query_new(q,children); break;
     case QueryKind::Delete: r = query_delete(q,children); break;
+    case QueryKind::StatementResult:
+        x.type = q.type ? q.type : children.empty() ? types.fundamental(FT_VOID) : types.unqualified(decay(children[0].expression.type));
+        break;
     case QueryKind::String: x.type = q.type; x.category = ValueCategory::Lvalue; break;
     case QueryKind::This: x.type = q.type; break;
     case QueryKind::Value:

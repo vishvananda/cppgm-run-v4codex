@@ -103,10 +103,15 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
         if (loop) ++loop_depth;
         if (sw) { ++switch_depth; switches.emplace_back(); }
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
+            bool header = ast[c].kind == Kind::Condition || ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration;
+            if (header && loop) --loop_depth;
+            if (header && sw) --switch_depth;
             if (ast[c].kind == Kind::Condition) resolve_condition(c, control, sw);
             else if (ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration || ast[c].kind == Kind::Then || ast[c].kind == Kind::Else)
                 resolve_statement(c, control);
             else resolve_statement(c, ast[c].kind == Kind::Compound ? control : make_scope(ScopeKind::Block, control));
+            if (header && loop) ++loop_depth;
+            if (header && sw) ++switch_depth;
         }
         if (sw) { --switch_depth; switches.pop_back(); }
         if (loop) --loop_depth;

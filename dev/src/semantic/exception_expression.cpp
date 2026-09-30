@@ -119,6 +119,22 @@ bool Analyzer::expression_nonthrowing(NodeId n)
     }
     if (node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack || node.kind == Kind::TypeTrait) return true;
     bool result = node.kind != Kind::Throw;
+    if (node.kind == Kind::SimpleDeclaration) {
+        auto list = child(n,Kind::InitDeclarators);
+        for (auto item = ast[list].first; item; item = ast[item].next) {
+            auto e = facts[ast[item].first].entity;
+            if (!e || entities[e].kind != EntityKind::Variable || entities[e].external_decl) continue;
+            auto init = entities[e].initializer, type = entities[e].type;
+            if (!init) result &= default_construction_nonthrowing(object_constructor(e));
+            else {
+                result &= initializer_nonthrowing(initializer_plan(init,type));
+                auto construction = class_initialization(init,type);
+                if (construction.conversion) result &= conversion_nonthrowing(conversions[construction.conversion]);
+            }
+            result &= type_destructor_nonthrowing(type);
+            if (auto temporary = reference_temporary(e)) result &= type_destructor_nonthrowing(entities[temporary].type);
+        }
+    }
     auto arrow = arrow_chains[object_fact(n).arrow];
     for (unsigned j = 0; j < arrow.count; ++j) {
         auto step = arrow_steps[arrow.first+j];
@@ -171,6 +187,7 @@ bool Analyzer::query_nonthrowing(QueryId id, bool temporary)
     if (auto known = query_exception_facts.get(key_value)) return known == 2;
     auto fact = query_fact(id); auto q = type_queries[id];
     if (fact.dependent) throw std::logic_error("dependent exception effect demand");
+    if (q.kind == QueryKind::StatementResult) return expression_nonthrowing(q.value);
     ++exception_work;
     if (q.kind == QueryKind::Typeid) {
         if (q.type) return true;

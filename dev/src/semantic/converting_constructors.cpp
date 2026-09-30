@@ -72,7 +72,7 @@ void Analyzer::materialize_conversion(NodeId n, Conversion& conversion, bool def
     while (ast[source].kind == syntax::Kind::Parenthesized) source = ast[source].first;
     auto value = expressions[source];
     materialized.elided = !conversion.reference && value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(t) &&
-        (ast[source].kind == syntax::Kind::Call || ast[source].kind == syntax::Kind::Lambda || value.form == ExpressionForm::Construction || value.form == ExpressionForm::OperatorCall || value.form == ExpressionForm::Cast);
+        (ast[source].kind == syntax::Kind::StatementExpression || ast[source].kind == syntax::Kind::Call || ast[source].kind == syntax::Kind::Lambda || value.form == ExpressionForm::Construction || value.form == ExpressionForm::OperatorCall || value.form == ExpressionForm::Cast);
     if (!conversion.reference && ast[source].kind == syntax::Kind::Conditional) {
         materialized.elision_permission = value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(t);
         if (defer || (materialized.elision_permission && trivial_transfer(ctor) && copy_storage_type(t))) {

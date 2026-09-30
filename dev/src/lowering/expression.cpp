@@ -9,6 +9,7 @@ Value Procedural::expression(NodeId n, bool location)
     guard_expression(n);
     auto node = ast[n];
     auto fact = sem.expression_fact(n);
+    if (node.kind == Kind::StatementExpression) return statement_expression(n);
     NodeId a = node.first;
     if (fact.form == semantic::ExpressionForm::Typeid || fact.form == semantic::ExpressionForm::DynamicCast)
         return rtti_expression(n);

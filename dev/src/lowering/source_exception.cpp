@@ -208,7 +208,7 @@ void Procedural::try_statement(NodeId n)
                 emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(5))});
                 emit(Opcode::EhEnd,IRType(),{}); exception_fallback();
                 start(ready);
-                if (auto state = sem.object_lifetime(e)) live = state;
+                if (auto state = object_lifetime(e)) live = state;
             } else if (reference(t) && sem.types[sem.types[t].child].kind == TypeKind::Pointer) {
                 // The Itanium runtime returns the adjusted pointer value for
                 // pointer exceptions. A reference parameter needs an address

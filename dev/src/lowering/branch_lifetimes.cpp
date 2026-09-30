@@ -110,6 +110,17 @@ void Procedural::merge_temporaries(std::uint32_t common, std::uint32_t yes, std:
 void Procedural::destroy_lifetime(std::uint32_t id)
 {
     auto action = lifetime_state(id);
+    auto initialized = initialization_guards.get(action.object);
+    if (initialized) {
+        auto ready = emit(Opcode::Load,IRType::I8,{Operand::slot(SlotId(initialized))});
+        auto destroy = block(), end = block();
+        emit(Opcode::Branch,IRType(),{ready.operand,Operand::label(destroy),Operand::label(end)});
+        start(destroy);
+        initialization_guards.put(action.object,0);
+        destroy_lifetime(id);
+        initialization_guards.put(action.object,initialized);
+        jump(end); start(end); return;
+    }
     auto temporary = id & 0x80000000u ? temporary_states[(id & 0x7fffffffu)-1] : TemporaryState();
     if (temporary.release) { release_allocation(temporary.release); return; }
     if (action.object || temporary.destroyed_type) {

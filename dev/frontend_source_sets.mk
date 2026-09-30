@@ -32,6 +32,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/constant_array lowering/constant_arra
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/converting_constructors
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/literal_calls semantic/numeric_literal_calls semantic/literal_constants lowering/literal_calls
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/floating_builtins lowering/floating_builtins
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/statement_expression lowering/statement_expression
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/placement_new lowering/placement_new
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/array_allocation
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/allocation_cleanup

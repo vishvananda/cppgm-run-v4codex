@@ -354,7 +354,10 @@ struct DestructionAction {
 };
 struct LifetimeState { EntityId object = 0, destructor = 0; std::uint32_t tail = 0, depth = 0; };
 struct ThrowUse { TypeId type = 0; NodeId source = 0; std::uint32_t conversion = 0; EntityId destructor = 0; };
-struct LifetimeUse { std::uint32_t entry = 0, exit = 0, target = 0; NodeId context = 0; };
+struct LifetimeUse {
+    std::uint32_t entry = 0, exit = 0, target = 0;
+    NodeId context = 0, expression_region = 0, target_region = 0;
+};
 struct Scope {
     ScopeKind kind = ScopeKind::Namespace;
     ScopeId jump = 0;

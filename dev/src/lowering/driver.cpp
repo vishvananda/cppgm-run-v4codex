@@ -43,6 +43,9 @@ void build_program(lowir_model::Program& program, const std::vector<std::string>
                 << ",\"rtti_expressions\":" << sem.rtti_expressions.size()-1
                 << ",\"rtti_records\":" << lower.rtti_work
                 << ",\"rtti_cache_hits\":" << lower.rtti_hits
+                << ",\"statement_regions\":" << lower.statement_regions
+                << ",\"lifetime_mapping_work\":" << lower.lifetime_mapping_work
+                << ",\"lifetime_mapping_hits\":" << lower.lifetime_mapping_hits
                 << ",\"list_plans\":" << sem.list_plans.size()-1
                 << ",\"list_objects\":" << sem.list_objects.size()-1
                 << ",\"initializer_list_types\":" << sem.initializer_list_types.size()-1

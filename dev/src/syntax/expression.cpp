@@ -139,7 +139,7 @@ NodeId Parser::primary()
     if (in.eat("(")) {
         unsigned saved = angle_expression;
         angle_expression = 0;
-        NodeId result = wrap(Kind::Parenthesized, expression());
+        NodeId result = in.is("{") ? wrap(Kind::StatementExpression, compound()) : wrap(Kind::Parenthesized, expression());
         in.require(")");
         angle_expression = saved;
         return result;

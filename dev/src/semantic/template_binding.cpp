@@ -147,6 +147,7 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
     if (!n) return false;
     ++template_binding_work;
     auto node = ast[n];
+    if (node.kind == Kind::StatementExpression) { bind_template_statement(node.first,s); return true; }
     if (node.kind == Kind::Lambda) { bind_lambda_body(n,s); return true; }
     if (node.kind == Kind::ClassForward && !(node.flags & 2)) {
         if (bind_template_name(node.detail,s).dependent) return true;

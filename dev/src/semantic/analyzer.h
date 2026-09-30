@@ -148,6 +148,8 @@ public:
     bool scalar_transfer_source(EntityId transfer, NodeId source) const;
     EntityId object_destructor(EntityId e) const { return object_destructors.get(e); }
     const LifetimeUse& lifetime_use(NodeId n) const { return lifetime_uses[lifetime_index.get(n)]; }
+    Index initialization_guards;
+    bool expression_nonthrowing(NodeId n);
     std::uint32_t object_lifetime(EntityId e) const { return object_lifetimes.get(e); }
     unsigned return_count(std::uint32_t state, NodeId context) const { return return_counts.get(key(state, context)); }
     std::vector<LifetimeState> lifetimes = std::vector<LifetimeState>(1);
@@ -540,7 +542,6 @@ private:
     void destructor_actions(EntityId e);
     bool implicit_destructor_nonthrowing(EntityId cls);
     bool type_destructor_nonthrowing(TypeId type);
-    bool expression_nonthrowing(NodeId node);
     Index scalar_body_exception_facts;
     bool query_nonthrowing(QueryId query, bool temporary = true);
     bool conversion_nonthrowing(Conversion conversion);
@@ -1170,6 +1171,8 @@ private:
     std::size_t statement_conversion_work = 0, statement_conversion_uses = 0;
     Conversion return_conversion(NodeId source, Expression value, TypeId target, bool eligible);
     Expression expression(NodeId n, ScopeId s);
+    Expression statement_expression(NodeId n, ScopeId s);
+    QueryId statement_result_query(NodeId n, ScopeId s);
     void record_discard_form(NodeId n, Expression& result) const;
     void bind_template_discarded(NodeId n, ScopeId s);
     void prepare_discarded(NodeId n);

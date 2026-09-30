@@ -316,6 +316,15 @@ class Procedural {
     Value user_conversion(NodeId n, const semantic::Conversion& conversion, Value destination = Value(), bool truth = false);
     Value incoming(NodeId n);
     Value expression(NodeId n, bool location = false);
+    Value statement_expression(NodeId n, Value destination = Value());
+    struct LifetimeOverlay { NodeId region; std::uint32_t anchor, replacement, parent; };
+    std::vector<LifetimeOverlay> lifetime_overlays = std::vector<LifetimeOverlay>(1);
+    semantic::Index mapped_lifetimes;
+    semantic::Index initialization_guards;
+    std::uint32_t lifetime_overlay = 0;
+    std::uint32_t map_lifetime(std::uint32_t state, std::uint32_t overlay);
+    std::uint32_t object_lifetime(EntityId object);
+    semantic::LifetimeUse lifetime_use(NodeId n);
     bool discarded_access(NodeId n);
     void discard(NodeId n, bool access = true);
     Value unary(NodeId n);
@@ -403,6 +412,7 @@ public:
     std::size_t aggregate_array_work = 0, aggregate_array_hits = 0;
     std::size_t control_work = 0, discard_work = 0;
     std::size_t full_expression_work = 0, full_expression_regions = 0;
+    std::size_t statement_regions = 0, lifetime_mapping_work = 0, lifetime_mapping_hits = 0;
     std::size_t rtti_work = 0, rtti_hits = 0;
     Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, lowir_model::Program& out, Linkage& links);
     void run();

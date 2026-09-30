@@ -142,6 +142,6 @@ void Procedural::range_initialize(EntityId object, const semantic::RangeOperatio
         else store(typed_conversion(value,c),location);
     }
     finish_full_expression(initial);
-    if (auto lifetime = sem.object_lifetime(object)) live = lifetime;
+    if (auto lifetime = object_lifetime(object)) live = lifetime;
 }
 } }

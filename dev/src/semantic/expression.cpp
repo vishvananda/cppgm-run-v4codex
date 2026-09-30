@@ -94,6 +94,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     ++expression_work;
     NodeId first = ast[n].first;
     switch (ast[n].kind) {
+    case Kind::StatementExpression: return statement_expression(n,s);
     case Kind::Throw: return throw_expression(n,s);
     case Kind::Lambda: return lambda_expression(n,s);
     case Kind::SizeofPack: {

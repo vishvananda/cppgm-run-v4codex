@@ -91,6 +91,7 @@ const char* kind_name(Kind kind)
         "unary-expression",
         "postfix-expression",
         "parenthesized-expression",
+        "statement-expression",
         "call-expression",
         "argument-list",
         "subscript-expression",

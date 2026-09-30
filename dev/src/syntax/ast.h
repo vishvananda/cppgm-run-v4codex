@@ -40,6 +40,7 @@ enum class Kind : unsigned char {
     Unary,
     Postfix,
     Parenthesized,
+    StatementExpression,
     Call,
     Arguments,
     Subscript,

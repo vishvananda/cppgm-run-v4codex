@@ -15,9 +15,11 @@ void Procedural::reset_lifetime(EntityId e)
     release_actions.clear(); release_operands.clear();
     list_backing_addresses = semantic::Index(); list_element_addresses.clear();
     full_expression = FullExpression();
+    lifetime_overlays.resize(1); lifetime_overlay = 0; mapped_lifetimes = semantic::Index();
+    initialization_guards = semantic::Index();
     constructor_block_boundary = 0;
     exception_contexts.resize(1); exception_context = 0;
-    nonthrowing_parameters = e && sem.function_nonthrowing(e) ? sem.lifetime_use(sem.entities[e].body).entry : 0;
+    nonthrowing_parameters = e && sem.function_nonthrowing(e) ? lifetime_use(sem.entities[e].body).entry : 0;
     exception_selectors = semantic::Index(); exception_selector_count = 0;
     unwind_continuations.clear(); unwind_cursor = 0;
     unwind_terminals = semantic::Index(); unwind_dispatches = semantic::Index();
@@ -110,7 +112,7 @@ Value Procedural::guarded_call(Instruction i, const Operand* args, std::size_t c
 }
 void Procedural::return_statement(NodeId n)
 {
-    auto life = sem.lifetime_use(n);
+    auto life = lifetime_use(n);
     bool has_value = result_type() != IRType::Void;
     Value value;
     auto class_return = sem.class_return(n);
@@ -136,6 +138,7 @@ void Procedural::return_statement(NodeId n)
         else value = convert(expression(operand, reference(returned)), returned);
     }
     else if (ast[n].first) expression(ast[n].first);
+    if (ended) { full_expression = FullExpression(); return; }
     finish_full_expression(life.entry);
     auto saved_returning = returning_object;
     returning_object = sem.return_object(active_function);

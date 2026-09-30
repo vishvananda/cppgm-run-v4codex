@@ -29,6 +29,9 @@ NodeId Procedural::child(NodeId n, Kind k) const
 }
 Value Procedural::emit_raw(Instruction i, const Operand* args, std::size_t count)
 {
+    // An expression can leave its containing statement (GNU statement body).
+    // Its remaining consumers have no reachable instruction stream.
+    if (ended) return Value(Operand::integer(0),i.result_type());
     if (full_expression.open && !emitting_cleanup && lowir_model::terminator(i.opcode)) close_expression_region();
     i.operands.begin = p.operands.size(); i.operands.count = count;
     for (std::size_t j = 0; j < count; ++j) p.operands.push_back(args[j]);

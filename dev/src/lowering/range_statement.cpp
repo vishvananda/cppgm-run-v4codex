@@ -2,7 +2,9 @@
 namespace cppgm { namespace lowering {
 void Procedural::range_statement(NodeId n)
 {
-    auto plan = sem.range_plan(n); auto lifetime = sem.lifetime_use(n);
+    auto plan = sem.range_plan(n); auto lifetime = lifetime_use(n);
+    plan.loop_live = map_lifetime(plan.loop_live,lifetime_overlay);
+    plan.body_live = map_lifetime(plan.body_live,lifetime_overlay);
     if (plan.initialize_range) object(plan.range);
     SlotId index;
     if (plan.array || plan.list_element) {

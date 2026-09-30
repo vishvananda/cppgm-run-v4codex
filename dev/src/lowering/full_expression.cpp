@@ -10,6 +10,7 @@ bool Procedural::unwind_expression(NodeId n, bool body_proof)
     if (cache[n]) return cache[n] == 2;
     ++full_expression_work;
     bool result = ast[n].kind == Kind::Throw;
+    if (ast[n].kind == Kind::SimpleDeclaration) result |= !sem.expression_nonthrowing(n);
     auto x = sem.expression_fact(n);
     EntityId callee = sem.facts[n].entity;
     bool call = (ast[n].kind == Kind::Call && x.form != semantic::ExpressionForm::Cast &&
@@ -134,6 +135,7 @@ void Procedural::close_expression_region()
 }
 void Procedural::finish_full_expression(std::uint32_t stop)
 {
+    if (ended) { full_expression = FullExpression(); return; }
     clean_inline(live,stop); close_expression_region(); full_expression = FullExpression();
 }
 } }

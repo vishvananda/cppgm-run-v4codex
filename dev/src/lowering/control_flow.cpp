@@ -319,7 +319,7 @@ void Procedural::statement(NodeId n)
 {
     if (!n) return;
     Kind k = ast[n].kind;
-    auto lifetime = sem.lifetime_use(n); live = lifetime.entry;
+    auto lifetime = lifetime_use(n); live = lifetime.entry;
     if (k == Kind::Compound || k == Kind::Then || k == Kind::Else) {
         for (NodeId c = ast[n].first; c; c = ast[c].next) statement(c);
         if (!ended) clean_inline(lifetime.exit, lifetime.entry);
@@ -366,7 +366,14 @@ void Procedural::statement(NodeId n)
     case Kind::Goto: {
         NodeId target = sem.facts[n].target;
         if (!labels[target] || p.blocks[labels[target].index-1].owner.index != function.index) labels[target] = block();
-        exit_exception_contexts(sem.jump_exception_targets.get(n),lifetime.target);
+        auto from = live, to = lifetime.target;
+        // Leaving an initializer may skip its destination's construction.
+        // The target owns a guarded lifetime; retire only the common suffix.
+        while (from != to) {
+            if (lifetime_state(from).depth >= lifetime_state(to).depth) from = lifetime_state(from).tail;
+            else to = lifetime_state(to).tail;
+        }
+        exit_exception_contexts(sem.jump_exception_targets.get(n),to);
         jump(labels[target]); return;
     }
     case Kind::Break: exit_exception_contexts(sem.jump_exception_targets.get(n),lifetime.target); jump(break_target); return;
@@ -385,16 +392,15 @@ void Procedural::statement(NodeId n)
         BlockId cond = block(), body = block(), step = k == Kind::For ? block() : cond, end = block();
         BlockId exit_cleanup = lifetime.exit != lifetime.entry ? block() : end;
         BlockId old_break = break_target, old_continue = continue_target;
-        break_target = end; continue_target = step;
         if (k == Kind::For) statement(child(n, Kind::ForInit));
         if (k != Kind::Do) {
             jump(cond); start(cond); condition(child(n, Kind::Condition), body, exit_cleanup);
         } else jump(body);
-        start(body);
+        start(body); break_target = end; continue_target = step;
         NodeId body_node = k == Kind::Do ? ast[n].first : ast[n].last;
         statement(body_node);
-        if (!ended) clean_inline(live, sem.lifetime_use(body_node).entry);
-        jump(step);
+        if (!ended) clean_inline(live, lifetime_use(body_node).entry);
+        jump(step); break_target = old_break; continue_target = old_continue;
         if (k == Kind::For) { start(step); statement(child(n, Kind::Iteration)); jump(cond); }
         if (k == Kind::Do) { start(cond); condition(child(n, Kind::Condition), body, exit_cleanup); }
         if (exit_cleanup.index != end.index) { start(exit_cleanup); clean_inline(lifetime.exit, lifetime.entry); jump(end); }

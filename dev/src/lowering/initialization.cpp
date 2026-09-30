@@ -156,9 +156,16 @@ void Procedural::object(EntityId e)
     if (sem.local_static(e)) { initialize_local_static(e); return; }
     initialized_units = semantic::Index();
     TypeId t = sem.entities[e].type;
-    auto lifetime = sem.object_lifetime(e);
-    if (lifetime) live = sem.lifetimes[lifetime].tail;
+    auto lifetime = object_lifetime(e);
+    if (lifetime) live = lifetime_state(lifetime).tail;
     auto initial_live = live;
+    SlotId initialized;
+    auto guarded_object = lifetime ? lifetime_state(lifetime).object : e;
+    if (sem.initialization_guards.get(guarded_object)) {
+        initialized = builder->add_slot(0,IRType::I8);
+        initialization_guards.put(guarded_object,initialized.index);
+        emit(Opcode::Store,IRType::I8,{Operand::integer(0),Operand::slot(initialized)});
+    }
     prepare_reference_guards(e);
     if (!object_addresses[e] && (!objects[e] || p.slots[objects[e].index-1].owner.index != function.index)) objects[e] = source_slot(e);
     Value location = object_addresses[e] ? Value(Operand::value(object_addresses[e]),type(t),t,true) : Value(Operand::slot(objects[e]), type(t), t, true);
@@ -189,6 +196,8 @@ void Procedural::object(EntityId e)
     // Initialization has succeeded. Constructor-argument temporaries are
     // destroyed next, while this complete destination is already owned here.
     // Earlier unwind snapshots still name the old, unconstructed prefix.
+    if (ended) { full_expression = FullExpression(); return; }
+    if (initialized) emit(Opcode::Store,IRType::I8,{Operand::integer(1),Operand::slot(initialized)});
     if (lifetime) {
         semantic::Index retired, cache;
         live = retire_construction(live,initial_live,retired,cache,lifetime);
