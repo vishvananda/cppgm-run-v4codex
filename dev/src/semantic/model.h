@@ -375,7 +375,7 @@ struct Declaration {
 };
 struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false, injected_member = false; };
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
-enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatInfinite, FloatNormal, FloatClassify, InitializerList, ListValue, BoundMember, Expect, Typeid, DynamicCast, TypeinfoEqual, TypeinfoUnequal };
+enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatNaN, FloatInfinite, FloatNormal, FloatClassify, InitializerList, ListValue, BoundMember, Expect, Typeid, DynamicCast, TypeinfoEqual, TypeinfoUnequal };
 struct RttiExpression {
     TypeId type = 0, source = 0;
     std::int64_t hint = -1;

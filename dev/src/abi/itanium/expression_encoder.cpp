@@ -25,12 +25,9 @@ const char* operation_code(Id op) {
 void Encoder::literal(const Node& n) {
     output += 'L'; type(n.a);
     if (n.kind == Kind::WideValue) {
-        unsigned __int128 bits = (static_cast<unsigned __int128>(n.c) << 96) |
-            (static_cast<unsigned __int128>(n.b) << 64) | n.value;
-        if (g[n.a].a == ABI_BUILTIN_TYPE_INT128 && (bits >> 127)) { output += 'n'; bits = 0-bits; }
-        char digits[40]; unsigned count = 0;
-        do { digits[count++] = char('0'+bits%10); bits /= 10; } while (bits);
-        while (count) output += digits[--count];
+        auto text = g.wide_value_text(n);
+        if (text[0] == '-') text[0] = 'n';
+        output += text;
         output += 'E'; return;
     }
     std::uint64_t bits = n.value;

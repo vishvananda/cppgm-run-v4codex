@@ -14,7 +14,7 @@ def program(name,text):
  exe=art/name
  run([compiler,'-o',exe,src]);run([exe]);checks.append(name)
  obj=art/(name+'.obj');run([compiler,'-c','-o',obj,src]);run([compiler,'-o',exe,obj]);run([exe]);checks.append(name+'-object')
-for name in ['wide','wide-fields']:
+for name in ['wide','wide-fields','floating-builtins']:
  program(name,(root/'student.tests/pa25'/f'{name}.cc').read_text())
 mask=(1<<128)-1
 literal=lambda n:f'((U({(n&mask)>>64}ULL)<<64)|U({n&((1<<64)-1)}ULL))'
@@ -57,5 +57,11 @@ lowir=(art/'template.lowir').read_text()
 expected='_Z5valueILo1267650600228229401496703205379EEov'
 assert expected in names and expected in lowir
 checks.append('wide-template-itanium')
+# Standalone normalized-fact adapter shares the production full-width encoder.
+facts=art/'wide.facts'
+facts.write_text('let-arg N value uint128 1267650600228229401496703205379\ntype template Box N\n')
+run([root/'dev/abimangle','-o',art/'wide.mangled',facts])
+assert (art/'wide.mangled').read_text().strip().endswith('3BoxILo1267650600228229401496703205379EE')
+checks.append('wide-abi-facts')
 (art/'results.json').write_text(json.dumps({'checks':checks,'count':len(checks)},indent=2)+'\n')
 print(f'{len(checks)} scalar controls passed; 96 randomized full-width operand pairs')

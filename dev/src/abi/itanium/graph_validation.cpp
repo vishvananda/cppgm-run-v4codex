@@ -46,8 +46,11 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
         return;
     case Kind::Cv: require(b <= 3); edge(a, Role::Type); break;
     case Kind::Pointer: case Kind::Reference: case Kind::RvalueReference:
-    case Kind::Pack: case Kind::Vector: case Kind::TypeArgument: case Kind::Value: case Kind::WideValue:
+    case Kind::Pack: case Kind::Vector: case Kind::TypeArgument: case Kind::Value:
     case Kind::TemplateEntity: case Kind::SizeofType: case Kind::AlignofType: case Kind::TypeidType: edge(a, Role::Type); break;
+    case Kind::WideValue:
+        require((*this)[a].kind == Kind::Builtin && ((*this)[a].a == ABI_BUILTIN_TYPE_INT128 ||
+            (*this)[a].a == ABI_BUILTIN_TYPE_UINT128)); break;
     case Kind::TypeidExpression: edge(a, Role::Expression); break;
     case Kind::Vendor: edge(a, Role::Type); text(b); break;
     case Kind::Array: edge(a, Role::Type); if (b) edge(b, Role::Expression); break;
@@ -61,7 +64,7 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
     case Kind::Lambda: edge(a, Role::Context); sequence(Role::Type); return;
     case Kind::RawContext: case Kind::SymbolEntity: text(a); break;
     case Kind::DependentValue:
-        edge(a, Role::Type); require((*this)[b].kind == Kind::Value); break;
+        edge(a, Role::Type); require((*this)[b].kind == Kind::Value || (*this)[b].kind == Kind::WideValue); break;
     case Kind::ArgumentPack: sequence(Role::Argument); return;
     case Kind::MemberTemplateEntity: edge(a, Role::Type); text(b); break;
     case Kind::EntityArgument: case Kind::EntityExpression:

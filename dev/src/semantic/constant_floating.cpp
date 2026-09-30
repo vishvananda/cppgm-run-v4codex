@@ -18,13 +18,13 @@ bool Analyzer::constant_truth(Constant v) const
 {
     return floating_type(v.type) ? floating_value(v) != 0 : v.bits != 0;
 }
-Constant Analyzer::floating_constant(TypeId t, long double v)
+Constant Analyzer::floating_constant(TypeId t, long double v, bool special)
 {
     // Each operation/conversion observes the destination precision. The host
     // and target are Linux x86-64 (IEEE float/double and 80-bit long double).
     if (fundamental(t,FT_FLOAT)) { volatile float rounded = v; v = rounded; }
     else if (fundamental(t,FT_DOUBLE)) { volatile double rounded = v; v = rounded; }
-    if (!std::isfinite(v)) return Constant();
+    if (!special && !std::isfinite(v)) return Constant();
     std::uint64_t significand = 0; std::uint16_t exponent = 0;
     std::memcpy(&significand,&v,8);
     std::memcpy(&exponent,reinterpret_cast<const char*>(&v)+8,2);
@@ -40,7 +40,7 @@ Constant Analyzer::floating_conversion(Constant v, TypeId to)
 {
     if ((!integral(v.type) && !floating_type(v.type)) || (!integral(to) && !floating_type(to))) return Constant();
     auto value = floating_value(v);
-    if (floating_type(to)) return floating_constant(to,value);
+    if (floating_type(to)) return floating_constant(to,value,!std::isfinite(value));
     if (fundamental(to,FT_BOOL)) return Constant(to,value != 0);
     // Test the truncated value before any host cast; out-of-range conversion
     // is a core constant-expression failure, including the unsigned case.
@@ -55,15 +55,16 @@ Constant Analyzer::floating_binary(ETokenType op, Constant a, Constant b, bool c
     a = convert(a,common,true); b = convert(b,common,true);
     if (!a.valid || !b.valid) return Constant();
     auto x = floating_value(a), y = floating_value(b);
+    bool special = !std::isfinite(x) || !std::isfinite(y);
     // C++11 [expr]/12 permits excess precision for the operation. Use the
     // Linux x86-64 x87 model, then materialize the destination precision;
     // do not claim this is a single IEEE rounding for double arithmetic.
     bool result;
     switch (op) {
-    case OP_PLUS: return floating_constant(common,x+y);
-    case OP_MINUS: return floating_constant(common,x-y);
-    case OP_STAR: return floating_constant(common,x*y);
-    case OP_DIV: return y == 0 ? Constant() : floating_constant(common,x/y);
+    case OP_PLUS: return floating_constant(common,x+y,special);
+    case OP_MINUS: return floating_constant(common,x-y,special);
+    case OP_STAR: return floating_constant(common,x*y,special);
+    case OP_DIV: return y == 0 ? Constant() : floating_constant(common,x/y,special);
     case OP_EQ: result = x == y; break;
     case OP_NE: result = x != y; break;
     case OP_LT: result = x < y; break;

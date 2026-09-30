@@ -38,12 +38,25 @@ void Graph::grow() {
         slots_[p] = i;
     }
 }
+std::string Graph::wide_value_text(const Node& n) const {
+    unsigned __int128 bits = (static_cast<unsigned __int128>(n.c) << 96) |
+        (static_cast<unsigned __int128>(n.b) << 64) | n.value;
+    bool negative = (*this)[n.a].a == ABI_BUILTIN_TYPE_INT128 && (bits >> 127);
+    if (negative) bits = 0-bits;
+    std::string result;
+    do { result += char('0'+bits%10); bits /= 10; } while (bits);
+    if (negative) result += '-';
+    std::reverse(result.begin(),result.end()); return result;
+}
 Id Graph::wide_value(Id type, std::uint64_t low, std::uint64_t high) {
     return make(Kind::WideValue,type,Id(high),Id(high >> 32),low);
 }
 Id Graph::make(Kind kind, Id a, Id b, Id c, std::uint64_t value,
                const std::vector<Id>& children) {
     validate(kind, a, b, c, children);
+    if (kind == Kind::Value && (*this)[a].kind == Kind::Builtin &&
+        ((*this)[a].a == ABI_BUILTIN_TYPE_INT128 || (*this)[a].a == ABI_BUILTIN_TYPE_UINT128))
+        return wide_value(a,value,(*this)[a].a == ABI_BUILTIN_TYPE_INT128 && (value >> 63) ? ~std::uint64_t(0) : 0);
     // Canonicalize at the shared producer boundary, before hashing. Literal
     // expressions, arguments and direct clients must have identical keys.
     if (kind == Kind::Value && (*this)[a].kind == Kind::Builtin) {

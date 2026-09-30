@@ -114,9 +114,10 @@ std::string FactWriter::argument(Id id) {
     const Node& n = g[id];
     switch (n.kind) {
     case Kind::TypeArgument: return join_form({"type ", ref('t', n.a)});
+    case Kind::WideValue: return join_form({"value ", ref('t', n.a), " ", g.wide_value_text(n)});
     case Kind::Value: return join_form({"value ", ref('t', n.a), " ", std::to_string(static_cast<std::int64_t>(n.value))});
     case Kind::DependentValue:
-        return join_form({"dependent-value ", ref('t', n.a), " ", ref('t', g[n.b].a), " ", std::to_string(static_cast<std::int64_t>(g[n.b].value))});
+        return join_form({"dependent-value ", ref('t', n.a), " ", ref('t', g[n.b].a), " ", g[n.b].kind == Kind::WideValue ? g.wide_value_text(g[n.b]) : std::to_string(static_cast<std::int64_t>(g[n.b].value))});
     case Kind::ExpressionArgument: return join_form({"expression ", ref('x', n.a)});
     case Kind::ArgumentPack: return join_form({"pack", list(n, 'a')});
     case Kind::TemplateEntity:
@@ -133,6 +134,7 @@ std::string FactWriter::expression(Id id) {
     case Kind::ExprThis: return "this";
     case Kind::ExprParameter: return join_form({"template-param ", std::to_string(n.value)});
     case Kind::ExprFunctionParameter: return join_form({"function-param ", std::to_string(n.value)});
+    case Kind::WideValue: return join_form({"value ", ref('t', n.a), " ", g.wide_value_text(n)});
     case Kind::Value: return join_form({"value ", ref('t', n.a), " ", std::to_string(static_cast<std::int64_t>(n.value))});
     case Kind::Unary: return join_form({std::string("unary "), operation_code(n.b), " ", ref('x', n.a)});
     case Kind::Binary: return join_form({std::string("binary "), operation_code(n.c), " ", ref('x', n.a), " ", ref('x', n.b)});

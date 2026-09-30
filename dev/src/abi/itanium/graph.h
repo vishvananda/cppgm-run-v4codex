@@ -51,6 +51,7 @@ public:
     Id path(const std::string& qualified);
     Id builtin(AbiBuiltinTypeKind kind);
     Id wide_value(Id type, std::uint64_t low, std::uint64_t high);
+    std::string wide_value_text(const Node& value) const;
     Id cv(Id type, unsigned qualifiers);
     const Node& operator[](Id id) const;
     Id child(const Node& node, std::size_t i) const;

@@ -24,10 +24,13 @@ intermediate PA25 **70/101**, earlier **4152/4152**. Canonical 128-bit payloads
 are interned per Analyzer (zero is ID 0); Constant and ABI Node sizes stay fixed.
 Arithmetic/conversion, static data, template keys/names, bounds, enum constants,
 switches and bit-fields consume typed payloads. Native pair selection is reused.
-16 explicit scalar controls include 96 seeded full-width pairs, signed-overflow
+19 explicit scalar controls include 96 seeded full-width pairs, signed-overflow
 rejections and a host-ABI symbol comparison (validation only). A concrete member
 comparison/cast parsing failure found there is fixed with the memoized delimiter
-probe. Compiler performance and final required checks remain pending.
+probe. NaN/infinity generation, all floating classifications, special constants,
+nonthrowing facts and template use now share semantic builtin ownership.
+Normalized ABI fact input/output also retains all 128 literal bits. Compiler
+performance and final required checks remain pending.
 
 ## Design/spec alignment and completed group
 
@@ -65,7 +68,7 @@ output); there are no global retries or fixed-point transforms.
 | Source EH/runtime | 14 | Catch clauses, payload type/lifetime and function-try boundaries -> matching/unwind/runtime; PA24's scalar LowIR EH is insufficient |
 | Canonical wide source types | 0 | Completed scalar group; final validation/performance pending |
 | GNU statement expressions | 3 | Parser/typed statement result/lifetime -> lowering, including enclosing return |
-| Floating builtins | 1 | Semantic builtin identity for nanl/isnan -> typed constant/lowering |
+| Floating builtins | 0 | Typed NaN/infinity/classification facts completed; final validation/performance pending |
 | Floating calculator | 1 | Five one-ULP f64 differences in 1M outputs; execution/oracle ownership still to establish, references preserved |
 
 Also observed outside required fixtures: `student.tests/pa25/unused-dependent-local.cc`

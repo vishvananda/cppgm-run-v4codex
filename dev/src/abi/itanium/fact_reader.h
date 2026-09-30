@@ -24,6 +24,7 @@ private:
     Id type(const Words& words, std::size_t& pos);
     Id compact(const std::string& word);
     Id argument(const Words& words, std::size_t& pos);
+    Id literal(Id type, const std::string& text);
     Id expression(const Words& words, std::size_t& pos);
     Id entity(const Words& words, std::size_t& pos);
     Id context(const Words& words, std::size_t& pos);

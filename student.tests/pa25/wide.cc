@@ -1,6 +1,7 @@
 using I = __int128;
 using U = unsigned __int128;
 constexpr U high = U(1) << 100;
+static_assert(__int128(1)==__uint128_t(1),"fundamental casts");
 constexpr I minus = -I(high);
 static_assert(sizeof(I) == 16 && alignof(U) == 16, "layout");
 static_assert((high | 17) >> 100 == 1, "wide constant");

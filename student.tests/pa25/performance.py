@@ -38,6 +38,17 @@ floating=save('floating.cc',f'''double step(double x,int i){{return x*0.5+(i&127
 int main(int argc,char**){{double x=0;int total=0;for(int i=0;i<argc*{count};++i){{x=step(x,i);total=(total+(int)x)%1009;}}return total=={total}?0:1;}}
 ''')
 workloads={'templates':(templates,1),'memory':([memory],64),'floating':([floating],64)}
+if '--wide-baseline' in sys.argv[4:]:
+    assert A.read_bytes()==B.read_bytes(), 'wide baseline requires the same correct binary'
+    count=200000; modulus=(1<<119)+23; x=(1<<100)+1
+    for i in range(count): x=(x*3+i)%modulus
+    wide=save('wide.cc',f'''using U=unsigned __int128;
+U step(U x,int i){{return (x*3+i)%((U(1)<<119)+23);}}
+int main(int argc,char**){{U x=(U(1)<<100)+argc;
+for(int i=0;i<argc*{count};++i)x=step(x,i);
+return x==((U({x>>64}ULL)<<64)|U({x&((1<<64)-1)}ULL))?0:1;}}
+''')
+    workloads={'wide':([wide],64)}
 def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def run(args):
     p=subprocess.run(list(map(str,args)),stdout=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -45,7 +56,7 @@ def run(args):
     return p
 # Preserve ordinary ELF images from each frozen binary for equality and timing.
 manifest={str(p):digest(p) for p in [A,B,*inputs.glob('*.cc')]}
-results={'manifest':manifest,'flags':['-O0'],'policy':'O0; no optional transforms or speedup claim', 'runs':[],'images':{}}
+results={'manifest':manifest,'flags':['-O0'],'policy':'O0; no optional transforms or speedup claim; wide mode is final/final calibration', 'runs':[],'images':{}}
 for name,(sources,_) in workloads.items():
     images=[]
     for label,binary in [('A',A),('B',B)]:

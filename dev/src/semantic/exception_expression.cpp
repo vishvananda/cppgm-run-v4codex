@@ -150,7 +150,9 @@ bool Analyzer::expression_nonthrowing(NodeId n)
     bool call = (node.kind == Kind::Call && x.form != ExpressionForm::Cast &&
         x.form != ExpressionForm::ListValue && x.form != ExpressionForm::PseudoDestructor) ||
         x.form == ExpressionForm::OperatorCall || (callee && constructor_member(callee));
-    if (call && x.form != ExpressionForm::Expect) result &= callee && function_nonthrowing(callee);
+    bool intrinsic = (x.form >= ExpressionForm::FloatFinite && x.form <= ExpressionForm::FloatClassify) ||
+        x.form == ExpressionForm::ConstantQuery;
+    if (call && x.form != ExpressionForm::Expect && !intrinsic) result &= callee && function_nonthrowing(callee);
     if (object_fact(n).temporary && class_value(x.type)) result &= type_destructor_nonthrowing(x.type);
     auto discarded = discarded_conversion(n);
     if (discarded.valid()) result &= conversion_nonthrowing(discarded);

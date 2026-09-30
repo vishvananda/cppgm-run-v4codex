@@ -84,7 +84,7 @@ std::uint32_t Analyzer::query_value(QueryId id)
                 if (query.op == OP_LNOT) value = Constant(types.fundamental(FT_BOOL),!constant_truth(value));
                 else {
                     value = convert(value,fact.expression.type,true);
-                    if (query.op == OP_MINUS) value = floating_type(value.type) ? floating_constant(value.type,-floating_value(value)) : binary(OP_MINUS,Constant(value.type,0),value,true);
+                    if (query.op == OP_MINUS) value = floating_type(value.type) ? floating_constant(value.type,-floating_value(value),true) : binary(OP_MINUS,Constant(value.type,0),value,true);
                     else if (query.op == OP_COMPL) value = integer_constant(value.type,~integer_value(value));
                     else if (query.op != OP_PLUS) value = Constant();
                 }

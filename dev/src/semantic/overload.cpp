@@ -161,6 +161,8 @@ TypeId Analyzer::fundamental_cast_type(ETokenType op)
 {
             switch (op) {
             case KW_INT: return types.fundamental(FT_INT);
+            case KW_INT128: return types.fundamental(FT_INT128);
+            case KW_UINT128: return types.fundamental(FT_UINT128);
             case KW_BOOL: return types.fundamental(FT_BOOL);
             case KW_CHAR: return types.fundamental(FT_CHAR);
             case KW_SHORT: return types.fundamental(FT_SHORT_INT);
@@ -236,23 +238,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
                 e = declare_function(global, name, 0, types.function(types.fundamental(FT_UNSIGNED_LONG_INT), {cp}, false));
                 entities[e].builtin = Entity::Strlen;
             }
-            auto form = spelling.equals("__builtin_isfinite") ? ExpressionForm::FloatFinite :
-                spelling.equals("__builtin_isinf") ? ExpressionForm::FloatInfinite :
-                spelling.equals("__builtin_isnormal") ? ExpressionForm::FloatNormal :
-                spelling.equals("__builtin_fpclassify") ? ExpressionForm::FloatClassify : ExpressionForm::Ordinary;
-            if (form != ExpressionForm::Ordinary) {
-                if (args.size() != (form == ExpressionForm::FloatClassify ? 6 : 1)) throw std::runtime_error("floating builtin arity");
-                TypeId t = expressions[args.back()].type;
-                if (!arithmetic(t) || integral(t)) throw std::runtime_error("floating builtin argument type");
-                std::vector<Conversion> selected;
-                for (std::size_t j = 0; j < args.size(); ++j) {
-                    Conversion c = conversion(args[j], j+1 == args.size() ? t : types.fundamental(FT_INT));
-                    if (!c.valid()) throw std::runtime_error("floating classification result type");
-                    selected.push_back(c);
-                }
-                record_call(result, args, selected);
-                result.type = types.fundamental(FT_INT); result.form = form; return result;
-            }
+            if (floating_builtin(n,s,name,args,result)) return result;
             if (copy || move) {
                 TypeId v = types.fundamental(FT_VOID), ptr = types.compound(TypeKind::Pointer, v);
                 TypeId ft = types.function(ptr, {ptr, types.compound(TypeKind::Pointer, types.qualify(v, 1)), types.fundamental(FT_UNSIGNED_LONG_INT)}, false);

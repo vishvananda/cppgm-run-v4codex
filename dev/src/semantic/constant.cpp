@@ -254,7 +254,7 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         v = convert(v, calls ? expressions[n].type : promote(v.type));
         if (ast[n].op == OP_PLUS) return v;
         if (ast[n].op == OP_COMPL) return integer_constant(v.type, ~integer_value(v));
-        if (ast[n].op == OP_MINUS) return floating_type(v.type) ? floating_constant(v.type,-floating_value(v)) : binary(OP_MINUS, Constant(v.type, 0), v, true);
+        if (ast[n].op == OP_MINUS) return floating_type(v.type) ? floating_constant(v.type,-floating_value(v),true) : binary(OP_MINUS, Constant(v.type, 0), v, true);
         return Constant();
     }
     case Kind::Binary: {

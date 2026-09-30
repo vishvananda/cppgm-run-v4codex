@@ -608,7 +608,8 @@ private:
     std::vector<WideConstant> wide_constants = std::vector<WideConstant>(1);
     Index wide_constant_index;
     bool floating_type(TypeId type) const;
-    Constant floating_constant(TypeId type, long double value);
+    Constant floating_constant(TypeId type, long double value, bool special = false);
+    bool floating_builtin(NodeId n, ScopeId scope, IdentifierId name, const std::vector<NodeId>& args, Expression& result);
     Constant floating_conversion(Constant value, TypeId target);
     Constant floating_binary(ETokenType op, Constant left, Constant right, bool converted);
     bool constant_truth(Constant value) const;

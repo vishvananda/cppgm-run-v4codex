@@ -3,15 +3,34 @@
 #include <stdexcept>
 
 namespace abi_mangle {
+Id FactReader::literal(Id type, const std::string& text) {
+    auto t = g[type];
+    if (t.kind != Kind::Builtin || (t.a != ABI_BUILTIN_TYPE_INT128 && t.a != ABI_BUILTIN_TYPE_UINT128))
+        return g.make(Kind::Value,type,0,0,integral_value(text));
+    using Wide = unsigned __int128;
+    bool negative = !text.empty() && text[0] == '-';
+    unsigned at = negative;
+    if (at == text.size()) throw std::runtime_error("empty wide ABI value");
+    Wide bits = 0;
+    for (; at < text.size(); ++at) {
+        unsigned digit = unsigned(text[at]-'0');
+        if (digit > 9 || bits > (~Wide(0)-digit)/10) throw std::runtime_error("wide ABI value out of range");
+        bits = bits*10+digit;
+    }
+    if (t.a == ABI_BUILTIN_TYPE_INT128 && bits > (Wide(1)<<127)-!negative)
+        throw std::runtime_error("signed wide ABI value out of range");
+    if (negative) bits = 0-bits;
+    return g.wide_value(type,std::uint64_t(bits),std::uint64_t(bits>>64));
+}
 Id FactReader::argument(const Words& w, std::size_t& p) {
     std::string op = take(w, p);
     if (op == "type") return g.make(Kind::TypeArgument, type(w, p));
     if (op == "value" || op == "dependent-value") {
         Id dependent = 0;
         if (op == "dependent-value") dependent = type(w, p);
-        Id value_type = type(w, p); auto value = integral_value(take(w, p));
-        Id literal = g.make(Kind::Value, value_type, 0, 0, value);
-        return dependent ? g.make(Kind::DependentValue, dependent, literal) : literal;
+        Id value_type = type(w, p);
+        Id value = literal(value_type,take(w,p));
+        return dependent ? g.make(Kind::DependentValue, dependent, value) : value;
     }
     if (op == "expression") return g.make(Kind::ExpressionArgument, reference(take(w, p), BindingKind::Expression));
     if (op == "pack") return g.make(Kind::ArgumentPack, 0, 0, 0, 0, refs(w, p, BindingKind::Argument));
@@ -56,7 +75,7 @@ Id FactReader::expression(const Words& w, std::size_t& p) {
     if (op == "sizeof-captured-pack") return g.make(Kind::SizeofPack,0,0,0,0,refs(w,p,BindingKind::Argument));
     if (op == "literal" || op == "value") {
         Id t = op == "value" ? type(w, p) : g.builtin(ABI_BUILTIN_TYPE_INT);
-        return g.make(Kind::Value, t, 0, 0, integral_value(take(w, p)));
+        return literal(t,take(w,p));
     }
     if (op == "unary" || op == "binary") {
         Id code = operation(take(w, p)); Id left = reference(take(w, p), BindingKind::Expression);

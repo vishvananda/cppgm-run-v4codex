@@ -38,6 +38,7 @@ Value Procedural::floating_builtin(NodeId n)
     };
     Value result;
     if (fact.form == semantic::ExpressionForm::FloatFinite) result = finite();
+    else if (fact.form == semantic::ExpressionForm::FloatNaN) result = nan();
     else if (fact.form == semantic::ExpressionForm::FloatInfinite) result = infinite();
     else if (fact.form == semantic::ExpressionForm::FloatNormal) result = normal();
     else {

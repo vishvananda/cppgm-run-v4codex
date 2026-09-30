@@ -183,6 +183,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_static_plan_work\":" << static_plan_work
         << ",\"semantic_constant_array_index_entries\":" << constant_array_children.size()
         << ",\"semantic_floating_constants\":" << floating_constants.size()-1
+        << ",\"semantic_wide_constants\":" << wide_constants.size()-1
+        << ",\"semantic_wide_constant_bytes\":" << wide_constants.capacity()*sizeof(WideConstant)
         << ",\"semantic_constant_bodies\":" << constant_bodies.size()-1
         << ",\"semantic_constant_activations\":" << constant_activations.size()-1
         << ",\"semantic_constant_execution_steps\":" << constant_steps
