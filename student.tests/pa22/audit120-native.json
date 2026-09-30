@@ -1,0 +1,170 @@
+[
+  {
+    "workload": "auto-specializations-9600",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "b0f57529b9220fa73d0d522ed7667afef3a825c342391c2d7ff40c53c432766c",
+      "b0f57529b9220fa73d0d522ed7667afef3a825c342391c2d7ff40c53c432766c"
+    ],
+    "executable_hashes": [
+      "acb2d11085e3d8bb221ba4b1d5aac7d20acec02a2aa2a3640c80b92b9429a675",
+      "b8abdf24a1e0e19001b4ed68a6f6c079bcc45c62172889935efaf984ccd8d3ff"
+    ]
+  },
+  {
+    "workload": "runtime-calls",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "53bbb1ae11a3a4a3b2be4a81cb51e1e346f45b0cf892d0530c8033b2feb8e7e6",
+      "53bbb1ae11a3a4a3b2be4a81cb51e1e346f45b0cf892d0530c8033b2feb8e7e6"
+    ],
+    "executable_hashes": [
+      "30d21b372f829e094380a797ce8e361a59a75d3328d6efafba875f0cf732e2ed",
+      "677391d5140753785bfb17b96d87b660b5f894a527d7f0893a6e66b899a32c96"
+    ]
+  },
+  {
+    "workload": "runtime-memory",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "9078782b04adf655bf9ab74ba1698ac489de6053a0508f7651e1275e0a240234",
+      "9078782b04adf655bf9ab74ba1698ac489de6053a0508f7651e1275e0a240234"
+    ],
+    "executable_hashes": [
+      "629379b142127a00c78b0b7dbe6a825b6796b5394e48d526913d03013f7d805b",
+      "49dc5defff1c4dd2d6b4f6fdd1536c469ab04f05eb99ad3572b41fcc832605ce"
+    ]
+  },
+  {
+    "workload": "runtime-floating",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "dc81ac1d56166add729fa3bc5cd4717dc4918d20ef5f11806981518241c243ae",
+      "dc81ac1d56166add729fa3bc5cd4717dc4918d20ef5f11806981518241c243ae"
+    ],
+    "executable_hashes": [
+      "947c9708111415f4ddeea5ca65af127ee02e3176c7733b7be0b6c403c48ea924",
+      "99eeddea9aa00cb296f0e5b64a004abb14520011e3919d258f7d54973dd4d580"
+    ]
+  },
+  {
+    "workload": "runtime-member",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "a6beb51f9ecea525c3105c67c4125d880073eb3d3c57cb5173cb0763bebdb508",
+      "a6beb51f9ecea525c3105c67c4125d880073eb3d3c57cb5173cb0763bebdb508"
+    ],
+    "executable_hashes": [
+      "7193e9c1fcde5af6e134646a66945358af8971c1a3db82b5b2ddf358cc183b5f",
+      "e89fd9b9c3cdd25f9c1fbf603576e438a26cdc6568eb934ea4ffefde818b5627"
+    ]
+  },
+  {
+    "workload": "member-functions-2048",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "cf1c3c1a5242d8278b8eefea6db85aa36e84e20bd48db20b46568493d9ee2ffb",
+      "cf1c3c1a5242d8278b8eefea6db85aa36e84e20bd48db20b46568493d9ee2ffb"
+    ],
+    "executable_hashes": [
+      "20436f9e5697277e33e56a5385a4fa3dd50842fc441715d1b98b0f1b89614392",
+      "c326c6c8d903b69d3469b2534a48e94efd4e8842f6474afd94206a5fdb81d30c"
+    ]
+  },
+  {
+    "workload": "empty-layouts-512",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "0931a2da7852a83f94cfc009dc455530ec4f865b74839c28f2363e28e07af731",
+      "0931a2da7852a83f94cfc009dc455530ec4f865b74839c28f2363e28e07af731"
+    ],
+    "executable_hashes": [
+      "c4dbd0bbefb8e00808d9fe9d979ab19732a094c9fdaf0b283cc403a534b8c7e2",
+      "c6b7ccb5371282b99d4dd4493a37519acc41bbd5fa519454ad7f82a95f55e5db"
+    ]
+  },
+  {
+    "workload": "access-functions-512",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "9bedfb7a2e0a031f52089fd2d5a027757924721ee79c342e165c02d825aa846e",
+      "9bedfb7a2e0a031f52089fd2d5a027757924721ee79c342e165c02d825aa846e"
+    ],
+    "executable_hashes": [
+      "4204f8548b780a6cb4bb452aba2fb3250e60ba2b9265610bce56bf13f06266ff",
+      "050a373ec44b7ff74bac985d93da7bde02c06dcb8495a3081902a893dcddeea8"
+    ]
+  },
+  {
+    "workload": "empty-layouts-2048",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "49116a637cc6d8a7dd93e5c2255df3603827fc8466b2d90a987dd29da841e2a5",
+      "49116a637cc6d8a7dd93e5c2255df3603827fc8466b2d90a987dd29da841e2a5"
+    ],
+    "executable_hashes": [
+      "be636ee7b7fafd500365a3fd4f28c482662bd5861b5226e42d01f06c6d8bc483",
+      "47d693e06ca69257c177b027fb7cc4aa5e649554ce67492bda43a1a851fa2ab1"
+    ]
+  },
+  {
+    "workload": "access-functions-2048",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "64f97160c2ed49cd2303be6fcfb587abb3e9427f68d5c61f6c0ae33b245de646",
+      "64f97160c2ed49cd2303be6fcfb587abb3e9427f68d5c61f6c0ae33b245de646"
+    ],
+    "executable_hashes": [
+      "a67e25e3096f7aaf9bc9cf31ff423da78f1820c1b158c42932238e286bf2e663",
+      "1065e5cf72e0974fb7cb07e698ad09d65d3eb7e75d87eeb2a12df39e1c1181fc"
+    ]
+  },
+  {
+    "workload": "runtime-inherited",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "37853e601d18dbe153b14e6a7c58f7ce5a4b52237304fe170779c5fd3934ac9a",
+      "37853e601d18dbe153b14e6a7c58f7ce5a4b52237304fe170779c5fd3934ac9a"
+    ],
+    "executable_hashes": [
+      "019ca79d074b931c9d38bc86e1be5f60c31bfc15f4423525dc8000240758ca88",
+      "f231e7b7136e5dd884ef44b6563633b0bbfc9016a943506c1d903ba6f2f8a304"
+    ]
+  },
+  {
+    "workload": "runtime-field",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "cfc67d2f134b0bfabbc5fc57b3894ba7464de54ef2a2e398f34af9b155d50dab",
+      "cfc67d2f134b0bfabbc5fc57b3894ba7464de54ef2a2e398f34af9b155d50dab"
+    ],
+    "executable_hashes": [
+      "aff90ef916b876cc177b86bef100870db9842bdee9973e4d0525738400831b18",
+      "5ed4377863645dbcd15dd49c8ea20bac727b9cc5699a64257568d9e6966243c7"
+    ]
+  },
+  {
+    "workload": "runtime-conditional",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "9568ac50ff365dd26bdcf30b7d48a15605c850a1df141deaaf5c2218ea8cbe43",
+      "9568ac50ff365dd26bdcf30b7d48a15605c850a1df141deaaf5c2218ea8cbe43"
+    ],
+    "executable_hashes": [
+      "826f3654d72284c2d9ace7db2264c284fae32e930f3a9b53de0406862c6c5090",
+      "245ea655f49c98577bd06978943c03800c5e6965c89764c2c2a47eadf06b96c3"
+    ]
+  },
+  {
+    "workload": "runtime-member-selection",
+    "lowir_identical": true,
+    "native_text_sha256": [
+      "832ee1f1a788c1fc32168814247edc72d0c32d659f85d4f9df96498088abb969",
+      "832ee1f1a788c1fc32168814247edc72d0c32d659f85d4f9df96498088abb969"
+    ],
+    "executable_hashes": [
+      "2c85113c530fba6b4adb458bb1137c237c6a7ea1faed9dd1bb992ac0d4b6ed6a",
+      "b402d9d187fde28efac4ef7383bd3f7c1120a12ca0482b5608d945efab21cb23"
+    ]
+  }
+]

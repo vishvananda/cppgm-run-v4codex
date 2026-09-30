@@ -1,75 +1,88 @@
-# PA22 compact plan — handoff 119
+# PA22 compact plan — final audit 120
 
-Target: **PA22 full-stage**. Phase: **validated implementation; independent audit pending**.
-Stage base commit: `a8482d768bd2dcede42ea63ef39e39cf3245c380`.
-Last reviewed commit: `e90fa3fa514e2990bbe5ea4716252d8c42ae782a`.
-Entry HEAD: `17603c8a69e76820274b7bf849091d528f6ff261`, **95/99**, clean.
-Implementation: `321c93db`, **99/99**. Previous goal turn: progress (handoff 118);
-no live build/test process remained at entry. Review markers are unchanged.
+Target: **PA22 full-stage**. Phase: **final independent audit complete**.
+Final Spec Alignment: **aligned at PA22/O0**.
+Stage base: `a8482d768bd2dcede42ea63ef39e39cf3245c380`.
+Entry: `17bc7a06`, clean. Last reviewed implementation: `2b1a02c9`.
+Previous goal turn: progress (completed handoff 119). This audit reconstructs the
+whole stage from source and closes both unaudited handoffs; no PA23 work began.
 
-## Design/spec alignment and completed groups
+## Completed design and findings
 
-- **Parameter member values** retain generic signed receiver adjustment and
-  target-word truth. An external parameter has no zero-adjustment guarantee.
-  Four minimal [oracle corrections](reference-corrections119.md) have reduced
-  reproducers, C++11/LowIR proofs and original/corrected hashes with bundle
-  revision. All 99 sources, status sidecars and comparison rules are preserved.
-  The fourth correction removes an undemanded static template member; its
-  address-taking control still requires storage. The narrow-integer LowIR
-  truth compatibility rule now rejects implicit truncation from `i128`.
-- **Constant class receiver materialization** is owned by each selected user
-  conversion. A completed, receiver-independent scalar body summary feeds a
-  bounded proof of fresh empty construction plus inert destruction. Canonical
-  function IDs index source/conversion-use edges; typed lowering consumes a
-  boolean fact. No syntax replay, callee demand, text keys, tree copying or
-  additional whole-program scan. Effects, named objects, nonempty classes,
-  list initialization and unknown facts retain ordinary evaluation.
+- The shared streaming frontend, canonical typed facts, retained template source
+  regions and precise demand queues feed direct typed LowIR. The independent
+  [architecture review](audit.md) traces nontrivial multi-base lifetimes and a
+  demanded member-pointer template through the supplied validation backend to
+  execution. No text transport, semantic reconstruction or external compiler
+  delegation implements student output.
+- Member values preserve canonical targets and signed displacement. Local value
+  and storage proofs remain conservative across writes, aliases, effects,
+  overloaded arrows and lifetime/control boundaries. Constant scalar receiver
+  elision consumes the selected conversion's completed result/lifetime facts.
+  Parameter values retain generic adjustment and target-word truth.
+- **Audit fix: empty-subobject identity.** Repeated empty bases/members/arrays
+  formerly overlapped same-type objects. The layout owner now records bounded
+  canonical empty-type summaries and reserves separate storage on overlap or
+  unknown. Constexpr addresses, static member constants, runtime projection and
+  constructor/destructor receivers consume the corrected completed layout.
+- **Audit fix: access paths.** Later-base public using/protected access and
+  alternative public paths formerly encountered first-base-only checks. Access
+  now traverses relevant base edges with visited sets and canonical completed
+  path/miss facts. Implicit-object ranking follows the related selected path;
+  private, protected-object and ambiguous cases retain required rejection.
+- One [new reference correction](reference-corrections120.md) changes only the
+  broken layout's size/receiver metadata/offset. Its reducer and C++11/contract
+  proof reproduce the supplied reference defect. All four [119 corrections](reference-corrections119.md)
+  were independently reviewed and rerun. No source fixture, exit status,
+  comparator, timeout or coverage changed.
 
-Receiver proof work is at most **8 nodes/use**, with one use edge per prepared
-scalar conversion and cached existing constructor/destructor action facts.
-Result-body proof remains bounded by **8 wrappers**. TU-owned contiguous pools
-and flat indexes release with the TU; only the use fact is consumed by lowering.
-There is **zero generated-code growth**, no duplication and no fixed-point pass.
-Inherited limits remain: 64-node member-value proof, 4096 flow visits/function,
-64 flow depth, and eight-element initializer expansion before loop fallback.
+## Budgets and performance
 
-## Validation and performance
+Empty summaries consume/retain at most **64 type identities** per direct edge/
+completed class; overflow uses disjoint storage and never expands array elements.
+They release with the TU. Access scratch releases after each query; completed
+path facts retain their existing owner and validity. No global invalidation or
+broader body/layout demand is added.
 
-[Validation](../student.tests/pa22/validation119.json): `make test-pa22` **99/99**,
-prior through PA21 **3712/3712**, full through PA22 **3811/3811**, file audit pass
-(three inherited header warnings), **126/126** personal controls plus ABI truth
-and reference reducers, **95** stable LowIR roundtrips and **four** required
-rejections. The original entry passes all 28 initial behavioral controls but
-fails 11 receiver-elision expectations. The final 32 new controls cover effects,
-lifetime order, depth fallback, real static-member demand and thrown exceptions.
-The supplied standalone backend's pre-existing fundamental-RTTI limitation is
-retained in evidence; the two exception controls execute through the unchanged
-supplied object backend and host runtime, as documented in PA21.
+Inherited bounds remain **64 nodes** per member-value proof, **4096 visits and
+64 depth** per requested function flow, **8 wrappers** per result/receiver proof,
+and **8 initializer elements** before loop fallback. Proofs have zero generated
+code-growth budget. No fixed-point optimization or body cloning is introduced.
 
-[Performance](performance119.md) records frozen A/A+ABBA compiler latency/RSS,
-checked runtime/text size, all observations and the scalar-loop regression
-investigation. Receiver visits scale **512→2048** with exactly that many uses.
-Six common workloads retain identical IR/text. Compiler text grows **1920 bytes**.
-Spec §9's PA22/O0 acceptance applies. Historical +15%, +16 MiB and 5.5× diagnostic
-targets remain non-gating; all 114–118 measurements and mandated work/growth,
-correctness, comparison and coverage constraints are preserved.
+[Final performance](performance120.md): frozen entry/final binaries, A/A noise
+calibration and four ABBA blocks per workload/phase cover **14** fixed inputs.
+All preserve identical LowIR and executable `.text` bytes. Compiler text grows
+**5120 bytes**; required empty-layout/access work has small measured median
+costs, with all outliers and the largest **2200 KiB** RSS increase disclosed.
+No new speed claim follows from noisy runtime differences or IR counts.
+Historical 114–119 measurements, live-loop profitability, native work inspection
+and the 119 placement-dependent slowdown remain preserved and reviewed.
 
-## Handoff boundary and independent review ledger
+Spec §9's stage-scoped rules govern acceptance. Historical +15%, +16 MiB and
+5.5× self-selected targets remain diagnostics, not gates. Mandated work/growth
+limits, correctness, comparisons, coverage and default timeouts are unchanged.
+Student native optimization/debug and full self-host benchmarks belong to later
+stages; their absence does not add a PA22 exit criterion.
 
-**No known PA22 implementation failures remain.** The two entry ownership groups
-are complete, including receiver effects, typed truth validation and proof-backed
-reference repairs. PA23 owns virtual inheritance, polymorphic multiple inheritance
-and broader RTTI. Do not advance until the whole-stage independent audit resolves
-its findings; passing this handoff does not waive or certify that audit.
+## Validation and ledger
 
-| Range | Status | Evidence / outstanding review |
-|---|---|---|
-| Stage base through `e90fa3fa` (114–117) | Independently reviewed | [audit117](audit.md), including both audit fixes; historical evidence preserved |
-| `f18dfb62..e10bdd7f` (118) | Implemented; independent review pending | Local member storage, qualified repeated-base paths and overloaded-arrow effects |
-| `247c7de4..321c93db` (119) | Implemented; independent review pending | Constant receiver use/lifetime ownership, wide truth validation, four documented oracle corrections |
+[Sealed evidence](../student.tests/pa22/audit120-validation.json): fresh root report
+**3811/3811**, **22/22 stages**, plus passing focused property controls;
+`make test-pa22` **99/99**; required file audit passes with three inherited
+header-organization warnings. **95** accepted LowIR outputs roundtrip stably and
+**four** required rejections remain. New audit controls improve **7/26→26/26**;
+all **126/126** inherited personal controls and five reference reducers pass.
+The supplied primary log also reports 3811; no contract coverage was removed to
+reconcile the separately supplied 3835 status summary.
 
-Independent review must cover accumulated whole-stage architecture, occurrence
-identity and conservative effect boundaries, proof budgets/profitability, native
-placement sensitivity and the oracle proofs. Those review questions are distinct
-from unfinished implementation; neither category is waived. The implementation
-handoff returns control to Ralph for that audit.
+| Range | Independent review disposition |
+|---|---|
+| 114–117, stage base through `e90fa3fa` | Reconstructed/rechecked with the full stage; original [checkpoint](audit117.md) and its historical failures preserved |
+| 118, `f18dfb62..e10bdd7f` | Storage facts, repeated/equivalent paths and arrow effects reviewed; controls rerun |
+| 119, `247c7de4..321c93db`, sealed at `17bc7a06` | Receiver facts, lifetimes, wide truth and four oracle corrections reviewed; controls/reducers rerun |
+| 120, `2b1a02c9` | Both whole-stage ownership defects repaired and validated; performance, architecture, reference proof and final evidence consolidated |
+
+No unaudited handoff or known unresolved PA22 defect remains. Final delivery
+commits the audit/evidence and verifies an empty `git status --short`.
+The explicit next-stage boundary is PA23 virtual inheritance, polymorphic
+multiple inheritance and the broader RTTI ABI.
