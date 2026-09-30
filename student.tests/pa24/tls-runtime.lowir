@@ -1,0 +1,28 @@
+global @counter : i64 [storage=thread_local] = 7
+declare function @address() -> ptr [tls_for=@counter]
+function @step() -> i64 {
+block ^entry:
+%p = call ptr @address()
+%old = load i64 %p
+%new = binary add i64 %old, 1
+store i64 %new, @counter
+return i64 %new
+}
+function @main(%argc : i64, %argv : ptr) -> i64 [role=entry] {
+block ^entry:
+%n = binary mul i64 %argc, 20000000
+jump ^loop
+block ^loop:
+%i = phi i64 [^entry: 0, ^body: %next]
+%more = cmp ult i64 %i, %n
+branch %more, ^body, ^done
+block ^body:
+%value = call i64 @step()
+%next = binary add i64 %i, 1
+jump ^loop
+block ^done:
+%final = load i64 @counter
+%wanted = binary add i64 %n, 7
+%bad = cmp ne i64 %final, %wanted
+return i64 %bad
+}

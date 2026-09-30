@@ -3,7 +3,7 @@ namespace native {
 using namespace lowir_model;
 const char* runtime_name(unsigned entity)
 {
-    static const char* const names[] = {"@native.exception_top","@native.exception_value"};
+    static const char* const names[] = {"@native.exception_top","@native.exception_value","@native.thread_pointer"};
     require(entity < unsigned(RuntimeEntity::Count),"invalid native runtime entity");
     return names[entity];
 }

@@ -11,11 +11,16 @@ struct ValueState {
 // whole-unit scan per function and no string-keyed placement decisions.
 struct SlotState { unsigned stored = 0, position = 0; bool escape = false, observed = false; };
 struct Workspace {
-    std::vector<unsigned> value_indices;
+    std::vector<unsigned> value_indices, tls_wrappers;
     std::vector<Operand> slots;
     std::vector<SlotState> slot_facts;
     std::vector<unsigned> block_epochs, predecessor_count, successor, next_block, parameter_clobbers, block_local;
-    explicit Workspace(const lowir_model::Program& p) : value_indices(p.values.size()+1), slots(p.slots.size()+1), slot_facts(p.slots.size()+1), block_epochs(p.blocks.size()+1), predecessor_count(p.blocks.size()+1), successor(p.blocks.size()+1), next_block(p.blocks.size()+1), parameter_clobbers(p.blocks.size()+1), block_local(p.blocks.size()+1) {}
+    explicit Workspace(const lowir_model::Program& p) : value_indices(p.values.size()+1), tls_wrappers(p.symbols.size()+1), slots(p.slots.size()+1), slot_facts(p.slots.size()+1), block_epochs(p.blocks.size()+1), predecessor_count(p.blocks.size()+1), successor(p.blocks.size()+1), next_block(p.blocks.size()+1), parameter_clobbers(p.blocks.size()+1), block_local(p.blocks.size()+1) {
+        for (const auto& s : p.functions) {
+            auto target = p.symbols[s.symbol.index-1].metadata.tls_for;
+            if (target) tls_wrappers[target.index] = s.symbol.index;
+        }
+    }
 };
 class Selector {
     const lowir_model::Program& p;
@@ -67,6 +72,8 @@ class Selector {
     Type value_type(lowir_model::Operand o, Type fallback) const;
     Type consumed_type(lowir_model::Operand o, Type context) const;
     Operand memory(lowir_model::Operand o, int scratch = XR_R11);
+    bool tls_symbol(unsigned id) const;
+    void tls_address(Operand to, Operand symbol);
     Operand in_register(Operand o, Type type, int reg);
     void move(Operand to, Operand from, Type type);
     void normalize_register(Operand to, Type type);

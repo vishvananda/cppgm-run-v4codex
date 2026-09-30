@@ -26,7 +26,7 @@ void Selector::call(const lowir_model::Instruction& i)
         }
     }
     if (target.kind == Operand::Symbol && p.symbols[target.id-1].kind == lowir_model::Symbol::GlobalSymbol) {
-        target.address = false;
+        target = memory(target_input);
         move(Operand::r(XR_R11),target,Type::Ptr); target = Operand::r(XR_R11);
     } else if (target.kind != Operand::Symbol) {
         move(Operand::r(XR_R11),target,Type::Ptr); target = Operand::r(XR_R11);

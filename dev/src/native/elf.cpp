@@ -27,9 +27,11 @@ static void scalar_data(std::vector<unsigned char>& data, const DataItem& item, 
 }
 void encode_data(const lowir_model::Program& p, Image& image)
 {
-    for (const auto& g : p.globals) {
+    for (unsigned lane = 0; lane < 2; ++lane) for (const auto& g : p.globals) {
         if (g.declaration) continue;
-        require(p.symbols[g.symbol.index-1].metadata.storage != GSM_THREAD_LOCAL, "native TLS not implemented");
+        bool tls = p.symbols[g.symbol.index-1].metadata.storage == GSM_THREAD_LOCAL;
+        if (tls != bool(lane)) continue;
+        if (tls) { image.has_tls = true; image.tls_targets[g.symbol.index] = g.symbol.index; }
         unsigned alignment = 1; bool typed = false;
         for (unsigned n = g.data.begin; n != g.data.end(); ++n)
             if (p.data[n].kind != DataItem::Zero) { alignment = std::max(alignment,p.data[n].type.alignment()); typed = true; }
@@ -53,11 +55,24 @@ void encode_data(const lowir_model::Program& p, Image& image)
             }
         }
     }
+    if (image.has_tls) {
+        image.data.resize(aligned(image.data.size(),16),0);
+        unsigned id = image.runtime_begin+unsigned(RuntimeEntity::ThreadPointer);
+        image.symbols[id] = image.data.size(); image.defined[id] = image.data_symbols[id] = true;
+        Fixup fix; fix.kind = Fixup::AbsoluteSymbol; fix.symbol = id; fix.offset = image.data.size();
+        image.data_fixups.push_back(fix); append(image.data,0,8);
+    }
+    for (const auto& f : p.functions) {
+        auto target = p.symbols[f.symbol.index-1].metadata.tls_for;
+        if (!target) continue;
+        image.tls_targets[f.symbol.index] = target.index;
+        if (f.declaration) image.tls_wrappers.push_back(f.symbol.index);
+    }
     bool exceptions = false;
     for (const auto& i : p.instructions)
         exceptions |= i.opcode >= Opcode::EhTry && i.opcode <= Opcode::Resume;
     if (exceptions) {
-        for (unsigned k = 0; k < unsigned(RuntimeEntity::Count); ++k) {
+        for (unsigned k = 0; k < unsigned(RuntimeEntity::ThreadPointer); ++k) {
             image.data.resize(aligned(image.data.size(),16),0);
             unsigned id = image.runtime_begin+k;
             image.symbols[id] = image.data.size(); image.defined[id] = image.data_symbols[id] = true;
@@ -73,7 +88,9 @@ static void patch(std::vector<unsigned char>& bytes, const std::vector<Fixup>& f
         std::uint64_t address = (image.data_symbols[fix.symbol] ? data_address : code_address) + image.symbols[fix.symbol] + fix.addend;
         unsigned width = fix.kind == Fixup::AbsoluteSymbol ? 8 : 4;
         if (width == 4) {
-            address -= code_address + fix.end;
+            if (fix.kind == Fixup::ThreadOffset)
+                address = image.symbols[fix.symbol] + fix.addend - image.symbols[image.runtime_begin+unsigned(RuntimeEntity::ThreadPointer)];
+            else address -= code_address + fix.end;
             require(std::int64_t(address) >= INT32_MIN && std::int64_t(address) <= INT32_MAX,"native reference out of range");
         }
         for (unsigned n = 0; n < width; ++n) bytes[fix.offset+n] = address >> (n*8);

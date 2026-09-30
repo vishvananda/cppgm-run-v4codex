@@ -56,7 +56,7 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
         "adc","sbb","mul","shld","shrd","lock_cmpxchg16b",
         "fmov","fadd","fsub","fmul","fdiv","fneg","fcmp","fset",
         "sitofp","uitofp","fptosi","fptoui","fpext","fptrunc","fret","fstp",
-        "eh_push","eh_pop","throw","resume","stack_alloc"};
+        "eh_push","eh_pop","throw","resume","stack_alloc","tls_addr"};
     out << "    " << names[unsigned(i.op)];
     if (i.op == Op::Jcc || i.op == Op::Set || i.op == Op::Fset) out << cc(i.condition);
     bool typed = i.op == Op::Load || i.op == Op::Store || i.op == Op::Compare ||
@@ -94,7 +94,9 @@ void dump_header(const lowir_model::Program& p, const std::vector<Instruction>& 
         for (const auto& i : start) instruction(p,i,out);
     }
     for (const auto& g : p.globals) if (!g.declaration) {
-        out << "\nglobal " << p.name(p.symbols[g.symbol.index-1].name) << "\n  storage ";
+        out << "\nglobal " << p.name(p.symbols[g.symbol.index-1].name);
+        if (p.symbols[g.symbol.index-1].metadata.storage == ir_model::GSM_THREAD_LOCAL) out << " thread_local";
+        out << "\n  storage ";
         if (g.structured) out << "data\n";
         else out << "scalar " << type_name(g.type) << '\n';
         for (unsigned n = g.data.begin; n != g.data.end(); ++n) {

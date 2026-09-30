@@ -12,7 +12,7 @@ void compile(const lowir_model::Program& p, const std::string& output, std::ostr
     Image image(p.symbols.size());
     Encoder encoder(image);
     Workspace workspace(p);
-    auto time = Clock::now(); encoder.startup(start); encode_data(p,image); stats.encoding_ms += ms(time);
+    auto time = Clock::now(); encode_data(p,image); encoder.startup(start); stats.encoding_ms += ms(time);
     if (mir) dump_header(p,start,*mir,image.defined[image.runtime_begin]);
     for (const auto& source : p.functions) if (!source.declaration) {
         time = Clock::now();
@@ -34,6 +34,7 @@ void compile(const lowir_model::Program& p, const std::string& output, std::ostr
         if (mir) dump_function(p,f,*mir);
         time = Clock::now(); encoder.encode(f); stats.encoding_ms += ms(time); ++stats.functions; stats.instructions += f.instructions.size();
     }
+    time = Clock::now(); encoder.tls_wrappers(); stats.encoding_ms += ms(time);
     stats.text_bytes = image.code.size();
     if (!output.empty()) {
         time = Clock::now(); write_executable(image,output); stats.encoding_ms += ms(time);

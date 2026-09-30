@@ -97,6 +97,8 @@ void Selector::move(Operand to, Operand from, Type t)
             from = in_register(from,t,scratch);
         }
         emit(Op::Store,t,{to,from});
+    } else if (from.kind == Operand::Symbol && from.address && tls_symbol(from.id)) {
+        tls_address(to,from);
     } else if (from.address) {
         from.address = false;
         emit(from.kind == Operand::Symbol ? Op::Mov : Op::Lea,Type::Ptr,{to,from});
@@ -119,9 +121,16 @@ void Selector::move(Operand to, Operand from, Type t)
 Operand Selector::memory(lowir_model::Operand o, int scratch)
 {
     if (o.kind == lowir_model::Operand::Slot) return value(o,Type::Ptr);
-    if (o.kind == lowir_model::Operand::Symbol) return Operand::symbol(SymbolId(o.ref),false);
+    if (o.kind == lowir_model::Operand::Symbol) {
+        if (!tls_symbol(o.ref)) return Operand::symbol(SymbolId(o.ref),false);
+        tls_address(Operand::r(scratch),Operand::symbol(SymbolId(o.ref)));
+        return Operand::mem(scratch);
+    }
     Operand base = value(o,Type::Ptr);
     if (value_type(o,Type::Ptr).kind() == Type::Object) return base;
+    if (base.kind == Operand::Symbol && tls_symbol(base.id)) {
+        tls_address(Operand::r(scratch),base); return Operand::mem(scratch);
+    }
     if (base.address) { base.address = false; return base; }
     base = in_register(base,Type::Ptr,scratch);
     return Operand::mem(base.reg);
@@ -142,6 +151,11 @@ void Selector::select(const lowir_model::Instruction& i)
         break;
     case Opcode::Phi: break;
     case Opcode::Addr: {
+        if (arg(i,0).kind == lowir_model::Operand::Symbol && tls_symbol(arg(i,0).ref)) {
+            if (state(i.destination.index).uses)
+                move(allocate(i.destination.index,Type::Ptr),value(arg(i,0),Type::Ptr),Type::Ptr);
+            break;
+        }
         Operand address = memory(arg(i,0)); address.address = true;
         // A constant symbol address never needs a spill home. When a control-
         // flow interval has no retained register, materialize at its consumers.

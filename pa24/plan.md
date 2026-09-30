@@ -9,6 +9,23 @@ independent review. These markers are preserved; PA24 must not advance to PA25.
 [Audit130](audit.md), [validation131](../student.tests/pa24/validation131.json),
 and [performance131](../student.tests/pa24/performance131.md) retain evidence.
 
+## Implementation132 in progress
+
+Entry HEAD: `bcf1e3b58ecc69da5fb930ce1e2111f437a1999f` (clean). The previous
+turn completed validated EH/frame work: progress, not a live wait. Review/base
+markers above remain unchanged. Entry course failures: 9 of 296 (287 passing).
+
+| Group / owner | Data flow and work budget | Validation |
+|---|---|---|
+| TLS / image + selector + encoder | Typed storage/wrapper identities -> dense unit map -> TLS address MIR -> initial-thread storage and direct encoding; linear layout/selection/fixups, constant access sequence | Three existing failures; declared/defined wrappers, addresses, widths, pressure, initializers, ABI/debug; frozen four-dimensional evidence |
+| Required placement / selector + frame finalization | Interval and ABI facts -> placements/setup -> actual preserve/frame metadata; bounded register pool and linear cleanup | Six mandatory MIR failures plus inherited semantic controls |
+
+Close TLS and its related consumers first, then extend into placement while
+validation and the shared ownership support it. No comparison/coverage changes.
+Performance protocol: frozen entry/final binaries, fixed inputs, A/A + ABBA,
+compiler latency/RSS and executable runtime/text. New TLS semantics get absolute
+costs; no comparison against rejected output. Evidence in `../artifacts/pa24-132`.
+
 ## Design and completed behavior
 
 Typed PA8 Program -> function-owned placement/flat MIR -> direct x86 encoding

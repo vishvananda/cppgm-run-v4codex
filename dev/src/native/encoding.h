@@ -2,7 +2,7 @@
 #include "native/model.h"
 namespace native {
 struct Fixup {
-    enum Kind { RelativeSymbol, AbsoluteSymbol } kind = RelativeSymbol;
+    enum Kind { RelativeSymbol, AbsoluteSymbol, ThreadOffset } kind = RelativeSymbol;
     std::size_t offset = 0, end = 0;
     unsigned symbol = 0;
     std::int64_t addend = 0;
@@ -12,8 +12,11 @@ struct Image {
     std::vector<Fixup> code_fixups, data_fixups;
     std::vector<std::uint64_t> symbols;
     std::vector<bool> data_symbols, defined;
+    std::vector<unsigned> tls_targets;
+    std::vector<unsigned> tls_wrappers;
+    bool has_tls = false;
     unsigned runtime_begin;
-    explicit Image(std::size_t count) : symbols(count+1+unsigned(RuntimeEntity::Count)), data_symbols(symbols.size()), defined(symbols.size()), runtime_begin(count+1) {}
+    explicit Image(std::size_t count) : symbols(count+1+unsigned(RuntimeEntity::Count)), data_symbols(symbols.size()), defined(symbols.size()), tls_targets(symbols.size()), runtime_begin(count+1) {}
     Operand runtime(RuntimeEntity entity) const { return Operand::symbol(SymbolId(runtime_begin+unsigned(entity)),false); }
 };
 class Encoder {
@@ -51,10 +54,13 @@ class Encoder {
     void call(Operand target);
     void epilogue_code();
     void runtime(const Instruction& i);
+    void tls_address(Operand to, Operand symbol);
+    void tls_startup();
 public:
     explicit Encoder(Image& image) : image(image), code(image.code) {}
     void startup(const std::vector<Instruction>& instructions);
     void encode(const Function& function);
+    void tls_wrappers();
 };
 std::vector<Instruction> startup(const lowir_model::Program& p);
 void encode_data(const lowir_model::Program& p, Image& image);

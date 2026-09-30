@@ -5,6 +5,7 @@ namespace native {
 using lowir_model::require;
 void Encoder::startup(const std::vector<Instruction>& instructions)
 {
+    if (!instructions.empty() && image.has_tls) tls_startup();
     // Linux process entry starts with an aligned stack. Native functions follow
     // SysV's call-entry alignment after each direct call pushes a return address.
     for (const auto& i : instructions) instruction(i);

@@ -33,11 +33,11 @@ enum class Op {
     Adc, Sbb, MulWide, Shld, Shrd, CmpxchgWide,
     Fmov, Fadd, Fsub, Fmul, Fdiv, Fneg, Fcompare, Fset,
     Sitofp, Uitofp, Fptosi, Fptoui, Fpext, Fptrunc, Freturn, Fpop,
-    EhPush, EhPop, Throw, Resume, StackAlloc
+    EhPush, EhPop, Throw, Resume, StackAlloc, TlsAddr
 };
 // Image-owned runtime entities have identities after the external symbol range.
 // They are not semantic declarations, nor are their spellings lookup keys.
-enum class RuntimeEntity { ExceptionTop, ExceptionValue, Count };
+enum class RuntimeEntity { ExceptionTop, ExceptionValue, ThreadPointer, Count };
 inline Operand runtime_operand(const lowir_model::Program& p, RuntimeEntity entity) {
     return Operand::symbol(SymbolId(p.symbols.size()+1+unsigned(entity)),false);
 }
