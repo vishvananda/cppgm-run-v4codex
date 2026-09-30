@@ -2,7 +2,7 @@
 
 Stage base commit: `f833cf1ff361529147361cada33eca62e55330cf`
 Last reviewed commit: `f833cf1ff361529147361cada33eca62e55330cf`
-Target: **PA27 full-stage**. Phase: **implement; incomplete handoff146**.
+Target: **PA27 full-stage**. Phase: **implement; loop147 active**.
 Current: **155/158**, down from **25 to 3 failures** this turn; no new failures.
 PA1–PA26: **4283/4283**. Independent review markers remain unchanged.
 
@@ -79,3 +79,26 @@ reference, harness or comparison changes this turn. Prior145's documented
   review questions about source-attribute identity, COMDAT alias/FDE ownership
   and GOT scratch lifetimes. These are separate from unfinished implementation;
   neither category is waived and the review markers above are not advanced.
+
+## Loop147 entry and working groups
+
+Entry HEAD: `8d595af6b91289109cae36554a8e8e8551192873`, clean; 155/158
+(three failures). Previous turn: **progress**, with committed ABI/emission
+implementation and validation; no live build/test process remains. Stage base
+and last-reviewed markers above are preserved. Frozen entry binary is in
+`/tmp/pa27-147/cppgm-entry`.
+
+1. **Anonymous storage / constructor actions**: semantic ownership maps injected
+   member identities to their storage path and selected union variant. Construct
+   leaves in declaration order, with explicit/default initialization overriding
+   default construction, then consume recorded projections in lowering and
+   partial-construction cleanup. Work is proportional to selected fields,
+   storage edges and initializer paths; no cloned source nodes or name recovery.
+   Validate required fixtures plus nested/default/reference/nontrivial members,
+   variant rejection, constant evaluation and throwing cleanup controls.
+2. **Hosted header parsing and vtable demand**: inspect the remaining parser
+   failure after the storage group, extend related grammar/semantic fixes where
+   supported; keep unfinished implementation separate from review questions.
+3. Freeze final binary, measure compiler latency/RSS and checked runtime/text
+   with A/A+ABBA on equivalent inputs. Required prior/current/through reports,
+   file audit and explicit personal controls; record all coverage unchanged.
