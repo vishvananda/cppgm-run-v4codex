@@ -123,6 +123,9 @@ ExpansionToken Preprocessor::builtin(const ExpansionToken& head, unsigned kind, 
     if (kind == 3) return generated(std::to_string(counter_++), head);
     if (!expansion.take().is("(")) throw std::runtime_error("preprocessor probe requires parentheses");
     if (kind == 6 || kind == 7) {
+        // The expansion's condition context also covers macro argument
+        // prescans and replacement rescans, but not ordinary source/directives.
+        if (!expansion.expression_) throw std::runtime_error("header probe requires a preprocessing condition");
         std::vector<ExpansionToken> operand;
         unsigned depth = 1;
         while (depth) {
