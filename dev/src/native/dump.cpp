@@ -166,6 +166,7 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
     if (f.host_exception.kind != Operand::None) {
         out << "    host_exception "; operand(p,f.host_exception,out); out << '\n';
         out << "    host_selector "; operand(p,f.host_selector,out); out << '\n';
+        out << "    host_raw_selector "; operand(p,f.host_raw_selector,out); out << '\n';
     }
     if (f.exception_base.kind != Operand::None) {
         out << "    exception_base "; operand(p,f.exception_base,out); out << '\n';
@@ -185,11 +186,15 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
         if (b.name) out << p.name(b.name); else out << "%native" << -b.offset;
         out << " -> "; operand(p,Operand::mem(f.frame_base,b.offset),out); out << " : " << type_name(b.type) << '\n';
     }
-    for (const auto& b : f.blocks) {
+    for (unsigned bi = 0; bi < f.blocks.size(); ++bi) {
+        const auto& b = f.blocks[bi];
         out << "\n  block "; operand(p,Operand::label(b.id),out); out << '\n';
+        if (f.host && f.host_outer[bi]) {
+            out << "    host_outer "; operand(p,Operand::label(f.blocks[f.host_outer[bi]-1].id),out); out << '\n';
+        }
         for (unsigned n = b.instructions.begin; n != b.instructions.end(); ++n) {
             const auto& i = f.instructions[n];
-            if (f.host && i.op == Op::Call && i.boundary.unwind != ir_model::CUM_NO) {
+            if (f.host && ((i.op == Op::Call && i.boundary.unwind != ir_model::CUM_NO) || i.op == Op::Resume)) {
                 out << "    host_eh ";
                 if (i.host_handler == ~0u) out << "unreachable";
                 else if (!i.host_handler) out << "unprotected";
