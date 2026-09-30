@@ -1,0 +1,129 @@
+{
+  "stage_base": "f833cf1ff361529147361cada33eca62e55330cf",
+  "last_reviewed": "cbe7871e211c284ef4a1c571de12db5f26c29777",
+  "entry_commit": "226b88668284e116a4d273627bf4810bd682226e",
+  "code_tip": "df5aef0879cb53129cf6b524229559fd4b0a4aa9",
+  "binary_sha256": "453baae0b401a336074ae51c13f7297cee911edfa03d08ebe5c863cf7ee7f12e",
+  "checks": [
+    {
+      "name": "stageTests",
+      "command": [
+        "make",
+        "test-pa27"
+      ],
+      "status": 0,
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-149/stage-final3.log",
+      "output_sha256": "2fae6668a2d167c9d7c4de82ec87d1af927376529e623e74a359b8b7ba084e4d",
+      "result": "(158 / 158)"
+    },
+    {
+      "name": "priorThroughTests",
+      "command": [
+        "make",
+        "test-report-through-pa26"
+      ],
+      "status": 0,
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-149/prior-final3.log",
+      "output_sha256": "7cac27cf3186f13b955c5acf0fb07ff27b00fcb1aa841ffa27213d34fbe64cfd",
+      "result": "(4283 / 4283)"
+    },
+    {
+      "name": "throughStage",
+      "command": [
+        "make",
+        "test-report-through-pa27"
+      ],
+      "status": 0,
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-149/through-final3.log",
+      "output_sha256": "4d218fbab339f74707b7153e2c83bf08d542846080b57aef02924103292d95bf",
+      "result": "(4441 / 4441)"
+    },
+    {
+      "name": "fileAudit",
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa27",
+        "--paths",
+        "dev/src"
+      ],
+      "status": 0,
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-149/file-audit-final3.log",
+      "output_sha256": "a8cc56fe117bbfd3ed16e9e29470abb6f84497ea8488c7e2d89528530a070d9b",
+      "result": "File audit passed for pa27 with 4 warning(s)."
+    },
+    {
+      "name": "hostedControls",
+      "command": [
+        "python3",
+        "student.tests/pa27/hosted149-controls.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-149/controls-final3"
+      ],
+      "status": 0,
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-149/controls-final3.out",
+      "output_sha256": "885de995cdebaffedef2f1ac85d3ad7e1dac2d4674e0be5ae58f4059544871cd",
+      "result": "PASS 66 commands"
+    },
+    {
+      "name": "firstSignatureControls",
+      "command": [
+        "python3",
+        "student.tests/pa18/signature79_controls.py",
+        "dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-149/first-signature-final"
+      ],
+      "status": 0,
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-149/first-signature-final.out",
+      "output_sha256": "2304cf7ec69a706991e4b6fb97a8d82c8f4beacd9c3756daab267cb302365523",
+      "result": "33/33 cases pass"
+    }
+  ],
+  "first_signature_cases": 33,
+  "coverage": {
+    "tracked_contract_paths": 19693,
+    "inventory_sha256": "637d1dc1f87eed3dee940b29925294be20f6da635ce6a7baf2ac4aebb63420cc",
+    "stage_anchors": 158,
+    "changes_since_entry": [],
+    "path_scope": "Tracked pa1 through pa27 tests/ fixtures and reference sidecars; suite infrastructure unchanged by git diff"
+  },
+  "progress": {
+    "entry_failures": [
+      "pa27/tests/general/200-host-extern-template-vtable-reference.t"
+    ],
+    "current_failures": [],
+    "total": 158,
+    "passed": 158,
+    "additional_failures": []
+  },
+  "sources": {
+    "dev/frontend_source_sets.mk": "002f3c791ab31ecd0ba3edb0811c69e827f2d61ff2792704bc03eb3501c7dacf",
+    "dev/src/lowering/expression.cpp": "1a4cece6fd536bf3e4f6b533b552e849c618dffd2e56d25f98579f896b051de3",
+    "dev/src/lowering/intrinsics.cpp": "1e2c9cba5ed7c98479d24f7ab71b94c7beb707053114c2baba4af1f06950806b",
+    "dev/src/lowering/procedural.h": "77ff23b715bc66d95cec5a3ca0760a4243597cc2bf9e808bca15d4fe5cd57cd8",
+    "dev/src/preprocess/directive.cpp": "4dac79e2fb98b26c11c33708a41f248be80a4a3f065572c08439d7f04bd5bdea",
+    "dev/src/preprocess/macro.cpp": "e86f68fc42174d306eb4d1608720aedb0ca42ac8032178f6f3c00c6e2cb0496e",
+    "dev/src/preprocess/preprocessor.cpp": "a6d19a3c9059ad23038a244c2eacac65fca30ab067d55e106516a94285ac0cd0",
+    "dev/src/preprocess/preprocessor.h": "66b27360f7ce8782a5db53b52b37dfab4b021d2caf0636567dcf865d802a8377",
+    "dev/src/preprocess/token_cursor.cpp": "646a6ee5863d939e1ef324e71a5d0fd727ed05a7740afdd6545abae9c8e513c3",
+    "dev/src/preprocess/token_cursor.h": "946c56ec682a3eb6048e2cfdc8baaaba7e86a6884d5400b9bb68d4e6bec2aec4",
+    "dev/src/semantic/access.cpp": "c32de35fc8f18197cdf147d803d9981fbb848db9126b623f030e21da0f77eee0",
+    "dev/src/semantic/analyzer.h": "67a73d5d743e2e61c24cb0a3e490d9368a3757bb51c1e1c82c11ee53d15cd7ae",
+    "dev/src/semantic/builtin_functions.cpp": "25307f7c91fc56ef3c7c2667dd74fa2ab286942fef29fda888f0a86883c67b83",
+    "dev/src/semantic/call_selection.cpp": "efd20541c6694b8c0f8e71569d4905ff4c0c4b448b3402b454436814b067cde5",
+    "dev/src/semantic/conversion.cpp": "e84779e6264c9e5e1b0124de5dd56e2ae300fdf317b3dd11efd48715794f2a58",
+    "dev/src/semantic/dependent_type.cpp": "e8f82d3977448772bea983609d2d5bb3a709ce729fe88d171a21a80ce0bf9f57",
+    "dev/src/semantic/explicit_instantiation.cpp": "a4a11554c118903b6deb403c682c70a9b7bc21f023f6284f03399df1e5af78b6",
+    "dev/src/semantic/expression.cpp": "09148ec7b6eb46b5e8331f4d052c08444d803f91b0968284d4c41e9e00e89949",
+    "dev/src/semantic/model.h": "8f68e1e30bb06d91c05b93b0e30a2a54b53ba72b97b1e9efba5bce7d45f58894",
+    "dev/src/semantic/template_binding_declarations.cpp": "36c37150d3621432a25ea0d042cf88be6a2f47a48b255faca3e38efc550855a2",
+    "dev/src/semantic/template_call.cpp": "f186a87cf327a349a6cabee48baed729de44a0eaec7c0ad87db2cf75c73da3ff",
+    "dev/src/semantic/template_declaration.cpp": "d55818f5ff9e54558a2fac29ea6780cab69ff30d9d62ae979f8bf7a4ab1ebc1b",
+    "dev/src/semantic/template_type_access.cpp": "e0b38e06d10e747bca0057490408614ef148b139fb51c75ea9e44673c88405fa",
+    "dev/src/semantic/template_type_facts.cpp": "944e9974bfd4792dd147a7aebc17e8dbead6cdad12a299f58bb26b37c7036a3c",
+    "dev/src/semantic/type_query.cpp": "8d9eb9cdf4c5f605da5925832c377310d3ee326f204618be9abe9af0af43fd56",
+    "dev/src/syntax/class_parser.cpp": "b7296f242ea9751bc5ad896c1fc50152c6c35d9ea85764c2b2739fd67c50e28c",
+    "dev/src/syntax/expression.cpp": "11da1d71147a6f2ab015a1b9bbeea95734f955c2ce7b1572be9a43768aaf6992"
+  },
+  "status": "pass: required stage, earlier stages, through report, file audit, personal controls and unchanged coverage"
+}
