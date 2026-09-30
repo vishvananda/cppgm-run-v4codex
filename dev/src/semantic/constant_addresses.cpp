@@ -358,7 +358,10 @@ void Analyzer::constant_dependencies(Constant value, std::vector<ArgumentId>& ar
         args.push_back(storage_id); args.push_back(storage.version);
         args.push_back(unsigned(storage.live) | (unsigned(storage.readable)<<1));
         constant_dependencies(storage.value,args,seen);
-        if (storage.builder) for (auto part : storage.builder->parts) constant_dependencies(part.value,args,seen);
+        if (storage.builder) {
+            for (auto part : storage.builder->parts) constant_dependencies(part.value,args,seen);
+            for (auto projected : storage.builder->projected_values) constant_dependencies(projected,args,seen);
+        }
     } else if (class_value(value.type) || k == TypeKind::Array) {
         auto object_key = key(1,value.bits);
         if (seen.get(object_key)) return;

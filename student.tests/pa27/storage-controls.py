@@ -39,6 +39,9 @@ int main(){R r(7);S s(static_cast<R&&>(r));return s.prefix==41&&s.a.value==7&&r.
 int main(){S s;return s.prefix==9&&s.a==5&&s.b==6?0:1;}''',
 'mixed-default-receiver':'''struct S{long prefix;struct{int a=5;int b=this->a+1;int* p=&a;};S():prefix(9){} S(int x):prefix(10),a(x){}};
 int main(){S s;S t(7);return s.prefix==9&&s.b==6&&s.p==&s.a&&t.prefix==10&&t.a==7&&t.b==8&&t.p==&t.a?0:1;}''',
+'constant-default-reference':'''constexpr int read(const int& x){return x+1;}
+struct S{long prefix;struct{int a;int b=read(a);};constexpr S(int x):prefix(9),a(x){}};
+constexpr S s(7);constexpr S t(10);static_assert(s.b==8&&t.b==11,"projected argument identity");int main(){return s.b==8&&t.b==11?0:1;}''',
 'constant-default-receiver':'''struct S{long prefix;struct{int a;int b=this->a+1;};constexpr S(int x):prefix(9),a(x){}};
 constexpr S s(7);static_assert(s.a==7&&s.b==8,"default receiver");int main(){S t(10);return t.b==11?0:1;}''',
 'implicit-defaults':'''struct S{long prefix=3;struct{int a=4;int b=5;};};
