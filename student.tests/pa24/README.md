@@ -122,3 +122,29 @@ checks an input-dependent sum through eight million mixed normal/throwing calls
 at the timed argument count. Entry binaries cannot execute this new surface;
 use the same frozen completed binary as A and B to measure its absolute costs
 and noise, without claiming a speedup. See [performance131.md](performance131.md).
+
+Handoff132 adds initial-thread TLS storage, accessors and address consumers:
+
+```
+python3 student.tests/pa24/tls132.py dev/lowir2native /tmp/pa24-tls132
+python3 student.tests/pa24/tls-integration132.py dev/lowir2native /tmp/pa24-tls-integration132
+dev/cppgm++ --validate-lowir --emit-lowir -o /tmp/pa24-trace132.lowir student.tests/pa24/trace132.cpp
+dev/lowir2native --dump-machine-ir /tmp/pa24-trace132.mir -o /tmp/pa24-trace132 /tmp/pa24-trace132.lowir
+/tmp/pa24-trace132
+/tmp/pa24-trace132 input
+```
+
+The 236 TLS controls preserve the existing outcomes while changing eligible
+personal copies of course globals to thread storage, then add independent scalar,
+conversion, derived-address, wrapper, pointer-argument, function-table and bulk-copy
+cases. Course fixtures and comparisons are untouched. The integration controls
+inspect real TLS instruction/debug facts, initial-thread setup before initializer
+functions, wrapper fixups across files, helper-only dumps and view/native identity.
+The source trace follows ordinary TLS access through a demanded class-template
+member; its unused invalid member remains undemanded.
+
+`PA24_TLS_COMPILER=1` selects 4096 distinct TLS globals and helpers with load,
+arithmetic and store work. `tls-runtime` checks forty million accessor calls
+and increments at the timed argument count, with a second runtime input checked
+before timing. The entry binary rejects TLS; measure the final binary against
+itself for absolute cost/noise. See [performance132.md](performance132.md).

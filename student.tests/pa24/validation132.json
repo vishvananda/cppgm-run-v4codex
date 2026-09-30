@@ -1,0 +1,296 @@
+{
+  "handoff": 132,
+  "entry_commit": "bcf1e3b58ecc69da5fb930ce1e2111f437a1999f",
+  "code_commit": "03eeff9ed8315c12b7d93f0749f56587262def7d",
+  "stage_base_commit": "bde9eb3e128e24923a1de40bb63b8e348a13553b",
+  "last_reviewed_commit": "9f3f9b5caaec9677af0e8431b51cacebcf823dce",
+  "boundary": "TLS/storage/accessor/address consumers complete; six canonical placement/frame failures remain implementation work; 131 and 132 independent review pending",
+  "checks": [
+    {
+      "name": "tls-integration",
+      "command": "python3 student.tests/pa24/tls-integration132.py dev/lowir2native ../artifacts/pa24-132/integration-final",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/tls-integration-final.log",
+      "sha256": "c15dc5d681ecb4f874f4ebffcb90768f7098a1f5fa42cfb91f8146f870e26045"
+    },
+    {
+      "name": "stage",
+      "command": "make test-pa24",
+      "exit_code": 2,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/stage-final.log",
+      "sha256": "636882eb06f38523a9d40ef788686fff1c606a54a24149859bb300d71927553d"
+    },
+    {
+      "name": "prior",
+      "command": "n=24; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/prior-final.log",
+      "sha256": "4c662c56ee5a753f284ba8febfd524d2af760e74bf151ec790709fa63891cb73"
+    },
+    {
+      "name": "file-audit",
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa24 --paths dev/src",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/file-audit-final.log",
+      "sha256": "09991cae3876c91c905a9d48086986cd7bf75a6f2e2dfb20654472296390380d"
+    }
+  ],
+  "stage_progress": {
+    "passed": true,
+    "entry_passed": 287,
+    "final_passed": 290,
+    "course_count": 296,
+    "entry_failures": [
+      "pa24/tests/behavior/600-defined-and-declared-tls-wrappers.t",
+      "pa24/tests/behavior/700-thread-local-store-register-pressure.t",
+      "pa24/tests/strict/100-object-abi-lowered.t",
+      "pa24/tests/strict/600-thread-local-direct-native-runtime.t",
+      "pa24/tests/structural/200-stack-arguments-beyond-six.t",
+      "pa24/tests/structural/500-mixed-gpr-xmm-call-abi.t",
+      "pa24/tests/structural/600-indirect-mixed-gpr-xmm-call-abi.t",
+      "pa24/tests/structural/700-call-setup-forwarding-no-preserve.t",
+      "pa24/tests/structural/800-single-edge-callee-saved-retention.t"
+    ],
+    "final_failures": [
+      "pa24/tests/strict/100-object-abi-lowered.t",
+      "pa24/tests/structural/200-stack-arguments-beyond-six.t",
+      "pa24/tests/structural/500-mixed-gpr-xmm-call-abi.t",
+      "pa24/tests/structural/600-indirect-mixed-gpr-xmm-call-abi.t",
+      "pa24/tests/structural/700-call-setup-forwarding-no-preserve.t",
+      "pa24/tests/structural/800-single-edge-callee-saved-retention.t"
+    ],
+    "resolved": [
+      "pa24/tests/behavior/600-defined-and-declared-tls-wrappers.t",
+      "pa24/tests/behavior/700-thread-local-store-register-pressure.t",
+      "pa24/tests/strict/600-thread-local-direct-native-runtime.t"
+    ],
+    "new_failures": [],
+    "fixture_sha256": "64b2f84e5d9efdca86e8230dd8ff44726501d02426cc6e61b5740e7ed8ebceb0",
+    "tracked_fixture_files": 2403,
+    "coverage_comparators_references_unchanged": true
+  },
+  "personal": {
+    "scalar": 1820,
+    "floating": 1259,
+    "wide": 1495,
+    "objects": 160,
+    "runtime_frame": 75,
+    "audit": 21,
+    "tls": 236,
+    "course_program_behavior": 295,
+    "integration": "pass",
+    "tls_debug_elf_multifile_startup_helper_and_four_identity_checks": "pass",
+    "source_trace_argc_1_and_2": "pass"
+  },
+  "source_sha256": {
+    "dev/frontend_source_sets.mk": "abff3f695757b9c6ff8c9c151739b4526f01d67600d8739d471d52af620caf24",
+    "dev/src/native/calls.cpp": "217bbc8adeaffbe07023944f54c72579ee9e04a6aa1b0c2f967becb6be274ee3",
+    "dev/src/native/driver.cpp": "8b7146c2e02db7e8abba9a4768cc085bcbaa93eb9453eb0aa8cb9c8be4a1aa98",
+    "dev/src/native/dump.cpp": "6e690196ba33b217e0b2c34a491c3d2db6564546e708c29d58b8cf98f073f3d9",
+    "dev/src/native/elf.cpp": "40dc1b5e2192a182af552b1201b807d587554a2527303f911ee941326653f402",
+    "dev/src/native/encoding.h": "e0971e1f4d74bd55b18af4c11371edf7a57e4ddeadde667808b8e8bcbcc872d7",
+    "dev/src/native/integer_encoding.cpp": "e95940e0e45f75da21caa2a1ca4af765de1d31171c02e9f591a9ccabc7390fa8",
+    "dev/src/native/layout.cpp": "ac83324fa4c9d7206858a00e638cfb04be7ea73da77e6508a1583f9be4384d12",
+    "dev/src/native/model.h": "58126ee65486f171377c19012886698a1361def6383737964ef749fee9a98d28",
+    "dev/src/native/runtime.cpp": "bf465219e73bc2e2d2672a9be84db589f8fa476941b57bb86aedd7bd1b1ab2e3",
+    "dev/src/native/selection.cpp": "79f16a43aa60e363e4e91f5a38785d8d52ba16f521defd3de216ca8726c97e21",
+    "dev/src/native/selection.h": "1fe9461ee27d85e4a92206395382f8cce5d228913379dbf4cfcb43410c51a973",
+    "dev/src/native/tls.cpp": "d68a431c20faa66c9405ccfccb4bd13862e1e7d9da9b24bf13664344d413b0d6"
+  },
+  "compiler_sha256": {
+    "before": "ebe4f004cf548dfb698e53215e5844260f1656b04fb109d12d448b1afd93bb40",
+    "after": "6e81d514d7a406554df6eeec9dd4fd604912ff69280b5eba1d3b7a3d9f30f1b3",
+    "final": "21a0dce80386462219afd2626a281e3dabc6e2ca8f16816cf62d5469d1c7ff79"
+  },
+  "performance_experiments": [
+    {
+      "name": "scalar",
+      "command": [
+        "python3",
+        "student.tests/pa24/benchmark.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/before",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/after",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/bench-scalar",
+        "runtime",
+        "memory-runtime",
+        "floating-runtime",
+        "pressure-runtime",
+        "wide-runtime",
+        "wide-numeric-runtime",
+        "exception-runtime"
+      ],
+      "status": 0
+    },
+    {
+      "name": "floating",
+      "command": [
+        "python3",
+        "student.tests/pa24/benchmark.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/before",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/after",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/bench-floating"
+      ],
+      "status": 0
+    },
+    {
+      "name": "wide",
+      "command": [
+        "python3",
+        "student.tests/pa24/benchmark.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/before",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/after",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/bench-wide"
+      ],
+      "status": 0
+    },
+    {
+      "name": "tls",
+      "command": [
+        "python3",
+        "student.tests/pa24/benchmark.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/after",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/after",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/bench-tls",
+        "tls-runtime"
+      ],
+      "status": 0
+    }
+  ],
+  "evidence_directory": "/home/vishvananda/work/private/v4codex/artifacts/pa24-132",
+  "evidence_sha256": {
+    "build-tls.log": "040e9d44f439d516c83d8e539fdbb54f9683564d7079ab43ee267072c913bc5e",
+    "tls-integration-invalid-input.log": "5ea9dbe81559425f81a75a2d5c9e331482ed4373c407612f207722c14b69b6d1",
+    "build-final.log": "af5a8bdc72f7f85ad2691358914c6da950984a987b0e8d6dd94e7cd839bace18",
+    "trace.lowir": "ac018f649f0425515f544e4be92a82c4edf71023bac94bc4420e1f23f60629e4",
+    "tls-second.log": "4379ce0df9e25d30a2c471fbdf42de4b212754d83e829b66bee7778d50d8f3ba",
+    "stage-mid.log": "636882eb06f38523a9d40ef788686fff1c606a54a24149859bb300d71927553d",
+    "tls-expanded.log": "79cbeb0dff4c2f9fa0e94187ea564e7a8662bbc43f22cea3756ced063cccc216",
+    "benchmark-runs.json": "2850d1511a23f5d7f40ac0d25cdf6a5631e06df7fdf0085dfdae646c4b8fa921",
+    "trace-frontend.log": "6b658ae54e176071253d7bf539a8478a98dc12d782ef10ee155c013f8828cb50",
+    "integration-wrapper-mir.log": "c15dc5d681ecb4f874f4ebffcb90768f7098a1f5fa42cfb91f8146f870e26045",
+    "trace.mir": "691a11e7702b75143d49ab0d4fc34a6adeaeb18187d9bb03b1e8d3788356ed34",
+    "personal-0.log": "21e62ccd5a615c886496fb20667e2485895bae5ceccb391555aecb36f879c9e2",
+    "trace-disassembly.txt": "85126aa9140351179e48e5fb1c8548a1bd1b43fa4833643320ca4876171b3ea6",
+    "tls-third.log": "abad6b007998feb17480382b6d1529e24469a7ea755a29799c95ddf1fb3875d2",
+    "trace-native.log": "abe4a7da56afecf355beec00aafc2d63c151b09a50fab1002c124c05e40a3cd2",
+    "personal-1.log": "764a5d87ab5279532d91f9dad2f3f2e5ad9b362b47b1c172c1850be19ce2859c",
+    "entry-stage.log": "93b4ae3e31a1e31efdaedec7bc64b332e325a9013b96d39624182597bb5f0a98",
+    "tls-complete.log": "d92ed380257210d9e33337a9a56fea317b5f9296e0a37ac2238837eadd29ff19",
+    "file-audit-final.log": "09991cae3876c91c905a9d48086986cd7bf75a6f2e2dfb20654472296390380d",
+    "bench-floating.log": "0106ccc49929fd6614b165f5cf1b24ff92213bfdb5f01dc69b7f57fa153fe3df",
+    "bench-tls.log": "0db340534bbcc7bb64085c88ecfcedb7cc5fc7919d37b910410807b6c0904ad7",
+    "personal-3.log": "82b4b42864845d4691e0aec8cd1c298681e93aea68eb64006fc5bb030d4cb97f",
+    "final-scalar-bench.log": "98ad80103e65e4265c78f5a99c0727864f0719008b3a4b0ea034ab495bde01f4",
+    "personal-4.log": "f3735ea515dea551c05c717cc0ade3737c72d8347d47c823ce533ee0151a4b47",
+    "personal-5.log": "51c3fa48db71d128b2c0cc6072d9e0a83efd352eab6cc9e4a2acfd41811d6f64",
+    "tls-integration-final.log": "c15dc5d681ecb4f874f4ebffcb90768f7098a1f5fa42cfb91f8146f870e26045",
+    "final-runtime-identity.json": "27c32e9da7f212b35736608204ad336dcf2335032c30624085d8c5fb3ecc7540",
+    "final-wide-bench.log": "701404d676436dde1ec92f9174e543d47d004a720acc369a0ab4c33f12c9af2a",
+    "personal-7.log": "3348760f2cc876d4e1973a9f96edb0e27d4c16e7a1dfc8e442e4c9bb58d696c8",
+    "final-floating-bench.log": "5995c98c358241f56febb55a516164d5ebdf06da66dbb5a0c5ce9ce584081a54",
+    "stage-final.log": "636882eb06f38523a9d40ef788686fff1c606a54a24149859bb300d71927553d",
+    "personal-6.log": "a9e15b7ec9ac9e1d707057127becca948e5eb6cd9b5f7622bec9c267ca19ecdf",
+    "build-wrapper-mir.log": "5ec42dc52443d18e52b3002eeda4c9824cfc608da1928d5035ddbdfac7e506f6",
+    "bench-wide.log": "f524a1cf3546d1ebdf6b94df7af609a513f6acc1cdd9b1f8ccbc748591470371",
+    "final-tls-bench.log": "4d351980d843b08554c7dd6d7b8d341723f5adf51c2190fbf55d8b24b18ecb7c",
+    "final-benchmark-runs.json": "22f1e3d03a38f880f4f8b1e612982bd35f941444bb2cddc472007931e0fc6808",
+    "tls-course.log": "047b165bd1ffc81c21f3e9a50281293c34e826783cce5183452b7916752d5329",
+    "trace-elf.txt": "6711269b145a7a5757a9016541ef3b7bd41319405c1a8bd379ff8ecae6817d9e",
+    "personal-2.log": "e9c176ff49931734369b1a76938038d2e7bfc5c37459c46525a0ac0abec2dac8",
+    "tls-wrapper-mir.log": "d92ed380257210d9e33337a9a56fea317b5f9296e0a37ac2238837eadd29ff19",
+    "tls-final.log": "9a94bb288b5a97ef670733697e88bb539bb534c82ef16928571d7f06e15ca83a",
+    "bench-scalar.log": "17c7b90a3260e8dc09b0e86e680110ea7f8d246bd198800164b0a0372c6a1d56",
+    "tls-initial.log": "31e891fdc96892c603d3b54a08b32a7367aa51f574830fce1f7d9f8360cdb151",
+    "required-checks.json": "cbe29afd70d066d7c92ee5c7f79201e31091bca751c566177956368593b420d8",
+    "prior-final.log": "4c662c56ee5a753f284ba8febfd524d2af760e74bf151ec790709fa63891cb73",
+    "final-scalar-bench/observations.json": "e36deda5f175f04d08d4613f486e1cd203c3e8bf9294bbd033db14fa0520e630",
+    "tls-second/results.json": "af996d31b3909149899a8434ccec391e3bbd969bec5fc555e2191af9bc05794e",
+    "runtime/results.json": "02f585b44e24199aa71710956beb124cd01ecb9dfcb516ac2909bdde39bad6b0",
+    "final-wide-bench/observations.json": "fe27163f55215ee6f141244242d70a8151cd10577e1e7695a3c986cd565c9df5",
+    "bench-wide/observations.json": "837b61f02dde9468bc64f5dd5f6fbe8d1ebb1920950a22dab951957bb564eb3b",
+    "integration-final/identities.json": "5f9de964df5e0a0c53407cef491a956e175a70eaca05be6dad949791586658dc",
+    "tls-initial/results.json": "6aa9e93a6b4ecf733c9e7090cb30409d6509527a9491b9851b6b35ee0c6ad08e",
+    "tls-expanded/results.json": "b4bafb47883e7bd58e3ca05fb9c4d34d7bf6f308c90640987dc5cd49044190b2",
+    "tls-third/results.json": "95ef81eabfec59b5c86dad19821db9df18bc688810946f2f7ff38b4832b1be60",
+    "final-tls-bench/observations.json": "fcccbb27fbefe503b8dd476f0469a52f15c939df1100a007a5d82e3059ac2e0a",
+    "integration-wrapper-mir/identities.json": "5f9de964df5e0a0c53407cef491a956e175a70eaca05be6dad949791586658dc",
+    "tls-final/results.json": "8ebfc26b92373cd8e78d28649aa31f5da3a2d3456f160a4c6d6ecd0fcae962f5",
+    "bench-tls/observations.json": "ff3cacb1d8777fa7d7f2688785c77f52abe095313b4833e3a5921ac1a5696a8a",
+    "tls-wrapper-mir/results.json": "fc63816f31826797e401b0220588e7c52cf8526abc22bd3656c5bc6fd0ffbe32",
+    "bench-scalar/observations.json": "64be76eaf61441ccc1750a507405057c35961b4c2582c543104d289f43b45819",
+    "tls-complete/results.json": "0b21d8b0e3dea5afe41b59ad7cf9e051db50f9cf1b54cb9c2ad4b487f43af7e3",
+    "bench-floating/observations.json": "b8f2794050c901e510df00eadd4b1ab3c84e22701b3ad9dac0638ac7c1f5b749",
+    "final-floating-bench/observations.json": "b5fcda0721205fbc7d2ed87d463c5c710eddd86b6bb144a3cd1c7f9602bd64a2",
+    "integration/identities.json": "5f9de964df5e0a0c53407cef491a956e175a70eaca05be6dad949791586658dc"
+  },
+  "notes": [
+    "Initial artifacts were relocated from checkout/artifacts to the shared artifacts directory before measurements.",
+    "Early exploratory TLS input generators used invalid spellings/conversions; final controls use valid LowIR. All early diagnostics are retained.",
+    "The first multifile personal control duplicated a global declaration/definition; LowIR section Validation requires each top-level name once. The valid forward-reference control passes.",
+    "No reference output, required fixture or comparator was changed.",
+    "Final worktree cleanliness is verified after committing this evidence; the evidence commit changes no implementation.",
+    "Final accessor refinement lowers demanded declared TLS wrappers through shared Function/MIR/dump/encoding; 236 TLS controls and TLS integration passed afterward.",
+    "Inherited personal suites ran at initial implementation db965a86; final refinement only changes generated TLS accessor ownership. Required course/prior/audit gates were rerun at final implementation 03eeff9e.",
+    "Final compiler latency/RSS experiments rerun with frozen final binary; all eight final executable images match measured bytes and pass both runtime input counts."
+  ],
+  "initial_code_commit": "db965a8690856eb704a7d8b5bbfdc30546e9f06d",
+  "personal_harness_sha256": {
+    "student.tests/pa24/objects.py": "abb16070b49bd7d1baa789e497d6e3c743472993da54aa4f7f4c2e9ce01cc8ae",
+    "student.tests/pa24/floating.py": "feebb24491897374cdf5ae8e82168a1e3b0a9ed665f0d3289181b949a694bef4",
+    "student.tests/pa24/scalar.py": "4eac71cc1ecf7f45aa2c9586eafb7496750d6ab735eb3246812ea74efa718d5b",
+    "student.tests/pa24/tls-integration132.py": "2f969783df9beb10456853e3a79e44dbbe2ab29ec2c66a760b0062230aec1f97",
+    "student.tests/pa24/wide.py": "040c3337171bff67502472b320851f87946227c620380612a30855f939acc0b6",
+    "student.tests/pa24/integration.py": "47d63e2416f630cb85879a8cfb59368851d163ab5b2433c0e4a601f8f2331cec",
+    "student.tests/pa24/benchmark.py": "73c7f75856f30b3cc5d55df15bb0c49138b700aacc6a53ca83209625640ee14b",
+    "student.tests/pa24/status.py": "baa1ce9f275c5a7f68fec19fd4539cb4e52e679c762d225cfe46fb2b2c24ad3d",
+    "student.tests/pa24/audit130.py": "9d6a8c2881cdf44c941d47104447dc4dd4a3635174dbdad81889ee02cb36c2eb",
+    "student.tests/pa24/tls132.py": "49edcfe2508a9fe91e2bc03bf554aa6dc2951c70bf1bba79525988c15586f94b",
+    "student.tests/pa24/runtime131.py": "ab31f794b35b2dfbce9608228066162b6aac53e977b7b5a5ad827e9d60323f55"
+  },
+  "final_performance_experiments": [
+    {
+      "name": "scalar",
+      "command": [
+        "python3",
+        "student.tests/pa24/benchmark.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/before",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/final",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/final-scalar-bench"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "floating",
+      "command": [
+        "python3",
+        "student.tests/pa24/benchmark.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/before",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/final",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/final-floating-bench"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "wide",
+      "command": [
+        "python3",
+        "student.tests/pa24/benchmark.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/before",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/final",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/final-wide-bench"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "tls",
+      "command": [
+        "python3",
+        "student.tests/pa24/benchmark.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/final",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/final",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-132/final-tls-bench"
+      ],
+      "exit_code": 0
+    }
+  ]
+}
