@@ -1,11 +1,23 @@
-# PA25 implementation135 handoff
+# PA25 implementation136 (in progress)
 
 Stage base commit: fee6ad9076ff35c5272526e1c4c4df235fbf3bfe
 Last reviewed commit: fee6ad9076ff35c5272526e1c4c4df235fbf3bfe
 
-Target remains **PA25 full-stage**. Entry: clean, **0/101** (101 stub failures).
-Prior goal turn had no implementation evidence; fresh inspection established
-that baseline. This is a completed driver behavior group, **not stage approval**.
+Target remains **PA25 full-stage**. Implementation136 entry HEAD:
+`cf26b48b3f4c2e8bb037ee6185727f4b8f59e9d1`, clean, **64/101**, 37 failures.
+The prior goal turn made progress: the committed driver group and validation
+established this baseline. Both original review markers above remain unchanged.
+
+Current group: source wide-integer semantics. Parser/token vocabulary -> canonical
+fundamental TypeIds -> recorded arithmetic conversions/constants -> direct typed
+I128/U128 LowIR -> existing native pair operations/ABI. Owners are the existing
+syntax, semantic scalar and lowering components; no new text transport or runtime
+name recovery. Fixed-width scalar operations cost O(1); source work remains
+proportional to visited nodes. Validate all six required wide cases, explicit
+boundary/constant/template/ABI controls, earlier PAs and file audit. Freeze entry
+and final binaries for equivalent-workload A/A + ABBA compiler/RSS/runtime/text
+measurements. Extend adjacent scalar behavior as the same understanding permits.
+No optional optimization or speedup claim is planned.
 
 ## Design/spec alignment and completed group
 
