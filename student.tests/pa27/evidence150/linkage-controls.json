@@ -1,0 +1,539 @@
+{
+  "binary_sha256": "74d142d3f7cac9931ece646a63ad3d71689fe1174fd0d5fb596e1e45d151b06d",
+  "commands": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/typedefs.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/typedefs.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/typedefs.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/host.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/typedefs.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 T _Z5probeP5FirstP5Union5Color\n0000000000000000 W _ZN5First4readEv\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/host.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 T _Z5probeP5FirstP5Union5Color\n0000000000000000 W _ZN5First4readEv\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/typedef-main.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/typedefs.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/typedef-main"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/typedef-main"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/c-linkage.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/c.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/c.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/c-host.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/c"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/c"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/bad-c.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/bad.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: static declaration follows external C declaration\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/local-a.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/a.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/local-b.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/b.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/a.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/b.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/locals"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/locals"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/local-a.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/a.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/local-b.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/b.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/a.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/b.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/locals"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/locals"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/standards.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/student.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/standards.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/host.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "--defined-only",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/student.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 T _Z1aPSaIiE\n0000000000000012 T _Z1bPSo\n0000000000000024 T _Z1cPSt13basic_ostreamIc6TraitsE\n0000000000000036 T _Z1dPSt13basic_ostreamIwSt11char_traitsIwEE\n0000000000000048 T _Z1ePSs\n000000000000005a T _Z1fPN5other9allocatorIiEE\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "--defined-only",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/host.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 T _Z1aPSaIiE\n000000000000000f T _Z1bPSo\n000000000000001e T _Z1cPSt13basic_ostreamIc6TraitsE\n000000000000002d T _Z1dPSt13basic_ostreamIwSt11char_traitsIwEE\n000000000000003c T _Z1ePSs\n000000000000004b T _Z1fPN5other9allocatorIiEE\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/extern-provider.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "ar",
+        "rcs",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/provider.a",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/extern-user.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/user.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "-u",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/user.o"
+      ],
+      "status": 0,
+      "stdout": "                 U _Unwind_Resume\n                 U _ZN3BoxIiE4readEv\n                 U _ZN3BoxIiE5valueE\n                 U _ZN3BoxIiEC1Ev\n                 U _ZN3BoxIiED1Ev\n                 U __gxx_personality_v0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/extern-main.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/user.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/provider.a",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/archive"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/archive"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/extern-user.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/user.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "-u",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/user.o"
+      ],
+      "status": 0,
+      "stdout": "                 U _Unwind_Resume\n                 U _ZN3BoxIiE4readEv\n                 U _ZN3BoxIiE5valueE\n                 U _ZN3BoxIiEC1Ev\n                 U _ZN3BoxIiED1Ev\n                 U __gxx_personality_v0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/extern-main.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/user.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/provider.a",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/archive"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/archive"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/closures.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/closures.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/closures.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/closures"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/closures"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt-a.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/a.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt-b.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/b.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/a.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/b.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/b.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/a.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt-a.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/a.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt-b.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/b.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/a.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/b.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/b.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/a.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt-a.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/linkage-controls/vtt.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

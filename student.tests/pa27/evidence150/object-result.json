@@ -1,0 +1,33 @@
+{
+  "status": "pass",
+  "commands": 53,
+  "compiler_sha256": "74d142d3f7cac9931ece646a63ad3d71689fe1174fd0d5fb596e1e45d151b06d",
+  "source_sha256": {
+    "audit-trace.cpp": "a3f8d1c2390a8de354aa9fd1be6a5ff920459a3055428da0fa60f32841102a9d",
+    "audit150-b.cpp": "07a93aaaf1bfb7c694868cf985aee04859a8efac23df2456bfa8b0c41782bb2a",
+    "weak-data-host.cpp": "8563a6972b75ea67a9ad7df94c3709c7dbef9df12e8b59fd832634a3f94fe2da",
+    "audit150-host.cpp": "3bea0e19c785f8883e559c01e9ca7a7a8d6048a4ee57b4584c2677ba526a62a5",
+    "audit150-view.cpp": "06d35016c084c5aece17f49beab87514e77f22a44760139cc836379abda23b36",
+    "imported-data.cpp": "733de9e82eb67c4b12ef98a79530fbd22db410175d32f8ec7d06910ced339f76",
+    "friend-partial.cpp": "9e2951e6605c4b7c91b7b2ec68432ad45e994ce89b140c60f4e9ea9d76188855",
+    "inline-eh-b.cpp": "0d4773264e7b16e4f5cd1c2da0994f8f0b9bca20397a8e434b19dba032bf98f0",
+    "atomic-integers.cpp": "670a9b688007dad59d82b1f9a29580a40f40e3559adce4842f6cdbf6daffec85",
+    "global-name-user.cpp": "fc1418ead639d48b8f60cb1f4601489f453c671526883360489595235c8d6f19",
+    "void-member-signature.cpp": "445873a0d542614b90d4e6ac933f54a0f5474bb5c6291cb0251bb22fc1bb9662",
+    "extern-overload.cpp": "cf70efb4f8dc2ce88c954220b2aa384037c26c1d509f627359e15a4cebb116b8",
+    "sections.cpp": "8060061fe8043285dbeee346d4d68c2fce11616a0ae3deda82846ccad92acddc",
+    "friend-redeclaration.cpp": "4ca5e9cab87911870451ac59b363cc1becff9512a62362e3142443941d04b182",
+    "imported-data-host.cpp": "b5bcca502f1908aa2eb54a73e6ae9c7bcbed4b74dda64243ad4a2444dea33efd",
+    "hosted-prerequisites.cpp": "a0d1b3731a46a42b9d66dcaef22321d956e7b60313be3e5f37da7930572a0884",
+    "weak-data.cpp": "ccde00ccd06ce9167c63bf99acaf6bfbceaf8d7e9f2abc3349667e9c299c3935",
+    "inline-eh-a.cpp": "d9381b0c5d1f7775f6616a6298aaa6a290c9620d239345c48ec9be6250ecb5b3",
+    "audit150-a.cpp": "e3a84a4cb238b9755ba703418cf3f69efdf233be8997f12a1470a3adca9c29d5",
+    "friend-access.cpp": "b7380de6c3fc9e2c9135a637cab07d6493d54a2e24dc093629d9542ee681a4c0",
+    "audit-storage.cpp": "d189d6070904e78c1a65cbce069ed2a90b910e93f6ca88f75dfe1844e8474b63",
+    "hosted-stream-runtime.cpp": "47fd298c9e544d62a6329dcc7639a21e58833aea393d4f29f206837e0ebce160",
+    "friend-access-private.cpp": "3f834eb797e5e6c8aeffc2360ffcdd4064e3574a0ed4d78117b467d7a1da6ee0",
+    "global-name.cpp": "2ce3acf1294acdba8be62ed69eac5927d513b2d5e18b0a682dec28947b3cbf15",
+    "header-probe.cpp": "8a5c65058b242dd585fb19c57ba68a1dfea1e33df020317cf868e44a5c8e6d1f",
+    "atomic-host.cpp": "b85e8769bc93baacef9492f842555431f23a72d8cbad475014ff87c5c0934d22"
+  }
+}

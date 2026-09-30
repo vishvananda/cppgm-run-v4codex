@@ -1,0 +1,481 @@
+{
+  "binary_sha256": "74d142d3f7cac9931ece646a63ad3d71689fe1174fd0d5fb596e1e45d151b06d",
+  "commands": [
+    {
+      "command": [
+        "g++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/host-main.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o",
+        "-pthread",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/host-main.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o",
+        "-pthread",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/host-main.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o",
+        "-pthread",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/host-main.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o",
+        "-pthread",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/host-main.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o",
+        "-pthread",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/host-main.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o",
+        "-pthread",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/host-main.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o",
+        "-pthread",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/host-main.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o",
+        "-pthread",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/student-provider.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/student-reader.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/host-main.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o",
+        "-pthread",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/both"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/both"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/host-main.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/reader.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/provider.o",
+        "-pthread",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/both"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/tls-controls/both"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

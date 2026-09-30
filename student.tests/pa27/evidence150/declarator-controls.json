@@ -1,0 +1,191 @@
+{
+  "binary_sha256": "74d142d3f7cac9931ece646a63ad3d71689fe1174fd0d5fb596e1e45d151b06d",
+  "commands": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/handler.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/handler.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/handler.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/handler"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/handler"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/qualified.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/qualified.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/qualified.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/qualified"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/qualified"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/reference.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/reference.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/reference.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/reference"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/reference"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/nested.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/nested.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/nested.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/nested"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/nested"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/array.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/array.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/array.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/array"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/array"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/member.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/member.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/member.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/member"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/declarator-controls/member"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

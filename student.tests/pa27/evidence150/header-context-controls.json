@@ -1,0 +1,245 @@
+{
+  "binary_sha256": "74d142d3f7cac9931ece646a63ad3d71689fe1174fd0d5fb596e1e45d151b06d",
+  "cases": {
+    "conditional": [
+      true,
+      "\n#if !defined __has_include || !defined __has_include_next\n#error missing operators\n#endif\n#define ID(x) x\n#define PROBE(x) __has_include(x)\n#if !ID(PROBE(__FILE__))\n#error condition argument lost its context\n#endif\n#if 0\n#elif PROBE(\"absent-audit150.h\")\n#error missing file exists\n#elif !__has_include(__FILE__)\n#error elif lost its context\n#endif\nint main() { return 0; }\n"
+    ],
+    "direct": [
+      false,
+      "int n=__has_include(\"absent-audit150.h\");"
+    ],
+    "replacement": [
+      false,
+      "#define HAS(x) __has_include(x)\nint n=HAS(\"absent-audit150.h\");"
+    ],
+    "argument": [
+      false,
+      "#define ID(x) x\nint n=ID(__has_include(\"absent-audit150.h\"));"
+    ],
+    "next-direct": [
+      false,
+      "int n=__has_include_next(\"absent-audit150.h\");"
+    ],
+    "next-argument": [
+      false,
+      "#define ID(x) x\nint n=ID(__has_include_next(\"absent-audit150.h\"));"
+    ],
+    "line-directive": [
+      false,
+      "#line __has_include(\"absent-audit150.h\")\nint n;"
+    ]
+  },
+  "commands": [
+    {
+      "case": "conditional",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/conditional.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "conditional",
+      "expected_success": true,
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/conditional.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "case": "direct",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/direct.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: header probe requires a preprocessing condition\n"
+    },
+    {
+      "case": "direct",
+      "expected_success": false,
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/direct.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/direct.cpp:1:7: error: \u2018__has_include\u2019 used outside of preprocessing directive\n    1 | int n=__has_include(\"absent-audit150.h\");\n      |       ^~~~~~~~~~~~~\n"
+    },
+    {
+      "case": "replacement",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/replacement.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: header probe requires a preprocessing condition\n"
+    },
+    {
+      "case": "replacement",
+      "expected_success": false,
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/replacement.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/replacement.cpp:2:30: error: \u2018__has_include\u2019 used outside of preprocessing directive\n    2 | int n=HAS(\"absent-audit150.h\");\n      |                              ^\n"
+    },
+    {
+      "case": "argument",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/argument.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: header probe requires a preprocessing condition\n"
+    },
+    {
+      "case": "argument",
+      "expected_success": false,
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/argument.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/argument.cpp:2:44: error: \u2018__has_include\u2019 used outside of preprocessing directive\n    2 | int n=ID(__has_include(\"absent-audit150.h\"));\n      |                                            ^\n"
+    },
+    {
+      "case": "next-direct",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/next-direct.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: header probe requires a preprocessing condition\n"
+    },
+    {
+      "case": "next-direct",
+      "expected_success": false,
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/next-direct.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/next-direct.cpp:1:7: error: \u2018__has_include_next\u2019 used outside of preprocessing directive\n    1 | int n=__has_include_next(\"absent-audit150.h\");\n      |       ^~~~~~~~~~~~~~~~~~\n"
+    },
+    {
+      "case": "next-argument",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/next-argument.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: header probe requires a preprocessing condition\n"
+    },
+    {
+      "case": "next-argument",
+      "expected_success": false,
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/next-argument.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/next-argument.cpp:2:49: error: \u2018__has_include_next\u2019 used outside of preprocessing directive\n    2 | int n=ID(__has_include_next(\"absent-audit150.h\"));\n      |                                                 ^\n"
+    },
+    {
+      "case": "line-directive",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/line-directive.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: header probe requires a preprocessing condition\n"
+    },
+    {
+      "case": "line-directive",
+      "expected_success": true,
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/line-directive.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/header-context150/case.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

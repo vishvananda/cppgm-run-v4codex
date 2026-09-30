@@ -1,0 +1,135 @@
+[
+  {
+    "name": "stage",
+    "command": [
+      "make",
+      "test-pa27"
+    ],
+    "status": 0,
+    "seconds": 3.4792804922908545,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/stage.log",
+    "log_sha256": "2fae6668a2d167c9d7c4de82ec87d1af927376529e623e74a359b8b7ba084e4d",
+    "tail": "  LINK    abimangle\n  LINK    lowiropt\n===== pa27 =====\nPA27 global-section properties: PASS (3/3)\n===== ALL TESTS PASSED SUCCESSFULLY! (158 / 158) =====\n"
+  },
+  {
+    "name": "fileAudit",
+    "command": [
+      "perl",
+      "scripts/cppgm_file_audit.pl",
+      "--stage",
+      "pa27",
+      "--paths",
+      "dev/src"
+    ],
+    "status": 0,
+    "seconds": 4.0794434528797865,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/fileAudit.log",
+    "log_sha256": "a8cc56fe117bbfd3ed16e9e29470abb6f84497ea8488c7e2d89528530a070d9b",
+    "tail": "File audit passed for pa27 with 4 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n"
+  },
+  {
+    "name": "audit148-controls",
+    "command": [
+      "python3",
+      "student.tests/pa27/audit148-controls.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/audit148-controls"
+    ],
+    "status": 0,
+    "seconds": 3.0247832611203194,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/audit148-controls.log",
+    "log_sha256": "0e228091a89a939b0c8bcc7a6b70f428385fa23a2c62477609d92c202e0d3e46",
+    "tail": "PA27 audit controls PASS: 63 commands\n"
+  },
+  {
+    "name": "storage-controls",
+    "command": [
+      "python3",
+      "student.tests/pa27/storage-controls.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/storage-controls"
+    ],
+    "status": 0,
+    "seconds": 4.228968745097518,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/storage-controls.log",
+    "log_sha256": "94406821772b0ea9c5835fb6cbcf1f3864ae4b14c1684f5657346a72eea0e6c8",
+    "tail": "PA27 storage controls PASS: 104 commands\n"
+  },
+  {
+    "name": "declarator-controls",
+    "command": [
+      "python3",
+      "student.tests/pa27/declarator-controls.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/declarator-controls"
+    ],
+    "status": 0,
+    "seconds": 0.46623856760561466,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/declarator-controls.log",
+    "log_sha256": "c273de10580a6221a1fd876a0786806729e383bf091e35e82c65f1031957a88c",
+    "tail": "PA27 declarator controls PASS: 18 commands\n"
+  },
+  {
+    "name": "linkage-controls",
+    "command": [
+      "python3",
+      "student.tests/pa27/linkage-controls.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/linkage-controls"
+    ],
+    "status": 0,
+    "seconds": 1.5698866080492735,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/linkage-controls.log",
+    "log_sha256": "c9831cbd28885aab7e37e5f11f01c62cc00fc5f46daa54a44810b3332b978942",
+    "tail": "PA27 linkage controls PASS: 48 commands\n"
+  },
+  {
+    "name": "tls-controls",
+    "command": [
+      "python3",
+      "student.tests/pa27/tls-controls.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/tls-controls"
+    ],
+    "status": 0,
+    "seconds": 1.3694983534514904,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/tls-controls.log",
+    "log_sha256": "dac7a39f59833c2245a3bc68f6f7d1d9ea1848895f08d2ce88db44aa74077c71",
+    "tail": "PA27 TLS controls PASS: 38 commands\n"
+  },
+  {
+    "name": "object-controls",
+    "command": [
+      "python3",
+      "student.tests/pa27/object-controls.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/object-controls"
+    ],
+    "status": 0,
+    "seconds": 1.1689858734607697,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/object-controls.log",
+    "log_sha256": "4e0acb6f402905e581dba6fb3f429e8ac08a3bd54ffc2fd9f531482bf492f8c1",
+    "tail": "PA27 personal object controls: PASS (53 commands)\n"
+  },
+  {
+    "name": "hosted149-controls",
+    "command": [
+      "python3",
+      "student.tests/pa27/hosted149-controls.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/hosted149-controls"
+    ],
+    "status": 0,
+    "seconds": 1.6704023350030184,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/hosted149-controls.log",
+    "log_sha256": "885de995cdebaffedef2f1ac85d3ad7e1dac2d4674e0be5ae58f4059544871cd",
+    "tail": "PASS 66 commands\n"
+  },
+  {
+    "name": "signature79",
+    "command": [
+      "python3",
+      "student.tests/pa18/signature79_controls.py",
+      "dev/cppgm++",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/signature79"
+    ],
+    "status": 0,
+    "seconds": 3.075177013874054,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/signature79.log",
+    "log_sha256": "2304cf7ec69a706991e4b6fb97a8d82c8f4beacd9c3756daab267cb302365523",
+    "tail": "adl PASS \ndistinct_fixed_results PASS \ndependent_member PASS \ndependent_member_class PASS \ndependent_pack PASS \nfixed_sizeof_argument PASS \ndependent_nontype_explicit PASS \nmember_parameter PASS \nmember_three PASS \ndefinition_drops_const PASS \ndefinition_adds_const PASS \ndefinition_array PASS \ndefinition_pointer PASS \ndefinition_function PASS \nmember_drops_const PASS \nfixed_sizeof_template PASS \nqualified_result_prefix PASS \nfixed_call_ambiguous PASS ERROR: ambiguous overload\ndependent_missing PASS ERROR: no viable function\ndependent_missing_definition PASS ERROR: no viable function\ndistinct_names PASS ERROR: ambiguous overload\nparameter_const_preserved PASS ERROR: modifiable lvalue required\ndefinition_const_assignment PASS ERROR: modifiable lvalue required\nfixed_sizeof_missing PASS ERROR: invalid type-query expression: g\nfixed_sizeof_deleted PASS ERROR: invalid type-query expression: g\n"
+  }
+]

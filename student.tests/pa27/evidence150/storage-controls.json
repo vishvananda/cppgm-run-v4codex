@@ -1,0 +1,1125 @@
+{
+  "binary_sha256": "74d142d3f7cac9931ece646a63ad3d71689fe1174fd0d5fb596e1e45d151b06d",
+  "commands": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nested-order.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nested-order-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nested-order-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nested-order-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nested-order-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nested-order.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nested-order-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nested-order-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nested-order-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nested-order-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nontrivial-copy.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nontrivial-copy-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nontrivial-copy-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nontrivial-copy-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nontrivial-copy-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nontrivial-copy.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nontrivial-copy-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nontrivial-copy-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nontrivial-copy-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nontrivial-copy-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/defaults.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/defaults-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/defaults-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/defaults-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/defaults-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/defaults.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/defaults-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/defaults-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/defaults-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/defaults-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/union-select.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/union-select-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/union-select-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/union-select-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/union-select-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/union-select.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/union-select-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/union-select-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/union-select-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/union-select-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/array-bits.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/array-bits-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/array-bits-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/array-bits-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/array-bits-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/array-bits.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/array-bits-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/array-bits-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/array-bits-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/array-bits-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-complete.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-complete-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-complete-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-complete-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-complete-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-complete.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-complete-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-complete-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-complete-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/cleanup-complete-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/move.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/move-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/move-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/move-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/move-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/move.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/move-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/move-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/move-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/move-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/default-sibling.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/default-sibling-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/default-sibling-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/default-sibling-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/default-sibling-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/default-sibling.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/default-sibling-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/default-sibling-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/default-sibling-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/default-sibling-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/mixed-default-receiver.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/mixed-default-receiver-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/mixed-default-receiver-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/mixed-default-receiver-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/mixed-default-receiver-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/mixed-default-receiver.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/mixed-default-receiver-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/mixed-default-receiver-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/mixed-default-receiver-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/mixed-default-receiver-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-reference.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-reference-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-reference-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-reference-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-reference-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-reference.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-reference-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-reference-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-reference-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-reference-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-receiver.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-receiver-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-receiver-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-receiver-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-receiver-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-receiver.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-receiver-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-receiver-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-receiver-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-default-receiver-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/implicit-defaults.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/implicit-defaults-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/implicit-defaults-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/implicit-defaults-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/implicit-defaults-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/implicit-defaults.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/implicit-defaults-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/implicit-defaults-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/implicit-defaults-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/implicit-defaults-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-union.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-union-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-union-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-union-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-union-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-union.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-union-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-union-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-union-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-union-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-sibling.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-sibling-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-sibling-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-sibling-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-sibling-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-sibling.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-sibling-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-sibling-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-sibling-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-sibling-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/conflicting-variants.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: multiple initialized union variants\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nested-conflict.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: multiple initialized union variants\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/duplicate-leaf.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: duplicate constructor initializer\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/constant-missing.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: constexpr constructor leaves member uninitialized\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/default-parameter.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: x\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/nonmember.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: initializer does not name a member or base\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/missing-reference.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: uninitialized reference or const member\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/conflicting-defaults.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/final-validation/storage-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: multiple default union variant initializers\n"
+    }
+  ]
+}

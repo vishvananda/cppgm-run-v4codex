@@ -1,0 +1,28 @@
+[
+  {
+    "command": [
+      "dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/header-context.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/header-context.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/header-context.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/header-context.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/artifacts/pa27-150/header-context.cpp:1:13: error: \u2018__has_include\u2019 used outside of preprocessing directive\n    1 | int value = __has_include(\"absent-audit150.h\");\n      |             ^~~~~~~~~~~~~\n"
+  }
+]
