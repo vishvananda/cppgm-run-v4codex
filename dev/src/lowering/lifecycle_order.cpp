@@ -5,7 +5,11 @@ void Procedural::order_lifecycle_entries()
 {
     using Group = std::array<FunctionId,3>;
     std::vector<Group> groups(1); semantic::Index owners;
-    for (EntityId e = 1; e < sem.entities.size(); ++e) {
+    // Only reserved emission identities participate. Layout queries can
+    // complete a deferred type without giving its new semantic declarations
+    // any lowering symbol or lifecycle entry.
+    for (EntityId e = 1; e < symbols.size(); ++e) {
+        if (!symbols[e]) continue;
         auto member = sem.entities[e].member_info;
         auto deleting = member ? deleting_symbols[member] : SymbolId();
         if (!base_symbols[e] && !deleting) continue;
