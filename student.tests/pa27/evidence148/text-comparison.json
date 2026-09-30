@@ -1,0 +1,68 @@
+{
+  "common-memory": {
+    "A": {
+      "bytes": 151633,
+      "sha256": "bbb91d349a974f99331d57d2c0ba18773925d5ba8b3f2a75b095b9aa1f44f4e7"
+    },
+    "B": {
+      "bytes": 151633,
+      "sha256": "5bcb1f544fe09791813d5412cd509e656dfeb462f54d38c1555eba8a75fa750f"
+    },
+    "equal": false
+  },
+  "common-floating": {
+    "A": {
+      "bytes": 151474,
+      "sha256": "23703aed1d3c4902aff8d35ef9246e0952639aa412ae765dee36e6cbc2ba00bc"
+    },
+    "B": {
+      "bytes": 151474,
+      "sha256": "ab814a6c0a9c6e1e74007467ef1f7a3e7f5175c5b8b01164b3f01c3a360eb88b"
+    },
+    "equal": false
+  },
+  "common-exceptions": {
+    "A": {
+      "bytes": 151781,
+      "sha256": "fba2a94e51782f3690553b97b54fb3bef5f137b20ccb8fe5d2c662b828788164"
+    },
+    "B": {
+      "bytes": 151781,
+      "sha256": "8a7f4db9c4f7dd332d8976b3d68037d01954d3387c67dab65cf93c8409cb4878"
+    },
+    "equal": false
+  },
+  "common-pruning": {
+    "A": {
+      "bytes": 182449,
+      "sha256": "2e6bb0657313613ddbd44aae79ecd19aae8ab8e36b05daed4f35cf0eaef19228"
+    },
+    "B": {
+      "bytes": 151633,
+      "sha256": "5bcb1f544fe09791813d5412cd509e656dfeb462f54d38c1555eba8a75fa750f"
+    },
+    "equal": false
+  },
+  "storage-construction": {
+    "A": {
+      "bytes": 118696,
+      "sha256": "5b7654d9d38ebbc449618bb2b8d3d1b2a7254a77eb3d350c96331136e2c15de6"
+    },
+    "B": {
+      "bytes": 118696,
+      "sha256": "5b7654d9d38ebbc449618bb2b8d3d1b2a7254a77eb3d350c96331136e2c15de6"
+    },
+    "equal": true
+  },
+  "storage-constant": {
+    "A": {
+      "bytes": 439,
+      "sha256": "c8423760bcb5212b1db04d624924c67e6ea8422921265110c75c42a8d85aa262"
+    },
+    "B": {
+      "bytes": 439,
+      "sha256": "c8423760bcb5212b1db04d624924c67e6ea8422921265110c75c42a8d85aa262"
+    },
+    "equal": true
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "binary_sha256": "a2abb98ced2fc821db02b80d0661bf59797d0d2851847ef4497366e30bdf524e",
+  "commands": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/entry-cppgm",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/controls-entry/qualified-union.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/controls-entry/qualified-union-O0.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: inaccessible class member\n"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "student.tests/pa27/evidence145/first-performance.json": {
+    "sha256": "e56d09b6850cff8910ca7040e62c8ce3df4610c3bf76f284b519b4d03f082ff8",
+    "observations": 224
+  },
+  "student.tests/pa27/evidence145/final-performance.json": {
+    "sha256": "e99d16501043e6840c86b6fb241edba25b257c638351b6a2c4503b688ec81c68",
+    "observations": 224
+  },
+  "student.tests/pa27/evidence146/naming-performance.json": {
+    "sha256": "cf0b11ea2b8f37accca3d29afdccbce467d4a778c22b607fb6eff664cb445259",
+    "observations": 56
+  },
+  "student.tests/pa27/evidence146/common-performance.json": {
+    "sha256": "49a24653753bde1b3c344c35219662b293297f34994c343090c85e6b9e8a0305",
+    "observations": 224
+  },
+  "student.tests/pa27/evidence147/initial-common.json": {
+    "sha256": "c8e572a6511f737b69e68974d6646f75bef18c57893af8f8928195f955a4f9ec",
+    "observations": 224
+  },
+  "student.tests/pa27/evidence147/construction-performance.json": {
+    "sha256": "917da3c4b5787d811e1cafb9e2edee794eab9c04a1ba704c16ead587b793edf2",
+    "observations": 112
+  },
+  "student.tests/pa27/evidence147/initial-construction.json": {
+    "sha256": "c63a2425e01d5b19c398b208e148a622a002756a727b6bed274ccceec61dfbdc",
+    "observations": 112
+  },
+  "student.tests/pa27/evidence147/short-constant-performance.json": {
+    "sha256": "85aec24fe8d455c3f50b386c5b90dbaa36a8bd8a978325f06328a0f889b477f5",
+    "observations": 112
+  },
+  "student.tests/pa27/evidence147/scoped-common.json": {
+    "sha256": "013ebf5ef7656df7bbac27a2ec272f16ddcd8c4dc58329e3ae680405a4f1b390",
+    "observations": 224
+  },
+  "student.tests/pa27/evidence147/constant-performance.json": {
+    "sha256": "e3f36076ce1a72db59a5b3dc0d258472961d88716719784acfcf7d878cc314f5",
+    "observations": 112
+  },
+  "student.tests/pa27/evidence147/common-performance.json": {
+    "sha256": "9d3fb8694db2eb00f5beef3e885b7cb4513fd2c801cb7ea0df29ac18a9bf8e2d",
+    "observations": 224
+  },
+  "student.tests/pa27/evidence147/scoped-construction.json": {
+    "sha256": "85eee7c20e03db9a5a1588459e5d89792ffcda7c6bed1ae8e201574c1eec9d96",
+    "observations": 112
+  }
+}

@@ -1,0 +1,222 @@
+{
+  "stage_base": "f833cf1ff361529147361cada33eca62e55330cf",
+  "entry_commit": "7dbb067893e16c136d4f79b1048092f7c1f8e044",
+  "code_tip": "cbe7871e211c284ef4a1c571de12db5f26c29777",
+  "binary_sha256": "2dd35668617b07ddd6cb5f24c699d12bbaf02bdb92a06e2c186bbcee26e29fa5",
+  "checks": [
+    {
+      "name": "priorThroughTests",
+      "command": [
+        "bash",
+        "-c",
+        "n=27; if [ \"$n\" -le 1 ]; then echo \"===== ALL TESTS PASSED SUCCESSFULLY! (0/0) =====\"; else make test-report-through-pa$((n - 1)); fi"
+      ],
+      "status": 0,
+      "elapsed_s": 13.604663822799921,
+      "output_sha256": "7cac27cf3186f13b955c5acf0fb07ff27b00fcb1aa841ffa27213d34fbe64cfd",
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/priorThroughTests.log"
+    },
+    {
+      "name": "stageTests",
+      "command": [
+        "make",
+        "test-pa27"
+      ],
+      "status": 2,
+      "elapsed_s": 4.2871138248592615,
+      "output_sha256": "51660ad57d734ea80edf2e42cf27d5e06cb5ca8084cba6c5d51886f4a34f4066",
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/stageTests.log"
+    },
+    {
+      "name": "throughStage",
+      "command": [
+        "make",
+        "test-report-through-pa27"
+      ],
+      "status": 2,
+      "elapsed_s": 14.26851394586265,
+      "output_sha256": "c8937303f83b48c7c69d496a07b0520cd11fe68c27d9bc518da8c7aeb7e80520",
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/throughStage.log"
+    },
+    {
+      "name": "fileAudit",
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa27",
+        "--paths",
+        "dev/src"
+      ],
+      "status": 0,
+      "elapsed_s": 4.41159176081419,
+      "output_sha256": "a8cc56fe117bbfd3ed16e9e29470abb6f84497ea8488c7e2d89528530a070d9b",
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/fileAudit.log"
+    },
+    {
+      "name": "auditControls",
+      "command": [
+        "python3",
+        "student.tests/pa27/audit148-controls.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls"
+      ],
+      "status": 0,
+      "elapsed_s": 2.759073903784156,
+      "output_sha256": "0e228091a89a939b0c8bcc7a6b70f428385fa23a2c62477609d92c202e0d3e46",
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/auditControls.log"
+    },
+    {
+      "name": "storageControls",
+      "command": [
+        "python3",
+        "student.tests/pa27/storage-controls.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/storage-controls"
+      ],
+      "status": 0,
+      "elapsed_s": 4.157400516793132,
+      "output_sha256": "94406821772b0ea9c5835fb6cbcf1f3864ae4b14c1684f5657346a72eea0e6c8",
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/storageControls.log"
+    },
+    {
+      "name": "declaratorControls",
+      "command": [
+        "python3",
+        "student.tests/pa27/declarator-controls.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/declarator-controls"
+      ],
+      "status": 0,
+      "elapsed_s": 0.4214855805039406,
+      "output_sha256": "c273de10580a6221a1fd876a0786806729e383bf091e35e82c65f1031957a88c",
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/declaratorControls.log"
+    },
+    {
+      "name": "linkageControls",
+      "command": [
+        "python3",
+        "student.tests/pa27/linkage-controls.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/linkage-controls"
+      ],
+      "status": 0,
+      "elapsed_s": 1.6086676362901926,
+      "output_sha256": "c9831cbd28885aab7e37e5f11f01c62cc00fc5f46daa54a44810b3332b978942",
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/linkageControls.log"
+    },
+    {
+      "name": "tlsControls",
+      "command": [
+        "python3",
+        "student.tests/pa27/tls-controls.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/tls-controls"
+      ],
+      "status": 0,
+      "elapsed_s": 1.3593641594052315,
+      "output_sha256": "dac7a39f59833c2245a3bc68f6f7d1d9ea1848895f08d2ce88db44aa74077c71",
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/tlsControls.log"
+    },
+    {
+      "name": "objectControls",
+      "command": [
+        "python3",
+        "student.tests/pa27/object-controls.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/object-controls"
+      ],
+      "status": 0,
+      "elapsed_s": 1.0631461925804615,
+      "output_sha256": "4e0acb6f402905e581dba6fb3f429e8ac08a3bd54ffc2fd9f531482bf492f8c1",
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/objectControls.log"
+    },
+    {
+      "name": "diffCheck",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "status": 0,
+      "elapsed_s": 0.019934000447392464,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_path": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/diffCheck.log"
+    }
+  ],
+  "coverage": {
+    "tracked_contract_paths": 19749,
+    "inventory_sha256": "f47e5a4072740becf294ee85a2bb96242f61c486c5a639ded252402453172083",
+    "stage_anchors": 158,
+    "changes_since_entry": []
+  },
+  "progress": {
+    "entry_failures": [
+      "pa27/tests/general/200-host-extern-template-vtable-reference.t"
+    ],
+    "current_failures": [
+      "pa27/tests/general/200-host-extern-template-vtable-reference.t"
+    ],
+    "total": 158,
+    "passed": 157,
+    "additional_failures": []
+  },
+  "sources": {
+    "dev/cppgm++.cpp": "24a56933593ab9014dde512b61a977a80df331e0cc3849ccc465f5bf0165d9a4",
+    "dev/frontend_source_sets.mk": "7f2c664fb402cccdca6730a2f2d1ec40481e213b6a3c32f2d5554c47bfe6588e",
+    "dev/src/abi/itanium/encoder.cpp": "7e403c06beddc9e47bd91cdbba3eec38ae24c94504c2fe592656ecfd4ef04fc7",
+    "dev/src/abi/itanium/fact_writer.cpp": "bf180dae1403f92c448d7206b71fa21e4afd555510da99cba5359dbfbc880614",
+    "dev/src/abi/itanium/function_encoder.cpp": "ee8457b45f0adcf619053f3f980dde490fe9f9bad7d356588390a421b1b233a9",
+    "dev/src/abi/itanium/function_reader.cpp": "910889d50a02a7e2bd08be816fd27bc48ded676de20768ebe233ef5068331083",
+    "dev/src/abi/itanium/graph.h": "74c88ccb23764250813018949adc4e9c93fd16d519546215fcfee9c86a35b1b6",
+    "dev/src/lowering/cleanup.cpp": "f97e6e251a67e6dbcf2ae521c79a2de4c804dfbec37d08d574ebf1df9db77c0b",
+    "dev/src/lowering/construction.cpp": "bf8011344be09e68cbef682a34d09e97f8d858bbb1f68e4082c74f31cba7b6fd",
+    "dev/src/lowering/expression.cpp": "b96a00b3aadfb590eefac523ecfa625d95f3ec282207b92f03cb2e61e2650654",
+    "dev/src/lowering/function_declaration.cpp": "7bdf2f1ab33505d3e88411b1b242a5a2cdbd16d0570f93efa9f846f124ade94e",
+    "dev/src/lowering/initialization.cpp": "3d04b3ee031b9dcab2b4140da5ad140920c5a18fd52cc03e150a659d2ef6fd39",
+    "dev/src/lowering/local_abi.cpp": "cf2de46bf353cfbdd83088b8ceca5d4025d3f49868063f4140593cbd9bdc4565",
+    "dev/src/lowering/procedural.h": "819325170834c4e14de6b741411cd31e2309ec0d33b75af632264a438a97e266",
+    "dev/src/lowering/query_abi.cpp": "48e56a1170aadc5f212dc9374ecb5b2253aefd2b06da0509e2dafd4f737c58ff",
+    "dev/src/lowering/standard_abi.cpp": "c289b382aa54dcf2a1a4fa27aad0fe06c3aea41642370be4e14662cd9511f051",
+    "dev/src/lowering/symbols.cpp": "cf15ad07acc82152153240909d8a4f57d7d82691c49bd4691ae1ee04b7e6f2f1",
+    "dev/src/lowering/tls_initialization.cpp": "704e3da5cfdaba84a477b64d7af54ca33bfdade59448bd5e6f5ab1da39ea87d2",
+    "dev/src/lowering/values.cpp": "5d84f7883975fea9189b6fcafdeef72fe812bae33e9b8fcff7e0761237acd588",
+    "dev/src/lowering/virtuals.cpp": "f2c0f7c629154cfa7683eabcbdd5b1e03be310a8e762b5396f1a829c15bbb2f5",
+    "dev/src/native/driver.cpp": "7580c57d580cf211e1c7376f860502a72034e8718e507ffa446931c0b0f7ae72",
+    "dev/src/native/elf.cpp": "2d291b6e5dfdb03dab89e19328556e2ef8f58b0017e1f279e804ed7791c07095",
+    "dev/src/native/encoding.cpp": "78d115c3c8ef59dbeb86de1b0d371ba9689cd5012b1ba1d2a3b650e83470b47b",
+    "dev/src/native/encoding.h": "9a1446ec5efb215cbc38d1c712bff03fd71115bce5a1057e968099272a6fc9a5",
+    "dev/src/native/object_demand.cpp": "48dd726a2bf2fc1c8b8896d7f400457a88046264b584072536c05880d135b189",
+    "dev/src/native/selection.cpp": "9b6fd9a9b0485c811679a76b1caa214063a45e36d52591926c559917d81a34b6",
+    "dev/src/native/selection.h": "aef6e2e9f8dad515ee8772ebbceadb72fa8ddef10c10bf16fde7105f10ea1a68",
+    "dev/src/semantic/access.cpp": "cd246a0dabe1acdac4c03a06ff4ed7cbf75cdf557ca4f869b582e1c695bfcd1c",
+    "dev/src/semantic/analyzer.h": "364cccd149fd93ee0bd93c80729fd4aae34a0bf4153a19a3de5a460c0ad27b12",
+    "dev/src/semantic/class_enum.cpp": "08f4c9b39585a2085a3979eaf6de08fecd00b0fb1870b5e85fc49dc4920ae9ae",
+    "dev/src/semantic/constant_addresses.cpp": "1fdf1211c5a985af9eff0f42ccdf6f48ded079f6f33babeeeac375fc6dd68152",
+    "dev/src/semantic/constant_execution.cpp": "b48f2c78add7a64765fd9ea6ab1d8b089951156ddd9f05ce0942d224c0cb1ab6",
+    "dev/src/semantic/constant_queries.cpp": "13ac2d7d35e37640e378effff6bb2c14122c85d3e7ff51b233131c45626849a9",
+    "dev/src/semantic/constant_storage_construction.cpp": "cc55f194c722bc16797676de7d7bb0ea3a786d2c934671960ccdc925376a3cf6",
+    "dev/src/semantic/constexpr_validity.cpp": "59428f4ffc50c4ffbdff0247c453be7e4b09a05fb837d7899c5ec025a2648b14",
+    "dev/src/semantic/construction.cpp": "47c675d92eecf7e5ce7aa6f998270b578606ce791163b4cec494ea3fc24e7df2",
+    "dev/src/semantic/declaration.cpp": "589cdb8c2fd63bff8085b92d847497da75341ba7c26ae12b19e3377bd8c295ad",
+    "dev/src/semantic/default_destructor_facts.cpp": "4ad8d0956abcfb5280d575373ec82dc2f73a98d5b1e1da1c80b6d9f845226edc",
+    "dev/src/semantic/default_initialization_facts.cpp": "9ff595b6cb8a9abed9fe65d4f9b510e86df7cc7662815e499c8f1393fba8efc7",
+    "dev/src/semantic/expression.cpp": "b8684fe9bfbf78fd8db02261c1779e12245bf48ad359168971a21d8f0aeded4a",
+    "dev/src/semantic/field_projection.cpp": "6652428657b35cfa75f8f01b9425e4a9a6dcb85a12d9f22256eb47b9466f27a1",
+    "dev/src/semantic/lambda.cpp": "3b140b49a2e1097821583a6caf22b1492a75fe4acae6d0084c43df6bcf9db24d",
+    "dev/src/semantic/member.cpp": "d183a2970dcd4d24a2185408f31d0fa6f92ca530ff0ae514d4a35f5339926a42",
+    "dev/src/semantic/member_receiver.cpp": "aa07ad40bc0add8cdab1f9522035b6871dd100e7510fdeafdf1c74b85840baef",
+    "dev/src/semantic/model.h": "122cded950e228614a462c6554e7c88d012b5bc9e4f88c747c4b601cff761434",
+    "dev/src/semantic/output.cpp": "7d800f10a9c041e6b1386171e1a1d6ba9473a8a71d7dad755d5166795f98595b",
+    "dev/src/semantic/template_entities.cpp": "8fde27f199a7e5b3c7b767b7ae6c88e1a54c39894663b2ff67389c53056841e5",
+    "dev/src/semantic/type_builder.cpp": "a5a7e0cc5d1de1713443ab98fb35fc5b9f6b2c8a3e05ca4654917bcad984a741",
+    "dev/src/syntax/ast.h": "e6ca4db185192f32b6a327d21e52f4d20c2ce9972f247b0a40c94379f52befcf",
+    "dev/src/syntax/declaration.cpp": "953a93d7c190f716f7f8e60559d6d09078e6e04c11c7896700d8ebdafdb457c1",
+    "dev/src/syntax/declarator.cpp": "761748cb97e66eaa8556eecbad8ef3a26aeb9140a6fd5f5952a28139fcca2d52",
+    "dev/src/syntax/parser.cpp": "df39d4ef423a5bce5ca065c4bb2d52f229ced95630604e7f3f9740bfe495fcf5",
+    "dev/src/syntax/parser.h": "0ea3a9f7bd5c96417287988db943b0de720ef8b69630898db13cbe2c055e2451",
+    "dev/src/syntax/statement.cpp": "f639631bcd9d470204c37ad27b884f48da29ac4c611d504e95a6a52d966e68d5",
+    "dev/src/toolchain/driver.cpp": "095ecca2c016af633d08d514ca5b4b638a9c4391728b6e4f47c457a16c66a4e3",
+    "dev/src/toolchain/host_elf.cpp": "245d384b289b44163aab8de5b6533c95655297c2bdb302ef13f72d3dc9ccac15",
+    "dev/src/toolchain/host_elf.h": "3240cbc8115b3f0eb72b2edaaa60d689c08f0bec4195a539e851ea4b34aaf71b",
+    "dev/src/toolchain/host_sections.cpp": "db3aa088f4fddc967afdacab853e60a3312ada399014a4c5d662cafec53d8697",
+    "dev/src/toolchain/host_unwind.cpp": "0ef4e0012becb7c63d470f5c8e36ab126179f5daeb5f2c4d46c26375d7b8ab21",
+    "dev/src/toolchain/object.cpp": "3fd5ead96d088437698c4389b0d2983af8051de5dce3a9337c23112b65ff7364",
+    "dev/src/toolchain/object.h": "1c3c8fbbd668abe1659d1bcb6ed4b6fcffc745a2d7754931f9c2bdff555da27c"
+  },
+  "status": "pass: earlier stages, file audit, progress and coverage preserved"
+}

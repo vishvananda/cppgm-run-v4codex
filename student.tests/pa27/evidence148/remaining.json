@@ -1,0 +1,13 @@
+{
+  "command": [
+    "dev/cppgm++",
+    "-c",
+    "pa27/tests/general/200-host-extern-template-vtable-reference.t.1",
+    "-o",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/remaining.o"
+  ],
+  "status": 1,
+  "stdout": "",
+  "stderr": "ERROR: unknown expression name: __builtin_strcmp\n",
+  "binary_sha256": "2dd35668617b07ddd6cb5f24c699d12bbaf02bdb92a06e2c186bbcee26e29fa5"
+}

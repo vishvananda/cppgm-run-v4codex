@@ -1,0 +1,694 @@
+{
+  "binary_sha256": "2dd35668617b07ddd6cb5f24c699d12bbaf02bdb92a06e2c186bbcee26e29fa5",
+  "commands": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-union.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-union-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-union-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-union-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-union-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-union.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-union-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-union-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-union-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-union-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-union.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-union-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-union-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-nested.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-nested-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-nested-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-nested-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-nested-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-nested.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-nested-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-nested-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-nested-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-nested-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-nested.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-nested-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/qualified-nested-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-union.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-union-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-union-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-union-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-union-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-union.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-union-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-union-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-union-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-union-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-union.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-union-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-union-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/virtual-union.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/virtual-union-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/virtual-union-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/virtual-union-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/virtual-union-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/virtual-union.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/virtual-union-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/virtual-union-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/virtual-union-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/virtual-union-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/virtual-union.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/virtual-union-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/virtual-union-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/constexpr-qualified.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/constexpr-qualified-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/constexpr-qualified-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/constexpr-qualified-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/constexpr-qualified-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/constexpr-qualified.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/constexpr-qualified-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/constexpr-qualified-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/constexpr-qualified-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/constexpr-qualified-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/constexpr-qualified.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/constexpr-qualified-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/constexpr-qualified-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/nested-receiver.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/nested-receiver-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/nested-receiver-O0.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/nested-receiver-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/nested-receiver-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/nested-receiver.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/nested-receiver-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/nested-receiver-O2.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/nested-receiver-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/nested-receiver-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/private.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: inaccessible class member\n"
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/private.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/private.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/private.cpp:1:58: error: \u2018int B::<unnamed union>::x\u2019 is private within this context\n    1 | struct B{private:union{int x;};};int main(){B b;return b.x;}\n      |                                                          ^\n/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/private.cpp:1:28: note: declared private here\n    1 | struct B{private:union{int x;};};int main(){B b;return b.x;}\n      |                            ^\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/private-base.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: inaccessible class member\n"
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/private-base.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/private-base.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/private-base.cpp:1:71: error: \u2018int B::<unnamed union>::x\u2019 is inaccessible within this context\n    1 | struct B{union{int x;};};struct D:private B{};int main(){D d;return d.x;}\n      |                                                                       ^\n/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/private-base.cpp:1:20: note: declared here\n    1 | struct B{union{int x;};};struct D:private B{};int main(){D d;return d.x;}\n      |                    ^\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-outside.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: inaccessible class member\n"
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-outside.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-outside.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-outside.cpp:1:73: error: \u2018int B::<unnamed union>::x\u2019 is protected within this context\n    1 | struct B{protected:union{int x;};};struct D:B{};int main(){D d;return d.x;}\n      |                                                                         ^\n/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/protected-outside.cpp:1:30: note: declared protected here\n    1 | struct B{protected:union{int x;};};struct D:B{};int main(){D d;return d.x;}\n      |                              ^\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/ambiguous.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: ambiguous base subobject\n"
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/ambiguous.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/ambiguous.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/ambiguous.cpp:1:91: error: request for member \u2018x\u2019 is ambiguous\n    1 | struct B{union{int x;};};struct L:B{};struct R:B{};struct D:L,R{};int main(){D d;return d.x;}\n      |                                                                                           ^\n/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/ambiguous.cpp:1:20: note: candidates are: \u2018int B::<unnamed union>::x\u2019\n    1 | struct B{union{int x;};};struct L:B{};struct R:B{};struct D:L,R{};int main(){D d;return d.x;}\n      |                    ^\n/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/ambiguous.cpp:1:20: note:                 \u2018int B::<unnamed union>::x\u2019\n"
+    },
+    {
+      "command": [
+        "g++",
+        "-shared",
+        "-fPIC",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/got-host.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/input.so"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/got-user.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/got-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/got-O0.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/input.so",
+        "-Wl,-z,text",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/got-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/got-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "readelf",
+        "-rW",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/got-O0.o"
+      ],
+      "status": 0,
+      "stdout": "\nRelocation section '.rela.text' at offset 0x288 contains 25 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n000000000000000e  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n0000000000000018  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n000000000000002c  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n0000000000000036  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n000000000000004a  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n0000000000000054  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n000000000000006c  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n0000000000000076  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n0000000000000098  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n00000000000000a2  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n00000000000000c3  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n00000000000000cd  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n00000000000000ec  0000000c00000009 R_X86_64_GOTPCREL      0000000000000000 byte - 4\n00000000000000f7  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n000000000000010c  0000000c00000009 R_X86_64_GOTPCREL      0000000000000000 byte - 4\n0000000000000116  0000000d00000009 R_X86_64_GOTPCREL      0000000000000000 real - 4\n0000000000000122  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n0000000000000153  0000000d00000009 R_X86_64_GOTPCREL      0000000000000000 real - 4\n000000000000015f  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n0000000000000169  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n0000000000000173  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n000000000000017d  0000000e00000009 R_X86_64_GOTPCREL      0000000000000000 pairs - 4\n0000000000000192  0000000e00000009 R_X86_64_GOTPCREL      0000000000000000 pairs - 4\n00000000000001a5  0000001100000004 R_X86_64_PLT32         0000000000000000 _ZN4PairaSERKS_ - 4\n00000000000001aa  0000000f00000004 R_X86_64_PLT32         0000000000000000 check - 4\n\nRelocation section '.rela.eh_frame' at offset 0x4e0 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000020  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 0\n0000000000000048  0000000900000002 R_X86_64_PC32          0000000000000000 .text._ZN4PairaSERKS_ + 0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/got-user.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/got-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/got-O2.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/input.so",
+        "-Wl,-z,text",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/got-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/got-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "readelf",
+        "-rW",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa27-148/validation-final/audit148-controls/got-O2.o"
+      ],
+      "status": 0,
+      "stdout": "\nRelocation section '.rela.text' at offset 0x288 contains 25 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n000000000000000e  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n0000000000000018  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n000000000000002c  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n0000000000000036  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n000000000000004a  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n0000000000000054  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n000000000000006c  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n0000000000000076  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n0000000000000098  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n00000000000000a2  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n00000000000000c3  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n00000000000000cd  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n00000000000000ec  0000000c00000009 R_X86_64_GOTPCREL      0000000000000000 byte - 4\n00000000000000f7  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n000000000000010c  0000000c00000009 R_X86_64_GOTPCREL      0000000000000000 byte - 4\n0000000000000116  0000000d00000009 R_X86_64_GOTPCREL      0000000000000000 real - 4\n0000000000000122  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n0000000000000153  0000000d00000009 R_X86_64_GOTPCREL      0000000000000000 real - 4\n000000000000015f  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n0000000000000169  0000000b00000009 R_X86_64_GOTPCREL      0000000000000000 second - 4\n0000000000000173  0000000a00000009 R_X86_64_GOTPCREL      0000000000000000 first - 4\n000000000000017d  0000000e00000009 R_X86_64_GOTPCREL      0000000000000000 pairs - 4\n0000000000000192  0000000e00000009 R_X86_64_GOTPCREL      0000000000000000 pairs - 4\n00000000000001a5  0000001100000004 R_X86_64_PLT32         0000000000000000 _ZN4PairaSERKS_ - 4\n00000000000001aa  0000000f00000004 R_X86_64_PLT32         0000000000000000 check - 4\n\nRelocation section '.rela.eh_frame' at offset 0x4e0 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000020  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 0\n0000000000000048  0000000900000002 R_X86_64_PC32          0000000000000000 .text._ZN4PairaSERKS_ + 0\n",
+      "stderr": ""
+    }
+  ]
+}

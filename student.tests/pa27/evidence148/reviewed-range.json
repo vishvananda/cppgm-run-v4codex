@@ -1,0 +1,328 @@
+{
+  "base": "f833cf1ff361529147361cada33eca62e55330cf",
+  "entry": "7dbb067893e16c136d4f79b1048092f7c1f8e044",
+  "tip": "cbe7871e211c284ef4a1c571de12db5f26c29777",
+  "commits": [
+    {
+      "commit": "554f05f07685869d33048df37238d4a995bb1af8",
+      "subject": "Document PA27 baseline and semantic ownership plan",
+      "paths": [
+        "pa27/plan.md"
+      ]
+    },
+    {
+      "commit": "c36f350139afc1c3288732c37959cc282e5b72f7",
+      "subject": "Implement PA27 ELF groups, section placement, GOT data and object demand",
+      "paths": [
+        "dev/cppgm++.cpp",
+        "dev/frontend_source_sets.mk",
+        "dev/src/lowering/symbols.cpp",
+        "dev/src/native/driver.cpp",
+        "dev/src/native/elf.cpp",
+        "dev/src/native/encoding.cpp",
+        "dev/src/native/encoding.h",
+        "dev/src/native/object_demand.cpp",
+        "dev/src/native/selection.cpp",
+        "dev/src/native/selection.h",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/type_builder.cpp",
+        "dev/src/syntax/ast.h",
+        "dev/src/syntax/declaration.cpp",
+        "dev/src/syntax/declarator.cpp",
+        "dev/src/syntax/parser.cpp",
+        "dev/src/syntax/parser.h",
+        "dev/src/syntax/statement.cpp",
+        "dev/src/toolchain/driver.cpp",
+        "dev/src/toolchain/host_elf.cpp",
+        "dev/src/toolchain/host_elf.h",
+        "dev/src/toolchain/host_sections.cpp",
+        "dev/src/toolchain/host_unwind.cpp",
+        "dev/src/toolchain/object.cpp",
+        "dev/src/toolchain/object.h",
+        "pa27/reference-corrections.md",
+        "pa27/tests/general/200-host-defined-global-data-pcrel.inspect.expect",
+        "pa27/tests/general/200-host-defined-global-data-pcrel.ref.inspect",
+        "pa27/tests/general/200-host-imported-global-data-got.inspect.expect",
+        "pa27/tests/general/200-host-imported-global-data-got.ref.inspect",
+        "student.tests/pa27/global-name-user.cpp",
+        "student.tests/pa27/global-name.cpp",
+        "student.tests/pa27/imported-data-host.cpp",
+        "student.tests/pa27/imported-data.cpp",
+        "student.tests/pa27/inline-eh-a.cpp",
+        "student.tests/pa27/inline-eh-b.cpp",
+        "student.tests/pa27/inline-eh.h",
+        "student.tests/pa27/object-controls.py",
+        "student.tests/pa27/sections.cpp",
+        "student.tests/pa27/weak-data-host.cpp",
+        "student.tests/pa27/weak-data.cpp"
+      ]
+    },
+    {
+      "commit": "96e1cb72fa43f17016607f8857326358374ee7bd",
+      "subject": "Create COMDAT relocation sections only for actual fixups",
+      "paths": [
+        "dev/src/toolchain/host_elf.h",
+        "dev/src/toolchain/host_sections.cpp"
+      ]
+    },
+    {
+      "commit": "5aefb9626f568da2b8060cba7096cde931b68435",
+      "subject": "Record PA27 validated implementation handoff and measured object budgets",
+      "paths": [
+        "pa27/plan.md",
+        "student.tests/pa27/evidence145/final-performance.json",
+        "student.tests/pa27/evidence145/first-performance.json",
+        "student.tests/pa27/evidence145/object-controls.json",
+        "student.tests/pa27/evidence145/validation.json",
+        "student.tests/pa27/performance145.md",
+        "student.tests/pa27/performance145.py",
+        "student.tests/pa27/validation145.py"
+      ]
+    },
+    {
+      "commit": "364ebbcc7f531d27278f7841197ac14dd4c6cf5c",
+      "subject": "docs(pa27): record implementation146 baseline and semantic group",
+      "paths": [
+        "pa27/plan.md"
+      ]
+    },
+    {
+      "commit": "b0553a0674c88aac84e8acea1608a13e9558e1c7",
+      "subject": "fix(pa27): connect canonical semantic identities to host ABI names",
+      "paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/lowering/local_abi.cpp",
+        "dev/src/lowering/procedural.h",
+        "dev/src/lowering/query_abi.cpp",
+        "dev/src/lowering/standard_abi.cpp",
+        "dev/src/lowering/symbols.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/declaration.cpp",
+        "dev/src/semantic/type_builder.cpp",
+        "pa27/plan.md",
+        "student.tests/pa27/linkage-controls.py"
+      ]
+    },
+    {
+      "commit": "bb608e0bfdcadffcdac4022f343017dad8e57d5d",
+      "subject": "fix(pa27): preserve template, TLS and internal ABI emission identities",
+      "paths": [
+        "dev/src/abi/itanium/encoder.cpp",
+        "dev/src/abi/itanium/fact_writer.cpp",
+        "dev/src/abi/itanium/function_encoder.cpp",
+        "dev/src/abi/itanium/function_reader.cpp",
+        "dev/src/abi/itanium/graph.h",
+        "dev/src/lowering/function_declaration.cpp",
+        "dev/src/lowering/initialization.cpp",
+        "dev/src/lowering/procedural.h",
+        "dev/src/lowering/symbols.cpp",
+        "dev/src/lowering/tls_initialization.cpp",
+        "dev/src/lowering/virtuals.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/lambda.cpp",
+        "dev/src/semantic/template_entities.cpp",
+        "pa27/plan.md",
+        "student.tests/pa27/linkage-controls.py",
+        "student.tests/pa27/tls-controls.py"
+      ]
+    },
+    {
+      "commit": "8d595af6b91289109cae36554a8e8e8551192873",
+      "subject": "docs(pa27): seal implementation146 validation and performance handoff",
+      "paths": [
+        "pa27/plan.md",
+        "student.tests/pa27/evidence146/common-performance.json",
+        "student.tests/pa27/evidence146/linkage-controls.json",
+        "student.tests/pa27/evidence146/naming-performance.json",
+        "student.tests/pa27/evidence146/tls-controls.json",
+        "student.tests/pa27/evidence146/validation.json",
+        "student.tests/pa27/performance146.md",
+        "student.tests/pa27/performance146.py",
+        "student.tests/pa27/validation146.py"
+      ]
+    },
+    {
+      "commit": "7c71b6e67186c3490fc3f42d1948cd95aec10a8d",
+      "subject": "docs(pa27): record loop147 entry and constructor storage plan",
+      "paths": [
+        "pa27/plan.md"
+      ]
+    },
+    {
+      "commit": "1c0b2d104352f7f6c9352120ed9b182a0b410859",
+      "subject": "fix(pa27): preserve anonymous storage in constructor and lifetime actions",
+      "paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/lowering/cleanup.cpp",
+        "dev/src/lowering/construction.cpp",
+        "dev/src/lowering/expression.cpp",
+        "dev/src/lowering/procedural.h",
+        "dev/src/lowering/values.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/class_enum.cpp",
+        "dev/src/semantic/constant_addresses.cpp",
+        "dev/src/semantic/constant_execution.cpp",
+        "dev/src/semantic/constant_queries.cpp",
+        "dev/src/semantic/constant_storage_construction.cpp",
+        "dev/src/semantic/constexpr_validity.cpp",
+        "dev/src/semantic/construction.cpp",
+        "dev/src/semantic/default_destructor_facts.cpp",
+        "dev/src/semantic/default_initialization_facts.cpp",
+        "dev/src/semantic/member.cpp",
+        "dev/src/semantic/model.h",
+        "dev/src/semantic/output.cpp",
+        "dev/src/semantic/type_builder.cpp",
+        "pa27/plan.md",
+        "student.tests/pa27/storage-controls.py"
+      ]
+    },
+    {
+      "commit": "ebf263c4c8eca816808d48e6696b6ad4c18ca09c",
+      "subject": "fix(semantics): fold enclosing constants in default member contexts",
+      "paths": [
+        "dev/src/semantic/expression.cpp"
+      ]
+    },
+    {
+      "commit": "2eba9b7b953bae632cb778bdcef94b2fb52408ff",
+      "subject": "fix(parser): accept GNU attributes following pointer operators",
+      "paths": [
+        "dev/src/syntax/declarator.cpp",
+        "student.tests/pa27/declarator-controls.py"
+      ]
+    },
+    {
+      "commit": "53b8a76dc6fca36745f3145c4fc1046bcd38b0a4",
+      "subject": "fix(constexpr): track references in projected construction dependencies",
+      "paths": [
+        "dev/src/semantic/constant_addresses.cpp",
+        "student.tests/pa27/storage-controls.py"
+      ]
+    },
+    {
+      "commit": "79dffd03b26122773f10e9b45154b2ecea711b3a",
+      "subject": "refactor(constexpr): pool projected construction groups and values",
+      "paths": [
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/constant_addresses.cpp",
+        "dev/src/semantic/constant_storage_construction.cpp"
+      ]
+    },
+    {
+      "commit": "7dbb067893e16c136d4f79b1048092f7c1f8e044",
+      "subject": "docs(pa27): record validated storage handoff147 and performance evidence",
+      "paths": [
+        "pa27/plan.md",
+        "student.tests/pa27/evidence147/common-performance.json",
+        "student.tests/pa27/evidence147/constant-performance.json",
+        "student.tests/pa27/evidence147/construction-performance.json",
+        "student.tests/pa27/evidence147/declarator-controls.json",
+        "student.tests/pa27/evidence147/initial-common.json",
+        "student.tests/pa27/evidence147/initial-construction.json",
+        "student.tests/pa27/evidence147/linkage-controls.json",
+        "student.tests/pa27/evidence147/object-controls.json",
+        "student.tests/pa27/evidence147/scoped-common.json",
+        "student.tests/pa27/evidence147/scoped-construction.json",
+        "student.tests/pa27/evidence147/short-constant-performance.json",
+        "student.tests/pa27/evidence147/storage-controls.json",
+        "student.tests/pa27/evidence147/tls-controls.json",
+        "student.tests/pa27/evidence147/validation.json",
+        "student.tests/pa27/performance147.md",
+        "student.tests/pa27/performance147.py",
+        "student.tests/pa27/performance147_common.py",
+        "student.tests/pa27/validation147.py"
+      ]
+    },
+    {
+      "commit": "cbe7871e211c284ef4a1c571de12db5f26c29777",
+      "subject": "fix(pa27): preserve anonymous field access and cache semantic projections",
+      "paths": [
+        "dev/frontend_source_sets.mk",
+        "dev/src/lowering/expression.cpp",
+        "dev/src/lowering/values.cpp",
+        "dev/src/semantic/access.cpp",
+        "dev/src/semantic/analyzer.h",
+        "dev/src/semantic/constant_execution.cpp",
+        "dev/src/semantic/constant_storage_construction.cpp",
+        "dev/src/semantic/field_projection.cpp",
+        "dev/src/semantic/member_receiver.cpp",
+        "dev/src/semantic/model.h",
+        "dev/src/semantic/output.cpp",
+        "student.tests/pa27/audit-storage.cpp",
+        "student.tests/pa27/audit-trace.cpp",
+        "student.tests/pa27/audit148-controls.py",
+        "student.tests/pa27/performance148.py",
+        "student.tests/pa27/validation148.py"
+      ]
+    }
+  ],
+  "combined_implementation": {
+    "dev/cppgm++.cpp": "24a56933593ab9014dde512b61a977a80df331e0cc3849ccc465f5bf0165d9a4",
+    "dev/frontend_source_sets.mk": "7f2c664fb402cccdca6730a2f2d1ec40481e213b6a3c32f2d5554c47bfe6588e",
+    "dev/src/abi/itanium/encoder.cpp": "7e403c06beddc9e47bd91cdbba3eec38ae24c94504c2fe592656ecfd4ef04fc7",
+    "dev/src/abi/itanium/fact_writer.cpp": "bf180dae1403f92c448d7206b71fa21e4afd555510da99cba5359dbfbc880614",
+    "dev/src/abi/itanium/function_encoder.cpp": "ee8457b45f0adcf619053f3f980dde490fe9f9bad7d356588390a421b1b233a9",
+    "dev/src/abi/itanium/function_reader.cpp": "910889d50a02a7e2bd08be816fd27bc48ded676de20768ebe233ef5068331083",
+    "dev/src/abi/itanium/graph.h": "74c88ccb23764250813018949adc4e9c93fd16d519546215fcfee9c86a35b1b6",
+    "dev/src/lowering/cleanup.cpp": "f97e6e251a67e6dbcf2ae521c79a2de4c804dfbec37d08d574ebf1df9db77c0b",
+    "dev/src/lowering/construction.cpp": "bf8011344be09e68cbef682a34d09e97f8d858bbb1f68e4082c74f31cba7b6fd",
+    "dev/src/lowering/expression.cpp": "b96a00b3aadfb590eefac523ecfa625d95f3ec282207b92f03cb2e61e2650654",
+    "dev/src/lowering/function_declaration.cpp": "7bdf2f1ab33505d3e88411b1b242a5a2cdbd16d0570f93efa9f846f124ade94e",
+    "dev/src/lowering/initialization.cpp": "3d04b3ee031b9dcab2b4140da5ad140920c5a18fd52cc03e150a659d2ef6fd39",
+    "dev/src/lowering/local_abi.cpp": "cf2de46bf353cfbdd83088b8ceca5d4025d3f49868063f4140593cbd9bdc4565",
+    "dev/src/lowering/procedural.h": "819325170834c4e14de6b741411cd31e2309ec0d33b75af632264a438a97e266",
+    "dev/src/lowering/query_abi.cpp": "48e56a1170aadc5f212dc9374ecb5b2253aefd2b06da0509e2dafd4f737c58ff",
+    "dev/src/lowering/standard_abi.cpp": "c289b382aa54dcf2a1a4fa27aad0fe06c3aea41642370be4e14662cd9511f051",
+    "dev/src/lowering/symbols.cpp": "cf15ad07acc82152153240909d8a4f57d7d82691c49bd4691ae1ee04b7e6f2f1",
+    "dev/src/lowering/tls_initialization.cpp": "704e3da5cfdaba84a477b64d7af54ca33bfdade59448bd5e6f5ab1da39ea87d2",
+    "dev/src/lowering/values.cpp": "5d84f7883975fea9189b6fcafdeef72fe812bae33e9b8fcff7e0761237acd588",
+    "dev/src/lowering/virtuals.cpp": "f2c0f7c629154cfa7683eabcbdd5b1e03be310a8e762b5396f1a829c15bbb2f5",
+    "dev/src/native/driver.cpp": "7580c57d580cf211e1c7376f860502a72034e8718e507ffa446931c0b0f7ae72",
+    "dev/src/native/elf.cpp": "2d291b6e5dfdb03dab89e19328556e2ef8f58b0017e1f279e804ed7791c07095",
+    "dev/src/native/encoding.cpp": "78d115c3c8ef59dbeb86de1b0d371ba9689cd5012b1ba1d2a3b650e83470b47b",
+    "dev/src/native/encoding.h": "9a1446ec5efb215cbc38d1c712bff03fd71115bce5a1057e968099272a6fc9a5",
+    "dev/src/native/object_demand.cpp": "48dd726a2bf2fc1c8b8896d7f400457a88046264b584072536c05880d135b189",
+    "dev/src/native/selection.cpp": "9b6fd9a9b0485c811679a76b1caa214063a45e36d52591926c559917d81a34b6",
+    "dev/src/native/selection.h": "aef6e2e9f8dad515ee8772ebbceadb72fa8ddef10c10bf16fde7105f10ea1a68",
+    "dev/src/semantic/access.cpp": "cd246a0dabe1acdac4c03a06ff4ed7cbf75cdf557ca4f869b582e1c695bfcd1c",
+    "dev/src/semantic/analyzer.h": "364cccd149fd93ee0bd93c80729fd4aae34a0bf4153a19a3de5a460c0ad27b12",
+    "dev/src/semantic/class_enum.cpp": "08f4c9b39585a2085a3979eaf6de08fecd00b0fb1870b5e85fc49dc4920ae9ae",
+    "dev/src/semantic/constant_addresses.cpp": "1fdf1211c5a985af9eff0f42ccdf6f48ded079f6f33babeeeac375fc6dd68152",
+    "dev/src/semantic/constant_execution.cpp": "b48f2c78add7a64765fd9ea6ab1d8b089951156ddd9f05ce0942d224c0cb1ab6",
+    "dev/src/semantic/constant_queries.cpp": "13ac2d7d35e37640e378effff6bb2c14122c85d3e7ff51b233131c45626849a9",
+    "dev/src/semantic/constant_storage_construction.cpp": "cc55f194c722bc16797676de7d7bb0ea3a786d2c934671960ccdc925376a3cf6",
+    "dev/src/semantic/constexpr_validity.cpp": "59428f4ffc50c4ffbdff0247c453be7e4b09a05fb837d7899c5ec025a2648b14",
+    "dev/src/semantic/construction.cpp": "47c675d92eecf7e5ce7aa6f998270b578606ce791163b4cec494ea3fc24e7df2",
+    "dev/src/semantic/declaration.cpp": "589cdb8c2fd63bff8085b92d847497da75341ba7c26ae12b19e3377bd8c295ad",
+    "dev/src/semantic/default_destructor_facts.cpp": "4ad8d0956abcfb5280d575373ec82dc2f73a98d5b1e1da1c80b6d9f845226edc",
+    "dev/src/semantic/default_initialization_facts.cpp": "9ff595b6cb8a9abed9fe65d4f9b510e86df7cc7662815e499c8f1393fba8efc7",
+    "dev/src/semantic/expression.cpp": "b8684fe9bfbf78fd8db02261c1779e12245bf48ad359168971a21d8f0aeded4a",
+    "dev/src/semantic/field_projection.cpp": "6652428657b35cfa75f8f01b9425e4a9a6dcb85a12d9f22256eb47b9466f27a1",
+    "dev/src/semantic/lambda.cpp": "3b140b49a2e1097821583a6caf22b1492a75fe4acae6d0084c43df6bcf9db24d",
+    "dev/src/semantic/member.cpp": "d183a2970dcd4d24a2185408f31d0fa6f92ca530ff0ae514d4a35f5339926a42",
+    "dev/src/semantic/member_receiver.cpp": "aa07ad40bc0add8cdab1f9522035b6871dd100e7510fdeafdf1c74b85840baef",
+    "dev/src/semantic/model.h": "122cded950e228614a462c6554e7c88d012b5bc9e4f88c747c4b601cff761434",
+    "dev/src/semantic/output.cpp": "7d800f10a9c041e6b1386171e1a1d6ba9473a8a71d7dad755d5166795f98595b",
+    "dev/src/semantic/template_entities.cpp": "8fde27f199a7e5b3c7b767b7ae6c88e1a54c39894663b2ff67389c53056841e5",
+    "dev/src/semantic/type_builder.cpp": "a5a7e0cc5d1de1713443ab98fb35fc5b9f6b2c8a3e05ca4654917bcad984a741",
+    "dev/src/syntax/ast.h": "e6ca4db185192f32b6a327d21e52f4d20c2ce9972f247b0a40c94379f52befcf",
+    "dev/src/syntax/declaration.cpp": "953a93d7c190f716f7f8e60559d6d09078e6e04c11c7896700d8ebdafdb457c1",
+    "dev/src/syntax/declarator.cpp": "761748cb97e66eaa8556eecbad8ef3a26aeb9140a6fd5f5952a28139fcca2d52",
+    "dev/src/syntax/parser.cpp": "df39d4ef423a5bce5ca065c4bb2d52f229ced95630604e7f3f9740bfe495fcf5",
+    "dev/src/syntax/parser.h": "0ea3a9f7bd5c96417287988db943b0de720ef8b69630898db13cbe2c055e2451",
+    "dev/src/syntax/statement.cpp": "f639631bcd9d470204c37ad27b884f48da29ac4c611d504e95a6a52d966e68d5",
+    "dev/src/toolchain/driver.cpp": "095ecca2c016af633d08d514ca5b4b638a9c4391728b6e4f47c457a16c66a4e3",
+    "dev/src/toolchain/host_elf.cpp": "245d384b289b44163aab8de5b6533c95655297c2bdb302ef13f72d3dc9ccac15",
+    "dev/src/toolchain/host_elf.h": "3240cbc8115b3f0eb72b2edaaa60d689c08f0bec4195a539e851ea4b34aaf71b",
+    "dev/src/toolchain/host_sections.cpp": "db3aa088f4fddc967afdacab853e60a3312ada399014a4c5d662cafec53d8697",
+    "dev/src/toolchain/host_unwind.cpp": "0ef4e0012becb7c63d470f5c8e36ab126179f5daeb5f2c4d46c26375d7b8ab21",
+    "dev/src/toolchain/object.cpp": "3fd5ead96d088437698c4389b0d2983af8051de5dce3a9337c23112b65ff7364",
+    "dev/src/toolchain/object.h": "1c3c8fbbd668abe1659d1bcb6ed4b6fcffc745a2d7754931f9c2bdff555da27c"
+  },
+  "contract_changes": [
+    "pa27/tests/general/200-host-defined-global-data-pcrel.inspect.expect",
+    "pa27/tests/general/200-host-defined-global-data-pcrel.ref.inspect",
+    "pa27/tests/general/200-host-imported-global-data-got.inspect.expect",
+    "pa27/tests/general/200-host-imported-global-data-got.ref.inspect"
+  ]
+}
