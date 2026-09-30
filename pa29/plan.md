@@ -1,10 +1,21 @@
-# PA29 implementation / handoff155
+# PA29 implementation / handoff156
 
 Target: **PA29 full-stage**. Phase: implementation handoff; stage unfinished.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
-Entry: clean; 182/403 passing, 221 failing. Exit: **272/403**, 131 failing;
-**90 existing failures resolved, no new failures**, unchanged course coverage.
+Entry this turn: `6afc84f76c09cf336a4302af368d5b6ea44c0da0`, clean;
+**272/403 passing, 131 failing**. Prior turn is verified progress (90 original
+failures resolved and committed validation). Review markers above are preserved.
+
+Active implementation: runtime builtin signatures and scalar operation facts.
+Registry owns bounded signature/arity lookup; semantics records conversions and
+operation identities once; constant evaluation and direct LowIR consume them.
+Extend related libm, memory, integer-width and floating-predicate groups together.
+Validation: wrong arity/type, side effects, boundary widths/NaNs, source/LowIR
+parity, explicit controls, PA29 and PA1–28, file audit. Freeze A/B for equivalent
+common paths; measure new capabilities separately with latency/RSS/runtime/text.
+No optional transform or growth is planned. Remaining owners and independent
+review questions below remain open; the final ledger will replace this entry.
 
 ## Design/spec alignment
 
