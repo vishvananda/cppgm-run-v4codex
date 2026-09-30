@@ -1,12 +1,25 @@
-# PA25 implementation136 handoff
+# PA25 implementation137 in progress
 
 Stage base commit: fee6ad9076ff35c5272526e1c4c4df235fbf3bfe
 Last reviewed commit: fee6ad9076ff35c5272526e1c4c4df235fbf3bfe
 
-Target remains **PA25 full-stage**. Entry `cf26b48b`: clean, **64/101**,
-37 failures. Prior goal turn made progress: the committed driver group and
-validation established that baseline. This handoff completes related scalar
-behavior groups at **71/101**, 30 failures. It does not approve the stage.
+Target remains **PA25 full-stage**. Entry `11aee2da`: clean, **71/101**,
+30 failures. The previous turn made progress: seven original failures were
+removed with committed scalar behavior and validation. Both review markers above
+remain unchanged. This implementation turn starts with GNU statement expressions.
+
+## Current implementation group
+
+| Owner | Data flow / complexity | Validation planned |
+|---|---|---|
+| Parser and semantic expressions | One parsed compound region -> scoped statements plus recorded final value conversion and temporary; O(nodes), canonical occurrence facts | Original three failures, result/void/decay, nested scopes, templates and diagnostics |
+| Lowering/control/lifetime | Recorded statement/value facts -> typed LowIR; enclosing return/break/continue/goto edges and nested full-expression cleanup; O(statements + emitted cleanup edges) | Runtime side effects, class copies/destruction, unreachable final value, direct/separate/mixed parity |
+
+Frozen baseline: artifacts/pa25-137/compiler-A. O0 optional transform and growth
+budgets remain zero. Measure equivalent compiler/executable workloads using the
+existing A/A and ABBA protocol; new behavior gets a correct final/final baseline.
+Required checks and handoff evidence are pending. The groups and independent
+review questions retained below are not waived.
 
 ## Design/spec alignment
 
