@@ -22,7 +22,10 @@ void Procedural::order_lifecycle_entries()
         if (!group) p.function_order.push_back(FunctionId(i+1));
         else if (!emitted[group]) {
             emitted[group] = true;
-            for (auto entry : groups[group]) if (entry) p.function_order.push_back(entry);
+            // A previous TU can already have published the base declaration.
+            // Upgrading its body preserves that schedule position; append only
+            // the group's newly created complete/deleting entries.
+            for (auto entry : groups[group]) if (entry.index > begin) p.function_order.push_back(entry);
         }
     }
 }

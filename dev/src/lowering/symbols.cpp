@@ -211,6 +211,19 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     p.symbols[sid.index-1].metadata = metadata;
     if (!separate && !base_only && (sem.constructor_member(id) || sem.destructor_member(id)) && (e.body || sem.synthetic_member(id))) {
         target.function.terminal = sem.destructor_member(id) ? abi_mangle::ABI_TERMINAL_DESTRUCTOR_BASE : abi_mangle::ABI_TERMINAL_CONSTRUCTOR_BASE;
+        if (!internal && linkage.merge) {
+            auto base_key = (std::uint64_t(1) << 32) | abi_mangle::function_entity(abi,target.function);
+            auto existing = linkage.external.get(base_key);
+            if (existing) {
+                auto entry = p.symbols[existing-1];
+                // Another TU may have emitted this base entry before the
+                // complete entry arrived. It already owns that native name.
+                if (entry.kind == Symbol::FunctionSymbol && !p.functions[entry.entity-1].declaration) return sid;
+            }
+            // Publish alias identity too, so later base references share its
+            // defining entry instead of producing a second definition.
+            linkage.external.put(base_key,sid.index);
+        }
         std::string alias_name = abi_mangle::mangle(abi,target);
         if (internal && linkage.merge) alias_name += "." + std::to_string(sid.index);
         ObjectAlias alias; alias.name = p.intern(alias_name); alias.target = sid; p.aliases.push_back(alias);
