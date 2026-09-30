@@ -32,8 +32,8 @@ Type Selector::consumed_type(lowir_model::Operand o, Type context) const
 Operand Selector::value(lowir_model::Operand o, Type t)
 {
     if (o.literal() && t.floating()) return Operand::floating(o,t,&p);
-    if (o.kind == lowir_model::Operand::Temporary && t.integer()) {
-        Type actual = p.values[o.ref-1].type;
+    if ((o.kind == lowir_model::Operand::Temporary || o.kind == lowir_model::Operand::Slot) && t.integer()) {
+        Type actual = value_type(o,t);
         if (t == Type::I128 && actual.integer() && actual != Type::I128) {
             auto original = value(o,actual), storage = home(0,t,true);
             move(Operand::r(XR_R10),original,actual);
@@ -90,8 +90,12 @@ void Selector::move(Operand to, Operand from, Type t)
         emit(Op::Fmov,t,{to,from}); return;
     }
     if (to.kind == Operand::Memory || (to.kind == Operand::Symbol && !to.address)) {
-        if (from.kind != Operand::Reg && from.kind != Operand::Immediate)
-            from = in_register(from,t,XR_R10);
+        if (from.kind != Operand::Reg && from.kind != Operand::Immediate) {
+            // A folded indexed destination may still consume the reserved r10
+            // address carrier. Loading its value must not overwrite that index.
+            int scratch = to.reg == XR_R10 || to.index == XR_R10 ? XR_RAX : XR_R10;
+            from = in_register(from,t,scratch);
+        }
         emit(Op::Store,t,{to,from});
     } else if (from.address) {
         from.address = false;
@@ -178,11 +182,18 @@ void Selector::select(const lowir_model::Instruction& i)
         if (arg(i,1).kind == lowir_model::Operand::Slot && workspace.slot_facts[arg(i,1).ref].stored && !workspace.slot_facts[arg(i,1).ref].escape) break;
         require(i.type.scalar() || i.type.kind() == Type::Object, "invalid native store class");
         auto m = memory(arg(i,1));
-        auto src = value(arg(i,0),i.type);
         Type st = consumed_type(arg(i,0),i.type);
+        if (i.type == Type::I128 && st.integer() && st != i.type &&
+            (m.reg == XR_R10 || m.index == XR_R10)) {
+            // Widening an actual value uses r10 before its final stores. Freeze
+            // the selected address first, including both base and scaled index.
+            emit(Op::Lea,Type::Ptr,{Operand::r(XR_R11),m}); m = Operand::mem(XR_R11);
+        }
+        auto src = value(arg(i,0),i.type);
         if (i.type.floating() || st.floating()) { convert_to(m,src,st,i.type); break; }
         if (aggregate(i.type)) { move(m,src,i.type); break; }
-        if (src.kind == Operand::Memory && st != i.type) src = in_register(src,st,XR_R10);
+        if (src.kind == Operand::Memory && st != i.type)
+            src = in_register(src,st,m.reg == XR_R10 || m.index == XR_R10 ? XR_RAX : XR_R10);
         move(m,src,i.type); break;
     }
     case Opcode::Index: index(i); break;

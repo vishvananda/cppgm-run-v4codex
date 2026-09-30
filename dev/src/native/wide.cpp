@@ -65,6 +65,10 @@ void Selector::wide_arithmetic(const lowir_model::Instruction& i)
         emit(Op::Set,Type::I1,{reg}).condition = XC_E; emit(Op::ExtendUnsigned,Type::U8,{reg,reg});
         move(fragment(dst,0),reg,Type::I64); move(fragment(dst,8),Operand::imm(0),Type::I64); return;
     }
+    // Implicit widening may emit scratch-using moves. Finish preparing both
+    // logical inputs before loading either fixed arithmetic carrier.
+    Operand rhs;
+    if (i.opcode == Opcode::Binary) rhs = value(arg(i,1),i.type);
     auto dst = allocate(i.destination.index,i.type);
     Operand lo = Operand::r(XR_R10), hi = Operand::r(XR_RAX);
     move(lo,fragment(lhs,0),Type::I64); move(hi,fragment(lhs,8),Type::I64);
@@ -75,7 +79,6 @@ void Selector::wide_arithmetic(const lowir_model::Instruction& i)
             emit(Op::Not,Type::I64,{lo}); emit(Op::Not,Type::I64,{hi});
         } else throw ParseError("native wide unary operation not implemented");
     } else {
-        auto rhs = value(arg(i,1),i.type);
         Op op = i.operation == Operation::Add ? Op::Add : i.operation == Operation::Sub ? Op::Sub :
             i.operation == Operation::And ? Op::And : i.operation == Operation::Or ? Op::Or : Op::Xor;
         if (i.operation == Operation::Mul) {

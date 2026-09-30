@@ -79,3 +79,21 @@ register exhaustion and large stack objects (160 programs).
 `wide-runtime` checks high-word call/phi traffic; `wide-numeric-runtime` checks
 input-dependent division and all three FP conversion formats. Both check results
 with two runtime argument counts. See [performance129.md](performance129.md).
+
+Checkpoint audit130 adds independent controls for fixed-register reuse, implicit
+wide operands (including slots), indexed spill stores, hidden byte-multiply
+effects, floating sign bits and x87 rounding restoration:
+
+```
+python3 student.tests/pa24/audit130.py
+dev/cppgm++ --validate-lowir --emit-lowir -o /tmp/pa24-trace130.lowir student.tests/pa24/trace130.cpp
+dev/lowir2native --dump-machine-ir /tmp/pa24-trace130.mir -o /tmp/pa24-trace130 /tmp/pa24-trace130.lowir
+/tmp/pa24-trace130
+/tmp/pa24-trace130 input
+```
+
+The audit runner optionally accepts a compiler path and an evidence directory;
+it keeps every reduced input, MIR view and executable there. The source trace
+checks ordinary field access and a demanded class-template member while an
+invalid unused dependent member remains dormant. These are explicit tool-boundary
+checks; source/native driver integration remains a later milestone.

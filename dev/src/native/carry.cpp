@@ -47,6 +47,9 @@ void Selector::carry_reloads()
                     i.op == Op::ExtendSigned || i.op == Op::ExtendUnsigned || i.op == Op::Add ||
                     i.op == Op::Sub || i.op == Op::Mul || i.op == Op::And || i.op == Op::Or ||
                     i.op == Op::Xor || i.op == Op::Compare || i.op == Op::Set;
+                // Byte multiplication may load its memory operand through r11
+                // inside encoding. Without a complete effect proof keep the home.
+                if (i.op == Op::Mul && i.type.width() < 16 && i.args[1].kind == Operand::Memory) safe = false;
                 for (unsigned k = 0; k < i.count && safe; ++k) {
                     const auto& a = i.args[k];
                     safe &= a.kind != Operand::Symbol;

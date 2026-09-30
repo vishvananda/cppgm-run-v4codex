@@ -59,13 +59,9 @@ void Selector::analyze()
         const auto& body = p.blocks[block_id-1];
         for (unsigned n = body.instructions.begin; n != body.instructions.end(); ++n) {
             const auto& i = p.instructions[n];
-            unsigned clobbers = i.opcode == Opcode::Convert ? this->clobbers(i) : 0;
-            if (i.type == Type::I128 && i.opcode >= Opcode::AtomicLoad && i.opcode <= Opcode::AtomicCompareExchange)
-                clobbers |= (1u<<XR_RDX)|(1u<<XR_RCX);
-            if (i.type == Type::I128 && i.operation == Operation::Mul) clobbers |= 1u<<XR_RDX;
-            if (i.opcode == Opcode::Binary && (i.operation == Operation::Div || i.operation == Operation::Udiv || i.operation == Operation::Mod || i.operation == Operation::Umod)) clobbers |= (1u<<XR_RDX) | (i.type == Type::I128 ? 1u<<XR_RCX : 0);
-            if (i.opcode == Opcode::Binary && (i.operation == Operation::Shl || i.operation == Operation::Shr || i.operation == Operation::Ushr) && !arg(i,1).literal()) clobbers |= 1u<<XR_RCX;
-            if (i.opcode == Opcode::AtomicCompareExchange) clobbers |= 1u<<XR_RCX;
+            // Calls/bulk boundaries already have interval epochs. Fixed effects
+            // share their owner with incoming-parameter CFG flow.
+            unsigned clobbers = call_effect(i) ? 0 : this->clobbers(i);
             for (unsigned r = 0; r < 16; ++r) if (clobbers & (1u<<r)) first_clobber[r] = std::min(first_clobber[r],n+1);
             if (call_effect(i)) ++epoch;
             if (!i.destination) continue;
@@ -237,7 +233,8 @@ Operand Selector::allocate(unsigned id, Type t)
             auto& previous = state(root(input.ref));
             auto loc = previous.location;
             bool survives = loc.reg == XR_RBX || loc.reg >= XR_R12;
-            if (loc.kind == Operand::Reg && previous.last == position && live_until[loc.reg] == position && (!v.crosses_call || survives) && loc.reg != XR_RAX) {
+            if (loc.kind == Operand::Reg && previous.last == position && live_until[loc.reg] == position &&
+                (!v.crosses_call || survives) && loc.reg != XR_RAX && v.last < first_clobber[loc.reg]) {
                 live_until[loc.reg] = v.last;
                 return v.location = loc;
             }
