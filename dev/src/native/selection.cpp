@@ -143,7 +143,20 @@ void Selector::normalize_register(Operand o, Type t)
 void Selector::select(const lowir_model::Instruction& i)
 {
     debug = i.debug;
-    if (i.destination && state(i.destination.index).alias) return;
+    if (i.destination && state(i.destination.index).alias) {
+        // An adjacent elided Boolean conversion still owns its source step.
+        // Attribute the producing normalization to that step while preserving
+        // the comparison/set locations. Do not relabel intervening work.
+        if (i.opcode == Opcode::Convert && i.debug.file && position > 1 && !f.instructions.empty()) {
+            const auto& previous = p.instructions[position-2];
+            auto op = f.instructions.back().op;
+            if (previous.destination && root(previous.destination.index) == root(i.destination.index) &&
+                (previous.opcode == Opcode::Compare || previous.opcode == Opcode::Convert) &&
+                (op == Op::ExtendUnsigned || op == Op::Mov || op == Op::Store))
+                f.instructions.back().debug = i.debug;
+        }
+        return;
+    }
     switch (i.opcode) {
     case Opcode::Const:
         if (i.type.floating() || i.type == Type::I128) state(i.destination.index).location = value(arg(i,0),i.type);

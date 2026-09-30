@@ -1,0 +1,34 @@
+# Required conservative mixed-domain ABI policy; both FP and integer values
+# vary at runtime and contribute to a closed-form checked sum.
+function @mix(%a : i64, %b : f64, %c : i64, %d : f64) -> i64 {
+block ^entry:
+%bi = convert fptosi i64 f64 %b
+%di = convert fptosi i64 f64 %d
+%ints = binary add i64 %a, %c
+%floats = binary add i64 %bi, %di
+%r = binary add i64 %ints, %floats
+return i64 %r
+}
+function @main(%argc : i64) -> i64 [role=entry] {
+block ^entry:
+%n = binary mul i64 %argc, 20000000
+jump ^loop
+block ^loop:
+%i = phi i64 [^entry: 0, ^body: %next]
+%sum = phi i64 [^entry: 0, ^body: %total]
+%more = cmp lt i64 %i, %n
+branch %more, ^body, ^done
+block ^body:
+%f = convert sitofp f64 i64 %i
+%r = call i64 @mix(%i, %f, 10, 2.5)
+%total = binary add i64 %sum, %r
+%next = binary add i64 %i, 1
+jump ^loop
+block ^done:
+%prior = binary sub i64 %n, 1
+%twice_triangle = binary mul i64 %prior, %n
+%bias = binary mul i64 %n, 12
+%expected = binary add i64 %twice_triangle, %bias
+%bad = cmp ne i64 %sum, %expected
+return i64 %bad
+}

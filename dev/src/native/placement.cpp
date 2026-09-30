@@ -302,9 +302,13 @@ void Selector::finish_frame()
     // Reserve save homes below ordinary slots. RBP is always established before
     // accessing any frame operand; calls see a 16-byte-aligned stack.
     unsigned saved = __builtin_popcount(f.preserved);
-    // O0 retains capacity for each consumed scalar parameter even when its
-    // selected incoming register makes an actual home unnecessary.
-    f.stack_size = (std::max(parameter_bytes,f.frame_bytes + saved*8 + f.scratch_bytes) + 15 +
+    // The O0 void output boundary retains parameter capacity (including the
+    // lowered object-return ABI). Scalar-return and nonreturning functions
+    // need only the frame actually consumed by their selected instructions.
+    bool returns_void = false;
+    if (f.result == Type()) for (const auto& i : f.instructions)
+        returns_void |= i.op == Op::Return;
+    f.stack_size = (std::max(returns_void ? parameter_bytes : 0,f.frame_bytes + saved*8 + f.scratch_bytes) + 15 +
         (f.frame_alignment > 16 ? f.frame_alignment-1 : 0)) & ~std::uint64_t(15);
     require(f.stack_size < 0x70000000,"native aligned frame too large");
     stats.frame_bytes += f.stack_size;

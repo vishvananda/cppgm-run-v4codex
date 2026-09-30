@@ -1,0 +1,33 @@
+# Indirect call/result forwarding with an input-dependent Boolean result.
+global @target = { ptr addr @parity }
+function @parity(%seed : i64) -> i64 {
+block ^entry:
+%bit = binary and i64 %seed, 1
+return i64 %bit
+}
+function @classify(%seed : i64) -> i64 {
+block ^entry:
+%fp = load ptr @target
+%value = call i64 %fp(%seed) as (%arg : i64) -> i64
+%flag = cmp eq i64 %value, 1
+return i64 %flag
+}
+function @main(%argc : i64) -> i64 [role=entry] {
+block ^entry:
+%n = binary mul i64 %argc, 20000000
+jump ^loop
+block ^loop:
+%i = phi i64 [^entry: 0, ^body: %next]
+%sum = phi i64 [^entry: 0, ^body: %total]
+%more = cmp lt i64 %i, %n
+branch %more, ^body, ^done
+block ^body:
+%bit = call i64 @classify(%i)
+%total = binary add i64 %sum, %bit
+%next = binary add i64 %i, 1
+jump ^loop
+block ^done:
+%expected = binary div i64 %n, 2
+%bad = cmp ne i64 %sum, %expected
+return i64 %bad
+}

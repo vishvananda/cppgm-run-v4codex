@@ -21,8 +21,14 @@ def run(cmd, record):
 floating_compiler=os.environ.get('PA24_FLOAT_COMPILER')=='1'
 runtime_compiler=os.environ.get('PA24_RUNTIME_COMPILER')=='1'
 tls_compiler=os.environ.get('PA24_TLS_COMPILER')=='1'
+abi_compiler=os.environ.get('PA24_ABI_COMPILER')=='1'
 source=d/'compiler.lowir'
 with source.open('w') as out:
+    if abi_compiler:
+        out.write('function @mix(%a:i64,%b:f64,%c:i64,%d:f64) -> i64 { block ^entry: '
+                  '%bi = convert fptosi i64 f64 %b %di = convert fptosi i64 f64 %d '
+                  '%ab = binary add i64 %a, %bi %cd = binary add i64 %c, %di '
+                  '%r = binary add i64 %ab, %cd return i64 %r }\n')
     for f in range(4096):
         typ='f64' if floating_compiler else 'i128' if os.environ.get('PA24_WIDE_COMPILER')=='1' else 'i64'
         if tls_compiler:
@@ -40,7 +46,11 @@ with source.open('w') as out:
             prior='%input'
         for k in range(64):
             literal=str(k+1)+('.25' if floating_compiler else '')
-            out.write(f'%v{k} = binary add {typ} {prior}, {literal}\n'); prior=f'%v{k}'
+            if abi_compiler:
+                assert typ=='i64'
+                out.write(f'%v{k} = call i64 @mix({prior}, 0.0, {literal}, 0.0)\n')
+            else: out.write(f'%v{k} = binary add {typ} {prior}, {literal}\n')
+            prior=f'%v{k}'
         if runtime_compiler: out.write('eh_end\n')
         if tls_compiler: out.write(f'store i64 {prior}, @cell{f}\n')
         out.write(f'jump ^next\nblock ^next:\nreturn {typ} {prior}\n')
