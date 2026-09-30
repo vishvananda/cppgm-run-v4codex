@@ -1,0 +1,171 @@
+{
+  "stage_base": "f833cf1ff361529147361cada33eca62e55330cf",
+  "last_reviewed_commit": "f833cf1ff361529147361cada33eca62e55330cf",
+  "entry_commit": "5aefb9626f568da2b8060cba7096cde931b68435",
+  "implementation_commit": "bb608e0bfdcadffcdac4022f343017dad8e57d5d",
+  "binary_sha256": "37d90792b7d692fe04d29077a46540bb7751f79b4037d095b6d593cd66512955",
+  "checks": [
+    {
+      "name": "priorThroughTests",
+      "command": [
+        "make",
+        "test-report-through-pa26"
+      ],
+      "status": 0,
+      "elapsed_s": 10.256628703325987,
+      "output_path": "/tmp/pa27-146/validation/priorThroughTests.log",
+      "output_sha256": "7cac27cf3186f13b955c5acf0fb07ff27b00fcb1aa841ffa27213d34fbe64cfd"
+    },
+    {
+      "name": "stageTests",
+      "command": [
+        "make",
+        "test-pa27"
+      ],
+      "status": 2,
+      "elapsed_s": 3.2020844109356403,
+      "output_path": "/tmp/pa27-146/validation/stageTests.log",
+      "output_sha256": "8a745e7f4aa3cc9f93dd6fce401da6894fc658f37c8c1b5322b84a03c3459170"
+    },
+    {
+      "name": "throughStage",
+      "command": [
+        "make",
+        "test-report-through-pa27"
+      ],
+      "status": 2,
+      "elapsed_s": 13.376931952312589,
+      "output_path": "/tmp/pa27-146/validation/throughStage.log",
+      "output_sha256": "b457295cd0ba8f4f45aaa05a073a5152a114300ddd37c0f58875519ca77643ac"
+    },
+    {
+      "name": "fileAudit",
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa27",
+        "--paths",
+        "dev/src"
+      ],
+      "status": 0,
+      "elapsed_s": 4.889884304255247,
+      "output_path": "/tmp/pa27-146/validation/fileAudit.log",
+      "output_sha256": "a8cc56fe117bbfd3ed16e9e29470abb6f84497ea8488c7e2d89528530a070d9b"
+    },
+    {
+      "name": "personalLinkage",
+      "command": [
+        "python3",
+        "student.tests/pa27/linkage-controls.py",
+        "/tmp/pa27-146/validation/linkage"
+      ],
+      "status": 0,
+      "elapsed_s": 1.6490259300917387,
+      "output_path": "/tmp/pa27-146/validation/personalLinkage.log",
+      "output_sha256": "c9831cbd28885aab7e37e5f11f01c62cc00fc5f46daa54a44810b3332b978942"
+    },
+    {
+      "name": "personalTLS",
+      "command": [
+        "python3",
+        "student.tests/pa27/tls-controls.py",
+        "/tmp/pa27-146/validation/tls"
+      ],
+      "status": 0,
+      "elapsed_s": 1.419998798519373,
+      "output_path": "/tmp/pa27-146/validation/personalTLS.log",
+      "output_sha256": "dac7a39f59833c2245a3bc68f6f7d1d9ea1848895f08d2ce88db44aa74077c71"
+    },
+    {
+      "name": "inheritedObjects",
+      "command": [
+        "python3",
+        "student.tests/pa27/object-controls.py",
+        "/tmp/pa27-146/validation/objects"
+      ],
+      "status": 0,
+      "elapsed_s": 1.2715937737375498,
+      "output_path": "/tmp/pa27-146/validation/inheritedObjects.log",
+      "output_sha256": "4e0acb6f402905e581dba6fb3f429e8ac08a3bd54ffc2fd9f531482bf492f8c1"
+    },
+    {
+      "name": "diffCheck",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "status": 0,
+      "elapsed_s": 0.019594747573137283,
+      "output_path": "/tmp/pa27-146/validation/diffCheck.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "progress": {
+    "entry_pass": 133,
+    "current_pass": 155,
+    "total": 158,
+    "entry_fail": 25,
+    "current_fail": 3,
+    "resolved": [
+      "pa27/tests/general/200-anonymous-template-specialization-linkage.t",
+      "pa27/tests/general/200-dependent-abi-multiword-type-argument.t",
+      "pa27/tests/general/200-dependent-alias-return-decltype-operator-symbol-spelling.t",
+      "pa27/tests/general/200-dependent-nttp-default-return-symbol-spelling.t",
+      "pa27/tests/general/200-extern-c-anonymous-namespace-call.t",
+      "pa27/tests/general/200-extern-c-static-redecl-bad.t",
+      "pa27/tests/general/200-extern-template-member-template-instantiation.t",
+      "pa27/tests/general/200-host-eh-local-lambda-symbol-binding.t",
+      "pa27/tests/general/200-host-extern-template-constructor-reference.t",
+      "pa27/tests/general/200-host-extern-template-member-callee-closure.t",
+      "pa27/tests/general/200-host-extern-template-ooc-member-reference.t",
+      "pa27/tests/general/200-host-extern-template-static-data-reference.t",
+      "pa27/tests/general/200-host-typedef-linkage-anonymous-types.t",
+      "pa27/tests/general/200-inline-local-static-internal-template-argument-separates.t",
+      "pa27/tests/general/200-multi-level-virtual-base-diamond-lifecycle.t",
+      "pa27/tests/general/200-namespace-operator-template-std-string-substitution-symbol-spelling.t",
+      "pa27/tests/general/200-odr-mergeable-template-default-parameter.t",
+      "pa27/tests/general/200-std-ostream-member-template-result-symbol-spelling.t",
+      "pa27/tests/general/200-synthetic-std-hard-substitution-symbol-spelling.t",
+      "pa27/tests/general/200-thread-local-variable-export.t",
+      "pa27/tests/general/200-thread-local-variable-import.t",
+      "pa27/tests/general/200-virtual-base-construction-vtable-as-of-base-overrider.t"
+    ],
+    "remaining": [
+      "pa27/tests/general/200-anonymous-storage-member-init-runtime-smoke.t",
+      "pa27/tests/general/200-anonymous-storage-owner-initialization.t",
+      "pa27/tests/general/200-host-extern-template-vtable-reference.t"
+    ],
+    "new_failures": []
+  },
+  "coverage": {
+    "tracked_contract_paths": 19749,
+    "inventory_sha256": "f47e5a4072740becf294ee85a2bb96242f61c486c5a639ded252402453172083",
+    "pa27_anchors": 158,
+    "source_reference_and_comparison_changes": []
+  },
+  "sources": {
+    "dev/frontend_source_sets.mk": "e5606b0de652435881a6249a39185ead00d5a2b929e809e8825f89777d8b59c1",
+    "dev/src/abi/itanium/encoder.cpp": "7e403c06beddc9e47bd91cdbba3eec38ae24c94504c2fe592656ecfd4ef04fc7",
+    "dev/src/abi/itanium/fact_writer.cpp": "bf180dae1403f92c448d7206b71fa21e4afd555510da99cba5359dbfbc880614",
+    "dev/src/abi/itanium/function_encoder.cpp": "ee8457b45f0adcf619053f3f980dde490fe9f9bad7d356588390a421b1b233a9",
+    "dev/src/abi/itanium/function_reader.cpp": "910889d50a02a7e2bd08be816fd27bc48ded676de20768ebe233ef5068331083",
+    "dev/src/abi/itanium/graph.h": "74c88ccb23764250813018949adc4e9c93fd16d519546215fcfee9c86a35b1b6",
+    "dev/src/lowering/function_declaration.cpp": "7bdf2f1ab33505d3e88411b1b242a5a2cdbd16d0570f93efa9f846f124ade94e",
+    "dev/src/lowering/initialization.cpp": "3d04b3ee031b9dcab2b4140da5ad140920c5a18fd52cc03e150a659d2ef6fd39",
+    "dev/src/lowering/local_abi.cpp": "cf2de46bf353cfbdd83088b8ceca5d4025d3f49868063f4140593cbd9bdc4565",
+    "dev/src/lowering/procedural.h": "1c112e0add945a4dc0f6e1f2e39e60d6dd23b178e80c803569af6b9941ee973d",
+    "dev/src/lowering/query_abi.cpp": "48e56a1170aadc5f212dc9374ecb5b2253aefd2b06da0509e2dafd4f737c58ff",
+    "dev/src/lowering/standard_abi.cpp": "c289b382aa54dcf2a1a4fa27aad0fe06c3aea41642370be4e14662cd9511f051",
+    "dev/src/lowering/symbols.cpp": "cf15ad07acc82152153240909d8a4f57d7d82691c49bd4691ae1ee04b7e6f2f1",
+    "dev/src/lowering/tls_initialization.cpp": "704e3da5cfdaba84a477b64d7af54ca33bfdade59448bd5e6f5ab1da39ea87d2",
+    "dev/src/lowering/virtuals.cpp": "f2c0f7c629154cfa7683eabcbdd5b1e03be310a8e762b5396f1a829c15bbb2f5",
+    "dev/src/semantic/analyzer.h": "b6cc5ac76b7a8ca5984405b0a41ba56f923bc95025d8cee2540c4a9cbecafaff",
+    "dev/src/semantic/declaration.cpp": "589cdb8c2fd63bff8085b92d847497da75341ba7c26ae12b19e3377bd8c295ad",
+    "dev/src/semantic/lambda.cpp": "3b140b49a2e1097821583a6caf22b1492a75fe4acae6d0084c43df6bcf9db24d",
+    "dev/src/semantic/template_entities.cpp": "8fde27f199a7e5b3c7b767b7ae6c88e1a54c39894663b2ff67389c53056841e5",
+    "dev/src/semantic/type_builder.cpp": "9e80f7dd520c4ded24ee6ff2cc69a443b5f74e2a7fb3157299796eb528d78dd5"
+  },
+  "status": "validated incomplete implementation handoff; whole-stage audit remains pending"
+}

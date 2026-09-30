@@ -1,0 +1,481 @@
+{
+  "binary_sha256": "37d90792b7d692fe04d29077a46540bb7751f79b4037d095b6d593cd66512955",
+  "commands": [
+    {
+      "command": [
+        "g++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/provider.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/reader.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa27-146/validation/tls/host-main.cpp",
+        "/tmp/pa27-146/validation/tls/reader.o",
+        "/tmp/pa27-146/validation/tls/provider.o",
+        "-pthread",
+        "-o",
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/provider.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/reader.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa27-146/validation/tls/host-main.cpp",
+        "/tmp/pa27-146/validation/tls/reader.o",
+        "/tmp/pa27-146/validation/tls/provider.o",
+        "-pthread",
+        "-o",
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/provider.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/reader.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa27-146/validation/tls/host-main.cpp",
+        "/tmp/pa27-146/validation/tls/reader.o",
+        "/tmp/pa27-146/validation/tls/provider.o",
+        "-pthread",
+        "-o",
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/provider.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/reader.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa27-146/validation/tls/host-main.cpp",
+        "/tmp/pa27-146/validation/tls/reader.o",
+        "/tmp/pa27-146/validation/tls/provider.o",
+        "-pthread",
+        "-o",
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/provider.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/reader.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa27-146/validation/tls/host-main.cpp",
+        "/tmp/pa27-146/validation/tls/reader.o",
+        "/tmp/pa27-146/validation/tls/provider.o",
+        "-pthread",
+        "-o",
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/provider.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/reader.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa27-146/validation/tls/host-main.cpp",
+        "/tmp/pa27-146/validation/tls/reader.o",
+        "/tmp/pa27-146/validation/tls/provider.o",
+        "-pthread",
+        "-o",
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/provider.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/reader.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa27-146/validation/tls/host-main.cpp",
+        "/tmp/pa27-146/validation/tls/reader.o",
+        "/tmp/pa27-146/validation/tls/provider.o",
+        "-pthread",
+        "-o",
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/provider.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-O2",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-146/validation/tls/reader.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa27-146/validation/tls/host-main.cpp",
+        "/tmp/pa27-146/validation/tls/reader.o",
+        "/tmp/pa27-146/validation/tls/provider.o",
+        "-pthread",
+        "-o",
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-146/validation/tls/program"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-146/validation/tls/student-provider.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-146/validation/tls/student-reader.cpp",
+        "-o",
+        "/tmp/pa27-146/validation/tls/reader.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-146/validation/tls/host-main.cpp",
+        "/tmp/pa27-146/validation/tls/provider.o",
+        "/tmp/pa27-146/validation/tls/reader.o",
+        "-pthread",
+        "-o",
+        "/tmp/pa27-146/validation/tls/both"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-146/validation/tls/both"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-146/validation/tls/host-main.cpp",
+        "/tmp/pa27-146/validation/tls/reader.o",
+        "/tmp/pa27-146/validation/tls/provider.o",
+        "-pthread",
+        "-o",
+        "/tmp/pa27-146/validation/tls/both"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-146/validation/tls/both"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}
