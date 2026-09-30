@@ -106,7 +106,7 @@ static void segment(std::vector<unsigned char>& header, unsigned flags, std::uin
 }
 void write_executable(Image& image, const std::string& path)
 {
-    const std::uint64_t code_offset = 64+2*56;
+    const std::uint64_t code_offset = executable_code_offset;
     std::uint64_t data_offset = aligned(code_offset+image.code.size(),4096);
     patch(image.code,image.code_fixups,image,0x400000+code_offset,0x400000+data_offset,0x400000+code_offset);
     patch(image.data,image.data_fixups,image,0x400000+code_offset,0x400000+data_offset,0x400000+data_offset);

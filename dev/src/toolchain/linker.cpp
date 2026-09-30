@@ -25,8 +25,8 @@ void Linker::add(Object&& obj)
         if (runtime) id = image_.runtime_begin + i-source.runtime_begin;
         else if (record.binding == ir_model::SBM_INTERNAL) id = new_symbol();
         else {
-            auto text = obj.name(i); require(!text.empty(),"external object symbol has no name");
-            auto name = names_.intern({text.data(),text.size()});
+            require(record.name,"external object symbol has no name");
+            auto name = record.name;
             id = externals_.find(name);
             if (!id) { id = new_symbol(); externals_.insert(name,id); }
             record.name = name;
@@ -99,7 +99,7 @@ std::size_t Linker::finish(const std::string& path)
     native::Encoder encoder(header);
     encoder.startup(native::startup(lowir_model::SymbolId(entry_),parameters_,init,fini));
     // Preserve object section alignments after prefixing process startup.
-    header.code.resize((header.code.size()+alignment_-1)&~std::size_t(alignment_-1),0x90);
+    header.code.resize(((native::executable_code_offset+header.code.size()+alignment_-1)&~std::size_t(alignment_-1))-native::executable_code_offset,0x90);
     auto prefix = header.code.size();
     for (unsigned i = 1; i < image_.symbols.size(); ++i)
         if (image_.defined[i] && !image_.data_symbols[i]) image_.symbols[i] += prefix;

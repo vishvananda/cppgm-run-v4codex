@@ -80,6 +80,10 @@ int main(){return quoted_value()+user_value()-30;}
         command([CXX,'-c','-o',d/'extra-a.obj',left]); command([CXX,'-c','-o',d/'extra-b.obj',right])
         command([CXX,'-o',exe,d/'extra-a.obj',d/'extra-b.obj']); command([exe])
         command([CXX,'-o',exe,left,right]); command([exe])
+    aligned_c = source('aligned.c','__attribute__((aligned(4096))) int aligned_function(void){return 19;}')
+    aligned_cpp = source('aligned.cc','extern "C" int aligned_function(); int main(){return ((unsigned long)&aligned_function % 4096) || aligned_function()!=19;}')
+    command(['cc','-c','-o',d/'aligned.o',aligned_c])
+    command([CXX,'-o',exe,aligned_cpp,d/'aligned.o']); command([exe])
     original = bo.read_bytes()
     # Truncations throughout each record class must reject, not assert or read OOB.
     for size in sorted(set([0,1,7,8,15,24,48,len(original)//3,len(original)//2,len(original)-1])):

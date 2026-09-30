@@ -1,6 +1,7 @@
 #pragma once
 #include "native/model.h"
 namespace native {
+constexpr unsigned executable_code_offset = 64+2*56;
 struct Fixup {
     enum Kind { RelativeSymbol, AbsoluteSymbol, ThreadOffset, Absolute32, Absolute32Signed } kind = RelativeSymbol;
     std::size_t offset = 0, end = 0;
