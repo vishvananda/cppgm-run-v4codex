@@ -74,6 +74,7 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
         operand(p,i.args[n],out);
     }
     if (i.op >= Op::Fadd && i.op <= Op::Fdiv && i.source_type == Type::F80) out << " [eval=f80]";
+    if (i.op == Op::Fmul && i.source_type == i.type && i.type != Type::F80) out << " [eval=" << type_name(i.type) << ", exact=scale]";
     if (i.op == Op::Call || i.op == Op::Syscall) {
         out << " [args=(";
         bool first = true;

@@ -1,6 +1,19 @@
 #include "native/selection.h"
 namespace native {
 using namespace lowir_model;
+namespace {
+bool exact_scale(Operand operand, Type type)
+{
+    if (operand.kind != Operand::Floating || (type != Type::F32 && type != Type::F64)) return false;
+    unsigned fraction = type == Type::F32 ? 23 : 52;
+    auto magnitude = operand.bits & (type == Type::F32 ? 0x7fffffffULL : 0x7fffffffffffffffULL);
+    auto exponent = magnitude >> fraction;
+    if (!exponent) return magnitude && !(magnitude & (magnitude-1));
+    auto maximum = type == Type::F32 ? 255 : 2047;
+    return exponent != unsigned(maximum) && !(magnitude & ((std::uint64_t(1)<<fraction)-1));
+}
+}
+
 void Selector::floating_arithmetic(const lowir_model::Instruction& i)
 {
     f.scratch_bytes = 48;
@@ -23,7 +36,17 @@ void Selector::floating_arithmetic(const lowir_model::Instruction& i)
         i.operation == Operation::Mul ? Op::Fmul : Op::Fdiv;
     require(i.operation == Operation::Add || i.operation == Operation::Sub ||
         i.operation == Operation::Mul || i.operation == Operation::Div,"unsupported floating binary operation");
-    emit(op,i.type,{dest,lhs,value(arg(i,1),i.type)}).source_type = i.source_type;
+    auto rhs = value(arg(i,1),i.type);
+    auto precision = i.source_type;
+    // Scaling a binary32/64 value by a finite nonzero power of two is exact
+    // in binary80, including all possible product exponents. Only the final
+    // binary32/64 rounding remains. SSE implements that same rounding, zero,
+    // infinity and NaN behavior. Unknown scales retain extended evaluation.
+    // Two constant-size bit tests, no search/allocation/growth; one selected
+    // instruction carries the proof and uses the shorter ordinary SSE path.
+    if (precision == Type::F80 && op == Op::Fmul && (exact_scale(lhs,i.type) || exact_scale(rhs,i.type)))
+        precision = i.type;
+    emit(op,i.type,{dest,lhs,rhs}).source_type = precision;
 }
 void Selector::floating_compare(const lowir_model::Instruction& i, bool branch)
 {
