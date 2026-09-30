@@ -27,6 +27,14 @@ include a nonpolymorphic virtual diamond whose `B&` access uses a fixed offset;
 this needs an executable reducer and contract/standard proof before any oracle
 correction. Reference correctness and unfinished implementation remain distinct.
 
+Semantic increment: **21/45** required fixtures, no new failures; explicit
+shared-identity/final-overrider controls **25/25**. Canonical relative identities
+use virtual anchors plus interned nonvirtual edge paths. A two-pass maximum
+check selects and verifies final overriders without pairwise candidate scans.
+Shared base conversions now merge only identical occurrences. Layout and
+lifecycle remain unfinished, so accepted semantic controls do not certify their
+executables. Continuing into the layout/table owner.
+
 ## Completed ownership and spec alignment
 
 [Handoff 121](handoff121.md) completed ordinary nonvirtual views/dispatch/RTTI.

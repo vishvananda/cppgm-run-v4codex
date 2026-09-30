@@ -304,6 +304,11 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_virtual_views\":" << virtual_views
         << ",\"semantic_virtual_slots\":" << virtual_slots
         << ",\"semantic_virtual_storage_bytes\":" << virtual_storage
+        << ",\"semantic_virtual_base_work\":" << virtual_base_work
+        << ",\"semantic_final_overrider_work\":" << final_overrider_work
+        << ",\"semantic_subobject_work\":" << subobject_work
+        << ",\"semantic_subobject_identities\":" << subobjects.size()-1
+        << ",\"semantic_subobject_paths\":" << subobject_paths.size()-1
         << ",\"semantic_virtual_slot_work\":" << virtual_slot_work
         << ",\"semantic_virtual_declaration_work\":" << virtual_declaration_work
         << ",\"semantic_virtual_demands\":" << virtual_demands

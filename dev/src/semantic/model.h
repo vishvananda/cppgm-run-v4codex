@@ -122,6 +122,7 @@ struct ClassFacts {
     EntityId first_conversion = 0;
     std::uint32_t first_base = 0;
     std::uint32_t primary_base = 0;
+    std::uint32_t virtual_bases_begin = 0, virtual_bases_count = 0;
     unsigned rtti_flags = ~0U; // Uncomputed until an RTTI consumer demands it.
     ScopeId default_constructor = 0;
     FactState layout_state = FactState::NotStarted;
@@ -253,6 +254,7 @@ struct MemberFacts {
 enum class VtableReason : unsigned char { KeyDefinition = 1, Constructor = 2, Destructor = 4, Rtti = 8 };
 struct VirtualSlot {
     EntityId function = 0, declaration = 0;
+    std::uint32_t origin = 0, implementation = 0;
     std::uint32_t receiver = 0; // Zero: complete class; otherwise one-based view.
     std::int64_t this_adjustment = 0, result_adjustment = 0;
     VirtualSlot() {}
@@ -377,8 +379,13 @@ struct Expression {
 struct BaseAdjustment {
     std::uint64_t offset = 0, total = 0;
     std::uint32_t next = 0, edge = 0, inverse = 0;
+    std::uint32_t subobject = 0;
     bool ambiguous = false, laid_out = false;
 };
+// Relative subobject identity: a shared virtual anchor, followed by an interned
+// nonvirtual edge path. Zero denotes the current complete class occurrence.
+struct SubobjectIdentity { EntityId anchor = 0; std::uint32_t path = 0; };
+struct SubobjectPath { std::uint32_t edge = 0, next = 0; };
 struct ObjectUse {
     unsigned capture = 0; // Checked closure field containing an object address or source this.
     EntityId callable_entry = 0; // Receiver-free closure ABI; selected declaration stays on the call.

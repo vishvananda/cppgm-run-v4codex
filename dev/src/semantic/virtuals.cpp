@@ -50,6 +50,7 @@ void Analyzer::complete_virtuals(EntityId cls)
     auto info = entities[cls].class_info;
     // Import subobject identities, not a signature-only union: unrelated
     // roots can have the same signature and distinct final overriders.
+    complete_virtual_bases(cls);
     VirtualClass completed;
     std::vector<VirtualSlot> primary;
     for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
@@ -58,6 +59,14 @@ void Analyzer::complete_virtuals(EntityId cls)
         const auto& inherited = virtual_class(bases[b].base);
         primary.assign(inherited.slots.begin(),inherited.slots.begin()+inherited.primary_count);
         completed.slots.assign(inherited.slots.begin()+inherited.primary_count,inherited.slots.end());
+        for (auto& slot : primary) {
+            slot.origin = prefix_subobject(b,slot.origin);
+            slot.implementation = prefix_subobject(b,slot.implementation);
+        }
+        for (auto& slot : completed.slots) {
+            slot.origin = prefix_subobject(b,slot.origin);
+            slot.implementation = prefix_subobject(b,slot.implementation);
+        }
         completed.views = inherited.views;
         for (auto& view : completed.views) view.begin -= inherited.primary_count;
         completed.signatures = inherited.signatures;
@@ -73,6 +82,8 @@ void Analyzer::complete_virtuals(EntityId cls)
             view.begin = completed.slots.size(); view.count = count;
             for (unsigned j = 0; j < count; ++j) {
                 auto slot = inherited.slots[begin+j]; slot.receiver += root;
+                slot.origin = prefix_subobject(b,slot.origin);
+                slot.implementation = prefix_subobject(b,slot.implementation);
                 completed.slots.push_back(slot); ++virtual_slot_work;
             }
             completed.views.push_back(view);
@@ -129,7 +140,7 @@ void Analyzer::complete_virtuals(EntityId cls)
             if (function_nonthrowing(old) && !function_nonthrowing(e))
                 throw std::runtime_error("looser virtual exception specification");
             matched.put(e,1); members[m].virtual_member = true;
-            slot.function = e; slot.receiver = 0;
+            slot.function = e; slot.receiver = 0; slot.implementation = 0;
         }
     };
     replace(primary); replace(completed.slots);
@@ -154,6 +165,7 @@ void Analyzer::complete_virtuals(EntityId cls)
     completed.primary_count = primary.size();
     for (auto& view : completed.views) view.begin += completed.primary_count;
     completed.slots.insert(completed.slots.begin(),primary.begin(),primary.end());
+    resolve_final_overriders(cls,completed);
     for (const auto& slot : completed.slots) completed.abstract |= members[entities[slot.function].member_info].pure;
     class_facts[info].aggregate = false;
     auto v = virtual_classes.size(); class_facts[info].virtual_info = v;

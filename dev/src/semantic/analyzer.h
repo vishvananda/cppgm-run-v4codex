@@ -925,6 +925,15 @@ private:
     bool abstract_value(TypeId t);
     std::vector<VirtualClass> virtual_classes = std::vector<VirtualClass>(1);
     void layout_virtual_views(EntityId cls);
+    void complete_virtual_bases(EntityId cls);
+    void resolve_final_overriders(EntityId cls, VirtualClass& model);
+    std::uint32_t prefix_subobject(std::uint32_t edge, std::uint32_t identity);
+    bool contains_subobject(EntityId outer, std::uint32_t from, std::uint32_t to);
+    std::vector<EntityId> virtual_bases;
+    Index virtual_base_index, subobject_index, subobject_path_index;
+    std::vector<SubobjectIdentity> subobjects = std::vector<SubobjectIdentity>(1);
+    std::vector<SubobjectPath> subobject_paths = std::vector<SubobjectPath>(1);
+    std::size_t virtual_base_work = 0, final_overrider_work = 0, subobject_work = 0;
     void record_rtti_type(TypeId type);
     void complete_rtti_class(EntityId cls);
     void finish_rtti_facts();

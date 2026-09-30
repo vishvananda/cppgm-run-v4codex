@@ -60,7 +60,12 @@ unsigned Analyzer::base_path(TypeId from, EntityId to)
         auto edge = bases[b];
         auto tail = base_path(entities[edge.base].type,to);
         if (tail && !base_adjustments[tail].edge) continue;
-        if (found) { path.ambiguous = true; break; }
+        auto object = prefix_subobject(b,base_adjustments[tail].subobject);
+        if (found) {
+            path.ambiguous |= base_adjustments[tail].ambiguous || path.subobject != object;
+            continue;
+        }
+        path.subobject = object;
         found = true; path.edge = b; path.next = tail;
         path.ambiguous = base_adjustments[path.next].ambiguous;
     }
