@@ -6,12 +6,12 @@
 #include <iostream>
 #include <sys/resource.h>
 namespace cppgm { namespace lowering {
-int emit_lowir(const std::string& output, const std::vector<std::string>& inputs, bool stats, bool audit)
+void build_program(lowir_model::Program& program, const std::vector<std::string>& inputs, bool stats,
+    const std::vector<std::string>& includes, const std::vector<std::string>& macros)
 {
     typedef std::chrono::steady_clock Clock;
     const std::time_t now = std::time(0);
     const std::string stamp = std::asctime(std::localtime(&now));
-    lowir_model::Program program;
     Linkage linkage(inputs.size() > 1);
     double frontend_ms = 0, lowering_ms = 0;
     std::size_t nodes = 0, static_requests = 0, static_hits = 0;
@@ -20,6 +20,7 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
     for (const std::string& input : inputs) {
         auto start = Clock::now();
         Preprocessor pp(input, stamp.substr(4, 7) + stamp.substr(20, 4), stamp.substr(11, 8), stats);
+        pp.include_paths(includes); pp.command_options(macros);
         PostTokenCursor post(pp, pp.identifiers(), false, 0, true);
         syntax::Ast ast(stats);
         syntax::Cursor cursor(post, pp.identifiers(), ast);
@@ -58,16 +59,9 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
     auto lifecycle_start = Clock::now();
     linkage.finish_lifecycle(program);
     lowering_ms += std::chrono::duration<double, std::milli>(Clock::now()-lifecycle_start).count();
-    if (audit) lowir_model::validate(program);
-    std::ofstream out(output.c_str());
-    if (!out) throw std::runtime_error("cannot create LowIR output");
-    auto start = Clock::now();
-    lowir_model::write_program(program, out); out.flush();
-    if (!out) throw std::runtime_error("cannot write LowIR output");
     if (stats) {
         struct rusage usage; getrusage(RUSAGE_SELF, &usage);
         std::cerr << "{\"frontend_ms\":" << frontend_ms << ",\"lowering_ms\":" << lowering_ms
-            << ",\"write_ms\":" << std::chrono::duration<double, std::milli>(Clock::now()-start).count()
             << ",\"peak_rss_kib\":" << usage.ru_maxrss << ",\"nodes\":" << nodes
             << ",\"static_requests\":" << static_requests << ",\"static_hits\":" << static_hits
             << ",\"control_work\":" << control_work << ",\"discard_work\":" << discard_work
@@ -81,6 +75,18 @@ int emit_lowir(const std::string& output, const std::vector<std::string>& inputs
             << ",\"ir_pool_growths\":" << program.pool_allocations()
             << ",\"ir_capacity_bytes\":" << program.pool_storage_bytes() << "}\n";
     }
+}
+int emit_lowir(const std::string& output, const std::vector<std::string>& inputs, bool stats, bool audit)
+{
+    lowir_model::Program program;
+    build_program(program,inputs,stats,{},{});
+    if (audit) lowir_model::validate(program);
+    std::ofstream out(output.c_str());
+    if (!out) throw std::runtime_error("cannot create LowIR output");
+    auto start = std::chrono::steady_clock::now();
+    lowir_model::write_program(program,out); out.close();
+    if (!out) throw std::runtime_error("cannot write LowIR output");
+    if (stats) std::cerr << "{\"write_ms\":" << std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count() << "}\n";
     return 0;
 }
 } }

@@ -167,3 +167,5 @@ FRONTEND_OBJ_BASENAMES_lowir2native += native/wide_shift
 FRONTEND_OBJ_BASENAMES_lowir2native += native/wide_division
 FRONTEND_OBJ_BASENAMES_lowir2native += native/wide_float_encoding
 FRONTEND_OBJ_BASENAMES_lowir2native += native/tls native/runtime native/runtime_encoding
+
+FRONTEND_OBJ_BASENAMES_cppgm++ += $(filter native/%,$(FRONTEND_OBJ_BASENAMES_lowir2native)) toolchain/object toolchain/linker toolchain/elf_input toolchain/driver

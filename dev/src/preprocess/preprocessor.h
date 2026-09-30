@@ -29,7 +29,7 @@ struct ExpansionToken {
 };
 
 struct MacroDefinition {
-    bool defined = false, function = false, variadic = false;
+    bool defined = false, function = false, variadic = false, command_line = false;
     unsigned char builtin = 0;
     std::vector<IdentifierId> parameters;
     std::vector<ExpansionToken> replacement;
@@ -102,6 +102,8 @@ class Preprocessor : public PPTokenSource {
 public:
     Preprocessor(const std::string& path, const std::string& date, const std::string& time,
                  bool telemetry = false);
+    void command_options(const std::vector<std::string>&);
+    void include_paths(const std::vector<std::string>& paths) { include_paths_ = paths; }
     PPToken next();
     IdentifierTable& identifiers() { return identifiers_; }
     const PreprocessStats& stats() const { return stats_; }
@@ -112,12 +114,12 @@ private:
     struct FileFrame {
         const SourceBuffer& source;
         PPTokenCursor cursor;
-        IdentifierId filename;
+        IdentifierId filename, physical_filename;
         std::int64_t line_delta = 0;
         bool line_start = true, space = false;
         std::vector<Conditional> conditions;
         FileFrame(const SourceBuffer& s, IdentifierTable& ids, LexStats* stats, IdentifierId name)
-            : source(s), cursor(s, ids, stats), filename(name) {}
+            : source(s), cursor(s, ids, stats), filename(name), physical_filename(name) {}
         bool active() const { return conditions.empty() || conditions.back().active; }
     };
     struct ContextNode { std::uint32_t child[2]; };
@@ -128,6 +130,7 @@ private:
         TextView save(TextView text);
         void rewind();
     };
+    std::vector<std::string> include_paths_;
     bool telemetry_;
     LexStats lex_stats_;
     PreprocessStats stats_;

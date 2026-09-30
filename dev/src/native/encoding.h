@@ -2,10 +2,13 @@
 #include "native/model.h"
 namespace native {
 struct Fixup {
-    enum Kind { RelativeSymbol, AbsoluteSymbol, ThreadOffset } kind = RelativeSymbol;
+    enum Kind { RelativeSymbol, AbsoluteSymbol, ThreadOffset, Absolute32, Absolute32Signed } kind = RelativeSymbol;
     std::size_t offset = 0, end = 0;
     unsigned symbol = 0;
     std::int64_t addend = 0;
+    // Link-only origin; discarded weak definitions do not demand relocations.
+    unsigned owner = 0;
+    std::uint64_t definition = 0;
 };
 struct Image {
     std::vector<unsigned char> code, data;
@@ -60,8 +63,10 @@ public:
     void startup(const std::vector<Instruction>& instructions);
     void encode(const Function& function);
 };
+std::vector<Instruction> startup(SymbolId, unsigned, const std::vector<SymbolId>&, const std::vector<SymbolId>&, Type argc_type = Type::I32);
 std::vector<Instruction> startup(const lowir_model::Program& p);
 void encode_data(const lowir_model::Program& p, Image& image);
 void write_executable(Image& image, const std::string& path);
+void compile_image(const lowir_model::Program&, Image&, const std::vector<Instruction>&, std::ostream*, Statistics&);
 void compile(const lowir_model::Program& p, const std::string& output, std::ostream* mir, Statistics& stats);
 } // namespace native

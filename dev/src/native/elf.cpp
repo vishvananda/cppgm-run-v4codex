@@ -28,10 +28,10 @@ static void scalar_data(std::vector<unsigned char>& data, const DataItem& item, 
 void encode_data(const lowir_model::Program& p, Image& image)
 {
     for (unsigned lane = 0; lane < 2; ++lane) for (const auto& g : p.globals) {
-        if (g.declaration) continue;
         bool tls = p.symbols[g.symbol.index-1].metadata.storage == GSM_THREAD_LOCAL;
         if (tls != bool(lane)) continue;
         if (tls) { image.has_tls = true; image.tls_targets[g.symbol.index] = g.symbol.index; }
+        if (g.declaration) continue;
         unsigned alignment = 1; bool typed = false;
         for (unsigned n = g.data.begin; n != g.data.end(); ++n)
             if (p.data[n].kind != DataItem::Zero) { alignment = std::max(alignment,p.data[n].type.alignment()); typed = true; }
@@ -80,7 +80,7 @@ void encode_data(const lowir_model::Program& p, Image& image)
     }
 }
 static void patch(std::vector<unsigned char>& bytes, const std::vector<Fixup>& fixes, const Image& image,
-    std::uint64_t code_address, std::uint64_t data_address)
+    std::uint64_t code_address, std::uint64_t data_address, std::uint64_t source_address)
 {
     for (const auto& fix : fixes) {
         require(image.defined.at(fix.symbol), "unresolved native symbol");
@@ -89,8 +89,11 @@ static void patch(std::vector<unsigned char>& bytes, const std::vector<Fixup>& f
         if (width == 4) {
             if (fix.kind == Fixup::ThreadOffset)
                 address = image.symbols[fix.symbol] + fix.addend - image.symbols[image.runtime_begin+unsigned(RuntimeEntity::ThreadPointer)];
-            else address -= code_address + fix.end;
-            require(std::int64_t(address) >= INT32_MIN && std::int64_t(address) <= INT32_MAX,"native reference out of range");
+            else if (fix.kind == Fixup::RelativeSymbol) address -= source_address + fix.end;
+            else if (fix.kind == Fixup::Absolute32) {
+                require(address <= UINT32_MAX,"native absolute reference out of range");
+            }
+            if (fix.kind != Fixup::Absolute32) require(std::int64_t(address) >= INT32_MIN && std::int64_t(address) <= INT32_MAX,"native reference out of range");
         }
         for (unsigned n = 0; n < width; ++n) bytes[fix.offset+n] = address >> (n*8);
     }
@@ -105,8 +108,8 @@ void write_executable(Image& image, const std::string& path)
 {
     const std::uint64_t code_offset = 64+2*56;
     std::uint64_t data_offset = aligned(code_offset+image.code.size(),4096);
-    patch(image.code,image.code_fixups,image,0x400000+code_offset,0x400000+data_offset);
-    patch(image.data,image.data_fixups,image,0x400000+code_offset,0x400000+data_offset);
+    patch(image.code,image.code_fixups,image,0x400000+code_offset,0x400000+data_offset,0x400000+code_offset);
+    patch(image.data,image.data_fixups,image,0x400000+code_offset,0x400000+data_offset,0x400000+data_offset);
     std::vector<unsigned char> header = {0x7f,'E','L','F',2,1,1,0,0,0,0,0,0,0,0,0};
     append(header,2,2); append(header,62,2); append(header,1,4);
     append(header,0x400000+code_offset,8); append(header,64,8); append(header,0,8); append(header,0,4);

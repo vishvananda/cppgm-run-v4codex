@@ -75,6 +75,18 @@ std::vector<Instruction> startup(const lowir_model::Program& p)
         if (role == ir_model::SR_INIT) init.push_back(f.symbol);
         if (role == ir_model::SR_FINI) fini.push_back(f.symbol);
     }
+    unsigned parameters = 0; Type argc_type = Type::I32;
+    if (entry) {
+        const auto& entry_function = p.functions[p.symbols[entry.index-1].entity-1];
+        const auto& signature = p.signatures[entry_function.signature.index-1];
+        parameters = signature.parameters.count;
+        if (parameters) argc_type = p.parameters[signature.parameters.begin].type;
+    }
+    return startup(entry,parameters,init,fini,argc_type);
+}
+std::vector<Instruction> startup(SymbolId entry, unsigned parameters,
+    const std::vector<SymbolId>& init, const std::vector<SymbolId>& fini, Type argc_type)
+{
     std::vector<Instruction> result;
     if (!entry) return result;
     auto call = [&](SymbolId symbol) {
@@ -84,20 +96,18 @@ std::vector<Instruction> startup(const lowir_model::Program& p)
         Instruction i(Op::Mov); i.args[0] = Operand::r(to); i.args[1] = Operand::r(from); i.count = 2; result.push_back(i);
     };
     for (auto s : init) call(s);
-    const auto& entry_function = p.functions[p.symbols[entry.index-1].entity-1];
-    const auto& entry_signature = p.signatures[entry_function.signature.index-1];
-    require(entry_signature.parameters.count <= 2,"entry accepts at most argc and argv");
-    if (entry_signature.parameters.count) {
-        Instruction argc(Op::Load,p.parameters[entry_signature.parameters.begin].type);
+    require(parameters <= 2,"entry accepts at most argc and argv");
+    if (parameters) {
+        Instruction argc(Op::Load,argc_type);
         argc.args[0] = Operand::r(XR_RDI); argc.args[1] = Operand::mem(XR_RSP); argc.count = 2; result.push_back(argc);
     }
-    if (entry_signature.parameters.count == 2) {
+    if (parameters == 2) {
         Instruction argv(Op::Lea,Type::Ptr);
         argv.args[0] = Operand::r(XR_RSI); argv.args[1] = Operand::mem(XR_RSP,8); argv.count = 2; result.push_back(argv);
     }
     call(entry);
-    if (entry_signature.parameters.count) result.back().arg_registers |= 1u<<XR_RDI;
-    if (entry_signature.parameters.count == 2) result.back().arg_registers |= 1u<<XR_RSI;
+    if (parameters) result.back().arg_registers |= 1u<<XR_RDI;
+    if (parameters == 2) result.back().arg_registers |= 1u<<XR_RSI;
     if (!fini.empty()) {
         mov(XR_R12,XR_RAX);
         for (auto i = fini.rbegin(); i != fini.rend(); ++i) call(*i);

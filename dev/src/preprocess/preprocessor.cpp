@@ -101,6 +101,38 @@ Preprocessor::Preprocessor(const std::string& path, const std::string& date,
     include(path);
 }
 
+void Preprocessor::command_options(const std::vector<std::string>& options)
+{
+    for (const auto& option : options) {
+        bool undefine = option[1] == 'U';
+        std::string text = option.substr(2);
+        auto equal = text.find('=');
+        if (!undefine) {
+            if (equal == std::string::npos) text += " 1";
+            else text[equal] = ' ';
+        }
+        text = (undefine ? "undef " : "define ") + text + "\n";
+        SourceBuffer source(text);
+        PPTokenCursor cursor(source,identifiers_,nullptr);
+        std::vector<ExpansionToken> line; bool space = false;
+        for (;;) {
+            auto token = cursor.next();
+            if (token.kind == PPTokenKind::eof) break;
+            if (token.kind == PPTokenKind::whitespace || token.kind == PPTokenKind::newline) { space = true; continue; }
+            ExpansionToken value; value.token = token; value.space = space; space = false;
+            value.token.spelling = persistent_.save(token.spelling); line.push_back(value);
+        }
+        if (line.size() < 2 || line[1].token.kind != PPTokenKind::identifier)
+            throw std::runtime_error("invalid command-line macro name");
+        auto id = line[1].token.identifier;
+        if (id >= macros_.size()) macros_.resize(id+1);
+        macros_[id] = MacroDefinition();
+        if (undefine) {
+            if (line.size() != 2) throw std::runtime_error("invalid command-line undefinition");
+        } else { define(line); macros_[id].command_line = true; }
+    }
+}
+
 bool Preprocessor::defined(IdentifierId id) const
 {
     return id < macros_.size() && macros_[id].defined;

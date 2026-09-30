@@ -406,5 +406,6 @@ public:
     Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, lowir_model::Program& out, Linkage& links);
     void run();
 };
+void build_program(lowir_model::Program&, const std::vector<std::string>&, bool stats, const std::vector<std::string>& includes, const std::vector<std::string>& macros);
 int emit_lowir(const std::string& output, const std::vector<std::string>& inputs, bool stats, bool audit = false);
 } }

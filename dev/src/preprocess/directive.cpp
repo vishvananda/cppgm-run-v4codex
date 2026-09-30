@@ -205,13 +205,25 @@ void Preprocessor::directive()
             TextView text = rest[0].token.spelling;
             next.assign(text.data + 1, text.size - 2);
         } else next = decode_pp_string(rest[0]);
-        std::string current = spelling(f.filename);
-        std::size_t slash = current.rfind('/');
-        if (slash != std::string::npos) {
-            std::string relative = current.substr(0, slash + 1) + next;
-            struct stat info;
-            if (!stat(relative.c_str(), &info)) next = relative;
+        const bool quoted = rest[0].token.kind != PPTokenKind::header || rest[0].token.spelling.data[0] == '"';
+        std::string found;
+        struct stat info;
+        if (!next.empty() && next[0] == '/' && !stat(next.c_str(), &info)) found = next;
+        if (found.empty() && quoted) {
+            std::string current = spelling(f.physical_filename);
+            std::size_t slash = current.rfind('/');
+            std::string relative = (slash == std::string::npos ? "" : current.substr(0,slash+1)) + next;
+            if (!stat(relative.c_str(), &info)) found = relative;
         }
+        if (found.empty()) for (const auto& path : include_paths_) {
+            std::string candidate = path + "/" + next;
+            if (!stat(candidate.c_str(), &info)) { found = candidate; break; }
+        }
+        // Preserve the early PA explicit-tool search convention when no driver
+        // search paths were supplied.
+        if (found.empty() && !stat(next.c_str(), &info)) found = next;
+        if (found.empty()) throw std::runtime_error("cannot find header " + next);
+        next = found;
         if (!once(next, false)) include(next);
     } else {
         if (rest.empty() || rest.size() > 2 || rest[0].token.kind != PPTokenKind::number)

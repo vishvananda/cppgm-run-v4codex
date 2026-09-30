@@ -6,11 +6,8 @@ Function builtin_tls(const lowir_model::Program&,const lowir_model::Function&);
 Function builtin_strlen(const lowir_model::Program&,const lowir_model::Function&);
 using Clock = std::chrono::steady_clock;
 static double ms(Clock::time_point begin) { return std::chrono::duration<double,std::milli>(Clock::now()-begin).count(); }
-void compile(const lowir_model::Program& p, const std::string& output, std::ostream* mir, Statistics& stats)
+void compile_image(const lowir_model::Program& p, Image& image, const std::vector<Instruction>& start, std::ostream* mir, Statistics& stats)
 {
-    auto start = startup(p);
-    lowir_model::require(output.empty() || !start.empty(), "executable requires an entry function");
-    Image image(p.symbols.size());
     Encoder encoder(image);
     Workspace workspace(p);
     auto time = Clock::now(); encode_data(p,image); encoder.startup(start); stats.encoding_ms += ms(time);
@@ -36,8 +33,15 @@ void compile(const lowir_model::Program& p, const std::string& output, std::ostr
         time = Clock::now(); encoder.encode(f); stats.encoding_ms += ms(time); ++stats.functions; stats.instructions += f.instructions.size();
     }
     stats.text_bytes = image.code.size();
+ }
+void compile(const lowir_model::Program& p, const std::string& output, std::ostream* mir, Statistics& stats)
+{
+    auto start = startup(p);
+    lowir_model::require(output.empty() || !start.empty(), "executable requires an entry function");
+    Image image(p.symbols.size());
+    compile_image(p,image,start,mir,stats);
     if (!output.empty()) {
-        time = Clock::now(); write_executable(image,output); stats.encoding_ms += ms(time);
+        auto time = Clock::now(); write_executable(image,output); stats.encoding_ms += ms(time);
     }
 }
 } // namespace native

@@ -4,6 +4,7 @@
 #include "support/tool_help_text.h"
 #include "syntax/driver.h"
 #include "lowering/procedural.h"
+#include "toolchain/object.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -343,7 +344,7 @@ DriverInvocation parse_driver_invocation(const vector<string> & args)
       explicit_outfile = true;
       continue;
     }
-    if(consume_preprocess_option(args, i) ||
+    if(args[i] == "--stats" || consume_preprocess_option(args, i) ||
        consume_search_option(args, i) ||
        consume_dependency_option(args, i) ||
        consume_toolchain_option(args, i) ||
@@ -449,9 +450,9 @@ int run_driver_mode(const vector<string> & args)
   case DriverMode::Preprocess:
     return run_unimplemented_mode("hosted preprocess driver mode (-E)", "PA29");
   case DriverMode::Compile:
-    return run_unimplemented_mode("compile driver mode (-c)", "PA24");
+    return cppgm::toolchain::run(args);
   case DriverMode::Link:
-    return run_unimplemented_mode("link driver mode", "PA24");
+    return cppgm::toolchain::run(args);
   }
   throw logic_error("unreachable driver mode");
 }

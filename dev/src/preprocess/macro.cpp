@@ -2,6 +2,7 @@
 #include "preprocess/preprocessor.h"
 #include <algorithm>
 #include <stdexcept>
+#include <iostream>
 
 namespace cppgm {
 namespace {
@@ -83,7 +84,11 @@ void Preprocessor::define(const std::vector<ExpansionToken>& line)
                 std::equal(a.token.spelling.data, a.token.spelling.data + a.token.spelling.size,
                            b.token.spelling.data);
         }
-        if (!same) throw std::runtime_error("incompatible macro redefinition");
+        if (!same && !old.command_line) throw std::runtime_error("incompatible macro redefinition");
+        if (old.command_line) {
+            if (!same) std::cerr << "warning: source replaces command-line macro\n";
+            macros_[id] = std::move(m);
+        }
     } else macros_[id] = std::move(m);
 }
 

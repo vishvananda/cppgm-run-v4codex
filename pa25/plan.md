@@ -39,7 +39,15 @@ its diagnostic 15% targets are not additional stage gates.
 
 ## Handoff ledger
 
-Implementation unfinished: all groups above. Independent review pending:
+Implementation135 driver increment: required PA25 **64/101** (37 remaining),
+58 explicit driver controls pass. Sources, compiler objects, mixed inputs,
+strong/weak symbols, lifecycle order, aliases, foreign ELF/GOT/data relocations,
+include/target/library/macro options, TLS and generated helper coalescing are
+implemented. Shared-report overlap invalidated one intermediate aggregate;
+required suites are being rerun sequentially. File audit passes.
+
+Implementation unfinished: source/runtime integration groups (EH, RTTI runtime,
+wide types, statement expressions, floating builtins/calculator). Independent review pending:
 object boundaries, coalescing/alias identities, lifecycle/runtime and stage
 performance evidence. Neither implementation nor independent review is waived.
 No handoff boundary has yet been reached.
