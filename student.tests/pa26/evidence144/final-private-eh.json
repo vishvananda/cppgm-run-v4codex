@@ -1,0 +1,590 @@
+[
+  {
+    "case": "scalar-order",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "scalar-order",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "nested-rethrow",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "nested-rethrow",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "nested-new",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "nested-new",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "cleanup-nested-catch",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "cleanup-nested-catch",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "base-offset",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "base-offset",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "base-access",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "base-access",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "virtual-base",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "virtual-base",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "pointer-exact",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "pointer-exact",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "pointer-qualification",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "pointer-qualification",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "pointer-base",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "pointer-base",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "null-pointer-base",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "null-pointer-base",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "pointer-void",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "pointer-void",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "function-try-members",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "function-try-members",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "constructor-body-try",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "constructor-body-try",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "function-try-template",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "function-try-template",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "bad-cast",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "bad-cast",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "bad-typeid",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "bad-typeid",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "allocation-failure",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "allocation-failure",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "malloc-failure",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "malloc-failure",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "cleanup-double-throw",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 1,
+    "expected": 1,
+    "pass_test": true
+  },
+  {
+    "case": "cleanup-double-throw",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 1,
+    "expected": 1,
+    "pass_test": true
+  },
+  {
+    "case": "handler-copy-throw",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 1,
+    "expected": 1,
+    "pass_test": true
+  },
+  {
+    "case": "handler-copy-throw",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 1,
+    "expected": 1,
+    "pass_test": true
+  },
+  {
+    "case": "noexcept",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 1,
+    "expected": 1,
+    "pass_test": true
+  },
+  {
+    "case": "noexcept",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 1,
+    "expected": 1,
+    "pass_test": true
+  },
+  {
+    "case": "rethrow-empty",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 1,
+    "expected": 1,
+    "pass_test": true
+  },
+  {
+    "case": "rethrow-empty",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 1,
+    "expected": 1,
+    "pass_test": true
+  },
+  {
+    "case": "nullptr-data-member",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "nullptr-data-member",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "nullptr-function-member",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "nullptr-function-member",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "nullptr-pointer",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "nullptr-pointer",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "pointer-cv-deep",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "pointer-cv-deep",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "pointer-cv-remove",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "pointer-cv-remove",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "function-pointer-void",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "function-pointer-void",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "null-virtual",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "null-virtual",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "null-ambiguous",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "null-ambiguous",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "exception-destructor-throw",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 1,
+    "expected": 1,
+    "pass_test": true
+  },
+  {
+    "case": "exception-destructor-throw",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 1,
+    "expected": 1,
+    "pass_test": true
+  },
+  {
+    "case": "copy-throw-retains-outer",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "copy-throw-retains-outer",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "destructor-handler-return",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "destructor-handler-return",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "function-try-parameters",
+    "mode": "direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "function-try-parameters",
+    "mode": "object",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "constructor-handler-return",
+    "phase": "compile",
+    "status": 1,
+    "expected": 1,
+    "pass_test": true
+  },
+  {
+    "case": "cross-direct",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "cross-objects",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  },
+  {
+    "case": "cross-mixed",
+    "phase": "runtime",
+    "status": 0,
+    "expected": 0,
+    "pass_test": true
+  }
+]

@@ -1,0 +1,978 @@
+{
+  "compiler_sha256": "55d08c175a29d771e96d63e00c9f166526db0d743e3ca3cdbb9ef48b610d547c",
+  "records": [
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/constructor-outer-handler.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/constructor-outer-handler.cpp"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/constructor-outer-handler.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/constructor-outer-handler-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/constructor-outer-handler-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/constructor-outer-handler.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/constructor-outer-handler-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/constructor-outer-handler-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa26-144-policy/accepted-validation/link/constructor-outer-handler.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/constructor-outer-handler-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/constructor-outer-handler-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/nested-source-catches.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/nested-source-catches.cpp"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/nested-source-catches.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/nested-source-catches-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/nested-source-catches-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/nested-source-catches.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/nested-source-catches-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/nested-source-catches-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa26-144-policy/accepted-validation/link/nested-source-catches.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/nested-source-catches-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/nested-source-catches-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/boundary-selector-identity.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/boundary-selector-identity.cpp"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/boundary-selector-identity.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/boundary-selector-identity-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/boundary-selector-identity-direct"
+      ],
+      "status": 73,
+      "expected": 73,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/boundary-selector-identity.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/boundary-selector-identity-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/boundary-selector-identity-object"
+      ],
+      "status": 73,
+      "expected": 73,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa26-144-policy/accepted-validation/link/boundary-selector-identity.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/boundary-selector-identity-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/boundary-selector-identity-host"
+      ],
+      "status": 73,
+      "expected": 73,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-value.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-value.cpp"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-value.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-value-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-value-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-value.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-value-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-value-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-value.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-value-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-value-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-alignment.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-alignment.cpp"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-alignment.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-alignment-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-alignment-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-alignment.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-alignment-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-alignment-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-alignment.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-alignment-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-alignment-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-relocation.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-relocation.cpp"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-relocation.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-relocation-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-relocation-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-relocation.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-relocation-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-relocation-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-relocation.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-relocation-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-relocation-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/lifecycle.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/lifecycle.cpp"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/lifecycle.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/lifecycle-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/lifecycle-direct"
+      ],
+      "status": 73,
+      "expected": 73,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/lifecycle.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/lifecycle-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/lifecycle-object"
+      ],
+      "status": 73,
+      "expected": 73,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa26-144-policy/accepted-validation/link/lifecycle.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/lifecycle-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/lifecycle-host"
+      ],
+      "status": 73,
+      "expected": 73,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/function-address.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/function-address.cpp"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/function-address.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/function-address-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/function-address-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/function-address.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/function-address-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/function-address-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa26-144-policy/accepted-validation/link/function-address.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/function-address-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/function-address-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/imported-data.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/imported-data.cpp"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/imported-data.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/imported-data-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/imported-data-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/imported-data.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/imported-data-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/imported-data-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa26-144-policy/accepted-validation/link/imported-data.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/imported-data-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/imported-data-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/linkage-definition.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/linkage-definition.cpp"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/linkage-definition.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/linkage-definition-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/linkage-definition-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/linkage-definition.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/linkage-definition-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/linkage-definition-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa26-144-policy/accepted-validation/link/linkage-definition.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/linkage-definition-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/linkage-definition-host"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-a.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-a.cpp"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-b.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-b.cpp"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-a.cpp",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-b.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-tu-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-tu-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-a.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-b.obj",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-tu-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-tu-object"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-a.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-b.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-tu-mixed"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-tu-mixed"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa26-144-policy/accepted-validation/link/thread.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/thread.o"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/tls-a.obj",
+        "/tmp/pa26-144-policy/accepted-validation/link/thread.o",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/thread"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/thread"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "g++",
+        "-c",
+        "/tmp/pa26-144-policy/accepted-validation/link/throw.cpp",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/throw.o"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa26-144-policy/accepted-validation/link/catch.cpp",
+        "/tmp/pa26-144-policy/accepted-validation/link/throw.o",
+        "-o",
+        "/tmp/pa26-144-policy/accepted-validation/link/foreign-eh"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-144-policy/accepted-validation/link/foreign-eh"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "args": [
+        "readelf",
+        "-rW",
+        "/tmp/pa26-144-policy/accepted-validation/link/imported-data-direct"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": "\nRelocation section '.rela.dyn' at offset 0x2150 contains 3 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000402040  0000000200000001 R_X86_64_64            0000000000000000 fflush + 0\n0000000000402050  0000000100000005 R_X86_64_COPY          0000000000402050 stdout + 0\n0000000000402060  0000000400000001 R_X86_64_64            0000000000000000 __libc_start_main + 0\n"
+    },
+    {
+      "args": [
+        "readelf",
+        "-lW",
+        "/tmp/pa26-144-policy/accepted-validation/link/thread"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": "\nElf file type is EXEC (Executable file)\nEntry point 0x401130\nThere are 8 program headers, starting at offset 64\n\nProgram Headers:\n  Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align\n  PHDR           0x000040 0x0000000000400040 0x0000000000400040 0x0001c0 0x0001c0 R   0x8\n  INTERP         0x000200 0x0000000000400200 0x0000000000400200 0x00001c 0x00001c R   0x1\n      [Requesting program interpreter: /lib64/ld-linux-x86-64.so.2]\n  LOAD           0x000000 0x0000000000400000 0x0000000000400000 0x001169 0x001169 R E 0x1000\n  LOAD           0x002000 0x0000000000402000 0x0000000000402000 0x0003e8 0x0003e8 RW  0x1000\n  DYNAMIC        0x002338 0x0000000000402338 0x0000000000402338 0x0000b0 0x0000b0 RW  0x8\n  GNU_EH_FRAME   0x002310 0x0000000000402310 0x0000000000402310 0x000024 0x000024 R   0x4\n  GNU_STACK      0x000000 0x0000000000000000 0x0000000000000000 0x000000 0x000000 RW  0x10\n  TLS            0x0020f8 0x00000000004020f8 0x00000000004020f8 0x000004 0x000004 R   0x4\n\n Section to Segment mapping:\n  Segment Sections...\n   00     \n   01     \n   02     .text \n   03     .data .tdata .hash .dynsym .dynstr .rela.dyn .dynamic .eh_frame_hdr \n   04     .dynamic \n   05     .eh_frame_hdr \n   06     \n   07     .tdata \n"
+    },
+    {
+      "args": [
+        "readelf",
+        "-lW",
+        "/tmp/pa26-144-policy/accepted-validation/link/foreign-eh"
+      ],
+      "status": 0,
+      "expected": 0,
+      "stderr": "",
+      "stdout": "\nElf file type is EXEC (Executable file)\nEntry point 0x401129\nThere are 7 program headers, starting at offset 64\n\nProgram Headers:\n  Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align\n  PHDR           0x000040 0x0000000000400040 0x0000000000400040 0x000188 0x000188 R   0x8\n  INTERP         0x0001c8 0x00000000004001c8 0x00000000004001c8 0x00001c 0x00001c R   0x1\n      [Requesting program interpreter: /lib64/ld-linux-x86-64.so.2]\n  LOAD           0x000000 0x0000000000400000 0x0000000000400000 0x001162 0x001162 R E 0x1000\n  LOAD           0x002000 0x0000000000402000 0x0000000000402000 0x000558 0x000558 RW  0x1000\n  DYNAMIC        0x002488 0x0000000000402488 0x0000000000402488 0x0000d0 0x0000d0 RW  0x8\n  GNU_EH_FRAME   0x002468 0x0000000000402468 0x0000000000402468 0x00001c 0x00001c R   0x4\n  GNU_STACK      0x000000 0x0000000000000000 0x0000000000000000 0x000000 0x000000 RW  0x10\n\n Section to Segment mapping:\n  Segment Sections...\n   00     \n   01     \n   02     .text \n   03     .data .tdata .hash .dynsym .dynstr .rela.dyn .dynamic .eh_frame_hdr \n   04     .dynamic \n   05     .eh_frame_hdr \n   06     \n"
+    }
+  ],
+  "sources": {
+    "tls-relocation.cpp": "4a9eba8a7ad7c48798091ea2ed78ad0f473fcbaa5026ebebf4a9ce0ef8b302b1",
+    "tls-alignment.cpp": "0af85fa2bade99ab5e827a285fa5c299fa4cba459c7a6ac71137947a158f9c61",
+    "tls-b.cpp": "57eee4ddd2acee90e2cf48aabe9f261f475062ec972b93c166921ad9e1ad91dd",
+    "throw.cpp": "3d4904f7aa3ca9d1084e1ca51c3b8823c4d54c2e896bb588a3e1a2d66e64281a",
+    "imported-data.cpp": "16c9adfafe269a9576dfebcef6ffaeea0b992d0ec54555e0469aa4c694a91a7c",
+    "nested-source-catches.cpp": "256fb941d5dcc1eea33b83613a1adb456ddb6973aaa295bae32d8f5a4350e964",
+    "boundary-selector-identity.cpp": "a64c0f7315d3071f2a0cffa8661fa9fb5cfdd6e5533d298fa5b33dd398cdf1fa",
+    "tls-value.cpp": "488d4638a4cf0fffec4dfdc2da18cf75d5d3d3554cab41bee818871f16ea5f30",
+    "lifecycle.cpp": "2b448e83d831fc823c419e3d6c7f4b9a679a82413c631a3719eeddcfc8701d0c",
+    "tls-a.cpp": "12d0ad69251a9e1bd4059ff43b1443a997ae1d151a1c85e98ae71947689cbe05",
+    "thread.cpp": "364896b1767ed2663b0ae3a1641d0e0dea061ec7198c9e854c3da0396ad7a815",
+    "catch.cpp": "e5c2b138e51b5921d75c720c3370ef37ad78f0ab677e73ce430fe7cdde8f9016",
+    "function-address.cpp": "d9619872e750a39d4b5191c71ace82a89a678e20bbe2e5440ac9387ced16b6df",
+    "constructor-outer-handler.cpp": "e8233a181d51ad9b1bb1eaeb098bbdd24bf9e4295a4e0f19369b85cde5df97bf",
+    "linkage-definition.cpp": "6d2e450f1ef5ca978620de57e85d62020e1ee32ac7e6b7f6879d91150a4a7909"
+  }
+}

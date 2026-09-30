@@ -1,0 +1,23 @@
+{
+  "status": "pass",
+  "source": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa26/trace.cpp",
+  "source_sha256": "6f7acee5878a13360bb9a23e611e19d9c3f55fd75d9df55ee5fbd3f1db16b479",
+  "lowir_sha256": "38d0ece417f44984c9f6db6e8001ff11b594d104ac2303b9d8b32b22e0a0fbd0",
+  "mir_sha256": "9072fdf3e2f3609aa6b49e4d6fcd3b46e003afa8e4834aaa8c7e41c75da028c0",
+  "object_sha256": "e4d04198c51488833d4de4a814e69286aeb58e10d49ad7b7a7b8412d0bd7c7bc",
+  "symbols_sha256": "2b325e774f2f0ccbfeb0361cf8449ce76de6f780939c99b4f01cf2877b4c2ca9",
+  "frames_sha256": "4804d23cfb9c3aa56d6f335f5a77bd0e67e613ef0ee68b32cdb7bfcff439830e",
+  "relocations_sha256": "d1842c0187a9c1eb977e5a8bd1f4ef5abb9dafcdd1b8ef0f0154db52e6e98234",
+  "verified_facts": [
+    "demanded calculate<11> specialization",
+    "typed EH clauses in production LowIR",
+    "MIR host frame slots and landing block identity",
+    "zPLR CIE",
+    "epilogue CFI restore state",
+    "MIR saved raw selector and outer region identities",
+    "PLT32 call relocations",
+    "host personality reference",
+    "host resume reference",
+    "program exits zero"
+  ]
+}

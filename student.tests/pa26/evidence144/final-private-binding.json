@@ -1,0 +1,2293 @@
+[
+  {
+    "case": "member-converted-reference-identity",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-converted-reference-identity-direct",
+      "/tmp/pa26-144-policy/final-private-binding/member-converted-reference-identity.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-converted-reference-identity",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/member-converted-reference-identity-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-converted-reference-identity",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-converted-reference-identity.obj",
+      "/tmp/pa26-144-policy/final-private-binding/member-converted-reference-identity.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-converted-reference-identity",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-converted-reference-identity-object",
+      "/tmp/pa26-144-policy/final-private-binding/member-converted-reference-identity.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-converted-reference-identity",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/member-converted-reference-identity-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-null-reference-storage",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-storage-direct",
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-storage.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-null-reference-storage",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-storage-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-null-reference-storage",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-storage.obj",
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-storage.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-null-reference-storage",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-storage-object",
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-storage.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-null-reference-storage",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-storage-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-function-null-reference-storage",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-function-null-reference-storage-direct",
+      "/tmp/pa26-144-policy/final-private-binding/member-function-null-reference-storage.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-function-null-reference-storage",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/member-function-null-reference-storage-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-function-null-reference-storage",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-function-null-reference-storage.obj",
+      "/tmp/pa26-144-policy/final-private-binding/member-function-null-reference-storage.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-function-null-reference-storage",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-function-null-reference-storage-object",
+      "/tmp/pa26-144-policy/final-private-binding/member-function-null-reference-storage.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-function-null-reference-storage",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/member-function-null-reference-storage-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-declaration",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-declaration-direct",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-declaration.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-declaration",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/aligned-declaration-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-declaration",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-declaration.obj",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-declaration.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-declaration",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-declaration-object",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-declaration.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-declaration",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/aligned-declaration-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-template-declaration",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-template-declaration-direct",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-template-declaration.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-template-declaration",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/aligned-template-declaration-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-template-declaration",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-template-declaration.obj",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-template-declaration.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-template-declaration",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-template-declaration-object",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-template-declaration.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-template-declaration",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/aligned-template-declaration-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-static",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/packed-static-direct",
+      "/tmp/pa26-144-policy/final-private-binding/packed-static.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-static",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/packed-static-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-static",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/packed-static.obj",
+      "/tmp/pa26-144-policy/final-private-binding/packed-static.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-static",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/packed-static-object",
+      "/tmp/pa26-144-policy/final-private-binding/packed-static.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-static",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/packed-static-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-relocation",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/packed-relocation-direct",
+      "/tmp/pa26-144-policy/final-private-binding/packed-relocation.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-relocation",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/packed-relocation-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-relocation",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/packed-relocation.obj",
+      "/tmp/pa26-144-policy/final-private-binding/packed-relocation.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-relocation",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/packed-relocation-object",
+      "/tmp/pa26-144-policy/final-private-binding/packed-relocation.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-relocation",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/packed-relocation-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-array",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/packed-array-direct",
+      "/tmp/pa26-144-policy/final-private-binding/packed-array.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-array",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/packed-array-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-array",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/packed-array.obj",
+      "/tmp/pa26-144-policy/final-private-binding/packed-array.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-array",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/packed-array-object",
+      "/tmp/pa26-144-policy/final-private-binding/packed-array.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "packed-array",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/packed-array-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-static",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-static-direct",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-static.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-static",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/aligned-static-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-static",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-static.obj",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-static.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-static",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-static-object",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-static.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-static",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/aligned-static-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-zero",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-zero-direct",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-zero.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-zero",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/aligned-zero-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-zero",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-zero.obj",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-zero.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-zero",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-zero-object",
+      "/tmp/pa26-144-policy/final-private-binding/aligned-zero.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "aligned-zero",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/aligned-zero-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "converted-miss-catchall",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/converted-miss-catchall-direct",
+      "/tmp/pa26-144-policy/final-private-binding/converted-miss-catchall.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "converted-miss-catchall",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/converted-miss-catchall-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "converted-miss-catchall",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/converted-miss-catchall.obj",
+      "/tmp/pa26-144-policy/final-private-binding/converted-miss-catchall.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "converted-miss-catchall",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/converted-miss-catchall-object",
+      "/tmp/pa26-144-policy/final-private-binding/converted-miss-catchall.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "converted-miss-catchall",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/converted-miss-catchall-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "converted-rethrow-catchall",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/converted-rethrow-catchall-direct",
+      "/tmp/pa26-144-policy/final-private-binding/converted-rethrow-catchall.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "converted-rethrow-catchall",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/converted-rethrow-catchall-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "converted-rethrow-catchall",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/converted-rethrow-catchall.obj",
+      "/tmp/pa26-144-policy/final-private-binding/converted-rethrow-catchall.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "converted-rethrow-catchall",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/converted-rethrow-catchall-object",
+      "/tmp/pa26-144-policy/final-private-binding/converted-rethrow-catchall.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "converted-rethrow-catchall",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/converted-rethrow-catchall-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-mutation",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-mutation-direct",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-mutation.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-mutation",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-mutation-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-mutation",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-mutation.obj",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-mutation.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-mutation",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-mutation-object",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-mutation.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-mutation",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-mutation-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-conversion",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-conversion-direct",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-conversion.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-conversion",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-conversion-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-conversion",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-conversion.obj",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-conversion.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-conversion",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-conversion-object",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-conversion.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-conversion",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-conversion-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-base",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-base-direct",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-base.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-base",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-base-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-base",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-base.obj",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-base.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-base",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-base-object",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-base.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-reference-base",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-reference-base-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-exact",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-exact-direct",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-exact.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-exact",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-exact-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-exact",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-exact.obj",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-exact.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-exact",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-exact-object",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-exact.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-exact",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-exact-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-mutation",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-mutation-direct",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-mutation.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-mutation",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-mutation-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-mutation",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-mutation.obj",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-mutation.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-mutation",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-mutation-object",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-mutation.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-mutation",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-mutation-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-converted",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-converted-direct",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-converted.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-converted",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-converted-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-converted",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-converted.obj",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-converted.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-converted",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-converted-object",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-converted.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-const-reference-converted",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-const-reference-converted-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-converted-storage",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-converted-storage-direct",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-converted-storage.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-converted-storage",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-converted-storage-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-converted-storage",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-converted-storage.obj",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-converted-storage.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-converted-storage",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-converted-storage-object",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-converted-storage.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-converted-storage",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-converted-storage-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-null-const-reference",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-const-reference-direct",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-const-reference.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-null-const-reference",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-const-reference-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-null-const-reference",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-const-reference.obj",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-const-reference.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-null-const-reference",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-const-reference-object",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-const-reference.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-null-const-reference",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-const-reference-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-null-reference-rejected",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-reference-rejected-direct",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-reference-rejected.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-null-reference-rejected",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-reference-rejected-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-null-reference-rejected",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-reference-rejected.obj",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-reference-rejected.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-null-reference-rejected",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-reference-rejected-object",
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-reference-rejected.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "pointer-null-reference-rejected",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/pointer-null-reference-rejected-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-null-reference-rejected",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-rejected-direct",
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-rejected.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-null-reference-rejected",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-rejected-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-null-reference-rejected",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-rejected.obj",
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-rejected.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-null-reference-rejected",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-rejected-object",
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-rejected.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-null-reference-rejected",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/member-null-reference-rejected-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-reference-mutation",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-reference-mutation-direct",
+      "/tmp/pa26-144-policy/final-private-binding/member-reference-mutation.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-reference-mutation",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/member-reference-mutation-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-reference-mutation",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-reference-mutation.obj",
+      "/tmp/pa26-144-policy/final-private-binding/member-reference-mutation.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-reference-mutation",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-reference-mutation-object",
+      "/tmp/pa26-144-policy/final-private-binding/member-reference-mutation.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-reference-mutation",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/member-reference-mutation-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-qualification-rejected",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-qualification-rejected-direct",
+      "/tmp/pa26-144-policy/final-private-binding/member-qualification-rejected.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-qualification-rejected",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/member-qualification-rejected-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-qualification-rejected",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-qualification-rejected.obj",
+      "/tmp/pa26-144-policy/final-private-binding/member-qualification-rejected.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-qualification-rejected",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/member-qualification-rejected-object",
+      "/tmp/pa26-144-policy/final-private-binding/member-qualification-rejected.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "member-qualification-rejected",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/member-qualification-rejected-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-qualification",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification-direct",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-qualification",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-qualification",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification.obj",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-qualification",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification-object",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-qualification",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-qualification-reference",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification-reference-direct",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification-reference.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-qualification-reference",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification-reference-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-qualification-reference",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification-reference.obj",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification-reference.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-qualification-reference",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification-reference-object",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification-reference.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-qualification-reference",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-qualification-reference-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-unsafe-qualification",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-unsafe-qualification-direct",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-unsafe-qualification.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-unsafe-qualification",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-unsafe-qualification-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-unsafe-qualification",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-unsafe-qualification.obj",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-unsafe-qualification.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-unsafe-qualification",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-unsafe-qualification-object",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-unsafe-qualification.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-unsafe-qualification",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-unsafe-qualification-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-owner-rejected",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-owner-rejected-direct",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-owner-rejected.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-owner-rejected",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-owner-rejected-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-owner-rejected",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-owner-rejected.obj",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-owner-rejected.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-owner-rejected",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-owner-rejected-object",
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-owner-rejected.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "mixed-member-owner-rejected",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/mixed-member-owner-rejected-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "deep-pointer-base-rejected",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/deep-pointer-base-rejected-direct",
+      "/tmp/pa26-144-policy/final-private-binding/deep-pointer-base-rejected.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "deep-pointer-base-rejected",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/deep-pointer-base-rejected-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "deep-pointer-base-rejected",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/deep-pointer-base-rejected.obj",
+      "/tmp/pa26-144-policy/final-private-binding/deep-pointer-base-rejected.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "deep-pointer-base-rejected",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/deep-pointer-base-rejected-object",
+      "/tmp/pa26-144-policy/final-private-binding/deep-pointer-base-rejected.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "deep-pointer-base-rejected",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/deep-pointer-base-rejected-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "function-pointer-reference",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/function-pointer-reference-direct",
+      "/tmp/pa26-144-policy/final-private-binding/function-pointer-reference.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "function-pointer-reference",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/function-pointer-reference-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "function-pointer-reference",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/function-pointer-reference.obj",
+      "/tmp/pa26-144-policy/final-private-binding/function-pointer-reference.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "function-pointer-reference",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/function-pointer-reference-object",
+      "/tmp/pa26-144-policy/final-private-binding/function-pointer-reference.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "function-pointer-reference",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/function-pointer-reference-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "rethrow-adjusted-base",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/rethrow-adjusted-base-direct",
+      "/tmp/pa26-144-policy/final-private-binding/rethrow-adjusted-base.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "rethrow-adjusted-base",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/rethrow-adjusted-base-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "rethrow-adjusted-base",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/rethrow-adjusted-base.obj",
+      "/tmp/pa26-144-policy/final-private-binding/rethrow-adjusted-base.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "rethrow-adjusted-base",
+    "mode": "object-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/rethrow-adjusted-base-object",
+      "/tmp/pa26-144-policy/final-private-binding/rethrow-adjusted-base.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "rethrow-adjusted-base",
+    "mode": "object-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/rethrow-adjusted-base-object"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "incomplete-pointer",
+    "mode": "reject",
+    "status": 1,
+    "passed": true,
+    "stderr": "ERROR: sizeof unsupported or incomplete type\n"
+  },
+  {
+    "case": "incomplete-reference",
+    "mode": "reject",
+    "status": 1,
+    "passed": true,
+    "stderr": "ERROR: sizeof unsupported or incomplete type\n"
+  },
+  {
+    "case": "weakened-alignment",
+    "mode": "reject",
+    "status": 1,
+    "passed": true,
+    "stderr": "ERROR: weakened object alignment\n"
+  },
+  {
+    "case": "invalid-alignment",
+    "mode": "reject",
+    "status": 1,
+    "passed": true,
+    "stderr": "ERROR: alignment is not a power of two\n"
+  },
+  {
+    "case": "conflicting-alignment",
+    "mode": "reject",
+    "status": 1,
+    "passed": true,
+    "stderr": "ERROR: inconsistent object alignment\n"
+  },
+  {
+    "case": "aligned-function",
+    "mode": "reject",
+    "status": 1,
+    "passed": true,
+    "stderr": "ERROR: alignment on function declaration\n"
+  },
+  {
+    "case": "cross-tu",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/cross0.obj",
+      "/tmp/pa26-144-policy/final-private-binding/cross0.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "cross-tu",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/cross1.obj",
+      "/tmp/pa26-144-policy/final-private-binding/cross1.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "cross-tu",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/cross2.obj",
+      "/tmp/pa26-144-policy/final-private-binding/cross2.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "cross-tu",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/cross-direct",
+      "/tmp/pa26-144-policy/final-private-binding/cross0.cc",
+      "/tmp/pa26-144-policy/final-private-binding/cross1.cc",
+      "/tmp/pa26-144-policy/final-private-binding/cross2.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "cross-tu",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/cross-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "cross-tu",
+    "mode": "objects-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/cross-objects",
+      "/tmp/pa26-144-policy/final-private-binding/cross0.obj",
+      "/tmp/pa26-144-policy/final-private-binding/cross1.obj",
+      "/tmp/pa26-144-policy/final-private-binding/cross2.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "cross-tu",
+    "mode": "objects-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/cross-objects"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "cross-tu",
+    "mode": "mixed-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/cross-mixed",
+      "/tmp/pa26-144-policy/final-private-binding/cross0.obj",
+      "/tmp/pa26-144-policy/final-private-binding/cross1.cc",
+      "/tmp/pa26-144-policy/final-private-binding/cross2.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "cross-tu",
+    "mode": "mixed-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/cross-mixed"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "layout-cross-tu",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/layout0.obj",
+      "/tmp/pa26-144-policy/final-private-binding/layout0.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "layout-cross-tu",
+    "mode": "compile",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-c",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/layout1.obj",
+      "/tmp/pa26-144-policy/final-private-binding/layout1.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "layout-cross-tu",
+    "mode": "direct-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/layout-direct",
+      "/tmp/pa26-144-policy/final-private-binding/layout0.cc",
+      "/tmp/pa26-144-policy/final-private-binding/layout1.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "layout-cross-tu",
+    "mode": "direct-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/layout-direct"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "layout-cross-tu",
+    "mode": "objects-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/layout-objects",
+      "/tmp/pa26-144-policy/final-private-binding/layout0.obj",
+      "/tmp/pa26-144-policy/final-private-binding/layout1.obj"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "layout-cross-tu",
+    "mode": "objects-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/layout-objects"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "layout-cross-tu",
+    "mode": "mixed-link",
+    "args": [
+      "/tmp/pa26-144-policy/private-cppgm",
+      "-o",
+      "/tmp/pa26-144-policy/final-private-binding/layout-mixed",
+      "/tmp/pa26-144-policy/final-private-binding/layout0.obj",
+      "/tmp/pa26-144-policy/final-private-binding/layout1.cc"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  },
+  {
+    "case": "layout-cross-tu",
+    "mode": "mixed-run",
+    "args": [
+      "/tmp/pa26-144-policy/final-private-binding/layout-mixed"
+    ],
+    "status": 0,
+    "expected": 0,
+    "passed": true,
+    "stderr": ""
+  }
+]

@@ -1,4 +1,6 @@
-# PA26 audit144 performance checkpoint
+# PA26 audit144 performance: checkpoint and final acceptance
+
+## Preserved writer checkpoint
 
 Frozen A is entry `0af58619`, SHA-256
 `f057adc7ca5ed77791e42e388fc1eb1c9e2d07337c0cfb3637e11737571f6ce7`.
@@ -58,6 +60,83 @@ PA26 mandates no numerical compiler latency or RSS ceiling. The inherited 15%
 and blanket zero-growth targets remain diagnostic under spec section 9; earlier
 misses and all historical142/143 observations are preserved. Mandatory EH
 inspection bounds, correctness, comparison and coverage remain required.
-Self-hosting remains the PA34 surface, not a new PA26 performance gate. The
-unresolved output-name contract defect remains required work independently of
-these favorable memory measurements and passing course tests.
+Self-hosting remains the PA34 surface, not a new PA26 performance gate. At that checkpoint, the unresolved output-name contract defect remained required
+work independently of favorable memory measurements and passing course tests.
+The following final comparison covers its completed repair.
+
+
+## Final frozen comparison (`78410bfc`)
+
+Frozen A remains the original audit entry above. Frozen B is
+`55d08c175a29d771e96d63e00c9f166526db0d743e3ca3cdbb9ef48b610d547c`, retained at
+`/tmp/pa26-144-policy/accepted-cppgm`. `final_performance144.py` verifies the fixed
+source hashes against the checkpoint manifests before measuring. It records
+**448 observations**: five host-object workloads and three compiler-owned
+executable workloads, each with four A/A observations and six ABBA blocks for
+compilation and execution separately. Every executable returns its independently
+computed expected result before measurement and during each runtime sample.
+The input loops depend on argc and update live memory/results. No compiler build
+or correctness suite from this audit ran during these samples.
+
+[Raw final measurements](evidence144/final-performance.json) retain all samples,
+spread, calibration, phase/work counters, flags, binary/input/image hashes and
+host-tool identity. Compilation uses `-O0 --stats`; `-c` is added for the host
+object surface, and host final linking is excluded from that timing. Own-link
+compilation includes this compiler's linker. RSS comes from `/usr/bin/time`.
+The strings row retains the inherited **B/B** calibration rather than an A/B
+improvement claim. The original 280 writer/common observations and earlier
+142/143 measurements remain unchanged.
+
+| Surface / workload | Compile A/B median ms | Compiler peak A/B KiB | Runtime A/B median ms | Executable text A/B bytes |
+|---|---:|---:|---:|---:|
+| host_object/memory | 247.88 / 253.95 | 29084 / 29196 | 66.01 / 69.85 | 151633 / 151633 |
+| host_object/floating | 180.29 / 181.74 | 28580 / 28800 | 47.72 / 48.86 | 151474 / 151474 |
+| host_object/exceptions | 170.11 / 165.75 | 29404 / 29572 | 375.37 / 422.48 | 151778 / 151781 |
+| host_object/strings | 917.54 / 751.37 | 46168 / 46048 | 592.16 / 825.37 | 36009 / 36009 |
+| host_object/storage | 195.62 / 98.12 | 138188 / 39996 | 107.41 / 102.81 | 571 / 571 |
+| own_link/memory | 233.21 / 203.08 | 28724 / 29244 | 61.39 / 67.95 | 151425 / 151425 |
+| own_link/floating | 234.84 / 225.27 | 29088 / 28776 | 51.41 / 54.26 | 151266 / 151266 |
+| own_link/exceptions | 159.29 / 167.38 | 28760 / 29656 | 2329.48 / 273.08 | 156071 / 151640 |
+
+The large-object peak reduction persists: **138188 -> 39996 KiB (71.1%)**.
+Its paired compile median is 0.517 B/A, but the range is **0.062–8.238** with
+multi-second file-write outliers on both binaries; no precise latency speedup is
+claimed. Common compiler medians also sit within broad calibration/paired
+variation. The host-object EH runtime paired median is 1.161, range
+0.709–1.401; the identical-binary strings runtime baseline itself has median
+1.107, range 1.023–1.512. These observations do not establish a host-object
+runtime improvement or a repeatable slowdown attributable to the repair.
+The host-object EH text change is **+3 bytes**, required to retain exception
+state through the repaired outer-handler path; plain memory/floating/storage
+text is byte-identical. Final source-to-ELF inspection records 463 bytes versus
+460 at the writer-only checkpoint, with the same 71 LowIR/82 MIR instructions.
+
+The own-link EH workload has a clear runtime change: paired B/A median **0.115**,
+range **0.107–0.145**; medians are 2329.48 -> 273.08 ms. This is the switch from
+our private exception runtime to the host ABI/runtime, not an IR optimization.
+The result is correct on both fixed inputs and exceeds the observed A/A noise.
+The cost is disclosed: compiler peak RSS 28760 -> 29656 KiB; generated-process
+peak RSS 256 -> 4060 KiB; executable file size 160208 -> 405376 bytes. Text
+falls 156071 -> 151640 bytes, but these figures **exclude shared-library text**
+and must not be described as a whole-program footprint reduction.
+
+Own-link memory/floating text is byte-identical. Their file sizes grow by 96160
+bytes on the 2400-specialization input because the shared host-object contract
+retains final-layout CFI data (about 40 bytes per function); static executable
+section collection is not added as an O0 optimization in this PA. Dynamic EH
+output additionally carries symbol, relocation and unwind-index tables. This
+is bounded linear ABI metadata, disclosed separately from `.text`; it does not
+justify a zero-file-growth claim. Runtime ratios on the plain workloads remain
+within the noisy sampling regime. No code cloning, inlining, speculative fact,
+new search pass or larger optimization work budget was introduced.
+
+The final policy is accepted for PA26: mandated native/EH inspection limits,
+all correctness checks and unchanged coverage pass. The memory ownership
+repair has a repeatable affected-workload benefit without text/runtime changes.
+The uniform ELF repair carries necessary ABI facts and bounded metadata costs;
+it is required correctness work, not an optional transform kept for a presumed
+speedup. The inherited 15% latency/RSS and blanket zero-growth targets remain
+diagnostics under spec section 9, with historical observations preserved.
+Neither hosted completeness nor PA34 self-hosting is an additional PA26 exit
+gate. [Final ledger](evidence144/final-ledger.json) records exact text hashes,
+current counters, compatibility checks and failed-attempt provenance.

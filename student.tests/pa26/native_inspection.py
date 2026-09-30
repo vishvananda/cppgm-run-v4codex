@@ -15,6 +15,7 @@ source=root/'student.tests/pa26/trace.cpp'
 lowir=run([out/'dump',source]); mir=run([out/'dump',source,'--mir'])
 assert b'@calculate' in lowir and b'eh_catch ' in lowir
 assert b'host_exception [rbp' in mir and b'host_eh landing ^b' in mir
+assert b'host_raw_selector [rbp' in mir and b'host_outer ^b' in mir
 (out/'trace.lowir').write_bytes(lowir); (out/'trace.mir').write_bytes(mir)
 obj=out/'trace.o'; exe=out/'trace'
 run(['dev/cppgm++','-c','-o',obj,source]); run(['g++',obj,'-o',exe]); run([exe])
@@ -30,6 +31,7 @@ result={'status':'pass','source':str(source),'source_sha256':hashlib.sha256(sour
     'relocations_sha256':hashlib.sha256(relocs).hexdigest(),
     'verified_facts':['demanded calculate<11> specialization','typed EH clauses in production LowIR',
         'MIR host frame slots and landing block identity','zPLR CIE','epilogue CFI restore state',
+        'MIR saved raw selector and outer region identities',
         'PLT32 call relocations','host personality reference','host resume reference','program exits zero']}
 (out/'inspection.json').write_text(json.dumps(result,indent=2)+'\n')
 print('Template -> production LowIR -> host MIR -> ELF trace passed')
