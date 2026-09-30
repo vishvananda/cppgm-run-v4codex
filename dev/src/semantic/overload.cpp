@@ -27,6 +27,12 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
         (owner == active_template_scope || scopes[owner].kind == ScopeKind::Namespace ||
          (source && scopes[owner].kind == ScopeKind::Class)))
         return declare_template_function(owner,name,source,type,constructor,conversion != 0);
+    // A block-scope function declaration has namespace linkage identity but
+    // introduces its name only into the declaring block ([basic.link]). The
+    // namespace signature index can later merge its namespace redeclaration.
+    auto binding_scope = owner;
+    while (scopes[owner].kind != ScopeKind::Namespace && scopes[owner].kind != ScopeKind::Class &&
+        scopes[owner].kind != ScopeKind::Template) owner = scopes[owner].parent;
     Type t = types[type];
     std::vector<TypeId> params(types.parameters.begin() + t.offset, types.parameters.begin() + t.offset + t.count);
     TypeId shape = types.function(types.fundamental(FT_VOID), params, t.variadic, t.cv, t.ref);
@@ -41,7 +47,7 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
     EntityId e = family ? function_signatures.get(key(family, shape)) : 0;
     if (e) {
         if (entities[e].type != type) throw std::runtime_error("conflicting function return type");
-        if (!constructor && !conversion) bind(owner, name, e);
+        if (!constructor && !conversion) bind(binding_scope, name, e);
         return e;
     }
     e = make_entity(EntityKind::Function, owner, name, source);
@@ -58,7 +64,7 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
     if (!family) { family = e; (conversion ? conversion_families : function_families).put(key(owner, conversion ? conversion : name), family); }
     if (ref_shape) function_ref_modes.put(key(family, ref_shape), ref_mode);
     function_signatures.put(key(family, shape), e);
-    if (!constructor && !conversion) bind(owner, name, e);
+    if (!constructor && !conversion) bind(binding_scope, name, e);
     return e;
 }
 bool Analyzer::better(const Conversion* a, const Conversion* b, std::size_t count)

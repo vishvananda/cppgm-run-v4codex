@@ -3,8 +3,9 @@
 Stage base commit: 369c57f19fa13c0394d4fb0345cf2bb79708fc67
 Last reviewed commit: 369c57f19fa13c0394d4fb0345cf2bb79708fc67
 
-Target: **PA26 full-stage**. Phase: **implementation142, awaiting independent
-review**. Code boundary: `041cf554f499c4574b72294d23af897459e0147a`.
+Target: **PA26 full-stage**. Phase: **implementation143, in progress**.
+Turn entry: `9063d5260c65bf6b1984ebae6028fef44251910a`, **29/30**.
+Previous code boundary: `041cf554f499c4574b72294d23af897459e0147a`.
 Entry **0/30** -> **29/30**; PA1–25 **4253/4253**; through PA26 **4282/4283**.
 No contract fixture, reference, harness, comparison rule or coverage was changed.
 
@@ -25,11 +26,25 @@ Private emission allocates no host landing-table storage.
 
 ## Unfinished implementation and concrete boundary
 
-- Required `300-shared-conditional-cleanup-resume` still fails: preprocessing
-  cannot find `<string>`. The checkout has no hosted C++ header/library path.
-  This fixture remains required despite the README's general hosted-library
-  exclusion. Supplying a fixture-shaped string shim would bypass the missing
-  general header/library integration; that is a separate implementation group.
+Current group: hosted header discovery and demanded string-expression semantics.
+Driver-owned build configuration supplies target header roots/predefines to the
+streaming preprocessor; ordinary parser/semantic facts drive template demand,
+temporary construction/destruction and existing typed host EH lowering. No
+library spelling recognition or fixture-specific library replacement. Header
+processing must remain proportional to source/tokens and demanded facts; test
+the unchanged failing fixture plus reduced semantic/cleanup controls. Freeze
+entry/final compilers for latency/RSS, runtime/text evidence. Follow related
+failures while this ownership chain supports them. Driver format migration is
+a separate unfinished group; independent audit remains pending below.
+
+- Required `300-shared-conditional-cleanup-resume` still fails inside the real
+  host `<type_traits>` included by `<string>`. Header discovery now works.
+  GNU type-trait syntax and dependent semantic queries are the next owner.
+  Nine prerequisite controls pass; PA1–25 4253/4253 and file audit pass after
+  configured include roots/macros, namespace/parameter attributes, asm labels,
+  typed SysV va_list and block-function linkage fixes. PA26 remains 29/30:
+  this increment is progress toward implementation, not an accepted handoff.
+  Final performance evidence and all final required checks remain outstanding.
 - Driver migration remains unfinished: `.obj` preserves PA25 private objects;
   other output names select host ELF. `--object-format=elf|private` overrides
   this choice. Host objects use PA26's external host linker. Uniform host output

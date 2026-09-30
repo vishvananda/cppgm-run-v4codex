@@ -443,6 +443,19 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     entities[e].mutable_field |= spec_has(specs, KW_MUTABLE);
     if (calls && function) declare_operator(e, name);
     declaration_attributes(e,specs,source);
+    for (auto label = ast[d].first; label; label = ast[label].next) {
+        if (ast[label].kind != Kind::Specifier || ast[label].op != KW_ASM) continue;
+        const auto& literal = ast.literals[ast[ast[label].first].literal];
+        if (literal.kind != LiteralKind::string || literal.type != FT_CHAR || literal.bytes < 2)
+            throw std::runtime_error("asm label requires a nonempty narrow string");
+        auto data = ast.literal_bytes.data()+literal.offset;
+        for (unsigned i = 0; i+1 < literal.bytes; ++i)
+            if (!data[i]) throw std::runtime_error("embedded null in asm label");
+        auto object_name = ids.intern(TextView(data,literal.bytes-1));
+        auto prior = assembler_names.get(e);
+        if (prior && prior != object_name) throw std::runtime_error("conflicting asm labels");
+        assembler_names.put(e,object_name);
+    }
     bool specialized_member_declaration = source == explicit_specialization_source && !init && scopes[owner].kind == ScopeKind::Class;
     if (calls && !function && entities[e].definition && entities[e].is_static &&
         scopes[owner].kind == ScopeKind::Class && scopes[s].kind != ScopeKind::Class &&

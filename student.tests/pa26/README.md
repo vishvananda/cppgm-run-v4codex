@@ -35,3 +35,14 @@ The candidate and accepted frozen binaries remain under `/tmp/pa26-142`; their
 hashes, generated input hashes, every A/A and ABBA observation and final validation
 are retained under `evidence142/`. The inspection helper is named
 `native_inspection.py` to avoid shadowing Python's standard `inspect` module.
+
+Implementation143 header controls: `python3 student.tests/pa26/header_controls.py`.
+These exercise configured host include roots, user search/macro precedence,
+namespace and parameter attributes, explicit function/object asm labels,
+block-scope function linkage/visibility, and the SysV AMD64 `va_list` shape.
+The last follows the [x86-64 psABI, variable arguments](https://gitlab.com/x86-psABIs/x86-64-ABI/-/blob/master/x86-64-ABI/low-level-sys-info.tex).
+Compiler build configuration probes only host target metadata/header roots;
+compiling a user input never invokes host preprocessing or code generation.
+Unsupported host floating extensions and language-feature macros are not
+advertised. GNU compatibility selects conservative header paths. No header or
+library body is replaced. Full `<string>` remains in progress.

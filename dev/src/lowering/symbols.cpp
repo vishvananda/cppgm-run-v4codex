@@ -177,6 +177,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     if (entry) {
         metadata.role = SR_ENTRY; metadata.keep_alias = true;
     } else metadata.object = p.intern(e.c_linkage && !internal && e.kind != semantic::EntityKind::Function ? name : abi_mangle::mangle(abi, target));
+    if (auto explicit_name = sem.assembler_names.get(id)) metadata.object = p.intern(spelling(explicit_name));
     // Several source TUs are emitted as one LowIR program/object. Its local
     // object labels need the same isolation as their internal SymbolIds.
     if (internal && linkage.merge && metadata.object)

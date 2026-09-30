@@ -14,6 +14,30 @@ Analyzer::Analyzer(syntax::Ast& tree, IdentifierTable& identifiers, bool with_ca
     templates.resize(1); argument_packs.resize(1); specializations.resize(1);
     conversions.push_back(Conversion());
     global = make_scope(ScopeKind::Namespace, 0);
+    // SysV AMD64 va_list is an array of one record, not a pointer alias. Keep
+    // the ABI shape in ordinary typed class/field facts for layout and decay.
+    auto tag_name = ids.intern(TextView("__va_list_tag",13));
+    auto tag = make_entity(EntityKind::Type,global,tag_name,0);
+    entities[tag].key = KW_STRUCT; entities[tag].type = types.named(tag);
+    entities[tag].scope = make_scope(ScopeKind::Class,global,tag_name,tag,false);
+    entities[tag].class_info = class_facts.size(); class_facts.push_back(ClassFacts());
+    auto field_scope = entities[tag].scope;
+    auto word = types.fundamental(FT_UNSIGNED_INT);
+    auto ptr = types.compound(TypeKind::Pointer,types.fundamental(FT_VOID));
+    const char* field_names[] = {"gp_offset","fp_offset","overflow_arg_area","reg_save_area"};
+    for (unsigned i = 0; i < 4; ++i) {
+        auto field_name = ids.intern(TextView(field_names[i],std::char_traits<char>::length(field_names[i])));
+        auto field = make_entity(EntityKind::Variable,field_scope,field_name,0);
+        entities[field].type = i < 2 ? word : ptr;
+        bind(field_scope,field_name,field);
+        record(field_scope,field,0,entities[field].type,EntityKind::Variable);
+    }
+    entities[tag].complete = true;
+    class_facts[entities[tag].class_info].definition_state = FactState::Success;
+    auto va_name = ids.intern(TextView("__builtin_va_list",17));
+    auto va = make_entity(EntityKind::Alias,global,va_name,0);
+    entities[va].type = types.compound(TypeKind::Array,entities[tag].type,1);
+    bind(global,va_name,va);
     if (calls) {
         IdentifierId name = ids.intern(TextView("nullptr_t", 9));
         EntityId e = make_entity(EntityKind::Alias, global, name, 0);

@@ -6,6 +6,7 @@ namespace cppgm { namespace syntax {
 Parser::Parser(Cursor& cursor, Ast& tree, IdentifierTable& identifiers)
     : in(cursor), ast(tree), ids(identifiers), names(tree.telemetry) {
     names.bind(0, ids.intern(TextView("nullptr_t", 9)), Category::Type);
+    names.bind(0, ids.intern(TextView("__builtin_va_list", 17)), Category::Type);
 }
 
 NodeId Parser::make(Kind kind)

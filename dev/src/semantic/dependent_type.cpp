@@ -206,7 +206,10 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typena
         auto instance = class_template_name(p,e,s);
         if (template_type_probe && e && !instance) return 0;
         e = instance;
-        if (!e) throw std::runtime_error("type name is not visible");
+        if (!e) {
+            auto text = ids.spelling(ast[p].text);
+            throw std::runtime_error("type name '" + std::string(text.data,text.size) + "' is not visible");
+        }
         check_access(e,s,owner);
         bool type = entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias;
         prefix = type ? source_type(e) : 0;

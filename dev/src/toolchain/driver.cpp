@@ -1,4 +1,5 @@
 #include "toolchain/object.h"
+#include "toolchain/host_config.h"
 #include "lowering/procedural.h"
 #include <chrono>
 #include <iostream>
@@ -54,6 +55,7 @@ Options options(const std::vector<std::string>& args)
         if (o.compile) { auto s = o.inputs[0]; auto slash = s.rfind('/'); s = s.substr(slash == std::string::npos ? 0 : slash+1); o.output = s.substr(0,s.rfind('.')) + ".o"; }
     }
     o.host = o.compile && (o.format == "elf" || (o.format.empty() && (o.output.size() < 4 || o.output.substr(o.output.size()-4) != ".obj")));
+    if (o.host) host_environment(o.includes,o.macros);
     return o;
 }
 Object source(const std::string& path, const Options& o, native::Statistics& stats) {

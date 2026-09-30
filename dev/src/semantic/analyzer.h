@@ -24,6 +24,7 @@ public:
     std::vector<Scope> scopes;
     std::vector<Declaration> declarations;
     FactStore facts;
+    Index assembler_names; // EntityId -> interned explicit object name.
     LiteralCallKind literal_call_kind(NodeId n) const { auto k = literal_call_kinds.get(n); return k ? LiteralCallKind(k-1) : LiteralCallKind::String; }
     Expression expression_fact(NodeId n) const { return expressions[n]; }
     Index throw_index, try_scopes, constructor_handler_scopes, handler_initializations, handler_bindings, jump_exception_targets;

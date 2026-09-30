@@ -54,7 +54,7 @@ NodeId Parser::specifiers(bool type_only, NodeId result)
         } else break;
     }
     if (alignment) ast.alignment_owners.put(result, alignment);
-    if (!have_type) throw std::runtime_error("expected type specifier at byte " + std::to_string(ast.locations[in.peek().location].begin));
+    if (!have_type) throw std::runtime_error("expected type specifier in " + in.position());
     return result;
 }
 
@@ -71,6 +71,8 @@ bool Parser::parameter_clause_ahead(std::size_t ahead)
     if (!in.is("(",ahead)) return false;
     std::size_t end = in.matching(ahead);
     for (std::size_t i = ahead+1; i < end; ++i) {
+        while ((in.is("[",i) && in.is("[",i+1)) || in.is("__attribute__",i) || in.is("__attribute",i))
+            i = in.matching(in.is("[",i) ? i : i+1)+1;
         if (in.is("...", i)) return true;
         if (!type_start(i)) return false;
         i = probe_type(i);
@@ -155,6 +157,7 @@ NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts, 
             }
         } else break;
     }
+    if (in.is("asm") || in.is("__asm") || in.is("__asm__")) function_suffix(result);
     scope = saved_scope;
     // The operator nearest the name decides function versus object. Nested
     // facts propagate once; prefix pointers apply after this level's suffixes.
@@ -229,6 +232,13 @@ void Parser::function_suffix(NodeId owner)
         if (in.is("const") || in.is("volatile")) ast.append(owner, leaf(Kind::CvQualifier));
         else if (in.is("&") || in.is("&&")) ast.append(owner, leaf(Kind::FunctionQualifier));
         else if (in.is("override") || in.is("final")) ast.append(owner, leaf(Kind::VirtSpecifier));
+        else if (in.is("asm") || in.is("__asm") || in.is("__asm__")) {
+            auto label = leaf(Kind::Specifier); ast[label].op = KW_ASM;
+            in.require("(");
+            if (in.peek().kind != PostTokenKind::literal) throw std::runtime_error("asm label requires a string");
+            ast.append(label,leaf(Kind::Literal)); in.require(")");
+            ast.append(owner,label);
+        }
         else if (in.is("throw")) {
             NodeId node = leaf(Kind::FunctionQualifier);
             in.require("(");

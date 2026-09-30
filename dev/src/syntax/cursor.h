@@ -14,6 +14,7 @@ public:
     bool is(const char* spelling, std::size_t ahead = 0);
     bool eat(const char* spelling);
     Token require(const char* spelling);
+    std::string position();
     void close_angle();
     std::size_t matching(std::size_t ahead);
     std::size_t angle_end(std::size_t ahead);

@@ -180,4 +180,5 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/runtime_exception
 FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/runtime_eh_match toolchain/runtime_failure
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/host_elf toolchain/host_unwind
+FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/host_config
 FRONTEND_OBJ_BASENAMES_lowir2native += support/id_index

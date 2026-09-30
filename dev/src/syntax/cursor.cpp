@@ -17,7 +17,11 @@ void Cursor::fill()
         head_ = 0;
     }
     PostToken post = input_.next();
-    if (post.kind == PostTokenKind::invalid) throw std::runtime_error("invalid phase-7 token");
+    if (post.kind == PostTokenKind::invalid) {
+        auto file = ids_.spelling(post.source.presumed_file);
+        throw std::runtime_error("invalid phase-7 token '" + std::string(post.source.spelling.data,post.source.spelling.size) +
+            "' in " + std::string(file.data,file.size) + ":" + std::to_string(post.source.line));
+    }
     if (post.source.end > std::numeric_limits<std::uint32_t>::max())
         throw std::runtime_error("source exceeds compact location capacity");
     Token token;
@@ -74,10 +78,20 @@ Token Cursor::require(const char* spelling)
 {
     if (!is(spelling)) {
         TextView found = ids_.spelling(peek().text);
+        const auto& loc = ast_.locations[peek().location];
+        TextView file = ids_.spelling(loc.presumed_file);
         throw std::runtime_error(std::string("expected '") + spelling + "', found '" +
-                                 std::string(found.data, found.size) + "' at byte " + std::to_string(ast_.locations[peek().location].begin));
+                                 std::string(found.data, found.size) + "' in " + std::string(file.data,file.size) + ":" + std::to_string(loc.line));
     }
     return take();
+}
+
+std::string Cursor::position()
+{
+    const auto& loc = ast_.locations[peek().location];
+    auto file = ids_.spelling(loc.presumed_file), word = ids_.spelling(peek().text);
+    return std::string(file.data,file.size) + ":" + std::to_string(loc.line) +
+        " near '" + std::string(word.data,word.size) + "'";
 }
 
 void Cursor::index_delimiter(Token& token)

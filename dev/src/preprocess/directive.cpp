@@ -131,7 +131,8 @@ bool Preprocessor::condition(const std::vector<ExpansionToken>& tokens)
         evaluator.push(token.token);
     }
     PPExpressionResult result = evaluator.finish();
-    if (result.empty || !result.valid) throw std::runtime_error("invalid controlling expression");
+    if (result.empty || !result.valid) throw std::runtime_error("invalid controlling expression in " +
+        spelling(files_.back()->filename) + ":" + std::to_string(next_line_));
     return result.value.bits != 0;
 }
 

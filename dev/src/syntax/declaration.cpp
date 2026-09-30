@@ -121,6 +121,7 @@ NodeId Parser::namespace_declaration()
     Token token;
     if (identifier()) token = in.take();
     NodeId result = ast.make(Kind::Namespace, token);
+    ast[result].flags |= attributes();
     if (in.eat("=")) {
         ast[result].kind = Kind::NamespaceAlias;
         NodeId n = name();
