@@ -1,0 +1,210 @@
+{
+  "cases": [
+    {
+      "name": "secondary-override",
+      "lowir_sha256": "c60be91f39e365150c32c3389b7900a83e4263c92b9416f086931a9d3bfbf0aa",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "secondary-inherited",
+      "lowir_sha256": "45fad2b663c54b1ab16a8b0acfa98c1dc08bbfe5d7eeb6d03bd8d1b645ef101d",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "deep-overrides",
+      "lowir_sha256": "b377a43c2afeae16ac6b836408405bb99d7ae236f244746db5123e3ca46e2fe2",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "later-primary",
+      "lowir_sha256": "9364c621a4a39ea3efebd99b5a30b290ce339dd1e97d1e3e2f17e00b3377339c",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "primary-ancestor-slots",
+      "lowir_sha256": "73d40f8b06da519d326a391853b5ccf5f23afc60193cd9aee9310c276ace9d57",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "unrelated-roots",
+      "lowir_sha256": "a3f8a83bec9d18e75db6acf99104185452893e1e48a1ea4910e0e677f35c3e7c",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "repeated-roots",
+      "lowir_sha256": "d6232380f66ffdd13fed713d0d09ddf9e2141df095484a3b3c92ab5e5b1ddbd9",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "all-roots-override",
+      "lowir_sha256": "42200fa8857449a82cbca2655266a92042440533df10a7996b7d06e5743a4834",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "triple-view",
+      "lowir_sha256": "95b0932444841b5c3bf54722a101d16f4a38cfa23382f57773d0a7ad6e0e8cce",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "forward-arguments",
+      "lowir_sha256": "f263fc51250f7af71bd837601e2d0676310d77a9f45e88beac468832b8177bc7",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "value-return",
+      "lowir_sha256": "5d07fd350e8e34b029f2725f68acbb789256cdea58bf0cdd8a21bcba59c488e2",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "indirect-return",
+      "lowir_sha256": "53a0539d345061b9ac72081d3b825c4e9de5dc8febeb327a76f50f07adca0620",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "template-views",
+      "lowir_sha256": "98cec3038d1be11cc13c6d5d41ebea95a8258162addeb55d85dbdc6f42dacf25",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "static-downcast",
+      "lowir_sha256": "2a08f70ae0fc47b677d312b6f089f68410005be7fefa48a94ee13baecfbb9ec2",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "global-views",
+      "lowir_sha256": "825130ebc13d82d909aaa94d91634aba10a1cd7dc364026c9df212d28958f424",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "crosscast-null-and-miss",
+      "lowir_sha256": "52028096601390286575fd54b89109493b3f16acd7d0523db3c2ea4136719dfe",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "typeid-secondary",
+      "lowir_sha256": "716dadda468b0ddbb5a14469660cb9c2fb059339591fcc6c8bb929a78dff4792",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "rtti-top",
+      "lowir_sha256": "b95c6b73b4712c48c0ded28c3d222d5c6b1fbed2de6c2c5e28f83834ae8ef33e",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "secondary-covariance",
+      "lowir_sha256": "d286d91d3457942dafc9d4f15b8454e3820ac726e453dc063820e575e26e7174",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "secondary-covariance-null",
+      "lowir_sha256": "ecd4bc8312731deb1add241c82095d32673508b427cee7a9d67b2c2af179c245",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "primary-covariance",
+      "lowir_sha256": "1b439f78f627420da9c9e63a9dee69bd66ba0897b92a348f71353a3adecd0a8b",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: undefined native symbol: pure_virtual referenced by _ZTV1A\n",
+      "passed": false
+    },
+    {
+      "name": "covariance-reference",
+      "lowir_sha256": "ff30b300c817dfb9ac4749d7447c671f0f726f93aa1fd8dac934e9e272d390bf",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "later-final-overrider",
+      "lowir_sha256": "9ca6f4ac8033f0150ed5902005d0c4d9a3ff2e1ae96f88e56ae70fb671cc5ef7",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "crosscast-private-base",
+      "lowir_sha256": "2169c73094b3fe0bfde1e39c9545b79a900ed75b60e342785186be00c04abbfe",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "repeated-source-downcast",
+      "lowir_sha256": "1ee822e1022d3a6be0d40a73ae87e028be28bb84f1ac142b9799a0a657510837",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "virtual-member-pointer",
+      "lowir_sha256": "373384853a36a5bfb3bf8071aab947ffd086ba8b334434114704576282539ed2",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: vtable_view\n",
+      "passed": false
+    },
+    {
+      "name": "late-complete-rtti",
+      "lowir_sha256": "bde2cdb9d205113e7384a84b4596ad04b2a395fc90855b20b38789fd1f4aecf9",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "exception-rtti",
+      "lowir_sha256": "b1ac1d2af580d3de893a746502072e2d825dcdaca5bdb4af35691c92bf53f659",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: __ehobj_1D\n",
+      "passed": false
+    },
+    {
+      "name": "covariance-layout-demand",
+      "lowir_sha256": "1629f86d958898de0f9ef9bcdd4753b1c50b88cae4419b4c59a7e9173377a41d",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: undefined native symbol: pure_virtual referenced by _ZTV1A\n",
+      "passed": false
+    }
+  ]
+}

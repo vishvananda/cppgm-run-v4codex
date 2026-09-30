@@ -1,0 +1,56 @@
+{
+  "bundle_source": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "cases": [
+    {
+      "name": "crosscast-null-and-miss",
+      "source": "struct A{virtual int a(){return 1;}};struct B{int value;virtual int b(){return value;}};struct D:A,B{};B* cross(A*a){return dynamic_cast<B*>(a);}int main(){D d;A a;return cross(&d)!=static_cast<B*>(&d)||cross(&a)!=0||cross(0)!=0;}",
+      "reference_compile_exit": 0,
+      "reference_diagnostic": "",
+      "reference_ir_sha256": "7b7174b79e9c36785ff949b12ec60ce94caf0a7d4cd60494f8f0d37c48e81838",
+      "raw_backend_exit": 1,
+      "raw_backend_diagnostic": "ERROR: duplicate native symbol: D____view__B__8__vtable\n",
+      "private_object_name_changes": 1,
+      "probe_ir_sha256": "ede7f6aaaf67d8c9201207e59cf6a1f8dbcdd1df76c8129d35fbcff2796b3356",
+      "probe_backend_exit": 0,
+      "probe_backend_diagnostic": "",
+      "probe_runtime_exit": 1,
+      "hosted_backend_exit": 0,
+      "hosted_link_exit": 0,
+      "hosted_runtime_exit": 0
+    },
+    {
+      "name": "crosscast-private-base",
+      "source": "struct A{virtual int f(){return 1;}};struct B:A{};struct C:private A{};struct D:B,C{};C* cross(A*a){return dynamic_cast<C*>(a);}int main(){D d;B&b=d;return cross(&b)!=static_cast<C*>(&d);}",
+      "reference_compile_exit": 0,
+      "reference_diagnostic": "",
+      "reference_ir_sha256": "d5565ab3ee3801279d3fa8021610e40456f1e7f5817977d911d890cfef7fee80",
+      "raw_backend_exit": 1,
+      "raw_backend_diagnostic": "ERROR: duplicate native symbol: D____view__C__8__vtable\n",
+      "private_object_name_changes": 2,
+      "probe_ir_sha256": "cd1712098e2a98443ed0efe3519eeaa7f97ff06451699d93c01187ce37eb1711",
+      "probe_backend_exit": 0,
+      "probe_backend_diagnostic": "",
+      "probe_runtime_exit": 1,
+      "hosted_backend_exit": 0,
+      "hosted_link_exit": 0,
+      "hosted_runtime_exit": 0
+    },
+    {
+      "name": "exception-rtti",
+      "source": "struct A{int a;};struct B{int b;};struct D:A,B{};int main(){try{D d;d.a=3;d.b=7;throw d;}catch(B&b){return b.b!=7;}}",
+      "reference_compile_exit": 0,
+      "reference_diagnostic": "",
+      "reference_ir_sha256": "c7b407509a51a8bd6a9763af94bfd9c641bffba8c24f9ccbbfdf640e78d984c7",
+      "raw_backend_exit": 1,
+      "raw_backend_diagnostic": "ERROR: duplicate native symbol: __ehobj_struct_D\n",
+      "private_object_name_changes": 1,
+      "probe_ir_sha256": "bbac61079c04de4e0596fc0c3c19a4068d0732d4776216b5b716fb1333f44469",
+      "probe_backend_exit": 0,
+      "probe_backend_diagnostic": "",
+      "probe_runtime_exit": 1,
+      "hosted_backend_exit": 0,
+      "hosted_link_exit": 0,
+      "hosted_runtime_exit": 0
+    }
+  ]
+}

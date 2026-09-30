@@ -1,0 +1,235 @@
+{
+  "cases": [
+    {
+      "name": "secondary-override",
+      "lowir_sha256": "ac2a1de40669de7a67e4032c7dafa480c539e85b108ddb4d7acebf8ab80bb9c4",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "secondary-inherited",
+      "lowir_sha256": "f6c8a370af0466d5ebac4ad6fba8eb40f5ef7edf0a25902b4c1b0f209df9d8dd",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "deep-overrides",
+      "lowir_sha256": "111ca58e4c1782fbd545c9de2782d989b78dbfc49843bf363b8e62cfa1e9259e",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "later-primary",
+      "lowir_sha256": "9364c621a4a39ea3efebd99b5a30b290ce339dd1e97d1e3e2f17e00b3377339c",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "primary-ancestor-slots",
+      "lowir_sha256": "73d40f8b06da519d326a391853b5ccf5f23afc60193cd9aee9310c276ace9d57",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "unrelated-roots",
+      "lowir_sha256": "94d3d040e1614c2ec2555a18049650bf26240272763042d165af28034a705562",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "repeated-roots",
+      "lowir_sha256": "4e53c37d31a0d629bfd3b7918b3969f6cbf8f245b19d1edea56f052088646471",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "all-roots-override",
+      "lowir_sha256": "116424eb9a474ee8dec8638c081c5bbf96e793e74433a7c3117e47ed791887b2",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "triple-view",
+      "lowir_sha256": "60d8776a010ae7894cc44fd340f2e02802800f023d1a378fc40098ebbfbc7cf7",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "forward-arguments",
+      "lowir_sha256": "4d9635013b06e7cc8fabb1811fa1b01ee0afa14830398a9aa8052b64bf042fae",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "value-return",
+      "lowir_sha256": "a123ebdc5b75624e674e3c8a285e02e662ce02cb939beee5eb040ef5925f4077",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "indirect-return",
+      "lowir_sha256": "eb5ce66f24c1bf8a54050fa5a626042da259cba41781ac7afefa55b76bc1be39",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "template-views",
+      "lowir_sha256": "575c827f19b963a368f558aff4af3577cda70df84c916cf21fd456c052bbc814",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "static-downcast",
+      "lowir_sha256": "420d45fdcbc112de44b1d5b10767fd7371654929407f8921a51eb6aff09f733e",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "global-views",
+      "lowir_sha256": "bfcee0e073237ab2ea0aeb8340aa1a8ca9258be716edcc387e4e859e6d86eb88",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "crosscast-null-and-miss",
+      "lowir_sha256": "0a130d0f80d1087e6bda66b184801519e77e4affefcff87adf03772a26bd4b89",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 1,
+      "passed": false
+    },
+    {
+      "name": "typeid-secondary",
+      "lowir_sha256": "2ae29c5a087384244e7769c11de41b6535417a8e16c6fb9d9e0ce1792d8b0789",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "rtti-top",
+      "lowir_sha256": "dc42f60b3343f5b9d3ffb0cca0b1e16b1730939f7ca4d0f57b2119eb9347036c",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "secondary-covariance",
+      "lowir_sha256": "19bfcf9aa6aacbe2337665595cb91926321cd48b354edc3efb0246e97817ce2d",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "secondary-covariance-null",
+      "lowir_sha256": "6a6ee6272fbbe97d8804aafc5831ed951e9ad30295543e8ebf99c0f031026097",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "primary-covariance",
+      "lowir_sha256": "a2d8639ee69ed88030e32f5941ad052de034fd0a2fa11f95b2c7313125514de8",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "covariance-reference",
+      "lowir_sha256": "59727aef9a72aa6c9469b3987b3425c08a37212e084bedbdb9ca9f4c80d71eec",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "later-final-overrider",
+      "lowir_sha256": "9523e6bfcdac4da05294d120e40e2b7716f187ea8c7ba2663d2bb9f3244fa62e",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "crosscast-private-base",
+      "lowir_sha256": "ba1e57028065772a1066e7e762e9c746df10e707369d1f8155be5b98910d0a8c",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 1,
+      "passed": false
+    },
+    {
+      "name": "repeated-source-downcast",
+      "lowir_sha256": "b614c6086deefc4f8b52c96232ab85affff06fb29799dc3ada538d4ee080e9f6",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "virtual-member-pointer",
+      "lowir_sha256": "e6fd267b64ec27920ffd0778ccfcd1199393f42fcfc0da5151c7c0e17290ef05",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 1,
+      "passed": false
+    },
+    {
+      "name": "late-complete-rtti",
+      "lowir_sha256": "bde2cdb9d205113e7384a84b4596ad04b2a395fc90855b20b38789fd1f4aecf9",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "exception-rtti",
+      "lowir_sha256": "b1ac1d2af580d3de893a746502072e2d825dcdaca5bdb4af35691c92bf53f659",
+      "backend_exit": 1,
+      "backend_diagnostic": "ERROR: duplicate native symbol: __ehobj_1D\n",
+      "passed": false
+    },
+    {
+      "name": "covariance-layout-demand",
+      "lowir_sha256": "712a7ae97bd4b38a831e3ed9c0564421a034ba27840c787b00c5695125d64260",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    }
+  ]
+}

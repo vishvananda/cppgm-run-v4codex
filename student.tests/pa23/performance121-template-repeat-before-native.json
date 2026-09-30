@@ -1,0 +1,243 @@
+{
+  "reason": "A/A spread and ABBA dispersion in sealed full run; no virtual or RTTI work on this input",
+  "prior": "student.tests/pa23/performance121-common.json",
+  "prior_sha256": "c77474b3a8c92e13571f6e45ab06f20b1ae78c5380ea40e2122587235615a484",
+  "binaries": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa23-121/entry-cppgm++",
+      "sha256": "f637045b13aad2a1dd7d4995e86d97eea558decb644780105486f1a25f0510bb",
+      "text_bytes": 2286342
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa23-121/sealed-cppgm++",
+      "sha256": "1209b2b46fce7531e30854307ba4108a4fb78a88bd4609c6663d09b40f47ba69",
+      "text_bytes": 2307718
+    }
+  ],
+  "cpu": 0,
+  "source_sha256": "38e6d5592c85e82ac384592778d24ace971b0d2ee2a23ff52f62a3d688ce73f5",
+  "warmups": [
+    {
+      "lane": 0,
+      "wall_s": 1.050073024,
+      "peak_rss_kib": 106544
+    },
+    {
+      "lane": 1,
+      "wall_s": 1.013207846,
+      "peak_rss_kib": 106648
+    }
+  ],
+  "observations": [
+    {
+      "lane": 0,
+      "wall_s": 0.987422394,
+      "peak_rss_kib": 106536
+    },
+    {
+      "lane": 0,
+      "wall_s": 1.119621181,
+      "peak_rss_kib": 106508
+    },
+    {
+      "lane": 0,
+      "wall_s": 1.038718444,
+      "peak_rss_kib": 106708
+    },
+    {
+      "lane": 0,
+      "wall_s": 0.966579782,
+      "peak_rss_kib": 106588
+    },
+    {
+      "lane": 0,
+      "wall_s": 1.024418665,
+      "peak_rss_kib": 106624
+    },
+    {
+      "lane": 1,
+      "wall_s": 1.008169057,
+      "peak_rss_kib": 106608
+    },
+    {
+      "lane": 1,
+      "wall_s": 1.067238162,
+      "peak_rss_kib": 106636
+    },
+    {
+      "lane": 0,
+      "wall_s": 0.994985271,
+      "peak_rss_kib": 106564
+    },
+    {
+      "lane": 0,
+      "wall_s": 1.176835463,
+      "peak_rss_kib": 106612
+    },
+    {
+      "lane": 1,
+      "wall_s": 1.086436773,
+      "peak_rss_kib": 106644
+    },
+    {
+      "lane": 1,
+      "wall_s": 0.962919816,
+      "peak_rss_kib": 106604
+    },
+    {
+      "lane": 0,
+      "wall_s": 1.11761553,
+      "peak_rss_kib": 106800
+    },
+    {
+      "lane": 0,
+      "wall_s": 1.091728359,
+      "peak_rss_kib": 106564
+    },
+    {
+      "lane": 1,
+      "wall_s": 0.997159895,
+      "peak_rss_kib": 106780
+    },
+    {
+      "lane": 1,
+      "wall_s": 0.906785946,
+      "peak_rss_kib": 106688
+    },
+    {
+      "lane": 0,
+      "wall_s": 0.933807994,
+      "peak_rss_kib": 106780
+    },
+    {
+      "lane": 0,
+      "wall_s": 1.042725503,
+      "peak_rss_kib": 106808
+    },
+    {
+      "lane": 1,
+      "wall_s": 1.013966161,
+      "peak_rss_kib": 106580
+    },
+    {
+      "lane": 1,
+      "wall_s": 0.984971956,
+      "peak_rss_kib": 106636
+    },
+    {
+      "lane": 0,
+      "wall_s": 1.030836732,
+      "peak_rss_kib": 106776
+    },
+    {
+      "lane": 0,
+      "wall_s": 1.015868962,
+      "peak_rss_kib": 106784
+    },
+    {
+      "lane": 1,
+      "wall_s": 1.152572288,
+      "peak_rss_kib": 106600
+    },
+    {
+      "lane": 1,
+      "wall_s": 1.044394247,
+      "peak_rss_kib": 106536
+    },
+    {
+      "lane": 0,
+      "wall_s": 0.955198664,
+      "peak_rss_kib": 106804
+    },
+    {
+      "lane": 0,
+      "wall_s": 0.908084963,
+      "peak_rss_kib": 106580
+    },
+    {
+      "lane": 1,
+      "wall_s": 1.115371075,
+      "peak_rss_kib": 106660
+    },
+    {
+      "lane": 1,
+      "wall_s": 0.959155799,
+      "peak_rss_kib": 106840
+    },
+    {
+      "lane": 0,
+      "wall_s": 1.055404571,
+      "peak_rss_kib": 106592
+    },
+    {
+      "lane": 0,
+      "wall_s": 0.880220919,
+      "peak_rss_kib": 106768
+    },
+    {
+      "lane": 1,
+      "wall_s": 0.854398098,
+      "peak_rss_kib": 106612
+    },
+    {
+      "lane": 1,
+      "wall_s": 1.014174034,
+      "peak_rss_kib": 106592
+    },
+    {
+      "lane": 0,
+      "wall_s": 1.226470807,
+      "peak_rss_kib": 106484
+    },
+    {
+      "lane": 0,
+      "wall_s": 1.204888785,
+      "peak_rss_kib": 106728
+    },
+    {
+      "lane": 1,
+      "wall_s": 1.018236771,
+      "peak_rss_kib": 106860
+    },
+    {
+      "lane": 1,
+      "wall_s": 0.974422141,
+      "peak_rss_kib": 106588
+    },
+    {
+      "lane": 0,
+      "wall_s": 0.973604485,
+      "peak_rss_kib": 106492
+    }
+  ],
+  "aa_range_s": [
+    0.966579782,
+    1.119621181
+  ],
+  "paired_b_over_a": [
+    1.0277325808876703,
+    0.8931794992581042,
+    0.9399712022843166,
+    0.9640116333426568,
+    1.1146073863829977,
+    1.0565510220845415,
+    0.8869698916736525,
+    0.9146959228384487
+  ],
+  "0": {
+    "median_wall_s": 1.0276276985,
+    "range_wall_s": [
+      0.880220919,
+      1.226470807
+    ],
+    "peak_rss_kib": 106808
+  },
+  "1": {
+    "median_wall_s": 1.011067609,
+    "range_wall_s": [
+      0.854398098,
+      1.152572288
+    ],
+    "peak_rss_kib": 106860
+  }
+}

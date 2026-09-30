@@ -1,55 +1,89 @@
-# PA23 implementation 121
+# PA23 compact plan — implementation handoff 121
 
-Target: **PA23 full-stage**. Phase: **implementation**.
+Target: **PA23 full-stage**. Phase: **incomplete implementation handoff**.
 Stage base commit: `f33dd0775073bf5db6665fb2f4f504783159df76`.
 Last reviewed commit: `f33dd0775073bf5db6665fb2f4f504783159df76`.
-Entry: clean; required suite **3/45**, **42 failures** (Ralph primary log).
-Previous interrupted turn: no live compiler/build process; current inspection
-establishes the baseline and owners rather than assuming prior work continued.
+Entry: clean, **3/45**, **42 failures**. Handoff: **17/45**, **28 failures**;
+**14 existing failures resolved, no new failures or reduced coverage**.
+Previous interrupted turn: no live build remained; entry inspection established
+current owners and baseline. This turn made implementation and validation progress.
 
-## Design and work groups
+## Completed group and spec alignment
 
-1. **Nonvirtual polymorphic subobjects**: semantic class completion owns primary
-   base, slot identities and final overriders; layout owns base displacements;
-   conversion facts feed signed/null-preserving projections. Completed view
-   records feed direct typed vtables, receiver thunks, lifecycle stores and RTTI.
-   Visit relevant base edges/slots, cache per completed class, emit each view and
-   thunk once. No name-based semantic recovery or text transport.
-2. **Shared virtual bases**: canonical shared subobject identity, nonvirtual size,
-   complete layout and per-view negative rows; dynamic projection through those
-   rows. Extend the same facts into inherited dispatch and final-overrider checks.
-3. **Virtual-base lifecycle/parameters**: typed complete/base ABI entries and
-   hidden pointers only for by-value parameters; forwarding, construction,
-   transfers and source inline policy. Preserve reference/pointer ABI.
+Ordinary virtual calls over **nonvirtual polymorphic subobjects** now share
+semantic primary-base selection, final-overrider identities and completed
+layout/view facts. Indexed local signatures preserve unrelated roots. Class
+slot arenas provide allocation-free view slices; lowering emits typed tables,
+receiver/covariant-result thunks, constructor vptr stores and all direct-base
+RTTI descriptors. Signed/null-preserving casts and the non-null `this` fact feed
+those same conversions. Typeid, sibling crosscasts and repeated-source downcasts
+consume the selected view; private base relationships do not suppress a valid
+complete-object crosscast.
 
-Work extends across related groups while the established ownership supports it.
-The full stage remains required; a partial handoff must identify a concrete
-completed group and the different ownership preventing further related work.
+RTTI facts have explicit deduplicated TU demand from expressions, tables and
+exceptions. Completion computes flags once before lowering. Primary-only chains
+have no ancestor-view expansion. New caches use canonical IDs and integer pairs;
+no text transport, cloned source bodies or global retry/invalidation was added.
+The [handoff detail](handoff121.md) records ownership, data flow, complexity,
+language rationale and the concrete implementation boundary.
 
-## Validation and performance
+## Remaining implementation — requirements retained
 
-Run focused contract diffs and explicit personal runtime/rejection controls,
-then `make test-pa23`, `make test-report-through-pa22` (through-pa23 if green),
-and `perl scripts/cppgm_file_audit.pl --stage pa23 --paths dev/src`.
-Keep all 45 contract fixtures/comparison rules. Reference changes require a
-reducer and standard/contract proof; none planned.
+1. Shared virtual-base subobject identities and layout, nonvirtual extents,
+   dynamic projection, segment-local vbase/vcall rows, diamond RTTI flags and
+   unique-final-overrider checks.
+2. Virtual-base constructor/transfer/destructor complete/base entries and hidden
+   pointer forwarding for by-value parameters; reference/pointer ABI uses the
+   object's vtable. Also finish the two nonvirtual virtual-destructor lifecycle
+   shape failures. All 45 fixtures remain required.
+3. Virtual member-function pointer representation and decoding. The retained
+   personal `virtual-member-pointer` reproducer calls the base function's raw
+   address instead of dispatching to the final overrider. Fix formation,
+   serialization, conversion/value facts and calls together, including inverse
+   conversions to nonpolymorphic owners; a local vtable fix is insufficient.
 
-Freeze entry/final binaries and workloads; A/A plus ABBA compiler wall/RSS and
-separate executable runtime/text measurements. Compare equivalent correct
-outputs; newly supported semantics have necessary costs, not speed claims.
-PA23/O0 introduces no optional optimization; no additional performance gate
-beyond spec's mandated complexity and stage-scoped acceptance. Earlier
-measurements and explicit work budgets remain preserved.
+The completed ordinary-call/view/RTTI group ends here. Continuing requires new
+shared-subobject, lifecycle-argument and member-value representations across
+other semantic owners. These are unfinished implementation, not waived cases
+or questions deferred to independent review.
 
-## Handoff ledger
+## Performance and validation
 
-Implementation 121: in progress; no handoff yet. `b1aed715` completes the first
-nonvirtual view implementation: **17/45** required tests, **29/29** explicit
-personal controls, and fresh prior-through report **3811/3811**. It includes
-covariant result adjustment, null handling, repeated source downcasts, private
-base crosscasts and later-base override rejection. Slot arena refinement and
-performance evidence are still in progress. A simultaneous root-test invocation
-collided in wrapper relinking; serial retries establish the results above. All stage edits after the last
-reviewed commit await independent review. Unfinished implementation is listed
-above; independent review must check view/slot ownership, inherited architecture,
-performance evidence and whole-stage scope without waiving remaining work.
+[Performance evidence](performance121.md) freezes entry/correct-view/final
+binaries and sources, records A/A calibration and four ABBA blocks, and reports
+compiler wall/RSS plus checked runtime/text across 13 inputs. Earlier pilot and
+pre-seal measurements remain preserved. New view work tracks produced slots;
+RTTI work tracks demanded reachable base edges. Each table/thunk emits once.
+The `this` fact costs O(1), adds no IR and introduces no iterative optimizer.
+
+Apply spec §9's PA23/O0 acceptance. Inherited +15%, +16 MiB and 5.5× diagnostics
+remain self-selected measurements, not additional exit gates. Correctness,
+coverage, mandated work/growth limits and earlier measurements are unchanged.
+Native optimizer/debug and self-host acceptance remain with their owning stages.
+
+[Sealed validation](../student.tests/pa23/validation121.json): `make test-pa23`
+**17/45**; `make test-report-through-pa22` **3811/3811**, **22/22 stages**;
+required file audit passes with three inherited header-organization warnings.
+All **41** accepted stage outputs roundtrip stably. Explicit personal controls
+are **32/33**; the one known failure is the unfinished member-pointer group
+above. Standalone backend checks are **25/29**: the same member-pointer defect
+and three reproduced reference-backend limitations are preserved in the
+handoff detail. No reference correction, fixture or comparison change was made.
+
+## Handoff ledger and independent review
+
+| Commit | Implementation disposition | Independent review |
+|---|---|---|
+| `b28e12ce` | Stage base, immutable review marker and owner plan recorded before edits | Pending |
+| `b1aed715` | Ordinary nonvirtual views, dispatch thunks, covariance and RTTI behavior | Pending |
+| `55e2053a` | Contiguous slot arenas and precise RTTI demand facts | Pending |
+| `72433afa` | Reacquire slot identities after outgoing covariant result-layout demand | Pending |
+| `6ae06461` | Distinct private object names and the pure-virtual runtime role for standalone execution | Pending |
+| Delivery commit | Seals plan, handoff boundary, validation and performance artifacts | Pending |
+
+Independent review must assess canonical subobject/slot identities, thunk ABI,
+precise demand and allocation lifetimes, inherited pipeline alignment and the
+performance protocol. It must resolve whole-stage findings before advancement.
+No independent review was performed or waived in this implementation turn;
+both review markers remain at the original stage base. The handoff returns
+control to Ralph without certifying PA23 or advancing to PA24.
