@@ -9,14 +9,16 @@ def run(args):
  (out/f'{len(results)}.stdout').write_text(p.stdout);(out/f'{len(results)}.stderr').write_text(p.stderr)
  results.append(dict(command=list(map(str,args)),status=p.returncode));assert p.returncode==0,(args,p.stderr)
 for args in commands:run(args)
-for name,src in [('floating',root/'student.tests/pa25/floating-evaluation.cc'),('exception',out.parent/'exceptions/cross1.cc')]:
+for name,src in [('floating',root/'student.tests/pa25/floating-evaluation.cc'),('scale',root/'student.tests/pa25/floating-exact-scale.cc'),('exception',out.parent/'exceptions/cross1.cc')]:
  if name=='exception':
   src=out/'exception.cc';src.write_text('template<int N> struct E{int n;E():n(N){}}; int main(){try{throw E<7>();}catch(E<7>& e){return e.n!=7;}return 1;}\n')
- stem=out/name;run([out/'trace-api',src,stem]);run([str(stem)+'.elf'])
- assert pathlib.Path(str(stem)+'.lowir').read_bytes()==pathlib.Path(str(stem)+'.roundtrip').read_bytes()
- if name=='floating':
+ stem=out/name;run([out/'trace-api',src,stem]);run([str(stem)+'.elf']);run([str(stem)+'.roundtrip.elf'])
+ assert pathlib.Path(str(stem)+'.elf').read_bytes()==pathlib.Path(str(stem)+'.roundtrip.elf').read_bytes()
+ if name in ('floating','scale'):
   assert '[eval=f80]' in pathlib.Path(str(stem)+'.lowir').read_text()
+  assert '[eval=f80]' in pathlib.Path(str(stem)+'.roundtrip').read_text()
   assert '[eval=f80]' in pathlib.Path(str(stem)+'.mir').read_text()
+  if name=='scale':assert 'exact=scale' in pathlib.Path(str(stem)+'.mir').read_text()
   run([root/'dev/lowir2native','-o',out/'floating-adapter.elf',str(stem)+'.lowir']);run([out/'floating-adapter.elf'])
 (out/'results.json').write_text(json.dumps(results,indent=2)+'\n')
 print('production typed IR/roundtrip/MIR/native execution passed')

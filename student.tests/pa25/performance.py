@@ -105,7 +105,7 @@ def run(args):
     return p
 # Preserve ordinary ELF images from each frozen binary for equality and timing.
 manifest={str(p):digest(p) for p in [A,B,*inputs.glob('*.cc')]}
-results={'manifest':manifest,'flags':['-O0'],'policy':'O0; no optional transforms or speedup claim; new-behavior modes are final/final calibration', 'runs':[],'images':{}}
+results={'manifest':manifest,'flags':['-O0'],'policy':'O0 frozen comparison; interpretation and transform budgets belong to the accompanying report; new-behavior modes are final/final calibration', 'runs':[],'images':{}}
 for name,(sources,_) in workloads.items():
     images=[]
     for label,binary in [('A',A),('B',B)]:
