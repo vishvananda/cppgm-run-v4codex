@@ -1,0 +1,38 @@
+[
+  {
+    "args": [
+      "dev/lowir2native-ref",
+      "-O0",
+      "-o",
+      "/tmp/pa28-152/reference-proof/ir-old",
+      "student.tests/pa28/cleanup-region152.lowir"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa28-152/reference-proof/ir-old"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "args": [
+      "dev/lowir2native-ref",
+      "-O0",
+      "-o",
+      "/tmp/pa28-152/reference-proof/ir-fixed",
+      "/tmp/pa28-152/reference-proof/cleanup-fixed.lowir"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa28-152/reference-proof/ir-fixed"
+    ],
+    "status": 0,
+    "stderr": ""
+  }
+]

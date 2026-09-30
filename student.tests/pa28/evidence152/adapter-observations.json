@@ -1,0 +1,109 @@
+[
+  {
+    "args": [
+      "dev/lowir2native-ref",
+      "-O0",
+      "-o",
+      "/tmp/pa28-152/reference-proof/200-source-handler-branch-call-cleans-outer-scopeold",
+      "/tmp/pa28-152/reference-proof/200-source-handler-branch-call-cleans-outer-scope.lowir"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: duplicate native object-symbol label\n"
+  },
+  {
+    "args": [
+      "dev/lowir2native-ref",
+      "-O0",
+      "-o",
+      "/tmp/pa28-152/reference-proof/200-source-handler-branch-call-cleans-outer-scopefixed",
+      "pa21/tests/general/200-source-handler-branch-call-cleans-outer-scope.ref"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: duplicate native object-symbol label\n"
+  },
+  {
+    "args": [
+      "dev/lowir2native-ref",
+      "-O0",
+      "-o",
+      "/tmp/pa28-152/reference-proof/400-handler-context-cleanup-continuationold",
+      "/tmp/pa28-152/reference-proof/400-handler-context-cleanup-continuation.lowir"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa28-152/reference-proof/400-handler-context-cleanup-continuationold"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "dev/lowir2native-ref",
+      "-O0",
+      "-o",
+      "/tmp/pa28-152/reference-proof/400-handler-context-cleanup-continuationfixed",
+      "pa21/tests/general/400-handler-context-cleanup-continuation.ref"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa28-152/reference-proof/400-handler-context-cleanup-continuationfixed"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa28-152/cppgm-before",
+      "-c",
+      "student.tests/pa28/cleanup-reducer152.cpp",
+      "-o",
+      "/tmp/pa28-152/reference-proof/before.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: unbalanced native protected region exit\n"
+  },
+  {
+    "args": [
+      "dev/cppgm++-ref",
+      "-c",
+      "student.tests/pa28/cleanup-reducer152.cpp",
+      "-o",
+      "/tmp/pa28-152/reference-proof/reference.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "g++",
+      "/tmp/pa28-152/reference-proof/reference.o",
+      "-o",
+      "/tmp/pa28-152/reference-proof/reference"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa28-152/reference-proof/reference"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

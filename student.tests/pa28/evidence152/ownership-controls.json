@@ -1,0 +1,103 @@
+[
+  {
+    "args": [
+      "dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/ownership-client152.cpp",
+      "-o",
+      "/tmp/pa28-152/verified-validation/ownership/client.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "g++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/ownership-host152.cpp",
+      "-o",
+      "/tmp/pa28-152/verified-validation/ownership/host.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/lazy-client152.cpp",
+      "-o",
+      "/tmp/pa28-152/verified-validation/ownership/lazy.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/lazy-owner152.cpp",
+      "-o",
+      "/tmp/pa28-152/verified-validation/ownership/owner.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "g++",
+      "/tmp/pa28-152/verified-validation/ownership/client.o",
+      "/tmp/pa28-152/verified-validation/ownership/host.o",
+      "-o",
+      "/tmp/pa28-152/verified-validation/ownership/ownership"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa28-152/verified-validation/ownership/ownership"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "g++",
+      "/tmp/pa28-152/verified-validation/ownership/lazy.o",
+      "/tmp/pa28-152/verified-validation/ownership/owner.o",
+      "-o",
+      "/tmp/pa28-152/verified-validation/ownership/lazy"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa28-152/verified-validation/ownership/lazy"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "nm",
+      "/tmp/pa28-152/verified-validation/ownership/client.o"
+    ],
+    "status": 0,
+    "stdout": "                 U _Unwind_Resume\n                 U _Z7fill152R13HostMiddle152i\n                 U _ZN11HostLeaf152C1Ev\n                 U _ZN11HostLeaf152D1Ev\n                 U _ZNK11HostRoot152cvbEv\n                 U __gxx_personality_v0\n                 U destroyed152\n0000000000000000 T main\n",
+    "stderr": ""
+  }
+]

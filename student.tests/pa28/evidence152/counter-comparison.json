@@ -1,0 +1,18 @@
+{
+  "memory": {
+    "stable_work_counters": true,
+    "phase_records": 3
+  },
+  "floating": {
+    "stable_work_counters": true,
+    "phase_records": 3
+  },
+  "exceptions": {
+    "stable_work_counters": true,
+    "phase_records": 3
+  },
+  "pruning": {
+    "stable_work_counters": true,
+    "phase_records": 3
+  }
+}

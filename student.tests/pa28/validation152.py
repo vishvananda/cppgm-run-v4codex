@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PA28 implementation handoff checks, including reviewed reference corrections and unchanged coverage."""
+"""PA28 implementation handoff checks, including unchanged fixture coverage."""
 import hashlib, json, pathlib, re, subprocess, sys, time
 root = pathlib.Path(__file__).resolve().parents[2]
 out = pathlib.Path(sys.argv[1]).resolve()

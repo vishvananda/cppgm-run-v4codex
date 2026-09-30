@@ -1,0 +1,30 @@
+{
+  "memory": {
+    "object_byte_identity": true,
+    "executable_byte_identity": true,
+    "object_sha256": "28798e83ffc231f2394886236fa230283a93ac20adbdb526111201a60dc7c98a",
+    "executable_sha256": "b4661121d4794947d1477cfd26c3028689b7c1641b915f421fe115e74c577d5b",
+    "text_bytes": 151633
+  },
+  "floating": {
+    "object_byte_identity": true,
+    "executable_byte_identity": true,
+    "object_sha256": "1d336c199b2695e783552f12dcddd9a0364cb2d495dc8dc5d9fab29ce7a02bc7",
+    "executable_sha256": "6f064b64fe34d51f06ee3af1c902c93722278f4a7760ed0978094d3ed5eaa9f8",
+    "text_bytes": 151474
+  },
+  "exceptions": {
+    "object_byte_identity": true,
+    "executable_byte_identity": true,
+    "object_sha256": "6f5a4a53dd1b55afcd6092df67128070e991feaffcf21bb3098b4c0d8cd84363",
+    "executable_sha256": "e6ba5474294b164e8dd533dfe294d440e28e5c8cc5935ef80043937801200590",
+    "text_bytes": 151781
+  },
+  "pruning": {
+    "object_byte_identity": true,
+    "executable_byte_identity": true,
+    "object_sha256": "28798e83ffc231f2394886236fa230283a93ac20adbdb526111201a60dc7c98a",
+    "executable_sha256": "b4661121d4794947d1477cfd26c3028689b7c1641b915f421fe115e74c577d5b",
+    "text_bytes": 151633
+  }
+}

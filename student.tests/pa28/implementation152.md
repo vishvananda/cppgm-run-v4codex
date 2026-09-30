@@ -49,8 +49,8 @@ scalar/base types, converted unexpected values, ordered local cleanup, nested
 rethrow, templates, empty specifications, private cleanup, and invalid type/set
 rejections. The course text adapter retains its established handler registration/exit
 convention; native production uses explicit cleanup registrations and live-prefix
-catch exits. See `adapter152.md`; all references remain unchanged. Performance and full final checks remain
-handoff work, separate from implementation correctness checks.
+catch exits. See `adapter152.md`; all references remain unchanged. Final performance
+and validation evidence is recorded in `performance152.md` and `evidence152/`.
 
 ## Imported support ownership and local-static demand
 
