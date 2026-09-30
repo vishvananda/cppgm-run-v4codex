@@ -1,0 +1,432 @@
+{
+  "compiler_sha256": "0ebacc5cca63fc3836dae3fefd1916f1020873891ed014bcd959478342669568",
+  "cases": 9,
+  "records": [
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-142/controls/incoming.o",
+        "/tmp/pa26-142/controls/incoming.cpp"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-142/controls/incoming-host.cpp",
+        "/tmp/pa26-142/controls/incoming.o",
+        "-o",
+        "/tmp/pa26-142/controls/incoming"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-142/controls/incoming"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-142/controls/incoming.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..0000000000000027\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 33 to 0000000000000025\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000026\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000027\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000040 000000000000001c 00000000 CIE\n  Version:               1\n  Augmentation:          \"zPLR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     9b bd ff ff ff 1b 1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000060 000000000000002c 00000024 FDE cie=00000040 pc=0000000000000027..0000000000000268\n  Augmentation data:     8f ff ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000028\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 000000000000002b\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 0000000000000036\n  DW_CFA_offset: r3 (rbx) at cfa-112\n  DW_CFA_advance_loc4: 389 to 00000000000001bb\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 00000000000001bf\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 00000000000001c0\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000001c1\n  DW_CFA_restore_state\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-142/controls/outgoing.o",
+        "/tmp/pa26-142/controls/outgoing.cpp"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-142/controls/outgoing-host.cpp",
+        "/tmp/pa26-142/controls/outgoing.o",
+        "-o",
+        "/tmp/pa26-142/controls/outgoing"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-142/controls/outgoing"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-142/controls/outgoing.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 000000000000002c 0000001c FDE cie=00000000 pc=0000000000000000..0000000000000054\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000000f\n  DW_CFA_offset: r3 (rbx) at cfa-24\n  DW_CFA_advance_loc: 4 to 0000000000000013\n  DW_CFA_offset: r12 (r12) at cfa-32\n  DW_CFA_advance_loc: 55 to 000000000000004a\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 000000000000004e\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 4 to 0000000000000052\n  DW_CFA_restore: r12 (r12)\n  DW_CFA_advance_loc: 1 to 0000000000000053\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000054\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000048 0000000000000024 0000004c FDE cie=00000000 pc=0000000000000054..0000000000000069\n  DW_CFA_advance_loc: 1 to 0000000000000055\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000058\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 15 to 0000000000000067\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000068\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000069\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-142/controls/unprotected-frame.o",
+        "/tmp/pa26-142/controls/unprotected-frame.cpp"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-142/controls/unprotected-frame-host.cpp",
+        "/tmp/pa26-142/controls/unprotected-frame.o",
+        "-o",
+        "/tmp/pa26-142/controls/unprotected-frame"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-142/controls/unprotected-frame"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-142/controls/unprotected-frame.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 000000000000003c 0000001c FDE cie=00000000 pc=0000000000000000..00000000000000f6\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 14 to 0000000000000012\n  DW_CFA_offset: r3 (rbx) at cfa-592\n  DW_CFA_advance_loc: 7 to 0000000000000019\n  DW_CFA_offset: r12 (r12) at cfa-600\n  DW_CFA_advance_loc: 7 to 0000000000000020\n  DW_CFA_offset: r13 (r13) at cfa-608\n  DW_CFA_advance_loc: 7 to 0000000000000027\n  DW_CFA_offset: r14 (r14) at cfa-616\n  DW_CFA_advance_loc: 7 to 000000000000002e\n  DW_CFA_offset: r15 (r15) at cfa-624\n  DW_CFA_advance_loc4: 163 to 00000000000000d1\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 7 to 00000000000000d8\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 7 to 00000000000000df\n  DW_CFA_restore: r12 (r12)\n  DW_CFA_advance_loc: 7 to 00000000000000e6\n  DW_CFA_restore: r13 (r13)\n  DW_CFA_advance_loc: 7 to 00000000000000ed\n  DW_CFA_restore: r14 (r14)\n  DW_CFA_advance_loc: 7 to 00000000000000f4\n  DW_CFA_restore: r15 (r15)\n  DW_CFA_advance_loc: 1 to 00000000000000f5\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000000f6\n  DW_CFA_restore_state\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-142/controls/terminate.o",
+        "/tmp/pa26-142/controls/terminate.cpp"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-142/controls/terminate-host.cpp",
+        "/tmp/pa26-142/controls/terminate.o",
+        "-o",
+        "/tmp/pa26-142/controls/terminate"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-142/controls/terminate"
+      ],
+      "status": 17,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-142/controls/terminate.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 000000000000001c 00000000 CIE\n  Version:               1\n  Augmentation:          \"zPLR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     9b ed ff ff ff 1b 1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000020 0000000000000024 00000024 FDE cie=00000000 pc=0000000000000000..0000000000000057\n  Augmentation data:     cf ff ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 42 to 000000000000002e\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 000000000000002f\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000030\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000048 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000060 0000000000000024 0000001c FDE cie=00000048 pc=0000000000000057..0000000000000073\n  DW_CFA_advance_loc: 1 to 0000000000000058\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 000000000000005b\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 22 to 0000000000000071\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000072\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000073\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-142/controls/runtime-alias.o",
+        "/tmp/pa26-142/controls/runtime-alias.cpp"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-142/controls/runtime-alias-host.cpp",
+        "/tmp/pa26-142/controls/runtime-alias.o",
+        "-o",
+        "/tmp/pa26-142/controls/runtime-alias"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-142/controls/runtime-alias"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-142/controls/runtime-alias.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..00000000000000f3\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 237 to 00000000000000f1\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 00000000000000f2\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000000f3\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-142/controls/implicit-cleanup.o",
+        "/tmp/pa26-142/controls/implicit-cleanup.cpp"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-142/controls/implicit-cleanup-host.cpp",
+        "/tmp/pa26-142/controls/implicit-cleanup.o",
+        "-o",
+        "/tmp/pa26-142/controls/implicit-cleanup"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-142/controls/implicit-cleanup"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-142/controls/implicit-cleanup.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..0000000000000012\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 12 to 0000000000000010\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000011\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000012\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000040 0000000000000024 00000044 FDE cie=00000000 pc=0000000000000012..0000000000000039\n  DW_CFA_advance_loc: 1 to 0000000000000013\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000016\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 33 to 0000000000000037\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000038\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000039\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000068 0000000000000024 0000006c FDE cie=00000000 pc=0000000000000039..000000000000004e\n  DW_CFA_advance_loc: 1 to 000000000000003a\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 000000000000003d\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 15 to 000000000000004c\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 000000000000004d\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 000000000000004e\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000090 0000000000000024 00000094 FDE cie=00000000 pc=000000000000004e..0000000000000073\n  DW_CFA_advance_loc: 1 to 000000000000004f\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000052\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 31 to 0000000000000071\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000072\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000073\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000b8 000000000000001c 00000000 CIE\n  Version:               1\n  Augmentation:          \"zPLR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     9b 35 ff ff ff 1b 1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000d8 000000000000002c 00000024 FDE cie=000000b8 pc=0000000000000073..0000000000000187\n  Augmentation data:     17 ff ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000074\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000077\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 219 to 0000000000000152\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000153\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000154\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000108 000000000000002c 00000054 FDE cie=000000b8 pc=0000000000000187..00000000000001e3\n  Augmentation data:     fa fe ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000188\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 000000000000018b\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 0000000000000196\n  DW_CFA_offset: r3 (rbx) at cfa-40\n  DW_CFA_advance_loc: 40 to 00000000000001be\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 00000000000001c2\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 00000000000001c3\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000001c4\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000138 0000000000000024 0000013c FDE cie=00000000 pc=00000000000001e3..00000000000001fc\n  DW_CFA_advance_loc: 1 to 00000000000001e4\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 00000000000001e7\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 19 to 00000000000001fa\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 00000000000001fb\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000001fc\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-142/controls/large-actions.o",
+        "/tmp/pa26-142/controls/large-actions.cpp"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-142/controls/large-actions-host.cpp",
+        "/tmp/pa26-142/controls/large-actions.o",
+        "-o",
+        "/tmp/pa26-142/controls/large-actions"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-142/controls/large-actions"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-142/controls/large-actions.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 000000000000001c 00000000 CIE\n  Version:               1\n  Augmentation:          \"zPLR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     9b 4d 04 00 00 1b 1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000020 000000000000002c 00000024 FDE cie=00000000 pc=0000000000000000..0000000000005803\n  Augmentation data:     cf ff ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 14 to 0000000000000012\n  DW_CFA_offset: r3 (rbx) at cfa-2296\n  DW_CFA_advance_loc4: 16590 to 00000000000040e0\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 7 to 00000000000040e7\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 00000000000040e8\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000040e9\n  DW_CFA_restore_state\n\n00000050 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000068 0000000000000024 0000001c FDE cie=00000050 pc=0000000000005803..000000000000581a\n  DW_CFA_advance_loc: 1 to 0000000000005804\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000005807\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 17 to 0000000000005818\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000005819\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 000000000000581a\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-142/controls/selectors.o",
+        "/tmp/pa26-142/controls/selectors.cpp"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa26-142/controls/selectors-host.cpp",
+        "/tmp/pa26-142/controls/selectors.o",
+        "-o",
+        "/tmp/pa26-142/controls/selectors"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-142/controls/selectors"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "readelf",
+        "-wf",
+        "/tmp/pa26-142/controls/selectors.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 000000000000001c 00000000 CIE\n  Version:               1\n  Augmentation:          \"zPLR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     9b fd ff ff ff 1b 1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000020 000000000000002c 00000024 FDE cie=00000000 pc=0000000000000000..0000000000000148\n  Augmentation data:     cf ff ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000000f\n  DW_CFA_offset: r3 (rbx) at cfa-64\n  DW_CFA_advance_loc4: 198 to 00000000000000d5\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 00000000000000d9\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 00000000000000da\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000000db\n  DW_CFA_restore_state\n  DW_CFA_nop\n\n00000050 000000000000002c 00000054 FDE cie=00000000 pc=0000000000000148..0000000000000293\n  Augmentation data:     ba ff ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000149\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 000000000000014c\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 0000000000000157\n  DW_CFA_offset: r3 (rbx) at cfa-64\n  DW_CFA_advance_loc4: 201 to 0000000000000220\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 0000000000000224\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 0000000000000225\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000226\n  DW_CFA_restore_state\n  DW_CFA_nop\n\n00000080 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000098 000000000000002c 0000001c FDE cie=00000080 pc=0000000000000293..00000000000002ee\n  DW_CFA_advance_loc: 1 to 0000000000000294\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000297\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 00000000000002a2\n  DW_CFA_offset: r3 (rbx) at cfa-32\n  DW_CFA_advance_loc4: 70 to 00000000000002e8\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 00000000000002ec\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 00000000000002ed\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000002ee\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-o",
+        "/tmp/pa26-142/controls/legacy.obj",
+        "/tmp/pa26-142/controls/format.cpp"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-o",
+        "/tmp/pa26-142/controls/private-main",
+        "/tmp/pa26-142/controls/legacy.obj"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-142/controls/private-main"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--object-format=elf",
+        "-o",
+        "/tmp/pa26-142/controls/explicit.obj",
+        "/tmp/pa26-142/controls/format.cpp"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa26-142/controls/explicit.obj",
+        "-o",
+        "/tmp/pa26-142/controls/host-main"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa26-142/controls/host-main"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "sources": {
+    "implicit-cleanup.cpp": "d6aad239d1484045ff6ab6a2b8c6b435f04adcdf1bc069c33690926a6e7eb516",
+    "outgoing-host.cpp": "fd70af551df667bf422c1545f112c44d49cc99c7765fe929715291fdb25bc44d",
+    "unprotected-frame.cpp": "0591eae3d6e7e61ad079b65ad387d5f026242505d67d4c8e07df567a3dd03ca1",
+    "incoming-host.cpp": "23328f6593fd970ac8fb8e505724e4b35fb2111915fad5762028f878b6cd571a",
+    "incoming.cpp": "9077adfaa91f133313f0acf45857cb51b7dbbe578ddba728bbee3a06cf6fedad",
+    "selectors-host.cpp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "implicit-cleanup-host.cpp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "format.cpp": "85d5d0c9e29f65e3fe6fbf25b7939530fb5b397ec258df70e9cf0068a673a45b",
+    "unprotected-frame-host.cpp": "1e44295ed1f8819e9a3b1ba2244d3e061f753d282e0216cbcc03c53e6a0353da",
+    "terminate.cpp": "baffe47f91d54a11cc91cc586e122886551672f1dd6272a3af7d252f4e05631e",
+    "large-actions.cpp": "be2fe4f98546bf0bb5d83cacd1a011763493b9c3c91e811cc8b2da1275fbfa42",
+    "large-actions-host.cpp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "outgoing.cpp": "9663f9e863821a9c1bc4bf2d0235c767c6733eea664681ef63e250869ca3c43a",
+    "runtime-alias.cpp": "51b95884feda09e68c4cc61632ba895f0f0d2b33e20a1492a010ee5623c2db66",
+    "terminate-host.cpp": "5ae2878e18267958af5a423ea27b0a9e344a63104a1489e23990dab99b811548",
+    "runtime-alias-host.cpp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "selectors.cpp": "76d143bdbe08ebcdb086e7fdd17889acb4a7959afb57561abf3703c474b5a9ce"
+  }
+}

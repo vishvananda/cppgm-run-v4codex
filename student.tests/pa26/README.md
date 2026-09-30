@@ -6,9 +6,10 @@ objects. It covers incoming/outgoing EH, large frames, termination, allocation
 and builtin aliases, empty/effectful implicit destruction, 140-entry LSDA action
 tables, selector identity across functions, and explicit object format selection.
 Generated files default to `/tmp/pa26-142/controls`.
+Run `python3 student.tests/pa26/native_inspection.py` for the demanded-template trace.
 
 `dump.cpp` is an inspection adapter: link it against cppgm++'s frontend source
-set, then pass one source filename. It prints the production host LowIR after
+set, then pass one source filename, optionally followed by `--mir`. It prints the production host LowIR after
 all semantic and lowering work, without making text part of the object pipeline.
 
 Host output follows the [Itanium EH ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi-eh.html)
@@ -23,3 +24,14 @@ other output names select host ELF. `--object-format=elf` and
 host linker specified by PA26. The private driver/runtime remains available for
 PA25 compile/direct/mixed linking. Full integration of the host ELF link path
 into that private linker is unfinished and must be reviewed before stage closure.
+
+`python3 student.tests/pa26/validate.py` records the exact required checks plus
+controls/inspection. At this incomplete handoff it verifies the documented
+29/30 result and the one remaining required header case; it does not waive that
+failure or replace the root suite's nonzero exit status.
+
+Performance observations and interpretation are in [performance142.md](performance142.md).
+The candidate and accepted frozen binaries remain under `/tmp/pa26-142`; their
+hashes, generated input hashes, every A/A and ABBA observation and final validation
+are retained under `evidence142/`. The inspection helper is named
+`native_inspection.py` to avoid shadowing Python's standard `inspect` module.
