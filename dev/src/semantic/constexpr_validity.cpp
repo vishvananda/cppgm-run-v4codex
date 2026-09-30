@@ -39,7 +39,11 @@ bool Analyzer::literal_type(TypeId t)
         ++constexpr_validity_work;
         auto info = entities[cls].class_info;
         bool valid = trivial_destructor(t);
-        bool constructor = class_facts[info].aggregate;
+        // Anonymous storage is initialized by its enclosing constructor's
+        // projected action plan, so it need not have a callable constexpr
+        // default constructor of its own. Its fields and destructor still
+        // obey the ordinary literal-type requirements below.
+        bool constructor = class_facts[info].aggregate || class_facts[info].storage;
         for (auto e : candidates(class_facts[info].constructor)) {
             ++constexpr_validity_work;
             if (!transfer_member(e) && constexpr_constructor(e)) constructor = true;
@@ -161,26 +165,33 @@ void Analyzer::check_constexpr_constructor(EntityId e)
         if (!constexpr_constructor(member.delegated_constructor)) throw std::runtime_error("nonconstexpr delegation");
         return;
     }
-    Index initialized;
+    Index initialized, paths;
+    std::vector<EntityId> owners{scopes[entities[e].owner].entity};
     for (unsigned i = 0; i < member.action_count; ++i) {
         auto action = subobject_actions[member.action_begin+i];
         ++constexpr_validity_work;
         if (action.field) initialized.put(action.field,1);
+        for (auto path = action.storage; path && !paths.get(path); path = construction_storage[path].parent) {
+            paths.put(path,1);
+            auto field = construction_storage[path].field;
+            initialized.put(field,1); owners.push_back(types[entities[field].type].entity);
+        }
         if (action.constructor && !constexpr_constructor(action.constructor))
             throw std::runtime_error("nonconstexpr subobject constructor");
     }
-    auto cls = scopes[entities[e].owner].entity;
-    unsigned variants = 0;
-    for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
-        auto field = declarations[d].entity;
-        if (!nonstatic_field(field) || entities[field].owner != entities[cls].scope ||
-            (field_fact(field).bit_field && !entities[field].name)) continue;
-        ++constexpr_validity_work;
-        if (initialized.get(field)) ++variants;
-        else if (entities[cls].key != KW_UNION) throw std::runtime_error("constexpr constructor leaves member uninitialized");
+    for (auto cls : owners) {
+        unsigned variants = 0;
+        for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
+            auto field = declarations[d].entity;
+            if (!nonstatic_field(field) || entities[field].owner != entities[cls].scope ||
+                (field_fact(field).bit_field && !entities[field].name)) continue;
+            ++constexpr_validity_work;
+            if (initialized.get(field)) ++variants;
+            else if (entities[cls].key != KW_UNION) throw std::runtime_error("constexpr constructor leaves member uninitialized");
+        }
+        if (entities[cls].key == KW_UNION && !empty_class(entities[cls].type) && variants != 1)
+            throw std::runtime_error("constexpr union constructor needs one initialized variant");
     }
-    if (entities[cls].key == KW_UNION && !empty_class(entities[cls].type) && variants != 1)
-        throw std::runtime_error("constexpr union constructor needs one initialized variant");
 }
 void Analyzer::check_constexpr_class(EntityId cls)
 {

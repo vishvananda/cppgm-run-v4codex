@@ -31,7 +31,7 @@ std::uint32_t Analyzer::constant_query_object(QueryId id)
         auto field = fact.expression.entity;
         auto use = object_uses[fact.expression.object_use];
         parent = constant_base_projection(constant_base_projection(parent,use.qualifier_adjustment),use.adjustment);
-        auto address = constant_subobject(parent,entities[field].type,field);
+        auto address = constant_field_address(parent,field);
         auto kind = types[entities[field].type].kind;
         if (kind == TypeKind::LRef || kind == TypeKind::RRef) {
             auto value = constant_read(address); return value.valid ? value.bits : 0;

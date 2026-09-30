@@ -102,3 +102,14 @@ and last-reviewed markers above are preserved. Frozen entry binary is in
 3. Freeze final binary, measure compiler latency/RSS and checked runtime/text
    with A/A+ABBA on equivalent inputs. Required prior/current/through reports,
    file audit and explicit personal controls; record all coverage unchanged.
+
+Loop147 implementation checkpoint: both required anonymous-storage fixtures now
+pass (157/158 stage run; hosted-header parser failure unchanged). Explicit
+storage controls pass **98 commands** at O0/O2, covering declaration order,
+nontrivial copy/move, nested defaults and union selection, arrays/bit-fields,
+partial/body-throw cleanup, constexpr values and DMI receiver/scope reuse.
+The shared semantic path records feed both native initialization/unwind and
+constant evaluation. An inherited destructor rule was narrowed to anonymous
+unions; anonymous structs now receive ordinary destruction checks. Defaults
+own a declaration scope and recorded receiver path, distinct from destination.
+Required through validation and performance measurements are still pending.

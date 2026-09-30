@@ -244,12 +244,26 @@ Value Procedural::base_projection(Value base, unsigned steps)
     }
     return base;
 }
-Value Procedural::field(Value base, EntityId e, unsigned steps)
+Value Procedural::implicit_object()
+{
+    auto object = emit(Opcode::Load,IRType::Ptr,{Operand::slot(this_slot)});
+    if (initializer_receiver) {
+        Instruction index(Opcode::Index,IRType::I8); index.projection = ir_model::IPK_FIELD;
+        object = emit(index,{object.operand,Operand::integer(sem.construction_storage[initializer_receiver].offset)});
+    }
+    return object;
+}
+Value Procedural::field(Value base, EntityId e, unsigned steps, TypeId object)
 {
     base = base_projection(base, steps);
     std::uint64_t offset = sem.entities[e].member_offset;
-    for (EntityId storage = sem.injected_storage(e); storage && sem.nonstatic_field(storage); storage = sem.injected_storage(storage))
-        offset += sem.entities[storage].member_offset;
+    while (sem.types[object].kind == TypeKind::Pointer || reference(object)) object = sem.types[object].child;
+    auto owner = sem.types[object].entity;
+    for (auto field = e; sem.scopes[sem.entities[field].owner].entity != owner; ) {
+        auto storage = sem.injected_storage(field);
+        if (!storage || !sem.nonstatic_field(storage)) break;
+        offset += sem.entities[storage].member_offset; field = storage;
+    }
     Instruction i(Opcode::Index, IRType::I8); i.projection = ir_model::IPK_FIELD;
     Value v = emit(i, {base.operand, Operand::integer(offset)});
     v.type = sem.entities[e].type;
@@ -273,7 +287,9 @@ Value Procedural::binding(EntityId e)
         while (storage && sem.nonstatic_field(storage)) storage = sem.injected_storage(storage);
         if (storage) return field(address(binding(storage)), e);
         if (!this_slot) throw std::logic_error("missing implicit object");
-        return field(emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)}), e);
+        auto owner = sem.scopes[sem.entities[active_function].owner].entity;
+        auto type = initializer_receiver ? sem.entities[sem.construction_storage[initializer_receiver].field].type : sem.entities[owner].type;
+        return field(implicit_object(), e, 0, type);
     }
     // An uninitialized automatic declaration may legally be bypassed by goto.
     // Storage identity is independent of whether its declaration falls through.

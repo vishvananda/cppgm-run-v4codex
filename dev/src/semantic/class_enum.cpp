@@ -203,6 +203,18 @@ void Analyzer::define_class(NodeId n, ScopeId s, EntityId e, ScopeId owner, bool
             entities[storage].is_static = static_union;
             class_facts[entities[e].class_info].storage = storage;
             anonymous_objects.put(n, storage);
+            // The storage is one variant of an enclosing union, even when
+            // several projected members of its anonymous struct have defaults.
+            if (scopes[s].kind == ScopeKind::Class && class_facts[entities[e].class_info].has_member_initializer) {
+                auto enclosing = scopes[s].entity;
+                auto info = entities[enclosing].class_info;
+                class_facts[info].has_member_initializer = true;
+                class_facts[info].aggregate = false;
+                if (entities[enclosing].key == KW_UNION) {
+                    if (class_facts[info].variant_initializer) throw std::runtime_error("multiple default union variant initializers");
+                    class_facts[info].variant_initializer = storage;
+                }
+            }
             record(s, storage, 0, t, EntityKind::Variable);
             if (scopes[s].kind != ScopeKind::Class) {
                 default_initialize(storage);

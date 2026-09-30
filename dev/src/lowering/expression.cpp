@@ -27,7 +27,7 @@ Value Procedural::expression(NodeId n, bool location)
                 left = expression(receiver.node,true);
                 left = sem.types[sem.expression_fact(receiver.node).type].kind == TypeKind::Pointer ? load(left) : address(left);
             }
-        } else left = receiver.capture ? captured_address(receiver.capture) : emit(Opcode::Load,IRType::Ptr,{Operand::slot(this_slot)});
+        } else left = receiver.capture ? captured_address(receiver.capture) : implicit_object();
         left = base_projection(left,receiver.qualifier_adjustment);
         left = base_projection(left,receiver.adjustment);
         auto right = converted(sem.call_argument(fact),sem.conversion_fact(fact.conversions));
@@ -134,7 +134,7 @@ Value Procedural::expression(NodeId n, bool location)
     case Kind::KeywordLiteral:
         if (node.op == KW_THIS) {
             auto capture = sem.object_fact(n).capture;
-            Value v = capture ? captured_address(capture) : emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
+            Value v = capture ? captured_address(capture) : implicit_object();
             v.type = fact.type; v.nonnull = true; return v;
         }
         return Value(node.op == KW_NULLPTR ? Operand::null() : Operand::integer(node.op == KW_TRUE),
@@ -160,12 +160,12 @@ Value Procedural::expression(NodeId n, bool location)
             while (storage && sem.nonstatic_field(storage)) storage = sem.injected_storage(storage);
             if (storage) { Value v = binding(fact.entity); v.type = fact.type; return v; }
             auto capture = sem.object_fact(n).capture;
-            Value base = capture ? captured_address(capture) : emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
+            Value base = capture ? captured_address(capture) : implicit_object();
             // Preserve the captured receiver's object projection separately
             // from the selected member projection in the O0 LowIR view.
             if (capture) base = emit(Opcode::Index,IRType::I8,{base.operand,Operand::integer(0)});
             base = base_projection(base,sem.object_fact(n).qualifier_adjustment);
-            Value v = field(base, fact.entity, sem.object_fact(n).adjustment); v.type = fact.type; return v;
+            Value v = field(base, fact.entity, sem.object_fact(n).adjustment, sem.object_fact(n).type); v.type = fact.type; return v;
         }
         return binding(fact.entity);
     case Kind::Parenthesized: return expression(a, location);
@@ -201,7 +201,7 @@ Value Procedural::expression(NodeId n, bool location)
         }
         Value base = node.op == OP_ARROW ? arrow_object(a,sem.object_fact(n).arrow) : address(expression(a, true));
         base = base_projection(base,sem.object_fact(n).qualifier_adjustment);
-        Value v = field(base, fact.entity, sem.object_fact(n).adjustment); v.type = fact.type;
+        Value v = field(base, fact.entity, sem.object_fact(n).adjustment, sem.object_fact(n).type); v.type = fact.type;
         v.member_zero_adjustment = sem.member_pointer_read_zero(n); return v;
     }
     case Kind::BracedInit: case Kind::ParenInitializer: case Kind::Initializer:
@@ -445,7 +445,7 @@ Value Procedural::call(NodeId n, Value destination)
                 object = expression(object_use.node, true);
                 object = sem.types[sem.expression_fact(object_use.node).type].kind == TypeKind::Pointer ? load(object) : address(object);
             }
-        } else object = object_use.capture ? captured_address(object_use.capture) : emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
+        } else object = object_use.capture ? captured_address(object_use.capture) : implicit_object();
         object = base_projection(object,object_use.qualifier_adjustment);
         call_work.push_back(base_projection(object,object_use.adjustment).operand);
     } else if (object_use.node) {

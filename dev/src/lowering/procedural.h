@@ -115,6 +115,8 @@ class Procedural {
     Value class_temporary(EntityId object, TypeId type);
     Value class_address(EntityId object, TypeId type);
     SlotId this_slot;
+    unsigned initializer_receiver = 0;
+    Value implicit_object();
     void transfer_body(EntityId e);
     void transfer_action(const semantic::TransferAction& action, Value source, Value target, bool assignment);
     void inherited_call(EntityId e, Value object);
@@ -346,7 +348,7 @@ class Procedural {
     void heap_array_destroy(EntityId destructor, TypeId leaf, Value data, Operand count);
     Value operation(ETokenType op, Value a, Value b, TypeId result);
     Value binding(EntityId e);
-    Value field(Value base, EntityId e, unsigned steps = 0);
+    Value field(Value base, EntityId e, unsigned steps = 0, TypeId object = 0);
     Value base_projection(Value base, unsigned steps);
     Value pointer_projection(Value base, unsigned adjustment);
     std::vector<SymbolId> vtables, deleting_symbols;

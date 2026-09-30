@@ -46,8 +46,12 @@ Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory 
 }
 unsigned Analyzer::base_path(TypeId from, EntityId to)
 {
-    while (auto enclosing = injected_class_owners.get(to)) to = enclosing;
     EntityId e = types[from].entity;
+    while (e != to) {
+        auto enclosing = injected_class_owners.get(to);
+        if (!enclosing) break;
+        to = enclosing;
+    }
     if (e == to) return 0;
     // Base edges are fixed before member checking; concrete specializations
     // have distinct entity identities from retained patterns. Cache graph facts

@@ -92,6 +92,10 @@ Constant Analyzer::constant_read(std::uint32_t id)
     auto a = constant_addresses[id]; refresh_constant_storage(a.storage);
     auto storage = constant_storage[a.storage];
     if (storage.live && types[a.type].kind == TypeKind::Function) return Constant(types.compound(TypeKind::Pointer,a.type),id);
+    if (storage.builder) {
+        auto slot = storage.builder->values_by_address.get(id);
+        if (slot) return storage.builder->projected_values[slot-1];
+    }
     if (storage.builder && a.parent && !constant_addresses[a.parent].parent) {
         auto slot = storage.builder->slots.get(a.selector);
         return slot ? storage.builder->parts[slot-1].value : Constant();
@@ -184,7 +188,7 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         auto base = use.node ? constant_arrow(use.node,use.arrow) : active_constant ? constant_activations[active_constant].object : 0;
         if (!base) return 0;
         base = constant_base_projection(constant_base_projection(base,use.qualifier_adjustment),use.adjustment);
-        auto result = constant_subobject(base,entities[x.entity].type,x.entity);
+        auto result = constant_field_address(base,x.entity);
         auto kind = types[entities[x.entity].type].kind;
         if (kind == TypeKind::LRef || kind == TypeKind::RRef) { auto v = constant_read(result); return v.valid ? v.bits : 0; }
         return result;

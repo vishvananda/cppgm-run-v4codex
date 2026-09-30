@@ -106,6 +106,7 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
             for (unsigned j = 0; valid && j < member.action_count; ++j) {
                 auto action = subobject_actions[member.action_begin+j];
                 Constant v;
+                constant_activations[id].object = constant_construction_receiver(receiver,action.receiver_storage);
                 if (member.inherited_constructor && action.constructor == member.inherited_constructor) {
                     std::vector<Constant> forwarded;
                     auto f = types[entities[action.constructor].type];
@@ -126,16 +127,24 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
                     }
                     v = constant_construct(action.constructor,forwarded);
                 } else v = constant_initialize(action.initializer,action.type,entities[e].scope,action.initializer ? 0 : action.constructor);
+                constant_activations[id].object = receiver;
                 if (!v.valid) { valid = false; break; }
                 if (member.delegated_constructor) { value = v; break; }
                 EvaluatedPart p; p.selector = action.field ? action.field : (0x80000000U | types[action.type].entity);
                 p.value = constant_field_value(action.field,v);
+                if (action.storage) {
+                    constant_projected_action(builder,action,receiver,p.value);
+                    ++constant_storage[storage].version; continue;
+                }
                 auto slot = slots.get(p.selector);
                 if (slot) parts[slot-1] = p;
                 else { slots.put(p.selector,parts.size()+1); parts.push_back(p); }
                 ++constant_storage[storage].version;
             }
-            if (valid && !member.delegated_constructor) value = evaluated_object(t,parts);
+            if (valid && !member.delegated_constructor) {
+                finish_constant_projections(builder);
+                value = evaluated_object(t,parts);
+            }
             constant_storage[storage].value = value;
             constant_storage[storage].readable = value.valid;
             if (valid && !synthetic_member(e)) {

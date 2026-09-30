@@ -171,6 +171,7 @@ public:
     }
     const MemberFacts& member_fact(EntityId e) const { return members[entities[e].member_info]; }
     std::vector<SubobjectAction> subobject_actions;
+    std::vector<ConstructionStorage> construction_storage = std::vector<ConstructionStorage>(1);
     std::vector<InheritedArgument> inherited_arguments = std::vector<InheritedArgument>(1);
     bool synthetic_member(EntityId e) const;
     bool transfer_member(EntityId e) const;
@@ -667,7 +668,21 @@ private:
     // is separate: copies share values, never addresses or lifetimes.
     struct EvaluatedPart { std::uint64_t selector = 0, count = 1; Constant value; };
     struct EvaluatedObject { TypeId type = 0; std::uint32_t first = 0, count = 0, next = 0, addresses = 0, address_count = 0; };
-    struct ConstantBuilder { Index slots; std::vector<EvaluatedPart> parts; };
+    struct ConstantBuildGroup {
+        std::uint32_t path = 0, address = 0, parent = 0;
+        Index slots; std::vector<EvaluatedPart> parts;
+    };
+    struct ConstantBuilder {
+        Index slots; std::vector<EvaluatedPart> parts;
+        Index groups_by_path, values_by_address;
+        std::vector<ConstantBuildGroup> groups;
+        std::vector<Constant> projected_values;
+    };
+    void constant_projected_action(ConstantBuilder& builder, const SubobjectAction& action,
+        std::uint32_t receiver, Constant value);
+    void finish_constant_projections(ConstantBuilder& builder);
+    std::uint32_t constant_construction_receiver(std::uint32_t receiver, unsigned path);
+    std::uint32_t constant_field_address(std::uint32_t parent, EntityId field);
     std::uint32_t constant_destination = 0;
     struct ConstantStorage { TypeId type = 0; EntityId entity = 0; NodeId literal = 0; Constant value; ConstantBuilder* builder = 0; std::uint32_t version = 0; bool live = true, readable = false; };
     struct ConstantAddress { std::uint32_t storage = 0, parent = 0, next = 0; TypeId type = 0; std::uint64_t selector = 0, offset = 0; bool located = false; };

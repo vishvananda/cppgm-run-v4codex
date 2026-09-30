@@ -125,7 +125,7 @@ struct ClassFacts {
     std::uint32_t primary_base = 0;
     std::uint32_t virtual_bases_begin = 0, virtual_bases_count = 0;
     unsigned rtti_flags = ~0U; // Uncomputed until an RTTI consumer demands it.
-    ScopeId default_constructor = 0;
+    ScopeId default_constructor = 0, member_initializer_scope = 0;
     FactState layout_state = FactState::NotStarted;
     std::uint32_t empty_types_begin = 0, empty_types_count = 0;
     bool aggregate = true, empty = true;
@@ -137,6 +137,7 @@ struct ClassFacts {
     unsigned local_ordinal = 0;
     EntityId value_constructor = 0;
     EntityId variant_initializer = 0;
+    bool has_member_initializer = false;
     unsigned char declared_transfers = 0, generated_transfers = 0;
     BooleanFact copy_storage_state = BooleanFact::NotStarted;
     BooleanFact trivial_destructor_state = BooleanFact::NotStarted;
@@ -337,8 +338,14 @@ struct ObjectAction { EntityId object, constructor; TypeId address_type; };
 struct LifecycleBase {
     EntityId type; std::uint64_t offset; std::uint32_t vtt; bool virtual_base;
 };
+// A constructor owns each projected anonymous-storage path. Parent identities
+// share prefixes; the completed layout supplies one cumulative byte offset.
+struct ConstructionStorage {
+    EntityId field; std::uint32_t parent; std::uint64_t offset;
+};
 struct SubobjectAction {
     EntityId field; TypeId type; NodeId initializer; EntityId constructor; std::uint32_t base;
+    std::uint32_t storage = 0, receiver_storage = 0;
     SubobjectAction(EntityId f, TypeId t, NodeId i, EntityId c, std::uint32_t b = 0)
         : field(f), type(t), initializer(i), constructor(c), base(b) {}
 };

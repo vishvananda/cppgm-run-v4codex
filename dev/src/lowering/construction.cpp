@@ -55,8 +55,10 @@ void Procedural::constructor_body(EntityId e, bool base)
     bool vptr_written = false;
     for (unsigned j = 0; j < m.action_count; ++j) {
         auto action = sem.subobject_actions[m.action_begin+j];
+        auto offset = action.field ? (sem.entities[action.field].member_offset + sem.construction_storage[action.storage].offset) : sem.lifecycle_bases[action.base].offset;
         if (base && action.base && sem.lifecycle_bases[action.base].virtual_base) continue;
         construction_base = action.base;
+        initializer_receiver = action.receiver_storage;
         if (action.field && !vptr_written) { vpointer_store(cls); vptr_written = true; }
         if (!action.field && action.initializer && !sem.initializer_work(sem.initializer_plan(action.initializer, action.type))) continue;
         if (!action.field && sem.empty_class(action.type) && sem.object_fact(action.initializer).value_initialize &&
@@ -66,12 +68,12 @@ void Procedural::constructor_body(EntityId e, bool base)
         auto t = sem.types[action.type];
         if (t.kind == TypeKind::Array && !action.initializer) {
             array_construct(action.constructor, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
-                {{action.field ? sem.entities[action.field].member_offset : sem.lifecycle_bases[action.base].offset, action.field != 0}});
+                {{offset, action.field != 0}});
             finish_subobject(action); continue;
         }
         if (action.initializer && (t.kind == TypeKind::Array || (t.kind == TypeKind::Named && sem.entities[t.entity].class_info)) &&
             !sem.facts[action.initializer].entity) {
-            std::vector<InitProjection> path(1, {action.field ? sem.entities[action.field].member_offset : sem.lifecycle_bases[action.base].offset, action.field != 0, action.field});
+            std::vector<InitProjection> path(1, {offset, action.field != 0, action.field});
             aggregate_initialize(action.initializer, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true, path);
             finish_subobject(action); continue;
         }
@@ -85,16 +87,16 @@ void Procedural::constructor_body(EntityId e, bool base)
         auto field = sem.field_fact(action.field);
         if (scalar && field.unit_transfer) {
             Value at; at.type = action.type; at.bit_field = action.field; at.initializing = true;
-            at.init_offset = sem.entities[action.field].member_offset;
+            at.init_offset = offset;
             store_bit_field(value,at,this_slot);
             finish_subobject(action); continue;
         }
         Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
-        Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : sem.lifecycle_bases[action.base].offset)});
+        Value at = emit(i, {base.operand, Operand::integer(offset)});
         at.type = action.type; at.address = true;
         if (field.bit_field) {
-            at.bit_field = action.field; at.initializing = true; at.init_offset = sem.entities[action.field].member_offset;
+            at.bit_field = action.field; at.initializing = true; at.init_offset = offset;
         }
         if (scalar) store(value, at);
         else if (action.initializer) {
@@ -110,6 +112,7 @@ void Procedural::constructor_body(EntityId e, bool base)
         else { at.address = false; construct(action.constructor, 0, at, !action.field); }
         finish_subobject(action);
     }
+    initializer_receiver = 0;
     if (!vptr_written) vpointer_store(cls);
 }
 } }

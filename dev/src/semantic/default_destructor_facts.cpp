@@ -23,7 +23,7 @@ bool Analyzer::default_destruction_valid(TypeId type, ScopeId scope, bool varian
     auto cls = types[type].entity;
     require_destructor_class(cls);
     auto info = entities[cls].class_info;
-    if (class_facts[info].storage) {
+    if (class_facts[info].storage && entities[cls].key == KW_UNION) {
         // The enclosing class owns anonymous-union variant restrictions. Its
         // artificial storage object has no separately invoked destructor.
         auto cs = entities[cls].scope;
@@ -47,7 +47,7 @@ bool Analyzer::default_destructor_valid(EntityId e)
     auto m = entities[e].member_info;
     if (!m || !members[m].destructor || !members[m].synthetic) return true;
     auto cls = scopes[entities[e].owner].entity;
-    if (class_facts[entities[cls].class_info].storage) return true;
+    if (class_facts[entities[cls].class_info].storage && entities[cls].key == KW_UNION) return true;
     auto state = members[m].destructor_properties;
     if (state == FactState::Success) return true;
     if (state == FactState::Failure) return false;

@@ -204,16 +204,17 @@ void Procedural::emit_cleanups()
     for (auto entry : constructed_subobjects) {
         start(entry.handler);
         auto action = entry.action;
+        auto offset = action.field ? (sem.entities[action.field].member_offset + sem.construction_storage[action.storage].offset) : sem.lifecycle_bases[action.base].offset;
         if (sem.types[action.type].kind == TypeKind::Array) {
             array_destroy(sem.type_destructor(action.type), action.type, Value(Operand::slot(this_slot), IRType::Ptr), true,
-                {{action.field ? sem.entities[action.field].member_offset : sem.lifecycle_bases[action.base].offset, action.field != 0}});
+                {{offset, action.field != 0}});
             if (previous) jump(previous);
             else { emit(Opcode::EhEnd, IRType(), {}); emit(Opcode::Resume, IRType(), {}); }
             previous = entry.handler; continue;
         }
         Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
-        Value at = emit(i, {base.operand, Operand::integer(action.field ? sem.entities[action.field].member_offset : sem.lifecycle_bases[action.base].offset)});
+        Value at = emit(i, {base.operand, Operand::integer(offset)});
         EntityId dtor = sem.type_destructor(action.type);
         // A leaf virtual base has identical complete/base destruction. Keep
         // the established cleanup entry when no virtual-base tail is omitted.

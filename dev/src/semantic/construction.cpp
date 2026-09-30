@@ -259,7 +259,7 @@ void Analyzer::constructor_actions(EntityId e)
         }
     }
     size(entities[cls].type);
-    Index explicit_initializers;
+    Index explicit_initializers, projected_storage, selected_variants;
     NodeId list = child(members[m].source, Kind::CtorInitializer);
     if (!list) list = child(entities[e].body,Kind::CtorInitializer);
     demand_region(list);
@@ -286,7 +286,25 @@ void Analyzer::constructor_actions(EntityId e)
             return;
         }
         if (explicit_initializers.get(field)) throw std::runtime_error("duplicate constructor initializer");
-        bool direct_member = nonstatic_field(field) && entities[field].owner == entities[cls].scope;
+        EntityId direct = field;
+        if (nonstatic_field(field)) {
+            // Record each actual storage edge and select a union variant at
+            // its immediate owner. Multiple leaves of one struct are one
+            // union variant; two different variants still conflict.
+            for (;;) {
+                auto owner = scopes[entities[direct].owner].entity;
+                if (entities[owner].key == KW_UNION) {
+                    auto prior = selected_variants.get(owner);
+                    if (prior && prior != direct) throw std::runtime_error("multiple initialized union variants");
+                    selected_variants.put(owner,direct);
+                }
+                if (entities[direct].owner == entities[cls].scope) break;
+                auto storage = injected_storage(direct);
+                if (!storage || !nonstatic_field(storage)) break;
+                projected_storage.put(storage,1); direct = storage;
+            }
+        }
+        bool direct_member = nonstatic_field(direct) && entities[direct].owner == entities[cls].scope;
         bool direct_base = false;
         for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next)
             direct_base |= bases[b].base == field;
@@ -295,15 +313,6 @@ void Analyzer::constructor_actions(EntityId e)
         explicit_initializers.put(field, ast[id].next);
     }
     std::vector<SubobjectAction> work;
-    EntityId variant = 0;
-    if (entities[cls].key == KW_UNION) {
-        for (NodeId n = ast[list].first; n; n = ast[n].next) {
-            EntityId field = resolve(ast[child(n, Kind::MemInitializerId)].detail, entities[e].owner);
-            if (variant) throw std::runtime_error("multiple initialized union variants");
-            variant = field;
-        }
-        if (!variant) variant = class_facts[entities[cls].class_info].variant_initializer;
-    }
     auto add = [&](EntityId field, TypeId type, NodeId initial, unsigned base) {
         EntityId ctor = 0;
         if (!initial && field && class_value(type)) {
@@ -311,12 +320,28 @@ void Analyzer::constructor_actions(EntityId e)
             // An anonymous union with no chosen variant has no subobject to
             // initialize in a user-provided enclosing constructor. Defaulted
             // enclosing constructors check variant deletion separately.
-            if (class_facts[info].storage == field && !class_facts[info].variant_initializer) return;
+            if (entities[types[type].entity].key == KW_UNION &&
+                class_facts[info].storage == field && !class_facts[info].variant_initializer) return;
         }
         default_destructor(type, scope);
         bool saved_base = base_initialization;
         base_initialization = !field;
-        if (initial) initialize(initial, type, scope);
+        if (initial) {
+            auto context = scope;
+            if (field && initial == entities[field].initializer) {
+                auto cls = scopes[entities[field].owner].entity;
+                auto info = entities[cls].class_info;
+                context = class_facts[info].member_initializer_scope;
+                if (!context) {
+                    context = make_scope(ScopeKind::Block,entities[field].owner);
+                    class_facts[info].member_initializer_scope = context;
+                    TemplateObjectContext object; object.owner = cls; object.available = true;
+                    template_object_context_index.put(context,template_object_contexts.size());
+                    template_object_contexts.push_back(object);
+                }
+            }
+            initialize(initial, type, context);
+        }
         else if (types[type].kind == TypeKind::Array || (types[type].kind == TypeKind::Named && entities[types[type].entity].class_info)) ctor = default_constructor(type, scope);
         else if (types[type].kind == TypeKind::LRef || types[type].kind == TypeKind::RRef || (types[type].cv & 1))
             throw std::runtime_error("uninitialized reference or const member");
@@ -348,13 +373,42 @@ void Analyzer::constructor_actions(EntityId e)
             work.push_back({0, entities[base].type, 0, inherited, id});
         } else add(0, entities[base].type, explicit_initializers.get(base), id);
     }
-    for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
-        EntityId field = declarations[d].entity;
-        if (!nonstatic_field(field) || entities[field].owner != entities[cls].scope) continue;
-        if (entities[cls].key == KW_UNION && field != variant) continue;
-        NodeId init = explicit_initializers.get(field);
-        if (!init) init = entities[field].initializer;
-        add(field, entities[field].type, init, 0);
+    // Traverse only storage selected by projected initializers. Untouched
+    // storage retains its independently checked default-construction action.
+    struct StorageFrame { EntityId owner; unsigned path, declaration; };
+    StorageFrame frame{cls,0,scopes[entities[cls].scope].first_decl};
+    std::vector<StorageFrame> parents;
+    for (;;) {
+        if (!frame.declaration) {
+            if (parents.empty()) break;
+            frame = parents.back(); parents.pop_back(); continue;
+        }
+        EntityId field = declarations[frame.declaration].entity;
+        frame.declaration = declarations[frame.declaration].next;
+        auto cs = entities[frame.owner].scope;
+        if (!nonstatic_field(field) || entities[field].owner != cs) continue;
+        auto variant = selected_variants.get(frame.owner);
+        if (!variant) variant = class_facts[entities[frame.owner].class_info].variant_initializer;
+        if (entities[frame.owner].key == KW_UNION && field != variant) continue;
+        if (projected_storage.get(field)) {
+            auto next = construction_storage.size();
+            construction_storage.push_back({field,frame.path,construction_storage[frame.path].offset+entities[field].member_offset});
+            // The complete object's destructor still owns ordinary
+            // destruction; partially built leaves own constructor unwind.
+            default_destructor(entities[field].type,scope);
+            parents.push_back(frame);
+            auto owner = types[entities[field].type].entity;
+            frame = {owner,unsigned(next),scopes[entities[owner].scope].first_decl};
+        } else {
+            NodeId init = explicit_initializers.get(field);
+            if (!init) init = entities[field].initializer;
+            auto begin = work.size();
+            add(field, entities[field].type, init, 0);
+            if (work.size() != begin) {
+                work.back().storage = frame.path;
+                if (init && init == entities[field].initializer) work.back().receiver_storage = frame.path;
+            }
+        }
     }
     members[m].action_begin = subobject_actions.size(); members[m].action_count = work.size();
     subobject_actions.insert(subobject_actions.end(), work.begin(), work.end());

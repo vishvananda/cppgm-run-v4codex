@@ -542,6 +542,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         auto cls = scopes[s].entity;
         auto info = entities[cls].class_info;
         class_facts[info].aggregate = false;
+        class_facts[info].has_member_initializer = true;
         if (entities[cls].key == KW_UNION) {
             if (class_facts[info].variant_initializer) throw std::runtime_error("multiple default union variant initializers");
             class_facts[info].variant_initializer = e;

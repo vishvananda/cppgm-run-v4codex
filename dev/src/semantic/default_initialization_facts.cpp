@@ -61,7 +61,12 @@ bool Analyzer::default_constructor_valid(EntityId e)
                 while (types[type].kind == TypeKind::Array) type = types[type].child;
                 all_const &= (types[type].cv & 1) != 0;
             }
-            subobject(type,entities[field].initializer != 0,variant,entities[field].mutable_field);
+            bool storage_default = false;
+            if (class_value(type)) {
+                auto child = entities[types[type].entity].class_info;
+                storage_default = class_facts[child].storage == field && class_facts[child].has_member_initializer;
+            }
+            subobject(type,entities[field].initializer != 0,variant && !storage_default,entities[field].mutable_field);
         }
         if (has_variant && all_const) valid = false;
         members[m].const_default = const_default;
