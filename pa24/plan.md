@@ -1,102 +1,82 @@
-# PA24 implementation handoff133
+# PA24 final audit134
 
 Stage base commit: bde9eb3e128e24923a1de40bb63b8e348a13553b
-Last reviewed commit: 9f3f9b5caaec9677af0e8431b51cacebcf823dce
+Last reviewed commit: a81684807f1f2c6da2cd83d99fa3d08dfaaf770a
+Entry: clean `63dc6c11`; previous goal turn made verified implementation progress.
 
-Entry was clean `18721ea79d6283dda2351101f2c50b54cac7cf10`. The preceding turn
-made verified TLS progress; no process remained live. Implementation commits are
-`1d73b01e` and `e5b5dada`. **All 296 course tests now pass.** This is the
-implementation handoff; whole-stage independent review remains pending. Preserve
-both review markers and do not advance to PA25 before that review.
+Target: **PA24 full-stage**, O0 native backend. **Accepted for advancement**;
+independent architecture, correctness and performance review is complete.
+See [final audit](audit.md), [checkpoint130](audit130.md),
+[validation134](../student.tests/pa24/validation134.json) and
+[performance134](../student.tests/pa24/performance134.md).
 
-[Audit130](audit.md), [validation133](../student.tests/pa24/validation133.json) and
-[performance133](../student.tests/pa24/performance133.md) retain evidence.
+## Final Spec Alignment
 
-## Design/spec alignment
+Immutable source buffers and streaming cursors feed one parsed graph with typed
+semantic facts, canonical identities, parent-linked template environments and
+demand queues. Typed `Program`/`FunctionBuilder` lowering feeds the PA24 explicit
+LowIR adapter. The native tool validates external LowIR once, selects one
+function's flat MIR, directly encodes x86 instructions, then patches typed
+references into its own ELF image. No assembly, textual MIR or reference tool
+transports or implements production phases. Source/native driver integration,
+relocatable/hosted EH objects, later optimization levels and self-hosting remain
+their handouts' later-stage work.
 
-Typed PA8 Program -> function-owned placement/flat MIR -> direct x86 encoding,
-typed fixups and ELF. Explicit text adapters remain at tool boundaries; neither
-MIR nor assembly transports production phases. Unit-owned dense identity indexes
-survive across functions; function facts, call plans and MIR release after use.
-No reference, host compiler or assembler implements output. Earlier scalar,
-floating, wide, object, phi, atomic, variadic, EH/frame and TLS groups are retained.
+Whole-stage review covered the 20 entry-stage commits, 42 production/build files,
+shared LowIR changes, phase consumers and representative source-to-ELF data flow.
+The source trace checks aligned ordinary fields, a demanded template member,
+mixed ABI and TLS; one template class completes, one member region is demanded,
+and the unused invalid dependent member remains dormant.
 
-133 closes the six canonical placement/frame failures as one ownership group:
+## Finding and completed repair
 
-| Owner | Data flow and completed behavior | Work/lifetime |
-|---|---|---|
-| Placement | Typed signature/value intervals -> scalar stack parameter homes, conservative mixed-conversion FP homes and GPR pool, safe adjacent ABI result carriers | Existing linear walks, fixed register pools, per-function facts |
-| Call setup | Shared ABI fragments -> register/address read masks, GPR/XMM transfer order, safe indirect target retention, early dependent or late independent stack stores, stable stack-call result homes | O(arguments); at most fourteen register assignments and bounded cycle scheduling; call-local storage |
-| Boolean selection | Compare's exact 0/1 fact -> representation-preserving scalar conversion aliases, full use intervals, canonical materialization and retained adjacent debug steps | O(values/uses); one-bit/wide conversions retain their explicit representation changes |
-| Frame finalization/encoding | Actual homes/preserve/scratch facts plus returning-void parameter capacity -> final stack size consumed by prologue/epilogue and dump | One linear finalization walk; no duplicated body or output-only metadata |
+Deferred conditional/switch phi transfers used the last selected source block's
+parameter-clobber mask. A call could therefore replace an incoming argument
+register before the edge incorrectly read it. `a8168480` records each source
+block's exit mask and selects deferred transfers under their predecessor's fact.
+This fixes the shared branch/switch ownership path without changing placement
+policy: one extra compact word per block, one write per source block and one read
+per deferred edge. No new analysis, global invalidation or iterative transform.
 
-Stable ABI homes are excluded from private scratch-carry windows. Incoming
-register fallback is enabled only for the existing proven parameter-flow policy;
-a newly marked ordinary spill must not regain an already reused incoming carrier.
-The new controls cover that interaction across pressure, calls, CFG and widths.
-
-Canonical fixtures require conservative mixed numeric placement and the lowered
-void object-output frame. The first implementation reserved parameter capacity
-more broadly; measurements exposed unnecessary leaf frames. Final code narrows
-that policy to returning void boundaries. Scalar-return/nonreturning functions
-use actual frame requirements. This preserves mandated shapes without imposing
-the extra reservation on unrelated functions. Occupied frames retain ordinary
-Boolean placement; an otherwise empty converted-return path uses its canonical
-fixed carriers/scratch policy. All these facts reach real encoding.
-
-Total work remains O(N + E log E), including inherited sorted phi edges and fixed
-reload windows. There is no new fixed point, global invalidation, semantic
-reconstruction, body cloning or optimization level. All fallback storage and
-instruction growth are linear; per-call register scheduling has a fixed bound.
+The 61 new controls cover all six GPR argument positions, three integer widths,
+direct/conditional/switch edges, TLS payloads and cross-function unwind.
+Frozen entry fails 36 valid cases; final code passes all 61. Initial malformed
+personal-generator variants remain in scratch evidence and were corrected.
+Required fixtures, references, bundle and comparison rules remain unchanged.
 
 ## Validation and performance
 
-- Required checks ran sequentially: `make test-pa24` **296/296** plus **17/17**
-  focused properties; prior-through **3856/3856**; root through-PA24 **4152/4152**.
-  File audit passes with the same four inherited substantial-header warnings.
-- Original required failures decrease **6 -> 0**, with no new failures. All 2403
-  tracked fixture files, references and comparators are unchanged. The inventory
-  convention moves **290/435 -> 296/435**: 125 solution regressions are excluded
-  and 14 control inputs report their properties separately. No coverage is waived.
-- Final personal runs: **205 placement**, **1820 scalar**, **1259 floating**,
-  **1495 wide**, **160 object**, **75 EH/frame**, **236 TLS**, **21 audit** controls;
-  parameter flow and scalar/TLS ABI/debug/ELF integration also pass. Early invalid
-  personal inputs and rejected diagnostics remain in evidence; final inputs pass.
-- `trace133.cpp` follows `Mixer<7>::value` and demanded `combine` through source
-  facts, typed LowIR, MIR and ELF. One class completion, one demanded template
-  region, two emitted functions, **214 text bytes**; the unused dependent member
-  stays dormant. Both inputs and ELF/disassembly checks pass. Production source
-  driver integration and self-hosting remain later-stage work.
-- Final frozen A/A + six ABBA blocks: compiler paired B/A medians
-  **1.003 / 1.009 / 1.011 / 1.010** (scalar/float/wide/ABI); RSS stable or lower.
-  The indirect-call workload is **3.4% faster**, **213 -> 207** text bytes.
-  Required mixed-ABI shape costs **8.1% runtime**, **248 -> 279** bytes. Eight
-  inherited runtime images are byte-identical to entry, with both inputs rechecked.
+- `make test-pa24`: **296/296**, plus **17/17** focused properties.
+- `make test-report-through-pa24`: **4152/4152**, **24/24** stages, plus
+  **39/39** separately reported focused properties. The supplied 4315 summary
+  is not the count in either the primary log or the fresh root report.
+- Required file audit: pass, zero fatal findings, four inherited header warnings.
+- Personal suites pass: 1820 scalar, 1259 floating, 1495 wide, 160 object,
+  75 EH/frame, 236 TLS, 205 placement, 21 checkpoint and 61 final-audit cases;
+  ABI/debug/ELF and TLS integration also pass.
+- New source trace: two successful runtime inputs, three native functions,
+  **389 text bytes**, separate RX/RW segments and dump/native byte identity.
+  Native compilation with an empty PATH produces the identical image.
+- Frozen entry/final measurements use A/A calibration, six ABBA blocks, fixed
+  flags/inputs and checked outputs. Final numerical evidence is consolidated
+  in performance134; all 37 inherited manifests match.
+- Native compiler paired medians span **0.983–1.026**, with effectively unchanged
+  RSS. All ten runtime images are byte-identical to entry; no new speedup is
+  claimed. The fixed 9600-specialization source also executes through our native
+  backend (806082 text bytes); frozen frontend binaries and outputs are identical.
 - The inherited 15% compiler latency/RSS and zero optional text-growth targets
-  remain diagnostic. Final medians meet the compiler targets; mandatory canonical
-  costs are disclosed separately. All observations, including initial regressions,
-  spreads/outliers and the corrected frame-policy measurements, are preserved.
-  Correctness, required MIR comparisons/envelopes and finite work bounds remain
-  mandatory. Implementation evidence does not substitute for independent review.
+  are diagnostic. Required correctness, MIR envelopes/comparisons and finite
+  work/growth bounds remain mandatory; no historical observations were removed.
 
-## Handoff boundary and ledger
+## Handoff ledger
 
-**Unfinished implementation:** none identified for the PA24 course handoff. The
-remaining six shape failures are closed, related placement consumers pass, and
-required checks are green. No known defect in this group is relabeled as review.
-
-**Independent review:** still required for 131 EH nesting/value ownership and
-stack/alignment restoration; 132 TLS layout/accessor demand and address consumers;
-133 placement/ABI-home dependencies, Boolean/debug facts, conservative canonical
-policies and performance evidence. Ralph must audit the accumulated whole stage
-against the handout/spec and resolve any findings before advancement. The review
-markers above remain unchanged; passing tests do not waive that audit.
-
-| Handoff | Code / evidence | Disposition |
+| Group | Reviewed code | Final disposition |
 |---|---|---|
-| Audit130 | through `9f3f9b5c`; audit.md | Independently reviewed; 14 failures remained |
-| 131 | `45774fa2`, `c7587f72`; validation131/performance131 | EH/frame complete; 9 failures; independent review pending |
-| 132 | `db965a86`, `03eeff9e`; validation132/performance132 | TLS/address complete; 6 failures; independent review pending |
-| 133 | `1d73b01e`, `e5b5dada`; validation133/performance133 | Placement/frame complete; zero course failures; whole-stage independent review pending |
+| 127–130 scalar/FP/wide/object/phi/atomic | through `9f3f9b5c` | Independently reconstructed again; earlier controls preserved |
+| 131 EH/frame | `45774fa2`, `c7587f72` | Stack floor, handler chain, saved frame and alignment consumers reviewed; accepted |
+| 132 TLS | `db965a86`, `03eeff9e` | Layout, wrapper demand, address consumers, FS startup and fixups reviewed; accepted |
+| 133 placement/frame | `1d73b01e`, `e5b5dada` | ABI dependencies, Boolean/debug facts and canonical costs reviewed; deferred-edge defect repaired |
+| 134 whole-stage | `a8168480` | Accepted: architecture, correctness, performance and required exit checks complete |
 
-Evidence: `/home/vishvananda/work/private/v4codex/artifacts/pa24-133/`.
+No implementation or review handoff remains unexamined. Evidence is retained in
+`/home/vishvananda/work/private/v4codex/artifacts/pa24-134/`.

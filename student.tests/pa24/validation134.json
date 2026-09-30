@@ -1,0 +1,751 @@
+{
+  "stage": "pa24 full-stage final audit134",
+  "disposition": "accepted for advancement",
+  "stage_base_commit": "bde9eb3e128e24923a1de40bb63b8e348a13553b",
+  "entry_commit": "63dc6c112a1646a121d2b3bb5c87725b880587e5",
+  "last_reviewed_commit": "a81684807f1f2c6da2cd83d99fa3d08dfaaf770a",
+  "artifact_directory": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134",
+  "previous_goal_turn": "progress; completed implementation commits and passing primary log; no prior live process at audit entry",
+  "checks": [
+    {
+      "name": "stage",
+      "command": "make test-pa24",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/stage.log",
+      "sha256": "6067ebb9b10683cba2a32baca69fbc4053c747e18b45414d3e1b8b91ee3ce978"
+    },
+    {
+      "name": "through",
+      "command": "make test-report-through-pa24",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/through.log",
+      "sha256": "7be6a8e58aa9a0a7d5d51917313fafaea4d35d78f4aa4172565aeffd751b547e"
+    },
+    {
+      "name": "file-audit",
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa24 --paths dev/src",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/file-audit.log",
+      "sha256": "09991cae3876c91c905a9d48086986cd7bf75a6f2e2dfb20654472296390380d"
+    }
+  ],
+  "course": {
+    "stage_fixtures": 296,
+    "through_fixtures": 4152,
+    "stages": 24,
+    "stage_focused_properties": 17,
+    "through_focused_properties": 39,
+    "supplied_summary_fixture_count": 4315,
+    "summary_note": "Primary last-test.log and fresh root report both count 4152; no coverage removed",
+    "tracked_fixture_files": 2403,
+    "excluded_solution_regression_inputs": 125,
+    "control_input_files": 14,
+    "reference_changes": false,
+    "comparators_changed": false,
+    "file_audit_warnings": 4,
+    "file_audit_fatal": 0
+  },
+  "personal": [
+    {
+      "command": [
+        "python3",
+        "student.tests/pa24/scalar.py"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/scalar.log",
+      "sha256": "21e62ccd5a615c886496fb20667e2485895bae5ceccb391555aecb36f879c9e2"
+    },
+    {
+      "command": [
+        "python3",
+        "student.tests/pa24/floating.py"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/floating.log",
+      "sha256": "764a5d87ab5279532d91f9dad2f3f2e5ad9b362b47b1c172c1850be19ce2859c"
+    },
+    {
+      "command": [
+        "python3",
+        "student.tests/pa24/wide.py"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/wide.log",
+      "sha256": "e9c176ff49931734369b1a76938038d2e7bfc5c37459c46525a0ac0abec2dac8"
+    },
+    {
+      "command": [
+        "python3",
+        "student.tests/pa24/objects.py"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/objects.log",
+      "sha256": "82b4b42864845d4691e0aec8cd1c298681e93aea68eb64006fc5bb030d4cb97f"
+    },
+    {
+      "command": [
+        "python3",
+        "student.tests/pa24/integration.py"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/integration.log",
+      "sha256": "f3735ea515dea551c05c717cc0ade3737c72d8347d47c823ce533ee0151a4b47"
+    },
+    {
+      "command": [
+        "python3",
+        "student.tests/pa24/audit130.py",
+        "dev/lowir2native",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/audit130-final"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/audit130.log",
+      "sha256": "51c3fa48db71d128b2c0cc6072d9e0a83efd352eab6cc9e4a2acfd41811d6f64"
+    },
+    {
+      "command": [
+        "python3",
+        "student.tests/pa24/runtime131.py",
+        "dev/lowir2native",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/runtime131-final"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/runtime131.log",
+      "sha256": "f9f39bae2e8fa0ac64cc2ac80f0dfb2aa6056d7b9ddb5573aefac85c515d90ff"
+    },
+    {
+      "command": [
+        "python3",
+        "student.tests/pa24/tls132.py",
+        "dev/lowir2native",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/tls132-final"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/tls132.log",
+      "sha256": "d92ed380257210d9e33337a9a56fea317b5f9296e0a37ac2238837eadd29ff19"
+    },
+    {
+      "command": [
+        "python3",
+        "student.tests/pa24/tls-integration132.py",
+        "dev/lowir2native",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/tls-integration132-final"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/tls-integration132.log",
+      "sha256": "c15dc5d681ecb4f874f4ebffcb90768f7098a1f5fa42cfb91f8146f870e26045"
+    },
+    {
+      "command": [
+        "python3",
+        "student.tests/pa24/placement133.py",
+        "dev/lowir2native",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/placement133-final"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/placement133.log",
+      "sha256": "e147ebf9b6c8e33bb57b3e44f2f0f89341788cfe1daf5c65362d801130d8d666"
+    }
+  ],
+  "new_controls": {
+    "command": "python3 student.tests/pa24/audit134.py dev/lowir2native ARTIFACT_DIR/reducers-final",
+    "entry_failures": 36,
+    "cases": 61,
+    "final_failures": 0,
+    "entry_results_sha256": "64b3b7a8963917949bbba43e4d170ff73dab027cd6292a2b4c5c1e57f6d430dd",
+    "final_results_sha256": "9fa623f48d435f579883c3f31b40d20e8d497f6ca900e7ccaa06897e190709a5",
+    "initial_invalid_generator_evidence": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/reducers-after/results.json"
+  },
+  "architecture": {
+    "production_build_files_reviewed": 42,
+    "entry_stage_commits": 20,
+    "pending_handoffs_closed": [
+      131,
+      132,
+      133
+    ],
+    "typed_pipeline": true,
+    "source_trace": "student.tests/pa24/trace134.cpp",
+    "trace_checks": [
+      {
+        "command": [
+          "dev/cppgm++",
+          "--stats",
+          "--validate-lowir",
+          "--emit-lowir",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/trace.lowir",
+          "student.tests/pa24/trace134.cpp"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "dev/lowir2native",
+          "--stats",
+          "--dump-machine-ir",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/trace.mir",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/trace",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/trace.lowir"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/trace"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/trace",
+          "input"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "readelf",
+          "-h",
+          "-l",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/trace"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "dev/lowir2native",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/trace-plain",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/trace.lowir"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "native_text_bytes": 389,
+    "source_trace_functions": 3,
+    "template_class_completions": 1,
+    "template_demanded_regions": 1,
+    "empty_PATH_native_identity": true,
+    "mir_view_identity": true,
+    "required_new_sources_registered": "no new production translation unit",
+    "pipeline_work": "O(N + E log E); new exit fact O(blocks) space, O(blocks + delayed_edges) work"
+  },
+  "performance": {
+    "protocol": "fixed binaries/flags/inputs; one CPU; four A/A samples, six wall-time ABBA blocks; separate compilation/execution, checked results",
+    "native_runs": [
+      {
+        "workload": "scalar",
+        "command": [
+          "python3",
+          "student.tests/pa24/benchmark.py",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/before-lowir2native",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/after-lowir2native",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/bench-scalar",
+          "runtime",
+          "memory-runtime",
+          "floating-runtime",
+          "pressure-runtime",
+          "wide-runtime",
+          "wide-numeric-runtime",
+          "exception-runtime",
+          "tls-runtime",
+          "call-runtime",
+          "mixed-abi-runtime"
+        ],
+        "environment": {},
+        "exit_code": 0
+      },
+      {
+        "workload": "floating",
+        "command": [
+          "python3",
+          "student.tests/pa24/benchmark.py",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/before-lowir2native",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/after-lowir2native",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/bench-floating"
+        ],
+        "environment": {
+          "PA24_FLOAT_COMPILER": "1",
+          "PA24_COMPILE_ONLY": "1"
+        },
+        "exit_code": 0
+      },
+      {
+        "workload": "wide",
+        "command": [
+          "python3",
+          "student.tests/pa24/benchmark.py",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/before-lowir2native",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/after-lowir2native",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/bench-wide"
+        ],
+        "environment": {
+          "PA24_WIDE_COMPILER": "1",
+          "PA24_COMPILE_ONLY": "1"
+        },
+        "exit_code": 0
+      },
+      {
+        "workload": "abi",
+        "command": [
+          "python3",
+          "student.tests/pa24/benchmark.py",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/before-lowir2native",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/after-lowir2native",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/bench-abi"
+        ],
+        "environment": {
+          "PA24_ABI_COMPILER": "1",
+          "PA24_COMPILE_ONLY": "1"
+        },
+        "exit_code": 0
+      },
+      {
+        "workload": "eh",
+        "command": [
+          "python3",
+          "student.tests/pa24/benchmark.py",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/before-lowir2native",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/after-lowir2native",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/bench-eh"
+        ],
+        "environment": {
+          "PA24_RUNTIME_COMPILER": "1",
+          "PA24_COMPILE_ONLY": "1"
+        },
+        "exit_code": 0
+      },
+      {
+        "workload": "tls",
+        "command": [
+          "python3",
+          "student.tests/pa24/benchmark.py",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/before-lowir2native",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/after-lowir2native",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/bench-tls"
+        ],
+        "environment": {
+          "PA24_TLS_COMPILER": "1",
+          "PA24_COMPILE_ONLY": "1"
+        },
+        "exit_code": 0
+      }
+    ],
+    "compiler_summary": [
+      {
+        "workload": "scalar",
+        "compiler": {
+          "paired_B_over_A": [
+            0.9836450919741336,
+            1.048142856790624,
+            1.0709282329985441,
+            0.9815296091939989,
+            0.952105938555159,
+            0.9200158498777662
+          ],
+          "median_ratio": 0.9825873505840663,
+          "A": {
+            "wall_median": 0.5405996860936284,
+            "wall_range": [
+              0.492351533845067,
+              1.0627941563725471
+            ],
+            "rss_max": 88064
+          },
+          "B": {
+            "wall_median": 0.5614495305344462,
+            "wall_range": [
+              0.48853911459445953,
+              0.9645652007311583
+            ],
+            "rss_max": 87852
+          },
+          "AA_range": [
+            0.5049566514790058,
+            0.8788064233958721
+          ]
+        },
+        "inputs": {
+          "compiler": "8a6e5de91783f08bdd73eddf76e68cf4c533c2018bf18b3b0a97667497724f5c",
+          "runtime": "cf0fbb9f0429e6093fd2a02c8caf978a0de9373eea3e294cb915867af28ed2b1",
+          "memory-runtime": "85e0ba403a08419d297523dbdd5f08d582e36c75d690975f34927a9627885c79",
+          "floating-runtime": "042d47faa19ee4aea8027163f445216525e125df2335b3e219acc81ec9619c1b",
+          "pressure-runtime": "d63f358413811977863cf5e2e637d9c6c23e7cbbe03f40e7275606950fb3c8a6",
+          "wide-runtime": "88d647a6e83c140606484e79e880f488786a57196d6fda8ca63fb9cccf216d27",
+          "wide-numeric-runtime": "c12caae5824ab743d772cc6e370fd803b9a6d977b98b264c9c92621312d77124",
+          "exception-runtime": "bb43fe64a10e50abbd82b4452c7ba84d0cdeb46bbb6d2ca8a478f26ccca96311",
+          "tls-runtime": "d5225a2811974955608c75b7cd92201d0f8791fc2d5d95e25087ac524ab42d03",
+          "call-runtime": "622dd9b0bf55ffa3dee2d95fe787a05f381850dd2746da5949522ec5a15e82a0",
+          "mixed-abi-runtime": "7dfbb38b6c54f5fc696b029a0254943297164f91dd494c01f9f385c4f86b782d"
+        },
+        "stats": {
+          "read_validate_ms": 387.822,
+          "selection_ms": 79.3617,
+          "encoding_ms": 14.101,
+          "peak_rss_kib": 87832.0,
+          "functions": 4097.0,
+          "instructions": 270342.0,
+          "frame_bytes": 0.0,
+          "text_bytes": 1105970.0,
+          "value_visits": 266242.0,
+          "scratch_carried_reloads": 0.0,
+          "parameter_flow_visits": 0.0,
+          "carry_window_visits": 0.0,
+          "xmm_reuses": 0.0,
+          "input_pool_growths": 146.0,
+          "input_pool_bytes": 89653248.0
+        }
+      },
+      {
+        "workload": "floating",
+        "compiler": {
+          "paired_B_over_A": [
+            0.9813085845541891,
+            0.9954430843251775,
+            0.9979413497713837,
+            1.004320954361384,
+            1.3146337810257196,
+            1.0199794212527133
+          ],
+          "median_ratio": 1.001131152066384,
+          "A": {
+            "wall_median": 0.6823480948805809,
+            "wall_range": [
+              0.6669172998517752,
+              0.7114840019494295
+            ],
+            "rss_max": 88924
+          },
+          "B": {
+            "wall_median": 0.6850772686302662,
+            "wall_range": [
+              0.6698788702487946,
+              1.0546156112104654
+            ],
+            "rss_max": 88936
+          },
+          "AA_range": [
+            0.721695913001895,
+            0.8496450874954462
+          ]
+        },
+        "inputs": {
+          "compiler": "34b0280e3e4b6691a5347290fd89613565da8a2b307787dd583bf8c25bf39fde"
+        },
+        "stats": {
+          "read_validate_ms": 530.617,
+          "selection_ms": 66.5478,
+          "encoding_ms": 68.9684,
+          "peak_rss_kib": 88832.0,
+          "functions": 4097.0,
+          "instructions": 270340.0,
+          "frame_bytes": 196656.0,
+          "text_bytes": 5316699.0,
+          "value_visits": 266242.0,
+          "scratch_carried_reloads": 0.0,
+          "parameter_flow_visits": 0.0,
+          "carry_window_visits": 0.0,
+          "xmm_reuses": 262144.0,
+          "input_pool_growths": 166.0,
+          "input_pool_bytes": 98041856.0
+        }
+      },
+      {
+        "workload": "wide",
+        "compiler": {
+          "paired_B_over_A": [
+            0.8857728565194055,
+            1.0179565555291015,
+            1.1786550907342292,
+            0.6937432676360071,
+            1.0012295794877368,
+            1.1469691508048607
+          ],
+          "median_ratio": 1.009593067508419,
+          "A": {
+            "wall_median": 0.7875035898759961,
+            "wall_range": [
+              0.7320181522518396,
+              1.232464488595724
+            ],
+            "rss_max": 88352
+          },
+          "B": {
+            "wall_median": 0.8106523314490914,
+            "wall_range": [
+              0.7332920841872692,
+              1.1017465572804213
+            ],
+            "rss_max": 88344
+          },
+          "AA_range": [
+            0.7497252766042948,
+            0.7758027520030737
+          ]
+        },
+        "inputs": {
+          "compiler": "bd888b0d81887210f4ec311cfd90d75dfb59325daae49d3c83659dab176ac641"
+        },
+        "stats": {
+          "read_validate_ms": 444.11,
+          "selection_ms": 224.872,
+          "encoding_ms": 122.413,
+          "peak_rss_kib": 88344.0,
+          "functions": 4097.0,
+          "instructions": 1597455.0,
+          "frame_bytes": 4259856.0,
+          "text_bytes": 9232476.0,
+          "value_visits": 266242.0,
+          "scratch_carried_reloads": 0.0,
+          "parameter_flow_visits": 0.0,
+          "carry_window_visits": 0.0,
+          "xmm_reuses": 0.0,
+          "input_pool_growths": 146.0,
+          "input_pool_bytes": 89653248.0
+        }
+      },
+      {
+        "workload": "abi",
+        "compiler": {
+          "paired_B_over_A": [
+            0.8163117541503941,
+            1.0977539206776956,
+            0.7531425679855136,
+            1.0604338093885233,
+            1.0471561836174195,
+            1.0048989651874976
+          ],
+          "median_ratio": 1.0260275744024585,
+          "A": {
+            "wall_median": 1.1225076578557491,
+            "wall_range": [
+              1.0783173963427544,
+              1.8420873899012804
+            ],
+            "rss_max": 130148
+          },
+          "B": {
+            "wall_median": 1.1427013138309121,
+            "wall_range": [
+              1.08553665317595,
+              1.793690025806427
+            ],
+            "rss_max": 130100
+          },
+          "AA_range": [
+            1.0942533481866121,
+            1.1821029391139746
+          ]
+        },
+        "inputs": {
+          "compiler": "e8eccbcab5e5a5e2b134e29331d4366c2320957c5d3149ab2aaa9ca84e314ebd"
+        },
+        "stats": {
+          "read_validate_ms": 682.97,
+          "selection_ms": 297.997,
+          "encoding_ms": 141.825,
+          "peak_rss_kib": 129908.0,
+          "functions": 4098.0,
+          "instructions": 1576976.0,
+          "frame_bytes": 196688.0,
+          "text_bytes": 9511042.0,
+          "value_visits": 266251.0,
+          "scratch_carried_reloads": 0.0,
+          "parameter_flow_visits": 0.0,
+          "carry_window_visits": 0.0,
+          "xmm_reuses": 0.0,
+          "input_pool_growths": 168.0,
+          "input_pool_bytes": 131727360.0
+        }
+      },
+      {
+        "workload": "eh",
+        "compiler": {
+          "paired_B_over_A": [
+            0.970959463951056,
+            1.0227257576526372,
+            1.035497965271853,
+            0.9943404911051019,
+            1.0055862845470611,
+            0.99957646901507
+          ],
+          "median_ratio": 1.0025813767810656,
+          "A": {
+            "wall_median": 0.543625601567328,
+            "wall_range": [
+              0.5366217959672213,
+              0.5654588919132948
+            ],
+            "rss_max": 78484
+          },
+          "B": {
+            "wall_median": 0.5451187258586287,
+            "wall_range": [
+              0.5358601845800877,
+              0.5860627051442862
+            ],
+            "rss_max": 78484
+          },
+          "AA_range": [
+            0.5425771679729223,
+            0.6219191774725914
+          ]
+        },
+        "inputs": {
+          "compiler": "3573bb1a5c6482382bb99d3674127fd0ab7f854c3ef69a5b31eeda8adf3da331"
+        },
+        "stats": {
+          "read_validate_ms": 415.636,
+          "selection_ms": 87.6412,
+          "encoding_ms": 25.8607,
+          "peak_rss_kib": 78408.0,
+          "functions": 4097.0,
+          "instructions": 303110.0,
+          "frame_bytes": 851968.0,
+          "text_bytes": 2117682.0,
+          "value_visits": 286722.0,
+          "scratch_carried_reloads": 0.0,
+          "parameter_flow_visits": 0.0,
+          "carry_window_visits": 0.0,
+          "xmm_reuses": 0.0,
+          "input_pool_growths": 172.0,
+          "input_pool_bytes": 89767936.0
+        }
+      },
+      {
+        "workload": "tls",
+        "compiler": {
+          "paired_B_over_A": [
+            1.013542002339262,
+            0.9923837322410153,
+            1.0099843169889704,
+            0.9731066330905441,
+            1.0246424710496056,
+            0.8549582233137785
+          ],
+          "median_ratio": 1.0011840246149928,
+          "A": {
+            "wall_median": 0.5291792005300522,
+            "wall_range": [
+              0.5195898003876209,
+              0.7067127842456102
+            ],
+            "rss_max": 83808
+          },
+          "B": {
+            "wall_median": 0.5251437900587916,
+            "wall_range": [
+              0.5170581601560116,
+              0.5504320003092289
+            ],
+            "rss_max": 83820
+          },
+          "AA_range": [
+            0.5201595388352871,
+            0.7018601056188345
+          ]
+        },
+        "inputs": {
+          "compiler": "9b0945bc0bd697dd87216449cbef2bcb9eb99a30c06b4b317e3d65d0a6e6ff8e"
+        },
+        "stats": {
+          "read_validate_ms": 431.358,
+          "selection_ms": 85.4703,
+          "encoding_ms": 17.9623,
+          "peak_rss_kib": 83580.0,
+          "functions": 4097.0,
+          "instructions": 286726.0,
+          "frame_bytes": 0.0,
+          "text_bytes": 1261658.0,
+          "value_visits": 278530.0,
+          "scratch_carried_reloads": 0.0,
+          "parameter_flow_visits": 0.0,
+          "carry_window_visits": 0.0,
+          "xmm_reuses": 0.0,
+          "input_pool_growths": 173.0,
+          "input_pool_bytes": 90505216.0
+        }
+      }
+    ],
+    "runtime_all_10_byte_identical": true,
+    "frontend_identical_binaries_and_outputs": true,
+    "frontend_text_bytes": 806082,
+    "historical_manifests_verified": 37,
+    "acceptance": "stage-scoped spec: inherited 15% latency/RSS and zero optional text growth are diagnostic; correctness, required comparisons/envelopes and finite work/growth remain mandatory"
+  },
+  "binaries": {
+    "before-lowir2native": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/before-lowir2native",
+      "sha256": "b37b7e3f90e3a7fab90b9a73e62cebc78e5c928aa298dca0df92eb0c222a6748"
+    },
+    "after-lowir2native": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/after-lowir2native",
+      "sha256": "f409b32e254d0ddd261c8483841b8fcd24892e18e95e0574eb7e28e8766445ab"
+    },
+    "before-cppgm++": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/before-cppgm++",
+      "sha256": "288168aec2f0f058d4e32b98f89ece2ce183d9cd0766662066828541fca125de"
+    },
+    "after-cppgm++": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa24-134/after-cppgm++",
+      "sha256": "288168aec2f0f058d4e32b98f89ece2ce183d9cd0766662066828541fca125de"
+    }
+  },
+  "source_hashes": {
+    "dev/src/native/selection.cpp": "c49f78158b0e76795724fb44d6709c190ae776de6eeb50d849d8f43f990c9abd",
+    "dev/src/native/selection.h": "fc0ac9bd86ef1a813efbd9f44e21af18deeffb04883aba50104853906362679b",
+    "student.tests/pa24/audit134.py": "759cd2bc837f9ea52a100c9549101ff300a3b160cfa55ec587589f01c4690c53",
+    "student.tests/pa24/frontend134.py": "e53f7d85a77ebef9572f864f5e5aa168a3f8ee0a24a8cf7adadb28680312f82a",
+    "student.tests/pa24/trace134.cpp": "3fd8bbf236f7410e5b9335474521a62ac1a29e64853120c8c576bac663f8504b",
+    "student.tests/pa24/benchmark.py": "ef7f2110210a97427b78bed3b17de78e1d353ad2646b53d0d8e971b0d5b48902"
+  },
+  "artifacts": {
+    "audit130.log": "51c3fa48db71d128b2c0cc6072d9e0a83efd352eab6cc9e4a2acfd41811d6f64",
+    "bench-abi/observations.json": "8eebf152c25124c8a75a16c9e1c32f1e4f8980de8d740980b87aaa28359fd758",
+    "bench-abi.log": "eecb17abfbd28eb02d366b474f888b0efffbb76dc33ae0083edd27c3181a6595",
+    "bench-eh/observations.json": "043156a440440217e414bfb8ff53d169f1d9d2bd3bcce7b15c797b330f2ed337",
+    "bench-eh.log": "0ccc3f57bac898f9a69448389772d3a681f7662c8e295b4d604695a53ba620e3",
+    "bench-floating/observations.json": "9ed4727d2adc6bc6d8abbd3ff70e8ce07e01d79e99cd76ec9751b6cbc056c8f4",
+    "bench-floating.log": "7d0ff075af2e7cde50833ddd3d0b7877b04323782396fcc9f57d5d5a8fc76c29",
+    "bench-frontend/observations.json": "e0832766b949e2ad32d9ebd3d406eff879759607cae8138d68a853448960e448",
+    "bench-frontend.log": "f8a9df927485ef4192b55cbfe3ca35338586387aa660226f2679f9b285d09c1f",
+    "bench-scalar/observations.json": "2b345d17244cd1659e73667afb297a2a5164b88fbee2c4ed06614c825367f98e",
+    "bench-scalar.log": "bf4096af70c088247258088a45daf9cae3c723531cc5c99cc19dd697b4ee7515",
+    "bench-tls/observations.json": "27d07416f8d638e69aacf19dca5741022f099424592e6f5f6394e4292efd014f",
+    "bench-tls.log": "e49016e7764b383c0b8c045142984a0a57bbe98a17619740cae87f16c3eb23a5",
+    "bench-wide/observations.json": "72af26cf2152e03e37506a75f1f31bd615a6dfa2c779e78a78c274e8603e70dc",
+    "bench-wide.log": "8b3dd5b963e124444a4403a9067e644a35a2e6a3dd5d5cc8179f3733f48f8d9a",
+    "benchmark-runs.json": "e3d4a1117efd0844ba4cbe9e29a2e9544de67c963b616e20c6cc19d05f90bef1",
+    "build.log": "54e118bbd170d9be0ec39ee016fbb3298ca8bb42f654973c4831ffbff6ba88da",
+    "file-audit.log": "09991cae3876c91c905a9d48086986cd7bf75a6f2e2dfb20654472296390380d",
+    "floating.log": "764a5d87ab5279532d91f9dad2f3f2e5ad9b362b47b1c172c1850be19ce2859c",
+    "inherited-manifests.json": "5c6d8985994b33449890f0ed75d7a1a159b2c2302dd74f118ec00e4fcdaad114",
+    "integration.log": "f3735ea515dea551c05c717cc0ade3737c72d8347d47c823ce533ee0151a4b47",
+    "objects.log": "82b4b42864845d4691e0aec8cd1c298681e93aea68eb64006fc5bb030d4cb97f",
+    "performance-summary.json": "b29d9d4ea6810d1190dfe2830a00f3519b5420bb40e0571a174dd1af85e648b6",
+    "personal.json": "7202fd6f46b6c6da3fcb57b5cc27b35ed72d2555a4331ab3a69da9cafd4123d4",
+    "placement133.log": "e147ebf9b6c8e33bb57b3e44f2f0f89341788cfe1daf5c65362d801130d8d666",
+    "reducers-entry.log": "75d7d5aac4bbb6eec56b671d7f72d4309a2b27f870dacad0af4e1692f963cac3",
+    "review-inventory.json": "582b52727dc8daf9000edcdb5ec17be16617c4b97dfef2d44b6f3b02c9556cc3",
+    "runtime131.log": "f9f39bae2e8fa0ac64cc2ac80f0dfb2aa6056d7b9ddb5573aefac85c515d90ff",
+    "scalar.log": "21e62ccd5a615c886496fb20667e2485895bae5ceccb391555aecb36f879c9e2",
+    "stage-commits.txt": "e7f4ba281a92eb8fc3ad14a583788f8c9a6be16f36cef0c18fc7e009eb9d770b",
+    "stage.log": "6067ebb9b10683cba2a32baca69fbc4053c747e18b45414d3e1b8b91ee3ce978",
+    "through.log": "7be6a8e58aa9a0a7d5d51917313fafaea4d35d78f4aa4172565aeffd751b547e",
+    "tls-integration132.log": "c15dc5d681ecb4f874f4ebffcb90768f7098a1f5fa42cfb91f8146f870e26045",
+    "tls132.log": "d92ed380257210d9e33337a9a56fea317b5f9296e0a37ac2238837eadd29ff19",
+    "trace-0.log": "f1aeae717e7dd69a02d1bad843fbced4c98af733daee1ed265fa0085c6def0ce",
+    "trace-1.log": "f13468a8cbea4ff8f769837b00e50a0edd6dda3d72018100195977e2434fd243",
+    "trace-2.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "trace-3.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "trace-4.log": "8090d9fee18cc51e1180bf997d21bfd44fb8543b9d468f48cf1534bf46ffca89",
+    "trace-5.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "trace-checks.json": "803ef6cfbd62601c234778d7abee094d21b7b2e4103786a75253c0bd0b3a302c",
+    "trace-disassembly.txt": "0f181584d7dfa9133a87c1939f8fe50ca13dc2531859e44c4d0a3aa76f0a3264",
+    "trace.lowir": "074989d6e21463062f6c06c9fdda5c3aa194bcfb7fa8f97f7a70e528f03d9215",
+    "trace.mir": "8eab24cb8dfcf2cbde0dfa0e37fd618762893c086cc81775897075e144ab62d3",
+    "wide.log": "e9c176ff49931734369b1a76938038d2e7bfc5c37459c46525a0ac0abec2dac8"
+  }
+}

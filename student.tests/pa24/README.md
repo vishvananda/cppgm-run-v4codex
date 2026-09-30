@@ -172,3 +172,26 @@ checks a varying mixed-domain sum. Both run at two argument counts before timing
 See [performance133](performance133.md) for the frozen A/A + ABBA evidence,
 including the initial overbroad frame policy, its correction, the measured
 forwarding benefit and the mandatory canonical mixed-ABI cost.
+
+Final audit134 adds independent deferred-edge and mixed runtime controls:
+
+```
+python3 student.tests/pa24/audit134.py dev/lowir2native /tmp/pa24-audit134
+dev/cppgm++ --stats --validate-lowir --emit-lowir -o /tmp/pa24-trace134.lowir student.tests/pa24/trace134.cpp
+dev/lowir2native --stats --dump-machine-ir /tmp/pa24-trace134.mir -o /tmp/pa24-trace134 /tmp/pa24-trace134.lowir
+/tmp/pa24-trace134
+/tmp/pa24-trace134 input
+```
+
+The 61 controls cover all six incoming integer carriers, three widths and
+direct/branch/switch phi edges after calls, plus TLS payloads and cross-function
+unwind. Frozen entry fails 36; final code passes all. The source trace checks
+ordinary aligned layout and a demanded member template through mixed ABI and TLS.
+
+`frontend134.py A B NATIVE OUTPUT_DIRECTORY` rechecks the fixed inherited
+9600-specialization workload through our native ELF backend. It records frozen
+hashes, checked output/text size and A/A plus six ABBA compiler measurements.
+The native `benchmark.py` experiments cover all six compiler families and ten
+runtime programs. [Performance134](performance134.md) and
+[validation134](validation134.json) retain final evidence; [the final audit](../../pa24/audit.md)
+records architecture, bounded work, stage acceptance and the closed handoffs.
