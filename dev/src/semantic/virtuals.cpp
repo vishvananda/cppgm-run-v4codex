@@ -233,27 +233,35 @@ void Analyzer::demand_vtable(EntityId cls, VtableReason reason)
 namespace cppgm { namespace semantic {
 void Analyzer::layout_virtual_views(EntityId cls)
 {
-    auto& v = virtual_classes[virtual_class_id(cls)];
+    auto id = virtual_class_id(cls);
     Index stored;
-    for (auto& view : v.views) {
-        view.offset = (view.parent ? v.views[view.parent-1].offset : 0) + bases[view.edge].offset;
+    for (auto& view : virtual_classes[id].views) {
+        view.offset = (view.parent ? virtual_classes[id].views[view.parent-1].offset : 0) + bases[view.edge].offset;
         view.store = view.offset && !stored.get(view.offset);
         if (view.store) stored.put(view.offset,1);
     }
     auto adjust = [&](unsigned begin, unsigned count, std::uint64_t offset) {
         for (unsigned j = 0; j < count; ++j) {
-            auto& slot = v.slots[begin+j];
-            slot.this_adjustment = std::int64_t(slot.receiver ? v.views[slot.receiver-1].offset : 0) - std::int64_t(offset);
+            auto slot = virtual_classes[id].slots[begin+j];
+            slot.this_adjustment = std::int64_t(slot.receiver ? virtual_classes[id].views[slot.receiver-1].offset : 0) - std::int64_t(offset);
             auto actual = types[entities[slot.function].type].child;
             auto expected = types[entities[slot.declaration].type].child;
             if (actual != expected) {
                 auto derived = types[actual].child, base = types[expected].child;
                 slot.result_adjustment = base_adjustments[base_steps(derived,types[base].entity)].total;
             }
+            // A return-type layout can complete a deferred class and relocate
+            // the class arena. Publish by identity after that outgoing demand.
+            virtual_classes[id].slots[begin+j] = slot;
         }
     };
-    adjust(0,v.primary_count,0);
-    for (const auto& view : v.views) adjust(view.begin,view.count,view.offset);
+    adjust(0,virtual_classes[id].primary_count,0);
+    auto views = virtual_classes[id].views.size();
+    for (unsigned j = 0; j < views; ++j) {
+        auto view = virtual_classes[id].views[j];
+        adjust(view.begin,view.count,view.offset);
+    }
+    auto& v = virtual_classes[id];
     auto count = v.primary_count;
     std::vector<VirtualSlot> additional;
     for (unsigned j = 0; j < count; ++j) {

@@ -37,6 +37,7 @@ add('repeated-source-downcast','struct A{virtual int f(){return 1;}};struct B:A{
 add('virtual-member-pointer','struct A{virtual int a(){return 1;}};struct B{virtual int b(){return 2;}};struct D:A,B{int b(){return 7;}};int main(){D d;int(D::*p)()=&B::b;return (d.*p)()!=7;}')
 add('late-complete-rtti','namespace std{struct type_info{bool operator==(const type_info&)const;};}struct D;const std::type_info& get(){return typeid(D*);}struct A{};struct B{};struct D:A,B{};int main(){return !(get()==typeid(D*));}')
 add('exception-rtti','struct A{int a;};struct B{int b;};struct D:A,B{};int main(){try{D d;d.a=3;d.b=7;throw d;}catch(B&b){return b.b!=7;}}')
+add('covariance-layout-demand','template<int I>struct Extra{virtual int f(){return I;}};struct Pad{int n;};struct R{int r;};struct Result:Pad,R{'+''.join('Extra<%d> e%d;'%(i,i) for i in range(64))+'};struct A{virtual R* get()=0;};struct D:A{Result* get(){return 0;}};int main(){D d;A&a=d;return a.get()!=0;}')
 add('secondary-pure-reject','struct A{virtual int a(){return 1;}};struct B{virtual int b()=0;};struct D:A,B{};int main(){D d;}',True)
 add('secondary-final-reject','struct A{virtual int a(){return 1;}};struct B{virtual int b()final{return 1;}};struct D:A,B{int b(){return 2;}};',True)
 add('secondary-exception-reject','struct A{virtual int a(){return 1;}};struct B{virtual int b()noexcept{return 1;}};struct D:A,B{int b(){return 2;}};',True)
