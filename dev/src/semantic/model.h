@@ -123,6 +123,7 @@ struct ClassFacts {
     std::uint32_t first_base = 0;
     ScopeId default_constructor = 0;
     FactState layout_state = FactState::NotStarted;
+    std::uint32_t empty_types_begin = 0, empty_types_count = 0;
     bool aggregate = true, empty = true;
     std::uint32_t virtual_info = 0;
     std::uint64_t base_offset = 0;

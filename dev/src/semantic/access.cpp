@@ -54,24 +54,26 @@ bool Analyzer::base_accessible(EntityId cls, EntityId target, ScopeId context)
 {
     if (explicit_instantiation_naming) return true;
     if (access_override) context = access_override;
-    for (EntityId current = cls; current && current != target;) {
-        auto edge = access_base(current);
-        while (edge && !class_derives(bases[edge].base,target)) edge = bases[edge].next;
-        if (!edge) return false;
-        Access level = bases[edge].access;
-        bool allowed = level == Access::Public || privileged(context, current);
-        if (!allowed && level == Access::Protected) {
-            for (auto s = context; s; s = scopes[s].parent)
-                if (scopes[s].kind == ScopeKind::Class && class_derives(scopes[s].entity, current)) allowed = true;
-            for (EntityId d = cls; !allowed && d && d != current;) {
-                allowed = privileged(context, d);
-                auto b = access_base(d); d = b ? bases[b].base : 0;
+    if (cls == target) return true;
+    std::vector<EntityId> work(1,cls); Index seen;
+    for (std::size_t i = 0; i < work.size(); ++i) {
+        auto current = work[i];
+        if (current == target) return true;
+        if (seen.get(current)) continue;
+        seen.put(current,1);
+        for (auto edge = access_base(current); edge; edge = bases[edge].next) {
+            if (!access_derives(bases[edge].base,target)) continue;
+            auto level = bases[edge].access;
+            bool allowed = level == Access::Public || privileged(context,current);
+            if (!allowed && level == Access::Protected) {
+                for (auto s = context; s; s = scopes[s].parent)
+                    if (scopes[s].kind == ScopeKind::Class && access_derives(scopes[s].entity,current)) allowed = true;
+                if (!allowed) allowed = privileged_base_path(context,cls,current);
             }
+            if (allowed) work.push_back(bases[edge].base);
         }
-        if (!allowed) return false;
-        current = bases[edge].base;
     }
-    return true;
+    return false;
 }
 void Analyzer::check_access(EntityId e, ScopeId context, ScopeId naming, TypeId object)
 {
@@ -97,30 +99,20 @@ bool Analyzer::accessible(EntityId e, ScopeId context, ScopeId naming, TypeId ob
     EntityId owner = scopes[entities[e].owner].entity;
     if (injected_class_owners.get(owner) && !accessible(owner,context,naming,object)) return false;
     EntityId named = scopes[naming_class(naming)].entity;
-    if (!named || !class_derives(named, owner)) named = owner;
-    Access level = entities[e].access;
-    EntityId introduced = owner;
-    for (EntityId current = named; current;) {
+    if (!named || !access_derives(named, owner)) named = owner;
+    if (named == owner) return accessible_introduction(e,context,named,owner,entities[e].access,object);
+    std::vector<EntityId> work(1,named); Index seen;
+    for (std::size_t i = 0; i < work.size(); ++i) {
+        auto current = work[i];
+        if (seen.get(current)) continue;
+        seen.put(current,1);
         auto exposed = using_member_access(entities[current].scope,e);
-        if (exposed) { introduced = current; level = Access(exposed-1); break; }
-        if (current == owner) break;
-        auto b = access_base(current); current = b ? bases[b].base : 0;
-    }
-    if (named != introduced && !base_accessible(named,introduced,context)) return false;
-    if (level == Access::Public || privileged(context, introduced)) return true;
-    if (level == Access::Protected) {
-        bool object_bound = !entities[e].is_static && (entities[e].kind == EntityKind::Variable || entities[e].kind == EntityKind::Function);
-        EntityId actual = object && types[object].kind == TypeKind::Named ? types[object].entity : named;
-        if (!object && object_bound) {
-            EntityId enclosing = scopes[naming_class(context)].entity;
-            if (class_derives(enclosing, introduced)) actual = enclosing;
+        if (exposed || current == owner) {
+            if (accessible_introduction(e,context,named,current,exposed ? Access(exposed-1) : entities[e].access,object)) return true;
+            continue;
         }
-        for (EntityId candidate = actual; candidate && class_derives(candidate, introduced);) {
-            if (privileged(context, candidate)) return true;
-            auto b = access_base(candidate); candidate = b ? bases[b].base : 0;
-        }
-        if (!object_bound) for (auto s = context; s; s = scopes[s].parent)
-            if (scopes[s].kind == ScopeKind::Class && class_derives(scopes[s].entity, introduced)) return true;
+        for (auto b = access_base(current); b; b = bases[b].next)
+            if (access_derives(bases[b].base,owner)) work.push_back(bases[b].base);
     }
     return false;
 }

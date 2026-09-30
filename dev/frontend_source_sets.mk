@@ -43,7 +43,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/static_initialization lowering/local_
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/destruction semantic/access semantic/friends lowering/destruction lowering/arrays lowering/cleanup
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/operator_names semantic/operator_call lowering/operator_abi
-FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/layout semantic/fields
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/layout semantic/empty_layout semantic/fields
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/bit_fields
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += support/id_index
@@ -69,6 +69,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/allocation lowering/deallocation
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/list_initialization lowering/list_initialization lowering/full_expression
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/member_pointers semantic/member_pointer_values lowering/member_pointers
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/member_pointer_flow
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/access_paths
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/zero_initialization lowering/zero_initialization
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/scalar_transfer semantic/parameter_representation
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/scalar_consumption lowering/scalar_consumption

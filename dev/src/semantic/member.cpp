@@ -14,6 +14,7 @@ Conversion Analyzer::object_conversion(EntityId e, TypeId object, ValueCategory 
         ScopeId scope = entities[cls].scope;
         if (using_member_access(scope,e)) { wanted = types.qualify(entities[cls].type, f.cv); break; }
         auto edge = access_base(cls);
+        while (edge && !access_derives(bases[edge].base,scopes[entities[e].owner].entity)) edge = bases[edge].next;
         cls = edge ? bases[edge].base : 0;
     }
     // [over.match.funcs]/4: conversion functions rank as members of the

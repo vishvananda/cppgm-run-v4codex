@@ -1,0 +1,197 @@
+{
+  "entry": "17bc7a06",
+  "path": "pa22/tests/general/100-public-qualified-base-typedef-ambiguous-subobject.ref",
+  "manifest": "# cppgm reference binary manifest\nversion\t1\nsource_sha\tc2f713cd70d06170632bfde3e75dd6fe1aa44d98\nplatform\tlinux-x86_64\nbundle_name\tcppgm-reference-binaries-linux-x86_64-c2f713cd70d0.tar.gz\nbundle_url\thttps://github.com/vishvananda/cppgm-extended/releases/download/reference-binaries/cppgm-reference-binaries-linux-x86_64-c2f713cd70d0.tar.gz\nbundle_sha256\tc532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7\nbinary\tabimangle\tead797305075401fb24ce38fb96839cedf8d9898768290bb8f3e5970824c1ca3\nbinary\tpptoken\td9ecfba3ff149d37dd4bd1d09ccd27b819350cb7219695806e641ef3dade31cc\nbinary\tposttoken\t4c3ffd4da1f698b256fba45d27d28a2006727670ee7abdda66265359bcdbfce0\nbinary\tppexpr\ta2a4529077cdce1c8df1155a60d14651291cbf33a5dc36567b4a1bdae9c6b29a\nbinary\tpreproc\td4f0d481a747930219faecb600de0398669adfa5ce86c6019ff64cb239726c2f\nbinary\tcppgm++\te32741e2504f7c75a91abdf5cea0d5fc0b56eb43deb503d2ffbddbcc2f854f70\nbinary\tlowir\tf3c389e4218c962b20e4e55dd3eddf87501977e32af0f7d77665e5f4b492a700\nbinary\tlowir2native\tc3bae4acf3243d5a2fd6a15ef00e2d75d11a7d82715b1e4771f55165d0542490\nbinary\tlowiropt\t6b0a8da0990c1f33c23c3e47553c12bd18b76799235b31add771b34dd2ae59b5\n",
+  "compiler_sha256": "f637045b13aad2a1dd7d4995e86d97eea558decb644780105486f1a25f0510bb",
+  "original_sha256": "feb47f616bcde7fb9f4dc8a1174d926c34935177587b93282ebd9e1669ca6e27",
+  "corrected_sha256": "704148b6ad2b41c0004700b012203268e6f12f76815419fbfd35a9eb0d42775a",
+  "fixtures": [
+    {
+      "path": "/tmp/pa22-120/reference/original.lowir",
+      "validation": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-120/reference/roundtrip.lowir",
+          "/tmp/pa22-120/reference/original.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "backend": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+          "-O0",
+          "-o",
+          "/tmp/pa22-120/reference/original.exe",
+          "/tmp/pa22-120/reference/original.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "runtime": {
+        "command": [
+          "/tmp/pa22-120/reference/original.exe"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/100-public-qualified-base-typedef-ambiguous-subobject.ref",
+      "validation": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+          "-o",
+          "/tmp/pa22-120/reference/roundtrip.lowir",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/100-public-qualified-base-typedef-ambiguous-subobject.ref"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "backend": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+          "-O0",
+          "-o",
+          "/tmp/pa22-120/reference/100-public-qualified-base-typedef-ambiguous-subobject.exe",
+          "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/100-public-qualified-base-typedef-ambiguous-subobject.ref"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "runtime": {
+        "command": [
+          "/tmp/pa22-120/reference/100-public-qualified-base-typedef-ambiguous-subobject.exe"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    }
+  ],
+  "source": "struct impl{};template<class T>struct trampoline:impl{};\nstruct inner:trampoline<long>{};struct outer:inner,trampoline<int>{};\nint main(){outer o;impl* a=static_cast<inner*>(&o);\nimpl* b=static_cast<trampoline<int>*>(&o);return a==b;}\n",
+  "source_sha256": "d3be1ca4e58578c518b60765a17e86aec718a006d882b773c99fbcb8b48ecd41",
+  "reducers": [
+    {
+      "lane": "reference",
+      "compiler_sha256": "0e1a0307bab95cf433727e90e0ae7de70c7293c7fc874de9e76f9cadfa1e7e6c",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+          "--emit-lowir",
+          "-O0",
+          "-o",
+          "/tmp/pa22-120/reference/reference.lowir",
+          "/tmp/pa22-120/reference/reducer.cpp"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "lowir_sha256": "e6831cdf01be77f42f32705bfee0679820bf2374e868cb4232b29d398fcc589b",
+      "backend": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+          "-O0",
+          "-o",
+          "/tmp/pa22-120/reference/reference.exe",
+          "/tmp/pa22-120/reference/reference.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "runtime": {
+        "command": [
+          "/tmp/pa22-120/reference/reference.exe"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "lane": "entry",
+      "compiler_sha256": "d2cac90074d5f8c4c9a73201e6b3bd1f6274b925146ec8879fe5491b7eda9b65",
+      "compile": {
+        "command": [
+          "/tmp/pa22-120/entry/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "-o",
+          "/tmp/pa22-120/reference/entry.lowir",
+          "/tmp/pa22-120/reference/reducer.cpp"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "lowir_sha256": "5e3cff29b7241e906e241ed3daeb25ffabbc1bff73c7a8e3c5f7da1d67cadcdf",
+      "backend": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+          "-O0",
+          "-o",
+          "/tmp/pa22-120/reference/entry.exe",
+          "/tmp/pa22-120/reference/entry.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "runtime": {
+        "command": [
+          "/tmp/pa22-120/reference/entry.exe"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "lane": "corrected",
+      "compiler_sha256": "f637045b13aad2a1dd7d4995e86d97eea558decb644780105486f1a25f0510bb",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "-o",
+          "/tmp/pa22-120/reference/corrected.lowir",
+          "/tmp/pa22-120/reference/reducer.cpp"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "lowir_sha256": "a8612c9810429e428372df7376b5033df3b1627e983b716721938e51cff712dc",
+      "backend": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+          "-O0",
+          "-o",
+          "/tmp/pa22-120/reference/corrected.exe",
+          "/tmp/pa22-120/reference/corrected.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "runtime": {
+        "command": [
+          "/tmp/pa22-120/reference/corrected.exe"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    }
+  ],
+  "passed": true
+}

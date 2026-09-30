@@ -61,22 +61,23 @@ void Analyzer::class_layout(EntityId e)
         align = 8; class_facts[info].empty = false;
         if (!direct || !polymorphic(direct)) cursor = 64;
     }
-    Index empty_bases;
-    bool has_empty_base = false;
+    EmptyLayout empty(*this);
+    std::uint64_t extent = cursor/8;
     for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
         TypeId base = entities[bases[b].base].type;
         auto bytes = size(base);
         bases[b].offset = class_facts[entities[types[base].entity].class_info].empty ? 0 : layout_align(cursor/8, size(base,true));
+        // A repeated empty type may not share an address. Type summaries are
+        // conservative: on overlap (or budget exhaustion), place this entire
+        // subobject beyond existing storage instead of searching for a hole.
+        if (empty.merge(base) && bases[b].offset < extent)
+            bases[b].offset = layout_align(extent,size(base,true));
+        extent = std::max(extent,layout_add(bases[b].offset,bytes));
         if (b == class_facts[info].first_base) class_facts[info].base_offset = bases[b].offset;
         if (!class_facts[entities[types[base].entity].class_info].empty) cursor = bases[b].offset*8;
         if (!class_facts[entities[types[base].entity].class_info].empty) {
             if (bytes > std::numeric_limits<std::uint64_t>::max()/8) throw std::runtime_error("base layout overflow");
             cursor = layout_add(cursor, bytes*8); class_facts[info].empty = false;
-        } else for (EntityId empty = types[base].entity; empty;) {
-            has_empty_base = true;
-            empty_bases.put(empty, 1);
-            auto edge = class_facts[entities[empty].class_info].first_base;
-            empty = edge ? bases[edge].base : 0;
         }
         align = std::max(align, size(base, true));
     }
@@ -109,24 +110,8 @@ void Analyzer::class_layout(EntityId e)
             cursor = is_union ? std::max(cursor, end) : end;
         } else {
             std::uint64_t offset = layout_align(layout_add(at, 7)/8, field_align);
-            // At offset zero, complete member objects must not overlap a base
-            // subobject of the same empty type, including nested zero offsets.
-            if (has_empty_base && !offset && types[member.type].kind == TypeKind::Named && entities[types[member.type].entity].class_info) {
-                std::vector<EntityId> work(1, types[member.type].entity);
-                Index seen; bool collision = false;
-                for (std::size_t i = 0; i < work.size() && !collision; ++i) {
-                    EntityId candidate = work[i];
-                    if (seen.get(candidate)) continue;
-                    seen.put(candidate, 1); collision = empty_bases.get(candidate);
-                    for (auto edge = class_facts[entities[candidate].class_info].first_base; edge; edge = bases[edge].next) work.push_back(bases[edge].base);
-                    for (auto decl = scopes[entities[candidate].scope].first_decl; decl; decl = declarations[decl].next) {
-                        auto child = entities[declarations[decl].entity];
-                        if (!nonstatic_field(declarations[decl].entity) || child.member_offset || types[child.type].kind != TypeKind::Named) continue;
-                        if (entities[types[child.type].entity].class_info) work.push_back(types[child.type].entity);
-                    }
-                }
-                if (collision) offset = field_align;
-            }
+            if (!reference && empty.merge(member.type) && !is_union && offset < extent)
+                offset = layout_align(extent,field_align);
             entities[id].member_offset = offset;
             auto end = layout_add(offset, field_size);
             ordinary_end = std::max(ordinary_end, end);
@@ -139,7 +124,8 @@ void Analyzer::class_layout(EntityId e)
     if (requested && requested < align) throw std::runtime_error("weakened class alignment");
     align = std::max(align, requested);
     class_facts[info].alignment = align;
-    class_facts[info].size = layout_align(std::max<std::uint64_t>(1, layout_add(cursor, 7)/8), align);
+    class_facts[info].size = layout_align(std::max<std::uint64_t>(std::max<std::uint64_t>(1,extent), layout_add(cursor, 7)/8), align);
+    empty.publish(info,class_facts[info].empty ? e : 0);
     class_facts[info].layout_state = FactState::Success;
     } catch (...) {
         class_facts[info].layout_state = FactState::Failure; throw;

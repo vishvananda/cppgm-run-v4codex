@@ -426,6 +426,20 @@ private:
     void bit_field_properties(EntityId field, Constant count);
     void bit_field_declaration(NodeId n, ScopeId s);
     void class_layout(EntityId e);
+    // Bounded canonical summaries for empty-subobject overlap checks. A count
+    // above 64 means unknown; layout then reserves disjoint storage.
+    std::vector<EntityId> layout_empty_types;
+    std::size_t layout_empty_work = 0, layout_empty_fallbacks = 0;
+    struct EmptyLayout {
+        Analyzer& sem;
+        Index seen;
+        std::vector<EntityId> types;
+        bool unknown = false;
+        explicit EmptyLayout(Analyzer& s) : sem(s) {}
+        void insert(EntityId e);
+        bool merge(TypeId t);
+        void publish(std::uint32_t info, EntityId empty);
+    };
     syntax::AstView ast;
     bool definitions;
     IdentifierTable& ids;
@@ -539,6 +553,10 @@ private:
     Access declaration_access(ScopeId s) const;
     bool privileged(ScopeId context, EntityId cls) const;
     bool class_derives(EntityId derived, EntityId base) const;
+    bool access_derives(EntityId derived, EntityId base);
+    bool privileged_base_path(ScopeId context, EntityId object, EntityId base);
+    bool accessible_introduction(EntityId e, ScopeId context, EntityId named,
+        EntityId introduced, Access level, TypeId object);
     std::uint32_t access_base(EntityId entity) const;
     void check_base_entity_access(EntityId from, EntityId to, ScopeId context);
     bool base_accessible(EntityId cls, EntityId target, ScopeId context);
