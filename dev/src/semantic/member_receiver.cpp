@@ -18,7 +18,7 @@ void Analyzer::record_member_receiver(Expression& result, NodeId node, TypeId ob
         throw std::runtime_error("invalid selected member subobject path");
     if (qualifier) check_base_access(object,from,context);
     auto type = entities[selected].kind == EntityKind::Function ? types.parameters[types[call_type(selected)].offset] :
-        types.compound(TypeKind::Pointer,entities[owner].type);
+        types.compound(TypeKind::Pointer,from);
     record_object(result,node,type,tail);
     auto& use = object_uses[result.object_use];
     use.qualifier_adjustment = first;

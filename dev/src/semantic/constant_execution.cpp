@@ -106,7 +106,7 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
             for (unsigned j = 0; valid && j < member.action_count; ++j) {
                 auto action = subobject_actions[member.action_begin+j];
                 Constant v;
-                constant_activations[id].object = constant_construction_receiver(receiver,action.receiver_storage);
+                constant_activations[id].object = constant_construction_receiver(builder,receiver,action.receiver_storage);
                 if (member.inherited_constructor && action.constructor == member.inherited_constructor) {
                     std::vector<Constant> forwarded;
                     auto f = types[entities[action.constructor].type];

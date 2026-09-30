@@ -39,6 +39,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/allocation_cleanup
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/allocation_cleanup
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/tls_initialization
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/constant_construction semantic/constant_storage_construction lowering/constant_construction
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/field_projection
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/global_initialization
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/static_initialization lowering/local_static
 

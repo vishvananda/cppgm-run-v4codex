@@ -10,20 +10,14 @@ std::uint32_t Analyzer::constant_field_address(std::uint32_t parent, EntityId fi
     }
     return constant_subobject(parent,entities[field].type,field);
 }
-std::uint32_t Analyzer::constant_construction_receiver(std::uint32_t receiver, unsigned path)
+std::uint32_t Analyzer::constant_construction_receiver(ConstantBuilder& builder,
+    std::uint32_t receiver, unsigned selected)
 {
-    if (!path) return receiver;
-    auto step = construction_storage[path];
-    auto parent = constant_construction_receiver(receiver,step.parent);
-    return constant_subobject(parent,entities[step.field].type,step.field);
-}
-void Analyzer::constant_projected_action(ConstantBuilder& builder, const SubobjectAction& action,
-    std::uint32_t receiver, Constant value)
-{
+    if (!selected) return receiver;
     // One temporary builder per selected storage path. Prefixes and field
     // addresses are canonical identities; no repeated aggregate copying.
     auto& missing = builder.missing_paths; missing.clear();
-    for (auto path = action.storage; path && !builder.groups_by_path.get(path); path = construction_storage[path].parent)
+    for (auto path = selected; path && !builder.groups_by_path.get(path); path = construction_storage[path].parent)
         missing.push_back(path);
     for (auto it = missing.rbegin(); it != missing.rend(); ++it) {
         auto path = construction_storage[*it];
@@ -34,6 +28,12 @@ void Analyzer::constant_projected_action(ConstantBuilder& builder, const Subobje
         builder.groups.push_back(std::move(group));
         builder.groups_by_path.put(*it,builder.groups.size());
     }
+    return builder.groups[builder.groups_by_path.get(selected)-1].address;
+}
+void Analyzer::constant_projected_action(ConstantBuilder& builder, const SubobjectAction& action,
+    std::uint32_t receiver, Constant value)
+{
+    constant_construction_receiver(builder,receiver,action.storage);
     auto& group = builder.groups[builder.groups_by_path.get(action.storage)-1];
     ConstantBuildPart entry; entry.part.selector = action.field; entry.part.value = value;
     builder.projected_parts.push_back(entry);

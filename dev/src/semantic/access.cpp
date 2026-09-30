@@ -97,7 +97,12 @@ bool Analyzer::accessible(EntityId e, ScopeId context, ScopeId naming, TypeId ob
     if (!calls || !e || entities[e].kind == EntityKind::Overload || scopes[entities[e].owner].kind != ScopeKind::Class) return true;
     if (access_override) context = access_override;
     EntityId owner = scopes[entities[e].owner].entity;
-    if (injected_class_owners.get(owner) && !accessible(owner,context,naming,object)) return false;
+    if (injected_class_owners.get(owner)) {
+        // The enclosing declaration owns access through inheritance. Anonymous
+        // storage is a member, not an additional base on that access path.
+        if (!accessible(owner,context,naming,object)) return false;
+        return accessible_introduction(e,context,owner,owner,entities[e].access,object);
+    }
     EntityId named = scopes[naming_class(naming)].entity;
     if (!named || !access_derives(named, owner)) named = owner;
     if (named == owner) return accessible_introduction(e,context,named,owner,entities[e].access,object);

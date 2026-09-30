@@ -343,6 +343,10 @@ struct LifecycleBase {
 struct ConstructionStorage {
     EntityId field; std::uint32_t parent; std::uint64_t offset;
 };
+struct FieldProjection {
+    std::uint64_t offset = 0;
+    EntityId object = 0; // Non-member storage for an injected namespace/local field.
+};
 struct SubobjectAction {
     EntityId field; TypeId type; NodeId initializer; EntityId constructor; std::uint32_t base;
     std::uint32_t storage = 0, receiver_storage = 0;

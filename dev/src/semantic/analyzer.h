@@ -203,6 +203,7 @@ public:
     EntityId injected_storage(EntityId field) const;
     EntityId anonymous_object(NodeId declaration) const { return anonymous_objects.get(declaration); }
     const FieldFacts& field_fact(EntityId e) const { return field_facts[field_index.get(e)]; }
+    FieldProjection field_projection(EntityId field, TypeId receiver = 0);
     std::vector<InitAction> initializers = std::vector<InitAction>(1);
     std::vector<ListPlan> list_plans = std::vector<ListPlan>(1);
     std::vector<ListObject> list_objects = std::vector<ListObject>(1);
@@ -464,6 +465,8 @@ private:
     void require_deduced_return(EntityId function);
     TypeId deduced_object_type(NodeId specs, NodeId declarator, NodeId initializer, ScopeId scope, TypeId& deduction);
     std::vector<FieldFacts> field_facts = std::vector<FieldFacts>(1);
+    Index field_projection_index;
+    std::vector<FieldProjection> field_projections = std::vector<FieldProjection>(1);
     std::uint64_t alignment_attributes(NodeId n, ScopeId s);
     FieldFacts& field_metadata(EntityId e);
     Constant constant_field_value(EntityId field, Constant value);
@@ -683,7 +686,7 @@ private:
     void constant_projected_action(ConstantBuilder& builder, const SubobjectAction& action,
         std::uint32_t receiver, Constant value);
     void finish_constant_projections(ConstantBuilder& builder);
-    std::uint32_t constant_construction_receiver(std::uint32_t receiver, unsigned path);
+    std::uint32_t constant_construction_receiver(ConstantBuilder&, std::uint32_t receiver, unsigned path);
     std::uint32_t constant_field_address(std::uint32_t parent, EntityId field);
     std::uint32_t constant_destination = 0;
     struct ConstantStorage { TypeId type = 0; EntityId entity = 0; NodeId literal = 0; Constant value; ConstantBuilder* builder = 0; std::uint32_t version = 0; bool live = true, readable = false; };

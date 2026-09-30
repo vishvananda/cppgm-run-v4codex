@@ -256,14 +256,7 @@ Value Procedural::implicit_object()
 Value Procedural::field(Value base, EntityId e, unsigned steps, TypeId object)
 {
     base = base_projection(base, steps);
-    std::uint64_t offset = sem.entities[e].member_offset;
-    while (sem.types[object].kind == TypeKind::Pointer || reference(object)) object = sem.types[object].child;
-    auto owner = sem.types[object].entity;
-    for (auto field = e; sem.scopes[sem.entities[field].owner].entity != owner; ) {
-        auto storage = sem.injected_storage(field);
-        if (!storage || !sem.nonstatic_field(storage)) break;
-        offset += sem.entities[storage].member_offset; field = storage;
-    }
+    auto offset = sem.field_projection(e,object).offset;
     Instruction i(Opcode::Index, IRType::I8); i.projection = ir_model::IPK_FIELD;
     Value v = emit(i, {base.operand, Operand::integer(offset)});
     v.type = sem.entities[e].type;
@@ -283,8 +276,7 @@ Value Procedural::binding(EntityId e)
         return value;
     }
     if (sem.nonstatic_field(e)) {
-        auto storage = sem.injected_storage(e);
-        while (storage && sem.nonstatic_field(storage)) storage = sem.injected_storage(storage);
+        auto storage = sem.field_projection(e).object;
         if (storage) return field(address(binding(storage)), e);
         if (!this_slot) throw std::logic_error("missing implicit object");
         auto owner = sem.scopes[sem.entities[active_function].owner].entity;

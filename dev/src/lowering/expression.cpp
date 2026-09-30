@@ -156,8 +156,7 @@ Value Procedural::expression(NodeId n, bool location)
             return constant_operand(c,fact.type);
         }
         if (sem.nonstatic_field(fact.entity)) {
-            auto storage = sem.injected_storage(fact.entity);
-            while (storage && sem.nonstatic_field(storage)) storage = sem.injected_storage(storage);
+            auto storage = sem.field_projection(fact.entity,sem.object_fact(n).type).object;
             if (storage) { Value v = binding(fact.entity); v.type = fact.type; return v; }
             auto capture = sem.object_fact(n).capture;
             Value base = capture ? captured_address(capture) : implicit_object();
