@@ -1,0 +1,207 @@
+{
+  "production_commit": "ba608c4fa918d45563b553149c4b708f189b7c9e",
+  "stage_base_commit": "fee6ad9076ff35c5272526e1c4c4df235fbf3bfe",
+  "last_reviewed_commit": "fee6ad9076ff35c5272526e1c4c4df235fbf3bfe",
+  "entry_commit": "cf26b48b3f4c2e8bb037ee6185727f4b8f59e9d1",
+  "dev_source_manifest_sha256": "acfa186b99928f273bfd83a9cbd42540e52b78bedbdc15cfee5f76ef035e089e",
+  "binaries": {
+    "cppgm++": "a30591cca86ea42f2a65ba3cc00e2f5714ff11055913739f4e30c9e0bb4ee417",
+    "lowir2native": "d87ac30bca0097488cbb17451733a156fee9c84cbf1bde0e72900165743eaec2",
+    "abimangle": "05d7c20d1efd9de9b563cbd5091d8f1b5426946eda157951dad0aaebf86876c0"
+  },
+  "required_checks": {
+    "stageTests": {
+      "command": "make test-pa25",
+      "exit_code": 2,
+      "passed": 71,
+      "total": 101,
+      "failed": 30
+    },
+    "priorThroughTests": {
+      "command": "make test-report-through-pa24",
+      "exit_code": 0,
+      "passed": 4152,
+      "total": 4152,
+      "stages_passed": 24
+    },
+    "throughCurrent": {
+      "command": "make test-report-through-pa25",
+      "exit_code": 2,
+      "passed": 4223,
+      "total": 4253
+    },
+    "fileAudit": {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa25 --paths dev/src",
+      "exit_code": 0,
+      "warnings": 4
+    },
+    "stageProgress": {
+      "baseline_failed": 37,
+      "current_failed": 30,
+      "required_cases": 101,
+      "removed_cases": 0,
+      "new_failures": 0,
+      "fixtures_references_harnesses_unchanged": true,
+      "decreased": true
+    }
+  },
+  "personal_driver_checks": 61,
+  "scalar_controls": 19,
+  "random_full_width_operand_pairs": 96,
+  "known_implementation_boundary": [
+    "native C++ runtime: 12 tests",
+    "source EH/function try blocks: 14 tests",
+    "statement expressions: 3 tests",
+    "floating evaluation policy: 1 test; references preserved"
+  ],
+  "independent_review_pending": true,
+  "evidence_directory": "/home/vishvananda/work/private/v4codex/artifacts/pa25-136",
+  "empty_path_trace": {
+    "command": "cppgm-B --stats -o wide-trace student.tests/pa25/wide.cc",
+    "exit_code": 0,
+    "program_exit_code": 0,
+    "wide_constants": 20,
+    "wide_pool_capacity_bytes": 1024,
+    "specializations": 2,
+    "body_transitions": 1,
+    "explicit_specialization_selections": 1,
+    "native_functions": 5,
+    "text_bytes": 2538
+  },
+  "performance": {
+    "equivalent_workloads": {
+      "templates": {
+        "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+        "text_bytes": 384567,
+        "file_bytes": 385024,
+        "compile": {
+          "ratio_median": 1.0104160500208321,
+          "ratio_range": [
+            0.9928567177982921,
+            1.0280395478564985
+          ],
+          "AA_range_s": [
+            0.22908361442387104,
+            0.2482308428734541
+          ],
+          "B_median_s": 0.23658727202564478,
+          "B_peak_rss_kib": 15680
+        },
+        "runtime": {
+          "ratio_median": 1.003143072732151,
+          "ratio_range": [
+            1.0008865610565998,
+            1.0185997383416507
+          ],
+          "AA_range_s": [
+            0.11689429543912411,
+            0.11874788627028465
+          ],
+          "B_median_s": 0.11761833168566227,
+          "B_peak_rss_kib": 256
+        }
+      },
+      "memory": {
+        "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+        "text_bytes": 521,
+        "file_bytes": 4096,
+        "compile": {
+          "ratio_median": 0.9547417987968142,
+          "ratio_range": [
+            0.6163856854423475,
+            1.008157364296616
+          ],
+          "AA_range_s": [
+            0.38533814065158367,
+            0.39165843464434147
+          ],
+          "B_median_s": 0.41333925165235996,
+          "B_peak_rss_kib": 6760
+        },
+        "runtime": {
+          "ratio_median": 1.0019934716183796,
+          "ratio_range": [
+            0.9923913816853123,
+            1.0432178519574873
+          ],
+          "AA_range_s": [
+            0.14998269453644753,
+            0.15298812836408615
+          ],
+          "B_median_s": 0.14987329673022032,
+          "B_peak_rss_kib": 256
+        }
+      },
+      "floating": {
+        "sha256": "011f58efcad1503f06e6cf81a88548ca27ac88ba7e724ba2cab8d4d82e185dcb",
+        "text_bytes": 340,
+        "file_bytes": 4096,
+        "compile": {
+          "ratio_median": 0.9299935925301237,
+          "ratio_range": [
+            0.8988260297462746,
+            0.9837514648458643
+          ],
+          "AA_range_s": [
+            0.3553219046443701,
+            0.37939057126641273
+          ],
+          "B_median_s": 0.35672328528016806,
+          "B_peak_rss_kib": 6848
+        },
+        "runtime": {
+          "ratio_median": 1.00113953232044,
+          "ratio_range": [
+            0.9910753296199587,
+            1.0397140960407076
+          ],
+          "AA_range_s": [
+            0.13823077455163002,
+            0.1399620771408081
+          ],
+          "B_median_s": 0.1388251706957817,
+          "B_peak_rss_kib": 256
+        }
+      }
+    },
+    "new_wide_final_baseline": {
+      "wide": {
+        "sha256": "1cd920f005c6bc46918baa5bb2926920bf15a76b983e81657875a2583cda41cf",
+        "text_bytes": 977,
+        "file_bytes": 4096,
+        "compile": {
+          "ratio_median": 1.014094051129355,
+          "ratio_range": [
+            0.9101009118391236,
+            1.0510764386275004
+          ],
+          "AA_range_s": [
+            0.41383454389870167,
+            0.44453675113618374
+          ],
+          "B_median_s": 0.4075027108192444,
+          "B_peak_rss_kib": 6764
+        },
+        "runtime": {
+          "ratio_median": 1.0007163092021454,
+          "ratio_range": [
+            0.9960572473332215,
+            1.0070761961395833
+          ],
+          "AA_range_s": [
+            0.2917691748589277,
+            0.29276040755212307
+          ],
+          "B_median_s": 0.2924876119941473,
+          "B_peak_rss_kib": 256
+        }
+      }
+    },
+    "evidence_sha256": {
+      "performance/performance.json": "7eb6dab5d43d84e242be70b32860b8951b4fc41ff25d52d97f48fe5b9bc64292",
+      "wide-performance/performance.json": "6a39e340677bc2a7d04792848dbc52e76c8d6e6896b7a82a6388e44fae6146b3"
+    },
+    "optional_optimization_added": false,
+    "speedup_claim": false
+  }
+}

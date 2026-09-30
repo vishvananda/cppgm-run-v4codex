@@ -1,115 +1,95 @@
-# PA25 implementation136 (in progress)
+# PA25 implementation136 handoff
 
 Stage base commit: fee6ad9076ff35c5272526e1c4c4df235fbf3bfe
 Last reviewed commit: fee6ad9076ff35c5272526e1c4c4df235fbf3bfe
 
-Target remains **PA25 full-stage**. Implementation136 entry HEAD:
-`cf26b48b3f4c2e8bb037ee6185727f4b8f59e9d1`, clean, **64/101**, 37 failures.
-The prior goal turn made progress: the committed driver group and validation
-established this baseline. Both original review markers above remain unchanged.
+Target remains **PA25 full-stage**. Entry `cf26b48b`: clean, **64/101**,
+37 failures. Prior goal turn made progress: the committed driver group and
+validation established that baseline. This handoff completes related scalar
+behavior groups at **71/101**, 30 failures. It does not approve the stage.
 
-Current group: source wide-integer semantics. Parser/token vocabulary -> canonical
-fundamental TypeIds -> recorded arithmetic conversions/constants -> direct typed
-I128/U128 LowIR -> existing native pair operations/ABI. Owners are the existing
-syntax, semantic scalar and lowering components; no new text transport or runtime
-name recovery. Fixed-width scalar operations cost O(1); source work remains
-proportional to visited nodes. Validate all six required wide cases, explicit
-boundary/constant/template/ABI controls, earlier PAs and file audit. Freeze entry
-and final binaries for equivalent-workload A/A + ABBA compiler/RSS/runtime/text
-measurements. Extend adjacent scalar behavior as the same understanding permits.
-No optional optimization or speedup claim is planned.
+## Design/spec alignment
 
-Wide scalar increment: all six original wide failures now execute successfully;
-intermediate PA25 **70/101**, earlier **4152/4152**. Canonical 128-bit payloads
-are interned per Analyzer (zero is ID 0); Constant and ABI Node sizes stay fixed.
-Arithmetic/conversion, static data, template keys/names, bounds, enum constants,
-switches and bit-fields consume typed payloads. Native pair selection is reused.
-19 explicit scalar controls include 96 seeded full-width pairs, signed-overflow
-rejections and a host-ABI symbol comparison (validation only). A concrete member
-comparison/cast parsing failure found there is fixed with the memoized delimiter
-probe. NaN/infinity generation, all floating classifications, special constants,
-nonthrowing facts and template use now share semantic builtin ownership.
-Normalized ABI fact input/output also retains all 128 literal bits. Compiler
-performance and final required checks remain pending.
+The inherited driver streams each source TU into the canonical semantic graph,
+constructs typed LowIR directly, selects/releases per-function MIR and writes
+native bytes. Internal PA25 objects retain native ABI facts and relocations;
+the indexed linker imports/releases each object. No production host/compiler,
+assembler, reference, textual IR transport or source-dependent object is added.
+PA26/27 still own host-compatible object output.
 
-## Design/spec alignment and completed group
+| Completed owner | Data flow and bounded work | Validation |
+|---|---|---|
+| Syntax/type system | Wide fundamental vocabulary -> canonical TypeIds, ranks, signedness and conversions; fixed-width operations O(1). A memoized angle probe distinguishes a member comparison from inferred template syntax. | All six original wide failures pass; arithmetic/conversion and relational controls |
+| Semantic scalar constants | TU-owned interned 128-bit payloads -> typed constants, templates, static data, bounds, enum values, switches and bit-fields. Zero has ID 0; complete payload equality resolves hash collisions. Common Constant size stays fixed. | 96 seeded full-width operand pairs, constexpr overflow rejection, high-half globals/templates/fields, separate and mixed linking |
+| ABI/lowering | Recorded type/value identities -> full-width ABI literals and LowIR operands -> existing PA24 native pair operations/ABI. Names are rendered only at output. Normalized ABI fact adapters share the encoder. | Cross-TU template identity, ABI symbol/fact checks, wide stack arguments; all earlier PA9/24 checks pass |
+| Floating builtins | Semantic NaN/infinity/classification facts -> constants or typed comparisons; lowering does not resolve runtime names. Payload strings are read once, bounded by source length; classification has constant work. | Required isnan/nanl case; three widths, templates, constexpr propagation, noexcept and single argument evaluation |
 
-`toolchain/driver` owns options and one-source-TU compilation. Shared
-`lowering::build_program` streams tokens into the existing typed semantic graph
-and LowIR. `native::compile_image` selects/releases one function's MIR at a time
-and encodes native bytes. `toolchain/object` persists bytes, native ABI exports,
-local IDs, aliases, roles and relocations in a versioned x86-64 binary format.
-There is no source/LowIR serialization between production phases, host compiler,
-assembler, linker or reference delegation. Frontend graphs die per source TU;
-linking consumes/releases each input object after importing its native facts.
-
-`toolchain/linker` owns indexed strong/weak resolution, local isolation, alias
-addresses, discarded-definition fixup ownership, lifecycle order and relocation.
-ABI spellings are boundary keys, interned once into the flat link index. Ordinary
-semantic decisions remain identity-based in their existing owners. `elf_input`
-imports allocated ELF sections and direct, absolute, PC-relative and GOT-relative
-relocations; GOT entries preserve the instruction's actual indirect semantics.
-Startup and output reuse the PA24 encoder/ELF writer. No optional optimization.
-
-Completed: compile/direct/mixed parity, source-independent objects, required
-include/target/library options, command macros/redefinition diagnostics, strong
-and weak exports, internal objects, data/function pointers, constructor aliases,
-foreign helper calls/data, shared TLS and backend helper identities. Follow-up
-controls cover discarded weak references, malformed objects, physical include
-paths after `#line`, Clang GOT relocations and 4096-aligned foreign functions.
-Complexity is O(bytes + (symbols + relocations) log symbols), storage O(input +
-output); there are no global retries or fixed-point transforms.
+New payload pools have Analyzer/TU lifetimes; ABI nodes remain compact and
+interned. No global mutable cache, optional optimization, fixed-point pass or
+unbounded search is introduced. Constant-pool telemetry observes existing work.
+The empty-PATH trace visits 20 unique wide constants, two specializations (one
+primary body transition and one explicit specialization selection), five native
+functions and 2538 text bytes. See [validation136](../student.tests/pa25/validation136.json).
 
 ## Remaining implementation (requirements retained)
 
-| Owner/group | Required failures | Data flow and next work |
+| Owner/group | Required failures | Next data flow |
 |---|---:|---|
-| Native C++ runtime | 12 | Recorded RTTI/allocation/pure-virtual roles -> actual native support definitions; dynamic-cast must consume hierarchy data |
-| Source EH/runtime | 14 | Catch clauses, payload type/lifetime and function-try boundaries -> matching/unwind/runtime; PA24's scalar LowIR EH is insufficient |
-| Canonical wide source types | 0 | Completed scalar group; final validation/performance pending |
-| GNU statement expressions | 3 | Parser/typed statement result/lifetime -> lowering, including enclosing return |
-| Floating builtins | 0 | Typed NaN/infinity/classification facts completed; final validation/performance pending |
-| Floating calculator | 1 | Five one-ULP f64 differences in 1M outputs; execution/oracle ownership still to establish, references preserved |
+| Native C++ runtime | 12 | Recorded RTTI/allocation/pure-virtual roles -> native support definitions; dynamic-cast must consume hierarchy data |
+| Source EH/runtime | 14 | Catch/type/payload/lifetime and function-try facts -> matching, unwinding, cleanup and handler state |
+| GNU statement expressions | 3 | Parsed statement result, enclosing control flow and lifetime facts -> semantic construction and lowering |
+| Floating evaluation policy | 1 | Reconcile exact source-runtime oracle with supported floating precision; five of 1M outputs differ |
 
-Also observed outside required fixtures: `student.tests/pa25/unused-dependent-local.cc`
-is rejected by inherited frontend `--emit-lowir`; unused dependent body checking
-remains implementation work. Diagnostics/case identities are in
-[remaining135](../student.tests/pa25/remaining135.json).
+Case identities and original diagnostics: [remaining136](../student.tests/pa25/remaining136.json).
+The inherited unused-dependent-local reducer is still rejected; it remains
+frontend implementation work outside the required fixtures.
 
-The boundary is substantive: all driver/ELF issues found in the controls are
-resolved. Further required progress now needs distinct language/runtime owners,
-including typed C++ exception matching and RTTI/allocation support; resolving a
-symbol to a placeholder would be incorrect. Wide types and statement expressions
-require frontend construction/conversion work, not another link-path extension.
+Boundary: the scalar group includes the payload consumers, template/ABI views,
+bit-fields and builtin effects exposed by its controls, with no known unresolved
+correctness defect in that group. Further required work now needs distinct
+class-runtime, EH, or statement-expression owners. The calculator requires a
+floating-evaluation policy across source/native contracts: its five reference
+values are reproduced by extended intermediates permitted by C++11 [expr]/12.
+[The reducer/proof discussion](../student.tests/pa25/rounding136.md) explains why
+host agreement cannot justify a reference correction. The failing comparison
+remains required; no oracle, coverage or comparison rule was changed.
 
-## Validation/performance and ledger
+## Performance and validation
 
-- Final `make test-pa25`: **64/101**, 37 failures; every original case retained.
-- `make test-report-through-pa24`: **4152/4152**, all earlier stages pass; focused
-  property checks pass. A concurrent intermediate run contaminated summary
-  files; authoritative reports were rerun sequentially.
-- Explicit `python3 student.tests/pa25/driver.py`: **61 checks pass**.
+[Performance136](../student.tests/pa25/performance136.md) records frozen binaries,
+flags/input hashes, A/A plus six ABBA blocks, all samples and paired spreads.
+Equivalent template/memory/floating compiler medians B/A: 1.010 / 0.955 / 0.930;
+RSS growth under 1.1%; all executable pairs byte-identical. No speedup claim.
+The new wide surface has a correct final/final baseline: 64 compiles in 0.40750 s,
+6764 KiB compiler peak RSS; three checked executions in 0.29249 s, 977 text bytes.
+O0 optional work/growth budgets are zero; new semantic work is linear in source
+and unique facts. Inherited 15% diagnostics create no extra gate; mandated
+correctness, coverage and finite bounds remain unchanged. Self-hosting is PA34.
+
+- `make test-pa25`: **71/101**, 30 original failures remain; seven removed, none added.
+- `make test-report-through-pa24`: **4152/4152**, 24 stages pass.
+- `make test-report-through-pa25`: **4223/4253**; no advancement claimed.
 - File audit passes with four inherited header warnings; `git diff --check` clean.
-- [Performance135](../student.tests/pa25/performance135.md): frozen A/B, A/A and six
-  ABBA blocks, wall/RSS/runtime/text together. Paired compiler medians 0.997–1.021;
-  all three executable pairs byte-identical and checked. No speedup claim.
-  Stub entry is not an equivalent baseline. Inherited diagnostic targets create
-  no extra gate; mandated correctness, coverage and finite work bounds remain.
-- Empty-PATH template source-to-ELF trace: 4800 specialization/body transitions,
-  4809 native functions, 384567 text bytes. Source/object/mixed images also match.
-- Required fixtures, references, bundle and comparison rules are unchanged.
+- Explicit driver controls: **61 pass**. Scalar controls: **19 pass**, including
+  96 randomized full-width operand pairs. Empty-PATH source/template-to-ELF passes.
+- A telemetry size-limit finding was fixed by moving constant reporting to its
+  owner; authoritative checks were rerun. Intermediate evidence is retained.
 
-| Increment | Handoff disposition |
+## Handoff ledger and independent review
+
+| Increment | Disposition |
 |---|---|
-| `b6eae734` | Initial ownership/scope plan; both review markers preserved |
-| `ce08119c` | Coherent compile/object/link group plus 58 controls |
-| `ff3e3848` | ELF load-address alignment, 61 controls and frozen performance runner |
-| Evidence handoff | Final required validation and remaining implementation/review ledger |
+| `cf26b48b` | Prior driver handoff: 64/101; review still pending |
+| `da31a876` | Current ownership/scope plan; both review markers preserved |
+| `1cc95b47` | Canonical wide source scalars and complete payload consumers |
+| `bcdd0b72` | Floating builtins, full-width ABI adapters and controls |
+| `ba608c4f` | Constant telemetry ownership and precision boundary documentation |
+| Evidence handoff | Final required checks, performance and remaining-work ledger |
 
 Independent review remains pending: whole-stage source-to-ELF architecture,
-object/alias/weak-definition ownership, runtime fact boundaries and performance
-acceptance. Those review questions do not replace the unfinished implementation
-above. The next independent audit must retain and resolve both categories.
-Evidence: `/home/vishvananda/work/private/v4codex/artifacts/pa25-135/` and
-[validation135](../student.tests/pa25/validation135.json). This handoff returns
-control for further implementation/audit; advancement is not authorized by it.
+object/weak-definition ownership, runtime boundaries, scalar key/ABI/effect
+correctness, floating precision policy and performance acceptance. These review
+questions are distinct from unfinished implementation above; neither is waived.
+Evidence: `/home/vishvananda/work/private/v4codex/artifacts/pa25-136/`.
+This committed implementation handoff returns control to Ralph for further work
+and audit; it does not certify assignment completion or authorize advancement.
