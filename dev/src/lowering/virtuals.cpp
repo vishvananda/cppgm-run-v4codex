@@ -83,7 +83,8 @@ void Procedural::emit_vtables()
                 auto row = scalar(IRType::I64,delta); row.value.negative_integer = delta < 0; data.push_back(row);
             }
             auto top = scalar(IRType::I64,0-offset); top.value.negative_integer = offset != 0;
-            data.push_back(top); data.push_back(relocation(typeinfo(cls)));
+            data.push_back(top);
+            data.push_back(sem.polymorphic(cls) ? relocation(typeinfo(cls)) : scalar(IRType::Ptr,0));
             for (unsigned j = 0; j < count; ++j) {
                 const auto& slot = model.slots[begin+j];
                 auto m = sem.member_fact(slot.function);

@@ -42,6 +42,8 @@ def check(cc,work):
    text=ir.read_text();row['tables']=[]
    for match in re.finditer(r'^global ([^\n]+) = \{\n(.*?)^\}',text,re.M|re.S):
     if 'object=_ZTV' in match[1] or 'object=__cppgm_vtable_view_' in match[1] or 'object=_ZTI' in match[1]:row['tables'].append(dict(header=match[1],rows=match[2].splitlines()))
+   if name=='shared-rtti':
+    row['virtual_cast_unknown_hint']=bool(re.search(r'call ptr @[^\n]+, -1\)',text))
    if name in ('inherited-secondary-override-slot','inherited-virtual-override-slot'):
     primary=[t for t in row['tables'] if 'object=_ZTV1D]' in t['header']]
     row['required_primary_override_slot']=len(primary)==1 and sum(x.strip().startswith('ptr addr') for x in primary[0]['rows'])==2
@@ -50,7 +52,7 @@ def check(cc,work):
    if not q.returncode:
     q=subprocess.run(['g++','-no-pie',str(obj),'-o',str(exe)],capture_output=True,text=True);row.update(link_exit=q.returncode,link_diagnostic=q.stderr)
     if not q.returncode:row['runtime_exit']=subprocess.run([str(exe)],timeout=15).returncode
-  row['passed']=row.get('runtime_exit')==0 and row.get('stats_identical',False) and row.get('required_primary_override_slot',True);rows.append(row)
+  row['passed']=row.get('runtime_exit')==0 and row.get('stats_identical',False) and row.get('required_primary_override_slot',True) and row.get('virtual_cast_unknown_hint',True);rows.append(row)
   print(name,'PASS' if row['passed'] else 'FAIL', '(unfinished lifecycle)' if name in unfinished else '',file=sys.stderr,flush=True)
  return dict(compiler=str(cc),compiler_sha256=sha(cc),cases=rows)
 if __name__=='__main__':

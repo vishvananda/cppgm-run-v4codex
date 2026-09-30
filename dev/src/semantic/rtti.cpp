@@ -105,8 +105,16 @@ Conversion Analyzer::dynamic_cast_conversion(Expression x, TypeId to, ScopeId s,
     else if (derived_from(use.type,use.source)) {
         auto path = base_path(use.type,types[use.source].entity);
         bool accessible = base_accessible(types[use.type].entity,types[use.source].entity,global);
-        use.hint = !accessible ? -2 : base_adjustments[path].ambiguous ? -3 :
-            std::int64_t(base_adjustments[base_steps(use.type,types[use.source].entity)].total);
+        if (!accessible) use.hint = -2;
+        else if (base_adjustments[path].ambiguous)
+            use.hint = virtual_base_count(types[use.type].entity) ? -1 : -3;
+        else {
+            auto projection = base_adjustments[base_steps(use.type,types[use.source].entity)];
+            // A positive src2dst hint promises a unique *nonvirtual* base.
+            // Shared bases (including their nonvirtual descendants) have a
+            // most-derived-dependent offset and must use the unknown hint.
+            use.hint = projection.virtual_row ? -1 : std::int64_t(projection.total);
+        }
     } else use.hint = -2;
     c.rank = 0; c.reference = use.reference;
     return c;
