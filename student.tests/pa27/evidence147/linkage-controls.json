@@ -1,0 +1,539 @@
+{
+  "binary_sha256": "a2abb98ced2fc821db02b80d0661bf59797d0d2851847ef4497366e30bdf524e",
+  "commands": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/typedefs.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/typedefs.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/typedefs.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/host.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "/tmp/pa27-147/validation-final/linkage/typedefs.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 T _Z5probeP5FirstP5Union5Color\n0000000000000000 W _ZN5First4readEv\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "/tmp/pa27-147/validation-final/linkage/host.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 T _Z5probeP5FirstP5Union5Color\n0000000000000000 W _ZN5First4readEv\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/tmp/pa27-147/validation-final/linkage/typedef-main.cpp",
+        "/tmp/pa27-147/validation-final/linkage/typedefs.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/typedef-main"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/linkage/typedef-main"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/c-linkage.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/c.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/linkage/c.o",
+        "/tmp/pa27-147/validation-final/linkage/c-host.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/c"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/linkage/c"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/bad-c.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/bad.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: static declaration follows external C declaration\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/local-a.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/a.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/local-b.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/b.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/linkage/a.o",
+        "/tmp/pa27-147/validation-final/linkage/b.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/locals"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/linkage/locals"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/local-a.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/a.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/local-b.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/b.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/linkage/a.o",
+        "/tmp/pa27-147/validation-final/linkage/b.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/locals"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/linkage/locals"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/standards.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/student.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/standards.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/host.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "--defined-only",
+        "/tmp/pa27-147/validation-final/linkage/student.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 T _Z1aPSaIiE\n0000000000000012 T _Z1bPSo\n0000000000000024 T _Z1cPSt13basic_ostreamIc6TraitsE\n0000000000000036 T _Z1dPSt13basic_ostreamIwSt11char_traitsIwEE\n0000000000000048 T _Z1ePSs\n000000000000005a T _Z1fPN5other9allocatorIiEE\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "--defined-only",
+        "/tmp/pa27-147/validation-final/linkage/host.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 T _Z1aPSaIiE\n000000000000000f T _Z1bPSo\n000000000000001e T _Z1cPSt13basic_ostreamIc6TraitsE\n000000000000002d T _Z1dPSt13basic_ostreamIwSt11char_traitsIwEE\n000000000000003c T _Z1ePSs\n000000000000004b T _Z1fPN5other9allocatorIiEE\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/extern-provider.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "ar",
+        "rcs",
+        "/tmp/pa27-147/validation-final/linkage/provider.a",
+        "/tmp/pa27-147/validation-final/linkage/provider.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/extern-user.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/user.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "-u",
+        "/tmp/pa27-147/validation-final/linkage/user.o"
+      ],
+      "status": 0,
+      "stdout": "                 U _Unwind_Resume\n                 U _ZN3BoxIiE4readEv\n                 U _ZN3BoxIiE5valueE\n                 U _ZN3BoxIiEC1Ev\n                 U _ZN3BoxIiED1Ev\n                 U __gxx_personality_v0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/linkage/extern-main.cpp",
+        "/tmp/pa27-147/validation-final/linkage/user.o",
+        "/tmp/pa27-147/validation-final/linkage/provider.a",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/archive"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/linkage/archive"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/extern-user.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/user.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "-u",
+        "/tmp/pa27-147/validation-final/linkage/user.o"
+      ],
+      "status": 0,
+      "stdout": "                 U _Unwind_Resume\n                 U _ZN3BoxIiE4readEv\n                 U _ZN3BoxIiE5valueE\n                 U _ZN3BoxIiEC1Ev\n                 U _ZN3BoxIiED1Ev\n                 U __gxx_personality_v0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/linkage/extern-main.cpp",
+        "/tmp/pa27-147/validation-final/linkage/user.o",
+        "/tmp/pa27-147/validation-final/linkage/provider.a",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/archive"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/linkage/archive"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/closures.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/closures.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/linkage/closures.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/closures"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/linkage/closures"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/vtt-a.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/a.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/vtt-b.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/b.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/linkage/a.o",
+        "/tmp/pa27-147/validation-final/linkage/b.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/linkage/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/linkage/b.o",
+        "/tmp/pa27-147/validation-final/linkage/a.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/linkage/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/vtt-a.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/a.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/linkage/vtt-b.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/b.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/linkage/a.o",
+        "/tmp/pa27-147/validation-final/linkage/b.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/linkage/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/linkage/b.o",
+        "/tmp/pa27-147/validation-final/linkage/a.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/linkage/vtt"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/tmp/pa27-147/validation-final/linkage/vtt-a.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/linkage/vtt.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

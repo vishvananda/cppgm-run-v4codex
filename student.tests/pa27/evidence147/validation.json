@@ -1,0 +1,175 @@
+{
+  "stage_base": "f833cf1ff361529147361cada33eca62e55330cf",
+  "last_reviewed_commit": "f833cf1ff361529147361cada33eca62e55330cf",
+  "entry_commit": "8d595af6b91289109cae36554a8e8e8551192873",
+  "implementation_commit": "79dffd03b26122773f10e9b45154b2ecea711b3a",
+  "binary_sha256": "a2abb98ced2fc821db02b80d0661bf59797d0d2851847ef4497366e30bdf524e",
+  "checks": [
+    {
+      "name": "priorThroughTests",
+      "command": [
+        "make",
+        "test-report-through-pa26"
+      ],
+      "status": 0,
+      "elapsed_s": 10.68435449525714,
+      "output_path": "/tmp/pa27-147/validation-final/priorThroughTests.log",
+      "output_sha256": "7cac27cf3186f13b955c5acf0fb07ff27b00fcb1aa841ffa27213d34fbe64cfd"
+    },
+    {
+      "name": "stageTests",
+      "command": [
+        "make",
+        "test-pa27"
+      ],
+      "status": 2,
+      "elapsed_s": 4.1480905301868916,
+      "output_path": "/tmp/pa27-147/validation-final/stageTests.log",
+      "output_sha256": "51660ad57d734ea80edf2e42cf27d5e06cb5ca8084cba6c5d51886f4a34f4066"
+    },
+    {
+      "name": "throughStage",
+      "command": [
+        "make",
+        "test-report-through-pa27"
+      ],
+      "status": 2,
+      "elapsed_s": 15.194419667124748,
+      "output_path": "/tmp/pa27-147/validation-final/throughStage.log",
+      "output_sha256": "c8937303f83b48c7c69d496a07b0520cd11fe68c27d9bc518da8c7aeb7e80520"
+    },
+    {
+      "name": "fileAudit",
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa27",
+        "--paths",
+        "dev/src"
+      ],
+      "status": 0,
+      "elapsed_s": 4.985513569787145,
+      "output_path": "/tmp/pa27-147/validation-final/fileAudit.log",
+      "output_sha256": "a8cc56fe117bbfd3ed16e9e29470abb6f84497ea8488c7e2d89528530a070d9b"
+    },
+    {
+      "name": "personalStorage",
+      "command": [
+        "python3",
+        "student.tests/pa27/storage-controls.py",
+        "/tmp/pa27-147/validation-final/storage"
+      ],
+      "status": 0,
+      "elapsed_s": 5.784300060942769,
+      "output_path": "/tmp/pa27-147/validation-final/personalStorage.log",
+      "output_sha256": "94406821772b0ea9c5835fb6cbcf1f3864ae4b14c1684f5657346a72eea0e6c8"
+    },
+    {
+      "name": "personalDeclarators",
+      "command": [
+        "python3",
+        "student.tests/pa27/declarator-controls.py",
+        "/tmp/pa27-147/validation-final/declarators"
+      ],
+      "status": 0,
+      "elapsed_s": 0.5257621593773365,
+      "output_path": "/tmp/pa27-147/validation-final/personalDeclarators.log",
+      "output_sha256": "c273de10580a6221a1fd876a0786806729e383bf091e35e82c65f1031957a88c"
+    },
+    {
+      "name": "personalLinkage",
+      "command": [
+        "python3",
+        "student.tests/pa27/linkage-controls.py",
+        "/tmp/pa27-147/validation-final/linkage"
+      ],
+      "status": 0,
+      "elapsed_s": 2.1842626556754112,
+      "output_path": "/tmp/pa27-147/validation-final/personalLinkage.log",
+      "output_sha256": "c9831cbd28885aab7e37e5f11f01c62cc00fc5f46daa54a44810b3332b978942"
+    },
+    {
+      "name": "personalTLS",
+      "command": [
+        "python3",
+        "student.tests/pa27/tls-controls.py",
+        "/tmp/pa27-147/validation-final/tls"
+      ],
+      "status": 0,
+      "elapsed_s": 1.7993742041289806,
+      "output_path": "/tmp/pa27-147/validation-final/personalTLS.log",
+      "output_sha256": "dac7a39f59833c2245a3bc68f6f7d1d9ea1848895f08d2ce88db44aa74077c71"
+    },
+    {
+      "name": "inheritedObjects",
+      "command": [
+        "python3",
+        "student.tests/pa27/object-controls.py",
+        "/tmp/pa27-147/validation-final/objects"
+      ],
+      "status": 0,
+      "elapsed_s": 1.3147572837769985,
+      "output_path": "/tmp/pa27-147/validation-final/inheritedObjects.log",
+      "output_sha256": "4e0acb6f402905e581dba6fb3f429e8ac08a3bd54ffc2fd9f531482bf492f8c1"
+    },
+    {
+      "name": "diffCheck",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "status": 0,
+      "elapsed_s": 0.028655968606472015,
+      "output_path": "/tmp/pa27-147/validation-final/diffCheck.log",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "progress": {
+    "entry_pass": 155,
+    "current_pass": 157,
+    "total": 158,
+    "entry_fail": 3,
+    "current_fail": 1,
+    "resolved": [
+      "pa27/tests/general/200-anonymous-storage-member-init-runtime-smoke.t",
+      "pa27/tests/general/200-anonymous-storage-owner-initialization.t"
+    ],
+    "remaining": [
+      "pa27/tests/general/200-host-extern-template-vtable-reference.t"
+    ],
+    "new_failures": []
+  },
+  "coverage": {
+    "tracked_contract_paths": 19749,
+    "inventory_sha256": "f47e5a4072740becf294ee85a2bb96242f61c486c5a639ded252402453172083",
+    "pa27_anchors": 158,
+    "source_reference_and_comparison_changes": []
+  },
+  "sources": {
+    "dev/frontend_source_sets.mk": "da9c8de54523841f9203940fe636ee62faee437ced3e24b697efd16b9ab6aa32",
+    "dev/src/lowering/cleanup.cpp": "f97e6e251a67e6dbcf2ae521c79a2de4c804dfbec37d08d574ebf1df9db77c0b",
+    "dev/src/lowering/construction.cpp": "bf8011344be09e68cbef682a34d09e97f8d858bbb1f68e4082c74f31cba7b6fd",
+    "dev/src/lowering/expression.cpp": "8f2bfabb92a48620204576035249905c0ed7337d6f2461d928e6f1cf81d1a258",
+    "dev/src/lowering/procedural.h": "819325170834c4e14de6b741411cd31e2309ec0d33b75af632264a438a97e266",
+    "dev/src/lowering/values.cpp": "e1d37e254759325150ce2518cacd4d3ce43c11ba7be1f99ad73b107cfd481fee",
+    "dev/src/semantic/analyzer.h": "03e8e4bd00e54ca08d538f8ec28834715e376fa081c6849f75617634abd988f9",
+    "dev/src/semantic/class_enum.cpp": "08f4c9b39585a2085a3979eaf6de08fecd00b0fb1870b5e85fc49dc4920ae9ae",
+    "dev/src/semantic/constant_addresses.cpp": "1fdf1211c5a985af9eff0f42ccdf6f48ded079f6f33babeeeac375fc6dd68152",
+    "dev/src/semantic/constant_execution.cpp": "297143dcee387f568202c5468cb6f3a80ae1fc0de30e3fa5adbbfb638dcebf0c",
+    "dev/src/semantic/constant_queries.cpp": "13ac2d7d35e37640e378effff6bb2c14122c85d3e7ff51b233131c45626849a9",
+    "dev/src/semantic/constant_storage_construction.cpp": "99e0b2ee16aa5edaa0dbe924258e9b04e31b94ac5055287dae5a02ed40288e05",
+    "dev/src/semantic/constexpr_validity.cpp": "59428f4ffc50c4ffbdff0247c453be7e4b09a05fb837d7899c5ec025a2648b14",
+    "dev/src/semantic/construction.cpp": "47c675d92eecf7e5ce7aa6f998270b578606ce791163b4cec494ea3fc24e7df2",
+    "dev/src/semantic/default_destructor_facts.cpp": "4ad8d0956abcfb5280d575373ec82dc2f73a98d5b1e1da1c80b6d9f845226edc",
+    "dev/src/semantic/default_initialization_facts.cpp": "9ff595b6cb8a9abed9fe65d4f9b510e86df7cc7662815e499c8f1393fba8efc7",
+    "dev/src/semantic/expression.cpp": "b8684fe9bfbf78fd8db02261c1779e12245bf48ad359168971a21d8f0aeded4a",
+    "dev/src/semantic/member.cpp": "d183a2970dcd4d24a2185408f31d0fa6f92ca530ff0ae514d4a35f5339926a42",
+    "dev/src/semantic/model.h": "45f2762a8f32ac72ca4f754bc6192a1055c36cc43ea975a59a2a7c903ec5a26f",
+    "dev/src/semantic/output.cpp": "815be3da3e3122772b375cf6ec2cf76afc61c1ae0e9b2c13a1ee2490de4e5a31",
+    "dev/src/semantic/type_builder.cpp": "a5a7e0cc5d1de1713443ab98fb35fc5b9f6b2c8a3e05ca4654917bcad984a741",
+    "dev/src/syntax/declarator.cpp": "761748cb97e66eaa8556eecbad8ef3a26aeb9140a6fd5f5952a28139fcca2d52"
+  },
+  "status": "validated incomplete implementation handoff; whole-stage audit remains pending"
+}

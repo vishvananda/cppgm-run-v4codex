@@ -2,114 +2,82 @@
 
 Stage base commit: `f833cf1ff361529147361cada33eca62e55330cf`
 Last reviewed commit: `f833cf1ff361529147361cada33eca62e55330cf`
-Target: **PA27 full-stage**. Phase: **implement; loop147 active**.
-Current: **155/158**, down from **25 to 3 failures** this turn; no new failures.
-PA1–PA26: **4283/4283**. Independent review markers remain unchanged.
+Target: **PA27 full-stage**. Phase: **implement; incomplete handoff147**.
+Entry HEAD: `8d595af6b91289109cae36554a8e8e8551192873`, clean, **155/158**.
+Current: **157/158**, failures **3 → 1**, no new failures or reduced coverage.
+Earlier PAs: **4283/4283**. Previous goal turn: **progress**, with committed
+ABI/emission implementation and evidence; no interrupted process was live.
+Independent review markers above remain unchanged.
 
 ## Design/spec alignment and completed groups
 
-Semantic identities and immutable type/query facts feed the typed PA9 ABI graph;
-LowIR records carry the resulting spelling, binding and emission facts. No text
-roundtrip, fixture-specific answer, semantic name reconstruction or external code
-generation was added. Standard-library abbreviations implement the ABI's required
-name compression; they do not alter language/library semantics.
-
 | Owner | Data flow, complexity and boundary | Validation |
 |---|---|---|
-| Semantic declarations | First typedef denoting an unnamed type supplies a separate linkage-name fact; C linkage survives namespace context and rejects static redeclaration. O(declarators); facts keyed by entity. | Host-built typedef boundaries, C addresses/rejections |
-| ABI type/query adapter | Original template signatures, dependent NTTP types, source expressions and canonical components produce standard/dependent spellings. Per-type/query caches; O(graph edges + emitted bytes). | All required naming fixtures, standard-type near misses |
-| Linkage/emission | Internal type arguments propagate through specialization ownership; suppression reaches function, ctor/dtor and static-data emission. Ordinary undefined references are strong. Cached scope/type identity; suppression follows lexical owners. | Cross-TU storage separation, archive extraction, extern-template closure |
-| TLS lowering | One typed wrapper/init identity per variable, optional weak host init hook, one guard per dynamic definition. O(TLS entities + initializer IR), fixed wrapper growth. | Required import/export; constant/dynamic, O0/O2, both link orders, threads |
-| ABI support entries | One TU cache entry per `(special-name kind, canonical ABI type)`; internal VTT uses share the defined symbol and remain separate across TUs. Average O(1) lookup, TU lifetime. | Both virtual-base fixtures; cross-TU VTT/body/LowIR controls |
-| Local closures | Separate source ordinal for TU-local names and signature ordinal for ODR contexts. One existing O(C log C) source sort. | Local EH lambda binding and distinct-signature controls |
-| Prior145 object group | Canonical demand/placement, GOT, actual-body COMDAT/FDE ownership, named sections and relocation alignment. O(symbols+operands), placement O(S log S + bytes + R). | Inherited 53-command object controls and section properties |
+| Constructor actions | Canonical injected-field/storage edges select each immediate union variant. A declaration-order walk publishes shared parent paths and cumulative layout offsets. O(selected declarations + explicit initializer paths); one 24-byte path per selected storage, 28-byte action per initialized leaf/base. TU-owned vectors; no source cloning or name recovery. | Both formerly failing fixtures; nested fields, defaults, unions, refs, arrays/bit-fields, nontrivial copy/move |
+| Default initialization | One declaration-owned context per class with demanded defaults; destination and `this` receiver paths remain separate. Scope/type identity is retained across constructor reuse. Anonymous structs receive ordinary default/destruction validation; union variant restrictions remain. | Mixed explicit/default constructors, prior-field reads, `this`, addresses, constructor-parameter rejection; PA11 enclosing constant |
+| Runtime/lifetime lowering | Typed actions feed direct LowIR offsets for construction and partial unwind; ordinary destruction retains its storage boundary. No preliminary default construction or representation copy replaces projected nontrivial actions. O(actions + emitted IR); existing cleanup bounds remain. | O0/O2 constructor/member throws, lifetime counters, host execution and object controls |
+| Constant construction | Canonical addresses index flat temporary group/part buffers. Freeze each selected storage once; include projected reference dependencies in activation keys. O(leaves + storage edges + required reachable dependencies), released with the activation; immutable values remain TU-owned. | Nested/union constexpr values, reads during initialization, missing-field rejection, reference arguments, measured constant workload |
+| Declarators | Consume GNU attributes after pointer/reference/member-pointer operators alongside qualifiers, preserving ordinary attribute facts. Linear token work; no token replay. | 18 explicit controls; hosted fixture progresses beyond `<exception>` |
 
-## Unfinished implementation (not audit questions)
+A nontrivial `S` and demanded `Value<N>` follow the same path: parsed declaration
+→ canonical fields/layout → constructor-owned action/path slices → typed LowIR
+construction and cleanup → PA24 selection/encoding → direct ELF. The focused
+benchmark checks 600 demanded template classes, exactly 600 projected storage
+paths and 1800 actions. No production phase adds a text roundtrip or host code
+generation. Host linking remains the PA27 harness boundary.
 
-1. **Anonymous-storage constructor actions**: two required fixtures reject
-   `initializer does not name a member or base`. Injected fields need their
-   storage-owner path retained in initialization/default/lifetime actions. Merely
-   accepting the name would still incorrectly default-construct the storage
-   before a nontrivial projected initializer. This needs constructor-action and
-   cleanup ownership work, not ABI symbol changes.
-2. **Hosted-header parsing/vtable demand**: the remaining hosted-vtable fixture
-   stops at `/usr/include/c++/15/exception:87` (`expected ')', found '('`). The
-   parser/hosted-header surface must be completed before its vtable behavior can
-   be assessed. No hosted fixture, comparison or requirement is waived.
+Prior145/146 object placement, GOT, COMDAT/FDE ownership, ABI naming, semantic
+linkage, TLS, suppression and support-entry work is preserved. Its designs and
+measurements remain in [performance145](../student.tests/pa27/performance145.md),
+[performance146](../student.tests/pa27/performance146.md) and their evidence.
 
-The [exact inventory](../student.tests/pa27/evidence146/validation.json) records
-all 22 resolved cases and the three remaining cases. The ABI/emission group is
-complete at this handoff. Continuing those failures requires different upstream
-parser and constructor-action models; repairing them through symbol emission
-would violate the spec's ownership boundary. Whole-stage implementation remains
-required; this handoff does not certify the assignment.
+## Unfinished implementation — not independent review
 
-## Performance and required checks
+`200-host-extern-template-vtable-reference.t` remains failing. Pointer-attribute
+parsing now succeeds; compilation reaches `<typeinfo>` and rejects
+`__builtin_strcmp`. Hosted builtin semantics and subsequent library/extern-template
+vtable demand are unfinished. The fixture, successful reference, comparison and
+requirement are preserved; its vtable behavior has not yet been validated.
 
-[Performance146](../student.tests/pa27/performance146.md) retains **280 frozen
-A/A+ABBA observations**, including compiler latency/RSS and checked runtime/text
-size. Text is unchanged on all five workloads. Prescribed substitutions remove
-110,400 object bytes on the focused naming input. Paired compiler medians range
-0.964–1.011; full spread/noise and necessary structural budgets are disclosed.
-No optional transform or new percentage gate was introduced;145 evidence remains.
+The anonymous-storage initialization/lifetime/constant group is complete at this
+boundary, including defects found by extending beyond the two course failures.
+The next failure is in hosted-library builtin binding before vtable demand,
+which requires a separate semantic/runtime-helper contract and controls; changing
+storage actions further cannot address it. This is an incomplete **assignment**
+handoff, not certification of PA27 or permission to advance.
 
-[Validation146](../student.tests/pa27/evidence146/validation.json) pins binary and
-source hashes and exact commands. Sequential prior-through and file audit pass
-(four inherited warnings); `make test-pa27` is **155/158**, with **3/3** section
-controls. `make test-report-through-pa27` is **4438/4441**, failures only in PA27.
-Personal controls pass **48 linkage + 38 TLS + 53 inherited object commands**.
-All 19,749 tracked contract paths and 158 stage anchors are preserved. No source,
-reference, harness or comparison changes this turn. Prior145's documented
+## Performance and validation
+
+[Performance147](../student.tests/pa27/performance147.md) records frozen binaries,
+flags/inputs, compiler latency/RSS, checked executable runtime/text, A/A noise and
+six ABBA blocks: **448 final / 1232 retained observations**. It preserves
+intermediate observations and uses pinned final measurements. No optional transform or new percentage gate was introduced.
+Necessary scope/path costs and linear work/memory bounds are explicit.
+
+[Validation147](../student.tests/pa27/evidence147/validation.json) pins the tested
+implementation and binary. Prior-through, file audit (four inherited warnings),
+and all **261 personal command checks** pass. PA27 is **157/158**, section controls
+**3/3**; through-PA27 is **4440/4441**, with only the hosted fixture remaining.
+All **19,749** tracked contract paths and **158** stage anchors are unchanged.
+No fixture, reference, harness or comparison changes; the prior145 documented
 [reference overlay](reference-corrections.md) is unchanged.
 
-## Handoff ledger / independent review
+## Ledger and independent review
 
-- Entry145 `554f05f0`, implementation `c36f3501` and `96e1cb72`: object demand,
-  placement and measured relocation-section correction; handoff145 `5aefb962`.
-- Entry146 `364ebbcc`: clean HEAD `5aefb962` and 133/158 baseline recorded; the
-  previous turn changed implementation/evidence and is classified as progress.
-- `b0553a06`: typed semantic linkage/ABI naming; 146/158 and personal controls.
-- `bb608e0b`: template/TLS/local-closure/support-object emission; 155/158, required
-  checks, explicit controls and frozen performance on this exact binary.
-- Handoff146 boundary: ABI/linkage/emission implementation progress validated;
-  parser and anonymous-storage action work above remains unfinished.
-- Independent audit must review semantic linkage-name identity, substitution
-  slot ownership, suppression versus body demand, TLS weak-hook/guard lifetime,
-  internal support cache isolation and recorded costs/bounds. Preserve prior145
-  review questions about source-attribute identity, COMDAT alias/FDE ownership
-  and GOT scratch lifetimes. These are separate from unfinished implementation;
-  neither category is waived and the review markers above are not advanced.
-
-## Loop147 entry and working groups
-
-Entry HEAD: `8d595af6b91289109cae36554a8e8e8551192873`, clean; 155/158
-(three failures). Previous turn: **progress**, with committed ABI/emission
-implementation and validation; no live build/test process remains. Stage base
-and last-reviewed markers above are preserved. Frozen entry binary is in
-`/tmp/pa27-147/cppgm-entry`.
-
-1. **Anonymous storage / constructor actions**: semantic ownership maps injected
-   member identities to their storage path and selected union variant. Construct
-   leaves in declaration order, with explicit/default initialization overriding
-   default construction, then consume recorded projections in lowering and
-   partial-construction cleanup. Work is proportional to selected fields,
-   storage edges and initializer paths; no cloned source nodes or name recovery.
-   Validate required fixtures plus nested/default/reference/nontrivial members,
-   variant rejection, constant evaluation and throwing cleanup controls.
-2. **Hosted header parsing and vtable demand**: inspect the remaining parser
-   failure after the storage group, extend related grammar/semantic fixes where
-   supported; keep unfinished implementation separate from review questions.
-3. Freeze final binary, measure compiler latency/RSS and checked runtime/text
-   with A/A+ABBA on equivalent inputs. Required prior/current/through reports,
-   file audit and explicit personal controls; record all coverage unchanged.
-
-Loop147 implementation checkpoint: both required anonymous-storage fixtures now
-pass (157/158 stage run; hosted-header parser failure unchanged). Explicit
-storage controls pass **98 commands** at O0/O2, covering declaration order,
-nontrivial copy/move, nested defaults and union selection, arrays/bit-fields,
-partial/body-throw cleanup, constexpr values and DMI receiver/scope reuse.
-The shared semantic path records feed both native initialization/unwind and
-constant evaluation. An inherited destructor rule was narrowed to anonymous
-unions; anonymous structs now receive ordinary destruction checks. Defaults
-own a declaration scope and recorded receiver path, distinct from destination.
-Required through validation and performance measurements are still pending.
+- Prior145: `c36f3501`, `96e1cb72`, handoff `5aefb962`.
+- Prior146: `b0553a06`, `bb608e0b`, handoff `8d595af6`.
+- Entry147: `7c71b6e6`, preserved stage/review markers and full-stage objective.
+- `1c0b2d10`: storage paths, union/default/lifetime/constant actions and controls.
+- `ebf263c4`: preserve enclosing-local constant folding in default contexts.
+- `2eba9b7b`: pointer-attribute parser group and controls.
+- `53b8a76d`, `79dffd03`: complete projected reference dependencies and flat
+  temporary constant buffers; final required checks and performance use `79dffd03`.
+- Handoff147 boundary: storage/default/lifetime/constant and pointer-attribute
+  groups validated; hosted builtin/library/vtable behavior remains unfinished.
+- Independent audit must examine default-context/receiver reuse, nested active
+  variant and cleanup ownership, constexpr dependency completeness and recorded
+  costs. Preserve prior145/146 questions about linkage-name/type identity,
+  substitution slots, suppression versus demand, TLS hook/guard lifetimes,
+  internal support-cache isolation, source attributes, COMDAT/FDE ownership and
+  GOT scratch lifetimes. These are review questions, separate from the unfinished
+  hosted implementation above; neither category is waived.

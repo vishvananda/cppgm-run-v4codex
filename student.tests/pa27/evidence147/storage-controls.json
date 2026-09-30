@@ -1,0 +1,1125 @@
+{
+  "binary_sha256": "a2abb98ced2fc821db02b80d0661bf59797d0d2851847ef4497366e30bdf524e",
+  "commands": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/nested-order.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/nested-order-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/nested-order-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/nested-order-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/nested-order-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/nested-order.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/nested-order-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/nested-order-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/nested-order-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/nested-order-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/nontrivial-copy.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/nontrivial-copy-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/nontrivial-copy-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/nontrivial-copy-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/nontrivial-copy-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/nontrivial-copy.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/nontrivial-copy-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/nontrivial-copy-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/nontrivial-copy-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/nontrivial-copy-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/defaults.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/defaults-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/defaults-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/defaults-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/defaults-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/defaults.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/defaults-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/defaults-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/defaults-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/defaults-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/union-select.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/union-select-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/union-select-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/union-select-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/union-select-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/union-select.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/union-select-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/union-select-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/union-select-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/union-select-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/array-bits.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/array-bits-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/array-bits-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/array-bits-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/array-bits-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/array-bits.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/array-bits-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/array-bits-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/array-bits-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/array-bits-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/cleanup.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/cleanup-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/cleanup-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/cleanup-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/cleanup-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/cleanup.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/cleanup-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/cleanup-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/cleanup-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/cleanup-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/cleanup-complete.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/cleanup-complete-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/cleanup-complete-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/cleanup-complete-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/cleanup-complete-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/cleanup-complete.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/cleanup-complete-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/cleanup-complete-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/cleanup-complete-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/cleanup-complete-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/move.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/move-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/move-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/move-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/move-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/move.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/move-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/move-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/move-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/move-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/default-sibling.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/default-sibling-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/default-sibling-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/default-sibling-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/default-sibling-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/default-sibling.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/default-sibling-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/default-sibling-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/default-sibling-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/default-sibling-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/mixed-default-receiver.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/mixed-default-receiver-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/mixed-default-receiver-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/mixed-default-receiver-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/mixed-default-receiver-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/mixed-default-receiver.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/mixed-default-receiver-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/mixed-default-receiver-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/mixed-default-receiver-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/mixed-default-receiver-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/constant-default-reference.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-default-reference-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/constant-default-reference-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-default-reference-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/constant-default-reference-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/constant-default-reference.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-default-reference-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/constant-default-reference-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-default-reference-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/constant-default-reference-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/constant-default-receiver.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-default-receiver-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/constant-default-receiver-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-default-receiver-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/constant-default-receiver-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/constant-default-receiver.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-default-receiver-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/constant-default-receiver-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-default-receiver-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/constant-default-receiver-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/implicit-defaults.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/implicit-defaults-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/implicit-defaults-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/implicit-defaults-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/implicit-defaults-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/implicit-defaults.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/implicit-defaults-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/implicit-defaults-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/implicit-defaults-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/implicit-defaults-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/constant-union.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-union-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/constant-union-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-union-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/constant-union-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/constant-union.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-union-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/constant-union-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-union-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/constant-union-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/constant.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/constant-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/constant-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/constant.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/constant-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/constant-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/constant-sibling.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-sibling-O0.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/constant-sibling-O0.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-sibling-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/constant-sibling-O0"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O2",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/constant-sibling.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-sibling-O2.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/storage/constant-sibling-O2.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/constant-sibling-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/storage/constant-sibling-O2"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/conflicting-variants.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: multiple initialized union variants\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/nested-conflict.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: multiple initialized union variants\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/duplicate-leaf.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: duplicate constructor initializer\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/constant-missing.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: constexpr constructor leaves member uninitialized\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/default-parameter.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: x\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/nonmember.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: initializer does not name a member or base\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/missing-reference.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: uninitialized reference or const member\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/storage/conflicting-defaults.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/storage/rejected.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: multiple default union variant initializers\n"
+    }
+  ]
+}

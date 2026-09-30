@@ -1,0 +1,191 @@
+{
+  "binary_sha256": "a2abb98ced2fc821db02b80d0661bf59797d0d2851847ef4497366e30bdf524e",
+  "commands": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/declarators/handler.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/declarators/handler.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/declarators/handler.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/declarators/handler"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/declarators/handler"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/declarators/qualified.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/declarators/qualified.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/declarators/qualified.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/declarators/qualified"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/declarators/qualified"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/declarators/reference.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/declarators/reference.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/declarators/reference.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/declarators/reference"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/declarators/reference"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/declarators/nested.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/declarators/nested.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/declarators/nested.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/declarators/nested"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/declarators/nested"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/declarators/array.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/declarators/array.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/declarators/array.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/declarators/array"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/declarators/array"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa27-147/validation-final/declarators/member.cpp",
+        "-o",
+        "/tmp/pa27-147/validation-final/declarators/member.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa27-147/validation-final/declarators/member.o",
+        "-o",
+        "/tmp/pa27-147/validation-final/declarators/member"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa27-147/validation-final/declarators/member"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}
