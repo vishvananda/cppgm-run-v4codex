@@ -18,6 +18,7 @@ static Op binary_op(Operation op)
 }
 void Selector::arithmetic(const lowir_model::Instruction& i)
 {
+    if (i.type == Type::I128) { wide_arithmetic(i); return; }
     if (i.type.floating()) { floating_arithmetic(i); return; }
     require(scalar_integer(i.type), "native arithmetic class not implemented");
     if (state(i.destination.index).compare_branch) {
@@ -87,6 +88,7 @@ static X86Condition condition(Operation op)
 }
 void Selector::compare(const lowir_model::Instruction& i, bool branch)
 {
+    if (i.type == Type::I128) { wide_compare(i,branch); return; }
     if (i.type.floating()) { floating_compare(i,branch); return; }
     require(scalar_integer(i.type), "native comparison class not implemented");
     Operand left = value(arg(i,0),i.type), right = value(arg(i,1),i.type);
@@ -103,6 +105,7 @@ void Selector::compare(const lowir_model::Instruction& i, bool branch)
 }
 void Selector::conversion(const lowir_model::Instruction& i)
 {
+    if ((i.type == Type::I128 || i.source_type == Type::I128) && !i.type.floating() && !i.source_type.floating()) { wide_conversion(i); return; }
     if (i.type.floating() || i.source_type.floating()) {
         convert_to(allocate(i.destination.index,i.type),value(arg(i,0),i.source_type),i.source_type,i.type,
             i.operation == Operation::Uitofp,i.operation == Operation::Fptoui); return;

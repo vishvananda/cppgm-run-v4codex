@@ -41,9 +41,9 @@ void Validator::instruction(const Instruction& i) const
         count(1);
         require(arg(0).kind == Operand::Slot || arg(0).kind == Operand::Symbol, "invalid addressable");
         value_type(arg(0)); break;
-    case Opcode::Load: count(1); scalar(); storage(arg(0), i.type); break;
+    case Opcode::Load: count(1); storage(arg(0), i.type); break;
     case Opcode::Store:
-        count(2); scalar();
+        count(2);
         if (!(i.type.floating() && !arg(0).literal() && value_type(arg(0)).floating())) value(arg(0), i.type);
         storage(arg(1), i.type); break;
     case Opcode::Index:

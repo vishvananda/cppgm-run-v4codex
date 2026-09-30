@@ -1,4 +1,5 @@
 #include "native/selection.h"
+#include "native/abi.h"
 #include <algorithm>
 namespace native {
 using namespace lowir_model;
@@ -59,6 +60,9 @@ void Selector::analyze()
         for (unsigned n = body.instructions.begin; n != body.instructions.end(); ++n) {
             const auto& i = p.instructions[n];
             unsigned clobbers = 0;
+            if (i.type == Type::I128 && i.opcode >= Opcode::AtomicLoad && i.opcode <= Opcode::AtomicCompareExchange)
+                clobbers |= (1u<<XR_RDX)|(1u<<XR_RCX);
+            if (i.type == Type::I128 && i.operation == Operation::Mul) clobbers |= 1u<<XR_RDX;
             if (i.opcode == Opcode::Binary && (i.operation == Operation::Div || i.operation == Operation::Udiv || i.operation == Operation::Mod || i.operation == Operation::Umod)) clobbers |= 1u<<XR_RDX;
             if (i.opcode == Opcode::Binary && (i.operation == Operation::Shl || i.operation == Operation::Shr || i.operation == Operation::Ushr) && !arg(i,1).literal()) clobbers |= 1u<<XR_RCX;
             if (i.opcode == Opcode::AtomicCompareExchange) clobbers |= 1u<<XR_RCX;
@@ -104,7 +108,7 @@ void Selector::analyze()
         if ((i.opcode == Opcode::Compare || (i.opcode == Opcode::Unary && i.operation == Operation::Not)) && s.uses == 1 && s.last == s.definition+1)
             s.compare_branch = p.instructions[s.last-1].opcode == Opcode::Branch;
         if (i.opcode != Opcode::Phi) continue;
-        require(scalar_integer(i.type) || i.type.floating(), "native phi class not implemented");
+        require(i.type.scalar() || i.type.kind() == Type::Object, "invalid native phi class");
         s.location = home(p.values[v-1].name, i.type, true);
         for (unsigned k = 0; k < i.operands.count; k += 2) {
             EdgeMove move;
@@ -126,7 +130,7 @@ void Selector::analyze()
 }
 Operand Selector::home(Name name, Type t, bool temporary)
 {
-    unsigned alignment = std::max(8u, t.alignment());
+    unsigned alignment = t == Type::I128 ? 16 : std::max(8u, t.alignment());
     require(alignment <= 16, "overaligned native stack storage not implemented");
     f.frame_bytes = (f.frame_bytes + std::max(8u,t.bytes()) + alignment-1) & ~(std::uint64_t(alignment)-1);
     require(f.frame_bytes < 0x70000000, "native frame too large");
@@ -137,7 +141,6 @@ Operand Selector::home(Name name, Type t, bool temporary)
 }
 void Selector::parameters()
 {
-    static const int registers[] = {XR_RDI,XR_RSI,XR_RDX,XR_RCX,XR_R8,XR_R9};
     const auto& signature = p.signatures[source.signature.index-1];
     if (signature.boundary.arity == CAM_VARIADIC) save_variadic_registers();
     unsigned retained_parameters = 0;
@@ -146,23 +149,29 @@ void Selector::parameters()
         const auto& v = state(param.value.index);
         if (scalar_integer(param.type) && v.uses && (v.crosses_block || v.crosses_call)) ++retained_parameters;
     }
-    unsigned gp = 0, fp = 0, stack = 16;
+    AbiCursor abi; abi.stack = 16;
+    if (indirect_return(f.result)) {
+        abi.gp = 1; indirect_result = home(0,Type::Ptr,true);
+        move(indirect_result,Operand::r(XR_RDI),Type::Ptr);
+    }
     for (unsigned k = signature.parameters.begin; k != signature.parameters.end(); ++k) {
         const auto& param = p.parameters[k];
-        require(scalar_integer(param.type) || param.type.floating(), "native parameter ABI class not implemented");
         bool vector = param.type == Type::F32 || param.type == Type::F64;
-        Operand incoming;
-        if (vector && fp < 8) incoming = Operand::r(xmm(fp++));
-        else if (scalar_integer(param.type) && gp < 6) incoming = Operand::r(registers[gp++]);
-        else {
-            unsigned alignment = std::max(8u,param.type.alignment());
-            stack = (stack+alignment-1)&~(alignment-1);
-            incoming = Operand::mem(XR_RBP,stack); stack += std::max(8u,param.type.bytes());
-        }
-        f.params.push_back({p.values[param.value.index-1].name,param.type,incoming});
+        auto placement = abi.take(param.type,XR_RBP);
+        Operand incoming = placement.parts[0];
+        f.params.push_back({p.values[param.value.index-1].name,param.type,incoming,placement.count == 2 ? placement.parts[1] : Operand()});
         auto& v = state(param.value.index);
         v.location = incoming;
         if (!v.uses) continue;
+        if (aggregate(param.type)) {
+            if (!placement.memory) {
+                v.location = home(p.values[param.value.index-1].name,param.type,true);
+                f.frame.back().parameter = true;
+                for (unsigned part = 0; part < placement.count; ++part)
+                    move(fragment(v.location,part*8),placement.parts[part],chunk_type(std::min(8u,param.type.bytes()-part*8)));
+            }
+            continue;
+        }
         bool retain = incoming.kind == Operand::Reg &&
             (vector || v.last < first_clobber[incoming.reg]) && !v.crosses_block && !v.crosses_call;
         if (retain) {
@@ -191,12 +200,13 @@ void Selector::parameters()
             normalize_register(incoming,param.type); move(v.location,incoming,param.type);
         }
     }
-    vararg_gp = gp*8; vararg_fp = 48+fp*16; vararg_stack = stack;
+    vararg_gp = abi.gp*8; vararg_fp = 48+abi.fp*16; vararg_stack = abi.stack;
 }
 Operand Selector::allocate(unsigned id, Type t)
 {
     auto& v = state(id);
     if (v.location.kind != Operand::None) return v.location;
+    if (aggregate(t)) return v.location = home(p.values[id-1].name,t,true);
     if (t.floating()) {
         f.scratch_bytes = 48;
         if (t != Type::F80 && !v.crosses_call && (!v.crosses_block || v.single_edge)) {

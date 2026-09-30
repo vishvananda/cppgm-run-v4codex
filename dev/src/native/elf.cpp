@@ -20,8 +20,9 @@ static void scalar_data(std::vector<unsigned char>& data, const DataItem& item, 
         std::memcpy(bytes,&value.bits,8); std::memcpy(bytes+8,&value.displacement,2);
         data.insert(data.end(),bytes,bytes+item.type.bytes());
     } else {
-        require(scalar_integer(item.type), "native wide initializer not implemented");
-        append(data,item.value.data.integer,item.type.bytes());
+        require(scalar_integer(item.type) || item.type == Type::I128, "native initializer type invalid");
+        append(data,item.value.data.integer,std::min(8u,item.type.bytes()));
+        if (item.type == Type::I128) append(data,item.value.integer_high(),8);
     }
 }
 void encode_data(const lowir_model::Program& p, Image& image)
@@ -33,7 +34,7 @@ void encode_data(const lowir_model::Program& p, Image& image)
         for (unsigned n = g.data.begin; n != g.data.end(); ++n)
             if (p.data[n].kind != DataItem::Zero) { alignment = std::max(alignment,p.data[n].type.alignment()); typed = true; }
         if (g.structured && !typed) alignment = 16;
-        if (!g.structured) alignment = g.type.alignment();
+        if (!g.structured) alignment = g.type == Type::I128 ? 16 : g.type.alignment();
         image.data.resize(aligned(image.data.size(),alignment),0);
         image.symbols[g.symbol.index] = image.data.size(); image.defined[g.symbol.index] = true; image.data_symbols[g.symbol.index] = true;
         for (unsigned n = g.data.begin; n != g.data.end(); ++n) {

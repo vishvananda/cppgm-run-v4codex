@@ -3,6 +3,27 @@
 Stage base commit: bde9eb3e128e24923a1de40bb63b8e348a13553b
 Last reviewed commit: bde9eb3e128e24923a1de40bb63b8e348a13553b
 
+## Active handoff129
+
+Entry HEAD: c88bfaebb06afebb6459595fb1455ab8e782fe4f. Previous turn made
+verified implementation progress; no surviving build at entry. Baseline is
+250/296 course cases (46 failures), Ralph inventory 250/435. Review markers stay.
+Work group: multiword values and object ABI, extended through shared call/frame
+placement and scratch effects. Unit owns complete numeric literal payloads;
+Selector owns value fragments, argument classification, homes and liveness;
+Encoder consumes explicit typed chunks. Register classification is bounded by
+six GPR/eight XMM carriers; object copying is linear in produced chunks, with
+bounded bulk-copy fallback. No name-based semantic recovery or textual phases.
+Validate required stage/prior reports and file audit, explicit personal wide/ABI
+tests, and frozen compiler latency/RSS plus executable runtime/text evidence.
+Known unfinished runtime/TLS/EH and canonical MIR policies remain requirements.
+First increment: typed 128-bit literals, fragment arithmetic/compare/shifts/atomics,
+shared object/wide ABI classification and bounded stack-copy dependency snapshots.
+Stage 282/296, prior 3856/3856, independent wide 1175, object 160, floating 1259.
+Audit passes; work continues through wide numeric completeness and ABI pressure.
+A converting parameter store is no longer incorrectly promoted as an identity.
+
+
 ## Design / completed execution groups
 
 PA8 typed Unit -> function-owned placement and flat MIR -> shared MIR view/x86

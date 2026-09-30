@@ -1,5 +1,6 @@
 #include "lowir/model.h"
 #include <limits>
+#include <algorithm>
 
 namespace lowir_model {
 void require(bool condition, const char* message) { if (!condition) throw ParseError(message); }
@@ -58,6 +59,28 @@ unsigned Type::width() const
     return kind() == I1 ? 1 : kind() == F80 ? 80 : bytes() * 8;
 }
 Operand Operand::integer(std::uint64_t n) { Operand o; o.data.integer = n; return o; }
+std::uint64_t Operand::integer_high() const
+{
+    return wide_integer ? data.words.high : negative_integer ? ~std::uint64_t(0) : 0;
+}
+std::string integer_text(const Operand& value)
+{
+    std::uint64_t lo = value.data.integer, hi = value.integer_high();
+    if (value.negative_integer) { hi = ~hi + (lo == 0); lo = 0-lo; }
+    std::string result;
+    do {
+        std::uint32_t limbs[4] = {std::uint32_t(lo), std::uint32_t(lo>>32), std::uint32_t(hi), std::uint32_t(hi>>32)};
+        std::uint64_t remainder = 0;
+        for (int n = 3; n >= 0; --n) {
+            std::uint64_t part = (remainder << 32) | limbs[n];
+            limbs[n] = part/10; remainder = part%10;
+        }
+        result += char('0'+remainder);
+        lo = std::uint64_t(limbs[1])<<32 | limbs[0]; hi = std::uint64_t(limbs[3])<<32 | limbs[2];
+    } while (lo || hi);
+    if (value.negative_integer) result += '-';
+    std::reverse(result.begin(),result.end()); return result;
+}
 Operand Operand::floating(long double n, bool signaling)
 {
     Operand o;

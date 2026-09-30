@@ -137,12 +137,25 @@ Operand Reader::literal()
         return result;
     }
     require(!s.empty() && s[0] >= '0' && s[0] <= '9', "expected scalar literal");
-    char* end = 0;
-    errno = 0;
-    auto n = std::strtoull(s.c_str(), &end, 0);
-    require(!errno && end == s.c_str() + s.size(), "invalid integer literal");
-    Operand result = Operand::integer(negative ? std::uint64_t(0)-n : n);
-    result.negative_integer = negative && n;
+    unsigned base = 10, first = 0;
+    if (s.size() > 2 && s[0] == '0' && (s[1] == 'x' || s[1] == 'X')) { base = 16; first = 2; }
+    else if (s.size() > 1 && s[0] == '0') base = 8;
+    std::uint64_t lo = 0, hi = 0;
+    for (unsigned k = first; k < s.size(); ++k) {
+        unsigned digit = s[k] >= '0' && s[k] <= '9' ? s[k]-'0' :
+            s[k] >= 'a' && s[k] <= 'f' ? s[k]-'a'+10 : s[k] >= 'A' && s[k] <= 'F' ? s[k]-'A'+10 : 99;
+        require(digit < base, "invalid integer literal");
+        // Four base-2^32 limbs keep literal input independent of host wide types.
+        std::uint64_t low = (lo & 0xffffffffu)*base + digit;
+        std::uint64_t high = (lo >> 32)*base + (low >> 32);
+        std::uint64_t carry = high >> 32;
+        require(hi <= (~std::uint64_t(0)-carry)/base, "integer literal exceeds 128 bits");
+        hi = hi*base + carry; lo = (high << 32) | std::uint32_t(low);
+    }
+    Operand result = Operand::integer(lo);
+    result.data.words.high = hi; result.wide_integer = true;
+    result.negative_integer = negative && (lo || hi);
+    if (negative) { result.data.words.low = 0-lo; result.data.words.high = ~hi + (lo == 0); }
     return result;
 }
 Operand Reader::operand(FunctionBuilder& b)

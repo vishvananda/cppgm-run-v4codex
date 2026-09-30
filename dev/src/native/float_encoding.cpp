@@ -34,6 +34,7 @@ void Encoder::x87_load(Operand from, Type t, unsigned offset)
         if (t == Type::F80) { storage.displacement += 8; store(storage,Operand::imm(from.displacement),Type::U16); }
         from = scratch(offset);
     } else if (from.kind == Operand::Reg) {
+        require(t != Type::F80,"f80 value cannot occupy an XMM register");
         fmove(scratch(offset),from,t); from = scratch(offset);
     }
     form(t == Type::F32 ? 0xd9 : t == Type::F64 ? 0xdd : 0xdb,32,t == Type::F80 ? 5 : 0,from);

@@ -6,6 +6,9 @@ unsigned Selector::clobbers(const lowir_model::Instruction& i) const
 {
     if (i.opcode == Opcode::Call || i.opcode == Opcode::CopyObject || i.opcode == Opcode::ZeroInit)
         return (1u<<XR_RDI)|(1u<<XR_RSI)|(1u<<XR_RDX)|(1u<<XR_RCX)|(1u<<XR_R8)|(1u<<XR_R9);
+    if (i.type == Type::I128 && i.opcode >= Opcode::AtomicLoad && i.opcode <= Opcode::AtomicCompareExchange)
+        return (1u<<XR_RCX)|(1u<<XR_RDX);
+    if (i.type == Type::I128 && i.operation == Operation::Mul) return 1u<<XR_RDX;
     if (i.opcode == Opcode::Binary) {
         if (i.operation == Operation::Div || i.operation == Operation::Udiv || i.operation == Operation::Mod || i.operation == Operation::Umod) return 1u<<XR_RDX;
         if ((i.operation == Operation::Shl || i.operation == Operation::Shr || i.operation == Operation::Ushr) && !arg(i,1).literal()) return 1u<<XR_RCX;

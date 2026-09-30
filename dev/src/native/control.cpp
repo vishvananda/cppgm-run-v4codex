@@ -1,4 +1,5 @@
 #include "native/selection.h"
+#include "native/abi.h"
 #include <algorithm>
 namespace native {
 using namespace lowir_model;
@@ -66,6 +67,9 @@ void Selector::control(const lowir_model::Instruction& i)
                 emit(Op::Compare,t,{test,Operand::imm(0)});
             }
         }
+        if (cond.kind == lowir_model::Operand::Temporary && state(cond.ref).compare_branch &&
+            p.instructions[state(cond.ref).definition-1].type == Type::I128)
+            cc = cc == XC_L ? XC_B : cc == XC_LE ? XC_BE : cc == XC_G ? XC_A : cc == XC_GE ? XC_AE : cc;
         emit(Op::Jcc,Type(),{Operand::label(edge_target(arg(i,1).ref))}).condition = cc;
         emit(Op::Jump,Type(),{Operand::label(edge_target(arg(i,2).ref))});
         break;
@@ -84,6 +88,18 @@ void Selector::control(const lowir_model::Instruction& i)
     }
     case Opcode::Return:
         if (i.type == Type()) emit(Op::Return,i.type,{});
+        else if (aggregate(i.type)) {
+            Operand from = value(arg(i,0),i.type);
+            if (indirect_return(i.type)) {
+                move(Operand::r(XR_R10),indirect_result,Type::Ptr);
+                object_move(Operand::mem(XR_R10),from,i.type);
+                move(Operand::r(XR_RAX),indirect_result,Type::Ptr);
+            } else {
+                move(Operand::r(XR_RAX),fragment(from,0),chunk_type(std::min(8u,i.type.bytes())));
+                if (i.type.bytes() > 8) move(Operand::r(XR_RDX),fragment(from,8),chunk_type(i.type.bytes()-8));
+            }
+            emit(Op::Return,Type(),{});
+        }
         else if (i.type.floating()) {
             auto result = convert_value(value(arg(i,0),i.type),value_type(arg(i,0),i.type),i.type);
             f.scratch_bytes = 48;

@@ -36,7 +36,7 @@ void Selector::promote_parameters()
                 if (i.opcode == Opcode::Load && k == 0) { if (!fact.stored) fact.escape = true; continue; }
                 if (i.opcode == Opcode::Store && k == 1 && b == source.blocks.begin && !fact.stored) {
                     auto from = arg(i,0);
-                    if (from.kind == lowir_model::Operand::Temporary && !p.values[from.ref-1].definition) {
+                    if (from.kind == lowir_model::Operand::Temporary && !p.values[from.ref-1].definition && p.values[from.ref-1].type == i.type) {
                         fact.stored = from.ref; fact.position = n+1; continue;
                     }
                 }
@@ -81,7 +81,7 @@ void Selector::folds()
         if (v.uses != 1 || v.crosses_block || v.last != v.definition+1) continue;
         const auto& i = p.instructions[v.definition-1];
         const auto& next = p.instructions[v.last-1];
-        if (i.opcode == Opcode::Load && !i.is_volatile && next.type == i.type && arg(next,next.operands.count-1).kind == lowir_model::Operand::Temporary) {
+        if (i.opcode == Opcode::Load && scalar_integer(i.type) && !i.is_volatile && next.type == i.type && arg(next,next.operands.count-1).kind == lowir_model::Operand::Temporary) {
             bool binary = next.opcode == Opcode::Binary && (next.operation == Operation::Add || next.operation == Operation::Sub ||
                 next.operation == Operation::And || next.operation == Operation::Or || next.operation == Operation::Xor ||
                 (next.operation == Operation::Mul && i.type.width() >= 16));

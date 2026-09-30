@@ -1,4 +1,5 @@
 #include "native/model.h"
+#include "native/abi.h"
 #include <ostream>
 #include <iomanip>
 #include <limits>
@@ -15,6 +16,10 @@ static void operand(const lowir_model::Program& p, Operand o, std::ostream& out)
             out << (std::signbit(value) ? "-snan" : "snan");
         else out << std::setprecision(std::numeric_limits<long double>::max_digits10) << value;
         break;
+    }
+    case Operand::WideImmediate: {
+        auto n = lowir_model::Operand::integer(o.bits); n.data.words.high = o.displacement; n.wide_integer = true;
+        out << lowir_model::integer_text(n); break;
     }
     case Operand::Immediate: out << std::int64_t(o.bits); break;
     case Operand::Symbol:
@@ -47,6 +52,7 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
     static const char* const names[] = {"mov","load","store","lea","add","sub","imul","and","or","xor","neg","not","bswap",
         "cmp","test","set","sext","zext","cqo","idiv","div","shl","shr","sar","jmp","j","call","ret","exit","ud2",
         "copy_bytes","zero_bytes","mfence","lock_xadd","xchg","lock_cmpxchg",
+        "adc","sbb","mul","shld","shrd","lock_cmpxchg16b",
         "fmov","fadd","fsub","fmul","fdiv","fneg","fcmp","fset",
         "sitofp","uitofp","fptosi","fptoui","fpext","fptrunc","fret","fstp"};
     out << "    " << names[unsigned(i.op)];
@@ -106,6 +112,7 @@ void dump_header(const lowir_model::Program& p, const std::vector<Instruction>& 
                     if (d.value.signaling_nan) out << (std::signbit(value) ? "-snan" : "snan");
                     else out << std::setprecision(std::numeric_limits<long double>::max_digits10) << value;
                 }
+                else if (d.type == Type::I128) out << lowir_model::integer_text(d.value);
                 else out << std::int64_t(d.value.data.integer);
             }
             out << '\n';
@@ -118,7 +125,10 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
     out << "\n  abi\n";
     for (const auto& param : f.params) {
         out << "    param " << p.name(param.name) << " -> "; operand(p,param.location,out);
-        out << " : " << type_name(param.type) << '\n';
+        out << " : " << type_name(param.second.kind != Operand::None ? Type::I64 : param.type) << '\n';
+        if (param.second.kind != Operand::None) {
+            out << "    param " << p.name(param.name) << ".1 -> "; operand(p,param.second,out); out << " : i64\n";
+        }
     }
     out << "    return " << type_name(f.result) << " -> " << (f.result == Type() ? "void" : f.result == Type::F80 ? "st0" : f.result.floating() ? "xmm0" : "rax") << '\n';
     out << "  frame\n    stack_size " << f.stack_size << "\n    scratch_bytes " << f.scratch_bytes << "\n    frame_pointer " << (f.frame_pointer ? "keep" : "omit")

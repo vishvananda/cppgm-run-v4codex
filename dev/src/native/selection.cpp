@@ -1,4 +1,5 @@
 #include "native/selection.h"
+#include "native/abi.h"
 #include <algorithm>
 namespace native {
 using namespace lowir_model;
@@ -27,10 +28,14 @@ Operand Selector::value(lowir_model::Operand o, Type t)
 {
     if (o.literal() && t.floating()) return Operand::floating(o,t,&p);
     switch (o.kind) {
-    case lowir_model::Operand::Integer: return Operand::imm(normalize(o.data.integer,t));
+    case lowir_model::Operand::Integer: {
+        if (t != Type::I128) return Operand::imm(normalize(o.data.integer,t));
+        Operand result; result.kind = Operand::WideImmediate; result.bits = o.data.integer;
+        result.displacement = o.integer_high(); return result;
+    }
     case lowir_model::Operand::Null: return Operand::imm(0);
     case lowir_model::Operand::Temporary:
-        if (!state(root(o.ref)).definition) {
+        if (!state(root(o.ref)).definition && scalar_integer(p.values[root(o.ref)-1].type)) {
             unsigned index = workspace.value_indices[root(o.ref)]-1;
             const auto& incoming = f.params[index].location;
             const auto& home = state(root(o.ref)).location;
@@ -58,6 +63,11 @@ Operand Selector::in_register(Operand o, Type t, int reg)
 void Selector::move(Operand to, Operand from, Type t)
 {
     if (to.kind == Operand::Reg && from.kind == Operand::Reg && to.reg == from.reg) return;
+    if (t.kind() == Type::Object) { object_move(to,from,t); return; }
+    if (t == Type::I128) {
+        move(fragment(to,0),fragment(from,0),Type::I64);
+        move(fragment(to,8),fragment(from,8),Type::I64); return;
+    }
     if (t.floating()) {
         f.scratch_bytes = 48;
         emit(Op::Fmov,t,{to,from}); return;
@@ -90,6 +100,7 @@ Operand Selector::memory(lowir_model::Operand o, int scratch)
     if (o.kind == lowir_model::Operand::Slot) return value(o,Type::Ptr);
     if (o.kind == lowir_model::Operand::Symbol) return Operand::symbol(SymbolId(o.ref),false);
     Operand base = value(o,Type::Ptr);
+    if (value_type(o,Type::Ptr).kind() == Type::Object) return base;
     if (base.address) { base.address = false; return base; }
     base = in_register(base,Type::Ptr,scratch);
     return Operand::mem(base.reg);
@@ -105,7 +116,7 @@ void Selector::select(const lowir_model::Instruction& i)
     if (i.destination && state(i.destination.index).alias) return;
     switch (i.opcode) {
     case Opcode::Const:
-        if (i.type.floating()) state(i.destination.index).location = value(arg(i,0),i.type);
+        if (i.type.floating() || i.type == Type::I128) state(i.destination.index).location = value(arg(i,0),i.type);
         else require(scalar_integer(i.type), "native wide constant not implemented");
         break;
     case Opcode::Phi: break;
@@ -122,6 +133,7 @@ void Selector::select(const lowir_model::Instruction& i)
     }
     case Opcode::Copy: {
         auto src = value(arg(i,0),i.type);
+        if (aggregate(i.type)) { move(allocate(i.destination.index,i.type),src,i.type); break; }
         if (i.type.floating() || value_type(arg(i,0),i.type).floating()) {
             convert_to(allocate(i.destination.index,i.type),src,value_type(arg(i,0),i.type),i.type); break;
         }
@@ -136,22 +148,23 @@ void Selector::select(const lowir_model::Instruction& i)
         break;
     }
     case Opcode::Load: {
-        require(scalar_integer(i.type) || i.type.floating(), "native load class not implemented");
+        require(i.type.scalar() || i.type.kind() == Type::Object, "invalid native load class");
         auto m = memory(arg(i,0));
         if (state(i.destination.index).folded_load) { state(i.destination.index).location = m; break; }
         auto dst = allocate(i.destination.index,i.type);
-        if (i.type.floating()) { move(dst,m,i.type); break; }
+        if (i.type.floating() || aggregate(i.type)) { move(dst,m,i.type); break; }
         auto reg = dst.kind == Operand::Reg ? dst : Operand::r(XR_R10);
         emit(Op::Load,i.type,{reg,m}); move(dst,reg,i.type); break;
     }
     case Opcode::Store: {
         if (arg(i,1).kind == lowir_model::Operand::Slot && !workspace.slot_facts[arg(i,1).ref].observed) break;
         if (arg(i,1).kind == lowir_model::Operand::Slot && workspace.slot_facts[arg(i,1).ref].stored && !workspace.slot_facts[arg(i,1).ref].escape) break;
-        require(scalar_integer(i.type) || i.type.floating(), "native store class not implemented");
+        require(i.type.scalar() || i.type.kind() == Type::Object, "invalid native store class");
         auto m = memory(arg(i,1));
         auto src = value(arg(i,0),i.type);
         Type st = value_type(arg(i,0),i.type);
         if (i.type.floating() || st.floating()) { convert_to(m,src,st,i.type); break; }
+        if (aggregate(i.type)) { move(m,src,i.type); break; }
         if (src.kind == Operand::Memory && st != i.type) src = in_register(src,st,XR_R10);
         move(m,src,i.type); break;
     }
@@ -175,7 +188,7 @@ Function Selector::run()
     initialize_values();
     f.symbol = source.symbol; f.debug = source.debug;
     f.result = p.signatures[source.signature.index-1].result;
-    require(f.result == Type() || scalar_integer(f.result) || f.result.floating(), "native return ABI class not implemented");
+    require(f.result == Type() || f.result.scalar() || f.result.kind() == Type::Object, "invalid native result class");
     block_id = p.block_order[source.blocks.begin].index;
     for (unsigned k = p.signatures[source.signature.index-1].parameters.begin;
          k != p.signatures[source.signature.index-1].parameters.end(); ++k)

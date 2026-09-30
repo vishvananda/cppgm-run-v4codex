@@ -20,8 +20,7 @@ void Writer::operand(const Operand& v, Type context)
     case Operand::Label: if (p_.blocks.at(v.ref-1).name) out_ << p_.name(p_.blocks[v.ref-1].name); else out_ << "^b" << v.ref; break;
     case Operand::Symbol: symbol(SymbolId(v.ref)); break;
     case Operand::Integer:
-        if (v.negative_integer) out_ << '-' << (std::uint64_t(0)-v.data.integer);
-        else out_ << v.data.integer;
+        out_ << integer_text(v);
         break;
     case Operand::Null: out_ << "nullptr"; break;
     case Operand::Floating: {

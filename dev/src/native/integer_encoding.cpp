@@ -42,7 +42,7 @@ void Encoder::arithmetic(const Instruction& i)
         else form(width == 8 ? 0xd2 : 0xd3,width,ext,dst);
         return;
     }
-    unsigned ext = i.op == Op::Add ? 0 : i.op == Op::Or ? 1 : i.op == Op::And ? 4 :
+    unsigned ext = i.op == Op::Add ? 0 : i.op == Op::Or ? 1 : i.op == Op::Adc ? 2 : i.op == Op::Sbb ? 3 : i.op == Op::And ? 4 :
         i.op == Op::Sub ? 5 : i.op == Op::Xor ? 6 : 7;
     if (i.op == Op::Compare && rhs.kind == Operand::Immediate && rhs.bits == 0) {
         form(width == 8 ? 0x84 : 0x85,width,dst.reg,dst); return;
@@ -70,6 +70,14 @@ void Encoder::instruction(const Instruction& i)
     case Op::Lea: form(0x8d,64,a.reg,b); break;
     case Op::ExtendSigned: load(a,b,i.type,true); break;
     case Op::ExtendUnsigned: load(a,b,i.type,false); break;
+    case Op::Shld: case Op::Shrd: {
+        auto count = i.args[2];
+        form((i.op == Op::Shld ? 0x0fa4 : 0x0fac)+(count.kind == Operand::Immediate ? 0 : 1),64,b.reg,a,
+            count.kind == Operand::Immediate ? 1 : 0,count.bits); break;
+    }
+    case Op::CmpxchgWide: form(0x0fc7,64,1,a,0,0,0xf0); break;
+    case Op::MulWide: form(0xf7,64,4,a); break;
+    case Op::Adc: case Op::Sbb:
     case Op::Add: case Op::Sub: case Op::Mul: case Op::And: case Op::Or: case Op::Xor:
     case Op::Compare: case Op::Shl: case Op::Shr: case Op::Sar: arithmetic(i); break;
     case Op::Neg: case Op::Not: form(width == 8 ? 0xf6 : 0xf7,width,i.op == Op::Neg ? 3 : 2,a); break;

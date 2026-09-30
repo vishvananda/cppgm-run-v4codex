@@ -23,7 +23,7 @@ class Selector {
     Workspace& workspace;
     Statistics& stats;
     Function f;
-    Operand vararg_save;
+    Operand vararg_save, indirect_result, atomic_scratch;
     unsigned vararg_gp = 0, vararg_fp = 0, vararg_stack = 16;
     std::vector<ValueState> values;
     void initialize_values();
@@ -50,6 +50,13 @@ class Selector {
     unsigned clobbers(const lowir_model::Instruction& i) const;
     void analyze_instruction(const lowir_model::Instruction& i, unsigned epoch);
     void parameters();
+    Operand fragment(Operand value, unsigned byte_offset);
+    void object_move(Operand to, Operand from, Type type);
+    void wide_arithmetic(const lowir_model::Instruction& i);
+    void wide_compare(const lowir_model::Instruction& i, bool branch);
+    void wide_shift(const lowir_model::Instruction& i);
+    void wide_atomic(const lowir_model::Instruction& i);
+    void wide_conversion(const lowir_model::Instruction& i);
     void save_variadic_registers();
     void variadic(const lowir_model::Instruction& i);
     Operand home(Name name, Type type, bool temporary);

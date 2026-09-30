@@ -10,7 +10,7 @@ using lowir_model::Name;
 using lowir_model::SymbolId;
 using lowir_model::DebugLocation;
 struct Operand {
-    enum Kind { None, Reg, Immediate, Memory, Symbol, Label, Floating } kind = None;
+    enum Kind { None, Reg, Immediate, Memory, Symbol, Label, Floating, WideImmediate } kind = None;
     int reg = -1, index = -1;
     unsigned scale = 1;
     std::int64_t displacement = 0;
@@ -30,6 +30,7 @@ enum class Op {
     Compare, Test, Set, ExtendSigned, ExtendUnsigned, SignDividend, Div, Udiv,
     Shl, Shr, Sar, Jump, Jcc, Call, Return, Exit, Trap,
     CopyBytes, ZeroBytes, Fence, Xadd, Exchange, Cmpxchg,
+    Adc, Sbb, MulWide, Shld, Shrd, CmpxchgWide,
     Fmov, Fadd, Fsub, Fmul, Fdiv, Fneg, Fcompare, Fset,
     Sitofp, Uitofp, Fptosi, Fptoui, Fpext, Fptrunc, Freturn, Fpop
 };
@@ -48,7 +49,7 @@ struct Instruction {
     explicit Instruction(Op op = Op::Mov, Type type = Type::I64) : op(op), type(type) {}
 };
 struct FrameBinding { Name name; Type type; std::int64_t offset; bool temporary; bool parameter; };
-struct Parameter { Name name; Type type; Operand location; };
+struct Parameter { Name name; Type type; Operand location; Operand second; };
 struct Block { std::uint32_t id; Name name; lowir_model::Range instructions; };
 struct Function {
     SymbolId symbol;

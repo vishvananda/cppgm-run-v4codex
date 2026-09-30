@@ -60,12 +60,14 @@ struct Operand {
     enum Kind { Integer, Floating, Null, Temporary, Slot, Symbol, Label } kind = Integer;
     std::uint32_t ref = 0;
     bool signaling_nan = false;
-    bool negative_integer = false;
+    bool negative_integer = false, wide_integer = false;
     union Payload {
         std::uint64_t integer;
+        struct Words { std::uint64_t low, high; } words;
         long double floating;
-        Payload() : integer(0) {}
+        Payload() : words{0,0} {}
     } data;
+    std::uint64_t integer_high() const;
     static Operand integer(std::uint64_t n);
     static Operand floating(long double n, bool signaling = false);
     static Operand null();
@@ -75,6 +77,7 @@ struct Operand {
     static Operand label(BlockId id);
     bool literal() const { return kind <= Null; }
 };
+std::string integer_text(const Operand& value);
 struct DebugLocation { Name file = 0; std::uint32_t line = 0, column = 0; };
 struct SymbolMetadata {
     SymbolRole role = SR_NONE;
