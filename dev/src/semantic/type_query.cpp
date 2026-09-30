@@ -7,13 +7,18 @@ namespace {
 std::string query_failure_context(IdentifierId name, ScopeId scope, const syntax::AstView& ast,
     const std::vector<Scope>& scopes, const std::vector<Entity>& entities, const IdentifierTable& ids)
 {
-    auto text = ids.spelling(name);
+    std::string result = "invalid type-query expression";
+    if (name) {
+        auto text = ids.spelling(name);
+        result += ": " + std::string(text.data,text.size);
+    }
     while (scope && !scopes[scope].entity) scope = scopes[scope].parent;
     auto source = entities[scopes[scope].entity].source;
+    if (!source) return result;
     auto location = static_cast<const syntax::Ast&>(ast).locations[ast[source].location];
+    if (!location.presumed_file) return result;
     auto path = ids.spelling(location.presumed_file);
-    return "invalid type-query expression: " + std::string(text.data,text.size) +
-        " in " + std::string(path.data,path.size) + ":" + std::to_string(location.line);
+    return result + " in " + std::string(path.data,path.size) + ":" + std::to_string(location.line);
 }
 }
 QueryId Analyzer::intern_query(TypeQuery q, const std::vector<QueryId>& children)

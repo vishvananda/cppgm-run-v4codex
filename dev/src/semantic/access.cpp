@@ -83,11 +83,19 @@ bool Analyzer::base_accessible(EntityId cls, EntityId target, ScopeId context)
 void Analyzer::check_access(EntityId e, ScopeId context, ScopeId naming, TypeId object)
 {
     if (!accessible(e,context,naming,object)) {
-        auto name = ids.spelling(entities[e].name);
-        const auto& location = static_cast<const syntax::Ast&>(ast).locations[ast[entities[e].source].location];
-        auto file = ids.spelling(location.presumed_file);
-        throw std::runtime_error("inaccessible class member: " + std::string(name.data,name.size) +
-            " declared in " + std::string(file.data,file.size) + ":" + std::to_string(location.line));
+        std::string message = "inaccessible class member";
+        if (entities[e].name) {
+            auto name = ids.spelling(entities[e].name);
+            message += ": " + std::string(name.data,name.size);
+        }
+        if (entities[e].source) {
+            const auto& location = static_cast<const syntax::Ast&>(ast).locations[ast[entities[e].source].location];
+            if (location.presumed_file) {
+                auto file = ids.spelling(location.presumed_file);
+                message += " declared in " + std::string(file.data,file.size) + ":" + std::to_string(location.line);
+            }
+        }
+        throw std::runtime_error(message);
     }
 }
 unsigned Analyzer::using_member_access(ScopeId scope, EntityId member) const
