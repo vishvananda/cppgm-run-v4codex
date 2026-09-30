@@ -1,8 +1,26 @@
-# PA23 compact plan — checkpoint audit 124
+# PA23 compact plan — implementation 125
 
-Target: **PA23 full-stage**. Phase: **checkpoint audit complete; implementation incomplete**.
+Target: **PA23 full-stage**. Phase: **implementation**.
 Stage base commit: `f33dd0775073bf5db6665fb2f4f504783159df76`.
 Last reviewed commit: `36e612a07bae32eb20d10ffc76bb03529555d4bb`.
+
+Entry 125: `7a644d69fa5eed60841ed2a231c38591c46d9390`, clean; prior
+turn classified as progress (completed checkpoint audit). No compiler/build
+process remains live. Frozen entry compiler: `/tmp/pa23-125/entry-cppgm++`.
+Baseline: 24/45, 21 existing failures. Preserve both review markers above.
+
+Owner plan 125: semantic lifecycle actions own shared-base order and entry
+selection; completed class ABI facts own construction-table/VTT slices and
+hidden-parameter layouts; lowering consumes those facts at every call,
+definition, transfer and cleanup. Publish each fact once, with flat identity
+indexes and TU/function lifetimes; work tracks physical subobjects, required
+table rows and emitted actions. Then finish member-pointer representation
+across formation, conversion, proofs and calls. Validate nested graphs,
+construction dispatch, transfers, TU order, all contract cases and inherited
+controls. Reconcile proven erroneous oracles only after correctness is checked.
+Freeze final binaries/inputs for A/A and ABBA latency/RSS, checked runtime and
+text; apply PA23/O0 acceptance. Independent audit remains separate from these
+unfinished implementation obligations.
 
 [Audit124](audit.md) reviews all 18 commits from the stage base through
 `2bba7273`, their combined 32-file implementation range and interactions, and
