@@ -219,6 +219,7 @@ class Procedural {
     semantic::Index abi_queries;
     abi_mangle::Id abi_function_context(EntityId e);
     abi_mangle::Id abi_entity_name(EntityId e);
+    abi_mangle::Id abi_template_type(abi_mangle::Id name, const std::vector<abi_mangle::Id>& arguments);
     void template_function_abi(EntityId e, abi_mangle::Function& target);
     void local_member_abi(EntityId e, abi_mangle::Function& target);
     bool internal_scope(semantic::ScopeId s);

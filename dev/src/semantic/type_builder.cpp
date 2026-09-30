@@ -460,6 +460,9 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     }
     if (block_extern) { block_extern_entities.put(key(owner,id),e); bind(s,id,e); }
     else if (hidden_external) bind(owner,id,e);
+    if (calls && scopes[owner].kind == ScopeKind::Namespace && spec_has(specs,KW_STATIC) &&
+        entities[e].source != source && !entities[e].is_static && entities[e].c_linkage)
+        throw std::runtime_error("static declaration follows external C declaration");
     entities[e].is_static |= spec_has(specs, KW_STATIC);
     if (calls && function && entities[e].is_static && types[t].ref != RefQualifier::None)
         throw std::runtime_error("static member cannot be ref qualified");

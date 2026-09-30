@@ -287,6 +287,16 @@ void Analyzer::simple(NodeId n, ScopeId s)
             shared_deduction = deduction;
         }
         EntityId e = declare_object(d, ast[d].next, t, specs, s, n);
+        // [dcl.typedef]: the first typedef-name denoting the unnamed class or
+        // enum defined in this declaration supplies its name for linkage.
+        // Preserve the source entity identity and lookup name independently.
+        if (calls && entities[e].kind == EntityKind::Alias && t == base && types[base].kind == TypeKind::Named) {
+            auto type_entity = types[base].entity;
+            for (NodeId c = ast[specs].first; c; c = ast[c].next)
+                if ((ast[c].kind == Kind::Class || ast[c].kind == Kind::Enum) &&
+                    !ast[c].detail && facts[c].entity == type_entity && !type_linkage_names.get(type_entity))
+                    type_linkage_names.put(type_entity,entities[e].name);
+        }
         if (calls && (ast.alignment_owners.get(n) || ast.alignment_owners.get(specs))) {
             if (entities[e].kind != EntityKind::Variable || types[t].kind == TypeKind::LRef || types[t].kind == TypeKind::RRef)
                 throw std::runtime_error("alignment on non-object declaration");

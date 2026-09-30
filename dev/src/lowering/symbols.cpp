@@ -11,7 +11,7 @@ abi_mangle::Id Procedural::abi_scope(semantic::ScopeId s)
     if (!s || s == sem.global) return 0;
     if (abi_scopes[s]) return abi_scopes[s];
     auto scope = sem.scopes[s];
-    if (scope.kind == semantic::ScopeKind::Class && sem.entities[scope.entity].specialization)
+    if (scope.kind == semantic::ScopeKind::Class && (sem.entities[scope.entity].specialization || sem.type_linkage_names.get(scope.entity)))
         return abi_scopes[s] = abi_entity_name(scope.entity);
     auto parent = abi_scope(scope.parent);
     if (scope.kind == semantic::ScopeKind::Template) return abi_scopes[s] = parent;
@@ -160,7 +160,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
         if (sem.constructor_member(id)) target.function.terminal = abi_mangle::ABI_TERMINAL_CONSTRUCTOR_COMPLETE;
         if (sem.destructor_member(id)) target.function.terminal = abi_mangle::ABI_TERMINAL_DESTRUCTOR_COMPLETE;
         if (base || base_only) target.function.terminal = sem.destructor_member(id) ? abi_mangle::ABI_TERMINAL_DESTRUCTOR_BASE : abi_mangle::ABI_TERMINAL_CONSTRUCTOR_BASE;
-        target.function.c_linkage = e.c_linkage && !internal;
+        target.function.c_linkage = e.c_linkage;
         local_member_abi(id,target.function);
         auto t = sem.types[e.type]; target.function.variadic = t.variadic;
         for (unsigned j = 0; j < t.count; ++j) target.function.parameters.push_back(abi_type(sem.types.parameters[t.offset+j]));

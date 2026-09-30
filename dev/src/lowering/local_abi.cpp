@@ -13,6 +13,10 @@ abi_mangle::Id Procedural::abi_argument(semantic::ArgumentId argument)
         return abi.make(Kind::ExpressionArgument,abi.make(Kind::ExprPack,abi_query(semantic::argument_query(sem.types[argument].bound))));
     if (!semantic::value_argument(argument)) return abi.make(Kind::TypeArgument,abi_type(argument));
     auto q = semantic::argument_query(argument);
+    // Implicit NTTP conversions establish semantic type/value identity, but
+    // are not source expressions in a dependent mangling.
+    while (sem.type_query(q).kind == semantic::QueryKind::Cast && sem.type_query(q).op == TOK_INVALID)
+        q = sem.type_query_child(q,0);
     auto query = sem.type_query(q);
     if (query.kind == semantic::QueryKind::Value && query.value &&
         (sem.types[query.type].kind == TypeKind::Pointer || sem.types[query.type].kind == TypeKind::LRef || sem.types[query.type].kind == TypeKind::MemberPointer)) {
@@ -29,13 +33,15 @@ abi_mangle::Id Procedural::abi_argument(semantic::ArgumentId argument)
 abi_mangle::Id Procedural::abi_entity_name(EntityId e)
 {
     auto entity = sem.entities[e];
-    auto name = abi.name(abi_scope(entity.owner),spelling(entity.name));
+    auto linkage_name = sem.type_linkage_names.get(e);
+    auto name = abi.name(abi_scope(entity.owner),spelling(linkage_name ? linkage_name : entity.name));
     if (!entity.specialization) return name;
     auto pack = sem.specialization_arguments(e);
     std::vector<abi_mangle::Id> arguments;
     for (unsigned j = 0; j < pack.count; ++j)
         arguments.push_back(abi_argument(sem.template_argument(pack.offset+j)));
-    return abi.make(abi_mangle::Kind::Template,name,0,0,0,arguments);
+    return entity.kind == semantic::EntityKind::Type ? abi_template_type(name,arguments) :
+        abi.make(abi_mangle::Kind::Template,name,0,0,0,arguments);
 }
 bool Procedural::internal_scope(semantic::ScopeId s)
 {
@@ -54,7 +60,7 @@ bool Procedural::internal_entity(EntityId id)
     if (internal_entities.size() <= id) internal_entities.resize(sem.entities.size());
     if (internal_entities[id]) return internal_entities[id] == 2;
     auto e = sem.entities[id];
-    bool local = internal_scope(e.owner) || local_abi_scope(e.owner) ||
+    bool local = (!e.c_linkage && internal_scope(e.owner)) || local_abi_scope(e.owner) ||
         (sem.scopes[e.owner].kind != semantic::ScopeKind::Class &&
          (e.is_static || (e.kind == semantic::EntityKind::Variable && (sem.types[e.type].cv & 1) && !e.external_decl)));
     if (!local && e.specialization) {
@@ -89,7 +95,7 @@ bool Procedural::local_abi_type(TypeId t)
     } else if (type.kind == TypeKind::Named) {
         auto e = sem.entities[type.entity];
         local |= sem.closure(type.entity).function != 0;
-        local |= local_abi_scope(e.owner);
+        local |= internal_scope(e.owner) || local_abi_scope(e.owner);
         auto args = sem.specialization_arguments(type.entity);
         for (unsigned j = 0; j < args.count; ++j) local |= local_abi_argument(sem.template_argument(args.offset+j));
     } else if (type.kind == TypeKind::MemberPointer) local |= local_abi_type(type.member_owner());
@@ -135,8 +141,15 @@ void Procedural::template_function_abi(EntityId e, abi_mangle::Function& target)
     if (!sem.entities[e].specialization) return;
     auto pack = sem.specialization_arguments(e);
     target.template_prefix = true;
-    for (unsigned j = 0; j < pack.count; ++j)
-        target.arguments.push_back(abi_argument(sem.template_argument(pack.offset+j)));
+    for (unsigned j = 0; j < pack.count; ++j) {
+        auto argument = abi_argument(sem.template_argument(pack.offset+j));
+        auto parameter_type = sem.dependent_function_template_parameter_type(e,j);
+        if (parameter_type &&
+            (abi[argument].kind == abi_mangle::Kind::Value || abi[argument].kind == abi_mangle::Kind::WideValue ||
+             abi[argument].kind == abi_mangle::Kind::NegativeWideValue))
+            argument = abi.make(abi_mangle::Kind::DependentValue,abi_type(parameter_type),argument);
+        target.arguments.push_back(argument);
+    }
     auto t = sem.types[sem.entities[sem.specialization_pattern(e)].type];
     // The conversion-type-id belongs to the template declaration, just like
     // its parameter types. The specialization arguments supply concrete types.

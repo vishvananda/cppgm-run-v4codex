@@ -77,3 +77,10 @@ using reduced inputs, C++11/ABI proof and the pinned bundle revision.
   related linkage/local-static/template naming failures as that ownership permits.
   Validate focused fixtures, explicit personal cross-TU controls, full stage and
   prior-through reports, file audit, frozen compiler/runtime/RSS/text evidence.
+- Implementation146 naming checkpoint: 146/158, resolving 13 entry failures.
+  Typed ABI adapter now preserves internal argument linkage, C-language naming,
+  typedef linkage names, prescribed standard substitutions, dependent NTTP type
+  annotations and source-only default expressions. Unresolved qualifier encoding
+  owns substitution order. Personal linkage controls pass 22 commands. Extending
+  the group to extern-template emission and local closure identities; root checks
+  will run sequentially because their runner bookkeeping is shared.

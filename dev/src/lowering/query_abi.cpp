@@ -67,7 +67,16 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
         auto name = abi.name(q.name ? 0 : abi_scope(entity.owner),spelling(q.name ? q.name : entity.name));
         result = abi.make(Kind::UnresolvedName,name,q.arguments!=0,0,0,args); break;
     }
-    case QueryKind::QualifiedValue: result = abi.make(Kind::Member,abi_type(q.type),abi.string(spelling(q.name))); break;
+    case QueryKind::QualifiedValue: {
+        auto owner = abi_type(q.type); bool qualified = true;
+        for (auto part = owner; part; part = abi[part].a)
+            if (abi[part].kind != Kind::Name && abi[part].kind != Kind::Template) { qualified = false; break; }
+        // A named qualifier is an unresolved-name sequence, not an encoded
+        // type: its components do not consume substitution slots (5.1.5).
+        result = qualified ? abi.make(Kind::UnresolvedName,abi.name(owner,spelling(q.name))) :
+            abi.make(Kind::Member,owner,abi.string(spelling(q.name)));
+        break;
+    }
     case QueryKind::Parenthesized: result = child(0); break;
     case QueryKind::Conditional: result = abi.make(Kind::Conditional,child(0),child(1),child(2)); break;
     case QueryKind::Cast:

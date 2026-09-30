@@ -68,6 +68,14 @@ public:
     EntityId type_query_selection(QueryId id) const { return query_facts[id].selected; }
     QueryId type_query_child(QueryId id, unsigned i) const { return query_edges[type_queries[id].offset+i]; }
     TypeArguments query_arguments(std::uint32_t pack) const { return argument_packs[pack]; }
+    TypeId dependent_function_template_parameter_type(EntityId specialization, unsigned ordinal) {
+        auto pattern = specialization_pattern(specialization);
+        auto head = templates[entities[pattern].template_info];
+        auto parameter = template_parameters[head.offset+ordinal];
+        auto type = entities[parameter].type;
+        return entities[parameter].kind == EntityKind::Parameter && dependent_type(type) ? type : 0;
+    }
+    Index type_linkage_names;
     ScopeId global = 0;
     std::vector<NodeId> call_arguments, default_arguments;
     NodeId default_argument(EntityId e, unsigned parameter, Conversion* converted = 0, DefaultReason reason = DefaultReason::Argument);
