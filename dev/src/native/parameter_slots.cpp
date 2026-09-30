@@ -9,6 +9,17 @@ void Selector::control_edges()
         unsigned id = p.block_order[b].index;
         if (b+1 != source.blocks.end()) workspace.next_block[id] = p.block_order[b+1].index;
         const auto& block = p.blocks[id-1];
+        for (unsigned n = block.instructions.begin; n != block.instructions.end(); ++n) {
+            const auto& i = p.instructions[n];
+            if ((i.opcode == Opcode::EhTry || i.opcode == Opcode::EhCleanup) && i.operands.count) {
+                unsigned handler = arg(i,0).ref;
+                // Registration is an exceptional edge from the protected
+                // dynamic region, never the adjacent ordinary retention edge.
+                workspace.predecessor_count[handler] += 2;
+                workspace.parameter_clobbers[handler] |=
+                    (1u<<XR_RDI)|(1u<<XR_RSI)|(1u<<XR_RDX)|(1u<<XR_RCX)|(1u<<XR_R8)|(1u<<XR_R9);
+            }
+        }
         const auto& term = p.instructions[block.instructions.end()-1];
         targets.clear();
         for (unsigned k = 0; k < term.operands.count; ++k)

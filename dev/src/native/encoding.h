@@ -12,7 +12,9 @@ struct Image {
     std::vector<Fixup> code_fixups, data_fixups;
     std::vector<std::uint64_t> symbols;
     std::vector<bool> data_symbols, defined;
-    explicit Image(std::size_t count) : symbols(count+1), data_symbols(count+1), defined(count+1) {}
+    unsigned runtime_begin;
+    explicit Image(std::size_t count) : symbols(count+1+unsigned(RuntimeEntity::Count)), data_symbols(symbols.size()), defined(symbols.size()), runtime_begin(count+1) {}
+    Operand runtime(RuntimeEntity entity) const { return Operand::symbol(SymbolId(runtime_begin+unsigned(entity)),false); }
 };
 class Encoder {
     Image& image;
@@ -48,6 +50,7 @@ class Encoder {
     void branch(unsigned label, int condition = -1);
     void call(Operand target);
     void epilogue_code();
+    void runtime(const Instruction& i);
 public:
     explicit Encoder(Image& image) : image(image), code(image.code) {}
     void startup(const std::vector<Instruction>& instructions);

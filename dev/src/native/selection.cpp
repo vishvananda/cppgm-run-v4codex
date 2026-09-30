@@ -208,6 +208,9 @@ void Selector::select(const lowir_model::Instruction& i)
     case Opcode::AtomicThreadFence: case Opcode::AtomicSignalFence: atomic(i); break;
     case Opcode::Jump: case Opcode::Branch: case Opcode::Switch:
     case Opcode::Return: case Opcode::Unreachable: control(i); break;
+    case Opcode::EhTry: case Opcode::EhCleanup: case Opcode::EhEnd:
+    case Opcode::Throw: case Opcode::Resume: case Opcode::Exception:
+    case Opcode::StackAlloc: runtime(i); break;
     default: throw ParseError(std::string("native operation not implemented: ")+spelling(i.opcode));
     }
 }
@@ -216,6 +219,14 @@ Function Selector::run()
     initialize_values();
     f.symbol = source.symbol; f.debug = source.debug;
     f.result = p.signatures[source.signature.index-1].result;
+    for (unsigned k = source.slots.begin; k != source.slots.end(); ++k)
+        f.frame_alignment = std::max(f.frame_alignment,p.slots[p.slot_order[k].index-1].type.alignment());
+    // Overaligned addressable storage has a stable base separate from the
+    // incoming ABI frame. Reserve it before assigning any parameter/value.
+    if (f.frame_alignment > 16) {
+        f.frame_base = XR_R15; f.preserved |= 1u<<XR_R15;
+        live_until[XR_R15] = ~0u;
+    }
     require(f.result == Type() || f.result.scalar() || f.result.kind() == Type::Object, "invalid native result class");
     block_id = p.block_order[source.blocks.begin].index;
     for (unsigned k = p.signatures[source.signature.index-1].parameters.begin;

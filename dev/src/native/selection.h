@@ -84,6 +84,7 @@ class Selector {
     void atomic(const lowir_model::Instruction& i);
     void bulk(const lowir_model::Instruction& i);
     void control(const lowir_model::Instruction& i);
+    void runtime(const lowir_model::Instruction& i);
     void begin_block(unsigned id, Name name);
     void finish_frame();
     void carry_reloads();

@@ -11,9 +11,13 @@ void Encoder::startup(const std::vector<Instruction>& instructions)
 }
 void Encoder::epilogue_code()
 {
+    if (function->exception_base.kind != Operand::None) {
+        load(Operand::r(XR_R11),function->exception_base,Type::Ptr,false);
+        store(image.runtime(RuntimeEntity::ExceptionTop),Operand::r(XR_R11),Type::Ptr);
+    }
     unsigned n = 0;
     for (unsigned reg = 0; reg < 16; ++reg) if (function->preserved & (1u << reg)) {
-        auto slot = Operand::mem(XR_RBP,-std::int64_t(function->frame_bytes+8*++n));
+        auto slot = Operand::mem(XR_RBP,-std::int64_t((function->frame_base == XR_RBP ? function->frame_bytes : 0)+8*++n));
         load(Operand::r(reg),slot,Type::I64,false);
     }
     if (function->frame_pointer) { byte(0xc9); }
@@ -28,7 +32,16 @@ void Encoder::encode(const Function& f)
     if (f.stack_size) form(0x81,64,5,Operand::r(XR_RSP),4,f.stack_size);
     unsigned n = 0;
     for (unsigned reg = 0; reg < 16; ++reg) if (f.preserved & (1u << reg))
-        store(Operand::mem(XR_RBP,-std::int64_t(f.frame_bytes+8*++n)),Operand::r(reg),Type::I64);
+        store(Operand::mem(XR_RBP,-std::int64_t((f.frame_base == XR_RBP ? f.frame_bytes : 0)+8*++n)),Operand::r(reg),Type::I64);
+    if (f.frame_base != XR_RBP) {
+        form(0x8d,64,f.frame_base,Operand::mem(XR_RBP,-std::int64_t(8*n)));
+        form(0x81,64,4,Operand::r(f.frame_base),4,-std::uint64_t(f.frame_alignment));
+    }
+    if (f.exception_base.kind != Operand::None) {
+        load(Operand::r(XR_R11),image.runtime(RuntimeEntity::ExceptionTop),Type::Ptr,false);
+        store(f.exception_base,Operand::r(XR_R11),Type::Ptr);
+    }
+    if (f.stack_floor.kind != Operand::None) store(f.stack_floor,Operand::r(XR_RSP),Type::Ptr);
     epilogue = 0;
     for (const auto& b : f.blocks) epilogue = std::max(epilogue,b.id+1);
     if (labels.size() <= epilogue) labels.resize(epilogue+1);

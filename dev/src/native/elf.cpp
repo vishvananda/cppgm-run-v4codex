@@ -53,6 +53,17 @@ void encode_data(const lowir_model::Program& p, Image& image)
             }
         }
     }
+    bool exceptions = false;
+    for (const auto& i : p.instructions)
+        exceptions |= i.opcode >= Opcode::EhTry && i.opcode <= Opcode::Resume;
+    if (exceptions) {
+        for (unsigned k = 0; k < unsigned(RuntimeEntity::Count); ++k) {
+            image.data.resize(aligned(image.data.size(),16),0);
+            unsigned id = image.runtime_begin+k;
+            image.symbols[id] = image.data.size(); image.defined[id] = image.data_symbols[id] = true;
+            image.data.resize(image.data.size()+16,0);
+        }
+    }
 }
 static void patch(std::vector<unsigned char>& bytes, const std::vector<Fixup>& fixes, const Image& image,
     std::uint64_t code_address, std::uint64_t data_address)

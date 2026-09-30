@@ -22,7 +22,7 @@ void compile(const lowir_model::Program& p, const std::string& output, std::ostr
         time = Clock::now(); encoder.encode(f); stats.encoding_ms += ms(time);
         // f and all selection temporaries die here, before the next function.
     }
-    std::vector<bool> demanded(p.symbols.size()+1);
+    std::vector<bool> demanded(image.symbols.size());
     for (const auto& fix : image.code_fixups) demanded[fix.symbol] = true;
     for (const auto& fix : image.data_fixups) demanded[fix.symbol] = true;
     for (const auto& source : p.functions) if (source.declaration && demanded[source.symbol.index]) {

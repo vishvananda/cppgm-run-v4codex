@@ -4,8 +4,8 @@ using lowir_model::require;
 Operand Encoder::scratch(unsigned offset) const
 {
     require(function && function->scratch_bytes >= 48,"missing floating scratch frame");
-    return Operand::mem(XR_RBP,-std::int64_t(function->frame_bytes +
-        8*__builtin_popcount(function->preserved)+function->scratch_bytes)+offset);
+    return Operand::mem(function->frame_base,-std::int64_t(function->frame_bytes +
+        (function->frame_base == XR_RBP ? 8*__builtin_popcount(function->preserved) : 0)+function->scratch_bytes)+offset);
 }
 void Encoder::sse(unsigned opcode, Type type, int reg, Operand rm)
 {

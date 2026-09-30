@@ -32,8 +32,16 @@ enum class Op {
     CopyBytes, ZeroBytes, Fence, Xadd, Exchange, Cmpxchg,
     Adc, Sbb, MulWide, Shld, Shrd, CmpxchgWide,
     Fmov, Fadd, Fsub, Fmul, Fdiv, Fneg, Fcompare, Fset,
-    Sitofp, Uitofp, Fptosi, Fptoui, Fpext, Fptrunc, Freturn, Fpop
+    Sitofp, Uitofp, Fptosi, Fptoui, Fpext, Fptrunc, Freturn, Fpop,
+    EhPush, EhPop, Throw, Resume, StackAlloc
 };
+// Image-owned runtime entities have identities after the external symbol range.
+// They are not semantic declarations, nor are their spellings lookup keys.
+enum class RuntimeEntity { ExceptionTop, ExceptionValue, Count };
+inline Operand runtime_operand(const lowir_model::Program& p, RuntimeEntity entity) {
+    return Operand::symbol(SymbolId(p.symbols.size()+1+unsigned(entity)),false);
+}
+const char* runtime_name(unsigned entity);
 struct Instruction {
     Op op;
     Type type;
@@ -60,6 +68,9 @@ struct Function {
     std::vector<Block> blocks;
     std::vector<Instruction> instructions;
     unsigned preserved = 0;
+    unsigned frame_alignment = 16;
+    int frame_base = XR_RBP;
+    Operand exception_base, stack_floor;
     std::uint64_t frame_bytes = 0, stack_size = 0, scratch_bytes = 0;
     bool frame_pointer = true, shared_epilogue = true;
 };

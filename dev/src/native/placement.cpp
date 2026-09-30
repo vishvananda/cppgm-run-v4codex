@@ -9,6 +9,7 @@ void Selector::initialize_values()
     // and live locations belong to this function and die after its emission.
     values.push_back(ValueState());
     auto insert = [&](unsigned id) {
+        f.frame_alignment = std::max(f.frame_alignment,p.values[id-1].type.alignment());
         workspace.value_indices[id] = values.size(); values.push_back(ValueState());
     };
     const auto& sig = p.signatures[source.signature.index-1];
@@ -54,11 +55,14 @@ void Selector::analyze()
     control_edges();
     parameter_availability();
     unsigned epoch = 0;
+    bool dynamic_stack = false, handlers = false;
     for (unsigned b = source.blocks.begin; b != source.blocks.end(); ++b) {
         block_id = p.block_order[b].index;
         const auto& body = p.blocks[block_id-1];
         for (unsigned n = body.instructions.begin; n != body.instructions.end(); ++n) {
             const auto& i = p.instructions[n];
+            dynamic_stack |= i.opcode == Opcode::StackAlloc;
+            handlers |= (i.opcode == Opcode::EhTry || i.opcode == Opcode::EhCleanup) && i.operands.count;
             // Calls/bulk boundaries already have interval epochs. Fixed effects
             // share their owner with incoming-parameter CFG flow.
             unsigned clobbers = call_effect(i) ? 0 : this->clobbers(i);
@@ -71,6 +75,10 @@ void Selector::analyze()
             if (i.opcode == Opcode::Const && scalar_integer(i.type))
                 v.location = Operand::imm(normalize(arg(i,0).data.integer, i.type));
         }
+    }
+    if (handlers) {
+        f.exception_base = home(0,Type::Ptr,true);
+        if (dynamic_stack) f.stack_floor = home(0,Type::Ptr,true);
     }
     // Epochs at predecessor exits place phi uses on incoming edges.
     epoch = 0;
@@ -126,12 +134,12 @@ void Selector::analyze()
 Operand Selector::home(Name name, Type t, bool temporary)
 {
     unsigned alignment = t == Type::I128 ? 16 : std::max(8u, t.alignment());
-    require(alignment <= 16, "overaligned native stack storage not implemented");
+    require(alignment <= f.frame_alignment, "unplanned native frame alignment");
     f.frame_bytes = (f.frame_bytes + std::max(8u,t.bytes()) + alignment-1) & ~(std::uint64_t(alignment)-1);
     require(f.frame_bytes < 0x70000000, "native frame too large");
     std::int64_t offset = -std::int64_t(f.frame_bytes);
     f.frame.push_back({name,t,offset,temporary,false});
-    Operand storage = Operand::mem(XR_RBP,offset); storage.temporary = temporary;
+    Operand storage = Operand::mem(f.frame_base,offset); storage.temporary = temporary;
     storage.id = f.frame.size(); return storage;
 }
 void Selector::parameters()
@@ -144,7 +152,7 @@ void Selector::parameters()
         const auto& v = state(param.value.index);
         if (scalar_integer(param.type) && v.uses && (v.crosses_block || v.crosses_call)) ++retained_parameters;
     }
-    AbiCursor abi; abi.stack = 16;
+    AbiCursor abi; abi.stack = abi.stack_origin = 16;
     if (indirect_return(f.result)) {
         abi.gp = 1; indirect_result = home(0,Type::Ptr,true);
         move(indirect_result,Operand::r(XR_RDI),Type::Ptr);
@@ -258,7 +266,9 @@ void Selector::finish_frame()
     // Reserve save homes below ordinary slots. RBP is always established before
     // accessing any frame operand; calls see a 16-byte-aligned stack.
     unsigned saved = __builtin_popcount(f.preserved);
-    f.stack_size = (f.frame_bytes + saved*8 + f.scratch_bytes + 15) & ~std::uint64_t(15);
+    f.stack_size = (f.frame_bytes + saved*8 + f.scratch_bytes + 15 +
+        (f.frame_alignment > 16 ? f.frame_alignment-1 : 0)) & ~std::uint64_t(15);
+    require(f.stack_size < 0x70000000,"native aligned frame too large");
     stats.frame_bytes += f.stack_size;
 }
 } // namespace native

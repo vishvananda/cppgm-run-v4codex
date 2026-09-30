@@ -104,7 +104,14 @@ void Selector::call(const lowir_model::Instruction& i)
     Operand target_home;
     if (bulk_stack && target.kind == Operand::Reg) { target_home = home(0,Type::Ptr,true); move(target_home,target,Type::Ptr); }
     std::uint64_t stack = (abi.stack+15)&~std::uint64_t(15);
+    Operand saved_stack;
+    if (abi.stack_alignment > 16) {
+        saved_stack = home(0,Type::Ptr,true);
+        move(saved_stack,Operand::r(XR_RSP),Type::Ptr);
+    }
     if (stack) emit(Op::Sub,Type::I64,{Operand::r(XR_RSP),Operand::imm(stack)});
+    if (abi.stack_alignment > 16)
+        emit(Op::And,Type::I64,{Operand::r(XR_RSP),Operand::imm(-std::uint64_t(abi.stack_alignment))});
     for (const auto& m : stack_moves) {
         auto from = m.from;
         if (m.address_home.kind != Operand::None) {
@@ -140,7 +147,8 @@ void Selector::call(const lowir_model::Instruction& i)
     auto& site = emit(Op::Call,i.type,{target});
     site.bytes = stack; site.boundary = signature.boundary;
     for (const auto& m : moves) site.arg_registers |= 1u << m.to.reg;
-    if (stack) emit(Op::Add,Type::I64,{Operand::r(XR_RSP),Operand::imm(stack)});
+    if (saved_stack.kind != Operand::None) move(Operand::r(XR_RSP),saved_stack,Type::Ptr);
+    else if (stack) emit(Op::Add,Type::I64,{Operand::r(XR_RSP),Operand::imm(stack)});
     if (i.destination && state(i.destination.index).uses) {
         auto dest = allocate(i.destination.index,i.type);
         if (aggregate(i.type)) {

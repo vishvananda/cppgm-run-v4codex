@@ -17,6 +17,7 @@ struct AbiLocation {
 struct AbiCursor {
     unsigned gp = 0, fp = 0;
     std::uint64_t stack = 0;
+    unsigned stack_origin = 0, stack_alignment = 16;
     AbiLocation take(Type t, int stack_base) {
         static const int regs[] = {XR_RDI,XR_RSI,XR_RDX,XR_RCX,XR_R8,XR_R9};
         AbiLocation r;
@@ -27,7 +28,8 @@ struct AbiCursor {
             for (unsigned k = 0; k < chunks; ++k) r.parts[k] = Operand::r(regs[gp++]);
         } else {
             unsigned alignment = t == Type::I128 ? 16 : std::max(8u,t.alignment());
-            stack = (stack+alignment-1)&~std::uint64_t(alignment-1);
+            stack_alignment = std::max(stack_alignment,alignment);
+            stack = ((stack-stack_origin+alignment-1)&~std::uint64_t(alignment-1))+stack_origin;
             r.parts[0] = Operand::mem(stack_base,stack); r.memory = true;
             stack += (t.bytes()+7)&~std::uint64_t(7);
         }

@@ -60,6 +60,7 @@ void Encoder::arithmetic(const Instruction& i)
 }
 void Encoder::instruction(const Instruction& i)
 {
+    if (i.op >= Op::EhPush) { runtime(i); return; }
     if (i.op >= Op::Fmov) { floating(i); return; }
     auto a = i.args[0], b = i.args[1];
     unsigned width = std::max(8u,i.type.width());

@@ -3,6 +3,22 @@
 Stage base commit: bde9eb3e128e24923a1de40bb63b8e348a13553b
 Last reviewed commit: 9f3f9b5caaec9677af0e8431b51cacebcf823dce
 
+Implementation131 entry: `8c10ee78f9b301ceaba73d6c31c197339745e6ba`.
+The preceding audit turn made progress (eleven independent correctness failures
+were repaired); fresh entry validation confirms 282/296 and the same fourteen
+course failures. The 435 inventory also counts excluded regression/control inputs.
+Review markers above remain unchanged.
+
+Current work: generic EH and stack lifetime. Selector owns exceptional edges and
+stable homes; per-function MIR records handler/frame facts; encoder owns native
+handler records, restoration and typed payload transport; image owns reserved
+runtime storage. All work is linear in instructions/edges, with constant-size
+handler operations. Validate nested/cross-function cleanup, payload widths,
+pressure, normal exits, dynamic storage and alignment explicitly, then rerun the
+course and prior suites and frozen compiler/runtime measurements. Canonical MIR
+placement/frame protocol and TLS image/wrapper binding remain implementation,
+not independent-review waivers.
+
 Checkpoint audit130 reviews the entire first-stage range, including all nine
 commits through entry `5bbf5325` and the audit fix `9f3f9b5c`. The checkpoint
 review is complete; PA24 is incomplete and must not advance to PA25.

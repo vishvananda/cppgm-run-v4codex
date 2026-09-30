@@ -23,7 +23,8 @@ static void operand(const lowir_model::Program& p, Operand o, std::ostream& out)
     }
     case Operand::Immediate: out << std::int64_t(o.bits); break;
     case Operand::Symbol:
-        out << p.name(p.symbols[o.id-1].name);
+        if (o.id > p.symbols.size()) out << runtime_name(o.id-p.symbols.size()-1);
+        else out << p.name(p.symbols[o.id-1].name);
         if (o.displacement) out << (o.displacement > 0 ? "+" : "") << o.displacement;
         break;
     case Operand::Label:
@@ -54,13 +55,14 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
         "copy_bytes","zero_bytes","mfence","lock_xadd","xchg","lock_cmpxchg",
         "adc","sbb","mul","shld","shrd","lock_cmpxchg16b",
         "fmov","fadd","fsub","fmul","fdiv","fneg","fcmp","fset",
-        "sitofp","uitofp","fptosi","fptoui","fpext","fptrunc","fret","fstp"};
+        "sitofp","uitofp","fptosi","fptoui","fpext","fptrunc","fret","fstp",
+        "eh_push","eh_pop","throw","resume","stack_alloc"};
     out << "    " << names[unsigned(i.op)];
     if (i.op == Op::Jcc || i.op == Op::Set || i.op == Op::Fset) out << cc(i.condition);
     bool typed = i.op == Op::Load || i.op == Op::Store || i.op == Op::Compare ||
         i.op == Op::ExtendSigned || i.op == Op::ExtendUnsigned || i.op == Op::Xadd || i.op == Op::Exchange || i.op == Op::Cmpxchg;
     if (i.op >= Op::Sitofp && i.op <= Op::Fptrunc) out << '.' << type_name(i.source_type);
-    if (i.op >= Op::Fmov) typed = true;
+    if ((i.op >= Op::Fmov && i.op <= Op::Fpop) || i.op == Op::Throw) typed = true;
     if (typed) out << '.' << type_name(i.type);
     if (i.op == Op::CopyBytes || i.op == Op::ZeroBytes) out << ' ' << i.bytes << 'x' << i.alignment;
     for (unsigned n = 0; n < i.count; ++n) {
@@ -133,6 +135,14 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
     out << "    return " << type_name(f.result) << " -> " << (f.result == Type() ? "void" : f.result == Type::F80 ? "st0" : f.result.floating() ? "xmm0" : "rax") << '\n';
     out << "  frame\n    stack_size " << f.stack_size << "\n    scratch_bytes " << f.scratch_bytes << "\n    frame_pointer " << (f.frame_pointer ? "keep" : "omit")
         << "\n    epilogues " << (f.shared_epilogue ? "shared" : "direct") << '\n';
+    if (f.exception_base.kind != Operand::None) {
+        out << "    exception_base "; operand(p,f.exception_base,out); out << '\n';
+    }
+    if (f.stack_floor.kind != Operand::None) {
+        out << "    stack_floor "; operand(p,f.stack_floor,out); out << '\n';
+    }
+    if (f.frame_base != XR_RBP)
+        out << "    frame_base " << register_name(f.frame_base) << "\n    frame_alignment " << f.frame_alignment << '\n';
     if (f.preserved) {
         out << "    preserve";
         for (unsigned r = 0; r < 16; ++r) if (f.preserved & (1u<<r)) out << ' ' << register_name(r);
@@ -141,7 +151,7 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
     for (const auto& b : f.frame) {
         out << (b.parameter ? "    param-slot " : b.temporary ? "    temp " : "    slot ");
         if (b.name) out << p.name(b.name); else out << "%native" << -b.offset;
-        out << " -> "; operand(p,Operand::mem(XR_RBP,b.offset),out); out << " : " << type_name(b.type) << '\n';
+        out << " -> "; operand(p,Operand::mem(f.frame_base,b.offset),out); out << " : " << type_name(b.type) << '\n';
     }
     for (const auto& b : f.blocks) {
         out << "\n  block "; operand(p,Operand::label(b.id),out); out << '\n';
