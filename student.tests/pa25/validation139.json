@@ -1,0 +1,298 @@
+{
+  "entry_commit": "7d26d375ef7d21be0b9457b23c0b00be1171b3ae",
+  "code_commit": "7dfdc6fcb9a12637a4f8f938b129eb5557eef768",
+  "stage_base_commit": "fee6ad9076ff35c5272526e1c4c4df235fbf3bfe",
+  "last_reviewed_commit": "4530fe939e95a45ff6a46d5e53c76807b5bdd352",
+  "required_checks": {
+    "priorThroughTests": {
+      "command": "make test-report-through-pa24",
+      "exit_code": 0,
+      "passed": 4152,
+      "total": 4152,
+      "stages": 24
+    },
+    "stageTests": {
+      "command": "make test-pa25",
+      "exit_code": 2,
+      "passed": 86,
+      "total": 101,
+      "full_stage_complete": false
+    },
+    "fileAudit": {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa25 --paths dev/src",
+      "exit_code": 0,
+      "warnings": 4
+    },
+    "stageProgress": {
+      "passed": true,
+      "baseline_failures": 27,
+      "current_failures": 15,
+      "fixed": [
+        "pa25/tests/general/100-multiple-inheritance-vtable-layout.t",
+        "pa25/tests/general/100-polymorphic-constant-init-cross-tu-order.t",
+        "pa25/tests/general/100-secondary-base-virtual-class-return.t",
+        "pa25/tests/general/100-sibling-dynamic-cast.t",
+        "pa25/tests/general/300-inherited-template-slot-respects-key-function-owner.t",
+        "pa25/tests/general/300-key-function-vtable-object-link.t",
+        "pa25/tests/general/300-runtime-dynamic-exception-spec-pure-override-vtable.t",
+        "pa25/tests/general/300-runtime-pure-virtual-detection-ignores-body-initializers.t",
+        "pa25/tests/general/300-runtime-virtual-member-pointer-multiple-inheritance.t",
+        "pa25/tests/general/300-secondary-vtable-declare-only-constructor.t",
+        "pa25/tests/general/300-template-secondary-primary-base-vptr.t",
+        "pa25/tests/general/300-vtt-retained-across-separate-object.t"
+      ],
+      "new_failures": [],
+      "coverage_reduced": false
+    }
+  },
+  "remaining_failures": [
+    "pa25/tests/general/200-runtime-ctor-member-throw-destroys-prior-member.t",
+    "pa25/tests/general/200-runtime-ctor-throw-destroys-constructed-member.t",
+    "pa25/tests/general/200-runtime-float-calculator.t",
+    "pa25/tests/general/200-runtime-throw-catch-ellipsis.t",
+    "pa25/tests/general/200-runtime-thrown-class-catch-by-value.t",
+    "pa25/tests/general/200-runtime-unnamed-catch-by-value-copy-lifetime.t",
+    "pa25/tests/general/200-template-member-destructor-required-by-constructor-unwind.t",
+    "pa25/tests/general/300-runtime-catch-by-value-nested-throw-copy-ctor.t",
+    "pa25/tests/general/300-runtime-constructor-call-unwind-cleanup.t",
+    "pa25/tests/general/300-runtime-constructor-function-try-block-catches-init-throw.t",
+    "pa25/tests/general/300-runtime-constructor-function-try-block.t",
+    "pa25/tests/general/300-runtime-destructor-function-try-block.t",
+    "pa25/tests/general/300-runtime-eh-handler-preserves-this.t",
+    "pa25/tests/general/300-runtime-free-function-try-block.t",
+    "pa25/tests/general/300-runtime-template-do-try-base-catch-before-catch-all.t"
+  ],
+  "source_inventory": {
+    "dev/frontend_source_sets.mk": "18a1564a036c2f080dfbc16523cef0bf31f7db75e26ba64116fb004462fdf8ae",
+    "dev/src/lowering/constant_construction.cpp": "5528676fd466e0345d505ee039d772fb92b59d7853103ffaa54244e5d2a425c6",
+    "dev/src/lowering/driver.cpp": "983de4131c573008a3cc6531a512ea0aab647317c67217417c70477d32badb71",
+    "dev/src/lowering/initialization.cpp": "ce339bc8149c42d23f33295ed1e146cecfcef7b42aa0f13003759016b6a5ccd1",
+    "dev/src/lowering/procedural.h": "3bed6622b41d3089acf4c42ef16751a6e230366e526f602bf39a14682e301a19",
+    "dev/src/lowering/rtti.cpp": "76363051e365a320166cae929dd04b137becbb92861ae4ec495a79dd0f6124c9",
+    "dev/src/native/dump.cpp": "523e904deaa4f3946188df87e96357111ff909fb73d7d4846d6d0dcc1789c4f2",
+    "dev/src/native/integer_encoding.cpp": "d68ee655e720f3a247a2ac48ce87bd6315d2ea1a414267349cbe52b40e82e4c8",
+    "dev/src/native/model.h": "4a8e21b2e87ffa1af6b61edc6fea2729f2ccbb9b570ca5041723a5757bb90114",
+    "dev/src/native/process_runtime.cpp": "c483b1170d62d8f6e683dfb5694c92de6ea7ea7f3391323dd823a00af6b9aaf0",
+    "dev/src/semantic/analyzer.h": "8652dbb13d34248524db29a32eb63005fb181a268299d62775c43656a3d617bf",
+    "dev/src/semantic/constant_construction.cpp": "9d118732d3bdd8ccb02d428a4eba9ffae7cb9848d4a6088a4724db5d95a73393",
+    "dev/src/semantic/constant_objects.cpp": "791b650f1f4530a2ba4df0beb334b0dc352536a8a6899a7661b426996094cd6a",
+    "dev/src/semantic/model.h": "5c02ac1a166a72b122cdafd1b9c45280e4e78e0245436e0f66569f7cb734211c",
+    "dev/src/semantic/static_initialization.cpp": "3d5ed2378a5d0fb305f114ab1f82fdb293d213df071de0b580812b4a7946ca55",
+    "dev/src/toolchain/driver.cpp": "5c322e4f012fc8bca9c5cad86c06e14b3edadc95d74fa825ab4bae84964871b7",
+    "dev/src/toolchain/linker.cpp": "0c3d0edd558327c623ae97dff44386e32024d08293ab6cb8b28207d8db4e78be",
+    "dev/src/toolchain/object.h": "d812f0f9834392e9947daa355473c9cbc5a137dab6e2987583f2c2a5ceb15885",
+    "dev/src/toolchain/runtime.cpp": "4b2f1bdfd0c14ce05f40d59c0bc7c856339021ff4f8a057668ce6b77fff7ca33",
+    "dev/src/toolchain/runtime.h": "363d93cc08413dd161ef20caf40179e2942414d19a7b96f79114972c7b8faca4",
+    "dev/src/toolchain/runtime_builder.cpp": "72b6b4d64c1e232b8870f421ccf7238ee31246843760f9776b8e9989cd1cc89b",
+    "dev/src/toolchain/runtime_cast.cpp": "86cb67c2ad7fe5f83496d17c4bd507fe6e82947c06b3d10005eb1c8ab2af66b2"
+  },
+  "fixture_inventory": {
+    "pa25/tests/general/100-command-line-macro-source-redefinition.t": "fd7549c1dabdcfa8cfaedff7e4b4f94e44df43a4aa7cb11ab7177a00c82cec37",
+    "pa25/tests/general/100-constant-linkage-across-tus.t": "e4a27fb74953fbcf5ad0dd027de04f3aa2867f7895158c827075481491a8b198",
+    "pa25/tests/general/100-constexpr-pointer-definition-cross-tu.t": "4e01796c9e4c35e6e70fc394a3c744380dc23de1c5bb630922d966a52b268512",
+    "pa25/tests/general/100-constructor-defined-in-separate-object.t": "479c5b2ab069ffd924693e36bd67c801834ac86151b3c76d2950f6e20b8696b2",
+    "pa25/tests/general/100-constructor-destructor-defined-in-separate-object.t": "8fad876d3b581844fd227904156da7e342ecec08150b54481505b841a58d0e54",
+    "pa25/tests/general/100-data-reloc-indirect-call.t": "322cd27d3d94dee1aa9409f867dd42be890e3de3a084114c128e238e3068c6fe",
+    "pa25/tests/general/100-driver-pedantic-warning-flags.t": "91ed9bf916d3bbf87693715fae36f282a61c5a0807606c8107ba0db9c1d3ec31",
+    "pa25/tests/general/100-duplicate-global-bad.t": "349fb8befbcac545b03a689d066ef4cddd578c81d8137e476c7d0d92edc4c3d2",
+    "pa25/tests/general/100-enum-to-ulong-argument-conversion.t": "940d6325a2f411fc44c256e25cee9567406a98975aa786a80a452aa7ee75cf35",
+    "pa25/tests/general/100-extern-c-two-source-call.t": "4d9a5f2b5f53e9bdf25a2a6e81530603b1a921dfcabf06a09e2e59bd198a46c5",
+    "pa25/tests/general/100-extern-global.t": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "pa25/tests/general/100-function-redeclaration-linkage-cross-tu.t": "80912bd70d8575874bccaa1ef6e6ed906e0e5b0a94127fe03c570f6afb8fbeae",
+    "pa25/tests/general/100-include-path-call.t": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "pa25/tests/general/100-initializer-list-member-defined-in-separate-object.t": "93cde34e2cbcb71b5818615b361869b68ed8e3fb378701467d688cd770dd56a5",
+    "pa25/tests/general/100-inline-prior-declaration-defined-in-separate-objects.t": "5e3358d30653c13ad5e50c182aa17921335b7c075b8cb328f72182c5d2747a7d",
+    "pa25/tests/general/100-internal-object-identity-across-tus.t": "d28ee8db9448abe6758f606e383235af69272b8a7203982fdfcd592f389acfa6",
+    "pa25/tests/general/100-library-search-call.t": "2f109a2b7ad358bdd4cc5ce826def261bc8855742baccec1364a4dcea8f09b96",
+    "pa25/tests/general/100-missing-main-bad.t": "850a3f8a19db119812f2b7fdb6f136e7d36240bb58e1c506baad2a5762a5d87f",
+    "pa25/tests/general/100-multiple-inheritance-vtable-layout.t": "857861c52f30270099608f19757ccb5fe771f2623ffe48275f413d1361f1158c",
+    "pa25/tests/general/100-namespaced-member-function-defined-in-separate-object.t": "817c4aae709abfa0f5632c6789725c1bc87fcceb969a4b3701530cb5a398594b",
+    "pa25/tests/general/100-polymorphic-constant-init-cross-tu-order.t": "ecd9f098759d83171eab8606bdc888f2dc445365128f0b5b827e0c19031c2ec2",
+    "pa25/tests/general/100-scoped-enum-parameter-defined-in-separate-object.t": "150878020373eb46d494908f24970b68884bff05d71ef13c04e08f75df9bb3fa",
+    "pa25/tests/general/100-secondary-base-virtual-class-return.t": "957b7fac4d13c6cb5774c88375b6cb21f3093e64c23e62a1caf4c1cc80e64d03",
+    "pa25/tests/general/100-sibling-dynamic-cast.t": "19f33e73b4470f0c782a716bc403fff552173e73be01bf99b42bc430d1d7448c",
+    "pa25/tests/general/100-single-source.t": "1b6b2c5cdbe29618b334e29574e9427decff9b08c218b19b2c12d505a4791405",
+    "pa25/tests/general/100-two-source-call.t": "1b7f6a1bee085f25cea6120092692b172f696477b4f96f4297d72df8c6f06749",
+    "pa25/tests/general/100-unresolved-symbol-bad.t": "d6f04c22f0cc52294d5e1466051c323df8279530ccb08d33f7bd4083684c2f32",
+    "pa25/tests/general/200-array-member-subscript-runtime.t": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "pa25/tests/general/200-move-only-local-return.t": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "pa25/tests/general/200-runtime-binary-calculator.t": "51aba64bab5c798eb699e9c37c31d744ee2fa34a8448d1373eeb6f8ca9fa9cd5",
+    "pa25/tests/general/200-runtime-by-value-parameter-destruction.t": "344f20989d181949ab41ad09dc7cb9d8d6a986faca26f701aeb00fcdd4e4a522",
+    "pa25/tests/general/200-runtime-ctor-member-throw-destroys-prior-member.t": "1da82596ba82aa54c73891aa0d4e7e70f87080e85e4e9ebdc5a5c4886c34473a",
+    "pa25/tests/general/200-runtime-ctor-throw-destroys-constructed-member.t": "3bb62963bf3ec5aafc222f6d5e3a50d91d3e21abf6de2fc754a82e852512078f",
+    "pa25/tests/general/200-runtime-discarded-class-prvalue-destruction.t": "67a9826748b47b81d76f350ebd8eedc34c1adabfd6bac84e0c60d848ca66cf8c",
+    "pa25/tests/general/200-runtime-duplicator.t": "e7e2e712fcbab8c0ece0276a4d5395c370d953c64e9ea41e7e03a54a8ccb7713",
+    "pa25/tests/general/200-runtime-float-calculator.t": "461ab5d397a0378889dbacd1705c2cce034592ba19f6180852df777a6c07887f",
+    "pa25/tests/general/200-runtime-from-float80.t": "2f69ac5111437e1bcdda7d443e89c06e2ca711a1495e852a4f7bcb01fc31afe6",
+    "pa25/tests/general/200-runtime-gnu-statement-expression-class-rhs.t": "f53bb6ddae7185c239ac4f35a67544f892be7b5b4cc074696ffdb0de294856a7",
+    "pa25/tests/general/200-runtime-gnu-statement-expression-enclosing-return.t": "67fb266dbb7f0be7d78071adce95773d1cbba21e88104cda3015fb0b752a9b27",
+    "pa25/tests/general/200-runtime-hello-world.t": "c6991efeb7f92c5b1849706c86c9a93e50ab7cf623988388d9ca287928f87d3e",
+    "pa25/tests/general/200-runtime-hexdump.t": "ca5ddb482b18567a22554e2eacffb405044384c36acf657675e0413e97578194",
+    "pa25/tests/general/200-runtime-if-condition-class-declaration.t": "bc65232b7783024f05609910450c62e252a5766a1fd69e539fca6d8e798063c9",
+    "pa25/tests/general/200-runtime-integer-calculator.t": "c776528c6928898b419f47832fdba45bbf42b262150271bfa0062419e6879a23",
+    "pa25/tests/general/200-runtime-reverser.t": "b0b934047f231829455c72e5d177e91e43e757796210400b4cbc1e636a322f6f",
+    "pa25/tests/general/200-runtime-throw-catch-ellipsis.t": "451a1d4f306b378ce5caaffeda82e55f20bdc2a0b8accbc2a2426fc7e1358171",
+    "pa25/tests/general/200-runtime-thrown-class-catch-by-value.t": "258e75dd9728bc9fcc31f59a20d9019977d5656dd3d71970f685028418f15467",
+    "pa25/tests/general/200-runtime-to-float80.t": "834b2f7d396180ae68449796c3df8cdc34f7542c5c37cc49aad34df54c02ab6e",
+    "pa25/tests/general/200-runtime-unnamed-catch-by-value-copy-lifetime.t": "8e9805aa63308a0b615ce97c199a4c2cfc79e7d9e467a13b013caaa1b830fc65",
+    "pa25/tests/general/200-template-member-destructor-required-by-constructor-unwind.t": "cbaa2e123f42c9d25b8cfb61db62c1c80ecfde80bddf76c74429bb6132bf4d47",
+    "pa25/tests/general/300-class-template-out-of-class-member-odr.t": "78020a6031e538519f28b2d8f18810cd79160449a7ba96028611afe8a835cb3b",
+    "pa25/tests/general/300-driver-target-equals-host-triple.t": "45a5f537d357a9f81bd1e686313dd5f97c1664cdc2198dd780a8801e899f13d1",
+    "pa25/tests/general/300-driver-target-equals-host.t": "194f0c5be1d894e9ec766d11c9677ece48304a5d36ab9262434bd33ac8a0c852",
+    "pa25/tests/general/300-duplicate-helper-symbol-bad.t": "4d3f9d2c2f068958bf37c8fa73fd3ba5da24461ab0b7283c98663f033f32f373",
+    "pa25/tests/general/300-explicit-function-specialization-defined-in-separate-object.t": "1877ff6e0186bb6a9592611cbba16aaba48c202add86895eb70c07bb6bef63e6",
+    "pa25/tests/general/300-include-definition-emits-object.t": "56e4f08485885fb9e35ac219022fecafac2ef7b7fd411bf47246d0d9eed2a0cf",
+    "pa25/tests/general/300-inherited-template-slot-respects-key-function-owner.t": "5bfe73f702bc0132a25296f7b378ad3666a8ebac315428926fcc19c2f6ab0e61",
+    "pa25/tests/general/300-key-function-vtable-object-link.t": "355377b1a5f05050838598cb2010d79257a69e139932b974227ff572a64d08e0",
+    "pa25/tests/general/300-main-local-type-abi-context.t": "e4ed821daad0cb7ec208dc16409630043969cd00d8d08a59c04bc86c0a9e21c3",
+    "pa25/tests/general/300-multiple-explicit-function-specializations-separate-object.t": "a24c228661db7c30a52e5b160935e3a00da52c36d00cac9e9f348d1a3d158d22",
+    "pa25/tests/general/300-runtime-bool-conversion-does-not-truncate.t": "2f80c3a020507c60c07db2287f743de305c01ba15fe2e93b7e5350163030885d",
+    "pa25/tests/general/300-runtime-builtin-isnan-does-not-self-recurse.t": "ad74a0fa1b4aef0585cb1e81b2fb33ca6c7efda81991e94da510892e733e22de",
+    "pa25/tests/general/300-runtime-catch-by-value-nested-throw-copy-ctor.t": "84cf6affdfb44a5adbfc3e45f8d2d649356c3157eeb96e2edf76c4a90d5e3b1c",
+    "pa25/tests/general/300-runtime-constexpr-call-template-local-static.t": "70dd26aa5906b89dfd70d30b74f3b8deba30c33460612bbfae42c513381a5519",
+    "pa25/tests/general/300-runtime-constructor-call-unwind-cleanup.t": "7c5f6f309610fa89020878b625b1161bf1583d2ba2e9d3b30fccfe9f4b781a7c",
+    "pa25/tests/general/300-runtime-constructor-function-try-block-catches-init-throw.t": "609568147bf2607a0f756dd725abaa4ff5f3e4a0de398fca24f08cd68fbdf1ed",
+    "pa25/tests/general/300-runtime-constructor-function-try-block.t": "0272ecc33f3c73b270073c5f40f0c04dd2158f0315fd8d8db1cc8b65951910b1",
+    "pa25/tests/general/300-runtime-destructor-function-try-block.t": "1e726286c6bea79a2bc6e418956b5d36dcee7cbc2cccde245aa5e96e95194ca5",
+    "pa25/tests/general/300-runtime-discarded-float80-call-result.t": "cbf336a0ed211c0ac408434a3f29d69a41c6aff19281e08ebde2d12d2f5bef34",
+    "pa25/tests/general/300-runtime-dynamic-exception-spec-pure-override-vtable.t": "6bcdabd8d502a85c8650c5f4ae6e334f361874109986d728eee9ecf154375b04",
+    "pa25/tests/general/300-runtime-eh-handler-preserves-this.t": "21e2a809b5b08909466a7562459674025bba868d74498a30e31abfecbf6d351e",
+    "pa25/tests/general/300-runtime-foreign-relocation-object-alias.t": "71c5cd58d75b7a7bf5e3b9670b63d679d68c0c1b765c0717525327882492ea71",
+    "pa25/tests/general/300-runtime-free-function-try-block.t": "485b495d79c41569cf902852ffa5fcb81c2c0d6ee26b0ac15d8b3cf7707a884a",
+    "pa25/tests/general/300-runtime-function-local-static-array-guard.t": "78a8c99b22583de28b237a406adb28c36d837cc12250a60d7ce9ca871a216486",
+    "pa25/tests/general/300-runtime-function-local-static-class-first-use.t": "6ceef82e9211420c08054bd069ee117c1171f1d670f20d3814550c75440ec018",
+    "pa25/tests/general/300-runtime-function-local-static-class-storage.t": "71bd5bb4981a006dc479c7d0617960ee948ba30d4f4e5106b2ec94e22262ebfc",
+    "pa25/tests/general/300-runtime-function-local-static-scalar-first-use.t": "d9c80292327b64fb698d98f96c08470bfb2452b113217a759629704eebe84669",
+    "pa25/tests/general/300-runtime-function-local-static-storage.t": "b0410382f31610e883e5778ae227680338e19a3d73bb1c05a76b8049f2fbd2b4",
+    "pa25/tests/general/300-runtime-global-class-factory-initialization-runs.t": "bb53d2f070f9eded2bc8de683ae6b70ad1700cbce4e26941b7501c00228cb2cb",
+    "pa25/tests/general/300-runtime-i128-direct-condition.t": "271903522f23873dae0a2d4e1385aa4dc1fd7b9e7829a0f33486bd6b022cd629",
+    "pa25/tests/general/300-runtime-imported-function-address.t": "a146832a537985e2b6a938a56f7a938a514575feda6935ac2abf8d0ba30351b8",
+    "pa25/tests/general/300-runtime-int128-mixed-signed-unsigned-comparison.t": "463a05852e0a7390cde83dac1e0c323e56d65810d0afd5a1865dfd8de5094b01",
+    "pa25/tests/general/300-runtime-int128-value-lowering.t": "26bce2259760c770efbc68a960124617320cb9d99fc83dfb76c3e5e88e34cdbb",
+    "pa25/tests/general/300-runtime-left-nested-short-circuit-temporary-lifetime.t": "62793aaeba419f76c8a67ad174927ef58e6813cdd2b95c3e47159bc0301a48f5",
+    "pa25/tests/general/300-runtime-local-class-default-constructor-runs.t": "7984eb7f067c212979abfd17e5f76c5373fff3d085fdb59d6d8d6dbb7345d7e6",
+    "pa25/tests/general/300-runtime-local-class-enclosing-enumerator.t": "dff4bedc712d1b4d2718070bcba969670f93476dd82e259af07a4caf5b799b6f",
+    "pa25/tests/general/300-runtime-local-class-member-friend-access.t": "ec053a825d1bf14cbf01cc4bff1f09f3cca99e597fa9b22cf30b3e1dd91c4015",
+    "pa25/tests/general/300-runtime-plain-char-is-signed.t": "adda95497954f94945249032567c1f3cc585c0f717ac5ec477c52b524f77c418",
+    "pa25/tests/general/300-runtime-pure-virtual-detection-ignores-body-initializers.t": "cf5ee01bf77fbf090e3d226356a58039ee66bcc5988639386e12074f3c7f16f3",
+    "pa25/tests/general/300-runtime-signed-shift-spilled-call-result.t": "9c70a584edf409a677bb568e421436cdab3f123c825e74df42e5e16c5ae22649",
+    "pa25/tests/general/300-runtime-startup-hooks-across-sources.t": "86e459e9cee3bf0ac19ccc5bc7167d9d7c52667704bdb6700485be4b9df026f6",
+    "pa25/tests/general/300-runtime-statement-expression-unreachable-result.t": "a42895488e4ff9aa075ed88329711b21d509566890df7ab4658c3e5ad707c104",
+    "pa25/tests/general/300-runtime-template-do-try-base-catch-before-catch-all.t": "ff7687ef62b1c7016aa311777edd13dfb5724c66c98e42996067c9f19b4cc244",
+    "pa25/tests/general/300-runtime-u128-call-arg-carry-scratch.t": "ce568a14613fd330bcc45df9353552c2569f12f57da3e84c266a9eb03259f0ad",
+    "pa25/tests/general/300-runtime-u128-helper-call-preserves-live-temp.t": "ef04662bc58b2edd9bf21e26ed0ac04ee3d61cb402c7a82a6eda6eb2f57149a6",
+    "pa25/tests/general/300-runtime-uint128-relational-comparison.t": "e24c5036f3ae916b93b4dd1a1eafe4a2e192db4160de400540f792cba0039188",
+    "pa25/tests/general/300-runtime-value-init-trivial-union-member.t": "80e1298d597b0774a0220a132f965afb6d0030c74e36d3f727948db2da38d9f5",
+    "pa25/tests/general/300-runtime-virtual-member-pointer-multiple-inheritance.t": "22a483c6ae9ba65f266e2201e4fdfcc541bdc034336e0e7b2a144256ee812119",
+    "pa25/tests/general/300-secondary-vtable-declare-only-constructor.t": "13b486cc24a693e65c36cd5ed2be37dafc509792ac1398ff31f0f6ee13d4c1b9",
+    "pa25/tests/general/300-template-secondary-primary-base-vptr.t": "c2da6b4a927400cd3fc44902aa29a5ec74e1d747cc0482d83dedd2a9cd2bf11a",
+    "pa25/tests/general/300-user-include-precedes-internal-shim.t": "c8e579cb17e89e8e2d70e8802c917c66e51a1f2de80becd52d6bcd27e7a74336",
+    "pa25/tests/general/300-vtt-retained-across-separate-object.t": "9f3b4a70d3fc16199fd5cca97608993645ab160f0f3c6cd593708c162ab7d0ee"
+  },
+  "binaries": {
+    "compiler-A": "8ec48c55121ff284ee82238203e17a9e5b482c96dc87cdd3d346ba7d981fff3f",
+    "compiler-B": "4fe0cd1798d6b6948da9844dc4c529d9b78b30540337877f7619e4859c0bae6d",
+    "compiler-final": "82485193297359ed27750a9bcc1daad92208fc0e351c4978512c9833209c9152"
+  },
+  "logs": {
+    "stage-code-tip.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/stage-code-tip.log",
+      "sha256": "32b83dc7337032c69234a835cf8eedcb20f6f6eda43006605304f379d5a79382"
+    },
+    "through24-code-tip.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/through24-code-tip.log",
+      "sha256": "fd8e4c636cf72a2708dde0e0ae16f51251bec1ac24fe92c82d3e78d8ccef6817"
+    },
+    "file-audit-code-tip.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/file-audit-code-tip.log",
+      "sha256": "ecb5c8691e9459cff3673d47a336904ae2681678f41dcec312d8491a4667ac13"
+    },
+    "class-controls-code-tip.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/class-controls-code-tip.log",
+      "sha256": "68f671c0466179f59cdf41d1277742a2975d0d17b98a0f5c7fed30ee54d8df99"
+    },
+    "audit-controls.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/audit-controls.log",
+      "sha256": "b4cb5a50939af1675da15d839dfab50949666e5a482c8cc9b8b080beaf14f9cb"
+    },
+    "statement-controls.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/statement-controls.log",
+      "sha256": "7b71a6479082f4200931e6fc5b0a6628f430e6086210747640cf81e274101e85"
+    },
+    "trace-final.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/trace-final.log",
+      "sha256": "f8a093b89e54eb521f42142f1f1f44932f54deab463051bf419253f8dac48655"
+    },
+    "exception-boundary.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/exception-boundary.log",
+      "sha256": "6d8e5b04ff10d8360e9e8bf857d4953ddf25a60982bb44d9a51c9938ef9b518f"
+    },
+    "driver-code-tip.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/driver-code-tip.log",
+      "sha256": "cb4a49605b7f29681a49d143c9dede29bfca3d6dd562396388f5ac6afcf1d935"
+    },
+    "scalars-code-tip.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/scalars-code-tip.log",
+      "sha256": "0f018dccbccc9acf4bd3df7dcdd8ad7ffa6d26f6aeb3ce3b0198a52ea06b3510"
+    },
+    "audit-code-tip.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/audit-code-tip.log",
+      "sha256": "b4cb5a50939af1675da15d839dfab50949666e5a482c8cc9b8b080beaf14f9cb"
+    },
+    "statements-code-tip.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/statements-code-tip.log",
+      "sha256": "7b71a6479082f4200931e6fc5b0a6628f430e6086210747640cf81e274101e85"
+    }
+  },
+  "explicit_controls": {
+    "class_runtime": 67,
+    "driver": 61,
+    "scalars": 19,
+    "wide_operand_pairs": 96,
+    "audit138": 122,
+    "statements": 49,
+    "trace_commands": 11,
+    "trace_ABI_dataflow_assertions": 4
+  },
+  "trace": {
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/trace-final/results.json",
+    "sha256": "05f61281eaa57e2d4bde0ac9b5757c94d22b7d0f022a1f3a53455a0e115c451a",
+    "manifest_verified": true
+  },
+  "performance": {
+    "performance": {
+      "file": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/performance/performance.json",
+      "sha256": "b124994f0bc10b512a7ef0944d0e07cf2f8e579c4610559990eaf40096a1152d",
+      "observations": 168,
+      "manifest_verified": true
+    },
+    "performance-final": {
+      "file": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/performance-final/performance.json",
+      "sha256": "6c9417cb8e360f6c10590fe6561007670160b221f86e14acaba904319b5287e1",
+      "observations": 168,
+      "manifest_verified": true
+    },
+    "performance-classes": {
+      "file": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/performance-classes/performance.json",
+      "sha256": "7e4370837837d0088fb3b6fbbf2052a59ee2061069b6d41c82f0584c7a701510",
+      "observations": 168,
+      "manifest_verified": true
+    }
+  },
+  "new_observations": 504,
+  "notes": [
+    "Initial concurrent root reports share counter files; their mixed totals are superseded by the sequential code-tip reports above.",
+    "Intermediate performance predates the final native parameter-view fact; all 504 observations remain preserved.",
+    "Pending exception-boundary control intentionally remains unresolved; no throwing runtime stubs are supplied.",
+    "No fixture, reference output, comparison rule or required coverage was changed.",
+    "Implementation handoff only; independent review markers are unchanged."
+  ],
+  "test_sources": {
+    "student.tests/pa25/class-runtime.py": "037b9f9559d08a7ec4895af15974fbfebde8d83591776b04616114bb261721e9",
+    "student.tests/pa25/runtime-api.cc": "777d5e647d8fa789f6d4b12ced62839013866dbe3f1fb683fea711eed6bc7a17",
+    "student.tests/pa25/runtime-trace.py": "66f8adab015b34daacc0fafe20d2fc1b9e5153f7b2f51872ef5262a48c35bd4e",
+    "student.tests/pa25/class-trace.cc": "60cdeba14dff4b311a5a8726e65c4c9280307d0efa31a62a1dfbe2fc3f291c54",
+    "student.tests/pa25/class-exception-boundary.cc": "e6ac36c35a8d121f04b527d09edb5a15bf38ac5aa77060bfa94702e18f157b6a",
+    "student.tests/pa25/performance.py": "17f7e219356b4fdc25bee6986d671616998a5d746b88b0359e4f4d584353775d"
+  }
+}

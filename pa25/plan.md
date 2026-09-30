@@ -3,7 +3,7 @@
 Stage base commit: fee6ad9076ff35c5272526e1c4c4df235fbf3bfe
 Last reviewed commit: 4530fe939e95a45ff6a46d5e53c76807b5bdd352
 
-Target: **PA25 full-stage**. Phase: **implement**. Entry HEAD:
+Target: **PA25 full-stage**. Phase: **implementation handoff**. Code: `7dfdc6fc`. Entry HEAD:
 `7d26d375ef7d21be0b9457b23c0b00be1171b3ae`, **74/101** (27 failures).
 The preceding turn completed audit repairs/evidence (progress); no prior process
 was live. Preserve [audit138](audit.md) and its review markers.
@@ -31,19 +31,26 @@ now all passing. No fixture, reference, comparison rule or coverage changed.
 - Through PA24: **4152/4152**, all 24 stages pass.
 - Explicit controls: **67 class**, **61 driver**, **19 scalar** plus 96 wide
   operand pairs, **122 audit138**, **49 statement**, typed runtime IR validation,
-  MIR inspection and object roundtrip.
+  MIR inspection and object roundtrip; 11 source-to-ELF trace commands plus four
+  ABI/data-flow assertions.
 - File audit passes with four inherited header warnings; diff whitespace clean.
-- Final-binary ABBA/A/A performance and final validation manifest are being
-  recorded before handoff. Existing measurements remain preserved. This adds
-  required semantic/runtime work at O0 and no optional optimization or speedup
-  claim. The inherited 15% timing/RSS and zero optional text-growth targets are
+- [Validation139](../student.tests/pa25/validation139.json) pins final binaries,
+  source/fixture inventories, exact failure sets, logs and traces.
+- [Performance139](../student.tests/pa25/performance139.md) preserves 504 new
+  A/A and ABBA observations. Final template compile median **0.25293 s**, B/A
+  **0.998 [0.963, 1.016]**, peak **15692 KiB**. Equivalent executable pairs are
+  byte-identical. New class/cast/allocation baselines include runtime and text
+  size; their final/final comparisons calibrate noise and claim no speedup.
+  Required O0 work is bounded; no optional optimization is added. The inherited
+  15% timing/RSS and zero optional text-growth targets are
   diagnostics under spec section 9, not additional exit gates. Correctness,
   coverage, complexity and mandatory native bounds remain required.
 
 ## Remaining implementation and independent review
 
 **Unfinished implementation:** 14 source-EH/handler/function-try cases and the
-one exact floating-calculator comparison. Source exceptions need coordinated
+one exact floating-calculator comparison; [remaining139](../student.tests/pa25/remaining139.json)
+names all 15. Source exceptions need coordinated
 handler matching, payload ownership, nested catch/rethrow state, lifetime cleanup
 and function-try semantics. The same owner must supply throwing bad-cast,
 bad-typeid and allocation-failure services; the explicit
@@ -63,11 +70,15 @@ architecture investigation is a prerequisite invented by this implementation.
 | Boundary | Evidence / next owner |
 |---|---|
 | audit138 | Reviewed through the preserved marker; 74/101; see audit.md and validation138.json. |
-| implementation139 | Nonthrowing class execution and constant polymorphic initialization complete, 12 original failures fixed. Final evidence recording pending. |
+| implementation139 | Nonthrowing class execution and constant polymorphic initialization complete; 74/101 -> 86/101, 12 original failures fixed, no new failures. Required prior/file checks pass; final performance, trace and validation records linked above. |
 
-The remaining source-EH group changes the dynamic handler-frame/payload protocol,
-not just support-symbol definitions. Extending this completed group by adding
-individual exception stubs would not implement matching, cleanup or rethrow.
-That coordinated state-machine work and the separate floating-evaluation policy
-are the concrete next implementation boundaries. This handoff does not certify
+The remaining source-EH group needs a new coordinated handler-frame/payload
+protocol: PA24's 80-byte records always pop on transfer, while source cleanup
+pads retain their region; matching selectors and nested caught payloads are
+absent. Ten required cases stop at native clause selection, and four function-try
+cases stop earlier in semantic statement handling. Extending the completed
+nonthrowing group cannot supply these facts through additional runtime symbols;
+it requires coordinated semantic, lowering, native-frame and runtime work.
+That state-machine implementation and the separate floating-evaluation policy
+are the concrete next boundaries, preserved as implementation work. This handoff does not certify
 PA25: stage and through-PA25 reports must both pass before advancement.

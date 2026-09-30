@@ -1,0 +1,78 @@
+[
+  {
+    "test": "pa25/tests/general/200-runtime-ctor-member-throw-destroys-prior-member.t",
+    "status": 1,
+    "diagnostic": "ERROR: native operation not implemented: eh_catch_all"
+  },
+  {
+    "test": "pa25/tests/general/200-runtime-ctor-throw-destroys-constructed-member.t",
+    "status": 1,
+    "diagnostic": "ERROR: native operation not implemented: eh_catch_all"
+  },
+  {
+    "test": "pa25/tests/general/200-runtime-float-calculator.t",
+    "status": 1,
+    "diagnostic": "Required linked runtime comparison: 5 of 1000000 lines differ by one f64 ULP; preserved references, unclassified floating execution/oracle issue.",
+    "direct_probe_without_helpers": "ERROR: unresolved native symbol: cppgm_test_alloc"
+  },
+  {
+    "test": "pa25/tests/general/200-runtime-throw-catch-ellipsis.t",
+    "status": 1,
+    "diagnostic": "ERROR: native operation not implemented: eh_catch_all"
+  },
+  {
+    "test": "pa25/tests/general/200-runtime-thrown-class-catch-by-value.t",
+    "status": 1,
+    "diagnostic": "ERROR: native operation not implemented: eh_catch"
+  },
+  {
+    "test": "pa25/tests/general/200-runtime-unnamed-catch-by-value-copy-lifetime.t",
+    "status": 1,
+    "diagnostic": "ERROR: native operation not implemented: eh_catch"
+  },
+  {
+    "test": "pa25/tests/general/200-template-member-destructor-required-by-constructor-unwind.t",
+    "status": 1,
+    "diagnostic": "ERROR: native operation not implemented: eh_catch_all"
+  },
+  {
+    "test": "pa25/tests/general/300-runtime-catch-by-value-nested-throw-copy-ctor.t",
+    "status": 1,
+    "diagnostic": "ERROR: native operation not implemented: eh_catch_all"
+  },
+  {
+    "test": "pa25/tests/general/300-runtime-constructor-call-unwind-cleanup.t",
+    "status": 1,
+    "diagnostic": "ERROR: native operation not implemented: eh_catch"
+  },
+  {
+    "test": "pa25/tests/general/300-runtime-constructor-function-try-block-catches-init-throw.t",
+    "status": 1,
+    "diagnostic": "ERROR: unsupported statement"
+  },
+  {
+    "test": "pa25/tests/general/300-runtime-constructor-function-try-block.t",
+    "status": 1,
+    "diagnostic": "ERROR: unsupported statement"
+  },
+  {
+    "test": "pa25/tests/general/300-runtime-destructor-function-try-block.t",
+    "status": 1,
+    "diagnostic": "ERROR: unsupported statement"
+  },
+  {
+    "test": "pa25/tests/general/300-runtime-eh-handler-preserves-this.t",
+    "status": 1,
+    "diagnostic": "ERROR: native operation not implemented: eh_catch_all"
+  },
+  {
+    "test": "pa25/tests/general/300-runtime-free-function-try-block.t",
+    "status": 1,
+    "diagnostic": "ERROR: unsupported statement"
+  },
+  {
+    "test": "pa25/tests/general/300-runtime-template-do-try-base-catch-before-catch-all.t",
+    "status": 1,
+    "diagnostic": "ERROR: native operation not implemented: eh_catch"
+  }
+]
