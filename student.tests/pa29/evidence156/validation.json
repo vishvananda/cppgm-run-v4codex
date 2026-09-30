@@ -1,0 +1,89 @@
+{
+  "entry_commit": "6afc84f76c09cf336a4302af368d5b6ea44c0da0",
+  "compiler_sha256": "5631b69d1adb2c54a8b13120e5dd073ef705b34a3df462690dfdce357b8a0052",
+  "baseline": {
+    "passed": 272,
+    "total": 403,
+    "failed": 131,
+    "log": "/tmp/pa29-156/entry.log",
+    "log_sha256": "2e36b0cfc7af674ccc505e3a8ac37f4603c733692ced01a87c519fad427721d7"
+  },
+  "current": {
+    "passed": 301,
+    "total": 403,
+    "failed": 102,
+    "command": "make test-pa29",
+    "exit_code": 2,
+    "log": "/tmp/pa29-156/stage-required.log",
+    "log_sha256": "53b6fa8a970af34e794cc89855b825e5eab1dcf2f0e346bc1f52b322f4b92ddb"
+  },
+  "resolved": [
+    "pa29/tests/compile/500-builtin-bit-count-conditional-type.t",
+    "pa29/tests/compile/500-builtin-bswap-family.t",
+    "pa29/tests/compile/500-global-qualified-builtin-call.t",
+    "pa29/tests/compile/500-hosted-libm-intrinsics.t",
+    "pa29/tests/compile/500-hosted-libm-mixed-operands.t",
+    "pa29/tests/compile/600-builtin-bitops-promote.t",
+    "pa29/tests/compile/600-builtin-clzg.t",
+    "pa29/tests/compile/600-builtin-clzll.t",
+    "pa29/tests/compile/600-builtin-memset-probe.t",
+    "pa29/tests/compile/600-builtin-popcountg.t",
+    "pa29/tests/compile/600-host-builtin-bitops-widths.t",
+    "pa29/tests/compile/700-builtin-popcountg.t",
+    "pa29/tests/preproc/300-host-llvm-and-bswap-builtins.t",
+    "pa29/tests/preproc/400-has-builtin-popcountg.t",
+    "pa29/tests/run/800-builtin-assume-aligned-three-arg.t",
+    "pa29/tests/run/800-builtin-assume-aligned-two-arg.t",
+    "pa29/tests/run/800-builtin-bzero.t",
+    "pa29/tests/run/800-builtin-flt-rounds-run.t",
+    "pa29/tests/run/800-builtin-fp-predicates-run.t",
+    "pa29/tests/run/800-builtin-memcpy-strlen-run-smoke.t",
+    "pa29/tests/run/800-builtin-nans-run.t",
+    "pa29/tests/run/800-builtin-operator-new-delete.t",
+    "pa29/tests/run/800-builtin-overflow-same-type-family.t",
+    "pa29/tests/run/800-builtin-prefetch.t",
+    "pa29/tests/run/800-builtin-strchr.t",
+    "pa29/tests/run/800-generic-count-trailing-zero-fallback.t",
+    "pa29/tests/run/800-hosted-cmath-ceil-run.t",
+    "pa29/tests/run/800-hosted-cstring-strlen-run.t",
+    "pa29/tests/run/800-short-circuited-arm-demands-callee.t"
+  ],
+  "new_failures": [],
+  "prior": {
+    "command": "make test-report-through-pa28",
+    "exit_code": 0,
+    "passed": 4538,
+    "total": 4538,
+    "log": "/tmp/pa29-156/prior-final.log",
+    "log_sha256": "b1ff9611d30d0da259845968d6ec5a5a9b0ee6da2d9810c505780299a5c67a88"
+  },
+  "file_audit": {
+    "command": "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src",
+    "exit_code": 0,
+    "log_sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f",
+    "output": "File audit passed for pa29 with 4 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n"
+  },
+  "fixtures": {
+    "count": 21987,
+    "changed": 0,
+    "sha256": "56cc402768a0ff6c10594a70b512e85af33e764d0d9d32b5d2f2b567d3d8e7ab"
+  },
+  "personal": {
+    "current_checks": 40,
+    "overflow_cases": 1944,
+    "inherited_checks": 77
+  },
+  "superseded_validation": {
+    "reason": "Concurrent course reports share counters; discarded mixed totals and reran both sequentially.",
+    "logs": [
+      {
+        "path": "/tmp/pa29-156/prior.log",
+        "sha256": "2f67473cc9799273e31f9450dc84e3a410fc15fcbc55f0e94e8e2ef6a923fac2"
+      },
+      {
+        "path": "/tmp/pa29-156/stage-final.log",
+        "sha256": "1313c02cc43e84abc4f5e2e591e83f7158b1987079ffea4330e485b4beb4f2dc"
+      }
+    ]
+  }
+}

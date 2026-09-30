@@ -1,0 +1,55 @@
+{
+  "commands": [
+    "dev/cppgm++ -c --emit-lowir --validate-lowir student.tests/pa29/controls156/inspection.cpp -o /tmp/pa29-156/inspection.lowir",
+    "dev/lowir -o /tmp/pa29-156/inspection-roundtrip.lowir /tmp/pa29-156/inspection.lowir",
+    "dev/lowir2native --dump-machine-ir /tmp/pa29-156/inspection.mir -o /tmp/pa29-156/inspection-native /tmp/pa29-156/inspection-roundtrip.lowir",
+    "/tmp/pa29-156/inspection-native"
+  ],
+  "all_exit_codes": 0,
+  "files": [
+    {
+      "file": "/tmp/pa29-156/inspection.lowir",
+      "sha256": "38be435c1a69bea76d63cc4f8788fab0e1d52324934ec531ca09b38c0d3c75b6",
+      "bytes": 11373
+    },
+    {
+      "file": "/tmp/pa29-156/inspection-roundtrip.lowir",
+      "sha256": "38be435c1a69bea76d63cc4f8788fab0e1d52324934ec531ca09b38c0d3c75b6",
+      "bytes": 11373
+    },
+    {
+      "file": "/tmp/pa29-156/inspection.mir",
+      "sha256": "14d093ae12cadb6100cdec0aeb97a317681c1a62e0a05f63683712f2f762dd53",
+      "bytes": 14865
+    },
+    {
+      "file": "/tmp/pa29-156/inspection-native",
+      "sha256": "58a3bb08974babb66ff4a288b43ec92659125971f63b7f9a5f6754f83cd32ec8",
+      "bytes": 4118
+    }
+  ],
+  "canonical_roundtrip_identical": true,
+  "checks": [
+    "Mixed-width demanded template, runtime bit count, checked overflow, global/class/local signaling and payload NaNs, negative zero, no builtin calls, no terminate boundary",
+    "Volatile overflow destination emits volatile typed store"
+  ],
+  "excerpt": [
+    "declare function @__builtin_clzg() -> i32 [unwind=no, binding=strong, object=_Z14__builtin_clzgv]",
+    "declare function @__builtin_popcountll(%v1 : i64) -> i32 [unwind=no, binding=strong, object=_Z20__builtin_popcountlly]",
+    "declare function @__builtin_ctzll(%v3 : i64) -> i32 [unwind=no, binding=strong, object=_Z15__builtin_ctzlly]",
+    "declare function @__builtin_mul_overflow() -> u8 [unwind=no, binding=strong, object=_Z22__builtin_mul_overflowv]",
+    "declare function @__builtin_mul_overflow__2(%v5 : i64, %v6 : i32, %v7 : ptr) -> u8 [unwind=no, binding=strong, object=_Z22__builtin_mul_overflowxiPx]",
+    "declare function @__builtin_clzg__3(%v8 : i64, %v9 : i32) -> i32 [unwind=no, binding=strong, object=_Z14__builtin_clzgyi]",
+    "declare function @__builtin_clzg__4(%v10 : u8, %v11 : i32) -> i32 [unwind=no, binding=strong, object=_Z14__builtin_clzghi]",
+    "global @global_nan : obj<8x8> [binding=strong] = {",
+    "  i64 9219994337134247936",
+    "}",
+    "global @global_cell : obj<8x8> [binding=strong] = {",
+    "  i64 9221120237041090577",
+    "}",
+    "global @__string_13 [binding=internal, storage=readonly] = {",
+    "  i8 0",
+    "}"
+  ],
+  "source_sha256": "ef93069773b44c1bc022b7f7b36f0976f1e502565530a278a22579e353374cd8"
+}

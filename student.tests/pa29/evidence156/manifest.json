@@ -1,0 +1,38 @@
+{
+  "entry_commit": "6afc84f76c09cf336a4302af368d5b6ea44c0da0",
+  "implementation_commit": "81a9f67f8b2babb6a853299b7951a082ffc9e4f5",
+  "binaries": {
+    "A": {
+      "path": "/tmp/pa29-156/base",
+      "sha256": "4e4873df66898a2bb16a06304569616f1fec412178b4ced3d5ab01cd6206d385",
+      "bytes": 3848944
+    },
+    "B": {
+      "path": "/tmp/pa29-156/final",
+      "sha256": "5631b69d1adb2c54a8b13120e5dd073ef705b34a3df462690dfdce357b8a0052",
+      "bytes": 3900504
+    }
+  },
+  "machine": "Linux instance-20260513-022623 7.0.0-1005-gcp #5-Ubuntu SMP PREEMPT Tue May 26 15:11:20 UTC 2026 x86_64 GNU/Linux",
+  "host_compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+  "build_flags": "-std=gnu++11 -Wall -O3",
+  "performance_flags": [
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "affinity": "taskset -c 0",
+  "policy": "A/A plus ABBA for equivalent common paths; separate standalone costs for capability rejected by A; no optional optimization and no speedup claim.",
+  "control_inputs": {
+    "student.tests/pa29/controls156/floating.cpp": "15a733f7c480976730209892a32cc0989ef3d5425b1edcc64c76aa922e510f21",
+    "student.tests/pa29/controls156/hints.cpp": "9aedba56b2c832ee893c15569297bdb9f064b7481a50ad1336f20b378cb59944",
+    "student.tests/pa29/controls156/inspection.cpp": "ef93069773b44c1bc022b7f7b36f0976f1e502565530a278a22579e353374cd8",
+    "student.tests/pa29/controls156/integer.cpp": "f88235c63f730f6767dfbfcb8c43bc2f3a11d2146448027ba3dc272adffc2b2c",
+    "student.tests/pa29/controls156/runtime.cpp": "314cfedda8485995eb91ef5dcc34656d2da95b9c69335ac4e82fcfddef7cab37"
+  },
+  "harnesses": {
+    "student.tests/pa29/controls156.py": "b3fa55022003981019255648dbb98359e6bb7c0cfc02133038d4478400831b7b",
+    "student.tests/pa29/performance156.py": "d063ed714f75d8096acebb249373c823d8e3157f1c119f7893dc555a72a2e9af",
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3"
+  }
+}
