@@ -1,6 +1,7 @@
-# PA28 implementation plan and handoff151
+# PA28 implementation plan and handoff152
 
-Target: **PA28 full-stage**. Phase: **validated incomplete implementation handoff**.
+Target: **PA28 full-stage**. Phase: **implementation**.
+Turn entry commit: `bed2be54be95a64037bc09dca8867dab996a9c88` (91/97).
 Stage base commit: `bec9389f62014dfecac8b41d330de142e0904b8c`.
 Last reviewed commit: `bec9389f62014dfecac8b41d330de142e0904b8c`.
 Review markers remain fixed until independent review.
@@ -57,3 +58,24 @@ Independent review remains pending for all PA28 commits: semantic publication,
 cache/lifetime and source-to-ELF ownership, substitution ordering and performance
 evidence. Those review questions are separate from the six known implementation
 failures above. Neither is waived; PA28 has not passed its full-stage exit.
+
+## Loop152 active work
+
+Previous turn: progress, verified by ten resolved required failures in evidence151.
+Frozen entry compiler: `/tmp/pa28-152/cppgm-before`, SHA-256
+`d10d9691602a574ab7c5183c2b6ac71ab657bf693d57d9e2a30a873ff0254686`.
+
+1. Lifetime/EH group: lowering owns live-prefix and handler continuations; native
+   host-region analysis owns resume destinations; semantic exception-spec facts
+   feed typed LowIR clauses and host LSDA filters. Inspect all three failures
+   together, retain compact canonical keys and per-function linear/bounded work.
+   Validate required cases plus nested cleanup and permitted/unexpected throws.
+2. Extend to virtual completion/layout/RTTI when the EH group is coherent.
+   Layout facts own address points/result rows; precise class demand owns RTTI
+   prerequisites; lowering consumes published facts once.
+3. Measure equivalent fixed compiler/runtime workloads with frozen A/B, A/A and
+   ABBA; record latency, peak RSS, runtime/text together. Required new behavior
+   gets standalone cost evidence when the baseline is incorrect.
+4. Run earlier PAs, current suite, file audit and explicit personal controls;
+   commit coherent increments, refresh this compact ledger and retain review
+   markers. Independent review remains pending separately from implementation.
