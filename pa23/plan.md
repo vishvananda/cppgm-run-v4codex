@@ -43,7 +43,13 @@ measurements and explicit work budgets remain preserved.
 
 ## Handoff ledger
 
-Implementation 121: in progress; no handoff yet. All stage edits after the last
+Implementation 121: in progress; no handoff yet. `b1aed715` completes the first
+nonvirtual view implementation: **17/45** required tests, **29/29** explicit
+personal controls, and fresh prior-through report **3811/3811**. It includes
+covariant result adjustment, null handling, repeated source downcasts, private
+base crosscasts and later-base override rejection. Slot arena refinement and
+performance evidence are still in progress. A simultaneous root-test invocation
+collided in wrapper relinking; serial retries establish the results above. All stage edits after the last
 reviewed commit await independent review. Unfinished implementation is listed
 above; independent review must check view/slot ownership, inherited architecture,
 performance evidence and whole-stage scope without waiving remaining work.

@@ -12,9 +12,11 @@ RttiExpression Analyzer::rtti_expression(NodeId n) const
 void Analyzer::demand_rtti(const RttiExpression& use)
 {
     if (unevaluated_depth) return;
-    for (auto t : {use.type,use.source})
+    for (auto t : {use.type,use.source}) {
+        record_rtti_type(t);
         if (class_value(t) && !entities[types[t].entity].specialization)
             demand_vtable(types[t].entity,VtableReason::Rtti);
+    }
 }
 Expression Analyzer::rtti_operand(QueryId id)
 {

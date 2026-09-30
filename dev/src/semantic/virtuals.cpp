@@ -51,14 +51,17 @@ void Analyzer::complete_virtuals(EntityId cls)
     // Import subobject identities, not a signature-only union: unrelated
     // roots can have the same signature and distinct final overriders.
     VirtualClass completed;
+    std::vector<VirtualSlot> primary;
     for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
         if (!polymorphic(bases[b].base) || bases[b].virtual_base) continue;
         class_facts[info].primary_base = b;
         const auto& inherited = virtual_class(bases[b].base);
-        completed.slots = inherited.slots; completed.views = inherited.views;
+        primary.assign(inherited.slots.begin(),inherited.slots.begin()+inherited.primary_count);
+        completed.slots.assign(inherited.slots.begin()+inherited.primary_count,inherited.slots.end());
+        completed.views = inherited.views;
+        for (auto& view : completed.views) view.begin -= inherited.primary_count;
         completed.signatures = inherited.signatures;
         virtual_slot_work += inherited.slots.size();
-        for (const auto& view : inherited.views) virtual_slot_work += view.slots.size();
         break;
     }
     for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
@@ -66,14 +69,19 @@ void Analyzer::complete_virtuals(EntityId cls)
         if (!polymorphic(base) || b == class_facts[info].primary_base) continue;
         const auto& inherited = virtual_class(base);
         unsigned root = completed.views.size()+1;
-        VirtualView view; view.type = base; view.edge = b; view.slots = inherited.slots;
-        auto relocate = [&](std::vector<VirtualSlot>& slots) {
-            for (auto& slot : slots) { slot.receiver += root; ++virtual_slot_work; }
+        auto import = [&](VirtualView view, unsigned begin, unsigned count) {
+            view.begin = completed.slots.size(); view.count = count;
+            for (unsigned j = 0; j < count; ++j) {
+                auto slot = inherited.slots[begin+j]; slot.receiver += root;
+                completed.slots.push_back(slot); ++virtual_slot_work;
+            }
+            completed.views.push_back(view);
         };
-        relocate(view.slots); completed.views.push_back(std::move(view));
+        VirtualView view; view.type = base; view.edge = b;
+        import(view,0,inherited.primary_count);
         for (const auto& old : inherited.views) {
             auto copy = old; copy.parent += root;
-            relocate(copy.slots); completed.views.push_back(std::move(copy));
+            import(copy,old.begin,old.count);
         }
         // Primary-chain aliases need tables only in a secondary subobject.
         // Keep single-inheritance completion proportional to its real slots.
@@ -81,25 +89,9 @@ void Analyzer::complete_virtuals(EntityId cls)
         for (auto edge = class_facts[entities[base].class_info].primary_base; edge;
             edge = class_facts[entities[bases[edge].base].class_info].primary_base) {
             VirtualView alias; alias.type = bases[edge].base; alias.edge = edge; alias.parent = parent;
-            auto count = virtual_class(alias.type).slots.size();
-            alias.slots.assign(inherited.slots.begin(),inherited.slots.begin()+count);
-            relocate(alias.slots); completed.views.push_back(std::move(alias));
+            auto count = virtual_class(alias.type).primary_count;
+            import(alias,0,count);
             parent = completed.views.size();
-        }
-    }
-    auto first = class_facts[info].first_base;
-    if (first && !bases[first].next) class_facts[info].rtti_flags = class_facts[entities[bases[first].base].class_info].rtti_flags;
-    else if (first) {
-        Index seen;
-        std::vector<EntityId> pending;
-        for (auto b = first; b; b = bases[b].next) pending.push_back(bases[b].base);
-        while (!pending.empty()) {
-            auto e = pending.back(); pending.pop_back();
-            if (seen.get(e)) { class_facts[info].rtti_flags |= 1; continue; }
-            seen.put(e,1);
-            class_facts[info].rtti_flags |= class_facts[entities[e].class_info].rtti_flags;
-            for (auto b = class_facts[entities[e].class_info].first_base; b; b = bases[b].next)
-                pending.push_back(bases[b].base);
         }
     }
     std::vector<EntityId> methods;
@@ -140,8 +132,7 @@ void Analyzer::complete_virtuals(EntityId cls)
             slot.function = e; slot.receiver = 0;
         }
     };
-    replace(completed.slots);
-    for (auto& view : completed.views) replace(view.slots);
+    replace(primary); replace(completed.slots);
     for (EntityId e : methods) {
         ++virtual_declaration_work;
         auto m = entities[e].member_info;
@@ -150,21 +141,20 @@ void Analyzer::complete_virtuals(EntityId cls)
         if (!members[m].virtual_member) continue;
         auto k = shape(e), slot = std::uint64_t(completed.signatures.get(k));
         if (!slot) {
-            slot = completed.slots.size()+1;
+            slot = primary.size()+1;
             completed.signatures.put(k,slot);
-            completed.slots.push_back(VirtualSlot(e));
-            if (members[m].destructor) completed.slots.push_back(VirtualSlot(e));
+            primary.push_back(VirtualSlot(e));
+            if (members[m].destructor) primary.push_back(VirtualSlot(e));
         }
         members[m].virtual_slot = slot;
         if (!completed.key_function && !members[m].pure && !entities[e].inline_function)
             completed.key_function = e;
     }
-    if (completed.slots.empty() && completed.views.empty()) return;
-    auto abstract = [&](const std::vector<VirtualSlot>& slots) {
-        for (const auto& slot : slots) completed.abstract |= members[entities[slot.function].member_info].pure;
-    };
-    abstract(completed.slots);
-    for (const auto& view : completed.views) abstract(view.slots);
+    if (primary.empty() && completed.views.empty()) return;
+    completed.primary_count = primary.size();
+    for (auto& view : completed.views) view.begin += completed.primary_count;
+    completed.slots.insert(completed.slots.begin(),primary.begin(),primary.end());
+    for (const auto& slot : completed.slots) completed.abstract |= members[entities[slot.function].member_info].pure;
     class_facts[info].aggregate = false;
     auto v = virtual_classes.size(); class_facts[info].virtual_info = v;
     virtual_classes.push_back(std::move(completed));
@@ -220,7 +210,6 @@ void Analyzer::demand_vtable(EntityId cls, VtableReason reason)
         }
     };
     collect(virtual_classes[v].slots);
-    for (const auto& view : virtual_classes[v].views) collect(view.slots);
     for (EntityId e : demanded) {
         auto m = entities[e].member_info;
         if (members[m].pure) continue;
@@ -232,6 +221,7 @@ void Analyzer::demand_vtable(EntityId cls, VtableReason reason)
             members[m].deleting_deallocation = deallocation;
         }
     }
+    record_rtti_type(entities[cls].type);
     vtable_emission.push_back(cls);
     virtual_classes[v].demand = FactState::Success;
     } catch (...) {
@@ -250,8 +240,9 @@ void Analyzer::layout_virtual_views(EntityId cls)
         view.store = view.offset && !stored.get(view.offset);
         if (view.store) stored.put(view.offset,1);
     }
-    auto adjust = [&](std::vector<VirtualSlot>& slots, std::uint64_t offset) {
-        for (auto& slot : slots) {
+    auto adjust = [&](unsigned begin, unsigned count, std::uint64_t offset) {
+        for (unsigned j = 0; j < count; ++j) {
+            auto& slot = v.slots[begin+j];
             slot.this_adjustment = std::int64_t(slot.receiver ? v.views[slot.receiver-1].offset : 0) - std::int64_t(offset);
             auto actual = types[entities[slot.function].type].child;
             auto expected = types[entities[slot.declaration].type].child;
@@ -261,18 +252,24 @@ void Analyzer::layout_virtual_views(EntityId cls)
             }
         }
     };
-    adjust(v.slots,0);
-    for (auto& view : v.views) adjust(view.slots,view.offset);
-    auto count = v.slots.size();
+    adjust(0,v.primary_count,0);
+    for (const auto& view : v.views) adjust(view.begin,view.count,view.offset);
+    auto count = v.primary_count;
+    std::vector<VirtualSlot> additional;
     for (unsigned j = 0; j < count; ++j) {
         auto slot = v.slots[j];
         auto e = slot.function, m = entities[e].member_info;
         if (!slot.result_adjustment || scopes[entities[e].owner].entity != cls || members[m].virtual_slot != j+1) continue;
         // The inherited slot still returns the base view; a call naming the
         // overriding declaration needs its unadjusted covariant result.
-        members[m].virtual_slot = v.slots.size()+1;
+        members[m].virtual_slot = count+additional.size()+1;
         v.signatures.put(key(entities[e].name,members[m].virtual_signature),members[m].virtual_slot);
-        v.slots.push_back(VirtualSlot(e));
+        additional.push_back(VirtualSlot(e));
+    }
+    if (!additional.empty()) {
+        v.slots.insert(v.slots.begin()+count,additional.begin(),additional.end());
+        for (auto& view : v.views) view.begin += additional.size();
+        v.primary_count += additional.size();
     }
 }
 } }

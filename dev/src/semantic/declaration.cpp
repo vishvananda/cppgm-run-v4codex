@@ -112,6 +112,7 @@ void Analyzer::finish()
     // Semantic discovery order is independent of deterministic ABI publication.
     std::sort(vtable_emission.begin(), vtable_emission.end());
     for (EntityId e : jump_bodies) finish_body(e);
+    if (calls) finish_rtti_facts();
     if (ast.telemetry) analysis_ms += std::chrono::duration<double,std::milli>(Clock::now()-started).count();
     completion_state = FactState::Success;
     } catch (...) {

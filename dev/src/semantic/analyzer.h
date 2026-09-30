@@ -105,7 +105,7 @@ public:
     EntityId direct_base(EntityId e) const { auto b = class_facts[entities[e].class_info].first_base; return b ? bases[b].base : 0; }
     std::uint32_t first_base_edge(EntityId e) const { return class_facts[entities[e].class_info].first_base; }
     const BaseRelation& base_edge(std::uint32_t b) const { return bases[b]; }
-    unsigned rtti_class_flags(EntityId e) const { return class_facts[entities[e].class_info].rtti_flags; }
+    unsigned rtti_class_flags(EntityId e) const;
     bool public_direct_base(EntityId e) const { auto b = class_facts[entities[e].class_info].first_base; return b && bases[b].access == Access::Public; }
     bool constructor_member(EntityId e) const;
     bool constructor_needed(EntityId e);
@@ -925,6 +925,12 @@ private:
     bool abstract_value(TypeId t);
     std::vector<VirtualClass> virtual_classes = std::vector<VirtualClass>(1);
     void layout_virtual_views(EntityId cls);
+    void record_rtti_type(TypeId type);
+    void complete_rtti_class(EntityId cls);
+    void finish_rtti_facts();
+    Index rtti_type_demand_index;
+    std::vector<TypeId> rtti_type_demands;
+    std::size_t rtti_base_work = 0, rtti_class_work = 0;
     std::vector<EntityId> key_vtable_demand, vtable_emission;
     std::size_t key_vtable_cursor = 0;
     std::size_t virtual_slot_work = 0, virtual_declaration_work = 0, virtual_demands = 0;

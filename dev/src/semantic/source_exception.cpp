@@ -9,6 +9,7 @@ Expression Analyzer::throw_expression(NodeId n, ScopeId scope)
     if (!source) return result;
     auto value = expression(source,scope);
     ThrowUse use; use.source = source; use.type = types.unqualified(decay(value.type));
+    if (!unevaluated_depth) record_rtti_type(use.type);
     size(use.type);
     if (class_value(use.type)) {
         reject_abstract(use.type);
@@ -66,6 +67,7 @@ void Analyzer::resolve_handler(NodeId n, ScopeId parent, bool pattern)
         facts.edit(parameter).entity = e; facts.edit(parameter).type = t;
         if (decl) { facts.edit(decl).entity = e; facts.edit(decl).type = t; }
         if (!pattern) {
+            record_rtti_type(value);
             if (name) bind(scope,name,e);
             publish_template_binding(parameter,e);
             if (class_value(t)) {

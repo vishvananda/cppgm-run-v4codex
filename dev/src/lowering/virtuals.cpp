@@ -54,20 +54,23 @@ void Procedural::emit_vtables()
     for (EntityId cls : sem.demanded_vtables()) {
         SymbolId table = vtable_symbol(cls);
         if (p.symbols[table.index-1].kind != Symbol::Unknown) continue;
-        auto emit_view = [&](SymbolId output, const std::vector<semantic::VirtualSlot>& slots, std::uint64_t offset) {
+        sem.object_size(sem.entities[cls].type);
+        const auto& model = sem.virtual_class(cls);
+        auto emit_view = [&](SymbolId output, unsigned begin, unsigned count, std::uint64_t offset) {
             std::vector<DataItem> data = {scalar(IRType::I64,0-offset),relocation(typeinfo(cls))};
             data[0].value.negative_integer = offset != 0;
-            for (unsigned j = 0; j < slots.size(); ++j) {
-                auto m = sem.member_fact(slots[j].function);
-                bool deleting = m.destructor && j && slots[j-1].function == slots[j].function;
-                data.push_back(relocation(virtual_target(slots[j],deleting)));
+            for (unsigned j = 0; j < count; ++j) {
+                const auto& slot = model.slots[begin+j];
+                auto m = sem.member_fact(slot.function);
+                bool deleting = m.destructor && j && model.slots[begin+j-1].function == slot.function;
+                data.push_back(relocation(virtual_target(slot,deleting)));
             }
             publish(p,output,data);
         };
-        emit_view(table,sem.virtual_class(cls).slots,0);
+        emit_view(table,0,model.primary_count,0);
         const auto& views = sem.virtual_class(cls).views;
         for (unsigned j = 0; j < views.size(); ++j)
-            if (views[j].offset) emit_view(view_symbol(cls,j+1),views[j].slots,views[j].offset);
+            if (views[j].offset) emit_view(view_symbol(cls,j+1),views[j].begin,views[j].count,views[j].offset);
     }
 }
 void Procedural::vpointer_store(EntityId cls)

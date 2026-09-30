@@ -122,7 +122,7 @@ struct ClassFacts {
     EntityId first_conversion = 0;
     std::uint32_t first_base = 0;
     std::uint32_t primary_base = 0;
-    unsigned rtti_flags = 0;
+    unsigned rtti_flags = ~0U; // Uncomputed until an RTTI consumer demands it.
     ScopeId default_constructor = 0;
     FactState layout_state = FactState::NotStarted;
     std::uint32_t empty_types_begin = 0, empty_types_count = 0;
@@ -261,12 +261,15 @@ struct VirtualSlot {
 struct VirtualView {
     EntityId type = 0;
     std::uint32_t parent = 0, edge = 0;
+    std::uint32_t begin = 0, count = 0; // Slice of the owning class's slot arena.
     std::uint64_t offset = 0;
     bool store = false;
-    std::vector<VirtualSlot> slots;
 };
 struct VirtualClass {
-    std::vector<VirtualSlot> slots; // Complete, then deleting destructor occupies two entries.
+    // One contiguous arena per completed class; views never own allocations.
+    // Complete, then deleting destructor occupies two entries.
+    std::vector<VirtualSlot> slots;
+    std::uint32_t primary_count = 0;
     std::vector<VirtualView> views;
     Index signatures;
     EntityId key_function = 0;
@@ -350,7 +353,6 @@ enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQu
 struct RttiExpression {
     TypeId type = 0, source = 0;
     std::int64_t hint = -1;
-    bool known_failure = false;
     bool dynamic = false, reference = false;
 };
 enum class CallInputs : unsigned char { Concrete, Source, Context, Query };

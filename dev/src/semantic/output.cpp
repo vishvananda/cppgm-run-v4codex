@@ -121,6 +121,11 @@ void Analyzer::write_scope(std::ostream& out, ScopeId s, unsigned depth) const
 void Analyzer::write(std::ostream& out) const { out << "translation-unit\n"; write_scope(out, global, 1); }
 void Analyzer::telemetry(std::ostream& out) const
 {
+    std::size_t virtual_views = 0, virtual_slots = 0, virtual_storage = virtual_classes.capacity()*sizeof(VirtualClass);
+    for (const auto& cls : virtual_classes) {
+        virtual_views += cls.views.size(); virtual_slots += cls.slots.size();
+        virtual_storage += cls.views.capacity()*sizeof(VirtualView)+cls.slots.capacity()*sizeof(VirtualSlot);
+    }
     out << ",\"semantic_ms\":" << analysis_ms
         << ",\"semantic_angle_names\":" << angle_name_work
         << ",\"semantic_angle_parts\":" << angle_part_work
@@ -290,6 +295,12 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_reference_alternatives\":" << reference_alternatives.size()-1
         << ",\"semantic_lifetime_uses\":" << lifetime_uses.size()-1
         << ",\"semantic_virtual_classes\":" << virtual_classes.size()-1
+        << ",\"semantic_rtti_type_demands\":" << rtti_type_demands.size()
+        << ",\"semantic_rtti_class_work\":" << rtti_class_work
+        << ",\"semantic_rtti_base_work\":" << rtti_base_work
+        << ",\"semantic_virtual_views\":" << virtual_views
+        << ",\"semantic_virtual_slots\":" << virtual_slots
+        << ",\"semantic_virtual_storage_bytes\":" << virtual_storage
         << ",\"semantic_virtual_slot_work\":" << virtual_slot_work
         << ",\"semantic_virtual_declaration_work\":" << virtual_declaration_work
         << ",\"semantic_virtual_demands\":" << virtual_demands
