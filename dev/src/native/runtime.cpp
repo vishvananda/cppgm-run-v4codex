@@ -3,7 +3,7 @@ namespace native {
 using namespace lowir_model;
 const char* runtime_name(unsigned entity)
 {
-    static const char* const names[] = {"@native.exception_top","@native.exception_value","@native.thread_pointer"};
+    static const char* const names[] = {"@native.exception_top","@native.exception_value","@native.thread_pointer","@native.exception_selector","@native.exception_matcher","@native.exception_caught"};
     require(entity < unsigned(RuntimeEntity::Count),"invalid native runtime entity");
     return names[entity];
 }
@@ -11,10 +11,14 @@ void Selector::runtime(const lowir_model::Instruction& i)
 {
     switch (i.opcode) {
     case Opcode::EhTry: case Opcode::EhCleanup:
-        require(i.operands.count == 1,"host EH clauses require the object runtime");
+        if (!i.operands.count) break;
         require(f.exception_base.kind != Operand::None,"missing handler frame fact");
-        emit(Op::EhPush,Type(),{Operand::label(arg(i,0).ref),Operand::imm(i.opcode == Opcode::EhCleanup)});
+        emit(Op::EhPush,Type(),{Operand::label(arg(i,0).ref),Operand::imm(i.opcode == Opcode::EhCleanup ||
+            (workspace.exception_handlers[arg(i,0).ref] && f.exception_handlers[workspace.exception_handlers[arg(i,0).ref]-1].cleanup))});
         break;
+    case Opcode::EhCatch: case Opcode::EhCatchAll: break; // indexed landing-pad facts
+    case Opcode::ExceptionSelector:
+        move(allocate(i.destination.index,i.type),runtime_operand(p,RuntimeEntity::ExceptionSelector),i.type); break;
     case Opcode::EhEnd: emit(Op::EhPop,Type(),{}); break;
     case Opcode::Throw: {
         auto payload = runtime_operand(p,RuntimeEntity::ExceptionValue);

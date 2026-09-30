@@ -49,7 +49,7 @@ struct Linkage {
     std::uint64_t disambiguator = 0;
     bool merge, presentation;
     SymbolId allocation_roles[2], rtti_roles[9], rtti_functions[3];
-    SymbolId exception_functions[6];
+    SymbolId exception_functions[7];
     SymbolId terminate_adapter;
     SymbolId abort_runtime;
     std::vector<FunctionId> initializers, finalizers;
@@ -134,11 +134,12 @@ class Procedural {
     struct Cleanup { std::uint32_t state; BlockId next, block; };
     std::vector<Cleanup> cleanup_blocks;
     struct TemporaryState : semantic::LifetimeState { lowir_model::ValueId location; SlotId selector, constructed, saved_location; std::uint32_t yes = 0, no = 0, release = 0; TypeId destroyed_type = 0; };
-    struct ReleaseAction { EntityId function; std::uint32_t begin, count; };
+    struct ReleaseAction { SymbolId function; std::uint32_t begin, count; };
     struct ReleaseOperand { SlotId slot; IRType type; };
     std::vector<ReleaseAction> release_actions;
     std::vector<ReleaseOperand> release_operands;
     std::uint32_t protect_deallocation(EntityId function, const Operand* operands, unsigned count);
+    std::uint32_t protect_exception(Operand object);
     void release_allocation(std::uint32_t action);
     void retire_deallocation(std::uint32_t state, std::uint32_t initial);
     void activate_subobject(TypeId type, Value address, SlotId count, semantic::Index& retired);
@@ -252,7 +253,7 @@ class Procedural {
     Value guarded_call(Instruction i, const Operand* args, std::size_t count);
     void return_statement(NodeId n);
     void destructor_prologue(EntityId e);
-    void destructor_finish(EntityId e);
+    void destructor_finish(EntityId e, bool returning = true);
     void destroy_subobjects(EntityId e);
     void finish_constructor_handlers();
     void constructor_cleanup(semantic::SubobjectAction action);

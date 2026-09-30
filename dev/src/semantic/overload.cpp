@@ -46,6 +46,14 @@ EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId sou
     }
     e = make_entity(EntityKind::Function, owner, name, source);
     entities[e].type = type;
+    if (c_linkage && !constructor && !conversion && !t.variadic && t.count == 1 &&
+        scopes[owner].kind == ScopeKind::Namespace) {
+        auto ptr = types.compound(TypeKind::Pointer,types.fundamental(FT_VOID));
+        if (ids.spelling(name).equals("malloc") && t.child == ptr && params[0] == types.fundamental(FT_UNSIGNED_LONG_INT))
+            entities[e].builtin = Entity::Malloc;
+        if (ids.spelling(name).equals("free") && t.child == types.fundamental(FT_VOID) && params[0] == ptr)
+            entities[e].builtin = Entity::Free;
+    }
     if (calls && scopes[owner].kind == ScopeKind::Template) template_facts(e);
     if (!family) { family = e; (conversion ? conversion_families : function_families).put(key(owner, conversion ? conversion : name), family); }
     if (ref_shape) function_ref_modes.put(key(family, ref_shape), ref_mode);

@@ -12,11 +12,11 @@ struct ValueState {
 // whole-unit scan per function and no string-keyed placement decisions.
 struct SlotState { unsigned stored = 0, position = 0; bool escape = false, observed = false; };
 struct Workspace {
-    std::vector<unsigned> value_indices, tls_wrappers;
+    std::vector<unsigned> value_indices, tls_wrappers, exception_handlers;
     std::vector<Operand> slots;
     std::vector<SlotState> slot_facts;
     std::vector<unsigned> block_epochs, predecessor_count, successor, next_block, parameter_clobbers, parameter_exits, block_local;
-    explicit Workspace(const lowir_model::Program& p) : value_indices(p.values.size()+1), tls_wrappers(p.symbols.size()+1), slots(p.slots.size()+1), slot_facts(p.slots.size()+1), block_epochs(p.blocks.size()+1), predecessor_count(p.blocks.size()+1), successor(p.blocks.size()+1), next_block(p.blocks.size()+1), parameter_clobbers(p.blocks.size()+1), parameter_exits(p.blocks.size()+1), block_local(p.blocks.size()+1) {
+    explicit Workspace(const lowir_model::Program& p) : value_indices(p.values.size()+1), tls_wrappers(p.symbols.size()+1), exception_handlers(p.blocks.size()+1), slots(p.slots.size()+1), slot_facts(p.slots.size()+1), block_epochs(p.blocks.size()+1), predecessor_count(p.blocks.size()+1), successor(p.blocks.size()+1), next_block(p.blocks.size()+1), parameter_clobbers(p.blocks.size()+1), parameter_exits(p.blocks.size()+1), block_local(p.blocks.size()+1) {
         for (const auto& s : p.functions) {
             auto target = p.symbols[s.symbol.index-1].metadata.tls_for;
             if (target) tls_wrappers[target.index] = s.symbol.index;
@@ -34,6 +34,7 @@ class Selector {
     Operand vararg_save, indirect_result, atomic_scratch;
     unsigned vararg_gp = 0, vararg_fp = 0, vararg_stack = 16;
     std::vector<ValueState> values;
+    void index_exception_clauses();
     void initialize_values();
     std::array<unsigned,32> live_until = {{0}};
     unsigned position = 0, block_id = 0;

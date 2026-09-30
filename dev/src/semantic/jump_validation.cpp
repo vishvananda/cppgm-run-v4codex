@@ -59,7 +59,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             k == Kind::If || k == Kind::For || k == Kind::RangeFor || k == Kind::While || k == Kind::Do || k == Kind::Switch || k == Kind::Condition ||
             k == Kind::SimpleDeclaration || k == Kind::Class || k == Kind::ExpressionStatement || k == Kind::Return || k == Kind::Goto ||
             k == Kind::Break || k == Kind::Continue || k == Kind::Label || k == Kind::Case || k == Kind::Default ||
-            k == Kind::Throw || k == Kind::Try || k == Kind::Handler;
+            k == Kind::Throw || k == Kind::Try || k == Kind::FunctionTry || k == Kind::Handler;
         if (!recorded) {
             for (auto c = ast[n].first; c; c = ast[c].next) visit(c);
             return;
@@ -110,12 +110,13 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         NodeId saved_context = context;
         auto saved_break_region = break_region, saved_continue_region = continue_region;
         auto saved_exception = exception, saved_break_exception = break_exception, saved_continue_exception = continue_exception;
-        if (k == Kind::Try) {
+        if (k == Kind::Try || k == Kind::FunctionTry) {
             // A jump may leave a protected body, but may not enter it. The
             // target's lexical owner is retained once for direct lowering.
-            enter_initialization(); exception = n; visit(ast[n].first);
+            auto protected_body = child(n,Kind::Compound);
+            enter_initialization(); exception = n; visit(protected_body);
             active = saved; live = saved_live; exception = saved_exception;
-            for (auto h = ast[ast[n].first].next; h; h = ast[h].next) visit(h);
+            for (auto h = ast[protected_body].next; h; h = ast[h].next) visit(h);
             record_use(); return;
         }
         if (k == Kind::Handler) { exception = n; enter_initialization(); add_object(facts[n].entity); }

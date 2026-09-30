@@ -114,7 +114,8 @@ void Validator::run()
                 }
             } else ordinary = true;
             require(k+1 == b.instructions.end() || !terminator(i.opcode), "instruction after terminator");
-            instruction(i);
+            try { instruction(i); }
+                catch (const ParseError& error) { throw ParseError(p_.name(p_.symbols[p_.functions[function_.index-1].symbol.index-1].name)+": "+spelling(i.opcode)+" #"+std::to_string(ordinal_)+": "+error.what()); }
             ++p_.stats.validated_instructions;
         }
     }

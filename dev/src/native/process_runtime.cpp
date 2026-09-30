@@ -3,12 +3,13 @@ namespace native {
 // Standalone process primitives. Host-object runtime bindings belong to PA26.
 // Syscall exposes the real inputs; Linux clobbers rax, rcx and r11. These leaf
 // bodies use only caller-saved registers and have no hidden stack adjustment.
-Function process_runtime(SymbolId symbol, ir_model::SymbolRole role)
+Function process_runtime(SymbolId symbol, ir_model::SymbolRole role, SymbolId failure)
 {
     Function f; f.symbol = symbol; f.frame_pointer = false; f.shared_epilogue = false;
-    f.result = role == ir_model::SR_ALLOCATE_MEMORY ? Type::Ptr : Type();
-    if (role == ir_model::SR_ALLOCATE_MEMORY || role == ir_model::SR_FREE_MEMORY)
-        f.params.push_back({0,role == ir_model::SR_ALLOCATE_MEMORY ? Type::I64 : Type::Ptr,Operand::r(XR_RDI)});
+    bool allocation = role == ir_model::SR_ALLOCATE_MEMORY || role == ir_model::SR_MALLOC;
+    f.result = allocation ? Type::Ptr : Type();
+    if (allocation || role == ir_model::SR_FREE_MEMORY)
+        f.params.push_back({0,allocation ? Type::I64 : Type::Ptr,Operand::r(XR_RDI)});
     auto block = [&](unsigned id) {
         Block b; b.id = id; b.name = 0; b.instructions.begin = f.instructions.size(); f.blocks.push_back(b);
     };
@@ -21,7 +22,7 @@ Function process_runtime(SymbolId symbol, ir_model::SymbolRole role)
     auto branch = [&](unsigned id, X86Condition cc) { emit(Op::Jcc,Type(),{Operand::label(id)}).condition = cc; };
     auto syscall = [&](unsigned mask) { emit(Op::Syscall,Type(),{}).arg_registers = mask | (1u<<XR_RAX); };
     block(1);
-    if (role == ir_model::SR_ALLOCATE_MEMORY) {
+    if (allocation) {
         // A private 16-byte prefix keeps the mapping extent and gives every
         // returned address fundamental alignment, including new(0).
         mov(XR_RSI,reg(XR_RDI)); emit(Op::Add,Type::I64,{reg(XR_RSI),Operand::imm(16)});
@@ -43,7 +44,13 @@ Function process_runtime(SymbolId symbol, ir_model::SymbolRole role)
         block(2); emit(Op::Return,Type(),{}); return f;
     } else lowir_model::require(role == ir_model::SR_TERMINATE || role == ir_model::SR_PURE_VIRTUAL,
         "unsupported process runtime role");
-    block(3); mov(XR_RDI,Operand::imm(1)); emit(Op::Exit,Type(),{}); emit(Op::Trap,Type(),{});
+    block(3);
+    if (role == ir_model::SR_MALLOC) { mov(XR_RAX,Operand::imm(0)); emit(Op::Return,Type::Ptr,{reg(XR_RAX)}); return f; }
+    if (failure) {
+        emit(Op::Sub,Type::I64,{reg(XR_RSP),Operand::imm(8)});
+        emit(Op::Call,Type(),{Operand::symbol(failure)}); emit(Op::Trap,Type(),{}); return f;
+    }
+    mov(XR_RDI,Operand::imm(1)); emit(Op::Exit,Type(),{}); emit(Op::Trap,Type(),{});
     return f;
 }
 } // namespace native

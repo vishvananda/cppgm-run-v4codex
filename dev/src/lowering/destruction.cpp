@@ -129,7 +129,7 @@ void Procedural::destroy_subobject(const semantic::DestructionAction& action)
     if (!action.field) lifecycle_arguments(action.destructor,args,action.base);
     guarded_call(Instruction(Opcode::Call,IRType::Void),args.data(),args.size());
 }
-void Procedural::destructor_finish(EntityId e)
+void Procedural::destructor_finish(EntityId e, bool returning)
 {
     if (!ended) {
         emit(Opcode::EhEnd, IRType(), {});
@@ -141,7 +141,7 @@ void Procedural::destructor_finish(EntityId e)
     destroy_subobjects(e);
     emit(Opcode::EhEnd, IRType(), {}); emit(Opcode::Resume, IRType(), {});
     emitting_cleanup = false;
-    start(destructor_end); emit(Opcode::Return, IRType(), {});
+    start(destructor_end); if (returning) emit(Opcode::Return, IRType(), {});
 }
 void Procedural::global_finalization()
 {

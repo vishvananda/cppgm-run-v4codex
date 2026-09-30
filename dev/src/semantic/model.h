@@ -189,7 +189,7 @@ struct Entity {
     IdentifierId name = 0;
     ScopeId owner = 0, scope = 0;
     NodeId source = 0, definition = 0, initializer = 0, body = 0;
-    enum Builtin : unsigned char { NoBuiltin, Memcpy, Memmove, Strlen } builtin = NoBuiltin;
+    enum Builtin : unsigned char { NoBuiltin, Memcpy, Memmove, Strlen, Malloc, Free } builtin = NoBuiltin;
     bool c_linkage = false, external_decl = false, thread_local_storage = false, inline_function = false;
     bool no_inline = false, force_inline = false, stable_prefix = false;
     bool constexpr_function = false;

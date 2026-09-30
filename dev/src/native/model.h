@@ -33,11 +33,11 @@ enum class Op {
     Adc, Sbb, MulWide, Shld, Shrd, CmpxchgWide,
     Fmov, Fadd, Fsub, Fmul, Fdiv, Fneg, Fcompare, Fset,
     Sitofp, Uitofp, Fptosi, Fptoui, Fpext, Fptrunc, Freturn, Fpop,
-    EhPush, EhPop, Throw, Resume, StackAlloc, TlsAddr, Syscall
+    EhPush, EhPop, EhDispatch, Throw, Resume, StackAlloc, TlsAddr, Syscall
 };
 // Image-owned runtime entities have identities after the external symbol range.
 // They are not semantic declarations, nor are their spellings lookup keys.
-enum class RuntimeEntity { ExceptionTop, ExceptionValue, ThreadPointer, Count };
+enum class RuntimeEntity { ExceptionTop, ExceptionValue, ThreadPointer, ExceptionSelector, ExceptionMatcher, ExceptionCaught, Count };
 inline Operand runtime_operand(const lowir_model::Program& p, RuntimeEntity entity) {
     return Operand::symbol(SymbolId(p.symbols.size()+1+unsigned(entity)),false);
 }
@@ -59,6 +59,8 @@ struct Instruction {
 struct FrameBinding { Name name; Type type; std::int64_t offset; bool temporary; bool parameter; };
 struct Parameter { Name name; Type type; Operand location; Operand second; };
 struct Block { std::uint32_t id; Name name; lowir_model::Range instructions; };
+struct ExceptionClause { SymbolId type; unsigned selector; };
+struct ExceptionHandler { lowir_model::Range clauses; bool cleanup = false; };
 struct Function {
     SymbolId symbol;
     Type result;
@@ -71,6 +73,8 @@ struct Function {
     unsigned frame_alignment = 16;
     int frame_base = XR_RBP;
     Operand exception_base, stack_floor;
+    std::vector<ExceptionClause> exception_clauses;
+    std::vector<ExceptionHandler> exception_handlers;
     std::uint64_t frame_bytes = 0, stack_size = 0, scratch_bytes = 0;
     bool frame_pointer = true, shared_epilogue = true;
 };

@@ -12,8 +12,8 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
     case Kind::Throw:
         if (node.first) bind_template_expression(node.first,s);
         return;
-    case Kind::Try:
-        for (auto c = node.first; c; c = ast[c].next) bind_template_statement(c,s);
+    case Kind::Try: case Kind::FunctionTry:
+        for (auto c = child(n,Kind::Compound); c; c = ast[c].next) bind_template_statement(c,s);
         return;
     case Kind::Handler: resolve_handler(n,s,true); return;
     case Kind::RangeFor: bind_template_range(n,s); return;

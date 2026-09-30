@@ -320,6 +320,7 @@ void Analyzer::bind_template_body(const Body& body)
             if ((ast[q].kind == Kind::FunctionQualifier || ast[q].kind == Kind::Noexcept) && ast[q].op == KW_NOEXCEPT && ast[q].first)
                 bind_template_expression(ast[q].first,fs);
     auto ctor_initializers = child(body.source,Kind::CtorInitializer);
+    if (!ctor_initializers) ctor_initializers = child(body.node,Kind::CtorInitializer);
     for (auto item = ast[ctor_initializers].first; item; item = ast[item].next) {
         auto id = child(item,Kind::MemInitializerId);
         bind_template_expression(ast[id].detail,fs);

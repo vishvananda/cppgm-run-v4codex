@@ -20,18 +20,18 @@ SymbolId Procedural::exception_function(unsigned role)
 {
     if (linkage.exception_functions[role]) return linkage.exception_functions[role];
     if (role == 5 && linkage.abort_runtime) p.symbols[linkage.abort_runtime.index-1].metadata.role = SR_NONE;
-    static const char* names[] = {"__cxa_allocate_exception","__cxa_begin_catch","__cxa_end_catch","__cxa_rethrow","__cxa_throw","_ZSt9terminatev"};
-    static const SymbolRole roles[] = {SR_EH_ALLOCATE_EXCEPTION,SR_EH_BEGIN_CATCH,SR_EH_END_CATCH,SR_EH_RETHROW,SR_EH_THROW,SR_TERMINATE};
+    static const char* names[] = {"__cxa_allocate_exception","__cxa_begin_catch","__cxa_end_catch","__cxa_rethrow","__cxa_throw","_ZSt9terminatev","__cxa_free_exception"};
+    static const SymbolRole roles[] = {SR_EH_ALLOCATE_EXCEPTION,SR_EH_BEGIN_CATCH,SR_EH_END_CATCH,SR_EH_RETHROW,SR_EH_THROW,SR_TERMINATE,SR_EH_FREE_EXCEPTION};
     auto ptr = sem.types.compound(TypeKind::Pointer,sem.types.fundamental(FT_VOID));
     std::vector<TypeId> params;
     if (role == 0) params.push_back(sem.types.fundamental(FT_UNSIGNED_LONG_INT));
-    if (role == 1) params.push_back(ptr);
+    if (role == 1 || role == 6) params.push_back(ptr);
     if (role == 4) params = {ptr,ptr,ptr};
     auto sig = sem.types.function(role < 2 ? ptr : sem.types.fundamental(FT_VOID),params,false);
     Function f; f.symbol = fresh_symbol("@exception_runtime"); f.declaration = true;
     FunctionId owner(p.functions.size()+1); f.signature = signature(sig,owner);
-    if (role >= 3) p.signatures[f.signature.index-1].boundary.returns = ir_model::CRM_NORETURN;
-    if (role == 5) p.signatures[f.signature.index-1].boundary.unwind = ir_model::CUM_NO;
+    if (role >= 3 && role <= 5) p.signatures[f.signature.index-1].boundary.returns = ir_model::CRM_NORETURN;
+    if (role == 5 || role == 6) p.signatures[f.signature.index-1].boundary.unwind = ir_model::CUM_NO;
     p.functions.push_back(f); linkage.exception_functions[role] = f.symbol;
     auto& s = p.symbols[f.symbol.index-1]; s.kind = Symbol::FunctionSymbol; s.entity = owner.index;
     s.metadata.binding = SBM_STRONG; s.metadata.linkage = LLM_C;
@@ -41,6 +41,7 @@ SymbolId Procedural::exception_function(unsigned role)
 SymbolId Procedural::exception_type(TypeId t)
 {
     auto info = rtti_type(t);
+    if (!linkage.presentation) return info;
     if (sem.types[t].kind != TypeKind::Fundamental &&
         !(sem.types[t].kind == TypeKind::Pointer && sem.types[sem.types[t].child].kind == TypeKind::Fundamental)) return info;
     if (auto old = exception_rtti.get(t)) return SymbolId(old);
@@ -75,7 +76,7 @@ bool Procedural::exception_clauses(std::uint32_t context, bool cleanup)
         if (c.handler) { crossed_handler = true; continue; }
         if (!first && (crossed_handler || prior_live != c.live)) { emit(Opcode::EhCleanup,IRType(),{}); has_cleanup = true; }
         bool all = false;
-        for (auto h = ast[ast[c.node].first].next; h; h = ast[h].next) {
+        for (auto h = ast[child(c.node,Kind::Compound)].next; h; h = ast[h].next) {
             auto t = sem.facts[h].type;
             auto selector = exception_selector(t);
             if (t) emit(Opcode::EhCatch,IRType(),{Operand::symbol(exception_type(t)),Operand::integer(selector)});
@@ -108,7 +109,7 @@ Value Procedural::throw_expression(NodeId n)
     auto use = sem.throw_use(n);
     auto initial = live;
     if (use.source) {
-        exception_object(use.type);
+        if (linkage.presentation) exception_object(use.type);
         Operand allocate[] = {Operand::symbol(exception_function(0)),Operand::integer(sem.object_size(use.type))};
         auto object = guarded_call(Instruction(Opcode::Call,IRType::Ptr),allocate,2);
         if (full_expression.open) {
@@ -117,9 +118,11 @@ Value Procedural::throw_expression(NodeId n)
             close_expression_region();
             object = emit(Opcode::Load,IRType::Ptr,{Operand::slot(saved)});
         }
+        auto release = !linkage.presentation && sem.class_value(use.type) ? protect_exception(object.operand) : 0;
         object.type = use.type; object.address = true;
         if (sem.class_value(use.type)) construct_value(use.source,sem.conversion_fact(use.conversion),object);
         else store(converted(use.source,sem.conversion_fact(use.conversion)),object);
+        if (release) retire_deallocation(release,initial);
         clean_inline(live,initial); close_expression_region();
         if (full_expression.enabled && unwind_live()) open_expression_region();
         auto info = emit(Opcode::Addr,IRType(),{Operand::symbol(exception_type(use.type))});
@@ -153,10 +156,13 @@ void Procedural::exit_exception_contexts(NodeId target, std::uint32_t stop)
 void Procedural::try_statement(NodeId n)
 {
     auto parent = exception_context, initial = live;
+    auto protected_body = child(n,Kind::Compound);
+    bool function_try = ast[n].kind == Kind::FunctionTry;
+    bool lifecycle = function_try && (sem.constructor_member(active_function) || sem.destructor_member(active_function));
     auto dispatch = block(), entry = block(), end = block();
     ExceptionContext c; c.parent = parent; c.live = initial; c.node = n; c.entry = entry; c.has_catches = true;
     bool catches_all = false;
-    for (auto h = ast[ast[n].first].next; h; h = ast[h].next) catches_all |= !sem.facts[h].type;
+    for (auto h = ast[protected_body].next; h; h = ast[h].next) catches_all |= !sem.facts[h].type;
     // Summarize the same parent-linked clauses emitted by exception_clauses.
     // A catch-all ends the search; otherwise a changed live prefix or an
     // active handler needs cleanup before forwarding to the parent's clauses.
@@ -165,7 +171,17 @@ void Procedural::try_statement(NodeId n)
             exception_contexts[parent].cleanup_dispatch : initial != 0);
     auto context = exception_contexts.size(); exception_contexts.push_back(c); exception_context = context;
     emit(Opcode::EhTry,IRType(),{Operand::label(dispatch)});
-    statement(ast[n].first);
+    // Lifecycle cleanups must complete before function-try handlers are entered.
+    // Their physical outer region owns dispatch after the subobject protocol.
+    if (lifecycle) exception_context = 0;
+    if (function_try && sem.constructor_member(active_function)) constructor_body(active_function,active_base_entry);
+    if (function_try && sem.destructor_member(active_function)) {
+        destructor_prologue(active_function); vpointer_store(sem.scopes[sem.entities[active_function].owner].entity);
+    }
+    statement(protected_body);
+    if (function_try && destructor_handler) { destructor_finish(active_function,false); destructor_handler = BlockId(); }
+    if (function_try && !ended) finish_constructor_handlers();
+    exception_context = context;
     if (!ended) { emit(Opcode::EhEnd,IRType(),{}); jump(end); }
     exception_context = parent;
     start(dispatch);
@@ -176,7 +192,7 @@ void Procedural::try_statement(NodeId n)
     start(entry);
     auto object = emit(Opcode::Exception,IRType::Ptr,{});
     auto selector = emit(Opcode::ExceptionSelector,IRType::I32,{});
-    for (auto h = ast[ast[n].first].next; h; h = ast[h].next) {
+    for (auto h = ast[protected_body].next; h; h = ast[h].next) {
         auto body = block(), next = block(), cleanup = block();
         auto match = emit(Opcode::Compare,IRType::I32,{selector.operand,Operand::integer(exception_selector(sem.facts[h].type))},Operation::Eq);
         emit(Opcode::Branch,IRType(),{match.operand,Operand::label(body),Operand::label(next)});
@@ -224,6 +240,11 @@ void Procedural::try_statement(NodeId n)
         c.has_catches = parent && exception_contexts[parent].has_catches;
         exception_context = exception_contexts.size(); exception_contexts.push_back(c);
         statement(ast[ast[h].first].next);
+        if (lifecycle && !ended) {
+            clean_inline(live,initial);
+            emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(3))});
+            exception_fallback();
+        }
         if (!ended) {
             clean_inline(live,initial);
             emit(Opcode::EhEnd,IRType(),{});

@@ -17,6 +17,7 @@ void Selector::begin_block(unsigned id, Name name)
     Block block; block.id = id; block.name = name;
     block.instructions.begin = f.instructions.size();
     f.blocks.push_back(block);
+    if (id < workspace.exception_handlers.size()) if (auto h = workspace.exception_handlers[id]) emit(Op::EhDispatch,Type(),{Operand::imm(h-1)});
 }
 Type Selector::value_type(lowir_model::Operand o, Type fallback) const
 {
@@ -236,6 +237,7 @@ void Selector::select(const lowir_model::Instruction& i)
     case Opcode::Jump: case Opcode::Branch: case Opcode::Switch:
     case Opcode::Return: case Opcode::Unreachable: control(i); break;
     case Opcode::EhTry: case Opcode::EhCleanup: case Opcode::EhEnd:
+    case Opcode::EhCatch: case Opcode::EhCatchAll: case Opcode::ExceptionSelector:
     case Opcode::Throw: case Opcode::Resume: case Opcode::Exception:
     case Opcode::StackAlloc: runtime(i); break;
     default: throw ParseError(std::string("native operation not implemented: ")+spelling(i.opcode));

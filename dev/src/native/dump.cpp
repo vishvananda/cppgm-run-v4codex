@@ -56,7 +56,7 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
         "adc","sbb","mul","shld","shrd","lock_cmpxchg16b",
         "fmov","fadd","fsub","fmul","fdiv","fneg","fcmp","fset",
         "sitofp","uitofp","fptosi","fptoui","fpext","fptrunc","fret","fstp",
-        "eh_push","eh_pop","throw","resume","stack_alloc","tls_addr","syscall"};
+        "eh_push","eh_pop","eh_dispatch","throw","resume","stack_alloc","tls_addr","syscall"};
     // The scalar Boolean materialization has the canonical byte-to-register
     // spelling. Its typed ExtendUnsigned fact is also consumed by encoding.
     bool boolean_extend = i.op == Op::ExtendUnsigned && i.type == Type::U8;

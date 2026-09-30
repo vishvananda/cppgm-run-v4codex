@@ -181,7 +181,9 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     // object labels need the same isolation as their internal SymbolIds.
     if (internal && linkage.merge && metadata.object)
         metadata.object = p.intern(p.name(metadata.object) + "." + std::to_string(p.symbols.size()+1));
-    if (e.builtin != semantic::Entity::NoBuiltin) {
+    if ((e.builtin == semantic::Entity::Malloc || e.builtin == semantic::Entity::Free) && !e.definition) {
+        metadata.role = e.builtin == semantic::Entity::Malloc ? SR_MALLOC : SR_FREE_MEMORY;
+    } else if (e.builtin != semantic::Entity::NoBuiltin && e.builtin != semantic::Entity::Malloc && e.builtin != semantic::Entity::Free) {
         if (e.builtin == semantic::Entity::Strlen) metadata.builtin = lowir_model::SymbolMetadata::Builtin::Strlen;
         metadata.object = p.intern(e.builtin == semantic::Entity::Memcpy ? "cppgm_builtin_memcpy" : e.builtin == semantic::Entity::Strlen ? "cppgm_builtin_strlen" : "cppgm_builtin_memmove");
         metadata.linkage = LLM_C;
@@ -494,19 +496,20 @@ void Procedural::function_body(EntityId e, bool base)
             if (sem.entities[parameter].kind == semantic::EntityKind::Parameter && sem.class_value(sem.entities[parameter].type))
                 activate_temporary(parameter);
         }
+    bool function_try = ast[sem.entities[e].body].kind == syntax::Kind::FunctionTry;
     if (sem.transfer_member(e) && sem.synthetic_member(e)) transfer_body(e);
-    else if (sem.constructor_member(e)) constructor_body(e,active_base_entry);
-    if (sem.destructor_member(e)) {
+    else if (!function_try && sem.constructor_member(e)) constructor_body(e,active_base_entry);
+    if (!function_try && sem.destructor_member(e)) {
         destructor_prologue(e);
         vpointer_store(sem.scopes[sem.entities[e].owner].entity);
     }
     mark_control_entries(sem.entities[e].body);
     constructor_block_boundary = p.block_order.size();
     statement(sem.entities[e].body);
-    if (destructor_handler) destructor_finish(e);
+    if (!function_try && destructor_handler) destructor_finish(e);
     if (!ended) {
         clean_inline(live,0);
-        finish_constructor_handlers();
+        if (!function_try) finish_constructor_handlers();
         if (result_type() == IRType::Void) emit(Opcode::Return, IRType(), {});
         else if (sem.class_value(returned)) {
             exception_fallback();

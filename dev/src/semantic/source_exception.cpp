@@ -43,11 +43,12 @@ Expression Analyzer::throw_expression(NodeId n, ScopeId scope)
     throw_index.put(n,throws.size()); throws.push_back(use);
     return result;
 }
-void Analyzer::resolve_handler(NodeId n, ScopeId parent, bool pattern)
+void Analyzer::resolve_handler(NodeId n, ScopeId parent, bool pattern, bool function_try)
 {
     auto scope = make_scope(ScopeKind::Block,parent,0,0,!pattern);
     if (pattern) template_pattern_scopes.put(scope,1);
     facts.edit(n).scope = scope;
+    if (function_try && constructor_member(current_function)) constructor_handler_scopes.put(scope,1);
     auto parameter = ast[n].first, specs = ast[parameter].first;
     if (ast[specs].kind != Kind::Ellipsis) {
         auto decl = ast[specs].next;

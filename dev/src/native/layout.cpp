@@ -46,10 +46,10 @@ void Encoder::encode(const Function& f)
     if (f.stack_floor.kind != Operand::None) store(f.stack_floor,Operand::r(XR_RSP),Type::Ptr);
     epilogue = 0;
     for (const auto& b : f.blocks) epilogue = std::max(epilogue,b.id+1);
-    if (labels.size() <= epilogue) labels.resize(epilogue+1);
+    if (labels.size() <= epilogue) { labels.resize(epilogue+1); label_owners.resize(epilogue+1); }
     branches.clear();
     for (unsigned k = 0; k < f.blocks.size(); ++k) {
-        const auto& block = f.blocks[k]; labels[block.id] = code.size();
+        const auto& block = f.blocks[k]; labels[block.id] = code.size(); label_owners[block.id] = f.symbol;
         for (unsigned j = block.instructions.begin; j != block.instructions.end(); ++j) {
             const auto& i = f.instructions[j];
             // The fallthrough target is already selected; suppressing its jump
@@ -58,9 +58,10 @@ void Encoder::encode(const Function& f)
             instruction(i);
         }
     }
-    labels[epilogue] = code.size();
+    labels[epilogue] = code.size(); label_owners[epilogue] = f.symbol;
     if (f.shared_epilogue) epilogue_code();
     for (const auto& fix : branches) {
+        require(fix.label < label_owners.size() && label_owners[fix.label] == f.symbol,"undefined native branch target");
         std::int64_t relative = std::int64_t(labels.at(fix.label)) - std::int64_t(fix.offset+4);
         require(relative >= INT32_MIN && relative <= INT32_MAX, "native branch out of range");
         for (unsigned k = 0; k < 4; ++k) code[fix.offset+k] = std::uint64_t(relative) >> (8*k);

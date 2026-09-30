@@ -171,3 +171,7 @@ FRONTEND_OBJ_BASENAMES_lowir2native += native/tls native/runtime native/runtime_
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += $(filter native/%,$(FRONTEND_OBJ_BASENAMES_lowir2native)) toolchain/object toolchain/linker toolchain/elf_input toolchain/driver
 FRONTEND_OBJ_BASENAMES_cppgm++ += native/process_runtime toolchain/runtime toolchain/runtime_builder toolchain/runtime_cast
+FRONTEND_OBJ_BASENAMES_lowir2native += native/exception_clauses
+FRONTEND_OBJ_BASENAMES_cppgm++ += native/exception_clauses
+FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/runtime_exception
+FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/runtime_eh_match toolchain/runtime_failure

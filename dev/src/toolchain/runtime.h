@@ -5,7 +5,12 @@ struct RuntimeRequest { std::string name; ir_model::SymbolRole role; };
 // This owner contains only runtime IR. It never owns source or semantic nodes.
 struct RuntimeProgram {
     lowir_model::Program p;
-    lowir_model::SymbolId tables[3];
+    struct Primitive { lowir_model::SymbolId symbol; ir_model::SymbolRole role; };
+    std::vector<Primitive> primitives;
+    lowir_model::SymbolId tables[5];
+    lowir_model::SymbolId allocation_failure;
+    lowir_model::SymbolId states[unsigned(native::RuntimeEntity::Count)];
+    lowir_model::SymbolId state(native::RuntimeEntity);
     lowir_model::SymbolId symbol(const std::string& name, ir_model::SymbolRole role);
     lowir_model::FunctionId function(lowir_model::SymbolId symbol, lowir_model::Type result);
     void table(lowir_model::SymbolId symbol);
@@ -32,8 +37,12 @@ struct RuntimeBody {
     void jump(lowir_model::BlockId b);
     void branch(Operand condition, lowir_model::BlockId yes, lowir_model::BlockId no);
 };
+lowir_model::FunctionId build_exception_match(RuntimeProgram&,lowir_model::SymbolId);
+lowir_model::SymbolId runtime_typeinfo(RuntimeProgram&, const std::string&, lowir_model::SymbolId base = lowir_model::SymbolId());
+void build_failures(RuntimeProgram&,lowir_model::FunctionId,lowir_model::FunctionId,const std::vector<RuntimeRequest>&);
+void build_exceptions(RuntimeProgram&, const std::vector<RuntimeRequest>&);
 void build_dynamic_cast(RuntimeProgram&, lowir_model::SymbolId);
 bool runtime_role(ir_model::SymbolRole);
 Object runtime_object(const std::vector<RuntimeRequest>&, native::Statistics&);
 } }
-namespace native { Function process_runtime(SymbolId,ir_model::SymbolRole); }
+namespace native { Function process_runtime(SymbolId,ir_model::SymbolRole,SymbolId failure = SymbolId()); }

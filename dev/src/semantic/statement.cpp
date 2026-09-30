@@ -79,12 +79,12 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
     if (definitions) resolve_angle_statement(n,s);
     switch (ast[n].kind) {
     case Kind::Throw: expression(n,s); return;
-    case Kind::Try: {
-        auto body = ast[n].first;
+    case Kind::Try: case Kind::FunctionTry: {
+        auto body = child(n,Kind::Compound);
         auto scope = make_scope(ScopeKind::Block,s);
-        facts.edit(body).scope = scope; try_scopes.put(scope,1);
+        facts.edit(body).scope = scope; facts.edit(n).scope = scope; try_scopes.put(scope,1);
         for (auto c = ast[body].first; c; c = ast[c].next) resolve_statement(c,scope);
-        for (auto h = ast[body].next; h; h = ast[h].next) resolve_handler(h,s);
+        for (auto h = ast[body].next; h; h = ast[h].next) resolve_handler(h,s,false,ast[n].kind == Kind::FunctionTry);
         return;
     }
     case Kind::Handler: resolve_handler(n,s); return;
@@ -125,6 +125,8 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
     case Kind::NamespaceAlias: case Kind::StaticAssert: case Kind::Class: case Kind::ClassForward: case Kind::Enum:
         declaration(n, s); return;
     case Kind::Return:
+        for (auto scope=s; scope && scopes[scope].kind != ScopeKind::Function; scope=scopes[scope].parent)
+            if (constructor_handler_scopes.get(scope)) throw std::runtime_error("return in constructor function-try handler");
         if (placeholder_returns.get(current_function)) deduce_return(n,s);
         if (class_value(return_type)) { record_class_return(n,s); return; }
         if (ast[n].first) {

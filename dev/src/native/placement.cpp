@@ -62,6 +62,7 @@ void Selector::analyze_instruction(const lowir_model::Instruction& i, unsigned e
 }
 void Selector::analyze()
 {
+    index_exception_clauses();
     first_clobber.fill(~0u);
     promote_parameters();
     control_edges();

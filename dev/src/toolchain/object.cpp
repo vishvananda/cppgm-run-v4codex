@@ -93,7 +93,7 @@ void read_fixes(Reader& r, std::vector<native::Fixup>& fixes, std::size_t bytes,
 void write_object(const Object& obj, const std::string& path)
 {
     std::ofstream out(path,std::ios::binary); require(bool(out),"cannot create compiler object");
-    out.write("CPPGMOBJ",8); number(out,2); number(out,62); // format, x86-64 target
+    out.write("CPPGMOBJ",8); number(out,3); number(out,62); // format, x86-64 target
     number(out,obj.image.runtime_begin); number(out,obj.alignment); number(out,obj.image.has_tls);
     number(out,obj.symbols.size());
     for (unsigned i = 0; i < obj.symbols.size(); ++i) {
@@ -116,7 +116,7 @@ Object read_object(const std::string& path)
     if (bytes.size() >= 4 && bytes[0] == 127 && bytes[1] == 'E' && bytes[2] == 'L' && bytes[3] == 'F') return read_elf(bytes);
     require(bytes.size() >= 8 && std::string(bytes.begin(),bytes.begin()+8) == "CPPGMOBJ","invalid compiler object");
     Reader r{bytes}; r.pos = 8;
-    require(r.number() == 2 && r.number() == 62,"unsupported compiler object version/target");
+    require(r.number() == 3 && r.number() == 62,"unsupported compiler object version/target");
     auto runtime = r.number(), alignment = r.number(), tls = r.number();
     auto count = r.count(72);
     require(runtime && runtime <= count && count-runtime >= unsigned(native::RuntimeEntity::Count),"invalid runtime symbol range");

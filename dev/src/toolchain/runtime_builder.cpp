@@ -17,6 +17,15 @@ FunctionId RuntimeProgram::function(SymbolId symbol, Type result)
     auto& s = p.symbols[symbol.index-1]; s.kind = lowir_model::Symbol::FunctionSymbol; s.entity = p.functions.size();
     return FunctionId(p.functions.size());
 }
+SymbolId RuntimeProgram::state(native::RuntimeEntity entity)
+{
+    auto& id = states[unsigned(entity)];
+    if (id) return id;
+    id = symbol("",SR_NONE);
+    Global g; g.symbol = id; g.declaration = true; p.globals.push_back(g);
+    p.symbols[id.index-1].kind = lowir_model::Symbol::GlobalSymbol;
+    p.symbols[id.index-1].entity = p.globals.size(); return id;
+}
 void RuntimeProgram::table(SymbolId symbol)
 {
     // Reserved Itanium vtable header and address point. Standalone class RTTI

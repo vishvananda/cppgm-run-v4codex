@@ -261,6 +261,7 @@ void Analyzer::constructor_actions(EntityId e)
     size(entities[cls].type);
     Index explicit_initializers;
     NodeId list = child(members[m].source, Kind::CtorInitializer);
+    if (!list) list = child(entities[e].body,Kind::CtorInitializer);
     demand_region(list);
     expand_expression_list(list,scope);
     for (NodeId n = ast[list].first; n; n = ast[n].next) {

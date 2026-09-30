@@ -27,6 +27,7 @@ class Encoder {
     struct Branch { std::size_t offset; unsigned label; };
     std::vector<Branch> branches;
     std::vector<std::size_t> labels;
+    std::vector<SymbolId> label_owners;
     const Function* function = nullptr;
     unsigned epilogue = 0;
     void byte(unsigned n);
