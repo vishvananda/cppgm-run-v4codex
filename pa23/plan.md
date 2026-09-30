@@ -1,12 +1,31 @@
-# PA23 compact plan — implementation handoff 122
+# PA23 compact plan — implementation 123 in progress
 
-Target: **PA23 full-stage**. Phase: **incomplete implementation handoff**.
+Target: **PA23 full-stage**. Phase: **implement**.
 Stage base commit: `f33dd0775073bf5db6665fb2f4f504783159df76`.
 Last reviewed commit: `f33dd0775073bf5db6665fb2f4f504783159df76`.
-Turn entry: `26b96f27`, clean, **17/45**, **28 failures**.
-Handoff: **20/45**, **25 failures**; **three original failures resolved, no new
-failures or reduced coverage**. Previous turn: implementation/validation progress;
-no interrupted build remained live. This turn also made implementation progress.
+Turn entry: `9688f9e54a2b206b9add41ce78acd9b5f0452c62`, clean,
+**20/45**, **25 failures**. Previous turn: verified implementation progress;
+no prior build process is live. Entry binary and failure log frozen in
+`/tmp/pa23-123/`. Stage/review markers above are unchanged.
+
+## Current owner plan
+
+Complete the shared virtual-subobject group, extending into its dependent
+lifecycle/parameter paths while the same facts support progress. Class completion
+owns canonical virtual-subobject identities and unique final overriders; layout
+owns nonvirtual extents and per-segment adjustment/address-point facts. Checked
+base conversions and lifecycle actions carry those identities into typed LowIR.
+Use class-local flat indexes and immutable slices, with TU lifetime and work
+proportional to consumed base/slot edges plus emitted rows. No global retries,
+source replay, textual semantic keys or optional optimizer is planned.
+
+Validate original failures and explicit diamond/access/dispatch/lifecycle
+controls; run earlier stages, file audit and the through report at handoff.
+Freeze final binary/inputs and retain A/A + ABBA compiler wall/RSS and checked
+native runtime/text evidence under spec §9's PA23/O0 acceptance. Current refs
+include a nonpolymorphic virtual diamond whose `B&` access uses a fixed offset;
+this needs an executable reducer and contract/standard proof before any oracle
+correction. Reference correctness and unfinished implementation remain distinct.
 
 ## Completed ownership and spec alignment
 
@@ -85,7 +104,8 @@ object-label limit is reproduced with reference IR; both IRs pass hosted executi
 | `8b505a75` | Merged-TU definition publication, precise telemetry and controls | Pending |
 | `3b9cf2b5` | Single base-only entry identity; covariant secondary group check | Pending |
 | `a04a8cae` | Typed base-alias deduplication and prior-TU schedule preservation | Pending |
-| Delivery commit | Sealed validation/performance, retained failures and boundary | Pending |
+| `9688f9e5` | Handoff 122 validation/performance, retained failures and boundary | Pending |
+| Turn 123 planning commit | Frozen baseline and shared-base owner/data-flow plan | Pending |
 
 Independent review must assess demand/ABI identities, group layout and cross-TU
 publication, cleanup bounds, the reference proof, storage lifetimes, inherited
