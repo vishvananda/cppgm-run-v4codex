@@ -94,7 +94,7 @@ Constant Analyzer::constant_read(std::uint32_t id)
     if (storage.live && types[a.type].kind == TypeKind::Function) return Constant(types.compound(TypeKind::Pointer,a.type),id);
     if (storage.builder) {
         auto slot = storage.builder->values_by_address.get(id);
-        if (slot) return storage.builder->projected_values[slot-1];
+        if (slot) return storage.builder->projected_parts[slot-1].part.value;
     }
     if (storage.builder && a.parent && !constant_addresses[a.parent].parent) {
         auto slot = storage.builder->slots.get(a.selector);
@@ -360,7 +360,7 @@ void Analyzer::constant_dependencies(Constant value, std::vector<ArgumentId>& ar
         constant_dependencies(storage.value,args,seen);
         if (storage.builder) {
             for (auto part : storage.builder->parts) constant_dependencies(part.value,args,seen);
-            for (auto projected : storage.builder->projected_values) constant_dependencies(projected,args,seen);
+            for (auto projected : storage.builder->projected_parts) constant_dependencies(projected.part.value,args,seen);
         }
     } else if (class_value(value.type) || k == TypeKind::Array) {
         auto object_key = key(1,value.bits);

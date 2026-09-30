@@ -670,13 +670,15 @@ private:
     struct EvaluatedObject { TypeId type = 0; std::uint32_t first = 0, count = 0, next = 0, addresses = 0, address_count = 0; };
     struct ConstantBuildGroup {
         std::uint32_t path = 0, address = 0, parent = 0;
-        Index slots; std::vector<EvaluatedPart> parts;
+        std::uint32_t first = 0, last = 0;
     };
+    struct ConstantBuildPart { EvaluatedPart part; std::uint32_t next = 0; };
     struct ConstantBuilder {
         Index slots; std::vector<EvaluatedPart> parts;
         Index groups_by_path, values_by_address;
         std::vector<ConstantBuildGroup> groups;
-        std::vector<Constant> projected_values;
+        std::vector<ConstantBuildPart> projected_parts;
+        std::vector<unsigned> missing_paths;
     };
     void constant_projected_action(ConstantBuilder& builder, const SubobjectAction& action,
         std::uint32_t receiver, Constant value);

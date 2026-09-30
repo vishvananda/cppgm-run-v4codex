@@ -22,7 +22,7 @@ void Analyzer::constant_projected_action(ConstantBuilder& builder, const Subobje
 {
     // One temporary builder per selected storage path. Prefixes and field
     // addresses are canonical identities; no repeated aggregate copying.
-    std::vector<unsigned> missing;
+    auto& missing = builder.missing_paths; missing.clear();
     for (auto path = action.storage; path && !builder.groups_by_path.get(path); path = construction_storage[path].parent)
         missing.push_back(path);
     for (auto it = missing.rbegin(); it != missing.rend(); ++it) {
@@ -35,27 +35,40 @@ void Analyzer::constant_projected_action(ConstantBuilder& builder, const Subobje
         builder.groups_by_path.put(*it,builder.groups.size());
     }
     auto& group = builder.groups[builder.groups_by_path.get(action.storage)-1];
-    EvaluatedPart part; part.selector = action.field; part.value = value;
-    auto slot = group.slots.get(action.field);
-    if (slot) group.parts[slot-1] = part;
-    else { group.parts.push_back(part); group.slots.put(action.field,group.parts.size()); }
+    ConstantBuildPart entry; entry.part.selector = action.field; entry.part.value = value;
+    builder.projected_parts.push_back(entry);
+    auto slot = builder.projected_parts.size();
+    if (group.last) builder.projected_parts[group.last-1].next = slot;
+    else group.first = slot;
+    group.last = slot;
     auto address = constant_subobject(group.address,action.type,action.field);
-    builder.projected_values.push_back(value);
-    builder.values_by_address.put(address,builder.projected_values.size());
+    builder.values_by_address.put(address,slot);
 }
 void Analyzer::finish_constant_projections(ConstantBuilder& builder)
 {
     // Parents precede children; freeze each completed storage once and append
     // its value to its parent. Temporary builders die with this activation.
+    std::vector<EvaluatedPart> parts;
     for (auto it = builder.groups.rbegin(); it != builder.groups.rend(); ++it) {
         auto field = construction_storage[it->path].field;
+        parts.clear();
+        for (auto p = it->first; p; p = builder.projected_parts[p-1].next)
+            parts.push_back(builder.projected_parts[p-1].part);
         EvaluatedPart part; part.selector = field;
-        part.value = evaluated_object(entities[field].type,it->parts);
-        auto& slots = it->parent ? builder.groups[it->parent-1].slots : builder.slots;
-        auto& parts = it->parent ? builder.groups[it->parent-1].parts : builder.parts;
-        auto slot = slots.get(field);
-        if (slot) parts[slot-1] = part;
-        else { parts.push_back(part); slots.put(field,parts.size()); }
+        part.value = evaluated_object(entities[field].type,parts);
+        if (it->parent) {
+            auto& parent = builder.groups[it->parent-1];
+            ConstantBuildPart entry; entry.part = part;
+            builder.projected_parts.push_back(entry);
+            auto slot = builder.projected_parts.size();
+            if (parent.last) builder.projected_parts[parent.last-1].next = slot;
+            else parent.first = slot;
+            parent.last = slot;
+        } else {
+            auto slot = builder.slots.get(field);
+            if (slot) builder.parts[slot-1] = part;
+            else { builder.parts.push_back(part); builder.slots.put(field,builder.parts.size()); }
+        }
     }
 }
 } }
