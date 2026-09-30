@@ -1,79 +1,143 @@
+global @vtable [binding=weak, object=_ZTV1B] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt [binding=weak, object=_ZTT1B, object_root=yes] = {
+  ptr addr @vtable + 24
+}
+global @vtable__1 [binding=weak, object=_ZTV1C] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt__2 [binding=weak, object=_ZTT1C, object_root=yes] = {
+  ptr addr @vtable__1 + 24
+}
+global @vtable__3 [binding=weak, object=_ZTV1D] = {
+  i64 16
+  i64 0
+  ptr 0
+}
+global @vtable_view [binding=internal, object=__cppgm_vtable_view_12] = {
+  i64 8
+  i64 -8
+  ptr 0
+}
+global @construction_vtable [binding=internal, object=__cppgm_construction_vtable_14] = {
+  i64 16
+  i64 0
+  ptr 0
+}
+global @construction_vtable__5 [binding=internal, object=__cppgm_construction_vtable_15] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt__4 [binding=weak, object=_ZTT1D, object_root=yes] = {
+  ptr addr @vtable__3 + 24
+  ptr addr @construction_vtable + 24
+  ptr addr @construction_vtable__5 + 24
+  ptr addr @vtable_view + 24
+}
+function @Holder(%v1 : ptr [object_bytes=8], %v2 : ptr [pass=by_address, object_bytes=16]) -> void [binding=weak, object=_ZN6HolderC1ER1B, inline_hint=yes] {
+  slot $s1 : ptr
+  slot $s2 : ptr
+  block ^b1:
+    store ptr %v1, $s1
+    store ptr %v2, $s2
+    %v11 = load ptr $s2
+    %v12 = load ptr $s1
+    %v13 = index i8 [projection=field] %v12, 0
+    store ptr %v11, %v13
+    return void
+}
+function @f(%v3 : ptr [object_bytes=8]) -> i32 [binding=weak, object=_ZN6Holder1fEv, inline_hint=yes] {
+  slot $s3 : ptr
+  block ^b2:
+    store ptr %v3, $s3
+    %v14 = load ptr $s3
+    %v15 = index i8 [projection=field] %v14, 0
+    %v16 = load ptr %v15
+    %v17 = load ptr %v16
+    %v18 = index i8 %v17, -24
+    %v19 = load i64 %v18
+    %v20 = index i8 %v16, %v19
+    %v21 = index i8 %v20, 0
+    %v22 = index i8 [projection=field] %v21, 0
+    %v23 = load i32 %v22
+    return i32 %v23
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
-  slot $d : obj<12x4>
+  slot $d : obj<24x8>
   slot $h : obj<8x8>
-
-  block ^entry:
-    %t1 = addr $d
-    call void @D__D(%t1)
-    %t2 = addr $d
-    %t3 = index i8 %t2, 8
-    %t4 = index i8 [projection=field] %t3, 0
-    store i32 7, %t4
-    %t5 = addr $h
-    %t6 = addr $d
-    %t7 = index i8 %t6, 0
-    call void @Holder__Holder(%t5, %t7)
-    %t8 = addr $h
-    %t9 = call i32 @Holder__f(%t8)
-    %t10 = cmp ne i32 %t9, 7
-    %t11 = convert trunc i32 i64 %t10
-    return i32 %t11
+  block ^b3:
+    %v24 = addr $d
+    call void @D(%v24)
+    %v25 = addr $d
+    %v26 = load ptr %v25
+    %v27 = index i8 %v26, -24
+    %v28 = load i64 %v27
+    %v29 = index i8 %v25, %v28
+    %v30 = index i8 %v29, 0
+    %v31 = index i8 [projection=field] %v30, 0
+    store i32 7, %v31
+    %v32 = addr $h
+    %v33 = addr $d
+    %v34 = index i8 %v33, 0
+    call void @Holder(%v32, %v34)
+    %v35 = addr $h
+    %v36 = call i32 @f(%v35)
+    %v37 = cmp ne i32 %v36, 7
+    %v38 = convert trunc i32 i64 %v37
+    return i32 %v38
 }
-function @D__D(%this : ptr [object_bytes=12]) -> void [binding=weak, object=_ZN1DC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 %t1, 0
-    %t3 = load ptr $this
-    %t4 = index i8 %t3, 8
-    call void @B__B__base_entry(%t2, %t4)
-    %t5 = load ptr $this
-    %t6 = index i8 %t5, 4
-    %t7 = load ptr $this
-    %t8 = index i8 %t7, 8
-    call void @C__C__base_entry(%t6, %t8)
+function @D(%v4 : ptr [object_bytes=24]) -> void [unwind=no, binding=weak, object=_ZN1DC1Ev, inline_hint=yes] {
+  slot $s6 : ptr
+  block ^b4:
+    store ptr %v4, $s6
+    %v39 = load ptr $s6
+    %v40 = index i8 %v39, 0
+    %v41 = addr @vtt__4
+    %v42 = index i8 %v41, 8
+    %v43 = load ptr $s6
+    %v44 = index i8 %v43, 16
+    call void @B(%v40, %v42, %v44)
+    %v45 = load ptr $s6
+    %v46 = index i8 %v45, 8
+    %v47 = addr @vtt__4
+    %v48 = index i8 %v47, 16
+    %v49 = load ptr $s6
+    %v50 = index i8 %v49, 16
+    call void @C(%v46, %v48, %v50)
+    %v51 = load ptr $s6
+    %v52 = addr @vtable__3
+    %v53 = index i8 %v52, 24
+    store ptr %v53, %v51
+    %v54 = load ptr $s6
+    %v55 = index i8 %v54, 8
+    %v56 = addr @vtable_view
+    %v57 = index i8 %v56, 24
+    store ptr %v57, %v55
     return void
 }
-function @Holder__Holder(%this : ptr [object_bytes=8], %b : ptr [pass=by_address, object_bytes=8]) -> void [binding=weak, object=_ZN6HolderC1ER1B, inline_hint=yes] {
-  slot $this : ptr
-  slot $b : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    store ptr %b, $b
-    %t1 = load ptr $b
-    %t2 = load ptr $this
-    %t3 = index i8 [projection=field] %t2, 0
-    store ptr %t1, %t3
+function @B(%v5 : ptr [object_bytes=16], %v6 : ptr, %v7 : ptr) -> void [unwind=no, binding=weak, object=_ZN1BC2Ev, object_root=yes, inline_hint=yes] {
+  slot $s7 : ptr
+  block ^b5:
+    store ptr %v5, $s7
+    %v58 = load ptr $s7
+    %v59 = load ptr %v6
+    store ptr %v59, %v58
     return void
 }
-function @Holder__f(%this : ptr [object_bytes=8]) -> i32 [binding=weak, object=_ZN6Holder1fEv, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 [projection=field] %t1, 0
-    %t3 = load ptr %t2
-    %t4 = index i8 %t3, 4
-    %t5 = index i8 [projection=field] %t4, 0
-    %t6 = load i32 %t5
-    return i32 %t6
-}
-function @B__B__base_entry(%this : ptr [object_bytes=8], %__vbptr0 : ptr) -> void [unwind=no, binding=weak, object=_ZN1BC2Ev, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
+function @C(%v8 : ptr [object_bytes=16], %v9 : ptr, %v10 : ptr) -> void [unwind=no, binding=weak, object=_ZN1CC2Ev, object_root=yes, inline_hint=yes] {
+  slot $s8 : ptr
+  block ^b6:
+    store ptr %v8, $s8
+    %v60 = load ptr $s8
+    %v61 = load ptr %v9
+    store ptr %v61, %v60
     return void
 }
-function @C__C__base_entry(%this : ptr [object_bytes=8], %__vbptr0 : ptr) -> void [unwind=no, binding=weak, object=_ZN1CC2Ev, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    return void
-}
-alias object _ZN6HolderC2ER1B = @Holder__Holder
+alias object _ZN6HolderC2ER1B = @Holder
+alias object _ZN1DC2Ev = @D

@@ -1,116 +1,145 @@
+global @vtable [binding=weak, object=_ZTV7OStream] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt [binding=weak, object=_ZTT7OStream, object_root=yes] = {
+  ptr addr @vtable + 24
+}
+global @vtable__3 [binding=weak, object=_ZTV12StringStream] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @construction_vtable [binding=internal, object=__cppgm_construction_vtable_14] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt__4 [binding=weak, object=_ZTT12StringStream, object_root=yes] = {
+  ptr addr @vtable__3 + 24
+  ptr addr @construction_vtable + 24
+}
+function @IOS__1(%v8 : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN3IOSC2Ev, object_root=yes, inline_hint=yes] {
+  slot $s2 : ptr
+  block ^b2:
+    store ptr %v8, $s2
+    %v14 = load ptr $s2
+    %v15 = index i8 [projection=field] %v14, 0
+    store i32 0, %v15
+    return void
+}
+function @IOS(%v1 : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN3IOSC1Ev, inline_hint=yes] {
+  slot $s1 : ptr
+  block ^b1:
+    store ptr %v1, $s1
+    %v12 = load ptr $s1
+    %v13 = index i8 [projection=field] %v12, 0
+    store i32 0, %v13
+    return void
+}
+function @set(%v2 : ptr [object_bytes=4], %v3 : i32) -> void [binding=weak, object=_ZN3IOS3setEi, inline_hint=yes] {
+  slot $s3 : ptr
+  slot $s4 : i32
+  block ^b3:
+    store ptr %v2, $s3
+    store i32 %v3, $s4
+    %v16 = load i32 $s4
+    %v17 = load ptr $s3
+    %v18 = index i8 [projection=field] %v17, 0
+    store i32 %v16, %v18
+    return void
+}
+function @get(%v4 : ptr [object_bytes=4]) -> i32 [binding=weak, object=_ZNK3IOS3getEv, inline_hint=yes] {
+  slot $s5 : ptr
+  block ^b4:
+    store ptr %v4, $s5
+    %v19 = load ptr $s5
+    %v20 = index i8 [projection=field] %v19, 0
+    %v21 = load i32 %v20
+    return i32 %v21
+}
+function @OStream__2(%v9 : ptr [object_bytes=16], %v10 : ptr, %v11 : ptr) -> void [binding=weak, object=_ZN7OStreamC2Ev, object_root=yes, inline_hint=yes] {
+  slot $s7 : ptr
+  block ^b6:
+    store ptr %v9, $s7
+    %v27 = load ptr $s7
+    %v28 = load ptr %v10
+    store ptr %v28, %v27
+    return void
+}
+function @OStream(%v5 : ptr [object_bytes=16]) -> void [binding=weak, object=_ZN7OStreamC1Ev, inline_hint=yes] {
+  slot $s6 : ptr
+  block ^b5:
+    store ptr %v5, $s6
+    %v22 = load ptr $s6
+    %v23 = index i8 %v22, 8
+    call void @IOS__1(%v23)
+    %v24 = load ptr $s6
+    %v25 = addr @vtable
+    %v26 = index i8 %v25, 24
+    store ptr %v26, %v24
+    return void
+}
+function @mark(%v6 : ptr [object_bytes=16]) -> void [binding=weak, object=_ZN7OStream4markEv, inline_hint=yes] {
+  slot $s8 : ptr
+  block ^b7:
+    store ptr %v6, $s8
+    %v29 = load ptr $s8
+    %v30 = load ptr %v29
+    %v31 = index i8 %v30, -24
+    %v32 = load i64 %v31
+    %v33 = index i8 %v29, %v32
+    %v34 = index i8 %v33, 0
+    call void @set(%v34, 7)
+    return void
+}
+function @StringStream(%v7 : ptr [object_bytes=16]) -> void [binding=weak, object=_ZN12StringStreamC1Ev, inline_hint=yes] {
+  slot $s9 : ptr
+  block ^b8:
+    store ptr %v7, $s9
+    %v35 = load ptr $s9
+    %v36 = index i8 %v35, 8
+    call void @IOS__1(%v36)
+    %v37 = load ptr $s9
+    %v38 = index i8 %v37, 0
+    %v39 = addr @vtt__4
+    %v40 = index i8 %v39, 8
+    %v41 = load ptr $s9
+    %v42 = index i8 %v41, 8
+    call void @OStream__2(%v38, %v40, %v42)
+    %v43 = load ptr $s9
+    %v44 = addr @vtable__3
+    %v45 = index i8 %v44, 24
+    store ptr %v45, %v43
+    return void
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
-  slot $ss : obj<8x4>
-  slot $cond__1 : i32
-
-  block ^entry:
-    %t1 = addr $ss
-    call void @StringStream__StringStream(%t1)
-    %t2 = addr $ss
-    %t3 = index i8 %t2, 0
-    %t4 = load ptr %t3
-    %t5 = index i8 %t4, -24
-    %t6 = load i64 %t5
-    %t7 = index i8 %t3, %t6
-    call void @OStream__mark(%t3, %t7)
-    %t8 = addr $ss
-    %t9 = index i8 %t8, 4
-    %t10 = call i32 @IOS__get(%t9)
-    %t11 = cmp eq i32 %t10, 7
-    branch %t11, ^cond_then_1, ^cond_else_2
-
-  block ^cond_then_1:
-    store i32 0, $cond__1
-    jump ^cond_end_3
-
-  block ^cond_else_2:
-    store i32 1, $cond__1
-    jump ^cond_end_3
-
-  block ^cond_end_3:
-    %t12 = load i32 $cond__1
-    return i32 %t12
+  slot $ss : obj<16x8>
+  slot $s11 : i32
+  block ^b9:
+    %v46 = addr $ss
+    call void @StringStream(%v46)
+    %v47 = addr $ss
+    %v48 = index i8 %v47, 0
+    call void @mark(%v48)
+    %v49 = addr $ss
+    %v50 = load ptr %v49
+    %v51 = index i8 %v50, -24
+    %v52 = load i64 %v51
+    %v53 = index i8 %v49, %v52
+    %v54 = index i8 %v53, 0
+    %v55 = call i32 @get(%v54)
+    %v56 = cmp eq i32 %v55, 7
+    branch %v56, ^b10, ^b11
+  block ^b10:
+    store i32 0, $s11
+    jump ^b12
+  block ^b11:
+    store i32 1, $s11
+    jump ^b12
+  block ^b12:
+    %v57 = load i32 $s11
+    return i32 %v57
 }
-function @StringStream__StringStream(%this : ptr [object_bytes=8]) -> void [binding=weak, object=_ZN12StringStreamC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 %t1, 4
-    call void @IOS__IOS__base_entry(%t2)
-    %t3 = load ptr $this
-    %t4 = index i8 %t3, 0
-    %t5 = load ptr $this
-    %t6 = index i8 %t5, 4
-    call void @OStream__OStream__base_entry(%t4, %t6)
-    return void
-}
-function @OStream__mark(%this : ptr [object_bytes=8], %__vbptr0 : ptr) -> void [binding=weak, object=_ZN7OStream4markEv, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = index i8 %__vbptr0, 0
-    call void @IOS__set(%t1, 7)
-    return void
-}
-function @IOS__get(%this : ptr [object_bytes=4]) -> i32 [binding=weak, object=_ZNK3IOS3getEv, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 [projection=field] %t1, 0
-    %t3 = load i32 %t2
-    return i32 %t3
-}
-function @IOS__IOS__base_entry(%this : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN3IOSC2Ev, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 [projection=field] %t1, 0
-    store i32 0, %t2
-    return void
-}
-function @IOS__IOS(%this : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN3IOSC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 [projection=field] %t1, 0
-    store i32 0, %t2
-    return void
-}
-function @OStream__OStream__base_entry(%this : ptr [object_bytes=8], %__vbptr0 : ptr) -> void [binding=weak, object=_ZN7OStreamC2Ev, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    return void
-}
-function @OStream__OStream(%this : ptr [object_bytes=8]) -> void [binding=weak, object=_ZN7OStreamC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 %t1, 4
-    call void @IOS__IOS__base_entry(%t2)
-    return void
-}
-function @IOS__set(%this : ptr [object_bytes=4], %v : i32) -> void [binding=weak, object=_ZN3IOS3setEi, inline_hint=yes] {
-  slot $this : ptr
-  slot $v : i32
-
-  block ^entry:
-    store ptr %this, $this
-    store i32 %v, $v
-    %t1 = load i32 $v
-    %t2 = load ptr $this
-    %t3 = index i8 [projection=field] %t2, 0
-    store i32 %t1, %t3
-    return void
-}
+alias object _ZN12StringStreamC2Ev = @StringStream

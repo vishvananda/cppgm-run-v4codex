@@ -1,56 +1,86 @@
+global @vtable [binding=weak, object=_ZTV7Derived] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt [binding=weak, object=_ZTT7Derived, object_root=yes] = {
+  ptr addr @vtable + 24
+}
+function @VirtualBase__1(%v5 : ptr [object_bytes=4]) -> void [unwind=no, binding=weak, object=_ZN11VirtualBaseC2Ev, object_root=yes, inline_hint=yes] {
+  slot $s2 : ptr
+  block ^b2:
+    store ptr %v5, $s2
+    %v12 = load ptr $s2
+    %v13 = index i8 [projection=field] %v12, 0
+    store i32 7, %v13
+    return void
+}
+function @VirtualBase(%v1 : ptr [object_bytes=4]) -> void [unwind=no, binding=weak, object=_ZN11VirtualBaseC1Ev, inline_hint=yes] {
+  slot $s1 : ptr
+  block ^b1:
+    store ptr %v1, $s1
+    %v10 = load ptr $s1
+    %v11 = index i8 [projection=field] %v10, 0
+    store i32 7, %v11
+    return void
+}
+function @_VirtualBase__2(%v6 : ptr [object_bytes=4]) -> void [unwind=no, binding=weak, object=_ZN11VirtualBaseD2Ev, object_root=yes, inline_hint=yes] {
+  slot $s4 : ptr
+  block ^b4:
+    store ptr %v6, $s4
+    return void
+}
+function @_VirtualBase(%v2 : ptr [object_bytes=4]) -> void [unwind=no, binding=weak, object=_ZN11VirtualBaseD1Ev, object_root=yes, inline_hint=yes] {
+  slot $s3 : ptr
+  block ^b3:
+    store ptr %v2, $s3
+    return void
+}
+function @Derived(%v3 : ptr [object_bytes=16]) -> void [unwind=no, binding=weak, object=_ZN7DerivedC1Ev, inline_hint=yes] {
+  slot $s5 : ptr
+  block ^b5:
+    store ptr %v3, $s5
+    %v14 = load ptr $s5
+    %v15 = index i8 %v14, 8
+    call void @VirtualBase__1(%v15)
+    %v16 = load ptr $s5
+    %v17 = addr @vtable
+    %v18 = index i8 %v17, 24
+    store ptr %v18, %v16
+    return void
+}
+function @_Derived__3(%v7 : ptr [object_bytes=16], %v8 : ptr, %v9 : ptr) -> void [unwind=no, binding=weak, object=_ZN7DerivedD2Ev, object_root=yes, inline_hint=yes] {
+  slot $s7 : ptr
+  block ^b7:
+    store ptr %v7, $s7
+    %v22 = load ptr $s7
+    %v23 = load ptr %v8
+    store ptr %v23, %v22
+    return void
+}
+function @_Derived(%v4 : ptr [object_bytes=16]) -> void [unwind=no, binding=weak, object=_ZN7DerivedD1Ev, object_root=yes, inline_hint=yes] {
+  slot $s6 : ptr
+  block ^b6:
+    store ptr %v4, $s6
+    %v19 = load ptr $s6
+    %v20 = addr @vtable
+    %v21 = index i8 %v20, 24
+    store ptr %v21, %v19
+    return void
+}
 function @use_derived() -> i32 [binding=strong, object=_Z11use_derivedv] {
-  slot $value : obj<8x4>
-
-  block ^entry:
-    %t1 = addr $value
-    call void @Derived__Derived(%t1)
-    %t2 = addr $value
-    %t3 = index i8 %t2, 4
-    %t4 = index i8 [projection=field] %t3, 0
-    %t5 = load i32 %t4
-    return i32 %t5
+  slot $value : obj<16x8>
+  block ^b8:
+    %v24 = addr $value
+    call void @Derived(%v24)
+    %v25 = addr $value
+    %v26 = load ptr %v25
+    %v27 = index i8 %v26, -24
+    %v28 = load i64 %v27
+    %v29 = index i8 %v25, %v28
+    %v30 = index i8 %v29, 0
+    %v31 = index i8 [projection=field] %v30, 0
+    %v32 = load i32 %v31
+    return i32 %v32
 }
-function @Derived__Derived(%this : ptr [object_bytes=8]) -> void [unwind=no, binding=weak, object=_ZN7DerivedC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 %t1, 4
-    call void @VirtualBase__VirtualBase__base_entry(%t2)
-    return void
-}
-function @Derived___Derived__base_entry(%this : ptr [object_bytes=8], %__vbptr0 : ptr) -> void [unwind=no, binding=weak, object=_ZN7DerivedD2Ev, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    return void
-}
-function @Derived___Derived(%this : ptr [object_bytes=8]) -> void [unwind=no, binding=weak, object=_ZN7DerivedD1Ev, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    return void
-}
-function @VirtualBase__VirtualBase__base_entry(%this : ptr [object_bytes=4]) -> void [unwind=no, binding=weak, object=_ZN11VirtualBaseC2Ev, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 [projection=field] %t1, 0
-    store i32 7, %t2
-    return void
-}
-function @VirtualBase__VirtualBase(%this : ptr [object_bytes=4]) -> void [unwind=no, binding=weak, object=_ZN11VirtualBaseC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 [projection=field] %t1, 0
-    store i32 7, %t2
-    return void
-}
+alias object _ZN7DerivedC2Ev = @Derived

@@ -111,7 +111,7 @@ global @D____construction__B__0__s0__vtable [binding=internal, object=@D____cons
 global @D____construction__B__0__s1__vtable [binding=internal, object=@D____construction__B__0__s1__vtable] = {
   i64 0
   i64 -16
-  ptr addr @__rtti_struct_V
+  ptr addr @__rtti_struct_B
   ptr addr @V__probe
 }
 global @D____vtt [binding=weak, object=_ZTT1D, object_root=yes] = {

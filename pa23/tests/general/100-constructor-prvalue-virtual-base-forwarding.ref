@@ -1,86 +1,133 @@
+global @vtable [binding=weak, object=_ZTV1D] = {
+  i64 16
+  i64 12
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt [binding=weak, object=_ZTT1D, object_root=yes] = {
+  ptr addr @vtable + 40
+}
+global @vtable__2 [binding=weak, object=_ZTV1WI1DE] = {
+  i64 16
+  i64 12
+  i64 8
+  i64 0
+  ptr 0
+}
+global @construction_vtable [binding=internal, object=__cppgm_construction_vtable_10] = {
+  i64 16
+  i64 12
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt__3 [binding=weak, object=_ZTT1WI1DE, object_root=yes] = {
+  ptr addr @vtable__2 + 40
+  ptr addr @construction_vtable + 40
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
-  slot $d : obj<16x4>
-  slot $w : obj<16x4>
-  slot $cond__1 : i32
-
-  block ^entry:
-    %t1 = addr $d
-    call void @D__D(%t1)
-    %t2 = addr $d
-    %t3 = index i8 %t2, 4
-    %t4 = index i8 [projection=field] %t3, 0
-    store i32 7, %t4
-    %t5 = addr $w
-    %t6 = addr $d
-    %t7 = addr $d
-    %t8 = index i8 %t7, 4
-    %t9 = index i8 [projection=field] %t8, 0
-    call void @make_wrap(%t5, %t6, %t9)
-    %t10 = addr $w
-    %t11 = index i8 %t10, 4
-    %t12 = index i8 [projection=field] %t11, 0
-    %t13 = load i32 %t12
-    %t14 = cmp eq i32 %t13, 7
-    branch %t14, ^cond_then_1, ^cond_else_2
-
-  block ^cond_then_1:
-    store i32 0, $cond__1
-    jump ^cond_end_3
-
-  block ^cond_else_2:
-    store i32 1, $cond__1
-    jump ^cond_end_3
-
-  block ^cond_end_3:
-    %t15 = load i32 $cond__1
-    return i32 %t15
+  slot $d : obj<24x8>
+  slot $w : obj<24x8>
+  slot $s3 : i32
+  block ^b1:
+    %v14 = addr $d
+    call void @D(%v14)
+    %v15 = addr $d
+    %v16 = load ptr %v15
+    %v17 = index i8 %v16, -24
+    %v18 = load i64 %v17
+    %v19 = index i8 %v15, %v18
+    %v20 = index i8 %v19, 0
+    %v21 = index i8 [projection=field] %v20, 0
+    store i32 7, %v21
+    %v22 = addr $w
+    %v23 = addr $d
+    %v24 = addr $d
+    %v25 = load ptr %v24
+    %v26 = index i8 %v25, -24
+    %v27 = load i64 %v26
+    %v28 = index i8 %v24, %v27
+    %v29 = index i8 %v28, 0
+    %v30 = index i8 [projection=field] %v29, 0
+    call void @make_wrap(%v22, %v23, %v30)
+    %v31 = addr $w
+    %v32 = load ptr %v31
+    %v33 = index i8 %v32, -24
+    %v34 = load i64 %v33
+    %v35 = index i8 %v31, %v34
+    %v36 = index i8 %v35, 0
+    %v37 = index i8 [projection=field] %v36, 0
+    %v38 = load i32 %v37
+    %v39 = cmp eq i32 %v38, 7
+    branch %v39, ^b2, ^b3
+  block ^b2:
+    store i32 0, $s3
+    jump ^b4
+  block ^b3:
+    store i32 1, $s3
+    jump ^b4
+  block ^b4:
+    %v40 = load i32 $s3
+    return i32 %v40
 }
-function @D__D(%this : ptr [object_bytes=16]) -> void [unwind=no, binding=weak, object=_ZN1DC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
+function @D(%v1 : ptr [object_bytes=24]) -> void [unwind=no, binding=weak, object=_ZN1DC1Ev, inline_hint=yes] {
+  slot $s4 : ptr
+  block ^b5:
+    store ptr %v1, $s4
+    %v41 = load ptr $s4
+    %v42 = addr @vtable
+    %v43 = index i8 %v42, 40
+    store ptr %v43, %v41
     return void
 }
-function @make_wrap(%ret : ptr [pass=indirect_result, object_bytes=16], %e : ptr [pass=by_address, object_bytes=16], %loc : ptr [pass=by_address, object_bytes=4]) -> void [binding=weak, object=_Z9make_wrapI1DE1WIT_ERKS2_RKi] {
-  slot $e : ptr
-  slot $loc : ptr
-
-  block ^entry:
-    store ptr %e, $e
-    store ptr %loc, $loc
-    %t1 = load ptr $e
-    %t2 = load ptr $loc
-    call void @W_D___W_D_(%ret, %t1, %t2)
+function @W(%v2 : ptr [object_bytes=24], %v3 : ptr [pass=by_address, object_bytes=24], %v4 : ptr [pass=by_address, object_bytes=4]) -> void [binding=weak, object=_ZN1WI1DEC1ERKS0_RKi, inline_hint=yes] {
+  slot $s5 : ptr
+  slot $s6 : ptr
+  slot $s7 : ptr
+  block ^b6:
+    store ptr %v2, $s5
+    store ptr %v3, $s6
+    store ptr %v4, $s7
+    %v44 = load ptr $s5
+    %v45 = index i8 %v44, 0
+    %v46 = load ptr $s6
+    %v47 = addr @vtt__3
+    %v48 = index i8 %v47, 8
+    %v49 = load ptr $s5
+    %v50 = index i8 %v49, 8
+    %v51 = load ptr $s5
+    %v52 = index i8 %v51, 12
+    %v53 = load ptr $s5
+    %v54 = index i8 %v53, 16
+    call void @D__1(%v45, %v46, %v48, %v50, %v52, %v54)
+    %v55 = load ptr $s5
+    %v56 = addr @vtable__2
+    %v57 = index i8 %v56, 40
+    store ptr %v57, %v55
     return void
 }
-function @W_D___W_D_(%this : ptr [object_bytes=16], %e : ptr [pass=by_address, object_bytes=16], %__param2 : ptr [pass=by_address, object_bytes=4]) -> void [binding=weak, object=_ZN1WI1DEC1ERKS0_RKi, inline_hint=yes] {
-  slot $this : ptr
-  slot $e : ptr
-  slot $__param2 : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    store ptr %e, $e
-    store ptr %__param2, $__param2
-    %t1 = load ptr $this
-    %t2 = index i8 %t1, 0
-    %t3 = load ptr $e
-    %t4 = load ptr $this
-    %t5 = index i8 %t4, 4
-    %t6 = load ptr $this
-    %t7 = index i8 %t6, 8
-    %t8 = load ptr $this
-    %t9 = index i8 %t8, 12
-    call void @D__D__base_entry(%t2, %t3, %t5, %t7, %t9)
+function @make_wrap(%v5 : ptr [pass=indirect_result, object_bytes=24], %v6 : ptr [pass=by_address, object_bytes=24], %v7 : ptr [pass=by_address, object_bytes=4]) -> void [binding=weak, object=_Z9make_wrapI1DE1WIT_ERKS2_RKi] {
+  slot $s8 : ptr
+  slot $s9 : ptr
+  block ^b7:
+    store ptr %v6, $s8
+    store ptr %v7, $s9
+    %v58 = load ptr $s8
+    %v59 = load ptr $s9
+    call void @W(%v5, %v58, %v59)
     return void
 }
-function @D__D__base_entry(%this : ptr [alias=noalias, object_bytes=16], %other : ptr [pass=by_address, alias=noalias, object_bytes=16], %__vbptr0 : ptr, %__vbptr1 : ptr, %__vbptr2 : ptr) -> void [unwind=no, binding=weak, object=_ZN1DC2ERKS_, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-  slot $other : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    store ptr %other, $other
+function @D__1(%v8 : ptr [alias=noalias, object_bytes=24], %v9 : ptr [pass=by_address, alias=noalias, object_bytes=24], %v10 : ptr, %v11 : ptr, %v12 : ptr, %v13 : ptr) -> void [unwind=no, binding=weak, object=_ZN1DC2ERKS_, object_root=yes, inline_hint=yes] {
+  slot $s10 : ptr
+  slot $s11 : ptr
+  block ^b8:
+    store ptr %v8, $s10
+    store ptr %v9, $s11
+    %v60 = load ptr $s10
+    %v61 = load ptr %v10
+    store ptr %v61, %v60
     return void
 }
+alias object _ZN1DC2Ev = @D
+alias object _ZN1WI1DEC2ERKS0_RKi = @W

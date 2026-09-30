@@ -1,0 +1,551 @@
+{
+  "bundle_revision": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "cases": [
+    {
+      "name": "nonpoly-virtual-reference",
+      "source": "struct V { int value; };\nstruct B : virtual V {};\nstruct C : virtual V { int guard; };\nstruct D : B, C {};\nint read(B& b) { return b.value; }\nint main() {\n  D d;\n  d.guard = 13;\n  d.value = 7;\n  return read(d) == 7 ? 0 : 1;\n}\n",
+      "source_sha256": "b0da0195f221f0ce654d712d747bb0dfa2b48c5f9d8889b4313287387658a6d2",
+      "required_exit": 0,
+      "lanes": [
+        {
+          "compiler": "reference",
+          "commands": [
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "--emit-lowir",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/nonpoly-virtual-reference-reference.lowir",
+                "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa23/reducers/nonpoly-virtual-reference.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/nonpoly-virtual-reference-reference.o",
+                "/tmp/pa23-125/reference-final/nonpoly-virtual-reference-reference.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "g++",
+                "-no-pie",
+                "/tmp/pa23-125/reference-final/nonpoly-virtual-reference-reference.o",
+                "-o",
+                "/tmp/pa23-125/reference-final/nonpoly-virtual-reference-reference.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/tmp/pa23-125/reference-final/nonpoly-virtual-reference-reference.exe"
+              ],
+              "exit": 1,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "lowir": "function @read(%b : ptr [pass=by_address, object_bytes=8]) -> i32 [binding=strong, object=_Z4readR1B] {\n  slot $b : ptr\n\n  block ^entry:\n    store ptr %b, $b\n    %t1 = load ptr $b\n    %t2 = index i8 %t1, 4\n    %t3 = index i8 [projection=field] %t2, 0\n    %t4 = load i32 %t3\n    return i32 %t4\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  slot $d : obj<12x4>\n  slot $cond__1 : i32\n\n  block ^entry:\n    %t1 = addr $d\n    call void @D__D(%t1)\n    %t2 = addr $d\n    %t3 = index i8 %t2, 4\n    %t4 = index i8 [projection=field] %t3, 0\n    store i32 13, %t4\n    %t5 = addr $d\n    %t6 = index i8 %t5, 8\n    %t7 = index i8 [projection=field] %t6, 0\n    store i32 7, %t7\n    %t8 = addr $d\n    %t9 = index i8 %t8, 0\n    %t10 = call i32 @read(%t9)\n    %t11 = cmp eq i32 %t10, 7\n    branch %t11, ^cond_then_1, ^cond_else_2\n\n  block ^cond_then_1:\n    store i32 0, $cond__1\n    jump ^cond_end_3\n\n  block ^cond_else_2:\n    store i32 1, $cond__1\n    jump ^cond_end_3\n\n  block ^cond_end_3:\n    %t12 = load i32 $cond__1\n    return i32 %t12\n}\nfunction @D__D(%this : ptr [object_bytes=12]) -> void [binding=weak, object=_ZN1DC1Ev, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    %t1 = load ptr $this\n    %t2 = index i8 %t1, 0\n    %t3 = load ptr $this\n    %t4 = index i8 %t3, 8\n    call void @B__B__base_entry(%t2, %t4)\n    %t5 = load ptr $this\n    %t6 = index i8 %t5, 4\n    %t7 = load ptr $this\n    %t8 = index i8 %t7, 8\n    call void @C__C__base_entry(%t6, %t8)\n    return void\n}\nfunction @B__B__base_entry(%this : ptr [object_bytes=8], %__vbptr0 : ptr) -> void [unwind=no, binding=weak, object=_ZN1BC2Ev, object_root=yes, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    return void\n}\nfunction @C__C__base_entry(%this : ptr [object_bytes=8], %__vbptr0 : ptr) -> void [unwind=no, binding=weak, object=_ZN1CC2Ev, object_root=yes, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    return void\n}\n",
+          "lowir_sha256": "893e3239cde5a4622eb1658d7a946d703dca8fef37b34041056ed52cd382a77f",
+          "runtime_exit": 1
+        },
+        {
+          "compiler": "student",
+          "commands": [
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/nonpoly-virtual-reference-student.lowir",
+                "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa23/reducers/nonpoly-virtual-reference.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/nonpoly-virtual-reference-student.o",
+                "/tmp/pa23-125/reference-final/nonpoly-virtual-reference-student.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "g++",
+                "-no-pie",
+                "/tmp/pa23-125/reference-final/nonpoly-virtual-reference-student.o",
+                "-o",
+                "/tmp/pa23-125/reference-final/nonpoly-virtual-reference-student.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/tmp/pa23-125/reference-final/nonpoly-virtual-reference-student.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "lowir": "global @vtable [binding=weak, object=_ZTV1B] = {\n  i64 8\n  i64 0\n  ptr 0\n}\nglobal @vtt [binding=weak, object=_ZTT1B, object_root=yes] = {\n  ptr addr @vtable + 24\n}\nglobal @vtable__1 [binding=weak, object=_ZTV1C] = {\n  i64 16\n  i64 0\n  ptr 0\n}\nglobal @vtt__2 [binding=weak, object=_ZTT1C, object_root=yes] = {\n  ptr addr @vtable__1 + 24\n}\nglobal @vtable__3 [binding=weak, object=_ZTV1D] = {\n  i64 24\n  i64 0\n  ptr 0\n}\nglobal @vtable_view [binding=internal, object=__cppgm_vtable_view_11] = {\n  i64 16\n  i64 -8\n  ptr 0\n}\nglobal @construction_vtable [binding=internal, object=__cppgm_construction_vtable_13] = {\n  i64 24\n  i64 0\n  ptr 0\n}\nglobal @construction_vtable__5 [binding=internal, object=__cppgm_construction_vtable_14] = {\n  i64 16\n  i64 0\n  ptr 0\n}\nglobal @vtt__4 [binding=weak, object=_ZTT1D, object_root=yes] = {\n  ptr addr @vtable__3 + 24\n  ptr addr @construction_vtable + 24\n  ptr addr @construction_vtable__5 + 24\n  ptr addr @vtable_view + 24\n}\nfunction @read(%v1 : ptr [pass=by_address, object_bytes=16]) -> i32 [binding=strong, object=_Z4readR1B] {\n  slot $s1 : ptr\n  block ^b1:\n    store ptr %v1, $s1\n    %v9 = load ptr $s1\n    %v10 = load ptr %v9\n    %v11 = index i8 %v10, -24\n    %v12 = load i64 %v11\n    %v13 = index i8 %v9, %v12\n    %v14 = index i8 %v13, 0\n    %v15 = index i8 [projection=field] %v14, 0\n    %v16 = load i32 %v15\n    return i32 %v16\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  slot $d : obj<32x8>\n  slot $s3 : i32\n  block ^b2:\n    %v17 = addr $d\n    call void @D(%v17)\n    %v18 = addr $d\n    %v19 = index i8 %v18, 8\n    %v20 = index i8 [projection=field] %v19, 8\n    store i32 13, %v20\n    %v21 = addr $d\n    %v22 = load ptr %v21\n    %v23 = index i8 %v22, -24\n    %v24 = load i64 %v23\n    %v25 = index i8 %v21, %v24\n    %v26 = index i8 %v25, 0\n    %v27 = index i8 [projection=field] %v26, 0\n    store i32 7, %v27\n    %v28 = addr $d\n    %v29 = index i8 %v28, 0\n    %v30 = call i32 @read(%v29)\n    %v31 = cmp eq i32 %v30, 7\n    branch %v31, ^b3, ^b4\n  block ^b3:\n    store i32 0, $s3\n    jump ^b5\n  block ^b4:\n    store i32 1, $s3\n    jump ^b5\n  block ^b5:\n    %v32 = load i32 $s3\n    return i32 %v32\n}\nfunction @D(%v2 : ptr [object_bytes=32]) -> void [unwind=no, binding=weak, object=_ZN1DC1Ev, inline_hint=yes] {\n  slot $s4 : ptr\n  block ^b6:\n    store ptr %v2, $s4\n    %v33 = load ptr $s4\n    %v34 = index i8 %v33, 0\n    %v35 = addr @vtt__4\n    %v36 = index i8 %v35, 8\n    %v37 = load ptr $s4\n    %v38 = index i8 %v37, 24\n    call void @B(%v34, %v36, %v38)\n    %v39 = load ptr $s4\n    %v40 = index i8 %v39, 8\n    %v41 = addr @vtt__4\n    %v42 = index i8 %v41, 16\n    %v43 = load ptr $s4\n    %v44 = index i8 %v43, 24\n    call void @C(%v40, %v42, %v44)\n    %v45 = load ptr $s4\n    %v46 = addr @vtable__3\n    %v47 = index i8 %v46, 24\n    store ptr %v47, %v45\n    %v48 = load ptr $s4\n    %v49 = index i8 %v48, 8\n    %v50 = addr @vtable_view\n    %v51 = index i8 %v50, 24\n    store ptr %v51, %v49\n    return void\n}\nfunction @B(%v3 : ptr [object_bytes=16], %v4 : ptr, %v5 : ptr) -> void [unwind=no, binding=weak, object=_ZN1BC2Ev, object_root=yes, inline_hint=yes] {\n  slot $s5 : ptr\n  block ^b7:\n    store ptr %v3, $s5\n    %v52 = load ptr $s5\n    %v53 = load ptr %v4\n    store ptr %v53, %v52\n    return void\n}\nfunction @C(%v6 : ptr [object_bytes=24], %v7 : ptr, %v8 : ptr) -> void [unwind=no, binding=weak, object=_ZN1CC2Ev, object_root=yes, inline_hint=yes] {\n  slot $s6 : ptr\n  block ^b8:\n    store ptr %v6, $s6\n    %v54 = load ptr $s6\n    %v55 = load ptr %v7\n    store ptr %v55, %v54\n    return void\n}\nalias object _ZN1DC2Ev = @D\n",
+          "lowir_sha256": "b0ebc8df2963eabbd9b1c21b6ca920f73f08a8d4fe7764de4ad87737690723ae",
+          "runtime_exit": 0
+        }
+      ]
+    },
+    {
+      "name": "construction-view-rtti",
+      "source": "namespace std { class type_info { public: bool operator==(const type_info&) const; }; }\nint bad;\nstruct V { virtual void f() {} };\nstruct A : virtual V { A(); };\nA::A() {\n  V& v = *this;\n  if (!(typeid(v) == typeid(A))) ++bad;\n  if (dynamic_cast<void*>(&v) != static_cast<void*>(this)) ++bad;\n}\nstruct P { virtual void p() {} };\nstruct D : P, A {};\nint main() { D d; return bad; }\n",
+      "source_sha256": "d500c1ae7c532498bedf4d0ed38bce958d6cae85b1402f9fef5c8ea76820c80d",
+      "required_exit": 0,
+      "lanes": [
+        {
+          "compiler": "reference",
+          "commands": [
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "--emit-lowir",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/construction-view-rtti-reference.lowir",
+                "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa23/reducers/construction-view-rtti.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/construction-view-rtti-reference.o",
+                "/tmp/pa23-125/reference-final/construction-view-rtti-reference.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "g++",
+                "-no-pie",
+                "/tmp/pa23-125/reference-final/construction-view-rtti-reference.o",
+                "-o",
+                "/tmp/pa23-125/reference-final/construction-view-rtti-reference.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/tmp/pa23-125/reference-final/construction-view-rtti-reference.exe"
+              ],
+              "exit": 2,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "lowir": "declare global @__external_rtti__void [role=rtti_data, binding=strong, object=_ZTIv]\ndeclare global @__external_rtti_vtable____class_type_info [role=rtti_class, binding=strong, object=_ZTVN10__cxxabiv117__class_type_infoE]\ndeclare global @__external_rtti_vtable____vmi_class_type_info [role=rtti_vmi, binding=strong, object=_ZTVN10__cxxabiv121__vmi_class_type_infoE]\n\ndeclare function @__external_runtime____dynamic_cast(%arg0 : ptr, %arg1 : ptr, %arg2 : ptr, %arg3 : i64) -> ptr [role=dynamic_cast, linkage=c, binding=strong, object=__dynamic_cast]\ndeclare function @__external_runtime____cxa_bad_typeid() -> void [return=noreturn, role=bad_typeid, linkage=c, binding=strong, object=__cxa_bad_typeid]\n\nglobal @__typeinfo_name__struct_V [binding=weak, object=_ZTS1V] = {\n  i8 49\n  i8 86\n  i8 0\n}\nglobal @__rtti_struct_V [binding=weak, object=_ZTI1V] = {\n  ptr addr @__external_rtti_vtable____class_type_info + 16\n  ptr addr @__typeinfo_name__struct_V\n}\nglobal @__typeinfo_name__struct_A [binding=weak, object=_ZTS1A] = {\n  i8 49\n  i8 65\n  i8 0\n}\nglobal @__rtti_struct_A [binding=weak, object=_ZTI1A] = {\n  ptr addr @__external_rtti_vtable____vmi_class_type_info + 16\n  ptr addr @__typeinfo_name__struct_A\n  i32 0\n  i32 1\n  ptr addr @__rtti_struct_V\n  i64 -6141\n}\nglobal @__typeinfo_name__struct_P [binding=weak, object=_ZTS1P] = {\n  i8 49\n  i8 80\n  i8 0\n}\nglobal @__rtti_struct_P [binding=weak, object=_ZTI1P] = {\n  ptr addr @__external_rtti_vtable____class_type_info + 16\n  ptr addr @__typeinfo_name__struct_P\n}\nglobal @__typeinfo_name__struct_D [binding=weak, object=_ZTS1D] = {\n  i8 49\n  i8 68\n  i8 0\n}\nglobal @__rtti_struct_D [binding=weak, object=_ZTI1D] = {\n  ptr addr @__external_rtti_vtable____vmi_class_type_info + 16\n  ptr addr @__typeinfo_name__struct_D\n  i32 0\n  i32 2\n  ptr addr @__rtti_struct_P\n  i64 2\n  ptr addr @__rtti_struct_A\n  i64 2050\n}\nglobal @V__vtable [binding=weak, object=_ZTV1V] = {\n  i64 0\n  ptr addr @__rtti_struct_V\n  ptr addr @V__f\n}\nglobal @A__vtable [binding=weak, object=_ZTV1A] = {\n  i64 8\n  i64 0\n  ptr addr @__rtti_struct_A\n}\nglobal @A____view__V__8__vtable [binding=internal, object=@A____view__V__8__vtable] = {\n  i64 0\n  i64 -8\n  ptr addr @__rtti_struct_A\n  ptr addr @V__f\n}\nglobal @A____vtt [binding=weak, object=_ZTT1A, object_root=yes] = {\n  ptr addr @A__vtable + 24\n  ptr addr @A____view__V__8__vtable + 24\n}\nglobal @P__vtable [binding=weak, object=_ZTV1P] = {\n  i64 0\n  ptr addr @__rtti_struct_P\n  ptr addr @P__p\n}\nglobal @D__vtable [binding=weak, object=_ZTV1D] = {\n  i64 16\n  i64 0\n  ptr addr @__rtti_struct_D\n  ptr addr @P__p\n}\nglobal @D____view__A__8__vtable [binding=internal, object=@D____view__A__8__vtable] = {\n  i64 8\n  i64 -8\n  ptr addr @__rtti_struct_D\n}\nglobal @D____view__V__16__vtable [binding=internal, object=@D____view__V__16__vtable] = {\n  i64 0\n  i64 -16\n  ptr addr @__rtti_struct_D\n  ptr addr @V__f\n}\nglobal @D____construction__A__8__s0__vtable [binding=internal, object=@D____construction__A__8__s0__vtable] = {\n  i64 8\n  i64 -8\n  ptr addr @__rtti_struct_A\n}\nglobal @D____construction__A__8__s1__vtable [binding=internal, object=@D____construction__A__8__s1__vtable] = {\n  i64 0\n  i64 -16\n  ptr addr @__rtti_struct_V\n  ptr addr @V__f\n}\nglobal @D____vtt [binding=weak, object=_ZTT1D, object_root=yes] = {\n  ptr addr @D__vtable + 24\n  ptr addr @D____construction__A__8__s0__vtable + 24\n  ptr addr @D____construction__A__8__s1__vtable + 24\n  ptr addr @D____view__A__8__vtable + 24\n  ptr addr @D____view__V__16__vtable + 24\n}\nglobal @bad : i32 [binding=strong, object=_Z3bad] = zero\n\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  slot $d : obj<24x8>\n\n  block ^entry:\n    %t1 = addr $d\n    call void @D__D(%t1)\n    %t2 = load i32 @bad\n    return i32 %t2\n}\nfunction @V__f(%this : ptr [object_bytes=8]) -> void [binding=weak, object=_ZN1V1fEv, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    return void\n}\nfunction @A__A__base_entry(%this : ptr [object_bytes=16], %__vtt : ptr, %__vbptr0 : ptr) -> void [binding=strong, object=_ZN1AC2Ev, object_root=yes] {\n  slot $this : ptr\n  slot $v : ptr\n  slot $dyn_cast__1 : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    %t1 = load ptr $this\n    %t2 = load ptr %__vtt\n    store ptr %t2, %t1\n    %t3 = index i8 %__vbptr0, 0\n    %t4 = index i8 %__vtt, 8\n    %t5 = load ptr %t4\n    store ptr %t5, %t3\n    %t6 = index i8 %__vbptr0, 0\n    store ptr %t6, $v\n    %t7 = load ptr $v\n    %t8 = cmp eq ptr %t7, 0\n    branch %t8, ^typeid_fail_4, ^typeid_scan_5\n\n  block ^typeid_fail_4:\n    call void @__external_runtime____cxa_bad_typeid()\n    return void\n\n  block ^typeid_scan_5:\n    %t9 = load ptr %t7\n    %t10 = index i8 %t9, -8\n    %t11 = load ptr %t10\n    %t12 = addr @__rtti_struct_A\n    %t13 = cmp eq ptr %t11, %t12\n    %t14 = cmp eq i64 %t13, 0\n    branch %t14, ^if_then_1, ^if_else_2\n\n  block ^if_then_1:\n    %t15 = load i32 @bad\n    %t16 = binary add i32 %t15, 1\n    store i32 %t16, @bad\n    jump ^if_end_3\n\n  block ^if_else_2:\n    jump ^if_end_3\n\n  block ^if_end_3:\n    %t17 = load ptr $v\n    store ptr 0, $dyn_cast__1\n    %t18 = cmp eq ptr %t17, 0\n    branch %t18, ^dyn_cast_end_10, ^dyn_cast_scan_9\n\n  block ^dyn_cast_scan_9:\n    %t19 = load ptr %t17\n    %t20 = index i8 %t19, -16\n    %t21 = load i64 %t20\n    %t22 = index i8 %t17, %t21\n    store ptr %t22, $dyn_cast__1\n    jump ^dyn_cast_end_10\n\n  block ^block_11:\n    %t23 = addr @__rtti_struct_V\n    %t24 = addr @__external_rtti__void\n    %t25 = call ptr @__external_runtime____dynamic_cast(%t17, %t23, %t24, -2)\n    store ptr %t25, $dyn_cast__1\n    jump ^dyn_cast_end_10\n\n  block ^dyn_cast_end_10:\n    %t26 = load ptr $dyn_cast__1\n    %t27 = load ptr $this\n    %t28 = cmp ne ptr %t26, %t27\n    branch %t28, ^if_then_6, ^if_else_7\n\n  block ^if_then_6:\n    %t29 = load i32 @bad\n    %t30 = binary add i32 %t29, 1\n    store i32 %t30, @bad\n    jump ^if_end_8\n\n  block ^if_else_7:\n    jump ^if_end_8\n\n  block ^if_end_8:\n    return void\n}\nfunction @A__A(%this : ptr [object_bytes=16]) -> void [binding=strong, object=_ZN1AC1Ev] {\n  slot $this : ptr\n  slot $v : ptr\n  slot $dyn_cast__1 : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    %t1 = load ptr $this\n    %t2 = index i8 %t1, 8\n    call void @V__V__base_entry(%t2)\n    %t3 = load ptr $this\n    %t4 = addr @A__vtable\n    %t5 = index i8 %t4, 24\n    store ptr %t5, %t3\n    %t6 = load ptr $this\n    %t7 = load ptr %t6\n    %t8 = index i8 %t7, -24\n    %t9 = load i64 %t8\n    %t10 = index i8 %t6, %t9\n    %t11 = index i8 %t10, 0\n    %t12 = addr @A____view__V__8__vtable\n    %t13 = index i8 %t12, 24\n    store ptr %t13, %t11\n    %t14 = load ptr $this\n    %t15 = load ptr %t14\n    %t16 = index i8 %t15, -24\n    %t17 = load i64 %t16\n    %t18 = index i8 %t14, %t17\n    %t19 = index i8 %t18, 0\n    store ptr %t19, $v\n    %t20 = load ptr $v\n    %t21 = cmp eq ptr %t20, 0\n    branch %t21, ^typeid_fail_4, ^typeid_scan_5\n\n  block ^typeid_fail_4:\n    call void @__external_runtime____cxa_bad_typeid()\n    return void\n\n  block ^typeid_scan_5:\n    %t22 = load ptr %t20\n    %t23 = index i8 %t22, -8\n    %t24 = load ptr %t23\n    %t25 = addr @__rtti_struct_A\n    %t26 = cmp eq ptr %t24, %t25\n    %t27 = cmp eq i64 %t26, 0\n    branch %t27, ^if_then_1, ^if_else_2\n\n  block ^if_then_1:\n    %t28 = load i32 @bad\n    %t29 = binary add i32 %t28, 1\n    store i32 %t29, @bad\n    jump ^if_end_3\n\n  block ^if_else_2:\n    jump ^if_end_3\n\n  block ^if_end_3:\n    %t30 = load ptr $v\n    store ptr 0, $dyn_cast__1\n    %t31 = cmp eq ptr %t30, 0\n    branch %t31, ^dyn_cast_end_10, ^dyn_cast_scan_9\n\n  block ^dyn_cast_scan_9:\n    %t32 = load ptr %t30\n    %t33 = index i8 %t32, -16\n    %t34 = load i64 %t33\n    %t35 = index i8 %t30, %t34\n    store ptr %t35, $dyn_cast__1\n    jump ^dyn_cast_end_10\n\n  block ^block_11:\n    %t36 = addr @__rtti_struct_V\n    %t37 = addr @__external_rtti__void\n    %t38 = call ptr @__external_runtime____dynamic_cast(%t30, %t36, %t37, -2)\n    store ptr %t38, $dyn_cast__1\n    jump ^dyn_cast_end_10\n\n  block ^dyn_cast_end_10:\n    %t39 = load ptr $dyn_cast__1\n    %t40 = load ptr $this\n    %t41 = cmp ne ptr %t39, %t40\n    branch %t41, ^if_then_6, ^if_else_7\n\n  block ^if_then_6:\n    %t42 = load i32 @bad\n    %t43 = binary add i32 %t42, 1\n    store i32 %t43, @bad\n    jump ^if_end_8\n\n  block ^if_else_7:\n    jump ^if_end_8\n\n  block ^if_end_8:\n    return void\n}\nfunction @P__p(%this : ptr [object_bytes=8]) -> void [binding=weak, object=_ZN1P1pEv, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    return void\n}\nfunction @D__D(%this : ptr [object_bytes=24]) -> void [binding=weak, object=_ZN1DC1Ev, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    %t1 = load ptr $this\n    %t2 = index i8 %t1, 16\n    call void @V__V__base_entry(%t2)\n    %t3 = load ptr $this\n    %t4 = index i8 %t3, 0\n    call void @P__P__base_entry(%t4)\n    %t5 = load ptr $this\n    %t6 = index i8 %t5, 8\n    %t7 = addr @D____vtt\n    %t8 = index i8 %t7, 8\n    %t9 = load ptr $this\n    %t10 = index i8 %t9, 16\n    call void @A__A__base_entry(%t6, %t8, %t10)\n    %t11 = load ptr $this\n    %t12 = addr @D__vtable\n    %t13 = index i8 %t12, 24\n    store ptr %t13, %t11\n    %t14 = load ptr $this\n    %t15 = index i8 %t14, 8\n    %t16 = addr @D____view__A__8__vtable\n    %t17 = index i8 %t16, 24\n    store ptr %t17, %t15\n    %t18 = load ptr $this\n    %t19 = load ptr %t18\n    %t20 = index i8 %t19, -24\n    %t21 = load i64 %t20\n    %t22 = index i8 %t18, %t21\n    %t23 = index i8 %t22, 0\n    %t24 = addr @D____view__V__16__vtable\n    %t25 = index i8 %t24, 24\n    store ptr %t25, %t23\n    return void\n}\nfunction @V__V__base_entry(%this : ptr [object_bytes=8]) -> void [unwind=no, binding=weak, object=_ZN1VC2Ev, object_root=yes, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    %t1 = load ptr $this\n    %t2 = addr @V__vtable\n    %t3 = index i8 %t2, 16\n    store ptr %t3, %t1\n    return void\n}\nfunction @P__P__base_entry(%this : ptr [object_bytes=8]) -> void [unwind=no, binding=weak, object=_ZN1PC2Ev, object_root=yes, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    %t1 = load ptr $this\n    %t2 = addr @P__vtable\n    %t3 = index i8 %t2, 16\n    store ptr %t3, %t1\n    return void\n}\n",
+          "lowir_sha256": "bae44da6fa6e9149fef83a37019424a013929141d9b20db6072620104d7b877f",
+          "runtime_exit": 2
+        },
+        {
+          "compiler": "student",
+          "commands": [
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/construction-view-rtti-student.lowir",
+                "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa23/reducers/construction-view-rtti.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/construction-view-rtti-student.o",
+                "/tmp/pa23-125/reference-final/construction-view-rtti-student.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "g++",
+                "-no-pie",
+                "/tmp/pa23-125/reference-final/construction-view-rtti-student.o",
+                "-o",
+                "/tmp/pa23-125/reference-final/construction-view-rtti-student.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/tmp/pa23-125/reference-final/construction-view-rtti-student.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "lowir": "declare global @rtti_runtime [role=rtti_class, binding=strong, object=_ZTVN10__cxxabiv117__class_type_infoE]\ndeclare global @rtti_runtime__5 [role=rtti_vmi, binding=strong, object=_ZTVN10__cxxabiv121__vmi_class_type_infoE]\ndeclare global @__rtti_void [role=rtti_data, binding=strong, object=_ZTIv]\ndeclare function @rtti_function() -> void [role=bad_typeid, linkage=c, binding=strong, object=__cxa_bad_typeid, return=noreturn]\ndeclare function @rtti_function__16(%v45 : ptr, %v46 : ptr, %v47 : ptr, %v48 : i64) -> ptr [role=dynamic_cast, linkage=c, binding=strong, object=__dynamic_cast]\nglobal @bad : i32 [binding=strong] = zero\nglobal @typeinfo_name [binding=weak, object=_ZTS1V] = {\n  i8 49\n  i8 86\n  i8 0\n}\nglobal @typeinfo [binding=weak, object=_ZTI1V] = {\n  ptr addr @rtti_runtime + 16\n  ptr addr @typeinfo_name\n}\nglobal @vtable [binding=weak, object=_ZTV1V] = {\n  i64 0\n  ptr addr @typeinfo\n  ptr addr @f\n}\nglobal @typeinfo_name__4 [binding=weak, object=_ZTS1A] = {\n  i8 49\n  i8 65\n  i8 0\n}\nglobal @typeinfo__3 [binding=weak, object=_ZTI1A] = {\n  ptr addr @rtti_runtime__5 + 16\n  ptr addr @typeinfo_name__4\n  i32 0\n  i32 1\n  ptr addr @typeinfo\n  i64 -6141\n}\nglobal @vtable__2 [binding=weak, object=_ZTV1A] = {\n  i64 8\n  i64 0\n  ptr addr @typeinfo__3\n}\nglobal @vtable_view [binding=internal, object=__cppgm_vtable_view_18] = {\n  i64 0\n  i64 -8\n  ptr addr @typeinfo__3\n  ptr addr @f\n}\nglobal @vtt [binding=weak, object=_ZTT1A, object_root=yes] = {\n  ptr addr @vtable__2 + 24\n  ptr addr @vtable_view + 24\n}\nglobal @typeinfo_name__8 [binding=weak, object=_ZTS1P] = {\n  i8 49\n  i8 80\n  i8 0\n}\nglobal @typeinfo__7 [binding=weak, object=_ZTI1P] = {\n  ptr addr @rtti_runtime + 16\n  ptr addr @typeinfo_name__8\n}\nglobal @vtable__6 [binding=weak, object=_ZTV1P] = {\n  i64 0\n  ptr addr @typeinfo__7\n  ptr addr @p\n}\nglobal @typeinfo_name__11 [binding=weak, object=_ZTS1D] = {\n  i8 49\n  i8 68\n  i8 0\n}\nglobal @typeinfo__10 [binding=weak, object=_ZTI1D] = {\n  ptr addr @rtti_runtime__5 + 16\n  ptr addr @typeinfo_name__11\n  i32 0\n  i32 2\n  ptr addr @typeinfo__7\n  i64 2\n  ptr addr @typeinfo__3\n  i64 2050\n}\nglobal @vtable__9 [binding=weak, object=_ZTV1D] = {\n  i64 16\n  i64 0\n  ptr addr @typeinfo__10\n  ptr addr @p\n}\nglobal @vtable_view__12 [binding=internal, object=__cppgm_vtable_view_26] = {\n  i64 8\n  i64 -8\n  ptr addr @typeinfo__10\n}\nglobal @vtable_view__13 [binding=internal, object=__cppgm_vtable_view_27] = {\n  i64 0\n  i64 -16\n  ptr addr @typeinfo__10\n  ptr addr @f\n}\nglobal @construction_vtable [binding=internal, object=__cppgm_construction_vtable_29] = {\n  i64 8\n  i64 0\n  ptr addr @typeinfo__3\n}\nglobal @construction_vtable__15 [binding=internal, object=__cppgm_construction_vtable_30] = {\n  i64 0\n  i64 -8\n  ptr addr @typeinfo__3\n  ptr addr @f\n}\nglobal @vtt__14 [binding=weak, object=_ZTT1D, object_root=yes] = {\n  ptr addr @vtable__9 + 24\n  ptr addr @construction_vtable + 24\n  ptr addr @construction_vtable__15 + 24\n  ptr addr @vtable_view__12 + 24\n  ptr addr @vtable_view__13 + 24\n}\nfunction @f(%v1 : ptr [object_bytes=8]) -> void [binding=weak, object=_ZN1V1fEv, inline_hint=yes] {\n  slot $s1 : ptr\n  block ^b1:\n    store ptr %v1, $s1\n    return void\n}\nfunction @A(%v2 : ptr [object_bytes=16]) -> void [binding=strong, object=_ZN1AC1Ev] {\n  slot $s2 : ptr\n  slot $v : ptr\n  slot $s4 : ptr\n  block ^b2:\n    store ptr %v2, $s2\n    %v10 = load ptr $s2\n    %v11 = index i8 %v10, 8\n    call void @V(%v11)\n    %v12 = load ptr $s2\n    %v13 = addr @vtable__2\n    %v14 = index i8 %v13, 24\n    store ptr %v14, %v12\n    %v15 = load ptr $s2\n    %v16 = load ptr %v15\n    %v17 = index i8 %v16, -24\n    %v18 = load i64 %v17\n    %v19 = index i8 %v15, %v18\n    %v20 = index i8 %v19, 0\n    %v21 = addr @vtable_view\n    %v22 = index i8 %v21, 24\n    store ptr %v22, %v20\n    %v23 = load ptr $s2\n    %v24 = load ptr $s2\n    %v25 = index i8 %v24, 8\n    %v26 = index i8 %v25, 0\n    store ptr %v26, $v\n    %v27 = load ptr $v\n    %v28 = cmp eq ptr %v27, 0\n    branch %v28, ^b5, ^b6\n  block ^b5:\n    call void @rtti_function()\n    return void\n  block ^b6:\n    %v29 = load ptr %v27\n    %v30 = index i8 %v29, -8\n    %v31 = load ptr %v30\n    %v32 = addr @typeinfo__3\n    %v33 = cmp eq ptr %v31, %v32\n    %v34 = cmp eq i64 %v33, 0\n    branch %v34, ^b3, ^b4\n  block ^b3:\n    %v35 = load i32 @bad\n    %v36 = binary add i32 %v35, 1\n    store i32 %v36, @bad\n    jump ^b7\n  block ^b4:\n    jump ^b7\n  block ^b7:\n    %v37 = load ptr $v\n    store ptr 0, $s4\n    %v38 = cmp eq ptr %v37, 0\n    branch %v38, ^b11, ^b10\n  block ^b10:\n    %v39 = load ptr %v37\n    %v40 = index i8 %v39, -16\n    %v41 = load i64 %v40\n    %v42 = index i8 %v37, %v41\n    store ptr %v42, $s4\n    jump ^b11\n  block ^b12:\n    %v43 = addr @typeinfo\n    %v44 = addr @__rtti_void\n    %v49 = call ptr @rtti_function__16(%v37, %v43, %v44, -2)\n    store ptr %v49, $s4\n    jump ^b11\n  block ^b11:\n    %v50 = load ptr $s4\n    %v51 = load ptr $s2\n    %v52 = cmp ne ptr %v50, %v51\n    branch %v52, ^b8, ^b9\n  block ^b8:\n    %v53 = load i32 @bad\n    %v54 = binary add i32 %v53, 1\n    store i32 %v54, @bad\n    jump ^b13\n  block ^b9:\n    jump ^b13\n  block ^b13:\n    return void\n}\nfunction @V(%v3 : ptr [object_bytes=8]) -> void [unwind=no, binding=weak, object=_ZN1VC2Ev, object_root=yes, inline_hint=yes] {\n  slot $s8 : ptr\n  block ^b26:\n    store ptr %v3, $s8\n    %v86 = load ptr $s8\n    %v87 = addr @vtable\n    %v88 = index i8 %v87, 16\n    store ptr %v88, %v86\n    return void\n}\nfunction @p(%v4 : ptr [object_bytes=8]) -> void [binding=weak, object=_ZN1P1pEv, inline_hint=yes] {\n  slot $s9 : ptr\n  block ^b27:\n    store ptr %v4, $s9\n    return void\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  slot $d : obj<24x8>\n  block ^b28:\n    %v89 = addr $d\n    call void @D(%v89)\n    %v90 = load i32 @bad\n    return i32 %v90\n}\nfunction @D(%v5 : ptr [object_bytes=24]) -> void [binding=weak, object=_ZN1DC1Ev, inline_hint=yes] {\n  slot $s11 : ptr\n  block ^b29:\n    store ptr %v5, $s11\n    %v91 = load ptr $s11\n    %v92 = index i8 %v91, 16\n    call void @V(%v92)\n    %v93 = load ptr $s11\n    %v94 = index i8 %v93, 0\n    call void @P(%v94)\n    %v95 = load ptr $s11\n    %v96 = index i8 %v95, 8\n    %v97 = addr @vtt__14\n    %v98 = index i8 %v97, 8\n    %v99 = load ptr $s11\n    %v100 = index i8 %v99, 16\n    call void @A__1(%v96, %v98, %v100)\n    %v101 = load ptr $s11\n    %v102 = addr @vtable__9\n    %v103 = index i8 %v102, 24\n    store ptr %v103, %v101\n    %v104 = load ptr $s11\n    %v105 = index i8 %v104, 8\n    %v106 = addr @vtable_view__12\n    %v107 = index i8 %v106, 24\n    store ptr %v107, %v105\n    %v108 = load ptr $s11\n    %v109 = load ptr %v108\n    %v110 = index i8 %v109, -24\n    %v111 = load i64 %v110\n    %v112 = index i8 %v108, %v111\n    %v113 = index i8 %v112, 0\n    %v114 = addr @vtable_view__13\n    %v115 = index i8 %v114, 24\n    store ptr %v115, %v113\n    return void\n}\nfunction @P(%v6 : ptr [object_bytes=8]) -> void [unwind=no, binding=weak, object=_ZN1PC2Ev, object_root=yes, inline_hint=yes] {\n  slot $s12 : ptr\n  block ^b30:\n    store ptr %v6, $s12\n    %v116 = load ptr $s12\n    %v117 = addr @vtable__6\n    %v118 = index i8 %v117, 16\n    store ptr %v118, %v116\n    return void\n}\nfunction @A__1(%v7 : ptr [object_bytes=16], %v8 : ptr, %v9 : ptr) -> void [binding=strong, object=_ZN1AC2Ev, object_root=yes] {\n  slot $s5 : ptr\n  slot $v : ptr\n  slot $s7 : ptr\n  block ^b14:\n    store ptr %v7, $s5\n    %v55 = load ptr $s5\n    %v56 = load ptr %v8\n    store ptr %v56, %v55\n    %v57 = index i8 %v9, 0\n    %v58 = index i8 %v8, 8\n    %v59 = load ptr %v58\n    store ptr %v59, %v57\n    %v60 = load ptr $s5\n    %v61 = index i8 %v9, 0\n    store ptr %v61, $v\n    %v62 = load ptr $v\n    %v63 = cmp eq ptr %v62, 0\n    branch %v63, ^b17, ^b18\n  block ^b17:\n    call void @rtti_function()\n    return void\n  block ^b18:\n    %v64 = load ptr %v62\n    %v65 = index i8 %v64, -8\n    %v66 = load ptr %v65\n    %v67 = addr @typeinfo__3\n    %v68 = cmp eq ptr %v66, %v67\n    %v69 = cmp eq i64 %v68, 0\n    branch %v69, ^b15, ^b16\n  block ^b15:\n    %v70 = load i32 @bad\n    %v71 = binary add i32 %v70, 1\n    store i32 %v71, @bad\n    jump ^b19\n  block ^b16:\n    jump ^b19\n  block ^b19:\n    %v72 = load ptr $v\n    store ptr 0, $s7\n    %v73 = cmp eq ptr %v72, 0\n    branch %v73, ^b23, ^b22\n  block ^b22:\n    %v74 = load ptr %v72\n    %v75 = index i8 %v74, -16\n    %v76 = load i64 %v75\n    %v77 = index i8 %v72, %v76\n    store ptr %v77, $s7\n    jump ^b23\n  block ^b24:\n    %v78 = addr @typeinfo\n    %v79 = addr @__rtti_void\n    %v80 = call ptr @rtti_function__16(%v72, %v78, %v79, -2)\n    store ptr %v80, $s7\n    jump ^b23\n  block ^b23:\n    %v81 = load ptr $s7\n    %v82 = load ptr $s5\n    %v83 = cmp ne ptr %v81, %v82\n    branch %v83, ^b20, ^b21\n  block ^b20:\n    %v84 = load i32 @bad\n    %v85 = binary add i32 %v84, 1\n    store i32 %v85, @bad\n    jump ^b25\n  block ^b21:\n    jump ^b25\n  block ^b25:\n    return void\n}\nalias object _ZN1DC2Ev = @D\n",
+          "lowir_sha256": "0fe7bc96ec0e5f2ea6c221323abe36e89f837e383ddcb755dc9a80db2db52d2d",
+          "runtime_exit": 0
+        }
+      ]
+    },
+    {
+      "name": "shared-copy-base",
+      "source": "struct V { int value; V(int v = 3) : value(v) {} };\nstruct A : virtual V {};\nstruct D : A { D(const A& a) : V(9), A(a) {} };\nint main() { A a; a.value = 7; D d(a); return d.value != 9; }\n",
+      "source_sha256": "7791b0475369521a324905a84878c47ba7f2778443d31503de064f1600d07804",
+      "required_exit": 0,
+      "lanes": [
+        {
+          "compiler": "reference",
+          "commands": [
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "--emit-lowir",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/shared-copy-base-reference.lowir",
+                "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa23/reducers/shared-copy-base.cpp"
+              ],
+              "exit": 1,
+              "stdout": "",
+              "stderr": "ERROR: unknown constructor member initializer\n"
+            }
+          ]
+        },
+        {
+          "compiler": "student",
+          "commands": [
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/shared-copy-base-student.lowir",
+                "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa23/reducers/shared-copy-base.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/shared-copy-base-student.o",
+                "/tmp/pa23-125/reference-final/shared-copy-base-student.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "g++",
+                "-no-pie",
+                "/tmp/pa23-125/reference-final/shared-copy-base-student.o",
+                "-o",
+                "/tmp/pa23-125/reference-final/shared-copy-base-student.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/tmp/pa23-125/reference-final/shared-copy-base-student.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "lowir": "global @vtable [binding=weak, object=_ZTV1A] = {\n  i64 8\n  i64 0\n  ptr 0\n}\nglobal @vtt [binding=weak, object=_ZTT1A, object_root=yes] = {\n  ptr addr @vtable + 24\n}\nglobal @vtable__3 [binding=weak, object=_ZTV1D] = {\n  i64 8\n  i64 0\n  ptr 0\n}\nglobal @construction_vtable [binding=internal, object=__cppgm_construction_vtable_11] = {\n  i64 8\n  i64 0\n  ptr 0\n}\nglobal @vtt__4 [binding=weak, object=_ZTT1D, object_root=yes] = {\n  ptr addr @vtable__3 + 24\n  ptr addr @construction_vtable + 24\n}\nfunction @V(%v1 : ptr [object_bytes=4], %v2 : i32) -> void [binding=weak, object=_ZN1VC1Ei, inline_hint=yes] {\n  slot $s1 : ptr\n  slot $s2 : i32\n  block ^b1:\n    store ptr %v1, $s1\n    store i32 %v2, $s2\n    %v12 = load i32 $s2\n    %v13 = load ptr $s1\n    %v14 = index i8 [projection=field] %v13, 0\n    store i32 %v12, %v14\n    return void\n}\nfunction @D(%v3 : ptr [object_bytes=16], %v4 : ptr [pass=by_address, object_bytes=16]) -> void [binding=weak, object=_ZN1DC1ERK1A, inline_hint=yes] {\n  slot $s5 : ptr\n  slot $s6 : ptr\n  block ^b3:\n    store ptr %v3, $s5\n    store ptr %v4, $s6\n    %v18 = load ptr $s5\n    %v19 = index i8 %v18, 8\n    call void @V__2(%v19, 9)\n    %v20 = load ptr $s5\n    %v21 = index i8 %v20, 0\n    %v22 = load ptr $s6\n    %v23 = addr @vtt__4\n    %v24 = index i8 %v23, 8\n    %v25 = load ptr $s5\n    %v26 = index i8 %v25, 8\n    call void @A(%v21, %v22, %v24, %v26)\n    %v27 = load ptr $s5\n    %v28 = addr @vtable__3\n    %v29 = index i8 %v28, 24\n    store ptr %v29, %v27\n    return void\n}\nfunction @A(%v5 : ptr [alias=noalias, object_bytes=16], %v6 : ptr [pass=by_address, alias=noalias, object_bytes=16], %v7 : ptr, %v8 : ptr) -> void [unwind=no, binding=weak, object=_ZN1AC2ERKS_, object_root=yes, inline_hint=yes] {\n  slot $s7 : ptr\n  slot $s8 : ptr\n  block ^b4:\n    store ptr %v5, $s7\n    store ptr %v6, $s8\n    %v30 = load ptr $s7\n    %v31 = load ptr %v7\n    store ptr %v31, %v30\n    return void\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  slot $a : obj<16x8>\n  slot $d : obj<16x8>\n  block ^b5:\n    %v32 = addr $a\n    call void @A__1(%v32)\n    %v33 = addr $a\n    %v34 = load ptr %v33\n    %v35 = index i8 %v34, -24\n    %v36 = load i64 %v35\n    %v37 = index i8 %v33, %v36\n    %v38 = index i8 %v37, 0\n    %v39 = index i8 [projection=field] %v38, 0\n    store i32 7, %v39\n    %v40 = addr $d\n    %v41 = addr $a\n    call void @D(%v40, %v41)\n    %v42 = addr $d\n    %v43 = load ptr %v42\n    %v44 = index i8 %v43, -24\n    %v45 = load i64 %v44\n    %v46 = index i8 %v42, %v45\n    %v47 = index i8 %v46, 0\n    %v48 = index i8 [projection=field] %v47, 0\n    %v49 = load i32 %v48\n    %v50 = cmp ne i32 %v49, 9\n    %v51 = convert trunc i32 i64 %v50\n    return i32 %v51\n}\nfunction @A__1(%v9 : ptr [object_bytes=16]) -> void [binding=weak, object=_ZN1AC1Ev, inline_hint=yes] {\n  slot $s11 : ptr\n  block ^b6:\n    store ptr %v9, $s11\n    %v52 = load ptr $s11\n    %v53 = index i8 %v52, 8\n    call void @V__2(%v53, 3)\n    %v54 = load ptr $s11\n    %v55 = addr @vtable\n    %v56 = index i8 %v55, 24\n    store ptr %v56, %v54\n    return void\n}\nfunction @V__2(%v10 : ptr [object_bytes=4], %v11 : i32) -> void [binding=weak, object=_ZN1VC2Ei, object_root=yes, inline_hint=yes] {\n  slot $s3 : ptr\n  slot $s4 : i32\n  block ^b2:\n    store ptr %v10, $s3\n    store i32 %v11, $s4\n    %v15 = load i32 $s4\n    %v16 = load ptr $s3\n    %v17 = index i8 [projection=field] %v16, 0\n    store i32 %v15, %v17\n    return void\n}\nalias object _ZN1DC2ERK1A = @D\nalias object _ZN1AC2Ev = @A__1\n",
+          "lowir_sha256": "13458ef01c2094e9b5d160381a5584cb9eaab7965acbb3f66b09d04d97c4fe0f",
+          "runtime_exit": 0
+        }
+      ]
+    },
+    {
+      "name": "null-placement-virtual",
+      "source": "int calls;\nstruct V {};\nstruct B : virtual V {\n  B() {}\n  B(B&) { ++calls; }\n  static void* operator new(unsigned long, void*, int) noexcept { return 0; }\n};\nint main() { B b; B* p = new ((void*)0, 0) B(b); return p != 0 || calls != 0; }\n",
+      "source_sha256": "8dbde055b3aeac683559d1143bd2221e71b98a4e11781a8b230184cdd4153c7b",
+      "required_exit": 0,
+      "lanes": [
+        {
+          "compiler": "reference",
+          "commands": [
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "--emit-lowir",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/null-placement-virtual-reference.lowir",
+                "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa23/reducers/null-placement-virtual.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/null-placement-virtual-reference.o",
+                "/tmp/pa23-125/reference-final/null-placement-virtual-reference.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "g++",
+                "-no-pie",
+                "/tmp/pa23-125/reference-final/null-placement-virtual-reference.o",
+                "-o",
+                "/tmp/pa23-125/reference-final/null-placement-virtual-reference.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/tmp/pa23-125/reference-final/null-placement-virtual-reference.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "lowir": "global @calls : i32 [binding=strong, object=_Z5calls] = zero\n\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  slot $b : obj<2x1>\n  slot $p : ptr\n  slot $lor__1 : i64\n\n  block ^entry:\n    %t1 = addr $b\n    call void @B__B(%t1)\n    %t2 = convert sext i64 i32 2\n    %t3 = call ptr @B__operatornew(%t2, 0, 0)\n    %t4 = cmp ne ptr %t3, 0\n    branch %t4, ^new_init_1, ^new_end_2\n\n  block ^new_init_1:\n    %t5 = addr $b\n    call void @B__B__ov2(%t3, %t5)\n    jump ^new_end_2\n\n  block ^new_end_2:\n    store ptr %t3, $p\n    %t6 = load ptr $p\n    %t7 = cmp ne ptr %t6, 0\n    branch %t7, ^lor_short_4, ^lor_rhs_3\n\n  block ^lor_rhs_3:\n    %t8 = load i32 @calls\n    %t9 = cmp ne i32 %t8, 0\n    %t10 = cmp ne i64 %t9, 0\n    store i64 %t10, $lor__1\n    jump ^lor_end_5\n\n  block ^lor_short_4:\n    store i64 1, $lor__1\n    jump ^lor_end_5\n\n  block ^lor_end_5:\n    %t11 = load i64 $lor__1\n    %t12 = convert trunc i32 i64 %t11\n    return i32 %t12\n}\nfunction @B__B(%this : ptr [object_bytes=2]) -> void [binding=weak, object=_ZN1BC1Ev, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    return void\n}\nfunction @B__operatornew(%__param0 : i64, %__param1 : ptr, %__param2 : i32) -> ptr [unwind=no, binding=weak, object=_ZN1BnwEmPvi, inline_hint=yes] {\n  slot $__param0 : i64\n  slot $__param1 : ptr\n  slot $__param2 : i32\n\n  block ^entry:\n    store i64 %__param0, $__param0\n    store ptr %__param1, $__param1\n    store i32 %__param2, $__param2\n    return ptr 0\n}\nfunction @B__B__ov2(%this : ptr [alias=noalias, object_bytes=2], %__param1 : ptr [pass=by_address, alias=noalias, object_bytes=2]) -> void [binding=weak, object=_ZN1BC1ERS_, inline_hint=yes] {\n  slot $this : ptr\n  slot $__param1 : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    store ptr %__param1, $__param1\n    %t1 = load i32 @calls\n    %t2 = binary add i32 %t1, 1\n    store i32 %t2, @calls\n    return void\n}\n",
+          "lowir_sha256": "c8884caed109645b4d3de23b5e380183352fe2c670d19fc21a56dd8a8cadbb2c",
+          "runtime_exit": 0
+        },
+        {
+          "compiler": "student",
+          "commands": [
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/null-placement-virtual-student.lowir",
+                "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa23/reducers/null-placement-virtual.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/null-placement-virtual-student.o",
+                "/tmp/pa23-125/reference-final/null-placement-virtual-student.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "g++",
+                "-no-pie",
+                "/tmp/pa23-125/reference-final/null-placement-virtual-student.o",
+                "-o",
+                "/tmp/pa23-125/reference-final/null-placement-virtual-student.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/tmp/pa23-125/reference-final/null-placement-virtual-student.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "lowir": "global @calls : i32 [binding=strong] = zero\nglobal @vtable [binding=weak, object=_ZTV1B] = {\n  i64 8\n  i64 0\n  ptr 0\n}\nglobal @vtt [binding=weak, object=_ZTT1B, object_root=yes] = {\n  ptr addr @vtable + 24\n}\nfunction @B(%v1 : ptr [object_bytes=16]) -> void [binding=weak, object=_ZN1BC1Ev, inline_hint=yes] {\n  slot $s1 : ptr\n  block ^b1:\n    store ptr %v1, $s1\n    %v7 = load ptr $s1\n    %v8 = addr @vtable\n    %v9 = index i8 %v8, 24\n    store ptr %v9, %v7\n    return void\n}\nfunction @B__1(%v2 : ptr [alias=noalias, object_bytes=16], %v3 : ptr [pass=by_address, alias=noalias, object_bytes=16]) -> void [binding=weak, object=_ZN1BC1ERS_, inline_hint=yes] {\n  slot $s2 : ptr\n  slot $s3 : ptr\n  block ^b2:\n    store ptr %v2, $s2\n    store ptr %v3, $s3\n    %v10 = load ptr $s2\n    %v11 = addr @vtable\n    %v12 = index i8 %v11, 24\n    store ptr %v12, %v10\n    %v13 = load i32 @calls\n    %v14 = binary add i32 %v13, 1\n    store i32 %v14, @calls\n    return void\n}\nfunction @operator_new(%v4 : i64, %v5 : ptr, %v6 : i32) -> ptr [unwind=no, binding=weak, object=_ZN1BnwEmPvi, inline_hint=yes] {\n  slot $s4 : i64\n  slot $s5 : ptr\n  slot $s6 : i32\n  block ^b3:\n    store i64 %v4, $s4\n    store ptr %v5, $s5\n    store i32 %v6, $s6\n    return ptr 0\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  slot $b : obj<16x8>\n  slot $p : ptr\n  slot $s9 : i64\n  block ^b4:\n    %v15 = addr $b\n    call void @B(%v15)\n    %v16 = convert sext i64 i32 16\n    %v17 = call ptr @operator_new(%v16, 0, 0)\n    %v18 = cmp ne ptr %v17, 0\n    branch %v18, ^b5, ^b6\n  block ^b5:\n    %v19 = addr $b\n    call void @B__1(%v17, %v19)\n    jump ^b6\n  block ^b6:\n    store ptr %v17, $p\n    %v20 = load ptr $p\n    %v21 = cmp ne ptr %v20, 0\n    branch %v21, ^b8, ^b7\n  block ^b7:\n    %v22 = load i32 @calls\n    %v23 = cmp ne i32 %v22, 0\n    %v24 = cmp ne i64 %v23, 0\n    store i64 %v24, $s9\n    jump ^b9\n  block ^b8:\n    store i64 1, $s9\n    jump ^b9\n  block ^b9:\n    %v25 = load i64 $s9\n    %v26 = convert trunc i32 i64 %v25\n    return i32 %v26\n}\nalias object _ZN1BC2Ev = @B\nalias object _ZN1BC2ERS_ = @B__1\n",
+          "lowir_sha256": "b2a96d4ef08a97fba5459769a522a98b9732b3c111c1252930f2091fc44d8d53",
+          "runtime_exit": 0
+        }
+      ]
+    },
+    {
+      "name": "null-placement-standard",
+      "source": "typedef decltype(sizeof(0)) size_type;\nvoid* operator new(size_type, void*) noexcept;\nint calls;\nstruct A {};\nstruct B : virtual A { B() {} B(B&) { ++calls; } };\nint main() { B b; B* p = new ((void*)0) B(b); return p != 0 || calls != 0; }\n",
+      "source_sha256": "c5f8cd880fb28a98fd1ee0026033c9a9f09b76d71c56fce043d606406cb0d0dc",
+      "required_exit": 0,
+      "lanes": [
+        {
+          "compiler": "reference",
+          "commands": [
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "--emit-lowir",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/null-placement-standard-reference.lowir",
+                "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa23/reducers/null-placement-standard.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/null-placement-standard-reference.o",
+                "/tmp/pa23-125/reference-final/null-placement-standard-reference.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "g++",
+                "-no-pie",
+                "/tmp/pa23-125/reference-final/null-placement-standard-reference.o",
+                "/tmp/pa23-125/reference-final/placement-library.o",
+                "-o",
+                "/tmp/pa23-125/reference-final/null-placement-standard-reference.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/tmp/pa23-125/reference-final/null-placement-standard-reference.exe"
+              ],
+              "exit": 1,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "lowir": "declare function @operatornew__ov2(%arg0 : i64, %arg1 : ptr) -> ptr [unwind=no, binding=strong, object=_ZnwmPv]\n\nglobal @calls : i32 [binding=strong, object=_Z5calls] = zero\n\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  slot $b : obj<2x1>\n  slot $p : ptr\n  slot $lor__1 : i64\n\n  block ^entry:\n    %t1 = addr $b\n    call void @B__B(%t1)\n    %t2 = convert sext i64 i32 2\n    %t3 = call ptr @operatornew__ov2(%t2, 0)\n    %t4 = addr $b\n    call void @B__B__ov2(%t3, %t4)\n    store ptr %t3, $p\n    %t5 = load ptr $p\n    %t6 = cmp ne ptr %t5, 0\n    branch %t6, ^lor_short_2, ^lor_rhs_1\n\n  block ^lor_rhs_1:\n    %t7 = load i32 @calls\n    %t8 = cmp ne i32 %t7, 0\n    %t9 = cmp ne i64 %t8, 0\n    store i64 %t9, $lor__1\n    jump ^lor_end_3\n\n  block ^lor_short_2:\n    store i64 1, $lor__1\n    jump ^lor_end_3\n\n  block ^lor_end_3:\n    %t10 = load i64 $lor__1\n    %t11 = convert trunc i32 i64 %t10\n    return i32 %t11\n}\nfunction @B__B(%this : ptr [object_bytes=2]) -> void [binding=weak, object=_ZN1BC1Ev, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    return void\n}\nfunction @B__B__ov2(%this : ptr [alias=noalias, object_bytes=2], %__param1 : ptr [pass=by_address, alias=noalias, object_bytes=2]) -> void [binding=weak, object=_ZN1BC1ERS_, inline_hint=yes] {\n  slot $this : ptr\n  slot $__param1 : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    store ptr %__param1, $__param1\n    %t1 = load i32 @calls\n    %t2 = binary add i32 %t1, 1\n    store i32 %t2, @calls\n    return void\n}\n",
+          "lowir_sha256": "ed279a73888b1db57c89aebdb4e0825a318c6c94b13f0d0c28a29bbfcfad4631",
+          "runtime_exit": 1
+        },
+        {
+          "compiler": "student",
+          "commands": [
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+                "--emit-lowir",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/null-placement-standard-student.lowir",
+                "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa23/reducers/null-placement-standard.cpp"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+                "-c",
+                "-O0",
+                "-o",
+                "/tmp/pa23-125/reference-final/null-placement-standard-student.o",
+                "/tmp/pa23-125/reference-final/null-placement-standard-student.lowir"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "g++",
+                "-no-pie",
+                "/tmp/pa23-125/reference-final/null-placement-standard-student.o",
+                "/tmp/pa23-125/reference-final/placement-library.o",
+                "-o",
+                "/tmp/pa23-125/reference-final/null-placement-standard-student.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            },
+            {
+              "command": [
+                "/tmp/pa23-125/reference-final/null-placement-standard-student.exe"
+              ],
+              "exit": 0,
+              "stdout": "",
+              "stderr": ""
+            }
+          ],
+          "lowir": "declare function @operator_new(%v1 : i64, %v2 : ptr) -> ptr [unwind=no, binding=strong, object=_ZnwmPv]\nglobal @calls : i32 [binding=strong] = zero\nglobal @vtable [binding=weak, object=_ZTV1B] = {\n  i64 8\n  i64 0\n  ptr 0\n}\nglobal @vtt [binding=weak, object=_ZTT1B, object_root=yes] = {\n  ptr addr @vtable + 24\n}\nfunction @B(%v3 : ptr [object_bytes=16]) -> void [binding=weak, object=_ZN1BC1Ev, inline_hint=yes] {\n  slot $s1 : ptr\n  block ^b1:\n    store ptr %v3, $s1\n    %v6 = load ptr $s1\n    %v7 = addr @vtable\n    %v8 = index i8 %v7, 24\n    store ptr %v8, %v6\n    return void\n}\nfunction @B__1(%v4 : ptr [alias=noalias, object_bytes=16], %v5 : ptr [pass=by_address, alias=noalias, object_bytes=16]) -> void [binding=weak, object=_ZN1BC1ERS_, inline_hint=yes] {\n  slot $s2 : ptr\n  slot $s3 : ptr\n  block ^b2:\n    store ptr %v4, $s2\n    store ptr %v5, $s3\n    %v9 = load ptr $s2\n    %v10 = addr @vtable\n    %v11 = index i8 %v10, 24\n    store ptr %v11, %v9\n    %v12 = load i32 @calls\n    %v13 = binary add i32 %v12, 1\n    store i32 %v13, @calls\n    return void\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  slot $b : obj<16x8>\n  slot $p : ptr\n  slot $s6 : i64\n  block ^b3:\n    %v14 = addr $b\n    call void @B(%v14)\n    %v15 = convert sext i64 i32 16\n    %v16 = call ptr @operator_new(%v15, 0)\n    %v17 = cmp ne ptr %v16, 0\n    branch %v17, ^b4, ^b5\n  block ^b4:\n    %v18 = addr $b\n    call void @B__1(%v16, %v18)\n    jump ^b5\n  block ^b5:\n    store ptr %v16, $p\n    %v19 = load ptr $p\n    %v20 = cmp ne ptr %v19, 0\n    branch %v20, ^b7, ^b6\n  block ^b6:\n    %v21 = load i32 @calls\n    %v22 = cmp ne i32 %v21, 0\n    %v23 = cmp ne i64 %v22, 0\n    store i64 %v23, $s6\n    jump ^b8\n  block ^b7:\n    store i64 1, $s6\n    jump ^b8\n  block ^b8:\n    %v24 = load i64 $s6\n    %v25 = convert trunc i32 i64 %v24\n    return i32 %v25\n}\nalias object _ZN1BC2Ev = @B\nalias object _ZN1BC2ERS_ = @B__1\n",
+          "lowir_sha256": "04c6897fb775a8e47faf43ff6988d4247a1f24cdf0fc7f4cef29f41de4800d92",
+          "runtime_exit": 0
+        }
+      ]
+    }
+  ]
+}

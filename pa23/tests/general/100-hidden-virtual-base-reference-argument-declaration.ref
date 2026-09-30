@@ -1,65 +1,71 @@
-declare function @consume(%arg0 : ptr [pass=by_address, object_bytes=8]) -> void [binding=strong, object=_Z7consumeR1D]
-
+declare function @consume(%v4 : ptr [pass=by_address, object_bytes=24]) -> void [binding=strong, object=_Z7consumeR1D]
+global @vtable [binding=weak, object=_ZTV1D] = {
+  i64 16
+  i64 0
+  ptr 0
+}
+global @vtt [binding=weak, object=_ZTT1D, object_root=yes] = {
+  ptr addr @vtable + 24
+}
+function @V__1(%v5 : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN1VC2Ev, object_root=yes, inline_hint=yes] {
+  slot $s2 : ptr
+  block ^b2:
+    store ptr %v5, $s2
+    %v9 = load ptr $s2
+    %v10 = index i8 [projection=field] %v9, 0
+    store i32 42, %v10
+    return void
+}
+function @V(%v1 : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN1VC1Ev, inline_hint=yes] {
+  slot $s1 : ptr
+  block ^b1:
+    store ptr %v1, $s1
+    %v7 = load ptr $s1
+    %v8 = index i8 [projection=field] %v7, 0
+    store i32 42, %v8
+    return void
+}
+function @A__2(%v6 : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN1AC2Ev, object_root=yes, inline_hint=yes] {
+  slot $s4 : ptr
+  block ^b4:
+    store ptr %v6, $s4
+    %v13 = load ptr $s4
+    %v14 = index i8 [projection=field] %v13, 0
+    store i32 7, %v14
+    return void
+}
+function @A(%v2 : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN1AC1Ev, inline_hint=yes] {
+  slot $s3 : ptr
+  block ^b3:
+    store ptr %v2, $s3
+    %v11 = load ptr $s3
+    %v12 = index i8 [projection=field] %v11, 0
+    store i32 7, %v12
+    return void
+}
+function @D(%v3 : ptr [object_bytes=24]) -> void [binding=weak, object=_ZN1DC1Ev, inline_hint=yes] {
+  slot $s5 : ptr
+  block ^b5:
+    store ptr %v3, $s5
+    %v15 = load ptr $s5
+    %v16 = index i8 %v15, 16
+    call void @V__1(%v16)
+    %v17 = load ptr $s5
+    %v18 = index i8 %v17, 8
+    call void @A__2(%v18)
+    %v19 = load ptr $s5
+    %v20 = addr @vtable
+    %v21 = index i8 %v20, 24
+    store ptr %v21, %v19
+    return void
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
-  slot $d : obj<8x4>
-
-  block ^entry:
-    %t1 = addr $d
-    call void @D__D(%t1)
-    %t2 = addr $d
-    call void @consume(%t2)
+  slot $d : obj<24x8>
+  block ^b6:
+    %v22 = addr $d
+    call void @D(%v22)
+    %v23 = addr $d
+    call void @consume(%v23)
     return i32 0
 }
-function @D__D(%this : ptr [object_bytes=8]) -> void [binding=weak, object=_ZN1DC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 %t1, 4
-    call void @V__V__base_entry(%t2)
-    %t3 = load ptr $this
-    %t4 = index i8 %t3, 0
-    call void @A__A__base_entry(%t4)
-    return void
-}
-function @V__V__base_entry(%this : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN1VC2Ev, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 [projection=field] %t1, 0
-    store i32 42, %t2
-    return void
-}
-function @V__V(%this : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN1VC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 [projection=field] %t1, 0
-    store i32 42, %t2
-    return void
-}
-function @A__A__base_entry(%this : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN1AC2Ev, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 [projection=field] %t1, 0
-    store i32 7, %t2
-    return void
-}
-function @A__A(%this : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN1AC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 [projection=field] %t1, 0
-    store i32 7, %t2
-    return void
-}
+alias object _ZN1DC2Ev = @D

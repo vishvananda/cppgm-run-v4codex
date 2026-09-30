@@ -1,31 +1,49 @@
-function @read(%p : ptr) -> i32 [binding=strong, object=_Z4readP1A] {
-  slot $p : ptr
-  slot $cond__1 : i32
-
-  block ^entry:
-    store ptr %p, $p
-    %t1 = load ptr $p
-    branch %t1, ^cond_then_1, ^cond_else_2
-
-  block ^cond_then_1:
-    %t2 = load ptr $p
-    %t3 = index i8 %t2, 4
-    %t4 = index i8 [projection=field] %t3, 0
-    %t5 = load i32 %t4
-    store i32 %t5, $cond__1
-    jump ^cond_end_3
-
-  block ^cond_else_2:
-    store i32 0, $cond__1
-    jump ^cond_end_3
-
-  block ^cond_end_3:
-    %t6 = load i32 $cond__1
-    return i32 %t6
+function @V__1(%v3 : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN1VC2Ev, object_root=yes, inline_hint=yes] {
+  slot $s2 : ptr
+  block ^b2:
+    store ptr %v3, $s2
+    %v6 = load ptr $s2
+    %v7 = index i8 [projection=field] %v6, 0
+    store i32 0, %v7
+    return void
+}
+function @V(%v1 : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN1VC1Ev, inline_hint=yes] {
+  slot $s1 : ptr
+  block ^b1:
+    store ptr %v1, $s1
+    %v4 = load ptr $s1
+    %v5 = index i8 [projection=field] %v4, 0
+    store i32 0, %v5
+    return void
+}
+function @read(%v2 : ptr) -> i32 [binding=strong, object=_Z4readP1A] {
+  slot $s3 : ptr
+  slot $s4 : i32
+  block ^b3:
+    store ptr %v2, $s3
+    %v8 = load ptr $s3
+    branch %v8, ^b4, ^b5
+  block ^b4:
+    %v9 = load ptr $s3
+    %v10 = load ptr %v9
+    %v11 = index i8 %v10, -24
+    %v12 = load i64 %v11
+    %v13 = index i8 %v9, %v12
+    %v14 = index i8 %v13, 0
+    %v15 = index i8 [projection=field] %v14, 0
+    %v16 = load i32 %v15
+    store i32 %v16, $s4
+    jump ^b6
+  block ^b5:
+    store i32 0, $s4
+    jump ^b6
+  block ^b6:
+    %v17 = load i32 $s4
+    return i32 %v17
 }
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
-  block ^entry:
-    %t1 = copy ptr nullptr
-    %t2 = call i32 @read(%t1)
-    return i32 %t2
+  block ^b7:
+    %v18 = copy ptr nullptr
+    %v19 = call i32 @read(%v18)
+    return i32 %v19
 }

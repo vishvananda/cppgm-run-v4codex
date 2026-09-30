@@ -1,89 +1,101 @@
-function @take(%h : obj<4x4>) -> i32 [binding=strong, object=_Z4take6Holder] {
-  slot $h : obj<4x4>
-
-  block ^entry:
-    %t1 = addr $h
-    copyobj 4x4 %h, %t1
-    %t2 = addr $h
-    %t3 = index i8 [projection=field] %t2, 0
-    %t4 = load i32 %t3
-    return i32 %t4
+global @vtable [binding=weak, object=_ZTV6Stream] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt [binding=weak, object=_ZTT6Stream, object_root=yes] = {
+  ptr addr @vtable + 24
+}
+function @IOS__1(%v6 : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN3IOSC2Ev, object_root=yes, inline_hint=yes] {
+  slot $s2 : ptr
+  block ^b2:
+    store ptr %v6, $s2
+    %v9 = load ptr $s2
+    %v10 = index i8 [projection=field] %v9, 0
+    store i32 0, %v10
+    return void
+}
+function @IOS(%v1 : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN3IOSC1Ev, inline_hint=yes] {
+  slot $s1 : ptr
+  block ^b1:
+    store ptr %v1, $s1
+    %v7 = load ptr $s1
+    %v8 = index i8 [projection=field] %v7, 0
+    store i32 0, %v8
+    return void
+}
+function @Stream(%v2 : ptr [object_bytes=16]) -> void [binding=weak, object=_ZN6StreamC1Ev, inline_hint=yes] {
+  slot $s3 : ptr
+  block ^b3:
+    store ptr %v2, $s3
+    %v11 = load ptr $s3
+    %v12 = index i8 %v11, 8
+    call void @IOS__1(%v12)
+    %v13 = load ptr $s3
+    %v14 = addr @vtable
+    %v15 = index i8 %v14, 24
+    store ptr %v15, %v13
+    return void
+}
+function @take(%v3 : obj<4x4>) -> i32 [binding=strong, object=_Z4take6Holder] {
+  slot $s4 : obj<4x4>
+  block ^b4:
+    %v16 = addr $s4
+    copyobj 4x4 %v3, %v16
+    %v17 = addr $s4
+    %v18 = index i8 [projection=field] %v17, 0
+    %v19 = load i32 %v18
+    return i32 %v19
 }
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
-  slot $s : obj<8x4>
-  slot $cond__1 : i32
-  slot $argobj__2 : obj<4x4>
-
-  block ^entry:
-    %t1 = addr $s
-    call void @Stream__Stream(%t1)
-    %t2 = addr $s
-    %t3 = index i8 %t2, 4
-    %t4 = index i8 [projection=field] %t3, 0
-    store i32 7, %t4
-    %t5 = addr $argobj__2
-    %t6 = addr $s
-    call void @Holder__Holder__ov3(%t5, %t6)
-    %t7 = call i32 @take($argobj__2)
-    %t8 = cmp eq i32 %t7, 7
-    branch %t8, ^cond_then_1, ^cond_else_2
-
-  block ^cond_then_1:
-    store i32 0, $cond__1
-    jump ^cond_end_3
-
-  block ^cond_else_2:
-    store i32 1, $cond__1
-    jump ^cond_end_3
-
-  block ^cond_end_3:
-    %t9 = load i32 $cond__1
-    return i32 %t9
+  slot $s : obj<16x8>
+  slot $s6 : i32
+  slot $s7 : obj<4x4>
+  block ^b5:
+    %v20 = addr $s
+    call void @Stream(%v20)
+    %v21 = addr $s
+    %v22 = load ptr %v21
+    %v23 = index i8 %v22, -24
+    %v24 = load i64 %v23
+    %v25 = index i8 %v21, %v24
+    %v26 = index i8 %v25, 0
+    %v27 = index i8 [projection=field] %v26, 0
+    store i32 7, %v27
+    %v28 = addr $s7
+    %v29 = addr $s
+    call void @Holder(%v28, %v29)
+    %v30 = call i32 @take($s7)
+    %v31 = cmp eq i32 %v30, 7
+    branch %v31, ^b6, ^b7
+  block ^b6:
+    store i32 0, $s6
+    jump ^b8
+  block ^b7:
+    store i32 1, $s6
+    jump ^b8
+  block ^b8:
+    %v32 = load i32 $s6
+    return i32 %v32
 }
-function @Stream__Stream(%this : ptr [object_bytes=8]) -> void [binding=weak, object=_ZN6StreamC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 %t1, 4
-    call void @IOS__IOS__base_entry(%t2)
+function @Holder(%v4 : ptr [object_bytes=4], %v5 : ptr [pass=by_address, object_bytes=16]) -> void [binding=weak, object=_ZN6HolderC1I6StreamEERT_, inline_hint=yes] {
+  slot $s8 : ptr
+  slot $s9 : ptr
+  block ^b9:
+    store ptr %v4, $s8
+    store ptr %v5, $s9
+    %v33 = load ptr $s9
+    %v34 = load ptr %v33
+    %v35 = index i8 %v34, -24
+    %v36 = load i64 %v35
+    %v37 = index i8 %v33, %v36
+    %v38 = index i8 %v37, 0
+    %v39 = index i8 [projection=field] %v38, 0
+    %v40 = load i32 %v39
+    %v41 = load ptr $s8
+    %v42 = index i8 [projection=field] %v41, 0
+    store i32 %v40, %v42
     return void
 }
-function @Holder__Holder__ov3(%this : ptr [object_bytes=4], %s : ptr [pass=by_address, object_bytes=8]) -> void [binding=weak, object=_ZN6HolderC1I6StreamEERT_, inline_hint=yes] {
-  slot $this : ptr
-  slot $s : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    store ptr %s, $s
-    %t1 = load ptr $s
-    %t2 = index i8 %t1, 4
-    %t3 = index i8 [projection=field] %t2, 0
-    %t4 = load i32 %t3
-    %t5 = load ptr $this
-    %t6 = index i8 [projection=field] %t5, 0
-    store i32 %t4, %t6
-    return void
-}
-function @IOS__IOS__base_entry(%this : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN3IOSC2Ev, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 [projection=field] %t1, 0
-    store i32 0, %t2
-    return void
-}
-function @IOS__IOS(%this : ptr [object_bytes=4]) -> void [binding=weak, object=_ZN3IOSC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 [projection=field] %t1, 0
-    store i32 0, %t2
-    return void
-}
-alias object _ZN6HolderC2I6StreamEERT_ = @Holder__Holder__ov3
+alias object _ZN6StreamC2Ev = @Stream
+alias object _ZN6HolderC2I6StreamEERT_ = @Holder

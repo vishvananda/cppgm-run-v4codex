@@ -1,47 +1,113 @@
+global @vtable [binding=weak, object=_ZTV2YB] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt [binding=weak, object=_ZTT2YB, object_root=yes] = {
+  ptr addr @vtable + 24
+}
+global @vtable__1 [binding=weak, object=_ZTV2YC] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt__2 [binding=weak, object=_ZTT2YC, object_root=yes] = {
+  ptr addr @vtable__1 + 24
+}
+global @vtable__3 [binding=weak, object=_ZTV2YD] = {
+  i64 16
+  i64 0
+  ptr 0
+}
+global @vtable_view [binding=internal, object=__cppgm_vtable_view_10] = {
+  i64 8
+  i64 -8
+  ptr 0
+}
+global @construction_vtable [binding=internal, object=__cppgm_construction_vtable_12] = {
+  i64 16
+  i64 0
+  ptr 0
+}
+global @construction_vtable__5 [binding=internal, object=__cppgm_construction_vtable_13] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt__4 [binding=weak, object=_ZTT2YD, object_root=yes] = {
+  ptr addr @vtable__3 + 24
+  ptr addr @construction_vtable + 24
+  ptr addr @construction_vtable__5 + 24
+  ptr addr @vtable_view + 24
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
-  slot $d : obj<12x4>
-
-  block ^entry:
-    %t1 = addr $d
-    call void @YD__YD(%t1)
-    %t2 = addr $d
-    %t3 = index i8 %t2, 8
-    %t4 = index i8 [projection=field] %t3, 0
-    store i32 5, %t4
-    %t5 = addr $d
-    %t6 = index i8 %t5, 8
-    %t7 = index i8 [projection=field] %t6, 0
-    %t8 = load i32 %t7
-    return i32 %t8
+  slot $d : obj<24x8>
+  block ^b1:
+    %v8 = addr $d
+    call void @YD(%v8)
+    %v9 = addr $d
+    %v10 = load ptr %v9
+    %v11 = index i8 %v10, -24
+    %v12 = load i64 %v11
+    %v13 = index i8 %v9, %v12
+    %v14 = index i8 %v13, 0
+    %v15 = index i8 [projection=field] %v14, 0
+    store i32 5, %v15
+    %v16 = addr $d
+    %v17 = load ptr %v16
+    %v18 = index i8 %v17, -24
+    %v19 = load i64 %v18
+    %v20 = index i8 %v16, %v19
+    %v21 = index i8 %v20, 0
+    %v22 = index i8 [projection=field] %v21, 0
+    %v23 = load i32 %v22
+    return i32 %v23
 }
-function @YD__YD(%this : ptr [object_bytes=12]) -> void [binding=weak, object=_ZN2YDC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 %t1, 0
-    %t3 = load ptr $this
-    %t4 = index i8 %t3, 8
-    call void @YB__YB__base_entry(%t2, %t4)
-    %t5 = load ptr $this
-    %t6 = index i8 %t5, 4
-    %t7 = load ptr $this
-    %t8 = index i8 %t7, 8
-    call void @YC__YC__base_entry(%t6, %t8)
+function @YD(%v1 : ptr [object_bytes=24]) -> void [unwind=no, binding=weak, object=_ZN2YDC1Ev, inline_hint=yes] {
+  slot $s2 : ptr
+  block ^b2:
+    store ptr %v1, $s2
+    %v24 = load ptr $s2
+    %v25 = index i8 %v24, 0
+    %v26 = addr @vtt__4
+    %v27 = index i8 %v26, 8
+    %v28 = load ptr $s2
+    %v29 = index i8 %v28, 16
+    call void @YB(%v25, %v27, %v29)
+    %v30 = load ptr $s2
+    %v31 = index i8 %v30, 8
+    %v32 = addr @vtt__4
+    %v33 = index i8 %v32, 16
+    %v34 = load ptr $s2
+    %v35 = index i8 %v34, 16
+    call void @YC(%v31, %v33, %v35)
+    %v36 = load ptr $s2
+    %v37 = addr @vtable__3
+    %v38 = index i8 %v37, 24
+    store ptr %v38, %v36
+    %v39 = load ptr $s2
+    %v40 = index i8 %v39, 8
+    %v41 = addr @vtable_view
+    %v42 = index i8 %v41, 24
+    store ptr %v42, %v40
     return void
 }
-function @YB__YB__base_entry(%this : ptr [object_bytes=8], %__vbptr0 : ptr) -> void [unwind=no, binding=weak, object=_ZN2YBC2Ev, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
+function @YB(%v2 : ptr [object_bytes=16], %v3 : ptr, %v4 : ptr) -> void [unwind=no, binding=weak, object=_ZN2YBC2Ev, object_root=yes, inline_hint=yes] {
+  slot $s3 : ptr
+  block ^b3:
+    store ptr %v2, $s3
+    %v43 = load ptr $s3
+    %v44 = load ptr %v3
+    store ptr %v44, %v43
     return void
 }
-function @YC__YC__base_entry(%this : ptr [object_bytes=8], %__vbptr0 : ptr) -> void [unwind=no, binding=weak, object=_ZN2YCC2Ev, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
+function @YC(%v5 : ptr [object_bytes=16], %v6 : ptr, %v7 : ptr) -> void [unwind=no, binding=weak, object=_ZN2YCC2Ev, object_root=yes, inline_hint=yes] {
+  slot $s4 : ptr
+  block ^b4:
+    store ptr %v5, $s4
+    %v45 = load ptr $s4
+    %v46 = load ptr %v6
+    store ptr %v46, %v45
     return void
 }
+alias object _ZN2YDC2Ev = @YD

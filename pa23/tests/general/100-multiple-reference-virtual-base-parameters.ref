@@ -1,62 +1,106 @@
+global @vtable [binding=weak, object=_ZTV1B] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt [binding=weak, object=_ZTT1B, object_root=yes] = {
+  ptr addr @vtable + 24
+}
+global @vtable__1 [binding=weak, object=_ZTV1D] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @construction_vtable [binding=internal, object=__cppgm_construction_vtable_9] = {
+  i64 8
+  i64 0
+  ptr 0
+}
+global @vtt__2 [binding=weak, object=_ZTT1D, object_root=yes] = {
+  ptr addr @vtable__1 + 24
+  ptr addr @construction_vtable + 24
+}
 function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
-  slot $left : obj<8x4>
-  slot $right : obj<8x4>
-
-  block ^entry:
-    %t1 = addr $left
-    call void @D__D(%t1)
-    %t2 = addr $right
-    call void @D__D(%t2)
-    %t3 = addr $left
-    %t4 = index i8 %t3, 4
-    %t5 = index i8 [projection=field] %t4, 0
-    store i32 2, %t5
-    %t6 = addr $right
-    %t7 = index i8 %t6, 4
-    %t8 = index i8 [projection=field] %t7, 0
-    store i32 5, %t8
-    %t9 = addr $left
-    %t10 = index i8 %t9, 0
-    %t11 = addr $right
-    %t12 = index i8 %t11, 0
-    %t13 = call i32 @add(%t10, %t12)
-    %t14 = binary sub i32 %t13, 7
-    return i32 %t14
+  slot $left : obj<16x8>
+  slot $right : obj<16x8>
+  block ^b1:
+    %v7 = addr $left
+    call void @D(%v7)
+    %v8 = addr $right
+    call void @D(%v8)
+    %v9 = addr $left
+    %v10 = load ptr %v9
+    %v11 = index i8 %v10, -24
+    %v12 = load i64 %v11
+    %v13 = index i8 %v9, %v12
+    %v14 = index i8 %v13, 0
+    %v15 = index i8 [projection=field] %v14, 0
+    store i32 2, %v15
+    %v16 = addr $right
+    %v17 = load ptr %v16
+    %v18 = index i8 %v17, -24
+    %v19 = load i64 %v18
+    %v20 = index i8 %v16, %v19
+    %v21 = index i8 %v20, 0
+    %v22 = index i8 [projection=field] %v21, 0
+    store i32 5, %v22
+    %v23 = addr $left
+    %v24 = index i8 %v23, 0
+    %v25 = addr $right
+    %v26 = index i8 %v25, 0
+    %v27 = call i32 @add(%v24, %v26)
+    %v28 = binary sub i32 %v27, 7
+    return i32 %v28
 }
-function @D__D(%this : ptr [object_bytes=8]) -> void [binding=weak, object=_ZN1DC1Ev, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
-    %t1 = load ptr $this
-    %t2 = index i8 %t1, 0
-    %t3 = load ptr $this
-    %t4 = index i8 %t3, 4
-    call void @B__B__base_entry(%t2, %t4)
+function @D(%v1 : ptr [object_bytes=16]) -> void [unwind=no, binding=weak, object=_ZN1DC1Ev, inline_hint=yes] {
+  slot $s3 : ptr
+  block ^b2:
+    store ptr %v1, $s3
+    %v29 = load ptr $s3
+    %v30 = index i8 %v29, 0
+    %v31 = addr @vtt__2
+    %v32 = index i8 %v31, 8
+    %v33 = load ptr $s3
+    %v34 = index i8 %v33, 8
+    call void @B(%v30, %v32, %v34)
+    %v35 = load ptr $s3
+    %v36 = addr @vtable__1
+    %v37 = index i8 %v36, 24
+    store ptr %v37, %v35
     return void
 }
-function @add(%left : ptr [pass=by_address, object_bytes=8], %right : ptr [pass=by_address, object_bytes=8]) -> i32 [binding=weak, object=_Z3addI1BS0_EiRT_RT0_] {
-  slot $left : ptr
-  slot $right : ptr
-
-  block ^entry:
-    store ptr %left, $left
-    store ptr %right, $right
-    %t1 = load ptr $left
-    %t2 = index i8 %t1, 4
-    %t3 = index i8 [projection=field] %t2, 0
-    %t4 = load i32 %t3
-    %t5 = load ptr $right
-    %t6 = index i8 %t5, 4
-    %t7 = index i8 [projection=field] %t6, 0
-    %t8 = load i32 %t7
-    %t9 = binary add i32 %t4, %t8
-    return i32 %t9
-}
-function @B__B__base_entry(%this : ptr [object_bytes=8], %__vbptr0 : ptr) -> void [unwind=no, binding=weak, object=_ZN1BC2Ev, object_root=yes, inline_hint=yes] {
-  slot $this : ptr
-
-  block ^entry:
-    store ptr %this, $this
+function @B(%v2 : ptr [object_bytes=16], %v3 : ptr, %v4 : ptr) -> void [unwind=no, binding=weak, object=_ZN1BC2Ev, object_root=yes, inline_hint=yes] {
+  slot $s4 : ptr
+  block ^b3:
+    store ptr %v2, $s4
+    %v38 = load ptr $s4
+    %v39 = load ptr %v3
+    store ptr %v39, %v38
     return void
 }
+function @add(%v5 : ptr [pass=by_address, object_bytes=16], %v6 : ptr [pass=by_address, object_bytes=16]) -> i32 [binding=weak, object=_Z3addI1BS0_EiRT_RT0_] {
+  slot $s5 : ptr
+  slot $s6 : ptr
+  block ^b4:
+    store ptr %v5, $s5
+    store ptr %v6, $s6
+    %v40 = load ptr $s5
+    %v41 = load ptr %v40
+    %v42 = index i8 %v41, -24
+    %v43 = load i64 %v42
+    %v44 = index i8 %v40, %v43
+    %v45 = index i8 %v44, 0
+    %v46 = index i8 [projection=field] %v45, 0
+    %v47 = load i32 %v46
+    %v48 = load ptr $s6
+    %v49 = load ptr %v48
+    %v50 = index i8 %v49, -24
+    %v51 = load i64 %v50
+    %v52 = index i8 %v48, %v51
+    %v53 = index i8 %v52, 0
+    %v54 = index i8 [projection=field] %v53, 0
+    %v55 = load i32 %v54
+    %v56 = binary add i32 %v47, %v55
+    return i32 %v56
+}
+alias object _ZN1DC2Ev = @D
