@@ -1,210 +1,220 @@
-# PA25 accumulated checkpoint audit138
+# PA25 final whole-stage audit141
 
 Stage base commit: fee6ad9076ff35c5272526e1c4c4df235fbf3bfe
-Last reviewed commit: 4530fe939e95a45ff6a46d5e53c76807b5bdd352
+Last reviewed commit: 67ea755a273223b7fcc973215e0ca1ec8131689d
 
-Target: **PA25 full-stage**, phase **checkpointAudit**. This first audit reviews
-`fee6ad9076ff35c5272526e1c4c4df235fbf3bfe..4530fe939e95a45ff6a46d5e53c76807b5bdd352`,
-including all changes through entry `34fe77a31e8bc73d46e425a48266b7537f21d773`
-and the audit repair. Both entry markers named the stage base; the range was not
-narrowed to the latest handoff. All 12 original commits and their combined source
-changes were reviewed, including driver/scalar/statement interactions. The final
-combined inventory has 84 changed `dev/` paths, recorded with commit inventories
-in [validation138](../student.tests/pa25/validation138.json).
+Target: **PA25 full-stage**. Phase: **audit**. Disposition: **complete**.
+Entry was `e6cdc480`; the review covers the entire stage from the base above,
+including the eight implementation139/140 commits since the last checkpoint's
+code marker `4530fe93`. The earlier [audit138](audit138.md) is preserved verbatim.
+Its conclusions and the implementation handoffs were inputs, not substitutes for
+reading the combined source, assignment, [spec](../spec.md), testing policy and
+plan. [Validation141](../student.tests/pa25/validation141.json) pins the complete
+commit/source inventory, commands, binaries, traces and measurements.
 
-Disposition: **checkpoint audit complete; PA25 incomplete**. Entry and exit are
-74/101 with exactly the same 27 failing cases. The three accepted implementation
-checkpoints are preserved. The code repair is committed separately before these
-records, making the marker above the next review's unambiguous baseline.
+## Findings and changes
 
-## Complete commit review
+**Exception binding was lost at the semantic/runtime boundary.** Catching `T*&`
+bound a local copy, so assigning another pointer and rethrowing did not update the
+exception object. Mutable pointer references also accepted conversions that are
+permitted only for value or const-reference handlers. Nested pointer/member-pointer
+qualification chains were incompletely matched, and a handler could name a pointer
+to an incomplete class. The reduced programs are in
+[audit141.py](../student.tests/pa25/audit141.py), including rejection controls,
+exact const-reference identity, mutation through rethrow, secondary-base adjustment,
+nullptr, member/function pointers and direct/separate/mixed three-TU execution.
 
-| Commit | Reviewed contribution and disposition |
+The proof is C++11 [except.handle]/1,3,16–17 and [conv.qual]/4–7 in
+[N3485](../doc/n3485.txt) ([published draft](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3485.pdf)).
+Only value and const-reference pointer handlers receive the listed pointer
+conversions; an exact reference binds the exception object. Changes through a
+non-const reference remain visible on rethrow. Mixed qualification conversion
+requires matching member owners and intervening const qualifiers. C++11 does
+**not** add a root member-pointer qualification conversion to the handler list;
+the negative test preserves that distinction. Compiler agreement is not the proof.
+
+`semantic/source_exception.cpp` now records compact binding mode by handler ID.
+`lowering/exception_handlers.cpp` consumes it and keys function-local selectors
+by `(type, binding)`. Typed LowIR clauses, validation, text adapters, MIR clauses,
+MIR dumps and native matcher arguments all carry that same fact. Exact references
+receive the payload address; mutable-reference mismatches fail. Converted const
+references receive handler-owned temporary storage, including separate member-
+pointer temporary identities across nested catches. The 80-byte exception header
+keeps only transient match state, cleared both before matching and at catch entry;
+a failed conversion or catch-all cannot consume stale temporary state. Handler
+storage survives inner catches and ends with its function frame. A two-word
+member representation is copied only when required; ordinary pointer temporaries
+use one word. The private begin-catch signature changes with object format **4**;
+version-3 objects must be rebuilt rather than silently linked with the new runtime.
+The final adapter review also found that native clause indexing could read beyond
+a clause when an external input omitted its selector. Explicit source selectors
+are unchanged; unsupported selector-less native clauses now receive a diagnostic
+before operand access. Generic LowIR views retain their accepted syntax.
+
+**Completed static layout was reconstructed incorrectly.** A packed `char,int`
+class had semantic offsets 0 and 1, but native data emission reinserted padding
+before the integer. Packed arrays and pointer relocations exposed the same hole.
+Overaligned class objects could lose alignment between objects/TUs. Declaration
+alignment was retained only for fields; local statement parsing discarded leading
+alignment attributes entirely.
+
+The parser now retains local alignment metadata through the existing occurrence
+model. Semantic declaration facts record and check explicit object alignment by
+entity ID, including template locals. Source slots consume this fact; the existing
+native frame-alignment path supplies aligned automatic storage. Defined structured
+and explicitly aligned globals reuse the compact LowIR `Object(bytes,alignment)`
+type as their exact storage layout. Items contain already-decided padding; native
+emission writes them consecutively and checks the final extent. Compiler objects
+carry the maximum required alignment through the linker. This adds no field to
+`Global` and no second layout graph. Legacy untyped structured LowIR retains PA24's
+item-derived alignment contract. The course presentation adapter retains its
+original spelling; production inspection exposes the new exact layout.
+
+C++11 [basic.align]/1 and [dcl.align]/1–6 require the accepted alignments and prohibit
+weakened, invalid and inconsistent specifications. `#pragma pack` follows this
+compiler's supported extension and the offsets its own semantic layout establishes.
+The existing private-object/data-image alignment limit is 4096; unsupported global
+alignments are rejected, not silently truncated or weakened. Controls cover packed
+constant objects/arrays/relocations, aligned zero and initialized storage, local and
+template declarations, static locals and cross-TU direct/object/mixed linking.
+
+The final expanded control set exposes **47 failures in 178 checks** in the frozen
+entry binary and passes **178/178** on the final compiler. The nested converted
+member-reference identity reproducer distinguishes two simultaneously live handler
+temporaries. Another **15/15** adapter/version checks pass; validation141 records
+the commands and initial failures. One intermediate full report exposed a
+PA21 initializer-list display change; the backing-storage presentation owner was
+corrected, with the original fixture and comparison rule preserved.
+
+## Independently reconstructed architecture
+
+| Spec surface | Actual owner, identity, work and release boundary |
 |---|---|
-| `b6eae734` | Initial stage boundary/ownership plan; marker and unfinished requirements retained |
-| `ce08119c` | Direct typed source/native driver, objects, foreign ELF and linking; repaired producer definition ownership and alias/GOT interactions |
-| `ff3e3848` | Foreign alignment and driver measurements; retained layout, strengthened full-width alignment/extent validation, preserved all measurements |
-| `cf26b48b` | Driver validation and 64/101 handoff; checked coverage and remaining owner groups |
-| `da31a876` | Wide scalar plan; finite required work retained, inherited diagnostic targets do not add gates |
-| `1cc95b47` | Canonical wide source types, constants and lowering; repaired enum range/payload and floating narrowing interactions |
-| `bcdd0b72` | Scalar builtins and ABI adapters; repaired enum sign/type identity, native builtin metadata and floating semantic views |
-| `ba608c4f` | Constant-owner telemetry and precision discussion; counters observe existing work, reference proof does not justify an oracle change |
-| `11aee2da` | Scalar validation and 71/101 handoff; reviewed full-width controls and performance manifests |
-| `832d2d85` | Statement ownership plan; retained review boundary and remaining stage scope |
-| `2705e57b` | Statement values, template/query/control/lifetime facts; traced combined wide/template statements and normal/early cleanup to ELF |
-| `34fe77a3` | Statement validation and 74/101 handoff; verified unchanged failure inventory and historical measurements |
-| `4530fe93` | Cohesive audit repair across semantic/ABI/native owners, plus explicit personal controls; validated before recording this tip |
+| 1: source/parser | `preprocess` owns immutable buffers and interned names; `PostTokenCursor` feeds the geometric ring in `syntax/cursor`. Integrated parser/Analyzer construct one source graph. `syntax/occurrence.cpp` retains deferred regions and compact `(source,context)` views, including alignment operands; substitution does not replay grammar or clone complete syntax trees. |
+| 2–3: canonical facts/lookup | TU-owned entity/type/scope/constant/ABI IDs and flat indices carry equality. `semantic/lookup.cpp` indexes `(scope,name)` and explicit parent/using/base/ADL edges. Overload candidates retain selected declaration/conversion IDs for lowering. Wide integers keep constant-pool identity and explicit ABI numeric sign; diagnostic/mangled strings are views or object-linkage names, not semantic equality keys. |
+| 4: templates/demand | `template_binding*`, `template_instantiation`, definition environments/owners and specialization owners separate definition-time fixed facts from contextual dependent work. Parent-linked frames avoid copying visible environments. NotStarted/Active/Success/Failure states distinguish recursive demand from new work; class completion does not demand unrelated member bodies. |
+| 5: scheduling/invalidation | `query_dependencies.cpp` stores deduplicated reverse edges from an incomplete class/query to affected consumers. Completion resets those facts and per-query revisions, including failed dependents; no global generation flush. Deferred function use, definition and vtable queues are owner-indexed. Lifetime/selector mappings are function-owned and reset at the function boundary. |
+| 6: typed lowering | `lowering/driver.cpp` constructs `Program` directly while the Analyzer is alive, then releases source/semantic owners before native construction. Constants, destination identities, ABI entries, construction/destruction actions, F80 evaluation, catch binding and exact storage layout cross as typed facts. Each TU gets its own frontend; source, compiler-object and mixed driver paths converge on `compile_object`/Linker. Text readers/writers serve explicit tools only. |
+| 7: native | `native/driver.cpp` creates and destroys one selected function's MIR/frame/encoding state per iteration. The unit workspace holds compact ID maps. EH clauses are indexed once by block; branch labels retain ownership. Six-bit parameter-clobber propagation queues only changed blocks, at most six additions per edge. Direct machine encoding and ELF byte writing invoke no assembler. |
+| 8: allocation | Semantic nodes/facts/expressions use TU slabs and sparse compact indices, not a second owning semantic tree. Local substitution/candidate/selection temporaries die with their owner. Native objects retain only bytes, symbols and producer-owned fixups; runtime support IR dies after object construction; linker buffers die with the invocation. No accumulating process-global cache was found on this path. |
+| 9–10: bounded/self-contained | Foreign ELF is an explicit bounded input adapter with one extent sort. Definition/alias/GOT ownership feeds a flat deduplicated relocation worklist; retained definitions/edges are visited once. Class/RTTI/EH services are a finite set of compiler-built typed IR bodies plus native syscall primitives. No reference or host compiler implements source output; empty-PATH controls exercise that boundary. Host tools only build the compiler, API probes and allowed foreign test helpers. |
 
-## Findings and repairs
+The stage-wide source review also rechecked the earlier enum range/representation,
+ABI literal, floating narrowing, statement-expression lifetime, alias/GOT and builtin
+identity repairs. No name/address recovery fallback was reintroduced. Static class
+initialization retains destination-relative self pointers, vptrs and base/field
+layout; RTTI traversal checks public access and ambiguity, including virtual-base
+identity. EH ownership spans constructor failure, function-try handlers, catch-copy
+failure, rethrow, cleanup and final destruction/freeing. Hierarchy matching follows
+required paths with depth-proportional stack; it is not falsely described as linear
+in a shared inheritance graph.
 
-**Scalar representation and ABI identity.** Non-fixed enums could shrink their
-underlying type according to a later small enumerator, keep narrow payloads under
-a wide type tag, or lose the required pre-closing-brace enumerator type. Implicit
-increments and fixed-range values needed checked bounds. The enum owner now
-tracks the full signed/unsigned range, selects a type representing every value,
-checks increments, and converts all constants to the selected representation
-before assigning enum type. This prevents narrow integers being read as wide
-constant-pool IDs. C++11 [dcl.enum]/5–6 in [N3485](../doc/n3485.txt) specifies
-initializer/preceding-enumerator types and representation of all enumerators.
+## End-to-end trace and optimization review
 
-Integer-to-floating list initialization compared values already rounded to long
-double, accepting some non-exact conversions. It now checks exact integer
-roundtrip, as required by [dcl.init.list]/7. Non-finite floating-to-integer
-conversion is rejected before a host cast: [conv.fpint]/1 makes out-of-range
-conversion undefined, and [expr.const]/2 excludes undefined operations from core
-constant expressions. Floating builtin constant views now use the floating pool,
-not an integer pool interpretation. Reduced programs cover NaN, float/double/
-long-double boundaries, enum widening/sign/range/type/increment and typed views.
+[audit141-trace.cc](../student.tests/pa25/audit141-trace.cc) combines a demanded
+`Item<9>` specialization, constant polymorphic globals with self pointers, a
+function-template function-try block, destructor cleanup, pointer-reference
+mutation, rethrow, secondary-base conversion, virtual dispatch and dynamic_cast.
+The same type/entity/ABI identities are followed through validated production
+LowIR, canonical text roundtrip, actual MIR and independently executed native ELF.
+The trace checks the replacement object, adjusted address, virtual result and one
+destruction, not merely IR counts.
 
-Wide enum template arguments exposed a cross-handoff hole: source constants
-reached an ABI graph that accepted wide values only for builtin integer types.
-Unsigned 64-bit enum values could also acquire a negative spelling. Canonical
-wide ABI facts now preserve declared enum type and separate numeric sign; the
-reader, writer and encoder agree. Small named values keep their existing key.
-[Itanium ABI section 5.1.6.1](../doc/itanium-mangling.txt) requires an enum literal's
-declared type plus numeric value of its base integral type. Positive/negative
-128-bit and unsigned-64 enum controls check exact manglings, fact/API roundtrips,
-direct/separate compilation and linkage with independently built helper objects.
-Host agreement supplements that ABI rule; it is not the proof by itself.
+Observed counters: **312 tokens**, pending ring maximum **41**, **489** parsed nodes
+and **144** occurrence views; **3** specializations, **1** demanded template body
+transition and **1** template class completion; **2** substitution frames;
+**2** fixed expressions reused twice; **233** semantic fact records; **256** LowIR
+instructions and **336** operands. Constant polymorphic globals need **zero** dynamic
+initializer units. Additional traces inspect packed relocations, aligned local and
+template storage, converted member-reference binding, runtime services and F80
+arithmetic. Canonical typed facts survive all roundtrips. Complex ABI-entry traces
+can reorder functions because the explicit writer uses `function_order` while
+native emission uses the function pool; whole-ELF byte equality is therefore a
+diagnostic there. Both images execute the same checked result. Simple layout and
+floating traces remain byte-identical; no course comparison was weakened.
 
-**Native definition ownership.** Link-time nearest-address reconstruction could
-lose relocations required by a retained alias when a weak sibling was replaced.
-Conversely, a synthetic GOT slot for a discarded weak body could demand an
-otherwise unused undefined target. Native code/data producers now attach a
-compact definition ID to each fixup. Aliases share that identity. Compiler object
-version 2 persists and validates definition/lazy/owner facts; old version-1
-objects must be rebuilt. This is an internal-format revision, not the later
-host-compatible object-output milestone.
+The independent final statement trace also exercises two demanded specializations:
+**273** parsed nodes plus **200** occurrence views, **2** body transitions and
+**8** fixed expressions with **16** uses. This checks shared definition facts
+across `int`/`long` instantiation and normal/early destruction. The combined class/EH
+trace emits **12** source functions, demands **13** runtime functions and visits
+**63** definitions / **243** relocation edges; telemetry is outside timing runs.
 
-The explicit foreign ELF adapter decodes and sorts bounded function/object
-extents once, coalesces same-address aliases, and supplies the same typed facts.
-It validates alignment before narrowing and checks symbol extents. Synthetic GOT
-slots are lazy definitions. Linker symbol selection roots the selected definitions;
-a flat adjacency and deduplicated worklist visit each retained definition and
-edge at most once. A retained alias keeps its dependencies, while unused slots
-of discarded bodies remain undemanded. Section-owned relocations are retained.
-Dead object bytes are not removed; this is necessary relocation selection, not
-an optional code-size optimization. Controls cover ordinary PLT and `-fno-plt`,
-both object orders, retained aliases, shared slots and required unresolved targets.
+The useful optional fact reviewed is exact power-of-two scaling. Source F32/F64
+arithmetic carries F80 evaluation; `native/floating.cpp` tests at most two constant
+operand bit patterns. A finite nonzero normal/subnormal power of two times a
+binary32/64 value is exact in binary80, including the full possible product
+exponents, leaving only the declared-precision rounding. The selected MIR records
+the proof, and the encoder uses shorter SSE work without x87 operand spill/reload
+traffic. Unknown operands keep F80. There is no persistent analysis to invalidate,
+no search/allocation/new IR, no additional frame bytes and zero text-growth budget.
+The 120,120 float/double comparisons and production/MIR trace check legality;
+frozen correct/correct measurements establish profitability separately.
 
-**Builtin facts.** The native driver recovered `strlen` identity from an object
-name. The source path now carries the semantic builtin through a typed LowIR
-metadata field. Only the external LowIR reader decodes the legacy textual form.
-The field uses existing padding: symbol metadata remains 36 bytes; ABI nodes
-remain 32 bytes. Direct-source and explicit-adapter execution both pass.
+Pipeline-wide budgets remain proportional to real source/fact/edge work, per-
+function IR and emitted bytes, with required foreign extent sorting O(n log n).
+The new binding/layout propagation adds constant work per clause/item/declaration,
+one sparse semantic entry per applicable declaration/handler, and one bounded
+handler temporary when conversion is possible. Matching state remains in the
+existing header; EH registrations remain 96 stack bytes. No speculative cloning,
+unbounded fixed point or optional growth pass was added. Inherited PA24 branch,
+register, ABI, bulk-copy and declared MIR bounds remain enforced by the root report.
+Later O1–O3 policies, host object interoperability/metadata and self-hosting remain
+owned by their assignments rather than invented PA25 gates.
 
-The committed [audit controls](../student.tests/pa25/audit138.py) contain the
-reducers. Initial controls exposed 26 failing checks among 70 attempted checks
-against the frozen entry binary (some follow-ups require successful compilation).
-The expanded final suite passes 122/122. All intermediate failures and generated
-reducers remain under the artifact directory; no course tests were altered.
+## Performance acceptance and validation
 
-## Architecture and optimization trace
+[Performance141](../student.tests/pa25/performance141.md) reports final frozen
+compiler latency/peak RSS, checked executable runtime and text size together.
+It retains A/A calibration, six ABBA blocks, every paired ratio/spread and all
+intermediate observations. Template, loop/call/memory, floating, class, cast,
+allocation and exception workloads compare equivalent correct entry/final behavior;
+new binding semantics have a final/final baseline. Timing runs had no concurrent
+build or correctness runner. All inherited 138–140 manifests were independently
+rehashed, including frozen inputs/binaries and executable images.
 
-Read against [spec](../spec.md), [assignment](README.md),
-[testing policy](../TESTING_AND_REFERENCES.md) and [layout](../PROJECT_LAYOUT.md).
-The nontrivial lifetime declaration in `student.tests/pa25/statement-trace.cc`
-and the demanded template in the audit's `template-statement-wide.cc` were
-traced from source to final ELF, including explicit AST, validated LowIR and MIR
-inspection and execution with an empty PATH. All 16 final-binary trace checks pass.
+No final compiler speedup is claimed from noisy samples. Required binding checks
+increase demanded EH support text; costs and affected runtime are disclosed.
+The unchanged exact-scale selection retains its prior isolated **17.3%** runtime
+benefit (paired ratio **0.827 [0.824,0.838]**, text **377 -> 362**), with identical
+final floating benchmark code. Fewer IR nodes are not used as evidence of benefit.
+Inherited **15% latency/RSS** targets and blanket zero-growth targets for necessary
+semantic work remain diagnostics under spec section 9. Historical misses and all
+measurements are preserved. This does not waive correctness, coverage, mandatory
+native bounds or the optional scale transform's explicit zero-growth budget.
 
-| Boundary | Owner, identity, work and release evidence |
+| Required check | Final result |
 |---|---|
-| Source/parser | Streaming cursor and immutable parsed source; each deferred source region parsed once and cached; occurrence views keyed by `(source, context)`, no cloned grammar or replay |
-| Template/semantic | Canonical entity/type/constant IDs, parent-linked substitution frames and complete `(owner, id)` query keys; fixed definition facts reused, only dependent facts instantiated; demanded body transitions once per specialization |
-| Result/lifetime | Selected statement result conversion and constructor/destructor facts feed typed lowering; function-owned `(overlay, state)` mappings share unchanged prefixes; skipped-initialization guards follow recorded control/lifetime edges |
-| LowIR/native | Semantic scopes/source graphs end at the TU boundary; direct typed symbols, ABI values and runtime roles cross it. One function's MIR/selection/frame/encoding temporaries are released before the next; explicit text views do not feed source production |
-| Object/ELF | Compact bytes, symbols, aliases and producer-owned fixups outlive frontend/MIR; O(symbols + relocations) linker worklist, one O(symbols log symbols) foreign-extent sort; buffers released with the driver invocation |
+| `perl scripts/cppgm_file_audit.pl --stage pa25 --paths dev/src` | Pass, four inherited header warnings |
+| `make test-pa25` | 101/101 |
+| `make test-report-through-pa25` | 4253/4253, all 25 stages |
+| Personal controls | 178 binding/layout and 15 adapter/version checks; 74 exception, 67 class, 61 driver, 19 scalar + 96 full-width pairs, 122 audit138, 49 statement; runtime/API/MIR/roundtrip and source reducers pass |
+| Preservation | `git diff --check` passes; fixtures, harnesses, references and comparison rules unchanged |
 
-The lifetime trace has 165 tokens, 273 parsed nodes, 473 occurrence-view nodes,
-two specializations/body transitions and two parsed template source regions.
-Eight fixed expressions have 16 uses. Four lowered statement regions need two
-lifetime mappings with 22 hits; five native functions produce 158 instructions
-and 1581 text bytes. Linker visits: nine definitions, 53 relocation edges.
-The wide/template/statement composition has 126 parsed nodes, two body
-transitions, six fixed expressions with 12 uses, two statement regions, three
-functions/109 native instructions, 559 text bytes and four definition/two edge
-visits. Normal/early destruction order is checked, not merely inspected.
+The authoritative root count is **4253**, including prior-through24 **4152** plus
+PA25 **101**. The supplied state said 4416; the initial primary log and independent
+reports agree on 4253. No cases were removed. The four inherited file-audit warnings
+are substantial header bodies in `lowering/procedural.h`, `lowir/model.h`,
+`semantic/analyzer.h` and `semantic/model.h`; fileAudit itself passes.
 
-Useful optimization fact: semantic result category, same class type and selected
-constructor facts allow the existing C++11 destination copy-elision path to use
-the final destination. Legality comes from the recorded construction/conversion
-and lifetime facts; profitability is avoiding a temporary/copy. Ineligible
-results retain ordinary conversions/copies and cleanup. Function-owned lifetime
-state is reset between functions, so mappings cannot survive invalidation of
-their owner. This extension adds no iterative optimization or speculative growth;
-work follows actual regions, lifetime edges and emitted instructions. Final MIR
-and execution preserve return/control behavior, ABI calls and debug associations.
-Existing PA24 native bounds and contract checks still pass. No allocator-specific
-or later optimization-policy requirement is invented at PA25.
+The inherited unused-dependent-local item was independently rechecked: N3485
+[temp.dep.type]/5–6 makes its missing current-instantiation member ill-formed even
+without instantiating that function. The valid `T::missing` control executes without
+demanding the unused body. [The proof](../student.tests/pa25/deferred-member-proof140.md)
+closes that item; the earlier floating reference remains valid under [expr]/12.
+No reference correction was made. Bundle
+`cppgm-reference-binaries-linux-x86_64-c2f713cd70d0.tar.gz`, SHA256
+`c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7`, is unchanged.
 
-The reviewed production path has no unexplained text transport, global retry,
-repeated specialization construction or new per-node hot allocation. The name
-and address reconstruction found by this audit was repaired in its producers
-and explicit adapters, rather than hidden by a fallback in the consumer.
+## Consolidated ledger
 
-## Performance and validation
-
-[Performance138](../student.tests/pa25/performance138.md) reports compiler latency,
-peak memory, checked executable runtime and text together. It pins exact A/B
-binaries, flags and inputs, A/A calibration and six ABBA blocks per mode/workload.
-All 1624 observations and historical outliers remain; all 11 manifests rehash
-correctly. The exact final template compiler median is 0.32798 s, paired B/A
-1.061 [0.794, 1.304], peak 14900 KiB. The cumulative packed predecessor versus
-the first correct driver has median 1.028 [0.864, 1.153]. These costs and spread
-are disclosed. Equivalent executables are byte-identical: 384567/521/340 text
-bytes for template/memory/floating workloads. No speedup is claimed.
-
-Stage acceptance follows spec section 9, including inherited plans: unsupported
-15% latency/RSS and zero optional text-growth targets are diagnostics, not extra
-exit gates. Necessary semantic/ABI work is bounded; avoidable common-node growth
-was removed. There is no new optional transform whose cost lacks a demonstrated
-benefit. Wide/statement final/final baselines remain available; PA34 owns
-self-hosting. This does not relax mandated correctness, coverage or native bounds.
-
-| Check | Final result |
+| Boundary | Review and disposition |
 |---|---|
-| `make test-pa25` | Exit 2; 74/101, exactly the original 27 failures |
-| Required `n=25` conditional through report | Exit 0; PA1–PA24 4152/4152, all 24 stages pass |
-| `perl scripts/cppgm_file_audit.pl --stage pa25 --paths dev/src` | Pass; four inherited header warnings |
-| Stage progress / coverage | Pass; zero new failures, zero removed cases, all 101 anchors preserved |
-| Explicit controls | 122 audit, 61 driver, 19 scalar + 96 randomized operand pairs, 49 statement, 4 ABI/API, 16 trace checks pass |
-| Source/fixture checks | `git diff --check` passes; no fixture, harness, reference or comparison changes |
+| 135–137 implementation / audit138 | Entire original stage range independently revisited, including driver, wide scalars, ABI facts and statement lifetimes. Original audit and measurements preserved; its 74/101 incompleteness is historical. |
+| implementation139: `7dfdc6fc`, `4ecb9b41` | Previously unaudited class runtime/static destination/vptr/RTTI work reviewed through all owners; behavior and fixed class/cast/allocation measurements checked. Accepted with this audit's exact global-layout repair. |
+| implementation140: `c75e9946`, `17f7f6b4`, `5bf12aef`, `9655db73`, `e7f66a25`, `e6cdc480` | Previously unaudited source EH, function-try ownership, nullptr/member representations, evaluation precision, scale proof and records reviewed together. Accepted with binding/temporary/qualification repairs. |
+| audit141: `67ea755a273223b7fcc973215e0ca1ec8131689d` | Whole-stage ownership repairs, expanded reducers, actual source-to-ELF/MIR traces, frozen performance, required stage/root/file checks complete. No unaudited implementation handoff or identified PA25 blocker remains. |
 
-Exact commands, exit codes, source/fixture inventories, binary and evidence hashes
-are in validation138. Driver/scalar/statement and ABI controls precede only the
-last semantic-view correction; required suites, audit controls and traces use the
-exact final binary. The four file-audit warnings are inherited substantial header
-bodies in lowering/procedural.h, lowir/model.h, semantic/analyzer.h and
-semantic/model.h. No file-audit requirement is waived.
-
-## Remaining scope and reference preservation
-
-Group the next implementation work broadly: native class/runtime support plus
-source EH integration (12 + 14 required failures), then source-semantic completion
-(the floating oracle and inherited unused-dependent-local reducer). Runtime
-hierarchy, payload, cleanup and handler facts must connect through shared owners;
-a handoff per support symbol or failing case would fragment their interactions.
-The three prior checkpoints each contain substantial driver, scalar or statement
-work, but separate planning, telemetry and evidence mini-commits caused avoidable
-review fragmentation. Keep related fixes, interaction controls and validation
-within one broad ownership handoff.
-
-The five floating differences among one million lines remain required failures.
-[The reduced precision experiment](../student.tests/pa25/rounding136.md) and
-C++11 [expr]/12 permit both direct double and excess-precision evaluation, so
-there is no proof that the reference is wrong. No reference output is corrected.
-Bundle: `cppgm-reference-binaries-linux-x86_64-c2f713cd70d0.tar.gz`, SHA256
-`c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7`.
-The exact comparison and all coverage remain. Full-stage success still requires
-the stage and root through-PA25 reports to pass; this audit grants no advancement.
-
-## Audit ledger
-
-| Audit | Reviewed range / accepted checkpoints | Findings and evidence | Exit / remaining work |
-|---|---|---|---|
-| 138 | `fee6ad90..4530fe93`; entry `34fe77a3`; 3 checkpoints | Fixed scalar/enum/ABI representation, definition/alias/GOT ownership, typed builtin and constant views; source-to-ELF trace; validation138/performance138 | Audit complete; prior 4152/4152, stage 74/101 with same 27 failures; native runtime/EH and source-semantic completion remain |
-
-Raw evidence: `/home/vishvananda/work/private/v4codex/artifacts/pa25-138/`.
-The following records-only commit contains this audit, compact plan and evidence
-summaries; its code parent is the `Last reviewed commit` above.
+Raw evidence: `/home/vishvananda/work/private/v4codex/artifacts/pa25-141/`.
+The final records commit follows the reviewed code commit; it changes no compiler
+behavior. [Plan](plan.md) is the compact final disposition, not a second open queue.

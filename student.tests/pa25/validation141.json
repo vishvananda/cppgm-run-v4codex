@@ -1,0 +1,3064 @@
+{
+  "stage": "pa25",
+  "target": "full-stage",
+  "phase": "audit",
+  "disposition": "complete",
+  "stage_base_commit": "fee6ad9076ff35c5272526e1c4c4df235fbf3bfe",
+  "entry_commit": "e6cdc480756fd0e4c91fec5832a1bcb277246cf4",
+  "previous_reviewed_commit": "4530fe939e95a45ff6a46d5e53c76807b5bdd352",
+  "code_commit": "67ea755a273223b7fcc973215e0ca1ec8131689d",
+  "required_checks": {
+    "fileAudit": {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa25 --paths dev/src",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/file-audit-final-code.log",
+      "sha256": "ecb5c8691e9459cff3673d47a336904ae2681678f41dcec312d8491a4667ac13",
+      "warnings": 4
+    },
+    "stageTests": {
+      "command": "make test-pa25",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/test-pa25-final-code.log",
+      "sha256": "b627dcc03b810a5794abfd3003c3387c1d5c942bbd34bfb2a1ccab3f3f6849dc",
+      "passed": 101,
+      "total": 101
+    },
+    "through25": {
+      "command": "make test-report-through-pa25",
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/through25-final-code.log",
+      "sha256": "f3803c1acd6430d930011f17628a89cf3a104a20aeb4ee722d338b80cc2fea81",
+      "passed": 4253,
+      "total": 4253,
+      "stages": 25
+    }
+  },
+  "supplied_state_count": 4416,
+  "authoritative_test_count": 4253,
+  "prior_stage_tests": 4152,
+  "tracked_stages": 25,
+  "coverage_reduced": false,
+  "protected_paths_changed": [],
+  "source_inventory": {
+    "dev/cppgm++.cpp": "2344f235e6bc6977eb45a506ea9d8292bad84de9efa3bd0c5cfc31acb6775fa8",
+    "dev/frontend_source_sets.mk": "8eebe749ea1e0f73fb23d0a0028e808e4216d8005244c40da6d3e0966407e23f",
+    "dev/src/abi/itanium/argument_reader.cpp": "7b96ac18e12a6d75c5605c184a970ee4541b2655766f331578921d471efddba7",
+    "dev/src/abi/itanium/expression_encoder.cpp": "f2a952de7e0f9f4ee09873d6fff6db7edcc330a2298d3450f14ac33d0d8ecc1a",
+    "dev/src/abi/itanium/fact_reader.h": "333ca979280c14714b99f37ef129f642d30dd6bcec71307ddfe328deb7da9e53",
+    "dev/src/abi/itanium/fact_writer.cpp": "d0ee8bf548ffca4a8fe6224bf6e7d45ea72f1770aa829e1da7e8fb4565a7b995",
+    "dev/src/abi/itanium/graph.cpp": "0470f99c308339200af88aad3e492b9291733569c2b7e93a9a9e15296ea82bff",
+    "dev/src/abi/itanium/graph.h": "d9e7836dccd5b2f6460ea68edad1bb94ac7b8ce494c04d9fcd194335ecf2d59c",
+    "dev/src/abi/itanium/graph_validation.cpp": "4ba765cd415e96d4bc68e0f7d534b1a30508befba44f39ce512c15d38b8923af",
+    "dev/src/ir_symbol_model.h": "b6744c13ae21c9f22ba7a0ffff581bb4db62f090e5fe34f010d13d5a033721cf",
+    "dev/src/lowering/allocation_cleanup.cpp": "acc47797d177c6189dabd02d0d06090a717975bd14e39658bcfed9dd74d30b70",
+    "dev/src/lowering/bit_fields.cpp": "1244651665c997f47c0d69fbb2cc71dbe85485c88abe3cf1fbde9a6aa4b05240",
+    "dev/src/lowering/branch_lifetimes.cpp": "7d5465d7f08169e6da9e128789240ef3a32d240099fc883ee5337e2111351ae7",
+    "dev/src/lowering/class_values.cpp": "ee845b7beecd90232acfd1f08838a9c067cf289451a336a712ac972632a4ccc6",
+    "dev/src/lowering/cleanup.cpp": "c5b7dcf15fcbab5fce5717474a98c38c7001ed1c968a8dc382bd5236207f2561",
+    "dev/src/lowering/constant_construction.cpp": "5528676fd466e0345d505ee039d772fb92b59d7853103ffaa54244e5d2a425c6",
+    "dev/src/lowering/control_flow.cpp": "a68507a6c8422b3424caf5cd5e563a4b7056ce5c719eda23f9eeeed4049d1981",
+    "dev/src/lowering/destruction.cpp": "64cee5d6639ce6ded88cf743f8dba033e6571ef7e4d60dfd45d50ad87a884a3b",
+    "dev/src/lowering/driver.cpp": "983de4131c573008a3cc6531a512ea0aab647317c67217417c70477d32badb71",
+    "dev/src/lowering/exception_boundary.cpp": "a35c0a628a9d0bd7f29640be27d667a590c150d4e247b5e780c88ac9885b88b7",
+    "dev/src/lowering/exception_handlers.cpp": "b8905da3c143b2ec2f511d775572197b528d1224ae6242436f1a76a55be21880",
+    "dev/src/lowering/expression.cpp": "f138478c0e79d34b056227c6933c24ed5a8104570eec20c2ae5e4be1a8947af3",
+    "dev/src/lowering/floating_builtins.cpp": "eca06149c72734059fe316955f6456083f45806880399a48fde83a9db8cc2d53",
+    "dev/src/lowering/full_expression.cpp": "c0833e8888b6d4b51ba4be791817a32a046a21b5cb02e682f984cb726f176118",
+    "dev/src/lowering/initialization.cpp": "fe2fc68d79429d762e9b7d4fa4c1a1dd5968c7764dd3d1a1a172d235e1c7da0b",
+    "dev/src/lowering/procedural.h": "cf62918637f191851b1ddc46041a75fe3181aba6e6ebe4932747f51c87b4957f",
+    "dev/src/lowering/query_abi.cpp": "a93102b8d0c8e647434d7e97bbbdf4ff5576195d4cf97b29415305de132ae462",
+    "dev/src/lowering/range_statement.cpp": "1e40a061cb089357f38773f9d0004e48e9482bfe88c1d5e6f452be13200fdbc0",
+    "dev/src/lowering/reference_storage.cpp": "076c83ebb23ebdd7f05d5273b38c39bb52a6254be78acea95a5f4a21a0bed59f",
+    "dev/src/lowering/rtti.cpp": "08b1b4b76947800e760030c0fa288084751c04b1fe76c83c851830bc1dc68f05",
+    "dev/src/lowering/source_exception.cpp": "aba7935922be2d163e69b533e06c26fc42c5e9b87747c9d2c918621d5a65db4a",
+    "dev/src/lowering/statement_expression.cpp": "93904d516a575318358f3a39f7672fe72f7cfa1e47ae93c6c2d76e3410363fe3",
+    "dev/src/lowering/static_bit_fields.cpp": "f97cd24335d5456d99928cd1aa932479cbefbaf593868ed7daebc0c5c1d48f2e",
+    "dev/src/lowering/symbols.cpp": "c7600bf8a68c663795f80fd465d02ca221a3b92302dec5a32cf28d79cd983506",
+    "dev/src/lowering/typed_operations.cpp": "0e82ea000d8069dba4e02e1862edb98991fa3b84629ec4ec7d8053e466b91dbc",
+    "dev/src/lowering/values.cpp": "02e709348f101c703623e12067d37d4c62ea572364708391992256647e11b181",
+    "dev/src/lowir/instruction_reader.cpp": "65f9f0dec19ff382b13e41d7428eeb5363b390d9b4611801ab6b4a24b7acc1b4",
+    "dev/src/lowir/instruction_shape.cpp": "6cce2392e3b9845e7ae9cc7504fd23ad85afdc2d2fad85d86808f5c8c602d8ad",
+    "dev/src/lowir/instruction_writer.cpp": "69e88fdc8e1e3890982c5eeb9476be329dd55b8cba588affe82a29decb8fbaf9",
+    "dev/src/lowir/metadata.cpp": "9a36bd734b613c45ba16131ae16a66ea1b3841132e3838efa2ad2904b364bf8b",
+    "dev/src/lowir/metadata_vocabulary.cpp": "406fb665706bf56fd05584ed08845d5e9e2b51e12b320bd725a997160ac3e04b",
+    "dev/src/lowir/model.h": "9c6f88a8cdac856d2364bb54645c282bdeda04e1fafbe6102a371e4cbf9156c5",
+    "dev/src/lowir/top_level.cpp": "c2db6f0ed3d55c3a1280a810ccd2f4e89289e35b87b2f37dacc006cc07a0cc68",
+    "dev/src/lowir/validation_instructions.cpp": "63ce04379fd4335a605c23eee57322e2af247eb5b9a15ad84036c90f0d615784",
+    "dev/src/lowir/validator.cpp": "958457f10b008613e190f7c0bef97eb05ef2a18625e189c8c93b6c9a684c81b2",
+    "dev/src/lowir/writer.cpp": "49331ba726245fbc3f457c74d981fea3d059b0a3a0d8ee7d683c7c9c1aceea8c",
+    "dev/src/native/builtins.cpp": "a4ec74fd07c210b85d5a62cf674831802db0ce6e8018eec31570d4778eb94cb7",
+    "dev/src/native/driver.cpp": "7f1ee5011b77c10c430322444a670c0f213fcda0c23a0a0e3e7f28e260793dca",
+    "dev/src/native/dump.cpp": "28c6a6fc5028f97444c613c0ac4d32a4fc24903f38958fec9771e64d648185cd",
+    "dev/src/native/elf.cpp": "3a68f63a315c47e4868ad408ab3868a5d9b9664b856881ac4fe16cf9d7d7dacb",
+    "dev/src/native/encoding.h": "2fe7474dce3dbf2395aa88a1bdc13aa7d20219ea86de05649690a2fbe340edc9",
+    "dev/src/native/exception_clauses.cpp": "99475701866343b56233435a71bfc7fbf00543232cd57cc342a2d398316e37d1",
+    "dev/src/native/float_encoding.cpp": "f02daa41fd7ee052bd11efc4acb53bb50bbbb51054a22e660def799ae045a32d",
+    "dev/src/native/floating.cpp": "a05238c9d62c5184d175a2cc08e22c5e66a24d75b66c74440ef51c9a4ff4cf06",
+    "dev/src/native/integer_encoding.cpp": "d68ee655e720f3a247a2ac48ce87bd6315d2ea1a414267349cbe52b40e82e4c8",
+    "dev/src/native/layout.cpp": "ec436f3825023e7866489fb7892d574e872142502347569276f0e8d047c44ba4",
+    "dev/src/native/model.h": "653e87b967b69a6c9c6f4551d02f5322d525d023b0dda8c1ddeed19d25a9827e",
+    "dev/src/native/parameter_flow.cpp": "af0e9929aab71a2478dac253ab6ff67b4e3a84187ad9473ee307659070dab3f5",
+    "dev/src/native/placement.cpp": "684573a253061d0d282c9f878440d52fe330d92dc31c04c452fb22c2a79ded2d",
+    "dev/src/native/process_runtime.cpp": "37729024b07cc46686757b580ebc2bd5c58968f9a78c3f0ff99355c98ceb2986",
+    "dev/src/native/runtime.cpp": "fba5f103935e50a9575e673ff9c62dd3041ee57fe82f3eb222d39e4a9e3d77d9",
+    "dev/src/native/runtime_encoding.cpp": "61354e9f87d4661d248463fb1b7bf2a084282c534573da4490ead76e7a72d57c",
+    "dev/src/native/selection.cpp": "a9f2686eb466b634a84727a03aaf94a3fe8480b0b029d81c95a031cf8038a810",
+    "dev/src/native/selection.h": "d6b704bfd487626950803a0329d78ce15d0052ee89467aa94927d62b26eb7fc3",
+    "dev/src/posttoken/token_types.cpp": "bff2d691430f4ea6753f4afa1acb91ee50acc91f96a357b505918225e07fc166",
+    "dev/src/posttoken/token_types.h": "f107e597dcddda6cfd99a584f385dc46ca52e3ecb780e39002af6adc03d491cf",
+    "dev/src/preprocess/directive.cpp": "a771f72eafad3b59c111d92c47f1ad8e3fcb240edf1ba6684d8a3a9d8feaebef",
+    "dev/src/preprocess/macro.cpp": "df1af2b05ee8715fa3d8911aa113bfab504c878bcffc617caa7dd53622c6bf08",
+    "dev/src/preprocess/preprocessor.cpp": "e16baf3165c84b152d09bdccbe4d2240cfd5e416a6164f7f1ff2e34e4063a2b0",
+    "dev/src/preprocess/preprocessor.h": "d96111d28ead7cd89fcb70cc60b92921049c4039dd3e1f54398c05a7818ecb82",
+    "dev/src/semantic/analyzer.h": "d85bf9ea95b8d3b6e8e98778b2aa4f2b52b5204ce00cc4689be8a410bf34688e",
+    "dev/src/semantic/class_enum.cpp": "6376917392c0c4e583cd71b4214a43f85e94fc7744044603dabfeb5a57ef6e76",
+    "dev/src/semantic/class_values.cpp": "2f004c905da94c04f4c3943cbe4e252877db16698513250cbd18de6a71b742bd",
+    "dev/src/semantic/constant.cpp": "0f60f8c7b4a8faefd2d232b88ff59116a7cbf840e050cd20dbef3bae22a535cc",
+    "dev/src/semantic/constant_addresses.cpp": "c27999b8525ff1f36821301f6a924646687a4aeb204f925cc30cffec7b5bb170",
+    "dev/src/semantic/constant_array.cpp": "13a2746be1499be1b054ee4bc466f2e47d20b83e5d955d06804b451bb93abb9d",
+    "dev/src/semantic/constant_construction.cpp": "9d118732d3bdd8ccb02d428a4eba9ffae7cb9848d4a6088a4724db5d95a73393",
+    "dev/src/semantic/constant_floating.cpp": "a0683671c367d6ce5e7d1972020c9e3e7165bb1a3d3a091213ae18a608d08a12",
+    "dev/src/semantic/constant_integer.cpp": "3c2a4abf3895992c2530b4e0ba019f802faeb2598d5a2c3b4b29232dea71c790",
+    "dev/src/semantic/constant_objects.cpp": "791b650f1f4530a2ba4df0beb334b0dc352536a8a6899a7661b426996094cd6a",
+    "dev/src/semantic/construction.cpp": "f55d899da279c712807975ffe18909127e89c8794579c0258f2f5d115bfc13c6",
+    "dev/src/semantic/conversion.cpp": "adb6c4379ddc129b1f0bbb7c2ea2f3097458a2a2dd8167bf90a725d7f0714329",
+    "dev/src/semantic/converting_constructors.cpp": "4dc71433f07c766be552a55b93c110032e70c9fe4c337dedba3b132f3ca4602e",
+    "dev/src/semantic/declaration.cpp": "cc6cbc2198d7343330b28115d54c44fce82ad1358d8c3573f08314e9858c703a",
+    "dev/src/semantic/exception_expression.cpp": "5bc7a189da5894da3878747657101a7e4cf98231931950950199dd9b68b0f77d",
+    "dev/src/semantic/expression.cpp": "46c5f47cf07f95861f5b73eb171b4eda59592110fe1dcd6b63867ac29a48b9a7",
+    "dev/src/semantic/fields.cpp": "bbdc84faa134a992288c3fbe9053476b7f4ba3463ae77915848d717b3d73c150",
+    "dev/src/semantic/floating_builtins.cpp": "75a456ee338bc767b9e2977a3ebf277cb400205d822c2a115f4af7212a5f9a1f",
+    "dev/src/semantic/initializers.cpp": "d5f0ace003ecd9a5ba2c9ef285efeaafc934ed9dc15e5ef05d322b8214bfebd1",
+    "dev/src/semantic/jump_validation.cpp": "3fe8b40d5fb2789871a2a1de6804e275be49511aa740bd6f001cbcf4e8c78050",
+    "dev/src/semantic/literal_constants.cpp": "5c10ef0bf4c2e6d90cbe035b54179725eb357537501a3f7ad1ef29691bf1366c",
+    "dev/src/semantic/model.h": "d1f55d96505e993133f08125e8988c7da2abe4aebbe9439f8ba10e5527aedead",
+    "dev/src/semantic/output.cpp": "192a67cd5a42a0748c5a231819d15d68a10e9755bbeba6b8526de57b0e1c98cf",
+    "dev/src/semantic/overload.cpp": "986dcd90afce7e43b53ef4adda4c66288368a61b851d06fcde1c5dce7e309e1c",
+    "dev/src/semantic/resolved_output.cpp": "38e5604ed726405b20287e4e1e6a629fad7260fdbf2357e2ea78a6a8cbaad187",
+    "dev/src/semantic/source_exception.cpp": "e55c23fc10954d6e3f674e853e5dd324f7d236a2e70d3cae47ffb5a0d57e0850",
+    "dev/src/semantic/statement.cpp": "6a4ed4c34093155a2e8c20e8d96f525c48bccc24cab9297833fd343d5b6860aa",
+    "dev/src/semantic/statement_expression.cpp": "95e33f15f3a62ece42bf7af7a00966f89963cd7812b21ff823bbe3d7a82cea41",
+    "dev/src/semantic/static_initialization.cpp": "3d5ed2378a5d0fb305f114ab1f82fdb293d213df071de0b580812b4a7946ca55",
+    "dev/src/semantic/static_initializer.cpp": "6850d6daf8b86678534df7af104687f27537e75a82118788e5f8a0680ccd5ccd",
+    "dev/src/semantic/template_arguments.cpp": "8665dbd2fe10f6dfe560ae92f324c0d0c5387180687c292cc965ee3da33500b4",
+    "dev/src/semantic/template_binding.cpp": "456642f8e276bb30a400d8228e002151b796f1aebe0b9af734c2d5b1dbf6b298",
+    "dev/src/semantic/template_binding_statements.cpp": "519ab3583bf66253e1571cc4cdc47305889927096a9f6feaf9e56389207a2a05",
+    "dev/src/semantic/template_call.cpp": "3b50614b23db4f400e2b6a9bacd6661a687d91b529bfa626f1a6d2ef84876bd0",
+    "dev/src/semantic/template_value_facts.cpp": "d7352f2076ce3c57e390680ad6dfaa9a123cb25229b251ffe2ec0c66b7fbd97c",
+    "dev/src/semantic/type_builder.cpp": "a0c30c8705c100ca4ff42fd0ffc7443d3575ab9218249d0d6ef0679ca9790d67",
+    "dev/src/semantic/type_query.cpp": "7ee99a3408f4806c008aee971074670768e6a94c4fd24172f8d10f472e22fc41",
+    "dev/src/semantic/type_query.h": "02b62a4a195a5de1d53624072353c396d3e2ed3b30b8a363c279db7d2b298819",
+    "dev/src/syntax/ast.cpp": "561d19612a39da03b54c44865cc077bbcb8479c69efab1542c72992572f7fe0c",
+    "dev/src/syntax/ast.h": "55a83ccb2c321486a19034c1b40b18aa5e019911d58306e5850edb336ecf2c0c",
+    "dev/src/syntax/expression.cpp": "6fe8e5ad8d2d333623eb2bdb0543f776932468dd66084e87db41364e40dca3f5",
+    "dev/src/syntax/name_parser.cpp": "a7acede6d3910acde0806bccf0e378f5885291cfffb49e184380e5251ecde111",
+    "dev/src/syntax/parser.cpp": "583cf852d3432dbeac6c6d534e813a19c1a745465d08ec48e802fde349a8e3f5",
+    "dev/src/syntax/statement.cpp": "4ba77064516370641c22a2930e193572a40ea0ba883c39c4f4819618ed67e5ae",
+    "dev/src/toolchain/driver.cpp": "5c322e4f012fc8bca9c5cad86c06e14b3edadc95d74fa825ab4bae84964871b7",
+    "dev/src/toolchain/elf_input.cpp": "2b8d0e29023a084729c0c45230ab4a2570436d4b1d47688e462ba668c2443f92",
+    "dev/src/toolchain/linker.cpp": "0c3d0edd558327c623ae97dff44386e32024d08293ab6cb8b28207d8db4e78be",
+    "dev/src/toolchain/object.cpp": "df33bc8a0a0d6c39d8ab70fbe332207aed7699fe6b17cfdf6cc8474d1f2fc9c5",
+    "dev/src/toolchain/object.h": "d812f0f9834392e9947daa355473c9cbc5a137dab6e2987583f2c2a5ceb15885",
+    "dev/src/toolchain/runtime.cpp": "b817d442b8173c2a4f8d05db894661e2b51496d027fd28edd9e585fadec96605",
+    "dev/src/toolchain/runtime.h": "4f91372252603205842d48471f36191e9630631b154aba3ae04e67e54c65805b",
+    "dev/src/toolchain/runtime_builder.cpp": "34f93c934b4faa861de692f5fcb2156a859f22a770fa84d64e38b2659ba39c4b",
+    "dev/src/toolchain/runtime_cast.cpp": "86cb67c2ad7fe5f83496d17c4bd507fe6e82947c06b3d10005eb1c8ab2af66b2",
+    "dev/src/toolchain/runtime_eh_match.cpp": "678d72f0e81cf0163bd9461bf75b56a2dbd2bbd9630006bc0501e16ab827b0e8",
+    "dev/src/toolchain/runtime_exception.cpp": "3ce2c83b19d703b5a478fa6424679c45bc1934c725e1f2c929dd04064c9f638c",
+    "dev/src/toolchain/runtime_failure.cpp": "82ec61de4aefc5a022204581eecd11f3477b5645e4e40d263898490624e3bdef"
+  },
+  "stage_commits": [
+    {
+      "commit": "b6eae7349095e893e5106b3dad1e8b6a3192e674",
+      "subject": "Record PA25 implementation boundary and owner plan"
+    },
+    {
+      "commit": "ce08119c8ee6b6a6e293d0e74e396489f1d56b25",
+      "subject": "Implement PA25 native object driver and typed compile/link integration"
+    },
+    {
+      "commit": "ff3e384895ab0834b2e16f6ec30e8881b7d3103e",
+      "subject": "Preserve foreign function alignment and measure PA25 driver integration"
+    },
+    {
+      "commit": "cf26b48b3f4c2e8bb037ee6185727f4b8f59e9d1",
+      "subject": "Record validated PA25 driver handoff and remaining stage owners"
+    },
+    {
+      "commit": "da31a87645144cb0f8fce56d74d616180df563b7",
+      "subject": "Plan PA25 wide scalar semantic ownership and validation"
+    },
+    {
+      "commit": "1cc95b471a99ea328c66d6edf1b02d928a574918",
+      "subject": "Connect canonical 128-bit source scalars through constants and native lowering"
+    },
+    {
+      "commit": "bcdd0b7268057d61b0ad8bce5167f2c99b3921ba",
+      "subject": "Complete scalar builtins and full-width ABI fact adapters"
+    },
+    {
+      "commit": "ba608c4fa918d45563b553149c4b708f189b7c9e",
+      "subject": "Report constant-pool telemetry within its owner and document rounding boundary"
+    },
+    {
+      "commit": "11aee2da5df69efed3bc1822e568a9fedbc995be",
+      "subject": "Record validated PA25 scalar handoff and remaining full-stage work"
+    },
+    {
+      "commit": "832d2d85a62145dfd685758446d82c231a085378",
+      "subject": "Plan PA25 statement-expression ownership and validation"
+    },
+    {
+      "commit": "2705e57b19159115e9abe3fb2b16194b73596de0",
+      "subject": "Implement scoped statement expressions with value, template and lifetime facts"
+    },
+    {
+      "commit": "34fe77a31e8bc73d46e425a48266b7537f21d773",
+      "subject": "Record PA25 statement handoff, required checks and performance evidence"
+    },
+    {
+      "commit": "4530fe939e95a45ff6a46d5e53c76807b5bdd352",
+      "subject": "Repair PA25 constants, ABI literals and native definition ownership"
+    },
+    {
+      "commit": "7d26d375ef7d21be0b9457b23c0b00be1171b3ae",
+      "subject": "Record accumulated PA25 audit, evidence and reviewed code boundary"
+    },
+    {
+      "commit": "7dfdc6fcb9a12637a4f8f938b129eb5557eef768",
+      "subject": "Implement PA25 standalone class runtime and constant polymorphic initialization"
+    },
+    {
+      "commit": "4ecb9b413ab864cc1a43b2636ca78e67f6ce8ef8",
+      "subject": "Record validated PA25 class runtime handoff and performance evidence"
+    },
+    {
+      "commit": "c75e994673847b705d6ef2e0245caa48b6ea5ef2",
+      "subject": "Plan coordinated PA25 exception semantics and runtime implementation"
+    },
+    {
+      "commit": "17f7f6b4589183e147962c5012166ad2b0c4a70f",
+      "subject": "Implement PA25 source exception ownership matching and function-try execution"
+    },
+    {
+      "commit": "5bf12aef9db4a749b524a54df67d677f839bc90b",
+      "subject": "Complete nullptr exception matching with source member-pointer representations"
+    },
+    {
+      "commit": "9655db738a8fdaa5e51e03ca7bd359f38e8e2951",
+      "subject": "Carry source floating evaluation precision through typed LowIR and native encoding"
+    },
+    {
+      "commit": "e7f66a2529c80e3d870bcda050f9cc28100cf70e",
+      "subject": "Select exact power-of-two scaling without excess-precision spill traffic"
+    },
+    {
+      "commit": "e6cdc480756fd0e4c91fec5832a1bcb277246cf4",
+      "subject": "Validate complete PA25 execution and record bounded precision performance evidence"
+    },
+    {
+      "commit": "67ea755a273223b7fcc973215e0ca1ec8131689d",
+      "subject": "Preserve PA25 catch binding and object layout across native boundaries"
+    }
+  ],
+  "contract_inventory": {
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/contract-git-inventory.json",
+    "sha256": "49b27fcd10ddcc5bf61391a34cb0ea7fbde40e0294c44b40e794ae487a91f253",
+    "canonical_map_sha256": "a6c40ec8f4800a56333c7428d224e094efae857866704121573f3b4a700985bb",
+    "count": 18472,
+    "hash_kind": "git blob SHA-1",
+    "pa25_anchors": 101
+  },
+  "compiler_binaries": {
+    "cppgm-entry": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/cppgm-entry",
+      "sha256": "26ca4cba8f2fe988d34a2a663c6da97ee0b63deddd4c92cc53b96c01a487e48d"
+    },
+    "cppgm-final": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/cppgm-final",
+      "sha256": "785d93c5dc489343dd2653bf24a0e52c4a98bb9176ee0f4ed81fe563ee7630aa"
+    },
+    "cppgm-reviewed": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/cppgm-reviewed",
+      "sha256": "88d793d695a93b977f2a5cf6f1f5ba463d673de79f2e1c109194fdb44630b828"
+    },
+    "cppgm-final-code": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/cppgm-final-code",
+      "sha256": "283e3987a3084961b52aece8957d644cfff63bfa8b322f9d5dd031139b6ac6ad"
+    }
+  },
+  "controls": {
+    "controls-entry-identity": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls-entry-identity/results.json",
+      "sha256": "6ac7f120297dfbf5ede4f6029b9f6570b94d53578fd9d6289512a9b30093457f",
+      "passed": 131,
+      "total": 178,
+      "failing_cases": [
+        "aligned-declaration",
+        "aligned-function",
+        "aligned-static",
+        "aligned-template-declaration",
+        "aligned-zero",
+        "conflicting-alignment",
+        "cross-tu",
+        "function-pointer-reference",
+        "incomplete-pointer",
+        "invalid-alignment",
+        "layout-cross-tu",
+        "member-converted-reference-identity",
+        "member-null-reference-rejected",
+        "mixed-member-qualification",
+        "mixed-member-qualification-reference",
+        "packed-array",
+        "packed-relocation",
+        "packed-static",
+        "pointer-const-reference-exact",
+        "pointer-const-reference-mutation",
+        "pointer-null-reference-rejected",
+        "pointer-reference-base",
+        "pointer-reference-conversion",
+        "pointer-reference-mutation",
+        "weakened-alignment"
+      ]
+    },
+    "controls-final-code": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls-final-code/results.json",
+      "sha256": "71c137befdf8328003c54655fbc5db08bf3dad4c251d809f3056c6cc09f3f95e",
+      "passed": 178,
+      "total": 178,
+      "failing_cases": []
+    },
+    "adapters-final-code": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/adapters-final-code/results.json",
+      "sha256": "7e84a060bb67b78981d7b63168ad11d9839a1327b5ac6454e226768548d3ef51",
+      "passed": 15,
+      "total": 15,
+      "failing_cases": []
+    }
+  },
+  "personal_checks": [
+    {
+      "name": "exceptions",
+      "command": [
+        "python3",
+        "student.tests/pa25/exceptions.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/exceptions-final-code"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/exceptions-final-code.log"
+    },
+    {
+      "name": "classes",
+      "command": [
+        "python3",
+        "student.tests/pa25/class-runtime.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/classes-final-code"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/classes-final-code.log"
+    },
+    {
+      "name": "driver",
+      "command": [
+        "python3",
+        "student.tests/pa25/driver.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/driver-final-code"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/driver-final-code.log"
+    },
+    {
+      "name": "scalars",
+      "command": [
+        "python3",
+        "student.tests/pa25/scalars.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/scalars-final-code"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/scalars-final-code.log"
+    },
+    {
+      "name": "audit138",
+      "command": [
+        "python3",
+        "student.tests/pa25/audit138.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit138-final-code"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit138-final-code.log"
+    },
+    {
+      "name": "statements",
+      "command": [
+        "python3",
+        "student.tests/pa25/statements.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/statements-final-code"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/statements-final-code.log"
+    }
+  ],
+  "trace_checks": {
+    "commands": [
+      {
+        "name": "audit-trace-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/production-trace-final-code/trace-api",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa25/audit141-trace.cc",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit-trace-final-code"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "audit-trace-final-code-execute",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit-trace-final-code.elf"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "audit-trace-final-code-roundtrip",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit-trace-final-code.roundtrip.elf"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "packed-trace-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/production-trace-final-code/trace-api",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls-final/packed-relocation.cc",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/packed-trace-final-code"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "packed-trace-final-code-execute",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/packed-trace-final-code.elf"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "packed-trace-final-code-roundtrip",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/packed-trace-final-code.roundtrip.elf"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "alignment-trace-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/production-trace-final-code/trace-api",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls-final/aligned-declaration.cc",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/alignment-trace-final-code"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "alignment-trace-final-code-execute",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/alignment-trace-final-code.elf"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "alignment-trace-final-code-roundtrip",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/alignment-trace-final-code.roundtrip.elf"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "template-alignment-trace-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/production-trace-final-code/trace-api",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls-final/aligned-template-declaration.cc",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/template-alignment-trace-final-code"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "template-alignment-trace-final-code-execute",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/template-alignment-trace-final-code.elf"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "template-alignment-trace-final-code-roundtrip",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/template-alignment-trace-final-code.roundtrip.elf"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "member-binding-trace-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/production-trace-final-code/trace-api",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls-final/member-null-reference-storage.cc",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/member-binding-trace-final-code"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "member-binding-trace-final-code-execute",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/member-binding-trace-final-code.elf"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "member-binding-trace-final-code-roundtrip",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/member-binding-trace-final-code.roundtrip.elf"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "unused-dependent-member-compile-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/unused-dependent-member-final-code",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa25/unused-dependent-member.cc"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "unused-dependent-member-execute-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/unused-dependent-member-final-code"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "destructor-handler-return-compile-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/destructor-handler-return-final-code",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa25/destructor-handler-return.cc"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "destructor-handler-return-execute-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/destructor-handler-return-final-code"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "class-exception-boundary-compile-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/class-exception-boundary-final-code",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa25/class-exception-boundary.cc"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "class-exception-boundary-execute-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/class-exception-boundary-final-code"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "wide-fields-compile-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/wide-fields-final-code",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa25/wide-fields.cc"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "wide-fields-execute-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/wide-fields-final-code"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "floating-builtins-compile-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/floating-builtins-final-code",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa25/floating-builtins.cc"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "floating-builtins-execute-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/floating-builtins-final-code"
+        ],
+        "status": 0,
+        "expected": 0
+      },
+      {
+        "name": "unused-dependent-local-reject-final-code",
+        "args": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/invalid.obj",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa25/unused-dependent-local.cc"
+        ],
+        "status": 1,
+        "expected": 1
+      }
+    ],
+    "roundtrips": {
+      "audit-trace-final-code": {
+        "byte_identical": false,
+        "canonical_lowir_identical": true
+      },
+      "packed-trace-final-code": {
+        "byte_identical": true,
+        "canonical_lowir_identical": true
+      },
+      "alignment-trace-final-code": {
+        "byte_identical": true,
+        "canonical_lowir_identical": true
+      },
+      "template-alignment-trace-final-code": {
+        "byte_identical": true,
+        "canonical_lowir_identical": true
+      },
+      "member-binding-trace-final-code": {
+        "byte_identical": false,
+        "canonical_lowir_identical": true
+      }
+    },
+    "ordering_note": "Writer uses function_order; native iterates functions. The nontrivial ABI-entry trace has equivalent function bodies in a different order, so whole ELF equality is diagnostic, not the adapter contract."
+  },
+  "trace_counters": {
+    "audit-trace-final-code": [
+      {
+        "tokens": 312,
+        "max_pending": 41,
+        "node_growths": 9,
+        "delimiter_work": 312,
+        "semantic_floating_constants": 0,
+        "semantic_wide_constants": 0,
+        "semantic_wide_constant_bytes": 32,
+        "semantic_constant_bodies": 3,
+        "semantic_constant_activations": 6,
+        "semantic_constant_execution_steps": 20,
+        "semantic_constant_object_work": 12,
+        "semantic_constant_address_work": 6,
+        "semantic_constant_dependency_work": 6,
+        "semantic_constant_persistence_work": 2,
+        "semantic_constant_execution_hits": 0,
+        "semantic_ms": 0.812773,
+        "semantic_angle_names": 0,
+        "semantic_angle_parts": 0,
+        "semantic_angle_interpretations": 0,
+        "semantic_fact_slots": 633,
+        "semantic_fact_records": 233,
+        "semantic_fact_storage_bytes": 23384,
+        "semantic_template_declaration_work": 7,
+        "semantic_declaration_publications": 7,
+        "semantic_dependence_work": 17,
+        "semantic_specializations": 3,
+        "semantic_type_substitution_work": 8,
+        "semantic_type_substitution_hits": 4,
+        "semantic_type_substitution_records": 5,
+        "semantic_substitution_frames": 2,
+        "semantic_template_type_work": 3,
+        "semantic_template_type_access_work": 0,
+        "semantic_template_type_uses": 7,
+        "semantic_template_signature_work": 2,
+        "semantic_template_signature_uses": 2,
+        "semantic_parameter_publications": 2,
+        "semantic_template_default_binding_work": 0,
+        "semantic_template_default_binding_queued": 0,
+        "semantic_template_initializer_binding_work": 1,
+        "semantic_template_initializer_binding_queued": 0,
+        "template_body_transitions": 1,
+        "semantic_body_checks": 9,
+        "semantic_closures": 0,
+        "semantic_capture_edges": 0,
+        "semantic_range_plans": 0,
+        "semantic_initializer_independence_work": 0,
+        "semantic_initializer_independence_hits": 0,
+        "semantic_range_storage_bytes": 412,
+        "semantic_range_patterns": 0,
+        "semantic_range_pattern_uses": 0,
+        "semantic_return_deductions": 0,
+        "semantic_return_deduction_uses": 0,
+        "semantic_placeholder_type_work": 0,
+        "semantic_body_lifetime_checks": 9,
+        "semantic_statement_conversion_work": 0,
+        "semantic_statement_conversion_uses": 0,
+        "semantic_constant_array_work": 0,
+        "semantic_conversion_result_work": 0,
+        "semantic_layout_empty_work": 0,
+        "semantic_layout_empty_types": 1,
+        "semantic_layout_empty_fallbacks": 0,
+        "semantic_conversion_receiver_work": 0,
+        "semantic_conversion_receivers_omitted": 0,
+        "semantic_base_adjustment_paths": 5,
+        "semantic_base_adjustment_work": 4,
+        "semantic_base_adjustment_hits": 13,
+        "semantic_static_initialization_work": 3,
+        "semantic_static_plan_work": 0,
+        "semantic_constant_array_index_entries": 0,
+        "semantic_initializer_recipe_work": 0,
+        "semantic_initializer_recipe_uses": 0,
+        "semantic_default_initialization_work": 1,
+        "semantic_default_initialization_uses": 1,
+        "template_class_completions": 1,
+        "nested_class_declarations": 0,
+        "nested_class_definitions": 0,
+        "explicit_specialization_selections": 0,
+        "variable_template_initializers": 0,
+        "variable_template_reuses": 0,
+        "variable_template_candidates": 0,
+        "function_ordering_work": 0,
+        "function_ordering_hits": 0,
+        "class_pattern_ordering_work": 0,
+        "class_pattern_ordering_hits": 0,
+        "template_definition_applications": 0,
+        "template_definition_direct_applications": 0,
+        "template_definition_requests": 9,
+        "template_definition_hits": 0,
+        "template_definition_edges": 0,
+        "template_definition_signature_requests": 0,
+        "template_definition_signature_work": 0,
+        "semantic_expression_bytes": 36,
+        "semantic_type_queries": 8,
+        "semantic_type_query_work": 7,
+        "semantic_candidate_substitutions": 1,
+        "semantic_candidate_cycles": 0,
+        "query_completion_edges": 0,
+        "query_completion_invalidations": 0,
+        "semantic_deferred_function_uses": 0,
+        "semantic_deferred_function_use_work": 0,
+        "semantic_template_binding_work": 64,
+        "semantic_template_parameter_check_work": 144,
+        "semantic_template_parameter_check_reuses": 0,
+        "semantic_template_bindings": 16,
+        "semantic_template_fixed_expressions": 2,
+        "semantic_template_fixed_uses": 2,
+        "semantic_template_fixed_calls": 0,
+        "semantic_template_fixed_call_uses": 0,
+        "semantic_template_object_contexts": 2,
+        "semantic_template_member_uses": 1,
+        "parsed_nodes": 489,
+        "template_occurrences": 144,
+        "template_deferred_regions": 4,
+        "template_demanded_regions": 4,
+        "template_source_regions": 6,
+        "template_region_nodes": 144,
+        "template_region_roots": 4,
+        "template_default_environment_work": 0,
+        "template_default_argument_work": 0,
+        "template_default_facts": 0,
+        "template_default_dependencies": 0,
+        "template_default_dependency_work": 0,
+        "template_default_demands": 0,
+        "semantic_pack_expansion_work": 0,
+        "semantic_pack_expansion_lanes": 0,
+        "semantic_argument_packs": 16,
+        "semantic_object_uses": 7,
+        "semantic_expression_facts": 78,
+        "semantic_expression_uses": 79,
+        "semantic_expression_slots": 633,
+        "semantic_expression_inherited": 2,
+        "semantic_expression_variants": 0,
+        "semantic_call_argument_edges": 4,
+        "semantic_constructor_actions": 5,
+        "semantic_inherited_arguments": 0,
+        "semantic_conversion_objects": 0,
+        "semantic_user_conversions": 0,
+        "semantic_list_plans": 0,
+        "semantic_list_fields": 0,
+        "semantic_query_edges": 4,
+        "semantic_list_objects": 0,
+        "semantic_value_initializations": 0,
+        "semantic_value_returns": 0,
+        "semantic_function_returns": 0,
+        "semantic_placement_objects": 0,
+        "semantic_constant_constructor_actions": 0,
+        "semantic_constant_fields": 10,
+        "semantic_initializer_actions": 0,
+        "semantic_zero_plans": 0,
+        "semantic_zero_parts": 0,
+        "semantic_field_descriptors": 0,
+        "semantic_transfer_unit_fields": 0,
+        "member_pointer_proof_work": 0,
+        "member_pointer_proof_hits": 0,
+        "member_pointer_flow_work": 0,
+        "member_pointer_flow_reads": 0,
+        "semantic_member_constant_values": 0,
+        "semantic_member_constant_bytes": 16,
+        "semantic_member_receiver_work": 0,
+        "semantic_scalar_observations": 0,
+        "semantic_scalar_consumptions": 0,
+        "semantic_scalar_consumption_work": 0,
+        "semantic_parameter_queries": 0,
+        "semantic_parameter_query_work": 0,
+        "semantic_delegation_entry_work": 0,
+        "semantic_destruction_actions": 2,
+        "semantic_transfer_actions": 0,
+        "semantic_scalar_transfer_work": 0,
+        "semantic_scalar_transfer_cache_bytes": 0,
+        "semantic_lifetime_states": 1,
+        "semantic_reference_binding_work": 0,
+        "semantic_reference_alternatives": 0,
+        "semantic_lifetime_uses": 3,
+        "semantic_virtual_classes": 3,
+        "semantic_rtti_type_demands": 5,
+        "semantic_rtti_class_work": 3,
+        "semantic_rtti_base_work": 2,
+        "semantic_virtual_views": 1,
+        "semantic_virtual_slots": 5,
+        "semantic_virtual_storage_bytes": 864,
+        "semantic_subobject_storage_bytes": 64,
+        "semantic_lifecycle_base_entries": 3,
+        "semantic_lifecycle_storage_bytes": 96,
+        "semantic_virtual_base_entries": 0,
+        "semantic_virtual_base_work": 0,
+        "semantic_final_overrider_work": 0,
+        "semantic_subobject_work": 7,
+        "semantic_base_layout_work": 2,
+        "semantic_subobject_identities": 2,
+        "semantic_subobject_paths": 2,
+        "semantic_virtual_slot_work": 9,
+        "semantic_virtual_declaration_work": 7,
+        "semantic_virtual_demands": 3,
+        "semantic_key_vtable_notifications": 0,
+        "semantic_key_vtable_processed": 0,
+        "semantic_vtable_emissions": 3,
+        "semantic_external_vtable_references": 0,
+        "semantic_vtable_queue_bytes": 16,
+        "semantic_member_demands": 11,
+        "semantic_friend_definitions": 0,
+        "semantic_friend_demands": 0,
+        "semantic_friend_processed": 0,
+        "semantic_demand_processed": 11,
+        "semantic_expression_work": 69,
+        "semantic_discard_selections": 0,
+        "semantic_discard_recipe_uses": 0,
+        "semantic_discard_materializations": 0,
+        "semantic_candidate_work": 6,
+        "semantic_conversion_work": 51,
+        "semantic_conversions": 53,
+        "semantic_entity_bytes": 120,
+        "semantic_class_facts": 6,
+        "semantic_constants": 7,
+        "semantic_value_queries": 1,
+        "semantic_value_query_work": 1,
+        "semantic_template_value_sources": 0,
+        "semantic_template_value_uses": 0,
+        "semantic_value_conversion_variants": 0,
+        "semantic_value_conversion_records": 0,
+        "semantic_types": 50,
+        "semantic_entities": 49,
+        "semantic_scopes": 60,
+        "semantic_edges": 4,
+        "semantic_declarations": 34,
+        "semantic_regions": 26,
+        "semantic_lookup_work": 362,
+        "semantic_signature_work": 17,
+        "semantic_template_signature_shape_work": 4,
+        "semantic_template_signature_shape_hits": 2,
+        "semantic_type_probes": 219,
+        "semantic_constant_work": 17,
+        "constexpr_validity_work": 6,
+        "exception_work": 5,
+        "closures": 0,
+        "lower_virtual_cache_bytes": 112,
+        "rtti_expressions": 1,
+        "rtti_records": 5,
+        "rtti_cache_hits": 11,
+        "statement_regions": 0,
+        "lifetime_mapping_work": 0,
+        "lifetime_mapping_hits": 0,
+        "list_plans": 0,
+        "list_objects": 0,
+        "initializer_list_types": 0,
+        "lower_deleting_entries": 0,
+        "lower_local_statics": 0,
+        "lower_constant_data_records": 0,
+        "lower_constant_data_work": 0,
+        "lower_constant_data_hits": 0,
+        "lower_aggregate_array_work": 0,
+        "lower_aggregate_array_hits": 0
+      },
+      {
+        "frontend_ms": 1.49063,
+        "lowering_ms": 0.531841,
+        "peak_rss_kib": 12464,
+        "nodes": 633,
+        "static_requests": 0,
+        "static_hits": 0,
+        "control_work": 45,
+        "discard_work": 0,
+        "full_expression_work": 96,
+        "full_expression_regions": 2,
+        "linkage_requests": 0,
+        "linkage_hits": 0,
+        "value_base_argument_facts": 0,
+        "value_parameter_abi_facts": 0,
+        "initializer_units": 0,
+        "finalizer_units": 0,
+        "abi_nodes": 27,
+        "abi_bytes": 2168,
+        "instructions": 256,
+        "operands": 336,
+        "ir_pool_growths": 95,
+        "ir_capacity_bytes": 63504
+      }
+    ],
+    "statement-trace-final": [
+      {
+        "tokens": 165,
+        "max_pending": 32,
+        "node_growths": 9,
+        "delimiter_work": 165,
+        "semantic_floating_constants": 0,
+        "semantic_wide_constants": 0,
+        "semantic_wide_constant_bytes": 32,
+        "semantic_constant_bodies": 0,
+        "semantic_constant_activations": 0,
+        "semantic_constant_execution_steps": 0,
+        "semantic_constant_object_work": 0,
+        "semantic_constant_address_work": 0,
+        "semantic_constant_dependency_work": 0,
+        "semantic_constant_persistence_work": 0,
+        "semantic_constant_execution_hits": 0,
+        "semantic_ms": 1.2208,
+        "semantic_angle_names": 0,
+        "semantic_angle_parts": 0,
+        "semantic_angle_interpretations": 0,
+        "semantic_fact_slots": 473,
+        "semantic_fact_records": 179,
+        "semantic_fact_storage_bytes": 22832,
+        "semantic_template_declaration_work": 4,
+        "semantic_declaration_publications": 8,
+        "semantic_dependence_work": 6,
+        "semantic_specializations": 2,
+        "semantic_type_substitution_work": 6,
+        "semantic_type_substitution_hits": 8,
+        "semantic_type_substitution_records": 4,
+        "semantic_substitution_frames": 2,
+        "semantic_template_type_work": 3,
+        "semantic_template_type_access_work": 0,
+        "semantic_template_type_uses": 12,
+        "semantic_template_signature_work": 0,
+        "semantic_template_signature_uses": 0,
+        "semantic_parameter_publications": 2,
+        "semantic_template_default_binding_work": 0,
+        "semantic_template_default_binding_queued": 0,
+        "semantic_template_initializer_binding_work": 3,
+        "semantic_template_initializer_binding_queued": 0,
+        "template_body_transitions": 2,
+        "semantic_body_checks": 5,
+        "semantic_closures": 0,
+        "semantic_capture_edges": 0,
+        "semantic_range_plans": 0,
+        "semantic_initializer_independence_work": 0,
+        "semantic_initializer_independence_hits": 0,
+        "semantic_range_storage_bytes": 412,
+        "semantic_range_patterns": 0,
+        "semantic_range_pattern_uses": 0,
+        "semantic_return_deductions": 0,
+        "semantic_return_deduction_uses": 0,
+        "semantic_placeholder_type_work": 0,
+        "semantic_body_lifetime_checks": 5,
+        "semantic_statement_conversion_work": 0,
+        "semantic_statement_conversion_uses": 0,
+        "semantic_constant_array_work": 0,
+        "semantic_conversion_result_work": 0,
+        "semantic_layout_empty_work": 0,
+        "semantic_layout_empty_types": 0,
+        "semantic_layout_empty_fallbacks": 0,
+        "semantic_conversion_receiver_work": 0,
+        "semantic_conversion_receivers_omitted": 0,
+        "semantic_base_adjustment_paths": 0,
+        "semantic_base_adjustment_work": 0,
+        "semantic_base_adjustment_hits": 0,
+        "semantic_static_initialization_work": 1,
+        "semantic_static_plan_work": 0,
+        "semantic_constant_array_index_entries": 0,
+        "semantic_initializer_recipe_work": 3,
+        "semantic_initializer_recipe_uses": 6,
+        "semantic_default_initialization_work": 0,
+        "semantic_default_initialization_uses": 0,
+        "template_class_completions": 0,
+        "nested_class_declarations": 0,
+        "nested_class_definitions": 0,
+        "explicit_specialization_selections": 0,
+        "variable_template_initializers": 0,
+        "variable_template_reuses": 0,
+        "variable_template_candidates": 0,
+        "function_ordering_work": 0,
+        "function_ordering_hits": 0,
+        "class_pattern_ordering_work": 0,
+        "class_pattern_ordering_hits": 0,
+        "template_definition_applications": 0,
+        "template_definition_direct_applications": 0,
+        "template_definition_requests": 0,
+        "template_definition_hits": 0,
+        "template_definition_edges": 0,
+        "template_definition_signature_requests": 0,
+        "template_definition_signature_work": 0,
+        "semantic_expression_bytes": 36,
+        "semantic_type_queries": 7,
+        "semantic_type_query_work": 7,
+        "semantic_candidate_substitutions": 2,
+        "semantic_candidate_cycles": 0,
+        "query_completion_edges": 0,
+        "query_completion_invalidations": 0,
+        "semantic_deferred_function_uses": 0,
+        "semantic_deferred_function_use_work": 0,
+        "semantic_template_binding_work": 58,
+        "semantic_template_parameter_check_work": 100,
+        "semantic_template_parameter_check_reuses": 0,
+        "semantic_template_bindings": 9,
+        "semantic_template_fixed_expressions": 8,
+        "semantic_template_fixed_uses": 16,
+        "semantic_template_fixed_calls": 0,
+        "semantic_template_fixed_call_uses": 0,
+        "semantic_template_object_contexts": 0,
+        "semantic_template_member_uses": 0,
+        "parsed_nodes": 273,
+        "template_occurrences": 200,
+        "template_deferred_regions": 2,
+        "template_demanded_regions": 2,
+        "template_source_regions": 2,
+        "template_region_nodes": 100,
+        "template_region_roots": 1,
+        "template_default_environment_work": 0,
+        "template_default_argument_work": 0,
+        "template_default_facts": 0,
+        "template_default_dependencies": 0,
+        "template_default_dependency_work": 0,
+        "template_default_demands": 0,
+        "semantic_pack_expansion_work": 0,
+        "semantic_pack_expansion_lanes": 0,
+        "semantic_argument_packs": 7,
+        "semantic_object_uses": 3,
+        "semantic_expression_facts": 80,
+        "semantic_expression_uses": 92,
+        "semantic_expression_slots": 473,
+        "semantic_expression_inherited": 16,
+        "semantic_expression_variants": 0,
+        "semantic_call_argument_edges": 14,
+        "semantic_constructor_actions": 1,
+        "semantic_inherited_arguments": 0,
+        "semantic_conversion_objects": 0,
+        "semantic_user_conversions": 0,
+        "semantic_list_plans": 0,
+        "semantic_list_fields": 0,
+        "semantic_query_edges": 5,
+        "semantic_list_objects": 0,
+        "semantic_value_initializations": 0,
+        "semantic_value_returns": 0,
+        "semantic_function_returns": 0,
+        "semantic_placement_objects": 0,
+        "semantic_constant_constructor_actions": 0,
+        "semantic_constant_fields": 0,
+        "semantic_initializer_actions": 0,
+        "semantic_zero_plans": 0,
+        "semantic_zero_parts": 0,
+        "semantic_field_descriptors": 0,
+        "semantic_transfer_unit_fields": 0,
+        "member_pointer_proof_work": 0,
+        "member_pointer_proof_hits": 0,
+        "member_pointer_flow_work": 0,
+        "member_pointer_flow_reads": 0,
+        "semantic_member_constant_values": 0,
+        "semantic_member_constant_bytes": 16,
+        "semantic_member_receiver_work": 0,
+        "semantic_scalar_observations": 0,
+        "semantic_scalar_consumptions": 0,
+        "semantic_scalar_consumption_work": 0,
+        "semantic_parameter_queries": 0,
+        "semantic_parameter_query_work": 0,
+        "semantic_delegation_entry_work": 0,
+        "semantic_destruction_actions": 0,
+        "semantic_transfer_actions": 0,
+        "semantic_scalar_transfer_work": 0,
+        "semantic_scalar_transfer_cache_bytes": 0,
+        "semantic_lifetime_states": 4,
+        "semantic_reference_binding_work": 0,
+        "semantic_reference_alternatives": 0,
+        "semantic_lifetime_uses": 36,
+        "semantic_virtual_classes": 0,
+        "semantic_rtti_type_demands": 0,
+        "semantic_rtti_class_work": 0,
+        "semantic_rtti_base_work": 0,
+        "semantic_virtual_views": 0,
+        "semantic_virtual_slots": 0,
+        "semantic_virtual_storage_bytes": 136,
+        "semantic_subobject_storage_bytes": 16,
+        "semantic_lifecycle_base_entries": 1,
+        "semantic_lifecycle_storage_bytes": 24,
+        "semantic_virtual_base_entries": 0,
+        "semantic_virtual_base_work": 0,
+        "semantic_final_overrider_work": 0,
+        "semantic_subobject_work": 0,
+        "semantic_base_layout_work": 0,
+        "semantic_subobject_identities": 0,
+        "semantic_subobject_paths": 0,
+        "semantic_virtual_slot_work": 0,
+        "semantic_virtual_declaration_work": 2,
+        "semantic_virtual_demands": 0,
+        "semantic_key_vtable_notifications": 0,
+        "semantic_key_vtable_processed": 0,
+        "semantic_vtable_emissions": 0,
+        "semantic_external_vtable_references": 0,
+        "semantic_vtable_queue_bytes": 0,
+        "semantic_member_demands": 2,
+        "semantic_friend_definitions": 0,
+        "semantic_friend_demands": 0,
+        "semantic_friend_processed": 0,
+        "semantic_demand_processed": 2,
+        "semantic_expression_work": 65,
+        "semantic_discard_selections": 0,
+        "semantic_discard_recipe_uses": 0,
+        "semantic_discard_materializations": 0,
+        "semantic_candidate_work": 5,
+        "semantic_conversion_work": 59,
+        "semantic_conversions": 70,
+        "semantic_entity_bytes": 120,
+        "semantic_class_facts": 1,
+        "semantic_constants": 4,
+        "semantic_value_queries": 0,
+        "semantic_value_query_work": 0,
+        "semantic_template_value_sources": 0,
+        "semantic_template_value_uses": 0,
+        "semantic_value_conversion_variants": 0,
+        "semantic_value_conversion_records": 0,
+        "semantic_types": 23,
+        "semantic_entities": 34,
+        "semantic_scopes": 34,
+        "semantic_edges": 0,
+        "semantic_declarations": 25,
+        "semantic_regions": 17,
+        "semantic_lookup_work": 160,
+        "semantic_signature_work": 16,
+        "semantic_template_signature_shape_work": 2,
+        "semantic_template_signature_shape_hits": 2,
+        "semantic_type_probes": 77,
+        "semantic_constant_work": 10,
+        "constexpr_validity_work": 0,
+        "exception_work": 80,
+        "closures": 0,
+        "lower_virtual_cache_bytes": 28,
+        "rtti_expressions": 0,
+        "rtti_records": 0,
+        "rtti_cache_hits": 0,
+        "statement_regions": 4,
+        "lifetime_mapping_work": 2,
+        "lifetime_mapping_hits": 22,
+        "list_plans": 0,
+        "list_objects": 0,
+        "initializer_list_types": 0,
+        "lower_deleting_entries": 0,
+        "lower_local_statics": 0,
+        "lower_constant_data_records": 0,
+        "lower_constant_data_work": 0,
+        "lower_constant_data_hits": 0,
+        "lower_aggregate_array_work": 0,
+        "lower_aggregate_array_hits": 0
+      },
+      {
+        "frontend_ms": 22.147,
+        "lowering_ms": 1.05653,
+        "peak_rss_kib": 6524,
+        "nodes": 473,
+        "static_requests": 0,
+        "static_hits": 0,
+        "control_work": 18,
+        "discard_work": 0,
+        "full_expression_work": 327,
+        "full_expression_regions": 4,
+        "linkage_requests": 0,
+        "linkage_hits": 0,
+        "value_base_argument_facts": 0,
+        "value_parameter_abi_facts": 0,
+        "initializer_units": 0,
+        "finalizer_units": 0,
+        "abi_nodes": 15,
+        "abi_bytes": 1064,
+        "instructions": 132,
+        "operands": 199,
+        "ir_pool_growths": 69,
+        "ir_capacity_bytes": 31744
+      },
+      {
+        "driver_ms": 26.4446,
+        "peak_rss_kib": 6524,
+        "text_bytes": 1825,
+        "native_functions": 5,
+        "native_instructions": 158,
+        "link_definition_work": 12,
+        "link_relocation_work": 55,
+        "runtime_functions": 0,
+        "runtime_instructions": 0,
+        "runtime_text_bytes": 0,
+        "selection_ms": 0.142616,
+        "encoding_ms": 0.071304
+      }
+    ],
+    "audit-driver-final": [
+      {
+        "tokens": 312,
+        "max_pending": 41,
+        "node_growths": 9,
+        "delimiter_work": 312,
+        "semantic_floating_constants": 0,
+        "semantic_wide_constants": 0,
+        "semantic_wide_constant_bytes": 32,
+        "semantic_constant_bodies": 3,
+        "semantic_constant_activations": 6,
+        "semantic_constant_execution_steps": 20,
+        "semantic_constant_object_work": 12,
+        "semantic_constant_address_work": 6,
+        "semantic_constant_dependency_work": 6,
+        "semantic_constant_persistence_work": 2,
+        "semantic_constant_execution_hits": 0,
+        "semantic_ms": 1.63161,
+        "semantic_angle_names": 0,
+        "semantic_angle_parts": 0,
+        "semantic_angle_interpretations": 0,
+        "semantic_fact_slots": 633,
+        "semantic_fact_records": 233,
+        "semantic_fact_storage_bytes": 23384,
+        "semantic_template_declaration_work": 7,
+        "semantic_declaration_publications": 7,
+        "semantic_dependence_work": 17,
+        "semantic_specializations": 3,
+        "semantic_type_substitution_work": 8,
+        "semantic_type_substitution_hits": 4,
+        "semantic_type_substitution_records": 5,
+        "semantic_substitution_frames": 2,
+        "semantic_template_type_work": 3,
+        "semantic_template_type_access_work": 0,
+        "semantic_template_type_uses": 7,
+        "semantic_template_signature_work": 2,
+        "semantic_template_signature_uses": 2,
+        "semantic_parameter_publications": 2,
+        "semantic_template_default_binding_work": 0,
+        "semantic_template_default_binding_queued": 0,
+        "semantic_template_initializer_binding_work": 1,
+        "semantic_template_initializer_binding_queued": 0,
+        "template_body_transitions": 1,
+        "semantic_body_checks": 9,
+        "semantic_closures": 0,
+        "semantic_capture_edges": 0,
+        "semantic_range_plans": 0,
+        "semantic_initializer_independence_work": 0,
+        "semantic_initializer_independence_hits": 0,
+        "semantic_range_storage_bytes": 412,
+        "semantic_range_patterns": 0,
+        "semantic_range_pattern_uses": 0,
+        "semantic_return_deductions": 0,
+        "semantic_return_deduction_uses": 0,
+        "semantic_placeholder_type_work": 0,
+        "semantic_body_lifetime_checks": 9,
+        "semantic_statement_conversion_work": 0,
+        "semantic_statement_conversion_uses": 0,
+        "semantic_constant_array_work": 0,
+        "semantic_conversion_result_work": 0,
+        "semantic_layout_empty_work": 0,
+        "semantic_layout_empty_types": 1,
+        "semantic_layout_empty_fallbacks": 0,
+        "semantic_conversion_receiver_work": 0,
+        "semantic_conversion_receivers_omitted": 0,
+        "semantic_base_adjustment_paths": 5,
+        "semantic_base_adjustment_work": 4,
+        "semantic_base_adjustment_hits": 13,
+        "semantic_static_initialization_work": 3,
+        "semantic_static_plan_work": 0,
+        "semantic_constant_array_index_entries": 0,
+        "semantic_initializer_recipe_work": 0,
+        "semantic_initializer_recipe_uses": 0,
+        "semantic_default_initialization_work": 1,
+        "semantic_default_initialization_uses": 1,
+        "template_class_completions": 1,
+        "nested_class_declarations": 0,
+        "nested_class_definitions": 0,
+        "explicit_specialization_selections": 0,
+        "variable_template_initializers": 0,
+        "variable_template_reuses": 0,
+        "variable_template_candidates": 0,
+        "function_ordering_work": 0,
+        "function_ordering_hits": 0,
+        "class_pattern_ordering_work": 0,
+        "class_pattern_ordering_hits": 0,
+        "template_definition_applications": 0,
+        "template_definition_direct_applications": 0,
+        "template_definition_requests": 9,
+        "template_definition_hits": 0,
+        "template_definition_edges": 0,
+        "template_definition_signature_requests": 0,
+        "template_definition_signature_work": 0,
+        "semantic_expression_bytes": 36,
+        "semantic_type_queries": 8,
+        "semantic_type_query_work": 7,
+        "semantic_candidate_substitutions": 1,
+        "semantic_candidate_cycles": 0,
+        "query_completion_edges": 0,
+        "query_completion_invalidations": 0,
+        "semantic_deferred_function_uses": 0,
+        "semantic_deferred_function_use_work": 0,
+        "semantic_template_binding_work": 64,
+        "semantic_template_parameter_check_work": 144,
+        "semantic_template_parameter_check_reuses": 0,
+        "semantic_template_bindings": 16,
+        "semantic_template_fixed_expressions": 2,
+        "semantic_template_fixed_uses": 2,
+        "semantic_template_fixed_calls": 0,
+        "semantic_template_fixed_call_uses": 0,
+        "semantic_template_object_contexts": 2,
+        "semantic_template_member_uses": 1,
+        "parsed_nodes": 489,
+        "template_occurrences": 144,
+        "template_deferred_regions": 4,
+        "template_demanded_regions": 4,
+        "template_source_regions": 6,
+        "template_region_nodes": 144,
+        "template_region_roots": 4,
+        "template_default_environment_work": 0,
+        "template_default_argument_work": 0,
+        "template_default_facts": 0,
+        "template_default_dependencies": 0,
+        "template_default_dependency_work": 0,
+        "template_default_demands": 0,
+        "semantic_pack_expansion_work": 0,
+        "semantic_pack_expansion_lanes": 0,
+        "semantic_argument_packs": 16,
+        "semantic_object_uses": 7,
+        "semantic_expression_facts": 78,
+        "semantic_expression_uses": 79,
+        "semantic_expression_slots": 633,
+        "semantic_expression_inherited": 2,
+        "semantic_expression_variants": 0,
+        "semantic_call_argument_edges": 4,
+        "semantic_constructor_actions": 5,
+        "semantic_inherited_arguments": 0,
+        "semantic_conversion_objects": 0,
+        "semantic_user_conversions": 0,
+        "semantic_list_plans": 0,
+        "semantic_list_fields": 0,
+        "semantic_query_edges": 4,
+        "semantic_list_objects": 0,
+        "semantic_value_initializations": 0,
+        "semantic_value_returns": 0,
+        "semantic_function_returns": 0,
+        "semantic_placement_objects": 0,
+        "semantic_constant_constructor_actions": 0,
+        "semantic_constant_fields": 10,
+        "semantic_initializer_actions": 0,
+        "semantic_zero_plans": 0,
+        "semantic_zero_parts": 0,
+        "semantic_field_descriptors": 0,
+        "semantic_transfer_unit_fields": 0,
+        "member_pointer_proof_work": 0,
+        "member_pointer_proof_hits": 0,
+        "member_pointer_flow_work": 0,
+        "member_pointer_flow_reads": 0,
+        "semantic_member_constant_values": 0,
+        "semantic_member_constant_bytes": 16,
+        "semantic_member_receiver_work": 0,
+        "semantic_scalar_observations": 0,
+        "semantic_scalar_consumptions": 0,
+        "semantic_scalar_consumption_work": 0,
+        "semantic_parameter_queries": 0,
+        "semantic_parameter_query_work": 0,
+        "semantic_delegation_entry_work": 0,
+        "semantic_destruction_actions": 2,
+        "semantic_transfer_actions": 0,
+        "semantic_scalar_transfer_work": 0,
+        "semantic_scalar_transfer_cache_bytes": 0,
+        "semantic_lifetime_states": 1,
+        "semantic_reference_binding_work": 0,
+        "semantic_reference_alternatives": 0,
+        "semantic_lifetime_uses": 3,
+        "semantic_virtual_classes": 3,
+        "semantic_rtti_type_demands": 5,
+        "semantic_rtti_class_work": 3,
+        "semantic_rtti_base_work": 2,
+        "semantic_virtual_views": 1,
+        "semantic_virtual_slots": 5,
+        "semantic_virtual_storage_bytes": 864,
+        "semantic_subobject_storage_bytes": 64,
+        "semantic_lifecycle_base_entries": 3,
+        "semantic_lifecycle_storage_bytes": 96,
+        "semantic_virtual_base_entries": 0,
+        "semantic_virtual_base_work": 0,
+        "semantic_final_overrider_work": 0,
+        "semantic_subobject_work": 7,
+        "semantic_base_layout_work": 2,
+        "semantic_subobject_identities": 2,
+        "semantic_subobject_paths": 2,
+        "semantic_virtual_slot_work": 9,
+        "semantic_virtual_declaration_work": 7,
+        "semantic_virtual_demands": 3,
+        "semantic_key_vtable_notifications": 0,
+        "semantic_key_vtable_processed": 0,
+        "semantic_vtable_emissions": 3,
+        "semantic_external_vtable_references": 0,
+        "semantic_vtable_queue_bytes": 16,
+        "semantic_member_demands": 11,
+        "semantic_friend_definitions": 0,
+        "semantic_friend_demands": 0,
+        "semantic_friend_processed": 0,
+        "semantic_demand_processed": 11,
+        "semantic_expression_work": 69,
+        "semantic_discard_selections": 0,
+        "semantic_discard_recipe_uses": 0,
+        "semantic_discard_materializations": 0,
+        "semantic_candidate_work": 6,
+        "semantic_conversion_work": 51,
+        "semantic_conversions": 53,
+        "semantic_entity_bytes": 120,
+        "semantic_class_facts": 6,
+        "semantic_constants": 7,
+        "semantic_value_queries": 1,
+        "semantic_value_query_work": 1,
+        "semantic_template_value_sources": 0,
+        "semantic_template_value_uses": 0,
+        "semantic_value_conversion_variants": 0,
+        "semantic_value_conversion_records": 0,
+        "semantic_types": 50,
+        "semantic_entities": 49,
+        "semantic_scopes": 60,
+        "semantic_edges": 4,
+        "semantic_declarations": 34,
+        "semantic_regions": 26,
+        "semantic_lookup_work": 362,
+        "semantic_signature_work": 17,
+        "semantic_template_signature_shape_work": 4,
+        "semantic_template_signature_shape_hits": 2,
+        "semantic_type_probes": 219,
+        "semantic_constant_work": 17,
+        "constexpr_validity_work": 6,
+        "exception_work": 5,
+        "closures": 0,
+        "lower_virtual_cache_bytes": 112,
+        "rtti_expressions": 1,
+        "rtti_records": 5,
+        "rtti_cache_hits": 11,
+        "statement_regions": 0,
+        "lifetime_mapping_work": 0,
+        "lifetime_mapping_hits": 0,
+        "list_plans": 0,
+        "list_objects": 0,
+        "initializer_list_types": 0,
+        "lower_deleting_entries": 0,
+        "lower_local_statics": 0,
+        "lower_constant_data_records": 0,
+        "lower_constant_data_work": 0,
+        "lower_constant_data_hits": 0,
+        "lower_aggregate_array_work": 0,
+        "lower_aggregate_array_hits": 0
+      },
+      {
+        "frontend_ms": 3.17027,
+        "lowering_ms": 1.21516,
+        "peak_rss_kib": 6804,
+        "nodes": 633,
+        "static_requests": 0,
+        "static_hits": 0,
+        "control_work": 45,
+        "discard_work": 0,
+        "full_expression_work": 96,
+        "full_expression_regions": 2,
+        "linkage_requests": 0,
+        "linkage_hits": 0,
+        "value_base_argument_facts": 0,
+        "value_parameter_abi_facts": 0,
+        "initializer_units": 0,
+        "finalizer_units": 0,
+        "abi_nodes": 27,
+        "abi_bytes": 2168,
+        "instructions": 256,
+        "operands": 336,
+        "ir_pool_growths": 95,
+        "ir_capacity_bytes": 63504
+      },
+      {
+        "driver_ms": 10.09,
+        "peak_rss_kib": 6804,
+        "text_bytes": 9043,
+        "native_functions": 12,
+        "native_instructions": 254,
+        "link_definition_work": 63,
+        "link_relocation_work": 243,
+        "runtime_functions": 13,
+        "runtime_instructions": 794,
+        "runtime_text_bytes": 4291,
+        "selection_ms": 0.215221,
+        "encoding_ms": 0.084502
+      }
+    ]
+  },
+  "inherited_image_checks": [
+    {
+      "workload": "wide",
+      "source": "/home/vishvananda/work/private/v4codex/artifacts/pa25-136/wide-performance/inputs/wide.cc",
+      "source_sha256": "dcafda896bd644c213686645254866da67e0c0052c9bc62def4b9971d403d623",
+      "prior_manifest": "/home/vishvananda/work/private/v4codex/artifacts/pa25-136/wide-performance/performance.json",
+      "images": {
+        "entry": {
+          "sha256": "1cd920f005c6bc46918baa5bb2926920bf15a76b983e81657875a2583cda41cf",
+          "text_bytes": 977,
+          "status": 0
+        },
+        "final": {
+          "sha256": "1cd920f005c6bc46918baa5bb2926920bf15a76b983e81657875a2583cda41cf",
+          "text_bytes": 977,
+          "status": 0
+        }
+      },
+      "byte_identical": true
+    },
+    {
+      "workload": "statements",
+      "source": "/home/vishvananda/work/private/v4codex/artifacts/pa25-137/statements-performance/inputs/statements.cc",
+      "source_sha256": "836a3bb7eb757f4979d0daf5a94877e2aa553e860465ee3e7dcf22745471b968",
+      "prior_manifest": "/home/vishvananda/work/private/v4codex/artifacts/pa25-137/statements-performance/performance.json",
+      "images": {
+        "entry": {
+          "sha256": "2843408ce129cfa5eed2d596a30d2e82adf9761c82b9be9bf8de10c3b456a76e",
+          "text_bytes": 503,
+          "status": 0
+        },
+        "final": {
+          "sha256": "2843408ce129cfa5eed2d596a30d2e82adf9761c82b9be9bf8de10c3b456a76e",
+          "text_bytes": 503,
+          "status": 0
+        }
+      },
+      "byte_identical": true
+    }
+  ],
+  "performance": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-classes/performance.json",
+      "sha256": "227b1738e96f23a3d280672558fd181823a179a82dd7198c8246572f48362a84",
+      "observations": 168,
+      "manifest_verified": true,
+      "images_verified": true,
+      "paired_summary_recomputed": true,
+      "final_code": false,
+      "summary": {
+        "classes": {
+          "sha256": "e70c680b9f2a0539e57d6ea13ffb26bfcddfdf142cf386953dc29d39d6c85398",
+          "text_bytes": 68368,
+          "file_bytes": 130592,
+          "versions": {
+            "A": {
+              "sha256": "e70c680b9f2a0539e57d6ea13ffb26bfcddfdf142cf386953dc29d39d6c85398",
+              "text_bytes": 68368,
+              "file_bytes": 130592
+            },
+            "B": {
+              "sha256": "e70c680b9f2a0539e57d6ea13ffb26bfcddfdf142cf386953dc29d39d6c85398",
+              "text_bytes": 68368,
+              "file_bytes": 130592
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 1.0042337808519308,
+            "ratio_range": [
+              0.9816666984406326,
+              1.028885647132908
+            ],
+            "AA_range_s": [
+              0.17065096646547318,
+              0.18671994842588902
+            ],
+            "B_median_s": 0.1736473347991705,
+            "B_peak_rss_kib": 19604
+          },
+          "runtime": {
+            "ratio_median": 1.001182965946251,
+            "ratio_range": [
+              0.9975619690267723,
+              1.003976929613668
+            ],
+            "AA_range_s": [
+              0.5025708600878716,
+              0.5068299248814583
+            ],
+            "B_median_s": 0.5031245108693838,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "casts": {
+          "sha256": "a99136c656be3244d083704a28cd7e3ba558e82be5263cc9697b43d7cfe38ce9",
+          "text_bytes": 1682,
+          "file_bytes": 4416,
+          "versions": {
+            "A": {
+              "sha256": "a99136c656be3244d083704a28cd7e3ba558e82be5263cc9697b43d7cfe38ce9",
+              "text_bytes": 1682,
+              "file_bytes": 4416
+            },
+            "B": {
+              "sha256": "a99136c656be3244d083704a28cd7e3ba558e82be5263cc9697b43d7cfe38ce9",
+              "text_bytes": 1682,
+              "file_bytes": 4416
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.9608469250102694,
+            "ratio_range": [
+              0.920179876769163,
+              0.965819105993429
+            ],
+            "AA_range_s": [
+              0.44429937563836575,
+              0.45218332298099995
+            ],
+            "B_median_s": 0.4108391487970948,
+            "B_peak_rss_kib": 7144
+          },
+          "runtime": {
+            "ratio_median": 1.0011620999067294,
+            "ratio_range": [
+              0.9984466682255363,
+              1.080265598646522
+            ],
+            "AA_range_s": [
+              0.11415538378059864,
+              0.11611123383045197
+            ],
+            "B_median_s": 0.11465566512197256,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "allocations": {
+          "sha256": "8b3ce0ad1653a8fd2af1d8e513c44ee84745aaaef941cb5bb971df07dca069c6",
+          "text_bytes": 5525,
+          "file_bytes": 8960,
+          "versions": {
+            "A": {
+              "sha256": "a7407b214fd71e645546563a0082945939311c732c10176a558ffd496cb40738",
+              "text_bytes": 5255,
+              "file_bytes": 8960
+            },
+            "B": {
+              "sha256": "8b3ce0ad1653a8fd2af1d8e513c44ee84745aaaef941cb5bb971df07dca069c6",
+              "text_bytes": 5525,
+              "file_bytes": 8960
+            }
+          },
+          "byte_identical": false,
+          "compile": {
+            "ratio_median": 0.9821987256017357,
+            "ratio_range": [
+              0.9653182856550362,
+              1.036869884677849
+            ],
+            "AA_range_s": [
+              0.4214704092592001,
+              0.4484508130699396
+            ],
+            "B_median_s": 0.4216466275975108,
+            "B_peak_rss_kib": 7144
+          },
+          "runtime": {
+            "ratio_median": 0.9963408359209234,
+            "ratio_range": [
+              0.9586867376396103,
+              1.0158324164937345
+            ],
+            "AA_range_s": [
+              0.3455453719943762,
+              0.35339175909757614
+            ],
+            "B_median_s": 0.34717888105660677,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-common/performance.json",
+      "sha256": "1dc90a1b756aa05879131ab1e6938f5f8158b9c3fea68863cb898a500bccf7f3",
+      "observations": 168,
+      "manifest_verified": true,
+      "images_verified": true,
+      "paired_summary_recomputed": true,
+      "final_code": false,
+      "summary": {
+        "templates": {
+          "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+          "text_bytes": 384567,
+          "file_bytes": 385024,
+          "versions": {
+            "A": {
+              "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+              "text_bytes": 384567,
+              "file_bytes": 385024
+            },
+            "B": {
+              "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+              "text_bytes": 384567,
+              "file_bytes": 385024
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 1.0013930491030534,
+            "ratio_range": [
+              0.9908319913364946,
+              1.0073322048614097
+            ],
+            "AA_range_s": [
+              0.23317398689687252,
+              0.2527121137827635
+            ],
+            "B_median_s": 0.23706466238945723,
+            "B_peak_rss_kib": 15500
+          },
+          "runtime": {
+            "ratio_median": 0.9998156536793594,
+            "ratio_range": [
+              0.9966068083365215,
+              1.0069208907493057
+            ],
+            "AA_range_s": [
+              0.11701771430671215,
+              0.11887761391699314
+            ],
+            "B_median_s": 0.11720237135887146,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "memory": {
+          "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+          "text_bytes": 521,
+          "file_bytes": 4096,
+          "versions": {
+            "A": {
+              "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+              "text_bytes": 521,
+              "file_bytes": 4096
+            },
+            "B": {
+              "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+              "text_bytes": 521,
+              "file_bytes": 4096
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.9649260981310522,
+            "ratio_range": [
+              0.9383856148529468,
+              0.9890013231069438
+            ],
+            "AA_range_s": [
+              0.372855294495821,
+              0.3963828030973673
+            ],
+            "B_median_s": 0.3522725561633706,
+            "B_peak_rss_kib": 6880
+          },
+          "runtime": {
+            "ratio_median": 0.999921818453108,
+            "ratio_range": [
+              0.9967168782060514,
+              1.0196833964600063
+            ],
+            "AA_range_s": [
+              0.14877944253385067,
+              0.14993677474558353
+            ],
+            "B_median_s": 0.14892812445759773,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "floating": {
+          "sha256": "4cba8e81887564fd21e033a312d547b111d75feb3ab1aae06c4fef8a845cfebc",
+          "text_bytes": 362,
+          "file_bytes": 4096,
+          "versions": {
+            "A": {
+              "sha256": "4cba8e81887564fd21e033a312d547b111d75feb3ab1aae06c4fef8a845cfebc",
+              "text_bytes": 362,
+              "file_bytes": 4096
+            },
+            "B": {
+              "sha256": "4cba8e81887564fd21e033a312d547b111d75feb3ab1aae06c4fef8a845cfebc",
+              "text_bytes": 362,
+              "file_bytes": 4096
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.954609052163918,
+            "ratio_range": [
+              0.9244546766272909,
+              1.0213547709122823
+            ],
+            "AA_range_s": [
+              0.36035776883363724,
+              0.38185486383736134
+            ],
+            "B_median_s": 0.3464314294978976,
+            "B_peak_rss_kib": 7040
+          },
+          "runtime": {
+            "ratio_median": 1.0013967192560185,
+            "ratio_range": [
+              0.9929005430649734,
+              1.0126596477768341
+            ],
+            "AA_range_s": [
+              0.14040818065404892,
+              0.14150729402899742
+            ],
+            "B_median_s": 0.1412803390994668,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-exceptions/performance.json",
+      "sha256": "0b008332530ec9bf28731bc180c89c010af6154147bd7d3293aa2ac0219dd50f",
+      "observations": 56,
+      "manifest_verified": true,
+      "images_verified": true,
+      "paired_summary_recomputed": true,
+      "final_code": false,
+      "summary": {
+        "exceptions": {
+          "sha256": "4e0867b582f0bb6979e8e7830b536d54456c1a13359a27add5491d8ff452bec4",
+          "text_bytes": 11038,
+          "file_bytes": 12880,
+          "versions": {
+            "A": {
+              "sha256": "b6133e370d2ccfae60fd9cfb8bdb455991ac9302e8f9ca1e073797cdadfb8fbe",
+              "text_bytes": 10652,
+              "file_bytes": 12880
+            },
+            "B": {
+              "sha256": "4e0867b582f0bb6979e8e7830b536d54456c1a13359a27add5491d8ff452bec4",
+              "text_bytes": 11038,
+              "file_bytes": 12880
+            }
+          },
+          "byte_identical": false,
+          "compile": {
+            "ratio_median": 0.955550581009142,
+            "ratio_range": [
+              0.9531053809943807,
+              0.9786178089909775
+            ],
+            "AA_range_s": [
+              0.2223913073539734,
+              0.23621430061757565
+            ],
+            "B_median_s": 0.22771605383604765,
+            "B_peak_rss_kib": 7168
+          },
+          "runtime": {
+            "ratio_median": 1.0008648832433809,
+            "ratio_range": [
+              0.9878117717221547,
+              1.0352247205224938
+            ],
+            "AA_range_s": [
+              2.074065934866667,
+              2.106184672564268
+            ],
+            "B_median_s": 2.099018377251923,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-final-binding/performance.json",
+      "sha256": "f9bc382299e39e315f62f58d228d328859e70c7bda0af481207be7fefd91276d",
+      "observations": 56,
+      "manifest_verified": true,
+      "images_verified": true,
+      "paired_summary_recomputed": true,
+      "final_code": true,
+      "summary": {
+        "binding": {
+          "sha256": "2ab77efd69ec5fb96dd8fcd626712c96a01f83495cb3161a717f00e7b574c0db",
+          "text_bytes": 8193,
+          "file_bytes": 12960,
+          "versions": {
+            "A": {
+              "sha256": "2ab77efd69ec5fb96dd8fcd626712c96a01f83495cb3161a717f00e7b574c0db",
+              "text_bytes": 8193,
+              "file_bytes": 12960
+            },
+            "B": {
+              "sha256": "2ab77efd69ec5fb96dd8fcd626712c96a01f83495cb3161a717f00e7b574c0db",
+              "text_bytes": 8193,
+              "file_bytes": 12960
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.9965806191117588,
+            "ratio_range": [
+              0.8443404110052449,
+              1.1319406842393553
+            ],
+            "AA_range_s": [
+              0.3481323942542076,
+              0.40321660228073597
+            ],
+            "B_median_s": 0.40907913353294134,
+            "B_peak_rss_kib": 7152
+          },
+          "runtime": {
+            "ratio_median": 0.9954603774606179,
+            "ratio_range": [
+              0.8522927457904308,
+              1.0691532066453735
+            ],
+            "AA_range_s": [
+              2.4872352946549654,
+              2.9562804959714413
+            ],
+            "B_median_s": 2.665646252222359,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-final-classes/performance.json",
+      "sha256": "72640343ebe0e80eab2842db40e248d5d80b73987e9252ca83ee4b47514c50b1",
+      "observations": 168,
+      "manifest_verified": true,
+      "images_verified": true,
+      "paired_summary_recomputed": true,
+      "final_code": true,
+      "summary": {
+        "classes": {
+          "sha256": "e70c680b9f2a0539e57d6ea13ffb26bfcddfdf142cf386953dc29d39d6c85398",
+          "text_bytes": 68368,
+          "file_bytes": 130592,
+          "versions": {
+            "A": {
+              "sha256": "e70c680b9f2a0539e57d6ea13ffb26bfcddfdf142cf386953dc29d39d6c85398",
+              "text_bytes": 68368,
+              "file_bytes": 130592
+            },
+            "B": {
+              "sha256": "e70c680b9f2a0539e57d6ea13ffb26bfcddfdf142cf386953dc29d39d6c85398",
+              "text_bytes": 68368,
+              "file_bytes": 130592
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.9868785675364516,
+            "ratio_range": [
+              0.8859227497524224,
+              1.1872255622044312
+            ],
+            "AA_range_s": [
+              0.3171867746859789,
+              0.33686400577425957
+            ],
+            "B_median_s": 0.29503609519451857,
+            "B_peak_rss_kib": 19832
+          },
+          "runtime": {
+            "ratio_median": 1.029444290236838,
+            "ratio_range": [
+              0.969970866569078,
+              1.166860020641085
+            ],
+            "AA_range_s": [
+              0.7702252827584743,
+              0.7953042518347502
+            ],
+            "B_median_s": 0.8562445472925901,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "casts": {
+          "sha256": "a99136c656be3244d083704a28cd7e3ba558e82be5263cc9697b43d7cfe38ce9",
+          "text_bytes": 1682,
+          "file_bytes": 4416,
+          "versions": {
+            "A": {
+              "sha256": "a99136c656be3244d083704a28cd7e3ba558e82be5263cc9697b43d7cfe38ce9",
+              "text_bytes": 1682,
+              "file_bytes": 4416
+            },
+            "B": {
+              "sha256": "a99136c656be3244d083704a28cd7e3ba558e82be5263cc9697b43d7cfe38ce9",
+              "text_bytes": 1682,
+              "file_bytes": 4416
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.9434991017239576,
+            "ratio_range": [
+              0.8693258516873997,
+              1.0878703375492027
+            ],
+            "AA_range_s": [
+              0.7527394592761993,
+              0.8404811639338732
+            ],
+            "B_median_s": 0.8103188909590244,
+            "B_peak_rss_kib": 7184
+          },
+          "runtime": {
+            "ratio_median": 0.943264701348455,
+            "ratio_range": [
+              0.8733164538805305,
+              1.050994180213319
+            ],
+            "AA_range_s": [
+              0.16579362004995346,
+              0.19578357972204685
+            ],
+            "B_median_s": 0.18210575636476278,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "allocations": {
+          "sha256": "8715f040779e37fddd71678753e3265b32ce789c98fab0c06c65311f3c7248b1",
+          "text_bytes": 5544,
+          "file_bytes": 8960,
+          "versions": {
+            "A": {
+              "sha256": "a7407b214fd71e645546563a0082945939311c732c10176a558ffd496cb40738",
+              "text_bytes": 5255,
+              "file_bytes": 8960
+            },
+            "B": {
+              "sha256": "8715f040779e37fddd71678753e3265b32ce789c98fab0c06c65311f3c7248b1",
+              "text_bytes": 5544,
+              "file_bytes": 8960
+            }
+          },
+          "byte_identical": false,
+          "compile": {
+            "ratio_median": 0.9287237624128546,
+            "ratio_range": [
+              0.8612078461567418,
+              0.9996811466028843
+            ],
+            "AA_range_s": [
+              0.7591823134571314,
+              0.8485105242580175
+            ],
+            "B_median_s": 0.7576478514820337,
+            "B_peak_rss_kib": 7200
+          },
+          "runtime": {
+            "ratio_median": 1.0164383883931791,
+            "ratio_range": [
+              0.9142574100507103,
+              1.0408246408408772
+            ],
+            "AA_range_s": [
+              0.5385399162769318,
+              0.5897097736597061
+            ],
+            "B_median_s": 0.5595622900873423,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-final-common/performance.json",
+      "sha256": "42f7bcc992c425e2288c7b04d118c8c4be695aca7d61364c5918060a3c119e37",
+      "observations": 168,
+      "manifest_verified": true,
+      "images_verified": true,
+      "paired_summary_recomputed": true,
+      "final_code": true,
+      "summary": {
+        "templates": {
+          "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+          "text_bytes": 384567,
+          "file_bytes": 385024,
+          "versions": {
+            "A": {
+              "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+              "text_bytes": 384567,
+              "file_bytes": 385024
+            },
+            "B": {
+              "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+              "text_bytes": 384567,
+              "file_bytes": 385024
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 1.016577399070309,
+            "ratio_range": [
+              0.9910834229510163,
+              1.028154159121995
+            ],
+            "AA_range_s": [
+              0.2745783384889364,
+              0.43050929345190525
+            ],
+            "B_median_s": 0.2635404160246253,
+            "B_peak_rss_kib": 15084
+          },
+          "runtime": {
+            "ratio_median": 1.0010092867872245,
+            "ratio_range": [
+              0.9961253921951913,
+              1.0046876038959751
+            ],
+            "AA_range_s": [
+              0.11741387657821178,
+              0.11827467940747738
+            ],
+            "B_median_s": 0.11758267134428024,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "memory": {
+          "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+          "text_bytes": 521,
+          "file_bytes": 4096,
+          "versions": {
+            "A": {
+              "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+              "text_bytes": 521,
+              "file_bytes": 4096
+            },
+            "B": {
+              "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+              "text_bytes": 521,
+              "file_bytes": 4096
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.9531150887524037,
+            "ratio_range": [
+              0.9314037620676783,
+              0.9653326754842438
+            ],
+            "AA_range_s": [
+              0.3817825522273779,
+              0.4120018035173416
+            ],
+            "B_median_s": 0.37209723610430956,
+            "B_peak_rss_kib": 6896
+          },
+          "runtime": {
+            "ratio_median": 1.005381786357915,
+            "ratio_range": [
+              0.9914250135134256,
+              1.0129811672133306
+            ],
+            "AA_range_s": [
+              0.1515379138290882,
+              0.1670187208801508
+            ],
+            "B_median_s": 0.15057793073356152,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "floating": {
+          "sha256": "4cba8e81887564fd21e033a312d547b111d75feb3ab1aae06c4fef8a845cfebc",
+          "text_bytes": 362,
+          "file_bytes": 4096,
+          "versions": {
+            "A": {
+              "sha256": "4cba8e81887564fd21e033a312d547b111d75feb3ab1aae06c4fef8a845cfebc",
+              "text_bytes": 362,
+              "file_bytes": 4096
+            },
+            "B": {
+              "sha256": "4cba8e81887564fd21e033a312d547b111d75feb3ab1aae06c4fef8a845cfebc",
+              "text_bytes": 362,
+              "file_bytes": 4096
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.9500017751758298,
+            "ratio_range": [
+              0.9122925582937544,
+              1.030492537654261
+            ],
+            "AA_range_s": [
+              0.40577418357133865,
+              0.42793636582791805
+            ],
+            "B_median_s": 0.3691127672791481,
+            "B_peak_rss_kib": 7056
+          },
+          "runtime": {
+            "ratio_median": 0.9967385190845288,
+            "ratio_range": [
+              0.9903109580783003,
+              1.0079264948771647
+            ],
+            "AA_range_s": [
+              0.14154263213276863,
+              0.14376003481447697
+            ],
+            "B_median_s": 0.14228926319628954,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-final-exceptions/performance.json",
+      "sha256": "7743a07786133b04f91e2beb1f0b3dbf1be57d71e6d0e194709bfb9a40e9f462",
+      "observations": 56,
+      "manifest_verified": true,
+      "images_verified": true,
+      "paired_summary_recomputed": true,
+      "final_code": true,
+      "summary": {
+        "exceptions": {
+          "sha256": "ea7851e5d5ec663dd66438f3a36be5e2bde80a0bb7cd9021003b1de35ac35b07",
+          "text_bytes": 11109,
+          "file_bytes": 12880,
+          "versions": {
+            "A": {
+              "sha256": "b6133e370d2ccfae60fd9cfb8bdb455991ac9302e8f9ca1e073797cdadfb8fbe",
+              "text_bytes": 10652,
+              "file_bytes": 12880
+            },
+            "B": {
+              "sha256": "ea7851e5d5ec663dd66438f3a36be5e2bde80a0bb7cd9021003b1de35ac35b07",
+              "text_bytes": 11109,
+              "file_bytes": 12880
+            }
+          },
+          "byte_identical": false,
+          "compile": {
+            "ratio_median": 0.9586443173161164,
+            "ratio_range": [
+              0.945247709456413,
+              1.01356265224998
+            ],
+            "AA_range_s": [
+              0.24913576617836952,
+              0.2632672656327486
+            ],
+            "B_median_s": 0.23922028858214617,
+            "B_peak_rss_kib": 7184
+          },
+          "runtime": {
+            "ratio_median": 0.9966784432167051,
+            "ratio_range": [
+              0.7554597181477067,
+              1.071165480764024
+            ],
+            "AA_range_s": [
+              2.1173141337931156,
+              3.88528448715806
+            ],
+            "B_median_s": 2.9665175592526793,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-reviewed-binding/performance.json",
+      "sha256": "ee3fd7974824299b1a3e348766be949e56359b0360f29de182c14d4172c56ed3",
+      "observations": 56,
+      "manifest_verified": true,
+      "images_verified": true,
+      "paired_summary_recomputed": true,
+      "final_code": false,
+      "summary": {
+        "binding": {
+          "sha256": "2ab77efd69ec5fb96dd8fcd626712c96a01f83495cb3161a717f00e7b574c0db",
+          "text_bytes": 8193,
+          "file_bytes": 12960,
+          "versions": {
+            "A": {
+              "sha256": "2ab77efd69ec5fb96dd8fcd626712c96a01f83495cb3161a717f00e7b574c0db",
+              "text_bytes": 8193,
+              "file_bytes": 12960
+            },
+            "B": {
+              "sha256": "2ab77efd69ec5fb96dd8fcd626712c96a01f83495cb3161a717f00e7b574c0db",
+              "text_bytes": 8193,
+              "file_bytes": 12960
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.9967071819829566,
+            "ratio_range": [
+              0.8337038918429559,
+              1.0075018166179424
+            ],
+            "AA_range_s": [
+              0.20403096452355385,
+              0.21277783438563347
+            ],
+            "B_median_s": 0.20644709188491106,
+            "B_peak_rss_kib": 7152
+          },
+          "runtime": {
+            "ratio_median": 1.0033994757428861,
+            "ratio_range": [
+              0.9755579333215012,
+              1.0101194781734728
+            ],
+            "AA_range_s": [
+              1.3594758734107018,
+              1.4097421877086163
+            ],
+            "B_median_s": 1.3626037687063217,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-reviewed-classes/performance.json",
+      "sha256": "36a89355d7b70296a65cb6a8cbabca09318d5306d5184d2998ccb81cda549b66",
+      "observations": 168,
+      "manifest_verified": true,
+      "images_verified": true,
+      "paired_summary_recomputed": true,
+      "final_code": false,
+      "summary": {
+        "classes": {
+          "sha256": "e70c680b9f2a0539e57d6ea13ffb26bfcddfdf142cf386953dc29d39d6c85398",
+          "text_bytes": 68368,
+          "file_bytes": 130592,
+          "versions": {
+            "A": {
+              "sha256": "e70c680b9f2a0539e57d6ea13ffb26bfcddfdf142cf386953dc29d39d6c85398",
+              "text_bytes": 68368,
+              "file_bytes": 130592
+            },
+            "B": {
+              "sha256": "e70c680b9f2a0539e57d6ea13ffb26bfcddfdf142cf386953dc29d39d6c85398",
+              "text_bytes": 68368,
+              "file_bytes": 130592
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.9881819152408746,
+            "ratio_range": [
+              0.9200078699098688,
+              1.0124902054422467
+            ],
+            "AA_range_s": [
+              0.1748928390443325,
+              0.18277588486671448
+            ],
+            "B_median_s": 0.17250993195921183,
+            "B_peak_rss_kib": 19968
+          },
+          "runtime": {
+            "ratio_median": 1.0004414214494233,
+            "ratio_range": [
+              0.9965172502961965,
+              1.017615454369168
+            ],
+            "AA_range_s": [
+              0.5043045990169048,
+              0.5068533010780811
+            ],
+            "B_median_s": 0.5035218587145209,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "casts": {
+          "sha256": "a99136c656be3244d083704a28cd7e3ba558e82be5263cc9697b43d7cfe38ce9",
+          "text_bytes": 1682,
+          "file_bytes": 4416,
+          "versions": {
+            "A": {
+              "sha256": "a99136c656be3244d083704a28cd7e3ba558e82be5263cc9697b43d7cfe38ce9",
+              "text_bytes": 1682,
+              "file_bytes": 4416
+            },
+            "B": {
+              "sha256": "a99136c656be3244d083704a28cd7e3ba558e82be5263cc9697b43d7cfe38ce9",
+              "text_bytes": 1682,
+              "file_bytes": 4416
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.9651243844718704,
+            "ratio_range": [
+              0.9485006808082265,
+              0.9923060871392703
+            ],
+            "AA_range_s": [
+              0.42728984728455544,
+              0.449748745188117
+            ],
+            "B_median_s": 0.41413135174661875,
+            "B_peak_rss_kib": 7176
+          },
+          "runtime": {
+            "ratio_median": 0.9977847685437707,
+            "ratio_range": [
+              0.9874530609306705,
+              1.0061883381771892
+            ],
+            "AA_range_s": [
+              0.11365258693695068,
+              0.11467254348099232
+            ],
+            "B_median_s": 0.11435866262763739,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "allocations": {
+          "sha256": "8715f040779e37fddd71678753e3265b32ce789c98fab0c06c65311f3c7248b1",
+          "text_bytes": 5544,
+          "file_bytes": 8960,
+          "versions": {
+            "A": {
+              "sha256": "a7407b214fd71e645546563a0082945939311c732c10176a558ffd496cb40738",
+              "text_bytes": 5255,
+              "file_bytes": 8960
+            },
+            "B": {
+              "sha256": "8715f040779e37fddd71678753e3265b32ce789c98fab0c06c65311f3c7248b1",
+              "text_bytes": 5544,
+              "file_bytes": 8960
+            }
+          },
+          "byte_identical": false,
+          "compile": {
+            "ratio_median": 0.9490121987713982,
+            "ratio_range": [
+              0.9165331886405619,
+              1.0449906881772397
+            ],
+            "AA_range_s": [
+              0.4286222718656063,
+              0.44162859208881855
+            ],
+            "B_median_s": 0.4307198105379939,
+            "B_peak_rss_kib": 7184
+          },
+          "runtime": {
+            "ratio_median": 1.0006714887667738,
+            "ratio_range": [
+              0.9936747150106163,
+              1.0729285775863204
+            ],
+            "AA_range_s": [
+              0.34695614129304886,
+              0.34907194413244724
+            ],
+            "B_median_s": 0.3456209525465965,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-reviewed-common/performance.json",
+      "sha256": "9dd698f5ea21bd50604750c3c2ec59067f121c6f120c402f14584d58663db3ee",
+      "observations": 168,
+      "manifest_verified": true,
+      "images_verified": true,
+      "paired_summary_recomputed": true,
+      "final_code": false,
+      "summary": {
+        "templates": {
+          "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+          "text_bytes": 384567,
+          "file_bytes": 385024,
+          "versions": {
+            "A": {
+              "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+              "text_bytes": 384567,
+              "file_bytes": 385024
+            },
+            "B": {
+              "sha256": "176eeb2b020cf960d534de3846d23a59408847e7f4aa73215b180fcb0768a3e0",
+              "text_bytes": 384567,
+              "file_bytes": 385024
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.9957024644056713,
+            "ratio_range": [
+              0.9226687190059993,
+              1.027628440635714
+            ],
+            "AA_range_s": [
+              0.26580020040273666,
+              0.2749871239066124
+            ],
+            "B_median_s": 0.26806432753801346,
+            "B_peak_rss_kib": 15644
+          },
+          "runtime": {
+            "ratio_median": 0.9965122618643926,
+            "ratio_range": [
+              0.7495109297294206,
+              1.0961779477534705
+            ],
+            "AA_range_s": [
+              0.11770743317902088,
+              0.23554643616080284
+            ],
+            "B_median_s": 0.11751593183726072,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "memory": {
+          "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+          "text_bytes": 521,
+          "file_bytes": 4096,
+          "versions": {
+            "A": {
+              "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+              "text_bytes": 521,
+              "file_bytes": 4096
+            },
+            "B": {
+              "sha256": "a073c6edad0a44f9d367d525627d1bf75a78929b64cd9241f42663a4cb1db1e0",
+              "text_bytes": 521,
+              "file_bytes": 4096
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.9593724268135787,
+            "ratio_range": [
+              0.8682058032234191,
+              1.0129369904058299
+            ],
+            "AA_range_s": [
+              0.37977211736142635,
+              0.40397536382079124
+            ],
+            "B_median_s": 0.3742819093167782,
+            "B_peak_rss_kib": 6896
+          },
+          "runtime": {
+            "ratio_median": 1.0004367245909291,
+            "ratio_range": [
+              0.9911986469386082,
+              1.0055048665963513
+            ],
+            "AA_range_s": [
+              0.14851996675133705,
+              0.15039141662418842
+            ],
+            "B_median_s": 0.14969457406550646,
+            "B_peak_rss_kib": 256
+          }
+        },
+        "floating": {
+          "sha256": "4cba8e81887564fd21e033a312d547b111d75feb3ab1aae06c4fef8a845cfebc",
+          "text_bytes": 362,
+          "file_bytes": 4096,
+          "versions": {
+            "A": {
+              "sha256": "4cba8e81887564fd21e033a312d547b111d75feb3ab1aae06c4fef8a845cfebc",
+              "text_bytes": 362,
+              "file_bytes": 4096
+            },
+            "B": {
+              "sha256": "4cba8e81887564fd21e033a312d547b111d75feb3ab1aae06c4fef8a845cfebc",
+              "text_bytes": 362,
+              "file_bytes": 4096
+            }
+          },
+          "byte_identical": true,
+          "compile": {
+            "ratio_median": 0.9428422171778896,
+            "ratio_range": [
+              0.8636865798503592,
+              0.9841574368315082
+            ],
+            "AA_range_s": [
+              0.3951306827366352,
+              0.42952473275363445
+            ],
+            "B_median_s": 0.3667502235621214,
+            "B_peak_rss_kib": 7024
+          },
+          "runtime": {
+            "ratio_median": 1.0013756599718207,
+            "ratio_range": [
+              0.9863998344686343,
+              1.031322650806471
+            ],
+            "AA_range_s": [
+              0.1398964263498783,
+              0.14144400507211685
+            ],
+            "B_median_s": 0.14130938798189163,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-reviewed-exceptions/performance.json",
+      "sha256": "0c74ba95a089768f90fae89160da4364ff3abb13edbebe1a7d6c8130bf9c9103",
+      "observations": 56,
+      "manifest_verified": true,
+      "images_verified": true,
+      "paired_summary_recomputed": true,
+      "final_code": false,
+      "summary": {
+        "exceptions": {
+          "sha256": "ea7851e5d5ec663dd66438f3a36be5e2bde80a0bb7cd9021003b1de35ac35b07",
+          "text_bytes": 11109,
+          "file_bytes": 12880,
+          "versions": {
+            "A": {
+              "sha256": "b6133e370d2ccfae60fd9cfb8bdb455991ac9302e8f9ca1e073797cdadfb8fbe",
+              "text_bytes": 10652,
+              "file_bytes": 12880
+            },
+            "B": {
+              "sha256": "ea7851e5d5ec663dd66438f3a36be5e2bde80a0bb7cd9021003b1de35ac35b07",
+              "text_bytes": 11109,
+              "file_bytes": 12880
+            }
+          },
+          "byte_identical": false,
+          "compile": {
+            "ratio_median": 0.9656285538651612,
+            "ratio_range": [
+              0.9535882722090722,
+              1.1514445479283384
+            ],
+            "AA_range_s": [
+              0.24522816576063633,
+              0.2565993219614029
+            ],
+            "B_median_s": 0.23359342757612467,
+            "B_peak_rss_kib": 7184
+          },
+          "runtime": {
+            "ratio_median": 1.0022885399144048,
+            "ratio_range": [
+              0.9916414978849442,
+              1.0109486664861922
+            ],
+            "AA_range_s": [
+              2.089007046073675,
+              2.1217510160058737
+            ],
+            "B_median_s": 2.0830760151147842,
+            "B_peak_rss_kib": 256
+          }
+        }
+      }
+    }
+  ],
+  "prior_performance_verification": [
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-135/performance.json",
+      "sha256": "2791899a05de706bde755483a6d1850b083e72de190226c182c0f5b01e98fc6a",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-136/performance/performance.json",
+      "sha256": "7eb6dab5d43d84e242be70b32860b8951b4fc41ff25d52d97f48fe5b9bc64292",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-136/wide-performance/performance.json",
+      "sha256": "6a39e340677bc2a7d04792848dbc52e76c8d6e6896b7a82a6388e44fae6146b3",
+      "observations": 56,
+      "manifest_entries": 13,
+      "images_checked": 2,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-137/performance/performance.json",
+      "sha256": "eda550ff52b26a0893bac2a2c2361f209614284f45efa733d4070819f7e57df4",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-137/statements-performance/performance.json",
+      "sha256": "7b06b2ce9de444349a8e55e9a855ddc326b01afa779f17c936c01fe7629258fc",
+      "observations": 56,
+      "manifest_entries": 13,
+      "images_checked": 2,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-138/performance-audit/performance.json",
+      "sha256": "8a6fca21022cd941a84884d88ee96bdf69824169bafa0d0539bd23cf68ffa921",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-138/performance-code-tip/performance.json",
+      "sha256": "b2169833bec35577795424b12db29fe456d76bf3ff20510b300045d8d18bb8a7",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-138/performance-cumulative/performance.json",
+      "sha256": "df364f9dfa7d5f23d4da18cdfbffb37eeb0ea340fb5c36d12d82f50905c2344c",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-138/performance-final/performance.json",
+      "sha256": "3479d0ae193b0bf09b970fd86198ae6ebe830da6040db676a2c299fa8a5b0c41",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-138/performance-reviewed-audit/performance.json",
+      "sha256": "dbcab73dc59c2ba81d876d4ffb1cbb635f94399307abc5814006180a4e52ed9a",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-138/performance-reviewed-cumulative/performance.json",
+      "sha256": "494b4504092a322d0881c71e5426463c07a42f4917b5bae13998e6dedf61e8d1",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/performance/performance.json",
+      "sha256": "b124994f0bc10b512a7ef0944d0e07cf2f8e579c4610559990eaf40096a1152d",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/performance-final/performance.json",
+      "sha256": "6c9417cb8e360f6c10590fe6561007670160b221f86e14acaba904319b5287e1",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-139/performance-classes/performance.json",
+      "sha256": "7e4370837837d0088fb3b6fbbf2052a59ee2061069b6d41c82f0584c7a701510",
+      "observations": 168,
+      "manifest_entries": 15,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-140/performance-classes/performance.json",
+      "sha256": "f2fa977bb563fe878b7be854b8787ac723d2c510980e4d3398ad85e496321697",
+      "observations": 168,
+      "manifest_entries": 15,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-140/performance-classes-final/performance.json",
+      "sha256": "575133b6c94bd94068ee0e66f03740cef1012fecedabe9be7037ad3d42309841",
+      "observations": 168,
+      "manifest_entries": 15,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-140/performance-common/performance.json",
+      "sha256": "e4346c4367f7bba7cc77393d1241fdd13b2d3f3748d655b1b434b64d39b7a1b5",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-140/performance-exceptions/performance.json",
+      "sha256": "86f6fa0be36bc0302287fcb54450fc94985adfa550b435b8d0ed509e81ddc49b",
+      "observations": 56,
+      "manifest_entries": 13,
+      "images_checked": 2,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-140/performance-exceptions-final/performance.json",
+      "sha256": "6cb3fb6186f456d58d982d8635c99d60382c47f716c1e8b54b4a68c885f25fa3",
+      "observations": 56,
+      "manifest_entries": 13,
+      "images_checked": 2,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-140/performance-final/performance.json",
+      "sha256": "42ddac56bced4f0b9f7259a89621ffed7a411d3a897895f748025e0146b310b1",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    },
+    {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-140/performance-scale/performance.json",
+      "sha256": "892174006aa50f5ef696241fcadf9c40d61220cdd4d2a5ba6e07ef5364df569d",
+      "observations": 168,
+      "manifest_entries": 13,
+      "images_checked": 6,
+      "verified": true,
+      "paired_summary_recomputed": true
+    }
+  ],
+  "performance_observations": 1288,
+  "final_code_performance_observations": 448,
+  "performance_policy": "O0; required semantic work bounded by source/fact/IR, clause/item, definition/edge counts. No new speedup claim. Inherited 15% timing/RSS and blanket zero-growth targets are diagnostics; mandatory native bounds, correctness and coverage remain. Exact-scale optional selection retains two-bit-test/no-growth budget and verified 17.3% isolated runtime benefit. Self-hosting and O1-O3 belong to later stages.",
+  "reference_revision": {
+    "bundle": "cppgm-reference-binaries-linux-x86_64-c2f713cd70d0.tar.gz",
+    "sha256": "c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7",
+    "changed": false
+  },
+  "intermediate_notes": [
+    "Preserved through25-final.log records the PA21 backing-storage presentation regression, repaired in its producer before final checks.",
+    "Generic views and native function-pool order differ for complex ABI-entry traces; canonical facts and executable results are checked. Whole-ELF equality there is diagnostic, not a weakened course comparison.",
+    "adapters-final.log contains an initial personal-test spelling error (eh.catch versus eh_catch); corrected personal tests pass in adapters-final-code.",
+    "Intermediate frozen binaries and all 840 timing observations remain; only cppgm-final-code identifies the accepted source commit."
+  ],
+  "historical_audit138_sha256": "cf617f84b8695bfa9bff07666707f620dedfaea1031427a6f47188de41044d04",
+  "evidence_hashes": {
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/adapters-final-code.log": "55cdc98502a5a917ec54f8e9196d6f270abfe3dabf472dac2e1b04493813de2f",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/adapters-final.log": "f17abb836e9b300cf44fe0c3c6d2486238c14645bd051fb59f26c5db0b274edd",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/alignment-trace-final-code-execute.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/alignment-trace-final-code-roundtrip.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/alignment-trace-final-code.log": "242fbfad667237f11940cd51401fd106f21d025d949f31f928007a9606b16723",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/alignment-trace-reviewed-execute.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/alignment-trace-reviewed-roundtrip.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/alignment-trace-reviewed.log": "df1f1c82e09bcbd7f965ab7e92e2dcf42ef046785a5041538aa772a837354307",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/alignment-trace.log": "ca94afb8f379d03fd21c64e38a0d7d2ea8aa6281b94e25a21113d344464cd999",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit-trace-final-code-execute.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit-trace-final-code-roundtrip.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit-trace-final-code.log": "ddc6de46e117bb48b4a600ec626cc665c6acf1938a5076ae03a4ca5c5f3fdfdc",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit-trace-reviewed-execute.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit-trace-reviewed-roundtrip.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit-trace-reviewed.log": "cb52a8b0586915af5ffffd40b7e9746c9472d6cbf4205e3bcf7b3cb2f5f29bbc",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit-trace.log": "8e93a6b734ad1051128871c06095816c9e3bcc8b2e91f2369c0f8b16a2b19d24",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit138-final-code.log": "b4cb5a50939af1675da15d839dfab50949666e5a482c8cc9b8b080beaf14f9cb",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit138-reviewed.log": "b4cb5a50939af1675da15d839dfab50949666e5a482c8cc9b8b080beaf14f9cb",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit138.log": "b4cb5a50939af1675da15d839dfab50949666e5a482c8cc9b8b080beaf14f9cb",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/build-alignment.log": "bb11652293f83812ee3772fc5147e5a0b5616acdc58797607c1de515906c18cb",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/build-final.log": "31837f37fb51390eb093211eae4e8bf5809bb4546cd5bd30e861c30ad1befccd",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/build-layout.log": "551091e22bbc0598711daee111aa26264d2c9eaacbc73acb1d3750c80d297b6a",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/build-storage.log": "43e213c5f54cc0616984b17532654f8f7a79b85a4dc163ef93c3a3665a0d423f",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/build.log": "fded23806b26172a245e3a5baaae8fac698561bc964dbd5a8b8b5feca5390774",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/class-exception-boundary-compile-final-code.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/class-exception-boundary-compile-reviewed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/class-exception-boundary-execute-final-code.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/class-exception-boundary-execute-reviewed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/classes-final-code.log": "68f671c0466179f59cdf41d1277742a2975d0d17b98a0f5c7fed30ee54d8df99",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/classes-reviewed.log": "68f671c0466179f59cdf41d1277742a2975d0d17b98a0f5c7fed30ee54d8df99",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/classes.log": "68f671c0466179f59cdf41d1277742a2975d0d17b98a0f5c7fed30ee54d8df99",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls-complete.log": "33a7d40b181e561e51e6a14cb588d947df9ef01cd56bf8692be3ff1ce03e956a",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls-entry-complete.log": "a6f000e55f76902c943f656aab5e1af34fc318109f87681ff20ff0e2f4de8e58",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls-entry-identity.log": "c89860c63a827ea16ada5b4dbf743fa5fb85696621176f8b08246c91b13484b8",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls-final-code.log": "33a7d40b181e561e51e6a14cb588d947df9ef01cd56bf8692be3ff1ce03e956a",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls-final.log": "6cd5359d188a9d78e3bace2e7a56935606953175fbeaae4a49931db78fbac723",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls-layout.log": "3484ec109acd716c78bb4538133e4bb90341ac3c122f97394ee080376da1e31c",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls-storage.log": "57a25539d2df618520f9de340e9a1ee06b0aeec2d39bda408ed9ce0db30bf101",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/controls.log": "7c7d597ea0466dc78f04689a233782eebf37a2794a3e55c728ca47c621c78e46",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/destructor-handler-return-compile-final-code.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/destructor-handler-return-compile-reviewed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/destructor-handler-return-execute-final-code.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/destructor-handler-return-execute-reviewed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/driver-final-code.log": "cb4a49605b7f29681a49d143c9dede29bfca3d6dd562396388f5ac6afcf1d935",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/driver-reviewed.log": "cb4a49605b7f29681a49d143c9dede29bfca3d6dd562396388f5ac6afcf1d935",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/driver.log": "cb4a49605b7f29681a49d143c9dede29bfca3d6dd562396388f5ac6afcf1d935",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/entry-controls.log": "af4138e69752ae251ad9621ea612d81f619fe495a8853cf637569567d43c271b",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/exceptions-final-code.log": "43343d47395bf5273ae60f5752a06eeb5b10db459cd92cf06a313a77aab5fe56",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/exceptions-reviewed.log": "43343d47395bf5273ae60f5752a06eeb5b10db459cd92cf06a313a77aab5fe56",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/exceptions.log": "43343d47395bf5273ae60f5752a06eeb5b10db459cd92cf06a313a77aab5fe56",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/file-audit-final-code.log": "ecb5c8691e9459cff3673d47a336904ae2681678f41dcec312d8491a4667ac13",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/file-audit-final.log": "ecb5c8691e9459cff3673d47a336904ae2681678f41dcec312d8491a4667ac13",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/file-audit-reviewed.log": "ecb5c8691e9459cff3673d47a336904ae2681678f41dcec312d8491a4667ac13",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/floating-builtins-compile-final-code.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/floating-builtins-compile-reviewed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/floating-builtins-execute-final-code.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/floating-builtins-execute-reviewed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/member-binding-trace-final-code-execute.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/member-binding-trace-final-code-roundtrip.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/member-binding-trace-final-code.log": "26ea82146844d489d5943b9a6d9c48085fb66fa40b163292626217d59d9bdba8",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/member-binding-trace-reviewed-execute.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/member-binding-trace-reviewed-roundtrip.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/member-binding-trace-reviewed.log": "0bbceda61b695d8ef10c98b33c5a681f4ff0347dd4888cfcff50338773361827",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/packed-trace-final-code-execute.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/packed-trace-final-code-roundtrip.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/packed-trace-final-code.log": "3a052345d5fd0e47d44b47fd68fe0ee479cd52eddc0feabaddb5b34be2b370fb",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/packed-trace-reviewed-execute.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/packed-trace-reviewed-roundtrip.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/packed-trace-reviewed.log": "38efd6e7dcd3aa08510c760a329b9cadb08334fedb17b3d445a5b0898fe92f40",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-classes.log": "56949a80761ed366389829d11cfd438978778c528c7e8ee67c83e166240b7d7b",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-common.log": "999884bdb4fe3c49040c2d8a2e663fb6c4f8d40cb908ad28389e531d47600e40",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-exceptions.log": "2c888d70194bfe2d9570e66f1af31c663ab429d38e182d68af4bdc29b16ca9be",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-final-binding.log": "7532d7fc7a54a298ff5592ddbbb6483d0b091a49bc0a438b4f40d14075469df1",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-final-classes.log": "ced5aaf86909848bd5f4bf3805dcd8c57c6e43ca6f544c3e954164430a46ce0b",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-final-common.log": "fdb990f08e648f819e95f48c70729740b70976a03fa2cdbde563c53d21dbd607",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-final-exceptions.log": "800761b7609955720596064abc1be8f5e270439e6cba2b569df3aee8e0090dc0",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-reviewed-binding.log": "2db45076d4c260262fe1d242081c2280d0dec2b473ee81abc46f37fbe351e781",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-reviewed-classes.log": "6e257612b769b1e29aa8d2811432a0f88b1bd60d19eb48f0f34cc8cb7bfc5bf3",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-reviewed-common.log": "63af6b6369d7f681e56e611db5458043b3f8afda6efe16579a1069f3afd3c93f",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/performance-reviewed-exceptions.log": "1fc4837e1a0ba93612084192e2022c6fcacf616a0639ae45aefdad79be2b7cae",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/production-trace-final-code.log": "891220112293a1f7c8beccdc7073936597606e9caf7502cabe85129977e4c6ba",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/production-trace-final.log": "891220112293a1f7c8beccdc7073936597606e9caf7502cabe85129977e4c6ba",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/production-trace-reviewed.log": "891220112293a1f7c8beccdc7073936597606e9caf7502cabe85129977e4c6ba",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/production-trace-storage.log": "891220112293a1f7c8beccdc7073936597606e9caf7502cabe85129977e4c6ba",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/production-trace.log": "891220112293a1f7c8beccdc7073936597606e9caf7502cabe85129977e4c6ba",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/runtime-trace-final-code.log": "f8a093b89e54eb521f42142f1f1f44932f54deab463051bf419253f8dac48655",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/runtime-trace-reviewed.log": "f8a093b89e54eb521f42142f1f1f44932f54deab463051bf419253f8dac48655",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/runtime-trace.log": "f8a093b89e54eb521f42142f1f1f44932f54deab463051bf419253f8dac48655",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/scalars-final-code.log": "0f018dccbccc9acf4bd3df7dcdd8ad7ffa6d26f6aeb3ce3b0198a52ea06b3510",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/scalars-reviewed.log": "0f018dccbccc9acf4bd3df7dcdd8ad7ffa6d26f6aeb3ce3b0198a52ea06b3510",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/scalars.log": "0f018dccbccc9acf4bd3df7dcdd8ad7ffa6d26f6aeb3ce3b0198a52ea06b3510",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/statements-final-code.log": "7b71a6479082f4200931e6fc5b0a6628f430e6086210747640cf81e274101e85",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/statements-reviewed.log": "7b71a6479082f4200931e6fc5b0a6628f430e6086210747640cf81e274101e85",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/statements.log": "7b71a6479082f4200931e6fc5b0a6628f430e6086210747640cf81e274101e85",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/template-alignment-trace-final-code-execute.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/template-alignment-trace-final-code-roundtrip.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/template-alignment-trace-final-code.log": "1ce5f4dda67e5fcbc7505347ea4c2e47e6eb3d3dacb736bc776667db9ba30556",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/template-alignment-trace-reviewed-execute.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/template-alignment-trace-reviewed-roundtrip.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/template-alignment-trace-reviewed.log": "e317cce3639e4b96b6bb745c2e2305c9be9e8c55fc8000085a828555ce9a1e68",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/test-pa25-final-code.log": "b627dcc03b810a5794abfd3003c3387c1d5c942bbd34bfb2a1ccab3f3f6849dc",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/test-pa25-reviewed.log": "b627dcc03b810a5794abfd3003c3387c1d5c942bbd34bfb2a1ccab3f3f6849dc",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/test-pa25.log": "b627dcc03b810a5794abfd3003c3387c1d5c942bbd34bfb2a1ccab3f3f6849dc",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/through25-final-code.log": "f3803c1acd6430d930011f17628a89cf3a104a20aeb4ee722d338b80cc2fea81",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/through25-final.log": "78c61f55e40f3169f378ab020cbb36ce4cacea43105efa313eafe5cf858b4dcd",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/through25-reviewed.log": "f3803c1acd6430d930011f17628a89cf3a104a20aeb4ee722d338b80cc2fea81",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/through25.log": "f3803c1acd6430d930011f17628a89cf3a104a20aeb4ee722d338b80cc2fea81",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/unused-dependent-local-reject-final-code.log": "4fcc275e7f03ec0396063283ed777e92ff17da4ab2c4b8318176e4b26ebb8a76",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/unused-dependent-local-reject-reviewed.log": "4fcc275e7f03ec0396063283ed777e92ff17da4ab2c4b8318176e4b26ebb8a76",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/unused-dependent-member-compile-final-code.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/unused-dependent-member-compile-reviewed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/unused-dependent-member-execute-final-code.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/unused-dependent-member-execute-reviewed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/wide-fields-compile-final-code.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/wide-fields-compile-reviewed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/wide-fields-execute-final-code.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/wide-fields-execute-reviewed.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/inherited-images-final.json": "a8b6530d8efff17746cfe6df51e47717e2d27b28375c29ea8e40575c45a12c1a",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/personal-final-code.json": "5e6ab6541aeb47609b54a1bbdd2729c8808c037029506bb2be80c80690da58c0",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/traces-final-code.json": "88fc86367ce422d60077ceecf9882b6866a0ed31580234aa25bf2879277ab5be",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit-driver-final.stats": "f5b7e9b8129783ed0afa565753843a5b2b36d7edf389fac79e259af20ade7dc5",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/statement-trace-final.stats": "41dc7290df7da2d7a7fc24657b64e85ca85314aca69fbefdf6d9477839ee0356",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/production-trace-final-code/results.json": "54a7d9954f3d34e01506c1904b4c75128a5c89e978a97a64e689d0ef30c2f044",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/runtime-trace-final-code/results.json": "eb3ad9eda3932bdfd4584b0914618b6e4f495759ece39fc5717a280e329b8722"
+  },
+  "remaining_failures": [],
+  "unaudited_handoffs": [],
+  "additional_trace_executions": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/statement-trace-final"
+      ],
+      "exit_code": 0,
+      "stats": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/statement-trace-final.stats"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit-driver-final"
+      ],
+      "exit_code": 0,
+      "stats": "/home/vishvananda/work/private/v4codex/artifacts/pa25-141/audit-driver-final.stats"
+    }
+  ],
+  "input_primary_log": {
+    "path": "/home/vishvananda/work/.ralph/v4codex-gpt-6-astra-xhigh/last-test.log",
+    "sha256": "0ce37fb1df2e7044087b41b66f16f3738e5b66d989559ab3fb2db9c88b2f05cc",
+    "observed_count": 4253
+  }
+}
