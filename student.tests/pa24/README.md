@@ -148,3 +148,27 @@ arithmetic and store work. `tls-runtime` checks forty million accessor calls
 and increments at the timed argument count, with a second runtime input checked
 before timing. The entry binary rejects TLS; measure the final binary against
 itself for absolute cost/noise. See [performance132.md](performance132.md).
+
+Handoff133 completes the canonical scalar placement/frame protocol:
+
+```
+python3 student.tests/pa24/placement133.py dev/lowir2native /tmp/pa24-placement133
+dev/cppgm++ --stats --validate-lowir --emit-lowir -o /tmp/pa24-trace133.lowir student.tests/pa24/trace133.cpp
+dev/lowir2native --stats --dump-machine-ir /tmp/pa24-trace133.mir -o /tmp/pa24-trace133 /tmp/pa24-trace133.lowir
+/tmp/pa24-trace133
+/tmp/pa24-trace133 input
+```
+
+The 205 controls independently check weighted argument permutations, indirect
+targets in register/stack positions, GPR/XMM classification, stack and bulk-copy
+dependencies, Boolean conversions across calls/edges, fixed effects, adjacent
+conversion debug locations and view/native byte identity. The source trace
+follows a field and demanded template member through the mixed numeric ABI while
+an unused dependent member remains dormant.
+
+`PA24_ABI_COMPILER=1` selects 4096 callers with 64 mixed calls each. `call-runtime`
+checks input-dependent parity through an indirect target; `mixed-abi-runtime`
+checks a varying mixed-domain sum. Both run at two argument counts before timing.
+See [performance133](performance133.md) for the frozen A/A + ABBA evidence,
+including the initial overbroad frame policy, its correction, the measured
+forwarding benefit and the mandatory canonical mixed-ABI cost.

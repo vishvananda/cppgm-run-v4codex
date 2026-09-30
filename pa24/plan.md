@@ -1,126 +1,102 @@
-# PA24 checkpoint plan
+# PA24 implementation handoff133
 
 Stage base commit: bde9eb3e128e24923a1de40bb63b8e348a13553b
 Last reviewed commit: 9f3f9b5caaec9677af0e8431b51cacebcf823dce
 
-Implementation133 entered at clean `18721ea79d6283dda2351101f2c50b54cac7cf10`.
-The previous turn is verified progress (TLS commits and terminal test evidence);
-no build/test process is live at entry. Review markers above remain unchanged.
-Entry course result is 290/296, six canonical-MIR failures; inventory 290/435.
+Entry was clean `18721ea79d6283dda2351101f2c50b54cac7cf10`. The preceding turn
+made verified TLS progress; no process remained live. Implementation commits are
+`1d73b01e` and `e5b5dada`. **All 296 course tests now pass.** This is the
+implementation handoff; whole-stage independent review remains pending. Preserve
+both review markers and do not advance to PA25 before that review.
 
-133 working scope: close the **canonical placement/frame protocol** together.
-Function selection owns scalar/XMM parameter homes, complete value intervals,
-ABI result forwarding and normalized Boolean facts. Call setup consumes typed
-ABI fragments and explicit register/address dependencies; final MIR owns the
-preserve list and stack layout used by encoding. Use bounded per-function walks,
-fixed register pools and bounded parallel-transfer scheduling; no name matching,
-text transport or fixture-specific lowering. Validate all six shapes plus mixed
-width/pressure/CFG/stack/indirect consumers, inherited personal suites, the course
-suite, prior-through and file audit. Freeze entry/final compilers for compiler
-latency/RSS and runtime/text A/A plus ABBA evidence; disclose required canonical
-costs and avoidable regressions separately. No reference change is planned.
+[Audit130](audit.md), [validation133](../student.tests/pa24/validation133.json) and
+[performance133](../student.tests/pa24/performance133.md) retain evidence.
 
-Implementation132 entered at clean `bcf1e3b5`; code is `db965a86` and `03eeff9e`.
-The preceding turn made validated EH/frame progress; no live work was abandoned.
-Audit130 remains the last independent review. Preserve both markers and do not
-advance to PA25. [Audit130](audit.md), [validation132](../student.tests/pa24/validation132.json)
-and [performance132](../student.tests/pa24/performance132.md) retain evidence.
+## Design/spec alignment
 
-## Design/spec alignment and completed groups
+Typed PA8 Program -> function-owned placement/flat MIR -> direct x86 encoding,
+typed fixups and ELF. Explicit text adapters remain at tool boundaries; neither
+MIR nor assembly transports production phases. Unit-owned dense identity indexes
+survive across functions; function facts, call plans and MIR release after use.
+No reference, host compiler or assembler implements output. Earlier scalar,
+floating, wide, object, phi, atomic, variadic, EH/frame and TLS groups are retained.
 
-Typed PA8 Program -> function-owned placement/flat MIR -> direct x86 encoding
-and typed image fixups -> ELF. Text is confined to explicit LowIR/MIR adapters.
-Unit-owned compact indexes survive across functions; selection and MIR release
-after each function. No reference, host compiler or assembler implements output.
+133 closes the six canonical placement/frame failures as one ownership group:
 
-Inherited groups cover scalar/wide integer, pointers, f32/f64/f80, parallel phis,
-atomics, bulk memory, calls, variadics and object ABI. Audit130 fixed scratch,
-implicit-width and parameter ownership defects. Handoff131 completed generic EH,
-dynamic-stack lifetime and aligned frames/calls; its evidence and review questions
-remain in validation131/performance131 and the ledger below.
-
-132 completes **TLS storage, wrappers and address consumers**:
-
-| Owner | Data flow / correctness | Work and lifetime |
+| Owner | Data flow and completed behavior | Work/lifetime |
 |---|---|---|
-| LowIR unit and native Workspace | Existing typed `storage` / `tls_for` identities -> dense wrapper lookup; no rendered-name decisions | One unit classification; O(1) lookup; unit release |
-| Selector | Raw and derived symbol addresses -> `tls_addr`; loads, stores, calls, phis, pointer arguments and bulk memory consume actual addresses | Constant selection work per access, function-owned MIR; only selected carrier changes |
-| Image and encoder | Dense target map -> initial-thread storage, FS:0 addressing, signed thread-offset fixups; declared accessor thunks; defined wrappers retain bodies | Linear layout/fixups/demand; each demanded thunk emitted once; image-owned storage/maps |
-| Native startup | Initializes the thread pointer before init/main; checks setup failure; preserves initial argc/argv stack | One bounded startup sequence, eight-byte self pointer, bounded alignment padding |
+| Placement | Typed signature/value intervals -> scalar stack parameter homes, conservative mixed-conversion FP homes and GPR pool, safe adjacent ABI result carriers | Existing linear walks, fixed register pools, per-function facts |
+| Call setup | Shared ABI fragments -> register/address read masks, GPR/XMM transfer order, safe indirect target retention, early dependent or late independent stack stores, stable stack-call result homes | O(arguments); at most fourteen register assignments and bounded cycle scheduling; call-local storage |
+| Boolean selection | Compare's exact 0/1 fact -> representation-preserving scalar conversion aliases, full use intervals, canonical materialization and retained adjacent debug steps | O(values/uses); one-bit/wide conversions retain their explicit representation changes |
+| Frame finalization/encoding | Actual homes/preserve/scratch facts plus returning-void parameter capacity -> final stack size consumed by prologue/epilogue and dump | One linear finalization walk; no duplicated body or output-only metadata |
 
-Declared accessors use the shared typed Function/MIR path and appear in dumps
-when demanded; their frame/return facts reach the ordinary encoder. This removes
-a separate direct-thunk emitter without changing executable bytes.
+Stable ABI homes are excluded from private scratch-carry windows. Incoming
+register fallback is enabled only for the existing proven parameter-flow policy;
+a newly marked ordinary spill must not regain an already reused incoming carrier.
+The new controls cover that interaction across pressure, calls, CFG and widths.
 
-The group extends beyond the three failing fixtures: deferred constant indexes
-now resolve as TLS, and calls through TLS function-pointer tables load the correct
-storage. Atomic, floating/wide, bulk, pressure, CFG and ABI consumers are checked.
-The `thread_local` global directive and `tls_addr` operation describe native TLS
-semantics; target startup/accessor expansion consumes the same typed image facts.
-Standalone initial-thread setup is implemented here; hosted object TLS allocation
-and relocation belong to later hosted stages. Addresses already follow FS:0.
+Canonical fixtures require conservative mixed numeric placement and the lowered
+void object-output frame. The first implementation reserved parameter capacity
+more broadly; measurements exposed unnecessary leaf frames. Final code narrows
+that policy to returning void boundaries. Scalar-return/nonreturning functions
+use actual frame requirements. This preserves mandated shapes without imposing
+the extra reservation on unrelated functions. Occupied frames retain ordinary
+Boolean placement; an otherwise empty converted-return path uses its canonical
+fixed carriers/scratch policy. All these facts reach real encoding.
 
-Total work remains O(N + E log E): fixed linear selection walks, bounded register
-pools/reload probes, monotonic parameter flow and sorted phi edges. Each TLS address
-has at most 17 native bytes; an accessor adds one return byte. No optional transform,
-global retry, broad cache invalidation or body duplication was added. O1–O3 retain
-the current O0 policy; later optimizers remain separate work.
+Total work remains O(N + E log E), including inherited sorted phi edges and fixed
+reload windows. There is no new fixed point, global invalidation, semantic
+reconstruction, body cloning or optimization level. All fallback storage and
+instruction growth are linear; per-call register scheduling has a fixed bound.
 
 ## Validation and performance
 
-- Final `make test-pa24`: **290/296**; failures **9 -> 6**, no new failing fixture.
-  All three TLS failures pass. Focused properties: **17/17**. All **295** positive
-  course programs execute correctly, including the six MIR-shape failures.
-- The unchanged 435-file inventory includes 125 excluded solution regressions
-  and 14 controls. Its counting convention moves **287/435 -> 290/435**, with
-  failures **148 -> 145**. Course coverage and all comparators/references are intact.
-- Prior-through: **3856/3856**, **23/23** stages. File audit passes with the same four
-  inherited substantial-header warnings. Final checks ran sequentially.
-- Personal suites: **236 TLS**, **1820 scalar**, **1259 floating**, **1495 wide**,
-  **160 object**, **75 EH/frame**, **21 audit** controls, plus ABI/debug/ELF integration.
-  TLS-specific debug, startup initialization, multifile binding, helper-only MIR
-  and four native/view identity checks pass. Early invalid personal test inputs
-  and their diagnostics remain in evidence; corrected final runs are explicit.
-- `trace132.cpp` follows a TLS object and demanded `Counter<3>::advance` through
-  source facts, typed LowIR, MIR and ELF; the invalid unused member stays dormant.
-  Both runtime argument counts pass. Two functions, 229 text bytes; ELF and native
-  disassembly inspected. The source/native driver integration remains later work.
-- Frozen A/A plus six ABBA blocks: compiler paired B/A **0.993 / 1.045 / 1.002**
-  (scalar/float/wide), peak RSS effectively unchanged. The possible floating
-  compiler cost and initial wide samples are disclosed with spreads; no speedup
-  is claimed. Final accessor MIR produces byte-identical measured runtime images.
-  Seven inherited executable pairs are byte-identical. New TLS checks forty
-  million accessor/increment calls in about **0.175 s**, with **247** text bytes.
-- Inherited 15% compiler latency/RSS and zero optional text-growth targets remain
-  diagnostic and are met by paired medians here. Correctness, course MIR limits,
-  comparison rules and finite work/growth bounds remain mandatory. All observations,
-  calibration, hashes and absolute new-semantic costs are preserved.
+- Required checks ran sequentially: `make test-pa24` **296/296** plus **17/17**
+  focused properties; prior-through **3856/3856**; root through-PA24 **4152/4152**.
+  File audit passes with the same four inherited substantial-header warnings.
+- Original required failures decrease **6 -> 0**, with no new failures. All 2403
+  tracked fixture files, references and comparators are unchanged. The inventory
+  convention moves **290/435 -> 296/435**: 125 solution regressions are excluded
+  and 14 control inputs report their properties separately. No coverage is waived.
+- Final personal runs: **205 placement**, **1820 scalar**, **1259 floating**,
+  **1495 wide**, **160 object**, **75 EH/frame**, **236 TLS**, **21 audit** controls;
+  parameter flow and scalar/TLS ABI/debug/ELF integration also pass. Early invalid
+  personal inputs and rejected diagnostics remain in evidence; final inputs pass.
+- `trace133.cpp` follows `Mixer<7>::value` and demanded `combine` through source
+  facts, typed LowIR, MIR and ELF. One class completion, one demanded template
+  region, two emitted functions, **214 text bytes**; the unused dependent member
+  stays dormant. Both inputs and ELF/disassembly checks pass. Production source
+  driver integration and self-hosting remain later-stage work.
+- Final frozen A/A + six ABBA blocks: compiler paired B/A medians
+  **1.003 / 1.009 / 1.011 / 1.010** (scalar/float/wide/ABI); RSS stable or lower.
+  The indirect-call workload is **3.4% faster**, **213 -> 207** text bytes.
+  Required mixed-ABI shape costs **8.1% runtime**, **248 -> 279** bytes. Eight
+  inherited runtime images are byte-identical to entry, with both inputs rechecked.
+- The inherited 15% compiler latency/RSS and zero optional text-growth targets
+  remain diagnostic. Final medians meet the compiler targets; mandatory canonical
+  costs are disclosed separately. All observations, including initial regressions,
+  spreads/outliers and the corrected frame-policy measurements, are preserved.
+  Correctness, required MIR comparisons/envelopes and finite work bounds remain
+  mandatory. Implementation evidence does not substitute for independent review.
 
-## Remaining implementation and handoff boundary
+## Handoff boundary and ledger
 
-**Canonical placement/frame protocol (six failures):** strict object-ABI frame;
-stack arguments; mixed direct/indirect calls; call-setup forwarding; single-edge
-retention. The next owner is function placement and frame finalization: incoming
-parameter homes, call-result carriers, setup ordering, Boolean materialization
-and final preserve/stack facts must agree with mandatory canonical shapes.
-Those programs execute correctly, but exact/structural comparisons still fail.
+**Unfinished implementation:** none identified for the PA24 course handoff. The
+remaining six shape failures are closed, related placement consumers pass, and
+required checks are green. No known defect in this group is relabeled as review.
 
-TLS storage, accessors and their related address consumers are complete. Further
-work on these six failures requires a coordinated placement-policy change across
-non-TLS ABI functions and its own runtime/compiler validation. TLS symbol maps,
-startup or fixups cannot close those shape differences. This is the concrete
-handoff boundary, not a waiver of the remaining requirements or whole-stage success.
-No additional known TLS correctness/spec defect is deferred as a review question.
-
-Independent review remains pending for both 131 and 132: handler nesting/value
-ownership, allocation/alignment restoration, TLS layout/accessor demand and all
-mixed-width/pressure interactions against the handout/spec and bounded-work claims.
-Implementation validation does not replace that review or move Last reviewed commit.
+**Independent review:** still required for 131 EH nesting/value ownership and
+stack/alignment restoration; 132 TLS layout/accessor demand and address consumers;
+133 placement/ABI-home dependencies, Boolean/debug facts, conservative canonical
+policies and performance evidence. Ralph must audit the accumulated whole stage
+against the handout/spec and resolve any findings before advancement. The review
+markers above remain unchanged; passing tests do not waive that audit.
 
 | Handoff | Code / evidence | Disposition |
 |---|---|---|
 | Audit130 | through `9f3f9b5c`; audit.md | Independently reviewed; 14 failures remained |
-| 131 | `45774fa2`, `c7587f72`; validation131/performance131 | EH/frame group complete; 9 failures; independent review pending |
-| 132 | `db965a86`, `03eeff9e`; validation132/performance132 | TLS/address group complete; 6 failures; independent review pending |
+| 131 | `45774fa2`, `c7587f72`; validation131/performance131 | EH/frame complete; 9 failures; independent review pending |
+| 132 | `db965a86`, `03eeff9e`; validation132/performance132 | TLS/address complete; 6 failures; independent review pending |
+| 133 | `1d73b01e`, `e5b5dada`; validation133/performance133 | Placement/frame complete; zero course failures; whole-stage independent review pending |
 
-Evidence: `/home/vishvananda/work/private/v4codex/artifacts/pa24-132/`.
+Evidence: `/home/vishvananda/work/private/v4codex/artifacts/pa24-133/`.
