@@ -2,7 +2,7 @@
 
 Stage base commit: `f833cf1ff361529147361cada33eca62e55330cf`
 Last reviewed commit: `f833cf1ff361529147361cada33eca62e55330cf`
-Target: **PA27 full-stage**. Phase: **implement; incomplete handoff145**.
+Target: **PA27 full-stage**. Phase: **implement146 in progress**.
 Current: **133/158**, down from **42 to 25 failures**, no new failures.
 PA1–PA26: **4283/4283**. Independent review markers remain unchanged.
 
@@ -67,3 +67,13 @@ using reduced inputs, C++11/ABI proof and the pinned bundle revision.
   Independent audit must review source-attribute identity, COMDAT alias/FDE
   ownership, GOT scratch lifetimes and the recorded cost/bounds. These questions
   are separate from the known implementation failures above; neither is waived.
+
+- Entry146: HEAD `5aefb9626f568da2b8060cba7096cde931b68435`, clean; prior
+  handoff changed authoritative implementation and validation (progress).
+  Turn baseline 133/158, 25 failures; stage/review markers above preserved.
+  Initial group: semantic entity linkage → typed ABI graph → stored symbol and
+  binding → LowIR/object. Review canonical identity and substitution ownership;
+  require O(graph nodes + emitted name bytes) work, no text recovery. Extend to
+  related linkage/local-static/template naming failures as that ownership permits.
+  Validate focused fixtures, explicit personal cross-TU controls, full stage and
+  prior-through reports, file audit, frozen compiler/runtime/RSS/text evidence.
