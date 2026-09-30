@@ -1,0 +1,37 @@
+{
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "processor": "Intel(R) Xeon(R) CPU @ 2.20GHz",
+  "compiler_build_flags": "-std=gnu++11 -Wall -O3 \n-std=gnu++11 -Wall -O3  -Dmain=test_runner_real_main\n",
+  "host_config_sha256": "57f9e80157246059f1fca3e235f80392fffec66428c4e00734f3d0f0358d7df4",
+  "host_compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "implementation_commit": "6bf1369bba1bedadc4db24e266b50fa466ba2ddc",
+  "affinity": "taskset -c 0",
+  "policy": "No concurrent builds or tests during timed measurements; external machine scheduling remains uncontrolled.",
+  "attempts": [
+    {
+      "evidence": "before-attribute-common-performance.json",
+      "observations": 224,
+      "note": "Historical implementation before attribute operand expansion, ordinary-alias and definition-access repairs, and runtime-feature metadata."
+    },
+    {
+      "evidence": "before-attribute-affected-performance.json",
+      "observations": 56,
+      "note": "Historical standalone capability costs, 6,000,000 runtime loop iterations."
+    },
+    {
+      "evidence": "final-noisy-common-performance.json",
+      "observations": 224,
+      "note": "Final binary; severe A/A compile scheduling noise. Retained all observations; repeated full protocol once."
+    },
+    {
+      "evidence": "common-performance.json",
+      "observations": 224,
+      "note": "Final binary repeat; all observations retained, including outliers."
+    },
+    {
+      "evidence": "affected-performance.json",
+      "observations": 56,
+      "note": "Final binary standalone capability costs. Runtime lengthened to 60,000,000 iterations to dominate measured launcher overhead; no cross-attempt speedup comparison."
+    }
+  ]
+}

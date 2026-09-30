@@ -1,0 +1,283 @@
+[
+  {
+    "control": "literals",
+    "files": {
+      ".lowir": {
+        "sha256": "22f7021d63e754b555dc143110fb68780c92761089d3f15e810d99fac8cf9f3b",
+        "bytes": 1009
+      },
+      "-roundtrip.lowir": {
+        "sha256": "f7dfd30d1c4454df4f557ab007c6b20a3138b90819ddff79102373eb4451769f",
+        "bytes": 1006
+      },
+      ".mir": {
+        "sha256": "742c62532362feddad3daa8d67ca664c2ea680e64d3ca7a06899b4372652ec4f",
+        "bytes": 1150
+      },
+      "-lowir": {
+        "sha256": "c24f57f41858938dda1a8fbbad87e25385a5664e9e908c6100018a2dde8c0809",
+        "bytes": 4112
+      }
+    },
+    "canonical_roundtrip_identical": false,
+    "lowir_excerpt": [
+      "global @half : f64 [binding=internal, storage=readonly, object=_ZL4half] = 0.5",
+      "global @tiny : f64 [binding=internal, storage=readonly, object=_ZL4tiny] = 0.09375",
+      "function @operator___bits(%v1 : i64) -> i64 [binding=weak, object=_Zli5_bitsy, inline_hint=yes] {",
+      "  slot $s1 : i64",
+      "  block ^b1:",
+      "    store i64 %v1, $s1",
+      "    %v2 = load i64 $s1",
+      "    return i64 %v2",
+      "}",
+      "function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {",
+      "  slot $s2 : i32",
+      "  slot $s3 : i64",
+      "  block ^b2:",
+      "    %v3 = load f64 @half",
+      "    %v4 = convert fpext f64 f32 16.0f",
+      "    %v5 = binary add f64 %v4, %v3 [eval=f80]",
+      "    %v6 = cmp eq f64 %v5, 16.5",
+      "    branch %v6, ^b6, ^b7",
+      "  block ^b6:",
+      "    %v7 = cmp eq f80 6.0L, 6.0L",
+      "    %v8 = cmp ne i64 %v7, 0",
+      "    store i64 %v8, $s3",
+      "    jump ^b8",
+      "  block ^b7:",
+      "    store i64 0, $s3",
+      "    jump ^b8",
+      "  block ^b8:",
+      "    %v9 = load i64 $s3",
+      "    branch %v9, ^b3, ^b4",
+      "  block ^b3:"
+    ],
+    "mir_excerpt": [
+      "machine_ir x86_64 linux",
+      "",
+      "startup",
+      "    call @main [args=()]",
+      "    mov rdi, rax",
+      "    exit",
+      "",
+      "global @half",
+      "  storage scalar f64",
+      "  init f64 0.5",
+      "",
+      "global @tiny",
+      "  storage scalar f64",
+      "  init f64 0.09375",
+      "",
+      "function @operator___bits",
+      "  abi",
+      "    param %v1 -> rdi : i64",
+      "    return i64 -> rax",
+      "  frame",
+      "    stack_size 0",
+      "    scratch_bytes 0",
+      "    frame_pointer keep",
+      "    epilogues shared",
+      "",
+      "  block ^b1",
+      "    ret rdi",
+      "",
+      "function @main",
+      "  abi"
+    ],
+    "roundtrip_difference": "Reader canonicalization removes source f/L suffixes from explicitly typed LowIR floating constants; f32/f80 types and executed values are preserved."
+  },
+  {
+    "control": "traits",
+    "files": {
+      ".lowir": {
+        "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4",
+        "bytes": 103
+      },
+      "-roundtrip.lowir": {
+        "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4",
+        "bytes": 103
+      },
+      ".mir": {
+        "sha256": "a40df15eefce55746ee3fd1d248a61d354ec3f52bcf253589c9ebc9ead757f40",
+        "bytes": 257
+      },
+      "-lowir": {
+        "sha256": "184f975d808940abdeae3811e42f0f4b538be3abad6294f65fd6b3efba1ca09d",
+        "bytes": 4096
+      }
+    },
+    "canonical_roundtrip_identical": true,
+    "lowir_excerpt": [
+      "function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {",
+      "  block ^b1:",
+      "    return i32 0",
+      "}"
+    ],
+    "mir_excerpt": [
+      "machine_ir x86_64 linux",
+      "",
+      "startup",
+      "    call @main [args=()]",
+      "    mov rdi, rax",
+      "    exit",
+      "",
+      "function @main",
+      "  abi",
+      "    return i32 -> rax",
+      "  frame",
+      "    stack_size 0",
+      "    scratch_bytes 0",
+      "    frame_pointer keep",
+      "    epilogues shared",
+      "",
+      "  block ^b1",
+      "    mov rax, 0",
+      "    ret rax"
+    ]
+  },
+  {
+    "control": "operations",
+    "files": {
+      ".lowir": {
+        "sha256": "391d1b48a7fa77cdc6fdd9a9b64cd065a810b1248894bfab38b54f2af5e6e87c",
+        "bytes": 2698
+      },
+      "-roundtrip.lowir": {
+        "sha256": "391d1b48a7fa77cdc6fdd9a9b64cd065a810b1248894bfab38b54f2af5e6e87c",
+        "bytes": 2698
+      },
+      ".mir": {
+        "sha256": "0534e11a3b3daefbb4f0ad258d55d3dea5364d88eca71ed407e8cb6cb639121f",
+        "bytes": 2355
+      },
+      "-lowir": {
+        "sha256": "ec3f30236158f601aae2785bcbba9c73fac1f0952acaf4a07319e46fe7b06d81",
+        "bytes": 4096
+      }
+    },
+    "canonical_roundtrip_identical": true,
+    "lowir_excerpt": [
+      "function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {",
+      "  block ^b1:",
+      "    return i32 0",
+      "}",
+      "function @Protected(%v1 : ptr [object_bytes=1]) -> void [unwind=no, binding=weak, object=_ZN9ProtectedC1Ev, object_root=yes, inline_hint=yes] {",
+      "  slot $s1 : ptr",
+      "  block ^b2:",
+      "    store ptr %v1, $s1",
+      "    return void",
+      "}",
+      "function @Protected__1(%v2 : ptr [alias=noalias, object_bytes=1], %v3 : ptr [pass=by_address, alias=noalias, object_bytes=1]) -> void [unwind=no, binding=weak, object=_ZN9ProtectedC1ERKS_, object_root=yes, inline_hint=yes] {",
+      "  slot $s2 : ptr",
+      "  slot $s3 : ptr",
+      "  block ^b3:",
+      "    store ptr %v2, $s2",
+      "    store ptr %v3, $s3",
+      "    return void",
+      "}",
+      "function @operator_(%v4 : ptr [object_bytes=1], %v5 : ptr [pass=by_address, object_bytes=1]) -> ptr [unwind=no, binding=weak, object=_ZN9ProtectedaSERKS_, inline_hint=yes] {",
+      "  slot $s4 : ptr",
+      "  slot $s5 : ptr",
+      "  block ^b4:",
+      "    store ptr %v4, $s4",
+      "    store ptr %v5, $s5",
+      "    %v12 = load ptr $s4",
+      "    return ptr %v12",
+      "}",
+      "function @Derived(%v6 : ptr [object_bytes=1]) -> void [unwind=no, binding=weak, object=_ZN7DerivedC1Ev, inline_hint=yes] {",
+      "  slot $s6 : ptr",
+      "  block ^b5:"
+    ],
+    "mir_excerpt": [
+      "machine_ir x86_64 linux",
+      "",
+      "startup",
+      "    call @main [args=()]",
+      "    mov rdi, rax",
+      "    exit",
+      "",
+      "function @main",
+      "  abi",
+      "    return i32 -> rax",
+      "  frame",
+      "    stack_size 0",
+      "    scratch_bytes 0",
+      "    frame_pointer keep",
+      "    epilogues shared",
+      "",
+      "  block ^b1",
+      "    mov rax, 0",
+      "    ret rax",
+      "",
+      "function @Protected",
+      "  abi",
+      "    param %v1 -> rdi : ptr",
+      "    return void -> void",
+      "  frame",
+      "    stack_size 16",
+      "    scratch_bytes 0",
+      "    frame_pointer keep",
+      "    epilogues shared",
+      ""
+    ]
+  },
+  {
+    "control": "shape-extension",
+    "files": {
+      ".lowir": {
+        "sha256": "429d2a994e101c866f8624cd8cdedf9e34694ac73bb0234b8441e8489963be51",
+        "bytes": 314
+      },
+      "-roundtrip.lowir": {
+        "sha256": "429d2a994e101c866f8624cd8cdedf9e34694ac73bb0234b8441e8489963be51",
+        "bytes": 314
+      },
+      ".mir": {
+        "sha256": "f76582b9d9fbb362785b58e1326dc198a73f1e407a5aa3716bed03274e233f61",
+        "bytes": 328
+      },
+      "-lowir": {
+        "sha256": "66ae634a862e94f388e073ac07561944bcc2e6a3330eed1d385250b3594a7369",
+        "bytes": 4096
+      }
+    },
+    "canonical_roundtrip_identical": true,
+    "lowir_excerpt": [
+      "function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {",
+      "  slot $p : obj<4x4>",
+      "  block ^b1:",
+      "    %v1 = addr $p",
+      "    %v2 = addr $p",
+      "    %v3 = index i8 [projection=field] %v2, 0",
+      "    store i32 0, %v3",
+      "    %v4 = addr $p",
+      "    %v5 = index i8 [projection=field] %v4, 0",
+      "    %v6 = load i32 %v5",
+      "    return i32 %v6",
+      "}"
+    ],
+    "mir_excerpt": [
+      "machine_ir x86_64 linux",
+      "",
+      "startup",
+      "    call @main [args=()]",
+      "    mov rdi, rax",
+      "    exit",
+      "",
+      "function @main",
+      "  abi",
+      "    return i32 -> rax",
+      "  frame",
+      "    stack_size 16",
+      "    scratch_bytes 0",
+      "    frame_pointer keep",
+      "    epilogues shared",
+      "    slot $p -> [rbp-8] : obj<4x4>",
+      "",
+      "  block ^b1",
+      "    store.i32 [rbp-8], 0",
+      "    load.i32 rax, [rbp-8]",
+      "    ret rax"
+    ]
+  }
+]

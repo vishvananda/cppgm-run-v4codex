@@ -1,0 +1,58 @@
+[
+  {
+    "workload": "memory",
+    "command": [
+      "/tmp/pa29-155/final",
+      "-O0",
+      "-c",
+      "/tmp/pa29-155/common/memory.cpp",
+      "-o",
+      "/tmp/pa29-155/common/memory-plain.o"
+    ],
+    "exit_code": 0,
+    "object_sha256": "28798e83ffc231f2394886236fa230283a93ac20adbdb526111201a60dc7c98a",
+    "identical_with_stats": true
+  },
+  {
+    "workload": "floating",
+    "command": [
+      "/tmp/pa29-155/final",
+      "-O0",
+      "-c",
+      "/tmp/pa29-155/common/floating.cpp",
+      "-o",
+      "/tmp/pa29-155/common/floating-plain.o"
+    ],
+    "exit_code": 0,
+    "object_sha256": "1d336c199b2695e783552f12dcddd9a0364cb2d495dc8dc5d9fab29ce7a02bc7",
+    "identical_with_stats": true
+  },
+  {
+    "workload": "exceptions",
+    "command": [
+      "/tmp/pa29-155/final",
+      "-O0",
+      "-c",
+      "/tmp/pa29-155/common/exceptions.cpp",
+      "-o",
+      "/tmp/pa29-155/common/exceptions-plain.o"
+    ],
+    "exit_code": 0,
+    "object_sha256": "6f5a4a53dd1b55afcd6092df67128070e991feaffcf21bb3098b4c0d8cd84363",
+    "identical_with_stats": true
+  },
+  {
+    "workload": "pruning",
+    "command": [
+      "/tmp/pa29-155/final",
+      "-O0",
+      "-c",
+      "/tmp/pa29-155/common/pruning.cpp",
+      "-o",
+      "/tmp/pa29-155/common/pruning-plain.o"
+    ],
+    "exit_code": 0,
+    "object_sha256": "28798e83ffc231f2394886236fa230283a93ac20adbdb526111201a60dc7c98a",
+    "identical_with_stats": true
+  }
+]
