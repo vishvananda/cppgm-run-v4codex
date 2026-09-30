@@ -10,6 +10,11 @@ void compile_image(const lowir_model::Program& p, Image& image, const std::vecto
 {
     Encoder encoder(image);
     Workspace workspace(p);
+    if (image.host) {
+        image.indirect_functions.resize(image.symbols.size());
+        for (const auto& f : p.functions)
+            image.indirect_functions[f.symbol.index] = p.symbols[f.symbol.index-1].metadata.binding != ir_model::SBM_INTERNAL;
+    }
     auto time = Clock::now(); encode_data(p,image); encoder.startup(start); stats.encoding_ms += ms(time);
     if (mir) dump_header(p,start,*mir,image.defined[image.runtime_begin]);
     for (const auto& source : p.functions) if (!source.declaration) {

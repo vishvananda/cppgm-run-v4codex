@@ -3,7 +3,7 @@
 namespace native {
 constexpr unsigned executable_code_offset = 64+2*56;
 struct Fixup {
-    enum Kind { RelativeSymbol, AbsoluteSymbol, ThreadOffset, Absolute32, Absolute32Signed, CallSymbol } kind = RelativeSymbol;
+    enum Kind { RelativeSymbol, AbsoluteSymbol, ThreadOffset, Absolute32, Absolute32Signed, CallSymbol, GotSymbol } kind = RelativeSymbol;
     std::size_t offset = 0, end = 0;
     unsigned symbol = 0;
     std::int64_t addend = 0;
@@ -21,6 +21,7 @@ struct Image {
     std::vector<Fixup> code_fixups, data_fixups;
     std::vector<std::uint64_t> symbols;
     std::vector<bool> data_symbols, defined;
+    std::vector<bool> indirect_functions;
     std::vector<unsigned> tls_targets;
     bool has_tls = false, host = false;
     std::vector<UnwindRecord> unwind;

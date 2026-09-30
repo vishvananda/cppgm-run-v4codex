@@ -84,9 +84,10 @@ HostElf::HostElf(const Object& obj) : mapping(obj.symbols.size()), section_symbo
             unsigned type = f.kind == native::Fixup::AbsoluteSymbol ? R_X86_64_64 :
                 f.kind == native::Fixup::Absolute32 ? R_X86_64_32 : f.kind == native::Fixup::Absolute32Signed ? R_X86_64_32S : R_X86_64_PC32;
             auto addend = f.addend;
-            if ((f.kind == native::Fixup::RelativeSymbol || f.kind == native::Fixup::CallSymbol)) {
+            if (f.kind == native::Fixup::RelativeSymbol || f.kind == native::Fixup::CallSymbol || f.kind == native::Fixup::GotSymbol) {
                 addend += std::int64_t(f.offset)-std::int64_t(f.end);
                 if (f.kind == native::Fixup::CallSymbol) type = R_X86_64_PLT32;
+                if (f.kind == native::Fixup::GotSymbol) type = R_X86_64_GOTPCREL;
             }
             lowir_model::require(f.kind != native::Fixup::ThreadOffset,"host TLS model is not implemented");
             relocate(lane ? RelaData : RelaText,f.offset,mapping[f.symbol],type,addend);

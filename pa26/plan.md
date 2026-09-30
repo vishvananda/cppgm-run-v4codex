@@ -50,12 +50,13 @@ a separate unfinished group; independent audit remains pending below.
   before lowering allocates entity-indexed tables. Twenty-one explicit semantic controls
   and ten header controls pass; PA1–25 is again 4253/4253 and file audit passes.
 - Partial-construction cleanup now uses the same completed destructor effect
-  fact as ordinary destruction and declaration emission. The fixture emits an
-  object. Remaining related owner: imported function addresses in PIE; the host
-  linker rejects their direct PC32 address relocations. Validate actual host
-  link, runtime and cleanup inspection after correcting that ABI boundary. The original stage count is still 29/30;
-  these increments are not accepted handoff progress. Final performance evidence
-  and all final required checks remain outstanding.
+  fact as ordinary destruction and declaration emission. Nonlocal function
+  addresses use a typed GOT relocation for host PIE; classification is one pass
+  over function identities, with no private-path table allocation and no extra
+  instruction for zero-offset addresses. A DSO pointer-identity/indirect-call
+  control passes. **PA26 now passes 30/30**, removing the original remaining
+  failure with unchanged fixtures. Final through-report/performance evidence
+  remains in progress.
 - Driver migration remains unfinished: `.obj` preserves PA25 private objects;
   other output names select host ELF. `--object-format=elf|private` overrides
   this choice. Host objects use PA26's external host linker. Uniform host output
