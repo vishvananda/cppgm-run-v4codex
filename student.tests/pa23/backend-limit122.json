@@ -1,0 +1,29 @@
+{
+  "bundle_revision": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "source": "int trace;int freed;void operator delete(void*)noexcept;struct A{virtual ~A()noexcept(false){trace=trace*10+1;}};struct B{virtual ~B()noexcept(false){trace=trace*10+2;throw 9;}};struct D:A,B{static void operator delete(void*p)noexcept{++freed;::operator delete(p);}};int main(){B*p=new D;try{delete p;return 1;}catch(int n){return n!=9||trace!=21||freed!=1;}}",
+  "reference_compile": {
+    "exit": 0,
+    "diagnostic": ""
+  },
+  "reference_ir_sha256": "7bf60730d803e8836fb6e9eed6c95a17afe9dea09c1981641439ec8ebb491753",
+  "standalone": {
+    "exit": 1,
+    "diagnostic": "ERROR: duplicate native object-symbol label\n"
+  },
+  "private_name_probe": {
+    "exit": 1,
+    "diagnostic": "ERROR: duplicate native object-symbol label\n"
+  },
+  "hosted_backend": {
+    "exit": 0,
+    "diagnostic": ""
+  },
+  "hosted_link": {
+    "exit": 0,
+    "diagnostic": ""
+  },
+  "hosted_execution": {
+    "exit": 0,
+    "diagnostic": ""
+  }
+}

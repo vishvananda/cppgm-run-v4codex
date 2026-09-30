@@ -1,0 +1,163 @@
+{
+  "cases": [
+    {
+      "name": "delete-secondary-order",
+      "lowir_sha256": "5defedadcd801bae1217a1117015397e4624d77f2573776649f62fdebec2e414",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "implicit-delete-two-bases",
+      "lowir_sha256": "4a0474d8583d1735121cdd61a41ebec9ff06bcb314c0705443f7c38309dc8261",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "implicit-delete-three-bases",
+      "lowir_sha256": "d971b49d29905826314332a14b021326c150a2e180d89e2561c94b99919f5fd4",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "delete-virtual-during-destruction",
+      "lowir_sha256": "dbf4dfc7b74eb75056da81bbbe3e2f3a97b1d898de7a0754e9e235add0a819c5",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "delete-throwing-secondary",
+      "lowir_sha256": "ac417f9da622307dc21bf83444bfef3ec0fffb926bd9afebf9ceabced053a177",
+      "backend_exit": 1,
+      "diagnostic": "ERROR: duplicate native object-symbol label\n",
+      "passed": false
+    },
+    {
+      "name": "key-definition-after-use",
+      "lowir_sha256": "1d5cf7534472f1a86bf8778234aa0704f308bc242f1763346c6ad8ace1861223",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "inline-key-definition-after-use",
+      "lowir_sha256": "999f04b0935bce1e8dd691cd33d72c3ef51d8b6830e2ff26f10f0e173e0a596d",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "template-key-demand",
+      "lowir_sha256": "6de75894461bef677f2cea8a074a710eae9b0ecd612cecf45771dd1d55cbe0f4",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "key-unused-body",
+      "lowir_sha256": "5c5240099efb561e596edee8df079f8f2e2e5e55f53a43acbf7747279859d3bd",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "repeated-destructor-base",
+      "lowir_sha256": "1aa953b6ca8b385df572c8d144d89649e8c3b37f7b41f4a80625b424d6d3b408",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "separate-key-owner",
+      "lowir_sha256": "5cb5c2757a2e5750b9345719f99cf4f9b97813285e9c50c3a574e223eef07114",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "separate-delete-owner",
+      "lowir_sha256": "fedceb2033f12db17a0aba94f3fb94b5d27afac3bbb309a6fd45a44cbd112fb7",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "separate-nested-secondary",
+      "lowir_sha256": "93d6ea1b0974b6955073961d68bfa6df20c52a70088874d9e66f30ac06379eed",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "key-owner-before-use",
+      "lowir_sha256": "1bbbb0f65119cb9081d2685cb7343e6735e715f23c3634df04c66b08f5e6943a",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "separate-covariant-group",
+      "lowir_sha256": "59bd57ff175d6f484981c5ba0cbeb10b7cdacacf29908b02a9efcb9a8be6da54",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "covariant-owner-before-use",
+      "lowir_sha256": "c43b92c893e17fc5484099c974b270a7f6dcf2158f70fbf8a4379ffb7ea8e617",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "base-declaration-then-alias",
+      "lowir_sha256": "f58a789bcf77e04a4e13badc38751b7368f4833f8113f9d9ec12d6a6c0489307",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "destructor-scaling-4",
+      "lowir_sha256": "d801ed076b887030c5a3440cb980336721873c45954c507ae223042e82a4d5d9",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "destructor-scaling-16",
+      "lowir_sha256": "40e139b25e33c2d67a2a64be3cceca05727850950c9dbd8b44515464d580e1fc",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "destructor-scaling-64",
+      "lowir_sha256": "e51449ef1830feb973422f4728f7125fc1c51689d7685aa8fe145af80f501a8e",
+      "backend_exit": 0,
+      "diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    }
+  ]
+}
