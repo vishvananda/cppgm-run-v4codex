@@ -133,6 +133,7 @@ private:
     };
     std::vector<std::string> include_paths_;
     bool telemetry_, hosted_;
+    bool exceptions_ = true;
     std::vector<std::string> forced_includes_;
     std::size_t next_forced_include_ = 0;
     LexStats lex_stats_;

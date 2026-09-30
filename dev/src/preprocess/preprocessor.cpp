@@ -114,6 +114,9 @@ void Preprocessor::command_options(const std::vector<std::string>& options)
 {
     for (std::size_t i = 0; i < options.size(); ++i) {
         const auto& option = options[i];
+        if (option == "-fno-exceptions" || option == "-fexceptions") {
+            exceptions_ = option == "-fexceptions"; continue;
+        }
         if (option == "-include") {
             if (++i == options.size()) throw std::runtime_error("missing forced include file");
             forced_includes_.push_back(options[i]); continue;

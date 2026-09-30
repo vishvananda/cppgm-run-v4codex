@@ -72,8 +72,11 @@ Options options(const std::vector<std::string>& args)
             o.macros.push_back(std::string("-D__cplusplus=")+year);
             o.macros.push_back(standard.compare(0,3,"gnu") == 0 ? "-U__STRICT_ANSI__" : "-D__STRICT_ANSI__=1");
         } else if (a == "-pthread") o.macros.push_back("-D_REENTRANT=1");
-        else if (a == "-fno-exceptions") o.macros.push_back("-U__EXCEPTIONS");
-        else if (a == "-fexceptions") o.macros.push_back("-D__EXCEPTIONS=1");
+        else if (a == "-fno-exceptions" || a == "-fexceptions") {
+            o.macros.push_back(a);
+            o.macros.push_back(a == "-fexceptions" ? "-D__EXCEPTIONS=1" : "-U__EXCEPTIONS");
+            o.macros.push_back(a == "-fexceptions" ? "-D__cpp_exceptions=199711L" : "-U__cpp_exceptions");
+        }
         else if (a == "-MMD" || a == "-MD" || a == "-MP") continue;
         else if (prefix(a,"-MF") || prefix(a,"-MT") || prefix(a,"-MQ")) {
             if (a.size() == 3) argument(args,i,a.c_str());

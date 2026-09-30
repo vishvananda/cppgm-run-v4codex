@@ -22,3 +22,7 @@
 _Pragma("GCC diagnostic ignored \"-Wunknown-pragmas\"")
 #warning hosted warning
 int main() { return 0; }
+
+#if !__has_feature(cxx_exceptions) || !__has_feature(cxx_rtti) || !__cpp_exceptions || !__cpp_rtti
+#error language runtime features
+#endif

@@ -1,5 +1,5 @@
 {
-  "compiler_sha256": "27e99d88963b16e497364537f9a11d20393bdde818706bc21f8a20a6b0c20554",
+  "compiler_sha256": "4e4873df66898a2bb16a06304569616f1fec412178b4ced3d5ab01cd6206d385",
   "checks": [
     {
       "name": "literals compile",
@@ -258,6 +258,34 @@
       ],
       "status": 0,
       "stdout": "preproc 1\nsof /tmp/pa29-155/controls/macros.cpp\nidentifier macro_ok\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "disabled exception metadata",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-fexceptions",
+        "-fno-exceptions",
+        "/tmp/pa29-155/controls/exception-flags.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/exception-flags.cpp\nidentifier exception_mode_ok\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "enabled exception metadata",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-fno-exceptions",
+        "-fexceptions",
+        "/tmp/pa29-155/controls/exception-probe-config.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-155/controls/exception-probe-config.cpp\nidentifier exception_mode_ok\neof\n",
       "stderr": "",
       "passed": true
     },
@@ -978,6 +1006,6 @@
       "passed": true
     }
   ],
-  "passed": 75,
-  "total": 75
+  "passed": 77,
+  "total": 77
 }

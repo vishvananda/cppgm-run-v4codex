@@ -30,6 +30,22 @@ s=source('macros','''#if VALUE != 9 || defined(GONE)
 macro_ok
 ''')
 run('ordered macro controls',[compiler,'-E','-DVALUE=2','-UVALUE','-D','VALUE=9','-DGONE','-U','GONE','-std=c++14',s],contains=['identifier macro_ok'])
+s=source('exception-flags','''#if defined(__EXCEPTIONS) || defined(__cpp_exceptions) || __has_feature(cxx_exceptions) || __has_extension(__cxx_exceptions__)
+#error exceptions disabled
+#endif
+#if !__has_feature(cxx_rtti) || !__cpp_rtti
+#error RTTI retained
+#endif
+exception_mode_ok
+''')
+run('disabled exception metadata',[compiler,'-E','-fexceptions','-fno-exceptions',s],contains=['identifier exception_mode_ok'])
+s=source('exception-probe-config','''#undef __EXCEPTIONS
+#if !__has_feature(cxx_exceptions) || !__cpp_exceptions
+#error probe is configuration, not macro lookup
+#endif
+exception_mode_ok
+''')
+run('enabled exception metadata',[compiler,'-E','-fno-exceptions','-fexceptions',s],contains=['identifier exception_mode_ok'])
 a=source('first','''#define LOCAL 1
 first
 ''');b=source('second','''#ifdef LOCAL

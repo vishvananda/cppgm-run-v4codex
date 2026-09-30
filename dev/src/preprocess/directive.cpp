@@ -176,7 +176,7 @@ ExpansionToken Preprocessor::builtin(const ExpansionToken& head, unsigned kind, 
     if (kind == 16) value = classify_simple(attribute.token.spelling) == TOK_INVALID &&
         builtin_trait(attribute.token.spelling) == BuiltinTrait::None;
     if (kind == 8) value = hosted_builtin(attribute.token.spelling);
-    if (kind == 9 || kind == 10) value = hosted_feature(attribute.token.spelling);
+    if (kind == 9 || kind == 10) value = hosted_feature(attribute.token.spelling,exceptions_);
     ExpansionToken close = operand();
     if (kind == 4 && close.is("::")) {
         attribute = operand();

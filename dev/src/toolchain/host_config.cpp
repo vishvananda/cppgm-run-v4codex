@@ -38,7 +38,8 @@ void host_environment(std::vector<std::string>& includes, std::vector<std::strin
     defaults.push_back("-D__GNUC_MINOR__=2");
     defaults.push_back("-D__GNUC_PATCHLEVEL__=1");
     defaults.push_back("-D__GNUG__=4");
-    const char* features[] = {"__cpp_ref_qualifiers=200710L", "__cpp_rvalue_references=200610L",
+    const char* features[] = {"__EXCEPTIONS=1", "__GXX_RTTI=1", "__cpp_exceptions=199711L",
+        "__cpp_rtti=199711L", "__cpp_ref_qualifiers=200710L", "__cpp_rvalue_references=200610L",
         "__cpp_static_assert=200410L", "__cpp_variadic_templates=200704L", "__cpp_alias_templates=200704L",
         "__cpp_constexpr=200704L", "__cpp_decltype=200707L", "__cpp_lambdas=200907L",
         "__cpp_unicode_literals=200710L", "__cpp_raw_strings=200710L", "__cpp_user_defined_literals=200809L"};
