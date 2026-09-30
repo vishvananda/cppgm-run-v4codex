@@ -272,9 +272,13 @@ Function Selector::run()
             select(p.instructions[n]);
             parameter_clobbers |= clobbers(p.instructions[n]);
         }
+        workspace.parameter_exits[block_id] = parameter_clobbers;
     }
     debug = DebugLocation();
     for (const auto& edge : edge_blocks) {
+        // A deferred transfer executes at this predecessor's exit, independent
+        // of the source block that happened to be selected last.
+        parameter_clobbers = workspace.parameter_exits[edge.pred];
         begin_block(edge.label,0);
         edge_transfers(edge.pred,edge.target);
         emit(Op::Jump,Type(),{Operand::label(edge.target)});
