@@ -1,180 +1,63 @@
-// Student-facing scaffold for the PA24 `lowir2native` binary.
-
-#include "support/not_implemented.h"
+// PA24 adapter: the typed LowIR boundary is shared with source lowering.
+#include "lowir/model.h"
+#include "native/encoding.h"
 #include "support/tool_help_text.h"
-
+#include <chrono>
+#include <fstream>
 #include <iostream>
-#include <stdexcept>
-#include <string>
-#include <vector>
-
-using namespace std;
-
+#include <sys/resource.h>
 namespace {
-
-struct LowIR2NativeInvocation
-{
-  bool has_optimization_level = false;
-  int optimization_level = 0;
-  string output_target;
-  string outfile;
-  string machine_ir_file;
-  vector<string> srcfiles;
+struct Invocation {
+    std::vector<std::string> inputs;
+    std::string output, dump;
+    bool stats = false;
 };
-
-vector<string> collect_args(int argc, char ** argv)
+Invocation invocation(int argc, char** argv)
 {
-  vector<string> args;
-  for(int i = 1; i < argc; ++i) {
-    args.push_back(argv[i]);
-  }
-  return args;
-}
-
-bool has_arg(const vector<string> & args, const string & needle)
-{
-  for(size_t i = 0; i < args.size(); ++i) {
-    if(args[i] == needle) {
-      return true;
+    Invocation i;
+    for (int k = 1; k < argc; ++k) {
+        std::string a = argv[k];
+        if (a == "--stats") i.stats = true;
+        else if (a == "-O0") {}
+        else if (a == "-o" || a == "--dump-machine-ir" || a == "--dump-native-plan" || a == "--target") {
+            lowir_model::require(++k < argc,"missing option value");
+            std::string value = argv[k];
+            if (a == "--target") lowir_model::require(value == "linux","unsupported target");
+            else {
+                auto& target = a == "-o" ? i.output : i.dump;
+                lowir_model::require(target.empty(),"repeated option"); target = value;
+            }
+        } else if (!a.empty() && a[0] == '-') throw lowir_model::ParseError("unknown native option: "+a);
+        else i.inputs.push_back(a);
     }
-  }
-  return false;
+    lowir_model::require(!i.inputs.empty() && (!i.output.empty() || !i.dump.empty()),"expected inputs and native/MIR output");
+    return i;
 }
-
-bool has_help_arg(const vector<string> & args)
-{
-  return has_arg(args, "--help") || has_arg(args, "-h");
 }
-
-bool is_optimization_level(const string & arg, int & level)
+int main(int argc, char** argv)
 {
-  if(arg == "-O0") {
-    level = 0;
-    return true;
-  }
-  if(arg == "-O1") {
-    level = 1;
-    return true;
-  }
-  if(arg == "-O2") {
-    level = 2;
-    return true;
-  }
-  return false;
-}
-
-bool starts_with_dash(const string & arg)
-{
-  return !arg.empty() && arg[0] == '-';
-}
-
-bool has_batch_stdin_arg(const vector<string> & args)
-{
-  return has_arg(args, "--batch-stdin");
-}
-
-int run_not_implemented_batch_mode()
-{
-  string line;
-  while(getline(cin, line)) {
-    (void)line;
-    cout << "EXIT_NOT_IMPLEMENTED" << endl;
-  }
-  return EXIT_SUCCESS;
-}
-
-LowIR2NativeInvocation parse_lowir2native_invocation(const vector<string> & args)
-{
-  LowIR2NativeInvocation invocation;
-
-  for(size_t i = 0; i < args.size(); ++i) {
-    int optimization_level = 0;
-    if(is_optimization_level(args[i], optimization_level)) {
-      if(invocation.has_optimization_level) {
-        throw logic_error("multiple optimization levels provided");
-      }
-      invocation.has_optimization_level = true;
-      invocation.optimization_level = optimization_level;
-      continue;
-    }
-    if(args[i] == "--target") {
-      if(i + 1 >= args.size()) {
-        throw logic_error("missing target after --target");
-      }
-      if(!invocation.output_target.empty()) {
-        throw logic_error("multiple --target options provided");
-      }
-      invocation.output_target = args[++i];
-      continue;
-    }
-    if(args[i] == "--dump-machine-ir" || args[i] == "--dump-native-plan") {
-      if(i + 1 >= args.size()) {
-        throw logic_error("missing output file after --dump-machine-ir");
-      }
-      if(!invocation.machine_ir_file.empty()) {
-        throw logic_error("multiple machine IR dump paths provided");
-      }
-      invocation.machine_ir_file = args[++i];
-      continue;
-    }
-    if(args[i] == "-o") {
-      if(i + 1 >= args.size()) {
-        throw logic_error("missing output file after -o");
-      }
-      if(!invocation.outfile.empty()) {
-        throw logic_error("multiple output files provided");
-      }
-      invocation.outfile = args[++i];
-      continue;
-    }
-    if(starts_with_dash(args[i])) {
-      throw logic_error("unknown option: " + args[i]);
-    }
-    invocation.srcfiles.push_back(args[i]);
-  }
-
-  if((invocation.outfile.empty() && invocation.machine_ir_file.empty()) ||
-     invocation.srcfiles.empty()) {
-    throw logic_error("invalid usage");
-  }
-
-  return invocation;
-}
-
-int run_lowir2native_mode(const vector<string> & args)
-{
-  if(has_batch_stdin_arg(args)) {
-    return run_not_implemented_batch_mode();
-  }
-
-  if(has_help_arg(args)) {
-    cout << lowir2native_help_text();
-    return EXIT_SUCCESS;
-  }
-
-  const LowIR2NativeInvocation invocation =
-      parse_lowir2native_invocation(args);
-  (void)invocation;
-
-  throw NotImplementedException();
-}
-
-}  // namespace
-
-int main(int argc, char ** argv)
-{
-  try
-  {
-    return run_lowir2native_mode(collect_args(argc, argv));
-  }
-  catch(const NotImplementedException & e)
-  {
-    cerr << "ERROR: " << e.what() << endl;
-    return CPPGM_EXIT_NOT_IMPLEMENTED;
-  }
-  catch(const exception & e)
-  {
-    cerr << "ERROR: " << e.what() << endl;
-    return EXIT_FAILURE;
-  }
+    try {
+        for (int n = 1; n < argc; ++n) if (std::string(argv[n]) == "--help" || std::string(argv[n]) == "-h") {
+            std::cout << lowir2native_help_text(); return 0;
+        }
+        const auto i = invocation(argc,argv);
+        auto begin = std::chrono::steady_clock::now();
+        lowir_model::Program p = lowir_model::parse_lowir_program_files(i.inputs);
+        auto parsed = std::chrono::steady_clock::now();
+        std::ofstream mir;
+        if (!i.dump.empty()) { mir.open(i.dump); lowir_model::require(bool(mir),"cannot create MIR dump"); }
+        native::Statistics stats;
+        native::compile(p,i.output,i.dump.empty() ? nullptr : &mir,stats);
+        if (!i.dump.empty()) { mir.close(); lowir_model::require(bool(mir),"cannot write MIR dump"); }
+        if (i.stats) {
+            rusage usage; getrusage(RUSAGE_SELF,&usage);
+            std::cerr << "{\"read_validate_ms\":" << std::chrono::duration<double,std::milli>(parsed-begin).count()
+                << ",\"selection_ms\":" << stats.selection_ms << ",\"encoding_ms\":" << stats.encoding_ms
+                << ",\"peak_rss_kib\":" << usage.ru_maxrss << ",\"functions\":" << stats.functions
+                << ",\"instructions\":" << stats.instructions << ",\"frame_bytes\":" << stats.frame_bytes
+                << ",\"text_bytes\":" << stats.text_bytes << ",\"value_visits\":" << stats.value_visits
+                << ",\"scratch_carried_reloads\":" << stats.scratch_carried_reloads << "}\n";
+        }
+        return 0;
+    } catch (const std::exception& e) { std::cerr << "ERROR: " << e.what() << '\n'; return 1; }
 }

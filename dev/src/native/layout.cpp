@@ -1,0 +1,82 @@
+#include "native/encoding.h"
+#include <algorithm>
+#include <climits>
+namespace native {
+using lowir_model::require;
+void Encoder::startup(const std::vector<Instruction>& instructions)
+{
+    // Linux process entry starts with an aligned stack. Native functions follow
+    // SysV's call-entry alignment after each direct call pushes a return address.
+    for (const auto& i : instructions) instruction(i);
+}
+void Encoder::epilogue_code()
+{
+    unsigned n = 0;
+    for (unsigned reg = 0; reg < 16; ++reg) if (function->preserved & (1u << reg)) {
+        auto slot = Operand::mem(XR_RBP,-std::int64_t(function->frame_bytes+8*++n));
+        load(Operand::r(reg),slot,Type::I64,false);
+    }
+    if (function->frame_pointer) { byte(0xc9); }
+    else if (function->stack_size) form(0x81,64,0,Operand::r(XR_RSP),4,function->stack_size);
+    byte(0xc3);
+}
+void Encoder::encode(const Function& f)
+{
+    function = &f;
+    image.symbols[f.symbol.index] = code.size(); image.defined[f.symbol.index] = true;
+    if (f.frame_pointer) { byte(0x55); form(0x89,64,XR_RSP,Operand::r(XR_RBP)); }
+    if (f.stack_size) form(0x81,64,5,Operand::r(XR_RSP),4,f.stack_size);
+    unsigned n = 0;
+    for (unsigned reg = 0; reg < 16; ++reg) if (f.preserved & (1u << reg))
+        store(Operand::mem(XR_RBP,-std::int64_t(f.frame_bytes+8*++n)),Operand::r(reg),Type::I64);
+    epilogue = 0;
+    for (const auto& b : f.blocks) epilogue = std::max(epilogue,b.id+1);
+    if (labels.size() <= epilogue) labels.resize(epilogue+1);
+    branches.clear();
+    for (unsigned k = 0; k < f.blocks.size(); ++k) {
+        const auto& block = f.blocks[k]; labels[block.id] = code.size();
+        for (unsigned j = block.instructions.begin; j != block.instructions.end(); ++j) {
+            const auto& i = f.instructions[j];
+            // The fallthrough target is already selected; suppressing its jump
+            // changes neither MIR control flow nor label identity.
+            if (i.op == Op::Jump && k+1 < f.blocks.size() && i.args[0].id == f.blocks[k+1].id) continue;
+            instruction(i);
+        }
+    }
+    labels[epilogue] = code.size();
+    if (f.shared_epilogue) epilogue_code();
+    for (const auto& fix : branches) {
+        std::int64_t relative = std::int64_t(labels.at(fix.label)) - std::int64_t(fix.offset+4);
+        require(relative >= INT32_MIN && relative <= INT32_MAX, "native branch out of range");
+        for (unsigned k = 0; k < 4; ++k) code[fix.offset+k] = std::uint64_t(relative) >> (8*k);
+    }
+}
+std::vector<Instruction> startup(const lowir_model::Program& p)
+{
+    SymbolId entry;
+    std::vector<SymbolId> init, fini;
+    for (const auto& f : p.functions) if (!f.declaration) {
+        auto role = p.symbols[f.symbol.index-1].metadata.role;
+        if (role == ir_model::SR_ENTRY) { require(!entry, "multiple native entry functions"); entry = f.symbol; }
+        if (role == ir_model::SR_INIT) init.push_back(f.symbol);
+        if (role == ir_model::SR_FINI) fini.push_back(f.symbol);
+    }
+    std::vector<Instruction> result;
+    if (!entry) return result;
+    auto call = [&](SymbolId symbol) {
+        Instruction i(Op::Call); i.args[0] = Operand::symbol(symbol); i.count = 1; result.push_back(i);
+    };
+    auto mov = [&](int to, int from) {
+        Instruction i(Op::Mov); i.args[0] = Operand::r(to); i.args[1] = Operand::r(from); i.count = 2; result.push_back(i);
+    };
+    for (auto s : init) call(s);
+    call(entry);
+    if (!fini.empty()) {
+        mov(XR_R12,XR_RAX);
+        for (auto i = fini.rbegin(); i != fini.rend(); ++i) call(*i);
+        mov(XR_RDI,XR_R12);
+    } else mov(XR_RDI,XR_RAX);
+    result.push_back(Instruction(Op::Exit));
+    return result;
+}
+} // namespace native

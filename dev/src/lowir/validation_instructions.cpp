@@ -25,14 +25,17 @@ void Validator::instruction(const Instruction& i) const
         if (arg(0).literal()) value(arg(0), i.type);
         else {
             Type t = value_type(arg(0));
-            require(t == i.type || (t.integer() && i.type.integer() && t.width() == i.type.width()) ||
+            require(t == i.type || (t.integer() && i.type.integer()) ||
                 (t.width() == 64 && i.type.width() == 64 &&
                 (t == Type::Ptr || i.type == Type::Ptr) && !t.floating() && !i.type.floating()), "invalid copy retype");
         }
         break;
     case Opcode::Phi:
         scalar(); require(i.operands.count && !(i.operands.count % 2), "invalid phi operands");
-        for (unsigned j = 0; j < i.operands.count; j += 2) { label(j); value(arg(j+1), i.type); }
+        for (unsigned j = 0; j < i.operands.count; j += 2) {
+            label(j); value(arg(j+1), i.type);
+            if (!arg(j+1).literal()) require(value_type(arg(j+1)) == i.type,"phi type mismatch");
+        }
         break;
     case Opcode::Addr:
         count(1);
@@ -46,7 +49,7 @@ void Validator::instruction(const Instruction& i) const
         count(1); scalar(); value(arg(0), i.type);
         require(i.operation >= Operation::Neg && i.operation <= Operation::Bswap, "invalid unary operator");
         if (i.operation == Operation::Bitnot || i.operation == Operation::Bswap) require(i.type.integer(), "integer unary operation on noninteger");
-        if (i.operation == Operation::Bswap) require(i.type == Type::I16 || i.type == Type::I32 || i.type == Type::I64, "invalid bswap width");
+        if (i.operation == Operation::Bswap) require(i.type.width() == 16 || i.type.width() == 32 || i.type.width() == 64, "invalid bswap width");
         break;
     case Opcode::Binary:
         count(2); require(i.type.integer() || i.type.floating() || (i.type == Type::Ptr && i.operation == Operation::Sub), "invalid binary type");
@@ -79,7 +82,7 @@ void Validator::instruction(const Instruction& i) const
         if (i.opcode == Opcode::CopyObject) {
             Type t = value_type(arg(0));
             require(t == Type::Ptr || (t.kind() == Type::Object && t.bytes() == i.bytes && t.alignment() == i.alignment), "invalid object copy source");
-            pointer(arg(1));
+            pointer(arg(1),arg(1).kind == Operand::Slot);
         } else {
             // An object slot denotes its addressable storage in a bulk write,
             // just as in load/store. Check its span rather than requiring the

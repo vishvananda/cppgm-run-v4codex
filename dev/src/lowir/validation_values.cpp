@@ -40,7 +40,7 @@ void Validator::value(const Operand& o, Type type) const
     if (o.literal()) { validate_literal(o, type); return; }
     Type actual = value_type(o);
     bool truth = o.kind == Operand::Temporary && p_.values[o.ref-1].truth && type == Type::I1;
-    require(actual == type || truth, "incompatible operand type");
+    require(actual == type || truth || (actual.integer() && type.integer()), "incompatible operand type");
 }
 void Validator::integer(const Operand& o) const { require(value_type(o).integer(), "expected integer value"); }
 void Validator::pointer(const Operand& o, bool object) const
@@ -49,13 +49,13 @@ void Validator::pointer(const Operand& o, bool object) const
     // delete retains a load from literal zero in its unreachable nonnull arm.
     if (o.literal()) { validate_literal(o, Type::Ptr); return; }
     Type t = value_type(o);
-    require(t == Type::Ptr || (object && t.kind() == Type::Object), "expected pointer value");
+    require(t == Type::Ptr || (object && (o.kind == Operand::Slot || t.kind() == Type::Object)), "expected pointer value");
 }
 void Validator::storage(const Operand& o, Type t) const
 {
     if (o.kind == Operand::Slot) {
         Type actual = value_type(o);
-        require(actual == t || actual.kind() == Type::Object, "incompatible slot access");
+        require(actual == t || actual.kind() == Type::Object || (t.bytes() <= actual.bytes() && t.scalar() && actual.scalar()), "incompatible slot access");
     } else if (o.kind == Operand::Symbol) {
         const Symbol& s = p_.symbols.at(o.ref-1);
         require(s.kind == Symbol::GlobalSymbol, "function used as storage");
@@ -105,7 +105,14 @@ void Validator::call(const Instruction& i) const
     require(count >= sig->parameters.count && (sig->boundary.arity == CAM_VARIADIC || count == sig->parameters.count), "call arity mismatch");
     for (unsigned j = 0; j < count; ++j) {
         const Operand& a = p_.operands[i.operands.begin+j+1];
-        if (j < sig->parameters.count) value(a, p_.parameters[sig->parameters.begin+j].type);
+        if (j < sig->parameters.count) {
+            const auto& param = p_.parameters[sig->parameters.begin+j];
+            if (param.passing != PPM_DIRECT) {
+                // A by-address boundary materializes scalar actuals, while a
+                // pointer actual already denotes the passed storage.
+                require(value_type(a).scalar() || value_type(a).kind() == Type::Object, "invalid by-address actual");
+            } else value(a,param.type);
+        }
         else require(value_type(a).scalar(), "invalid variadic value");
     }
     if (i.copy_elision) require(direct && i.type == Type() && count >= 2, "invalid copy elision permission");
