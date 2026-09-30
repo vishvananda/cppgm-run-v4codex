@@ -20,8 +20,8 @@
         "command": [
           "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
           "-o",
-          "/tmp/pa22-119/references-final/checked.lowir",
-          "/tmp/pa22-119/references-final/300-const-member-function-pointer-address-call.original.lowir"
+          "/tmp/pa22-119/references-sealed/checked.lowir",
+          "/tmp/pa22-119/references-sealed/300-const-member-function-pointer-address-call.original.lowir"
         ],
         "exit": 0,
         "stdout": "",
@@ -31,7 +31,7 @@
         "command": [
           "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
           "-o",
-          "/tmp/pa22-119/references-final/checked.lowir",
+          "/tmp/pa22-119/references-sealed/checked.lowir",
           "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-const-member-function-pointer-address-call.ref"
         ],
         "exit": 0,
@@ -44,7 +44,7 @@
             "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
             "-O0",
             "-o",
-            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-const-member-function-pointer-address-call.exe",
+            "/tmp/pa22-119/references-sealed/300-const-member-function-pointer-address-call.exe",
             "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-const-member-function-pointer-address-call.ref"
           ],
           "exit": 0,
@@ -53,7 +53,7 @@
         },
         "execution": {
           "command": [
-            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-const-member-function-pointer-address-call.exe"
+            "/tmp/pa22-119/references-sealed/300-const-member-function-pointer-address-call.exe"
           ],
           "exit": 0,
           "stdout": "",
@@ -69,8 +69,8 @@
         "command": [
           "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
           "-o",
-          "/tmp/pa22-119/references-final/checked.lowir",
-          "/tmp/pa22-119/references-final/300-member-pointer-parameter-variadic-deduction.original.lowir"
+          "/tmp/pa22-119/references-sealed/checked.lowir",
+          "/tmp/pa22-119/references-sealed/300-member-pointer-parameter-variadic-deduction.original.lowir"
         ],
         "exit": 0,
         "stdout": "",
@@ -80,7 +80,7 @@
         "command": [
           "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
           "-o",
-          "/tmp/pa22-119/references-final/checked.lowir",
+          "/tmp/pa22-119/references-sealed/checked.lowir",
           "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.ref"
         ],
         "exit": 0,
@@ -93,7 +93,7 @@
             "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
             "-O0",
             "-o",
-            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.exe",
+            "/tmp/pa22-119/references-sealed/300-member-pointer-parameter-variadic-deduction.exe",
             "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.ref"
           ],
           "exit": 0,
@@ -102,7 +102,7 @@
         },
         "execution": {
           "command": [
-            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-member-pointer-parameter-variadic-deduction.exe"
+            "/tmp/pa22-119/references-sealed/300-member-pointer-parameter-variadic-deduction.exe"
           ],
           "exit": 0,
           "stdout": "",
@@ -118,8 +118,8 @@
         "command": [
           "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
           "-o",
-          "/tmp/pa22-119/references-final/checked.lowir",
-          "/tmp/pa22-119/references-final/300-overloaded-member-pointer-function-template-deduction.original.lowir"
+          "/tmp/pa22-119/references-sealed/checked.lowir",
+          "/tmp/pa22-119/references-sealed/300-overloaded-member-pointer-function-template-deduction.original.lowir"
         ],
         "exit": 1,
         "stdout": "",
@@ -129,7 +129,7 @@
         "command": [
           "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
           "-o",
-          "/tmp/pa22-119/references-final/checked.lowir",
+          "/tmp/pa22-119/references-sealed/checked.lowir",
           "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.ref"
         ],
         "exit": 0,
@@ -142,7 +142,7 @@
             "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
             "-O0",
             "-o",
-            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.exe",
+            "/tmp/pa22-119/references-sealed/300-overloaded-member-pointer-function-template-deduction.exe",
             "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.ref"
           ],
           "exit": 0,
@@ -151,7 +151,7 @@
         },
         "execution": {
           "command": [
-            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/spec/300-overloaded-member-pointer-function-template-deduction.exe"
+            "/tmp/pa22-119/references-sealed/300-overloaded-member-pointer-function-template-deduction.exe"
           ],
           "exit": 0,
           "stdout": "",
@@ -167,8 +167,8 @@
         "command": [
           "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
           "-o",
-          "/tmp/pa22-119/references-final/checked.lowir",
-          "/tmp/pa22-119/references-final/300-structured-bool-conditional-member-pointer-dead-branch.original.lowir"
+          "/tmp/pa22-119/references-sealed/checked.lowir",
+          "/tmp/pa22-119/references-sealed/300-structured-bool-conditional-member-pointer-dead-branch.original.lowir"
         ],
         "exit": 0,
         "stdout": "",
@@ -178,7 +178,7 @@
         "command": [
           "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
           "-o",
-          "/tmp/pa22-119/references-final/checked.lowir",
+          "/tmp/pa22-119/references-sealed/checked.lowir",
           "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.ref"
         ],
         "exit": 0,
@@ -191,7 +191,7 @@
             "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
             "-O0",
             "-o",
-            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.exe",
+            "/tmp/pa22-119/references-sealed/300-structured-bool-conditional-member-pointer-dead-branch.exe",
             "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.ref"
           ],
           "exit": 0,
@@ -200,7 +200,7 @@
         },
         "execution": {
           "command": [
-            "/home/vishvananda/work/private/v4codex/checkout/pa22/tests/general/300-structured-bool-conditional-member-pointer-dead-branch.exe"
+            "/tmp/pa22-119/references-sealed/300-structured-bool-conditional-member-pointer-dead-branch.exe"
           ],
           "exit": 0,
           "stdout": "",
@@ -211,11 +211,11 @@
   ],
   "adjustment_caller": {
     "command": [
-      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "/tmp/pa22-119/final",
       "--emit-lowir",
       "-O0",
       "-o",
-      "/tmp/pa22-119/references-final/caller.lowir",
+      "/tmp/pa22-119/references-sealed/caller.lowir",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/adjustment-caller.cpp"
     ],
     "exit": 0,
@@ -231,8 +231,8 @@
           "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
           "-O0",
           "-o",
-          "/tmp/pa22-119/references-final/original-adjustment.exe",
-          "/tmp/pa22-119/references-final/original-adjustment.lowir"
+          "/tmp/pa22-119/references-sealed/original-adjustment.exe",
+          "/tmp/pa22-119/references-sealed/original-adjustment.lowir"
         ],
         "exit": 0,
         "stdout": "",
@@ -240,7 +240,7 @@
       },
       "execution": {
         "command": [
-          "/tmp/pa22-119/references-final/original-adjustment.exe"
+          "/tmp/pa22-119/references-sealed/original-adjustment.exe"
         ],
         "exit": 1,
         "stdout": "",
@@ -255,8 +255,8 @@
           "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
           "-O0",
           "-o",
-          "/tmp/pa22-119/references-final/corrected-adjustment.exe",
-          "/tmp/pa22-119/references-final/corrected-adjustment.lowir"
+          "/tmp/pa22-119/references-sealed/corrected-adjustment.exe",
+          "/tmp/pa22-119/references-sealed/corrected-adjustment.lowir"
         ],
         "exit": 0,
         "stdout": "",
@@ -264,7 +264,7 @@
       },
       "execution": {
         "command": [
-          "/tmp/pa22-119/references-final/corrected-adjustment.exe"
+          "/tmp/pa22-119/references-sealed/corrected-adjustment.exe"
         ],
         "exit": 0,
         "stdout": "",
@@ -279,7 +279,7 @@
         "--emit-lowir",
         "-O0",
         "-o",
-        "/tmp/pa22-119/references-final/ref-callee.lowir",
+        "/tmp/pa22-119/references-sealed/ref-callee.lowir",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/adjustment-callee.cpp"
       ],
       "exit": 0,
@@ -298,8 +298,8 @@
           "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
           "-O0",
           "-o",
-          "/tmp/pa22-119/references-final/original-truth.exe",
-          "/tmp/pa22-119/references-final/original-truth.lowir"
+          "/tmp/pa22-119/references-sealed/original-truth.exe",
+          "/tmp/pa22-119/references-sealed/original-truth.lowir"
         ],
         "exit": 0,
         "stdout": "",
@@ -307,7 +307,7 @@
       },
       "execution": {
         "command": [
-          "/tmp/pa22-119/references-final/original-truth.exe"
+          "/tmp/pa22-119/references-sealed/original-truth.exe"
         ],
         "exit": 7,
         "stdout": "",
@@ -322,8 +322,8 @@
           "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
           "-O0",
           "-o",
-          "/tmp/pa22-119/references-final/corrected-truth.exe",
-          "/tmp/pa22-119/references-final/corrected-truth.lowir"
+          "/tmp/pa22-119/references-sealed/corrected-truth.exe",
+          "/tmp/pa22-119/references-sealed/corrected-truth.lowir"
         ],
         "exit": 0,
         "stdout": "",
@@ -331,7 +331,7 @@
       },
       "execution": {
         "command": [
-          "/tmp/pa22-119/references-final/corrected-truth.exe"
+          "/tmp/pa22-119/references-sealed/corrected-truth.exe"
         ],
         "exit": 0,
         "stdout": "",
@@ -343,7 +343,7 @@
     "command": [
       "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
       "-o",
-      "/tmp/pa22-119/references-final/wide.lowir",
+      "/tmp/pa22-119/references-sealed/wide.lowir",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/wide-truth.lowir"
     ],
     "exit": 1,
@@ -354,7 +354,7 @@
     "command": [
       "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
       "-o",
-      "/tmp/pa22-119/references-final/narrow.lowir",
+      "/tmp/pa22-119/references-sealed/narrow.lowir",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/narrow-truth.lowir"
     ],
     "exit": 0,
@@ -370,7 +370,7 @@
           "--emit-lowir",
           "-O0",
           "-o",
-          "/tmp/pa22-119/references-final/reference-unused.lowir",
+          "/tmp/pa22-119/references-sealed/reference-unused.lowir",
           "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/unused-static.cpp"
         ],
         "exit": 0,
@@ -384,11 +384,11 @@
       "lane": "student",
       "compile": {
         "command": [
-          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "/tmp/pa22-119/final",
           "--emit-lowir",
           "-O0",
           "-o",
-          "/tmp/pa22-119/references-final/student-unused.lowir",
+          "/tmp/pa22-119/references-sealed/student-unused.lowir",
           "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/unused-static.cpp"
         ],
         "exit": 0,
@@ -402,11 +402,11 @@
   "source_adjustment": {
     "compile": {
       "command": [
-        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa22-119/final",
         "--emit-lowir",
         "-O0",
         "-o",
-        "/tmp/pa22-119/references-final/source-adjustment.lowir",
+        "/tmp/pa22-119/references-sealed/source-adjustment.lowir",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/adjustment-callee.cpp",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa22/reference119/adjustment-caller.cpp"
       ],
@@ -419,8 +419,8 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
         "-O0",
         "-o",
-        "/tmp/pa22-119/references-final/source-adjustment.exe",
-        "/tmp/pa22-119/references-final/source-adjustment.lowir"
+        "/tmp/pa22-119/references-sealed/source-adjustment.exe",
+        "/tmp/pa22-119/references-sealed/source-adjustment.lowir"
       ],
       "exit": 0,
       "stdout": "",
@@ -428,7 +428,7 @@
     },
     "execution": {
       "command": [
-        "/tmp/pa22-119/references-final/source-adjustment.exe"
+        "/tmp/pa22-119/references-sealed/source-adjustment.exe"
       ],
       "exit": 0,
       "stdout": "",

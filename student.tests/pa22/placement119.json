@@ -1,0 +1,654 @@
+{
+  "protocol": "same frozen objects; four A/A observations then four ABBA blocks per text address; runtime only, diagnostic, no compiler-speed claim",
+  "cpu": 0,
+  "objects": [
+    {
+      "path": "/tmp/pa22-119/performance-affected/runtime-conditional0.o",
+      "sha256": "2693e2839ab48ab1a26f1256e9bfa291792ce1ff3775173b0084284d482f9148"
+    },
+    {
+      "path": "/tmp/pa22-119/performance-affected/runtime-conditional1.o",
+      "sha256": "c1955101f8d8322d7dc9dd4d864a81303a565d8241c16a4f1b8395b79d2db569"
+    }
+  ],
+  "placements": [
+    {
+      "address": "0x402000",
+      "binaries": [
+        {
+          "command": [
+            "g++",
+            "-no-pie",
+            "-Wl,-Ttext=0x402000",
+            "/tmp/pa22-119/performance-affected/runtime-conditional0.o",
+            "-o",
+            "/tmp/pa22-119/placement/402000-0"
+          ],
+          "sha256": "9226f61eb0b0f85d5a3272124856f56de39dbda61c5a3bcd2f0bf05548cd1c4c",
+          "main_disassembly": "\n/tmp/pa22-119/placement/402000-0:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n00000000004020f0 <main>:\n  4020f0:\t55                   \tpush   %rbp\n  4020f1:\t48 89 e5             \tmov    %rsp,%rbp\n  4020f4:\t48 83 ec 20          \tsub    $0x20,%rsp\n  4020f8:\t48 c7 45 f8 00 00 00 \tmovq   $0x0,-0x8(%rbp)\n  4020ff:\t00 \n  402100:\t48 c7 45 f0 00 00 00 \tmovq   $0x0,-0x10(%rbp)\n  402107:\t00 \n  402108:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40210c:\t4c 8b 0d fd 2e 00 00 \tmov    0x2efd(%rip),%r9        # 405010 <iterations>\n  402113:\t4d 39 c8             \tcmp    %r9,%r8\n  402116:\t7c 02                \tjl     40211a <main+0x2a>\n  402118:\teb 24                \tjmp    40213e <main+0x4e>\n  40211a:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40211e:\t48 8d 7d ef          \tlea    -0x11(%rbp),%rdi\n  402122:\tc6 07 00             \tmovb   $0x0,(%rdi)\n  402125:\t4c 03 45 f0          \tadd    -0x10(%rbp),%r8\n  402129:\t4c 89 45 f8          \tmov    %r8,-0x8(%rbp)\n  40212d:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  402131:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  402138:\t4c 89 45 f0          \tmov    %r8,-0x10(%rbp)\n  40213c:\teb ca                \tjmp    402108 <main+0x18>\n  40213e:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  402142:\t48 ba 00 d3 a0 82 98 \tmovabs $0x2d79882a0d300,%rdx\n  402149:\td7 02 00 \n  40214c:\t49 39 d0             \tcmp    %rdx,%r8\n  40214f:\t41 0f 95 c0          \tsetne  %r8b\n  402153:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  402157:\t49 63 c0             \tmovslq %r8d,%rax\n  40215a:\t48 83 c4 20          \tadd    $0x20,%rsp\n  40215e:\t5d                   \tpop    %rbp\n  40215f:\tc3                   \tret\n\nDisassembly of section .init:\n\nDisassembly of section .fini:\n"
+        },
+        {
+          "command": [
+            "g++",
+            "-no-pie",
+            "-Wl,-Ttext=0x402000",
+            "/tmp/pa22-119/performance-affected/runtime-conditional1.o",
+            "-o",
+            "/tmp/pa22-119/placement/402000-1"
+          ],
+          "sha256": "15d9361c3904596ccb70cd24b3444f6f3c48eb96127e54e048b8429e4ff84d10",
+          "main_disassembly": "\n/tmp/pa22-119/placement/402000-1:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n00000000004020f0 <main>:\n  4020f0:\t55                   \tpush   %rbp\n  4020f1:\t48 89 e5             \tmov    %rsp,%rbp\n  4020f4:\t48 83 ec 10          \tsub    $0x10,%rsp\n  4020f8:\t48 c7 45 f8 00 00 00 \tmovq   $0x0,-0x8(%rbp)\n  4020ff:\t00 \n  402100:\t48 c7 45 f0 00 00 00 \tmovq   $0x0,-0x10(%rbp)\n  402107:\t00 \n  402108:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40210c:\t4c 8b 0d fd 2e 00 00 \tmov    0x2efd(%rip),%r9        # 405010 <iterations>\n  402113:\t4d 39 c8             \tcmp    %r9,%r8\n  402116:\t7c 02                \tjl     40211a <main+0x2a>\n  402118:\teb 1d                \tjmp    402137 <main+0x47>\n  40211a:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40211e:\t4c 03 45 f0          \tadd    -0x10(%rbp),%r8\n  402122:\t4c 89 45 f8          \tmov    %r8,-0x8(%rbp)\n  402126:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40212a:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  402131:\t4c 89 45 f0          \tmov    %r8,-0x10(%rbp)\n  402135:\teb d1                \tjmp    402108 <main+0x18>\n  402137:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40213b:\t48 ba 00 d3 a0 82 98 \tmovabs $0x2d79882a0d300,%rdx\n  402142:\td7 02 00 \n  402145:\t49 39 d0             \tcmp    %rdx,%r8\n  402148:\t41 0f 95 c0          \tsetne  %r8b\n  40214c:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  402150:\t49 63 c0             \tmovslq %r8d,%rax\n  402153:\t48 83 c4 10          \tadd    $0x10,%rsp\n  402157:\t5d                   \tpop    %rbp\n  402158:\tc3                   \tret\n\nDisassembly of section .init:\n\nDisassembly of section .fini:\n"
+        }
+      ],
+      "warmups": [
+        {
+          "lane": 0,
+          "wall_s": 0.156444555,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.154060132,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "lane": 0,
+          "wall_s": 0.155729284,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.155757976,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.156733098,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.156175365,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.157357443,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.158936196,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.157994476,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.156158724,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.156689733,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.159409319,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.155488201,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.158162376,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.159352628,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.154721391,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.155388166,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.15638778,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.156766619,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.154725488,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.157906508,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.156521597,
+          "checked_exit": 0
+        }
+      ],
+      "aa_range_s": [
+        0.155729284,
+        0.156733098
+      ],
+      "paired_b_over_a": [
+        1.0108910013562395,
+        1.0001442296198817,
+        0.9821662009127446,
+        0.9979053792435015
+      ]
+    },
+    {
+      "address": "0x402010",
+      "binaries": [
+        {
+          "command": [
+            "g++",
+            "-no-pie",
+            "-Wl,-Ttext=0x402010",
+            "/tmp/pa22-119/performance-affected/runtime-conditional0.o",
+            "-o",
+            "/tmp/pa22-119/placement/402010-0"
+          ],
+          "sha256": "47aac8aad352f763a7f34caf5cb7269275c605c3c56a56edbfcb12b7ab1198d1",
+          "main_disassembly": "\n/tmp/pa22-119/placement/402010-0:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000402100 <main>:\n  402100:\t55                   \tpush   %rbp\n  402101:\t48 89 e5             \tmov    %rsp,%rbp\n  402104:\t48 83 ec 20          \tsub    $0x20,%rsp\n  402108:\t48 c7 45 f8 00 00 00 \tmovq   $0x0,-0x8(%rbp)\n  40210f:\t00 \n  402110:\t48 c7 45 f0 00 00 00 \tmovq   $0x0,-0x10(%rbp)\n  402117:\t00 \n  402118:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40211c:\t4c 8b 0d ed 2e 00 00 \tmov    0x2eed(%rip),%r9        # 405010 <iterations>\n  402123:\t4d 39 c8             \tcmp    %r9,%r8\n  402126:\t7c 02                \tjl     40212a <main+0x2a>\n  402128:\teb 24                \tjmp    40214e <main+0x4e>\n  40212a:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40212e:\t48 8d 7d ef          \tlea    -0x11(%rbp),%rdi\n  402132:\tc6 07 00             \tmovb   $0x0,(%rdi)\n  402135:\t4c 03 45 f0          \tadd    -0x10(%rbp),%r8\n  402139:\t4c 89 45 f8          \tmov    %r8,-0x8(%rbp)\n  40213d:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  402141:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  402148:\t4c 89 45 f0          \tmov    %r8,-0x10(%rbp)\n  40214c:\teb ca                \tjmp    402118 <main+0x18>\n  40214e:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  402152:\t48 ba 00 d3 a0 82 98 \tmovabs $0x2d79882a0d300,%rdx\n  402159:\td7 02 00 \n  40215c:\t49 39 d0             \tcmp    %rdx,%r8\n  40215f:\t41 0f 95 c0          \tsetne  %r8b\n  402163:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  402167:\t49 63 c0             \tmovslq %r8d,%rax\n  40216a:\t48 83 c4 20          \tadd    $0x20,%rsp\n  40216e:\t5d                   \tpop    %rbp\n  40216f:\tc3                   \tret\n\nDisassembly of section .init:\n\nDisassembly of section .fini:\n"
+        },
+        {
+          "command": [
+            "g++",
+            "-no-pie",
+            "-Wl,-Ttext=0x402010",
+            "/tmp/pa22-119/performance-affected/runtime-conditional1.o",
+            "-o",
+            "/tmp/pa22-119/placement/402010-1"
+          ],
+          "sha256": "ad32e3d6fb9e5a3cdb91fc8fdb083f763438e5a81cc3a2fe6cb2e2fc6115768a",
+          "main_disassembly": "\n/tmp/pa22-119/placement/402010-1:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000402100 <main>:\n  402100:\t55                   \tpush   %rbp\n  402101:\t48 89 e5             \tmov    %rsp,%rbp\n  402104:\t48 83 ec 10          \tsub    $0x10,%rsp\n  402108:\t48 c7 45 f8 00 00 00 \tmovq   $0x0,-0x8(%rbp)\n  40210f:\t00 \n  402110:\t48 c7 45 f0 00 00 00 \tmovq   $0x0,-0x10(%rbp)\n  402117:\t00 \n  402118:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40211c:\t4c 8b 0d ed 2e 00 00 \tmov    0x2eed(%rip),%r9        # 405010 <iterations>\n  402123:\t4d 39 c8             \tcmp    %r9,%r8\n  402126:\t7c 02                \tjl     40212a <main+0x2a>\n  402128:\teb 1d                \tjmp    402147 <main+0x47>\n  40212a:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40212e:\t4c 03 45 f0          \tadd    -0x10(%rbp),%r8\n  402132:\t4c 89 45 f8          \tmov    %r8,-0x8(%rbp)\n  402136:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40213a:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  402141:\t4c 89 45 f0          \tmov    %r8,-0x10(%rbp)\n  402145:\teb d1                \tjmp    402118 <main+0x18>\n  402147:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40214b:\t48 ba 00 d3 a0 82 98 \tmovabs $0x2d79882a0d300,%rdx\n  402152:\td7 02 00 \n  402155:\t49 39 d0             \tcmp    %rdx,%r8\n  402158:\t41 0f 95 c0          \tsetne  %r8b\n  40215c:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  402160:\t49 63 c0             \tmovslq %r8d,%rax\n  402163:\t48 83 c4 10          \tadd    $0x10,%rsp\n  402167:\t5d                   \tpop    %rbp\n  402168:\tc3                   \tret\n\nDisassembly of section .init:\n\nDisassembly of section .fini:\n"
+        }
+      ],
+      "warmups": [
+        {
+          "lane": 0,
+          "wall_s": 0.152613269,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.163536755,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "lane": 0,
+          "wall_s": 0.153169204,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.153493189,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.152773422,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.156958819,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.15050941,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.1632846,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.165218018,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.153360398,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.15391702,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.163502319,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.165257358,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.15382203,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.1526928,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.163974993,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.163216127,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.153629712,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.152697421,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.164185108,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.171829726,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.152618103,
+          "checked_exit": 0
+        }
+      ],
+      "aa_range_s": [
+        0.152773422,
+        0.156958819
+      ],
+      "paired_b_over_a": [
+        1.081063696857965,
+        1.0683066611143432,
+        1.0681262629499462,
+        1.1005494565025786
+      ]
+    },
+    {
+      "address": "0x402020",
+      "binaries": [
+        {
+          "command": [
+            "g++",
+            "-no-pie",
+            "-Wl,-Ttext=0x402020",
+            "/tmp/pa22-119/performance-affected/runtime-conditional0.o",
+            "-o",
+            "/tmp/pa22-119/placement/402020-0"
+          ],
+          "sha256": "dcfdff5b9e80bf1b71600344423596e03a09384941a3d3384e09b888f87d7ad9",
+          "main_disassembly": "\n/tmp/pa22-119/placement/402020-0:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000402110 <main>:\n  402110:\t55                   \tpush   %rbp\n  402111:\t48 89 e5             \tmov    %rsp,%rbp\n  402114:\t48 83 ec 20          \tsub    $0x20,%rsp\n  402118:\t48 c7 45 f8 00 00 00 \tmovq   $0x0,-0x8(%rbp)\n  40211f:\t00 \n  402120:\t48 c7 45 f0 00 00 00 \tmovq   $0x0,-0x10(%rbp)\n  402127:\t00 \n  402128:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40212c:\t4c 8b 0d dd 2e 00 00 \tmov    0x2edd(%rip),%r9        # 405010 <iterations>\n  402133:\t4d 39 c8             \tcmp    %r9,%r8\n  402136:\t7c 02                \tjl     40213a <main+0x2a>\n  402138:\teb 24                \tjmp    40215e <main+0x4e>\n  40213a:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40213e:\t48 8d 7d ef          \tlea    -0x11(%rbp),%rdi\n  402142:\tc6 07 00             \tmovb   $0x0,(%rdi)\n  402145:\t4c 03 45 f0          \tadd    -0x10(%rbp),%r8\n  402149:\t4c 89 45 f8          \tmov    %r8,-0x8(%rbp)\n  40214d:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  402151:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  402158:\t4c 89 45 f0          \tmov    %r8,-0x10(%rbp)\n  40215c:\teb ca                \tjmp    402128 <main+0x18>\n  40215e:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  402162:\t48 ba 00 d3 a0 82 98 \tmovabs $0x2d79882a0d300,%rdx\n  402169:\td7 02 00 \n  40216c:\t49 39 d0             \tcmp    %rdx,%r8\n  40216f:\t41 0f 95 c0          \tsetne  %r8b\n  402173:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  402177:\t49 63 c0             \tmovslq %r8d,%rax\n  40217a:\t48 83 c4 20          \tadd    $0x20,%rsp\n  40217e:\t5d                   \tpop    %rbp\n  40217f:\tc3                   \tret\n\nDisassembly of section .init:\n\nDisassembly of section .fini:\n"
+        },
+        {
+          "command": [
+            "g++",
+            "-no-pie",
+            "-Wl,-Ttext=0x402020",
+            "/tmp/pa22-119/performance-affected/runtime-conditional1.o",
+            "-o",
+            "/tmp/pa22-119/placement/402020-1"
+          ],
+          "sha256": "6adf0784425d10d9d8947ea5be2bcc660a86d38bf1c54703cf085c5016dd39a6",
+          "main_disassembly": "\n/tmp/pa22-119/placement/402020-1:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000402110 <main>:\n  402110:\t55                   \tpush   %rbp\n  402111:\t48 89 e5             \tmov    %rsp,%rbp\n  402114:\t48 83 ec 10          \tsub    $0x10,%rsp\n  402118:\t48 c7 45 f8 00 00 00 \tmovq   $0x0,-0x8(%rbp)\n  40211f:\t00 \n  402120:\t48 c7 45 f0 00 00 00 \tmovq   $0x0,-0x10(%rbp)\n  402127:\t00 \n  402128:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40212c:\t4c 8b 0d dd 2e 00 00 \tmov    0x2edd(%rip),%r9        # 405010 <iterations>\n  402133:\t4d 39 c8             \tcmp    %r9,%r8\n  402136:\t7c 02                \tjl     40213a <main+0x2a>\n  402138:\teb 1d                \tjmp    402157 <main+0x47>\n  40213a:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40213e:\t4c 03 45 f0          \tadd    -0x10(%rbp),%r8\n  402142:\t4c 89 45 f8          \tmov    %r8,-0x8(%rbp)\n  402146:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40214a:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  402151:\t4c 89 45 f0          \tmov    %r8,-0x10(%rbp)\n  402155:\teb d1                \tjmp    402128 <main+0x18>\n  402157:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40215b:\t48 ba 00 d3 a0 82 98 \tmovabs $0x2d79882a0d300,%rdx\n  402162:\td7 02 00 \n  402165:\t49 39 d0             \tcmp    %rdx,%r8\n  402168:\t41 0f 95 c0          \tsetne  %r8b\n  40216c:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  402170:\t49 63 c0             \tmovslq %r8d,%rax\n  402173:\t48 83 c4 10          \tadd    $0x10,%rsp\n  402177:\t5d                   \tpop    %rbp\n  402178:\tc3                   \tret\n\nDisassembly of section .init:\n\nDisassembly of section .fini:\n"
+        }
+      ],
+      "warmups": [
+        {
+          "lane": 0,
+          "wall_s": 0.152490277,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.161792211,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "lane": 0,
+          "wall_s": 0.15385991,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.154383427,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.155730281,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.152260334,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.153729191,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.160982413,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.161303616,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.153433506,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.153233381,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.162749064,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.162742589,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.153193939,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.152876198,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.160282463,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.163423757,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.153561397,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.153542299,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.160495317,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.160786049,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.152639747,
+          "checked_exit": 0
+        }
+      ],
+      "aa_range_s": [
+        0.152260334,
+        0.155730281
+      ],
+      "paired_b_over_a": [
+        1.0492355749825963,
+        1.0622148606070765,
+        1.056352827726637,
+        1.0493148445418645
+      ]
+    },
+    {
+      "address": "0x402030",
+      "binaries": [
+        {
+          "command": [
+            "g++",
+            "-no-pie",
+            "-Wl,-Ttext=0x402030",
+            "/tmp/pa22-119/performance-affected/runtime-conditional0.o",
+            "-o",
+            "/tmp/pa22-119/placement/402030-0"
+          ],
+          "sha256": "4f53d8904e5a944609ddf0f0e685f3f5066e956d871448199949c90ac77e0e97",
+          "main_disassembly": "\n/tmp/pa22-119/placement/402030-0:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000402120 <main>:\n  402120:\t55                   \tpush   %rbp\n  402121:\t48 89 e5             \tmov    %rsp,%rbp\n  402124:\t48 83 ec 20          \tsub    $0x20,%rsp\n  402128:\t48 c7 45 f8 00 00 00 \tmovq   $0x0,-0x8(%rbp)\n  40212f:\t00 \n  402130:\t48 c7 45 f0 00 00 00 \tmovq   $0x0,-0x10(%rbp)\n  402137:\t00 \n  402138:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40213c:\t4c 8b 0d cd 2e 00 00 \tmov    0x2ecd(%rip),%r9        # 405010 <iterations>\n  402143:\t4d 39 c8             \tcmp    %r9,%r8\n  402146:\t7c 02                \tjl     40214a <main+0x2a>\n  402148:\teb 24                \tjmp    40216e <main+0x4e>\n  40214a:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40214e:\t48 8d 7d ef          \tlea    -0x11(%rbp),%rdi\n  402152:\tc6 07 00             \tmovb   $0x0,(%rdi)\n  402155:\t4c 03 45 f0          \tadd    -0x10(%rbp),%r8\n  402159:\t4c 89 45 f8          \tmov    %r8,-0x8(%rbp)\n  40215d:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  402161:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  402168:\t4c 89 45 f0          \tmov    %r8,-0x10(%rbp)\n  40216c:\teb ca                \tjmp    402138 <main+0x18>\n  40216e:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  402172:\t48 ba 00 d3 a0 82 98 \tmovabs $0x2d79882a0d300,%rdx\n  402179:\td7 02 00 \n  40217c:\t49 39 d0             \tcmp    %rdx,%r8\n  40217f:\t41 0f 95 c0          \tsetne  %r8b\n  402183:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  402187:\t49 63 c0             \tmovslq %r8d,%rax\n  40218a:\t48 83 c4 20          \tadd    $0x20,%rsp\n  40218e:\t5d                   \tpop    %rbp\n  40218f:\tc3                   \tret\n\nDisassembly of section .init:\n\nDisassembly of section .fini:\n"
+        },
+        {
+          "command": [
+            "g++",
+            "-no-pie",
+            "-Wl,-Ttext=0x402030",
+            "/tmp/pa22-119/performance-affected/runtime-conditional1.o",
+            "-o",
+            "/tmp/pa22-119/placement/402030-1"
+          ],
+          "sha256": "95b92e21af9b67a94cdd0e105872792525a420db4a701b8af1f3405f412873bb",
+          "main_disassembly": "\n/tmp/pa22-119/placement/402030-1:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000402120 <main>:\n  402120:\t55                   \tpush   %rbp\n  402121:\t48 89 e5             \tmov    %rsp,%rbp\n  402124:\t48 83 ec 10          \tsub    $0x10,%rsp\n  402128:\t48 c7 45 f8 00 00 00 \tmovq   $0x0,-0x8(%rbp)\n  40212f:\t00 \n  402130:\t48 c7 45 f0 00 00 00 \tmovq   $0x0,-0x10(%rbp)\n  402137:\t00 \n  402138:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40213c:\t4c 8b 0d cd 2e 00 00 \tmov    0x2ecd(%rip),%r9        # 405010 <iterations>\n  402143:\t4d 39 c8             \tcmp    %r9,%r8\n  402146:\t7c 02                \tjl     40214a <main+0x2a>\n  402148:\teb 1d                \tjmp    402167 <main+0x47>\n  40214a:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40214e:\t4c 03 45 f0          \tadd    -0x10(%rbp),%r8\n  402152:\t4c 89 45 f8          \tmov    %r8,-0x8(%rbp)\n  402156:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40215a:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  402161:\t4c 89 45 f0          \tmov    %r8,-0x10(%rbp)\n  402165:\teb d1                \tjmp    402138 <main+0x18>\n  402167:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40216b:\t48 ba 00 d3 a0 82 98 \tmovabs $0x2d79882a0d300,%rdx\n  402172:\td7 02 00 \n  402175:\t49 39 d0             \tcmp    %rdx,%r8\n  402178:\t41 0f 95 c0          \tsetne  %r8b\n  40217c:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  402180:\t49 63 c0             \tmovslq %r8d,%rax\n  402183:\t48 83 c4 10          \tadd    $0x10,%rsp\n  402187:\t5d                   \tpop    %rbp\n  402188:\tc3                   \tret\n\nDisassembly of section .init:\n\nDisassembly of section .fini:\n"
+        }
+      ],
+      "warmups": [
+        {
+          "lane": 0,
+          "wall_s": 0.151252312,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.149505662,
+          "checked_exit": 0
+        }
+      ],
+      "observations": [
+        {
+          "lane": 0,
+          "wall_s": 0.152880694,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.151967087,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.151930641,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.152575688,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.153609223,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.153748641,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.153087748,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.153297359,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.152090659,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.151508272,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.151368879,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.152238729,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.15162572,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.151011376,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.154168487,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.151560688,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.152536957,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.151765526,
+          "checked_exit": 0
+        },
+        {
+          "lane": 1,
+          "wall_s": 0.176693735,
+          "checked_exit": 0
+        },
+        {
+          "lane": 0,
+          "wall_s": 0.176395509,
+          "checked_exit": 0
+        }
+      ],
+      "aa_range_s": [
+        0.151930641,
+        0.152880694
+      ],
+      "paired_b_over_a": [
+        0.9997712887109081,
+        0.9952280750487364,
+        1.0065750144049994,
+        0.9985613916262068
+      ]
+    }
+  ],
+  "original_binaries": [
+    {
+      "workload": "runtime-conditional",
+      "lane": 0,
+      "sha256": "7a99b30bcfdbe32da9b44940ba0052b47aa5ade91c3c432ccac1668f47d7aec3",
+      "main_disassembly": "\n/tmp/pa22-119/performance-affected/runtime-conditional0:     file format elf64-x86-64\n\n\nDisassembly of section .init:\n\nDisassembly of section .text:\n\n0000000000401110 <main>:\n  401110:\t55                   \tpush   %rbp\n  401111:\t48 89 e5             \tmov    %rsp,%rbp\n  401114:\t48 83 ec 20          \tsub    $0x20,%rsp\n  401118:\t48 c7 45 f8 00 00 00 \tmovq   $0x0,-0x8(%rbp)\n  40111f:\t00 \n  401120:\t48 c7 45 f0 00 00 00 \tmovq   $0x0,-0x10(%rbp)\n  401127:\t00 \n  401128:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40112c:\t4c 8b 0d dd 2e 00 00 \tmov    0x2edd(%rip),%r9        # 404010 <iterations>\n  401133:\t4d 39 c8             \tcmp    %r9,%r8\n  401136:\t7c 02                \tjl     40113a <main+0x2a>\n  401138:\teb 24                \tjmp    40115e <main+0x4e>\n  40113a:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40113e:\t48 8d 7d ef          \tlea    -0x11(%rbp),%rdi\n  401142:\tc6 07 00             \tmovb   $0x0,(%rdi)\n  401145:\t4c 03 45 f0          \tadd    -0x10(%rbp),%r8\n  401149:\t4c 89 45 f8          \tmov    %r8,-0x8(%rbp)\n  40114d:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  401151:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  401158:\t4c 89 45 f0          \tmov    %r8,-0x10(%rbp)\n  40115c:\teb ca                \tjmp    401128 <main+0x18>\n  40115e:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  401162:\t48 ba 00 d3 a0 82 98 \tmovabs $0x2d79882a0d300,%rdx\n  401169:\td7 02 00 \n  40116c:\t49 39 d0             \tcmp    %rdx,%r8\n  40116f:\t41 0f 95 c0          \tsetne  %r8b\n  401173:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  401177:\t49 63 c0             \tmovslq %r8d,%rax\n  40117a:\t48 83 c4 20          \tadd    $0x20,%rsp\n  40117e:\t5d                   \tpop    %rbp\n  40117f:\tc3                   \tret\n\nDisassembly of section .fini:\n"
+    },
+    {
+      "workload": "runtime-conditional",
+      "lane": 1,
+      "sha256": "245ea655f49c98577bd06978943c03800c5e6965c89764c2c2a47eadf06b96c3",
+      "main_disassembly": "\n/tmp/pa22-119/performance-affected/runtime-conditional1:     file format elf64-x86-64\n\n\nDisassembly of section .init:\n\nDisassembly of section .text:\n\n0000000000401110 <main>:\n  401110:\t55                   \tpush   %rbp\n  401111:\t48 89 e5             \tmov    %rsp,%rbp\n  401114:\t48 83 ec 10          \tsub    $0x10,%rsp\n  401118:\t48 c7 45 f8 00 00 00 \tmovq   $0x0,-0x8(%rbp)\n  40111f:\t00 \n  401120:\t48 c7 45 f0 00 00 00 \tmovq   $0x0,-0x10(%rbp)\n  401127:\t00 \n  401128:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40112c:\t4c 8b 0d dd 2e 00 00 \tmov    0x2edd(%rip),%r9        # 404010 <iterations>\n  401133:\t4d 39 c8             \tcmp    %r9,%r8\n  401136:\t7c 02                \tjl     40113a <main+0x2a>\n  401138:\teb 1d                \tjmp    401157 <main+0x47>\n  40113a:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40113e:\t4c 03 45 f0          \tadd    -0x10(%rbp),%r8\n  401142:\t4c 89 45 f8          \tmov    %r8,-0x8(%rbp)\n  401146:\t4c 8b 45 f0          \tmov    -0x10(%rbp),%r8\n  40114a:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  401151:\t4c 89 45 f0          \tmov    %r8,-0x10(%rbp)\n  401155:\teb d1                \tjmp    401128 <main+0x18>\n  401157:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  40115b:\t48 ba 00 d3 a0 82 98 \tmovabs $0x2d79882a0d300,%rdx\n  401162:\td7 02 00 \n  401165:\t49 39 d0             \tcmp    %rdx,%r8\n  401168:\t41 0f 95 c0          \tsetne  %r8b\n  40116c:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  401170:\t49 63 c0             \tmovslq %r8d,%rax\n  401173:\t48 83 c4 10          \tadd    $0x10,%rsp\n  401177:\t5d                   \tpop    %rbp\n  401178:\tc3                   \tret\n\nDisassembly of section .fini:\n"
+    },
+    {
+      "workload": "runtime-member-selection",
+      "lane": 0,
+      "sha256": "ca602fc65f252b343e0355d43d46f6bd2798b7395c25b26cfda19aafd74845ab",
+      "main_disassembly": "\n/tmp/pa22-119/performance-affected/runtime-member-selection0:     file format elf64-x86-64\n\n\nDisassembly of section .init:\n\nDisassembly of section .text:\n\n0000000000401110 <main>:\n  401110:\t55                   \tpush   %rbp\n  401111:\t48 89 e5             \tmov    %rsp,%rbp\n  401114:\t53                   \tpush   %rbx\n  401115:\t48 81 ec 98 00 00 00 \tsub    $0x98,%rsp\n  40111c:\tc7 45 f4 07 00 00 00 \tmovl   $0x7,-0xc(%rbp)\n  401123:\t48 c7 45 e8 00 00 00 \tmovq   $0x0,-0x18(%rbp)\n  40112a:\t00 \n  40112b:\tc7 45 e4 00 00 00 00 \tmovl   $0x0,-0x1c(%rbp)\n  401132:\t4c 63 45 e4          \tmovslq -0x1c(%rbp),%r8\n  401136:\t4c 63 0d d3 2e 00 00 \tmovslq 0x2ed3(%rip),%r9        # 404010 <iterations>\n  40113d:\t45 39 c8             \tcmp    %r9d,%r8d\n  401140:\t7c 05                \tjl     401147 <main+0x37>\n  401142:\te9 b9 00 00 00       \tjmp    401200 <main+0xf0>\n  401147:\t48 8d 7d c7          \tlea    -0x39(%rbp),%rdi\n  40114b:\tc6 07 00             \tmovb   $0x0,(%rdi)\n  40114e:\t49 c7 c0 22 12 40 00 \tmov    $0x401222,%r8\n  401155:\t4c 89 c0             \tmov    %r8,%rax\n  401158:\t31 d2                \txor    %edx,%edx\n  40115a:\t48 89 45 a8          \tmov    %rax,-0x58(%rbp)\n  40115e:\t48 89 55 b0          \tmov    %rdx,-0x50(%rbp)\n  401162:\t4c 8d 5d a8          \tlea    -0x58(%rbp),%r11\n  401166:\t49 8b 03             \tmov    (%r11),%rax\n  401169:\t49 8b 53 08          \tmov    0x8(%r11),%rdx\n  40116d:\t4c 8d 5d c8          \tlea    -0x38(%rbp),%r11\n  401171:\t49 89 03             \tmov    %rax,(%r11)\n  401174:\t49 89 53 08          \tmov    %rdx,0x8(%r11)\n  401178:\t48 8b 5d e8          \tmov    -0x18(%rbp),%rbx\n  40117c:\t4c 8d 5d c8          \tlea    -0x38(%rbp),%r11\n  401180:\t49 8b 03             \tmov    (%r11),%rax\n  401183:\t49 8b 53 08          \tmov    0x8(%r11),%rdx\n  401187:\t4c 8d 5d a8          \tlea    -0x58(%rbp),%r11\n  40118b:\t49 89 03             \tmov    %rax,(%r11)\n  40118e:\t49 89 53 08          \tmov    %rdx,0x8(%r11)\n  401192:\t4c 8b 45 a8          \tmov    -0x58(%rbp),%r8\n  401196:\t4c 8d 5d a8          \tlea    -0x58(%rbp),%r11\n  40119a:\t49 8b 03             \tmov    (%r11),%rax\n  40119d:\t49 8b 53 08          \tmov    0x8(%r11),%rdx\n  4011a1:\tb9 40 00 00 00       \tmov    $0x40,%ecx\n  4011a6:\t31 f6                \txor    %esi,%esi\n  4011a8:\tb9 40 00 00 00       \tmov    $0x40,%ecx\n  4011ad:\t48 83 f9 40          \tcmp    $0x40,%rcx\n  4011b1:\t73 09                \tjae    4011bc <main+0xac>\n  4011b3:\t48 0f ad d0          \tshrd   %cl,%rdx,%rax\n  4011b7:\t48 d3 fa             \tsar    %cl,%rdx\n  4011ba:\teb 0a                \tjmp    4011c6 <main+0xb6>\n  4011bc:\t48 89 d0             \tmov    %rdx,%rax\n  4011bf:\t48 d3 f8             \tsar    %cl,%rax\n  4011c2:\t48 c1 fa 3f          \tsar    $0x3f,%rdx\n  4011c6:\t4c 8d 5d 98          \tlea    -0x68(%rbp),%r11\n  4011ca:\t49 89 03             \tmov    %rax,(%r11)\n  4011cd:\t49 89 53 08          \tmov    %rdx,0x8(%r11)\n  4011d1:\t4c 8b 4d 98          \tmov    -0x68(%rbp),%r9\n  4011d5:\t48 8d 7d f4          \tlea    -0xc(%rbp),%rdi\n  4011d9:\t4c 01 cf             \tadd    %r9,%rdi\n  4011dc:\t49 ff d0             \trex.WB call *%r8\n  4011df:\t4c 63 c8             \tmovslq %eax,%r9\n  4011e2:\t4c 01 cb             \tadd    %r9,%rbx\n  4011e5:\t48 89 5d e8          \tmov    %rbx,-0x18(%rbp)\n  4011e9:\t4c 63 45 e4          \tmovslq -0x1c(%rbp),%r8\n  4011ed:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  4011f4:\t4d 63 c0             \tmovslq %r8d,%r8\n  4011f7:\t44 89 45 e4          \tmov    %r8d,-0x1c(%rbp)\n  4011fb:\te9 32 ff ff ff       \tjmp    401132 <main+0x22>\n  401200:\t4c 8b 45 e8          \tmov    -0x18(%rbp),%r8\n  401204:\tba 00 76 b0 10       \tmov    $0x10b07600,%edx\n  401209:\t49 39 d0             \tcmp    %rdx,%r8\n  40120c:\t41 0f 95 c0          \tsetne  %r8b\n  401210:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  401214:\t49 63 c0             \tmovslq %r8d,%rax\n  401217:\t48 81 c4 98 00 00 00 \tadd    $0x98,%rsp\n  40121e:\t5b                   \tpop    %rbx\n  40121f:\t5d                   \tpop    %rbp\n  401220:\tc3                   \tret\n\nDisassembly of section .fini:\n"
+    },
+    {
+      "workload": "runtime-member-selection",
+      "lane": 1,
+      "sha256": "b402d9d187fde28efac4ef7383bd3f7c1120a12ca0482b5608d945efab21cb23",
+      "main_disassembly": "\n/tmp/pa22-119/performance-affected/runtime-member-selection1:     file format elf64-x86-64\n\n\nDisassembly of section .init:\n\nDisassembly of section .text:\n\n0000000000401110 <main>:\n  401110:\t55                   \tpush   %rbp\n  401111:\t48 89 e5             \tmov    %rsp,%rbp\n  401114:\t53                   \tpush   %rbx\n  401115:\t48 81 ec 88 00 00 00 \tsub    $0x88,%rsp\n  40111c:\tc7 45 f4 07 00 00 00 \tmovl   $0x7,-0xc(%rbp)\n  401123:\t48 c7 45 e8 00 00 00 \tmovq   $0x0,-0x18(%rbp)\n  40112a:\t00 \n  40112b:\tc7 45 e4 00 00 00 00 \tmovl   $0x0,-0x1c(%rbp)\n  401132:\t4c 63 45 e4          \tmovslq -0x1c(%rbp),%r8\n  401136:\t4c 63 0d d3 2e 00 00 \tmovslq 0x2ed3(%rip),%r9        # 404010 <iterations>\n  40113d:\t45 39 c8             \tcmp    %r9d,%r8d\n  401140:\t7c 05                \tjl     401147 <main+0x37>\n  401142:\te9 b2 00 00 00       \tjmp    4011f9 <main+0xe9>\n  401147:\t49 c7 c0 1a 12 40 00 \tmov    $0x40121a,%r8\n  40114e:\t4c 89 c0             \tmov    %r8,%rax\n  401151:\t31 d2                \txor    %edx,%edx\n  401153:\t48 89 45 b8          \tmov    %rax,-0x48(%rbp)\n  401157:\t48 89 55 c0          \tmov    %rdx,-0x40(%rbp)\n  40115b:\t4c 8d 5d b8          \tlea    -0x48(%rbp),%r11\n  40115f:\t49 8b 03             \tmov    (%r11),%rax\n  401162:\t49 8b 53 08          \tmov    0x8(%r11),%rdx\n  401166:\t4c 8d 5d c8          \tlea    -0x38(%rbp),%r11\n  40116a:\t49 89 03             \tmov    %rax,(%r11)\n  40116d:\t49 89 53 08          \tmov    %rdx,0x8(%r11)\n  401171:\t48 8b 5d e8          \tmov    -0x18(%rbp),%rbx\n  401175:\t4c 8d 5d c8          \tlea    -0x38(%rbp),%r11\n  401179:\t49 8b 03             \tmov    (%r11),%rax\n  40117c:\t49 8b 53 08          \tmov    0x8(%r11),%rdx\n  401180:\t4c 8d 5d b8          \tlea    -0x48(%rbp),%r11\n  401184:\t49 89 03             \tmov    %rax,(%r11)\n  401187:\t49 89 53 08          \tmov    %rdx,0x8(%r11)\n  40118b:\t4c 8b 45 b8          \tmov    -0x48(%rbp),%r8\n  40118f:\t4c 8d 5d b8          \tlea    -0x48(%rbp),%r11\n  401193:\t49 8b 03             \tmov    (%r11),%rax\n  401196:\t49 8b 53 08          \tmov    0x8(%r11),%rdx\n  40119a:\tb9 40 00 00 00       \tmov    $0x40,%ecx\n  40119f:\t31 f6                \txor    %esi,%esi\n  4011a1:\tb9 40 00 00 00       \tmov    $0x40,%ecx\n  4011a6:\t48 83 f9 40          \tcmp    $0x40,%rcx\n  4011aa:\t73 09                \tjae    4011b5 <main+0xa5>\n  4011ac:\t48 0f ad d0          \tshrd   %cl,%rdx,%rax\n  4011b0:\t48 d3 fa             \tsar    %cl,%rdx\n  4011b3:\teb 0a                \tjmp    4011bf <main+0xaf>\n  4011b5:\t48 89 d0             \tmov    %rdx,%rax\n  4011b8:\t48 d3 f8             \tsar    %cl,%rax\n  4011bb:\t48 c1 fa 3f          \tsar    $0x3f,%rdx\n  4011bf:\t4c 8d 5d a8          \tlea    -0x58(%rbp),%r11\n  4011c3:\t49 89 03             \tmov    %rax,(%r11)\n  4011c6:\t49 89 53 08          \tmov    %rdx,0x8(%r11)\n  4011ca:\t4c 8b 4d a8          \tmov    -0x58(%rbp),%r9\n  4011ce:\t48 8d 7d f4          \tlea    -0xc(%rbp),%rdi\n  4011d2:\t4c 01 cf             \tadd    %r9,%rdi\n  4011d5:\t49 ff d0             \trex.WB call *%r8\n  4011d8:\t4c 63 c8             \tmovslq %eax,%r9\n  4011db:\t4c 01 cb             \tadd    %r9,%rbx\n  4011de:\t48 89 5d e8          \tmov    %rbx,-0x18(%rbp)\n  4011e2:\t4c 63 45 e4          \tmovslq -0x1c(%rbp),%r8\n  4011e6:\t49 81 c0 01 00 00 00 \tadd    $0x1,%r8\n  4011ed:\t4d 63 c0             \tmovslq %r8d,%r8\n  4011f0:\t44 89 45 e4          \tmov    %r8d,-0x1c(%rbp)\n  4011f4:\te9 39 ff ff ff       \tjmp    401132 <main+0x22>\n  4011f9:\t4c 8b 45 e8          \tmov    -0x18(%rbp),%r8\n  4011fd:\tba 00 76 b0 10       \tmov    $0x10b07600,%edx\n  401202:\t49 39 d0             \tcmp    %rdx,%r8\n  401205:\t41 0f 95 c0          \tsetne  %r8b\n  401209:\t45 0f b6 c0          \tmovzbl %r8b,%r8d\n  40120d:\t49 63 c0             \tmovslq %r8d,%rax\n  401210:\t48 81 c4 88 00 00 00 \tadd    $0x88,%rsp\n  401217:\t5b                   \tpop    %rbx\n  401218:\t5d                   \tpop    %rbp\n  401219:\tc3                   \tret\n\nDisassembly of section .fini:\n"
+    }
+  ]
+}

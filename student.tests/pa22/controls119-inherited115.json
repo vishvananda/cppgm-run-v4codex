@@ -1,0 +1,104 @@
+[
+  {
+    "source": "student.tests/pa22/dependent/associated.cpp",
+    "compile_exit": 0,
+    "stderr": "",
+    "reject": false,
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/injected.cpp",
+    "compile_exit": 0,
+    "stderr": "",
+    "reject": false,
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/nttp.cpp",
+    "compile_exit": 0,
+    "stderr": "",
+    "reject": false,
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/owners.cpp",
+    "compile_exit": 0,
+    "stderr": "",
+    "reject": false,
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/protected.cpp",
+    "compile_exit": 0,
+    "stderr": "",
+    "reject": false,
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/reject-injected-type.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: ambiguous lookup\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/reject-nttp-base.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid class template arguments\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/reject-nttp-integer.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid class template arguments\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/reject-nttp-private.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: inaccessible class member\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/reject-nttp-variable.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid class template arguments\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/reject-parenthesized-member.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid class template arguments\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/dependent/sfinae.cpp",
+    "compile_exit": 0,
+    "stderr": "",
+    "reject": false,
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
+  }
+]

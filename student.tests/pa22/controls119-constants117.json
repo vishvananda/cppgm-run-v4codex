@@ -1,0 +1,45 @@
+{
+  "compiler_sha256": "d2cac90074d5f8c4c9a73201e6b3bd1f6274b925146ec8879fe5491b7eda9b65",
+  "cases": [
+    {
+      "source": "student.tests/pa22/constants/converted.cpp",
+      "compile_exit": 0,
+      "diagnostic": "",
+      "static_initialization": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa22/constants/overloaded.cpp",
+      "compile_exit": 0,
+      "diagnostic": "",
+      "static_initialization": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa22/constants/repeated.cpp",
+      "compile_exit": 0,
+      "diagnostic": "",
+      "static_initialization": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa22/constants/static-chain.cpp",
+      "compile_exit": 0,
+      "diagnostic": "",
+      "static_initialization": true,
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    }
+  ]
+}

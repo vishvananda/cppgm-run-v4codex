@@ -15,7 +15,7 @@ def checked(cmd):
 def compile(cc,stem,inputs):
  ir=WORK/(stem+'.lowir');r=checked([cc,'--emit-lowir','-O0','-o',ir,*inputs]);return ir,r
 def execute(ir):
- exe=ir.with_suffix('.exe');r=run([ROOT/'dev/lowir2native-ref','-O0','-o',exe,ir])
+ exe=WORK/(ir.stem+'.exe');r=run([ROOT/'dev/lowir2native-ref','-O0','-o',exe,ir])
  result=dict(backend=r)
  if not r['exit']:result['execution']=run([exe])
  return result

@@ -31,7 +31,7 @@ C++11 [conv.mem]/2 preserves the selected member under base-to-derived
 conversion; [expr.static.cast]/12 permits the inverse conversion even when the
 base does not itself declare the original member. [expr.mptr.oper]/2–4 permits
 application when the object's dynamic type contains that member. See
-[N3485](../doc/n3485.txt), lines 5026–5043, 6089–6098 and 6709–6725.
+[N3485](../doc/n3485.txt), lines 5026–5043, 6088–6096 and 6711–6724.
 A class with no bases can thus receive a pointer whose member belongs to a
 complete derived object and whose receiver displacement is nonzero.
 

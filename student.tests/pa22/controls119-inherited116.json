@@ -1,0 +1,70 @@
+[
+  {
+    "source": "student.tests/pa22/conversions/inherited.cpp",
+    "compile_exit": 0,
+    "stderr": "",
+    "reject": false,
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/conversions/ranking.cpp",
+    "compile_exit": 0,
+    "stderr": "",
+    "reject": false,
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/conversions/reject-path-hiding.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid explicit cast\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/conversions/reject-private.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: inaccessible class member\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/conversions/reject-repeated.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: ambiguous base subobject\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/conversions/reject-siblings.cpp",
+    "compile_exit": 1,
+    "stderr": "ERROR: invalid explicit cast\n",
+    "reject": true,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/conversions/template.cpp",
+    "compile_exit": 0,
+    "stderr": "",
+    "reject": false,
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
+  },
+  {
+    "source": "student.tests/pa22/conversions/value-zero.cpp",
+    "compile_exit": 0,
+    "stderr": "",
+    "reject": false,
+    "backend_exit": 0,
+    "backend_stderr": "",
+    "runtime_exit": 0,
+    "passed": true
+  }
+]
