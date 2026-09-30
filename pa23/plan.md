@@ -8,32 +8,23 @@ Turn entry: `9688f9e54a2b206b9add41ce78acd9b5f0452c62`, clean,
 no prior build process is live. Entry binary and failure log frozen in
 `/tmp/pa23-123/`. Stage/review markers above are unchanged.
 
-## Current owner plan
+## Current completed group
 
-Complete the shared virtual-subobject group, extending into its dependent
-lifecycle/parameter paths while the same facts support progress. Class completion
-owns canonical virtual-subobject identities and unique final overriders; layout
-owns nonvirtual extents and per-segment adjustment/address-point facts. Checked
-base conversions and lifecycle actions carry those identities into typed LowIR.
-Use class-local flat indexes and immutable slices, with TU lifetime and work
-proportional to consumed base/slot edges plus emitted rows. No global retries,
-source replay, textual semantic keys or optional optimizer is planned.
+**24/45**, **21 failures**, four original failures resolved with no new failures.
+Class-owned canonical virtual anchors/nonvirtual paths now determine base
+conversion identity and unique final overriders. Separate nonvirtual extents
+feed shared complete-object layout, segment-local vbase/vcall rows, address
+points, RTTI flags and dynamic projections. Inherited overrides retain required
+primary slots. Covariant result thunks consume dynamic return projections with
+null preservation and complete typed cache keys. Language polymorphism remains
+separate from having a virtual-base layout pointer.
 
-Validate original failures and explicit diamond/access/dispatch/lifecycle
-controls; run earlier stages, file audit and the through report at handoff.
-Freeze final binary/inputs and retain A/A + ABBA compiler wall/RSS and checked
-native runtime/text evidence under spec §9's PA23/O0 acceptance. Current refs
-include a nonpolymorphic virtual diamond whose `B&` access uses a fixed offset;
-this needs an executable reducer and contract/standard proof before any oracle
-correction. Reference correctness and unfinished implementation remain distinct.
-
-Semantic increment: **21/45** required fixtures, no new failures; explicit
-shared-identity/final-overrider controls **25/25**. Canonical relative identities
-use virtual anchors plus interned nonvirtual edge paths. A two-pass maximum
-check selects and verifies final overriders without pairwise candidate scans.
-Shared base conversions now merge only identical occurrences. Layout and
-lifecycle remain unfinished, so accepted semantic controls do not certify their
-executables. Continuing into the layout/table owner.
+Explicit semantic controls pass **25/25**; executable layout/dispatch controls
+pass **17/17**. Two separately recorded lifecycle probes still fail: repeated
+construction of one shared base and a base constructor clobbering a sibling
+vptr. They require complete/base action separation, construction-table slices
+and hidden-pointer signatures across all call paths. These are unfinished
+implementation, not review questions. Final validation/performance is pending.
 
 ## Completed ownership and spec alignment
 
@@ -58,24 +49,23 @@ bodies, slots and comparison rules remain unchanged.
 
 ## Remaining implementation — requirements retained
 
-1. **Shared virtual-subobject ownership:** canonical shared identity, nonvirtual
-   extents, layout/access, dynamic projections, segment-local vbase/vcall rows,
-   virtual diamond RTTI flags, unique final overriders and inherited primary slots.
-2. **Virtual-base lifecycle/parameter ABI:** complete/base construction,
-   destruction and transfer actions; hidden virtual-base pointers for by-value
-   parameters, and object-vtable access for references/pointers. These owners
-   account for all **25 remaining required failures**; all fixtures stay required.
-3. **Virtual member-function pointers:** the inherited executable still bypasses
-   the final overrider. Formation, static data, conversions, value proofs and
-   dispatch decoding must agree, including inverse conversion to nonpolymorphic
-   owners and variadic forwarding. The proposed expansion was investigated but
-   not implemented; an owner-only dispatch patch would be incorrect.
+1. **Virtual-base lifecycle/parameter ABI:** complete/base construction,
+   destruction and transfer actions; construction tables and VTT slices;
+   by-value hidden pointers across declarations/call paths. Reference/pointer
+   accesses now use the object's table and acquire no hidden argument.
+2. **Reference reconciliation:** nonpolymorphic virtual-reference output uses
+   a fixed complete-type offset. A deterministic reducer fails in the pinned
+   reference. Correct affected oracles only with the recorded standard/contract
+   proof and completed lifecycle behavior; no oracle has changed in turn 123.
+3. **Virtual member-function pointers:** inherited formation/conversion/value
+   proofs and call decoding still bypass final overriders; the preserved control
+   remains required implementation work.
 
-The initial lifecycle scope was extended through exception/deallocation paths,
-termination scheduling, nested views and cross-TU ownership. Further related
-work now needs the shared-base and member-value representations above; static
-segment offsets and nonvirtual lifecycle actions cannot implement them. This
-is an implementation boundary, not a waiver or an independent-review question.
+The initial semantic scope extended through layout, RTTI, table demand, dynamic
+access, inherited primary slots and covariant returns. Construction/destruction
+and value transfer now need a distinct ABI-action owner, including entry-local
+parameter binding, construction-table selection and exception cleanups. Existing
+static lifecycle calls cannot consume complete-object projections correctly.
 
 ## Performance and validation
 
@@ -113,7 +103,9 @@ object-label limit is reproduced with reference IR; both IRs pass hosted executi
 | `3b9cf2b5` | Single base-only entry identity; covariant secondary group check | Pending |
 | `a04a8cae` | Typed base-alias deduplication and prior-TU schedule preservation | Pending |
 | `9688f9e5` | Handoff 122 validation/performance, retained failures and boundary | Pending |
-| Turn 123 planning commit | Frozen baseline and shared-base owner/data-flow plan | Pending |
+| `2f27c0e5` | Turn 123 frozen baseline and shared-base owner/data-flow plan | Pending |
+| `c7944d23` | Canonical subobjects, final overriders and semantic controls | Pending |
+| Layout implementation commit | Shared extents, table rows, RTTI, projections and covariant returns | Pending |
 
 Independent review must assess demand/ABI identities, group layout and cross-TU
 publication, cleanup bounds, the reference proof, storage lifetimes, inherited

@@ -97,7 +97,12 @@ public:
     const std::vector<EntityId>& demanded_vtables() const { return vtable_emission; }
     EntityId local_function(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_function : local_enum_functions.get(e); }
     unsigned local_ordinal(EntityId e) const { return entities[e].class_info ? class_facts[entities[e].class_info].local_ordinal : local_enum_ordinals.get(e); }
-    bool polymorphic(EntityId e) const { return entities[e].class_info && class_facts[entities[e].class_info].virtual_info; }
+    bool dynamic_class(EntityId e) const { return entities[e].class_info && class_facts[entities[e].class_info].virtual_info; }
+    bool polymorphic(EntityId e) const { return dynamic_class(e) && virtual_class(e).polymorphic; }
+    unsigned virtual_base_count(EntityId e) const { return class_facts[entities[e].class_info].virtual_bases_count; }
+    EntityId virtual_base_type(EntityId e, unsigned i) const { return virtual_bases[class_facts[entities[e].class_info].virtual_bases_begin+i]; }
+    std::uint64_t virtual_base_offset(EntityId e, EntityId base) const;
+    std::int64_t virtual_base_row(EntityId e, EntityId base) const;
     std::uint64_t base_offset(TypeId t, TypeId base = 0) { size(t); return base ? base_adjustments[base_steps(t,types[base].entity)].total : class_facts[entities[types[t].entity].class_info].base_offset; }
     std::vector<BaseAdjustment> base_adjustments = std::vector<BaseAdjustment>(1);
     Index base_adjustment_index;
@@ -920,6 +925,7 @@ private:
     void complete_virtuals(EntityId cls);
     void vtable_definition_available(EntityId e);
     void demand_vtable(EntityId cls, VtableReason reason);
+    unsigned virtual_dispatch(EntityId member);
     void check_covariance(EntityId e, EntityId base);
     void reject_abstract(TypeId t);
     bool abstract_value(TypeId t);
@@ -930,6 +936,7 @@ private:
     std::uint32_t prefix_subobject(std::uint32_t edge, std::uint32_t identity);
     bool contains_subobject(EntityId outer, std::uint32_t from, std::uint32_t to);
     std::vector<EntityId> virtual_bases;
+    std::vector<std::uint64_t> virtual_base_offsets;
     Index virtual_base_index, subobject_index, subobject_path_index;
     std::vector<SubobjectIdentity> subobjects = std::vector<SubobjectIdentity>(1);
     std::vector<SubobjectPath> subobject_paths = std::vector<SubobjectPath>(1);

@@ -10,7 +10,7 @@ void Analyzer::complete_virtual_bases(EntityId cls)
         auto k = key(cls,base);
         if (virtual_base_index.get(k)) return;
         virtual_base_index.put(k,virtual_bases.size()+1);
-        virtual_bases.push_back(base);
+        virtual_bases.push_back(base); virtual_base_offsets.push_back(0);
     };
     for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
         auto inherited = class_facts[entities[bases[b].base].class_info];
@@ -20,6 +20,19 @@ void Analyzer::complete_virtual_bases(EntityId cls)
     }
     class_facts[info].virtual_bases_begin = begin;
     class_facts[info].virtual_bases_count = virtual_bases.size()-begin;
+}
+std::uint64_t Analyzer::virtual_base_offset(EntityId cls, EntityId base) const
+{
+    auto id = virtual_base_index.get(key(cls,base));
+    if (!id) throw std::logic_error("missing virtual-base layout identity");
+    return virtual_base_offsets[id-1];
+}
+std::int64_t Analyzer::virtual_base_row(EntityId cls, EntityId base) const
+{
+    auto id = virtual_base_index.get(key(cls,base));
+    if (!id) throw std::logic_error("missing virtual-base row identity");
+    auto position = id-1-class_facts[entities[cls].class_info].virtual_bases_begin;
+    return -24-std::int64_t(position)*8;
 }
 std::uint32_t Analyzer::prefix_subobject(std::uint32_t b, std::uint32_t id)
 {

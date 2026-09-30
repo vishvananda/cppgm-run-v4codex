@@ -54,7 +54,7 @@ unsigned Analyzer::base_path(TypeId from, EntityId to)
     // separately from layout, and share tails across derived uses.
     auto identity = key(e,to);
     if (auto known = base_adjustment_index.get(identity)) { ++base_adjustment_hits; return known; }
-    BaseAdjustment path; bool found = false;
+    BaseAdjustment path; path.source = e; bool found = false;
     for (auto b = access_base(e); b; b = bases[b].next) {
         ++base_adjustment_work;
         auto edge = bases[b];
@@ -77,9 +77,17 @@ unsigned Analyzer::base_path(TypeId from, EntityId to)
 std::uint64_t Analyzer::layout_base_path(unsigned id)
 {
     if (!id || base_adjustments[id].laid_out) return base_adjustments[id].total;
-    auto tail = layout_base_path(base_adjustments[id].next);
     auto& path = base_adjustments[id];
-    path.offset = bases[path.edge].offset; path.total = path.offset + tail;
+    auto identity = subobjects[path.subobject];
+    path.offset = bases[path.edge].offset;
+    path.total = 0;
+    for (auto p = identity.path; p; p = subobject_paths[p].next)
+        path.total += bases[subobject_paths[p].edge].offset;
+    if (identity.anchor) {
+        path.virtual_tail = path.total;
+        path.total += virtual_base_offset(path.source,identity.anchor);
+        path.virtual_row = virtual_base_row(path.source,identity.anchor);
+    }
     path.laid_out = true; return path.total;
 }
 unsigned Analyzer::base_steps(TypeId from, EntityId to)

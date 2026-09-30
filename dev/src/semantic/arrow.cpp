@@ -38,7 +38,7 @@ std::uint32_t Analyzer::prepare_arrow(Expression object, ScopeId s, NodeId n, bo
         ArrowStep step; step.function = e; step.result = types[entities[e].type].child;
         step.adjustment = demand ? base_steps(object.type,scopes[entities[e].owner].entity) :
             base_path(object.type,scopes[entities[e].owner].entity);
-        step.virtual_slot = members[entities[e].member_info].virtual_slot;
+        step.virtual_slot = virtual_dispatch(e);
         object.type = value_type(step.result);
         object.category = types[step.result].kind == TypeKind::LRef ? ValueCategory::Lvalue :
             types[step.result].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;

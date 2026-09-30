@@ -118,7 +118,9 @@ SymbolId Procedural::rtti_type(TypeId id)
         for (auto b = sem.first_base_edge(t.entity); b; b = sem.base_edge(b).next) {
             auto edge = sem.base_edge(b);
             data.push_back(relocation(typeinfo(edge.base)));
-            data.push_back(scalar(IRType::I64,(edge.offset<<8)|(edge.access == semantic::Access::Public ? 2 : 0)));
+            auto offset = edge.virtual_base ? sem.virtual_base_row(t.entity,edge.base) : std::int64_t(edge.offset);
+            auto entry = scalar(IRType::I64,(std::uint64_t(offset)<<8)|(edge.virtual_base ? 1 : 0)|(edge.access == semantic::Access::Public ? 2 : 0));
+            entry.value.negative_integer = offset < 0; data.push_back(entry);
         }
     }
     if (role == 4 || role == 8) { data.push_back(scalar(IRType::I32,flags)); data.push_back(relocation(dependency)); }

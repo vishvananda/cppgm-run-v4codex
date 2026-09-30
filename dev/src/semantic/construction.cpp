@@ -332,7 +332,7 @@ void Analyzer::constructor_actions(EntityId e)
             EntityId selected = ctor;
             if (selected && entities[selected].member_info) {
                 members[entities[selected].member_info].base_entry = true;
-                members[entities[selected].member_info].polymorphic_base_entry |= polymorphic(cls);
+                members[entities[selected].member_info].polymorphic_base_entry |= dynamic_class(cls);
             }
         } else if (ctor) members[entities[ctor].member_info].complete_entry = true;
         if (initial || ctor) work.push_back({field, type, initial, ctor});
@@ -422,7 +422,7 @@ bool Analyzer::constructor_needed(EntityId e)
     if (state == BooleanFact::Active) throw std::logic_error("cyclic constructor actions");
     members[m].constructor_effects = BooleanFact::Active;
     try {
-    bool needed = polymorphic(scopes[entities[e].owner].entity);
+    bool needed = dynamic_class(scopes[entities[e].owner].entity);
     for (unsigned j = 0; j < members[m].action_count; ++j) {
         auto action = subobject_actions[members[m].action_begin+j];
         if (action.initializer) {

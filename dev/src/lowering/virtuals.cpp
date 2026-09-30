@@ -32,7 +32,7 @@ SymbolId Procedural::abi_type_global(TypeId type, abi_mangle::TargetKind kind)
     internal |= kind == abi_mangle::TargetKind::Typeinfo && rtti_incomplete_flags(type);
     auto key = (std::uint64_t(16+unsigned(kind)) << 32) | target.type;
     if (!internal) if (auto prior = linkage.external.get(key)) return SymbolId(prior);
-    std::string name = kind == abi_mangle::TargetKind::Vtable ? "@vtable" : kind == abi_mangle::TargetKind::Typeinfo ? "@typeinfo" : "@typeinfo_name";
+    std::string name = kind == abi_mangle::TargetKind::Vtable ? "@vtable" : kind == abi_mangle::TargetKind::Vtt ? "@vtt" : kind == abi_mangle::TargetKind::Typeinfo ? "@typeinfo" : "@typeinfo_name";
     if (sem.types[type].kind == TypeKind::Fundamental)
         name = (kind == abi_mangle::TargetKind::Typeinfo ? "@__rtti_" : "@__typeinfo_name__")+support_type_name(type);
     SymbolId sym = fresh_symbol(name);
@@ -73,11 +73,17 @@ void Procedural::emit_vtables()
         p.symbols[table.index-1].metadata.binding = internal_entity(cls) ? SBM_INTERNAL : SBM_WEAK;
         // Key-owned tables have one cross-TU ABI group. Unkeyed course views
         // retain their private emission identities.
-        bool grouped = model.key_function && !sem.entities[cls].specialization;
+        bool grouped = model.key_function && !sem.entities[cls].specialization && !sem.virtual_base_count(cls);
         std::vector<DataItem> group;
-        auto emit_view = [&](SymbolId output, unsigned begin, unsigned count, std::uint64_t offset) {
-            std::vector<DataItem> data = {scalar(IRType::I64,0-offset),relocation(typeinfo(cls))};
-            data[0].value.negative_integer = offset != 0;
+        auto emit_view = [&](SymbolId output, EntityId owner, unsigned begin, unsigned count, std::uint64_t offset, unsigned vcalls) {
+            std::vector<DataItem> data;
+            for (unsigned i = 0; i < vcalls; ++i) data.push_back(scalar(IRType::I64,0));
+            for (unsigned i = sem.virtual_base_count(owner); i; --i) {
+                auto delta = std::int64_t(sem.virtual_base_offset(cls,sem.virtual_base_type(owner,i-1)))-std::int64_t(offset);
+                auto row = scalar(IRType::I64,delta); row.value.negative_integer = delta < 0; data.push_back(row);
+            }
+            auto top = scalar(IRType::I64,0-offset); top.value.negative_integer = offset != 0;
+            data.push_back(top); data.push_back(relocation(typeinfo(cls)));
             for (unsigned j = 0; j < count; ++j) {
                 const auto& slot = model.slots[begin+j];
                 auto m = sem.member_fact(slot.function);
@@ -87,32 +93,47 @@ void Procedural::emit_vtables()
             if (grouped) group.insert(group.end(),data.begin(),data.end());
             else publish(p,output,data);
         };
-        emit_view(table,0,model.primary_count,0);
+        emit_view(table,cls,0,model.primary_count,0,0);
         const auto& views = sem.virtual_class(cls).views;
         for (unsigned j = 0; j < views.size(); ++j)
-            if (grouped ? views[j].store : views[j].offset != 0)
-                emit_view(grouped ? table : view_symbol(cls,j+1),views[j].begin,views[j].count,views[j].offset);
+            if (grouped || sem.virtual_base_count(cls) ? views[j].store : views[j].offset != 0)
+                emit_view(grouped ? table : view_symbol(cls,j+1),views[j].type,views[j].begin,views[j].count,views[j].offset,views[j].vcall_rows);
         if (grouped) publish(p,table,group);
+        if (sem.virtual_base_count(cls)) {
+            auto vtt = abi_global(cls,abi_mangle::TargetKind::Vtt);
+            p.symbols[vtt.index-1].metadata.object_root = true;
+            std::vector<DataItem> entries = {relocation(table,model.address_point)};
+            for (unsigned j = 0; j < views.size(); ++j)
+                if (views[j].store) entries.push_back(relocation(view_symbol(cls,j+1),views[j].address_point));
+            publish(p,vtt,entries);
+        }
     }
 }
 void Procedural::vpointer_store(EntityId cls)
 {
-    if (!sem.polymorphic(cls)) return;
+    if (!sem.dynamic_class(cls)) return;
     auto symbol = vtables[sem.virtual_class_id(cls)];
     if (!symbol) throw std::logic_error("undemanded vtable in lifecycle entry");
-    auto store = [&](SymbolId symbol, std::uint64_t offset, std::uint64_t point_offset) {
+    auto store = [&](SymbolId symbol, std::uint64_t offset, std::uint64_t point_offset, EntityId anchor, std::uint64_t tail) {
         Value object = emit(Opcode::Load,IRType::Ptr,{Operand::slot(this_slot)});
-        if (offset) object = emit(Opcode::Index,IRType::I8,{object.operand,Operand::integer(offset)});
+        if (anchor) {
+            auto table = emit(Opcode::Load,IRType::Ptr,{object.operand});
+            auto row = Operand::integer(sem.virtual_base_row(cls,anchor)); row.negative_integer = true;
+            auto location = emit(Opcode::Index,IRType::I8,{table.operand,row});
+            auto delta = emit(Opcode::Load,IRType::I64,{location.operand});
+            object = emit(Opcode::Index,IRType::I8,{object.operand,delta.operand});
+            object = emit(Opcode::Index,IRType::I8,{object.operand,Operand::integer(tail)});
+        } else if (offset) object = emit(Opcode::Index,IRType::I8,{object.operand,Operand::integer(offset)});
         Value table = emit(Opcode::Addr,IRType(),{Operand::symbol(symbol)});
         Value point = emit(Opcode::Index,IRType::I8,{table.operand,Operand::integer(point_offset)});
         emit(Opcode::Store,IRType::Ptr,{point.operand,object.operand});
     };
-    store(symbol,0,16);
+    store(symbol,0,sem.virtual_class(cls).address_point,0,0);
     const auto& model = sem.virtual_class(cls);
-    bool grouped = model.key_function && !sem.entities[cls].specialization;
+    bool grouped = model.key_function && !sem.entities[cls].specialization && !sem.virtual_base_count(cls);
     const auto& views = sem.virtual_class(cls).views;
     for (unsigned j = 0; j < views.size(); ++j)
-        if (views[j].store) store(grouped ? symbol : view_symbol(cls,j+1),views[j].offset,grouped ? views[j].group_address_point : 16);
+        if (views[j].store) store(grouped ? symbol : view_symbol(cls,j+1),views[j].offset,grouped ? views[j].group_address_point : views[j].address_point,views[j].virtual_anchor,views[j].virtual_tail);
 }
 Value Procedural::virtual_function(Value object, unsigned slot)
 {
@@ -122,7 +143,7 @@ Value Procedural::virtual_function(Value object, unsigned slot)
 }
 Value Procedural::pointer_projection(Value base, unsigned adjustment)
 {
-    if (base.nonnull || !sem.base_adjustments[adjustment].total) return base_projection(base,adjustment);
+    if (base.nonnull || (!sem.base_adjustments[adjustment].total && !sem.base_adjustments[adjustment].virtual_row)) return base_projection(base,adjustment);
     auto slot = builder->add_slot(0,IRType::Ptr);
     auto test = emit(Opcode::Compare,IRType::Ptr,{base.operand,Operand::integer(0)},Operation::Eq);
     auto null = block(), adjust = block(), end = block();

@@ -23,8 +23,8 @@ void Analyzer::prepare_static_vptrs()
         auto ctor = members[entities[action.constructor].member_info];
         EntityId cls = types[object.type].entity;
         if (ctor.synthetic && ctor.transfer == TransferKind::None && !ctor.inherited_constructor &&
-            !ctor.delegated_constructor && !ctor.action_count && polymorphic(cls)) static_vptr_objects.put(action.object,cls);
-        else if (entities[action.constructor].constexpr_function && polymorphic(cls) && size(object.type) == 8) {
+            !ctor.delegated_constructor && !ctor.action_count && dynamic_class(cls)) static_vptr_objects.put(action.object,cls);
+        else if (entities[action.constructor].constexpr_function && dynamic_class(cls) && size(object.type) == 8) {
             auto value = constant_construct(action.constructor,{});
             if (value.valid) {
                 auto data = constant_value_data(value);
@@ -43,7 +43,7 @@ std::uint32_t Analyzer::constant_constructor(EntityId ctor)
     // Keep source-declared copy/move value types on the ordinary O0 lifetime
     // path. Their initialization is not part of the early scalar-field policy.
     EntityId cls = scopes[entities[ctor].owner].entity;
-    if (polymorphic(cls) || (class_facts[entities[cls].class_info].declared_transfers & 3)) return index;
+    if (dynamic_class(cls) || (class_facts[entities[cls].class_info].declared_transfers & 3)) return index;
     // Early static initialization is permitted only when the demanded body
     // has no effects and every action initializes this object's scalar fields.
     // Other bodies retain their ordinary dynamic initialization path.

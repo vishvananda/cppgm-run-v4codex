@@ -54,7 +54,7 @@ void Analyzer::complete_virtuals(EntityId cls)
     VirtualClass completed;
     std::vector<VirtualSlot> primary;
     for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
-        if (!polymorphic(bases[b].base) || bases[b].virtual_base) continue;
+        if (!dynamic_class(bases[b].base) || bases[b].virtual_base) continue;
         class_facts[info].primary_base = b;
         const auto& inherited = virtual_class(bases[b].base);
         primary.assign(inherited.slots.begin(),inherited.slots.begin()+inherited.primary_count);
@@ -75,7 +75,7 @@ void Analyzer::complete_virtuals(EntityId cls)
     }
     for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
         auto base = bases[b].base;
-        if (!polymorphic(base) || b == class_facts[info].primary_base) continue;
+        if (!dynamic_class(base) || b == class_facts[info].primary_base) continue;
         const auto& inherited = virtual_class(base);
         unsigned root = completed.views.size()+1;
         auto import = [&](VirtualView view, unsigned begin, unsigned count) {
@@ -161,11 +161,30 @@ void Analyzer::complete_virtuals(EntityId cls)
         if (!completed.key_function && !members[m].pure && !entities[e].inline_function)
             completed.key_function = e;
     }
-    if (primary.empty() && completed.views.empty()) return;
+    if (primary.empty() && completed.views.empty() && !virtual_base_count(cls)) return;
+    completed.polymorphic = !primary.empty() || !completed.slots.empty();
     completed.primary_count = primary.size();
     for (auto& view : completed.views) view.begin += completed.primary_count;
     completed.slots.insert(completed.slots.begin(),primary.begin(),primary.end());
     resolve_final_overriders(cls,completed);
+    // An inherited override introduced in a secondary view still needs its
+    // callable slot in this class's primary group. Keep unrelated inherited
+    // roots separate; only actual overrides add a new primary signature.
+    std::vector<VirtualSlot> inherited_overrides;
+    for (unsigned j = completed.primary_count; j < completed.slots.size(); ++j) {
+        auto slot = completed.slots[j];
+        auto e = slot.function;
+        if (e == slot.declaration || scopes[entities[e].owner].entity == cls || completed.signatures.get(shape(e))) continue;
+        completed.signatures.put(shape(e),completed.primary_count+inherited_overrides.size()+1);
+        slot.declaration = e; slot.origin = slot.implementation;
+        inherited_overrides.push_back(slot);
+        if (members[entities[e].member_info].destructor) inherited_overrides.push_back(slot);
+    }
+    if (!inherited_overrides.empty()) {
+        completed.slots.insert(completed.slots.begin()+completed.primary_count,inherited_overrides.begin(),inherited_overrides.end());
+        completed.primary_count += inherited_overrides.size();
+        for (auto& view : completed.views) view.begin += inherited_overrides.size();
+    }
     for (const auto& slot : completed.slots) completed.abstract |= members[entities[slot.function].member_info].pure;
     class_facts[info].aggregate = false;
     auto v = virtual_classes.size(); class_facts[info].virtual_info = v;
@@ -189,7 +208,7 @@ void Analyzer::vtable_definition_available(EntityId e)
 {
     if (!calls) return;
     EntityId cls = scopes[entities[e].owner].entity;
-    if (!polymorphic(cls)) return;
+    if (!dynamic_class(cls)) return;
     auto v = virtual_class_id(cls);
     // The owning class is the reverse dependency of its one selected key.
     // Availability is distinct from checking the body; defer the consumer until
@@ -200,9 +219,16 @@ void Analyzer::vtable_definition_available(EntityId e)
     virtual_classes[v].reasons |= bit;
     if (virtual_classes[v].demand == FactState::NotStarted) key_vtable_demand.push_back(cls);
 }
+unsigned Analyzer::virtual_dispatch(EntityId e)
+{
+    auto slot = members[entities[e].member_info].virtual_slot;
+    auto cls = scopes[entities[e].owner].entity;
+    if (slot && !unevaluated_depth && virtual_base_count(cls)) demand_vtable(cls,VtableReason::Dispatch);
+    return slot;
+}
 void Analyzer::demand_vtable(EntityId cls, VtableReason reason)
 {
-    if (!polymorphic(cls)) return;
+    if (!dynamic_class(cls)) return;
     auto v = class_facts[entities[cls].class_info].virtual_info;
     virtual_classes[v].reasons |= static_cast<unsigned char>(reason);
     if (!virtual_classes[v].referenced) {
@@ -243,6 +269,9 @@ void Analyzer::demand_vtable(EntityId cls, VtableReason reason)
             members[m].deleting_deallocation = deallocation;
         }
     }
+    if (reason == VtableReason::Dispatch)
+        for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next)
+            demand_vtable(bases[b].base,reason);
     record_rtti_type(entities[cls].type);
     virtual_classes[v].demand = FactState::Success;
     } catch (...) {
@@ -256,16 +285,34 @@ void Analyzer::layout_virtual_views(EntityId cls)
 {
     auto id = virtual_class_id(cls);
     Index stored;
-    std::uint64_t group_end = 16 + std::uint64_t(virtual_classes[id].primary_count)*8;
+    virtual_classes[id].address_point = 16+std::uint64_t(virtual_base_count(cls))*8;
+    std::uint64_t group_end = virtual_classes[id].address_point + std::uint64_t(virtual_classes[id].primary_count)*8;
     for (unsigned j = 0; j < virtual_classes[id].views.size(); ++j) {
         auto& view = virtual_classes[id].views[j];
-        view.offset = (view.parent ? virtual_classes[id].views[view.parent-1].offset : 0) + bases[view.edge].offset;
+        view.offset = bases[view.edge].virtual_base ? virtual_base_offset(cls,bases[view.edge].base) :
+            (view.parent ? virtual_classes[id].views[view.parent-1].offset : 0) + bases[view.edge].offset;
+        view.virtual_anchor = bases[view.edge].virtual_base ? bases[view.edge].base :
+            view.parent ? virtual_classes[id].views[view.parent-1].virtual_anchor : 0;
+        view.virtual_tail = view.virtual_anchor ? view.offset-virtual_base_offset(cls,view.virtual_anchor) : 0;
+        view.vbase_rows = virtual_base_count(view.type);
+        view.vcall_rows = 0;
+        if (bases[view.edge].virtual_base) {
+            Index signatures;
+            for (unsigned k = 0; k < view.count; ++k) {
+                ++virtual_slot_work;
+                auto e = virtual_classes[id].slots[view.begin+k].declaration;
+                auto member = members[entities[e].member_info];
+                auto shape = key(member.destructor ? 0 : entities[e].name,member.virtual_signature);
+                if (!signatures.get(shape)) { signatures.put(shape,1); ++view.vcall_rows; }
+            }
+        }
+        view.address_point = 16+std::uint64_t(view.vcall_rows+view.vbase_rows)*8;
         view.store = view.offset && !stored.get(view.offset);
         if (view.store) {
-            view.group_address_point = group_end + 16;
+            view.group_address_point = group_end + view.address_point;
             stored.put(view.offset,j+1);
-            group_end += 16 + std::uint64_t(view.count)*8;
-        } else view.group_address_point = view.offset ? virtual_classes[id].views[stored.get(view.offset)-1].group_address_point : 16;
+            group_end += view.address_point + std::uint64_t(view.count)*8;
+        } else view.group_address_point = view.offset ? virtual_classes[id].views[stored.get(view.offset)-1].group_address_point : virtual_classes[id].address_point;
     }
     auto adjust = [&](unsigned begin, unsigned count, std::uint64_t offset) {
         for (unsigned j = 0; j < count; ++j) {
@@ -275,7 +322,9 @@ void Analyzer::layout_virtual_views(EntityId cls)
             auto expected = types[entities[slot.declaration].type].child;
             if (actual != expected) {
                 auto derived = types[actual].child, base = types[expected].child;
-                slot.result_adjustment = base_adjustments[base_steps(derived,types[base].entity)].total;
+                auto path = base_adjustments[base_steps(derived,types[base].entity)];
+                slot.result_virtual_row = path.virtual_row;
+                slot.result_adjustment = path.virtual_row ? path.virtual_tail : path.total;
             }
             // A return-type layout can complete a deferred class and relocate
             // the class arena. Publish by identity after that outgoing demand.
@@ -294,7 +343,7 @@ void Analyzer::layout_virtual_views(EntityId cls)
     for (unsigned j = 0; j < count; ++j) {
         auto slot = v.slots[j];
         auto e = slot.function, m = entities[e].member_info;
-        if (!slot.result_adjustment || scopes[entities[e].owner].entity != cls || members[m].virtual_slot != j+1) continue;
+        if ((!slot.result_adjustment && !slot.result_virtual_row) || scopes[entities[e].owner].entity != cls || members[m].virtual_slot != j+1) continue;
         // The inherited slot still returns the base view; a call naming the
         // overriding declaration needs its unadjusted covariant result.
         members[m].virtual_slot = count+additional.size()+1;

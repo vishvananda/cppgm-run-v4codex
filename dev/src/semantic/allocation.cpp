@@ -49,7 +49,7 @@ void Analyzer::finish_allocations()
         auto e = use.constructor; auto& m = members[entities[e].member_info];
         // An empty no-argument body with no subobject actions has no work per
         // element. Keep this proof on the allocation record, after demand.
-        bool empty = !polymorphic(scopes[entities[e].owner].entity) &&
+        bool empty = !dynamic_class(scopes[entities[e].owner].entity) &&
             m.body && ast[m.body].kind == Kind::Compound && !ast[m.body].first &&
             !m.action_count && !m.inherited_constructor && !types[entities[e].type].count;
         use.construct = constructor_needed(e) && !empty;

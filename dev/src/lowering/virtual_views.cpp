@@ -27,13 +27,16 @@ SymbolId Procedural::virtual_target(const semantic::VirtualSlot& slot, bool dele
         }
         return pure_virtual;
     }
-    if (!slot.this_adjustment && !slot.result_adjustment) return symbol(e,false,deleting);
+    if (!slot.this_adjustment && !slot.result_adjustment && !slot.result_virtual_row) return symbol(e,false,deleting);
     auto offset_id = [&](std::int64_t value) {
         auto id = thunk_adjustments.get(value);
         if (!id) { id = ++next_thunk_adjustment; thunk_adjustments.put(value,id); }
         return id;
     };
-    auto pair = (std::uint64_t(offset_id(slot.this_adjustment))<<32)|offset_id(slot.result_adjustment);
+    auto result_pair = (std::uint64_t(offset_id(slot.result_adjustment))<<32)|offset_id(slot.result_virtual_row);
+    auto result_id = thunk_result_pairs.get(result_pair);
+    if (!result_id) { result_id = ++next_thunk_result; thunk_result_pairs.put(result_pair,result_id); }
+    auto pair = (std::uint64_t(offset_id(slot.this_adjustment))<<32)|result_id;
     auto adjustment = thunk_pairs.get(pair);
     if (!adjustment) { adjustment = ++next_thunk_pair; thunk_pairs.put(pair,adjustment); }
     auto key = (std::uint64_t(e)<<32)|adjustment;
@@ -44,7 +47,9 @@ SymbolId Procedural::virtual_target(const semantic::VirtualSlot& slot, bool dele
     target.function = abi_mangle::entity_function(abi,abi_function_context(e));
     if (deleting) target.function.terminal = abi_mangle::ABI_TERMINAL_DESTRUCTOR_DELETING;
     target.this_adjust = slot.this_adjustment;
-    target.result_adjust = slot.result_adjustment; target.has_result_adjust = slot.result_adjustment != 0;
+    target.result_adjust = slot.result_adjustment; target.has_result_adjust = slot.result_adjustment != 0 || slot.result_virtual_row != 0;
+    target.virtual_result = slot.result_virtual_row != 0;
+    target.result_vcall_offset = slot.result_virtual_row;
     auto& meta = p.symbols[output.index-1].metadata;
     meta.binding = internal_entity(e) ? SBM_INTERNAL : SBM_WEAK;
     auto object = abi_mangle::mangle(abi,target);
@@ -54,7 +59,7 @@ SymbolId Procedural::virtual_target(const semantic::VirtualSlot& slot, bool dele
     FunctionId owner(p.functions.size()+1); f.signature = signature(sem.call_type(e),owner);
     p.functions.push_back(f);
     auto& s = p.symbols[output.index-1]; s.kind = Symbol::FunctionSymbol; s.entity = owner.index;
-    adjustor_thunks.push_back({e,slot.this_adjustment,slot.result_adjustment,output,deleting});
+    adjustor_thunks.push_back({e,slot.this_adjustment,slot.result_adjustment,slot.result_virtual_row,output,deleting});
     return output;
 }
 void Procedural::emit_adjustor_thunks()
@@ -72,16 +77,27 @@ void Procedural::emit_adjustor_thunks()
         auto delta = Operand::integer(thunk.adjustment); delta.negative_integer = thunk.adjustment < 0;
         if (thunk.adjustment) args[receiver] = emit(Opcode::Index,IRType::I8,{args[receiver],delta}).operand;
         auto result = emit(Instruction(Opcode::Call,sig.result),args.data(),args.size());
-        if (thunk.result_adjustment) {
-            auto offset = Operand::integer(thunk.result_adjustment);
-            if (reference(returned)) result = emit(Opcode::Index,IRType::I8,{result.operand,offset});
+        if (thunk.result_adjustment || thunk.result_virtual_row) {
+            auto project = [&](Value value) {
+                if (thunk.result_virtual_row) {
+                    auto table = emit(Opcode::Load,IRType::Ptr,{value.operand});
+                    auto row = Operand::integer(thunk.result_virtual_row); row.negative_integer = true;
+                    auto location = emit(Opcode::Index,IRType::I8,{table.operand,row});
+                    auto offset = emit(Opcode::Load,IRType::I64,{location.operand});
+                    value = emit(Opcode::Index,IRType::I8,{value.operand,offset.operand});
+                }
+                if (thunk.result_adjustment)
+                    value = emit(Opcode::Index,IRType::I8,{value.operand,Operand::integer(thunk.result_adjustment)});
+                return value;
+            };
+            if (reference(returned)) result = project(result);
             else {
                 auto storage = builder->add_slot(0,IRType::Ptr);
                 emit(Opcode::Store,IRType::Ptr,{Operand::integer(0),Operand::slot(storage)});
                 auto test = emit(Opcode::Compare,IRType::Ptr,{result.operand,Operand::integer(0)},Operation::Eq);
                 auto adjust = block(), end = block();
                 emit(Opcode::Branch,IRType(),{test.operand,Operand::label(end),Operand::label(adjust)});
-                start(adjust); result = emit(Opcode::Index,IRType::I8,{result.operand,offset});
+                start(adjust); result = project(result);
                 emit(Opcode::Store,IRType::Ptr,{result.operand,Operand::slot(storage)}); jump(end);
                 start(end); result = emit(Opcode::Load,IRType::Ptr,{Operand::slot(storage)});
             }

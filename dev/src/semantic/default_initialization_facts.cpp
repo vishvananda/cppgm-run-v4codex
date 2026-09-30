@@ -24,7 +24,7 @@ bool Analyzer::default_constructor_valid(EntityId e)
         auto scope = entities[cls].scope;
         auto info = entities[cls].class_info;
         bool valid = true;
-        bool trivial = !members[m].defaulted_late && !polymorphic(cls), const_default = true;
+        bool trivial = !members[m].defaulted_late && !dynamic_class(cls), const_default = true;
         auto subobject = [&](TypeId type, bool initialized, bool variant, bool mutable_field) {
             while (types[type].kind == TypeKind::Array) type = types[type].child;
             if (!default_destruction_valid(type,scope)) { valid = false; return; }

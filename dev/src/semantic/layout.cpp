@@ -57,7 +57,7 @@ void Analyzer::class_layout(EntityId e)
     std::uint64_t cursor = 0, align = 1, ordinary_end = 0;
     bool is_union = entities[e].key == KW_UNION;
     auto primary = class_facts[info].primary_base;
-    if (polymorphic(e)) {
+    if (dynamic_class(e)) {
         align = 8; class_facts[info].empty = false;
         if (!primary) cursor = 64;
     }
@@ -66,16 +66,18 @@ void Analyzer::class_layout(EntityId e)
     std::vector<std::uint32_t> order;
     if (primary) order.push_back(primary);
     for (auto b = class_facts[info].first_base; b; b = bases[b].next)
-        if (b != primary) order.push_back(b);
+        if (b != primary && !bases[b].virtual_base) order.push_back(b);
     for (auto b : order) {
         TypeId base = entities[bases[b].base].type;
-        auto bytes = size(base);
-        bases[b].offset = class_facts[entities[types[base].entity].class_info].empty ? 0 : layout_align(cursor/8, size(base,true));
+        size(base);
+        auto base_info = entities[types[base].entity].class_info;
+        auto bytes = class_facts[base_info].nonvirtual_size;
+        bases[b].offset = class_facts[entities[types[base].entity].class_info].empty ? 0 : layout_align(cursor/8, class_facts[base_info].nonvirtual_alignment);
         // A repeated empty type may not share an address. Type summaries are
         // conservative: on overlap (or budget exhaustion), place this entire
         // subobject beyond existing storage instead of searching for a hole.
         if (empty.merge(base) && bases[b].offset < extent)
-            bases[b].offset = layout_align(extent,size(base,true));
+            bases[b].offset = layout_align(extent,class_facts[base_info].nonvirtual_alignment);
         extent = std::max(extent,layout_add(bases[b].offset,bytes));
         if (b == class_facts[info].first_base) class_facts[info].base_offset = bases[b].offset;
         if (!class_facts[entities[types[base].entity].class_info].empty) cursor = bases[b].offset*8;
@@ -83,7 +85,7 @@ void Analyzer::class_layout(EntityId e)
             if (bytes > std::numeric_limits<std::uint64_t>::max()/8) throw std::runtime_error("base layout overflow");
             cursor = layout_add(cursor, bytes*8); class_facts[info].empty = false;
         }
-        align = std::max(align, size(base, true));
+        align = std::max(align, class_facts[base_info].nonvirtual_alignment);
     }
     for (auto d = scopes[entities[e].scope].first_decl; d; d = declarations[d].next) {
         EntityId id = declarations[d].entity;
@@ -127,11 +129,27 @@ void Analyzer::class_layout(EntityId e)
     auto requested = class_facts[info].requested_alignment;
     if (requested && requested < align) throw std::runtime_error("weakened class alignment");
     align = std::max(align, requested);
+    class_facts[info].nonvirtual_alignment = align;
+    class_facts[info].nonvirtual_size = layout_align(std::max<std::uint64_t>(std::max<std::uint64_t>(1,extent), layout_add(cursor,7)/8),align);
+    cursor = class_facts[info].nonvirtual_size;
+    for (unsigned j = 0; j < class_facts[info].virtual_bases_count; ++j) {
+        auto at = class_facts[info].virtual_bases_begin+j;
+        auto base = virtual_bases[at]; size(entities[base].type);
+        auto base_info = entities[base].class_info;
+        auto base_align = class_facts[base_info].nonvirtual_alignment;
+        auto offset = layout_align(cursor,base_align);
+        virtual_base_offsets[at] = offset;
+        cursor = layout_add(offset,class_facts[base_info].nonvirtual_size);
+        align = std::max(align,base_align);
+    }
+    for (auto b = class_facts[info].first_base; b; b = bases[b].next)
+        if (bases[b].virtual_base) bases[b].offset = virtual_base_offset(e,bases[b].base);
+    if (class_facts[info].first_base) class_facts[info].base_offset = bases[class_facts[info].first_base].offset;
     class_facts[info].alignment = align;
-    class_facts[info].size = layout_align(std::max<std::uint64_t>(std::max<std::uint64_t>(1,extent), layout_add(cursor, 7)/8), align);
+    class_facts[info].size = layout_align(cursor,align);
     empty.publish(info,class_facts[info].empty ? e : 0);
     class_facts[info].layout_state = FactState::Success;
-    if (polymorphic(e)) layout_virtual_views(e);
+    if (dynamic_class(e)) layout_virtual_views(e);
     } catch (...) {
         class_facts[info].layout_state = FactState::Failure; throw;
     }

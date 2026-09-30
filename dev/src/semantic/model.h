@@ -116,6 +116,7 @@ struct ClassFacts {
     FactState definition_state = FactState::NotStarted;
     Access current_access = Access::Public;
     std::uint64_t size = 0, alignment = 0, requested_alignment = 0;
+    std::uint64_t nonvirtual_size = 0, nonvirtual_alignment = 1;
     unsigned char packing = 0;
     EntityId constructor = 0, implicit_constructor = 0, storage = 0, destructor = 0;
     EntityId inherited_base = 0;
@@ -251,12 +252,13 @@ struct MemberFacts {
     std::uint32_t transfer_begin = 0, transfer_count = 0;
     EntityId transfer_parameter = 0;
 };
-enum class VtableReason : unsigned char { KeyDefinition = 1, Constructor = 2, Destructor = 4, Rtti = 8 };
+enum class VtableReason : unsigned char { KeyDefinition = 1, Constructor = 2, Destructor = 4, Rtti = 8, Dispatch = 16 };
 struct VirtualSlot {
     EntityId function = 0, declaration = 0;
     std::uint32_t origin = 0, implementation = 0;
     std::uint32_t receiver = 0; // Zero: complete class; otherwise one-based view.
     std::int64_t this_adjustment = 0, result_adjustment = 0;
+    std::int64_t result_virtual_row = 0;
     VirtualSlot() {}
     explicit VirtualSlot(EntityId e) : function(e), declaration(e) {}
 };
@@ -266,6 +268,10 @@ struct VirtualView {
     std::uint32_t begin = 0, count = 0; // Slice of the owning class's slot arena.
     std::uint64_t offset = 0;
     std::uint64_t group_address_point = 16;
+    std::uint32_t vcall_rows = 0, vbase_rows = 0;
+    std::uint64_t address_point = 16;
+    EntityId virtual_anchor = 0;
+    std::uint64_t virtual_tail = 0;
     bool store = false;
 };
 struct VirtualClass {
@@ -276,6 +282,8 @@ struct VirtualClass {
     std::vector<VirtualView> views;
     Index signatures;
     EntityId key_function = 0;
+    std::uint64_t address_point = 16;
+    bool polymorphic = false;
     bool abstract = false, referenced = false;
     FactState demand = FactState::NotStarted;
     unsigned char reasons = 0;
@@ -380,6 +388,9 @@ struct BaseAdjustment {
     std::uint64_t offset = 0, total = 0;
     std::uint32_t next = 0, edge = 0, inverse = 0;
     std::uint32_t subobject = 0;
+    EntityId source = 0;
+    std::int64_t virtual_row = 0;
+    std::uint64_t virtual_tail = 0;
     bool ambiguous = false, laid_out = false;
 };
 // Relative subobject identity: a shared virtual anchor, followed by an interned

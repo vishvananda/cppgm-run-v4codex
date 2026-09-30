@@ -34,8 +34,8 @@ void Analyzer::prepare_transfer(EntityId e)
     }
     Type f = types[entities[e].type];
     TypeId source = value_type(types.parameters[f.offset]);
-    bool deleted = members[m].deleted, trivial = !members[m].defaulted_late && !polymorphic(cls), no_throw = true;
-    bool representation_copy = !polymorphic(cls), empty_subobject = false;
+    bool deleted = members[m].deleted, trivial = !members[m].defaulted_late && !dynamic_class(cls), no_throw = true;
+    bool representation_copy = !dynamic_class(cls), empty_subobject = false;
     bool is_union = entities[cls].key == KW_UNION;
     std::vector<TransferAction> actions;
     std::uint64_t unit_offset = 0, unit_bytes = 0;
@@ -121,7 +121,7 @@ void Analyzer::prepare_transfer(EntityId e)
         // O0 keeps a proven representation prefix in one typed storage action.
         // The prefix stops before every observable transfer/lifetime boundary;
         // native small-copy selection belongs to the backend stage.
-        if (!polymorphic(cls) && !empty_subobject && prefix) {
+        if (!dynamic_class(cls) && !empty_subobject && prefix) {
             if (prefix == actions.size()) bytes = size(target);
             TransferAction storage; storage.kind = TransferAction::Storage; storage.bytes = bytes;
             storage.alignment = size(target, true);

@@ -203,7 +203,17 @@ Value Procedural::base_projection(Value base, unsigned steps)
 {
     if (steps) {
         bool nonnull = base.nonnull;
-        auto offset = Operand::integer(sem.base_adjustments[steps].total);
+        const auto& path = sem.base_adjustments[steps];
+        if (path.virtual_row) {
+            auto table = emit(Opcode::Load,IRType::Ptr,{base.operand});
+            auto row = Operand::integer(path.virtual_row); row.negative_integer = true;
+            auto location = emit(Opcode::Index,IRType::I8,{table.operand,row});
+            auto offset = emit(Opcode::Load,IRType::I64,{location.operand});
+            base = emit(Opcode::Index,IRType::I8,{base.operand,offset.operand});
+            base = emit(Opcode::Index,IRType::I8,{base.operand,Operand::integer(path.virtual_tail)});
+            base.nonnull = nonnull; return base;
+        }
+        auto offset = Operand::integer(path.total);
         offset.negative_integer = std::int64_t(sem.base_adjustments[steps].total) < 0;
         base = emit(Opcode::Index, IRType::I8,{base.operand, offset});
         base.nonnull = nonnull;

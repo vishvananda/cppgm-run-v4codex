@@ -168,7 +168,7 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     if (selected.member) {
         record_object(result, args[0], types.parameters[types[call_type(selected.entity)].offset],
             base_steps(object, scopes[entities[selected.entity].owner].entity));
-        object_uses[result.object_use].virtual_slot = members[entities[selected.entity].member_info].virtual_slot;
+        object_uses[result.object_use].virtual_slot = virtual_dispatch(selected.entity);
         object_uses[result.object_use].source_owned = recipe;
         object_uses[result.object_use].callable_entry = entry;
     }

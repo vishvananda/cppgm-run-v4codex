@@ -22,6 +22,6 @@ void Analyzer::record_member_receiver(Expression& result, NodeId node, TypeId ob
     record_object(result,node,type,tail);
     auto& use = object_uses[result.object_use];
     use.qualifier_adjustment = first;
-    if (!qualified) use.virtual_slot = members[entities[selected].member_info].virtual_slot;
+    if (!qualified) use.virtual_slot = virtual_dispatch(selected);
 }
 } }

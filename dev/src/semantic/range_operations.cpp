@@ -77,7 +77,7 @@ void Analyzer::prepare_range_operation(RangeOperation& op, const std::vector<Exp
         op.receiver = entities[op.function].member_info && !entities[op.function].is_static;
         if (op.receiver) {
             op.adjustment = base_steps(args[0].type,scopes[entities[op.function].owner].entity);
-            op.virtual_slot = members[entities[op.function].member_info].virtual_slot;
+            op.virtual_slot = virtual_dispatch(op.function);
         }
         if (evaluated) use_selected_function(op.function,!op.virtual_slot);
     } else op.returned = op.result.type;

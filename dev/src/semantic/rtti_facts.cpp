@@ -25,14 +25,23 @@ void Analyzer::complete_rtti_class(EntityId cls)
     // expanding repeated subtrees or walking unrelated class registries.
     if (first && bases[first].next) {
         Index seen;
-        std::vector<EntityId> pending;
-        for (auto b = first; b; b = bases[b].next) pending.push_back(bases[b].base);
+        std::vector<std::uint32_t> pending;
+        for (auto b = first; b; b = bases[b].next) pending.push_back(b);
         while (!pending.empty()) {
-            auto e = pending.back(); pending.pop_back();
-            if (seen.get(e)) { flags |= 1; continue; }
-            seen.put(e,1);
+            auto edge = bases[pending.back()]; pending.pop_back();
+            auto e = edge.base;
+            unsigned bit = edge.virtual_base ? 2 : 1, prior = seen.get(e);
+            if (prior) {
+                if (edge.virtual_base && (prior & 2)) flags |= 2;
+                else flags |= 1;
+                // Repeating an ordinary subtree repeats each of its virtual
+                // anchors too. Summaries avoid expanding identical subtrees.
+                if (!edge.virtual_base && (prior & 1) && virtual_base_count(e)) flags |= 2;
+            }
+            if (prior & bit) continue;
+            seen.put(e,prior|bit);
             for (auto b = class_facts[entities[e].class_info].first_base; b; b = bases[b].next) {
-                ++rtti_base_work; pending.push_back(bases[b].base);
+                ++rtti_base_work; pending.push_back(b);
             }
         }
     }
