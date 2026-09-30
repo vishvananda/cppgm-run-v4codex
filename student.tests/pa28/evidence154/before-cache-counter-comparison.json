@@ -1,0 +1,32 @@
+{
+  "memory": {},
+  "floating": {},
+  "exceptions": {},
+  "pruning": {},
+  "overrides": {
+    "semantic_base_adjustment_paths": [
+      400,
+      401
+    ],
+    "semantic_base_adjustment_work": [
+      400,
+      401
+    ],
+    "semantic_base_adjustment_hits": [
+      803,
+      1202
+    ],
+    "semantic_subobject_work": [
+      1200,
+      1201
+    ],
+    "semantic_subobject_identities": [
+      400,
+      401
+    ],
+    "semantic_subobject_paths": [
+      400,
+      401
+    ]
+  }
+}

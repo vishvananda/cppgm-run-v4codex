@@ -1,0 +1,194 @@
+[
+  {
+    "args": [
+      "dev/cppgm++",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/exceptions152.cpp",
+      "-o",
+      "/tmp/pa28-audit154/final/exceptions/exceptions152.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "g++",
+      "/tmp/pa28-audit154/final/exceptions/exceptions152.o",
+      "-o",
+      "/tmp/pa28-audit154/final/exceptions/exceptions152"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa28-audit154/final/exceptions/exceptions152"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "dev/cppgm++",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/cleanup-reducer152.cpp",
+      "-o",
+      "/tmp/pa28-audit154/final/exceptions/cleanup-reducer152.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "g++",
+      "/tmp/pa28-audit154/final/exceptions/cleanup-reducer152.o",
+      "-o",
+      "/tmp/pa28-audit154/final/exceptions/cleanup-reducer152"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa28-audit154/final/exceptions/cleanup-reducer152"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "dev/cppgm++",
+      "--object-format=private",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa28/cleanup-reducer152.cpp",
+      "-o",
+      "/tmp/pa28-audit154/final/exceptions/private"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa28-audit154/final/exceptions/private"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "dev/cppgm++",
+      "-c",
+      "/tmp/pa28-audit154/final/exceptions/empty.cpp",
+      "-o",
+      "/tmp/pa28-audit154/final/exceptions/empty.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "g++",
+      "/tmp/pa28-audit154/final/exceptions/empty.o",
+      "-o",
+      "/tmp/pa28-audit154/final/exceptions/empty"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa28-audit154/final/exceptions/empty"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "dev/cppgm++",
+      "-c",
+      "/tmp/pa28-audit154/final/exceptions/member-template.cpp",
+      "-o",
+      "/tmp/pa28-audit154/final/exceptions/member-template.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "g++",
+      "/tmp/pa28-audit154/final/exceptions/member-template.o",
+      "-o",
+      "/tmp/pa28-audit154/final/exceptions/member-template"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa28-audit154/final/exceptions/member-template"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "dev/cppgm++",
+      "-c",
+      "/tmp/pa28-audit154/final/exceptions/conflict.cpp",
+      "-o",
+      "/tmp/pa28-audit154/final/exceptions/conflict.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: conflicting allowed exception types\n"
+  },
+  {
+    "args": [
+      "dev/cppgm++",
+      "-c",
+      "/tmp/pa28-audit154/final/exceptions/absent-spec.cpp",
+      "-o",
+      "/tmp/pa28-audit154/final/exceptions/absent-spec.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: conflicting allowed exception types\n"
+  },
+  {
+    "args": [
+      "dev/cppgm++",
+      "-c",
+      "/tmp/pa28-audit154/final/exceptions/incomplete.cpp",
+      "-o",
+      "/tmp/pa28-audit154/final/exceptions/incomplete.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: incomplete exception specification type\n"
+  },
+  {
+    "args": [
+      "dev/cppgm++",
+      "-c",
+      "/tmp/pa28-audit154/final/exceptions/rvalue.cpp",
+      "-o",
+      "/tmp/pa28-audit154/final/exceptions/rvalue.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: rvalue reference exception specification\n"
+  }
+]

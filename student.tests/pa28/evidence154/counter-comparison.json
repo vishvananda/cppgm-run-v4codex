@@ -1,0 +1,72 @@
+{
+  "memory": {
+    "exception_match_work": [
+      null,
+      0
+    ],
+    "exception_match_hits": [
+      null,
+      0
+    ]
+  },
+  "floating": {
+    "exception_match_work": [
+      null,
+      0
+    ],
+    "exception_match_hits": [
+      null,
+      0
+    ]
+  },
+  "exceptions": {
+    "exception_match_work": [
+      null,
+      0
+    ],
+    "exception_match_hits": [
+      null,
+      0
+    ]
+  },
+  "pruning": {
+    "exception_match_work": [
+      null,
+      0
+    ],
+    "exception_match_hits": [
+      null,
+      0
+    ]
+  },
+  "overrides": {
+    "semantic_base_adjustment_paths": [
+      400,
+      401
+    ],
+    "semantic_base_adjustment_work": [
+      400,
+      401
+    ],
+    "semantic_subobject_work": [
+      1200,
+      1201
+    ],
+    "semantic_subobject_identities": [
+      400,
+      401
+    ],
+    "semantic_subobject_paths": [
+      400,
+      401
+    ],
+    "exception_match_work": [
+      null,
+      1
+    ],
+    "exception_match_hits": [
+      null,
+      399
+    ]
+  }
+}

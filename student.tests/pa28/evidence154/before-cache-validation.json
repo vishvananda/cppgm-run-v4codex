@@ -1,0 +1,161 @@
+{
+  "stage_base": "bec9389f62014dfecac8b41d330de142e0904b8c",
+  "audit_entry": "03575afb57a5f9cdfde1857349f32501e493c1bf",
+  "reviewed_code": "a3714525fb04c98d0abd3f5b0a4665f4db6bb44c",
+  "binary_sha256": "d36790910e76e4f49af3299238a0e63608aeb096732ed38eafffa8175e9c9abd",
+  "checks": [
+    {
+      "name": "build",
+      "command": "make build",
+      "status": 0,
+      "log": "/tmp/pa28-audit154/build.log",
+      "log_sha256": "cfa5faa03fef986298effcc96e14e32956991c5955ddcf59b180c9e81c31a8e8",
+      "tail": "note: the ABI of passing union with \u2018long double\u2019 has changed in GCC 4.4\n    6 | DataItem scalar(IRType t, std::uint64_t value) { DataItem d; d.kind = DataItem::Scalar; d.type = t; d.value = Operand::integer(value); return d; }\n      |                                                                                                     ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~\nsrc/lowering/exception_handlers.cpp: In member function \u2018cppgm::lowering::Value cppgm::lowering::Procedural::begin_catch(lowir_model::Operand, cppgm::syntax::NodeId)\u2019:\nsrc/lowering/exception_handlers.cpp:14:7: note: the ABI of passing union with \u2018long double\u2019 has changed in GCC 4.4\n   14 | Value Procedural::begin_catch(Operand object, NodeId handler)\n      |       ^~~~~~~~~~\nsrc/lowering/aggregate_lifetimes.cpp: In member function \u2018void cppgm::lowering::Procedural::activate_subobject(cppgm::semantic::TypeId, cppgm::lowering::Value, lowir_model::SlotId, cppgm::semantic::Index&)\u2019:\nsrc/lowering/aggregate_lifetimes.cpp:35:9: note: the ABI of passing union with \u2018long double\u2019 has changed in GCC 4.4\n   35 |     emit(Opcode::Store,IRType::Ptr,{at.operand,Operand::slot(state.saved_location)});\n      |     ~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nsrc/lowering/exception_boundary.cpp: In member function \u2018void cppgm::lowering::Procedural::finish_exception_boundary()\u2019:\nsrc/lowering/exception_boundary.cpp:41:48: note: the ABI of passing union with \u2018long double\u2019 has changed in GCC 4.4\n   41 |             p.operands.push_back(Operand::label(handler)); p.instructions.push_back(enter);\n      |                                  ~~~~~~~~~~~~~~^~~~~~~~~\nsrc/lowering/source_exception.cpp: In member function \u2018bool cppgm::lowering::Procedural::exception_clauses(uint32_t, bool)\u2019:\nsrc/lowering/source_exception.cpp:80:21: note: the ABI of passing union with \u2018long double\u2019 has changed in GCC 4.4\n   80 |                 emit(clause,{Operand::symbol(exception_type(t)),Operand::integer(selector)});\n      |                 ~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nsrc/lowering/exception_continuation.cpp: In member function \u2018void cppgm::lowering::Procedural::flush_unwind_continuations()\u2019:\nsrc/lowering/exception_continuation.cpp:70:21: note: the ABI of passing union with \u2018long double\u2019 has changed in GCC 4.4\n   70 |                 emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(2))});\n      |                 ~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nsrc/lowering/member_thunks.cpp: In member function \u2018void cppgm::lowering::Procedural::emit_member_thunks()\u2019:\nsrc/lowering/member_thunks.cpp:36:42: note: the ABI of passing union with \u2018long double\u2019 has changed in GCC 4.4\n   36 |             args.push_back(Operand::value(p.parameters[sig.parameters.begin+j].value));\n      |                            ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nsrc/lowering/intrinsics.cpp: In member function \u2018cppgm::lowering::Value cppgm::lowering::Procedural::intrinsic_call(cppgm::syntax::NodeId, cppgm::semantic::Intrinsic)\u2019:\nsrc/lowering/intrinsics.cpp:24:26: note: the ABI of passing union with \u2018long double\u2019 has changed in GCC 4.4\n   24 |         auto value = emit(Opcode::AtomicAddFetch,increment.ir,{first.operand,increment.operand,Operand::integer(5)});\n      |                      ~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n  LINK    cppgm++\n"
+    },
+    {
+      "name": "throughStage",
+      "command": "make test-report-through-pa28",
+      "status": 0,
+      "log": "/tmp/pa28-audit154/through.log",
+      "log_sha256": "b1ff9611d30d0da259845968d6ec5a5a9b0ee6da2d9810c505780299a5c67a88",
+      "tail": "  LINK    lowiropt\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== pa21 =====\n===== pa22 =====\n===== pa23 =====\n===== pa24 =====\nPA24 native contract properties: PASS (14/14)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\n===== pa25 =====\n===== pa26 =====\n===== pa27 =====\nPA27 global-section properties: PASS (3/3)\n===== pa28 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (4538 / 4538) =====\n"
+    },
+    {
+      "name": "stageTests",
+      "command": "make test-pa28",
+      "status": 0,
+      "log": "/tmp/pa28-audit154/stage.log",
+      "log_sha256": "9c114324714a082d78830ae2f213064319a13a95ddb7a11bc1e9071fbdd223f1",
+      "tail": "  LINK    lowiropt\n===== pa28 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (97 / 97) =====\n"
+    },
+    {
+      "name": "fileAudit",
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa28 --paths dev/src",
+      "status": 0,
+      "log": "/tmp/pa28-audit154/file-audit.log",
+      "log_sha256": "f3fc99a889e12af99240ff43d0e7be2f5bd18420efb59d1417ab539cc2ef0341",
+      "tail": "File audit passed for pa28 with 4 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n"
+    },
+    {
+      "name": "naming",
+      "command": "python3 student.tests/pa28/naming151.py",
+      "status": 0,
+      "evidence": "student.tests/pa28/evidence154/naming-controls.json",
+      "evidence_sha256": "040020ac912af66ba3acb8143ad9272c034875e5e61a3484ce36467a88dba4ca"
+    },
+    {
+      "name": "exceptions",
+      "command": "python3 student.tests/pa28/exceptions152.py",
+      "status": 0,
+      "evidence": "student.tests/pa28/evidence154/exception-controls.json",
+      "evidence_sha256": "22cc1e976eca9e172469c393142106c9e5e367ee5b3dcaccedd8c6ff6b395028"
+    },
+    {
+      "name": "ownership",
+      "command": "python3 student.tests/pa28/ownership152.py",
+      "status": 0,
+      "evidence": "student.tests/pa28/evidence154/ownership-controls.json",
+      "evidence_sha256": "c07a4c6bd925fb65addaff4ac91e085b9c326a974fecc6c28b4efe9f9e0c5fcc"
+    },
+    {
+      "name": "primary",
+      "command": "python3 student.tests/pa28/virtual-primary153.py",
+      "status": 0,
+      "evidence": "student.tests/pa28/evidence154/primary-controls.json",
+      "evidence_sha256": "941a10752145a5d775327b2ab3b2b484faab9fc63e98d9ad5949077854b5b3c1"
+    },
+    {
+      "name": "nativeInspection",
+      "command": "python3 student.tests/pa28/inspection153.py",
+      "status": 0,
+      "evidence": "student.tests/pa28/evidence154/inspection.json",
+      "evidence_sha256": "494d784208098470f1e49b26abb348824ec6c3d5bbeb8ef1f1fef0180c33d280"
+    },
+    {
+      "name": "overrideControls",
+      "command": "python3 student.tests/pa28/exception-override154.py",
+      "status": 0,
+      "evidence": "student.tests/pa28/evidence154/override-controls.json",
+      "evidence_sha256": "18b2ea0aa4653e2b567ac78a8e87f67a873ecd17f89010194b4cebe4daeb7fc5"
+    },
+    {
+      "name": "templateTrace",
+      "command": "python3 student.tests/pa28/trace154.py",
+      "status": 0,
+      "evidence": "student.tests/pa28/evidence154/template-trace.json",
+      "evidence_sha256": "86b47b670c84f5b09ce2db5d388fe559f653dcbf554fa97f45c7e3612cf6dc16"
+    }
+  ],
+  "course_tests": {
+    "passed": 4538,
+    "total": 4538,
+    "stages": 28,
+    "pa28": 97
+  },
+  "coverage": {
+    "anchors": 97,
+    "tracked_contract_paths": 20288,
+    "sha256": "24cb3a8e20b8ff82ea4b8fb609b3b93352a64b9b6c35af151260c86234abe404",
+    "changes": [],
+    "reference_manifest_sha256": "d7dc0333fdf0999f77399bbd655dbfc296a199f7408c50e95169c71a5fc18f8c",
+    "bundle_revision": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98"
+  },
+  "implementation_hashes": {
+    "dev/frontend_source_sets.mk": "93cac7198c78b847ed28a3697cbbb4e02e26fc96012fb3122d7461d111c07da6",
+    "dev/src/abi/itanium/encoder.cpp": "c85afcec109ee970ffdcc951a417d43297ea4d48ce0a2eee41bad117cd7a93b3",
+    "dev/src/abi/itanium/fact_writer.cpp": "4f7c62f31f15d1663b5f400867a427b9349d1942857b08e97c7680fa20c1ef1f",
+    "dev/src/abi/itanium/function_encoder.cpp": "4f0a232792e8403768563e5925fbd0f1c948cdca72ff505acef90811df698fc0",
+    "dev/src/abi/itanium/graph_validation.cpp": "f58a9ff52b97b730c1c41cf87d555b35790f481cf9e7fe38d9ef51141c1150bd",
+    "dev/src/abi/itanium/type_reader.cpp": "2d0fa1b88cda99ada4c24dd89e44a66721bfa17481cfeefbf2be13f029915b11",
+    "dev/src/lowering/cleanup.cpp": "1a8b5f739fc39e46a31e0a9e8ccb5c63d9d956957290c850c9400c08dab82116",
+    "dev/src/lowering/construction_tables.cpp": "5941d592d0de8a291769c66676ceb41b457dad082b1f80fe1b35f69c3ee75de9",
+    "dev/src/lowering/driver.cpp": "31456bba19849a42709fa51c5a35b003cd90244af586810694120e70e7067b5b",
+    "dev/src/lowering/exception_boundary.cpp": "821df4580f23356466ef064874b3a8cff477a7c76277cb382a35e13b835340bd",
+    "dev/src/lowering/full_expression.cpp": "3c97f1e7e4a3e1be5e374e6aebff8386645e8f8058ae794ae6caa3cf59fa675f",
+    "dev/src/lowering/function_declaration.cpp": "5dd0ccda36d3818f8d0ebb84c09876f0b36ea0f9d293fed0d85798468f477dfa",
+    "dev/src/lowering/lifecycle_abi.cpp": "dd2172d0590ab0db738c107bdd843fbb8e586bc9c3a762a6a49a82dead0cf9a1",
+    "dev/src/lowering/local_abi.cpp": "ca9227371658e5fdef49c3e9ceb78571e07c5864dc0c230640272eca5eeedd7b",
+    "dev/src/lowering/procedural.h": "515c9eca5bcd0210ffe92190f88a38a6eef06f1e6196e3fef88c14f7d5566798",
+    "dev/src/lowering/source_exception.cpp": "bdde09a53821dd0451610f300eee64604f9b551e0a15a003e113bb20e9c93f60",
+    "dev/src/lowering/symbols.cpp": "798c4ac10652fee8234e11398bd1afb04d9d12a2391f5f9a895b12d299a37b3e",
+    "dev/src/lowering/virtuals.cpp": "921588f80692ec5040ff390b90f4f115c487cafebbb8422d572459fa174e3e9d",
+    "dev/src/native/dump.cpp": "6d6db7ffc2a426d150fdb3af62a83885b36428918eee0988b5c96914805fd4e8",
+    "dev/src/native/exception_clauses.cpp": "41907cd41381d55f00dfdbcef3bd45391bebd4cd83d789f3080446e283a31349",
+    "dev/src/native/host_regions.cpp": "9034bcfe1226e47b4d501a5b3c1512ea6480bdae46a901009210479c8435a158",
+    "dev/src/native/host_tables.cpp": "43ce999b15c820832a7567e17f548e0552bb50b69d67ef5f3abdef0f4c682cca",
+    "dev/src/native/model.h": "226b1e2e3afb38af1c7766622d6622a3bb9157474d6c9530a2a974702bf3fbfd",
+    "dev/src/native/runtime.cpp": "c47b31b784df1779bbef922964089c5b4593331c2019f4dfa038f05bfbf99680",
+    "dev/src/native/selection.cpp": "effa697249d3ac56e312f43fb8ef0d4c111b32739e85f04f3ff4ffc57bab7ab1",
+    "dev/src/semantic/analyzer.h": "e75a04fed1a350f8983de61a1d7e9841b029a21899eeb92210c4cb722459ad85",
+    "dev/src/semantic/builtin_traits.cpp": "c1c04e9aef1b34b571aa3b870cc5f39919b62a33d4736344c460348245c1b357",
+    "dev/src/semantic/class_enum.cpp": "e2e01d0a2e523444b76a1140c30fc553e89bfa5a5bf2eebdfd1159b65e4a9d7c",
+    "dev/src/semantic/construction.cpp": "3fe08463daa343f388113fc4190dfbfbd7338730c1e4e6db41ae339e0fbe8ff0",
+    "dev/src/semantic/dynamic_exceptions.cpp": "f104cab2c339fb232a609e8f681cf34ec41154f72813dd49e375525e87f760cb",
+    "dev/src/semantic/exception_override.cpp": "e258c6a0995619d41f87930d3c378ce26319baf1ce6d51ab70e09b1a71713eed",
+    "dev/src/semantic/exception_specification.cpp": "d577c4c40b6a2ae5eb0f6f5926366a262d900f2c8fa57568a5a73c7624183746",
+    "dev/src/semantic/layout.cpp": "84afa3367abe69c8a0cc25cb8131e04d927ef167f8bae71f3fbeae5a9abbfb11",
+    "dev/src/semantic/lifecycle_layout.cpp": "c86a180df974fe53bb0f8fe1f09596c94672a3530163e2735a2eef86bc573845",
+    "dev/src/semantic/lookup.cpp": "3998b1aa08b1a8e98f53757dd73833a8b20c8583700fc90775532664c9fd0c2e",
+    "dev/src/semantic/model.h": "c517755894b5c4fe01f756cfa11b495a7cb50acbd24892704bdc8dd4e9d53ca8",
+    "dev/src/semantic/native_attributes.cpp": "dd145ee9cfeb48bd2f4df688ca3f579ec249eaf90c3417e944b9f1b13fb2ebc6",
+    "dev/src/semantic/output.cpp": "24e86be79a67bd674dee24a0251b322848de92f05232c076dddf4732d847876a",
+    "dev/src/semantic/template_binding_declarations.cpp": "4e8a1ab381d7a8b42fe99b16fd8b92c18a46fc88e452b6ba6d918ee61acbdcc0",
+    "dev/src/semantic/template_call.cpp": "9833df34c0d9914aaeb7ad403f9c7c7b61cce2689e1446efd565289f437d2513",
+    "dev/src/semantic/template_class.cpp": "4e19af097e0c53005dd30d115b1363134a172bc31f4608e45c82de804582f989",
+    "dev/src/semantic/template_definition.cpp": "4dc5b85464d3ca1933c53918ee0a039d52d10969eeecff41c9f54d08d39e775f",
+    "dev/src/semantic/type_builder.cpp": "ee18ab56b967bb1fc3e1f51e3eda1c0bca37586f27652022d38ff2410ec64686",
+    "dev/src/semantic/type_query.cpp": "03de474521c88c9788bdb5b7186e91349203fc871db5f84e2c8ac2a48baf3c3a",
+    "dev/src/semantic/virtual_primary.cpp": "05eabc231f990a0baf024f4efb6ac9db7e921aedd19f1d7f6360a9b36256e858",
+    "dev/src/semantic/virtual_storage.cpp": "81e70f9b7df240853468bd775d0cfc3b1d37075b59ee82531f54d7c8efeee8d2",
+    "dev/src/semantic/virtual_subobjects.cpp": "9cf0b919ce94ecddf03ee707e93f4f16e62924cdf7ea5492de9668814804f397",
+    "dev/src/semantic/virtuals.cpp": "2e9e78555d32dd2ae2222e8f6c9d4a2c2efb90b6625499f94789b4350cc82a86",
+    "dev/src/support/type_traits.h": "6081a2008c726f812f9fb7d96d9820ef6bcd1efea142eeed547a6068a6ecf805",
+    "dev/src/syntax/ast.h": "9ead7c815c559ca70b6b8e5455193547e4427cb89add4be75e08eb637e2e68e9",
+    "dev/src/syntax/attributes.cpp": "0525e5d0ac4e2130a56302bcd8cd84f9b809507ac90064a868d0bf77c994cc97",
+    "dev/src/syntax/class_parser.cpp": "5268232c571beca00b9528a919f4291e5dfde8af81267885685d44dfcd593075",
+    "dev/src/syntax/declarator.cpp": "a364749981fae11f62283b777d601b2004fbddd8da840623448332401818592e",
+    "dev/src/syntax/parser.cpp": "24875b4a53a6fef232e5e1b3d28f27ef35b033bb3b90b4b02a8aa4b41c50c58a",
+    "dev/src/syntax/prediction.cpp": "bffff562e7b69317adcb94747127548f0d7050a08cac95323d3a2db80bd03b4f"
+  },
+  "performance_observations": 280
+}

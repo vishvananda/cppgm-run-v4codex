@@ -1,5 +1,5 @@
 {
-  "binary_sha256": "d36790910e76e4f49af3299238a0e63608aeb096732ed38eafffa8175e9c9abd",
+  "binary_sha256": "79a205ace278949bd6fa118eeb9e35b1ab59a61007fc21f18746a257b7e5f727",
   "checks": [
     {
       "name": "disjoint",
@@ -9,9 +9,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/disjoint.cpp",
+        "/tmp/pa28-audit154/final/overrides/disjoint.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual allowed exception types\n"
@@ -24,9 +24,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/unrestricted.cpp",
+        "/tmp/pa28-audit154/final/overrides/unrestricted.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: unrestricted virtual override\n"
@@ -39,9 +39,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/false-noexcept.cpp",
+        "/tmp/pa28-audit154/final/overrides/false-noexcept.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: unrestricted virtual override\n"
@@ -54,9 +54,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/narrower.cpp",
+        "/tmp/pa28-audit154/final/overrides/narrower.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -69,9 +69,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/duplicate-types.cpp",
+        "/tmp/pa28-audit154/final/overrides/duplicate-types.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -84,9 +84,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/empty.cpp",
+        "/tmp/pa28-audit154/final/overrides/empty.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -99,9 +99,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/nonthrowing.cpp",
+        "/tmp/pa28-audit154/final/overrides/nonthrowing.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -114,9 +114,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/empty-base.cpp",
+        "/tmp/pa28-audit154/final/overrides/empty-base.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual exception specification\n"
@@ -129,9 +129,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/unrestricted-base.cpp",
+        "/tmp/pa28-audit154/final/overrides/unrestricted-base.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -144,9 +144,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/scalar-promotion.cpp",
+        "/tmp/pa28-audit154/final/overrides/scalar-promotion.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual allowed exception types\n"
@@ -159,9 +159,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/public-class.cpp",
+        "/tmp/pa28-audit154/final/overrides/public-class.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -174,9 +174,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/private-class.cpp",
+        "/tmp/pa28-audit154/final/overrides/private-class.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual allowed exception types\n"
@@ -189,9 +189,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/protected-class.cpp",
+        "/tmp/pa28-audit154/final/overrides/protected-class.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual allowed exception types\n"
@@ -204,9 +204,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/ambiguous-class.cpp",
+        "/tmp/pa28-audit154/final/overrides/ambiguous-class.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual allowed exception types\n"
@@ -219,9 +219,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/shared-class.cpp",
+        "/tmp/pa28-audit154/final/overrides/shared-class.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -234,9 +234,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/shared-public-path.cpp",
+        "/tmp/pa28-audit154/final/overrides/shared-public-path.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -249,9 +249,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/public-pointer.cpp",
+        "/tmp/pa28-audit154/final/overrides/public-pointer.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -264,9 +264,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/private-pointer.cpp",
+        "/tmp/pa28-audit154/final/overrides/private-pointer.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual allowed exception types\n"
@@ -279,9 +279,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/qualification.cpp",
+        "/tmp/pa28-audit154/final/overrides/qualification.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -294,9 +294,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/remove-qualification.cpp",
+        "/tmp/pa28-audit154/final/overrides/remove-qualification.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual allowed exception types\n"
@@ -309,9 +309,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/void-pointer.cpp",
+        "/tmp/pa28-audit154/final/overrides/void-pointer.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -324,9 +324,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/function-pointer.cpp",
+        "/tmp/pa28-audit154/final/overrides/function-pointer.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual allowed exception types\n"
@@ -339,9 +339,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/deep-qualification.cpp",
+        "/tmp/pa28-audit154/final/overrides/deep-qualification.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -354,9 +354,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/unsafe-qualification.cpp",
+        "/tmp/pa28-audit154/final/overrides/unsafe-qualification.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual allowed exception types\n"
@@ -369,9 +369,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/null-pointer.cpp",
+        "/tmp/pa28-audit154/final/overrides/null-pointer.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -384,9 +384,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/template-invalid.cpp",
+        "/tmp/pa28-audit154/final/overrides/template-invalid.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual allowed exception types\n"
@@ -399,9 +399,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/template-valid.cpp",
+        "/tmp/pa28-audit154/final/overrides/template-valid.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -414,9 +414,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/multiple-base.cpp",
+        "/tmp/pa28-audit154/final/overrides/multiple-base.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual allowed exception types\n"
@@ -429,9 +429,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/implicit-destructor.cpp",
+        "/tmp/pa28-audit154/final/overrides/implicit-destructor.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
@@ -444,9 +444,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/implicit-destructor-extra.cpp",
+        "/tmp/pa28-audit154/final/overrides/implicit-destructor-extra.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual allowed exception types\n"
@@ -459,9 +459,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/implicit-destructor-unrestricted.cpp",
+        "/tmp/pa28-audit154/final/overrides/implicit-destructor-unrestricted.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: unrestricted virtual override\n"
@@ -474,9 +474,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/implicit-destructor-transitive.cpp",
+        "/tmp/pa28-audit154/final/overrides/implicit-destructor-transitive.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 1,
       "stderr": "ERROR: looser virtual allowed exception types\n"
@@ -489,9 +489,9 @@
         "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
         "-std=c++11",
         "-c",
-        "/tmp/pa28-audit154/overrides/unused-member-body.cpp",
+        "/tmp/pa28-audit154/final/overrides/unused-member-body.cpp",
         "-o",
-        "/tmp/pa28-audit154/overrides/check.o"
+        "/tmp/pa28-audit154/final/overrides/check.o"
       ],
       "status": 0,
       "stderr": ""
