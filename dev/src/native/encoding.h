@@ -13,7 +13,6 @@ struct Image {
     std::vector<std::uint64_t> symbols;
     std::vector<bool> data_symbols, defined;
     std::vector<unsigned> tls_targets;
-    std::vector<unsigned> tls_wrappers;
     bool has_tls = false;
     unsigned runtime_begin;
     explicit Image(std::size_t count) : symbols(count+1+unsigned(RuntimeEntity::Count)), data_symbols(symbols.size()), defined(symbols.size()), tls_targets(symbols.size()), runtime_begin(count+1) {}
@@ -60,7 +59,6 @@ public:
     explicit Encoder(Image& image) : image(image), code(image.code) {}
     void startup(const std::vector<Instruction>& instructions);
     void encode(const Function& function);
-    void tls_wrappers();
 };
 std::vector<Instruction> startup(const lowir_model::Program& p);
 void encode_data(const lowir_model::Program& p, Image& image);

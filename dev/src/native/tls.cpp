@@ -41,19 +41,23 @@ void Encoder::tls_startup()
     mov(Operand::r(XR_RAX),Operand::imm(60)); byte(0x0f); byte(0x05);
     local_target(okay);
 }
-void Encoder::tls_wrappers()
+Function builtin_tls(const lowir_model::Program& p, const lowir_model::Function& source)
 {
-    // Declarations denote runtime-provided accessors; definitions remain
-    // ordinary functions, including their user-supplied initialization work.
-    if (image.tls_wrappers.empty()) return;
-    std::vector<bool> demanded(image.symbols.size());
-    for (const auto& fix : image.code_fixups)
-        if (fix.kind != Fixup::ThreadOffset) demanded[fix.symbol] = true;
-    for (const auto& fix : image.data_fixups) demanded[fix.symbol] = true;
-    for (unsigned id : image.tls_wrappers) if (demanded[id]) {
-        image.symbols[id] = code.size(); image.defined[id] = true;
-        tls_address(Operand::r(XR_RAX),Operand::symbol(lowir_model::SymbolId(id)));
-        byte(0xc3);
-    }
+    const auto& signature = p.signatures[source.signature.index-1];
+    lowir_model::require(!signature.parameters.count && signature.result == Type::Ptr,
+        "invalid TLS wrapper signature");
+    Function f; f.symbol = source.symbol; f.result = Type::Ptr;
+    f.frame_pointer = false; f.shared_epilogue = false;
+    Block block; block.id = p.blocks.size()+1; block.name = 0;
+    block.instructions.begin = 0; block.instructions.count = 2;
+    f.blocks.push_back(block);
+    Instruction address(Op::TlsAddr,Type::Ptr);
+    address.count = 2; address.args[0] = Operand::r(XR_RAX);
+    address.args[1] = Operand::symbol(p.symbols[source.symbol.index-1].metadata.tls_for);
+    f.instructions.push_back(address);
+    Instruction result(Op::Return,Type::Ptr);
+    result.count = 1; result.args[0] = Operand::r(XR_RAX);
+    f.instructions.push_back(result);
+    return f;
 }
 } // namespace native

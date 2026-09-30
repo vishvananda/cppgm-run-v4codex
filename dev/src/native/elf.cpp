@@ -66,7 +66,6 @@ void encode_data(const lowir_model::Program& p, Image& image)
         auto target = p.symbols[f.symbol.index-1].metadata.tls_for;
         if (!target) continue;
         image.tls_targets[f.symbol.index] = target.index;
-        if (f.declaration) image.tls_wrappers.push_back(f.symbol.index);
     }
     bool exceptions = false;
     for (const auto& i : p.instructions)

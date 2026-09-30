@@ -2,6 +2,7 @@
 #include "native/selection.h"
 #include <chrono>
 namespace native {
+Function builtin_tls(const lowir_model::Program&,const lowir_model::Function&);
 Function builtin_strlen(const lowir_model::Program&,const lowir_model::Function&);
 using Clock = std::chrono::steady_clock;
 static double ms(Clock::time_point begin) { return std::chrono::duration<double,std::milli>(Clock::now()-begin).count(); }
@@ -27,14 +28,13 @@ void compile(const lowir_model::Program& p, const std::string& output, std::ostr
     for (const auto& fix : image.data_fixups) demanded[fix.symbol] = true;
     for (const auto& source : p.functions) if (source.declaration && demanded[source.symbol.index]) {
         const auto& metadata = p.symbols[source.symbol.index-1].metadata;
-        if (p.name(metadata.object) != "cppgm_builtin_strlen") continue;
+        if (!metadata.tls_for && p.name(metadata.object) != "cppgm_builtin_strlen") continue;
         time = Clock::now();
-        Function f = builtin_strlen(p,source);
+        Function f = metadata.tls_for ? builtin_tls(p,source) : builtin_strlen(p,source);
         stats.selection_ms += ms(time);
         if (mir) dump_function(p,f,*mir);
         time = Clock::now(); encoder.encode(f); stats.encoding_ms += ms(time); ++stats.functions; stats.instructions += f.instructions.size();
     }
-    time = Clock::now(); encoder.tls_wrappers(); stats.encoding_ms += ms(time);
     stats.text_bytes = image.code.size();
     if (!output.empty()) {
         time = Clock::now(); write_executable(image,output); stats.encoding_ms += ms(time);

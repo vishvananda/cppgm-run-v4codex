@@ -20,10 +20,14 @@ def run(cmd, record):
 # release. Every function contains real arithmetic; only one is the entry point.
 floating_compiler=os.environ.get('PA24_FLOAT_COMPILER')=='1'
 runtime_compiler=os.environ.get('PA24_RUNTIME_COMPILER')=='1'
+tls_compiler=os.environ.get('PA24_TLS_COMPILER')=='1'
 source=d/'compiler.lowir'
 with source.open('w') as out:
     for f in range(4096):
         typ='f64' if floating_compiler else 'i128' if os.environ.get('PA24_WIDE_COMPILER')=='1' else 'i64'
+        if tls_compiler:
+            assert typ=='i64'
+            out.write(f'global @cell{f} : i64 [storage=thread_local] = 0\n')
         out.write(f'function @f{f}(%seed : {typ}) -> {typ} {{\n')
         if runtime_compiler: out.write('slot $aligned : obj<64x64>\n')
         out.write('block ^entry:\n')
@@ -31,10 +35,14 @@ with source.open('w') as out:
             assert typ=='i64'
             out.write('eh_try ^caught\n%slot = addr $aligned\nstore i64 %seed, %slot\n%dynamic = stack_alloc 64\nstore i64 %seed, %dynamic\n')
         prior='%seed'
+        if tls_compiler:
+            out.write(f'%tls = load i64 @cell{f}\n%input = binary add i64 %seed, %tls\n')
+            prior='%input'
         for k in range(64):
             literal=str(k+1)+('.25' if floating_compiler else '')
             out.write(f'%v{k} = binary add {typ} {prior}, {literal}\n'); prior=f'%v{k}'
         if runtime_compiler: out.write('eh_end\n')
+        if tls_compiler: out.write(f'store i64 {prior}, @cell{f}\n')
         out.write(f'jump ^next\nblock ^next:\nreturn {typ} {prior}\n')
         if runtime_compiler: out.write('block ^caught:\n%payload = exception i64\nreturn i64 %payload\n')
         out.write('}\n')
