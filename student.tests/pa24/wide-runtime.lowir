@@ -1,0 +1,25 @@
+# Dynamic call/loop workload exercising high words and live object boundaries.
+function @step(%value : i128) -> i128 {
+  block ^entry:
+    %next = binary add i128 %value, 18446744073709551617
+    return i128 %next
+}
+function @main(%argc : i64, %argv : ptr) -> i64 [role=entry] {
+  block ^entry:
+    %n = binary mul i64 %argc, 20000000
+    %wide_n = convert zext i128 i64 %n
+    %expected = binary mul i128 %wide_n, 18446744073709551617
+    jump ^loop
+  block ^loop:
+    %i = phi i64 [^entry: 0, ^body: %next]
+    %sum = phi i128 [^entry: 0, ^body: %value]
+    %more = cmp ult i64 %i, %n
+    branch %more, ^body, ^done
+  block ^body:
+    %value = call i128 @step(%sum)
+    %next = binary add i64 %i, 1
+    jump ^loop
+  block ^done:
+    %wrong = cmp ne i128 %sum, %expected
+    return i64 %wrong
+}

@@ -62,6 +62,11 @@ void Selector::control(const lowir_model::Instruction& i)
                 f.scratch_bytes = 48;
                 emit(Op::Fcompare,t,{value(cond,t),Operand::floating(lowir_model::Operand::integer(0),t)});
                 emit(Op::Jcc,Type(),{Operand::label(edge_target(arg(i,1).ref))}).condition = XC_P;
+            } else if (t == Type::I128) {
+                auto from = value(cond,t);
+                move(Operand::r(XR_R10),fragment(from,0),Type::I64);
+                emit(Op::Or,Type::I64,{Operand::r(XR_R10),fragment(from,8)});
+                emit(Op::Compare,Type::I64,{Operand::r(XR_R10),Operand::imm(0)});
             } else {
                 Operand test = in_register(value(cond,t),t,XR_R10);
                 emit(Op::Compare,t,{test,Operand::imm(0)});
@@ -76,6 +81,21 @@ void Selector::control(const lowir_model::Instruction& i)
     }
     case Opcode::Switch: {
         Type t = value_type(arg(i,0),Type::I64);
+        if (t == Type::I128) {
+            auto selector = value(arg(i,0),t);
+            for (unsigned k = 2; k != i.operands.count; k += 2) {
+                auto candidate = value(arg(i,k),t);
+                unsigned next = next_label++;
+                move(Operand::r(XR_R10),fragment(selector,8),Type::I64);
+                emit(Op::Compare,Type::I64,{Operand::r(XR_R10),fragment(candidate,8)});
+                emit(Op::Jcc,Type(),{Operand::label(next)}).condition = XC_NE;
+                move(Operand::r(XR_R10),fragment(selector,0),Type::I64);
+                emit(Op::Compare,Type::I64,{Operand::r(XR_R10),fragment(candidate,0)});
+                emit(Op::Jcc,Type(),{Operand::label(edge_target(arg(i,k+1).ref))}).condition = XC_E;
+                begin_block(next,0);
+            }
+            emit(Op::Jump,Type(),{Operand::label(edge_target(arg(i,1).ref))}); break;
+        }
         auto selector = in_register(value(arg(i,0),t),t,XR_R10);
         for (unsigned k = 2; k != i.operands.count; k += 2) {
             auto candidate = value(arg(i,k),t);
@@ -106,7 +126,7 @@ void Selector::control(const lowir_model::Instruction& i)
             if (i.type == Type::F80) emit(Op::Freturn,i.type,{result});
             else { move(Operand::r(xmm(0)),result,i.type); emit(Op::Return,Type(),{}); }
         } else {
-            auto result = in_register(value(arg(i,0),i.type),value_type(arg(i,0),i.type),XR_RAX);
+            auto result = in_register(value(arg(i,0),i.type),consumed_type(arg(i,0),i.type),XR_RAX);
             emit(Op::Return,i.type,{result});
         }
         break;

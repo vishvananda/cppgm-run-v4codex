@@ -23,6 +23,11 @@ with tempfile.TemporaryDirectory(prefix='pa24-wide-') as directory:
   inputs='%a = load i128 @a\n%b = load i128 @b\n'
   for op,expected in [('add',a+b),('sub',a-b),('mul',a*b),('and',a&b),('or',a|b),('xor',a^b)]:
    run(f'{op}-{k}',main(inputs+f'%x = binary {op} i128 %a, %b\n%bad = cmp ne i128 %x, {expected&mask}\nreturn i64 %bad',extra))
+  if b:
+   quotient=abs(signed(a))//abs(signed(b))
+   if (signed(a)<0)!=(signed(b)<0): quotient=-quotient
+   for op,expected in [('udiv',a//b),('umod',a%b),('div',quotient),('mod',signed(a)-quotient*signed(b))]:
+    run(f'{op}-{k}',main(inputs+f'%x = binary {op} i128 %a, %b\n%bad = cmp ne i128 %x, {expected&mask}\nreturn i64 %bad',extra))
   for op,expected in [('neg',-a),('bitnot',~a)]:
    run(f'{op}-{k}',main(inputs+f'%x = unary {op} i128 %a\n%bad = cmp ne i128 %x, {expected&mask}\nreturn i64 %bad',extra))
   for pred,truth in [('eq',a==b),('ne',a!=b),('lt',signed(a)<signed(b)),('le',signed(a)<=signed(b)),('gt',signed(a)>signed(b)),('ge',signed(a)>=signed(b)),('ult',a<b),('ule',a<=b),('ugt',a>b),('uge',a>=b)]:
@@ -71,6 +76,42 @@ atomic_store i128 {a}, %ptr, 5
 %s5 = binary or i64 %s4, %bad6
 %s6 = binary or i64 %s5, %fail
 return i64 %s6''',extra,'slot $expected : i128'))
+ def rounded(n,bits):
+  sign=-1 if n<0 else 1; n=abs(n); shift=max(0,n.bit_length()-bits)
+  if not shift: return sign*n
+  q,r=divmod(n,1<<shift)
+  if r>(1<<(shift-1)) or (r==(1<<(shift-1)) and q&1): q+=1
+  return sign*(q<<shift)
+ for t,bits in [('f32',24),('f64',53),('f80',64)]:
+  probes=values+[(1<<100)+(1<<76)+1,(1<<100)+(1<<47)+1,(1<<100)+(1<<36)+1]
+  for k,a in enumerate(probes):
+   for op,n in [('sitofp',signed(a)),('uitofp',a)]:
+    expected=rounded(n,bits)
+    literal='inf' if t=='f32' and expected>=1<<128 else str(expected)+'.0'
+    run(f'{op}-{t}-{k}',main(f'%x = convert {op} {t} i128 {n}\n%bad = cmp ne {t} %x, {literal}\nreturn i64 %bad'))
+  for n in [0,1,-1,37,-37,1<<63,-(1<<63),1<<96,-(1<<96),(1<<126)+(1<<110)]:
+   expected=rounded(n,bits)
+   run(f'fptosi-{t}-{n}',main(f'%x = convert fptosi i128 {t} {expected}.0\n%bad = cmp ne i128 %x, {expected}\nreturn i64 %bad'))
+  for n in [0,1,1<<63,1<<127,(1<<128)-(1<<(128-bits))]:
+   run(f'fptoui-{t}-{n}',main(f'%x = convert fptoui i128 {t} {n}.0\n%bad = cmp ne i128 %x, {n}\nreturn i64 %bad'))
+  for text,n in [('1.5',1),('-1.5',-1),('0.5',0),('-0.5',0),('4294967296.75',4294967296)]:
+   if t=='f32' and n>1<<24: continue
+   run(f'fptosi-fraction-{t}-{text}',main(f'%x = convert fptosi i128 {t} {text}\n%bad = cmp ne i128 %x, {n}\nreturn i64 %bad'))
+ for n in [0,1,1<<64,(1<<127)-1]:
+  run(f'truth-{n}',main(f'%n = const i128 {n}\nbranch %n, ^yes, ^no\nblock ^yes:\nreturn i64 {int(n==0)}\nblock ^no:\nreturn i64 {int(n!=0)}'))
+  run(f'not-{n}',main(f'%x = unary not i128 {n}\n%bad = cmp ne i128 %x, {int(n==0)}\nreturn i64 %bad'))
+  run(f'not-branch-{n}',main(f'%x = unary not i128 {n}\nbranch %x, ^yes, ^no\nblock ^yes:\nreturn i64 {int(n!=0)}\nblock ^no:\nreturn i64 {int(n==0)}'))
+  run(f'switch-{n}',main(f'%x = const i128 {n}\nswitch %x, ^bad, 0:^zero, 1:^one, 18446744073709551616:^wide, 170141183460469231731687303715884105727:^max\nblock ^bad:\nreturn i64 1\nblock ^zero:\nreturn i64 {int(n!=0)}\nblock ^one:\nreturn i64 {int(n!=1)}\nblock ^wide:\nreturn i64 {int(n!=1<<64)}\nblock ^max:\nreturn i64 {int(n!=(1<<127)-1)}'))
+  helper='function @va(%tag : i64) -> i128 [arity=variadic] {\nslot $ap : obj<24x8>\nblock ^entry:\n%p = addr $ap\nva_start %p\n'
+  for k in range(4): helper+=f'%v{k} = va_arg i128 %p\n'
+  helper+='return i128 %v3\n}\n'
+  run(f'va-{n}',main(f'%a = const i128 1\n%b = const i128 2\n%c = const i128 3\n%d = const i128 {n}\n%x = call i128 @va(0, %a, %b, %c, %d)\n%bad = cmp ne i128 %x, {n}\nreturn i64 %bad',helper))
+  run(f'fp-literal-{n}',main(f'%a = const f64 {n}\n%b = const f64 {rounded(n,53)}.0\n%bad = cmp ne f64 %a, %b\nreturn i64 %bad'))
+ run('implicit-widen',main('%x = const i8 -3\n%y = binary add i128 %x, 18446744073709551616\n%bad = cmp ne i128 %y, 18446744073709551613\n%small = copy i32 %y\n%bad2 = cmp ne i32 %small, -3\n%all = binary or i64 %bad, %bad2\nreturn i64 %all'))
+ params=', '.join(f'%p{k} : i64' for k in range(8))
+ helper=f'function @tail({params}) -> i64 {{\nblock ^entry:\nreturn i64 %p7\n}}\n'
+ run('narrow-stack-boundary',main('%x = const i8 -3\n%r = call i64 @tail(1, 2, 3, 4, 5, 6, %x, %x)\n%bad = cmp ne i64 %r, -3\nreturn i64 %bad',helper))
+ run('parallel-wide-phi',main('%a = const i128 18446744073709551617\n%b = const i128 36893488147419103234\njump ^loop\nblock ^loop:\n%x = phi i128 [^entry: %a, ^back: %y]\n%y = phi i128 [^entry: %b, ^back: %x]\n%n = phi i64 [^entry: 0, ^back: %next]\n%next = binary add i64 %n, 1\n%c = cmp lt i64 %n, 3\nbranch %c, ^back, ^done\nblock ^back:\njump ^loop\nblock ^done:\n%bad = cmp ne i128 %x, 36893488147419103234\nreturn i64 %bad'))
  for width in [8,16,32,64]:
   for n in [-1,-(1<<(width-1)),0,1,(1<<(width-1))-1]:
    for op in ['sext','zext']:

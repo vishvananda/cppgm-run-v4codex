@@ -164,3 +164,5 @@ FRONTEND_OBJ_BASENAMES_lowir2native += native/fragments
 FRONTEND_OBJ_BASENAMES_lowir2native += native/wide
 
 FRONTEND_OBJ_BASENAMES_lowir2native += native/wide_shift
+FRONTEND_OBJ_BASENAMES_lowir2native += native/wide_division
+FRONTEND_OBJ_BASENAMES_lowir2native += native/wide_float_encoding

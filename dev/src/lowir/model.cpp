@@ -1,6 +1,7 @@
 #include "lowir/model.h"
 #include <limits>
 #include <algorithm>
+#include <cstring>
 
 namespace lowir_model {
 void require(bool condition, const char* message) { if (!condition) throw ParseError(message); }
@@ -61,7 +62,14 @@ unsigned Type::width() const
 Operand Operand::integer(std::uint64_t n) { Operand o; o.data.integer = n; return o; }
 std::uint64_t Operand::integer_high() const
 {
-    return wide_integer ? data.words.high : negative_integer ? ~std::uint64_t(0) : 0;
+    if (!wide_integer) return negative_integer ? ~std::uint64_t(0) : 0;
+    std::uint64_t high; std::memcpy(&high,reinterpret_cast<const unsigned char*>(&data)+8,8); return high;
+}
+void Operand::integer_high(std::uint64_t high)
+{
+    // The unused half of the 16-byte numeric union stores wide integer bits.
+    // Object-representation access avoids reading an inactive union member.
+    std::memcpy(reinterpret_cast<unsigned char*>(&data)+8,&high,8); wide_integer = true;
 }
 std::string integer_text(const Operand& value)
 {

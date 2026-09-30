@@ -12,6 +12,8 @@ void Encoder::local_target(std::size_t offset)
 }
 void Encoder::float_convert(const Instruction& i)
 {
+    if (i.source_type == Type::I128) { wide_to_float(i); return; }
+    if (i.type == Type::I128) { float_to_wide(i); return; }
     auto to = i.args[0], from = i.args[1];
     Type src = i.source_type, dst = i.type;
     if (src.floating() && dst.floating()) {

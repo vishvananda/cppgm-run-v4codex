@@ -22,6 +22,12 @@ shared object/wide ABI classification and bounded stack-copy dependency snapshot
 Stage 282/296, prior 3856/3856, independent wide 1175, object 160, floating 1259.
 Audit passes; work continues through wide numeric completeness and ABI pressure.
 A converting parameter store is no longer incorrectly promoted as an identity.
+Second increment closes wide integer semantics: bounded division/remainder,
+float conversions with rounding protection, truth/switch, implicit integer
+width boundaries, parallel phis and variadic two-word register rollback.
+Current personal wide suite is 1495 programs; object suite 160. Stage remains
+282/296 with no new failures. Final compiler/runtime evidence is being collected.
+
 
 
 ## Design / completed execution groups

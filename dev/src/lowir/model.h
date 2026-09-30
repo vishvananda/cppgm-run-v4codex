@@ -63,11 +63,11 @@ struct Operand {
     bool negative_integer = false, wide_integer = false;
     union Payload {
         std::uint64_t integer;
-        struct Words { std::uint64_t low, high; } words;
         long double floating;
-        Payload() : words{0,0} {}
+        Payload() : integer(0) {}
     } data;
     std::uint64_t integer_high() const;
+    void integer_high(std::uint64_t high);
     static Operand integer(std::uint64_t n);
     static Operand floating(long double n, bool signaling = false);
     static Operand null();

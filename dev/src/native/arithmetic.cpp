@@ -22,7 +22,7 @@ void Selector::arithmetic(const lowir_model::Instruction& i)
     if (i.type.floating()) { floating_arithmetic(i); return; }
     require(scalar_integer(i.type), "native arithmetic class not implemented");
     if (state(i.destination.index).compare_branch) {
-        auto left = in_register(value(arg(i,0),i.type),value_type(arg(i,0),i.type),XR_R10);
+        auto left = in_register(value(arg(i,0),i.type),consumed_type(arg(i,0),i.type),XR_R10);
         emit(Op::Compare,i.type,{left,Operand::imm(0)}); return;
     }
     Operand dest = allocate(i.destination.index,i.type);
@@ -31,8 +31,8 @@ void Selector::arithmetic(const lowir_model::Instruction& i)
     if (i.operation == Operation::Div || i.operation == Operation::Mod ||
         i.operation == Operation::Udiv || i.operation == Operation::Umod) {
         bool sign = i.operation == Operation::Div || i.operation == Operation::Mod;
-        move(Operand::r(XR_R11),value(arg(i,1),i.type),value_type(arg(i,1),i.type));
-        move(Operand::r(XR_RAX),lhs,value_type(arg(i,0),i.type));
+        move(Operand::r(XR_R11),value(arg(i,1),i.type),consumed_type(arg(i,1),i.type));
+        move(Operand::r(XR_RAX),lhs,consumed_type(arg(i,0),i.type));
         // Division uses full logical register values. Explicit operand-width
         // normalization is necessary even for unsigned division of signed types.
         if (i.type.width() < 64) {
@@ -45,7 +45,7 @@ void Selector::arithmetic(const lowir_model::Instruction& i)
         bool remainder = i.operation == Operation::Mod || i.operation == Operation::Umod;
         move(result,Operand::r(remainder ? XR_RDX : XR_RAX),i.type);
     } else if (i.opcode == Opcode::Unary) {
-        move(result,lhs,value_type(arg(i,0),i.type));
+        move(result,lhs,consumed_type(arg(i,0),i.type));
         if (i.operation == Operation::Not) {
             emit(Op::Compare,i.type,{result,Operand::imm(0)});
             emit(Op::Set,Type::I1,{result}).condition = XC_E;
@@ -56,15 +56,15 @@ void Selector::arithmetic(const lowir_model::Instruction& i)
         }
     } else {
         Operand rhs = value(arg(i,1),i.type);
-        Type rt = value_type(arg(i,1),i.type);
+        Type rt = consumed_type(arg(i,1),i.type);
         // A memory home contains its own width, never the width of a consumer.
         if (rhs.address || (rhs.kind == Operand::Memory && rt != i.type)) rhs = in_register(rhs,rt,XR_R11);
         if (i.operation == Operation::Shl || i.operation == Operation::Shr || i.operation == Operation::Ushr) {
             if (rhs.kind != Operand::Immediate) { move(Operand::r(XR_RCX),rhs,rt); rhs = Operand::r(XR_RCX); }
-            move(result,lhs,value_type(arg(i,0),i.type));
+            move(result,lhs,consumed_type(arg(i,0),i.type));
             if (i.operation == Operation::Ushr && i.type.width() < 64)
                 emit(Op::ExtendUnsigned,i.type,{result,result});
-        } else move(result,lhs,value_type(arg(i,0),i.type));
+        } else move(result,lhs,consumed_type(arg(i,0),i.type));
         emit(binary_op(i.operation),i.type,{result,rhs});
     }
     normalize_register(result,i.type);
@@ -92,7 +92,7 @@ void Selector::compare(const lowir_model::Instruction& i, bool branch)
     if (i.type.floating()) { floating_compare(i,branch); return; }
     require(scalar_integer(i.type), "native comparison class not implemented");
     Operand left = value(arg(i,0),i.type), right = value(arg(i,1),i.type);
-    Type lt = value_type(arg(i,0),i.type), rt = value_type(arg(i,1),i.type);
+    Type lt = consumed_type(arg(i,0),i.type), rt = consumed_type(arg(i,1),i.type);
     left = in_register(left,lt,XR_R10);
     if (right.address || (right.kind == Operand::Memory && rt != i.type)) right = in_register(right,rt,XR_R11);
     emit(Op::Compare,i.type,{left,right});

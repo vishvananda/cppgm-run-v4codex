@@ -51,7 +51,7 @@ void Selector::call(const lowir_model::Instruction& i)
         if (!fixed && a.kind == lowir_model::Operand::Floating) t = Type::F64;
         require(t.scalar() || t.kind() == Type::Object, "invalid argument ABI class");
         Operand from = value(a,t);
-        Type actual = value_type(a,t);
+        Type actual = consumed_type(a,t);
         if (fixed && p.parameters[signature.parameters.begin+n].passing != PPM_DIRECT) {
             if (a.kind == lowir_model::Operand::Slot) from.address = true;
             else if (actual != Type::Ptr) {
@@ -75,7 +75,12 @@ void Selector::call(const lowir_model::Instruction& i)
             }
             continue;
         }
-        Assignment m; m.from = from; m.type = actual;
+        if (scalar_integer(t) && actual.integer() && actual != t && from.kind == Operand::Memory) {
+            auto converted = home(0,t,true);
+            move(Operand::r(XR_R10),from,actual); move(converted,Operand::r(XR_R10),t);
+            from = converted; actual = t;
+        }
+        Assignment m; m.from = from; m.type = scalar_integer(t) && actual.integer() ? t : actual;
         m.to = placement.parts[0];
         if (placement.memory) { stack_moves.push_back(m); continue; }
         moves.push_back(m);

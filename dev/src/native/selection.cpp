@@ -24,9 +24,26 @@ Type Selector::value_type(lowir_model::Operand o, Type fallback) const
     if (o.kind == lowir_model::Operand::Slot) return p.slots[o.ref-1].type;
     return fallback;
 }
+Type Selector::consumed_type(lowir_model::Operand o, Type context) const
+{
+    Type actual = value_type(o,context);
+    return actual == Type::I128 && context.integer() && context != Type::I128 ? context : actual;
+}
 Operand Selector::value(lowir_model::Operand o, Type t)
 {
     if (o.literal() && t.floating()) return Operand::floating(o,t,&p);
+    if (o.kind == lowir_model::Operand::Temporary && t.integer()) {
+        Type actual = p.values[o.ref-1].type;
+        if (t == Type::I128 && actual.integer() && actual != Type::I128) {
+            auto original = value(o,actual), storage = home(0,t,true);
+            move(Operand::r(XR_R10),original,actual);
+            move(fragment(storage,0),Operand::r(XR_R10),Type::I64);
+            if (unsigned_type(actual)) move(fragment(storage,8),Operand::imm(0),Type::I64);
+            else { emit(Op::Sar,Type::I64,{Operand::r(XR_R10),Operand::imm(63)}); move(fragment(storage,8),Operand::r(XR_R10),Type::I64); }
+            return storage;
+        }
+        if (actual == Type::I128 && t != Type::I128) return fragment(value(o,actual),0);
+    }
     switch (o.kind) {
     case lowir_model::Operand::Integer: {
         if (t != Type::I128) return Operand::imm(normalize(o.data.integer,t));
@@ -142,7 +159,7 @@ void Selector::select(const lowir_model::Instruction& i)
         else {
             auto dest = allocate(i.destination.index,i.type);
             auto result = dest.kind == Operand::Reg ? dest : Operand::r(XR_R10);
-            move(result,src,value_type(arg(i,0),i.type));
+            move(result,src,consumed_type(arg(i,0),i.type));
             normalize_register(result,i.type); move(dest,result,i.type);
         }
         break;
@@ -162,7 +179,7 @@ void Selector::select(const lowir_model::Instruction& i)
         require(i.type.scalar() || i.type.kind() == Type::Object, "invalid native store class");
         auto m = memory(arg(i,1));
         auto src = value(arg(i,0),i.type);
-        Type st = value_type(arg(i,0),i.type);
+        Type st = consumed_type(arg(i,0),i.type);
         if (i.type.floating() || st.floating()) { convert_to(m,src,st,i.type); break; }
         if (aggregate(i.type)) { move(m,src,i.type); break; }
         if (src.kind == Operand::Memory && st != i.type) src = in_register(src,st,XR_R10);

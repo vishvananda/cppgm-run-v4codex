@@ -152,10 +152,9 @@ Operand Reader::literal()
         require(hi <= (~std::uint64_t(0)-carry)/base, "integer literal exceeds 128 bits");
         hi = hi*base + carry; lo = (high << 32) | std::uint32_t(low);
     }
-    Operand result = Operand::integer(lo);
-    result.data.words.high = hi; result.wide_integer = true;
+    Operand result = Operand::integer(negative ? 0-lo : lo);
     result.negative_integer = negative && (lo || hi);
-    if (negative) { result.data.words.low = 0-lo; result.data.words.high = ~hi + (lo == 0); }
+    if (hi) result.integer_high(negative ? ~hi + (lo == 0) : hi);
     return result;
 }
 Operand Reader::operand(FunctionBuilder& b)

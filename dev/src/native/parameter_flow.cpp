@@ -2,15 +2,22 @@
 #include <algorithm>
 namespace native {
 using namespace lowir_model;
+bool Selector::call_effect(const lowir_model::Instruction& i) const
+{
+    return i.opcode == Opcode::Call || i.opcode == Opcode::CopyObject || i.opcode == Opcode::ZeroInit ||
+        (i.type.kind() == Type::Object && (i.opcode == Opcode::Load || i.opcode == Opcode::Store || i.opcode == Opcode::Copy));
+}
 unsigned Selector::clobbers(const lowir_model::Instruction& i) const
 {
-    if (i.opcode == Opcode::Call || i.opcode == Opcode::CopyObject || i.opcode == Opcode::ZeroInit)
+    if (call_effect(i))
         return (1u<<XR_RDI)|(1u<<XR_RSI)|(1u<<XR_RDX)|(1u<<XR_RCX)|(1u<<XR_R8)|(1u<<XR_R9);
+    if (i.opcode == Opcode::Convert && (i.type == Type::I128 || i.source_type == Type::I128) &&
+        (i.type.floating() || i.source_type.floating())) return (1u<<XR_RCX)|(1u<<XR_RDX);
     if (i.type == Type::I128 && i.opcode >= Opcode::AtomicLoad && i.opcode <= Opcode::AtomicCompareExchange)
         return (1u<<XR_RCX)|(1u<<XR_RDX);
     if (i.type == Type::I128 && i.operation == Operation::Mul) return 1u<<XR_RDX;
     if (i.opcode == Opcode::Binary) {
-        if (i.operation == Operation::Div || i.operation == Operation::Udiv || i.operation == Operation::Mod || i.operation == Operation::Umod) return 1u<<XR_RDX;
+        if (i.operation == Operation::Div || i.operation == Operation::Udiv || i.operation == Operation::Mod || i.operation == Operation::Umod) return (1u<<XR_RDX) | (i.type == Type::I128 ? 1u<<XR_RCX : 0);
         if ((i.operation == Operation::Shl || i.operation == Operation::Shr || i.operation == Operation::Ushr) && !arg(i,1).literal()) return 1u<<XR_RCX;
     }
     return i.opcode == Opcode::AtomicCompareExchange ? 1u<<XR_RCX : 0;

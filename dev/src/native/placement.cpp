@@ -59,15 +59,15 @@ void Selector::analyze()
         const auto& body = p.blocks[block_id-1];
         for (unsigned n = body.instructions.begin; n != body.instructions.end(); ++n) {
             const auto& i = p.instructions[n];
-            unsigned clobbers = 0;
+            unsigned clobbers = i.opcode == Opcode::Convert ? this->clobbers(i) : 0;
             if (i.type == Type::I128 && i.opcode >= Opcode::AtomicLoad && i.opcode <= Opcode::AtomicCompareExchange)
                 clobbers |= (1u<<XR_RDX)|(1u<<XR_RCX);
             if (i.type == Type::I128 && i.operation == Operation::Mul) clobbers |= 1u<<XR_RDX;
-            if (i.opcode == Opcode::Binary && (i.operation == Operation::Div || i.operation == Operation::Udiv || i.operation == Operation::Mod || i.operation == Operation::Umod)) clobbers |= 1u<<XR_RDX;
+            if (i.opcode == Opcode::Binary && (i.operation == Operation::Div || i.operation == Operation::Udiv || i.operation == Operation::Mod || i.operation == Operation::Umod)) clobbers |= (1u<<XR_RDX) | (i.type == Type::I128 ? 1u<<XR_RCX : 0);
             if (i.opcode == Opcode::Binary && (i.operation == Operation::Shl || i.operation == Operation::Shr || i.operation == Operation::Ushr) && !arg(i,1).literal()) clobbers |= 1u<<XR_RCX;
             if (i.opcode == Opcode::AtomicCompareExchange) clobbers |= 1u<<XR_RCX;
             for (unsigned r = 0; r < 16; ++r) if (clobbers & (1u<<r)) first_clobber[r] = std::min(first_clobber[r],n+1);
-            if (i.opcode == Opcode::Call || i.opcode == Opcode::CopyObject || i.opcode == Opcode::ZeroInit) ++epoch;
+            if (call_effect(i)) ++epoch;
             if (!i.destination) continue;
             auto& v = state(i.destination.index);
             v.definition = n+1; v.block = block_id; v.call_epoch = epoch;
@@ -81,8 +81,7 @@ void Selector::analyze()
     for (unsigned b = source.blocks.begin; b != source.blocks.end(); ++b) {
         unsigned id = p.block_order[b].index;
         for (unsigned n = p.blocks[id-1].instructions.begin; n != p.blocks[id-1].instructions.end(); ++n) {
-            auto op = p.instructions[n].opcode;
-            if (op == Opcode::Call || op == Opcode::CopyObject || op == Opcode::ZeroInit) ++epoch;
+            if (call_effect(p.instructions[n])) ++epoch;
         }
         workspace.block_epochs[id] = epoch;
     }
@@ -95,7 +94,7 @@ void Selector::analyze()
             const auto& i = p.instructions[n];
             position = n+1;
             analyze_instruction(i, epoch);
-            if (i.opcode == Opcode::Call || i.opcode == Opcode::CopyObject || i.opcode == Opcode::ZeroInit) ++epoch;
+            if (call_effect(i)) ++epoch;
         }
     }
     folds();

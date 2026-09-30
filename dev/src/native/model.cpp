@@ -10,12 +10,35 @@ Operand Operand::symbol(SymbolId id, bool address) {
     Operand o; o.kind = Symbol; o.id = id.index; o.address = address; return o;
 }
 Operand Operand::label(std::uint32_t id) { Operand o; o.kind = Label; o.id = id; return o; }
+static long double integer_floating(const lowir_model::Operand& value, unsigned precision)
+{
+    std::uint64_t lo = value.data.integer, hi = value.integer_high();
+    if (value.negative_integer) { hi = ~hi+(lo == 0); lo = 0-lo; }
+    unsigned bits = 0; for (auto n = hi; n; n >>= 1) ++bits;
+    if (!bits) return value.negative_integer ? -static_cast<long double>(lo) : static_cast<long double>(lo);
+    unsigned shift = bits+64-precision;
+    std::uint64_t top;
+    bool guard, sticky;
+    if (shift < 64) {
+        top = (hi<<(64-shift)) | (lo>>shift);
+        guard = (lo>>(shift-1))&1; sticky = (lo&((std::uint64_t(1)<<(shift-1))-1)) != 0;
+    } else if (shift == 64) { top = hi; guard = lo>>63; sticky = (lo<<1) != 0; }
+    else {
+        unsigned tail = shift-64; top = hi>>tail;
+        guard = (hi>>(tail-1))&1; sticky = lo || (hi&((std::uint64_t(1)<<(tail-1))-1));
+    }
+    if (guard && (sticky || (top&1))) {
+        ++top;
+        if (!top) { top = std::uint64_t(1)<<63; ++shift; }
+    }
+    long double result = std::ldexp(static_cast<long double>(top),shift);
+    return value.negative_integer ? -result : result;
+}
 Operand Operand::floating(lowir_model::Operand value, Type type, const lowir_model::Program* p)
 {
     Operand o; o.kind = Floating; o.id = type.kind();
     long double n = value.kind == lowir_model::Operand::Floating ? value.data.floating :
-        value.negative_integer ? static_cast<long double>(std::int64_t(value.data.integer)) :
-        static_cast<long double>(value.data.integer);
+        integer_floating(value,type == Type::F32 ? 24 : type == Type::F64 ? 53 : 64);
     unsigned char bytes[16] = {};
     if (type == Type::F32) { float f = n; std::memcpy(bytes,&f,4); }
     else if (type == Type::F64) { double f = n; std::memcpy(bytes,&f,8); }

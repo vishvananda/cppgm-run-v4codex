@@ -1,0 +1,37 @@
+# Runtime data crosses high words, restoring division, and all FP formats.
+function @step(%seed : i64) -> i64 {
+  block ^entry:
+    %base = convert zext i128 i64 %seed
+    %scaled = binary shl i128 %base, 64
+    %triple = binary mul i128 %scaled, 3
+    %quotient = binary udiv i128 %triple, 3
+    %single = convert uitofp f32 i128 %quotient
+    %double = convert uitofp f64 i128 %quotient
+    %extended = convert uitofp f80 i128 %quotient
+    %a = convert fptoui i128 f32 %single
+    %b = convert fptoui i128 f64 %double
+    %c = convert fptoui i128 f80 %extended
+    %bad_a = cmp ne i128 %a, %scaled
+    %bad_b = cmp ne i128 %b, %scaled
+    %bad_c = cmp ne i128 %c, %scaled
+    %ab = binary or i64 %bad_a, %bad_b
+    %result = binary or i64 %ab, %bad_c
+    return i64 %result
+}
+function @main(%argc : i64, %argv : ptr) -> i64 [role=entry] {
+  block ^entry:
+    %n = binary mul i64 %argc, 1000000
+    jump ^loop
+  block ^loop:
+    %i = phi i64 [^entry: 0, ^body: %next]
+    %bad = phi i64 [^entry: 0, ^body: %new_bad]
+    %more = cmp ult i64 %i, %n
+    branch %more, ^body, ^done
+  block ^body:
+    %result = call i64 @step(%i)
+    %new_bad = binary or i64 %bad, %result
+    %next = binary add i64 %i, 1
+    jump ^loop
+  block ^done:
+    return i64 %bad
+}

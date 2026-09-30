@@ -18,7 +18,7 @@ static void operand(const lowir_model::Program& p, Operand o, std::ostream& out)
         break;
     }
     case Operand::WideImmediate: {
-        auto n = lowir_model::Operand::integer(o.bits); n.data.words.high = o.displacement; n.wide_integer = true;
+        auto n = lowir_model::Operand::integer(o.bits); n.integer_high(o.displacement);
         out << lowir_model::integer_text(n); break;
     }
     case Operand::Immediate: out << std::int64_t(o.bits); break;

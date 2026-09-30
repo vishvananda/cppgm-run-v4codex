@@ -22,7 +22,7 @@ floating_compiler=os.environ.get('PA24_FLOAT_COMPILER')=='1'
 source=d/'compiler.lowir'
 with source.open('w') as out:
     for f in range(4096):
-        typ='f64' if floating_compiler else 'i64'
+        typ='f64' if floating_compiler else 'i128' if os.environ.get('PA24_WIDE_COMPILER')=='1' else 'i64'
         out.write(f'function @f{f}(%seed : {typ}) -> {typ} {{\nblock ^entry:\n')
         prior='%seed'
         for k in range(64):

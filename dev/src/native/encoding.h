@@ -39,6 +39,8 @@ class Encoder {
     void x87_load(Operand from, Type type, unsigned scratch_offset = 0);
     void x87_store(Operand to, Type type);
     void float_compare(Operand left, Operand right, Type type);
+    void wide_to_float(const Instruction& i);
+    void float_to_wide(const Instruction& i);
     void float_convert(const Instruction& i);
     std::size_t local_jump(int condition);
     void local_target(std::size_t offset);

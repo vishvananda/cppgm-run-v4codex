@@ -36,29 +36,29 @@ void Selector::variadic(const lowir_model::Instruction& i)
         move(Operand::r(XR_R10),save,Type::Ptr);
         move(Operand::mem(XR_R11,16),Operand::r(XR_R10),Type::Ptr); return;
     }
-    require(scalar_integer(i.type) || i.type.floating(),"unsupported variadic value class");
+    require(i.type.scalar(),"unsupported variadic value class");
     auto dest = allocate(i.destination.index,i.type);
     unsigned overflow = next_label++, done = next_label++;
     bool fp = i.type == Type::F32 || i.type == Type::F64;
     if (i.type != Type::F80) {
         move(Operand::r(XR_R10),Operand::mem(XR_R11,fp ? 4 : 0),Type::U32);
-        emit(Op::Compare,Type::U32,{Operand::r(XR_R10),Operand::imm(fp ? 176 : 48)});
+        emit(Op::Compare,Type::U32,{Operand::r(XR_R10),Operand::imm(fp ? 176 : i.type == Type::I128 ? 40 : 48)});
         emit(Op::Jcc,Type(),{Operand::label(overflow)}).condition = XC_AE;
         move(Operand::r(XR_RAX),Operand::mem(XR_R11,16),Type::Ptr);
         emit(Op::Add,Type::Ptr,{Operand::r(XR_RAX),Operand::r(XR_R10)});
-        emit(Op::Add,Type::U32,{Operand::r(XR_R10),Operand::imm(fp ? 16 : 8)});
+        emit(Op::Add,Type::U32,{Operand::r(XR_R10),Operand::imm(fp || i.type == Type::I128 ? 16 : 8)});
         move(Operand::mem(XR_R11,fp ? 4 : 0),Operand::r(XR_R10),Type::U32);
         move(dest,Operand::mem(XR_RAX),i.type);
         emit(Op::Jump,Type(),{Operand::label(done)});
     }
     begin_block(overflow,0);
     move(Operand::r(XR_RAX),Operand::mem(XR_R11,8),Type::Ptr);
-    if (i.type == Type::F80) {
+    if (i.type == Type::F80 || i.type == Type::I128) {
         emit(Op::Add,Type::Ptr,{Operand::r(XR_RAX),Operand::imm(15)});
         emit(Op::And,Type::Ptr,{Operand::r(XR_RAX),Operand::imm(-16)});
     }
     move(Operand::r(XR_R10),Operand::r(XR_RAX),Type::Ptr);
-    emit(Op::Add,Type::Ptr,{Operand::r(XR_R10),Operand::imm(i.type == Type::F80 ? 16 : 8)});
+    emit(Op::Add,Type::Ptr,{Operand::r(XR_R10),Operand::imm(i.type == Type::F80 || i.type == Type::I128 ? 16 : 8)});
     move(Operand::mem(XR_R11,8),Operand::r(XR_R10),Type::Ptr);
     move(dest,Operand::mem(XR_RAX),i.type);
     begin_block(done,0);

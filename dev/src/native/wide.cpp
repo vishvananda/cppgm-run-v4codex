@@ -53,8 +53,18 @@ void Selector::wide_compare(const lowir_model::Instruction& i, bool branch)
 }
 void Selector::wide_arithmetic(const lowir_model::Instruction& i)
 {
+    if (i.operation == Operation::Div || i.operation == Operation::Udiv || i.operation == Operation::Mod || i.operation == Operation::Umod) { wide_division(i); return; }
     if (i.operation == Operation::Shl || i.operation == Operation::Shr || i.operation == Operation::Ushr) { wide_shift(i); return; }
     auto lhs = value(arg(i,0),i.type);
+    if (i.operation == Operation::Not) {
+        auto reg = Operand::r(XR_R10);
+        move(reg,fragment(lhs,0),Type::I64); emit(Op::Or,Type::I64,{reg,fragment(lhs,8)});
+        emit(Op::Compare,Type::I64,{reg,Operand::imm(0)});
+        if (state(i.destination.index).compare_branch) return;
+        auto dst = allocate(i.destination.index,Type::I128);
+        emit(Op::Set,Type::I1,{reg}).condition = XC_E; emit(Op::ExtendUnsigned,Type::U8,{reg,reg});
+        move(fragment(dst,0),reg,Type::I64); move(fragment(dst,8),Operand::imm(0),Type::I64); return;
+    }
     auto dst = allocate(i.destination.index,i.type);
     Operand lo = Operand::r(XR_R10), hi = Operand::r(XR_RAX);
     move(lo,fragment(lhs,0),Type::I64); move(hi,fragment(lhs,8),Type::I64);

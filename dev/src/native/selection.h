@@ -48,12 +48,14 @@ class Selector {
     void control_edges();
     void parameter_availability();
     unsigned clobbers(const lowir_model::Instruction& i) const;
+    bool call_effect(const lowir_model::Instruction& i) const;
     void analyze_instruction(const lowir_model::Instruction& i, unsigned epoch);
     void parameters();
     Operand fragment(Operand value, unsigned byte_offset);
     void object_move(Operand to, Operand from, Type type);
     void wide_arithmetic(const lowir_model::Instruction& i);
     void wide_compare(const lowir_model::Instruction& i, bool branch);
+    void wide_division(const lowir_model::Instruction& i);
     void wide_shift(const lowir_model::Instruction& i);
     void wide_atomic(const lowir_model::Instruction& i);
     void wide_conversion(const lowir_model::Instruction& i);
@@ -63,6 +65,7 @@ class Selector {
     Operand allocate(unsigned value, Type type);
     Operand value(lowir_model::Operand o, Type context);
     Type value_type(lowir_model::Operand o, Type fallback) const;
+    Type consumed_type(lowir_model::Operand o, Type context) const;
     Operand memory(lowir_model::Operand o, int scratch = XR_R11);
     Operand in_register(Operand o, Type type, int reg);
     void move(Operand to, Operand from, Type type);

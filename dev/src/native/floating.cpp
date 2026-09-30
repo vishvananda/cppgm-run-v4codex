@@ -40,9 +40,12 @@ void Selector::floating_compare(const lowir_model::Instruction& i, bool branch)
 void Selector::convert_to(Operand to, Operand from, Type source_type, Type target, bool ui, bool uo)
 {
     if (source_type == target) { move(to,from,target); return; }
-    require((source_type.floating() || scalar_integer(source_type)) &&
-        (target.floating() || scalar_integer(target)),"unsupported native conversion");
+    require((source_type.floating() || source_type.integer() || source_type == Type::Ptr) &&
+        (target.floating() || target.integer() || target == Type::Ptr),"unsupported native conversion");
     f.scratch_bytes = 48;
+    if (source_type == Type::I128 && from.kind != Operand::Memory) {
+        auto storage = home(0,source_type,true); move(storage,from,source_type); from = storage;
+    }
     auto op = source_type.floating() ? target.floating() ?
         (target.width() > source_type.width() ? Op::Fpext : Op::Fptrunc) :
         (uo || unsigned_type(target) ? Op::Fptoui : Op::Fptosi) :
