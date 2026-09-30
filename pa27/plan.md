@@ -1,37 +1,69 @@
-# PA27 implementation
+# PA27 implementation handoff
 
 Stage base commit: `f833cf1ff361529147361cada33eca62e55330cf`
 Last reviewed commit: `f833cf1ff361529147361cada33eca62e55330cf`
-Target: **PA27 full-stage**. Phase: **implement**.
-Entry: **116/158**, 42 failures; PA1–PA26 previously pass. Review markers
-remain unchanged until independent audit.
+Target: **PA27 full-stage**. Phase: **implement; incomplete handoff145**.
+Current: **133/158**, down from **42 to 25 failures**, no new failures.
+PA1–PA26: **4283/4283**. Independent review markers remain unchanged.
 
-## Design and remaining groups
+## Design/spec alignment and completed group
 
-| Group / owner | Data flow and work bound | Validation |
+Host-object placement now consumes canonical binding, section, alignment,
+definition and fixup-owner identities. GNU object attributes are parsed once,
+stored on immutable source nodes, checked per entity and passed directly through
+typed LowIR to native records. No textual phase transport, mangling-based
+semantic recovery or external code generation was added.
+
+| Owner | Completed data flow and complexity | Evidence |
 |---|---|---|
-| Host ELF coalescing, imported addresses, named sections / native image and ELF writer | Consume typed symbol binding, placement and fixup ownership; partition bytes once, remap offsets and symbols once. O(bytes + relocations + symbols), with sorted extent lookup at most O(log symbols). No text transport or host code generation. | COMDAT/body+relocation inspections, GOT/PCREL, section controls, host and own links. |
-| Emission demand and linkage / semantic facts, lowering | Internal reachability, extern-template declarations, C linkage and TLS identities must survive by entity identity. Deduplicated demand edges. | pruning, internal template argument, extern-template, C and TLS fixtures. |
-| ABI spelling / typed PA9 mangler | Dependent result/NTTP types, substitutions and anonymous typedef identity. Reuse canonical semantic facts, no reconstructed textual semantics. | spelling and host-helper fixtures. |
-| Object lifetime / semantic construction and lowering | Anonymous storage initialization, move bodies, virtual-base construction tables. Consume recorded layout/lifetime facts. | runtime and system-include fixtures. |
+| Native object demand | Typed roots/operands retain referenced locals, required ABI roots and exported definitions; omit unused locals/inline bodies before selection. Deduplicated O(symbols+operands) worklist. | pruning, qualified member linkage, retained-base fixtures; personal EH/own-link controls |
+| Native selection/encoding | Imported and replaceable weak data use GOT addresses, including loads/stores and offsets; known strong definitions keep PC-relative references. O(1) identity lookup per access. | imported data, specialization data, inherited C linkage; DSO/PIE and strong-over-weak controls |
+| ELF placement/unwind | Actual weak bodies/data and their relocations share COMDAT groups. Named sections preserve alignment, pointer fixups and aliases. FDEs follow moved bodies. O(S log S + bytes + R); lazy relocation sections. | duplicate/coalescing/body inspections, both EH link orders, native own links, section controls |
+| Driver/attributes | `-g0` and both `-isystem` forms; section name/arity/conflict rejection; weak metadata. | 3/3 section controls; system-header move body retained |
 
-Implement the connected object-emission group first and extend related fixes as
-evidence supports them. Other groups remain implementation work, not audit-only
-questions. No fixture/reference/comparison changes are planned.
+## Unfinished implementation (not audit questions)
 
-## Performance evidence
+| Remaining owner | Required next behavior |
+|---|---|
+| Semantic linkage and typed ABI graph | Dependent result/NTTP substitution spelling, standard substitutions, typedef-anonymous type identity, lambda/internal-template linkage and local-static isolation; two C-linkage cases |
+| Template declaration/body demand | Extern-template constructor/destructor, member-template/callee closure, static data and vtable references |
+| TLS ABI lowering | Required host TLS wrapper identities and import/export surfaces |
+| Initialization/lifetime facts | Anonymous storage owners and multi-level virtual-base/construction-vtable behavior |
 
-Freeze entry/final binaries and fixed personal inputs. Record A/A calibration
-and ABBA compiler latency/RSS, checked executable runtime and text together.
-PA27 semantic object-format costs are necessary; no optional optimizer or new
-growth/search policy is introduced. Inherited blanket percentage/zero-growth
-diagnostics are not stage gates (spec section 9). Preserve observations and
-investigate avoidable regressions; all mandated limits and coverage remain.
+The [exact remaining/resolved inventory](../student.tests/pa27/evidence145/validation.json)
+preserves all 25 failures. These require missing or incorrect upstream entity,
+template-demand, ABI-entry or lifetime facts. Recovering them in ELF placement
+would violate the spec's ownership boundary. The completed image/section group
+cannot repair them; further work requires a separate coherent semantic group,
+not another extension of this writer. Whole-stage correctness remains required.
 
-## Handoff ledger
+## Performance and validation
 
-- Entry145: inspected actual clean HEAD, contract, spec, baseline errors and
-  symbol/relocation writer. Previous turn supplied stage evidence; classified
-  as progress. No prior running compiler process is assumed live.
-- Implementation: pending. Required stage, prior-through and file audit must be
-  rerun before handoff; independent architectural/performance review remains.
+[Performance145](../student.tests/pa27/performance145.md) preserves **448** frozen
+A/A+ABBA observations, latency/RSS/runtime/text together. Common text is unchanged;
+required pruning removes 30,816 bytes. Compiler paired medians range 0.973–1.085,
+with noise disclosed. Lazy relocation sections remove 234,608 avoidable object
+bytes from the 2,400-template case. Remaining metadata growth has explicit linear
+budgets; no optional optimizer or new percentage exit gate was introduced.
+
+[Validation145](../student.tests/pa27/evidence145/validation.json) pins final
+binary/source hashes and exact commands. Prior-through and file audit pass
+(four inherited header warnings); `make test-pa27` reports 133/158 plus 3/3
+section controls. `make test-report-through-pa27` reports 4416/4441, with failures
+only in PA27. Personal object controls pass **53 commands**. All 19,749 tracked
+contract paths remain, with no source/harness/comparison changes. The sole
+[reference overlay](reference-corrections.md) corrects two global-name inspections
+using reduced inputs, C++11/ABI proof and the pinned bundle revision.
+
+## Handoff ledger / independent review
+
+- Entry145 (`554f05f0`): clean entry and authoritative baseline recorded; previous
+  turn supplied stage evidence and is classified as progress.
+- `c36f3501`: connected object emission/attribute/demand implementation and
+  personal controls; first performance observations retained.
+- `96e1cb72`: measured empty-relocation-section growth removed; final required
+  checks and frozen benchmark observations repeated on this exact binary.
+- Handoff boundary: implementation progress is validated; PA27 remains incomplete.
+  Independent audit must review source-attribute identity, COMDAT alias/FDE
+  ownership, GOT scratch lifetimes and the recorded cost/bounds. These questions
+  are separate from the known implementation failures above; neither is waived.

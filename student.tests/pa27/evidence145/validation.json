@@ -1,0 +1,162 @@
+{
+  "stage_base": "f833cf1ff361529147361cada33eca62e55330cf",
+  "implementation_commit": "96e1cb72fa43f17016607f8857326358374ee7bd",
+  "binary_sha256": "18b276c035cdbe3a888ae6e085b667b5e598af192093150986b9b059831cd7eb",
+  "checks": [
+    {
+      "name": "priorThroughTests",
+      "command": [
+        "make",
+        "test-report-through-pa26"
+      ],
+      "status": 0,
+      "elapsed_s": 11.528854003176093,
+      "output_sha256": "8e4de4bd2bff2c0df35dd528eeee11bc91e79de9e322718a9ab24d3417ba4109",
+      "output_path": "/tmp/pa27-145/validation/priorThroughTests.log"
+    },
+    {
+      "name": "stageTests",
+      "command": [
+        "make",
+        "test-pa27"
+      ],
+      "status": 2,
+      "elapsed_s": 3.435931507498026,
+      "output_sha256": "1df0e9ef2f153d16cf7a1667781dda47bf16170c8badc9fbd1642347d0a711c0",
+      "output_path": "/tmp/pa27-145/validation/stageTests.log"
+    },
+    {
+      "name": "fileAudit",
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa27",
+        "--paths",
+        "dev/src"
+      ],
+      "status": 0,
+      "elapsed_s": 4.079172804951668,
+      "output_sha256": "a8cc56fe117bbfd3ed16e9e29470abb6f84497ea8488c7e2d89528530a070d9b",
+      "output_path": "/tmp/pa27-145/validation/fileAudit.log"
+    },
+    {
+      "name": "personalObjects",
+      "command": [
+        "python3",
+        "student.tests/pa27/object-controls.py",
+        "/tmp/pa27-145/validation/objects"
+      ],
+      "status": 0,
+      "elapsed_s": 1.040060481056571,
+      "output_sha256": "4e0acb6f402905e581dba6fb3f429e8ac08a3bd54ffc2fd9f531482bf492f8c1",
+      "output_path": "/tmp/pa27-145/validation/personalObjects.log"
+    },
+    {
+      "name": "diffCheck",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "status": 0,
+      "elapsed_s": 0.018638158217072487,
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "output_path": "/tmp/pa27-145/validation/diffCheck.log"
+    }
+  ],
+  "progress": {
+    "entry_pass": 116,
+    "current_pass": 133,
+    "total": 158,
+    "entry_fail": 42,
+    "current_fail": 25,
+    "resolved": [
+      "pa27/tests/general/100-unreachable-internal-function-pruning.t",
+      "pa27/tests/general/200-class-template-member-duplicate.t",
+      "pa27/tests/general/200-complex-template-owner-duplicate.t",
+      "pa27/tests/general/200-empty-pack-function-template-duplicate.t",
+      "pa27/tests/general/200-extern-c-variable-definition-inherits-prior-linkage.t",
+      "pa27/tests/general/200-function-template-duplicate.t",
+      "pa27/tests/general/200-host-defined-global-data-pcrel.t",
+      "pa27/tests/general/200-host-explicit-specialization-static-data-declaration.t",
+      "pa27/tests/general/200-host-gnu-section-attribute.t",
+      "pa27/tests/general/200-host-imported-global-data-got.t",
+      "pa27/tests/general/200-host-operator-prefix-template-owner-symbol.t",
+      "pa27/tests/general/200-inherited-constructor-weak-odr.t",
+      "pa27/tests/general/200-inline-header-duplicate.t",
+      "pa27/tests/general/200-member-template-prefix-substitution.t",
+      "pa27/tests/general/200-system-include-move-ctor-reset.t",
+      "pa27/tests/general/200-weak-function-body-comdat.t",
+      "pa27/tests/general/300-qualified-inline-member-linkage.t"
+    ],
+    "remaining": [
+      "pa27/tests/general/200-anonymous-storage-member-init-runtime-smoke.t",
+      "pa27/tests/general/200-anonymous-storage-owner-initialization.t",
+      "pa27/tests/general/200-anonymous-template-specialization-linkage.t",
+      "pa27/tests/general/200-dependent-abi-multiword-type-argument.t",
+      "pa27/tests/general/200-dependent-alias-return-decltype-operator-symbol-spelling.t",
+      "pa27/tests/general/200-dependent-nttp-default-return-symbol-spelling.t",
+      "pa27/tests/general/200-extern-c-anonymous-namespace-call.t",
+      "pa27/tests/general/200-extern-c-static-redecl-bad.t",
+      "pa27/tests/general/200-extern-template-member-template-instantiation.t",
+      "pa27/tests/general/200-host-eh-local-lambda-symbol-binding.t",
+      "pa27/tests/general/200-host-extern-template-constructor-reference.t",
+      "pa27/tests/general/200-host-extern-template-member-callee-closure.t",
+      "pa27/tests/general/200-host-extern-template-ooc-member-reference.t",
+      "pa27/tests/general/200-host-extern-template-static-data-reference.t",
+      "pa27/tests/general/200-host-extern-template-vtable-reference.t",
+      "pa27/tests/general/200-host-typedef-linkage-anonymous-types.t",
+      "pa27/tests/general/200-inline-local-static-internal-template-argument-separates.t",
+      "pa27/tests/general/200-multi-level-virtual-base-diamond-lifecycle.t",
+      "pa27/tests/general/200-namespace-operator-template-std-string-substitution-symbol-spelling.t",
+      "pa27/tests/general/200-odr-mergeable-template-default-parameter.t",
+      "pa27/tests/general/200-std-ostream-member-template-result-symbol-spelling.t",
+      "pa27/tests/general/200-synthetic-std-hard-substitution-symbol-spelling.t",
+      "pa27/tests/general/200-thread-local-variable-export.t",
+      "pa27/tests/general/200-thread-local-variable-import.t",
+      "pa27/tests/general/200-virtual-base-construction-vtable-as-of-base-overrider.t"
+    ],
+    "new_failures": []
+  },
+  "coverage": {
+    "tracked_contract_paths": 19749,
+    "inventory_sha256": "f47e5a4072740becf294ee85a2bb96242f61c486c5a639ded252402453172083",
+    "pa27_anchors": 158,
+    "allowed_reference_overlay": [
+      "pa27/tests/general/200-host-defined-global-data-pcrel.inspect.expect",
+      "pa27/tests/general/200-host-defined-global-data-pcrel.ref.inspect",
+      "pa27/tests/general/200-host-imported-global-data-got.inspect.expect",
+      "pa27/tests/general/200-host-imported-global-data-got.ref.inspect"
+    ],
+    "source_and_comparison_changes": []
+  },
+  "sources": {
+    "dev/cppgm++.cpp": "24a56933593ab9014dde512b61a977a80df331e0cc3849ccc465f5bf0165d9a4",
+    "dev/frontend_source_sets.mk": "e884844962eb04f4656bd2e77dd26a519ef491d7b8fb00a42873cc13399020db",
+    "dev/src/lowering/symbols.cpp": "42d9c4f6312b2a15b5bc907111134d674231e0fe4bdd3d4d1ccc652eaefe87ca",
+    "dev/src/native/driver.cpp": "7580c57d580cf211e1c7376f860502a72034e8718e507ffa446931c0b0f7ae72",
+    "dev/src/native/elf.cpp": "2d291b6e5dfdb03dab89e19328556e2ef8f58b0017e1f279e804ed7791c07095",
+    "dev/src/native/encoding.cpp": "78d115c3c8ef59dbeb86de1b0d371ba9689cd5012b1ba1d2a3b650e83470b47b",
+    "dev/src/native/encoding.h": "9a1446ec5efb215cbc38d1c712bff03fd71115bce5a1057e968099272a6fc9a5",
+    "dev/src/native/object_demand.cpp": "48dd726a2bf2fc1c8b8896d7f400457a88046264b584072536c05880d135b189",
+    "dev/src/native/selection.cpp": "9b6fd9a9b0485c811679a76b1caa214063a45e36d52591926c559917d81a34b6",
+    "dev/src/native/selection.h": "aef6e2e9f8dad515ee8772ebbceadb72fa8ddef10c10bf16fde7105f10ea1a68",
+    "dev/src/semantic/analyzer.h": "6162026eb091cc7fa7f73a42108e05b9f492f177ac09328d72e6cc9514c6e999",
+    "dev/src/semantic/type_builder.cpp": "9ddfabf669509002753dc43ec9e3ee24800fe09f925b525d52383fc65efe997e",
+    "dev/src/syntax/ast.h": "e6ca4db185192f32b6a327d21e52f4d20c2ce9972f247b0a40c94379f52befcf",
+    "dev/src/syntax/declaration.cpp": "953a93d7c190f716f7f8e60559d6d09078e6e04c11c7896700d8ebdafdb457c1",
+    "dev/src/syntax/declarator.cpp": "82b04ea52d7968c44ad0f30226dd1f42f9db7beea434668565aa7f41f8a69f0a",
+    "dev/src/syntax/parser.cpp": "df39d4ef423a5bce5ca065c4bb2d52f229ced95630604e7f3f9740bfe495fcf5",
+    "dev/src/syntax/parser.h": "0ea3a9f7bd5c96417287988db943b0de720ef8b69630898db13cbe2c055e2451",
+    "dev/src/syntax/statement.cpp": "f639631bcd9d470204c37ad27b884f48da29ac4c611d504e95a6a52d966e68d5",
+    "dev/src/toolchain/driver.cpp": "095ecca2c016af633d08d514ca5b4b638a9c4391728b6e4f47c457a16c66a4e3",
+    "dev/src/toolchain/host_elf.cpp": "245d384b289b44163aab8de5b6533c95655297c2bdb302ef13f72d3dc9ccac15",
+    "dev/src/toolchain/host_elf.h": "3240cbc8115b3f0eb72b2edaaa60d689c08f0bec4195a539e851ea4b34aaf71b",
+    "dev/src/toolchain/host_sections.cpp": "db3aa088f4fddc967afdacab853e60a3312ada399014a4c5d662cafec53d8697",
+    "dev/src/toolchain/host_unwind.cpp": "0ef4e0012becb7c63d470f5c8e36ab126179f5daeb5f2c4d46c26375d7b8ab21",
+    "dev/src/toolchain/object.cpp": "3fd5ead96d088437698c4389b0d2983af8051de5dce3a9337c23112b65ff7364",
+    "dev/src/toolchain/object.h": "1c3c8fbbd668abe1659d1bcb6ed4b6fcffc745a2d7754931f9c2bdff555da27c"
+  },
+  "status": "validated incomplete implementation handoff; independent audit pending"
+}

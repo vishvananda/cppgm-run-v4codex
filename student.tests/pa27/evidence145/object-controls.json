@@ -1,0 +1,16 @@
+{
+  "status": "pass",
+  "commands": 53,
+  "compiler_sha256": "18b276c035cdbe3a888ae6e085b667b5e598af192093150986b9b059831cd7eb",
+  "source_sha256": {
+    "weak-data-host.cpp": "8563a6972b75ea67a9ad7df94c3709c7dbef9df12e8b59fd832634a3f94fe2da",
+    "imported-data.cpp": "733de9e82eb67c4b12ef98a79530fbd22db410175d32f8ec7d06910ced339f76",
+    "inline-eh-b.cpp": "0d4773264e7b16e4f5cd1c2da0994f8f0b9bca20397a8e434b19dba032bf98f0",
+    "global-name-user.cpp": "fc1418ead639d48b8f60cb1f4601489f453c671526883360489595235c8d6f19",
+    "sections.cpp": "8060061fe8043285dbeee346d4d68c2fce11616a0ae3deda82846ccad92acddc",
+    "imported-data-host.cpp": "b5bcca502f1908aa2eb54a73e6ae9c7bcbed4b74dda64243ad4a2444dea33efd",
+    "weak-data.cpp": "ccde00ccd06ce9167c63bf99acaf6bfbceaf8d7e9f2abc3349667e9c299c3935",
+    "inline-eh-a.cpp": "d9381b0c5d1f7775f6616a6298aaa6a290c9620d239345c48ec9be6250ecb5b3",
+    "global-name.cpp": "2ce3acf1294acdba8be62ed69eac5927d513b2d5e18b0a682dec28947b3cbf15"
+  }
+}
