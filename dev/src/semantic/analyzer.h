@@ -106,7 +106,7 @@ public:
     std::uint64_t base_offset(TypeId t, TypeId base = 0) { size(t); return base ? base_adjustments[base_steps(t,types[base].entity)].total : class_facts[entities[types[t].entity].class_info].base_offset; }
     std::vector<BaseAdjustment> base_adjustments = std::vector<BaseAdjustment>(1);
     Index base_adjustment_index;
-    std::size_t base_adjustment_work = 0, base_adjustment_hits = 0;
+    std::size_t base_adjustment_work = 0, base_adjustment_hits = 0, base_layout_work = 0;
     EntityId direct_base(EntityId e) const { auto b = class_facts[entities[e].class_info].first_base; return b ? bases[b].base : 0; }
     std::uint32_t first_base_edge(EntityId e) const { return class_facts[entities[e].class_info].first_base; }
     const BaseRelation& base_edge(std::uint32_t b) const { return bases[b]; }

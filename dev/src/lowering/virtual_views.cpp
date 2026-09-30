@@ -3,11 +3,21 @@ namespace cppgm { namespace lowering {
 using namespace lowir_model;
 SymbolId Procedural::view_symbol(EntityId cls, unsigned view)
 {
-    auto key = (std::uint64_t(cls)<<32)|view;
-    if (auto prior = view_symbols.get(key)) return SymbolId(prior);
-    auto symbol = fresh_symbol("@vtable_view"); view_symbols.put(key,symbol.index);
+    auto key = (std::uint64_t(vtable_symbol(cls).index)<<32)|view;
+    if (auto prior = linkage.view_symbols.get(key)) return SymbolId(prior);
+    auto symbol = fresh_symbol("@vtable_view"); linkage.view_symbols.put(key,symbol.index);
     auto& meta = p.symbols[symbol.index-1].metadata;
     meta.binding = SBM_INTERNAL;
+    if (sem.virtual_class(cls).key_function && !sem.entities[cls].specialization && !internal_entity(cls)) {
+        // PA23 represents virtual-base segments as separate LowIR globals.
+        // A key-owned segment therefore needs the same support-symbol identity
+        // in a referencing TU and in its defining TU, just like its main table.
+        abi_mangle::Target target; target.kind = abi_mangle::TargetKind::Vtable;
+        target.type = abi_type(sem.entities[cls].type);
+        meta.binding = SBM_WEAK;
+        meta.object = p.intern(abi_mangle::mangle(abi,target)+".cppgm.view."+std::to_string(view));
+        return symbol;
+    }
     // Keep the backend object identity distinct from its optional LowIR alias.
     // These private views have no externally mandated Itanium symbol name.
     meta.object = p.intern("__cppgm_vtable_view_"+std::to_string(symbol.index));
@@ -27,22 +37,25 @@ SymbolId Procedural::virtual_target(const semantic::VirtualSlot& slot, bool dele
         }
         return pure_virtual;
     }
-    if (!slot.this_adjustment && !slot.result_adjustment && !slot.result_virtual_row) return symbol(e,false,deleting);
+    auto callee = symbol(e,false,deleting);
+    if (!slot.this_adjustment && !slot.result_adjustment && !slot.result_virtual_row) return callee;
+    // A thunk is a program ABI entry, even when several TU-local table facts
+    // request it. The target symbol includes internal linkage and D0/D1 identity;
+    // intern all adjustment components in the same program-owned namespace.
     auto offset_id = [&](std::int64_t value) {
-        auto id = thunk_adjustments.get(value);
-        if (!id) { id = ++next_thunk_adjustment; thunk_adjustments.put(value,id); }
+        auto id = linkage.thunk_adjustments.get(value);
+        if (!id) { id = ++linkage.next_thunk_adjustment; linkage.thunk_adjustments.put(value,id); }
         return id;
     };
     auto result_pair = (std::uint64_t(offset_id(slot.result_adjustment))<<32)|offset_id(slot.result_virtual_row);
-    auto result_id = thunk_result_pairs.get(result_pair);
-    if (!result_id) { result_id = ++next_thunk_result; thunk_result_pairs.put(result_pair,result_id); }
+    auto result_id = linkage.thunk_result_pairs.get(result_pair);
+    if (!result_id) { result_id = ++linkage.next_thunk_result; linkage.thunk_result_pairs.put(result_pair,result_id); }
     auto pair = (std::uint64_t(offset_id(slot.this_adjustment))<<32)|result_id;
-    auto adjustment = thunk_pairs.get(pair);
-    if (!adjustment) { adjustment = ++next_thunk_pair; thunk_pairs.put(pair,adjustment); }
-    auto key = (std::uint64_t(e)<<32)|adjustment;
-    auto& index = deleting ? deleting_thunk_symbols : thunk_symbols;
-    if (auto prior = index.get(key)) return SymbolId(prior);
-    auto output = fresh_symbol("@adjustor_thunk"); index.put(key,output.index);
+    auto adjustment = linkage.thunk_pairs.get(pair);
+    if (!adjustment) { adjustment = ++linkage.next_thunk_pair; linkage.thunk_pairs.put(pair,adjustment); }
+    auto key = (std::uint64_t(callee.index)<<32)|adjustment;
+    if (auto prior = linkage.thunk_symbols.get(key)) return SymbolId(prior);
+    auto output = fresh_symbol("@adjustor_thunk"); linkage.thunk_symbols.put(key,output.index);
     abi_mangle::Target target; target.kind = abi_mangle::TargetKind::Thunk;
     target.function = abi_mangle::entity_function(abi,abi_function_context(e));
     if (deleting) target.function.terminal = abi_mangle::ABI_TERMINAL_DESTRUCTOR_DELETING;

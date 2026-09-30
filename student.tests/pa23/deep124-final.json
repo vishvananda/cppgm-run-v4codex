@@ -1,0 +1,22 @@
+{
+  "compiler_sha256": "24688bccd2cc1b6926654b33d9aec6a8f92ddcdce419ef1f898fa2aca2022106",
+  "cases": [
+    {
+      "source": "struct V{virtual int f(){return 1;}};struct A0:virtual V{};struct B0:virtual V{};struct A1:virtual A0,virtual B0{};struct B1:virtual A0,virtual B0{};struct A2:virtual A1,virtual B1{};struct B2:virtual A1,virtual B1{};struct A3:virtual A2,virtual B2{};struct B3:virtual A2,virtual B2{};struct L:A3{int f(){return 2;}};struct R:B3{int f(){return 3;}};struct D:L,R{};int main(){return 0;}",
+      "expected_accept": false,
+      "compile_exit": 1,
+      "diagnostic": "ERROR: virtual base has no unique final overrider\n",
+      "passed": true
+    },
+    {
+      "source": "struct V{virtual int f(){return 1;}};struct A0:virtual V{};struct B0:virtual V{};struct A1:virtual A0,virtual B0{};struct B1:virtual A0,virtual B0{};struct A2:virtual A1,virtual B1{};struct B2:virtual A1,virtual B1{};struct A3:virtual A2,virtual B2{};struct B3:virtual A2,virtual B2{};struct L:A3{int f(){return 2;}};struct R:B3{int f(){return 3;}};struct D:L,R{int f(){return 7;}};int main(){D d;V&v=d;return v.f()!=7;}",
+      "expected_accept": true,
+      "compile_exit": 0,
+      "diagnostic": "",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": -11,
+      "passed": false
+    }
+  ]
+}

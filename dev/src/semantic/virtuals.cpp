@@ -68,7 +68,10 @@ void Analyzer::complete_virtuals(EntityId cls)
             slot.implementation = prefix_subobject(b,slot.implementation);
         }
         completed.views = inherited.views;
-        for (auto& view : completed.views) view.begin -= inherited.primary_count;
+        for (auto& view : completed.views) {
+            view.begin -= inherited.primary_count;
+            view.subobject = prefix_subobject(b,view.subobject);
+        }
         completed.signatures = inherited.signatures;
         virtual_slot_work += inherited.slots.size();
         break;
@@ -79,6 +82,7 @@ void Analyzer::complete_virtuals(EntityId cls)
         const auto& inherited = virtual_class(base);
         unsigned root = completed.views.size()+1;
         auto import = [&](VirtualView view, unsigned begin, unsigned count) {
+            view.subobject = prefix_subobject(b,view.subobject);
             view.begin = completed.slots.size(); view.count = count;
             for (unsigned j = 0; j < count; ++j) {
                 auto slot = inherited.slots[begin+j]; slot.receiver += root;
@@ -184,6 +188,26 @@ void Analyzer::complete_virtuals(EntityId cls)
         completed.slots.insert(completed.slots.begin()+completed.primary_count,inherited_overrides.begin(),inherited_overrides.end());
         completed.primary_count += inherited_overrides.size();
         for (auto& view : completed.views) view.begin += inherited_overrides.size();
+    }
+    if (virtual_base_count(cls)) {
+        // Every path must participate in final-overrider checking above. Once
+        // resolved, a shared physical view has one immutable slot slice. Do
+        // not propagate path multiplicity into the next derived class: nested
+        // virtual diamonds otherwise duplicate facts exponentially.
+        Index identities;
+        std::vector<unsigned> remap(completed.views.size()+1);
+        std::vector<VirtualView> views;
+        std::vector<VirtualSlot> slots(completed.slots.begin(),completed.slots.begin()+completed.primary_count);
+        for (unsigned j = 0; j < completed.views.size(); ++j) {
+            auto view = completed.views[j]; auto identity = key(view.subobject,view.type);
+            if (auto known = identities.get(identity)) { remap[j+1] = known; continue; }
+            remap[j+1] = views.size()+1; identities.put(identity,remap[j+1]);
+            auto begin = view.begin; view.begin = slots.size(); view.parent = remap[view.parent];
+            slots.insert(slots.end(),completed.slots.begin()+begin,completed.slots.begin()+begin+view.count);
+            views.push_back(view);
+        }
+        for (auto& slot : slots) slot.receiver = remap[slot.receiver];
+        completed.views.swap(views); completed.slots.swap(slots);
     }
     for (const auto& slot : completed.slots) completed.abstract |= members[entities[slot.function].member_info].pure;
     class_facts[info].aggregate = false;

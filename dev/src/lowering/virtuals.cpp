@@ -64,10 +64,16 @@ void Procedural::emit_vtables()
         sem.object_size(sem.entities[cls].type);
         const auto& model = sem.virtual_class(cls);
         if (model.demand != semantic::FactState::Success) {
-            if (prior.kind == Symbol::GlobalSymbol) continue;
-            Global g; g.symbol = table; g.declaration = true; p.globals.push_back(g);
-            auto& s = p.symbols[table.index-1]; s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size();
-            s.metadata.binding = SBM_STRONG;
+            auto declare = [&](SymbolId symbol) {
+                auto& s = p.symbols[symbol.index-1];
+                if (s.kind == Symbol::GlobalSymbol) return;
+                Global g; g.symbol = symbol; g.declaration = true; p.globals.push_back(g);
+                s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size(); s.metadata.binding = SBM_STRONG;
+            };
+            declare(table);
+            if (sem.virtual_base_count(cls))
+                for (unsigned j = 0; j < model.views.size(); ++j)
+                    if (model.views[j].store) declare(view_symbol(cls,j+1));
             continue;
         }
         p.symbols[table.index-1].metadata.binding = internal_entity(cls) ? SBM_INTERNAL : SBM_WEAK;
@@ -92,7 +98,11 @@ void Procedural::emit_vtables()
                 data.push_back(relocation(virtual_target(slot,deleting)));
             }
             if (grouped) group.insert(group.end(),data.begin(),data.end());
-            else publish(p,output,data);
+            else {
+                if (p.symbols[output.index-1].metadata.binding == SBM_STRONG)
+                    p.symbols[output.index-1].metadata.binding = internal_entity(cls) ? SBM_INTERNAL : SBM_WEAK;
+                publish(p,output,data);
+            }
         };
         emit_view(table,cls,0,model.primary_count,0,0);
         const auto& views = sem.virtual_class(cls).views;

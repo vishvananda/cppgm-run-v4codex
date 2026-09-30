@@ -77,15 +77,18 @@ unsigned Analyzer::base_path(TypeId from, EntityId to)
 std::uint64_t Analyzer::layout_base_path(unsigned id)
 {
     if (!id || base_adjustments[id].laid_out) return base_adjustments[id].total;
+    layout_base_path(base_adjustments[id].next);
     auto& path = base_adjustments[id];
+    const auto& tail = base_adjustments[path.next];
     auto identity = subobjects[path.subobject];
+    ++base_layout_work;
     path.offset = bases[path.edge].offset;
-    path.total = 0;
-    for (auto p = identity.path; p; p = subobject_paths[p].next)
-        path.total += bases[subobject_paths[p].edge].offset;
+    path.total = path.offset + tail.total;
     if (identity.anchor) {
-        path.virtual_tail = path.total;
-        path.total += virtual_base_offset(path.source,identity.anchor);
+        // Reuse the completed tail. Edges before a shared virtual anchor do
+        // not contribute to its displacement in this most-derived source.
+        path.virtual_tail = tail.virtual_row ? tail.virtual_tail : tail.total;
+        path.total = virtual_base_offset(path.source,identity.anchor) + path.virtual_tail;
         path.virtual_row = virtual_base_row(path.source,identity.anchor);
     }
     path.laid_out = true; return path.total;

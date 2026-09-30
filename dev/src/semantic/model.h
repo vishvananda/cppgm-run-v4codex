@@ -264,6 +264,7 @@ struct VirtualSlot {
 };
 struct VirtualView {
     EntityId type = 0;
+    std::uint32_t subobject = 0; // Physical vptr occurrence; primary aliases share it.
     std::uint32_t parent = 0, edge = 0;
     std::uint32_t begin = 0, count = 0; // Slice of the owning class's slot arena.
     std::uint64_t offset = 0;

@@ -1,0 +1,175 @@
+{
+  "cases": [
+    {
+      "name": "covariant-virtual-tail",
+      "unfinished": false,
+      "lowir_sha256": "da49abc898cf4c57083ec144febeda41eec789e134e3a1d8c74121464b413ccc",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "inherited-secondary-override-slot",
+      "unfinished": false,
+      "lowir_sha256": "dcdb37f6e6487a3d49e3fe5353d5727fb605a3c74c7ba1f528dac47ef0185f36",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "inherited-virtual-override-slot",
+      "unfinished": false,
+      "lowir_sha256": "a55cf7d54a37f897bbd3187bff6e003b6c31c60ee6c538462bf240cda521e04e",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "covariant-virtual-result",
+      "unfinished": false,
+      "lowir_sha256": "99d6bbdc5be69f2f5b3365f577bc77d033954199bd23d08aeff36a21d19c99e5",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "covariant-virtual-null",
+      "unfinished": false,
+      "lowir_sha256": "a0493c74d65ef82e48c7605f46a2d3f26eead038d95d06a4efab512930f95620",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "covariant-virtual-reference",
+      "unfinished": false,
+      "lowir_sha256": "f58cd53c673a6c37b6ec2ce5e1c1b6c308dd694784566c47fddd43274bcf874d",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "nonpoly-reference-reducer",
+      "unfinished": false,
+      "lowir_sha256": "82cdda2ad434828b99477ece40265a1700a298e6664aa31c0a0272ba6a5dec34",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "shared-nonpoly-field",
+      "unfinished": false,
+      "lowir_sha256": "f97ae3fe94f2e3fca63739b00fcfbc03b9969a8c3392f56f80ae52ebfa7e2690",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "secondary-shared-pointer",
+      "unfinished": false,
+      "lowir_sha256": "1e72f2343c43b14673b54b0475123f6e1c162c6bc4dcec8d864f2538262c541d",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "nested-shared-field",
+      "unfinished": false,
+      "lowir_sha256": "5a08eb79cbb4c3d60d605a5ed984e82378ca55a038eedf78cd7d8ecc504dcf86",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "three-virtual-rows",
+      "unfinished": false,
+      "lowir_sha256": "81366ef7dc2421ef75b352138c441c63596eadcc283c41b5872c181a3065bdfe",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "nonpoly-typeid",
+      "unfinished": false,
+      "lowir_sha256": "2dabda38d7f1d31ef316785c1b97d34a028263444bef763a76ba26a3a23a24d8",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "single-virtual-dispatch",
+      "unfinished": false,
+      "lowir_sha256": "a66e590b9cdfdfd00de2355b68f7e22aa213e1647aeca776841499f43bd7fc2e",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "shared-final-overrider",
+      "unfinished": false,
+      "lowir_sha256": "f3207355af70d54734d8f44e772106dca8c81349305a5a73b4c4e4622c18c0e4",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "shared-rtti",
+      "unfinished": false,
+      "lowir_sha256": "c328334ff2277c63c5441a1eadb3bcc32908bef087009741b48412c4de83d8dd",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 1,
+      "passed": false
+    },
+    {
+      "name": "virtual-base-alignment",
+      "unfinished": false,
+      "lowir_sha256": "beaaf384546a3907b6342879e07a14f20a4da8517018d880b8fc4b2d72ceb78c",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "nonvirtual-tail-in-virtual-base",
+      "unfinished": false,
+      "lowir_sha256": "d1ad3528cbeea35e02a745375b31162bb9b96818d92d5d4f21c988cd9f68c8bc",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "construct-shared-once",
+      "unfinished": true,
+      "lowir_sha256": "215cfe727235a94a22c55e9e0a76dd760f7661a573471e2c71e76a34e824211c",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 1,
+      "passed": false
+    },
+    {
+      "name": "construct-hidden-vptr-target",
+      "unfinished": true,
+      "lowir_sha256": "958a6cdc94b347b59575f5111d22c294d241bb27517abb2c619e7ff81dfe0124",
+      "backend_exit": 0,
+      "backend_diagnostic": "",
+      "runtime_exit": 1,
+      "passed": false
+    }
+  ]
+}
