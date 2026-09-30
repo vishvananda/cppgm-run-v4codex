@@ -365,7 +365,14 @@ Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
     case OP_GE: action = unsign ? Operation::Uge : Operation::Ge; compare = true; break;
     default: throw std::logic_error("missing binary lowering operation");
     }
-    v = emit(compare ? Opcode::Compare : Opcode::Binary, a.ir, {a.operand, b.operand}, action);
+    Instruction instruction(compare ? Opcode::Compare : Opcode::Binary,a.ir);
+    instruction.operation = action;
+    // Source C++ evaluation uses the same permitted x87 excess precision as
+    // constant evaluation, then materializes each result at its declared type.
+    // The explicit course LowIR view retains its exact-width operation contract.
+    if (!linkage.presentation && !compare && a.ir.floating() && a.ir != IRType::F80)
+        instruction.source_type = IRType::F80;
+    v = emit(instruction,{a.operand,b.operand});
     v.type = result; return v;
 }
 Value Procedural::call(NodeId n, Value destination)

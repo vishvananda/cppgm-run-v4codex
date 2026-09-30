@@ -23,7 +23,7 @@ void Selector::floating_arithmetic(const lowir_model::Instruction& i)
         i.operation == Operation::Mul ? Op::Fmul : Op::Fdiv;
     require(i.operation == Operation::Add || i.operation == Operation::Sub ||
         i.operation == Operation::Mul || i.operation == Operation::Div,"unsupported floating binary operation");
-    emit(op,i.type,{dest,lhs,value(arg(i,1),i.type)});
+    emit(op,i.type,{dest,lhs,value(arg(i,1),i.type)}).source_type = i.source_type;
 }
 void Selector::floating_compare(const lowir_model::Instruction& i, bool branch)
 {

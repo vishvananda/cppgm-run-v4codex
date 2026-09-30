@@ -64,6 +64,7 @@ void Reader::instruction_body(Instruction& i, FunctionBuilder& b)
         if (i.opcode == Opcode::Convert) i.source_type = type();
         add_operand(b);
         if (i.opcode == Opcode::Binary || i.opcode == Opcode::Compare) comma_operand(b);
+        if (i.opcode == Opcode::Binary && accept("[")) { expect("eval"); expect("="); i.source_type = type(); expect("]"); }
         break;
     case Opcode::AtomicLoad: case Opcode::AtomicStore: case Opcode::AtomicAddFetch:
     case Opcode::AtomicExchange: case Opcode::AtomicCompareExchange: {

@@ -50,7 +50,9 @@ void Writer::instruction(const Instruction& i)
     case Opcode::Unary: case Opcode::Binary: case Opcode::Compare: case Opcode::Convert:
         out_ << ' ' << spelling(i.operation) << ' '; type(i.type); out_ << ' ';
         if (i.opcode == Opcode::Convert) { type(i.source_type); out_ << ' '; }
-        all(0, i.opcode == Opcode::Convert ? i.source_type : i.type); break;
+        all(0, i.opcode == Opcode::Convert ? i.source_type : i.type);
+        if (i.opcode == Opcode::Binary && i.source_type != Type()) { out_ << " [eval="; type(i.source_type); out_ << ']'; }
+        break;
     case Opcode::Const: case Opcode::Copy: case Opcode::Load: case Opcode::Store:
     case Opcode::AtomicLoad: case Opcode::AtomicStore: case Opcode::AtomicAddFetch:
     case Opcode::AtomicExchange: case Opcode::AtomicCompareExchange: case Opcode::VaArg:

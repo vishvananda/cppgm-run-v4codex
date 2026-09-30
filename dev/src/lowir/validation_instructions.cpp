@@ -55,6 +55,7 @@ void Validator::instruction(const Instruction& i) const
         if (i.operation == Operation::Bswap) require(i.type.width() == 16 || i.type.width() == 32 || i.type.width() == 64, "invalid bswap width");
         break;
     case Opcode::Binary:
+        require(i.source_type == Type() || (i.type.floating() && i.source_type == Type::F80 && i.type.width() < 80), "invalid floating evaluation precision");
         count(2); require(i.type.integer() || i.type.floating() || (i.type == Type::Ptr && i.operation == Operation::Sub), "invalid binary type");
         require(i.operation >= Operation::Add && i.operation <= Operation::Ushr, "invalid binary operator");
         if (i.type.floating()) require(i.operation <= Operation::Div, "invalid floating binary operator");

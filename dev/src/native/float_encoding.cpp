@@ -83,7 +83,7 @@ void Encoder::floating(const Instruction& i)
     case Op::Fpext: case Op::Fptrunc: float_convert(i); return;
     default: break;
     }
-    if (i.type == Type::F80) {
+    if (i.type == Type::F80 || i.source_type == Type::F80) {
         if (i.op == Op::Fneg) { x87_load(lhs,i.type); byte(0xd9); byte(0xe0); }
         else {
             x87_load(lhs,i.type); x87_load(rhs,i.type,16);

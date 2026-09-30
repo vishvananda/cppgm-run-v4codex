@@ -85,6 +85,19 @@ for(int i=0;i<argc*10000;++i){D* d=new D(i);total+=d->v;B* b=d;delete b;}
 return total==49995000 && destroyed==10000?0:1;}
 """)
     workloads={'classes':([classes],2),'casts':([casts],64),'allocations':([allocations],64)}
+if '--exception-baseline' in sys.argv[4:]:
+    assert A.read_bytes()==B.read_bytes(), 'exception baseline requires one correct frozen compiler'
+    exceptions=save('exceptions.cc','''int dead,copies;
+struct A{int n;A(int x):n(x){}virtual ~A(){++dead;}};
+struct B{int padding;B():padding(9){}};
+struct D:B,A{D(int x):A(x){}D(const D& d):A(d.n){++copies;}};
+int step(int n){try{try{throw D(n);}catch(A& a){if(a.n!=n)return -1;throw;}}
+catch(D d){return d.n; }return -2;}
+int main(int argc,char**){long long total=0;
+for(int i=0;i<argc*60000;++i)total+=step(i%97);
+return total==2878839 && dead==120000 && copies==60000?0:1;}
+''')
+    workloads={'exceptions':([exceptions],32)}
 def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def run(args):
     p=subprocess.run(list(map(str,args)),stdout=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -97,11 +110,14 @@ for name,(sources,_) in workloads.items():
     images=[]
     for label,binary in [('A',A),('B',B)]:
         exe=out/(name+'-'+label); run([binary,'-O0','-o',exe,*sources]); run([exe]); images.append(exe)
-    assert images[0].read_bytes()==images[1].read_bytes(),name
     data=images[0].read_bytes(); ph=struct.unpack_from('<Q',data,32)[0]
     # RX PT_LOAD includes the ELF header; generated instruction bytes follow it.
     text=struct.unpack_from('<Q',data,ph+32)[0]-176
-    results['images'][name]={'sha256':digest(images[0]),'text_bytes':text,'file_bytes':len(data)}
+    measurements={}
+    for label,exe in zip(('A','B'),images):
+        data=exe.read_bytes();ph=struct.unpack_from('<Q',data,32)[0]
+        measurements[label]={'sha256':digest(exe),'text_bytes':struct.unpack_from('<Q',data,ph+32)[0]-176,'file_bytes':len(data)}
+    results['images'][name]={**measurements['B'],'versions':measurements,'byte_identical':images[0].read_bytes()==images[1].read_bytes()}
     for mode in ('compile','runtime'):
         repeat=workloads[name][1] if mode=='compile' else 3
         for block,order in enumerate(['AAAA','ABBA','ABBA','ABBA','ABBA','ABBA','ABBA']):

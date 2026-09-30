@@ -73,6 +73,7 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
         if (i.op == Op::Call && i.args[n].kind != Operand::Symbol) out << '*';
         operand(p,i.args[n],out);
     }
+    if (i.op >= Op::Fadd && i.op <= Op::Fdiv && i.source_type == Type::F80) out << " [eval=f80]";
     if (i.op == Op::Call || i.op == Op::Syscall) {
         out << " [args=(";
         bool first = true;

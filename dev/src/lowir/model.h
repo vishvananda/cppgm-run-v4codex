@@ -134,7 +134,7 @@ bool terminator(Opcode op);
 struct Instruction {
     Opcode opcode;
     Operation operation = Operation::None;
-    Type type, source_type;
+    Type type, source_type; // Convert input type; Binary optional evaluation precision.
     ValueId destination;
     Range operands;
     SignatureId signature;
