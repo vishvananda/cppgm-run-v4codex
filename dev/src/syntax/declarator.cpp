@@ -1,4 +1,5 @@
 #include "syntax/parser.h"
+#include "support/type_traits.h"
 #include <stdexcept>
 
 namespace cppgm { namespace syntax {
@@ -19,7 +20,7 @@ NodeId Parser::specifiers(bool type_only, NodeId result)
             in.require(")"); angle_expression = saved;
             auto spec = wrap(type_only ? Kind::Decltype : Kind::DeclSpecifier,operand);
             ast[spec].op = KW_DECLTYPE; ast[spec].flags |= 2; ast.append(result,spec); have_type = true;
-        } else if (!have_type && in.is("__underlying_type")) {
+        } else if (!have_type && type_transform(builtin_trait(ids.spelling(in.peek().text)))) {
             auto spec = wrap(type_only ? Kind::Decltype : Kind::DeclSpecifier,type_trait());
             ast[spec].op = KW_DECLTYPE; ast.append(result,spec); have_type = true;
         } else if (builtin()) {

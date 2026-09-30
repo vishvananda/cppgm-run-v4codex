@@ -58,6 +58,11 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
             auto k = key(function,id);
             auto& info = class_facts[entities[e].class_info];
             info.local_function = function; info.local_ordinal = local_class_names.get(k);
+            if (!name && !anonymous_union) {
+                auto unnamed = key(function,0);
+                auto ordinal = local_class_names.get(unnamed);
+                local_unnamed_types.put(e,ordinal+1); local_class_names.put(unnamed,ordinal+1);
+            }
             local_class_names.put(k,info.local_ordinal+1); break;
         }
         entities[e].key = key_op;
@@ -72,6 +77,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
                ((entities[e].key == KW_UNION) != (key_op == KW_UNION)))
         throw std::runtime_error("incompatible class declaration");
     TypeId t = entities[e].type;
+    native_attributes(e,n);
     if (definitions && definition && ast.nodes.occurrences[n].context) {
         auto pattern = template_class_bindings.get(ast.nodes.occurrences[n].source);
         if (pattern) {

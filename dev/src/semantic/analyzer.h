@@ -30,6 +30,11 @@ public:
     Index builtin_trait_values, builtin_type_properties;
     Index assembler_names; // EntityId -> interned explicit object name.
     Index section_names, weak_symbols; // EntityId -> immutable object attributes.
+    Index abi_tag_members;
+    std::vector<syntax::AbiTag> abi_tags = std::vector<syntax::AbiTag>(1);
+    void native_attributes(EntityId, NodeId);
+    void inherit_native_attributes(EntityId, EntityId);
+    syntax::FunctionEffects function_effects(EntityId) const;
     LiteralCallKind literal_call_kind(NodeId n) const { auto k = literal_call_kinds.get(n); return k ? LiteralCallKind(k-1) : LiteralCallKind::String; }
     Expression expression_fact(NodeId n) const { return expressions[n]; }
     Index throw_index, try_scopes, constructor_handler_scopes, handler_initializations, handler_bindings, jump_exception_targets;
@@ -71,6 +76,8 @@ public:
     TypeId dependent_function_template_parameter_type(EntityId specialization, unsigned ordinal);
     bool emission_suppressed(EntityId e) const { return instantiation_suppressed(e); }
     Index type_linkage_names;
+    Index local_unnamed_types;
+    bool dependent_type(TypeId type);
     ScopeId global = 0;
     std::vector<NodeId> call_arguments, default_arguments;
     NodeId default_argument(EntityId e, unsigned parameter, Conversion* converted = 0, DefaultReason reason = DefaultReason::Argument);
@@ -1169,7 +1176,6 @@ private:
 
     std::uint32_t intern_arguments(const std::vector<TypeId>& args);
     EntityId specialize(EntityId pattern, const std::vector<TypeId>& args, bool explicit_head = false);
-    bool dependent_type(TypeId type);
     TypeId substitute_type(TypeId pattern, const Index& bindings, Index& cache, std::uint32_t owner = 0);
     bool deduce_type(TypeId pattern, TypeId actual, Index& bindings, DeductionKind kind = DeductionKind::Call, std::uint32_t prefix = 0);
     bool deduce_sequence(const std::vector<ArgumentId>& pattern, const std::vector<ArgumentId>& actual, Index& bindings, DeductionKind kind, std::uint32_t prefix = 0);

@@ -516,7 +516,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     auto& x = r.expression;
     if (q.kind == QueryKind::IntegerPack || q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack)
         x.type = types.fundamental(q.op == KW_NOEXCEPT ? FT_BOOL : FT_UNSIGNED_LONG_INT);
-    if (q.kind == QueryKind::BuiltinTrait && q.value != unsigned(BuiltinTrait::Underlying))
+    if (q.kind == QueryKind::BuiltinTrait && !type_transform(BuiltinTrait(q.value)))
         x.type = types.fundamental(FT_BOOL);
     if (q.kind == QueryKind::Typeid) {
         x.type = typeinfo_result_type(); x.category = ValueCategory::Lvalue;

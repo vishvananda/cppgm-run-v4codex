@@ -15,7 +15,7 @@ void Encoder::function(const Function& f) {
     if (f.context) context(f.context);
     bool is_nested = f.local_owner || (owner && !standard_namespace(owner)) || f.qualifiers;
     if (is_nested) { output += 'N'; qualifiers(f.qualifiers); }
-    if (f.local_owner) local_component(f.local_owner);
+    if (f.local_owner) { local_component(f.local_owner); enter(f.local_owner); }
     else if (owner) prefix(owner);
     if (f.conversion) { output += "cv"; type(f.conversion); }
     else if (f.terminal != ABI_TERMINAL_NONE) {

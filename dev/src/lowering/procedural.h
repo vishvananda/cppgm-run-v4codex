@@ -217,6 +217,7 @@ class Procedural {
     NodeId child(NodeId n, syntax::Kind k) const;
     std::string spelling(IdentifierId id) const;
     abi_mangle::Id abi_type(TypeId t);
+    abi_mangle::Id abi_tagged_name(EntityId, abi_mangle::Id);
     abi_mangle::Id abi_query(semantic::QueryId q);
     abi_mangle::Id abi_argument(semantic::ArgumentId argument);
     semantic::Index abi_queries;

@@ -5,6 +5,9 @@ using namespace lowir_model;
 SignatureId Procedural::function_signature(EntityId e, FunctionId owner, bool base)
 {
     auto result = signature(sem.call_type(e),owner);
+    auto effects = sem.function_effects(e);
+    p.signatures[result.index-1].boundary.effects = effects == syntax::FunctionEffects::ReadNone ?
+        CFXM_READNONE : effects == syntax::FunctionEffects::ReadOnly ? CFXM_READONLY : CFXM_DEFAULT;
     if (!(base || base_only_entry(e)) || !(sem.constructor_member(e) || sem.destructor_member(e))) return result;
     auto cls = sem.scopes[sem.entities[e].owner].entity;
     auto count = sem.virtual_base_count(cls);

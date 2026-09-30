@@ -31,6 +31,10 @@ TypeQueryFact Analyzer::query_builtin_trait(QueryId id, const TypeQuery& query)
         throw std::runtime_error("invalid type trait arity");
     auto t = argument_types[args.offset];
     TypeQueryFact result; result.expression.type = types.fundamental(FT_BOOL);
+    if (trait == BuiltinTrait::Decay) {
+        if (types[t].kind == TypeKind::LRef || types[t].kind == TypeKind::RRef) t = types[t].child;
+        result.expression.type = types.unqualified(decay(t)); return result;
+    }
     if (trait == BuiltinTrait::Underlying) {
         if (types[t].kind != TypeKind::Named || entities[types[t].entity].key != KW_ENUM)
             return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);

@@ -5,8 +5,12 @@ enum class BuiltinTrait : unsigned char {
     None, Enum, Union, Class, Trivial, TriviallyCopyable, StandardLayout, Pod,
     Literal, Empty, Polymorphic, Final, Abstract, Constructible, NothrowConstructible,
     TriviallyConstructible, Assignable, NothrowAssignable, TriviallyAssignable,
-    TrivialDestructor, VirtualDestructor, Same, BaseOf, Underlying
+    TrivialDestructor, VirtualDestructor, Same, BaseOf, Underlying, Decay
 };
+inline bool type_transform(BuiltinTrait trait)
+{
+    return trait == BuiltinTrait::Underlying || trait == BuiltinTrait::Decay;
+}
 inline BuiltinTrait builtin_trait(TextView text)
 {
     static const char* const names[] = {"", "__is_enum", "__is_union", "__is_class", "__is_trivial",
@@ -14,7 +18,7 @@ inline BuiltinTrait builtin_trait(TextView text)
         "__is_empty", "__is_polymorphic", "__is_final", "__is_abstract", "__is_constructible",
         "__is_nothrow_constructible", "__is_trivially_constructible", "__is_assignable",
         "__is_nothrow_assignable", "__is_trivially_assignable", "__has_trivial_destructor",
-        "__has_virtual_destructor", "__is_same", "__is_base_of", "__underlying_type"};
+        "__has_virtual_destructor", "__is_same", "__is_base_of", "__underlying_type", "__decay"};
     if (text.size < 5 || text.data[0] != '_' || text.data[1] != '_') return BuiltinTrait::None;
     for (unsigned i = 1; i < sizeof(names)/sizeof(*names); ++i)
         if (text.equals(names[i])) return BuiltinTrait(i);

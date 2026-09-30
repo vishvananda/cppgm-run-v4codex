@@ -1,5 +1,13 @@
 #include "lowering/procedural.h"
 namespace cppgm { namespace lowering {
+abi_mangle::Id Procedural::abi_tagged_name(EntityId e, abi_mangle::Id name)
+{
+    if (!sem.entities[e].abi_tags) return name;
+    std::vector<abi_mangle::Id> tags;
+    for (auto t = sem.entities[e].abi_tags; t; t = sem.abi_tags[t].next)
+        tags.push_back(abi.string(spelling(sem.abi_tags[t].name)));
+    return abi.make(abi_mangle::Kind::Tagged,name,0,0,0,tags);
+}
 abi_mangle::Id Procedural::abi_argument(semantic::ArgumentId argument)
 {
     using abi_mangle::Kind;
@@ -35,11 +43,23 @@ abi_mangle::Id Procedural::abi_entity_name(EntityId e)
     auto entity = sem.entities[e];
     auto linkage_name = sem.type_linkage_names.get(e);
     auto name = abi.name(abi_scope(entity.owner),spelling(linkage_name ? linkage_name : entity.name));
+    name = abi_tagged_name(e,name);
     if (!entity.specialization) return name;
+    auto pattern = sem.specialization_pattern(e);
+    if (sem.entities[pattern].template_parameter) name = abi_type(sem.entities[pattern].type);
     auto pack = sem.specialization_arguments(e);
     std::vector<abi_mangle::Id> arguments;
-    for (unsigned j = 0; j < pack.count; ++j)
-        arguments.push_back(abi_argument(sem.template_argument(pack.offset+j)));
+    bool dependent = sem.dependent_type(entity.type);
+    for (unsigned j = 0; j < pack.count; ++j) {
+        auto arg = sem.template_argument(pack.offset+j);
+        // A dependent template-id retains its argument list, before matching
+        // a class head groups trailing arguments into a semantic pack.
+        if (dependent && sem.argument_pack(arg)) {
+            auto values = sem.pack_arguments(arg);
+            for (unsigned k = 0; k < values.count; ++k)
+                arguments.push_back(abi_argument(sem.template_argument(values.offset+k)));
+        } else arguments.push_back(abi_argument(arg));
+    }
     return entity.kind == semantic::EntityKind::Type ? abi_template_type(name,arguments) :
         abi.make(abi_mangle::Kind::Template,name,0,0,0,arguments);
 }
@@ -119,7 +139,7 @@ abi_mangle::Id Procedural::abi_function_context(EntityId e)
 {
     auto entity = sem.entities[e]; auto t = sem.types[entity.type];
     abi_mangle::Function function;
-    function.name = abi.name(abi_scope(entity.owner),spelling(entity.name));
+    function.name = abi_tagged_name(e,abi.name(abi_scope(entity.owner),spelling(entity.name)));
     function.category = entity.member_info ? abi_mangle::FunctionCategory::Member : abi_mangle::FunctionCategory::Nonmember;
     function.terminal = operator_terminal(e); function.qualifiers = t.cv;
     if (auto suffix = sem.literal_suffix(e)) {
@@ -163,7 +183,8 @@ void Procedural::local_member_abi(EntityId e, abi_mangle::Function& target)
     auto cls = sem.scopes[sem.entities[e].owner].entity;
     if (!sem.local_function(cls)) return;
     auto local = abi_type(sem.entities[cls].type);
-    target.context = abi[local].a; target.local_owner = local;
-    target.name = abi.name(0,spelling(sem.entities[e].name));
+    auto component = abi[local].kind == abi_mangle::Kind::Tagged ? abi[local].a : local;
+    target.context = abi[component].a; target.local_owner = local;
+    target.name = abi_tagged_name(e,abi.name(0,spelling(sem.entities[e].name)));
 }
 } }

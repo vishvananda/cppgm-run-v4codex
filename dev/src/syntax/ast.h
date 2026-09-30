@@ -177,7 +177,14 @@ struct Node {
 };
 
 struct AlignmentAttribute { NodeId operand; std::uint32_t next; bool type; };
-struct NativeAttributes { IdentifierId section = 0; bool weak = false; };
+enum class FunctionEffects : unsigned char { Unknown, ReadOnly, ReadNone };
+struct AbiTag { IdentifierId name; std::uint32_t next; };
+struct NativeAttributes {
+    IdentifierId section = 0;
+    std::uint32_t tags = 0;
+    FunctionEffects effects = FunctionEffects::Unknown;
+    bool weak = false;
+};
 
 struct ClassRegion { std::size_t begin, end; };
 
@@ -263,6 +270,7 @@ public:
     std::size_t node_growths = 0, location_growths = 0, literal_growths = 0;
     IdIndex alignment_owners, class_packing;
     IdIndex native_attribute_owners;
+    std::vector<AbiTag> abi_tags = std::vector<AbiTag>(1);
     std::vector<NativeAttributes> native_attributes = std::vector<NativeAttributes>(1);
     std::vector<AlignmentAttribute> alignments = std::vector<AlignmentAttribute>(1);
     NodePool nodes;
@@ -279,7 +287,7 @@ public:
     explicit AstView(Ast& a) : tree(a), telemetry(a.telemetry), nodes(a.nodes),
         literals(a.literals), literal_bytes(a.literal_bytes), class_regions(a.class_regions),
         alignment_owners(a.alignment_owners), class_packing(a.class_packing), alignments(a.alignments),
-        native_attribute_owners(a.native_attribute_owners), native_attributes(a.native_attributes) {}
+        native_attribute_owners(a.native_attribute_owners), abi_tags(a.abi_tags), native_attributes(a.native_attributes) {}
     Node operator[](NodeId id) const { return tree.view(id); }
     operator const Ast&() const { return tree; }
     NodeId instantiate(NodeId root, std::uint32_t context) { return tree.instantiate(root,context); }
@@ -301,6 +309,7 @@ public:
     IdIndex& class_packing;
     std::vector<AlignmentAttribute>& alignments;
     IdIndex& native_attribute_owners;
+    std::vector<AbiTag>& abi_tags;
     std::vector<NativeAttributes>& native_attributes;
 };
 

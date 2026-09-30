@@ -304,7 +304,7 @@ bool Analyzer::instantiate_member_definition(EntityId e)
                 auto specs = special_member ? 0 : ast[source].first;
                 auto init = ast.projected(def.initializer,context);
                 if (!init) init = child(source,Kind::Initializer);
-                declaration_attributes(e,specs,source);
+                declaration_attributes(e,specs,source,d);
                 function_defaults(e,d,environment,source);
                 exception_specification(e,d,environment);
                 auto special = child(init,Kind::SpecialInitializer);

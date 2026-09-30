@@ -1,4 +1,5 @@
 #include "syntax/parser.h"
+#include "support/type_traits.h"
 #include <stdexcept>
 
 namespace cppgm { namespace syntax {
@@ -52,7 +53,7 @@ bool Parser::builtin(std::size_t ahead)
 
 bool Parser::type_start(std::size_t ahead)
 {
-    if (builtin(ahead) || in.is("__underlying_type",ahead) || in.is("typeof",ahead) || in.is("__typeof",ahead) || in.is("__typeof__",ahead)) return true;
+    if (builtin(ahead) || type_transform(builtin_trait(ids.spelling(in.peek(ahead).text))) || in.is("typeof",ahead) || in.is("__typeof",ahead) || in.is("__typeof__",ahead)) return true;
     switch (in.peek(ahead).op) {
     case KW_CONST: case KW_VOLATILE: case KW_TYPENAME: case KW_DECLTYPE:
     case KW_STRUCT: case KW_CLASS: case KW_UNION: case KW_ENUM: return true;
@@ -106,83 +107,5 @@ NodeId Parser::translation_unit(DeclarationConsumer* consumer)
     return root;
 }
 
-void Parser::native_attributes(NodeId owner, NativeAttributes value)
-{
-    if (!value.section && !value.weak) return;
-    owner = ast.nodes.occurrences[owner].source;
-    auto prior = ast.native_attribute_owners.get(owner);
-    if (prior) {
-        auto& old = ast.native_attributes[prior];
-        if (old.section && value.section && old.section != value.section) throw std::runtime_error("conflicting section attributes");
-        if (value.section) old.section = value.section;
-        old.weak |= value.weak;
-    } else {
-        ast.native_attribute_owners.put(owner,ast.native_attributes.size());
-        ast.native_attributes.push_back(value);
-    }
-}
-unsigned Parser::balanced(const char* open, const char* close, NativeAttributes* native)
-{
-    unsigned result = 0;
-    in.require(open);
-    while (!in.is(close)) {
-        if (in.peek().kind == PostTokenKind::eof) throw std::runtime_error("unterminated attribute");
-        if (in.is("section") || in.is("__section__")) {
-            in.take(); in.require("(");
-            if (in.peek().kind != PostTokenKind::literal) throw std::runtime_error("section requires a string literal");
-            auto token = in.take(); const auto& value = ast.literals[token.literal];
-            if (value.kind != LiteralKind::string || value.type != FT_CHAR || value.bytes < 2)
-                throw std::runtime_error("section requires a nonempty narrow string");
-            auto data = ast.literal_bytes.data()+value.offset;
-            for (unsigned i = 0; i+1 < value.bytes; ++i) {
-                auto c = data[i];
-                if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
-                    (c >= '0' && c <= '9') || c == '_' || c == '.')) throw std::runtime_error("unsafe section name");
-            }
-            in.require(")");
-            if (!native) throw std::runtime_error("section attribute requires an object declaration");
-            auto name = ids.intern(TextView(data,value.bytes-1));
-            if (native->section && native->section != name) throw std::runtime_error("conflicting section attributes");
-            native->section = name;
-        }
-        else if (in.is("(")) result |= balanced("(", ")",native);
-        else if (in.is("[")) result |= balanced("[", "]");
-        else if (in.is("{")) result |= balanced("{", "}");
-        else {
-            if (native && (in.is("weak") || in.is("__weak__"))) native->weak = true;
-            if (in.is("packed") || in.is("__packed__")) result |= 32;
-            if (in.is("noinline") || in.is("__noinline__")) result |= 64;
-            if (in.is("always_inline") || in.is("__always_inline__")) result |= 128;
-            if (in.is("cppgm_stable_prefix") || in.is("__cppgm_stable_prefix__")) {
-                if (in.is("(",1)) throw std::runtime_error("stable-prefix attribute takes no arguments");
-                result |= 16;
-            }
-            in.take();
-        }
-    }
-    in.take(); return result;
-}
-
-unsigned Parser::attributes(std::uint32_t* alignment, NativeAttributes* native)
-{
-    unsigned result = 0;
-    for (;;) {
-        if (in.is("[") && in.is("[", 1)) result |= balanced("[", "]");
-        else if (in.eat("alignas")) {
-            in.require("(");
-            bool is_type = type_operand();
-            NodeId operand = is_type ? type_id() : expression(2);
-            in.require(")");
-            if (alignment) {
-                ast.alignments.push_back(AlignmentAttribute{operand, *alignment, is_type});
-                *alignment = ast.alignments.size()-1;
-            }
-        } else if (in.is("__attribute__") || in.is("__attribute")) {
-            in.take();
-            result |= balanced("(", ")",native);
-        } else break;
-    }
-    return result;
-}
 
 } }

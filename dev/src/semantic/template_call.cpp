@@ -383,11 +383,15 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
         specializations[index].declaration = FactState::Failure; return 0;
     }
     EntityId e = make_entity(EntityKind::Function, entities[pattern].owner == t.environment ? scopes[t.environment].parent : entities[pattern].owner, entities[pattern].name, entities[pattern].source);
+    inherit_native_attributes(e,pattern);
     entities[e].template_pattern = false;
     entities[e].type = type; entities[e].specialization = index;
     entities[e].constexpr_function = entities[pattern].constexpr_function;
     entities[e].deleted_function = entities[pattern].deleted_function;
     entities[e].inline_function = entities[pattern].inline_function;
+    entities[e].no_inline = entities[pattern].no_inline;
+    entities[e].force_inline = entities[pattern].force_inline;
+    entities[e].stable_prefix = entities[pattern].stable_prefix;
     entities[e].is_static = entities[pattern].is_static;
     entities[e].access = entities[pattern].access;
     entities[e].key = entities[pattern].key;

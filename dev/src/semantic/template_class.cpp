@@ -54,6 +54,7 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s, ScopeId friend_owne
         else bind(owner,id,e);
     }
     auto previous_index = entities[e].template_info;
+    native_attributes(e,n);
     auto previous = previous_index ? templates[previous_index] : TemplateFunction();
     if (ast[n].kind == Kind::Class && previous.body) throw std::runtime_error("class template redefinition");
     template_facts(e,s);
@@ -228,6 +229,7 @@ EntityId Analyzer::specialize_class(EntityId pattern, const std::vector<TypeId>&
     if (auto old = specialization_index.get(key(pattern,pack))) return specializations[old].entity;
     auto source = entities[pattern];
     EntityId e = make_entity(EntityKind::Type,source.owner,source.name,source.source);
+    inherit_native_attributes(e,pattern);
     entities[e].template_pattern = false; // Canonical argument identity, not a source declaration binding.
     entities[e].access = source.access;
     entities[e].key = source.key; entities[e].type = types.named(e);

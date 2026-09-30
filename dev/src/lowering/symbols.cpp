@@ -1,4 +1,5 @@
 #include "lowering/procedural.h"
+#include "support/type_traits.h"
 #include <stdexcept>
 namespace cppgm { namespace lowering {
 using namespace lowir_model;
@@ -11,7 +12,7 @@ abi_mangle::Id Procedural::abi_scope(semantic::ScopeId s)
     if (!s || s == sem.global) return 0;
     if (abi_scopes[s]) return abi_scopes[s];
     auto scope = sem.scopes[s];
-    if (scope.kind == semantic::ScopeKind::Class && (sem.entities[scope.entity].specialization || sem.type_linkage_names.get(scope.entity)))
+    if (scope.kind == semantic::ScopeKind::Class)
         return abi_scopes[s] = abi_entity_name(scope.entity);
     auto parent = abi_scope(scope.parent);
     if (scope.kind == semantic::ScopeKind::Template) return abi_scopes[s] = parent;
@@ -53,15 +54,28 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
             for (unsigned i = 0; i < f.count; ++i) params.push_back(abi_type(sem.types.parameters[f.offset+i]));
             result = abi.make(abi_mangle::Kind::Lambda,abi_function_context(closure.enclosing),!closure.ordinal,f.variadic,
                 closure.ordinal ? closure.ordinal-1 : 0,params);
-        } else if (sem.local_function(t.entity))
-            result = abi.make(abi_mangle::Kind::Local,abi_function_context(sem.local_function(t.entity)),abi.string(spelling(e.name)),0,sem.local_ordinal(t.entity));
+        } else if (sem.local_function(t.entity)) {
+            auto linkage_name = sem.type_linkage_names.get(t.entity);
+            auto unnamed = linkage_name ? 0 : sem.local_unnamed_types.get(t.entity);
+            result = abi_tagged_name(t.entity,abi.make(abi_mangle::Kind::Local,abi_function_context(sem.local_function(t.entity)),
+                unnamed ? 0 : abi.string(spelling(linkage_name ? linkage_name : e.name)),unnamed ? 1 : 0,unnamed ? unnamed-1 : sem.local_ordinal(t.entity)));
+        }
         else result = abi_entity_name(t.entity);
         break;
     }
     case TypeKind::AliasApplication: result = abi_type(t.child); break;
     case TypeKind::PackExpansion: result = abi.make(abi_mangle::Kind::Pack,abi_type(t.bound)); break;
     case TypeKind::Pointer: result = abi.make(abi_mangle::Kind::Pointer, abi_type(t.child)); break;
-    case TypeKind::Decltype: result = abi.make(abi_mangle::Kind::Decltype,abi_query(t.entity)); break;
+    case TypeKind::Decltype: {
+        auto query = sem.type_query(t.entity);
+        if (query.kind == semantic::QueryKind::BuiltinTrait && type_transform(BuiltinTrait(query.value))) {
+            auto args = sem.query_arguments(query.arguments);
+            std::vector<abi_mangle::Id> operands;
+            for (unsigned j = 0; j < args.count; ++j) operands.push_back(abi_type(sem.template_argument(args.offset+j)));
+            result = abi.make(abi_mangle::Kind::Transform,0,abi.string(spelling(query.name)),0,0,operands);
+        } else result = abi.make(abi_mangle::Kind::Decltype,abi_query(t.entity));
+        break;
+    }
     case TypeKind::DependentName: {
         result = abi.name(abi_type(t.child),spelling(t.entity));
         if (semantic::DependentNameKind(t.bound) == semantic::DependentNameKind::Application) {
@@ -152,7 +166,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     if (e.thread_local_storage) metadata.storage = GSM_THREAD_LOCAL;
     else if (e.kind == semantic::EntityKind::Variable && (sem.types[e.type].cv & 3) == 1 && type(e.type).scalar() && !reference(e.type)) metadata.storage = GSM_READONLY;
     abi_mangle::Target target;
-    auto aname = e.kind == semantic::EntityKind::Variable && e.specialization ? abi_entity_name(id) : abi.name(abi_scope(e.owner), name);
+    auto aname = e.kind == semantic::EntityKind::Variable && e.specialization ? abi_entity_name(id) : abi_tagged_name(id,abi.name(abi_scope(e.owner), name));
     if (e.kind == semantic::EntityKind::Function) {
         target.kind = abi_mangle::TargetKind::Function;
         target.function.name = aname;

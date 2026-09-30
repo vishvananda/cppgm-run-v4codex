@@ -193,7 +193,15 @@ void Encoder::context(Id id) {
 }
 void Encoder::local_component(Id id) {
     const Node n = g[id];
+    if (n.kind == Kind::Tagged) {
+        local_component(n.a); tags(g.children(id)); return;
+    }
     if (n.kind == Kind::Local) {
+        if (n.c) {
+            output += "Ut";
+            if (n.value) output += std::to_string(n.value-1);
+            output += '_'; return;
+        }
         source(n.b);
         if (n.value) {
             output += n.value > 10 ? "__" : "_";

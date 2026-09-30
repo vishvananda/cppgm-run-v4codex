@@ -32,7 +32,14 @@ Run explicit personal controls, `make test-pa28`, the root through report and
 
 ## Handoff ledger
 
-151 in progress. Implementation unfinished: all three groups above, initially
-16 failures. Independent review pending: cumulative PA28 architecture, semantic
-and performance evidence; no review requirement is waived. No handoff boundary
-has yet been reached.
+151 implementation increment: ABI attributes, dependent template identities,
+type-producing builtin queries and local/lambda naming now pass the ten owning
+fixtures. PA28 **91/97** and the through report **4532/4538** show no earlier
+failures. Fourteen explicit naming/effect controls pass, including a host-built
+consumer and effects added after an instance was declared. Final validation and
+frozen performance evidence are pending.
+
+Implementation unfinished: virtual layout/completion (3) and EH (3), with the
+same six entry fixtures still failing. Independent review pending: cumulative
+PA28 architecture, semantic and performance evidence; no review requirement is
+waived. The naming increment does not claim these separate owners are complete.

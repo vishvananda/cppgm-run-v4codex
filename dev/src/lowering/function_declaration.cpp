@@ -12,12 +12,18 @@ void Procedural::declare_function(EntityId e)
     auto& existing = p.symbols[f.symbol.index-1];
     if (existing.kind == Symbol::FunctionSymbol) {
         auto& prior = p.functions[existing.entity-1];
+        auto old_effects = p.signatures[prior.signature.index-1].boundary.effects;
+        auto effects = sem.function_effects(e);
+        auto merged = effects == syntax::FunctionEffects::ReadNone || old_effects == CFXM_READNONE ? CFXM_READNONE :
+            effects == syntax::FunctionEffects::ReadOnly || old_effects == CFXM_READONLY ? CFXM_READONLY : CFXM_DEFAULT;
+        p.signatures[prior.signature.index-1].boundary.effects = merged;
         if (!defined) {
             // A later TU can establish the value ABI of an earlier opaque
             // declaration. Refresh that function identity before any call
             // consumes its signature; unrelated declarations stay warm.
             if (prior.declaration && linkage.incomplete_signatures.get(existing.entity))
                 prior.signature = function_signature(e,FunctionId(existing.entity));
+            p.signatures[prior.signature.index-1].boundary.effects = merged;
             return;
         }
         if (!prior.declaration) {
@@ -26,6 +32,7 @@ void Procedural::declare_function(EntityId e)
         }
         prior.declaration = false;
         prior.signature = function_signature(e,FunctionId(existing.entity));
+        p.signatures[prior.signature.index-1].boundary.effects = merged;
         definitions.push_back(e);
         return;
     }

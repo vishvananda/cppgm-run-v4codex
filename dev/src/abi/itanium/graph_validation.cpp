@@ -41,7 +41,7 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
         sequence(Role::Argument); return;
     case Kind::Tagged:
         edge(a, Role::Type);
-        require((*this)[a].kind <= Kind::Tagged);
+        require((*this)[a].kind <= Kind::Tagged || (*this)[a].kind == Kind::Local);
         for (Id tag : children) text(tag);
         return;
     case Kind::Cv: require(b <= 3); edge(a, Role::Type); break;
@@ -66,7 +66,10 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
     case Kind::MemberPointer: edge(a, Role::Type); edge(b, Role::Type); break;
     case Kind::Decltype: case Kind::ExpressionArgument: case Kind::ExprPack:
         edge(a, Role::Expression); break;
-    case Kind::Local: edge(a, Role::Context); text(b); sequence(Role::Type); return;
+    case Kind::Local:
+        edge(a, Role::Context); require(c <= 1);
+        if (!c) text(b); else require(!b);
+        sequence(Role::Type); return;
     case Kind::Lambda: edge(a, Role::Context); sequence(Role::Type); return;
     case Kind::RawContext: case Kind::SymbolEntity: text(a); break;
     case Kind::DependentValue:
@@ -111,7 +114,11 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
             require((*this)[a].kind == Kind::Name || (*this)[a].kind == Kind::Template);
         }
         if (children[0]) edge(children[0], Role::Context);
-        if (children[1]) require((*this)[children[1]].kind == Kind::Local || (*this)[children[1]].kind == Kind::Lambda);
+        if (children[1]) {
+            auto local = children[1];
+            if ((*this)[local].kind == Kind::Tagged) local = (*this)[local].a;
+            require((*this)[local].kind == Kind::Local || (*this)[local].kind == Kind::Lambda);
+        }
         require(a || children[1]); qualifiers(b); require(c < 24);
         if (children[2]) abi_terminal_word(static_cast<AbiTerminalKind>(children[2]));
         if (children[3]) edge(children[3], Role::Type);

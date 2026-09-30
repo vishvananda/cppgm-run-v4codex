@@ -9,9 +9,11 @@ NodeId Parser::class_specifier()
     unsigned packing = in.peek().packing;
     NodeId key = leaf(Kind::ClassKey);
     std::uint32_t alignment = 0;
-    unsigned attributes_flags = attributes(&alignment);
+    NativeAttributes native;
+    unsigned attributes_flags = attributes(&alignment,&native);
     NodeId n = identifier() || in.is("::") ? name(true) : 0;
     NodeId result = named(Kind::Class, n);
+    native_attributes(result,native);
     if (alignment) ast.alignment_owners.put(result, alignment);
     if (packing) ast.class_packing.put(result, packing);
     ast[result].flags |= attributes_flags;

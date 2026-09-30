@@ -187,7 +187,7 @@ SymbolId Procedural::deleting_symbol(EntityId e)
     auto sym = fresh_symbol("@deleting_destructor"); deleting_symbols[id] = sym;
     deleting_entries.push_back(e);
     abi_mangle::Target target; target.kind = abi_mangle::TargetKind::Function;
-    target.function.name = abi.name(abi_scope(sem.entities[e].owner),spelling(sem.entities[e].name));
+    target.function.name = abi_tagged_name(e,abi.name(abi_scope(sem.entities[e].owner),spelling(sem.entities[e].name)));
     target.function.category = abi_mangle::FunctionCategory::Member;
     target.function.terminal = abi_mangle::ABI_TERMINAL_DESTRUCTOR_DELETING;
     local_member_abi(e,target.function);

@@ -19,6 +19,7 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
         }
     }
     if (!entity) entity = pattern_declaration(EntityKind::Type,parent,terminal(name),n,true);
+    native_attributes(entity,n);
     template_pattern_entities.put(entity,2);
     auto cs = entities[entity].scope;
     if (!cs) {
@@ -247,7 +248,7 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
                 entities[e].type = types.signature(type); facts.edit(d).type = type;
                 if (function) template_type_sources.put(ast.nodes.occurrences[d].source,type+1);
             }
-            if (function) declaration_attributes(e,specs,n);
+            if (function) declaration_attributes(e,specs,n,d);
             auto special_init = child(init,Kind::SpecialInitializer);
             if (!special_init) special_init = child(child(n,Kind::Initializer),Kind::SpecialInitializer);
             if (function && special_init && ast[special_init].op == KW_DELETE) entities[e].deleted_function = true;
