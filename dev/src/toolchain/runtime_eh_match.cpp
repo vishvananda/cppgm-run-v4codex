@@ -97,13 +97,26 @@ FunctionId conversion(RuntimeProgram& r, SymbolId void_type)
 FunctionId build_exception_match(RuntimeProgram& r, SymbolId void_type)
 {
     auto convert=conversion(r,void_type);
+    auto nullptr_type=runtime_typeinfo(r,"Dn");
     auto f=r.function(r.symbol("",SR_NONE),Type::I32); RuntimeBody b(r,f);
     auto target=b.parameter(Type::Ptr);
     auto entry=b.block(), pointer=b.block(), ordinary=b.block();
     b.start(entry); auto object=b.load(Operand::symbol(r.state(native::RuntimeEntity::ExceptionValue)));
-    auto header=b.offset(object,-64), type=b.load(header);
+    auto header=b.offset(object,-ExceptionHeaderBytes), type=b.load(header);
     auto table=b.offset(b.emit(Opcode::Addr,Type(),{Operand::symbol(r.tables[3])}),16);
-    b.branch(b.compare(b.load(type),table),pointer,ordinary);
+    auto null_pointer=b.block(), typed=b.block(), member=b.block(), null_value=b.block(), null_member=b.block();
+    b.branch(b.compare(type,b.emit(Opcode::Addr,Type(),{Operand::symbol(nullptr_type)})),null_pointer,typed);
+    b.start(null_pointer); b.branch(b.compare(b.load(target),table),null_value,member);
+    b.start(null_value); b.store(header,16,Operand::null());b.emit(Opcode::Return,Type::I32,{Operand::integer(1)});
+    b.start(member);auto member_table=b.offset(b.emit(Opcode::Addr,Type(),{Operand::symbol(r.tables[5])}),16);
+    b.branch(b.compare(b.load(target),member_table),null_member,ordinary);
+    b.start(null_member);
+    // PA25's source member-pointer representation uses zero for null in both
+    // lanes (data-member offsets are biased by one). Host ABI conversion is
+    // a later object-boundary responsibility.
+    b.store(header,64,Operand::integer(0),Type::I64);b.store(header,72,Operand::integer(0),Type::I64);
+    b.store(header,16,b.offset(header,64));b.emit(Opcode::Return,Type::I32,{Operand::integer(1)});
+    b.start(typed);b.branch(b.compare(b.load(type),table),pointer,ordinary);
     b.start(pointer); auto result=b.call(convert,{type,target,b.load(object),b.offset(header,16),Operand::integer(0),Operand::integer(1)});
     b.emit(Opcode::Return,Type::I32,{result});
     b.start(ordinary); result=b.call(convert,{type,target,object,b.offset(header,16),Operand::integer(0),Operand::integer(1)});

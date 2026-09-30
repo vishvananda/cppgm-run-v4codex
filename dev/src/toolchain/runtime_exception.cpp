@@ -4,7 +4,7 @@ using namespace lowir_model;
 namespace {
 // An allocation owns this fixed header and its payload until the last handler
 // exits. The signed handler count preserves ownership during rethrow.
-const int header_bytes = 64;
+const int header_bytes = ExceptionHeaderBytes;
 enum Field { TypeInfo=0, Destructor=8, Adjusted=16, PreviousCatch=24, Handlers=32, PreviousException=40 };
 FunctionId primitive(RuntimeProgram& r, SymbolRole role, Type result, bool parameter)
 {

@@ -42,6 +42,9 @@ int main(){try{D d;}catch(int n){return n!=7 || seen!=2 || dead!=2;}return 2;}''
 'rethrow-empty':('''int main(){throw;}''',1)
 }
 cases.update({
+'nullptr-data-member':'''struct A{int n;};int main(){try{throw nullptr;}catch(int A::* p){return p!=nullptr;}catch(...){return 1;}return 2;}''',
+'nullptr-function-member':'''struct A{int f();};int main(){try{throw nullptr;}catch(int(A::*p)()){return p!=nullptr;}catch(...){return 1;}return 2;}''',
+'nullptr-pointer':'''int main(){try{throw nullptr;}catch(int* p){return p!=nullptr;}catch(...){return 1;}return 2;}''',
 'pointer-cv-deep':'''int main(){int n=7;int* p=&n;try{throw &p;}catch(const int**){return 1;}catch(const int*const* q){return **q!=7;}catch(...){return 2;}return 3;}''',
 'pointer-cv-remove':'''int main(){const int n=7;try{throw &n;}catch(int*){return 1;}catch(const int* p){return *p!=7;}return 2;}''',
 'function-pointer-void':'''int f(){return 7;}int main(){try{throw &f;}catch(void*){return 1;}catch(int(*p)()){return p()!=7;}return 2;}''',

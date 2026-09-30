@@ -45,8 +45,8 @@ Object runtime_object(const std::vector<RuntimeRequest>& requests, native::Stati
     }
     if (exceptions) {
         const char* tables[] = {"_ZTVN10__cxxabiv117__class_type_infoE", "_ZTVN10__cxxabiv120__si_class_type_infoE",
-            "_ZTVN10__cxxabiv121__vmi_class_type_infoE", "_ZTVN10__cxxabiv119__pointer_type_infoE", "_ZTVN10__cxxabiv120__function_type_infoE"};
-        for (unsigned i = 0; i < 5; ++i) if (!r.tables[i]) {
+            "_ZTVN10__cxxabiv121__vmi_class_type_infoE", "_ZTVN10__cxxabiv119__pointer_type_infoE", "_ZTVN10__cxxabiv120__function_type_infoE", "_ZTVN10__cxxabiv129__pointer_to_member_type_infoE"};
+        for (unsigned i = 0; i < 6; ++i) if (!r.tables[i]) {
             // The pointer table may already be a requested RTTI data symbol.
             for (unsigned s = 0; s < r.p.symbols.size(); ++s)
                 if (r.p.symbols[s].metadata.object && r.p.name(r.p.symbols[s].metadata.object) == tables[i]) r.tables[i] = SymbolId(s+1);

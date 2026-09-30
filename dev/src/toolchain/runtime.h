@@ -1,13 +1,14 @@
 #pragma once
 #include "toolchain/object.h"
 namespace cppgm { namespace toolchain {
+enum { ExceptionHeaderBytes = 80 };
 struct RuntimeRequest { std::string name; ir_model::SymbolRole role; };
 // This owner contains only runtime IR. It never owns source or semantic nodes.
 struct RuntimeProgram {
     lowir_model::Program p;
     struct Primitive { lowir_model::SymbolId symbol; ir_model::SymbolRole role; };
     std::vector<Primitive> primitives;
-    lowir_model::SymbolId tables[5];
+    lowir_model::SymbolId tables[6];
     lowir_model::SymbolId allocation_failure;
     lowir_model::SymbolId states[unsigned(native::RuntimeEntity::Count)];
     lowir_model::SymbolId state(native::RuntimeEntity);
