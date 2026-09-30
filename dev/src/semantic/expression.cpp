@@ -154,7 +154,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         if (entities[e].constant.valid && scopes[entities[e].owner].kind != ScopeKind::Namespace &&
             scopes[entities[e].owner].kind != ScopeKind::Class) {
             ScopeId use = s;
-            while (use && scopes[use].kind != ScopeKind::Function) use = scopes[use].parent;
+            while (use && scopes[use].kind != ScopeKind::Function && !template_object_context_index.get(use))
+                use = scopes[use].parent;
             if (use && !encloses(use, entities[e].owner)) {
                 facts.edit(n).value = constants.size(); constants.push_back(entities[e].constant);
             }
