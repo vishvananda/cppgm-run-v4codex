@@ -1,12 +1,29 @@
-# PA23 compact plan — implementation handoff 121
+# PA23 compact plan — implementation 122
 
-Target: **PA23 full-stage**. Phase: **incomplete implementation handoff**.
+Target: **PA23 full-stage**. Phase: **implement**.
 Stage base commit: `f33dd0775073bf5db6665fb2f4f504783159df76`.
 Last reviewed commit: `f33dd0775073bf5db6665fb2f4f504783159df76`.
-Entry: clean, **3/45**, **42 failures**. Handoff: **17/45**, **28 failures**;
-**14 existing failures resolved, no new failures or reduced coverage**.
-Previous interrupted turn: no live build remained; entry inspection established
-current owners and baseline. This turn made implementation and validation progress.
+Turn 122 entry: `26b96f27e05f82f3cde2e6bf6877288c596f3d06`, clean,
+**17/45**, **28 failures**. The previous turn made implementation and validation
+progress (handoff 121); no interrupted build is live. Both review markers above
+remain unchanged. Entry binary frozen at `/tmp/pa23-122/entry`.
+
+## Current implementation groups
+
+- Lifecycle/vtable owner: finish nonvirtual destructor entry policy and external
+  key-function table demand. Class completion publishes entry/view identity;
+  lowering consumes segment offsets, with bounded cleanup expansion. Validate
+  both remaining nonvirtual fixtures, inherited suites and executable deletion.
+- Member-value owner: implement virtual member-function target formation, static
+  data, conversion facts and dispatch decoding together. Canonical member IDs
+  select tagged slots; lowering must preserve `this` adjustment even after inverse
+  conversion to a nonpolymorphic owner. O(1) formation/decoding; any value proof
+  stays bounded and falls back conservatively. Validate runtime, null/equality,
+  indirect and immediate calls, and PA22 shape preservation.
+- Continue into shared virtual-subobject ownership where the resulting facts
+  support it; do not call the stage complete on progress alone. Performance
+  compares frozen binaries with A/A and ABBA latency/RSS and checked runtime/text;
+  PA23/O0 acceptance applies, with no additional self-imposed speed gate.
 
 ## Completed group and spec alignment
 
