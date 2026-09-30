@@ -4,15 +4,15 @@ from pathlib import Path
 import json,os,platform,statistics,sys,time
 ROOT=Path(__file__).resolve().parents[2];sys.path.insert(0,str(ROOT/'student.tests/pa10'))
 from benchmark import run,sha,text_size
-A,B,WORK,OUT=[Path(p).resolve() for p in sys.argv[1:5]];mode=sys.argv[5]
+A,B,WORK,OUT=[Path(p).resolve() for p in sys.argv[1:5]];mode=sys.argv[5];blocks=8 if mode=='repeat' else 4
 WORK.mkdir(parents=True,exist_ok=True);assert not OUT.exists()
 cpu=min(os.sched_getaffinity(0));os.sched_setaffinity(0,{cpu})
-result=dict(protocol='warmup each lane; four A/A observations; four ABBA blocks; separate checked execution',cpu=cpu,platform=platform.platform(),flags=['--emit-lowir','-O0'],mode=mode,implementation=run(['git','rev-parse','HEAD']).stdout.strip(),harness_sha256=sha(__file__),binaries=[dict(path=str(p),sha256=sha(p),text_bytes=text_size(p)) for p in (A,B)],backend_sha256=sha(ROOT/'reference-binaries/cppgm++'),host=run(['g++','--version']).stdout.splitlines()[0],workloads={})
+result=dict(protocol='warmup each lane; four A/A observations; %d ABBA blocks; separate checked execution'%blocks,cpu=cpu,platform=platform.platform(),flags=['--emit-lowir','-O0'],mode=mode,implementation=run(['git','rev-parse','HEAD']).stdout.strip(),harness_sha256=sha(__file__),binaries=[dict(path=str(p),sha256=sha(p),text_bytes=text_size(p)) for p in (A,B)],backend_sha256=sha(ROOT/'reference-binaries/cppgm++'),host=run(['g++','--version']).stdout.splitlines()[0],workloads={})
 def observe(command):
  usage=WORK/'usage';start=time.perf_counter_ns();run(['/usr/bin/time','-f','%M','-o',usage,*command]);return dict(wall_s=(time.perf_counter_ns()-start)/1e9,peak_rss_kib=int(usage.read_text()),checked_exit=0)
 def measure(commands):
  warm=[dict(lane=i,**observe(c)) for i,c in enumerate(commands)]
- rows=[dict(lane=i,**observe(commands[i])) for i in [0]*4+[0,1,1,0]*4]
+ rows=[dict(lane=i,**observe(commands[i])) for i in [0]*4+[0,1,1,0]*blocks]
  data=dict(warmups=warm,observations=rows,aa_range_s=[min(x['wall_s'] for x in rows[:4]),max(x['wall_s'] for x in rows[:4])])
  data['paired_b_over_a']=[statistics.mean(x['wall_s'] for x in rows[j:j+4] if x['lane']==1)/statistics.mean(x['wall_s'] for x in rows[j:j+4] if x['lane']==0) for j in range(4,len(rows),4)]
  for i in (0,1):
@@ -20,10 +20,11 @@ def measure(commands):
   data[str(i)]=dict(median_wall_s=statistics.median(x['wall_s'] for x in samples),range_wall_s=[min(x['wall_s'] for x in samples),max(x['wall_s'] for x in samples)],peak_rss_kib=max(x['peak_rss_kib'] for x in samples))
  return data
 sources={n:w['source'] for n,w in json.loads((ROOT/'student.tests/pa22/performance114.json').read_text())['workloads'].items()}
+iterations=12000000 if mode=='repeat' else 1000000
 for count in (2,3):
  source='long destroyed;'+''.join('struct B%d{virtual ~B%d(){++destroyed;}};'%(i,i) for i in range(count))
  source+='struct D:'+','.join('B%d'%i for i in range(count))+'{};'
- sources['runtime-delete-%d'%count]=source+'volatile int iterations=1000000;int main(){for(int i=0;i<iterations;++i){B%d*p=new D;delete p;}return destroyed!=%d;}'%(count-1,count*1000000)
+ sources['runtime-delete-%d'%count]=source+'volatile int iterations=%d;int main(){for(int i=0;i<iterations;++i){B%d*p=new D;delete p;}return destroyed!=%d;}'%(iterations,count-1,count*iterations)
 for count in (128,512):
  source='template<int I>struct A{virtual int f(){return I;}};template<int I>struct B{virtual int g(){return I;}};template<int I>struct D:A<I>,B<I>{virtual ~D(){}};'
  source+=''.join('int use%d(){D<%d> d;B<%d>&b=d;return b.g();}'%(i,i,i) for i in range(count))
@@ -32,6 +33,7 @@ for count in (4,16,64):
  source='int destroyed;'+''.join('struct B%d{virtual ~B%d(){++destroyed;}};'%(i,i) for i in range(count))
  source+='struct D:'+','.join('B%d'%i for i in range(count))+'{};'
  sources['destructor-width-%d'%count]=source+'int main(){B%d*p=new D;delete p;return destroyed!=%d;}'%(count-1,count)
+if mode=='repeat':sources={n:s for n,s in sources.items() if n in ('auto-specializations-9600','runtime-delete-2','runtime-delete-3')}
 for name,source in sources.items():
  src=WORK/(name+'.cpp');src.write_text(source);item=dict(source=source,source_sha256=sha(src),outputs=[]);commands=[];exes=[];result['workloads'][name]=item
  for i,cc in enumerate((A,B)):

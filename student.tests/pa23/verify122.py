@@ -24,6 +24,8 @@ header2='struct A{virtual int f(){return 1;}};struct B{virtual int g(){return 2;
 cases['separate-nested-secondary']=[header2+'int main(){D d;B&b=d;Mid&m=d;return b.g()!=7||m.h()!=3;}',header2+'int D::g(){return 7;}']
 # Exercise both publication orders in the merged Program.
 cases['key-owner-before-use']=list(reversed(cases['separate-key-owner']))
+covariant='struct Pad{int p;};struct R{int r;};struct Result:Pad,R{};struct A{virtual R* get();virtual ~A();};struct B{virtual int g();};struct D:A,B{Result value;Result* get();int g();};'
+cases['separate-covariant-group']=[covariant+'int main(){D d;A&a=d;B&b=d;D&v=d;return a.get()!=static_cast<R*>(&d.value)||v.get()!=&d.value||b.g()!=7;}',covariant+'R* A::get(){return 0;}A::~A(){}int B::g(){return 2;}Result* D::get(){return &value;}int D::g(){return 7;}']
 for count in (4,16,64):
  source='int destroyed;'+''.join('struct B%d{virtual ~B%d(){++destroyed;}};'%(i,i) for i in range(count))
  source+='struct D:'+','.join('B%d'%i for i in range(count))+'{};'

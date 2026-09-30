@@ -217,6 +217,7 @@ class Procedural {
     abi_mangle::Id abi_scope(semantic::ScopeId s);
     SymbolId symbol(EntityId e, bool base = false, bool deleting = false);
     bool separate_base(EntityId e) const;
+    bool base_only_entry(EntityId e) const;
     abi_mangle::AbiTerminalKind operator_terminal(EntityId id) const;
     SymbolId fresh_symbol(const std::string& preferred);
     SignatureId signature(TypeId t, FunctionId owner = FunctionId());

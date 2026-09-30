@@ -80,9 +80,20 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     if (id >= abi_types.size()) abi_types.resize(sem.types.records.size());
     return abi_types[id] = result;
 }
+bool Procedural::base_only_entry(EntityId id) const
+{
+    auto e = sem.entities[id];
+    if (!e.member_info) return false;
+    const auto& m = sem.member_fact(id);
+    return m.base_entry && !m.complete_entry && !m.defaulted_late &&
+        (m.synthetic || !e.body || e.template_member || m.inherited_constructor);
+}
 bool Procedural::separate_base(EntityId id) const
 {
     auto e = sem.entities[id];
+    // One demanded base entry owns one symbol/body. Reserving a complete
+    // slot with the base spelling as well would duplicate its ABI identity.
+    if (base_only_entry(id)) return false;
     if (e.member_info && sem.member_fact(id).defaulted_late && (sem.constructor_member(id) || sem.destructor_member(id))) return true;
     if (!e.member_info || !sem.member_fact(id).base_entry) return false;
     if (sem.member_fact(id).virtual_member && sem.destructor_member(id)) return true;
@@ -95,7 +106,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     auto e = sem.entities[id];
     bool external = e.member_info && !e.body && !sem.synthetic_member(id);
     bool separate = separate_base(id);
-    bool base_only = e.member_info && sem.member_fact(id).base_entry && !sem.member_fact(id).complete_entry;
+    bool base_only = base_only_entry(id);
     base = base && separate;
     if (deleting) return deleting_symbol(id);
     if ((base ? base_symbols[id] : symbols[id])) return base ? base_symbols[id] : symbols[id];
