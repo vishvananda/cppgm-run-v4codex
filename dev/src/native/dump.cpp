@@ -28,7 +28,7 @@ static void operand(const lowir_model::Program& p, Operand o, std::ostream& out)
         if (o.displacement) out << (o.displacement > 0 ? "+" : "") << o.displacement;
         break;
     case Operand::Label:
-        if (o.id <= p.blocks.size()) out << p.name(p.blocks[o.id-1].name);
+        if (o.id && o.id <= p.blocks.size() && p.blocks[o.id-1].name) out << p.name(p.blocks[o.id-1].name);
         else out << "^native" << o.id;
         break;
     case Operand::Memory:
