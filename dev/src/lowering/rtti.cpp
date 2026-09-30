@@ -137,6 +137,9 @@ SymbolId Procedural::rtti_function(unsigned role)
         sem.types.function(ptr,{ptr,ptr,ptr,sem.types.fundamental(FT_LONG_INT)},false);
     Function f; f.symbol = fresh_symbol("@rtti_function"); f.declaration = true;
     FunctionId owner(p.functions.size()+1); f.signature = signature(sig,owner);
+    // __dynamic_cast returns null on failure. Only the source reference-cast
+    // failure helper throws; pointer-cast calls need no unwind boundary.
+    if (!role && !linkage.presentation) p.signatures[f.signature.index-1].boundary.unwind = ir_model::CUM_NO;
     if (role) p.signatures[f.signature.index-1].boundary.returns = ir_model::CRM_NORETURN;
     p.functions.push_back(f); linkage.rtti_functions[role] = f.symbol;
     auto& s = p.symbols[f.symbol.index-1]; s.kind = Symbol::FunctionSymbol; s.entity = owner.index;
@@ -187,6 +190,11 @@ Value Procedural::rtti_expression(NodeId n)
         auto displacement = emit(Opcode::Load,IRType::I64,{top.operand});
         auto complete = emit(Opcode::Index,IRType::I8,{object.operand,displacement.operand});
         emit(Opcode::Store,IRType::Ptr,{complete.operand,Operand::slot(slot)}); jump(end);
+        if (!linkage.presentation) {
+            start(end);
+            auto result = emit(Opcode::Load,IRType::Ptr,{Operand::slot(slot)});
+            result.type = fact.type; return result;
+        }
         // Retain the O0 cast continuation in the explicit course LowIR view.
         start(block());
     }

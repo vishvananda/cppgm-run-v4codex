@@ -123,6 +123,7 @@ void Procedural::global(EntityId e)
                 item.symbol = vtable_symbol(cls); item.addend = 16; p.data.push_back(item);
                 if (sem.object_size(t) > 8) { DataItem zero; zero.zero_bytes = sem.object_size(t)-8; p.data.push_back(zero); }
             }
+            else if (auto plan = sem.static_construction(e)) global_constant_fields(*plan,t);
             else if (g.structured && entity.constant.valid) {
                 auto ctor = sem.object_constructor(e);
                 if (!ctor) {

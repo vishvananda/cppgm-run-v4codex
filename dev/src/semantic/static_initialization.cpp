@@ -56,7 +56,7 @@ bool Analyzer::static_initialization(EntityId e)
     if (!entity.initializer && class_value(t)) constant = (local_static(e) || empty_value(t)) && !constructor_needed(object_constructor(e));
     if (!entity.initializer && types[t].kind == TypeKind::Array) constant = !constructor_needed(object_constructor(e));
     if (entity.constant.valid && class_value(t)) constant = constant_value_data(entity.constant).valid;
-    if (static_vptr(e)) constant = true;
+    if (static_vptr(e) || static_construction(e)) constant = true;
     static_initialization_facts.put(e,constant ? 2 : 1); return constant;
 }
 } }

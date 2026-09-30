@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include <algorithm>
 
 namespace cppgm { namespace semantic {
 const ConstantObject& Analyzer::constant_value_data(Constant value)
@@ -7,28 +8,52 @@ const ConstantObject& Analyzer::constant_value_data(Constant value)
     if (auto known = constant_value_objects.get(k)) return object_constants[known];
     ConstantObject result; result.first = constant_fields.size(); result.valid = constant_object_fields(value);
     if (!result.valid) constant_fields.resize(result.first);
-    else result.count = constant_fields.size()-result.first;
+    else {
+        result.count = constant_fields.size()-result.first;
+        std::stable_sort(constant_fields.begin()+result.first,constant_fields.end(),
+            [](const ConstantField& a, const ConstantField& b) { return a.offset < b.offset; });
+    }
     auto id = object_constants.size(); object_constants.push_back(result); constant_value_objects.put(k,id);
     return object_constants[id];
 }
 void Analyzer::prepare_static_vptrs()
 {
-    // Static storage already supplies zero-initialization. A demanded implicit
-    // default constructor with no subobject actions only installs this class's
-    // vptr, whose address is a link-time constant. No user body is evaluated.
+    // Complete each declaration's default static-initialization fact once.
+    // Implicit vptr-only construction is immediate; constexpr constructors
+    // retain their evaluated subobjects, including active union members.
+    Index seen;
     for (const auto& action : actions) {
         if (!action.object || !action.constructor) continue;
+        if (seen.get(action.object)) continue;
+        seen.put(action.object,1);
         auto object = entities[action.object];
         if (object.initializer || scopes[object.owner].kind != ScopeKind::Namespace || !class_value(object.type)) continue;
         auto ctor = members[entities[action.constructor].member_info];
         EntityId cls = types[object.type].entity;
         if (ctor.synthetic && ctor.transfer == TransferKind::None && !ctor.inherited_constructor &&
             !ctor.delegated_constructor && !ctor.action_count && dynamic_class(cls)) static_vptr_objects.put(action.object,cls);
-        else if (entities[action.constructor].constexpr_function && dynamic_class(cls) && size(object.type) == 8) {
-            auto value = constant_construct(action.constructor,{});
-            if (value.valid) {
+        else if (entities[action.constructor].constexpr_function) {
+            // A constant pointer to this must relocate to the declaration,
+            // never to an anonymous evaluator temporary. Do not publish this
+            // value as a constexpr variable: the source object can be mutable.
+            auto destination = constant_entity_storage.get(action.object);
+            if (!destination) {
+                destination = constant_storage_address(object.type,Constant(),action.object,0,true);
+                constant_entity_storage.put(action.object,destination);
+            }
+            auto saved = constant_destination; constant_destination = destination;
+            Constant value;
+            try { value = constant_construct(action.constructor,{}); }
+            catch (...) { constant_destination = saved; throw; }
+            constant_destination = saved;
+            if (value.valid && constant_persistent(value)) {
                 auto data = constant_value_data(value);
-                if (data.valid && !data.count) static_vptr_objects.put(action.object,cls);
+                if (data.valid) {
+                    if (dynamic_class(cls) && size(object.type) == 8 && data.count == 1 &&
+                        constant_fields[data.first].value.kind == StaticValue::Vtable)
+                        static_vptr_objects.put(action.object,cls);
+                    else static_construction_objects.put(action.object,constant_value_objects.get(key(value.type,value.bits)));
+                }
             }
         }
     }
@@ -112,7 +137,11 @@ const ConstantObject& Analyzer::constant_construction(NodeId n, TypeId t)
         }
     }
     if (!result.valid) constant_fields.resize(result.first);
-    else result.count = constant_fields.size()-result.first;
+    else {
+        result.count = constant_fields.size()-result.first;
+        std::stable_sort(constant_fields.begin()+result.first,constant_fields.end(),
+            [](const ConstantField& a, const ConstantField& b) { return a.offset < b.offset; });
+    }
     auto index = object_constants.size(); object_constants.push_back(result); constant_objects.put(k, index);
     return object_constants[index];
 }

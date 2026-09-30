@@ -13,13 +13,20 @@ void Procedural::global_constant_fields(const semantic::ConstantObject& plan, Ty
     for (unsigned j = 0; j < plan.count; ++j) {
         auto field = sem.constant_fields[plan.first+j];
         auto offset = field.offset;
-        if (sem.field_fact(field.field).bit_field) {
+        if (field.field && sem.field_fact(field.field).bit_field) {
             if (field.value.kind != semantic::StaticValue::Integer)
                 throw std::logic_error("nonintegral constant bit-field fact");
             global_bit_field_value(field.field,offset,field.value.bits,end); continue;
         }
         if (offset > end) { lowir_model::DataItem zero; zero.zero_bytes = offset-end; p.data.push_back(zero); }
         auto value = field.value;
+        if (value.kind == semantic::StaticValue::Vtable) {
+            const auto& model = sem.virtual_class(value.entity);
+            lowir_model::DataItem item; item.kind = lowir_model::DataItem::Address; item.type = IRType::Ptr;
+            item.symbol = value.bits ? view_symbol(value.entity,value.bits) : vtable_symbol(value.entity);
+            item.addend = value.bits ? model.views[value.bits-1].address_point : model.address_point;
+            p.data.push_back(item); end = offset+8; continue;
+        }
         if (value.kind == semantic::StaticValue::MemberFunction) {
             member_pointer_data(value); end = offset+16; continue;
         }

@@ -546,7 +546,7 @@ struct DeleteExpression {
     bool global_deallocation = false;
 };
 struct StaticValue {
-    enum Kind : unsigned char { Invalid, Integer, Floating, Address, String, MemberFunction } kind = Invalid;
+    enum Kind : unsigned char { Invalid, Integer, Floating, Address, String, MemberFunction, Vtable } kind = Invalid;
     std::uint64_t bits = 0;
     long double floating = 0;
     EntityId entity = 0;

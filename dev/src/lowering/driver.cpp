@@ -7,12 +7,12 @@
 #include <sys/resource.h>
 namespace cppgm { namespace lowering {
 void build_program(lowir_model::Program& program, const std::vector<std::string>& inputs, bool stats,
-    const std::vector<std::string>& includes, const std::vector<std::string>& macros)
+    const std::vector<std::string>& includes, const std::vector<std::string>& macros, bool presentation)
 {
     typedef std::chrono::steady_clock Clock;
     const std::time_t now = std::time(0);
     const std::string stamp = std::asctime(std::localtime(&now));
-    Linkage linkage(inputs.size() > 1);
+    Linkage linkage(inputs.size() > 1,presentation);
     double frontend_ms = 0, lowering_ms = 0;
     std::size_t nodes = 0, static_requests = 0, static_hits = 0;
     std::size_t control_work = 0, discard_work = 0;
@@ -82,7 +82,7 @@ void build_program(lowir_model::Program& program, const std::vector<std::string>
 int emit_lowir(const std::string& output, const std::vector<std::string>& inputs, bool stats, bool audit)
 {
     lowir_model::Program program;
-    build_program(program,inputs,stats,{},{});
+    build_program(program,inputs,stats,{},{},true);
     if (audit) lowir_model::validate(program);
     std::ofstream out(output.c_str());
     if (!out) throw std::runtime_error("cannot create LowIR output");

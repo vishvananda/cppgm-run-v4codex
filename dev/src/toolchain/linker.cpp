@@ -1,4 +1,4 @@
-#include "toolchain/object.h"
+#include "toolchain/runtime.h"
 #include <algorithm>
 namespace cppgm { namespace toolchain {
 using lowir_model::require;
@@ -73,6 +73,7 @@ void Linker::retain_relocations()
     std::vector<Edge> edges(1);
     std::vector<unsigned> heads(lazy_definitions_.size()), work;
     std::vector<bool> live(heads.size());
+    std::vector<bool> requested(symbols_.size());
     auto demand = [&](unsigned definition) {
         if (!live[definition]) { live[definition] = true; work.push_back(definition); ++definition_work; }
     };
@@ -88,6 +89,10 @@ void Linker::retain_relocations()
         ++relocation_work;
         auto symbol = edges[i].symbol;
         if (!image_.defined[symbol]) {
+            if (runtime_role(symbols_[symbol].role)) {
+                if (!requested[symbol]) { requested[symbol] = true; runtime_demands_.push_back(symbol); }
+                continue;
+            }
             auto name = symbols_[symbol].name ? names_.spelling(symbols_[symbol].name) : cppgm::TextView{"<runtime>",9};
             throw std::runtime_error("unresolved native symbol: " + std::string(name.data,name.size));
         }
@@ -102,6 +107,7 @@ std::size_t Linker::finish(const std::string& path)
 {
     require(entry_ && image_.defined[entry_],"missing main");
     retain_relocations();
+    supply_runtime();
     std::vector<lowir_model::SymbolId> init, fini;
     for (auto id : initializers_) init.push_back(lowir_model::SymbolId(id));
     for (auto id : finalizers_) fini.push_back(lowir_model::SymbolId(id));

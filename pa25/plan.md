@@ -1,70 +1,73 @@
-# PA25 checkpoint audit138
+# PA25 implementation139
 
 Stage base commit: fee6ad9076ff35c5272526e1c4c4df235fbf3bfe
 Last reviewed commit: 4530fe939e95a45ff6a46d5e53c76807b5bdd352
 
-Target: **PA25 full-stage**. Phase: **checkpointAudit**. The first accumulated
-review covers the stage base through the code tip above: all 12 original commits
-and the cohesive audit fix. Three accepted implementation checkpoints are
-reviewed together. This checkpoint preserves **74/101**, the same **27 failures**
-as entry `34fe77a3`; PA25 remains incomplete and advancement is not approved.
+Target: **PA25 full-stage**. Phase: **implement**. Entry HEAD:
+`7d26d375ef7d21be0b9457b23c0b00be1171b3ae`, **74/101** (27 failures).
+The preceding turn completed audit repairs/evidence (progress); no prior process
+was live. Preserve [audit138](audit.md) and its review markers.
 
-## Reviewed ownership and fixes
+## Design and completed group
 
-The production path remains streaming source -> canonical syntax/semantic facts
--> typed LowIR -> per-function MIR -> native object -> indexed ELF linker.
-[Audit138](audit.md) records each commit, cross-handoff findings, proofs and one
-ledger row. Its fixes are committed before these records.
+Production remains streaming source -> canonical semantic facts -> typed LowIR
+-> function-local MIR -> native object -> indexed linker -> ELF.
 
-| Owner | Completed audit repair / bounded behavior |
+| Owner | Data flow and bounded work |
 |---|---|
-| Semantic constants | Exact enum range/type selection and normalized payloads; checked implicit increments, fixed enum ranges, non-finite casts and integer-to-floating narrowing; typed constant views |
-| ABI literals | Preserve enum type, full 128-bit value and sign through canonical facts, explicit adapters and mangling; common nodes stay 32 bytes |
-| Native definitions | Producers record fixup owners; aliases share definition identity; version-2 objects persist facts; foreign extents decoded once; lazy GOT demand uses O(symbols + relocations) worklist |
-| Builtin role | Semantic builtin fact reaches native emission through typed metadata; only the external LowIR adapter decodes legacy spelling; metadata stays 36 bytes |
-| Statement/template/lifetime | Combined source-to-ELF trace confirms canonical occurrences, demanded body work, scoped query reuse and function-owned lifetime overlays |
+| Native class runtime | Retained definition/fixup edges demand typed runtime roles. One finite support program per link supplies allocation/deallocation, termination, class RTTI address points and pointer casts. No symbol-spelling inference, source replay, external runtime or textual phase transport. Existing object version 2 and definition ownership remain intact. |
+| Cast semantics | Recorded ABI hierarchy, offset and access entries feed a typed LowIR walker. Distinct subobject addresses determine ambiguity; public reachability is tracked separately. Virtual paths coalesce by address. Compiler construction has constant size; runtime traverses inheritance paths, with stack proportional to depth and 80 bytes of per-cast state. The optional ABI hint is conservatively ignored. |
+| Static construction | Declaration-owned constant plans include final vptr identities for complete objects and nested members, active unions and arrays. Base subobjects do not overwrite derived vptrs. Named evaluator destinations preserve self-pointer relocations without declaring mutable objects constexpr. Field ordering is O(fields log fields); emission is linear in data bytes. |
+| Native ABI | Mapping extents live in an aligned allocation prefix and are released by munmap. Syscall MIR records actual argument registers; leaf routines use caller-saved registers. Lowering retains legacy O0 presentation only for the explicit LowIR view; production void-pointer casts avoid an unreachable helper, and pointer-cast calls carry a non-unwinding boundary. |
 
-Object version 1 files must be rebuilt. No assignment fixture, reference output,
-comparison rule or required behavior changed. The floating oracle is retained:
-C++11 permits excess precision, so the reducer does not prove it erroneous.
+The initial runtime scope expanded to fix static polymorphic initialization,
+private/ambiguous cast interactions, construction-time casts, mutable self
+pointers and demand from discarded weak definitions. Required class cases are
+now all passing. No fixture, reference, comparison rule or coverage changed.
 
-## Evidence and acceptance
+## Validation and performance
 
-- `make test-pa25`: **74/101**, exit 2, exactly the same 27 failing cases.
-- Required through-PA24 command: **4152/4152**, all 24 stages pass.
-- File audit: pass, four inherited header warnings; `git diff --check`: clean.
-- Explicit controls: **122 audit**, **61 driver**, **19 scalar** plus **96**
-  randomized full-width operand pairs, **49 statement**, **4 ABI/API**, and
-  **16** final-binary source/AST/validated-LowIR/MIR/ELF trace checks.
-- [Validation138](../student.tests/pa25/validation138.json) pins commits, source
-  inventory, binaries, logs, exact failure sets, traces and evidence hashes.
-- [Performance138](../student.tests/pa25/performance138.md) preserves 1624
-  observations and verified input/binary manifests. Exact final template compile
-  median **0.32798 s**, B/A **1.061 [0.794, 1.304]**, peak **14900 KiB**;
-  equivalent executable pairs remain byte-identical. No speedup is claimed.
+- `make test-pa25`: **86/101**, the original 27 failures reduced to **15**.
+- Through PA24: **4152/4152**, all 24 stages pass.
+- Explicit controls: **67 class**, **61 driver**, **19 scalar** plus 96 wide
+  operand pairs, **122 audit138**, **49 statement**, typed runtime IR validation,
+  MIR inspection and object roundtrip.
+- File audit passes with four inherited header warnings; diff whitespace clean.
+- Final-binary ABBA/A/A performance and final validation manifest are being
+  recorded before handoff. Existing measurements remain preserved. This adds
+  required semantic/runtime work at O0 and no optional optimization or speedup
+  claim. The inherited 15% timing/RSS and zero optional text-growth targets are
+  diagnostics under spec section 9, not additional exit gates. Correctness,
+  coverage, complexity and mandatory native bounds remain required.
 
-Stage-scoped acceptance supersedes inherited self-imposed timing gates: the 15%
-latency/RSS and zero optional text-growth targets are diagnostics. Required
-correctness, coverage, complexity and native bounds remain. Necessary semantic
-and definition work is bounded; no optional optimization pass is added. Existing
-copy elision consumes selected semantic facts with conservative fallback.
-PA34 owns self-hosting, and later stages own higher optimization levels.
+## Remaining implementation and independent review
 
-## Remaining work, grouped by ownership
+**Unfinished implementation:** 14 source-EH/handler/function-try cases and the
+one exact floating-calculator comparison. Source exceptions need coordinated
+handler matching, payload ownership, nested catch/rethrow state, lifetime cleanup
+and function-try semantics. The same owner must supply throwing bad-cast,
+bad-typeid and allocation-failure services; the explicit
+[class exception boundary](../student.tests/pa25/class-exception-boundary.cc)
+remains unresolved. Preserve the unused-dependent-local reducer as separate
+frontend completion work. The floating oracle and million-input comparison are
+unchanged; [rounding136](../student.tests/pa25/rounding136.md) records why its
+excess precision is not proven erroneous.
 
-| Group | Required coverage / retained work |
+**Independent review:** assess the accumulated implementation against the spec,
+including RTTI access/ambiguity, static destination identity, native support
+demand and performance evidence. No finding is waived and no new independent
+architecture investigation is a prerequisite invented by this implementation.
+
+## Handoff ledger
+
+| Boundary | Evidence / next owner |
 |---|---|
-| Native C++ runtime and source EH integration | 12 class/RTTI/allocation/pure-virtual failures and 14 exception/unwind/handler failures; carry recorded hierarchy, payload, lifetime and function-try facts through shared support definitions and native execution |
-| Source semantic completion | 1 exact floating-oracle failure (five of one million lines); resolve source evaluation policy without changing generic LowIR arithmetic or comparison coverage. Retain the inherited unused-dependent-local reducer as separate frontend completion work |
+| audit138 | Reviewed through the preserved marker; 74/101; see audit.md and validation138.json. |
+| implementation139 | Nonthrowing class execution and constant polymorphic initialization complete, 12 original failures fixed. Final evidence recording pending. |
 
-[Remaining137](../student.tests/pa25/remaining137.json) names the unchanged cases;
-[rounding136](../student.tests/pa25/rounding136.md) preserves the precision proof
-and bundle identity. These are unfinished implementation requirements, not waived
-audit gates. Complete a broad owner group with its interactions and evidence in
-one handoff. Avoid a handoff per runtime symbol, test case, plan or telemetry
-adjustment; the earlier separate planning/evidence commits added avoidable review
-fragmentation around otherwise substantial driver, scalar and statement groups.
-
-Full-stage completion still requires `make test-pa25` and the root through-PA25
-report to pass. Raw audit artifacts are in
-`/home/vishvananda/work/private/v4codex/artifacts/pa25-138/`.
+The remaining source-EH group changes the dynamic handler-frame/payload protocol,
+not just support-symbol definitions. Extending this completed group by adding
+individual exception stubs would not implement matching, cleanup or rethrow.
+That coordinated state-machine work and the separate floating-evaluation policy
+are the concrete next implementation boundaries. This handoff does not certify
+PA25: stage and through-PA25 reports must both pass before advancement.

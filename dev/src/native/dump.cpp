@@ -56,7 +56,7 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
         "adc","sbb","mul","shld","shrd","lock_cmpxchg16b",
         "fmov","fadd","fsub","fmul","fdiv","fneg","fcmp","fset",
         "sitofp","uitofp","fptosi","fptoui","fpext","fptrunc","fret","fstp",
-        "eh_push","eh_pop","throw","resume","stack_alloc","tls_addr"};
+        "eh_push","eh_pop","throw","resume","stack_alloc","tls_addr","syscall"};
     // The scalar Boolean materialization has the canonical byte-to-register
     // spelling. Its typed ExtendUnsigned fact is also consumed by encoding.
     bool boolean_extend = i.op == Op::ExtendUnsigned && i.type == Type::U8;
@@ -73,7 +73,7 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
         if (i.op == Op::Call && i.args[n].kind != Operand::Symbol) out << '*';
         operand(p,i.args[n],out);
     }
-    if (i.op == Op::Call) {
+    if (i.op == Op::Call || i.op == Op::Syscall) {
         out << " [args=(";
         bool first = true;
         for (unsigned reg = 0; reg < 32; ++reg) if (i.arg_registers & (1u<<reg)) {
@@ -137,7 +137,7 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
     out << "\nfunction " << p.name(p.symbols[f.symbol.index-1].name); debug(p,f.debug,out);
     out << "\n  abi\n";
     for (const auto& param : f.params) {
-        out << "    param " << p.name(param.name) << " -> "; operand(p,param.location,out);
+        out << "    param " << (param.name ? p.name(param.name) : "%native_arg") << " -> "; operand(p,param.location,out);
         out << " : " << type_name(param.second.kind != Operand::None ? Type::I64 : param.type) << '\n';
         if (param.second.kind != Operand::None) {
             out << "    param " << p.name(param.name) << ".1 -> "; operand(p,param.second,out); out << " : i64\n";

@@ -187,11 +187,21 @@ Constant Analyzer::constant_entity_value(EntityId e)
     if (value.valid) entities[e].constant = value;
     return value;
 }
-bool Analyzer::constant_object_fields(Constant v, std::uint64_t offset, EntityId field)
+bool Analyzer::constant_object_fields(Constant v, std::uint64_t offset, EntityId field, bool base)
 {
     if (!v.valid) return false;
     if (class_value(v.type) || types[v.type].kind == TypeKind::Array) {
         auto object = evaluated_objects[v.bits];
+        if (!base && class_value(v.type) && dynamic_class(types[v.type].entity)) {
+            auto cls = types[v.type].entity;
+            const auto& model = virtual_class(cls);
+            auto vptr = [&](unsigned view, std::uint64_t at) {
+                StaticValue value; value.kind = StaticValue::Vtable; value.entity = cls; value.bits = view;
+                constant_fields.push_back({0,v.type,value,offset+at});
+            };
+            vptr(0,0);
+            for (auto index : model.store_order) vptr(index+1,model.views[index].offset);
+        }
         for (unsigned i = 0; i < object.count; ++i) {
             auto part = evaluated_parts[object.first+i];
             auto at = offset;
@@ -201,7 +211,7 @@ bool Analyzer::constant_object_fields(Constant v, std::uint64_t offset, EntityId
             auto member = types[v.type].kind != TypeKind::Array && !(part.selector & 0x80000000U) ? EntityId(part.selector) : 0;
             if (member && field_fact(member).bit_field && !field_fact(member).width) continue;
             for (std::uint64_t j = 0; j < part.count; ++j)
-                if (!constant_object_fields(part.value,at+j*size(part.value.type),member)) return false;
+                if (!constant_object_fields(part.value,at+j*size(part.value.type),member,types[v.type].kind != TypeKind::Array && (part.selector & 0x80000000U))) return false;
         }
         return true;
     }

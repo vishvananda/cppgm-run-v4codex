@@ -60,6 +60,7 @@ void Encoder::arithmetic(const Instruction& i)
 }
 void Encoder::instruction(const Instruction& i)
 {
+    if (i.op == Op::Syscall) { byte(0x0f); byte(0x05); return; }
     if (i.op == Op::TlsAddr) { tls_address(i.args[0],i.args[1]); return; }
     if (i.op >= Op::EhPush) { runtime(i); return; }
     if (i.op >= Op::Fmov) { floating(i); return; }

@@ -61,6 +61,30 @@ for(int i=0;i<argc*{count};++i)sum+=step(i%97,dead);
 return sum=={expected}LL && dead==argc*{count}?0:1;}}
 ''')
     workloads={'statements':([statements],64)}
+if '--class-baseline' in sys.argv[4:]:
+    assert A.read_bytes()==B.read_bytes(), 'new class runtime needs a correct final/final baseline'
+    classes=save('classes.cc',"""struct A{int value;constexpr A(int n):value(n){} virtual int f(){return value;}};
+struct B{int value;constexpr B(int n):value(n){} virtual int g(){return value;}};
+template<int N> struct D:A,B{constexpr D():A(N),B(N+1){} int f(){return value_a();} int value_a(){return A::value;}};
+"""+''.join(f'D<{i}> item{i};\n' for i in range(400))+
+        'int main(int argc,char**){long long total=0;for(int j=0;j<argc*20000;++j){\n'+''.join(f'total+=item{i}.f();\n' for i in range(400))+
+        '}return total==1596000000LL*argc?0:1;}\n')
+    casts=save('casts.cc',"""struct A{virtual int f(){return 2;}};
+struct B{int v; B(int n) noexcept:v(n){} virtual int g(){return v;}};
+template<int N> struct D:A,B{D(int n) noexcept:B(n+N){}};
+int step(A* p){D<7>* d=dynamic_cast<D<7>*>(p);B* b=dynamic_cast<B*>(p);return d && b?b->g():0;}
+int main(int argc,char**){D<7> d(argc*3); A* a=&d;long long total=0;
+for(int i=0;i<argc*400000;++i)total+=step(a);
+return total==4000000?0:1;}
+""")
+    allocations=save('allocations.cc',"""struct A{virtual ~A() noexcept{}};
+struct B{virtual ~B() noexcept{}};
+int destroyed; struct D:A,B{int v;D(int n) noexcept:v(n){} ~D() noexcept{++destroyed;}};
+int main(int argc,char**){long long total=0;
+for(int i=0;i<argc*10000;++i){D* d=new D(i);total+=d->v;B* b=d;delete b;}
+return total==49995000 && destroyed==10000?0:1;}
+""")
+    workloads={'classes':([classes],2),'casts':([casts],64),'allocations':([allocations],64)}
 def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def run(args):
     p=subprocess.run(list(map(str,args)),stdout=subprocess.PIPE,stderr=subprocess.PIPE)

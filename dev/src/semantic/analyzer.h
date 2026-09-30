@@ -157,6 +157,9 @@ public:
     EntityId value_constructor(TypeId t) const;
     EntityId object_constructor(EntityId e) const;
     EntityId static_vptr(EntityId e) const { return static_vptr_objects.get(e); }
+    const ConstantObject* static_construction(EntityId e) const {
+        auto id = static_construction_objects.get(e); return id ? &object_constants[id] : nullptr;
+    }
     const MemberFacts& member_fact(EntityId e) const { return members[entities[e].member_info]; }
     std::vector<SubobjectAction> subobject_actions;
     std::vector<InheritedArgument> inherited_arguments = std::vector<InheritedArgument>(1);
@@ -352,7 +355,7 @@ private:
     std::uint64_t scalar_transfer_work = 0;
     Index anonymous_objects;
     Index constant_constructors, constant_objects, constant_value_objects;
-    Index static_vptr_objects;
+    Index static_vptr_objects, static_construction_objects;
     void prepare_static_vptrs();
     std::vector<ConstantObject> constructor_constants = std::vector<ConstantObject>(1), object_constants = std::vector<ConstantObject>(1);
     std::vector<ConstructorConstantAction> constructor_constant_actions;
@@ -660,7 +663,7 @@ private:
     Constant constant_init_plan(std::uint32_t plan, ScopeId scope);
     Constant constant_construct(EntityId constructor, const std::vector<Constant>& arguments, bool zero = false);
     Constant constant_zero(TypeId type);
-    bool constant_object_fields(Constant value, std::uint64_t offset = 0, EntityId field = 0);
+    bool constant_object_fields(Constant value, std::uint64_t offset = 0, EntityId field = 0, bool base = false);
     Constant constant_entity_value(EntityId entity);
     void check_constant_object(EntityId entity);
     void demand_constant_relocations(Constant value);

@@ -33,11 +33,14 @@ class Linker {
     std::vector<unsigned> symbol_definitions_;
     std::vector<bool> lazy_definitions_ = std::vector<bool>(1);
     std::vector<unsigned> initializers_, finalizers_;
+    std::vector<unsigned> runtime_demands_;
     unsigned entry_ = 0, parameters_ = 0, alignment_ = 16;
     unsigned new_symbol();
     void retain_relocations();
+    void supply_runtime();
 public:
     std::size_t definition_work = 0, relocation_work = 0;
+    native::Statistics runtime_stats;
     Linker();
     void add(Object&&);
     std::size_t finish(const std::string&);
