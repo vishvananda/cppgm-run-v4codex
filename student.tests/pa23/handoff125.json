@@ -1,0 +1,150 @@
+{
+  "implementation": "d9179e848e8b6a5b9ca378a0ee20152404ce166a",
+  "compiler_sha256": "979a332fdeb3133af19b09d93bfbf4cb061236b59573e682b2c4a747fda5acaa",
+  "stage_progress": {
+    "entry_passed": 24,
+    "entry_failed": 21,
+    "final_passed": 45,
+    "final_failed": 0,
+    "fixture_count": 45,
+    "coverage_preserved": true,
+    "oracles_manifest_sha256": "258bfd88a0f045e6489495aaa4adc4f344601f73b1653ed0f8db1fc35c05aaee"
+  },
+  "required_checks_pass": true,
+  "personal_checks_pass": true,
+  "common_correct_performance_workloads": 19,
+  "new_required_semantic_workloads": 6,
+  "evidence": [
+    {
+      "path": "pa23/handoff125.md",
+      "sha256": "c0c13569662d06e18d5c276f5e373777b38eff88d68ba946c39ae78e44ba29f2",
+      "bytes": 7531
+    },
+    {
+      "path": "pa23/performance125.md",
+      "sha256": "b07c81f5a9768029558396adb9b24dfe235ed8258d4d183b0038233a489e9124",
+      "bytes": 10969
+    },
+    {
+      "path": "pa23/plan.md",
+      "sha256": "4185b6cde342e536d05968a6a91eefa611e1c4dd13b6677d33fc1a06c60d90cd",
+      "bytes": 3908
+    },
+    {
+      "path": "pa23/reference-correction125.md",
+      "sha256": "29f0d63b0759d1878421b87cd0a98aca62bc2249e5abbbd0aa934a87df775ebb",
+      "bytes": 6183
+    },
+    {
+      "path": "student.tests/pa23/backend-limit125.json",
+      "sha256": "4a1b5f51ccba9799ae98358e3fae7c64099831d2583b56a8a3569e607c187556",
+      "bytes": 4775
+    },
+    {
+      "path": "student.tests/pa23/benchmark125.py",
+      "sha256": "ad7a44deceec2d2fbdf576539d746d2cd20c9e4b525bdeb18b898e05178665f8",
+      "bytes": 6949
+    },
+    {
+      "path": "student.tests/pa23/controls125-deep.json",
+      "sha256": "6e7254ab6a048799f9b9151e426c32ddd6efefee3f8161c37cde240e2502e893",
+      "bytes": 1316
+    },
+    {
+      "path": "student.tests/pa23/controls125-inherited.json",
+      "sha256": "026a163003b1ea52bc9db0fadfc23b957b23f5294b2746fa10e2d5c4c9d6f8c1",
+      "bytes": 355903
+    },
+    {
+      "path": "student.tests/pa23/controls125-layout.json",
+      "sha256": "9648d73144e409bdc446589c922e1605190b2063fdb6c74ba281563edd913028",
+      "bytes": 262422
+    },
+    {
+      "path": "student.tests/pa23/controls125-lifecycle.json",
+      "sha256": "f7f29b5d53c2c9b88d9851f852b920522140438c98c7819c28c78af2cb069dae",
+      "bytes": 295457
+    },
+    {
+      "path": "student.tests/pa23/controls125-member.json",
+      "sha256": "342af7c12dfef96177b1562baadf62edae429325d69660bf500cd3d917c19ba7",
+      "bytes": 177914
+    },
+    {
+      "path": "student.tests/pa23/controls125-old-lifecycle.json",
+      "sha256": "9ad42d5386a7717063f81236011cefc2f9b83da893e6737b1c787363bd7ef472",
+      "bytes": 369060
+    },
+    {
+      "path": "student.tests/pa23/controls125-ownership.json",
+      "sha256": "b4c8563841d7de16a565712ddfd037dff9997723d3e755f8fe91c0f554ef8d88",
+      "bytes": 126413
+    },
+    {
+      "path": "student.tests/pa23/controls125-roundtrip.json",
+      "sha256": "56c5afa7ffee5b23b252e42c0ee7ccbfc665aedaa6614b9a425c965d542e9383",
+      "bytes": 13984
+    },
+    {
+      "path": "student.tests/pa23/controls125-semantic.json",
+      "sha256": "6255a706c64d17a9bcf9680d35aef735065bcee116baac8ac829e1708a1de5cd",
+      "bytes": 183488
+    },
+    {
+      "path": "student.tests/pa23/controls125-tu.json",
+      "sha256": "e0625574988bbda4bb93ac69b0fd277190a6e7d91bc7335865cf95b7b8e8c999",
+      "bytes": 43828
+    },
+    {
+      "path": "student.tests/pa23/lifecycle125.py",
+      "sha256": "0bb3d43ebb94f1b5a251a2327df235bc3419f6af89186b74b0a08c39657541d3",
+      "bytes": 4693
+    },
+    {
+      "path": "student.tests/pa23/lifecycle_tu125.py",
+      "sha256": "a042dc5d90b2ea5bc213311f4be670058f3f58233414522d11d17e7f88c4fd1f",
+      "bytes": 1873
+    },
+    {
+      "path": "student.tests/pa23/member125.py",
+      "sha256": "4d0af8015725bab36d001e3143367e5904008b14d6b1497bab55307884836d5f",
+      "bytes": 2308
+    },
+    {
+      "path": "student.tests/pa23/oracles125.json",
+      "sha256": "258bfd88a0f045e6489495aaa4adc4f344601f73b1653ed0f8db1fc35c05aaee",
+      "bytes": 23484
+    },
+    {
+      "path": "student.tests/pa23/performance125-forest.json",
+      "sha256": "04c92e5f6167e77f71364a08381d3da43d1acf1d1c7455ad325ed4c31a1fd1d3",
+      "bytes": 378595
+    },
+    {
+      "path": "student.tests/pa23/performance125.json",
+      "sha256": "f783128a30460e8146e89fbecce6354520a6b10a49e2b2f3e62d65c94a21122f",
+      "bytes": 1438001
+    },
+    {
+      "path": "student.tests/pa23/reference125.json",
+      "sha256": "ba1a80af0a8dde94abbb9a7016ef8712fa8497cbeb7e9baa46087e24b61af897",
+      "bytes": 56969
+    },
+    {
+      "path": "student.tests/pa23/reference125.py",
+      "sha256": "44b0ad383b408469ec36a604915f7ae0bd4f8fe1c65f88b470c302809b6f9302",
+      "bytes": 2061
+    },
+    {
+      "path": "student.tests/pa23/validate125.py",
+      "sha256": "156a4513b58fbfcf347f19859a7c989771eb85a115d80458259418b8d57da71f",
+      "bytes": 3112
+    },
+    {
+      "path": "student.tests/pa23/validation125.json",
+      "sha256": "a25eae084b076a31008f846c72e5aad4de3240cf178f2ccf1a096664e58dc9de",
+      "bytes": 7896
+    }
+  ],
+  "scope": "Implementation handoff complete; independent whole-stage audit pending. Review markers unchanged."
+}

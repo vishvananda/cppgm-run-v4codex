@@ -1,0 +1,400 @@
+{
+  "cases": [
+    {
+      "source": "pa23/tests/general/100-base-subobject-cast-virtual-dispatch.t",
+      "lowir_sha256": "4d9d6230a27a726917a1d325eed5c7885a9b79bfaf11cde3cc663d263211d7e1",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-complete-constructor-reference-vbase-parameter.t",
+      "lowir_sha256": "c5e9da77c6c44340a4984ce26ea6fa09509262b295508e99cbe4bb76201d069a",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-constructor-prvalue-virtual-base-forwarding.t",
+      "lowir_sha256": "cc38a385d8a94b9c7170f269ff4779feeb0611499d6d68ea39ec270ff5a1d0c0",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-constructor-template-vbase-hidden-argument.t",
+      "lowir_sha256": "6cf7b7c0b06d949003731199c26fe944bbb9c43cd5e616c0b823c93974a42255",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-converting-constructor-vbase-hidden-argument.t",
+      "lowir_sha256": "34d8302db2506dfe720da81ea822c9c2a2f11fd958647dbb33e91670d7fbe1f2",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-declared-member-reference-virtual-base-argument.t",
+      "lowir_sha256": "df793829ffc1cffac017b41dbdc611adc24cbd82224f88236a05253150030e17",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-diamond-virtual-destructor-slot-merge.t",
+      "lowir_sha256": "4d59f7e172c7021c5e9bf49cbc8902a9b7fb4d77b9ba443dace835b154853e32",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-forwarded-virtual-base-parameter-layout-union.t",
+      "lowir_sha256": "19e78370baeeff2ed52b3c7516ca3fd563eca005fdd04720f1e2282772bfdf8a",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-hidden-virtual-base-reference-argument-declaration.t",
+      "lowir_sha256": "8487df54970992c789e8886e3d0c068cd3a00e2853462bc58505017a75695fb2",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-inherited-virtual-base-dispatch-uses-converted-receiver.t",
+      "lowir_sha256": "6376bae09755c2de8f1dd85cb99f0ad57894783817af563d0c7c8783bdc8343f",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-member-pointer-reference-vbase-hidden-argument.t",
+      "lowir_sha256": "5c2fb1b8b659b4cded800bce6c21ed6e7393b26730307c6abfedc8a526020442",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-multibase-class-return-adjustor-thunk.t",
+      "lowir_sha256": "b919efbc6222df305f71b811782cf38c3e8c9e9b0057502aed2b559f0e2165a4",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-multibase-destructor-primary-pure-slot-concrete-call.t",
+      "lowir_sha256": "8c0aa75b6005594eeaae354d3c67ee30a0b4881c9ab44d3fe08905436e62119e",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-multibase-implicit-virtual-destructor-slot-merge.t",
+      "lowir_sha256": "67449433f123d2a2710e78ca2b9ff025653e3c4607c445738c68a431bfe681b0",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-multibase-inherited-virtual-slot-identity.t",
+      "lowir_sha256": "959ae98907cccb29bff1e02a064ea44394dfc1efe1b2cd209281c4cfbbfb88e2",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-multiple-reference-virtual-base-parameters.t",
+      "lowir_sha256": "f7110d2a4d1bf99505dc13f017429384906a31a5db1d4313b44ce0174808cc06",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-nonprimary-direct-base-ctor-vtable-offset.t",
+      "lowir_sha256": "b8f1bd1ad793c266585cccde006722c7929f0ae5661f149b50fc9129342713aa",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-nonprimary-virtual-dispatch.t",
+      "lowir_sha256": "b09f5184c9323451dc9dc0cef892182f665531f81153db836e2d84753b718a48",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-null-pointer-vbase-hidden-argument.t",
+      "lowir_sha256": "638c3866cdde8822bf8158783b7ffe9cc538368b0463e3ac7e655ccf4037e4c3",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-null-static-pointer-downcast-nonprimary-base.t",
+      "lowir_sha256": "7c0f964ea3ed49110b948e78a8b8299eaaf88b4477f847ffcc4ca0a3512815d9",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-overload-set-reference-vbase-hidden-argument.t",
+      "lowir_sha256": "27c7c3a11f300ae0ec6fccb70975fcb38dbb414c8c1d226638e9397f938595d4",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-placement-new-vbase-hidden-argument.t",
+      "lowir_sha256": "7464617bcaadfdd0d56f9f0b3d806e35db20ea429353cae92b09310444a6f6dc",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-polymorphic-pointer-virtual-base-argument.t",
+      "lowir_sha256": "7ffcfffd700861c5756c75e9c9257c1e7901b8591359bc6b384be75cbf44913b",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-primary-polymorphic-base-before-nonpoly-static-cast.t",
+      "lowir_sha256": "c79e3f21e89ceff41b73b736cafb15bd8f2c7571346aa4de32ec2a614b6c2db3",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-private-crtp-static-pointer-downcast.t",
+      "lowir_sha256": "71d7e41713f1249a143dfb622cf884ac3dcd87c35691bde4d54648584383533a",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-reference-member-hidden-virtual-base-layout.t",
+      "lowir_sha256": "635bec1ab5144f9c7acb168629ee1eae6cd879e4b395161be1ac1ce0bafca76d",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-reference-pointer-virtual-base-argument.t",
+      "lowir_sha256": "73a04ab035df65cc89153f7e5c65fb6b4e383a79ac429f79a8b89cc295a5d81d",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-secondary-primary-base-vptr-overwrite.t",
+      "lowir_sha256": "999f290571c6f5f8b1208600999fcd22f72fdf90b3ddaa903c3e785fe1de4198",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-sibling-dynamic-cast.t",
+      "lowir_sha256": "342c0cdd4edb12af2a9d1f1c7e56712817af1979ab2c7dffb6f5004f16a74975",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-static-pointer-downcast-nonprimary-base.t",
+      "lowir_sha256": "7f4d7099458afc548d03248078aa891b6bf811738dd4f74c24af7002854970ac",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-static-reference-downcast-nonprimary-base.t",
+      "lowir_sha256": "656dbefae1d52bab4be31736dc18ab5cbcbed5f91c5caff3494b4c7b0bfd0327",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-typeid-nonprimary-view.t",
+      "lowir_sha256": "98f2fd015e537ab31fb5feb98502e7051c5d02e5e6f9198e1cdfd761fe7401d6",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-unrelated-virtual-roots-final-overrider.t",
+      "lowir_sha256": "dbfb4d4515b0d06fec9d28c39ab05e6d30084f23eb557c95c3824a0170883f0d",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-using-base-field-primary-base-offset.t",
+      "lowir_sha256": "667d2f97f523e92cec416bcb165011901ab8b02d3852022c228a6a91fb3576b0",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-virtual-base-constructor-vptr-hidden-target.t",
+      "lowir_sha256": "1213df18df73883509090498285bba4f2e068f0f5d6ba6dbbe0b77915f031229",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-virtual-base-manipulator-hidden-argument.t",
+      "lowir_sha256": "766cde6e6b0acd5cdad13a614da0dc82ef1e0e0b81dd9bb203005944b47d2cf3",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-virtual-base-parameter-hidden-layout.t",
+      "lowir_sha256": "fc97128140c6a53ea63bc0fe94c7eb2accee4f63728419f711831106f9ae8255",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-virtual-dispatch-incomplete-vbase-parameter.t",
+      "lowir_sha256": "287a48b65fd5d292827218ed3061ae63cc001b67f74977bf7e156405d81cdae8",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/100-virtual-inheritance-fields.t",
+      "lowir_sha256": "5eabb35245f375bc191b8c915b8dbc7f14e4d171bcb50e7407fa6d4808a07e58",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/200-multi-level-virtual-base-diamond-lifecycle.t",
+      "lowir_sha256": "9abe10b6239516d6c5cc6cf0724a3ed2146a30c76f920d01f6a2cc4c0d1db95f",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/200-virtual-base-override-preserves-new-slot.t",
+      "lowir_sha256": "c417476f2d9f96bc9ac8232da196d7f40da495b9c08a5bc704baba1b1dff8694",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/200-virtual-base-rich-vtable-second-slot-dispatch.t",
+      "lowir_sha256": "2fce226dd73f02615abe61951b990d36e548cb2cf88b2d098772d0008bc716ff",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/300-lifecycle-base-entry-inline-policy.t",
+      "lowir_sha256": "04d8b3b8dc665c5aa9b0dcd98ea43380d155f8f07a26523c6c7f387925fe1214",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    },
+    {
+      "source": "pa23/tests/general/300-virtual-base-destructor-exception-specification.t",
+      "lowir_sha256": "b89c4d6c6bc2575b00ac7a304c24db97e82b25cb8e60dd1cc9c9eaf9bdd29373",
+      "first_exit": 0,
+      "first_diagnostic": "",
+      "second_exit": 0,
+      "second_diagnostic": "",
+      "stable": true
+    }
+  ]
+}

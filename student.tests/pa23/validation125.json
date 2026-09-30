@@ -1,0 +1,224 @@
+{
+  "implementation": "d9179e848e8b6a5b9ca378a0ee20152404ce166a",
+  "compiler_sha256": "979a332fdeb3133af19b09d93bfbf4cb061236b59573e682b2c4a747fda5acaa",
+  "checks": [
+    {
+      "name": "stage",
+      "command": [
+        "make",
+        "test-pa23"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/stage.log",
+      "stdout_sha256": "1c57bddda694bda8d0073e64e7dd5639713edb1dc9fba0ceea05049030a64fc6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summary": [
+        "===== ALL TESTS PASSED SUCCESSFULLY! (45 / 45) ====="
+      ]
+    },
+    {
+      "name": "prior",
+      "command": [
+        "make",
+        "test-report-through-pa22"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/prior.log",
+      "stdout_sha256": "0d6c46e60abae86f39d31a98b8f9394b15236df5af3f2265736cebaf29ff255f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summary": [
+        "===== ALL TESTS PASSED SUCCESSFULLY! (3811 / 3811) ====="
+      ]
+    },
+    {
+      "name": "through",
+      "command": [
+        "make",
+        "test-report-through-pa23"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/through.log",
+      "stdout_sha256": "71411d15eeda0a069ebd1962811f45a27212837cb6b49485d56dbae3d5728a7e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summary": [
+        "===== ALL TESTS PASSED SUCCESSFULLY! (3856 / 3856) ====="
+      ]
+    },
+    {
+      "name": "file-audit",
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa23",
+        "--paths",
+        "dev/src"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/file-audit.log",
+      "stdout_sha256": "288932b05be54f7dbd9f8567a9b5a74a7daabd88e8da3c4d7577d2f0185ce181",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summary": [
+        "File audit passed for pa23 with 3 warning(s)."
+      ]
+    },
+    {
+      "name": "lifecycle",
+      "command": [
+        "python3",
+        "student.tests/pa23/lifecycle125.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa23-125/validation-complete/lifecycle"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/lifecycle.json",
+      "stdout_sha256": "f7f29b5d53c2c9b88d9851f852b920522140438c98c7819c28c78af2cb069dae",
+      "stderr_sha256": "eb83d3727c2abaede6fb60112886a9637899ca5e6095d413ee2e66ba901742dc",
+      "cases": 22,
+      "passed": 22
+    },
+    {
+      "name": "member",
+      "command": [
+        "python3",
+        "student.tests/pa23/member125.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa23-125/validation-complete/member"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/member.json",
+      "stdout_sha256": "342af7c12dfef96177b1562baadf62edae429325d69660bf500cd3d917c19ba7",
+      "stderr_sha256": "78e8a1b033f1e3b5814e65b30e9910e8ddd63327a133ae0d805dac37a3147517",
+      "cases": 13,
+      "passed": 13
+    },
+    {
+      "name": "tu",
+      "command": [
+        "python3",
+        "student.tests/pa23/lifecycle_tu125.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa23-125/validation-complete/tu"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/tu.json",
+      "stdout_sha256": "e0625574988bbda4bb93ac69b0fd277190a6e7d91bc7335865cf95b7b8e8c999",
+      "stderr_sha256": "24c1168ca149e975fd685dcf4fb24e82ce7d51a87f4d06bd2aaea47d2b346b08",
+      "cases": 12,
+      "passed": 12
+    },
+    {
+      "name": "ownership",
+      "command": [
+        "python3",
+        "student.tests/pa23/audit124.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa23-125/validation-complete/ownership"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/ownership.json",
+      "stdout_sha256": "b4c8563841d7de16a565712ddfd037dff9997723d3e755f8fe91c0f554ef8d88",
+      "stderr_sha256": "ce34a4b772d11db9518ddbf557cc0fe5c8c5f70bc40fa6917ae496db5256ac27",
+      "cases": 21,
+      "passed": 21
+    },
+    {
+      "name": "layout",
+      "command": [
+        "python3",
+        "student.tests/pa23/layout123.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa23-125/validation-complete/layout"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/layout.json",
+      "stdout_sha256": "9648d73144e409bdc446589c922e1605190b2063fdb6c74ba281563edd913028",
+      "stderr_sha256": "7802df0e83981db5df5cf2adf8a72274c6f1a6b34b9f40e5cea8215cde4edc2a",
+      "cases": 19,
+      "passed": 19
+    },
+    {
+      "name": "semantic",
+      "command": [
+        "python3",
+        "student.tests/pa23/verify123.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa23-125/validation-complete/semantic"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/semantic.json",
+      "stdout_sha256": "6255a706c64d17a9bcf9680d35aef735065bcee116baac8ac829e1708a1de5cd",
+      "stderr_sha256": "2377ae8c836ac81506dfcbdc20ef14ffc7203cb3deb8ce2970097a6ec45a2b99",
+      "cases": 26,
+      "passed": 26
+    },
+    {
+      "name": "inherited",
+      "command": [
+        "python3",
+        "student.tests/pa23/verify121.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa23-125/validation-complete/inherited"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/inherited.json",
+      "stdout_sha256": "026a163003b1ea52bc9db0fadfc23b957b23f5294b2746fa10e2d5c4c9d6f8c1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cases": 33,
+      "passed": 33
+    },
+    {
+      "name": "old-lifecycle",
+      "command": [
+        "python3",
+        "student.tests/pa23/verify122.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa23-125/validation-complete/old-lifecycle"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/old-lifecycle.json",
+      "stdout_sha256": "9ad42d5386a7717063f81236011cefc2f9b83da893e6737b1c787363bd7ef472",
+      "stderr_sha256": "a20c187c461471fe5342306e50033c869877f06796936f83dcb961593077d5b3",
+      "cases": 20,
+      "passed": 20
+    },
+    {
+      "name": "deep",
+      "command": [
+        "python3",
+        "student.tests/pa23/deep_overrider124.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/tmp/pa23-125/validation-complete/deep"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/deep.json",
+      "stdout_sha256": "6e7254ab6a048799f9b9151e426c32ddd6efefee3f8161c37cde240e2502e893",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cases": 2,
+      "passed": 2
+    },
+    {
+      "name": "roundtrip",
+      "command": [
+        "python3",
+        "student.tests/pa23/roundtrip121.py",
+        "/tmp/pa23-125/validation-complete/roundtrip"
+      ],
+      "exit": 0,
+      "stdout": "/tmp/pa23-125/validation-complete/roundtrip.json",
+      "stdout_sha256": "56c5afa7ffee5b23b252e42c0ee7ccbfc665aedaa6614b9a425c965d542e9383",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cases": 44,
+      "passed": 44
+    }
+  ],
+  "stage_progress": {
+    "entry_passed": 24,
+    "entry_failed": 21,
+    "final_passed": 45,
+    "final_failed": 0,
+    "fixture_count": 45,
+    "coverage_preserved": true,
+    "oracles_manifest_sha256": "258bfd88a0f045e6489495aaa4adc4f344601f73b1653ed0f8db1fc35c05aaee"
+  }
+}
