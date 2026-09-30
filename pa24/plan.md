@@ -79,7 +79,10 @@ fixes. This handoff does not complete PA24 or advance to PA25.
   design regressions and the original 14 controls; course denominator stays 296.
 - `student.tests/pa24/performance.md` preserves handoff127 measurements.
   `performance128.md` records frozen current A/B data, A/A and six ABBA blocks,
-  latency/RSS and runtime/text measurements. Diagnostic budgets: <=15% compiler
+  latency/RSS and runtime/text measurements. Final paired compiler ratios are
+  0.971 integer / 0.917 floating (no speedup claim); max RSS changes by at most
+  8 KiB. Floating runtime ratio is 0.458, text 2169 -> 1522 bytes. Pressure
+  timing is inconclusive, with text 567 -> 557 bytes. Diagnostic budgets: <=15% compiler
   latency/RSS increase and no text growth for local selection. They are not extra
   exit gates; mandated course bounds remain binding. Existing loop/memory output
   is byte-identical to entry. XMM coalescing gives a repeatable runtime benefit.
@@ -90,8 +93,8 @@ fixes. This handoff does not complete PA24 or advance to PA25.
 - Handoff127: `f9ff5dd4` scalar foundation 199/296; `7d1be282` bounded placement
   221/296; `9d8113eb` evidence. Review markers above remain unchanged.
 - Handoff128: `2425715e` floating execution, typed literals and mixed/variadic ABI;
-  subsequent bounded pressure/parameter-flow increment and final evidence commits
-  close this implementation turn. No claims about unfinished groups are waived.
+  `ae72c874` bounded pressure/parameter-flow; the final telemetry/evidence
+  commit closes this implementation turn. No claims about unfinished groups are waived.
 - Independent audit remains due: scratch-effect completeness; XMM alias and
   call lifetimes; NaN/rounding and numeric-payload fidelity; parameter clobber
   worklists; private-home carry legality; shared LowIR validation compatibility;
@@ -99,5 +102,5 @@ fixes. This handoff does not complete PA24 or advance to PA25.
   These review questions are distinct from the unfinished implementation above.
 
 Evidence directory: `/home/vishvananda/work/private/v4codex/artifacts/pa24-handoff128/`.
-`stage-final.log`, `prior-final.log`, `file-audit.log`, `progress.json` and frozen
+`stage-accepted.log`, `prior-final.log`, `file-audit-accepted.log`, `progress.json` and frozen
 performance observations record this boundary. Independent review is not waived.

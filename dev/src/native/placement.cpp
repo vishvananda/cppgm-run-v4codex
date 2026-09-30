@@ -208,6 +208,7 @@ Operand Selector::allocate(unsigned id, Type t)
                     auto loc = previous.location;
                     if (loc.kind == Operand::Reg && loc.reg >= xmm(0) && loc.reg < xmm(14) &&
                         previous.last == position && live_until[loc.reg] == position) {
+                        ++stats.xmm_reuses;
                         live_until[loc.reg] = v.last; return v.location = loc;
                     }
                 }

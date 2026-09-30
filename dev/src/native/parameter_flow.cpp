@@ -30,6 +30,7 @@ void Selector::parameter_availability()
         for (unsigned n = block.instructions.begin; n != block.instructions.end(); ++n) effects[b] |= clobbers(p.instructions[n]);
     }
     for (unsigned at = 0; at < pending.size(); ++at) {
+        ++stats.parameter_flow_visits;
         unsigned b = pending[at], id = p.block_order[source.blocks.begin+b].index;
         queued[b] = false;
         unsigned out = workspace.parameter_clobbers[id] | effects[b];

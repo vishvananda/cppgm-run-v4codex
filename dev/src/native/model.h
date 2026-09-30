@@ -65,6 +65,7 @@ struct Function {
 struct Statistics {
     std::uint64_t functions = 0, instructions = 0, frame_bytes = 0, text_bytes = 0;
     std::uint64_t value_visits = 0, scratch_carried_reloads = 0;
+    std::uint64_t parameter_flow_visits = 0, carry_window_visits = 0, xmm_reuses = 0;
     double selection_ms = 0, encoding_ms = 0;
 };
 const char* register_name(int reg);

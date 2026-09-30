@@ -34,7 +34,7 @@ manifest={'binaries':{k:{'path':str(v),'sha256':digest(v)} for k,v in compilers.
           'inputs':{'compiler':digest(source)},'runs':[], 'runtime_arguments':['input'], 'cpu':cpu, 'platform':os.uname()._asdict() if hasattr(os.uname(),'_asdict') else list(os.uname())}
 # Compiler correctness is checked before timing; executables remain frozen for runtime.
 executables={}
-runtime_names=sys.argv[4:] or ['runtime','memory-runtime']
+runtime_names=[] if os.environ.get('PA24_COMPILE_ONLY')=='1' else sys.argv[4:] or ['runtime','memory-runtime']
 for name in runtime_names:
     input=d/f'{name}.lowir'; input.write_bytes((root/f'student.tests/pa24/{name}.lowir').read_bytes())
     manifest['inputs'][name]=digest(input)

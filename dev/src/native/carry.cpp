@@ -38,6 +38,7 @@ void Selector::carry_reloads()
             if (occupied[r] > n) continue;
             bool safe = true;
             for (unsigned j = n+1; j <= u.last && safe; ++j) {
+                ++stats.carry_window_visits;
                 const auto& i = f.instructions[j];
                 // This whitelist is also the effect boundary: integer moves,
                 // typed loads and simple ALU operations have no hidden scratch

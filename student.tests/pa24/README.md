@@ -56,3 +56,7 @@ a deferred address across a call, high parameter pressure, and a loop backedge.
 The floating runtime sums input-dependent kernel results and the pressure runtime
 checks an input-dependent recurrence. See [performance128.md](performance128.md)
 for the current frozen experiments, including all earlier observations.
+
+`PA24_COMPILE_ONLY=1` reruns compiler measurements alone after telemetry-only
+changes. Executable hash identity establishes reuse of the frozen runtime
+measurements; it never substitutes for checking both runtime input counts.

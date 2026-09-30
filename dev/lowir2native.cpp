@@ -56,7 +56,12 @@ int main(int argc, char** argv)
                 << " peak_rss_kib=" << usage.ru_maxrss << " functions=" << stats.functions
                 << " instructions=" << stats.instructions << " frame_bytes=" << stats.frame_bytes
                 << " text_bytes=" << stats.text_bytes << " value_visits=" << stats.value_visits
-                << " scratch_carried_reloads=" << stats.scratch_carried_reloads << "\n";
+                << " scratch_carried_reloads=" << stats.scratch_carried_reloads
+                << " parameter_flow_visits=" << stats.parameter_flow_visits
+                << " carry_window_visits=" << stats.carry_window_visits
+                << " xmm_reuses=" << stats.xmm_reuses
+                << " input_pool_growths=" << p.pool_allocations()
+                << " input_pool_bytes=" << p.pool_storage_bytes() << "\n";
         }
         return 0;
     } catch (const std::exception& e) { std::cerr << "ERROR: " << e.what() << '\n'; return 1; }
