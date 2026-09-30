@@ -54,22 +54,20 @@ void Procedural::emit_vtables()
     for (EntityId cls : sem.demanded_vtables()) {
         SymbolId table = vtable_symbol(cls);
         if (p.symbols[table.index-1].kind != Symbol::Unknown) continue;
-        std::vector<DataItem> data = {scalar(IRType::I64,0),relocation(typeinfo(cls))};
-        const auto& slots = sem.virtual_class(cls).slots;
-        for (unsigned j = 0; j < slots.size(); ++j) {
-            EntityId e = slots[j]; auto m = sem.member_fact(e);
-            if (m.pure) {
-                if (!pure_virtual) {
-                    pure_virtual = fresh_symbol("@pure_virtual");
-                    Function f; f.symbol = pure_virtual; f.declaration = true;
-                    f.signature = signature(sem.call_type(e)); p.functions.push_back(f);
-                    auto& s = p.symbols[pure_virtual.index-1]; s.kind = Symbol::FunctionSymbol; s.entity = p.functions.size();
-                    s.metadata.binding = SBM_STRONG; s.metadata.object = p.intern("__cxa_pure_virtual");
-                }
-                data.push_back(relocation(pure_virtual));
-            } else data.push_back(relocation(symbol(e,false,m.destructor && j && slots[j-1] == e)));
-        }
-        publish(p,table,data);
+        auto emit_view = [&](SymbolId output, const std::vector<semantic::VirtualSlot>& slots, std::uint64_t offset) {
+            std::vector<DataItem> data = {scalar(IRType::I64,0-offset),relocation(typeinfo(cls))};
+            data[0].value.negative_integer = offset != 0;
+            for (unsigned j = 0; j < slots.size(); ++j) {
+                auto m = sem.member_fact(slots[j].function);
+                bool deleting = m.destructor && j && slots[j-1].function == slots[j].function;
+                data.push_back(relocation(virtual_target(slots[j],deleting)));
+            }
+            publish(p,output,data);
+        };
+        emit_view(table,sem.virtual_class(cls).slots,0);
+        const auto& views = sem.virtual_class(cls).views;
+        for (unsigned j = 0; j < views.size(); ++j)
+            if (views[j].offset) emit_view(view_symbol(cls,j+1),views[j].slots,views[j].offset);
     }
 }
 void Procedural::vpointer_store(EntityId cls)
@@ -77,10 +75,17 @@ void Procedural::vpointer_store(EntityId cls)
     if (!sem.polymorphic(cls)) return;
     auto symbol = vtables[sem.virtual_class_id(cls)];
     if (!symbol) throw std::logic_error("undemanded vtable in lifecycle entry");
-    Value object = emit(Opcode::Load,IRType::Ptr,{Operand::slot(this_slot)});
-    Value table = emit(Opcode::Addr,IRType(),{Operand::symbol(symbol)});
-    Value point = emit(Opcode::Index,IRType::I8,{table.operand,Operand::integer(16)});
-    emit(Opcode::Store,IRType::Ptr,{point.operand,object.operand});
+    auto store = [&](SymbolId symbol, std::uint64_t offset) {
+        Value object = emit(Opcode::Load,IRType::Ptr,{Operand::slot(this_slot)});
+        if (offset) object = emit(Opcode::Index,IRType::I8,{object.operand,Operand::integer(offset)});
+        Value table = emit(Opcode::Addr,IRType(),{Operand::symbol(symbol)});
+        Value point = emit(Opcode::Index,IRType::I8,{table.operand,Operand::integer(16)});
+        emit(Opcode::Store,IRType::Ptr,{point.operand,object.operand});
+    };
+    store(symbol,0);
+    const auto& views = sem.virtual_class(cls).views;
+    for (unsigned j = 0; j < views.size(); ++j)
+        if (views[j].store) store(view_symbol(cls,j+1),views[j].offset);
 }
 Value Procedural::virtual_function(Value object, unsigned slot)
 {

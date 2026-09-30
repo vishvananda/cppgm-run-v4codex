@@ -128,7 +128,8 @@ Value Procedural::expression(NodeId n, bool location)
     case Kind::KeywordLiteral:
         if (node.op == KW_THIS) {
             auto capture = sem.object_fact(n).capture;
-            Value v = capture ? captured_address(capture) : emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)}); v.type = fact.type; return v;
+            Value v = capture ? captured_address(capture) : emit(Opcode::Load, IRType::Ptr, {Operand::slot(this_slot)});
+            v.type = fact.type; v.nonnull = true; return v;
         }
         return Value(node.op == KW_NULLPTR ? Operand::null() : Operand::integer(node.op == KW_TRUE),
         node.op == KW_NULLPTR ? IRType::Ptr : IRType::I64, fact.type);

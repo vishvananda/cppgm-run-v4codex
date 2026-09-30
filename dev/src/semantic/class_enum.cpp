@@ -157,6 +157,14 @@ void Analyzer::define_class(NodeId n, ScopeId s, EntityId e, ScopeId owner, bool
     for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, cs);
     if (calls) { inherited_constructors(e); complete_virtuals(e); }
     entities[e].complete = true;
+    // Covariant slot selection needs the completed result-class layout before
+    // any call/member-pointer fact can observe the member's logical slot.
+    if (calls && polymorphic(e)) {
+        bool covariance = false;
+        for (const auto& slot : virtual_class(e).slots)
+            covariance |= types[entities[slot.function].type].child != types[entities[slot.declaration].type].child;
+        if (covariance) class_layout(e);
+    }
     complete_query_class(e);
     entities[e].definition = n;
     if (calls) check_constexpr_class(e);

@@ -315,6 +315,13 @@ class Procedural {
     Value base_projection(Value base, unsigned steps);
     Value pointer_projection(Value base, unsigned adjustment);
     std::vector<SymbolId> vtables, deleting_symbols;
+    semantic::Index view_symbols, thunk_adjustments, thunk_pairs, thunk_symbols, deleting_thunk_symbols;
+    unsigned next_thunk_adjustment = 0, next_thunk_pair = 0;
+    struct AdjustorThunk { EntityId target; std::int64_t adjustment, result_adjustment; SymbolId symbol; bool deleting; };
+    std::vector<AdjustorThunk> adjustor_thunks;
+    SymbolId view_symbol(EntityId cls, unsigned view);
+    SymbolId virtual_target(const semantic::VirtualSlot& slot, bool deleting);
+    void emit_adjustor_thunks();
     std::vector<EntityId> deleting_entries;
     SymbolId pure_virtual;
     void emit_vtables();

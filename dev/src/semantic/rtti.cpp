@@ -100,9 +100,12 @@ Conversion Analyzer::dynamic_cast_conversion(Expression x, TypeId to, ScopeId s,
     if (!polymorphic(types[use.source].entity)) return c;
     use.dynamic = true;
     if (to_void) use.hint = -2;
-    else if (derived_from(use.type,use.source))
-        use.hint = base_accessible(types[use.type].entity,types[use.source].entity,global) ?
-            base_adjustments[base_steps(use.type,types[use.source].entity)].total : -2;
+    else if (derived_from(use.type,use.source)) {
+        auto path = base_path(use.type,types[use.source].entity);
+        bool accessible = base_accessible(types[use.type].entity,types[use.source].entity,global);
+        use.hint = !accessible ? -2 : base_adjustments[path].ambiguous ? -3 :
+            std::int64_t(base_adjustments[base_steps(use.type,types[use.source].entity)].total);
+    } else use.hint = -2;
     c.rank = 0; c.reference = use.reference;
     return c;
 }

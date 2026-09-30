@@ -358,6 +358,7 @@ void Procedural::run()
         if (base_symbols[e]) function_body(e, true);
     }
     emit_deleting_entries();
+    emit_adjustor_thunks();
     emit_allocation_adapters();
     if (!global_initializers.empty()) global_initialization();
     emit_tls_initializers();

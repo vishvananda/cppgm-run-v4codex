@@ -80,9 +80,12 @@ SymbolId Procedural::rtti_type(TypeId id)
     std::uint64_t offset = 0;
     if (t.kind == TypeKind::Named) {
         role = sem.entities[t.entity].class_info ? 0 : 7;
-        if (auto base = sem.direct_base(t.entity)) {
-            dependency = typeinfo(base); offset = sem.base_offset(id);
-            flags = sem.public_direct_base(t.entity) ? 2 : 0; role = offset || !flags ? 2 : 1;
+        if (auto b = sem.first_base_edge(t.entity)) {
+            sem.object_size(id);
+            auto edge = sem.base_edge(b);
+            dependency = typeinfo(edge.base); offset = edge.offset;
+            flags = edge.access == semantic::Access::Public ? 2 : 0;
+            role = edge.next || edge.virtual_base || offset || !flags ? 2 : 1;
         }
     } else if (t.kind == TypeKind::Pointer || t.kind == TypeKind::MemberPointer) {
         role = t.kind == TypeKind::Pointer ? 4 : 8;
@@ -109,8 +112,14 @@ SymbolId Procedural::rtti_type(TypeId id)
     data = {relocation(rtti_runtime(role),16),relocation(name)};
     if (role == 1) data.push_back(relocation(dependency));
     if (role == 2) {
-        data.push_back(scalar(IRType::I32,0)); data.push_back(scalar(IRType::I32,1));
-        data.push_back(relocation(dependency)); data.push_back(scalar(IRType::I64,(offset<<8)|flags));
+        unsigned count = 0;
+        for (auto b = sem.first_base_edge(t.entity); b; b = sem.base_edge(b).next) ++count;
+        data.push_back(scalar(IRType::I32,sem.rtti_class_flags(t.entity))); data.push_back(scalar(IRType::I32,count));
+        for (auto b = sem.first_base_edge(t.entity); b; b = sem.base_edge(b).next) {
+            auto edge = sem.base_edge(b);
+            data.push_back(relocation(typeinfo(edge.base)));
+            data.push_back(scalar(IRType::I64,(edge.offset<<8)|(edge.access == semantic::Access::Public ? 2 : 0)));
+        }
     }
     if (role == 4 || role == 8) { data.push_back(scalar(IRType::I32,flags)); data.push_back(relocation(dependency)); }
     if (role == 8) data.push_back(relocation(owner));
@@ -160,15 +169,9 @@ Value Procedural::rtti_expression(NodeId n)
     }
     auto operand = ast[ast[n].first].next;
     auto object = use.reference ? address(expression(operand,true)) : load(expression(operand));
-    // With the current single-inheritance object model there is no alternate
-    // public source subobject. A nonpublic source base therefore cannot pass
-    // [expr.dynamic.cast]/8. Preserve operand evaluation, including its effects.
-    // Multiple inheritance must replace this with the general crosscast search.
+    // A -2 hint excludes a public source-to-target base path, not a
+    // crosscast through a more-derived complete object. Let RTTI decide.
     bool to_void = sem.types[use.type].kind == TypeKind::Fundamental && sem.types[use.type].fundamental == FT_VOID;
-    if (use.hint == -2 && !to_void) {
-        if (use.reference) { rtti_failure(2); start(block()); }
-        return Value(Operand::integer(0),IRType::Ptr,fact.type);
-    }
     auto slot = builder->add_slot(0,IRType::Ptr);
     emit(Opcode::Store,IRType::Ptr,{Operand::integer(0),Operand::slot(slot)});
     auto null = emit(Opcode::Compare,IRType::Ptr,{object.operand,Operand::integer(0)},Operation::Eq);

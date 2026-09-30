@@ -103,6 +103,9 @@ public:
     Index base_adjustment_index;
     std::size_t base_adjustment_work = 0, base_adjustment_hits = 0;
     EntityId direct_base(EntityId e) const { auto b = class_facts[entities[e].class_info].first_base; return b ? bases[b].base : 0; }
+    std::uint32_t first_base_edge(EntityId e) const { return class_facts[entities[e].class_info].first_base; }
+    const BaseRelation& base_edge(std::uint32_t b) const { return bases[b]; }
+    unsigned rtti_class_flags(EntityId e) const { return class_facts[entities[e].class_info].rtti_flags; }
     bool public_direct_base(EntityId e) const { auto b = class_facts[entities[e].class_info].first_base; return b && bases[b].access == Access::Public; }
     bool constructor_member(EntityId e) const;
     bool constructor_needed(EntityId e);
@@ -921,6 +924,7 @@ private:
     void reject_abstract(TypeId t);
     bool abstract_value(TypeId t);
     std::vector<VirtualClass> virtual_classes = std::vector<VirtualClass>(1);
+    void layout_virtual_views(EntityId cls);
     std::vector<EntityId> key_vtable_demand, vtable_emission;
     std::size_t key_vtable_cursor = 0;
     std::size_t virtual_slot_work = 0, virtual_declaration_work = 0, virtual_demands = 0;

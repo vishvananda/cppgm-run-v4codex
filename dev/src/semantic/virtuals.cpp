@@ -48,62 +48,127 @@ void Analyzer::check_covariance(EntityId e, EntityId base)
 void Analyzer::complete_virtuals(EntityId cls)
 {
     auto info = entities[cls].class_info;
-    EntityId base = direct_base(cls);
-    std::uint32_t v = 0;
-    if (base && polymorphic(base)) {
-        auto inherited = class_facts[entities[base].class_info].virtual_info;
-        v = virtual_classes.size(); virtual_classes.push_back(VirtualClass());
-        virtual_slot_work += virtual_classes[inherited].slots.size();
-        virtual_classes[v].slots = virtual_classes[inherited].slots;
-        virtual_classes[v].signatures = virtual_classes[inherited].signatures;
-        class_facts[info].virtual_info = v;
+    // Import subobject identities, not a signature-only union: unrelated
+    // roots can have the same signature and distinct final overriders.
+    VirtualClass completed;
+    for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
+        if (!polymorphic(bases[b].base) || bases[b].virtual_base) continue;
+        class_facts[info].primary_base = b;
+        const auto& inherited = virtual_class(bases[b].base);
+        completed.slots = inherited.slots; completed.views = inherited.views;
+        completed.signatures = inherited.signatures;
+        virtual_slot_work += inherited.slots.size();
+        for (const auto& view : inherited.views) virtual_slot_work += view.slots.size();
+        break;
+    }
+    for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
+        auto base = bases[b].base;
+        if (!polymorphic(base) || b == class_facts[info].primary_base) continue;
+        const auto& inherited = virtual_class(base);
+        unsigned root = completed.views.size()+1;
+        VirtualView view; view.type = base; view.edge = b; view.slots = inherited.slots;
+        auto relocate = [&](std::vector<VirtualSlot>& slots) {
+            for (auto& slot : slots) { slot.receiver += root; ++virtual_slot_work; }
+        };
+        relocate(view.slots); completed.views.push_back(std::move(view));
+        for (const auto& old : inherited.views) {
+            auto copy = old; copy.parent += root;
+            relocate(copy.slots); completed.views.push_back(std::move(copy));
+        }
+        // Primary-chain aliases need tables only in a secondary subobject.
+        // Keep single-inheritance completion proportional to its real slots.
+        auto parent = root;
+        for (auto edge = class_facts[entities[base].class_info].primary_base; edge;
+            edge = class_facts[entities[bases[edge].base].class_info].primary_base) {
+            VirtualView alias; alias.type = bases[edge].base; alias.edge = edge; alias.parent = parent;
+            auto count = virtual_class(alias.type).slots.size();
+            alias.slots.assign(inherited.slots.begin(),inherited.slots.begin()+count);
+            relocate(alias.slots); completed.views.push_back(std::move(alias));
+            parent = completed.views.size();
+        }
+    }
+    auto first = class_facts[info].first_base;
+    if (first && !bases[first].next) class_facts[info].rtti_flags = class_facts[entities[bases[first].base].class_info].rtti_flags;
+    else if (first) {
+        Index seen;
+        std::vector<EntityId> pending;
+        for (auto b = first; b; b = bases[b].next) pending.push_back(bases[b].base);
+        while (!pending.empty()) {
+            auto e = pending.back(); pending.pop_back();
+            if (seen.get(e)) { class_facts[info].rtti_flags |= 1; continue; }
+            seen.put(e,1);
+            class_facts[info].rtti_flags |= class_facts[entities[e].class_info].rtti_flags;
+            for (auto b = class_facts[entities[e].class_info].first_base; b; b = bases[b].next)
+                pending.push_back(bases[b].base);
+        }
     }
     std::vector<EntityId> methods;
-    Index seen;
+    Index seen, overrides;
     for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
         EntityId e = declarations[d].entity;
         if (!entities[e].member_info || entities[e].owner != entities[cls].scope || seen.get(e)) continue;
         seen.put(e,1); methods.push_back(e);
     }
-    if (base && type_destructor(entities[base].type) && members[entities[type_destructor(entities[base].type)].member_info].virtual_member && !class_facts[info].destructor) {
+    bool virtual_destructor = false;
+    for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
+        auto dtor = type_destructor(entities[bases[b].base].type);
+        virtual_destructor |= dtor && members[entities[dtor].member_info].virtual_member;
+    }
+    if (virtual_destructor && !class_facts[info].destructor) {
         EntityId dtor = destructor_declaration(entities[cls].type);
         members[entities[dtor].member_info].virtual_signature = types.function(types.fundamental(FT_VOID), {}, false);
         methods.push_back(dtor);
     }
+    auto shape = [&](EntityId e) {
+        auto m = entities[e].member_info;
+        return key(members[m].destructor ? 0 : entities[e].name,members[m].virtual_signature);
+    };
+    for (auto e : methods) overrides.put(shape(e),e);
+    Index matched;
+    auto replace = [&](std::vector<VirtualSlot>& slots) {
+        for (auto& slot : slots) {
+            ++virtual_slot_work;
+            EntityId old = slot.function, e = overrides.get(shape(old));
+            if (!e) continue;
+            auto m = entities[e].member_info;
+            if (entities[e].is_static || members[entities[old].member_info].final_member)
+                throw std::runtime_error("invalid virtual override");
+            check_covariance(e,old);
+            if (function_nonthrowing(old) && !function_nonthrowing(e))
+                throw std::runtime_error("looser virtual exception specification");
+            matched.put(e,1); members[m].virtual_member = true;
+            slot.function = e; slot.receiver = 0;
+        }
+    };
+    replace(completed.slots);
+    for (auto& view : completed.views) replace(view.slots);
     for (EntityId e : methods) {
         ++virtual_declaration_work;
         auto m = entities[e].member_info;
-        auto k = key(members[m].destructor ? 0 : entities[e].name, members[m].virtual_signature);
-        auto slot = v ? virtual_classes[v].signatures.get(k) : 0;
-        if (slot) {
-            EntityId old = virtual_classes[v].slots[slot-1];
-            if (entities[e].is_static || members[entities[old].member_info].final_member) throw std::runtime_error("invalid virtual override");
-            check_covariance(e,old);
-            if (function_nonthrowing(old) && !function_nonthrowing(e)) throw std::runtime_error("looser virtual exception specification");
-            members[m].virtual_member = true;
-        }
-        if (members[m].override_member && !slot) throw std::runtime_error("override without matching base virtual");
+        if (members[m].override_member && !matched.get(e)) throw std::runtime_error("override without matching base virtual");
         if ((members[m].pure || members[m].final_member) && !members[m].virtual_member) throw std::runtime_error("pure/final requires virtual member");
         if (!members[m].virtual_member) continue;
-        if (!v) { v = virtual_classes.size(); virtual_classes.push_back(VirtualClass()); class_facts[info].virtual_info = v; }
+        auto k = shape(e), slot = std::uint64_t(completed.signatures.get(k));
         if (!slot) {
-            slot = virtual_classes[v].slots.size()+1;
-            virtual_classes[v].signatures.put(k,slot);
-            virtual_classes[v].slots.push_back(e);
-            if (members[m].destructor) virtual_classes[v].slots.push_back(e);
-        } else {
-            virtual_classes[v].slots[slot-1] = e;
-            if (members[m].destructor) virtual_classes[v].slots[slot] = e;
+            slot = completed.slots.size()+1;
+            completed.signatures.put(k,slot);
+            completed.slots.push_back(VirtualSlot(e));
+            if (members[m].destructor) completed.slots.push_back(VirtualSlot(e));
         }
         members[m].virtual_slot = slot;
-        if (!virtual_classes[v].key_function && !members[m].pure && !entities[e].inline_function)
-            virtual_classes[v].key_function = e;
+        if (!completed.key_function && !members[m].pure && !entities[e].inline_function)
+            completed.key_function = e;
     }
-    if (v) {
-        class_facts[info].aggregate = false;
-        for (EntityId e : virtual_classes[v].slots) virtual_classes[v].abstract |= members[entities[e].member_info].pure;
-        if (virtual_classes[v].key_function) vtable_definition_available(virtual_classes[v].key_function);
-    }
+    if (completed.slots.empty() && completed.views.empty()) return;
+    auto abstract = [&](const std::vector<VirtualSlot>& slots) {
+        for (const auto& slot : slots) completed.abstract |= members[entities[slot.function].member_info].pure;
+    };
+    abstract(completed.slots);
+    for (const auto& view : completed.views) abstract(view.slots);
+    class_facts[info].aggregate = false;
+    auto v = virtual_classes.size(); class_facts[info].virtual_info = v;
+    virtual_classes.push_back(std::move(completed));
+    if (virtual_classes[v].key_function) vtable_definition_available(virtual_classes[v].key_function);
 }
 bool Analyzer::abstract_value(TypeId t)
 {
@@ -145,13 +210,18 @@ void Analyzer::demand_vtable(EntityId cls, VtableReason reason)
     try {
     // Slot identities are immutable after class completion. Reacquire by ID
     // because outgoing member demands may relocate the outer class vector.
-    auto count = virtual_classes[v].slots.size();
-    EntityId previous = 0;
-    for (std::size_t j = 0; j < count; ++j) {
-        EntityId e = virtual_classes[v].slots[j];
-        ++virtual_slot_work;
-        if (e == previous) continue;
-        previous = e;
+    // Collect identities before member demand, which may relocate class facts.
+    std::vector<EntityId> demanded;
+    Index seen;
+    auto collect = [&](const std::vector<VirtualSlot>& slots) {
+        for (const auto& slot : slots) {
+            ++virtual_slot_work;
+            if (!seen.get(slot.function)) { seen.put(slot.function,1); demanded.push_back(slot.function); }
+        }
+    };
+    collect(virtual_classes[v].slots);
+    for (const auto& view : virtual_classes[v].views) collect(view.slots);
+    for (EntityId e : demanded) {
         auto m = entities[e].member_info;
         if (members[m].pure) continue;
         members[m].emission_reference = true;
@@ -166,6 +236,43 @@ void Analyzer::demand_vtable(EntityId cls, VtableReason reason)
     virtual_classes[v].demand = FactState::Success;
     } catch (...) {
         virtual_classes[v].demand = FactState::Failure; throw;
+    }
+}
+} }
+
+namespace cppgm { namespace semantic {
+void Analyzer::layout_virtual_views(EntityId cls)
+{
+    auto& v = virtual_classes[virtual_class_id(cls)];
+    Index stored;
+    for (auto& view : v.views) {
+        view.offset = (view.parent ? v.views[view.parent-1].offset : 0) + bases[view.edge].offset;
+        view.store = view.offset && !stored.get(view.offset);
+        if (view.store) stored.put(view.offset,1);
+    }
+    auto adjust = [&](std::vector<VirtualSlot>& slots, std::uint64_t offset) {
+        for (auto& slot : slots) {
+            slot.this_adjustment = std::int64_t(slot.receiver ? v.views[slot.receiver-1].offset : 0) - std::int64_t(offset);
+            auto actual = types[entities[slot.function].type].child;
+            auto expected = types[entities[slot.declaration].type].child;
+            if (actual != expected) {
+                auto derived = types[actual].child, base = types[expected].child;
+                slot.result_adjustment = base_adjustments[base_steps(derived,types[base].entity)].total;
+            }
+        }
+    };
+    adjust(v.slots,0);
+    for (auto& view : v.views) adjust(view.slots,view.offset);
+    auto count = v.slots.size();
+    for (unsigned j = 0; j < count; ++j) {
+        auto slot = v.slots[j];
+        auto e = slot.function, m = entities[e].member_info;
+        if (!slot.result_adjustment || scopes[entities[e].owner].entity != cls || members[m].virtual_slot != j+1) continue;
+        // The inherited slot still returns the base view; a call naming the
+        // overriding declaration needs its unadjusted covariant result.
+        members[m].virtual_slot = v.slots.size()+1;
+        v.signatures.put(key(entities[e].name,members[m].virtual_signature),members[m].virtual_slot);
+        v.slots.push_back(VirtualSlot(e));
     }
 }
 } }

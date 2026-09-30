@@ -56,14 +56,18 @@ void Analyzer::class_layout(EntityId e)
     try {
     std::uint64_t cursor = 0, align = 1, ordinary_end = 0;
     bool is_union = entities[e].key == KW_UNION;
-    EntityId direct = direct_base(e);
+    auto primary = class_facts[info].primary_base;
     if (polymorphic(e)) {
         align = 8; class_facts[info].empty = false;
-        if (!direct || !polymorphic(direct)) cursor = 64;
+        if (!primary) cursor = 64;
     }
     EmptyLayout empty(*this);
     std::uint64_t extent = cursor/8;
-    for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
+    std::vector<std::uint32_t> order;
+    if (primary) order.push_back(primary);
+    for (auto b = class_facts[info].first_base; b; b = bases[b].next)
+        if (b != primary) order.push_back(b);
+    for (auto b : order) {
         TypeId base = entities[bases[b].base].type;
         auto bytes = size(base);
         bases[b].offset = class_facts[entities[types[base].entity].class_info].empty ? 0 : layout_align(cursor/8, size(base,true));
@@ -127,6 +131,7 @@ void Analyzer::class_layout(EntityId e)
     class_facts[info].size = layout_align(std::max<std::uint64_t>(std::max<std::uint64_t>(1,extent), layout_add(cursor, 7)/8), align);
     empty.publish(info,class_facts[info].empty ? e : 0);
     class_facts[info].layout_state = FactState::Success;
+    if (polymorphic(e)) layout_virtual_views(e);
     } catch (...) {
         class_facts[info].layout_state = FactState::Failure; throw;
     }

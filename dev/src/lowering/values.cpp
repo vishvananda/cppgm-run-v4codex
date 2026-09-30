@@ -203,7 +203,9 @@ Value Procedural::base_projection(Value base, unsigned steps)
 {
     if (steps) {
         bool nonnull = base.nonnull;
-        base = emit(Opcode::Index, IRType::I8,{base.operand, Operand::integer(sem.base_adjustments[steps].total)});
+        auto offset = Operand::integer(sem.base_adjustments[steps].total);
+        offset.negative_integer = std::int64_t(sem.base_adjustments[steps].total) < 0;
+        base = emit(Opcode::Index, IRType::I8,{base.operand, offset});
         base.nonnull = nonnull;
     }
     return base;
