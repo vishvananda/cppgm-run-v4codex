@@ -1,0 +1,157 @@
+{
+  "stage": "pa24 checkpointAudit",
+  "stage_base_commit": "bde9eb3e128e24923a1de40bb63b8e348a13553b",
+  "entry_commit": "5bbf5325d351a2d375d33884c565988c671885fe",
+  "last_reviewed_commit": "9f3f9b5caaec9677af0e8431b51cacebcf823dce",
+  "artifact_directory": "/home/vishvananda/work/private/v4codex/artifacts/pa24-audit130",
+  "checks": [
+    {
+      "name": "stage-serial",
+      "command": "make test-pa24",
+      "exit_code": 2
+    },
+    {
+      "name": "prior-serial",
+      "command": "n=24; if [ \"$n\" -le 1 ]; then echo \"===== ALL TESTS PASSED SUCCESSFULLY! (0/0) =====\"; else make test-report-through-pa$((n - 1)); fi",
+      "exit_code": 0
+    },
+    {
+      "name": "file-audit",
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa24 --paths dev/src",
+      "exit_code": 0
+    },
+    {
+      "name": "personal",
+      "command": "python3 student.tests/pa24/scalar.py && python3 student.tests/pa24/floating.py && python3 student.tests/pa24/wide.py && python3 student.tests/pa24/objects.py && python3 student.tests/pa24/integration.py && python3 student.tests/pa24/status.py && python3 student.tests/pa24/audit130.py",
+      "exit_code": 0
+    },
+    {
+      "name": "audit-controls-final",
+      "command": "python3 student.tests/pa24/audit130.py dev/lowir2native ARTIFACT_DIR/reducers-after",
+      "exit_code": 0,
+      "cases": 21
+    },
+    {
+      "name": "roundtrips",
+      "command": "lowir input -> canonical -> canonical; lowir2native canonical; execute",
+      "exit_code": 0,
+      "cases": 21
+    }
+  ],
+  "progress": {
+    "baseline_passing": 282,
+    "current_passing": 282,
+    "total": 296,
+    "baseline_failures": [
+      "pa24/tests/behavior/600-defined-and-declared-tls-wrappers.t",
+      "pa24/tests/behavior/600-generic-cleanup-resume.t",
+      "pa24/tests/behavior/700-thread-local-store-register-pressure.t",
+      "pa24/tests/behavior/800-frame-dividend-direct-return.t",
+      "pa24/tests/behavior/800-wide-forwarded-call-argument-home.t",
+      "pa24/tests/behavior/900-folded-narrow-load-normalization.t",
+      "pa24/tests/behavior/900-parameter-home-address-clobber.t",
+      "pa24/tests/strict/100-object-abi-lowered.t",
+      "pa24/tests/strict/600-thread-local-direct-native-runtime.t",
+      "pa24/tests/structural/200-stack-arguments-beyond-six.t",
+      "pa24/tests/structural/500-mixed-gpr-xmm-call-abi.t",
+      "pa24/tests/structural/600-indirect-mixed-gpr-xmm-call-abi.t",
+      "pa24/tests/structural/700-call-setup-forwarding-no-preserve.t",
+      "pa24/tests/structural/800-single-edge-callee-saved-retention.t"
+    ],
+    "current_failures": [
+      "pa24/tests/behavior/600-defined-and-declared-tls-wrappers.t",
+      "pa24/tests/behavior/600-generic-cleanup-resume.t",
+      "pa24/tests/behavior/700-thread-local-store-register-pressure.t",
+      "pa24/tests/behavior/800-frame-dividend-direct-return.t",
+      "pa24/tests/behavior/800-wide-forwarded-call-argument-home.t",
+      "pa24/tests/behavior/900-folded-narrow-load-normalization.t",
+      "pa24/tests/behavior/900-parameter-home-address-clobber.t",
+      "pa24/tests/strict/100-object-abi-lowered.t",
+      "pa24/tests/strict/600-thread-local-direct-native-runtime.t",
+      "pa24/tests/structural/200-stack-arguments-beyond-six.t",
+      "pa24/tests/structural/500-mixed-gpr-xmm-call-abi.t",
+      "pa24/tests/structural/600-indirect-mixed-gpr-xmm-call-abi.t",
+      "pa24/tests/structural/700-call-setup-forwarding-no-preserve.t",
+      "pa24/tests/structural/800-single-edge-callee-saved-retention.t"
+    ],
+    "new_failures": [],
+    "controls_passed": 17,
+    "prior_passing": 3856,
+    "prior_total": 3856,
+    "coverage_preserved": true
+  },
+  "personal_suites": {
+    "scalar": 1820,
+    "floating": 1259,
+    "wide": 1495,
+    "object": 160,
+    "audit": 21,
+    "roundtrips": 21,
+    "integration": "pass",
+    "parameter_flow": "pass",
+    "source_trace_argument_counts": [
+      1,
+      2
+    ]
+  },
+  "artifacts": {
+    "review-inventory.json": "16fd6d86b8b6ccf84a6a825ceedfb8a40d8372a9b629041da3f5beaf7bb80c95",
+    "progress.json": "929f194173f44b7496a62af81777f85de86fc9a92549fb59e4b4f23b1f81a7e0",
+    "stage-serial.log": "900142c235326ae604fe0767eb47703511ab73ae5a5d6094a1b51b9f62f27960",
+    "prior-serial.log": "4c662c56ee5a753f284ba8febfd524d2af760e74bf151ec790709fa63891cb73",
+    "file-audit.log": "09991cae3876c91c905a9d48086986cd7bf75a6f2e2dfb20654472296390380d",
+    "personal.log": "56116771244baebf2aeb457249eee2dc4b9870a6b792799a083f67f9ebf656d2",
+    "reducers-before.json": "36f5e5868b06e07764f3bbb09968c2730305ec753ab6695535207ab2e7c7c3cb",
+    "reducers-after.json": "51c3fa48db71d128b2c0cc6072d9e0a83efd352eab6cc9e4a2acfd41811d6f64",
+    "roundtrips.json": "a0cb975c1e05ae1596752948ed5ecf320ad597de6ac9e6a2fd669e1564e0a7a3",
+    "trace.lowir": "0fa5925990a47f5e37853f2cb19dd95d6142d4cc13b50970a8a50845aee652d9",
+    "trace.mir": "14db85088744bac4779c964c972cb0cbc755f0942fcc33d9294d1c37ef7485f0",
+    "trace-frontend.stats": "c101938d8aff2bde7c2bbc9e67f0c6dea26a21da62e921d5c000118a33361d3b",
+    "trace-elf.txt": "6f0ee432bfe5241bf7f5a0513c92993646c5b8ed207e6239f7fcd165c2c2ae2e",
+    "trace-disassembly.txt": "a7b07f37769122fba5d7911ff8477b453647eba9c6293b1d998b0f7681f053c5",
+    "inherited-performance-verified.json": "458bbb170f968d2f616b0ef3cc18f3fb908087899960a7ba89f6c111ff3512af",
+    "runtime-identity.json": "9ef3a60a043a2b4f2bfce1a3137da8ce6fd93328ec4df986a2360c53b8b78f91",
+    "trace-native-final.stats": "bf0bc3fd574b11ebbb693614c1f3a787b4bf909491e15d020de75cdf605c908c"
+  },
+  "reviewed_sources": {
+    "dev/frontend_source_sets.mk": "f148b024c67f3044d83c0f35044c3bfbd9fff04593130a5385029cbe147f3d55",
+    "dev/lowir2native.cpp": "13165481efc435f6108cf95ace09af7e328d58712aa890a5878fcc2e33682b1e",
+    "dev/src/lowir/instruction_shape.cpp": "ba7bcb66f2e2921f293e3f346eb50386316c7bd0efc35a9aa2c5cab89e7ee3d2",
+    "dev/src/lowir/model.cpp": "19bdc24ea9400b6036862fefc0966e8dd8daa54327b54f41ad964ed232597ea4",
+    "dev/src/lowir/model.h": "45bc751c0073b54b60ef1e066fa3471d1c88ac2198c52f418afb14494a1040a4",
+    "dev/src/lowir/reader.cpp": "1a43a7c7705db4654016f86c63e0801a57d66d89c95af623e297bf58726402dd",
+    "dev/src/lowir/validation_instructions.cpp": "0ffb7800d0c4855df37483e9e95861b5fc138958f38c9e8c373090a7867f2bec",
+    "dev/src/lowir/validation_values.cpp": "af9c720f99def810afd38dbe243c92c8ab951da926ed0687bd659c10a2fefe95",
+    "dev/src/lowir/writer.cpp": "58de8d51a62906286cf5d10b0cfbe0b6957e28b47a62b1e0e2e9d4be631d11f9",
+    "dev/src/native/abi.h": "d51230fb97a35876c17f34df6ae6dbb714fb2c9000fe3b87eba01c2a7ecba196",
+    "dev/src/native/arithmetic.cpp": "20cdb75cf4340c7a5496cc1262192e9ce6d779fdfacb57a84fd19f7bf009d4dd",
+    "dev/src/native/builtins.cpp": "14257e59fba71f5da4e52177b0c1a1077145859259933d51b09cadbb98b2d4e6",
+    "dev/src/native/bulk_encoding.cpp": "f5eaeecf87b2b7cc76f5bd4b3fcf0eb39d47c2355ff4688129e6597c9067b5bd",
+    "dev/src/native/calls.cpp": "d306eb632d722a303e2008dcdf72366ed1dde7ef13d0d2d27ac970e152d38821",
+    "dev/src/native/carry.cpp": "f17e17481c8b19b3731050752c2eaf9a20f806466ea44e5d1f7acfc7fc3373e9",
+    "dev/src/native/control.cpp": "36cbba6ad100b8780c54c1248a20320ee23556e11f95973977a585b5bd21aafc",
+    "dev/src/native/driver.cpp": "e114e11e629277c816019e2b98813290bf542b3c3dd6df3a145353ec67676e20",
+    "dev/src/native/dump.cpp": "7afee271c377792befc53480967e207e71f6bcc476e5adc89efe0e6189e09fd5",
+    "dev/src/native/elf.cpp": "6622679db25f9ce2498840a15608fa343770ca0e14a754a41cba6113174ed177",
+    "dev/src/native/encoding.cpp": "2bc42763d88433c2bbbf46b70f78fc4da60b64c23afec616c8b769a7eeaba161",
+    "dev/src/native/encoding.h": "b085a89432a7e7aa394d70ff725545453bce3c0137c08487e103997b2664837e",
+    "dev/src/native/float_conversion.cpp": "6ffc2aa6b7e18ee1ba85434b142869815b33d5ecddbb98ca89d78d1f2c858beb",
+    "dev/src/native/float_encoding.cpp": "dc904bbe1e9026b4ff94d10a5d68947742fd648eb05e49da39db2ddd80552ef6",
+    "dev/src/native/floating.cpp": "648270d79dfbc31076f6fb7dd328ebff4254f77f8ec90f0f93374c4b753dd7d0",
+    "dev/src/native/fragments.cpp": "a98a4d130a65a52a870c5812249ef9ac0ec718951705df325e69970b2fe5af97",
+    "dev/src/native/integer_encoding.cpp": "2127150353eb00f6b89d2acb5583b6f1a0346dd6bf05836b2fcb23e036135e5a",
+    "dev/src/native/layout.cpp": "36b6daff76297bee0e257d7670b06ffd62b9872e01c1057ff956672598e5c8cb",
+    "dev/src/native/model.cpp": "e6cc619bd275a3dbc21d6cf1bbfbd7e27ba673df8e6bcecad79032c7d6e14a38",
+    "dev/src/native/model.h": "dc5fdcafdf85169442c2f6441d46bc3f8dd08af336f28042050fec28aabaea64",
+    "dev/src/native/parameter_flow.cpp": "4a2422dd95ed99408feb7e44c348187e4617e3b1a5ecc3ded810700c51fb9634",
+    "dev/src/native/parameter_slots.cpp": "602871eefc18532040ed5099367667eb832483590d4b8f5f20c09daa4bb3f822",
+    "dev/src/native/placement.cpp": "96ed609b5506c084277bc7682d21b17f7ee1969c1a5812c5d2d9516c898912dd",
+    "dev/src/native/selection.cpp": "b73af3a7c680db717a6b9a708166345484f72be33c5bb1857e2bb9cebfedd339",
+    "dev/src/native/selection.h": "fc5dfa0e5f2570926c208a22140d23796347f77570274ef5dbe381510f201fa4",
+    "dev/src/native/variadic.cpp": "c7c9dbefa2da32d2120301646b04cf68929481c6b3f48e8eff2c42743e36d9b6",
+    "dev/src/native/wide.cpp": "76028c84178ff417fc938a386eba99f6b25deaa0fee45eed7b7fc3bc14ffda93",
+    "dev/src/native/wide_division.cpp": "3ab5eeef7826cad8843081a6dfec8ede00813a22c2d6bfe26626e7452d83c775",
+    "dev/src/native/wide_float_encoding.cpp": "cec4d1cc36c7b3e6838395ac787ed311dd150401207db26c55a9c540ac2f3bd2",
+    "dev/src/native/wide_shift.cpp": "6ef797fc8fdb35ad4e516484c79caa0e9553b32b418bf3bcff406aa0922589f1"
+  }
+}
