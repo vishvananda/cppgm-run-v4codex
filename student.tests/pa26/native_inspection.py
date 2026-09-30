@@ -24,7 +24,12 @@ assert b'R_X86_64_PLT32' in relocs and b'_Unwind_Resume' in relocs and b'__gxx_p
 assert b'calculate<11>' in symbols
 result={'status':'pass','source':str(source),'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),
     'lowir_sha256':hashlib.sha256(lowir).hexdigest(),'mir_sha256':hashlib.sha256(mir).hexdigest(),
-    'object_sha256':hashlib.sha256(obj.read_bytes()).hexdigest(),'symbols':symbols.decode(),
-    'frames':frames.decode(),'relocations':relocs.decode()}
+    'object_sha256':hashlib.sha256(obj.read_bytes()).hexdigest(),
+    'symbols_sha256':hashlib.sha256(symbols).hexdigest(),
+    'frames_sha256':hashlib.sha256(frames).hexdigest(),
+    'relocations_sha256':hashlib.sha256(relocs).hexdigest(),
+    'verified_facts':['demanded calculate<11> specialization','typed EH clauses in production LowIR',
+        'MIR host frame slots and landing block identity','zPLR CIE','epilogue CFI restore state',
+        'PLT32 call relocations','host personality reference','host resume reference','program exits zero']}
 (out/'inspection.json').write_text(json.dumps(result,indent=2)+'\n')
 print('Template -> production LowIR -> host MIR -> ELF trace passed')

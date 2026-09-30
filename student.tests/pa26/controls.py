@@ -73,6 +73,10 @@ run([compiler,'-c','-o',private,source]); assert private.read_bytes()[:8]==b'CPP
 run([compiler,'-o',executable,private]); run([executable])
 run([compiler,'-c','--object-format=elf','-o',elf,source]); assert elf.read_bytes()[:4]==b'\x7fELF'
 run(['g++',elf,'-o',out/'host-main']); run([out/'host-main'])
+for record in records:
+    for stream in ['stdout','stderr']:
+        value=record.pop(stream)
+        record[stream+'_sha256']=hashlib.sha256(value.encode()).hexdigest()
 manifest=dict(compiler_sha256=hashlib.sha256(pathlib.Path(compiler).read_bytes()).hexdigest(),
               cases=9, records=records,
               sources={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in out.glob('*.cpp')})

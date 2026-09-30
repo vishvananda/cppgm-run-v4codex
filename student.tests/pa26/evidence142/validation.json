@@ -324,8 +324,8 @@
   "evidence": {
     "final-host.json": "c61241d8218052901bc20fbda1f4633f7df1bf0183179504bc6923d5a89b24e2",
     "final-legacy.json": "25de2b4f14efe3a6a7dba4a2234579d7bf8441650c868aa9a9ed5635e235cc29",
-    "inspection.json": "d1acb9e29bafe14862dab9cebd980c83b0e415c35f3ccda464636336933cbc2b",
-    "controls.json": "334b6a38359d11973e1d84e62bfe4dba7739fb234de65588cdc5a6b2d998ed97",
+    "inspection.json": "3fb4144f0e6c698becca1884140b942d4938cdee240759013f8f30975d0c7b8e",
+    "controls.json": "4e53f5535d974d72f5cd540ecc17bccb4663ed3f95cdad505e4a923a3dc7d23a",
     "candidate-legacy.json": "e1d2832aaa9ad2042086dd57f4d90c185ab725ee516dc0a167ee51828e86c8fe",
     "candidate-host.json": "fb6428fc28e0c4a90eb32793285ce33b7b9d2cc6da429906a711663fd54e4dea"
   }
