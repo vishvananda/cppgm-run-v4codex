@@ -11,7 +11,7 @@ namespace cppgm { namespace semantic {
 // The parser calls this boundary before proceeding to the next source region.
 class Analyzer : public syntax::DeclarationConsumer {
 public:
-    Analyzer(syntax::Ast& ast, IdentifierTable& ids, bool calls = false, bool definitions = false);
+    Analyzer(syntax::Ast& ast, IdentifierTable& ids, bool calls = false, bool definitions = false, bool host_abi = false);
     void consume(NodeId declaration) override;
     void finish();
     void require_body_facts(EntityId e) const;
@@ -502,6 +502,7 @@ private:
     bool definitions;
     IdentifierTable& ids;
     bool calls;
+    const bool host_abi;
     bool c_linkage = false;
     Index linkage_extern_declarations;
     struct StaticFact { FactState state = FactState::NotStarted; StaticValue value; };
@@ -1005,6 +1006,11 @@ private:
     void explicit_specifier(EntityId e, NodeId source, ScopeId scope);
     bool explicit_condition_value(QueryId query);
     void virtual_declaration(EntityId e, NodeId d, NodeId init, NodeId specs, NodeId source, ScopeId s);
+    std::uint32_t compose_subobject(std::uint32_t outer, std::uint32_t inner);
+    Index subobject_composition_index;
+    unsigned select_primary_base(EntityId cls);
+    void complete_virtual_prefix(EntityId cls, VirtualClass& model);
+    void layout_host_virtual_bases(EntityId cls, std::uint64_t& cursor, std::uint64_t& alignment);
     void complete_virtuals(EntityId cls);
     void vtable_definition_available(EntityId e);
     void demand_vtable(EntityId cls, VtableReason reason);
@@ -1022,6 +1028,7 @@ private:
     bool contains_subobject(EntityId outer, std::uint32_t from, std::uint32_t to);
     std::vector<EntityId> virtual_bases;
     std::vector<std::uint64_t> virtual_base_offsets;
+    std::vector<std::int64_t> virtual_base_rows;
     Index virtual_base_index, subobject_index, subobject_path_index;
     std::vector<SubobjectIdentity> subobjects = std::vector<SubobjectIdentity>(1);
     std::vector<SubobjectPath> subobject_paths = std::vector<SubobjectPath>(1);

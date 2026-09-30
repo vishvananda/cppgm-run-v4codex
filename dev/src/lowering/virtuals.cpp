@@ -94,14 +94,28 @@ void Procedural::emit_vtables()
         p.symbols[table.index-1].metadata.binding = internal_entity(cls) ? SBM_INTERNAL : SBM_WEAK;
         // Key-owned tables have one cross-TU ABI group. Unkeyed course views
         // retain their private emission identities.
-        bool grouped = model.key_function && !sem.entities[cls].specialization && !sem.virtual_base_count(cls);
+        bool grouped = linkage.host || (model.key_function && !sem.entities[cls].specialization && !sem.virtual_base_count(cls));
         std::vector<DataItem> group;
-        auto emit_view = [&](SymbolId output, EntityId owner, unsigned begin, unsigned count, std::uint64_t offset, unsigned vcalls) {
+        auto emit_view = [&](SymbolId output, EntityId owner, unsigned begin, unsigned count, std::uint64_t offset, unsigned vcalls, unsigned view) {
             std::vector<DataItem> data;
-            for (unsigned i = 0; i < vcalls; ++i) data.push_back(scalar(IRType::I64,0));
-            for (unsigned i = sem.virtual_base_count(owner); i; --i) {
-                auto delta = std::int64_t(sem.virtual_base_offset(cls,sem.virtual_base_type(owner,i-1)))-std::int64_t(offset);
-                auto row = scalar(IRType::I64,delta); row.value.negative_integer = delta < 0; data.push_back(row);
+            if (linkage.host) {
+                const auto& rows = view ? model.view_prefix : model.prefix;
+                auto first = view ? model.views[view-1].prefix_begin : 0;
+                auto n = view ? model.views[view-1].prefix_count : rows.size();
+                for (unsigned i = n; i; --i) {
+                    const auto& row = rows[first+i-1];
+                    auto target = row.base ? sem.virtual_base_offset(cls,row.base) :
+                        row.receiver ? model.views[row.receiver-1].offset : 0;
+                    auto delta = std::int64_t(target)-std::int64_t(offset);
+                    auto item = scalar(IRType::I64,delta); item.value.negative_integer = delta < 0;
+                    data.push_back(item);
+                }
+            } else {
+                for (unsigned i = 0; i < vcalls; ++i) data.push_back(scalar(IRType::I64,0));
+                for (unsigned i = sem.virtual_base_count(owner); i; --i) {
+                    auto delta = std::int64_t(sem.virtual_base_offset(cls,sem.virtual_base_type(owner,i-1)))-std::int64_t(offset);
+                    auto row = scalar(IRType::I64,delta); row.value.negative_integer = delta < 0; data.push_back(row);
+                }
             }
             auto top = scalar(IRType::I64,0-offset); top.value.negative_integer = offset != 0;
             data.push_back(top);
@@ -119,14 +133,17 @@ void Procedural::emit_vtables()
                 publish(p,output,data);
             }
         };
-        emit_view(table,cls,0,model.primary_count,0,0);
+        emit_view(table,cls,0,model.primary_count,0,0,0);
         const auto& views = sem.virtual_class(cls).views;
         if (sem.virtual_base_count(cls)) {
-            for (unsigned j : model.store_order)
-                emit_view(view_symbol(cls,j+1),views[j].type,views[j].begin,views[j].count,views[j].offset,views[j].vcall_rows);
+            if (grouped) {
+                for (unsigned j : model.store_order)
+                    emit_view(table,views[j].type,views[j].begin,views[j].count,views[j].offset,views[j].vcall_rows,j+1);
+            } else for (unsigned j : model.store_order)
+                emit_view(view_symbol(cls,j+1),views[j].type,views[j].begin,views[j].count,views[j].offset,views[j].vcall_rows,j+1);
         } else for (unsigned j = 0; j < views.size(); ++j)
             if (grouped ? views[j].store : views[j].offset != 0)
-                emit_view(grouped ? table : view_symbol(cls,j+1),views[j].type,views[j].begin,views[j].count,views[j].offset,views[j].vcall_rows);
+                emit_view(grouped ? table : view_symbol(cls,j+1),views[j].type,views[j].begin,views[j].count,views[j].offset,views[j].vcall_rows,j+1);
         if (grouped) publish(p,table,group);
         if (sem.virtual_base_count(cls)) emit_construction_tables(cls,table);
     }
@@ -164,11 +181,12 @@ void Procedural::vpointer_store(EntityId cls)
     };
     store(symbol,0,sem.virtual_class(cls).address_point,0,0,0);
     const auto& model = sem.virtual_class(cls);
-    bool grouped = model.key_function && !sem.entities[cls].specialization && !sem.virtual_base_count(cls);
+    bool grouped = linkage.host || (model.key_function && !sem.entities[cls].specialization && !sem.virtual_base_count(cls));
     const auto& views = sem.virtual_class(cls).views;
     unsigned vtt_index = sem.vtt_secondary(cls);
-    for (unsigned j : model.store_order)
-        store(grouped ? symbol : view_symbol(cls,j+1),views[j].offset,grouped ? views[j].group_address_point : views[j].address_point,views[j].virtual_anchor,views[j].virtual_tail,vtt_index++);
+    const auto& stores = linkage.host && active_base_entry ? model.vtt_order : model.store_order;
+    for (unsigned j : stores)
+        store(grouped ? symbol : view_symbol(cls,j+1),views[j].offset,grouped ? views[j].group_address_point : views[j].address_point,views[j].virtual_anchor,views[j].virtual_tail,linkage.host ? views[j].vtt_index : vtt_index++);
 }
 Value Procedural::virtual_function(Value object, unsigned slot)
 {

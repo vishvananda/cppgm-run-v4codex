@@ -75,3 +75,9 @@ Handoff requires all 97 required tests (one failure at entry), earlier tests,
 file audit, explicit personal controls, preserved coverage and clean commits.
 Independent whole-stage architecture/performance audit remains pending and is
 separate from unfinished implementation; this turn does not waive it.
+
+Loop153 implementation: all 97 required tests and 12 bidirectional host-control
+commands pass. The completed layout group also fixes displaced primary
+claimants, inherited receivers, VTT order, dynamic tail padding, alignment and
+exported table groups. See `student.tests/pa28/implementation153.md`. Required
+earlier-stage, inspection and performance evidence are still pending.

@@ -10,7 +10,7 @@ void Analyzer::complete_virtual_bases(EntityId cls)
         auto k = key(cls,base);
         if (virtual_base_index.get(k)) return;
         virtual_base_index.put(k,virtual_bases.size()+1);
-        virtual_bases.push_back(base); virtual_base_offsets.push_back(0);
+        virtual_bases.push_back(base); virtual_base_offsets.push_back(0); virtual_base_rows.push_back(0);
     };
     for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
         auto inherited = class_facts[entities[bases[b].base].class_info];
@@ -31,6 +31,10 @@ std::int64_t Analyzer::virtual_base_row(EntityId cls, EntityId base) const
 {
     auto id = virtual_base_index.get(key(cls,base));
     if (!id) throw std::logic_error("missing virtual-base row identity");
+    if (host_abi) {
+        if (!virtual_base_rows[id-1]) throw std::logic_error("unpublished virtual-base prefix row");
+        return virtual_base_rows[id-1];
+    }
     auto position = id-1-class_facts[entities[cls].class_info].virtual_bases_begin;
     return -24-std::int64_t(position)*8;
 }

@@ -30,9 +30,19 @@ void Procedural::emit_construction_tables(EntityId complete, SymbolId table)
             const auto& view = model.views[receiver-1];
             return view.virtual_anchor ? sem.virtual_base_offset(complete,view.virtual_anchor)+view.virtual_tail : offset+view.offset;
         };
+        semantic::Index points;
         auto segment = [&](unsigned view, unsigned index) {
             auto point = view ? model.views[view-1].address_point : model.address_point;
-            if (root) { entries[index] = address(view ? view_symbol(cls,view) : table,point); return; }
+            auto at = location(view);
+            if (linkage.host) {
+                if (auto prior = points.get(at)) { entries[index] = entries[prior-1]; return; }
+                points.put(at,index+1);
+            }
+            if (root) {
+                entries[index] = linkage.host ? address(table,view ? model.views[view-1].group_address_point : point) :
+                    address(view ? view_symbol(cls,view) : table,point);
+                return;
+            }
             auto key = (std::uint64_t(table.index)<<32)|index;
             auto old = linkage.construction_symbols.get(key);
             auto symbol = old ? SymbolId(old) : fresh_symbol("@construction_vtable");
@@ -43,12 +53,22 @@ void Procedural::emit_construction_tables(EntityId complete, SymbolId table)
             metadata.binding = ir_model::SBM_INTERNAL;
             metadata.object = p.intern("__cppgm_construction_vtable_"+std::to_string(symbol.index));
             auto owner = view ? model.views[view-1].type : cls;
-            auto at = location(view);
             std::vector<DataItem> data;
-            if (view) for (unsigned j = 0; j < model.views[view-1].vcall_rows; ++j)
-                data.push_back(scalar(IRType::I64,0));
-            for (unsigned j = sem.virtual_base_count(owner); j; --j)
-                data.push_back(scalar(IRType::I64,std::int64_t(sem.virtual_base_offset(complete,sem.virtual_base_type(owner,j-1)))-at));
+            if (linkage.host) {
+                const auto& rows = view ? model.view_prefix : model.prefix;
+                auto first = view ? model.views[view-1].prefix_begin : 0;
+                auto n = view ? model.views[view-1].prefix_count : rows.size();
+                for (unsigned j = n; j; --j) {
+                    const auto& row = rows[first+j-1];
+                    auto target = row.base ? sem.virtual_base_offset(complete,row.base) : location(row.receiver);
+                    data.push_back(scalar(IRType::I64,std::int64_t(target)-at));
+                }
+            } else {
+                if (view) for (unsigned j = 0; j < model.views[view-1].vcall_rows; ++j)
+                    data.push_back(scalar(IRType::I64,0));
+                for (unsigned j = sem.virtual_base_count(owner); j; --j)
+                    data.push_back(scalar(IRType::I64,std::int64_t(sem.virtual_base_offset(complete,sem.virtual_base_type(owner,j-1)))-at));
+            }
             data.push_back(scalar(IRType::I64,std::int64_t(offset)-at));
             data.push_back(sem.polymorphic(cls) ? address(typeinfo(cls),0) : scalar(IRType::Ptr,0));
             auto first = view ? model.views[view-1].begin : 0;
@@ -67,7 +87,7 @@ void Procedural::emit_construction_tables(EntityId complete, SymbolId table)
             if (!base.virtual_base && base.vtt) node(base.type,offset+base.offset,begin+base.vtt,false);
         }
         unsigned index = begin+sem.vtt_secondary(cls);
-        for (unsigned j : model.store_order) segment(j+1,index++);
+        for (unsigned j : linkage.host ? model.vtt_order : model.store_order) segment(j+1,index++);
         if (root) for (unsigned j = 0; j < sem.virtual_base_count(cls); ++j) {
             const auto& base = sem.lifecycle_bases[sem.lifecycle_begin(cls)+j];
             if (base.vtt) node(base.type,base.offset,begin+base.vtt,false);

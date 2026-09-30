@@ -53,9 +53,9 @@ void Analyzer::complete_virtuals(EntityId cls)
     complete_virtual_bases(cls);
     VirtualClass completed;
     std::vector<VirtualSlot> primary;
-    for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
-        if (!dynamic_class(bases[b].base) || bases[b].virtual_base) continue;
-        class_facts[info].primary_base = b;
+    auto selected = select_primary_base(cls);
+    class_facts[info].primary_base = selected;
+    if (auto b = selected) {
         const auto& inherited = virtual_class(bases[b].base);
         primary.assign(inherited.slots.begin(),inherited.slots.begin()+inherited.primary_count);
         completed.slots.assign(inherited.slots.begin()+inherited.primary_count,inherited.slots.end());
@@ -74,11 +74,10 @@ void Analyzer::complete_virtuals(EntityId cls)
         }
         completed.signatures = inherited.signatures;
         virtual_slot_work += inherited.slots.size();
-        break;
     }
     for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
         auto base = bases[b].base;
-        if (!dynamic_class(base) || b == class_facts[info].primary_base) continue;
+        if (!dynamic_class(base) || (b == selected && !bases[b].virtual_base)) continue;
         const auto& inherited = virtual_class(base);
         unsigned root = completed.views.size()+1;
         auto import = [&](VirtualView view, unsigned begin, unsigned count) {
@@ -101,9 +100,14 @@ void Analyzer::complete_virtuals(EntityId cls)
         // Primary-chain aliases need tables only in a secondary subobject.
         // Keep single-inheritance completion proportional to its real slots.
         auto parent = root;
+        std::uint32_t primary_occurrence = 0;
         for (auto edge = class_facts[entities[base].class_info].primary_base; edge;
             edge = class_facts[entities[bases[edge].base].class_info].primary_base) {
             VirtualView alias; alias.type = bases[edge].base; alias.edge = edge; alias.parent = parent;
+            if (host_abi) {
+                primary_occurrence = compose_subobject(primary_occurrence,prefix_subobject(edge,0));
+                alias.subobject = primary_occurrence;
+            }
             auto count = virtual_class(alias.type).primary_count;
             import(alias,0,count);
             parent = completed.views.size();
@@ -209,6 +213,7 @@ void Analyzer::complete_virtuals(EntityId cls)
         for (auto& slot : slots) slot.receiver = remap[slot.receiver];
         completed.views.swap(views); completed.slots.swap(slots);
     }
+    if (host_abi) complete_virtual_prefix(cls,completed);
     for (const auto& slot : completed.slots) completed.abstract |= members[entities[slot.function].member_info].pure;
     class_facts[info].aggregate = false;
     auto v = virtual_classes.size(); class_facts[info].virtual_info = v;
@@ -318,7 +323,7 @@ void Analyzer::layout_virtual_views(EntityId cls)
 {
     auto id = virtual_class_id(cls);
     Index stored;
-    virtual_classes[id].address_point = 16+std::uint64_t(virtual_base_count(cls))*8;
+    virtual_classes[id].address_point = 16+std::uint64_t(host_abi ? virtual_classes[id].prefix.size() : virtual_base_count(cls))*8;
     std::uint64_t group_end = virtual_classes[id].address_point + std::uint64_t(virtual_classes[id].primary_count)*8;
     for (unsigned j = 0; j < virtual_classes[id].views.size(); ++j) {
         auto& view = virtual_classes[id].views[j];
@@ -329,7 +334,7 @@ void Analyzer::layout_virtual_views(EntityId cls)
         view.virtual_tail = view.virtual_anchor ? view.offset-virtual_base_offset(cls,view.virtual_anchor) : 0;
         view.vbase_rows = virtual_base_count(view.type);
         view.vcall_rows = 0;
-        if (bases[view.edge].virtual_base) {
+        if (!host_abi && bases[view.edge].virtual_base) {
             Index signatures;
             for (unsigned k = 0; k < view.count; ++k) {
                 ++virtual_slot_work;
@@ -339,13 +344,37 @@ void Analyzer::layout_virtual_views(EntityId cls)
                 if (!signatures.get(shape)) { signatures.put(shape,1); ++view.vcall_rows; }
             }
         }
-        view.address_point = 16+std::uint64_t(view.vcall_rows+view.vbase_rows)*8;
+        if (host_abi) {
+            const auto& owner = virtual_class(view.type);
+            const auto& rows = bases[view.edge].virtual_base ? owner.virtual_prefix : owner.prefix;
+            view.prefix_begin = virtual_classes[id].view_prefix.size();
+            view.prefix_count = rows.size();
+            for (auto row : rows) {
+                if (row.declaration) row.origin = compose_subobject(view.subobject,row.origin);
+                virtual_classes[id].view_prefix.push_back(row);
+            }
+        }
+        view.address_point = 16+std::uint64_t(host_abi ? view.prefix_count : view.vcall_rows+view.vbase_rows)*8;
         view.store = view.offset && !stored.get(view.offset);
         if (view.store) {
             view.group_address_point = group_end + view.address_point;
             stored.put(view.offset,j+1);
             group_end += view.address_point + std::uint64_t(view.count)*8;
         } else view.group_address_point = view.offset ? virtual_classes[id].views[stored.get(view.offset)-1].group_address_point : virtual_classes[id].address_point;
+    }
+    if (host_abi) {
+        Index occurrences;
+        for (unsigned j = 0; j < virtual_classes[id].views.size(); ++j) {
+            const auto& view = virtual_classes[id].views[j];
+            occurrences.put(key(view.subobject,view.type),j+1);
+        }
+        for (auto& slot : virtual_classes[id].slots) {
+            if (!subobjects[slot.implementation].anchor) continue;
+            auto owner = scopes[entities[slot.function].owner].entity;
+            auto receiver = occurrences.get(key(slot.implementation,owner));
+            if (!receiver) throw std::logic_error("missing virtual implementation occurrence");
+            slot.receiver = receiver;
+        }
     }
     auto adjust = [&](unsigned begin, unsigned count, std::uint64_t offset) {
         for (unsigned j = 0; j < count; ++j) {
@@ -370,6 +399,21 @@ void Analyzer::layout_virtual_views(EntityId cls)
         auto view = virtual_classes[id].views[j];
         adjust(view.begin,view.count,view.offset);
     }
+    if (host_abi) {
+        Index receivers;
+        auto& model = virtual_classes[id];
+        for (const auto& slot : model.slots) receivers.put(key(slot.declaration,slot.origin),slot.receiver+1);
+        auto publish = [&](std::vector<VirtualPrefixRow>& rows) {
+            for (auto& row : rows) {
+                if (row.base) continue;
+                auto receiver = receivers.get(key(row.declaration,row.origin));
+                if (!receiver) throw std::logic_error("missing vcall final overrider");
+                row.receiver = receiver-1;
+            }
+        };
+        publish(model.prefix); publish(model.view_prefix);
+    }
+
     auto& v = virtual_classes[id];
     auto count = v.primary_count;
     std::vector<VirtualSlot> additional;

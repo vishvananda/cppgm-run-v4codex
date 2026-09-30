@@ -126,6 +126,9 @@ void Analyzer::telemetry(std::ostream& out) const
     for (const auto& cls : virtual_classes) {
         virtual_views += cls.views.size(); virtual_slots += cls.slots.size();
         virtual_storage += cls.views.capacity()*sizeof(VirtualView)+cls.slots.capacity()*sizeof(VirtualSlot);
+        virtual_storage += (cls.prefix.capacity()+cls.virtual_prefix.capacity()+cls.view_prefix.capacity())*sizeof(VirtualPrefixRow);
+        virtual_storage += cls.base_order.capacity()*sizeof(EntityId);
+        virtual_storage += (cls.store_order.capacity()+cls.vtt_order.capacity())*sizeof(unsigned);
         vtable_definitions += cls.demand == FactState::Success;
         external_vtables += cls.referenced && cls.demand != FactState::Success;
     }
@@ -297,7 +300,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_virtual_views\":" << virtual_views
         << ",\"semantic_virtual_slots\":" << virtual_slots
         << ",\"semantic_virtual_storage_bytes\":" << virtual_storage
-        << ",\"semantic_subobject_storage_bytes\":" << subobjects.capacity()*sizeof(SubobjectIdentity)+subobject_paths.capacity()*sizeof(SubobjectPath)+virtual_bases.capacity()*sizeof(EntityId)+virtual_base_offsets.capacity()*sizeof(std::uint64_t)
+        << ",\"semantic_subobject_storage_bytes\":" << subobjects.capacity()*sizeof(SubobjectIdentity)+subobject_paths.capacity()*sizeof(SubobjectPath)+virtual_bases.capacity()*sizeof(EntityId)+(virtual_base_offsets.capacity()+virtual_base_rows.capacity())*sizeof(std::uint64_t)
         << ",\"semantic_lifecycle_base_entries\":" << lifecycle_bases.size()
         << ",\"semantic_lifecycle_storage_bytes\":" << lifecycle_bases.capacity()*sizeof(LifecycleBase)
         << ",\"semantic_virtual_base_entries\":" << virtual_bases.size()

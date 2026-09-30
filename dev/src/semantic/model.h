@@ -128,7 +128,7 @@ struct ClassFacts {
     ScopeId default_constructor = 0, member_initializer_scope = 0;
     FactState layout_state = FactState::NotStarted;
     std::uint32_t empty_types_begin = 0, empty_types_count = 0;
-    bool aggregate = true, empty = true;
+    bool aggregate = true, empty = true, nearly_empty = false;
     std::uint32_t virtual_info = 0;
     std::uint32_t lifecycle_begin = 0, lifecycle_count = 0;
     std::uint32_t vtt_secondary = 0, vtt_base_size = 0, vtt_size = 0;
@@ -266,6 +266,11 @@ struct VirtualSlot {
     VirtualSlot() {}
     explicit VirtualSlot(EntityId e) : function(e), declaration(e) {}
 };
+struct VirtualPrefixRow {
+    EntityId base = 0, declaration = 0; // Exactly one identity: vbase or vcall.
+    std::uint32_t origin = 0; // Declaration occurrence in the prefix owner.
+    unsigned receiver = 0; // Final overrider occurrence, filled by layout.
+};
 struct VirtualView {
     EntityId type = 0;
     std::uint32_t subobject = 0; // Physical vptr occurrence; primary aliases share it.
@@ -277,6 +282,8 @@ struct VirtualView {
     std::uint64_t address_point = 16;
     EntityId virtual_anchor = 0;
     std::uint64_t virtual_tail = 0;
+    unsigned prefix_begin = 0, prefix_count = 0;
+    unsigned vtt_index = 0;
     bool store = false;
 };
 struct VirtualClass {
@@ -286,6 +293,11 @@ struct VirtualClass {
     std::uint32_t primary_count = 0;
     std::vector<VirtualView> views;
     std::vector<unsigned> store_order; // Physical vptr order, completed with layout.
+    // Closest-to-address-point first. Virtual-prefix is the canonical template
+    // when this class is itself a virtual base; view rows carry local receivers.
+    std::vector<VirtualPrefixRow> prefix, virtual_prefix, view_prefix;
+    std::vector<EntityId> base_order; // ABI preorder; lifecycle uses postorder.
+    std::vector<unsigned> vtt_order;
     Index signatures;
     EntityId key_function = 0;
     std::uint64_t address_point = 16;

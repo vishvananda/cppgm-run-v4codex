@@ -56,6 +56,8 @@ void Analyzer::class_layout(EntityId e)
     try {
     std::uint64_t cursor = 0, align = 1, ordinary_end = 0;
     bool is_union = entities[e].key == KW_UNION;
+    bool nearly_empty = dynamic_class(e);
+    unsigned dynamic_bases = 0;
     auto primary = class_facts[info].primary_base;
     if (dynamic_class(e)) {
         align = 8; class_facts[info].empty = false;
@@ -64,7 +66,14 @@ void Analyzer::class_layout(EntityId e)
     EmptyLayout empty(*this);
     std::uint64_t extent = cursor/8;
     std::vector<std::uint32_t> order;
-    if (primary) order.push_back(primary);
+    if (primary && !bases[primary].virtual_base) order.push_back(primary);
+    if (primary && bases[primary].virtual_base) {
+        auto base = bases[primary].base;
+        const auto& fact = class_facts[entities[base].class_info];
+        cursor = fact.nonvirtual_size*8; extent = fact.nonvirtual_size;
+        align = std::max(align,fact.nonvirtual_alignment);
+        empty.merge(entities[base].type);
+    }
     for (auto b = class_facts[info].first_base; b; b = bases[b].next)
         if (b != primary && !bases[b].virtual_base) order.push_back(b);
     for (auto b : order) {
@@ -78,6 +87,11 @@ void Analyzer::class_layout(EntityId e)
         // subobject beyond existing storage instead of searching for a hole.
         if (empty.merge(base) && bases[b].offset < extent)
             bases[b].offset = layout_align(extent,class_facts[base_info].nonvirtual_alignment);
+        if (!bases[b].virtual_base) {
+            const auto& fact = class_facts[base_info];
+            if (fact.empty) nearly_empty &= bases[b].offset == 0;
+            else nearly_empty &= fact.nearly_empty && ++dynamic_bases == 1;
+        }
         extent = std::max(extent,layout_add(bases[b].offset,bytes));
         if (b == class_facts[info].first_base) class_facts[info].base_offset = bases[b].offset;
         if (!class_facts[entities[types[base].entity].class_info].empty) cursor = bases[b].offset*8;
@@ -92,6 +106,7 @@ void Analyzer::class_layout(EntityId e)
         Entity member = entities[id];
         if (member.kind != EntityKind::Variable || member.is_static || member.owner != entities[e].scope) continue;
         auto f = field_fact(id);
+        if (!f.bit_field || f.declared_width) nearly_empty = false;
         bool reference = types[member.type].kind == TypeKind::LRef || types[member.type].kind == TypeKind::RRef;
         auto field_align = reference ? 8 : size(member.type, true);
         auto field_size = reference ? 8 : size(member.type);
@@ -130,9 +145,13 @@ void Analyzer::class_layout(EntityId e)
     if (requested && requested < align) throw std::runtime_error("weakened class alignment");
     align = std::max(align, requested);
     class_facts[info].nonvirtual_alignment = align;
-    class_facts[info].nonvirtual_size = layout_align(std::max<std::uint64_t>(std::max<std::uint64_t>(1,extent), layout_add(cursor,7)/8),align);
+    auto data_size = std::max<std::uint64_t>(std::max<std::uint64_t>(1,extent),layout_add(cursor,7)/8);
+    // Dynamic non-POD bases permit derived members to reuse their tail padding.
+    class_facts[info].nonvirtual_size = host_abi && dynamic_class(e) ? data_size : layout_align(data_size,align);
     cursor = class_facts[info].nonvirtual_size;
-    for (unsigned j = 0; j < class_facts[info].virtual_bases_count; ++j) {
+    class_facts[info].nearly_empty = nearly_empty && class_facts[info].nonvirtual_size == 8;
+    if (host_abi && virtual_base_count(e)) layout_host_virtual_bases(e,cursor,align);
+    else for (unsigned j = 0; j < class_facts[info].virtual_bases_count; ++j) {
         auto at = class_facts[info].virtual_bases_begin+j;
         auto base = virtual_bases[at]; size(entities[base].type);
         auto base_info = entities[base].class_info;
