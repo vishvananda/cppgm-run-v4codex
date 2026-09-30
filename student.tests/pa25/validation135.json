@@ -1,0 +1,67 @@
+{
+  "production_commit": "ff3e384895ab0834b2e16f6ec30e8881b7d3103e",
+  "stage_base_commit": "fee6ad9076ff35c5272526e1c4c4df235fbf3bfe",
+  "last_reviewed_commit": "fee6ad9076ff35c5272526e1c4c4df235fbf3bfe",
+  "dev_source_manifest_sha256": "e185dd6834b0f0798d3eb50d90e7c491110ba9b7a2a4e0c9b0d18eb4846c8005",
+  "binaries": {
+    "cppgm++": "b92e151177f2dc85c19b6d2a3306fd825aee066ccaf68677f64e94912af78609",
+    "lowir2native": "d87ac30bca0097488cbb17451733a156fee9c84cbf1bde0e72900165743eaec2"
+  },
+  "required_checks": {
+    "stageTests": {
+      "command": "make test-pa25",
+      "exit_code": 2,
+      "passed": 64,
+      "total": 101,
+      "failed": 37
+    },
+    "priorThroughTests": {
+      "command": "make test-report-through-pa24",
+      "exit_code": 0,
+      "passed": 4152,
+      "total": 4152,
+      "stages_passed": 24
+    },
+    "fileAudit": {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa25 --paths dev/src",
+      "exit_code": 0,
+      "warnings": 4
+    },
+    "stageProgress": {
+      "baseline_failed": 101,
+      "current_failed": 37,
+      "required_cases": 101,
+      "removed_cases": 0,
+      "fixtures_references_harnesses_unchanged": true,
+      "decreased": true
+    }
+  },
+  "personal_driver_checks": 61,
+  "new_inherited_frontend_reducer": {
+    "path": "student.tests/pa25/unused-dependent-local.cc",
+    "exit_code": 1,
+    "status": "unfinished implementation"
+  },
+  "performance": {
+    "raw": "/home/vishvananda/work/private/v4codex/artifacts/pa25-135/performance.json",
+    "sha256": "2791899a05de706bde755483a6d1850b083e72de190226c182c0f5b01e98fc6a",
+    "samples": 168,
+    "manifest_verified": true,
+    "final_binary_matches_frozen_B": true
+  },
+  "logs": {
+    "stage": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-135/stage.log",
+      "sha256": "abe8bea41009e30d79b9900c489cd78c26579d8fca2e0a2c71605f46bc1add45"
+    },
+    "prior": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-135/prior.log",
+      "sha256": "fb98419fc30603af5d11f530ccc82820eabc839001dd100cc444bf8d45da39e5"
+    },
+    "file_audit": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa25-135/file_audit.log",
+      "sha256": "ecb5c8691e9459cff3673d47a336904ae2681678f41dcec312d8491a4667ac13"
+    }
+  },
+  "handoff": "driver behavior group complete; full PA25 implementation and independent audit remain required"
+}
