@@ -32,11 +32,16 @@ void encode_data(const lowir_model::Program& p, Image& image)
         if (tls != bool(lane)) continue;
         if (tls) { image.has_tls = true; image.tls_targets[g.symbol.index] = g.symbol.index; }
         if (g.declaration) continue;
+        bool explicit_layout = g.structured && g.type.kind() == Type::Object;
         unsigned alignment = 1; bool typed = false;
         for (unsigned n = g.data.begin; n != g.data.end(); ++n)
             if (p.data[n].kind != DataItem::Zero) { alignment = std::max(alignment,p.data[n].type.alignment()); typed = true; }
         if (g.structured && !typed) alignment = 16;
         if (!g.structured) alignment = g.type == Type::I128 ? 16 : g.type.alignment();
+        if (explicit_layout) {
+            alignment = g.type.alignment();
+            require(alignment <= 4096,"unsupported native global alignment");
+        }
         image.data.resize(aligned(image.data.size(),alignment),0);
         image.symbols[g.symbol.index] = image.data.size(); image.defined[g.symbol.index] = true; image.data_symbols[g.symbol.index] = true;
         for (unsigned n = g.data.begin; n != g.data.end(); ++n) {
@@ -45,7 +50,7 @@ void encode_data(const lowir_model::Program& p, Image& image)
                 auto count = g.structured ? item.zero_bytes : g.type.bytes();
                 require(count < 0x70000000, "native data too large"); image.data.resize(image.data.size()+count,0);
             } else {
-                image.data.resize(aligned(image.data.size(),item.type.alignment()),0);
+                if (!explicit_layout) image.data.resize(aligned(image.data.size(),item.type.alignment()),0);
                 if (item.kind == DataItem::Scalar) scalar_data(image.data,item,p);
                 else {
                     Fixup fix; fix.kind = Fixup::AbsoluteSymbol; fix.offset = image.data.size();
@@ -54,6 +59,7 @@ void encode_data(const lowir_model::Program& p, Image& image)
                 }
             }
         }
+        if (explicit_layout) require(image.data.size()-image.symbols[g.symbol.index] == g.type.bytes(), "native global layout extent mismatch");
     }
     if (image.has_tls) {
         image.data.resize(aligned(image.data.size(),16),0);

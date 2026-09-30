@@ -61,8 +61,9 @@ for(int i=0;i<argc*{count};++i)sum+=step(i%97,dead);
 return sum=={expected}LL && dead==argc*{count}?0:1;}}
 ''')
     workloads={'statements':([statements],64)}
-if '--class-baseline' in sys.argv[4:]:
-    assert A.read_bytes()==B.read_bytes(), 'new class runtime needs a correct final/final baseline'
+if '--class-baseline' in sys.argv[4:] or '--class-compare' in sys.argv[4:]:
+    if '--class-baseline' in sys.argv[4:]:
+        assert A.read_bytes()==B.read_bytes(), 'new class runtime needs a correct final/final baseline'
     classes=save('classes.cc',"""struct A{int value;constexpr A(int n):value(n){} virtual int f(){return value;}};
 struct B{int value;constexpr B(int n):value(n){} virtual int g(){return value;}};
 template<int N> struct D:A,B{constexpr D():A(N),B(N+1){} int f(){return value_a();} int value_a(){return A::value;}};
@@ -85,8 +86,9 @@ for(int i=0;i<argc*10000;++i){D* d=new D(i);total+=d->v;B* b=d;delete b;}
 return total==49995000 && destroyed==10000?0:1;}
 """)
     workloads={'classes':([classes],2),'casts':([casts],64),'allocations':([allocations],64)}
-if '--exception-baseline' in sys.argv[4:]:
-    assert A.read_bytes()==B.read_bytes(), 'exception baseline requires one correct frozen compiler'
+if '--exception-baseline' in sys.argv[4:] or '--exception-compare' in sys.argv[4:]:
+    if '--exception-baseline' in sys.argv[4:]:
+        assert A.read_bytes()==B.read_bytes(), 'exception baseline requires one correct frozen compiler'
     exceptions=save('exceptions.cc','''int dead,copies;
 struct A{int n;A(int x):n(x){}virtual ~A(){++dead;}};
 struct B{int padding;B():padding(9){}};
@@ -98,6 +100,19 @@ for(int i=0;i<argc*60000;++i)total+=step(i%97);
 return total==2878839 && dead==120000 && copies==60000?0:1;}
 ''')
     workloads={'exceptions':([exceptions],32)}
+if '--binding-baseline' in sys.argv[4:]:
+    assert A.read_bytes()==B.read_bytes(), 'new binding behavior requires a correct final/final baseline'
+    binding=save('binding.cc','''struct A{int x;void f(){}};
+int main(int argc,char**){int a=1,b=2;long long sum=0;
+for(int i=0;i<argc*20000;++i){
+try{try{throw &a;}catch(int*& p){p=&b;throw;}}
+catch(int*const& p){sum+=*p;}
+try{throw nullptr;}catch(int A::*const& p){
+try{throw;}catch(void(A::*const& q)()){if(q!=nullptr)return 1;}
+if(p!=nullptr)return 2;}}
+return sum==40000?0:3;}
+''')
+    workloads={'binding':([binding],32)}
 def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def run(args):
     p=subprocess.run(list(map(str,args)),stdout=subprocess.PIPE,stderr=subprocess.PIPE)

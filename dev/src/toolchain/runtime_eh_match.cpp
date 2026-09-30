@@ -63,7 +63,16 @@ FunctionId conversion(RuntimeProgram& r, SymbolId void_type)
     b.start(equal); b.store(out,0,object); b.emit(Opcode::Return,Type::I32,{Operand::integer(1)});
     b.start(kind); auto ptrtable=b.offset(b.emit(Opcode::Addr,Type(),{Operand::symbol(r.tables[3])}),16);
     auto both=b.emit(Opcode::Binary,Type::I32,{b.compare(b.load(from),ptrtable),b.compare(b.load(to),ptrtable)},Operation::And);
-    b.branch(both,pointer,scalar);
+    auto member=b.block(), member_owner=b.block();
+    b.branch(both,pointer,member);
+    b.start(member); auto membertable=b.offset(b.emit(Opcode::Addr,Type(),{Operand::symbol(r.tables[5])}),16);
+    auto members=b.emit(Opcode::Binary,Type::I32,{b.compare(b.load(from),membertable),b.compare(b.load(to),membertable)},Operation::And);
+    // [except.handle]/3 permits qualification of pointer types. Member
+    // pointers participate inside a mixed pointer chain, not at its root.
+    b.branch(members,member_owner,scalar);
+    b.start(member_owner); auto same_owner=b.compare(b.load(from,32),b.load(to,32));
+    auto nested=b.compare(depth,Operand::integer(0),Operation::Ne,Type::I32);
+    b.branch(b.emit(Opcode::Binary,Type::I32,{same_owner,nested},Operation::And),pointer,fail);
     b.start(pointer); auto ff=b.load(from,16,Type::I32), tf=b.load(to,16,Type::I32);
     auto removed=b.emit(Opcode::Binary,Type::I32,{ff,b.emit(Opcode::Unary,Type::I32,{tf},Operation::Bitnot)},Operation::And);
     b.branch(b.compare(removed,Operand::integer(0),Operation::Eq,Type::I32),qualifiers,fail);
@@ -99,15 +108,25 @@ FunctionId build_exception_match(RuntimeProgram& r, SymbolId void_type)
     auto convert=conversion(r,void_type);
     auto nullptr_type=runtime_typeinfo(r,"Dn");
     auto f=r.function(r.symbol("",SR_NONE),Type::I32); RuntimeBody b(r,f);
-    auto target=b.parameter(Type::Ptr);
+    auto target=b.parameter(Type::Ptr), binding=b.parameter(Type::I32);
     auto entry=b.block(), pointer=b.block(), ordinary=b.block();
     b.start(entry); auto object=b.load(Operand::symbol(r.state(native::RuntimeEntity::ExceptionValue)));
     auto header=b.offset(object,-ExceptionHeaderBytes), type=b.load(header);
+    b.store(header,56,Operand::integer(0),Type::I32);
+    auto exact=b.block(), mismatch=b.block(), classify=b.block(), fail=b.block();
+    auto reference=b.compare(binding,Operand::integer(unsigned(CatchBinding::Value)),Operation::Ne,Type::I32);
+    auto same=b.compare(type,target);
+    b.branch(b.emit(Opcode::Binary,Type::I32,{reference,same},Operation::And),exact,mismatch);
+    b.start(exact); b.store(header,16,object); b.emit(Opcode::Return,Type::I32,{Operand::integer(1)});
+    b.start(mismatch); b.branch(b.compare(binding,Operand::integer(unsigned(CatchBinding::Reference)),Operation::Eq,Type::I32),fail,classify);
+    b.start(fail); b.emit(Opcode::Return,Type::I32,{Operand::integer(0)});
+    b.start(classify);
     auto table=b.offset(b.emit(Opcode::Addr,Type(),{Operand::symbol(r.tables[3])}),16);
     auto null_pointer=b.block(), typed=b.block(), member=b.block(), null_value=b.block(), null_member=b.block();
     b.branch(b.compare(type,b.emit(Opcode::Addr,Type(),{Operand::symbol(nullptr_type)})),null_pointer,typed);
     b.start(null_pointer); b.branch(b.compare(b.load(target),table),null_value,member);
-    b.start(null_value); b.store(header,16,Operand::null());b.emit(Opcode::Return,Type::I32,{Operand::integer(1)});
+    b.start(null_value); b.store(header,16,Operand::null());
+    b.store(header,56,reference,Type::I32); b.emit(Opcode::Return,Type::I32,{Operand::integer(1)});
     b.start(member);auto member_table=b.offset(b.emit(Opcode::Addr,Type(),{Operand::symbol(r.tables[5])}),16);
     b.branch(b.compare(b.load(target),member_table),null_member,ordinary);
     b.start(null_member);
@@ -115,9 +134,14 @@ FunctionId build_exception_match(RuntimeProgram& r, SymbolId void_type)
     // lanes (data-member offsets are biased by one). Host ABI conversion is
     // a later object-boundary responsibility.
     b.store(header,64,Operand::integer(0),Type::I64);b.store(header,72,Operand::integer(0),Type::I64);
-    b.store(header,16,b.offset(header,64));b.emit(Opcode::Return,Type::I32,{Operand::integer(1)});
+    b.store(header,16,b.offset(header,64));
+    // Kind 2 copies both member-pointer words into the handler's own storage.
+    b.store(header,56,b.emit(Opcode::Binary,Type::I32,{reference,Operand::integer(2)},Operation::Mul),Type::I32);
+    b.emit(Opcode::Return,Type::I32,{Operand::integer(1)});
     b.start(typed);b.branch(b.compare(b.load(type),table),pointer,ordinary);
-    b.start(pointer); auto result=b.call(convert,{type,target,b.load(object),b.offset(header,16),Operand::integer(0),Operand::integer(1)});
+    b.start(pointer);
+    auto result=b.call(convert,{type,target,b.load(object),b.offset(header,16),Operand::integer(0),Operand::integer(1)});
+    b.store(header,56,b.emit(Opcode::Binary,Type::I32,{reference,result},Operation::And),Type::I32);
     b.emit(Opcode::Return,Type::I32,{result});
     b.start(ordinary); result=b.call(convert,{type,target,object,b.offset(header,16),Operand::integer(0),Operand::integer(1)});
     b.emit(Opcode::Return,Type::I32,{result}); return f;

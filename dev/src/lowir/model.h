@@ -142,6 +142,7 @@ struct Instruction {
     std::uint32_t alignment = 1;
     IndexProjectionKind projection = IPK_NONE;
     bool is_volatile = false, copy_elision = false;
+    ir_model::CatchBinding catch_binding = ir_model::CatchBinding::Value;
     DebugLocation debug;
     explicit Instruction(Opcode op = Opcode::Const, Type t = Type()) : opcode(op), type(t) {}
     Type result_type() const;

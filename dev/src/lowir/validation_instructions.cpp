@@ -102,6 +102,8 @@ void Validator::instruction(const Instruction& i) const
     case Opcode::EhTry: count(1); label(0); break;
     case Opcode::EhCleanup: require(i.operands.count <= 1, "invalid cleanup"); if (i.operands.count) label(0); break;
     case Opcode::EhCatch: case Opcode::EhFilter: case Opcode::EhCatchAll:
+        require(unsigned(i.catch_binding) <= unsigned(ir_model::CatchBinding::ConstReference) &&
+            (i.catch_binding == ir_model::CatchBinding::Value || i.opcode == Opcode::EhCatch), "invalid catch binding");
         if (i.opcode == Opcode::EhCatch) require(i.operands.count >= 1 && i.operands.count <= 2, "invalid catch clause");
         if (i.opcode == Opcode::EhCatchAll) require(i.operands.count <= 1, "invalid catch-all clause");
         for (unsigned j = 0; j < i.operands.count; ++j) {

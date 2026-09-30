@@ -167,7 +167,9 @@ class Procedural {
     std::string support_type_name(TypeId type);
     void exception_object(TypeId type);
     bool exception_clauses(std::uint32_t context, bool cleanup = false);
-    unsigned exception_selector(TypeId type);
+    unsigned exception_selector(NodeId handler);
+    ir_model::CatchBinding catch_binding(NodeId handler) const;
+    Value begin_catch(Operand object, NodeId handler = 0);
     void try_statement(NodeId n);
     Value throw_expression(NodeId n);
     void exit_exception_contexts(NodeId target = 0, std::uint32_t stop = 0);

@@ -144,6 +144,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/closure_capture
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/rtti lowering/rtti
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/rtti_facts
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/source_exception lowering/source_exception
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/exception_handlers
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/exception_boundary
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/aggregate_lifetimes
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/exception_continuation

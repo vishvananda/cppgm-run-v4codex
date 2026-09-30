@@ -60,7 +60,8 @@ void build_exceptions(RuntimeProgram& r, const std::vector<RuntimeRequest>& requ
             b.store(state(r,native::RuntimeEntity::ExceptionMatcher),0,b.emit(Opcode::Addr,Type(),{Operand::symbol(r.p.functions[match.index-1].symbol)}));
             b.emit(Opcode::Throw,Type::Ptr,{object});
         } else if (role == SR_EH_BEGIN_CATCH) {
-            auto object = b.parameter(Type::Ptr); b.start(b.block()); auto header = b.offset(object,-header_bytes);
+            auto object = b.parameter(Type::Ptr), storage = b.parameter(Type::Ptr);
+            b.start(b.block()); auto header = b.offset(object,-header_bytes);
             auto count = b.load(header,Handlers,Type::I64);
             auto negative = b.block(), positive = b.block(), link = b.block(), push = b.block(), done = b.block();
             b.branch(b.compare(count,Operand::integer(0),Operation::Lt,Type::I64),negative,positive);
@@ -69,7 +70,18 @@ void build_exceptions(RuntimeProgram& r, const std::vector<RuntimeRequest>& requ
             b.start(positive); b.store(header,Handlers,b.emit(Opcode::Binary,Type::I64,{count,Operand::integer(1)},Operation::Add),Type::I64); b.jump(link);
             b.start(link); auto previous = b.load(caught); b.branch(b.compare(previous,object),done,push);
             b.start(push); b.store(header,PreviousCatch,previous); b.store(caught,0,object); b.jump(done);
-            b.start(done); b.emit(Opcode::Return,Type::Ptr,{b.load(header,Adjusted)});
+            b.start(done); auto converted = b.block(), direct = b.block();
+            auto temporary = b.load(header,56,Type::I32);
+            b.store(header,56,Operand::integer(0),Type::I32);
+            b.branch(temporary,converted,direct);
+            b.start(converted); auto pointer = b.block(), member = b.block(), ready = b.block();
+            b.branch(b.compare(temporary,Operand::integer(1),Operation::Eq,Type::I32),pointer,member);
+            b.start(pointer); b.store(storage,0,b.load(header,Adjusted)); b.jump(ready);
+            b.start(member); auto source = b.load(header,Adjusted);
+            b.store(storage,0,b.load(source)); b.store(storage,8,b.load(source,8)); b.jump(ready);
+            b.start(ready);
+            b.emit(Opcode::Return,Type::Ptr,{storage});
+            b.start(direct); b.emit(Opcode::Return,Type::Ptr,{b.load(header,Adjusted)});
         } else if (role == SR_EH_RETHROW) {
             b.start(b.block()); auto object = b.load(caught);
             auto valid = b.block(), invalid = b.block(); b.branch(b.compare(object,Operand::null()),invalid,valid);

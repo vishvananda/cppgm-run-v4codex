@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "ir_symbol_model.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
@@ -59,6 +60,8 @@ void Analyzer::resolve_handler(NodeId n, ScopeId parent, bool pattern, bool func
         if (!dependent_type(value)) {
             if (fundamental(value,FT_VOID)) throw std::runtime_error("void catch parameter");
             size(value);
+            if (types[value].kind == TypeKind::Pointer && class_value(types[value].child))
+                size(types[value].child); // [except.handle]/1: no pointer to incomplete class.
         }
         auto name = terminal(decl_name(decl));
         auto e = pattern ? pattern_declaration(EntityKind::Variable,scope,name,parameter,dependent_type(t)) :
@@ -68,6 +71,9 @@ void Analyzer::resolve_handler(NodeId n, ScopeId parent, bool pattern, bool func
         facts.edit(parameter).entity = e; facts.edit(parameter).type = t;
         if (decl) { facts.edit(decl).entity = e; facts.edit(decl).type = t; }
         if (!pattern) {
+            if (types[t].kind == TypeKind::LRef && (types[value].kind == TypeKind::Pointer || types[value].kind == TypeKind::MemberPointer))
+                handler_bindings.put(n,unsigned(types[types[t].child].cv & 1 ?
+                    ir_model::CatchBinding::ConstReference : ir_model::CatchBinding::Reference));
             record_rtti_type(value);
             if (name) bind(scope,name,e);
             publish_template_binding(parameter,e);

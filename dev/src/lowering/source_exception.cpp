@@ -26,6 +26,7 @@ SymbolId Procedural::exception_function(unsigned role)
     std::vector<TypeId> params;
     if (role == 0) params.push_back(sem.types.fundamental(FT_UNSIGNED_LONG_INT));
     if (role == 1 || role == 6) params.push_back(ptr);
+    if (role == 1 && !linkage.presentation) params.push_back(ptr);
     if (role == 4) params = {ptr,ptr,ptr};
     auto sig = sem.types.function(role < 2 ? ptr : sem.types.fundamental(FT_VOID),params,false);
     Function f; f.symbol = fresh_symbol("@exception_runtime"); f.declaration = true;
@@ -61,11 +62,6 @@ void Procedural::exception_object(TypeId t)
     auto& s = p.symbols[symbol.index-1]; s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size();
     s.metadata.binding = SBM_INTERNAL; s.metadata.object = s.name;
 }
-unsigned Procedural::exception_selector(TypeId t)
-{
-    if (auto old = exception_selectors.get(t+1)) return old;
-    auto value = ++exception_selector_count; exception_selectors.put(t+1,value); return value;
-}
 bool Procedural::exception_clauses(std::uint32_t context, bool cleanup)
 {
     bool first = true, crossed_handler = false;
@@ -78,8 +74,11 @@ bool Procedural::exception_clauses(std::uint32_t context, bool cleanup)
         bool all = false;
         for (auto h = ast[child(c.node,Kind::Compound)].next; h; h = ast[h].next) {
             auto t = sem.facts[h].type;
-            auto selector = exception_selector(t);
-            if (t) emit(Opcode::EhCatch,IRType(),{Operand::symbol(exception_type(t)),Operand::integer(selector)});
+            auto selector = exception_selector(h);
+            if (t) {
+                Instruction clause(Opcode::EhCatch); clause.catch_binding = catch_binding(h);
+                emit(clause,{Operand::symbol(exception_type(t)),Operand::integer(selector)});
+            }
             else { emit(Opcode::EhCatchAll,IRType(),{Operand::integer(selector)}); all = true; }
         }
         if (cleanup) { emit(Opcode::EhCleanup,IRType(),{}); cleanup = false; has_cleanup = true; }
@@ -194,10 +193,10 @@ void Procedural::try_statement(NodeId n)
     auto selector = emit(Opcode::ExceptionSelector,IRType::I32,{});
     for (auto h = ast[protected_body].next; h; h = ast[h].next) {
         auto body = block(), next = block(), cleanup = block();
-        auto match = emit(Opcode::Compare,IRType::I32,{selector.operand,Operand::integer(exception_selector(sem.facts[h].type))},Operation::Eq);
+        auto match = emit(Opcode::Compare,IRType::I32,{selector.operand,Operand::integer(exception_selector(h))},Operation::Eq);
         emit(Opcode::Branch,IRType(),{match.operand,Operand::label(body),Operand::label(next)});
         start(body); live = initial;
-        auto caught = emit(Opcode::Call,IRType::Ptr,{Operand::symbol(exception_function(1)),object.operand});
+        auto caught = begin_catch(object.operand,h);
         auto e = sem.facts[h].entity;
         bool named = e && sem.entities[e].name;
         if (named) {
@@ -220,12 +219,12 @@ void Procedural::try_statement(NodeId n)
                 emit(Opcode::EhEnd,IRType(),{}); jump(ready);
                 start(failed); emit(Opcode::EhCatchAll,IRType(),{Operand::integer(1)});
                 auto exception = emit(Opcode::Exception,IRType::Ptr,{});
-                emit(Opcode::Call,IRType::Ptr,{Operand::symbol(exception_function(1)),exception.operand});
+                begin_catch(exception.operand);
                 emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(5))});
                 emit(Opcode::EhEnd,IRType(),{}); exception_fallback();
                 start(ready);
                 if (auto state = object_lifetime(e)) live = state;
-            } else if (reference(t) && sem.types[sem.types[t].child].kind == TypeKind::Pointer) {
+            } else if (linkage.presentation && reference(t) && sem.types[sem.types[t].child].kind == TypeKind::Pointer) {
                 // The Itanium runtime returns the adjusted pointer value for
                 // pointer exceptions. A reference parameter needs an address
                 // of pointer storage, not that pointee address.

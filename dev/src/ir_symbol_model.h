@@ -13,6 +13,10 @@
 
 namespace ir_model {
 
+// Pointer catch binding is a source semantic fact. Reference permits only an
+// exact type match; ConstReference can bind a converted pointer temporary.
+enum class CatchBinding : unsigned char { Value, Reference, ConstReference };
+
 enum SymbolLinkage
 {
   SL_INTERNAL,

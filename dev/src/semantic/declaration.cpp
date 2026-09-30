@@ -260,6 +260,8 @@ void Analyzer::simple(NodeId n, ScopeId s)
     if (calls) for (NodeId c = ast[specs].first; c; c = ast[c].next)
         if (auto object = anonymous_object(c)) anonymous_objects.put(n, object);
     if (ast[n].kind == Kind::Function) {
+        if (calls && (ast.alignment_owners.get(n) || ast.alignment_owners.get(specs)))
+            throw std::runtime_error("alignment on function declaration");
         NodeId d = ast[specs].next;
         TypeId t = declarator(d, base, s,0,false,specs);
         EntityId e = declare_object(d, 0, t, specs, s, n);
@@ -278,10 +280,15 @@ void Analyzer::simple(NodeId n, ScopeId s)
             shared_deduction = deduction;
         }
         EntityId e = declare_object(d, ast[d].next, t, specs, s, n);
-        if (calls && scopes[s].kind == ScopeKind::Class && (ast.alignment_owners.get(n) || ast.alignment_owners.get(specs))) {
+        if (calls && (ast.alignment_owners.get(n) || ast.alignment_owners.get(specs))) {
+            if (entities[e].kind != EntityKind::Variable || types[t].kind == TypeKind::LRef || types[t].kind == TypeKind::RRef)
+                throw std::runtime_error("alignment on non-object declaration");
             auto alignment = std::max(alignment_attributes(n, s), alignment_attributes(specs, s));
-            if (alignment && alignment < size(t, true)) throw std::runtime_error("weakened field alignment");
-            field_metadata(e).alignment = alignment;
+            if (alignment && alignment < size(t, true)) throw std::runtime_error("weakened object alignment");
+            auto& storage = field_metadata(e);
+            if (alignment && storage.alignment && alignment != storage.alignment)
+                throw std::runtime_error("inconsistent object alignment");
+            storage.alignment = std::max(alignment,storage.alignment);
         }
     }
     access_override = saved_access;

@@ -18,6 +18,7 @@ void Encoder::runtime(const Instruction& i)
             std::size_t miss = 0;
             if (c.type) {
                 mov(Operand::r(XR_RDI),Operand::symbol(c.type));
+                mov(Operand::r(XR_RSI),Operand::imm(unsigned(c.binding)));
                 load(r11,image.runtime(RuntimeEntity::ExceptionMatcher),Type::Ptr,false); call(r11);
                 form(0x85,32,XR_RAX,Operand::r(XR_RAX)); miss = local_jump(XC_E);
             }

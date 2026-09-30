@@ -73,7 +73,7 @@ void Procedural::emit_terminate_adapter()
     reset_lifetime(0); builder.reset(new FunctionBuilder(p,function)); start(block());
     auto signature = p.signatures[p.functions[function.index-1].signature.index-1];
     auto argument = p.parameters[signature.parameters.begin];
-    emit(Opcode::Call,IRType::Ptr,{Operand::symbol(exception_function(1)),Operand::value(argument.value)});
+    begin_catch(Operand::value(argument.value));
     emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(5))});
     emit(Opcode::Return,IRType(),{}); builder.reset();
 }

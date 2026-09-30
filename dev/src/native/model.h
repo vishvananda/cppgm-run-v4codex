@@ -59,7 +59,7 @@ struct Instruction {
 struct FrameBinding { Name name; Type type; std::int64_t offset; bool temporary; bool parameter; };
 struct Parameter { Name name; Type type; Operand location; Operand second; };
 struct Block { std::uint32_t id; Name name; lowir_model::Range instructions; };
-struct ExceptionClause { SymbolId type; unsigned selector; };
+struct ExceptionClause { SymbolId type; unsigned selector; ir_model::CatchBinding binding; };
 struct ExceptionHandler { lowir_model::Range clauses; bool cleanup = false; };
 struct Function {
     SymbolId symbol;

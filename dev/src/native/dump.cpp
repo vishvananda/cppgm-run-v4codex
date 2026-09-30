@@ -102,7 +102,11 @@ void dump_header(const lowir_model::Program& p, const std::vector<Instruction>& 
         out << "\nglobal " << p.name(p.symbols[g.symbol.index-1].name);
         if (p.symbols[g.symbol.index-1].metadata.storage == ir_model::GSM_THREAD_LOCAL) out << " thread_local";
         out << "\n  storage ";
-        if (g.structured) out << "data\n";
+        if (g.structured) {
+            out << "data";
+            if (g.type.kind() == Type::Object) out << " layout=" << g.type.bytes() << 'x' << g.type.alignment();
+            out << '\n';
+        }
         else out << "scalar " << type_name(g.type) << '\n';
         for (unsigned n = g.data.begin; n != g.data.end(); ++n) {
             const auto& d = p.data[n];
@@ -137,6 +141,16 @@ void dump_header(const lowir_model::Program& p, const std::vector<Instruction>& 
 void dump_function(const lowir_model::Program& p, const Function& f, std::ostream& out)
 {
     out << "\nfunction " << p.name(p.symbols[f.symbol.index-1].name); debug(p,f.debug,out);
+    for (unsigned h = 0; h < f.exception_handlers.size(); ++h) {
+        const auto& handler = f.exception_handlers[h];
+        out << "\n  handler " << h << " cleanup=" << handler.cleanup;
+        for (unsigned n = handler.clauses.begin; n < handler.clauses.end(); ++n) {
+            const auto& clause = f.exception_clauses[n];
+            out << "\n    catch ";
+            if (clause.type) out << p.name(p.symbols[clause.type.index-1].name); else out << "all";
+            out << " selector=" << clause.selector << " binding=" << unsigned(clause.binding);
+        }
+    }
     out << "\n  abi\n";
     for (const auto& param : f.params) {
         out << "    param " << (param.name ? p.name(param.name) : "%native_arg") << " -> "; operand(p,param.location,out);

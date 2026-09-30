@@ -121,7 +121,7 @@ void Writer::global(const Global& g)
 {
     if (g.declaration) out_ << "declare ";
     out_ << "global "; symbol(g.symbol);
-    if (!g.structured && g.type != Type()) { out_ << " : "; type(g.type); }
+    if (g.type != Type()) { out_ << " : "; type(g.type); }
     metadata(&p_.symbols[g.symbol.index-1].metadata, 0);
     if (!g.declaration) {
         out_ << " = ";

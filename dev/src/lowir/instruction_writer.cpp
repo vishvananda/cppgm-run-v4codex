@@ -63,6 +63,11 @@ void Writer::instruction(const Instruction& i)
         if (i.projection != IPK_NONE) out_ << " [projection=" << (i.projection == IPK_ARRAY_ELEMENT ? "array_element" : "field") << ']';
         if (i.operands.count) { out_ << ' '; all(0, i.type); }
         break;
+    case Opcode::EhCatch:
+        out_ << ' '; all(0, Type());
+        if (i.catch_binding != ir_model::CatchBinding::Value)
+            out_ << " [binding=" << (i.catch_binding == ir_model::CatchBinding::Reference ? "reference" : "const_reference") << ']';
+        break;
     case Opcode::EhCatchAll:
         if (i.operands.count) { out_ << ", "; arg(0); }
         break;

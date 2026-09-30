@@ -39,6 +39,16 @@ void Validator::symbols() const
         if (d.kind == DataItem::Scalar) validate_literal(d.value, d.type);
         if (d.kind == DataItem::Address) require(d.type == Type::Ptr && p_.symbols.at(d.symbol.index-1).kind != Symbol::Unknown, "invalid address initializer");
     }
+    for (const auto& g : p_.globals) if (g.type.kind() == Type::Object && !g.declaration) {
+        require(g.structured && g.data.end() <= p_.data.size(), "invalid global byte layout");
+        std::uint64_t bytes = 0;
+        for (unsigned n = g.data.begin; n < g.data.end(); ++n) {
+            const auto& d = p_.data[n];
+            auto size = d.kind == DataItem::Zero ? d.zero_bytes : d.type.bytes();
+            require(size <= g.type.bytes()-bytes, "global byte layout exceeds extent"); bytes += size;
+        }
+        require(bytes == g.type.bytes(), "incomplete global byte layout");
+    }
     for (const Function& f : p_.functions) {
         validate_signature(p_, p_.signatures.at(f.signature.index-1), false);
         require(f.declaration || f.blocks.count, "function has no blocks");

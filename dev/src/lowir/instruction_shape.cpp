@@ -41,6 +41,8 @@ void validate_instruction_shape(const Instruction& i)
     if (scalar) require(i.type.scalar() || (i.type.kind() == Type::Object &&
         (i.opcode == Opcode::Load || i.opcode == Opcode::Store)), "invalid scalar instruction type");
     require(!i.is_volatile || i.opcode == Opcode::Load || i.opcode == Opcode::Store, "misplaced volatile flag");
+    require(unsigned(i.catch_binding) <= unsigned(CatchBinding::ConstReference) &&
+        (i.catch_binding == CatchBinding::Value || i.opcode == Opcode::EhCatch), "invalid catch binding");
     require(i.projection == IPK_NONE || i.opcode == Opcode::Index, "misplaced projection");
     require((!i.signature && !i.copy_elision) || i.opcode == Opcode::Call, "misplaced call metadata");
     if (i.opcode == Opcode::Unary) require(i.operation >= Operation::Neg && i.operation <= Operation::Bswap, "invalid unary operator");

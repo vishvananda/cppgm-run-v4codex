@@ -147,8 +147,8 @@ struct ClassFacts {
     EntityId parameter_transfer = 0;
     bool user_constructor = false, user_destructor = false, final_class = false;
 };
-// Sparse member storage facts. Ordinary fields keep their existing offset;
-// bit-fields and explicit alignment use this descriptor by canonical EntityId.
+// Sparse object storage facts. Ordinary fields keep their existing offset;
+// bit-fields and explicit declaration alignment use this descriptor by EntityId.
 struct FieldFacts {
     std::uint64_t alignment = 0, declared_width = 0;
     TypeId storage_type = 0;

@@ -34,7 +34,7 @@ void Reader::global(bool declaration)
         expect("=");
         g.data.begin = p_.data.size();
         if (accept("{")) {
-            require(!typed, "typed structured global");
+            require(!typed || g.type.kind() == Type::Object, "invalid structured global layout");
             g.structured = true;
             while (!at("}")) { p_.data.push_back(data_item(Type(), true)); ++g.data.count; }
             expect("}");
@@ -44,7 +44,7 @@ void Reader::global(bool declaration)
             p_.data.push_back(data_item(g.type, false));
             g.data.count = 1;
         }
-    } else require(!typed || g.type.scalar(), "invalid global declaration type");
+    } else require(!typed || g.type.scalar() || g.type.kind() == Type::Object, "invalid global declaration type");
     p_.globals.push_back(g);
     Symbol& symbol = p_.symbols[g.symbol.index-1];
     symbol.kind = Symbol::GlobalSymbol;

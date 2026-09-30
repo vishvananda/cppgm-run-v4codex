@@ -134,7 +134,13 @@ NodeId Parser::try_block(bool function)
 
 NodeId Parser::statement()
 {
-    attributes();
+    std::uint32_t alignment = 0;
+    unsigned flags = attributes(&alignment);
+    if (alignment) {
+        auto result = declaration();
+        ast.alignment_owners.put(result,alignment); ast[result].flags |= flags;
+        return result;
+    }
     if (in.is("{")) return compound();
     if (in.is("if") || in.is("switch")) return selection();
     if (in.is("while") || in.is("do") || in.is("for")) return iteration();

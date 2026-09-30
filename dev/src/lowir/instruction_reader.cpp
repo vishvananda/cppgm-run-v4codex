@@ -90,6 +90,12 @@ void Reader::instruction_body(Instruction& i, FunctionBuilder& b)
     case Opcode::EhCatch:
         p_.operands.push_back(Operand::symbol(p_.symbol(name('@'))));
         if (accept(",")) p_.operands.push_back(literal());
+        if (accept("[")) {
+            expect("binding"); expect("="); auto binding = word();
+            require(binding == "reference" || binding == "const_reference", "invalid catch binding");
+            i.catch_binding = binding == "reference" ? ir_model::CatchBinding::Reference : ir_model::CatchBinding::ConstReference;
+            expect("]");
+        }
         break;
     case Opcode::EhFilter:
         if (token_.size && token_.data[0] == '@') {

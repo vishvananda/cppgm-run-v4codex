@@ -146,6 +146,12 @@ void Procedural::global(EntityId e)
             g.data.count = p.data.size() - g.data.begin;
         }
     }
+    // Completed aggregates and explicitly aligned objects carry exact byte
+    // layout. The native writer must not re-pad their individual scalar items.
+    if (!g.declaration && !linkage.presentation && (g.structured || sem.field_fact(e).alignment)) {
+        auto alignment = std::max(sem.object_alignment(t),sem.field_fact(e).alignment);
+        g.type = IRType::object(sem.object_size(t),alignment); g.structured = true;
+    }
     if (prior.kind == Symbol::GlobalSymbol) { p.globals[prior.entity-1] = g; return; }
     p.globals.push_back(g);
     auto& sym = p.symbols[g.symbol.index-1]; sym.kind = Symbol::GlobalSymbol; sym.entity = p.globals.size();
