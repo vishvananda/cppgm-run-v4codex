@@ -1,0 +1,1227 @@
+{
+  "reviewed_through": "83ba7c5846220e03c3ea7520e91fbdb2d931a8fa",
+  "implementation": "d9179e848e8b6a5b9ca378a0ee20152404ce166a",
+  "dev_tree": "d06584e47d9812331800fb4fb23fd1dfda5e11ec",
+  "compiler_sha256": "979a332fdeb3133af19b09d93bfbf4cb061236b59573e682b2c4a747fda5acaa",
+  "spec_sha256": "d8eefee01a6102f63602b1989c19987d51bdf8f2e1ded0d60e52d7b68a76d3c3",
+  "checks": [
+    {
+      "name": "stage",
+      "command": [
+        "make",
+        "test-pa23"
+      ],
+      "observed_exit": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/audit126/stage.log",
+      "sha256": "1c57bddda694bda8d0073e64e7dd5639713edb1dc9fba0ceea05049030a64fc6",
+      "summary": [
+        "===== ALL TESTS PASSED SUCCESSFULLY! (45 / 45) ====="
+      ]
+    },
+    {
+      "name": "through",
+      "command": [
+        "make",
+        "test-report-through-pa23"
+      ],
+      "observed_exit": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/audit126/through.log",
+      "sha256": "71411d15eeda0a069ebd1962811f45a27212837cb6b49485d56dbae3d5728a7e",
+      "summary": [
+        "PA10 focused LowIR controls: PASS (5/5)",
+        "PA11 string-literal storage properties: PASS (1/1)",
+        "PA11 lifecycle policy properties: PASS (1/1)",
+        "PA11 goto lifetime properties: PASS (1/1)",
+        "PA11 unreachable lowering properties: PASS (1/1)",
+        "PA12 survivor properties: PASS (13/13)",
+        "===== ALL TESTS PASSED SUCCESSFULLY! (3856 / 3856) ====="
+      ]
+    },
+    {
+      "name": "file-audit",
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa23",
+        "--paths",
+        "dev/src"
+      ],
+      "observed_exit": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/audit126/file-audit.log",
+      "sha256": "288932b05be54f7dbd9f8567a9b5a74a7daabd88e8da3c4d7577d2f0185ce181",
+      "summary": [
+        "File audit passed for pa23 with 3 warning(s).",
+        "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "path": "student.tests/pa23/controls126.json",
+      "sha256": "e82a0b7e0909c5d75d70b4c8dacd9e061776d8ade5aa59452f9d63e6f5a4e0b3"
+    },
+    {
+      "path": "student.tests/pa23/reference126.json",
+      "sha256": "1009cb35fb678c43734b7d6cb7d261de2c555de57e3db6f51b33d92a8bdf890c"
+    },
+    {
+      "path": "student.tests/pa23/backend-limit126.json",
+      "sha256": "e273783cc0f53d09876f6e8fa120d6d264b118cdb5d6821404cdd8d7e54bba7d"
+    },
+    {
+      "path": "student.tests/pa23/trace126.json",
+      "sha256": "b51bbb076e881e7a74c3f2ec5e192498f38f77edbac7224fe9771a2f7f050d33"
+    },
+    {
+      "path": "student.tests/pa23/performance126.json",
+      "sha256": "26fb93e4fb2bb7d7dc5b1a3bd9dac19a7b2bf2afde93b8e160337578efcb5212"
+    },
+    {
+      "path": "student.tests/pa23/performance126-forest.json",
+      "sha256": "30d80f0b7e44d2a5e3590b4fd0fba4d0f4890aacf088082c7f2adf5e8ceb082f"
+    }
+  ],
+  "course_counts": {
+    "fixtures_passed": 3856,
+    "fixtures_total": 3856,
+    "focused_controls_passed": 22,
+    "focused_controls_total": 22,
+    "stages": [
+      "pa1",
+      "pa2",
+      "pa3",
+      "pa4",
+      "pa5",
+      "pa6",
+      "pa7",
+      "pa8",
+      "pa9",
+      "pa10",
+      "pa11",
+      "pa12",
+      "pa13",
+      "pa14",
+      "pa15",
+      "pa16",
+      "pa17",
+      "pa18",
+      "pa19",
+      "pa20",
+      "pa21",
+      "pa22",
+      "pa23"
+    ],
+    "supplied_summary": 3880,
+    "supplied_summary_reproduced": false
+  },
+  "personal": [
+    {
+      "name": "lifecycle",
+      "command": [
+        "python3",
+        "student.tests/pa23/lifecycle125.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit126/lifecycle"
+      ],
+      "exit": 0,
+      "cases": 22,
+      "passed": 22,
+      "sha256": "1e2ce1f2cb0cba3a721157ab9abed4e8e0c1a640af67f45add658a56bfe8a5eb",
+      "results": [
+        {
+          "name": "construct-destroy-once",
+          "passed": true
+        },
+        {
+          "name": "construction-dispatch",
+          "passed": true
+        },
+        {
+          "name": "construction-secondary-dispatch",
+          "passed": true
+        },
+        {
+          "name": "construction-rtti",
+          "passed": true
+        },
+        {
+          "name": "nested-shared-vptr",
+          "passed": true
+        },
+        {
+          "name": "virtual-nonvirtual-tail",
+          "passed": true
+        },
+        {
+          "name": "copy-complete-from-base",
+          "passed": true
+        },
+        {
+          "name": "copy-base-skips-shared",
+          "passed": true
+        },
+        {
+          "name": "copy-nested-shared",
+          "passed": true
+        },
+        {
+          "name": "assign-complete-base-view",
+          "passed": true
+        },
+        {
+          "name": "delegating-base-entry",
+          "passed": true
+        },
+        {
+          "name": "inherited-base-entry",
+          "passed": true
+        },
+        {
+          "name": "byvalue-parameter",
+          "passed": true
+        },
+        {
+          "name": "byvalue-indirect",
+          "passed": true
+        },
+        {
+          "name": "byvalue-constructor",
+          "passed": true
+        },
+        {
+          "name": "byvalue-conversion",
+          "passed": true
+        },
+        {
+          "name": "byvalue-inherited",
+          "passed": true
+        },
+        {
+          "name": "byvalue-virtual",
+          "passed": true
+        },
+        {
+          "name": "byvalue-member-pointer",
+          "passed": true
+        },
+        {
+          "name": "byvalue-multiple",
+          "passed": true
+        },
+        {
+          "name": "byvalue-lifecycle-hidden",
+          "passed": true
+        },
+        {
+          "name": "base-initializer-virtual-access",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "member",
+      "command": [
+        "python3",
+        "student.tests/pa23/member125.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit126/member"
+      ],
+      "exit": 0,
+      "cases": 13,
+      "passed": 13,
+      "sha256": "3e1815d421cf2181efd29c41d88816d75cdbadce3d89476ccb0e0abd850711ea",
+      "results": [
+        {
+          "name": "secondary-conversion",
+          "passed": true
+        },
+        {
+          "name": "primary-logical-slot",
+          "passed": true
+        },
+        {
+          "name": "static-storage",
+          "passed": true
+        },
+        {
+          "name": "argument-storage",
+          "passed": true
+        },
+        {
+          "name": "inverse-nonpoly-owner",
+          "passed": true
+        },
+        {
+          "name": "pure-virtual-address",
+          "passed": true
+        },
+        {
+          "name": "shared-virtual-owner",
+          "passed": true
+        },
+        {
+          "name": "nonvirtual-virtual-mix",
+          "passed": true
+        },
+        {
+          "name": "field-flow",
+          "passed": true
+        },
+        {
+          "name": "null-conversion",
+          "passed": true
+        },
+        {
+          "name": "constexpr-target",
+          "passed": true
+        },
+        {
+          "name": "virtual-value-argument",
+          "passed": true
+        },
+        {
+          "name": "overloaded-slot",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "tu",
+      "command": [
+        "python3",
+        "student.tests/pa23/lifecycle_tu125.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit126/tu"
+      ],
+      "exit": 0,
+      "cases": 12,
+      "passed": 12,
+      "sha256": "e55bdc830ccc490958d35095123cee501130168feced05a9066f44a256580e4b",
+      "results": [
+        {
+          "name": "external-lifecycle",
+          "passed": true
+        },
+        {
+          "name": "value-abi",
+          "passed": true
+        },
+        {
+          "name": "opaque-reference",
+          "passed": true
+        },
+        {
+          "name": "opaque-value-declaration",
+          "passed": true
+        },
+        {
+          "name": "member-pointer-abi",
+          "passed": true
+        },
+        {
+          "name": "dispatch-before-lifecycle",
+          "passed": true
+        },
+        {
+          "name": "external-lifecycle-reversed",
+          "passed": true
+        },
+        {
+          "name": "value-abi-reversed",
+          "passed": true
+        },
+        {
+          "name": "opaque-reference-reversed",
+          "passed": true
+        },
+        {
+          "name": "opaque-value-declaration-reversed",
+          "passed": true
+        },
+        {
+          "name": "member-pointer-abi-reversed",
+          "passed": true
+        },
+        {
+          "name": "dispatch-before-lifecycle-reversed",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "ownership",
+      "command": [
+        "python3",
+        "student.tests/pa23/audit124.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit126/ownership"
+      ],
+      "exit": 0,
+      "cases": 21,
+      "passed": 21,
+      "sha256": "92d1e71e19bbf98400128aa934833c6e8b5971427d5efede14d58a32faf2945f",
+      "results": [
+        {
+          "name": "shared-thunk",
+          "passed": true
+        },
+        {
+          "name": "virtual-key-owner",
+          "passed": true
+        },
+        {
+          "name": "virtual-covariant-key",
+          "passed": true
+        },
+        {
+          "name": "shared-result-thunk",
+          "passed": true
+        },
+        {
+          "name": "shared-null-thunk",
+          "passed": true
+        },
+        {
+          "name": "internal-targets",
+          "passed": true
+        },
+        {
+          "name": "template-thunk",
+          "passed": true
+        },
+        {
+          "name": "shared-thunk-reversed",
+          "passed": true
+        },
+        {
+          "name": "virtual-key-owner-reversed",
+          "passed": true
+        },
+        {
+          "name": "virtual-covariant-key-reversed",
+          "passed": true
+        },
+        {
+          "name": "shared-result-thunk-reversed",
+          "passed": true
+        },
+        {
+          "name": "shared-null-thunk-reversed",
+          "passed": true
+        },
+        {
+          "name": "internal-targets-reversed",
+          "passed": true
+        },
+        {
+          "name": "template-thunk-reversed",
+          "passed": true
+        },
+        {
+          "name": "nested-virtual-tail",
+          "passed": true
+        },
+        {
+          "name": "base-paths-64",
+          "passed": true
+        },
+        {
+          "name": "base-paths-256",
+          "passed": true
+        },
+        {
+          "name": "base-paths-1024",
+          "passed": true
+        },
+        {
+          "name": "shared-depth-4",
+          "passed": true
+        },
+        {
+          "name": "shared-depth-8",
+          "passed": true
+        },
+        {
+          "name": "shared-depth-12",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "layout",
+      "command": [
+        "python3",
+        "student.tests/pa23/layout123.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit126/layout"
+      ],
+      "exit": 0,
+      "cases": 19,
+      "passed": 19,
+      "sha256": "c73b21d126d2f6bb2ebea2edf59ada5fd9b74dc092e20db233dcd0ca82664e46",
+      "results": [
+        {
+          "name": "covariant-virtual-tail",
+          "passed": true
+        },
+        {
+          "name": "inherited-secondary-override-slot",
+          "passed": true
+        },
+        {
+          "name": "inherited-virtual-override-slot",
+          "passed": true
+        },
+        {
+          "name": "covariant-virtual-result",
+          "passed": true
+        },
+        {
+          "name": "covariant-virtual-null",
+          "passed": true
+        },
+        {
+          "name": "covariant-virtual-reference",
+          "passed": true
+        },
+        {
+          "name": "nonpoly-reference-reducer",
+          "passed": true
+        },
+        {
+          "name": "shared-nonpoly-field",
+          "passed": true
+        },
+        {
+          "name": "secondary-shared-pointer",
+          "passed": true
+        },
+        {
+          "name": "nested-shared-field",
+          "passed": true
+        },
+        {
+          "name": "three-virtual-rows",
+          "passed": true
+        },
+        {
+          "name": "nonpoly-typeid",
+          "passed": true
+        },
+        {
+          "name": "single-virtual-dispatch",
+          "passed": true
+        },
+        {
+          "name": "shared-final-overrider",
+          "passed": true
+        },
+        {
+          "name": "shared-rtti",
+          "passed": true
+        },
+        {
+          "name": "virtual-base-alignment",
+          "passed": true
+        },
+        {
+          "name": "nonvirtual-tail-in-virtual-base",
+          "passed": true
+        },
+        {
+          "name": "construct-shared-once",
+          "passed": true
+        },
+        {
+          "name": "construct-hidden-vptr-target",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "semantic",
+      "command": [
+        "python3",
+        "student.tests/pa23/verify123.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit126/semantic"
+      ],
+      "exit": 0,
+      "cases": 26,
+      "passed": 26,
+      "sha256": "7018cc404fc32c9e5e8c28d8009caf28d80087e76e8c0fcc8ba4370d4fa980e2",
+      "results": [
+        {
+          "name": "ambiguous-shared",
+          "passed": true
+        },
+        {
+          "name": "repeated-same-overrider",
+          "passed": true
+        },
+        {
+          "name": "repeated-nonvirtual-roots",
+          "passed": true
+        },
+        {
+          "name": "one-shared-overrider",
+          "passed": true
+        },
+        {
+          "name": "shared-remains-abstract",
+          "passed": true
+        },
+        {
+          "name": "leaf-resolves",
+          "passed": true
+        },
+        {
+          "name": "leaf-resolves-repeated-member",
+          "passed": true
+        },
+        {
+          "name": "leaf-makes-abstract",
+          "passed": true
+        },
+        {
+          "name": "shared-overrider-occurrence",
+          "passed": true
+        },
+        {
+          "name": "dominating-shared-overrider",
+          "passed": true
+        },
+        {
+          "name": "nonvirtual-receiver-does-not-dominate-sibling",
+          "passed": true
+        },
+        {
+          "name": "distinct-root-return-types",
+          "passed": true
+        },
+        {
+          "name": "nonvirtual-abstract-sibling",
+          "passed": true
+        },
+        {
+          "name": "virtual-plus-nonvirtual-abstract",
+          "passed": true
+        },
+        {
+          "name": "virtual-plus-nonvirtual-independent",
+          "passed": true
+        },
+        {
+          "name": "nested-nonvirtual-inside-shared",
+          "passed": true
+        },
+        {
+          "name": "nested-shared-ambiguous",
+          "passed": true
+        },
+        {
+          "name": "overloaded-roots",
+          "passed": true
+        },
+        {
+          "name": "same-name-unrelated-signature",
+          "passed": true
+        },
+        {
+          "name": "final-through-shared",
+          "passed": true
+        },
+        {
+          "name": "covariant-shared",
+          "passed": true
+        },
+        {
+          "name": "template-shared",
+          "passed": true
+        },
+        {
+          "name": "template-ambiguous",
+          "passed": true
+        },
+        {
+          "name": "virtual-inheritance-is-not-polymorphism",
+          "passed": true
+        },
+        {
+          "name": "late-maximum-False",
+          "passed": true
+        },
+        {
+          "name": "late-maximum-True",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "inherited",
+      "command": [
+        "python3",
+        "student.tests/pa23/verify121.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit126/inherited"
+      ],
+      "exit": 0,
+      "cases": 33,
+      "passed": 33,
+      "sha256": "b8aeaaf4341838a4f5532cef081563e8d39d629d0a7f8fa3e9e14c88a7f56597",
+      "results": [
+        {
+          "name": "secondary-override",
+          "passed": true
+        },
+        {
+          "name": "secondary-inherited",
+          "passed": true
+        },
+        {
+          "name": "deep-overrides",
+          "passed": true
+        },
+        {
+          "name": "later-primary",
+          "passed": true
+        },
+        {
+          "name": "primary-ancestor-slots",
+          "passed": true
+        },
+        {
+          "name": "unrelated-roots",
+          "passed": true
+        },
+        {
+          "name": "repeated-roots",
+          "passed": true
+        },
+        {
+          "name": "all-roots-override",
+          "passed": true
+        },
+        {
+          "name": "triple-view",
+          "passed": true
+        },
+        {
+          "name": "forward-arguments",
+          "passed": true
+        },
+        {
+          "name": "value-return",
+          "passed": true
+        },
+        {
+          "name": "indirect-return",
+          "passed": true
+        },
+        {
+          "name": "template-views",
+          "passed": true
+        },
+        {
+          "name": "static-downcast",
+          "passed": true
+        },
+        {
+          "name": "global-views",
+          "passed": true
+        },
+        {
+          "name": "crosscast-null-and-miss",
+          "passed": true
+        },
+        {
+          "name": "typeid-secondary",
+          "passed": true
+        },
+        {
+          "name": "rtti-top",
+          "passed": true
+        },
+        {
+          "name": "secondary-covariance",
+          "passed": true
+        },
+        {
+          "name": "secondary-covariance-null",
+          "passed": true
+        },
+        {
+          "name": "primary-covariance",
+          "passed": true
+        },
+        {
+          "name": "covariance-reference",
+          "passed": true
+        },
+        {
+          "name": "later-final-overrider",
+          "passed": true
+        },
+        {
+          "name": "crosscast-private-base",
+          "passed": true
+        },
+        {
+          "name": "repeated-source-downcast",
+          "passed": true
+        },
+        {
+          "name": "virtual-member-pointer",
+          "passed": true
+        },
+        {
+          "name": "late-complete-rtti",
+          "passed": true
+        },
+        {
+          "name": "exception-rtti",
+          "passed": true
+        },
+        {
+          "name": "covariance-layout-demand",
+          "passed": true
+        },
+        {
+          "name": "secondary-pure-reject",
+          "passed": true
+        },
+        {
+          "name": "secondary-final-reject",
+          "passed": true
+        },
+        {
+          "name": "secondary-exception-reject",
+          "passed": true
+        },
+        {
+          "name": "secondary-static-reject",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "old-lifecycle",
+      "command": [
+        "python3",
+        "student.tests/pa23/verify122.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit126/old-lifecycle"
+      ],
+      "exit": 0,
+      "cases": 20,
+      "passed": 20,
+      "sha256": "10a98a54824a812f07584accc6d8ffd015037adbcaf2d44b0c328d72561c2c15",
+      "results": [
+        {
+          "name": "delete-secondary-order",
+          "passed": true
+        },
+        {
+          "name": "implicit-delete-two-bases",
+          "passed": true
+        },
+        {
+          "name": "implicit-delete-three-bases",
+          "passed": true
+        },
+        {
+          "name": "delete-virtual-during-destruction",
+          "passed": true
+        },
+        {
+          "name": "delete-throwing-secondary",
+          "passed": true
+        },
+        {
+          "name": "key-definition-after-use",
+          "passed": true
+        },
+        {
+          "name": "inline-key-definition-after-use",
+          "passed": true
+        },
+        {
+          "name": "template-key-demand",
+          "passed": true
+        },
+        {
+          "name": "key-unused-body",
+          "passed": true
+        },
+        {
+          "name": "repeated-destructor-base",
+          "passed": true
+        },
+        {
+          "name": "separate-key-owner",
+          "passed": true
+        },
+        {
+          "name": "separate-delete-owner",
+          "passed": true
+        },
+        {
+          "name": "separate-nested-secondary",
+          "passed": true
+        },
+        {
+          "name": "key-owner-before-use",
+          "passed": true
+        },
+        {
+          "name": "separate-covariant-group",
+          "passed": true
+        },
+        {
+          "name": "covariant-owner-before-use",
+          "passed": true
+        },
+        {
+          "name": "base-declaration-then-alias",
+          "passed": true
+        },
+        {
+          "name": "destructor-scaling-4",
+          "passed": true
+        },
+        {
+          "name": "destructor-scaling-16",
+          "passed": true
+        },
+        {
+          "name": "destructor-scaling-64",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "deep",
+      "command": [
+        "python3",
+        "student.tests/pa23/deep_overrider124.py",
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit126/deep"
+      ],
+      "exit": 0,
+      "cases": 2,
+      "passed": 2,
+      "sha256": "6e7254ab6a048799f9b9151e426c32ddd6efefee3f8161c37cde240e2502e893",
+      "results": [
+        {
+          "name": "struct V{virtual int f(){return 1;}};struct A0:virtual V{};struct B0:virtual V{};struct A1:virtual A0,virtual B0{};struct B1:virtual A0,virtual B0{};struct A2:virtual A1,virtual B1{};struct B2:virtual A1,virtual B1{};struct A3:virtual A2,virtual B2{};struct B3:virtual A2,virtual B2{};struct L:A3{int f(){return 2;}};struct R:B3{int f(){return 3;}};struct D:L,R{};int main(){return 0;}",
+          "passed": true
+        },
+        {
+          "name": "struct V{virtual int f(){return 1;}};struct A0:virtual V{};struct B0:virtual V{};struct A1:virtual A0,virtual B0{};struct B1:virtual A0,virtual B0{};struct A2:virtual A1,virtual B1{};struct B2:virtual A1,virtual B1{};struct A3:virtual A2,virtual B2{};struct B3:virtual A2,virtual B2{};struct L:A3{int f(){return 2;}};struct R:B3{int f(){return 3;}};struct D:L,R{int f(){return 7;}};int main(){D d;V&v=d;return v.f()!=7;}",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "roundtrip",
+      "command": [
+        "python3",
+        "student.tests/pa23/roundtrip121.py",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit126/roundtrip"
+      ],
+      "exit": 0,
+      "cases": 44,
+      "passed": 44,
+      "sha256": "56c5afa7ffee5b23b252e42c0ee7ccbfc665aedaa6614b9a425c965d542e9383",
+      "results": [
+        {
+          "name": "pa23/tests/general/100-base-subobject-cast-virtual-dispatch.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-complete-constructor-reference-vbase-parameter.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-constructor-prvalue-virtual-base-forwarding.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-constructor-template-vbase-hidden-argument.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-converting-constructor-vbase-hidden-argument.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-declared-member-reference-virtual-base-argument.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-diamond-virtual-destructor-slot-merge.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-forwarded-virtual-base-parameter-layout-union.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-hidden-virtual-base-reference-argument-declaration.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-inherited-virtual-base-dispatch-uses-converted-receiver.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-member-pointer-reference-vbase-hidden-argument.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-multibase-class-return-adjustor-thunk.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-multibase-destructor-primary-pure-slot-concrete-call.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-multibase-implicit-virtual-destructor-slot-merge.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-multibase-inherited-virtual-slot-identity.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-multiple-reference-virtual-base-parameters.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-nonprimary-direct-base-ctor-vtable-offset.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-nonprimary-virtual-dispatch.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-null-pointer-vbase-hidden-argument.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-null-static-pointer-downcast-nonprimary-base.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-overload-set-reference-vbase-hidden-argument.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-placement-new-vbase-hidden-argument.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-polymorphic-pointer-virtual-base-argument.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-primary-polymorphic-base-before-nonpoly-static-cast.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-private-crtp-static-pointer-downcast.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-reference-member-hidden-virtual-base-layout.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-reference-pointer-virtual-base-argument.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-secondary-primary-base-vptr-overwrite.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-sibling-dynamic-cast.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-static-pointer-downcast-nonprimary-base.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-static-reference-downcast-nonprimary-base.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-typeid-nonprimary-view.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-unrelated-virtual-roots-final-overrider.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-using-base-field-primary-base-offset.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-virtual-base-constructor-vptr-hidden-target.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-virtual-base-manipulator-hidden-argument.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-virtual-base-parameter-hidden-layout.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-virtual-dispatch-incomplete-vbase-parameter.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/100-virtual-inheritance-fields.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/200-multi-level-virtual-base-diamond-lifecycle.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/200-virtual-base-override-preserves-new-slot.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/200-virtual-base-rich-vtable-second-slot-dispatch.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/300-lifecycle-base-entry-inline-policy.t",
+          "passed": true
+        },
+        {
+          "name": "pa23/tests/general/300-virtual-base-destructor-exception-specification.t",
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "coverage": {
+    "fixtures": 45,
+    "accepted_roundtrips": 44,
+    "changed_oracles": [
+      "pa23/tests/general/100-complete-constructor-reference-vbase-parameter.ref",
+      "pa23/tests/general/100-constructor-prvalue-virtual-base-forwarding.ref",
+      "pa23/tests/general/100-constructor-template-vbase-hidden-argument.ref",
+      "pa23/tests/general/100-converting-constructor-vbase-hidden-argument.ref",
+      "pa23/tests/general/100-declared-member-reference-virtual-base-argument.ref",
+      "pa23/tests/general/100-diamond-virtual-destructor-slot-merge.ref",
+      "pa23/tests/general/100-forwarded-virtual-base-parameter-layout-union.ref",
+      "pa23/tests/general/100-hidden-virtual-base-reference-argument-declaration.ref",
+      "pa23/tests/general/100-member-pointer-reference-vbase-hidden-argument.ref",
+      "pa23/tests/general/100-multiple-reference-virtual-base-parameters.ref",
+      "pa23/tests/general/100-null-pointer-vbase-hidden-argument.ref",
+      "pa23/tests/general/100-overload-set-reference-vbase-hidden-argument.ref",
+      "pa23/tests/general/100-placement-new-vbase-hidden-argument.ref",
+      "pa23/tests/general/100-reference-member-hidden-virtual-base-layout.ref",
+      "pa23/tests/general/100-reference-pointer-virtual-base-argument.ref",
+      "pa23/tests/general/100-virtual-base-constructor-vptr-hidden-target.ref",
+      "pa23/tests/general/100-virtual-base-manipulator-hidden-argument.ref",
+      "pa23/tests/general/100-virtual-base-parameter-hidden-layout.ref",
+      "pa23/tests/general/100-virtual-inheritance-fields.ref",
+      "pa23/tests/general/200-multi-level-virtual-base-diamond-lifecycle.ref",
+      "pa23/tests/general/300-lifecycle-base-entry-inline-policy.ref"
+    ],
+    "source_status_comparator_changes": [],
+    "manifest_sha256": "258bfd88a0f045e6489495aaa4adc4f344601f73b1653ed0f8db1fc35c05aaee"
+  },
+  "reviewed_commits": [
+    "b28e12ce308afd54a70882079b8247d07319359b pa23: record stage baseline, ownership groups and validation plan",
+    "b1aed715ce12ab00793f83dd0ffa16ac6f3dec93 pa23: implement nonvirtual polymorphic views, adjusted dispatch and RTTI",
+    "55e2053ac106648e2a05bd9312c69d3d64f9064e pa23: store vtable views in class arenas and demand RTTI facts explicitly",
+    "72433afa72a6cf129b590d1b828eb04deea7de44 pa23: preserve slot identities across covariant result layout demand",
+    "6ae0646175655becaea2dc7148f9fcc7a4ca333f pa23: give secondary views distinct object names and classify pure runtime helper",
+    "26b96f27e05f82f3cde2e6bf6877288c596f3d06 pa23: seal partial implementation handoff, validation and performance evidence",
+    "b20109158ee21001fd6a7c359002a66933e7241c Record PA23 turn 122 owners, baseline and validation plan",
+    "9417f88f93e8cc7275f7d9f15f33c1be72771614 Complete nonvirtual lifecycle entries and key-owned vtable demand",
+    "8b505a75ebb8e7f5fdd6a458527db65eedce54d1 Publish keyed vtable definitions across merged translation units",
+    "3b9cf2b55eb55a03a6d23998b7bc1318605f9345 Unify base-only lifecycle entry identity and test covariant table groups",
+    "a04a8cae6f404de9d62bd9f9393b354facae72ee Deduplicate lifecycle aliases and schedules across translation units",
+    "9688f9e54a2b206b9add41ce78acd9b5f0452c62 Seal PA23 lifecycle handoff with validation and performance evidence",
+    "2f27c0e58920dbb6eb4a8d6a8cd08c79eeafddf2 pa23: record shared virtual-subobject implementation plan",
+    "c7944d232e6df7255afde3f54a9cebf95b60f815 pa23: canonicalize virtual subobject identities and final overriders",
+    "67354b79d703e20aa7cf14f623695f8f473c3d14 pa23: lower shared layouts and segment-local virtual table facts",
+    "08cb86577dc5e655ab241fe644a6baee1968febc pa23: reuse receiver containment facts across virtual signatures",
+    "6a762f2502aefada1082b181f5fdf51a49fd246f pa23: use conservative RTTI hints for virtual base paths",
+    "2bba72734caa8bdf772418ad6e96775e76ed984d Seal PA23 shared-layout handoff with validation and performance evidence",
+    "36e612a07bae32eb20d10ffc76bb03529555d4bb Fix PA23 shared-view growth and cross-unit ABI ownership",
+    "7a644d69fa5eed60841ed2a231c38591c46d9390 Record PA23 checkpoint audit 124 and reviewed implementation tip",
+    "a6036731724c2b037c944a7dd706f3a30d3f47a2 Record PA23 lifecycle and ABI implementation scope",
+    "724770469a79633996c4631565f8ca91ad2c6ab0 Lower shared virtual-base lifecycle entries and value parameter ABI",
+    "ba150d2cfe79e7059be21ed72a100ef3021ecd77 Complete construction view ownership and virtual member pointer dispatch",
+    "587a6835fc21004faa8828a83fd82152f66150d9 Correct PA23 virtual-base oracles with reduced C++11 proofs",
+    "e9ea810cb25841beab3dd04a45f5506859f2da29 Restrict lifecycle scheduling to reserved emission identities",
+    "d9179e848e8b6a5b9ca378a0ee20152404ce166a Publish construction-table dependencies once per complete class",
+    "83ba7c5846220e03c3ea7520e91fbdb2d931a8fa Record PA23 full-stage validation, performance and implementation handoff"
+  ],
+  "implementation_files": {
+    "dev/frontend_source_sets.mk": "f132967cf2fb97432517303cda70c8592cf17f85a99617188fe4f3193a9fcc42",
+    "dev/src/lowering/class_values.cpp": "71144ef25f080bae5798886dc16188cbb1c6d58be30bf6fdfcefde76ab76f8b9",
+    "dev/src/lowering/cleanup.cpp": "e0e26b3ac80ab4162f4f85651be5ea4f4c56842ddd9c84187a8422adaee524d0",
+    "dev/src/lowering/construction.cpp": "0fb1fe71c764543aae7f1b977988b257eea48fff2beca8c7efc13c938567b582",
+    "dev/src/lowering/construction_tables.cpp": "2c03791e52df8cd6775d303c401cfcbd45914911daba5052d8729c397cc0b9ee",
+    "dev/src/lowering/destruction.cpp": "234c2f1b427aeeef477ac86436488d8943c06706e65d618e907aa418e701b47b",
+    "dev/src/lowering/driver.cpp": "811ca4d4689aaa503cf62f98607d59532627f01a77af5c047f143e14e137d096",
+    "dev/src/lowering/expression.cpp": "e128255f00862938fa378284639a59354abb161e716368e35dd3c7d20a1bd9ce",
+    "dev/src/lowering/function_declaration.cpp": "88ff5b51cd643b8e84350c726d93b08789270cedcaad3f697d97335c8b0089c5",
+    "dev/src/lowering/inherited_forwarding.cpp": "d129e15e8ad2d706cb2e0be6d5809ff9a67620c8e9b582eab8c6958658fb90f1",
+    "dev/src/lowering/lifecycle_abi.cpp": "7f4117fca5a665d4a65230b7d8f6393133b5f5d148a182581bc0b95b3ad1614e",
+    "dev/src/lowering/lifecycle_order.cpp": "52c160a0924aa69a197576f85dd29e6503b17ed6b50d813bee69f78856419bda",
+    "dev/src/lowering/member_pointers.cpp": "5f580854ca1492bd33926797c52af6709d0c9279839c9b1c9f29d4f02467cf26",
+    "dev/src/lowering/member_thunks.cpp": "088dd128f38f038f58fea5bb24b17e069848bc0e09621d25ee5e2a26005086e3",
+    "dev/src/lowering/parameter_abi.cpp": "791a0a6c1b9a25296a8c9239717300528d6137b083b74b3a0549149dab1c63fa",
+    "dev/src/lowering/procedural.h": "bfc7441b197a69d73bd879500e4f953102e70e0735c24c231f4ae7e5c5a1609e",
+    "dev/src/lowering/rtti.cpp": "7412bf1f310dcb0271d48b4c043adddcc6d1466780310cb483e85c475ef932dd",
+    "dev/src/lowering/symbols.cpp": "575723bc5ec23133338ed604f6b94460fe0e0bd67627061a5d3a53d55bf9802d",
+    "dev/src/lowering/transfers.cpp": "3a638ebd683842e2469a6041969488f2f2d126e22f0b2eecc6f6e1e8d95a8bb5",
+    "dev/src/lowering/values.cpp": "1e7828b71131d00e21fd9a22b339fd8ec05e0f3fea94a3b247e6559828b68a87",
+    "dev/src/lowering/virtual_views.cpp": "a8165a03e37f466a2fdebe3cfebb6edf90d99417bee273bd30166e10489290a7",
+    "dev/src/lowering/virtuals.cpp": "7fb7bf188d6df1859edd931e5d18824f84ba8e446e0e05607ecc9153a70145bf",
+    "dev/src/semantic/allocation.cpp": "825bb33bcc24ee484094075f2228bceeec97b5a5b5f78e744f380152f75282a6",
+    "dev/src/semantic/analyzer.h": "cbbe2ee05596833737b7c8eaf154d22db03b774c1c4dc7ab3592f8eb8a32974a",
+    "dev/src/semantic/arrow.cpp": "c79898a02989437b46f347b11c85c29991ea9a708e3abe0285e02cfa5f6bd4b0",
+    "dev/src/semantic/class_enum.cpp": "5da46b6dabd8b88467116be32d5f576a06c938d5a23216f6a902afbdea92883c",
+    "dev/src/semantic/constant_construction.cpp": "58599abb6472ff80b086f9cec21b1b361f7d905efe3e41544d11ca47c968d776",
+    "dev/src/semantic/construction.cpp": "196c69c8ece5f86767142a75799c408d944e191b19b8476871dde190b3d57f93",
+    "dev/src/semantic/construction_vtables.cpp": "b8775592c311dcad5e457ff70da7bc4498bc85297ffc96c96e72297ac9b19166",
+    "dev/src/semantic/conversion_functions.cpp": "af05cc556484251311f7bf676f16053a2664a9d2802ef273987ff2fcc8f958a0",
+    "dev/src/semantic/declaration.cpp": "fffb7c4bc9c5f902f0d444641a2608b354ad270ff842aa0fbd7ae6fc149e5481",
+    "dev/src/semantic/default_initialization_facts.cpp": "d3a5155e1d257325eef9cd6a56a0ca774e746bd6ec24794f0a9cee3ff0c15976",
+    "dev/src/semantic/destruction.cpp": "6481eda778d2edd5d7b460dda72979a31f072584fb3b7dfde25fb1fdd7382956",
+    "dev/src/semantic/layout.cpp": "9e2cd4a86905250074660b265a70e48a12c09ffcbba8998ed3befde07df3b86d",
+    "dev/src/semantic/lifecycle_layout.cpp": "90b90a6ca7b3fecfb0e8028f3ed067d54e0c614494f55ba854fe81f39565a831",
+    "dev/src/semantic/member.cpp": "165688f2665606f601951d12798c4f95a91477b0e6914791cfee9002161e0425",
+    "dev/src/semantic/member_receiver.cpp": "70b07c29c962e615a986a0615dcd8064fc7b9fb8902e70c43084274f9105134e",
+    "dev/src/semantic/model.h": "e6d1e8b36accc1d3134fcdfb636ec532b52e4f2dd78bae8166660d01c5e985cf",
+    "dev/src/semantic/operator_call.cpp": "df9ae2b30b51a1b64122592ba8c11e1d230a5303de8c4b349bf0e5445a819b05",
+    "dev/src/semantic/output.cpp": "6076ff193bfe0729c099c6b13c4de4d088a9daa2460d2d2504ec8660ccd04e7f",
+    "dev/src/semantic/range_operations.cpp": "867b0abc5b9a9cad0d817dd200d59b117883a08ab65c55c2b12be293c42e52f7",
+    "dev/src/semantic/rtti.cpp": "f0f49ac4b355eb81fe4e5bd6f0bb821b74f09002f051cc5f760ea9fb511e2344",
+    "dev/src/semantic/rtti_facts.cpp": "b930faab21d4e69d3cce7158c97b6fd3d7712e35a892bebdb50c8a574be43446",
+    "dev/src/semantic/source_exception.cpp": "f8ae74b1f99db89da37f235f3fe75ca5c8524ba8d5f3b4ed08af05625b0de262",
+    "dev/src/semantic/transfer_actions.cpp": "ac38373db3170974b11f106d6018d46e677bbbbfb9fa59147ad4dbe634c434de",
+    "dev/src/semantic/virtual_subobjects.cpp": "747bb7b2c9425a281aeb8e152237bfdd85c552aadce13ecd97051d509be43193",
+    "dev/src/semantic/virtuals.cpp": "8ac8aca5befb21241d9bbad3440f7603b6d7ff3097b243acb2c630690fb4a9cd"
+  },
+  "source_tree_clean": true
+}

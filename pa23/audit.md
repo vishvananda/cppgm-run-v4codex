@@ -1,217 +1,195 @@
-# PA23 checkpoint audit 124
+# PA23 final audit 126
 
-Target: **PA23 full-stage**. Disposition: **checkpoint audit complete; stage implementation incomplete**.
-Stage base commit: `f33dd0775073bf5db6665fb2f4f504783159df76`.
-Last reviewed commit: `36e612a07bae32eb20d10ffc76bb03529555d4bb`.
+Target: **PA23 full-stage**. Disposition: **accepted for advancement**.
+Reviewed range: `f33dd0775073bf5db6665fb2f4f504783159df76..83ba7c58`.
+Production implementation: `d9179e848e8b6a5b9ca378a0ee20152404ce166a`;
+compiler SHA-256 `979a332fdeb3133af19b09d93bfbf4cb061236b59573e682b2c4a747fda5acaa`.
 
-The first audit covers the entire accumulated range
-`f33dd077..2bba7273` (18 commits, three accepted handoffs), its combined changes
-in all 32 implementation/build-registration files, and audit fix `36e612a0`.
-The previous review marker was the stage base, so no handoff was excluded.
-The previous goal turn made progress: handoff 123 committed the 20→24/45
-improvement. Entry was clean and no interrupted build/test process was live.
+The previous goal turn made progress: it completed and committed the stage's
+remaining lifecycle/ABI/member-pointer owners and validation. Entry was clean;
+no prior build or test process was live. This audit read the spec, handout,
+testing rules, plans, all stage commits and the final combined changes in all
+47 implementation/build-registration files. It reconstructed the underlying
+frontend and lowering paths; the checkpoint's conclusions were not substituted
+for source review. [Checkpoint124](audit124.md), all implementation handoffs and
+historical measurements remain preserved.
 
-**Commit coverage.** Each implementation delta was checked against the final
-combined ownership paths; intermediate fixes were not treated as independent
-proof of the resulting implementation. Documentation, scripts, raw observations,
-fixture manifests and historical performance binaries were also inspected.
+## Findings and changes
 
-| Commit | Reviewed contribution and interaction |
+No additional in-scope production defect was found. Handoff125's claims were
+tested across their ownership boundaries, including combinations absent from
+its controls. [audit126.py](../student.tests/pa23/audit126.py) adds twelve
+independent cases: two virtual bases passed by value together with indirect
+results, secondary virtual dispatch and member pointers; indirect calls;
+derived value projections; covariant/null member returns; shared construction
+order; demanded templates with dormant invalid members; null projections and
+crosscasts; externally owned construction RTTI and value-result adjustors in
+separate/merged TUs and both orders. **12/12** pass validation and execution.
+
+The compiler, fixture sources, oracles, statuses and comparators are unchanged
+by audit126. Changes are the explicit personal controls, fresh evidence and
+consolidated final plan/audit/performance records. Two reporting details are
+resolved: the root report verifies **3856/3856** fixtures and **22/22** separately
+reported focused controls; the supplied **3880** summary is not substantiated
+by either the primary log or the fresh repository report. Current Itanium ABI
+RTTI Layout is §2.9.4, although
+the older correction records label it §2.9.5. Their `#rtti-layout` anchor and
+substantive proof are correct. Historical records are not silently rewritten.
+
+## Final Spec Alignment and architecture
+
+| Spec surface | Actual owner, data flow and audited invariant |
 |---|---|
-| `b28e12ce` | Original stage boundary, retained requirements and validation plan |
-| `b1aed715` | Ordinary multi-base views, primary selection, covariance, RTTI and non-null `this` |
-| `55e2053a` | Contiguous view/slot arenas and explicit semantic RTTI demand; supersedes eager RTTI reconstruction |
-| `72433afa` | Reacquisition by identity after covariant result-layout demand can move class storage |
-| `6ae06461` | Distinct native names for private views and pure-virtual runtime role |
-| `26b96f27` | Handoff 121 evidence, 17/45 checkpoint, 32/33 controls and preserved measurements |
-| `b2010915` | Lifecycle owner plan and unchanged review marker |
-| `9417f88f` | Key-owned table references/definitions, bounded deletion shape, lifecycle publication; one justified RTTI oracle correction |
-| `8b505a75` | Declaration-to-definition table upgrade, group offsets and telemetry |
-| `3b9cf2b5` | Unified base-only lifecycle identity and covariance/group interactions |
-| `a04a8cae` | Cross-TU base alias and schedule deduplication |
-| `9688f9e5` | Handoff 122 evidence, 20/45 checkpoint, separate/merged TU controls and performance uncertainty |
-| `2f27c0e5` | Shared-base owner plan and frozen baseline |
-| `c7944d23` | Canonical virtual anchors, ordinary occurrence paths and final-overrider candidates |
-| `67354b79` | Nonvirtual extents, segment-local rows, dynamic projections, RTTI, covariance and dispatch demand |
-| `08cb8657` | Completion-local receiver-containment cache; key includes both occurrences in this class |
-| `6a762f25` | Conservative virtual-path cast hints and nonpolymorphic layout-table RTTI |
-| `2bba7273` | Handoff 123 evidence, 24/45 checkpoint, reference reducer and explicit lifecycle boundary |
-| `36e612a0` | The five audit findings below, with frozen before/after controls and performance evidence |
+| §1 source/parse | `Preprocessor` owns immutable sources and interned identifiers. PP/post/syntax cursors stream into `Parser::translation_unit`, which sends each parsed region to `Analyzer::consume`. The ring retains unresolved lookahead; there are no successive owning token streams or second semantic syntax tree. PA5's specified lexical fallback is subordinate to known name categories. |
+| §2–3 identity/lookup | Node/Entity/Type/Scope IDs, canonical argument tuples and `IdIndex` flat tables own equality. Scope-kind/name indexes, base/import edges and candidate filters bound lookup to relevant declarations. Selected member, receiver/conversion and slot facts are recorded. Manglings and LowIR names are final spellings, not semantic keys. |
+| §4 templates | `syntax/occurrence.cpp` retains parsed source regions and creates compact `(source,context)` occurrences. Nested classes, bodies and defaults are demand-separated. `substitute_type` immediately reuses nondependent types; `template_expression.cpp` inherits checked fixed facts. Parent-linked substitution frames include specialization, parameter range, parent and argument tuple. No grammar replay, body cloning or enclosing-environment copy. |
+| §4–5 demand | Member/body/layout/RTTI/ordinary-table/construction-table states distinguish pending, active, success and failure. `Analyzer::finish` advances queue cursors; definition notification wakes the owning table/member. `demand_vtable` publishes each construction dependency set once. Completing a class does not instantiate its dormant template members. |
+| §2,5 shared layout | `virtual_subobjects.cpp` interns virtual anchors and ordinary occurrence paths. All required final-overrider candidates participate before physical view coalescing. `layout.cpp`, `layout_virtual_views` and `layout_lifecycle` publish complete/nonvirtual extents, base offsets, segment-owned negative rows, address points, physical store order and VTT slices. |
+| §5 cache validity | Base-path/miss keys use source/target IDs only after class completion; layout of each path is memoized. Containment cache keys both receiver occurrences and lives for one class completion. RTTI finalization follows semantic discovery. Program view keys include table/view, construction keys table/VTT index, and adjustor keys target plus every this/result/virtual-result adjustment. Local completion never clears unrelated caches. |
+| §6 lifecycle/ABI | Semantic actions distinguish shared virtual bases and direct nonvirtual bases. Complete entries initialize shared bases once; base entries skip them. Copy sources use their own table, construction destinations use entry context; destruction reverses actions and assignment retains direct-base order. Program signature plans place by-value hidden base addresses after visible parameters, before lifecycle tails; references/pointers have none. |
+| §6 direct lowering | `Procedural`, `Program` and `FunctionBuilder` consume typed facts and append typed instructions/data. Invariant failures remain errors. Each base/complete/deleting entry, view, construction segment, adjustor and member callable has an emission identity. `order_lifecycle_entries` scans reserved symbols, not later semantic declarations. LowIR writing is the requested output boundary; no serialize/reparse transport. |
+| §8 ownership | TU vectors own source facts, class/slot/view arenas and flat indexes. Class-completion scratch dies after publication. Program `Linkage`/ABI graph and signature plans survive all merged TUs. Hidden argument maps and builder scratch reset per function; temporary table buffers die after publication. The typed LowIR program survives for the explicit writer, then releases. No per-slot owning pointer graph or process-global mutable cache was introduced. |
+| §9–10 evidence/self-containment | Opt-in telemetry observes existing work; stats+validation preserve output hashes. Source-path inspection and file audit find no reference/host compilation delegation. Reference executables appear only in observation/validation harnesses. O0 executable work, latency, RSS and text are measured together; later native/self-host requirements are separately owned. |
 
-**Findings fixed.**
+Production source review includes `semantic/{member,virtuals,virtual_subobjects,
+layout,lifecycle_layout,construction,construction_vtables,destruction,
+transfer_actions,rtti,rtti_facts}.cpp` and every dependent consumer in the
+47-file delta. New `.cpp` files are registered in `dev/frontend_source_sets.mk`.
+The three file-audit warnings concern substantial inherited headers, not failed
+rules or newly introduced implementation ownership.
 
-1. Adjustor thunks were cached by TU-local entity IDs even though their external
-   ABI entries survive a TU. Two different derived tables in merged inputs
-   emitted the same native thunk twice. `Linkage` now owns adjustment interning
-   and the cache, keyed by program target-symbol identity plus this/result/virtual
-   result adjustments. The target includes internal linkage and deleting-entry
-   category. The first requesting TU emits the body exactly once.
-2. Secondary-view identities also died with the lowering adapter. In reversed
-   input order, a later complete constructor could create a fresh view symbol
-   after another TU had already emitted the table. Views now use the program's
-   table-symbol identity plus completed view ordinal, retaining internal-class
-   separation and reusing already published segments.
-3. Key-owned virtual-base classes referenced undefined private views when their
-   key definition lived in another TU. Referenced segments now have explicit
-   declarations and stable support-symbol identities; definitions upgrade those
-   same typed globals. The required separate-global LowIR shape is preserved.
-   These are compiler support entries, not a claim of later host C++ ABI closure.
-4. Canonical slot origins did not prevent completed views from retaining every
-   path through a shared diamond. Nesting produced exponential storage/work:
-   depth 16 retained 786,358 views and 262,143 slots. Every imported candidate
-   still participates in final-overrider resolution; afterwards views coalesce
-   by physical occurrence and view type, with parent/receiver IDs remapped.
-   The same input now retains 578 views and 35 slots. Ordinary repeated bases
-   and primary aliases remain distinct where their identities/types require it.
-5. Layout of each base projection rewalked its entire interned nonvirtual path.
-   The semantic owner now completes and reuses the next projection's fact,
-   rebasing a shared anchor in the current source class and retaining its
-   nonvirtual tail. Work is once per complete path key; no extra offset cache
-   or lifetime is introduced. The new counter records existing computations.
+## Representative end-to-end traces
 
-[Audit controls](../student.tests/pa23/audit124-final.json) pass **21/21**;
-[entry observations](../student.tests/pa23/audit124-entry.json) pass 9/21.
-The twelve resolved failures cover separate and merged TUs in both orders,
-ordinary/covariant/null thunks, templates, and external virtual-base key owners.
-Internal targets stay separate. Chain and nested-diamond inputs check layouts,
-work and valid emission. [Deep overrider probes](../student.tests/pa23/deep124-final.json)
-retain the later ambiguous override rejection and accept the resolved class.
-Their resolved executable still faults in both frozen entry and final binaries:
-this is an additional retained reproducer of the unfinished virtual-base
-construction owner, not a fixed runtime test or a newly accepted behavior.
-The provisional control/performance records remain available and are not
-relabeled as final results.
+**Ordinary declaration.** `value-result-member-call` defines `A : virtual V,
+virtual W`, and `D : P, I` overriding `I::read(A)` to return a three-word `R`.
+The semantic call selects `I::read`, records D→I displacement and by-value A
+materialization. A's layout owns V/W offsets. Signature construction produces
+the result address, receiver, A address and two hidden base addresses; the
+single call emitter expands that plan. Converting `&I::read` to a D member
+pointer changes the receiver displacement and retains the virtual callable.
+The callable loads the logical slot and forwards the already prepared arguments
+using `emit_raw`, avoiding a second hidden-argument expansion. The table target
+adjusts I's receiver back to D and invokes `D::read`.
 
-**Architecture trace and ownership.** The ordinary trace is `D::b` called
-through `B&` in `shared-thunk`; the demanded-template trace is `D<5>::b` in
-`template-thunk`, whose unrelated dependent `dormant` member stays undemanded.
-`lowering/driver.cpp` owns immutable preprocessing sources, the streaming
-post-token/parser cursor, the source graph and semantic fact arenas for one TU.
-`Parser::translation_unit` hands each parsed declaration to semantic construction;
-there is no completed syntax-tree copy into a second semantic tree. Identifiers
-and types have compact identities. Retained template source regions project
-occurrence/context IDs; instantiation does not replay grammar or clone source
-bodies. `template_type_facts.cpp` keys parent-linked substitution frames with
-all specialization/parameter/argument/context inputs. Nondependent source/type
-facts remain shared; dependent checking and selected-declaration publication
-belong to the concrete environment.
+[ELF trace](../student.tests/pa23/trace126.json) confirms the callable's two loads
+and indirect call, plus `_ZThn8_N1D4readE1A` applying `lea -8(%rsi)` before the
+call. The indirect result remains in `%rdi`; the receiver is correctly `%rsi`.
+No source body is copied into either helper. The test checks both `R::x` and
+`R::z`; separate/merged and reversed-TU variants check the same ownership.
 
-Scope/name indexes, candidate sequences, canonical subobject paths and immutable
-class-base edges supply the selected member and receiver. Completion separates
-shared virtual anchors from ordinary occurrences; final-overrider candidates,
-abstractness, primary signatures and covariance are established before lowering.
-Containment scratch belongs to one class completion, including cached misses.
-Layout publishes complete/nonvirtual extents, virtual rows and tails, and each
-segment's actual address point. Completed base paths and RTTI flags are computed
-once at their semantic owners. RTTI demand is deduplicated and finalized after
-source/body discovery; key-definition notifications wake the owning table,
-not every pending class. No global generation counter, retry sweep or textual
-semantic recovery was introduced.
+**Demanded template.** `template-shared-construction` instantiates `D<6>` from
+`A<6>, B<6>`, both virtually deriving from `V<6>`. Parsed patterns and literal
+facts remain shared; concrete field/virtual-call facts use the specialization
+frame. The invalid dependent `A::dormant` body is neither checked nor emitted.
+Shared V identity participates once in layout; A's override wins for that V.
+Complete D construction initializes V once, then calls A/B base entries with
+their VTT slices and the same physical V address. `read(D<6>)` copies into its
+parameter object and receives the hidden V address. Conversion to V and virtual
+dispatch consume the published projection/slot facts and return seven.
 
-`Procedural` consumes those identities directly into `lowir_model::Program`
-and `FunctionBuilder`. Manglings are output spellings, never lookup keys.
-`Linkage` and the typed ABI graph survive merged TUs; view/thunk keys now have
-that same lifetime. Class/slot vectors and path indexes release with the TU;
-completion traversal/coalescing scratch releases after publication, table buffers
-after emission, and the function builder after its body. These are contiguous
-arenas/slices and flat indexes, not individually owned slot/view heap nodes.
-No new process-global mutable cache exists. Retained LowIR is the explicit
-PA23 output program, released after its writer finishes; full validation is an
-explicit audit option, not a repeated ordinary phase boundary.
+Its ELF has one weak `_ZTT1DILi6EE`, the expected A/D table entries, and distinct
+28-byte adjustors for -16 and -8 receiver displacements required by complete
+and construction views. No dormant symbol exists. The source compiles to
+validated deterministic LowIR and both supplied native routes execute it.
 
-The trace reaches ELF through the handout's supplied backend, which consumes
-our explicit LowIR output. `readelf` on the merged template control confirms
-one `_ZThn8_N1DILi5EE1bEv` entry, and the saved disassembly shows its receiver
-adjustment and call to the selected definition. All 21 audit programs execute
-through that standalone backend as well as hosted object linking. The compiler
-does not delegate source semantics/lowering. Its own MIR/selection/allocator/
-ELF writer belongs to PA24, so no source-to-native production implementation,
-debug or self-host completion is claimed at this stage.
+**Stage boundary.** These traces reach ELF through the PA8/PA23 supplied backend
+and authorized host object linking. PA23's production endpoint is typed LowIR
+plus its explicit text view. This audit does not claim that this compiler's own
+MIR selection, allocator, ELF writer, host member-pointer ABI or debug emission
+already exists; those surfaces belong to PA24 and later assignments.
 
-**Optimization legality, profitability and budgets.** The inherited useful
-fact is non-null source `this` ([N3485](../doc/n3485.txt) §5.1.1/2).
-`expression.cpp` records it; `base_projection` preserves it across a valid base
-conversion; `pointer_projection` eliminates a null branch only when that proof
-(or a zero fixed adjustment) applies. Unknown pointer values stay conservative,
-and covariant pointer returns retain their null check. There is no fact hoisting
-across effects or strengthening of alias/unwind promises. This is constant work,
-zero code growth, and the original repeated 428→396-byte runtime/text evidence
-is preserved. Audit-generated text for that input remains 396 bytes.
+## Optimization, invalidation and pipeline bounds
 
-The O0 deleting-entry policy expands at most two prepared nontrivial actions,
-never a source body; larger/observable bodies call the complete destructor once.
-This bounds normal/cleanup growth (at most five subobject-call sites and four
-deallocations). Exception/order controls remain 20/20. The prior +146-byte cost
-is required comparison shape, not an optional optimization accepted on a noisy
-speed claim. Shared-view coalescing and path-fact reuse eliminate duplicated
-compiler work with unchanged executable code. They preserve all candidates and
-ABI decisions before publication, use linear scratch/work in imported facts,
-and retain no speculative bodies. There is no fixed point or optional O1–O3
-transform requiring a new work/growth policy. Native loop/spill quality belongs
-to the later native stages; checked runtime benchmarks ensure compiler gains
-are not concealing changed executable work.
+The useful fact traced here is non-null `this`: C++11 [expr.prim.this] §5.1.1/2
+identifies the object whose nonstatic member is executing. `expression.cpp`
+records it and `base_projection` preserves it. `pointer_projection` removes a
+null branch only for this proof or zero fixed displacement. Arbitrary pointers
+retain checks; `null-shared-projection`'s disassembly shows a null branch before
+loading the -24 virtual-base row. Covariant pointer results also retain their
+null test. No fact crosses a mutable storage write or invents alias/unwind facts.
+This is O(1), has zero code-growth budget and adds no analysis. The original
+paired runtime benefit and 428→396 text bytes are preserved in
+[performance121](performance121.md); the final executable remains 396 bytes.
+The fresh ELF trace shows `Base<D>::self()` as an 18-byte function containing
+`lea -4(%rdi),%rax` and no conditional branch, confirming the fact reaches
+encoding. Its remaining O0 frame setup is visible in the supplied backend's
+disassembly; it is not evidence of a student frame-allocation optimization.
 
-[Performance124](performance124.md) applies spec §9's PA23/O0 acceptance to the
-whole range and inherited plans. All historical binaries/hashes, measurements,
-paired spreads and disclosed semantic costs remain preserved. The longer final
-shared-diamond input improves compiler median **566.00→257.99 ms**, RSS
-**208,624→54,400 KiB**, with all four ABBA pairs improving; all **19** measured
-native texts are byte-identical. Compiler text grows 4,352 bytes and ordinary
-peak RSS at most 236 KiB. Smaller timing uncertainties remain disclosed.
-Historical +15%, +16 MiB and 5.5× targets are diagnostic, not mandated gates;
-no correctness, coverage, work bound or mandated requirement was reclassified.
+| Policy | Legality and fallback | Work/growth bound and invalidation |
+|---|---|---|
+| Shared-view coalescing | Resolve all final-overrider candidates first; merge only identical physical subobject/type views | Linear imported facts plus physical store sorting O(views log views); class-local scratch, immutable publication; no fixed-point rescan |
+| Path/layout reuse | Key completed source/target path; retain unknown/incomplete queries conservatively | Each demanded path layout once, shared tail summary; no global invalidation |
+| Member-pointer proof | Every write must preserve displacement; exposure/unknown value disables the proof | 64-step shared budget per proof, memoized owner states; fall back to full callable/displacement extraction; zero growth |
+| Member callable / ABI expansion | Needed to implement addressed virtual dispatch and required value-parameter ABI | One callable per program target, at most five logical instructions; one pointer/index per hidden fact, optional address instruction; linear arguments, no source-body copy |
+| Lifecycle/VTT | Preserve physical layouts, action order and construction RTTI | Each required segment/row once; nested sub-VTTs omit virtual tails; complete VTT appends each shared sub-VTT once. Construction dependencies publish once; emission scans reserved IDs once |
+| O0 cleanup/arrays | Preserve effects, exception paths and destruction order | At most two D0 actions before falling back to D1; destructor suffix expansion capped at eight, larger suffixes shared; array unrolling capped at eight, otherwise loops. No multiplicative unbounded body expansion |
 
-**Reference review.** The only oracle change in the entire accumulated range
-is the VMI RTTI flag 0→1 in the nonvirtual destructor diamond. The reducer,
-bundle revision `c2f713cd70d06170632bfde3e75dd6fe1aa44d98`, and proof are in
-[reference-correction122.md](reference-correction122.md). N3485 §10.1/4 gives
-one subobject per ordinary base occurrence, and §5.2.7/8 supplies the public
-cross/downcast rule. Independently inspected [Itanium ABI §2.9.5](https://itanium-cxx-abi.github.io/cxx-abi/abi.html#rtti-layout)
-assigns flag 0x01 to repeated non-diamond inheritance, including indirect bases.
-A virtual destructor does not make the base-specifiers virtual. The correction
-is justified independently of compiler agreement. The audit manifest checks
-that exact one-field change against the stage base; source, slot/body order,
-status and comparison rules are intact. No oracle changed during this audit.
+These bounds compose over demanded class facts, emitted table rows, call
+arguments and function actions. Distinct class closures and ABI entries can
+require more than source-linear output; repeated inheritance paths must not
+multiply identical physical facts. There is no optional inliner, loop transform
+or O1–O3 fixed-point optimizer in this stage. Actual backend spills/frames in
+the ELF trace are recorded, not mistaken for student allocator quality.
+[Performance126](performance126.md) assesses all four performance dimensions
+and the measured semantic costs, retaining the original evidence and spread.
 
-[Reference observation123](reference-observation123.md) still documents a
-separate incorrect fixed-offset read through a nonpolymorphic virtual-base
-reference. Its reduced proof and measurements are retained. Full affected
-oracles must be reconciled alongside completed lifecycle/ABI output; this audit
-neither copies the erroneous result nor weakens the comparator.
+## Reference and coverage audit
 
-**Required checks and coverage.** [Validation124](../student.tests/pa23/validation124.json)
-contains exact commands, terminal exits, log hashes, reviewed commits, compiler
-identity, evidence hashes and all 45 fixture hashes. `make test-pa23` is
-**24/45**, exit 2, with the identical **21** failing fixture names as entry.
-The status field `stageTests fail (2)` was a command exit code, not two failed
-fixtures. `make test-report-through-pa22` passes **3811/3811**, 22/22 stages;
-`make test-report-through-pa23` is **3835/3856**. The file audit passes with its
-three inherited header-organization warnings. Thus `priorThroughTests`,
-`fileAudit` and `stageProgressPreserved` pass. Additional personal passing cases
-have not been used to offset any additional course failure.
+[Correction122](reference-correction122.md) and
+[correction125](reference-correction125.md) cover exactly **21** changed `.ref`
+files since stage base, **20** since checkpoint124. All 45 fixture sources and
+expected statuses, harnesses and comparison rules are unchanged. The pinned
+bundle is `c2f713cd70d06170632bfde3e75dd6fe1aa44d98`, archive SHA-256
+`c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7`.
 
-All 44 accepted outputs roundtrip stably. Existing semantic controls pass 26/26,
-completed layout controls 17/17, lifecycle controls 20/20, and inherited controls
-32/33. The two known lifecycle probes and virtual-member-pointer defect remain
-visible. The standalone backend passes 16/17 completed layout controls; its
-shared-RTTI scan limit is reproduced again with reference and student IR in
-[backend-limit124](../student.tests/pa23/backend-limit124.json), while both pass
-hosted execution. No fixture, comparator, expected status or required coverage
-was removed. PA23's through report is not green; advancing to PA24 is prohibited.
+Independent review read the supplied N3485 rules for shared/ordinary base
+subobjects (§10.1/4,6,7), initialization (§12.6.2/7,8,10), construction RTTI
+(§12.7/4–6) and null allocation (§5.3.4/13, §18.6.1.3/2). The eighteen
+nonpolymorphic virtual-base corrections are one consistent table-based layout
+and ABI repair required by the PA23 parameter contract; the two other outputs
+change construction RTTI/top and shared-diamond metadata. The prior ordinary
+diamond's repeated-base flag remains a separate one-field correction.
+[Itanium construction entries](https://itanium-cxx-abi.github.io/cxx-abi/abi.html#vtable-ctor)
+and [RTTI Layout](https://itanium-cxx-abi.github.io/cxx-abi/abi.html#rtti-layout)
+support the metadata rules. Compiler agreement is not the proof.
 
-**Remaining work and handoff assessment.** Finish virtual-base complete/base
-lifecycle actions and the by-value hidden-parameter ABI as one group across
-construction/VTT selection, forwarding, transfer, placement-new and cleanup;
-include the documented oracle reconciliation. Finish virtual member-function
-pointer formation, conversions, value facts and dispatch as the other group.
-Then rerun the full stage/through contract and applicable performance evidence.
-The three handoffs identified real semantic owner boundaries, but repeatedly
-sealing partial table/lifecycle publication caused avoidable fragmentation:
-ABI identity lifetime and nested shared-graph scaling should have been checked
-across those boundaries earlier. Broad owner-complete work, including both TU
-orders and depth as well as width, is the next unit of delivery. None of the
-remaining stage failures is waived by accepting this checkpoint audit.
+Fresh [reference observations](../student.tests/pa23/reference126.json) reproduce
+reference exits 1 (nonpolymorphic reference), 2 (construction RTTI), rejection
+(indirect virtual-base mem-initializer), 0 (class placement control) and 1
+(standard null placement). Student exits are all zero. Standard placement is
+linked from an address-taken library function, not replaced by user code.
+The inherited repeated-base reducer also passes again. The fixture with
+indeterminate scalar virtual members remains a LowIR comparison, not a claimed
+defined runtime benchmark. No oracle was changed during this final audit.
 
-| Audit | Reviewed range | Findings/evidence | Disposition |
-|---|---|---|---|
-| 124 | `f33dd077..36e612a0`, including all three accumulated handoffs | Five ownership/complexity fixes; 21/21 new controls; frozen 19-workload performance; prior 3811/3811; PA23 unchanged 24/45; exact fixture/ref audit | Checkpoint accepted; lifecycle/parameter ABI, oracle reconciliation and member-pointer implementation remain required |
+## Validation and final ledger
+
+[Validation126](../student.tests/pa23/validation126.json) records exact commands,
+observed terminal exits, log/evidence hashes, source digests and individual
+personal verdicts. Required results are **45/45 PA23**, **3856/3856** through
+fixtures and **22/22** separately reported focused controls, **23/23** stages, and
+passing `perl scripts/cppgm_file_audit.pl --stage pa23 --paths dev/src` with
+three inherited warnings. All **168** inherited personal cases, **12** new cases
+and **44/44** accepted-output roundtrips pass. Telemetry does not change outputs.
+PA23 adds no debug/inspection exit target; representative ELF inspection was
+performed explicitly for this architecture audit.
+
+The [standalone backend limit](../student.tests/pa23/backend-limit126.json) is
+reproduced with reference and student shared-RTTI LowIR: the supplied standalone
+runtime returns 1, both hosted objects return 0. Reference private-label repair
+is confined to observation scratch. Source behavior and required comparison
+remain enforced; retain this backend reproducer for PA24.
+
+| Handoff / commits | Reviewed contribution | Final disposition |
+|---|---|---|
+| 121–123, `b28e12ce..2bba7273` | Views/covariance, RTTI, lifecycle identities, shared subobjects and segment rows | Final ownership paths independently reconstructed; old measurements preserved |
+| Audit124, `36e612a0..7a644d69` | Program-owned thunk/view identities, shared-view growth, completed path reuse; incomplete groups explicitly retained | Fixes remain; all prior failing personal runtime groups now pass |
+| `a6036731`, `72477046` | Lifecycle layout/actions, VTT/base context and centralized by-value ABI | Reviewed through every constructor/transfer/cleanup/call consumer |
+| `ba150d2c`, `587a6835` | Construction demand/RTTI and member dispatch callables; justified oracle correction | Independent controls, reducer proofs, native traces and unchanged coverage verified |
+| `e9ea810c`, `d9179e84` | Bound schedule by reserved emission IDs; publish construction dependencies once | Full earlier-stage report and deep/forest counters verify the completed path |
+| `83ba7c58`, audit126 | Handoff evidence, final architecture/performance/validation consolidation | No unaudited handoff remains; PA23/O0 accepted |
+
+No known correctness, self-containment, timeout, file-audit or architecture
+defect remains within the PA23 contract. Later native/host/debug/self-host work
+and the supplied backend observation are explicit handoffs, not additional
+PA23 exit gates. This audit completes PA23; it does not implement PA24.

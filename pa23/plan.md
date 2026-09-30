@@ -1,61 +1,58 @@
-# PA23 compact plan — implementation handoff 125
+# PA23 compact plan — final audit 126
 
-Target: **PA23 full-stage**. Phase: **implementation handoff; audit pending**.
-Stage base commit: `f33dd0775073bf5db6665fb2f4f504783159df76`.
-Last reviewed commit: `36e612a07bae32eb20d10ffc76bb03529555d4bb`.
-Entry: `7a644d69fa5eed60841ed2a231c38591c46d9390`, clean, **24/45**.
+Target: **PA23 full-stage**. Phase: **final audit complete**.
+Stage base: `f33dd0775073bf5db6665fb2f4f504783159df76`.
+Reviewed through: `83ba7c58` (all accumulated stage commits and handoffs).
 Implementation tip: `d9179e848e8b6a5b9ca378a0ee20152404ce166a`.
+The final audit adds independent controls and consolidated evidence; production
+code and contract fixtures are unchanged from the reviewed implementation.
 
-## Design and spec alignment
+## Final Spec Alignment
 
-Completed class facts own physical shared-base order, lifecycle entries and VTT
-slices. Complete/base construction, destruction and transfers consume those
-facts; shared bases initialize once and source transfers use the source layout.
-Program signature facts own by-value hidden base pointers across every call
-and definition; references/pointers retain table-based access without hidden
-arguments. Construction tables use the active class's RTTI and complete-object
-base locations, including separately owned key definitions and merged TUs.
+The streaming parser and semantic engine share source/occurrence identities.
+Completed classes own shared-base order, physical projections, final overriders,
+segment-local rows, lifecycle actions and VTT slices. Typed lowering consumes
+these facts. Program-owned ABI identities deduplicate tables, construction
+segments, adjustors and member-pointer callables across TUs. Signature-owned
+plans append hidden addresses only for by-value parameters; references/pointers
+use object tables. Complete/base lifecycle entries retain distinct behavior.
+The private callable-plus-displacement member-pointer representation is
+consistent across PA23 source TUs; later host ABI adaptation remains explicit.
 
-Program identities own construction segments, receiver adjustors and virtual
-member-pointer dispatch callables. Formation, storage, conversion, proofs and
-calls share the current callable-plus-displacement LowIR representation.
-Semantic member identity remains separate for later host ABI adaptation.
-Typed lowering consumes facts directly; it does not replay parsing or delegate
-source compilation. [Handoff125](handoff125.md) records owners, data flow,
-complexity, lifetimes, bounds and independent audit questions.
+[Final audit](audit.md) independently traces ordinary and demanded-template
+data through source, facts, LowIR and the supplied backend's ELF. It records
+cache keys/invalidation, demand states, lifetimes, work/growth limits and the
+optimization proof. Native backend, host interoperability, later debug and
+self-hosting remain with PA24–PA34; they do not become PA23 exit gates.
 
 ## Validation and performance
 
-[Validation125](../student.tests/pa23/validation125.json): PA23 **45/45**, prior
-PAs **3811/3811**, through PA23 **3856/3856**; file audit passes with three
-inherited warnings. Personal lifecycle/ABI, member-pointer, TU, ownership,
-layout, semantic and inherited controls all pass; **44/44** LowIR roundtrips.
-Former lifecycle probes, inherited member-pointer failure and deep runtime
-fault now pass. All 45 fixtures/statuses and comparison rules remain intact.
-[Correction proofs](reference-correction125.md) justify 20 oracle revisions
-with reduced C++11/LowIR cases, exact hashes and the pinned reference bundle.
+[Validation126](../student.tests/pa23/validation126.json) seals PA23 **45/45**,
+through PA23 **3856/3856** fixture tests and **22/22** separately reported
+focused controls, **23/23** stages, and passing file audit with three inherited
+header-organization warnings. All **168** inherited personal cases, **12** new
+cross-owner cases and **44** LowIR roundtrips pass. The five reference reducers
+were rerun; their C++11/contract proofs and exact fixture coverage are reviewed.
+All 45 sources/statuses and comparison rules remain intact. No oracle changes
+were made during audit 126.
 
-[Performance125](performance125.md) preserves frozen binaries/inputs, A/A and
-ABBA latency/RSS, separately checked runtime/text and explicit work/growth
-bounds. Apply spec §9's **PA23/O0** acceptance. Historical +15%, +16 MiB and
-5.5× diagnostic targets are not extra gates; mandated complexity, correctness
-and coverage remain required. New semantic costs are measured separately from
-correct A/B lanes. All 19 common native text outputs are identical; six new
-behavior inputs execute successfully. The forest adds 8 ms and 3,384 KiB RSS;
-compiler text adds 35,072 bytes (1.50%). No optional optimizer was added. Earlier
-measurements and [performance124](performance124.md) remain preserved.
+[Performance126](performance126.md) consolidates the frozen A/B, A/A and ABBA
+evidence for compiler latency/RSS and checked runtime/text. All 19 common
+executable texts remain identical; six final-only workloads measure required
+new semantics. No new runtime speedup is claimed. Historical measurements and
+semantic costs are preserved. The inherited +15%, +16 MiB and 5.5× targets are
+diagnostics under spec §9, not mandated exit gates. Correctness, coverage and
+bounded work/growth remain mandatory.
 
-## Remaining groups and handoff ledger
+## Handoff ledger
 
-No known PA23 implementation group remains unfinished. Independent whole-stage
-audit must review construction and signature identity ownership, private LowIR
-member-pointer ABI, oracle proofs and measured costs before advancement. The
-supplied standalone shared-RTTI backend limitation is reproduced independently;
-hosted execution passes. It does not relax source requirements or comparisons.
-Native backend, host compatibility, later debug/optimization and self-hosting
-remain with their owning assignments.
+| Range | Independently reviewed result | Disposition |
+|---|---|---|
+| Stage base through handoffs 121–123 and `36e612a0` | Shared layouts/views, RTTI, covariance, program ABI ownership and shared-path growth; [checkpoint124](audit124.md) preserved | Reconstructed again against final owners; earlier unfinished behavior now passes |
+| `7a644d69..d9179e84`, evidence through `83ba7c58` | Lifecycle/VTT, by-value ABI, virtual member pointers, schedule bounds, construction demand and 20 proven oracle corrections | Full handoff125 reviewed; no unaudited handoff remains |
+| Audit126 | Twelve independent interaction controls, ELF traces, repeated reference observations/performance, fresh required checks, compact final records | PA23 accepted; no known in-scope implementation defect or required work remains |
 
-| Handoff | Range | Result and boundary | Review |
-|---|---|---|---|
-| Earlier checkpoints and audit124 | Stage base through `7a644d69` | 24/45; owner fixes and remaining lifecycle/member-pointer groups recorded in [audit](audit.md) | Review marker preserved above |
-| Implementation125 | `7a644d69..d9179e84`, followed by evidence-only commits | 24→45/45; lifecycle, value ABI, virtual member pointers and proven oracle corrections complete | Full-stage audit pending; implementation handoff does not certify advancement |
+The supplied standalone shared-RTTI runtime limitation is separately reproduced
+with reference and student IR; both pass hosted execution. This is a downstream
+backend handoff, not a source requirement waiver. Preserve that reproducer for
+PA24. Do not use this audit as proof of the later native or host ABI stages.

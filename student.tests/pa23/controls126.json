@@ -1,0 +1,742 @@
+{
+  "compiler": "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+  "compiler_sha256": "979a332fdeb3133af19b09d93bfbf4cb061236b59573e682b2c4a747fda5acaa",
+  "cases": [
+    {
+      "name": "value-result-secondary-call",
+      "sources": [
+        "struct V{int x;V():x(3){}};struct W{int y;W():y(5){}};struct A:virtual V,virtual W{};struct R{long x,y,z;R(long n):x(n),y(n+1),z(n+2){}};struct P{virtual int pad(){return 1;}};struct I{virtual R read(A a){return R(a.x+a.y);}};struct D:P,I{R read(A a){return R(a.x+a.y+1);}};int main(){A a;a.x=7;a.y=11;D d;I&i=d;R r=i.read(a);return r.x!=19||r.z!=21;}"
+      ],
+      "lanes": [
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "f982f3b4dedc81a7afdf570fccbd952b1476614432b580ae445557236a562467",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 6,
+              "semantic_virtual_views": 1,
+              "semantic_virtual_slots": 5,
+              "semantic_final_overrider_work": 0,
+              "semantic_base_layout_work": 3,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 9,
+              "semantic_virtual_demands": 4
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 179
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": "",
+          "link_exit": 0,
+          "link_diagnostic": "",
+          "runtime_exit": 0,
+          "standalone_backend_exit": 0,
+          "standalone_diagnostic": "",
+          "standalone_exit": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "value-result-member-call",
+      "sources": [
+        "struct V{int x;V():x(3){}};struct W{int y;W():y(5){}};struct A:virtual V,virtual W{};struct R{long x,y,z;R(long n):x(n),y(n+1),z(n+2){}};struct P{virtual int pad(){return 1;}};struct I{virtual R read(A a){return R(a.x+a.y);}};struct D:P,I{R read(A a){return R(a.x+a.y+1);}};int main(){A a;a.x=7;a.y=11;D d;R(D::*p)(A)=&I::read;R r=(d.*p)(a);return r.x!=19||r.z!=21;}"
+      ],
+      "lanes": [
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "86cb00a962cea2a0cbb14a8dc812baa128606bc8fd538a417e167ff4ad75e77d",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 6,
+              "semantic_virtual_views": 1,
+              "semantic_virtual_slots": 5,
+              "semantic_final_overrider_work": 0,
+              "semantic_base_layout_work": 3,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 9,
+              "semantic_virtual_demands": 4
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 198
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": "",
+          "link_exit": 0,
+          "link_diagnostic": "",
+          "runtime_exit": 0,
+          "standalone_backend_exit": 0,
+          "standalone_diagnostic": "",
+          "standalone_exit": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "value-result-indirect-call",
+      "sources": [
+        "struct V{int x;V():x(3){}};struct W{int y;W():y(5){}};struct A:virtual V,virtual W{};struct R{long x,y,z;R(long n):x(n),y(n+1),z(n+2){}};R read(A a){return R(a.x+a.y);}int main(){A a;a.x=7;a.y=11;R(*p)(A)=&read;R r=p(a);return r.x!=18||r.z!=20;}"
+      ],
+      "lanes": [
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "d0a1810b499b3ad747ac86c025d82e7281feafdd1f4adbb1b174a600cc8a49c0",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 4,
+              "semantic_virtual_views": 0,
+              "semantic_virtual_slots": 0,
+              "semantic_final_overrider_work": 0,
+              "semantic_base_layout_work": 2,
+              "semantic_subobject_paths": 0,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_demands": 1
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 127
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": "",
+          "link_exit": 0,
+          "link_diagnostic": "",
+          "runtime_exit": 0,
+          "standalone_backend_exit": 0,
+          "standalone_diagnostic": "",
+          "standalone_exit": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "value-derived-projections",
+      "sources": [
+        "struct V{int x;V():x(3){}};struct W{int y;W():y(5){}};struct A:virtual V,virtual W{};struct B:A{long pad;};int read(B b){A&a=b;return b.x+b.y+a.x+a.y;}int main(){B b;b.x=7;b.y=11;return read(b)!=36;}"
+      ],
+      "lanes": [
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "14835ed72902ac32fdc46cb9776a784da49bb12a0959bebc553234c8a6354df0",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 7,
+              "semantic_virtual_views": 0,
+              "semantic_virtual_slots": 0,
+              "semantic_final_overrider_work": 0,
+              "semantic_base_layout_work": 5,
+              "semantic_subobject_paths": 1,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_demands": 2
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 147
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": "",
+          "link_exit": 0,
+          "link_diagnostic": "",
+          "runtime_exit": 0,
+          "standalone_backend_exit": 0,
+          "standalone_diagnostic": "",
+          "standalone_exit": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "covariant-member-result",
+      "sources": [
+        "struct P{virtual void pad(){}};struct V{virtual V*self(){return this;}};struct D:P,virtual V{bool empty;D():empty(false){}D*self(){return empty?0:this;}};int main(){D d;V*(V::*v)()=&V::self;D*(D::*p)()=&D::self;if((d.*v)()!=static_cast<V*>(&d)||(d.*p)()!=&d)return 1;d.empty=true;return (d.*v)()!=0||(d.*p)()!=0;}"
+      ],
+      "lanes": [
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "e40e40592e8aab5d6ece265c2ea11b072c9daa1e01b675d6ec81c3b964722e4a",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 2,
+              "semantic_virtual_views": 1,
+              "semantic_virtual_slots": 5,
+              "semantic_final_overrider_work": 5,
+              "semantic_base_layout_work": 1,
+              "semantic_subobject_paths": 1,
+              "semantic_virtual_slot_work": 10,
+              "semantic_virtual_demands": 3
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 142
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": "",
+          "link_exit": 0,
+          "link_diagnostic": "",
+          "runtime_exit": 0,
+          "standalone_backend_exit": 0,
+          "standalone_diagnostic": "",
+          "standalone_exit": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "construction-order-shared",
+      "sources": [
+        "int log;struct V{V(){log=log*10+1;}};struct W{W(){log=log*10+2;}};struct A:virtual V,virtual W{A(){log=log*10+3;}};struct B:virtual W,virtual V{B(){log=log*10+4;}};struct D:A,B{D(){log=log*10+5;}};int main(){D d;return log!=12345;}"
+      ],
+      "lanes": [
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "8aa38fd72af7d5daaddd16eed1a9d3cd3234fd9dbcfdc7798df458a6db72422b",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 0,
+              "semantic_virtual_views": 1,
+              "semantic_virtual_slots": 0,
+              "semantic_final_overrider_work": 0,
+              "semantic_base_layout_work": 0,
+              "semantic_subobject_paths": 1,
+              "semantic_virtual_slot_work": 0,
+              "semantic_virtual_demands": 3
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 119
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": "",
+          "link_exit": 0,
+          "link_diagnostic": "",
+          "runtime_exit": 0,
+          "standalone_backend_exit": 0,
+          "standalone_diagnostic": "",
+          "standalone_exit": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "template-shared-construction",
+      "sources": [
+        "template<int N>struct V{int x;V():x(N){}virtual int f(){return x;}};template<int N>struct A:virtual V<N>{int f(){return this->x+1;}int dormant(){return N.missing;}};template<int N>struct B:virtual V<N>{};template<int N>struct D:A<N>,B<N>{};template<int N>int read(D<N>d){V<N>&v=d;return v.f();}int main(){D<6>d;return read(d)!=7;}"
+      ],
+      "lanes": [
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "1a6dad0b371115e9f98a5a623595ea5a7b5b5bda3897223e5fa99df20bb07802",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 4,
+              "semantic_virtual_views": 4,
+              "semantic_virtual_slots": 6,
+              "semantic_final_overrider_work": 11,
+              "semantic_base_layout_work": 2,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 22,
+              "semantic_virtual_demands": 4
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 183
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": "",
+          "link_exit": 0,
+          "link_diagnostic": "",
+          "runtime_exit": 0,
+          "standalone_backend_exit": 0,
+          "standalone_diagnostic": "",
+          "standalone_exit": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "null-shared-projection",
+      "sources": [
+        "struct V{int x;virtual int f(){return x;}};struct A:virtual V{};struct P{virtual int p(){return 1;}};struct D:P,A{};V*project(A*p){return p;}P*cross(A*p){return dynamic_cast<P*>(p);}int main(){D d;A*a=&d;return project(0)!=0||cross(0)!=0||project(a)!=static_cast<V*>(&d)||cross(a)!=static_cast<P*>(&d);}"
+      ],
+      "lanes": [
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "4aacac0d7cdb83e7caadc3adb4438540a8f2a228370fb74db0014ca9fd56cbf1",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 8,
+              "semantic_virtual_views": 3,
+              "semantic_virtual_slots": 5,
+              "semantic_final_overrider_work": 6,
+              "semantic_base_layout_work": 4,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 14,
+              "semantic_virtual_demands": 4
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 134
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": "",
+          "link_exit": 0,
+          "link_diagnostic": "",
+          "runtime_exit": 0,
+          "standalone_backend_exit": 0,
+          "standalone_diagnostic": "",
+          "standalone_exit": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "external-value-result-thunk",
+      "sources": [
+        "struct V{int x;V():x(3){}};struct W{int y;W():y(5){}};struct A:virtual V,virtual W{};struct R{long x,y,z;R(long n):x(n),y(n+1),z(n+2){}};struct I{virtual R read(A);};struct P{virtual int pad(){return 1;}};struct D:P,I{R read(A);};R I::read(A a){return R(a.x+a.y);}R D::read(A a){return R(a.x+a.y+1);}",
+        "struct V{int x;V():x(3){}};struct W{int y;W():y(5){}};struct A:virtual V,virtual W{};struct R{long x,y,z;R(long n):x(n),y(n+1),z(n+2){}};struct I{virtual R read(A);};struct P{virtual int pad(){return 1;}};struct D:P,I{R read(A);};int main(){D d;A a;a.x=7;a.y=11;R(D::*p)(A)=&I::read;R r=(d.*p)(a);return r.x!=19||r.z!=21;}"
+      ],
+      "lanes": [
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "4cade1f5d701403fcf14eef92b0d2333118820332d0e9a27bb8a8484013719ff",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 4,
+              "semantic_virtual_views": 1,
+              "semantic_virtual_slots": 5,
+              "semantic_final_overrider_work": 0,
+              "semantic_base_layout_work": 2,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 8,
+              "semantic_virtual_demands": 3
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 45
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": ""
+        },
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "63fb162d3b69bdf5abc2f1250f371a3a02615a56f31811d46c9358b260ba1e47",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 6,
+              "semantic_virtual_views": 1,
+              "semantic_virtual_slots": 5,
+              "semantic_final_overrider_work": 0,
+              "semantic_base_layout_work": 3,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 5,
+              "semantic_virtual_demands": 2
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 155
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": ""
+        },
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "cba46757bce02272b6b958342a9f5e26da0d62e772a789d3a4bc4f47f6c2743f",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 4,
+              "semantic_virtual_views": 1,
+              "semantic_virtual_slots": 5,
+              "semantic_final_overrider_work": 0,
+              "semantic_base_layout_work": 2,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 8,
+              "semantic_virtual_demands": 3
+            },
+            {
+              "semantic_base_adjustment_work": 6,
+              "semantic_virtual_views": 1,
+              "semantic_virtual_slots": 5,
+              "semantic_final_overrider_work": 0,
+              "semantic_base_layout_work": 3,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 5,
+              "semantic_virtual_demands": 2
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 198
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": "",
+          "link_exit": 0,
+          "link_diagnostic": "",
+          "runtime_exit": 0,
+          "standalone_backend_exit": 0,
+          "standalone_diagnostic": "",
+          "standalone_exit": 0
+        }
+      ],
+      "separate_link_exit": 0,
+      "separate_diagnostic": "",
+      "separate_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "external-construction-rtti",
+      "sources": [
+        "namespace std{class type_info{public:bool operator==(const type_info&)const;};}extern int bad;struct V{virtual int f();};struct A:virtual V{A();int f();};struct P{virtual int pad();};struct D:P,A{D();int f();};int bad;int V::f(){return 1;}A::A(){V&v=*this;if(v.f()!=2||!(typeid(v)==typeid(A))||dynamic_cast<void*>(&v)!=this)++bad;}int A::f(){return 2;}",
+        "namespace std{class type_info{public:bool operator==(const type_info&)const;};}extern int bad;struct V{virtual int f();};struct A:virtual V{A();int f();};struct P{virtual int pad();};struct D:P,A{D();int f();};int P::pad(){return 4;}D::D(){}int D::f(){return 3;}int main(){D d;V&v=d;return bad||v.f()!=3||!(typeid(v)==typeid(D));}"
+      ],
+      "lanes": [
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "4599d90d0686362865dfb636a3797b703cb5b44285b0c05786082d3c6acc497d",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 1,
+              "semantic_virtual_views": 3,
+              "semantic_virtual_slots": 8,
+              "semantic_final_overrider_work": 9,
+              "semantic_base_layout_work": 1,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 12,
+              "semantic_virtual_demands": 2
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 132
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": ""
+        },
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "679fa04baf216d59df4b68e3514dd0dd634785738b5771ca8fee193d7c5d79a4",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 3,
+              "semantic_virtual_views": 3,
+              "semantic_virtual_slots": 8,
+              "semantic_final_overrider_work": 9,
+              "semantic_base_layout_work": 2,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 17,
+              "semantic_virtual_demands": 2
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 121
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": ""
+        },
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "0f5b5a8f6b1aaee063d861f1367482ba00319082beed243cb81150d93c5410bc",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 1,
+              "semantic_virtual_views": 3,
+              "semantic_virtual_slots": 8,
+              "semantic_final_overrider_work": 9,
+              "semantic_base_layout_work": 1,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 12,
+              "semantic_virtual_demands": 2
+            },
+            {
+              "semantic_base_adjustment_work": 3,
+              "semantic_virtual_views": 3,
+              "semantic_virtual_slots": 8,
+              "semantic_final_overrider_work": 9,
+              "semantic_base_layout_work": 2,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 17,
+              "semantic_virtual_demands": 2
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 244
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": "",
+          "link_exit": 0,
+          "link_diagnostic": "",
+          "runtime_exit": 0,
+          "standalone_backend_exit": 0,
+          "standalone_diagnostic": "",
+          "standalone_exit": 0
+        }
+      ],
+      "separate_link_exit": 0,
+      "separate_diagnostic": "",
+      "separate_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "external-value-result-thunk-reversed",
+      "sources": [
+        "struct V{int x;V():x(3){}};struct W{int y;W():y(5){}};struct A:virtual V,virtual W{};struct R{long x,y,z;R(long n):x(n),y(n+1),z(n+2){}};struct I{virtual R read(A);};struct P{virtual int pad(){return 1;}};struct D:P,I{R read(A);};int main(){D d;A a;a.x=7;a.y=11;R(D::*p)(A)=&I::read;R r=(d.*p)(a);return r.x!=19||r.z!=21;}",
+        "struct V{int x;V():x(3){}};struct W{int y;W():y(5){}};struct A:virtual V,virtual W{};struct R{long x,y,z;R(long n):x(n),y(n+1),z(n+2){}};struct I{virtual R read(A);};struct P{virtual int pad(){return 1;}};struct D:P,I{R read(A);};R I::read(A a){return R(a.x+a.y);}R D::read(A a){return R(a.x+a.y+1);}"
+      ],
+      "lanes": [
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "63fb162d3b69bdf5abc2f1250f371a3a02615a56f31811d46c9358b260ba1e47",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 6,
+              "semantic_virtual_views": 1,
+              "semantic_virtual_slots": 5,
+              "semantic_final_overrider_work": 0,
+              "semantic_base_layout_work": 3,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 5,
+              "semantic_virtual_demands": 2
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 155
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": ""
+        },
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "4cade1f5d701403fcf14eef92b0d2333118820332d0e9a27bb8a8484013719ff",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 4,
+              "semantic_virtual_views": 1,
+              "semantic_virtual_slots": 5,
+              "semantic_final_overrider_work": 0,
+              "semantic_base_layout_work": 2,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 8,
+              "semantic_virtual_demands": 3
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 45
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": ""
+        },
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "514b9b9ae9b229c1d5ba96fd0130b30200207702f1b4922dd8d4a02141cc3a81",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 6,
+              "semantic_virtual_views": 1,
+              "semantic_virtual_slots": 5,
+              "semantic_final_overrider_work": 0,
+              "semantic_base_layout_work": 3,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 5,
+              "semantic_virtual_demands": 2
+            },
+            {
+              "semantic_base_adjustment_work": 4,
+              "semantic_virtual_views": 1,
+              "semantic_virtual_slots": 5,
+              "semantic_final_overrider_work": 0,
+              "semantic_base_layout_work": 2,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 8,
+              "semantic_virtual_demands": 3
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 198
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": "",
+          "link_exit": 0,
+          "link_diagnostic": "",
+          "runtime_exit": 0,
+          "standalone_backend_exit": 0,
+          "standalone_diagnostic": "",
+          "standalone_exit": 0
+        }
+      ],
+      "separate_link_exit": 0,
+      "separate_diagnostic": "",
+      "separate_exit": 0,
+      "passed": true
+    },
+    {
+      "name": "external-construction-rtti-reversed",
+      "sources": [
+        "namespace std{class type_info{public:bool operator==(const type_info&)const;};}extern int bad;struct V{virtual int f();};struct A:virtual V{A();int f();};struct P{virtual int pad();};struct D:P,A{D();int f();};int P::pad(){return 4;}D::D(){}int D::f(){return 3;}int main(){D d;V&v=d;return bad||v.f()!=3||!(typeid(v)==typeid(D));}",
+        "namespace std{class type_info{public:bool operator==(const type_info&)const;};}extern int bad;struct V{virtual int f();};struct A:virtual V{A();int f();};struct P{virtual int pad();};struct D:P,A{D();int f();};int bad;int V::f(){return 1;}A::A(){V&v=*this;if(v.f()!=2||!(typeid(v)==typeid(A))||dynamic_cast<void*>(&v)!=this)++bad;}int A::f(){return 2;}"
+      ],
+      "lanes": [
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "679fa04baf216d59df4b68e3514dd0dd634785738b5771ca8fee193d7c5d79a4",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 3,
+              "semantic_virtual_views": 3,
+              "semantic_virtual_slots": 8,
+              "semantic_final_overrider_work": 9,
+              "semantic_base_layout_work": 2,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 17,
+              "semantic_virtual_demands": 2
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 121
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": ""
+        },
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "4599d90d0686362865dfb636a3797b703cb5b44285b0c05786082d3c6acc497d",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 1,
+              "semantic_virtual_views": 3,
+              "semantic_virtual_slots": 8,
+              "semantic_final_overrider_work": 9,
+              "semantic_base_layout_work": 1,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 12,
+              "semantic_virtual_demands": 2
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 132
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": ""
+        },
+        {
+          "compile_exit": 0,
+          "diagnostic": "",
+          "lowir_sha256": "bab64e34001b73c9cdd44f66adef68d514f0e2d889dda15cddbec893107482dd",
+          "stats_identical": true,
+          "work": [
+            {
+              "semantic_base_adjustment_work": 3,
+              "semantic_virtual_views": 3,
+              "semantic_virtual_slots": 8,
+              "semantic_final_overrider_work": 9,
+              "semantic_base_layout_work": 2,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 17,
+              "semantic_virtual_demands": 2
+            },
+            {
+              "semantic_base_adjustment_work": 1,
+              "semantic_virtual_views": 3,
+              "semantic_virtual_slots": 8,
+              "semantic_final_overrider_work": 9,
+              "semantic_base_layout_work": 1,
+              "semantic_subobject_paths": 2,
+              "semantic_virtual_slot_work": 12,
+              "semantic_virtual_demands": 2
+            },
+            {
+              "peak_rss_kib": 17728,
+              "instructions": 244
+            }
+          ],
+          "duplicate_function_objects": [],
+          "backend_exit": 0,
+          "backend_diagnostic": "",
+          "link_exit": 0,
+          "link_diagnostic": "",
+          "runtime_exit": 0,
+          "standalone_backend_exit": 0,
+          "standalone_diagnostic": "",
+          "standalone_exit": 0
+        }
+      ],
+      "separate_link_exit": 0,
+      "separate_diagnostic": "",
+      "separate_exit": 0,
+      "passed": true
+    }
+  ]
+}

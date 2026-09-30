@@ -1,0 +1,163 @@
+{
+  "bundle_revision": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "source": "namespace std{class type_info{public:bool operator==(const type_info&)const;};}struct V{virtual int f(){return 1;}};struct A:virtual V{};struct B:virtual V{};struct D:A,B{};int main(){D d;V*v=&d;return dynamic_cast<B*>(v)!=static_cast<B*>(&d)||!(typeid(*v)==typeid(D));}",
+  "source_sha256": "f442f3b2663259aac2c63e4e0527043eb1fd60b4ec02645911e26228aa4304b5",
+  "expected_source_exit": 0,
+  "cases": [
+    {
+      "label": "reference",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+          "--emit-lowir",
+          "-O0",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/reference.lowir",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/shared-rtti.cpp"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "lowir_sha256": "223f645263c5b65862249c9a3762b397945480144e17b57c5173996ccbc8a857",
+      "standalone": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+          "-O0",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/reference.exe",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/reference.lowir"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": "ERROR: duplicate native symbol: A____view__V__8__vtable\n"
+      },
+      "private_object_renames": 8,
+      "private_lowir_sha256": "a754382d8b029ec1116f61ff2a754211341c9b446b89e248c783d961498d480d",
+      "private_standalone": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+          "-O0",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/reference.exe",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/reference.private.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "private_run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/reference.exe"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "hosted_backend": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+          "-c",
+          "-O0",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/reference.o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/reference.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "hosted_link": {
+        "command": [
+          "g++",
+          "-no-pie",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/reference.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/reference.host"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "hosted_run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/reference.host"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    {
+      "label": "student",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--emit-lowir",
+          "-O0",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/student.lowir",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/shared-rtti.cpp"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "lowir_sha256": "f750598f9586e719674e3bf34c56a3c83325d125009e93ae04a292b572756f6d",
+      "standalone": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native-ref",
+          "-O0",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/student.exe",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/student.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "standalone_run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/student.exe"
+        ],
+        "exit": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "hosted_backend": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+          "-c",
+          "-O0",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/student.o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/student.lowir"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "hosted_link": {
+        "command": [
+          "g++",
+          "-no-pie",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/student.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/student.host"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "hosted_run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit126/backend-limit/student.host"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    }
+  ],
+  "oracle_changes": []
+}
