@@ -194,7 +194,6 @@ struct Entity {
     bool c_linkage = false, external_decl = false, thread_local_storage = false, inline_function = false;
     bool no_inline = false, force_inline = false, stable_prefix = false;
     syntax::FunctionEffects effects = syntax::FunctionEffects::Unknown;
-    std::uint32_t abi_tags = 0;
     bool constexpr_function = false;
     unsigned char allocation_runtime = 0;
     bool array_allocation = false;

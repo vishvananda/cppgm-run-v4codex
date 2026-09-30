@@ -30,7 +30,7 @@ public:
     Index builtin_trait_values, builtin_type_properties;
     Index assembler_names; // EntityId -> interned explicit object name.
     Index section_names, weak_symbols; // EntityId -> immutable object attributes.
-    Index abi_tag_members;
+    Index abi_tag_members, abi_tag_heads;
     std::vector<syntax::AbiTag> abi_tags = std::vector<syntax::AbiTag>(1);
     void native_attributes(EntityId, NodeId);
     void inherit_native_attributes(EntityId, EntityId);

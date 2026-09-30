@@ -2,9 +2,10 @@
 namespace cppgm { namespace lowering {
 abi_mangle::Id Procedural::abi_tagged_name(EntityId e, abi_mangle::Id name)
 {
-    if (!sem.entities[e].abi_tags) return name;
+    auto head = sem.abi_tag_heads.get(e);
+    if (!head) return name;
     std::vector<abi_mangle::Id> tags;
-    for (auto t = sem.entities[e].abi_tags; t; t = sem.abi_tags[t].next)
+    for (auto t = head; t; t = sem.abi_tags[t].next)
         tags.push_back(abi.string(spelling(sem.abi_tags[t].name)));
     return abi.make(abi_mangle::Kind::Tagged,name,0,0,0,tags);
 }

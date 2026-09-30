@@ -18,11 +18,11 @@ syntax::FunctionEffects Analyzer::function_effects(EntityId e) const
 void Analyzer::inherit_native_attributes(EntityId e, EntityId pattern)
 {
     entities[e].effects = std::max(entities[e].effects,entities[pattern].effects);
-    for (auto t = entities[pattern].abi_tags; t; t = abi_tags[t].next) {
+    for (auto t = abi_tag_heads.get(pattern); t; t = abi_tags[t].next) {
         auto tag = abi_tags[t].name; auto k = key(e,tag);
         if (abi_tag_members.get(k)) continue;
         abi_tag_members.put(k,1);
-        abi_tags.push_back({tag,entities[e].abi_tags}); entities[e].abi_tags = abi_tags.size()-1;
+        abi_tags.push_back({tag,abi_tag_heads.get(e)}); abi_tag_heads.put(e,abi_tags.size()-1);
     }
 }
 void Analyzer::native_attributes(EntityId e, NodeId n)
@@ -35,7 +35,7 @@ void Analyzer::native_attributes(EntityId e, NodeId n)
         auto tag = ast.abi_tags[t].name; auto k = key(e,tag);
         if (abi_tag_members.get(k)) continue;
         abi_tag_members.put(k,1);
-        abi_tags.push_back({tag,entities[e].abi_tags}); entities[e].abi_tags = abi_tags.size()-1;
+        abi_tags.push_back({tag,abi_tag_heads.get(e)}); abi_tag_heads.put(e,abi_tags.size()-1);
     }
     if (entities[e].kind == EntityKind::Function) entities[e].effects = std::max(entities[e].effects,value.effects);
     if (value.weak) weak_symbols.put(e,1);
