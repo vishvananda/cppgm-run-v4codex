@@ -135,7 +135,7 @@ void Analyzer::complete_virtuals(EntityId cls)
         return key(members[m].destructor ? 0 : entities[e].name,members[m].virtual_signature);
     };
     for (auto e : methods) overrides.put(shape(e),e);
-    Index matched;
+    Index matched, exception_checks;
     auto replace = [&](std::vector<VirtualSlot>& slots) {
         for (auto& slot : slots) {
             ++virtual_slot_work;
@@ -145,8 +145,11 @@ void Analyzer::complete_virtuals(EntityId cls)
             if (entities[e].is_static || members[entities[old].member_info].final_member)
                 throw std::runtime_error("invalid virtual override");
             check_covariance(e,old);
-            if (function_nonthrowing(old) && !function_nonthrowing(e))
-                throw std::runtime_error("looser virtual exception specification");
+            auto exception_key = key(e,old);
+            if (!exception_checks.get(exception_key)) {
+                check_exception_override(e,old);
+                exception_checks.put(exception_key,1);
+            }
             matched.put(e,1); members[m].virtual_member = true;
             slot.function = e; slot.receiver = 0; slot.implementation = 0;
         }

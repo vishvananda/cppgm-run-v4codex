@@ -1,0 +1,500 @@
+{
+  "binary_sha256": "d472892b7a45a7cf5c62ba272e34d0636b78f6f8b1e8007fd83c036890f69ca9",
+  "checks": [
+    {
+      "name": "disjoint",
+      "source": "\nstruct B { virtual void f() throw(int); };\nstruct D:B { void f() throw(double); };\n",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/disjoint.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "unrestricted",
+      "source": "\nstruct B { virtual void f() throw(int); };\nstruct D:B { void f() ; };\n",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/unrestricted.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "false-noexcept",
+      "source": "\nstruct B { virtual void f() throw(int); };\nstruct D:B { void f() noexcept(false); };\n",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/false-noexcept.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "narrower",
+      "source": "\nstruct B { virtual void f() throw(int,double); };\nstruct D:B { void f() throw(int); };\n",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/narrower.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "duplicate-types",
+      "source": "\nstruct B { virtual void f() throw(int,double); };\nstruct D:B { void f() throw(double,int,int); };\n",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/duplicate-types.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "empty",
+      "source": "\nstruct B { virtual void f() throw(int); };\nstruct D:B { void f() throw(); };\n",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/empty.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "nonthrowing",
+      "source": "\nstruct B { virtual void f() throw(int); };\nstruct D:B { void f() noexcept; };\n",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/nonthrowing.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "empty-base",
+      "source": "\nstruct B { virtual void f() throw(); };\nstruct D:B { void f() throw(int); };\n",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/empty-base.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual exception specification\n"
+    },
+    {
+      "name": "unrestricted-base",
+      "source": "\nstruct B { virtual void f() ; };\nstruct D:B { void f() throw(int); };\n",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/unrestricted-base.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "scalar-promotion",
+      "source": "\nstruct B { virtual void f() throw(long); };\nstruct D:B { void f() throw(int); };\n",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/scalar-promotion.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "public-class",
+      "source": "struct X {}; struct Y:X {};\nstruct B { virtual void f() throw(X); };\nstruct D:B { void f() throw(Y); };\n",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/public-class.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "private-class",
+      "source": "struct X {}; class Y:X {};\nstruct B { virtual void f() throw(X); };\nstruct D:B { void f() throw(Y); };\n",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/private-class.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "protected-class",
+      "source": "struct X {}; struct Y:protected X {};\nstruct B { virtual void f() throw(X); };\nstruct D:B { void f() throw(Y); };\n",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/protected-class.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "ambiguous-class",
+      "source": "struct X {}; struct L:X {}; struct R:X {}; struct Y:L,R {};\nstruct B { virtual void f() throw(X); };\nstruct D:B { void f() throw(Y); };\n",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/ambiguous-class.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "shared-class",
+      "source": "struct X {}; struct L:virtual X {}; struct R:virtual X {}; struct Y:L,R {};\nstruct B { virtual void f() throw(X); };\nstruct D:B { void f() throw(Y); };\n",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/shared-class.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "shared-public-path",
+      "source": "struct X {}; class L:virtual X {}; struct R:virtual X {}; struct Y:L,R {};\nstruct B { virtual void f() throw(X); };\nstruct D:B { void f() throw(Y); };\n",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/shared-public-path.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "public-pointer",
+      "source": "struct X {}; struct Y:X {};\nstruct B { virtual void f() throw(const X*); };\nstruct D:B { void f() throw(Y*); };\n",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/public-pointer.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "private-pointer",
+      "source": "struct X {}; class Y:X {};\nstruct B { virtual void f() throw(X*); };\nstruct D:B { void f() throw(Y*); };\n",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/private-pointer.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "qualification",
+      "source": "\nstruct B { virtual void f() throw(const int*); };\nstruct D:B { void f() throw(int*); };\n",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/qualification.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "remove-qualification",
+      "source": "\nstruct B { virtual void f() throw(int*); };\nstruct D:B { void f() throw(const int*); };\n",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/remove-qualification.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "void-pointer",
+      "source": "\nstruct B { virtual void f() throw(const void*); };\nstruct D:B { void f() throw(int*); };\n",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/void-pointer.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "function-pointer",
+      "source": "\nstruct B { virtual void f() throw(void*); };\nstruct D:B { void f() throw(void(*)()); };\n",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/function-pointer.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "deep-qualification",
+      "source": "\nstruct B { virtual void f() throw(const int* const*); };\nstruct D:B { void f() throw(int**); };\n",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/deep-qualification.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "unsafe-qualification",
+      "source": "\nstruct B { virtual void f() throw(const int**); };\nstruct D:B { void f() throw(int**); };\n",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/unsafe-qualification.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "null-pointer",
+      "source": "\nstruct B { virtual void f() throw(int*); };\nstruct D:B { void f() throw(decltype(nullptr)); };\n",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/null-pointer.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "template-invalid",
+      "source": "template<class T> struct B {virtual void f() throw(T);}; struct D:B<int> {void f() throw(double);};",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/template-invalid.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "template-valid",
+      "source": "template<class T> struct B {virtual void f() throw(T);}; template<class T> struct D:B<T> {void f() throw(T);}; int n=sizeof(D<int>);",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/template-valid.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "multiple-base",
+      "source": "struct B {virtual void f() throw(int,double);}; struct C {virtual void f() throw(char,int);}; struct D:B,C {void f() throw(double);};",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/multiple-base.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "implicit-destructor",
+      "source": "struct B {virtual ~B() throw(int);}; struct D:B {};",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/implicit-destructor.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "implicit-destructor-extra",
+      "source": "struct B {virtual ~B() throw(int);}; struct M {~M() throw(double);}; struct D:B {M m;};",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/implicit-destructor-extra.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "implicit-destructor-unrestricted",
+      "source": "struct B {virtual ~B() throw(int);}; struct M {~M() noexcept(false);}; struct D:B {M m;};",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/implicit-destructor-unrestricted.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "implicit-destructor-transitive",
+      "source": "struct B {virtual ~B() throw(int);}; struct C:B {}; struct D:C {~D() throw(double);};",
+      "expected_success": false,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/implicit-destructor-transitive.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "unused-member-body",
+      "source": "template<class T> struct B {virtual void f() throw(int); void unused(){T::missing();}}; struct D:B<int> {void f() throw(int);};",
+      "expected_success": true,
+      "command": [
+        "/tmp/pa28-audit154/entry-cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides-entry/unused-member-body.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides-entry/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    }
+  ]
+}

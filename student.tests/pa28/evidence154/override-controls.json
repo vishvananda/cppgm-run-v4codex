@@ -1,0 +1,500 @@
+{
+  "binary_sha256": "d36790910e76e4f49af3299238a0e63608aeb096732ed38eafffa8175e9c9abd",
+  "checks": [
+    {
+      "name": "disjoint",
+      "source": "\nstruct B { virtual void f() throw(int); };\nstruct D:B { void f() throw(double); };\n",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/disjoint.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual allowed exception types\n"
+    },
+    {
+      "name": "unrestricted",
+      "source": "\nstruct B { virtual void f() throw(int); };\nstruct D:B { void f() ; };\n",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/unrestricted.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: unrestricted virtual override\n"
+    },
+    {
+      "name": "false-noexcept",
+      "source": "\nstruct B { virtual void f() throw(int); };\nstruct D:B { void f() noexcept(false); };\n",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/false-noexcept.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: unrestricted virtual override\n"
+    },
+    {
+      "name": "narrower",
+      "source": "\nstruct B { virtual void f() throw(int,double); };\nstruct D:B { void f() throw(int); };\n",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/narrower.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "duplicate-types",
+      "source": "\nstruct B { virtual void f() throw(int,double); };\nstruct D:B { void f() throw(double,int,int); };\n",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/duplicate-types.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "empty",
+      "source": "\nstruct B { virtual void f() throw(int); };\nstruct D:B { void f() throw(); };\n",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/empty.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "nonthrowing",
+      "source": "\nstruct B { virtual void f() throw(int); };\nstruct D:B { void f() noexcept; };\n",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/nonthrowing.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "empty-base",
+      "source": "\nstruct B { virtual void f() throw(); };\nstruct D:B { void f() throw(int); };\n",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/empty-base.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual exception specification\n"
+    },
+    {
+      "name": "unrestricted-base",
+      "source": "\nstruct B { virtual void f() ; };\nstruct D:B { void f() throw(int); };\n",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/unrestricted-base.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "scalar-promotion",
+      "source": "\nstruct B { virtual void f() throw(long); };\nstruct D:B { void f() throw(int); };\n",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/scalar-promotion.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual allowed exception types\n"
+    },
+    {
+      "name": "public-class",
+      "source": "struct X {}; struct Y:X {};\nstruct B { virtual void f() throw(X); };\nstruct D:B { void f() throw(Y); };\n",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/public-class.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "private-class",
+      "source": "struct X {}; class Y:X {};\nstruct B { virtual void f() throw(X); };\nstruct D:B { void f() throw(Y); };\n",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/private-class.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual allowed exception types\n"
+    },
+    {
+      "name": "protected-class",
+      "source": "struct X {}; struct Y:protected X {};\nstruct B { virtual void f() throw(X); };\nstruct D:B { void f() throw(Y); };\n",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/protected-class.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual allowed exception types\n"
+    },
+    {
+      "name": "ambiguous-class",
+      "source": "struct X {}; struct L:X {}; struct R:X {}; struct Y:L,R {};\nstruct B { virtual void f() throw(X); };\nstruct D:B { void f() throw(Y); };\n",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/ambiguous-class.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual allowed exception types\n"
+    },
+    {
+      "name": "shared-class",
+      "source": "struct X {}; struct L:virtual X {}; struct R:virtual X {}; struct Y:L,R {};\nstruct B { virtual void f() throw(X); };\nstruct D:B { void f() throw(Y); };\n",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/shared-class.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "shared-public-path",
+      "source": "struct X {}; class L:virtual X {}; struct R:virtual X {}; struct Y:L,R {};\nstruct B { virtual void f() throw(X); };\nstruct D:B { void f() throw(Y); };\n",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/shared-public-path.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "public-pointer",
+      "source": "struct X {}; struct Y:X {};\nstruct B { virtual void f() throw(const X*); };\nstruct D:B { void f() throw(Y*); };\n",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/public-pointer.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "private-pointer",
+      "source": "struct X {}; class Y:X {};\nstruct B { virtual void f() throw(X*); };\nstruct D:B { void f() throw(Y*); };\n",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/private-pointer.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual allowed exception types\n"
+    },
+    {
+      "name": "qualification",
+      "source": "\nstruct B { virtual void f() throw(const int*); };\nstruct D:B { void f() throw(int*); };\n",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/qualification.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "remove-qualification",
+      "source": "\nstruct B { virtual void f() throw(int*); };\nstruct D:B { void f() throw(const int*); };\n",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/remove-qualification.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual allowed exception types\n"
+    },
+    {
+      "name": "void-pointer",
+      "source": "\nstruct B { virtual void f() throw(const void*); };\nstruct D:B { void f() throw(int*); };\n",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/void-pointer.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "function-pointer",
+      "source": "\nstruct B { virtual void f() throw(void*); };\nstruct D:B { void f() throw(void(*)()); };\n",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/function-pointer.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual allowed exception types\n"
+    },
+    {
+      "name": "deep-qualification",
+      "source": "\nstruct B { virtual void f() throw(const int* const*); };\nstruct D:B { void f() throw(int**); };\n",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/deep-qualification.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "unsafe-qualification",
+      "source": "\nstruct B { virtual void f() throw(const int**); };\nstruct D:B { void f() throw(int**); };\n",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/unsafe-qualification.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual allowed exception types\n"
+    },
+    {
+      "name": "null-pointer",
+      "source": "\nstruct B { virtual void f() throw(int*); };\nstruct D:B { void f() throw(decltype(nullptr)); };\n",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/null-pointer.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "template-invalid",
+      "source": "template<class T> struct B {virtual void f() throw(T);}; struct D:B<int> {void f() throw(double);};",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/template-invalid.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual allowed exception types\n"
+    },
+    {
+      "name": "template-valid",
+      "source": "template<class T> struct B {virtual void f() throw(T);}; template<class T> struct D:B<T> {void f() throw(T);}; int n=sizeof(D<int>);",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/template-valid.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "multiple-base",
+      "source": "struct B {virtual void f() throw(int,double);}; struct C {virtual void f() throw(char,int);}; struct D:B,C {void f() throw(double);};",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/multiple-base.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual allowed exception types\n"
+    },
+    {
+      "name": "implicit-destructor",
+      "source": "struct B {virtual ~B() throw(int);}; struct D:B {};",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/implicit-destructor.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    },
+    {
+      "name": "implicit-destructor-extra",
+      "source": "struct B {virtual ~B() throw(int);}; struct M {~M() throw(double);}; struct D:B {M m;};",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/implicit-destructor-extra.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual allowed exception types\n"
+    },
+    {
+      "name": "implicit-destructor-unrestricted",
+      "source": "struct B {virtual ~B() throw(int);}; struct M {~M() noexcept(false);}; struct D:B {M m;};",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/implicit-destructor-unrestricted.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: unrestricted virtual override\n"
+    },
+    {
+      "name": "implicit-destructor-transitive",
+      "source": "struct B {virtual ~B() throw(int);}; struct C:B {}; struct D:C {~D() throw(double);};",
+      "expected_success": false,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/implicit-destructor-transitive.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: looser virtual allowed exception types\n"
+    },
+    {
+      "name": "unused-member-body",
+      "source": "template<class T> struct B {virtual void f() throw(int); void unused(){T::missing();}}; struct D:B<int> {void f() throw(int);};",
+      "expected_success": true,
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/tmp/pa28-audit154/overrides/unused-member-body.cpp",
+        "-o",
+        "/tmp/pa28-audit154/overrides/check.o"
+      ],
+      "status": 0,
+      "stderr": ""
+    }
+  ]
+}

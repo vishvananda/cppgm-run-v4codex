@@ -593,6 +593,7 @@ private:
     EntityId destination_destructor(TypeId t, ScopeId s);
     void exception_specification(EntityId e, NodeId declarator, ScopeId scope);
     void demand_exception_specification(EntityId function);
+    void check_exception_override(EntityId function, EntityId base);
     unsigned evaluate_exception_specification(EntityId function, std::uint32_t fact);
     void evaluate_dynamic_exceptions(EntityId function, std::uint32_t fact);
     QueryId template_exception_query(EntityId function, std::uint32_t fact);
