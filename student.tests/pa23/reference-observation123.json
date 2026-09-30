@@ -1,0 +1,58 @@
+{
+  "bundle_revision": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "source": "student.tests/pa23/reducers/nonpoly-virtual-reference.cpp",
+  "source_sha256": "b0da0195f221f0ce654d712d747bb0dfa2b48c5f9d8889b4313287387658a6d2",
+  "expected_source_exit": 0,
+  "reference_exit": 1,
+  "reference_lowir_sha256": "893e3239cde5a4622eb1658d7a946d703dca8fef37b34041056ed52cd382a77f",
+  "reference_lowir": "function @read(%b : ptr [pass=by_address, object_bytes=8]) -> i32 [binding=strong, object=_Z4readR1B] {\n  slot $b : ptr\n\n  block ^entry:\n    store ptr %b, $b\n    %t1 = load ptr $b\n    %t2 = index i8 %t1, 4\n    %t3 = index i8 [projection=field] %t2, 0\n    %t4 = load i32 %t3\n    return i32 %t4\n}\nfunction @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {\n  slot $d : obj<12x4>\n  slot $cond__1 : i32\n\n  block ^entry:\n    %t1 = addr $d\n    call void @D__D(%t1)\n    %t2 = addr $d\n    %t3 = index i8 %t2, 4\n    %t4 = index i8 [projection=field] %t3, 0\n    store i32 13, %t4\n    %t5 = addr $d\n    %t6 = index i8 %t5, 8\n    %t7 = index i8 [projection=field] %t6, 0\n    store i32 7, %t7\n    %t8 = addr $d\n    %t9 = index i8 %t8, 0\n    %t10 = call i32 @read(%t9)\n    %t11 = cmp eq i32 %t10, 7\n    branch %t11, ^cond_then_1, ^cond_else_2\n\n  block ^cond_then_1:\n    store i32 0, $cond__1\n    jump ^cond_end_3\n\n  block ^cond_else_2:\n    store i32 1, $cond__1\n    jump ^cond_end_3\n\n  block ^cond_end_3:\n    %t12 = load i32 $cond__1\n    return i32 %t12\n}\nfunction @D__D(%this : ptr [object_bytes=12]) -> void [binding=weak, object=_ZN1DC1Ev, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    %t1 = load ptr $this\n    %t2 = index i8 %t1, 0\n    %t3 = load ptr $this\n    %t4 = index i8 %t3, 8\n    call void @B__B__base_entry(%t2, %t4)\n    %t5 = load ptr $this\n    %t6 = index i8 %t5, 4\n    %t7 = load ptr $this\n    %t8 = index i8 %t7, 8\n    call void @C__C__base_entry(%t6, %t8)\n    return void\n}\nfunction @B__B__base_entry(%this : ptr [object_bytes=8], %__vbptr0 : ptr) -> void [unwind=no, binding=weak, object=_ZN1BC2Ev, object_root=yes, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    return void\n}\nfunction @C__C__base_entry(%this : ptr [object_bytes=8], %__vbptr0 : ptr) -> void [unwind=no, binding=weak, object=_ZN1CC2Ev, object_root=yes, inline_hint=yes] {\n  slot $this : ptr\n\n  block ^entry:\n    store ptr %this, $this\n    return void\n}\n",
+  "commands": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+        "--emit-lowir",
+        "-O0",
+        "-o",
+        "/tmp/pa23-123/reference-observation/reference.lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa23/reducers/nonpoly-virtual-reference.cpp"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++-ref",
+        "-c",
+        "-O0",
+        "-o",
+        "/tmp/pa23-123/reference-observation/reference.o",
+        "/tmp/pa23-123/reference-observation/reference.lowir"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-no-pie",
+        "/tmp/pa23-123/reference-observation/reference.o",
+        "-o",
+        "/tmp/pa23-123/reference-observation/reference.exe"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa23-123/reference-observation/reference.exe"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "oracle_changes": []
+}

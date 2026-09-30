@@ -28,7 +28,7 @@ cases={
 # These cross the next owner boundary and deliberately remain recorded failures.
 unfinished={
  'construct-shared-once':'int count;struct V{V(){++count;}virtual void f(){}};struct A:virtual V{};struct B:virtual V{};struct D:A,B{};int main(){D d;return count!=1;}',
- 'construct-hidden-vptr-target':(ROOT/'pa23/tests/general/100-virtual-base-constructor-vptr-hidden-target.t').read_text(),
+ 'construct-hidden-vptr-target':'struct V{virtual int probe(){return 5;}};struct B:virtual V{B();};B::B(){}struct Payload{virtual int read(){return 7;}};struct Holder{Payload payload;};struct D:Holder,B{};int main(){D d;return d.payload.read()!=7;}',
 }
 def check(cc,work):
  work.mkdir(parents=True,exist_ok=True);rows=[]
