@@ -51,6 +51,7 @@ void Selector::analyze()
     first_clobber.fill(~0u);
     promote_parameters();
     control_edges();
+    parameter_availability();
     unsigned epoch = 0;
     for (unsigned b = source.blocks.begin; b != source.blocks.end(); ++b) {
         block_id = p.block_order[b].index;
@@ -130,14 +131,21 @@ Operand Selector::home(Name name, Type t, bool temporary)
     f.frame_bytes = (f.frame_bytes + std::max(8u,t.bytes()) + alignment-1) & ~(std::uint64_t(alignment)-1);
     require(f.frame_bytes < 0x70000000, "native frame too large");
     std::int64_t offset = -std::int64_t(f.frame_bytes);
-    f.frame.push_back({name,t,offset,temporary});
-    Operand storage = Operand::mem(XR_RBP,offset); storage.temporary = temporary; return storage;
+    f.frame.push_back({name,t,offset,temporary,false});
+    Operand storage = Operand::mem(XR_RBP,offset); storage.temporary = temporary;
+    storage.id = f.frame.size(); return storage;
 }
 void Selector::parameters()
 {
     static const int registers[] = {XR_RDI,XR_RSI,XR_RDX,XR_RCX,XR_R8,XR_R9};
     const auto& signature = p.signatures[source.signature.index-1];
     if (signature.boundary.arity == CAM_VARIADIC) save_variadic_registers();
+    unsigned retained_parameters = 0;
+    for (unsigned k = signature.parameters.begin; k != signature.parameters.end(); ++k) {
+        const auto& param = p.parameters[k];
+        const auto& v = state(param.value.index);
+        if (scalar_integer(param.type) && v.uses && (v.crosses_block || v.crosses_call)) ++retained_parameters;
+    }
     unsigned gp = 0, fp = 0, stack = 16;
     for (unsigned k = signature.parameters.begin; k != signature.parameters.end(); ++k) {
         const auto& param = p.parameters[k];
@@ -161,6 +169,15 @@ void Selector::parameters()
             live_until[incoming.reg] = v.last;
             normalize_register(incoming, param.type);
         } else if (incoming.kind == Operand::Reg) {
+            if (!vector && v.crosses_block && v.crosses_call && retained_parameters >= 5) {
+                v.location = home(p.values[param.value.index-1].name,param.type,true);
+                f.frame.back().parameter = true;
+                normalize_register(incoming,param.type); move(v.location,incoming,param.type);
+                // This incoming carrier remains reserved while any path can
+                // consume it. After clobbers, reads use the immutable home.
+                live_until[incoming.reg] = ~0u;
+                continue;
+            }
             if (!vector) {
                 int preserved = -1;
                 for (int r : {XR_RBX,XR_R12,XR_R13,XR_R14,XR_R15}) if (!live_until[r]) { preserved = r; break; }
@@ -183,6 +200,18 @@ Operand Selector::allocate(unsigned id, Type t)
     if (t.floating()) {
         f.scratch_bytes = 48;
         if (t != Type::F80 && !v.crosses_call && (!v.crosses_block || v.single_edge)) {
+            const auto& definition = p.instructions[v.definition-1];
+            if (definition.opcode == Opcode::Binary || definition.opcode == Opcode::Unary) {
+                auto input = arg(definition,0);
+                if (input.kind == lowir_model::Operand::Temporary) {
+                    const auto& previous = state(root(input.ref));
+                    auto loc = previous.location;
+                    if (loc.kind == Operand::Reg && loc.reg >= xmm(0) && loc.reg < xmm(14) &&
+                        previous.last == position && live_until[loc.reg] == position) {
+                        live_until[loc.reg] = v.last; return v.location = loc;
+                    }
+                }
+            }
             for (int reg = xmm(0); reg < xmm(14); ++reg) if (live_until[reg] < position) {
                 live_until[reg] = v.last; return v.location = Operand::r(reg);
             }

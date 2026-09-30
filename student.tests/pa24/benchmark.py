@@ -18,20 +18,24 @@ def run(cmd, record):
     return record
 # Large typed LowIR input amortizes process startup and covers repeated per-function
 # release. Every function contains real arithmetic; only one is the entry point.
+floating_compiler=os.environ.get('PA24_FLOAT_COMPILER')=='1'
 source=d/'compiler.lowir'
 with source.open('w') as out:
     for f in range(4096):
-        out.write(f'function @f{f}(%seed : i64) -> i64 {{\nblock ^entry:\n')
+        typ='f64' if floating_compiler else 'i64'
+        out.write(f'function @f{f}(%seed : {typ}) -> {typ} {{\nblock ^entry:\n')
         prior='%seed'
         for k in range(64):
-            out.write(f'%v{k} = binary add i64 {prior}, {k+1}\n'); prior=f'%v{k}'
-        out.write(f'jump ^next\nblock ^next:\nreturn i64 {prior}\n}}\n')
-    out.write('function @main() -> i64 [role=entry] {\nblock ^entry:\n%x = call i64 @f0(0)\n%bad = cmp ne i64 %x, 2080\nreturn i64 %bad\n}\n')
+            literal=str(k+1)+('.25' if floating_compiler else '')
+            out.write(f'%v{k} = binary add {typ} {prior}, {literal}\n'); prior=f'%v{k}'
+        out.write(f'jump ^next\nblock ^next:\nreturn {typ} {prior}\n}}\n')
+    out.write(f'function @main() -> i64 [role=entry] {{\nblock ^entry:\n%x = call {typ} @f0(0)\n%bad = cmp ne {typ} %x, '+('2096.0' if floating_compiler else '2080')+'\nreturn i64 %bad\n}\n')
 manifest={'binaries':{k:{'path':str(v),'sha256':digest(v)} for k,v in compilers.items()},'flags':['-O0','--stats'],
           'inputs':{'compiler':digest(source)},'runs':[], 'runtime_arguments':['input'], 'cpu':cpu, 'platform':os.uname()._asdict() if hasattr(os.uname(),'_asdict') else list(os.uname())}
 # Compiler correctness is checked before timing; executables remain frozen for runtime.
 executables={}
-for name in ['runtime','memory-runtime']:
+runtime_names=sys.argv[4:] or ['runtime','memory-runtime']
+for name in runtime_names:
     input=d/f'{name}.lowir'; input.write_bytes((root/f'student.tests/pa24/{name}.lowir').read_bytes())
     manifest['inputs'][name]=digest(input)
     for label,cc in compilers.items():
@@ -43,7 +47,7 @@ for name in ['runtime','memory-runtime']:
         rec['executable_sha256']=digest(exe)
 # A/A calibration followed by six independent ABBA blocks. Compile and run are
 # measured separately and each sample's complete wall/RSS/telemetry is retained.
-for phase in ['compile','runtime','memory-runtime']:
+for phase in ['compile',*runtime_names]:
     for block,order in [('AA', 'AAAA'), *[(str(k),'ABBA') for k in range(6)]]:
         for label in order:
             rec={'phase':phase,'block':block,'binary':label}
@@ -55,7 +59,7 @@ for phase in ['compile','runtime','memory-runtime']:
             manifest['runs'].append(rec)
     (d/'observations.json').write_text(json.dumps(manifest,indent=2)+'\n')
 summary={}
-for phase in ['compile','runtime','memory-runtime']:
+for phase in ['compile',*runtime_names]:
     rows=[r for r in manifest['runs'] if r['phase']==phase]
     pairs=[]
     for k in range(6):

@@ -90,18 +90,22 @@ void Encoder::floating(const Instruction& i)
         }
         x87_store(dst,i.type); return;
     }
-    fmove(Operand::r(xmm(14)),lhs,i.type);
+    // A dead lhs can share the result carrier. If the result instead aliases
+    // rhs, retain the reserved temporary so the two inputs remain distinct.
+    int result = dst.kind == Operand::Reg && !(rhs.kind == Operand::Reg && rhs.reg == dst.reg &&
+        !(lhs.kind == Operand::Reg && lhs.reg == dst.reg)) ? dst.reg : xmm(14);
+    fmove(Operand::r(result),lhs,i.type);
     if (i.op == Op::Fneg) {
         // XOR the sign bit, including for zero and NaNs. Arithmetic subtraction
         // from positive zero is not a representation-preserving negation.
         mov(Operand::r(XR_RAX),Operand::imm(std::uint64_t(1) << (i.type.width()-1)));
         form(0x0f6e,i.type == Type::F64 ? 64 : 32,15,Operand::r(XR_RAX),0,0,0x66);
-        form(0x0f57,32,14,Operand::r(15));
+        form(0x0f57,32,result-16,Operand::r(15));
     } else {
         if (rhs.kind == Operand::Floating) { fmove(Operand::r(xmm(15)),rhs,i.type); rhs = Operand::r(xmm(15)); }
         unsigned opcode = i.op == Op::Fadd ? 0x0f58 : i.op == Op::Fsub ? 0x0f5c : i.op == Op::Fmul ? 0x0f59 : 0x0f5e;
-        sse(opcode,i.type,xmm(14),rhs);
+        sse(opcode,i.type,result,rhs);
     }
-    fmove(dst,Operand::r(xmm(14)),i.type);
+    fmove(dst,Operand::r(result),i.type);
 }
 } // namespace native

@@ -1,0 +1,86 @@
+global @g0 : i64 = 1
+global @g1 : i64 = 2
+global @g2 : i64 = 3
+global @g3 : i64 = 4
+global @g4 : i64 = 5
+global @g5 : i64 = 6
+global @g6 : i64 = 7
+global @g7 : i64 = 8
+global @g8 : i64 = 9
+global @g9 : i64 = 10
+global @g10 : i64 = 11
+global @g11 : i64 = 12
+global @g12 : i64 = 13
+global @g13 : i64 = 14
+global @g14 : i64 = 15
+global @g15 : i64 = 16
+function @step(%seed : i64) -> i64 {
+block ^entry:
+%v0 = load i64 @g0
+%v1 = load i64 @g1
+%v2 = load i64 @g2
+%v3 = load i64 @g3
+%v4 = load i64 @g4
+%v5 = load i64 @g5
+%v6 = load i64 @g6
+%v7 = load i64 @g7
+%v8 = load i64 @g8
+%v9 = load i64 @g9
+%v10 = load i64 @g10
+%v11 = load i64 @g11
+%v12 = load i64 @g12
+%v13 = load i64 @g13
+%v14 = load i64 @g14
+%v15 = load i64 @g15
+%x0 = binary add i64 %v0, %v1
+%x1 = binary add i64 %v2, %v3
+%x2 = binary add i64 %v4, %v5
+%x3 = binary add i64 %v6, %v7
+%x4 = binary add i64 %v8, %v9
+%x5 = binary add i64 %v10, %v11
+%x6 = binary add i64 %v12, %v13
+%x7 = binary add i64 %v14, %v15
+%y0 = binary add i64 %v0, %v1
+%y1 = binary add i64 %v2, %v3
+%y2 = binary add i64 %v4, %v5
+%y3 = binary add i64 %v6, %v7
+%y4 = binary add i64 %v8, %v9
+%y5 = binary add i64 %v10, %v11
+%y6 = binary add i64 %v12, %v13
+%y7 = binary add i64 %v14, %v15
+%s0 = binary add i64 %seed, %x0
+%s1 = binary add i64 %s0, %x1
+%s2 = binary add i64 %s1, %x2
+%s3 = binary add i64 %s2, %x3
+%s4 = binary add i64 %s3, %x4
+%s5 = binary add i64 %s4, %x5
+%s6 = binary add i64 %s5, %x6
+%s7 = binary add i64 %s6, %x7
+%s8 = binary add i64 %s7, %y0
+%s9 = binary add i64 %s8, %y1
+%s10 = binary add i64 %s9, %y2
+%s11 = binary add i64 %s10, %y3
+%s12 = binary add i64 %s11, %y4
+%s13 = binary add i64 %s12, %y5
+%s14 = binary add i64 %s13, %y6
+%s15 = binary add i64 %s14, %y7
+return i64 %s15
+}
+function @main(%argc : i64) -> i64 [role=entry] {
+block ^entry:
+%n = binary mul i64 %argc, 50000000
+jump ^loop
+block ^loop:
+%i = phi i64 [^entry: 0, ^body: %next]
+%sum = phi i64 [^entry: 0, ^body: %total]
+%more = cmp lt i64 %i, %n
+branch %more, ^body, ^done
+block ^body:
+%total = call i64 @step(%sum)
+%next = binary add i64 %i, 1
+jump ^loop
+block ^done:
+%expected = binary mul i64 %n, 272
+%bad = cmp ne i64 %sum, %expected
+return i64 %bad
+}

@@ -157,3 +157,5 @@ FRONTEND_OBJ_BASENAMES_lowir2native += native/bulk_encoding
 FRONTEND_OBJ_BASENAMES_lowir2native += native/builtins
 FRONTEND_OBJ_BASENAMES_lowir2native += native/floating native/float_encoding native/float_conversion
 FRONTEND_OBJ_BASENAMES_lowir2native += native/variadic
+FRONTEND_OBJ_BASENAMES_lowir2native += native/carry
+FRONTEND_OBJ_BASENAMES_lowir2native += native/parameter_flow

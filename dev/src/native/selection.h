@@ -14,8 +14,8 @@ struct Workspace {
     std::vector<unsigned> value_indices;
     std::vector<Operand> slots;
     std::vector<SlotState> slot_facts;
-    std::vector<unsigned> block_epochs, predecessor_count, successor, next_block;
-    explicit Workspace(const lowir_model::Program& p) : value_indices(p.values.size()+1), slots(p.slots.size()+1), slot_facts(p.slots.size()+1), block_epochs(p.blocks.size()+1), predecessor_count(p.blocks.size()+1), successor(p.blocks.size()+1), next_block(p.blocks.size()+1) {}
+    std::vector<unsigned> block_epochs, predecessor_count, successor, next_block, parameter_clobbers, block_local;
+    explicit Workspace(const lowir_model::Program& p) : value_indices(p.values.size()+1), slots(p.slots.size()+1), slot_facts(p.slots.size()+1), block_epochs(p.blocks.size()+1), predecessor_count(p.blocks.size()+1), successor(p.blocks.size()+1), next_block(p.blocks.size()+1), parameter_clobbers(p.blocks.size()+1), block_local(p.blocks.size()+1) {}
 };
 class Selector {
     const lowir_model::Program& p;
@@ -29,6 +29,7 @@ class Selector {
     void initialize_values();
     std::array<unsigned,32> live_until = {{0}};
     unsigned position = 0, block_id = 0;
+    unsigned parameter_clobbers = 0;
     std::array<unsigned,16> first_clobber;
     void promote_parameters();
     void aliases();
@@ -45,6 +46,8 @@ class Selector {
     unsigned edge_target(unsigned target);
     void analyze();
     void control_edges();
+    void parameter_availability();
+    unsigned clobbers(const lowir_model::Instruction& i) const;
     void analyze_instruction(const lowir_model::Instruction& i, unsigned epoch);
     void parameters();
     void save_variadic_registers();
@@ -73,6 +76,7 @@ class Selector {
     void control(const lowir_model::Instruction& i);
     void begin_block(unsigned id, Name name);
     void finish_frame();
+    void carry_reloads();
     lowir_model::Operand arg(const lowir_model::Instruction& i, unsigned n) const { return p.operands[i.operands.begin+n]; }
     ValueState& state(unsigned v) { return values[workspace.value_indices[v]]; }
     const ValueState& state(unsigned v) const { return values[workspace.value_indices[v]]; }

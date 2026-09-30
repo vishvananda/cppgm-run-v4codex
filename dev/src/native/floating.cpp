@@ -4,8 +4,17 @@ using namespace lowir_model;
 void Selector::floating_arithmetic(const lowir_model::Instruction& i)
 {
     f.scratch_bytes = 48;
-    auto dest = allocate(i.destination.index,i.type);
     auto lhs = value(arg(i,0),i.type);
+    if (i.opcode == Opcode::Unary && i.operation == Operation::Not) {
+        auto zero = Operand::floating(lowir_model::Operand::integer(0),i.type);
+        if (state(i.destination.index).compare_branch) emit(Op::Fcompare,i.type,{lhs,zero});
+        else {
+            emit(Op::Fset,i.type,{Operand::r(XR_R10),lhs,zero}).condition = XC_E;
+            convert_to(allocate(i.destination.index,i.type),Operand::r(XR_R10),Type::I64,i.type);
+        }
+        return;
+    }
+    auto dest = allocate(i.destination.index,i.type);
     if (i.opcode == Opcode::Unary) {
         require(i.operation == Operation::Neg,"unsupported floating unary operation");
         emit(Op::Fneg,i.type,{dest,lhs}); return;
@@ -24,8 +33,9 @@ void Selector::floating_compare(const lowir_model::Instruction& i, bool branch)
     auto dst = allocate(i.destination.index,Type::I64);
     auto& selected = emit(Op::Fset,i.type,{dst,lhs,rhs});
     selected.condition = i.operation == Operation::Eq ? XC_E : i.operation == Operation::Ne ? XC_NE :
-        i.operation == Operation::Lt ? XC_B : i.operation == Operation::Le ? XC_BE :
-        i.operation == Operation::Gt ? XC_A : XC_AE;
+        (i.operation == Operation::Lt || i.operation == Operation::Ult) ? XC_B :
+        (i.operation == Operation::Le || i.operation == Operation::Ule) ? XC_BE :
+        (i.operation == Operation::Gt || i.operation == Operation::Ugt) ? XC_A : XC_AE;
 }
 void Selector::convert_to(Operand to, Operand from, Type source_type, Type target, bool ui, bool uo)
 {

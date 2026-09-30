@@ -34,3 +34,25 @@ The backend's new state has the following owners:
 No assembly or textual MIR transports implementation data between these owners.
 
 Final measurements and acceptance rationale are in [performance.md](performance.md).
+
+Handoff128 extends the checks to floating execution and scalar ABI state:
+
+```
+python3 student.tests/pa24/floating.py
+./dev/lowir2native -o /tmp/pa24-parameter-flow student.tests/pa24/parameter-flow.lowir
+/tmp/pa24-parameter-flow
+```
+
+`floating.py` checks arithmetic against Python/Decimal, exhaustive ordered/NaN
+comparisons, truth and negation, signed/unsigned conversions, XMM call cycles,
+stack arguments, call-crossing values, f32/f64 parallel phi transfers, and mixed
+variadic register/overflow arguments. f80 phi remains outside LowIR's contract.
+`parameter-flow.lowir` exercises both incoming-carrier and post-call home paths,
+a deferred address across a call, high parameter pressure, and a loop backedge.
+
+`benchmark.py A B DIRECTORY [WORKLOAD ...]` can select `floating-runtime` and
+`pressure-runtime` in addition to the original two workloads. Set
+`PA24_FLOAT_COMPILER=1` for 4096 floating helpers with 64 typed operations each.
+The floating runtime sums input-dependent kernel results and the pressure runtime
+checks an input-dependent recurrence. See [performance128.md](performance128.md)
+for the current frozen experiments, including all earlier observations.

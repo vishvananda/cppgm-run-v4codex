@@ -21,6 +21,11 @@ with tempfile.TemporaryDirectory(prefix='pa24-floating-') as d:
  def check_expr(body, typ, value, expected):
   return body+f'\n%bad = cmp ne {typ} {value}, {expected}\nreturn i64 %bad'
  for t in ['f32','f64','f80']:
+  for x in ['0.0','-0.0','1.0','-1.0','nan']:
+   exp=int(float(x)==0)
+   run(f'{t}-not-{x}',program(check_expr(f'%x = unary not {t} {x}',t,'%x',float(exp))))
+   run(f'{t}-not-branch-{x}',program(f'%x = unary not {t} {x}\nbranch %x, ^yes, ^no\nblock ^yes:\nreturn i64 {1-exp}\nblock ^no:\nreturn i64 {exp}'))
+   run(f'{t}-truth-{x}',program(f'%x = const {t} {x}\nbranch %x, ^yes, ^no\nblock ^yes:\nreturn i64 {exp}\nblock ^no:\nreturn i64 {1-exp}'))
   for a,b in [(1.5,2.25),(-7.0,2.0),(8.0,-0.5),(-3.5,-2.0),(0.0,1.0)]:
    for op,fn in [('add',lambda a,b:a+b),('sub',lambda a,b:a-b),('mul',lambda a,b:a*b),('div',lambda a,b:a/b)]:
     run(f'{t}-{op}-{a}-{b}',program(check_expr(f'%x = binary {op} {t} {a}, {b}',t,'%x',fn(Decimal(a),Decimal(b)) if t=='f80' else fn(a,b))))

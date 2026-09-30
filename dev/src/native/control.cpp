@@ -47,16 +47,24 @@ void Selector::control(const lowir_model::Instruction& i)
             p.instructions[state(cond.ref).definition-1].type.floating()) {
             const auto& comparison = p.instructions[state(cond.ref).definition-1];
             auto op = comparison.operation;
-            cc = op == Operation::Eq ? XC_E : op == Operation::Ne ? XC_NE :
-                op == Operation::Lt ? XC_B : op == Operation::Le ? XC_BE : op == Operation::Gt ? XC_A : XC_AE;
+            cc = op == Operation::Eq || op == Operation::Not ? XC_E : op == Operation::Ne ? XC_NE :
+                (op == Operation::Lt || op == Operation::Ult) ? XC_B :
+                (op == Operation::Le || op == Operation::Ule) ? XC_BE :
+                (op == Operation::Gt || op == Operation::Ugt) ? XC_A : XC_AE;
             emit(Op::Jcc,Type(),{Operand::label(edge_target(arg(i,op == Operation::Ne ? 1 : 2).ref))}).condition = XC_P;
         } else if (cond.kind == lowir_model::Operand::Temporary && state(cond.ref).compare_branch)
             cc = p.instructions[state(cond.ref).definition-1].operation == Operation::Not ? XC_E :
                 branch_condition(p.instructions[state(cond.ref).definition-1].operation);
         else {
             Type t = value_type(cond,Type::I64);
-            Operand test = in_register(value(cond,t),t,XR_R10);
-            emit(Op::Compare,t,{test,Operand::imm(0)});
+            if (t.floating()) {
+                f.scratch_bytes = 48;
+                emit(Op::Fcompare,t,{value(cond,t),Operand::floating(lowir_model::Operand::integer(0),t)});
+                emit(Op::Jcc,Type(),{Operand::label(edge_target(arg(i,1).ref))}).condition = XC_P;
+            } else {
+                Operand test = in_register(value(cond,t),t,XR_R10);
+                emit(Op::Compare,t,{test,Operand::imm(0)});
+            }
         }
         emit(Op::Jcc,Type(),{Operand::label(edge_target(arg(i,1).ref))}).condition = cc;
         emit(Op::Jump,Type(),{Operand::label(edge_target(arg(i,2).ref))});

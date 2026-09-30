@@ -145,7 +145,9 @@ void Selector::index(const lowir_model::Instruction& i)
         }
         address.index = offset.reg; address.scale = scale;
     }
-    if (state(i.destination.index).folded_index &&
+    bool survives_call = base.reg == XR_RBX || base.reg == XR_RBP || base.reg >= XR_R12;
+    if (address.index >= 0) survives_call &= address.index == XR_RBX || address.index >= XR_R12;
+    if (state(i.destination.index).folded_index && (!state(i.destination.index).crosses_call || survives_call) &&
         ((base.reg != XR_R10 && base.reg != XR_R11) || state(i.destination.index).last == position+1)) {
         address.address = true; state(i.destination.index).location = address; return;
     }

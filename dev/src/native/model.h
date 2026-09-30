@@ -47,7 +47,7 @@ struct Instruction {
     DebugLocation debug;
     explicit Instruction(Op op = Op::Mov, Type type = Type::I64) : op(op), type(type) {}
 };
-struct FrameBinding { Name name; Type type; std::int64_t offset; bool temporary; };
+struct FrameBinding { Name name; Type type; std::int64_t offset; bool temporary; bool parameter; };
 struct Parameter { Name name; Type type; Operand location; };
 struct Block { std::uint32_t id; Name name; lowir_model::Range instructions; };
 struct Function {

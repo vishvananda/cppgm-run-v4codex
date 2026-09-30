@@ -30,6 +30,13 @@ Operand Selector::value(lowir_model::Operand o, Type t)
     case lowir_model::Operand::Integer: return Operand::imm(normalize(o.data.integer,t));
     case lowir_model::Operand::Null: return Operand::imm(0);
     case lowir_model::Operand::Temporary:
+        if (!state(root(o.ref)).definition) {
+            unsigned index = workspace.value_indices[root(o.ref)]-1;
+            const auto& incoming = f.params[index].location;
+            const auto& home = state(root(o.ref)).location;
+            if (incoming.kind == Operand::Reg && incoming.reg < 16 && home.kind == Operand::Memory &&
+                home.id && f.frame[home.id-1].parameter && !(parameter_clobbers & (1u<<incoming.reg))) return incoming;
+        }
         require(state(root(o.ref)).location.kind != Operand::None, "missing native value location");
         return state(root(o.ref)).location;
     case lowir_model::Operand::Symbol: return Operand::symbol(SymbolId(o.ref));
@@ -178,11 +185,13 @@ Function Selector::run()
     for (unsigned b = source.blocks.begin; b != source.blocks.end(); ++b) {
         block_id = p.block_order[b].index;
         const auto& block = p.blocks[block_id-1];
+        parameter_clobbers = workspace.parameter_clobbers[block_id];
         begin_block(block_id,block.name);
         if (b == source.blocks.begin) parameters();
         for (unsigned n = block.instructions.begin; n != block.instructions.end(); ++n) {
             position = n+1;
             select(p.instructions[n]);
+            parameter_clobbers |= clobbers(p.instructions[n]);
         }
     }
     debug = DebugLocation();
@@ -191,6 +200,7 @@ Function Selector::run()
         edge_transfers(edge.pred,edge.target);
         emit(Op::Jump,Type(),{Operand::label(edge.target)});
     }
+    carry_reloads();
     finish_frame();
     ++stats.functions; stats.instructions += f.instructions.size();
     return std::move(f);

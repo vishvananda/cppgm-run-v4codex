@@ -1,0 +1,93 @@
+function @step(%seed : f64) -> f64 {
+block ^entry:
+%a0 = binary add f64 %seed, 0.25
+%b0 = binary sub f64 %a0, 0.125
+%a1 = binary add f64 %b0, 0.25
+%b1 = binary sub f64 %a1, 0.125
+%a2 = binary add f64 %b1, 0.25
+%b2 = binary sub f64 %a2, 0.125
+%a3 = binary add f64 %b2, 0.25
+%b3 = binary sub f64 %a3, 0.125
+%a4 = binary add f64 %b3, 0.25
+%b4 = binary sub f64 %a4, 0.125
+%a5 = binary add f64 %b4, 0.25
+%b5 = binary sub f64 %a5, 0.125
+%a6 = binary add f64 %b5, 0.25
+%b6 = binary sub f64 %a6, 0.125
+%a7 = binary add f64 %b6, 0.25
+%b7 = binary sub f64 %a7, 0.125
+%a8 = binary add f64 %b7, 0.25
+%b8 = binary sub f64 %a8, 0.125
+%a9 = binary add f64 %b8, 0.25
+%b9 = binary sub f64 %a9, 0.125
+%a10 = binary add f64 %b9, 0.25
+%b10 = binary sub f64 %a10, 0.125
+%a11 = binary add f64 %b10, 0.25
+%b11 = binary sub f64 %a11, 0.125
+%a12 = binary add f64 %b11, 0.25
+%b12 = binary sub f64 %a12, 0.125
+%a13 = binary add f64 %b12, 0.25
+%b13 = binary sub f64 %a13, 0.125
+%a14 = binary add f64 %b13, 0.25
+%b14 = binary sub f64 %a14, 0.125
+%a15 = binary add f64 %b14, 0.25
+%b15 = binary sub f64 %a15, 0.125
+%a16 = binary add f64 %b15, 0.25
+%b16 = binary sub f64 %a16, 0.125
+%a17 = binary add f64 %b16, 0.25
+%b17 = binary sub f64 %a17, 0.125
+%a18 = binary add f64 %b17, 0.25
+%b18 = binary sub f64 %a18, 0.125
+%a19 = binary add f64 %b18, 0.25
+%b19 = binary sub f64 %a19, 0.125
+%a20 = binary add f64 %b19, 0.25
+%b20 = binary sub f64 %a20, 0.125
+%a21 = binary add f64 %b20, 0.25
+%b21 = binary sub f64 %a21, 0.125
+%a22 = binary add f64 %b21, 0.25
+%b22 = binary sub f64 %a22, 0.125
+%a23 = binary add f64 %b22, 0.25
+%b23 = binary sub f64 %a23, 0.125
+%a24 = binary add f64 %b23, 0.25
+%b24 = binary sub f64 %a24, 0.125
+%a25 = binary add f64 %b24, 0.25
+%b25 = binary sub f64 %a25, 0.125
+%a26 = binary add f64 %b25, 0.25
+%b26 = binary sub f64 %a26, 0.125
+%a27 = binary add f64 %b26, 0.25
+%b27 = binary sub f64 %a27, 0.125
+%a28 = binary add f64 %b27, 0.25
+%b28 = binary sub f64 %a28, 0.125
+%a29 = binary add f64 %b28, 0.25
+%b29 = binary sub f64 %a29, 0.125
+%a30 = binary add f64 %b29, 0.25
+%b30 = binary sub f64 %a30, 0.125
+%a31 = binary add f64 %b30, 0.25
+%b31 = binary sub f64 %a31, 0.125
+return f64 %b31
+}
+function @main(%argc : i64) -> i64 [role=entry] {
+block ^entry:
+%n = binary mul i64 %argc, 2000000
+jump ^loop
+block ^loop:
+%i = phi i64 [^entry: 0, ^body: %next]
+%sum = phi f64 [^entry: 0.0, ^body: %total]
+%more = cmp lt i64 %i, %n
+branch %more, ^body, ^done
+block ^body:
+%x = convert sitofp f64 i64 %i
+%y = call f64 @step(%x)
+%total = binary add f64 %sum, %y
+%next = binary add i64 %i, 1
+jump ^loop
+block ^done:
+%prior = binary sub i64 %n, 1
+%product = binary mul i64 %prior, %n
+%triangle = binary div i64 %product, 2
+%bias = binary mul i64 %n, 4
+%expected = binary add i64 %triangle, %bias
+%fp = convert sitofp f64 i64 %expected
+%bad = cmp ne f64 %sum, %fp
+return i64 %bad
+}

@@ -9,7 +9,11 @@ static void operand(const lowir_model::Program& p, Operand o, std::ostream& out)
     switch (o.kind) {
     case Operand::Reg: out << register_name(o.reg); break;
     case Operand::Floating: {
-        out << std::setprecision(std::numeric_limits<long double>::max_digits10) << o.floating_value();
+        long double value = o.floating_value();
+        unsigned quiet_bit = o.id == Type::F32 ? 22 : o.id == Type::F64 ? 51 : 62;
+        if (std::isnan(value) && !(o.bits & (std::uint64_t(1)<<quiet_bit)))
+            out << (std::signbit(value) ? "-snan" : "snan");
+        else out << std::setprecision(std::numeric_limits<long double>::max_digits10) << value;
         break;
     }
     case Operand::Immediate: out << std::int64_t(o.bits); break;
@@ -125,7 +129,7 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
         out << '\n';
     }
     for (const auto& b : f.frame) {
-        out << (b.temporary ? "    temp " : "    slot ");
+        out << (b.parameter ? "    param-slot " : b.temporary ? "    temp " : "    slot ");
         if (b.name) out << p.name(b.name); else out << "%native" << -b.offset;
         out << " -> "; operand(p,Operand::mem(XR_RBP,b.offset),out); out << " : " << type_name(b.type) << '\n';
     }

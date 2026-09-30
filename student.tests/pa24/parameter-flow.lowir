@@ -1,0 +1,62 @@
+global @cells = { i64 10 i64 20 }
+function @clobber(%a : i64, %b : i64, %c : i64, %d : i64, %e : i64, %f : i64) -> i64 {
+block ^entry:
+%x = binary add i64 %a, %f
+return i64 %x
+}
+function @choose(%base : ptr, %path : i64, %a : i64, %b : i64, %c : i64, %d : i64, %e : i64) -> i64 {
+block ^entry:
+%derived = index i64 %base, 1
+branch %path, ^before, ^call
+block ^before:
+%value = load i64 %derived
+%ab = binary add i64 %a, %b
+%cd = binary add i64 %c, %d
+%abcd = binary add i64 %ab, %cd
+%abcde = binary add i64 %abcd, %e
+%before = binary add i64 %value, %abcde
+return i64 %before
+block ^call:
+%called = call i64 @clobber(1, 2, 3, 4, 5, 6)
+jump ^after
+block ^after:
+%x = load i64 %base
+%y = load i64 %derived
+%r = binary sub i64 %y, %x
+%ab2 = binary add i64 %a, %b
+%cd2 = binary add i64 %c, %d
+%abcd2 = binary add i64 %ab2, %cd2
+%abcde2 = binary add i64 %abcd2, %e
+%after = binary add i64 %r, %abcde2
+return i64 %after
+}
+function @loop(%base : ptr, %count : i64) -> i64 {
+block ^entry:
+jump ^head
+block ^head:
+%i = phi i64 [^entry: 0, ^body: %next]
+%sum = phi i64 [^entry: 0, ^body: %total]
+%more = cmp lt i64 %i, %count
+branch %more, ^body, ^done
+block ^body:
+%next = binary add i64 %i, 1
+%c = call i64 @clobber(100, 200, 300, 400, 500, 600)
+%x = load i64 %base
+%total = binary add i64 %sum, %x
+jump ^head
+block ^done:
+return i64 %sum
+}
+function @main() -> i64 [role=entry] {
+block ^entry:
+%base = addr @cells
+%a = call i64 @choose(%base, 1, 1, 2, 3, 4, 5)
+%b = call i64 @choose(%base, 0, 1, 2, 3, 4, 5)
+%c = call i64 @loop(%base, 5)
+%aa = cmp ne i64 %a, 35
+%bb = cmp ne i64 %b, 25
+%cc = cmp ne i64 %c, 50
+%ab = binary or i64 %aa, %bb
+%abc = binary or i64 %ab, %cc
+return i64 %abc
+}
