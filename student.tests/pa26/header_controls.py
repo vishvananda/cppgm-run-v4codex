@@ -69,5 +69,15 @@ case('include-order','''#include <cstddef>
 static_assert(OVERRIDE==19,"user macro precedence");
 int main(){overridden x=OVERRIDE; return x==19?0:1;}
 ''',flags=['-I',out/'override','-DOVERRIDE=19','-D__GNUC__=99'])
+for name in ['first','second','third']:
+    (out/name).mkdir(exist_ok=True)
+(out/'first'/'wrapper.h').write_text('#define OUTER 3\n#include_next "wrapper.h"\n')
+(out/'second'/'wrapper.h').write_text('#define MIDDLE 5\n#include "nested.h"\n')
+(out/'second'/'nested.h').write_text('#include_next <terminal.h>\n')
+(out/'second'/'terminal.h').write_text('#error resumed in same directory\n')
+(out/'third'/'terminal.h').write_text('#define INNER 7\n')
+case('include-next',"""#include <wrapper.h>
+int main(){return OUTER+MIDDLE+INNER==15?0:1;}
+""",flags=['-I',out/'first','-I',out/'first','-I',out/'second','-I',out/'third'])
 (out/'results.json').write_text(json.dumps(dict(compiler_sha256=hashlib.sha256(pathlib.Path(compiler).read_bytes()).hexdigest(),records=records),indent=2)+'\n')
-print('9 host header prerequisites passed')
+print('10 host header prerequisites passed')

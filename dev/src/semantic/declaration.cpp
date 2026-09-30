@@ -50,7 +50,14 @@ void Analyzer::finish()
         if (friend_definition_cursor < friend_definition_demand.size()) {
             instantiate_friend_body(friend_definition_demand[friend_definition_cursor++]); continue;
         }
-        if (demand_cursor == demand_queue.size()) break;
+        if (demand_cursor == demand_queue.size()) {
+            // Finish evaluated bodies before exception queries reuse their
+            // initializer facts. Any new demand rejoins these same queues.
+            if (function_exception_cursor < function_exception_demand.size()) {
+                function_nonthrowing(function_exception_demand[function_exception_cursor++]); continue;
+            }
+            break;
+        }
         EntityId e = demand_queue[demand_cursor++];
         std::uint32_t m = entities[e].member_info;
         members[m].demand = DemandState::Active;

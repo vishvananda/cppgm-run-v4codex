@@ -23,7 +23,7 @@ std::vector<EntityId> Analyzer::candidates(EntityId e)
 }
 EntityId Analyzer::declare_function(ScopeId owner, IdentifierId name, NodeId source, TypeId type, bool constructor, TypeId conversion)
 {
-    if (definitions && active_template_scope &&
+    if (source && definitions && active_template_scope &&
         (owner == active_template_scope || scopes[owner].kind == ScopeKind::Namespace ||
          (source && scopes[owner].kind == ScopeKind::Class)))
         return declare_template_function(owner,name,source,type,constructor,conversion != 0);

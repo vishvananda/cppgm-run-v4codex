@@ -37,30 +37,25 @@ entry/final compilers for latency/RSS, runtime/text evidence. Follow related
 failures while this ownership chain supports them. Driver format migration is
 a separate unfinished group; independent audit remains pending below.
 
-- Required `300-shared-conditional-cleanup-resume` still fails inside the real
-  host `<string>`. GNU type traits and typeof now use canonical typed queries;
-  structural properties demand completed layout, and operation traits use
-  ordinary overload/conversion facts in an unrelated access context. Empty
-  `throw()` is nonthrowing. Typed source variadic/stack intrinsics now reuse the
-  existing LowIR/native ABI; predefined function names use local constant
-  objects, and addressof bypasses overloaded address operators. Work is bounded
-  per builtin/argument list; constant name bytes are produced once per owner.
-  Controls cover host register/stack varargs, copies, scalar type queries,
-  function names, address operations and invalid uses. PA1–25 passes again.
-  Integer generators reuse canonical pack recipes (linear output, maximum
-  1048576 indices). GCC 15 headers require constexpr-if as a C++11 extension;
-  its selection fact controls instantiated branches, lifetimes and lowering.
-  Parameter-dependent exception specifications use their existing deferred
-  prototype/body scope. Seventeen explicit controls and PA1–25 4253/4253 pass.
-  Remaining owner: builtin expressions used by dependent type queries in real
-  headers; the current required fixture reaches `__builtin_expect`.
-  Nine prerequisite controls pass; PA1–25 4253/4253 and file audit pass after
-  configured include roots/macros, namespace/parameter attributes, asm labels,
-  typed SysV va_list and block-function linkage fixes. PA26 remains 29/30:
-  this increment is progress toward implementation, not an accepted handoff.
-  Trait controls (classification, structural, operation, substitution, packs,
-  typeof) and header prerequisites pass; PA1–25 passes again after traits.
-  Final performance evidence and all final required checks remain outstanding.
+- Required `300-shared-conditional-cleanup-resume` now parses and completes
+  semantic analysis of the installed `<string>` headers. GNU traits/typeof,
+  typed scalar varargs/stack allocation, function names, addressof, integer packs
+  and expression-form constexpr-if use canonical facts and existing ABI lowering.
+  Preprocessor `include_next` retains the directory index and deduplicates physical
+  search roots once (O(d log d)); header traversal remains streaming.
+- Dependent builtin calls retain intrinsic semantics in source and type queries;
+  enum arithmetic waits for concrete underlying types; auto locals publish their
+  deduced type to substituted decltype queries. Selected function boundaries now
+  enqueue exception-specification demand once, closing prototype/temporary facts
+  before lowering allocates entity-indexed tables. Twenty-one explicit semantic controls
+  and ten header controls pass; PA1–25 is again 4253/4253 and file audit passes.
+- Partial-construction cleanup now uses the same completed destructor effect
+  fact as ordinary destruction and declaration emission. The fixture emits an
+  object. Remaining related owner: imported function addresses in PIE; the host
+  linker rejects their direct PC32 address relocations. Validate actual host
+  link, runtime and cleanup inspection after correcting that ABI boundary. The original stage count is still 29/30;
+  these increments are not accepted handoff progress. Final performance evidence
+  and all final required checks remain outstanding.
 - Driver migration remains unfinished: `.obj` preserves PA25 private objects;
   other output names select host ELF. `--object-format=elf|private` overrides
   this choice. Host objects use PA26's external host linker. Uniform host output

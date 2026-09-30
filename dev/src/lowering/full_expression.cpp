@@ -12,6 +12,7 @@ bool Procedural::unwind_expression(NodeId n, bool body_proof)
     bool result = ast[n].kind == Kind::Throw;
     if (ast[n].kind == Kind::SimpleDeclaration) result |= !sem.expression_nonthrowing(n);
     auto x = sem.expression_fact(n);
+    if (x.form == semantic::ExpressionForm::ConstantQuery || x.form == semantic::ExpressionForm::Unreachable) return false;
     EntityId callee = sem.facts[n].entity;
     bool call = (ast[n].kind == Kind::Call && x.form != semantic::ExpressionForm::Cast &&
         x.form != semantic::ExpressionForm::ListValue && x.form != semantic::ExpressionForm::PseudoDestructor) ||

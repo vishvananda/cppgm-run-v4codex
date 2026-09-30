@@ -3,6 +3,19 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+namespace {
+std::string query_failure_context(IdentifierId name, ScopeId scope, const syntax::AstView& ast,
+    const std::vector<Scope>& scopes, const std::vector<Entity>& entities, const IdentifierTable& ids)
+{
+    auto text = ids.spelling(name);
+    while (scope && !scopes[scope].entity) scope = scopes[scope].parent;
+    auto source = entities[scopes[scope].entity].source;
+    auto location = static_cast<const syntax::Ast&>(ast).locations[ast[source].location];
+    auto path = ids.spelling(location.presumed_file);
+    return "invalid type-query expression: " + std::string(text.data,text.size) +
+        " in " + std::string(path.data,path.size) + ":" + std::to_string(location.line);
+}
+}
 QueryId Analyzer::intern_query(TypeQuery q, const std::vector<QueryId>& children)
 {
     std::uint64_t hash = 1469598103934665603ULL;
@@ -383,8 +396,9 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
         if (!q.type) return 0;
     }
     if (q.kind == QueryKind::Name && q.entity && !entities[q.entity].template_pattern &&
-        types[q.type].kind == TypeKind::Array && !types[q.type].bound)
-        q.type = entities[q.entity].type; // Bound completed by the instantiated declaration.
+        (entities[q.entity].kind == EntityKind::Variable || entities[q.entity].kind == EntityKind::Parameter) &&
+        (!q.type || (types[q.type].kind == TypeKind::Array && !types[q.type].bound)))
+        q.type = entities[q.entity].type; // Deduced type/bound owned by the instantiated declaration.
     if (q.arguments) {
         auto pack = argument_packs[q.arguments]; std::vector<TypeId> args;
         for (unsigned j = 0; j < pack.count; ++j)
@@ -496,7 +510,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     // that a later constant evaluation will short-circuit.
     if (r.dependent && (q.kind == QueryKind::Unary || q.kind == QueryKind::Binary || q.kind == QueryKind::Conditional)) {
         bool fixed = true;
-        for (auto child : children) fixed &= child.expression.type && arithmetic(child.expression.type);
+        for (auto child : children) fixed &= child.expression.type && !dependent_type(child.expression.type) && arithmetic(child.expression.type);
         if (fixed) {
             r = q.kind == QueryKind::Conditional ? query_conditional(q,children) : query_operator(q,children);
             r.dependent = true;
@@ -683,8 +697,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         query_facts[id] = r;
         if (immediate_query_probe) return r;
         auto name = q.kind == QueryKind::Call && q.count ? type_queries[query_edges[q.offset]].name : q.name;
-        auto text = ids.spelling(name);
-        throw std::runtime_error("invalid type-query expression: " + std::string(text.data,text.size));
+        throw std::runtime_error(query_failure_context(name,q.context,ast,scopes,entities,ids));
     }
     r.dependent |= r.expression.type && dependent_type(r.expression.type);
     r.state = FactState::Success; query_facts[id] = r; return r;
@@ -697,7 +710,12 @@ TypeId Analyzer::query_decltype(QueryId id, bool direct)
     if (value.dependent) return types.decltype_type(id,direct);
     if (direct && value.declared_type) return value.declared_type;
     auto x = value.expression;
-    if (!x.type) throw std::runtime_error("unresolved overload in decltype");
+    if (!x.type) {
+        auto q = type_queries[id];
+        auto name = q.kind == QueryKind::Call && q.count ? type_queries[query_edges[q.offset]].name : q.name;
+        throw std::runtime_error("unresolved decltype: " +
+            query_failure_context(name,entities[current_function].scope ? entities[current_function].scope : q.context,ast,scopes,entities,ids));
+    }
     return x.category == ValueCategory::Prvalue ? x.type :
         types.compound(x.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef,x.type);
 }

@@ -106,6 +106,7 @@ bool Analyzer::expression_nonthrowing(NodeId n)
     if (auto known = expression_exception_facts.get(n)) return known == 2;
     ++exception_work;
     auto node = ast[n]; auto x = expressions[n];
+    if (x.form == ExpressionForm::ConstantQuery || x.form == ExpressionForm::Abort || x.form == ExpressionForm::Unreachable) return true;
     if (x.form == ExpressionForm::Typeid) return !rtti_expression(n).dynamic;
     if (x.form == ExpressionForm::DynamicCast)
         return !rtti_expression(n).reference && expression_nonthrowing(ast[node.first].next);
@@ -197,6 +198,7 @@ bool Analyzer::query_nonthrowing(QueryId id, bool temporary)
     if (q.kind == QueryKind::Cast && q.op == KW_DYNAMIC_CAST)
         return types[q.type].kind == TypeKind::Pointer && query_nonthrowing(query_edges[q.offset]);
     if (q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack || q.kind == QueryKind::BuiltinTrait) return true;
+    if (fact.expression.form == ExpressionForm::ConstantQuery) return true;
     bool result = true;
     if (fact.surrogate) result = false; // The converted function pointer has a potentially-throwing call type.
     if (fact.selected) result &= function_nonthrowing(fact.selected);

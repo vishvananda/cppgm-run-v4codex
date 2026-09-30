@@ -1,10 +1,30 @@
 // Adapted from CPPGM PA4 directive and file-identity rules; see NOTICE.
 #include "preprocess/preprocessor.h"
 #include <cstdlib>
+#include <algorithm>
+#include <tuple>
 #include <stdexcept>
 #include <sys/stat.h>
 
 namespace cppgm {
+
+void Preprocessor::include_paths(const std::vector<std::string>& paths)
+{
+    // Duplicate physical directories must not make include_next re-enter the
+    // same search location. Sort temporary identities, retaining original order.
+    std::vector<std::tuple<std::uint64_t,std::uint64_t,std::size_t>> directories;
+    for (std::size_t i = 0; i < paths.size(); ++i) {
+        struct stat info;
+        if (!stat(paths[i].c_str(),&info)) directories.emplace_back(info.st_dev,info.st_ino,i);
+    }
+    std::sort(directories.begin(),directories.end());
+    std::vector<bool> duplicate(paths.size(),false);
+    for (std::size_t i = 1; i < directories.size(); ++i)
+        if (std::get<0>(directories[i]) == std::get<0>(directories[i-1]) &&
+            std::get<1>(directories[i]) == std::get<1>(directories[i-1])) duplicate[std::get<2>(directories[i])] = true;
+    include_paths_.clear();
+    for (std::size_t i = 0; i < paths.size(); ++i) if (!duplicate[i]) include_paths_.push_back(paths[i]);
+}
 
 bool Preprocessor::once(const std::string& path, bool insert)
 {
@@ -190,7 +210,7 @@ void Preprocessor::directive()
         pragma(rest, f.filename);
         return;
     }
-    if (!command.is("include") && !command.is("line")) throw std::runtime_error("unknown directive");
+    if (!command.is("include") && !command.is("include_next") && !command.is("line")) throw std::runtime_error("unknown directive");
     MacroExpander expansion(*this);
     expansion.push(rest);
     rest.clear();
@@ -199,7 +219,7 @@ void Preprocessor::directive()
         if (token.token.kind == PPTokenKind::eof) break;
         rest.push_back(token);
     }
-    if (command.is("include")) {
+    if (command.is("include") || command.is("include_next")) {
         if (rest.size() != 1) throw std::runtime_error("expected one header name");
         std::string next;
         if (rest[0].token.kind == PPTokenKind::header) {
@@ -208,24 +228,25 @@ void Preprocessor::directive()
         } else next = decode_pp_string(rest[0]);
         const bool quoted = rest[0].token.kind != PPTokenKind::header || rest[0].token.spelling.data[0] == '"';
         std::string found;
+        bool resume = command.is("include_next"); int include_index = -1;
         struct stat info;
         if (!next.empty() && next[0] == '/' && !stat(next.c_str(), &info)) found = next;
-        if (found.empty() && quoted) {
+        if (found.empty() && quoted && !resume) {
             std::string current = spelling(f.physical_filename);
             std::size_t slash = current.rfind('/');
             std::string relative = (slash == std::string::npos ? "" : current.substr(0,slash+1)) + next;
-            if (!stat(relative.c_str(), &info)) found = relative;
+            if (!stat(relative.c_str(), &info)) { found = relative; include_index = f.include_index; }
         }
-        if (found.empty()) for (const auto& path : include_paths_) {
-            std::string candidate = path + "/" + next;
-            if (!stat(candidate.c_str(), &info)) { found = candidate; break; }
+        if (found.empty()) for (std::size_t i = resume ? f.include_index+1 : 0; i < include_paths_.size(); ++i) {
+            std::string candidate = include_paths_[i] + "/" + next;
+            if (!stat(candidate.c_str(), &info)) { found = candidate; include_index = i; break; }
         }
         // Preserve the early PA explicit-tool search convention when no driver
         // search paths were supplied.
-        if (found.empty() && !stat(next.c_str(), &info)) found = next;
+        if (found.empty() && !resume && !stat(next.c_str(), &info)) found = next;
         if (found.empty()) throw std::runtime_error("cannot find header " + next);
         next = found;
-        if (!once(next, false)) include(next);
+        if (!once(next, false)) { include(next); files_.back()->include_index = include_index; }
     } else {
         if (rest.empty() || rest.size() > 2 || rest[0].token.kind != PPTokenKind::number)
             throw std::runtime_error("invalid line directive");

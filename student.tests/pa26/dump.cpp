@@ -2,10 +2,13 @@
 #include "lowir/writer.h"
 #include <iostream>
 #include "native/encoding.h"
+#include "toolchain/host_config.h"
 int main(int argc, char** argv) {
     if (argc < 2 || argc > 3) return 1;
     lowir_model::Program p;
-    cppgm::lowering::build_program(p,{argv[1]},false,{},{},false,true);
+    std::vector<std::string> includes, macros;
+    cppgm::toolchain::host_environment(includes,macros);
+    cppgm::lowering::build_program(p,{argv[1]},false,includes,macros,false,true);
     if (argc == 2) lowir_model::write_program(p,std::cout);
     else {
         // Diagnostic labels are output metadata, assigned after lowering.

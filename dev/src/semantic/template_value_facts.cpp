@@ -122,6 +122,12 @@ std::uint32_t Analyzer::query_value(QueryId id)
             value = constant_query_call(id);
         } else if (query.kind == QueryKind::ListInitialization || fact.initialization) {
             value = constant_query_list(fact.initialization);
+        } else if (query.kind == QueryKind::Call && fact.expression.form == ExpressionForm::ConstantQuery) {
+            value = Constant(fact.expression.type,constants[query_value(query_edges[query.offset+1])].valid);
+        } else if (query.kind == QueryKind::Call && fact.expression.form == ExpressionForm::Expect) {
+            auto first = constant_query_conversion(query_edges[query.offset+1],conversions[fact.expression.conversions]);
+            auto second = constant_query_conversion(query_edges[query.offset+2],conversions[fact.expression.conversions+1]);
+            value = second.valid ? first : Constant();
         } else if (query.kind == QueryKind::Call) {
             auto callee = type_queries[query_edges[query.offset]];
             if (callee.kind == QueryKind::TypeValue && (integral(callee.type) || floating_type(callee.type))) {

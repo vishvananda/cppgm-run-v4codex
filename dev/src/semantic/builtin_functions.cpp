@@ -1,18 +1,32 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+ExpressionForm Analyzer::intrinsic_expression(EntityId e) const
+{
+    switch (intrinsic_function(e)) {
+    case Intrinsic::Expect: return ExpressionForm::Expect;
+    case Intrinsic::Abort: return ExpressionForm::Abort;
+    case Intrinsic::Unreachable: return ExpressionForm::Unreachable;
+    default: return ExpressionForm::Ordinary;
+    }
+}
 EntityId Analyzer::builtin_function(IdentifierId name)
 {
     auto text = ids.spelling(name);
     auto kind = text.equals("__builtin_va_start") ? Intrinsic::VaStart :
         text.equals("__builtin_va_end") ? Intrinsic::VaEnd :
         text.equals("__builtin_va_copy") ? Intrinsic::VaCopy :
-        text.equals("__builtin_alloca") ? Intrinsic::StackAlloc : Intrinsic::None;
+        text.equals("__builtin_alloca") ? Intrinsic::StackAlloc :
+        text.equals("__builtin_expect") ? Intrinsic::Expect :
+        text.equals("__builtin_abort") ? Intrinsic::Abort :
+        text.equals("__builtin_unreachable") ? Intrinsic::Unreachable : Intrinsic::None;
     bool bounded = text.equals("__builtin_vsnprintf"), print = text.equals("__builtin_vsprintf");
-    auto floating = text.equals("__builtin_fabs") ? FT_DOUBLE : text.equals("__builtin_fabsf") ? FT_FLOAT :
-        text.equals("__builtin_fabsl") ? FT_LONG_DOUBLE : FT_VOID;
-    if (floating != FT_VOID) {
-        auto t = types.fundamental(floating);
+    auto absolute = text.equals("__builtin_fabs") ? FT_DOUBLE : text.equals("__builtin_fabsf") ? FT_FLOAT :
+        text.equals("__builtin_fabsl") ? FT_LONG_DOUBLE :
+        text.equals("__builtin_abs") ? FT_INT : text.equals("__builtin_labs") ? FT_LONG_INT :
+        text.equals("__builtin_llabs") ? FT_LONG_LONG_INT : FT_VOID;
+    if (absolute != FT_VOID) {
+        auto t = types.fundamental(absolute);
         auto e = declare_function(global,name,0,types.function(t,{t},false));
         entities[e].c_linkage = true; entities[e].exception_spec = 129;
         assembler_names.put(e,ids.intern(TextView(text.data+10,text.size-10))); return e;
@@ -21,11 +35,13 @@ EntityId Analyzer::builtin_function(IdentifierId name)
     auto v = types.fundamental(FT_VOID), size = types.fundamental(FT_UNSIGNED_LONG_INT);
     auto va = types.adjusted(variadic_list_type);
     auto ret = v; std::vector<TypeId> args;
-    if (kind == Intrinsic::StackAlloc) { args.push_back(size); ret = types.compound(TypeKind::Pointer,v); }
-    else if (kind != Intrinsic::None) {
+    if (kind == Intrinsic::Expect) {
+        ret = types.fundamental(FT_LONG_INT); args = {ret,ret};
+    } else if (kind == Intrinsic::StackAlloc) { args.push_back(size); ret = types.compound(TypeKind::Pointer,v); }
+    else if (kind == Intrinsic::VaStart || kind == Intrinsic::VaEnd || kind == Intrinsic::VaCopy) {
         args.push_back(va);
         if (kind == Intrinsic::VaCopy) args.push_back(va);
-    } else {
+    } else if (kind == Intrinsic::None) {
         auto c = types.fundamental(FT_CHAR);
         args.push_back(types.compound(TypeKind::Pointer,c));
         if (bounded) args.push_back(size);

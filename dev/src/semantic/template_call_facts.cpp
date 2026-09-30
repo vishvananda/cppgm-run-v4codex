@@ -53,7 +53,13 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     TypeId ft = 0; EntityId selected = 0; std::vector<Conversion> chosen;
     if (direct) {
         auto choice = select_call(fn.entity,{},&args,object_type,category,naming,0,chosen);
-        if (choice.failure == CallFailure::NoViable) throw std::runtime_error("no viable fixed template call");
+        if (choice.failure == CallFailure::NoViable) {
+            auto text = ids.spelling(terminal(name));
+            auto location = static_cast<const syntax::Ast&>(ast).locations[ast[n].location];
+            auto path = ids.spelling(location.presumed_file);
+            throw std::runtime_error("no viable fixed template call: " + std::string(text.data,text.size) +
+                " at " + std::string(path.data,path.size) + ":" + std::to_string(location.line));
+        }
         if (choice.failure == CallFailure::Ambiguous) throw std::runtime_error("ambiguous fixed template call");
         selected = choice.entity; ft = entities[selected].type;
         if (deleted_transfer(selected)) throw std::runtime_error("deleted fixed template callee");
@@ -90,6 +96,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     // environment. Rechecking them here would use the caller's access context.
     for (unsigned i = 0; i < supplied; ++i)
         check_fixed_conversion(expressions[args[i]],args[i],chosen[i],s);
+    if (intrinsic_function(selected) != Intrinsic::None) result.form = intrinsic_expression(selected);
     result.type = value_type(f.child);
     result.category = types[f.child].kind == TypeKind::LRef ? ValueCategory::Lvalue :
         types[f.child].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;

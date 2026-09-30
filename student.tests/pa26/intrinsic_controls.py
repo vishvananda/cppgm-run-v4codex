@@ -9,7 +9,7 @@ def run(cmd,success=True):
     records.append(dict(command=list(map(str,cmd)),status=r.returncode,stdout=r.stdout,stderr=r.stderr))
     (out/'results.json').write_text(json.dumps(records,indent=2)+'\n')
     assert (r.returncode==0)==success,records[-1]
-for name in ['type_traits','header_intrinsics','variadic','noexcept_parameter','integer_pack','constexpr_if']:
+for name in ['type_traits','header_intrinsics','variadic','noexcept_parameter','integer_pack','constexpr_if','dependent_enum_bound','auto_decltype','noexcept_emission','partial_cleanup']:
     obj=out/(name+'.o');exe=out/name
     run([compiler,'-c','-o',obj,root/(name+'.cpp')])
     run(['g++',obj,*([root/'variadic-host.cpp'] if name=='variadic' else []),'-o',exe]);run([exe])
@@ -29,4 +29,4 @@ for name,code in negative.items():
     src=out/(name+'.cpp');src.write_text(code+'\n');run([compiler,'-c','-o',out/(name+'.o'),src],False)
 src=out/'throw.cpp';src.write_text('void f()throw();static_assert(noexcept(f()),"empty throw");struct B{virtual void f()throw();};struct D:B{void f()noexcept;};int main(){}\n')
 run([compiler,'-c','-o',out/'throw.o',src]);run(['g++',out/'throw.o','-o',out/'throw']);run([out/'throw'])
-print('17 intrinsic/trait controls passed')
+print('21 intrinsic/trait controls passed')

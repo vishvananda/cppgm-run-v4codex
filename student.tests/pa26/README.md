@@ -61,3 +61,11 @@ expression conditions are supported as an extension, with discarded template
 branches excluded from instantiation and emission. Condition declarations in
 this extension currently diagnose unsupported use. `noexcept_parameter.cpp`
 checks that exception specifications see constructor prototype parameters.
+
+`include_next` follows the found-directory index, including quoted sibling headers
+and duplicate physical search directories; see GCC's
+[wrapper-header contract](https://gcc.gnu.org/onlinedocs/cpp/Wrapper-Headers.html).
+`auto_decltype.cpp`, `dependent_enum_bound.cpp` and `noexcept_emission.cpp`
+cover instantiation-owned local types, delayed enum bounds and exception facts
+completed before lowering. Intrinsic queries also cover expect, constant_p,
+abort/unreachable, and integral/floating absolute-value calls.

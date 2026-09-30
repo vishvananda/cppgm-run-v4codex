@@ -52,6 +52,7 @@ Expression Analyzer::callable_expression(NodeId n, ScopeId s, NodeId callee,
         if (object_type) chosen.erase(chosen.begin());
         facts.edit(n).entity = selected;
         validate_intrinsic(selected,args,s);
+        if (intrinsic_function(selected) != Intrinsic::None) result.form = intrinsic_expression(selected);
         if (entities[selected].member_info && !entities[selected].is_static)
         {
             NodeId direct = callee;

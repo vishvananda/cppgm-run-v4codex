@@ -33,6 +33,10 @@ void Procedural::constructor_cleanup(semantic::SubobjectAction action)
     auto member = sem.member_fact(active_function);
     bool structural_default = member.synthetic && member.constructor && member.transfer == semantic::TransferKind::None;
     if ((!structural_default && sem.function_nonthrowing(active_function)) || sem.trivial_destructor(action.type)) return;
+    // Partial-construction cleanups share the ordinary destruction emission
+    // policy. An omitted implicit destructor has no callable ABI entry.
+    auto destructor = sem.type_destructor(action.type);
+    if (!linkage.presentation && sem.synthetic_member(destructor) && !sem.destructor_needed(destructor)) return;
     if (!constructed_subobjects.empty()) emit(Opcode::EhEnd,IRType(),{});
     BlockId handler = block(); constructed_subobjects.push_back({action, handler});
     emit(Opcode::EhCleanup, IRType(), {Operand::label(handler)});

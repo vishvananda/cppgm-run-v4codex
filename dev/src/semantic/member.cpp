@@ -147,6 +147,7 @@ void Analyzer::demand_member(EntityId e, MemberDemandReason reason)
     if (unevaluated_depth) { record_deferred_function_use(e); return; }
     bool first_use = !(entities[e].emission & Entity::Used);
     entities[e].emission |= Entity::Used;
+    if (first_use && calls) function_exception_demand.push_back(e);
     if (first_use) activate_deferred_function_uses(e);
     if (first_use && closure_adapter(e).function) {
         auto adapter = closure_adapter(e);

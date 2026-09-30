@@ -249,7 +249,7 @@ void PPTokenCursor::update_directive()
         if (directive_ == Directive::line_start && token_.kind == PPTokenKind::punctuation &&
             (text.equals("#") || text.equals("%:"))) directive_ = Directive::after_hash;
         else if (directive_ == Directive::after_hash && token_.kind == PPTokenKind::identifier &&
-                 text.equals("include")) directive_ = Directive::after_include;
+                 (text.equals("include") || text.equals("include_next"))) directive_ = Directive::after_include;
         else directive_ = Directive::other;
     }
 }

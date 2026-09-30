@@ -75,6 +75,11 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
             fn.entity = merge_lookup(fn.entity,associated_type_lookup(callee.name,std::move(types)));
         }
     }
+    if (callee.kind == QueryKind::Name && !callee.entity && callee.name == constant_builtin) {
+        if (args.size() != 1) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+        TypeQueryFact result; result.expression.type = types.fundamental(FT_INT);
+        result.expression.form = ExpressionForm::ConstantQuery; return result;
+    }
     TypeId object = 0;
     ValueCategory category = ValueCategory::Lvalue;
     if (callee.kind == QueryKind::TypeValue) {
@@ -235,6 +240,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         r.expression.conversions = conversions.size(); r.expression.count = chosen.size();
         conversions.insert(conversions.end(),chosen.begin(),chosen.end());
     }
+    if (intrinsic_function(r.selected) != Intrinsic::None) r.expression.form = intrinsic_expression(r.selected);
     auto returned = types[function_type].child;
     r.expression.type = value_type(returned);
     if (types[returned].kind == TypeKind::LRef) r.expression.category = ValueCategory::Lvalue;

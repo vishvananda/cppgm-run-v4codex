@@ -177,6 +177,7 @@ public:
     bool indirect_parameter(TypeId t) const;
     const ScalarConsumption& scalar_consumption(EntityId object) const;
     bool empty_class(TypeId t) const;
+    ExpressionForm intrinsic_expression(EntityId e) const;
     Intrinsic intrinsic_function(EntityId e) const { return Intrinsic(intrinsic_functions.get(e)); }
     IdentifierId predefined_string(EntityId e) const { return predefined_strings.get(e); }
     TypeId variadic_type() const { return variadic_list_type; }
@@ -323,6 +324,8 @@ private:
     Index deferred_function_use_index, deferred_function_use_heads;
     std::vector<std::uint32_t> deferred_function_use_queue;
     std::size_t deferred_function_use_cursor = 0;
+    std::vector<EntityId> function_exception_demand;
+    std::size_t function_exception_cursor = 0;
     void record_deferred_function_use(EntityId target);
     void activate_deferred_function_uses(EntityId owner);
     bool literal_type(TypeId type);

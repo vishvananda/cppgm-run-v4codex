@@ -103,7 +103,7 @@ public:
     Preprocessor(const std::string& path, const std::string& date, const std::string& time,
                  bool telemetry = false);
     void command_options(const std::vector<std::string>&);
-    void include_paths(const std::vector<std::string>& paths) { include_paths_ = paths; }
+    void include_paths(const std::vector<std::string>& paths);
     PPToken next();
     IdentifierTable& identifiers() { return identifiers_; }
     const PreprocessStats& stats() const { return stats_; }
@@ -116,6 +116,7 @@ private:
         PPTokenCursor cursor;
         IdentifierId filename, physical_filename;
         std::int64_t line_delta = 0;
+        int include_index = -1;
         bool line_start = true, space = false;
         std::vector<Conditional> conditions;
         FileFrame(const SourceBuffer& s, IdentifierTable& ids, LexStats* stats, IdentifierId name)
