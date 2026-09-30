@@ -50,3 +50,42 @@ rethrow, templates, empty specifications, private cleanup, and invalid type/set
 rejections. Two earlier LowIR fixture corrections have independent contract
 proof in `reference-corrections152.md`. Performance and full final checks remain
 handoff work, separate from implementation correctness checks.
+
+## Imported support ownership and local-static demand
+
+A key-function declaration leaves the vtable and VTT owned by its defining TU.
+Host lowering now declares both; it does not define an imported VTT referencing
+private auxiliary views. Semantic construction-table dependencies are established
+only when the exact table owner transitions to Active definition demand. Its
+existing reverse key-definition notification preserves a later local definition.
+No unrelated class/member is retried, and imported references do less work.
+
+`constructor_needed` can answer positively from a completed dynamic-class fact:
+vptr initialization is necessary. It does not need to drain deferred synthetic
+constructor bodies/actions to prove that positive fact. Failure states and the
+full action plan remain mandatory for emission and omission decisions. This
+fixes local-static initialization of recursive CRTP hierarchies without eagerly
+instantiating their unrelated bodies. The RTTI base facts were already correct;
+the entry failure was an early constructor-action prerequisite query, not stale
+RTTI. Normal and array local statics retain their existing guard/destruction flow.
+
+`ownership152.py` runs nine commands: host-owned virtual-base constructors and
+D1 destruction, imported table/VTT symbol ownership, and two compiler-generated
+TUs with ordinary/array recursive-template statics and host RTTI cross-casts.
+Required stage tests reach 96/97. Earlier PAs remain passing.
+
+## Concrete remaining boundary
+
+The remaining covariant fixture requires a virtual-result row at -32 rather than
+-24. The current class model selects only nonvirtual dynamic primary bases;
+virtual base allocation always appends their storage. It also represents the
+primary table prefix as a contiguous virtual-base list, with vcall rows limited
+to secondary views. It therefore lacks nearly-empty virtual primary sharing and
+the inherited mixed vcall/vbase prefix needed by Itanium ABI §2.4 and §2.5.3
+Category 4. Merely renaming the thunk or inserting a padding word would conceal
+that physical-layout mismatch. A coherent fix must change primary selection,
+shared virtual-base allocation, prefix identities, base/result projections,
+constructor/VTT segments and RTTI together, with mixed host producer/consumer
+proofs. This is a distinct layout representation change, beyond the completed
+EH and imported-support/demand owners. No partial layout workaround is included.
+It remains unfinished implementation, not an independent-review question.

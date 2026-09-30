@@ -78,6 +78,13 @@ void Procedural::emit_vtables()
                 s.kind = Symbol::GlobalSymbol; s.entity = p.globals.size(); s.metadata.binding = SBM_STRONG;
             };
             declare(table);
+            if (linkage.host) {
+                // The key-function TU owns the whole ABI group, including
+                // its VTT. A referencing TU cannot synthesize a VTT from
+                // private view symbols that a host compiler never exports.
+                if (sem.virtual_base_count(cls)) declare(abi_global(cls,abi_mangle::TargetKind::Vtt));
+                continue;
+            }
             if (sem.virtual_base_count(cls))
                 for (unsigned j = 0; j < model.views.size(); ++j)
                     if (model.views[j].store) declare(view_symbol(cls,j+1));

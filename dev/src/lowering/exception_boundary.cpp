@@ -54,13 +54,14 @@ void Procedural::finish_exception_boundary()
         std::vector<Operand> types;
         for (unsigned i = 0; i < spec.allowed_count; ++i)
             types.push_back(Operand::symbol(exception_type(sem.allowed_exception_types[spec.allowed_begin+i])));
-        types.push_back(Operand::integer(-1));
+        auto filter_selector = Operand::integer(-1); filter_selector.negative_integer = true;
+        types.push_back(filter_selector);
         emit(Instruction(Opcode::EhFilter),types.data(),types.size());
         // A same-frame cleanup forwards the original selector here even when
         // this specification allows the exception. Only its negative filter
         // selector is a violation; a permitted exception resumes to the caller.
         auto selector = emit(Opcode::ExceptionSelector,IRType::I32,{});
-        auto violation = emit(Opcode::Compare,IRType::I32,{selector.operand,Operand::integer(-1)},Operation::Eq);
+        auto violation = emit(Opcode::Compare,IRType::I32,{selector.operand,filter_selector},Operation::Eq);
         auto unexpected = block(), allowed = block();
         emit(Opcode::Branch,IRType(),{violation.operand,Operand::label(unexpected),Operand::label(allowed)});
         start(allowed); emit(Opcode::Resume,IRType(),{});

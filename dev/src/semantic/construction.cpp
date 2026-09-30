@@ -467,6 +467,10 @@ bool Analyzer::constructor_needed(EntityId e)
         return !members[m].constructor || !direct_transfer(e);
     }
     if (!members[m].synthetic || members[m].inherited_constructor) return true;
+    // A dynamic class necessarily initializes its vptr. This positive need
+    // fact requires only completed class semantics, not the deferred action
+    // plan. Local-static classification can ask before member-body draining.
+    if (dynamic_class(scopes[entities[e].owner].entity)) return true;
     // Omission needs a completed action plan; an external/user-provided entry
     // is required independently of that plan and was handled above.
     if (members[m].actions_state != FactState::Success)

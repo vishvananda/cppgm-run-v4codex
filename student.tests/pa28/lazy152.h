@@ -1,0 +1,10 @@
+struct Entry152 { virtual ~Entry152() {} };
+struct Side152 { virtual ~Side152() {} };
+template<class T> struct Deferred152 : Entry152 { virtual ~Deferred152(); };
+template<class T> struct Level152 : Deferred152<T> { virtual ~Level152(); };
+template<class T> struct Fork152 : Side152, T {};
+struct Leaf152 : Fork152<Level152<Leaf152> > {};
+extern template class Deferred152<Leaf152>;
+extern template class Level152<Leaf152>;
+Entry152* first152();
+Entry152* second152();
