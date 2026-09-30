@@ -484,6 +484,7 @@ private:
     IdentifierTable& ids;
     bool calls;
     bool c_linkage = false;
+    Index linkage_extern_declarations;
     struct StaticFact { FactState state = FactState::NotStarted; StaticValue value; };
     Index static_index;
     std::vector<StaticFact> static_facts;

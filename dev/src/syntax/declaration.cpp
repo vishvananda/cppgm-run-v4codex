@@ -28,7 +28,7 @@ NodeId Parser::unadorned_declaration()
         if (in.eat("{")) {
             while (!in.is("}")) ast.append(node, declaration());
             in.take();
-        } else ast.append(node, declaration());
+        } else { ast[node].flags |= 1; ast.append(node, declaration()); }
         return node;
     }
     if (in.is("static_assert")) return static_assertion();

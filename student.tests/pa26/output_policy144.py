@@ -24,8 +24,13 @@ for name in ['output.o', 'output.obj', 'output', 'output.bin']:
         case['link_status'] = link.returncode
         if link.returncode == 0:
             case['run_status'] = subprocess.run([str(exe)], capture_output=True, timeout=30).returncode
+        own = out / (name + '-own')
+        link = subprocess.run([str(compiler), str(obj), '-o', str(own)], capture_output=True, timeout=30)
+        case['own_link_status'] = link.returncode
+        if link.returncode == 0:
+            case['own_run_status'] = subprocess.run([str(own)], capture_output=True, timeout=30).returncode
     result['cases'].append(case)
 (out / 'policy.json').write_text(json.dumps(result, indent=2) + '\n')
-failed = [c['name'] for c in result['cases'] if not c['elf'] or c.get('link_status') != 0 or c.get('run_status') != 0]
+failed = [c['name'] for c in result['cases'] if not c['elf'] or c.get('link_status') != 0 or c.get('run_status') != 0 or c.get('own_run_status') != 0]
 print('output-policy failures:', failed)
 sys.exit(bool(failed))

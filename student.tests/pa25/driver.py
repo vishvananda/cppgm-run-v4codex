@@ -29,6 +29,8 @@ int main(int argc,char**) { return argc==1 && *local_a()==11 && x==22 &&
 ''')
     ao,bo,exe = d/'a.obj', d/'b.obj', d/'program'
     command([CXX,'-c','-o',ao,a]); command([CXX,'-c','-o',bo,b])
+    legacy = d/'legacy.obj'
+    command([CXX,'-c','--object-format=private','-o',legacy,b])
     command([CXX,'-o',exe,ao,bo]); command([exe]); separate = exe.read_bytes()
     command([CXX,'-o',exe,a,b]); command([exe]); assert exe.read_bytes()==separate
     command([CXX,'-o',exe,ao,b]); command([exe]); assert exe.read_bytes()==separate
@@ -84,13 +86,15 @@ int main(){return quoted_value()+user_value()-30;}
     aligned_cpp = source('aligned.cc','extern "C" int aligned_function(); int main(){return ((unsigned long)&aligned_function % 4096) || aligned_function()!=19;}')
     command(['cc','-c','-o',d/'aligned.o',aligned_c])
     command([CXX,'-o',exe,aligned_cpp,d/'aligned.o']); command([exe])
-    original = bo.read_bytes()
+    # Private version-4 corruption checks remain explicit after PA26 changed
+    # the default object contract to ELF independently of output extension.
+    original = legacy.read_bytes()
     # Truncations throughout each record class must reject, not assert or read OOB.
     for size in sorted(set([0,1,7,8,15,24,48,len(original)//3,len(original)//2,len(original)-1])):
         broken = d/'broken.obj'; broken.write_bytes(original[:size])
-        command([CXX,'-o',exe,broken],expected=1)
+        command([CXX,'--object-format=private','-o',exe,broken],expected=1)
     for offset,value in [(8,99),(16,3),(24,0),(32,3),(40,2),(48,2**63)]:
         broken = d/'broken.obj'; data=bytearray(original); struct.pack_into('<Q',data,offset,value); broken.write_bytes(data)
-        command([CXX,'-o',exe,broken],expected=1)
-    broken.write_bytes(original+b'junk'); command([CXX,'-o',exe,broken],expected=1)
+        command([CXX,'--object-format=private','-o',exe,broken],expected=1)
+    broken.write_bytes(original+b'junk'); command([CXX,'--object-format=private','-o',exe,broken],expected=1)
 print(f'{checks} PA25 driver checks passed')

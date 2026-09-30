@@ -80,9 +80,13 @@ void Encoder::encode(const Function& f)
     if (image.host) {
         for (const auto& i : f.instructions) if (i.op == Op::Resume) resume_label = epilogue+1;
         if (labels.size() <= epilogue+1) { labels.resize(epilogue+2); label_owners.resize(epilogue+2); }
+        host_pad_labels.assign(epilogue,0);
+        if (labels.size() < epilogue+2+f.blocks.size()) { labels.resize(epilogue+2+f.blocks.size()); label_owners.resize(labels.size()); }
         cppgm::IdIndex targets;
         for (const auto& i : f.instructions) if (i.op == Op::EhPush) targets.put(i.args[0].id,1);
-        for (unsigned b = 0; b < f.blocks.size(); ++b) if (targets.get(f.blocks[b].id)) host_landings.push_back(b);
+        for (unsigned b = 0; b < f.blocks.size(); ++b) if (targets.get(f.blocks[b].id)) {
+            host_landings.push_back(b); host_pad_labels[f.blocks[b].id] = epilogue+2+b;
+        }
     }
     if (labels.size() <= epilogue) { labels.resize(epilogue+1); label_owners.resize(epilogue+1); }
     branches.clear();

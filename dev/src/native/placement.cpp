@@ -90,7 +90,10 @@ void Selector::analyze()
         }
     }
     if (handlers) {
-        if (f.host) { f.host_exception = home(0,Type::Ptr,true); f.host_selector = home(0,Type::I32,true); }
+        if (f.host) {
+            f.host_exception = home(0,Type::Ptr,true); f.host_selector = home(0,Type::I64,true);
+            f.host_raw_selector = f.host_selector; f.host_raw_selector.displacement += 4;
+        }
         else f.exception_base = home(0,Type::Ptr,true);
         if (dynamic_stack) f.stack_floor = home(0,Type::Ptr,true);
     }

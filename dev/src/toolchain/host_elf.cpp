@@ -27,37 +27,41 @@ unsigned HostElf::symbol(const std::string& name, unsigned binding, unsigned typ
 void HostElf::relocate(unsigned section, std::size_t offset, unsigned symbol, unsigned type, std::int64_t addend)
 {
     Elf64_Rela r = {}; r.r_offset = offset; r.r_info = ELF64_R_INFO(symbol,type); r.r_addend = addend;
-    append(sections[section].bytes,r);
+    sections[section].relocations.push_back(r);
 }
-HostElf::HostElf(Object&& obj) : mapping(obj.symbols.size()), section_symbols(Count)
+HostElf::HostElf(Object&& obj) : ElfModule(Count,Strtab), mapping(obj.symbols.size()), section_symbols(Count)
 {
-    const char* names[] = {"",".text",".data",".eh_frame",".gcc_except_table",".data.rel.local",".init_array",".fini_array",
-        ".rela.text",".rela.data",".rela.eh_frame",".rela.gcc_except_table",".rela.data.rel.local",".rela.init_array",".rela.fini_array",
+    unwind_section = EhFrame;
+    const char* names[] = {"",".text",".data",".eh_frame",".gcc_except_table",".data.rel.local",".init_array",".fini_array",".tdata",
+        ".rela.text",".rela.data",".rela.eh_frame",".rela.gcc_except_table",".rela.data.rel.local",".rela.init_array",".rela.fini_array",".rela.tdata",
         ".symtab",".strtab",".shstrtab",".note.GNU-stack"};
     sections[Strtab].bytes.push_back(0); sections[Shstrtab].bytes.push_back(0);
     for (unsigned n = 1; n < Count; ++n) {
         auto& s = sections[n]; s.name = names[n]; s.header.sh_name = string(sections[Shstrtab].bytes,s.name);
         s.header.sh_type = SHT_PROGBITS; s.header.sh_addralign = 1;
-        if (n >= Text && n <= Fini) { s.header.sh_flags = SHF_ALLOC; s.header.sh_addralign = 8; }
+        if (n >= Text && n <= Tdata) { s.header.sh_flags = SHF_ALLOC; s.header.sh_addralign = 8; }
         if (n == Text) { s.header.sh_flags |= SHF_EXECINSTR; s.header.sh_addralign = 16; }
         if (n == Data || n == Refs || n == Init || n == Fini) s.header.sh_flags |= SHF_WRITE;
         if (n == Data) s.header.sh_addralign = obj.alignment;
+        if (n == Tdata) { s.header.sh_flags |= SHF_WRITE|SHF_TLS; s.header.sh_addralign = obj.image.tls_alignment; }
         if (n == Init || n == Fini) { s.header.sh_type = n == Init ? SHT_INIT_ARRAY : SHT_FINI_ARRAY; s.header.sh_entsize = 8; }
-        if (n >= RelaText && n <= RelaFini) {
+        if (n >= RelaText && n <= RelaTdata) {
             s.header.sh_type = SHT_RELA; s.header.sh_link = Symtab; s.header.sh_info = n-RelaText+Text;
             s.header.sh_addralign = 8; s.header.sh_entsize = sizeof(Elf64_Rela);
         }
         if (n == Symtab) { s.header.sh_type = SHT_SYMTAB; s.header.sh_link = Strtab; s.header.sh_addralign = 8; s.header.sh_entsize = sizeof(Elf64_Sym); }
         if (n == Strtab || n == Shstrtab) s.header.sh_type = SHT_STRTAB;
-        if (n <= Fini) section_symbols[n] = symbol("",STB_LOCAL,STT_SECTION,n,0);
+        if (n <= Tdata) section_symbols[n] = symbol("",STB_LOCAL,STT_SECTION,n,0);
     }
     // Native bytes have one owner across this phase boundary. Relocation and
     // unwind records below consume offsets, so they do not need old buffers.
     sections[Text].bytes = std::move(obj.image.code);
     sections[Data].bytes = std::move(obj.image.data);
+    sections[Tdata].bytes = std::move(obj.image.tls);
     sections[Lsda].bytes = std::move(obj.image.lsda);
     std::vector<bool> used(obj.symbols.size()); std::vector<std::uint64_t> sizes(obj.symbols.size());
-    for (const auto* fixes : {&obj.image.code_fixups,&obj.image.data_fixups,&obj.image.lsda_fixups})
+    for (unsigned i = 1; i < sizes.size(); ++i) sizes[i] = obj.symbols[i].size;
+    for (const auto* fixes : {&obj.image.code_fixups,&obj.image.data_fixups,&obj.image.tls_fixups,&obj.image.lsda_fixups})
         for (const auto& fix : *fixes) used[fix.symbol] = true;
     for (const auto& u : obj.image.unwind) sizes[u.symbol] = u.end-u.begin;
     IdIndex exports;
@@ -66,15 +70,18 @@ HostElf::HostElf(Object&& obj) : mapping(obj.symbols.size()), section_symbols(Co
         const auto& s = obj.symbols[i];
         auto binding = s.binding == ir_model::SBM_INTERNAL ? STB_LOCAL : s.binding == ir_model::SBM_WEAK ? STB_WEAK : STB_GLOBAL;
         bool defined = obj.image.defined[i];
+        bool tls = obj.image.tls_targets[i] == i;
+        unsigned section = tls ? Tdata : obj.image.data_symbols[i] ? Data : Text;
+        unsigned type = tls ? STT_TLS : defined ? (obj.image.data_symbols[i] ? STT_OBJECT : STT_FUNC) : STT_NOTYPE;
         if (binding != STB_LOCAL && s.name) if (auto old = exports.get(s.name)) {
             mapping[i] = old;
             lowir_model::require(!defined || !symbols[old].st_shndx,"duplicate host object definition");
-            if (defined) { symbols[old].st_shndx = obj.image.data_symbols[i] ? Data : Text; symbols[old].st_value = obj.image.symbols[i]; symbols[old].st_size = sizes[i]; }
+            if (defined) { symbols[old].st_shndx = section; symbols[old].st_value = obj.image.symbols[i]; symbols[old].st_size = sizes[i]; symbols[old].st_info = ELF64_ST_INFO(binding,type); }
             continue;
         }
         lowir_model::require(s.name || !used[i],"host relocation has no symbol identity");
-        mapping[i] = symbol(s.name ? obj.name(i) : "",binding,defined ? (obj.image.data_symbols[i] ? STT_OBJECT : STT_FUNC) : STT_NOTYPE,
-            defined ? (obj.image.data_symbols[i] ? Data : Text) : 0,obj.image.symbols[i],sizes[s.definition ? s.definition : i]);
+        mapping[i] = symbol(s.name ? obj.name(i) : "",binding,type,
+            defined ? section : 0,obj.image.symbols[i],sizes[s.definition ? s.definition : i]);
         if (binding != STB_LOCAL && s.name) exports.put(s.name,mapping[i]);
         if (defined && (s.role == ir_model::SR_INIT || s.role == ir_model::SR_FINI)) {
             unsigned section = s.role == ir_model::SR_INIT ? Init : Fini;
@@ -82,8 +89,8 @@ HostElf::HostElf(Object&& obj) : mapping(obj.symbols.size()), section_symbols(Co
             host_number(sections[section].bytes,0,8);
         }
     }
-    for (unsigned lane = 0; lane < 2; ++lane) {
-        const auto& fixes = lane ? obj.image.data_fixups : obj.image.code_fixups;
+    for (unsigned lane = 0; lane < 3; ++lane) {
+        const auto& fixes = lane == 2 ? obj.image.tls_fixups : lane ? obj.image.data_fixups : obj.image.code_fixups;
         for (const auto& f : fixes) {
             unsigned type = f.kind == native::Fixup::AbsoluteSymbol ? R_X86_64_64 :
                 f.kind == native::Fixup::Absolute32 ? R_X86_64_32 : f.kind == native::Fixup::Absolute32Signed ? R_X86_64_32S : R_X86_64_PC32;
@@ -93,8 +100,8 @@ HostElf::HostElf(Object&& obj) : mapping(obj.symbols.size()), section_symbols(Co
                 if (f.kind == native::Fixup::CallSymbol) type = R_X86_64_PLT32;
                 if (f.kind == native::Fixup::GotSymbol) type = R_X86_64_GOTPCREL;
             }
-            lowir_model::require(f.kind != native::Fixup::ThreadOffset,"host TLS model is not implemented");
-            relocate(lane ? RelaData : RelaText,f.offset,mapping[f.symbol],type,addend);
+            if (f.kind == native::Fixup::ThreadOffset) type = R_X86_64_TPOFF32;
+            relocate(lane == 2 ? RelaTdata : lane ? RelaData : RelaText,f.offset,mapping[f.symbol],type,addend);
         }
     }
     unwind(obj);
@@ -110,9 +117,8 @@ void HostElf::write(const std::string& path)
     auto first = std::stable_partition(order.begin(),order.end(),[&](unsigned n) { return ELF64_ST_BIND(symbols[n].st_info) == STB_LOCAL; });
     sections[Symtab].header.sh_info = first-order.begin();
     for (unsigned n = 0; n < order.size(); ++n) { renumber[order[n]] = n; append(sections[Symtab].bytes,symbols[order[n]]); }
-    for (unsigned n = RelaText; n <= RelaFini; ++n) for (std::size_t at = 0; at < sections[n].bytes.size(); at += sizeof(Elf64_Rela)) {
-        Elf64_Rela r; std::memcpy(&r,sections[n].bytes.data()+at,sizeof(r));
-        r.r_info = ELF64_R_INFO(renumber[ELF64_R_SYM(r.r_info)],ELF64_R_TYPE(r.r_info)); std::memcpy(sections[n].bytes.data()+at,&r,sizeof(r));
+    for (unsigned n = RelaText; n <= RelaTdata; ++n) for (auto r : sections[n].relocations) {
+        r.r_info = ELF64_R_INFO(renumber[ELF64_R_SYM(r.r_info)],ELF64_R_TYPE(r.r_info)); append(sections[n].bytes,r);
     }
     Elf64_Ehdr h = {}; std::memcpy(h.e_ident,ELFMAG,SELFMAG); h.e_ident[EI_CLASS] = ELFCLASS64; h.e_ident[EI_DATA] = ELFDATA2LSB; h.e_ident[EI_VERSION] = EV_CURRENT;
     h.e_type = ET_REL; h.e_machine = EM_X86_64; h.e_version = EV_CURRENT; h.e_ehsize = sizeof(h); h.e_shentsize = sizeof(Elf64_Shdr); h.e_shnum = Count; h.e_shstrndx = Shstrtab;
@@ -144,4 +150,5 @@ void HostElf::write(const std::string& path)
     out.close(); lowir_model::require(bool(out),"cannot write host ELF object");
 }
 void write_host_object(Object&& obj, const std::string& path) { HostElf(std::move(obj)).write(path); }
+Object host_link_object(Object&& obj) { return link_elf(HostElf(std::move(obj))); }
 } }

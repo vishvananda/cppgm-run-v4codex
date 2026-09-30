@@ -181,6 +181,8 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/runtime_eh_match toolchain/runtime_f
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/host_elf toolchain/host_unwind
 FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/host_config
+FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/elf_link_input
+FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/dynamic_symbols toolchain/dynamic_relocations toolchain/dynamic_metadata toolchain/dynamic_writer
 FRONTEND_OBJ_BASENAMES_lowir2native += support/id_index
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/builtin_traits

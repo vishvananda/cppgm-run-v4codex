@@ -28,6 +28,7 @@ void compile_image(const lowir_model::Program& p, Image& image, const std::vecto
     std::vector<bool> demanded(image.symbols.size());
     for (const auto& fix : image.code_fixups) demanded[fix.symbol] = true;
     for (const auto& fix : image.data_fixups) demanded[fix.symbol] = true;
+    for (const auto& fix : image.tls_fixups) demanded[fix.symbol] = true;
     for (const auto& source : p.functions) if (source.declaration && demanded[source.symbol.index]) {
         const auto& metadata = p.symbols[source.symbol.index-1].metadata;
         if (image.host && metadata.builtin != lowir_model::SymbolMetadata::Builtin::None) continue;

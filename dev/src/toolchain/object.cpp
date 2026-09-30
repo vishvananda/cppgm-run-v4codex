@@ -20,7 +20,7 @@ Object compile_object(const lowir_model::Program& p, native::Statistics& stats, 
     }
     native::compile_image(p,obj.image,{},nullptr,stats);
     for (unsigned i = 1; i < obj.symbols.size(); ++i)
-        if (obj.image.defined[i]) obj.symbols[i].definition = i;
+        if (obj.image.defined[i]) { obj.symbols[i].definition = i; obj.symbols[i].size = obj.image.symbol_sizes[i]; }
     for (unsigned i = 1; i <= p.symbols.size(); ++i) {
         const auto& s = p.symbols[i-1];
         auto& symbol = obj.symbols[i];
@@ -50,7 +50,7 @@ Object compile_object(const lowir_model::Program& p, native::Statistics& stats, 
         obj.image.symbols.push_back(obj.image.symbols[target]);
         obj.image.defined.push_back(obj.image.defined[target]);
         obj.image.data_symbols.push_back(obj.image.data_symbols[target]);
-        obj.image.tls_targets.push_back(0);
+        obj.image.tls_targets.push_back(obj.image.tls_targets[target] == target ? obj.image.symbols.size()-1 : 0);
     }
     return obj;
 }

@@ -32,6 +32,8 @@ void encode_data(const lowir_model::Program& p, Image& image)
         if (tls != bool(lane)) continue;
         if (tls) { image.has_tls = true; image.tls_targets[g.symbol.index] = g.symbol.index; }
         if (g.declaration) continue;
+        auto& data = tls && image.host ? image.tls : image.data;
+        auto& fixups = tls && image.host ? image.tls_fixups : image.data_fixups;
         bool explicit_layout = g.structured && g.type.kind() == Type::Object;
         unsigned alignment = 1; bool typed = false;
         for (unsigned n = g.data.begin; n != g.data.end(); ++n)
@@ -42,26 +44,28 @@ void encode_data(const lowir_model::Program& p, Image& image)
             alignment = g.type.alignment();
             require(alignment <= 4096,"unsupported native global alignment");
         }
-        image.data.resize(aligned(image.data.size(),alignment),0);
-        image.symbols[g.symbol.index] = image.data.size(); image.defined[g.symbol.index] = true; image.data_symbols[g.symbol.index] = true;
+        if (tls) image.tls_alignment = std::max(image.tls_alignment,alignment);
+        data.resize(aligned(data.size(),alignment),0);
+        image.symbols[g.symbol.index] = data.size(); image.defined[g.symbol.index] = true; image.data_symbols[g.symbol.index] = true;
         for (unsigned n = g.data.begin; n != g.data.end(); ++n) {
             const auto& item = p.data[n];
             if (item.kind == DataItem::Zero) {
                 auto count = g.structured ? item.zero_bytes : g.type.bytes();
-                require(count < 0x70000000, "native data too large"); image.data.resize(image.data.size()+count,0);
+                require(count < 0x70000000, "native data too large"); data.resize(data.size()+count,0);
             } else {
-                if (!explicit_layout) image.data.resize(aligned(image.data.size(),item.type.alignment()),0);
-                if (item.kind == DataItem::Scalar) scalar_data(image.data,item,p);
+                if (!explicit_layout) data.resize(aligned(data.size(),item.type.alignment()),0);
+                if (item.kind == DataItem::Scalar) scalar_data(data,item,p);
                 else {
-                    Fixup fix; fix.kind = Fixup::AbsoluteSymbol; fix.offset = image.data.size();
-                    fix.symbol = item.symbol.index; fix.addend = item.addend; fix.owner = g.symbol.index; image.data_fixups.push_back(fix);
-                    append(image.data,0,8);
+                    Fixup fix; fix.kind = Fixup::AbsoluteSymbol; fix.offset = data.size();
+                    fix.symbol = item.symbol.index; fix.addend = item.addend; fix.owner = g.symbol.index; fixups.push_back(fix);
+                    append(data,0,8);
                 }
             }
         }
-        if (explicit_layout) require(image.data.size()-image.symbols[g.symbol.index] == g.type.bytes(), "native global layout extent mismatch");
+        if (explicit_layout) require(data.size()-image.symbols[g.symbol.index] == g.type.bytes(), "native global layout extent mismatch");
+        image.symbol_sizes[g.symbol.index] = data.size()-image.symbols[g.symbol.index];
     }
-    if (image.has_tls) {
+    if (image.has_tls && !image.host) {
         image.data.resize(aligned(image.data.size(),16),0);
         unsigned id = image.runtime_begin+unsigned(RuntimeEntity::ThreadPointer);
         image.symbols[id] = image.data.size(); image.defined[id] = image.data_symbols[id] = true;

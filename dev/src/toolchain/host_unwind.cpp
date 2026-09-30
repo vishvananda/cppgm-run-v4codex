@@ -42,6 +42,7 @@ void HostElf::unwind(const Object& obj)
             finish_record(out,cies[eh]);
         }
         auto start = out.size(); host_number(out,0,4); host_number(out,out.size()-cies[eh],4);
+        fdes.push_back(start);
         relocate(RelaEh,out.size(),section_symbols[Text],R_X86_64_PC32,u.begin);
         host_number(out,0,4); host_number(out,u.end-u.begin,4);
         host_uleb(out,eh ? 4 : 0);

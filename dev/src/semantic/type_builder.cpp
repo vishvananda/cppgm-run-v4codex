@@ -324,10 +324,11 @@ void Analyzer::declaration_attributes(EntityId e, NodeId specs, NodeId source)
     }
     if (entities[e].kind == EntityKind::Variable && spec_has(specs,KW_CONSTEXPR)) constexpr_declarations.put(e,2);
     entities[e].thread_local_storage |= spec_has(specs, KW_THREAD_LOCAL);
-    entities[e].external_decl |= spec_has(specs, KW_EXTERN);
+    entities[e].external_decl |= spec_has(specs, KW_EXTERN) || linkage_extern_declarations.get(source);
 }
 EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs, ScopeId s, NodeId source)
 {
+    bool external = spec_has(specs,KW_EXTERN) || linkage_extern_declarations.get(source);
     NodeId name = decl_name(d);
     IdentifierId id = terminal(name);
     bool destructor = ast[ast[name].last].op == OP_COMPL;
@@ -348,7 +349,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     bool function = types[t].kind == TypeKind::Function;
     if (calls && spec_has(specs,KW_CONSTEXPR) && (alias || (!function && owner == s && scopes[owner].kind == ScopeKind::Class && !spec_has(specs,KW_STATIC))))
         throw std::runtime_error("invalid constexpr declaration specifier");
-    bool block_extern = !alias && !function && spec_has(specs,KW_EXTERN) &&
+    bool block_extern = !alias && !function && external &&
         owner == s && scopes[owner].kind != ScopeKind::Namespace && scopes[owner].kind != ScopeKind::Class;
     if (block_extern) {
         if (init) throw std::runtime_error("block extern declaration has initializer");
@@ -359,7 +360,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         if (types[t].kind == TypeKind::Fundamental && types[t].fundamental == FT_VOID)
             throw std::runtime_error("object of void type");
         if ((types[t].kind == TypeKind::LRef || types[t].kind == TypeKind::RRef) && !init &&
-            scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN))
+            scopes[s].kind != ScopeKind::Class && !external)
             throw std::runtime_error("uninitialized reference");
     }
     EntityKind kind = alias ? EntityKind::Alias : function ? EntityKind::Function : EntityKind::Variable;
@@ -427,7 +428,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         if (calls && scopes[owner].kind == ScopeKind::Class && owner == s)
             throw std::runtime_error("duplicate class member");
         if (calls && kind == EntityKind::Variable && (scopes[owner].kind == ScopeKind::Block || scopes[owner].kind == ScopeKind::Control) &&
-            !spec_has(specs, KW_EXTERN)) throw std::runtime_error("duplicate local variable");
+            !external) throw std::runtime_error("duplicate local variable");
         entities[e].type = types.composite(entities[e].type, canonical);
     } else {
         e = make_entity(kind, owner, id, source);
@@ -470,7 +471,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && init && !function && entities[e].is_static && scopes[owner].kind == ScopeKind::Class &&
         entities[e].initializer && source != explicit_specialization_source)
         throw std::runtime_error("static member initializer specified twice");
-    if (!function && !specialized_member_declaration && !spec_has(specs, KW_EXTERN) && !(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source;
+    if (!function && !specialized_member_declaration && !external && !(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source;
     if (init && !function) { entities[e].initializer = init; if (!(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source; }
     if (calls && function) { function_defaults(e, d, definition_scope, source); exception_specification(e, d, definition_scope); }
     auto special = child(init, Kind::SpecialInitializer);
@@ -533,7 +534,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         (spec_has(specs,KW_CONSTEXPR) || (init && !member_initializer && !entities[e].is_static &&
             !entities[e].external_decl && scopes[owner].kind != ScopeKind::Namespace && scopes[owner].kind != ScopeKind::Class)))
         prepare_constant_array(e,spec_has(specs,KW_CONSTEXPR));
-    if (calls && !entities[e].initializer && !function && !alias && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) default_initialize(e,d);
+    if (calls && !entities[e].initializer && !function && !alias && scopes[s].kind != ScopeKind::Class && !external) default_initialize(e,d);
     if (init && !alias && !function && (!calls || (types[t].kind != TypeKind::LRef && types[t].kind != TypeKind::RRef)) && (integral(t) || floating_type(value_type(t))) && !member_initializer) {
         Constant v = calls ? convert(constant_initialize(init,t,definition_scope),t) : convert(evaluate(init, definition_scope),t);
         if (calls && spec_has(specs, KW_CONSTEXPR) && !v.valid) throw std::runtime_error("nonconstant constexpr initializer");
@@ -552,7 +553,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         throw std::runtime_error("constexpr object requires initializer");
     if (calls && init && spec_has(specs, KW_CONSTEXPR) && integral(t) && ast[ast[init].first].kind == Kind::Literal)
         facts.edit(ast[init].first).type = t;
-    if (calls && !function && !alias && !member_initializer && scopes[s].kind != ScopeKind::Class && !spec_has(specs, KW_EXTERN)) register_destruction(e);
+    if (calls && !function && !alias && !member_initializer && scopes[s].kind != ScopeKind::Class && !external) register_destruction(e);
     if (definitions && !function && !alias && entities[e].definition && scopes[s].kind == ScopeKind::Namespace)
         demand_class_constant_storage(t);
     if (definitions && !unevaluated_depth && local_static(e) && static_initialization(e))

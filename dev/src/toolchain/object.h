@@ -11,12 +11,19 @@ struct Symbol {
     // Aliases share their producer's definition; section anchors have none.
     unsigned definition = 0;
     bool lazy = false; // synthetic GOT slots are demanded by live relocations
+    unsigned object_type = 0;
+    std::uint64_t size = 0;
 };
+struct ObjectUnwind { unsigned symbol; std::int64_t addend; std::size_t offset; };
+struct ObjectReference { unsigned symbol; std::int64_t addend; };
 struct Object {
     native::Image image;
     cppgm::IdentifierTable names;
     std::vector<Symbol> symbols;
     unsigned alignment = 16;
+    std::vector<ObjectUnwind> unwind;
+    std::vector<ObjectReference> initializers, finalizers;
+    std::size_t frame_begin = std::size_t(-1);
     explicit Object(unsigned count = 0) : image(count), symbols(image.symbols.size()) {}
     std::string name(unsigned id) const;
     lowir_model::Name intern(const std::string& text);
@@ -33,7 +40,10 @@ class Linker {
     std::vector<Symbol> symbols_;
     std::vector<unsigned> symbol_definitions_;
     std::vector<bool> lazy_definitions_ = std::vector<bool>(1);
-    std::vector<unsigned> initializers_, finalizers_;
+    std::vector<ObjectReference> initializers_, finalizers_;
+    std::vector<ObjectUnwind> unwind_;
+    std::size_t frame_begin_ = std::size_t(-1);
+    bool host_;
     std::vector<unsigned> runtime_demands_;
     unsigned entry_ = 0, parameters_ = 0, alignment_ = 16;
     unsigned new_symbol();
@@ -42,7 +52,7 @@ class Linker {
 public:
     std::size_t definition_work = 0, relocation_work = 0;
     native::Statistics runtime_stats;
-    Linker();
+    explicit Linker(bool host = false);
     void add(Object&&);
     std::size_t finish(const std::string&);
 };

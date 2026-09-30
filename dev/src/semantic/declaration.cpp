@@ -397,6 +397,9 @@ void Analyzer::declaration(NodeId n, ScopeId s)
     }
     case Kind::Linkage: {
         bool saved = c_linkage;
+        // The unbraced form implies extern for the directly contained
+        // declaration ([dcl.link]/7); a braced language-linkage block does not.
+        if (ast[n].flags & 1) linkage_extern_declarations.put(ast[n].first,1);
         const auto literal = ast.literals[ast[n].literal];
         c_linkage = literal.type == FT_CHAR && literal.bytes == 2 && ast.literal_bytes[literal.offset] == 'C';
         for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, s);

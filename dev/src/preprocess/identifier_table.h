@@ -14,6 +14,7 @@ class IdentifierTable {
 public:
     explicit IdentifierTable(LexStats* stats = 0);
     IdentifierId intern(TextView text);
+    IdentifierId find(TextView text) const;
     TextView spelling(IdentifierId id) const;
     std::size_t size() const { return entries_.size(); }
     std::size_t storage_bytes() const;

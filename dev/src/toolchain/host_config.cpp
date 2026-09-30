@@ -2,6 +2,16 @@
 #include "builtin_host_config.h"
 #include <sstream>
 namespace cppgm { namespace toolchain {
+std::vector<std::string> host_library_paths()
+{
+    std::vector<std::string> result;
+    std::istringstream input(cppgm_builtin_host_config::kSearchDirs); std::string line;
+    while (std::getline(input,line)) if (line.compare(0,12,"libraries: =") == 0) {
+        std::istringstream paths(line.substr(12));
+        while (std::getline(paths,line,':')) if (!line.empty()) result.push_back(line);
+    }
+    return result;
+}
 void host_environment(std::vector<std::string>& includes, std::vector<std::string>& macros)
 {
     for (auto path : cppgm_builtin_host_config::kStandardIncludePaths)

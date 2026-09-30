@@ -1,16 +1,25 @@
 #include "toolchain/object.h"
+#include "toolchain/elf_model.h"
 #include "toolchain/host_config.h"
 #include "lowering/procedural.h"
 #include <chrono>
 #include <iostream>
+#include <fstream>
+#include <cstring>
 #include <sys/resource.h>
 #include <sys/stat.h>
 namespace cppgm { namespace toolchain {
 namespace {
 bool prefix(const std::string& s, const char* text) { return s.compare(0,std::char_traits<char>::length(text),text) == 0; }
 bool object_path(const std::string& s) {
-    auto dot = s.rfind('.'); if (dot == std::string::npos) return false;
-    auto ext = s.substr(dot); return ext == ".o" || ext == ".obj";
+    // Output names are not object-format policy. Explicit object input is
+    // recognized from its binary contract, including extensionless outputs.
+    char magic[8] = {}; std::ifstream input(s,std::ios::binary); input.read(magic,sizeof(magic));
+    if (!std::memcmp(magic,"\177ELF",4) || !std::memcmp(magic,"CPPGMOBJ",8)) return true;
+    // Retain object input intent for truncated/corrupt named objects so the
+    // bounded binary reader diagnoses them instead of parsing binary as C++.
+    auto dot = s.rfind('.');
+    return dot != std::string::npos && (s.substr(dot) == ".o" || s.substr(dot) == ".obj");
 }
 std::string argument(const std::vector<std::string>& args, unsigned& i, const char* flag) {
     if (++i == args.size()) throw std::runtime_error(std::string("missing argument after ")+flag);
@@ -54,7 +63,7 @@ Options options(const std::vector<std::string>& args)
         o.output = "a.out";
         if (o.compile) { auto s = o.inputs[0]; auto slash = s.rfind('/'); s = s.substr(slash == std::string::npos ? 0 : slash+1); o.output = s.substr(0,s.rfind('.')) + ".o"; }
     }
-    o.host = o.compile && (o.format == "elf" || (o.format.empty() && (o.output.size() < 4 || o.output.substr(o.output.size()-4) != ".obj")));
+    o.host = o.format != "private";
     if (o.host) host_environment(o.includes,o.macros);
     return o;
 }
@@ -70,9 +79,11 @@ int run(const std::vector<std::string>& args)
     native::Statistics stats, runtime_stats; std::size_t text = 0, link_definitions = 0, link_relocations = 0;
     if (o.compile) { auto obj = source(o.inputs[0],o,stats); text = obj.image.code.size(); if (o.host) write_host_object(std::move(obj),o.output); else write_object(obj,o.output); }
     else {
-        Linker linker;
-        for (const auto& input : o.inputs)
-            linker.add(object_path(input) ? read_object(input) : source(input,o,stats));
+        Linker linker(o.host);
+        for (const auto& input : o.inputs) {
+            if (object_path(input)) linker.add(read_object(input));
+            else { auto obj = source(input,o,stats); linker.add(o.host ? host_link_object(std::move(obj)) : std::move(obj)); }
+        }
         for (const auto& library : o.libraries) {
             std::string found;
             for (const auto& path : o.paths) {

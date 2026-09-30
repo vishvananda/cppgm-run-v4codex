@@ -69,8 +69,8 @@ int main(){return one()+two()==26?0:1;}''','')
 # The two object formats are deliberate driver choices, not source-dependent.
 source=out/'format.cpp'; source.write_text('int main(){return 0;}')
 private=out/'legacy.obj'; elf=out/'explicit.obj'; executable=out/'private-main'
-run([compiler,'-c','-o',private,source]); assert private.read_bytes()[:8]==b'CPPGMOBJ'
-run([compiler,'-o',executable,private]); run([executable])
+run([compiler,'-c','--object-format=private','-o',private,source]); assert private.read_bytes()[:8]==b'CPPGMOBJ'
+run([compiler,'--object-format=private','-o',executable,private]); run([executable])
 run([compiler,'-c','--object-format=elf','-o',elf,source]); assert elf.read_bytes()[:4]==b'\x7fELF'
 run(['g++',elf,'-o',out/'host-main']); run([out/'host-main'])
 for record in records:

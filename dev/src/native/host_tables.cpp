@@ -18,17 +18,36 @@ void Encoder::host_tables()
         std::vector<unsigned> action(f.blocks.size());
         cppgm::IdIndex blocks;
         for (unsigned b = 0; b < f.blocks.size(); ++b) blocks.put(f.blocks[b].id,b+1);
-        for (unsigned b : host_landings) {
-            const auto& block = f.blocks[b];
-            if (!block.instructions.count || f.instructions[block.instructions.begin].op != Op::EhDispatch) continue;
-            const auto& h = f.exception_handlers[f.instructions[block.instructions.begin].args[0].bits];
-            if (!h.clauses.count) continue;
-            action[b] = actions.size()+1;
-            for (unsigned n = h.clauses.begin; n < h.clauses.end(); ++n) {
-                sleb(actions,f.exception_clauses[n].host_selector);
-                sleb(actions,n+1 != h.clauses.end() || h.cleanup ? 1 : 0);
+        // A same-frame cleanup must expose its outer catches during the
+        // unwinder's search phase. Share action suffixes by region identity;
+        // do not duplicate all ancestor clauses at each nested landing.
+        auto prepend = [&](unsigned filter, unsigned next) {
+            auto begin = actions.size(); sleb(actions,filter);
+            auto at = actions.size(); sleb(actions,next ? std::int64_t(next-1)-std::int64_t(at) : 0);
+            return unsigned(begin+1);
+        };
+        std::vector<unsigned char> state(f.blocks.size());
+        std::vector<unsigned> pending;
+        for (unsigned landing : host_landings) {
+            for (unsigned b = landing; state[b] != 2;) {
+                lowir_model::require(!state[b],"cyclic host cleanup regions"); state[b] = 1; pending.push_back(b);
+                if (!f.host_outer[b]) break;
+                b = f.host_outer[b]-1;
             }
-            if (h.cleanup) { sleb(actions,0); sleb(actions,0); }
+            while (!pending.empty()) {
+                auto b = pending.back(); pending.pop_back();
+                auto chain = f.host_outer[b] ? action[f.host_outer[b]-1] : 0;
+                const auto& block = f.blocks[b];
+                if (block.instructions.count && f.instructions[block.instructions.begin].op == Op::EhDispatch) {
+                    const auto& h = f.exception_handlers[f.instructions[block.instructions.begin].args[0].bits];
+                    // A source catch-all exhausts this search before ancestors.
+                    auto end = h.clauses.end();
+                    for (unsigned n = h.clauses.begin; n < end; ++n) if (!f.exception_clauses[n].type) { end = n+1; chain = 0; break; }
+                    if (h.cleanup) chain = prepend(0,chain);
+                    for (unsigned n = end; n != h.clauses.begin;) chain = prepend(f.exception_clauses[--n].host_selector,chain);
+                } else if (chain) chain = prepend(0,chain);
+                action[b] = chain; state[b] = 2;
+            }
         }
         // Sites arrive in final address order. Merge only identical landing and
         // action continuations. Null sites are barriers, and gaps stay sparse.

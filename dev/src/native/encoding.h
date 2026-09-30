@@ -17,19 +17,20 @@ struct UnwindRecord {
     std::vector<unsigned char> cfi;
 };
 struct Image {
-    std::vector<unsigned char> code, data;
-    std::vector<Fixup> code_fixups, data_fixups;
-    std::vector<std::uint64_t> symbols;
+    std::vector<unsigned char> code, data, tls;
+    std::vector<Fixup> code_fixups, data_fixups, tls_fixups;
+    std::vector<std::uint64_t> symbols, symbol_sizes;
     std::vector<bool> data_symbols, defined;
     std::vector<bool> indirect_functions;
     std::vector<unsigned> tls_targets;
     bool has_tls = false, host = false;
+    unsigned tls_alignment = 1;
     std::vector<UnwindRecord> unwind;
     std::vector<unsigned char> lsda;
     std::vector<Fixup> lsda_fixups;
     unsigned host_resume = 0;
     unsigned runtime_begin;
-    explicit Image(std::size_t count) : symbols(count+1+unsigned(RuntimeEntity::Count)), data_symbols(symbols.size()), defined(symbols.size()), tls_targets(symbols.size()), runtime_begin(count+1) {}
+    explicit Image(std::size_t count) : symbols(count+1+unsigned(RuntimeEntity::Count)), symbol_sizes(symbols.size()), data_symbols(symbols.size()), defined(symbols.size()), tls_targets(symbols.size()), runtime_begin(count+1) {}
     Operand runtime(RuntimeEntity entity) const { return Operand::symbol(SymbolId(runtime_begin+unsigned(entity)),false); }
 };
 class Encoder {
@@ -44,6 +45,7 @@ class Encoder {
     struct HostSite { std::size_t begin, end; unsigned handler; };
     std::vector<HostSite> host_sites;
     std::vector<unsigned> host_landings;
+    std::vector<unsigned> host_pad_labels;
     std::vector<std::size_t> host_landing_offsets;
     UnwindRecord unwind_record;
     void host_landing_pads();

@@ -4,7 +4,14 @@ namespace native {
 void Encoder::host_runtime(const Instruction& i)
 {
     if (i.op == Op::EhPush || i.op == Op::EhPop || i.op == Op::EhDispatch) return;
-    if (i.op == Op::Resume) { branch(resume_label); return; }
+    if (i.op == Op::Resume) {
+        if (i.host_handler && i.host_handler != ~0u) {
+            load(Operand::r(XR_RAX),function->host_exception,Type::Ptr,false);
+            load(Operand::r(XR_RDX),function->host_raw_selector,Type::I32,false);
+            branch(host_pad_labels.at(i.host_handler));
+        } else branch(resume_label);
+        return;
+    }
     lowir_model::require(false,"unsupported raw host exception transfer");
 }
 void Encoder::host_landing_pads()
@@ -12,7 +19,9 @@ void Encoder::host_landing_pads()
     const auto& f = *function;
     for (unsigned target : host_landings) {
         host_landing_offsets[target] = code.size();
+        auto label = host_pad_labels[f.blocks[target].id]; labels[label] = code.size(); label_owners[label] = f.symbol;
         store(f.host_exception,Operand::r(XR_RAX),Type::Ptr);
+        if (f.host_outer[target]) store(f.host_raw_selector,Operand::r(XR_RDX),Type::I32);
         // SysV landing registers hold the exception and an LSDA-local selector.
         // Source selectors remain unchanged throughout the shared LowIR graph.
         store(f.host_selector,Operand::imm(0),Type::I32);

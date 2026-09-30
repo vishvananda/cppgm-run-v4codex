@@ -1,8 +1,9 @@
 #include "toolchain/runtime.h"
+#include "toolchain/dynamic.h"
 #include <algorithm>
 namespace cppgm { namespace toolchain {
 using lowir_model::require;
-Linker::Linker() : image_(0), symbols_(image_.symbols.size()), symbol_definitions_(symbols_.size()) {}
+Linker::Linker(bool host) : image_(0), symbols_(image_.symbols.size()), symbol_definitions_(symbols_.size()), host_(host) {}
 unsigned Linker::new_symbol()
 {
     unsigned id = symbols_.size(); symbols_.push_back(Symbol());
@@ -13,10 +14,13 @@ unsigned Linker::new_symbol()
 void Linker::add(Object&& obj)
 {
     auto& source = obj.image;
+    require(!host_ || source.host,"private objects require --object-format=private");
     alignment_ = std::max(alignment_,obj.alignment);
     image_.code.resize((image_.code.size()+obj.alignment-1)&~std::size_t(obj.alignment-1),0x90);
     image_.data.resize((image_.data.size()+obj.alignment-1)&~std::size_t(obj.alignment-1),0);
+    image_.tls.resize((image_.tls.size()+source.tls_alignment-1)&~std::size_t(source.tls_alignment-1),0);
     auto code_offset = image_.code.size(), data_offset = image_.data.size();
+    auto tls_offset = image_.tls.size(); image_.tls_alignment = std::max(image_.tls_alignment,source.tls_alignment);
     std::vector<unsigned> map(obj.symbols.size());
     std::vector<unsigned> definitions(obj.symbols.size());
     for (unsigned i = 1; i < definitions.size(); ++i) if (obj.symbols[i].definition == i) {
@@ -26,7 +30,7 @@ void Linker::add(Object&& obj)
         auto record = obj.symbols[i];
         if (record.name) { auto text = obj.name(i); record.name = names_.intern({text.data(),text.size()}); }
         unsigned id = 0;
-        bool runtime = i >= source.runtime_begin && i < source.runtime_begin+unsigned(native::RuntimeEntity::Count);
+        bool runtime = !source.host && i >= source.runtime_begin && i < source.runtime_begin+unsigned(native::RuntimeEntity::Count);
         if (runtime) id = image_.runtime_begin + i-source.runtime_begin;
         else if (record.binding == ir_model::SBM_INTERNAL) id = new_symbol();
         else {
@@ -47,11 +51,13 @@ void Linker::add(Object&& obj)
         }
         symbols_[id] = record; image_.defined[id] = true; image_.data_symbols[id] = source.data_symbols[i];
         symbol_definitions_[id] = definitions[record.definition];
-        image_.symbols[id] = source.symbols[i] + (source.data_symbols[i] ? data_offset : code_offset);
+        bool tls = source.host && source.tls_targets[i] == i;
+        if (tls) image_.tls_targets[id] = id;
+        image_.symbols[id] = source.symbols[i] + (tls ? tls_offset : source.data_symbols[i] ? data_offset : code_offset);
         if (record.role == ir_model::SR_ENTRY) {
             require(!entry_ || entry_ == id,"multiple entry functions"); entry_ = id; parameters_ = record.parameters;
-        } else if (record.role == ir_model::SR_INIT) initializers_.push_back(id);
-        else if (record.role == ir_model::SR_FINI) finalizers_.push_back(id);
+        } else if (record.role == ir_model::SR_INIT) initializers_.push_back({id,0});
+        else if (record.role == ir_model::SR_FINI) finalizers_.push_back({id,0});
     }
     auto fixes = [&](const std::vector<native::Fixup>& input, std::vector<native::Fixup>& output, std::size_t offset) {
         for (auto f : input) {
@@ -63,8 +69,16 @@ void Linker::add(Object&& obj)
     };
     fixes(source.code_fixups,image_.code_fixups,code_offset);
     fixes(source.data_fixups,image_.data_fixups,data_offset);
-    image_.code.insert(image_.code.end(),source.code.begin(),source.code.end());
-    image_.data.insert(image_.data.end(),source.data.begin(),source.data.end());
+    fixes(source.tls_fixups,image_.tls_fixups,tls_offset);
+    for (auto u : obj.unwind) { u.symbol = map.at(u.symbol); u.offset += data_offset; unwind_.push_back(u); }
+    for (auto r : obj.initializers) { r.symbol = map.at(r.symbol); initializers_.push_back(r); }
+    for (auto r : obj.finalizers) { r.symbol = map.at(r.symbol); finalizers_.push_back(r); }
+    if (frame_begin_ == std::size_t(-1) && obj.frame_begin != std::size_t(-1)) frame_begin_ = data_offset+obj.frame_begin;
+    auto append = [](std::vector<unsigned char>& to, std::vector<unsigned char>& from) {
+        if (to.empty()) to = std::move(from);
+        else to.insert(to.end(),from.begin(),from.end());
+    };
+    append(image_.code,source.code); append(image_.data,source.data); append(image_.tls,source.tls);
     image_.has_tls |= source.has_tls;
 }
 void Linker::retain_relocations()
@@ -80,7 +94,7 @@ void Linker::retain_relocations()
     demand(0); // Unowned section bytes, including foreign unwind records.
     for (unsigned id = 1; id < symbols_.size(); ++id)
         if (image_.defined[id] && !lazy_definitions_[symbol_definitions_[id]]) demand(symbol_definitions_[id]);
-    for (const auto* fixes : {&image_.code_fixups,&image_.data_fixups}) for (const auto& f : *fixes) {
+    for (const auto* fixes : {&image_.code_fixups,&image_.data_fixups,&image_.tls_fixups}) for (const auto& f : *fixes) {
         edges.push_back({f.symbol,heads[f.owner]}); heads[f.owner] = edges.size()-1;
     }
     // Each definition and dependency edge is visited at most once. A retained
@@ -89,7 +103,7 @@ void Linker::retain_relocations()
         ++relocation_work;
         auto symbol = edges[i].symbol;
         if (!image_.defined[symbol]) {
-            if (runtime_role(symbols_[symbol].role)) {
+            if (host_ || runtime_role(symbols_[symbol].role)) {
                 if (!requested[symbol]) { requested[symbol] = true; runtime_demands_.push_back(symbol); }
                 continue;
             }
@@ -98,7 +112,7 @@ void Linker::retain_relocations()
         }
         demand(symbol_definitions_[symbol]);
     }
-    for (auto* fixes : {&image_.code_fixups,&image_.data_fixups})
+    for (auto* fixes : {&image_.code_fixups,&image_.data_fixups,&image_.tls_fixups})
         fixes->erase(std::remove_if(fixes->begin(),fixes->end(),[&](const native::Fixup& f) {
             return !live[f.owner];
         }),fixes->end());
@@ -107,10 +121,25 @@ std::size_t Linker::finish(const std::string& path)
 {
     require(entry_ && image_.defined[entry_],"missing main");
     retain_relocations();
+    if (host_ && (!runtime_demands_.empty() || image_.has_tls)) {
+        auto name = names_.intern({"__libc_start_main",17});
+        auto startup = externals_.find(name);
+        if (!startup) { startup = new_symbol(); externals_.insert(name,startup); symbols_[startup].name = name; symbols_[startup].binding = ir_model::SBM_STRONG; }
+        if (std::find(runtime_demands_.begin(),runtime_demands_.end(),startup) == runtime_demands_.end()) runtime_demands_.push_back(startup);
+        std::vector<std::string> libraries;
+        auto imports = host_imports(runtime_demands_,symbols_,names_,libraries);
+        return write_dynamic_executable(image_,symbols_,names_,imports,libraries,unwind_,initializers_,finalizers_,frame_begin_,entry_,startup,path);
+    }
     supply_runtime();
     std::vector<lowir_model::SymbolId> init, fini;
-    for (auto id : initializers_) init.push_back(lowir_model::SymbolId(id));
-    for (auto id : finalizers_) fini.push_back(lowir_model::SymbolId(id));
+    auto function = [&](ObjectReference ref) {
+        require(image_.defined[ref.symbol] && !image_.data_symbols[ref.symbol],"invalid initializer reference");
+        auto id = ref.symbol;
+        if (ref.addend) { id = new_symbol(); image_.defined[id] = true; image_.symbols[id] = image_.symbols[ref.symbol]+ref.addend; }
+        return lowir_model::SymbolId(id);
+    };
+    for (auto ref : initializers_) init.push_back(function(ref));
+    for (auto ref : finalizers_) fini.push_back(function(ref));
     native::Image header(symbols_.size()-1-unsigned(native::RuntimeEntity::Count));
     header.runtime_begin = image_.runtime_begin; header.has_tls = image_.has_tls;
     native::Encoder encoder(header);

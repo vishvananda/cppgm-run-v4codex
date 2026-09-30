@@ -6,6 +6,16 @@
 #include <stdexcept>
 
 namespace cppgm {
+namespace {
+std::uint64_t identifier_hash(TextView text)
+{
+    std::uint64_t hash = 14695981039346656037ull;
+    for (std::size_t i = 0; i < text.size; ++i) {
+        hash ^= static_cast<unsigned char>(text.data[i]); hash *= 1099511628211ull;
+    }
+    return hash;
+}
+}
 
 IdentifierTable::IdentifierTable(LexStats* stats) : slots_(16, 0), stats_(stats) {}
 
@@ -26,11 +36,7 @@ void IdentifierTable::grow()
 
 IdentifierId IdentifierTable::intern(TextView text)
 {
-    std::uint64_t hash = 14695981039346656037ull;
-    for (std::size_t i = 0; i < text.size; ++i) {
-        hash ^= static_cast<unsigned char>(text.data[i]);
-        hash *= 1099511628211ull;
-    }
+    auto hash = identifier_hash(text);
     std::size_t slot = hash & (slots_.size() - 1);
     while (slots_[slot]) {
         if (stats_) ++stats_->intern_probes;
@@ -61,6 +67,18 @@ IdentifierId IdentifierTable::intern(TextView text)
     entries_.push_back(entry);
     slots_[slot] = static_cast<IdentifierId>(entries_.size());
     return slots_[slot];
+}
+
+IdentifierId IdentifierTable::find(TextView text) const
+{
+    auto hash = identifier_hash(text); auto slot = hash & (slots_.size()-1);
+    while (slots_[slot]) {
+        const auto& e = entries_[slots_[slot]-1];
+        if (e.hash == hash && e.length == text.size &&
+            std::memcmp(bytes_.data()+e.offset,text.data,text.size) == 0) return slots_[slot];
+        slot = (slot+1)&(slots_.size()-1);
+    }
+    return 0;
 }
 
 TextView IdentifierTable::spelling(IdentifierId id) const

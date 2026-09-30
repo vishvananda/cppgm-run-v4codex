@@ -73,9 +73,10 @@ struct Function {
     unsigned preserved = 0;
     unsigned frame_alignment = 16;
     int frame_base = XR_RBP;
-    Operand exception_base, stack_floor, host_exception, host_selector;
+    Operand exception_base, stack_floor, host_exception, host_selector, host_raw_selector;
     bool host = false;
     std::vector<SymbolId> host_types;
+    std::vector<unsigned> host_outer;
     std::vector<ExceptionClause> exception_clauses;
     std::vector<ExceptionHandler> exception_handlers;
     std::uint64_t frame_bytes = 0, stack_size = 0, scratch_bytes = 0;
