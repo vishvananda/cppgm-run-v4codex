@@ -1,6 +1,24 @@
 #include "semantic/analyzer.h"
 #include <algorithm>
 namespace cppgm { namespace semantic {
+void Analyzer::constant_overlay_dependencies(std::uint32_t storage, std::uint32_t id, bool attach)
+{
+    auto& owner = constant_storage[storage];
+    auto& entries = owner.frame->overlays;
+    auto& entry = entries[id];
+    if (entry.dependency_previous) entries[entry.dependency_previous].dependency_next = entry.dependency_next;
+    else if (owner.address_overlays == id) owner.address_overlays = entry.dependency_next;
+    if (entry.dependency_next) entries[entry.dependency_next].dependency_previous = entry.dependency_previous;
+    entry.dependency_previous = entry.dependency_next = 0;
+    if (!attach || !entry.value.valid) return;
+    auto value = entry.value; auto kind = types[value.type].kind;
+    bool addresses = (kind == TypeKind::Pointer || kind == TypeKind::LRef || kind == TypeKind::RRef) && value.bits;
+    if (class_value(value.type) || kind == TypeKind::Array) addresses = evaluated_objects[value.bits].address_count;
+    if (!addresses) return;
+    entry.dependency_next = owner.address_overlays;
+    if (entry.dependency_next) entries[entry.dependency_next].dependency_previous = id;
+    owner.address_overlays = id;
+}
 void Analyzer::constant_write(std::uint32_t address, Constant value)
 {
     auto storage = constant_addresses[address].storage;
@@ -25,11 +43,13 @@ void Analyzer::constant_write(std::uint32_t address, Constant value)
     if (frame.overlays[id].first) retired.push_back(frame.overlays[id].first);
     while (!retired.empty()) {
         auto p = retired.back(); retired.pop_back(); auto entry = frame.overlays[p];
+        constant_overlay_dependencies(storage,p,false);
         frame.overlay_index.put(entry.address,0);
         if (entry.first) retired.push_back(entry.first);
         if (entry.next) retired.push_back(entry.next);
     }
     frame.overlays[id].first = 0; frame.overlays[id].value = value; frame.overlays[id].dirty = false;
+    constant_overlay_dependencies(storage,id,true);
     for (auto p = constant_addresses[address].parent; p; p = constant_addresses[p].parent) {
         auto entry = frame.overlay_index.get(p);
         if (frame.overlays[entry].dirty) break;

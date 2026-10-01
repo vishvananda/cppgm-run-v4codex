@@ -376,15 +376,17 @@ void Analyzer::constant_dependencies(Constant value, std::vector<ArgumentId>& ar
         auto storage_id = constant_addresses[value.bits].storage;
         if (seen.get(storage_id)) return;
         seen.put(storage_id,1); ++constant_dependency_work; refresh_constant_storage(storage_id);
-        // A pointer to one scalar must not freeze its entire enclosing array.
-        // The storage version covers sibling writes; follow new pointer values
-        // only within the addressed subobject, alongside the original payload.
-        auto current = constant_storage[storage_id].frame ? constant_read(value.bits) : Constant();
+        // A callee can reach siblings by pointer arithmetic, and distinct
+        // reference arguments can address the same storage. Follow every
+        // changed address-bearing value once, without snapshotting scalar
+        // arrays or scanning their unrelated dirty overlays.
         auto storage = constant_storage[storage_id];
         args.push_back(storage_id); args.push_back(storage.version);
         args.push_back(unsigned(storage.live) | (unsigned(storage.readable)<<1));
         constant_dependencies(storage.value,args,seen);
-        if (current.valid) constant_dependencies(current,args,seen);
+        if (storage.frame)
+            for (auto id = storage.address_overlays; id; id = storage.frame->overlays[id].dependency_next)
+                constant_dependencies(storage.frame->overlays[id].value,args,seen);
         if (storage.builder) {
             for (auto part : storage.builder->parts) constant_dependencies(part.value,args,seen);
             for (auto projected : storage.builder->projected_parts) constant_dependencies(projected.part.value,args,seen);

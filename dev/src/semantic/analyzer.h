@@ -763,6 +763,7 @@ private:
     struct ConstantOverlay {
         Constant value;
         std::uint32_t address = 0, first = 0, next = 0;
+        std::uint32_t dependency_previous = 0, dependency_next = 0;
         bool dirty = false;
     };
     struct ConstantFrame {
@@ -797,7 +798,7 @@ private:
     std::uint32_t constant_construction_receiver(ConstantBuilder&, std::uint32_t receiver, unsigned path);
     std::uint32_t constant_field_address(std::uint32_t parent, EntityId field);
     std::uint32_t constant_destination = 0;
-    struct ConstantStorage { TypeId type = 0; EntityId entity = 0; NodeId literal = 0; Constant value; ConstantBuilder* builder = 0; ConstantFrame* frame = 0; std::uint32_t binding = 0, version = 0; bool live = true, readable = false; };
+    struct ConstantStorage { TypeId type = 0; EntityId entity = 0; NodeId literal = 0; Constant value; ConstantBuilder* builder = 0; ConstantFrame* frame = 0; std::uint32_t binding = 0, version = 0, address_overlays = 0; bool live = true, readable = false; };
     struct ConstantAddress { std::uint32_t storage = 0, parent = 0, next = 0; TypeId type = 0; std::uint64_t selector = 0, offset = 0; bool located = false; };
     std::vector<EvaluatedObject> evaluated_objects = std::vector<EvaluatedObject>(1);
     std::vector<EvaluatedPart> evaluated_parts;
@@ -834,6 +835,7 @@ private:
     Constant constant_base_read(std::uint32_t address);
     Constant constant_snapshot(std::uint32_t address, Constant value);
     void constant_write(std::uint32_t address, Constant value);
+    void constant_overlay_dependencies(std::uint32_t storage, std::uint32_t overlay, bool attach);
     Constant constant_indirect(Constant value);
     void constant_dependencies(Constant value, std::vector<ArgumentId>& arguments, Index& seen);
     Constant constant_pointer_binary(ETokenType op, Constant left, Constant right);
