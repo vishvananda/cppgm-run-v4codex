@@ -225,3 +225,4 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/vector_types
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/inline_validation
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/source_builtins lowering/source_strings
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/object_initializer

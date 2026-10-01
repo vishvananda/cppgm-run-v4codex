@@ -131,6 +131,9 @@ public:
     TypeArguments query_arguments(std::uint32_t pack) const { return argument_packs[pack]; }
     TypeId dependent_function_template_parameter_type(EntityId specialization, unsigned ordinal);
     bool emission_suppressed(EntityId e) const { return instantiation_suppressed(e); }
+    bool dormant_inline_variable(EntityId e) const {
+        return inline_variable_definitions.get(e) && !(entities[e].emission & Entity::Used);
+    }
     Index type_linkage_names;
     Index local_unnamed_types;
     bool dependent_type(TypeId type);
@@ -1252,6 +1255,15 @@ private:
     TemplateDefinitionOwner definition_owner(EntityId cls);
     bool instantiate_member_definition(EntityId e);
     void demand_template_storage(EntityId e);
+    void initialize_inline_variable(EntityId e);
+    Index inline_variable_definitions;
+    struct InlineVariableDefinition {
+        NodeId declarator = 0, specifiers = 0;
+        ScopeId scope = 0;
+        FactState state = FactState::NotStarted;
+    };
+    std::vector<InlineVariableDefinition> inline_variable_recipes = std::vector<InlineVariableDefinition>(1);
+    std::size_t inline_variable_initializers = 0, inline_variable_hits = 0;
     void demand_class_constant_storage(TypeId type);
     Index class_constant_storage;
     Index definition_roots, definition_paths, definition_index, definition_owner_index, definition_applications, storage_requested;
@@ -1476,6 +1488,7 @@ private:
     TypeId parameter(NodeId n, ScopeId s);
     ScopeId object_declaration_owner(NodeId name, ScopeId scope);
     EntityId declare_object(NodeId d, NodeId init, TypeId t, NodeId specs, ScopeId s, NodeId source);
+    void finish_object_initializer(EntityId e, NodeId init, NodeId d, NodeId specs, ScopeId s, ScopeId definition_scope, TypeId t, bool external);
     void declaration_attributes(EntityId e, NodeId specs, NodeId source, NodeId declarator = 0);
     Constant evaluate(NodeId n, ScopeId s);
     Constant evaluate_value(NodeId n, ScopeId s);

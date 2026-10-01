@@ -143,6 +143,9 @@ Constant Analyzer::constant_entity_value(EntityId e)
 {
     EvaluationScope initializer(*this,true);
     if (!e) return Constant();
+    initialize_inline_variable(e);
+    if (auto recipe = inline_variable_definitions.get(e))
+        if (inline_variable_recipes[recipe].state == FactState::Active) return Constant();
     if (entities[e].constant.valid) return entities[e].constant;
     if (entities[e].kind == EntityKind::Variable && entities[e].specialization && !entities[e].explicit_specialization) {
         auto spec = specializations[entities[e].specialization];

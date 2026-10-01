@@ -70,6 +70,16 @@ std::string Encoder::target(const Target& t) {
     case TargetKind::TlsWrapper: output += "TW"; type(t.type); break;
     case TargetKind::TlsInitializer: output += "TH"; type(t.type); break;
     case TargetKind::Guard: output += "GV"; type(t.type); break;
+    case TargetKind::ReferenceTemporary: case TargetKind::ReferenceGuard: {
+        output += t.kind == TargetKind::ReferenceTemporary ? "GR" : "GV";
+        type(t.type);
+        if (t.ordinal) {
+            std::string sequence; auto n = t.ordinal-1;
+            do { sequence += "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"[n%36]; n /= 36; } while (n);
+            output.append(sequence.rbegin(),sequence.rend());
+        }
+        output += '_'; break;
+    }
     case TargetKind::VirtualThunk:
         output += "Tv"; integer(t.this_adjust, t.this_adjust < 0); output += '_';
         integer(t.vcall_offset, t.vcall_offset < 0); output += '_';

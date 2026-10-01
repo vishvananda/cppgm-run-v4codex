@@ -221,6 +221,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"nested_class_definitions\":" << nested_class_definitions
         << ",\"explicit_specialization_selections\":" << explicit_selections
         << ",\"variable_template_initializers\":" << variable_initializers
+        << ",\"inline_variable_initializers\":" << inline_variable_initializers
+        << ",\"inline_variable_hits\":" << inline_variable_hits
         << ",\"variable_template_reuses\":" << variable_reuses
         << ",\"variable_template_candidates\":" << variable_candidates
         << ",\"function_ordering_work\":" << function_ordering_work

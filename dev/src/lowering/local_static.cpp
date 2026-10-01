@@ -5,7 +5,7 @@ void Procedural::prepare_local_static(EntityId e, bool dynamic)
 {
     LocalStatic local{e,SymbolId(),SymbolId(),dynamic};
     auto dtor = sem.object_destructor(e);
-    bool destruction = sem.destructor_needed(dtor) || local_static_references.get(e);
+    bool destruction = sem.destructor_needed(dtor) || (local_static_references.get(e) && !sem.entities[e].inline_variable);
     if (dynamic || destruction) {
         Global g; g.symbol = fresh_symbol(p.name(p.symbols[symbols[e].index-1].name)+"__guard"); g.type = IRType::I64;
         g.data.begin = p.data.size(); g.data.count = 1;
@@ -17,6 +17,12 @@ void Procedural::prepare_local_static(EntityId e, bool dynamic)
             target.type = abi_entity_name(e);
             symbol.metadata.object = p.intern(abi_mangle::mangle(abi,target));
             symbol.metadata.binding = SBM_WEAK;
+        }
+        auto reference = sem.static_temporary(e).reference;
+        if (reference && sem.entities[reference].inline_variable && !internal_entity(reference)) {
+            abi_mangle::Target target; target.kind = abi_mangle::TargetKind::ReferenceGuard;
+            target.type = abi_entity_name(reference); target.ordinal = reference_ordinals.get(e)-1;
+            symbol.metadata.object = p.intern(abi_mangle::mangle(abi,target)); symbol.metadata.binding = SBM_WEAK;
         }
         if (sem.entities[e].thread_local_storage) symbol.metadata.storage = GSM_THREAD_LOCAL;
         local.guard = g.symbol;
@@ -56,6 +62,7 @@ void Procedural::initialize_local_static(EntityId e)
     auto entity = sem.entities[e];
     bool published = false;
     auto publish = [&]() {
+        if (entity.inline_variable) register_inline_temporaries(e);
         if (local.destructor) emit(Opcode::Call,IRType::I32,{Operand::symbol(atexit_symbol),Operand::symbol(local.destructor)});
         emit(Opcode::Store,IRType::I64,{Operand::integer(1),Operand::symbol(local.guard)});
         published = true;
@@ -94,7 +101,7 @@ void Procedural::emit_local_static_destructors()
         builder.reset(new FunctionBuilder(p,function)); this_slot = SlotId(); start(block());
         auto destructor = sem.object_destructor(local.object);
         if (sem.destructor_needed(destructor)) destroy_object(local.object,destructor);
-        for (auto id = local_static_references.get(local.object); id; id = local_static_reference_objects[id].next) {
+        for (auto id = sem.entities[local.object].inline_variable ? 0 : local_static_references.get(local.object); id; id = local_static_reference_objects[id].next) {
             auto object = local_static_reference_objects[id].object;
             BlockId end;
             if (auto guard = reference_guards.get(object)) {

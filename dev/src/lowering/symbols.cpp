@@ -389,7 +389,12 @@ Procedural::Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& i
 void Procedural::run()
 {
     std::vector<EntityId> reference_objects, deferred_conversions;
+    semantic::Index reference_counts;
     for (auto storage : sem.reference_storage) {
+        if (storage.reference && sem.entities[storage.reference].inline_variable) {
+            auto ordinal = reference_counts.get(storage.reference)+1;
+            reference_counts.put(storage.reference,ordinal); reference_ordinals.put(storage.object,ordinal);
+        }
         if (!storage.reference || (!sem.local_static(storage.reference) && !sem.entities[storage.reference].inline_variable) || !sem.destructor_needed(sem.object_destructor(storage.object))) continue;
         auto next = local_static_references.get(storage.reference);
         local_static_references.put(storage.reference,local_static_reference_objects.size());
@@ -399,6 +404,7 @@ void Procedural::run()
         auto entity = sem.entities[e];
         if (sem.predefined_string(e) && !entity.name) continue; // Demand support bytes only through a consumed address.
         if (entity.template_pattern) continue;
+        if (sem.dormant_inline_variable(e)) continue;
         if (sem.deferred_inline_function(e) && !(entity.emission & semantic::Entity::Used) &&
             !entity.instantiation_definition) continue;
         if (entity.kind == semantic::EntityKind::Function && entity.specialization && !entity.explicit_specialization && !(entity.emission & semantic::Entity::Used)) continue;

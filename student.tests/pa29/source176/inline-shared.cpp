@@ -1,3 +1,4 @@
+struct Check { ~Check(); } check;
 #include "inline-shared.h"
 int calls = 0;
 int destroyed = 0;
@@ -6,7 +7,7 @@ int next() { return ++calls; }
 extern const void* other(int);
 extern int from_other();
 extern "C" void _Exit(int);
-struct Check { ~Check() { _Exit(!failed && destroyed == 2 ? 0 : 99); } } check;
+Check::~Check() { _Exit(!failed && destroyed == 2 ? 0 : 99); }
 int main() {
   if (other(0) != letters || other(1) != &scalar || other(2) != &dynamic) return 1;
   if (other(3) != &object || other(4) != &reference || other(5) != &Members::value) return 2;

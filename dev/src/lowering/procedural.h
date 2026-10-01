@@ -97,11 +97,13 @@ class Procedural {
     struct LocalStatic { EntityId object; SymbolId guard, destructor; bool dynamic; };
     std::vector<LocalStatic> local_statics = std::vector<LocalStatic>(1);
     semantic::Index local_static_index, local_static_references;
+    semantic::Index reference_ordinals;
     struct LocalStaticReference { EntityId object; std::uint32_t next; };
     std::vector<LocalStaticReference> local_static_reference_objects = std::vector<LocalStaticReference>(1);
     SymbolId atexit_symbol;
     void prepare_local_static(EntityId e, bool dynamic);
     void initialize_local_static(EntityId e);
+    void register_inline_temporaries(EntityId e);
     void emit_local_static_destructors();
     struct AllocationAdapter { SymbolId symbol, runtime; };
     std::vector<AllocationAdapter> allocation_adapters;

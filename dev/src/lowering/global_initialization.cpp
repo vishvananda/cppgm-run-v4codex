@@ -3,6 +3,25 @@
 namespace cppgm { namespace lowering {
 using syntax::Kind;
 using namespace lowir_model;
+void Procedural::register_inline_temporaries(EntityId e)
+{
+    // Host TUs guard temporary registration separately from the reference.
+    // Register in initialization order, so atexit destroys in reverse order.
+    std::vector<EntityId> objects;
+    for (auto id = local_static_references.get(e); id; id = local_static_reference_objects[id].next)
+        objects.push_back(local_static_reference_objects[id].object);
+    for (auto i = objects.rbegin(); i != objects.rend(); ++i) {
+        auto object = *i;
+        BlockId end;
+        if (auto guard = reference_guards.get(object)) {
+            auto active = emit(Opcode::Load,IRType::I64,{Operand::symbol(SymbolId(guard))});
+            auto run = block(); end = block();
+            emit(Opcode::Branch,IRType(),{active.operand,Operand::label(run),Operand::label(end)}); start(run);
+        }
+        initialize_local_static(object);
+        if (end) { jump(end); start(end); }
+    }
+}
 void Procedural::global_initialization()
 {
     reset_lifetime(0);
@@ -20,7 +39,11 @@ void Procedural::global_initialization()
     builder.reset(new FunctionBuilder(p, function)); this_slot = SlotId();
     start(block());
     for (EntityId e : global_initializers) {
-        if (sem.entities[e].inline_variable) { initialize_local_static(e); continue; }
+        if (sem.entities[e].inline_variable) {
+            initialize_local_static(e);
+            register_inline_temporaries(e);
+            continue;
+        }
         SourceInvocationScope invocation(source_invocation,sem.object_source_sites.get(e));
         initialized_units = semantic::Index();
         auto entity = sem.entities[e];

@@ -40,12 +40,19 @@ void Procedural::reference_global(EntityId e)
         p.globals.push_back(g);
         auto& symbol = p.symbols[g.symbol.index-1]; symbol.kind = Symbol::GlobalSymbol; symbol.entity = p.globals.size();
         symbol.metadata.binding = ir_model::SBM_INTERNAL;
+        if (object_data && storage.reference && sem.entities[storage.reference].inline_variable && !internal_entity(storage.reference)) {
+            abi_mangle::Target target; target.kind = abi_mangle::TargetKind::ReferenceTemporary;
+            target.type = abi_entity_name(storage.reference); target.ordinal = reference_ordinals.get(e)-1;
+            symbol.metadata.object = p.intern(abi_mangle::mangle(abi,target)); symbol.metadata.binding = SBM_WEAK;
+        }
         return g.symbol;
     };
     TypeId t = sem.entities[e].type;
     symbols[e] = add(type(t),type(t).kind() == IRType::Object,"@__reference_"+std::to_string(e),true);
     if (storage.conditional && sem.destructor_needed(sem.object_destructor(e)))
         reference_guards.put(e,add(IRType::I64,false,"@__reference_live_"+std::to_string(e)).index);
+    if (storage.reference && sem.entities[storage.reference].inline_variable && sem.destructor_needed(sem.object_destructor(e)))
+        prepare_local_static(e,false);
 }
 void Procedural::initialize_reference(EntityId e, Value location)
 {

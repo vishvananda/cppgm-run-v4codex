@@ -231,6 +231,8 @@ std::string FactWriter::write(const Target& t) {
     case TargetKind::TlsWrapper: result = "tls-wrapper-type " + ref('t', t.type); break;
     case TargetKind::TlsInitializer: result = "tls-initializer-type " + ref('t', t.type); break;
     case TargetKind::Guard: result = "guard-type " + ref('t', t.type); break;
+    case TargetKind::ReferenceTemporary: case TargetKind::ReferenceGuard:
+        result = std::string(t.kind == TargetKind::ReferenceTemporary ? "reference-temporary " : "reference-guard ") + ref('t',t.type) + ' ' + std::to_string(t.ordinal); break;
     case TargetKind::VirtualThunk:
         result = "virtual-base-thunk " + std::to_string(t.vcall_offset) +
             " this-adjust " + std::to_string(t.this_adjust) + " function " + function(t.function); break;

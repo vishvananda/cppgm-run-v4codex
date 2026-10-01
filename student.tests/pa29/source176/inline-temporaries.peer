@@ -1,0 +1,2 @@
+#include "inline-temporaries.h"
+const void* address(int n) { return n==0 ? (const void*)&pair : n==1 ? &pair.a : &pair.b; }

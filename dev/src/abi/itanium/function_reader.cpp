@@ -99,6 +99,9 @@ void FactReader::target_record(const Words& w) {
         }
         if (take(w, p) != "function") throw std::runtime_error("thunk requires function");
         target.function = function(w, p);
+    } else if (op == "reference-temporary" || op == "reference-guard") {
+        target.kind = op == "reference-temporary" ? TargetKind::ReferenceTemporary : TargetKind::ReferenceGuard;
+        target.type = type(w,p); target.ordinal = index_value(take(w,p));
     } else if (op == "variable-type" || op == "internal-variable-type" || op == "tls-wrapper-type" || op == "tls-initializer-type" || op == "guard-type") {
         target.kind = op == "guard-type" ? TargetKind::Guard : op == "tls-wrapper-type" ? TargetKind::TlsWrapper : op == "tls-initializer-type" ? TargetKind::TlsInitializer : TargetKind::Variable;
         target.internal = op == "internal-variable-type"; target.type = type(w, p);

@@ -89,11 +89,13 @@ struct Function {
 };
 enum class TargetKind : std::uint8_t {
     Type, Function, Variable, Typeinfo, TypeinfoName, Vtable, Vtt,
-    ConstructionVtable, TlsWrapper, Thunk, VirtualThunk, TlsInitializer, Guard
+    ConstructionVtable, TlsWrapper, Thunk, VirtualThunk, TlsInitializer, Guard,
+    ReferenceTemporary, ReferenceGuard
 };
 struct Target {
     TargetKind kind = TargetKind::Type;
     Id type = 0, base = 0;
+    std::uint32_t ordinal = 0;
     Function function;
     std::int64_t this_adjust = 0, result_adjust = 0, vcall_offset = 0;
     std::int64_t result_vcall_offset = 0;

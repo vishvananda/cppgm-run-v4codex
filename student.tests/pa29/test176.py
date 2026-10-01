@@ -13,7 +13,7 @@ for source in sorted((root/'student.tests/pa29/source176').glob('*.cpp')):
  obj=out/(source.stem+'.o');exe=out/source.stem
  row['compile']=run([cc,'-std=c++11','-O0','-c',source,'-o',obj])
  reject='.reject.' in source.name
- if reject: row['passed']=row['compile']['status']!=0
+ if reject: row['passed']=row['compile']['status']==1
  elif not row['compile']['status']:
   row['symbols']=run(['nm','-C',obj])
   objects=[obj]

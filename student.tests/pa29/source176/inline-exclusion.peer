@@ -1,0 +1,6 @@
+template<class T> struct Members {
+  __attribute__((exclude_from_explicit_instantiation)) inline static int used = 31;
+  __attribute__((exclude_from_explicit_instantiation)) inline static int dormant = T::missing;
+  inline static int supplied = 9;
+};
+template struct Members<int>;

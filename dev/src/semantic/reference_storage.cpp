@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include <algorithm>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
 void Analyzer::retain_initializer_references(EntityId e)
@@ -32,7 +33,11 @@ void Analyzer::retain_initializer_references(EntityId e)
     while (!work.empty()) {
         auto action = initializers[work.back()]; work.pop_back();
         if (action.kind == InitKind::Group) {
+            auto first = work.size();
             for (auto child = action.first; child; child = initializers[child].next) work.push_back(child);
+            // Inline definitions number their shared temporaries in source
+            // preorder, including each nested initializer before its sibling.
+            if (entity.inline_variable) std::reverse(work.begin()+first,work.end());
             continue;
         }
         auto type = types[action.type];

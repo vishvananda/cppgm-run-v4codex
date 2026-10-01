@@ -184,7 +184,7 @@ void Procedural::global(EntityId e)
     if (!g.declaration && entity.inline_variable && !entity.thread_local_storage) {
         bool dynamic = !sem.static_initialization(e);
         prepare_local_static(e,dynamic);
-        if (!dynamic && local_statics[local_static_index.get(e)].guard) global_initializers.push_back(e);
+        if (!dynamic && (local_statics[local_static_index.get(e)].guard || local_static_references.get(e))) global_initializers.push_back(e);
     }
     else if (sem.local_static(e)) prepare_local_static(e,!sem.static_initialization(e));
     else if (linkage.host && entity.thread_local_storage && !tls_wrappers.get(e)) prepare_tls(e);
