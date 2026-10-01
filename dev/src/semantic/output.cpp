@@ -68,6 +68,8 @@ void Analyzer::write_type(std::ostream& out, TypeId id, NodeId display_name, ETo
     switch (t.kind) {
     case TypeKind::AliasApplication: write_type(out,t.child); break;
     case TypeKind::Fundamental: out << fundamental_name(t.fundamental); break;
+    case TypeKind::ExtVector: out << "extended vector " << t.bound << " lanes of "; write_type(out,t.child); break;
+    case TypeKind::DependentExtVector: out << "vector lanes query " << t.bound << " of "; write_type(out,t.child); break;
     case TypeKind::Vector: out << "vector " << t.bound << " bytes of "; write_type(out,t.child); break;
     case TypeKind::DependentVector: out << "vector width query " << t.bound << " of "; write_type(out,t.child); break;
     case TypeKind::Decltype: out << "dependent decltype query " << t.entity; break;

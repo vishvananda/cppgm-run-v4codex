@@ -35,6 +35,11 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment, bool probe)
     if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return size(t.child, alignment,probe);
     if (t.kind == TypeKind::Pointer) return 8;
     if (t.kind == TypeKind::Vector) return t.bound;
+    if (t.kind == TypeKind::ExtVector) {
+        auto bytes = fundamental(t.child,FT_BOOL) ? (t.bound+7)/8 : t.bound*size(t.child);
+        std::uint64_t rounded = 1; while (rounded < bytes) rounded *= 2;
+        return rounded;
+    }
     if (t.kind == TypeKind::MemberPointer) return !alignment && types[t.child].kind == TypeKind::Function ? 16 : 8;
     if (t.kind == TypeKind::Array) {
         if (!t.bound) { if (probe) return 0; throw std::runtime_error("sizeof incomplete array"); }

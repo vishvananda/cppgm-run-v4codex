@@ -91,11 +91,14 @@ unsigned Parser::balanced(const char* open, const char* close, NativeAttributes*
             if (native->section && native->section != name) throw std::runtime_error("conflicting section attributes");
             native->section = name;
         }
-        else if (in.is("vector_size") || in.is("__vector_size__")) {
+        else if (in.is("vector_size") || in.is("__vector_size__") ||
+            in.is("ext_vector_type") || in.is("__ext_vector_type__")) {
+            bool extended = in.is("ext_vector_type") || in.is("__ext_vector_type__");
             in.take(); in.require("(");
             auto operand = expression(2); in.require(")");
             if (!native) throw std::runtime_error("vector_size requires a type owner");
             auto attribute = wrap(Kind::VectorAttribute,operand);
+            ast[attribute].flags = extended;
             ast[attribute].next = native->vector_attributes;
             native->vector_attributes = attribute;
         }

@@ -528,7 +528,8 @@ private:
     std::vector<FieldProjection> field_projections = std::vector<FieldProjection>(1);
     std::uint64_t gnu_alignment_constant(Constant value);
     TypeId vector_attributes(TypeId type, NodeId owner, ScopeId scope);
-    TypeId vector_type(TypeId lane, std::uint32_t width_query);
+    TypeId vector_type(TypeId lane, std::uint32_t width_query, bool extended = false);
+    std::uint64_t vector_elements(TypeId type);
     TypeId aligned_typedef(TypeId type, NodeId source, NodeId specs, NodeId declarator, ScopeId scope);
     std::uint64_t alignment_attributes(NodeId n, ScopeId s, bool* strict = 0);
     FieldFacts& field_metadata(EntityId e);

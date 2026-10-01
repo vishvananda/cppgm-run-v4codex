@@ -273,7 +273,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
                 return result;
             };
             if ((ast[args_node].kind == Kind::BracedInit && class_value(cast_type)) ||
-                types[cast_type].kind == TypeKind::Array || types[cast_type].kind == TypeKind::Vector) return list_value();
+                types[cast_type].kind == TypeKind::Array || vector_kind(types[cast_type].kind)) return list_value();
             if (types[cast_type].kind == TypeKind::Named && entities[types[cast_type].entity].class_info) {
                 EntityId ctor = choose_constructor(cast_type,args,&result,s,true,false,0,aggregate_type(cast_type));
                 if (!ctor) return list_value();

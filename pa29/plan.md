@@ -122,3 +122,11 @@ never a guessed signature. Pointer-to-vector ABI consumes PA9's typed Vector.
 Current check: 354/403 (four previous failures fixed, no new failures); 22/22
 explicit controls. Next: complete adjacent extended-vector layout and shape
 validation, then frozen final validation/performance evidence.
+
+Increment167b: extended vector types retain lane counts separately from GNU
+byte widths, including packed boolean layout and dependent partial-specialization
+deduction. Constant shape errors are rejected even in unused template patterns.
+42/42 controls and the final course tests pass their intended expectations:
+PA29 354/403; PA1–28 4538/4538; through PA29 4892/4941. File audit passes
+with the four inherited header warnings. Remaining 49 course failures are
+unchanged; performance and IR inspections are still pending handoff evidence.

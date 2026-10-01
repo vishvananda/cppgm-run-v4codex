@@ -307,7 +307,7 @@ bool Analyzer::builtin_type_property(unsigned operation, TypeId t)
     default: break;
     }
     if (type.kind == TypeKind::Array) return builtin_type_property(operation,type.child);
-    if (!cls) return type.kind == TypeKind::Vector || type.kind == TypeKind::Pointer || type.kind == TypeKind::MemberPointer || enumeration ||
+    if (!cls) return vector_kind(type.kind) || type.kind == TypeKind::Pointer || type.kind == TypeKind::MemberPointer || enumeration ||
         (type.kind == TypeKind::Fundamental && type.fundamental != FT_VOID);
     auto identity = key(operation,types.unqualified(t));
     auto state = BooleanFact(builtin_type_properties.get(identity));

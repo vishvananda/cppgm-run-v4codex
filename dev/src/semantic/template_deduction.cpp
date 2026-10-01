@@ -44,6 +44,19 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         return deduce_sequence(std::vector<ArgumentId>(argument_types.begin()+x.offset,argument_types.begin()+x.offset+x.count),
             std::vector<ArgumentId>(argument_types.begin()+y.offset,argument_types.begin()+y.offset+y.count),bindings,kind,prefix);
     }
+    if (p.kind == TypeKind::DependentExtVector) {
+        if (a.kind != TypeKind::ExtVector && a.kind != TypeKind::DependentExtVector) return false;
+        ArgumentId count;
+        if (a.kind == TypeKind::DependentExtVector) count = value_argument_id(a.bound);
+        else {
+            TypeQuery q; q.type = types.fundamental(FT_UNSIGNED_LONG_INT); q.value = a.bound;
+            count = value_argument_id(intern_query(q,{}));
+        }
+        auto query = type_queries[p.bound];
+        if (query.kind == QueryKind::TemplateValueParameter) count = convert_argument(count,query.type);
+        return count && deduce_type(value_argument_id(p.bound),count,bindings,kind,prefix) &&
+            deduce_type(p.child,a.child,bindings,kind,prefix);
+    }
     if (p.kind == TypeKind::DependentVector) return true; // vendor dependent vector shapes are non-deduced
     if (p.kind == TypeKind::DependentArray) {
         if (a.kind != TypeKind::Array && a.kind != TypeKind::DependentArray) return false;
@@ -84,7 +97,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
     }
     if (p.kind != a.kind) return false;
     if (kind != DeductionKind::Call && p.cv != a.cv) return false;
-    if ((p.kind == TypeKind::Array || p.kind == TypeKind::Vector) && p.bound != a.bound) return false;
+    if ((p.kind == TypeKind::Array || vector_kind(p.kind)) && p.bound != a.bound) return false;
     if (p.kind == TypeKind::MemberPointer && !deduce_type(p.member_owner(),a.member_owner(),bindings,kind,prefix)) return false;
     if (p.kind == TypeKind::Named && entities[p.entity].specialization && entities[a.entity].specialization &&
         entities[specialization_pattern(p.entity)].template_parameter) {
