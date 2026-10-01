@@ -1,0 +1,5 @@
+{
+  "status": 1,
+  "diagnostic": "Traceback (most recent call last):\n  File \"/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/performance179.py\", line 37, in <module>\n    run([cc['B'],*flags,src,'-o',obj]);run(['g++',obj,'-o',exe]);run(['g++','-std=c++17','-O0',src,'-o',host])\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/performance179.py\", line 11, in run\n    if not allow:assert not p.returncode,(args,p.returncode,p.stderr)\n                        ^^^^^^^^^^^^^^^^\nAssertionError: ([PosixPath('/tmp/pa29-179/final-cppgm++'), '-std=c++11', '-O0', '-c', '--stats', PosixPath('/tmp/pa29-179/owner-performance/class600.cpp'), '-o', PosixPath('/tmp/pa29-179/owner-performance/class600.o')], 1, 'ERROR: narrowing list initialization\\n')\n",
+  "classification": "No affected workload timing accepted: final at bcef72ad rejected the first input. Launcher timings were not persisted before this failure. Shared reference narrowing was subsequently repaired; final-only measurements use the corrected frozen image."
+}

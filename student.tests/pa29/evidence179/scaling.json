@@ -1,0 +1,307 @@
+{
+  "all_72_compilations_checked": true,
+  "workloads": {
+    "class600": {
+      "n": 600,
+      "family": "class",
+      "counters": {
+        "parsed_nodes": 9306,
+        "nodes": 53106,
+        "template_occurrences": 43800,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 2,
+        "semantic_binding_projections": 1202,
+        "semantic_binding_storage_bytes": 32800,
+        "instructions": 22843,
+        "native_instructions": 21660,
+        "text_bytes": 94120,
+        "semantic_substitution_frames": 600,
+        "template_body_transitions": 600
+      }
+    },
+    "class1200": {
+      "n": 1200,
+      "family": "class",
+      "counters": {
+        "parsed_nodes": 18306,
+        "nodes": 105906,
+        "template_occurrences": 87600,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 2,
+        "semantic_binding_projections": 2402,
+        "semantic_binding_storage_bytes": 65568,
+        "instructions": 45643,
+        "native_instructions": 43260,
+        "text_bytes": 188320,
+        "semantic_substitution_frames": 1200,
+        "template_body_transitions": 1200
+      }
+    },
+    "class2400": {
+      "n": 2400,
+      "family": "class",
+      "counters": {
+        "parsed_nodes": 36306,
+        "nodes": 211506,
+        "template_occurrences": 175200,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 2,
+        "semantic_binding_projections": 4802,
+        "semantic_binding_storage_bytes": 131104,
+        "instructions": 91243,
+        "native_instructions": 86460,
+        "text_bytes": 376720,
+        "semantic_substitution_frames": 2400,
+        "template_body_transitions": 2400
+      }
+    },
+    "array600": {
+      "n": 600,
+      "family": "array",
+      "counters": {
+        "parsed_nodes": 9278,
+        "nodes": 51278,
+        "template_occurrences": 42000,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 1202,
+        "semantic_binding_storage_bytes": 32792,
+        "instructions": 25243,
+        "native_instructions": 24060,
+        "text_bytes": 108736,
+        "semantic_substitution_frames": 600,
+        "template_body_transitions": 600
+      }
+    },
+    "array1200": {
+      "n": 1200,
+      "family": "array",
+      "counters": {
+        "parsed_nodes": 18278,
+        "nodes": 102278,
+        "template_occurrences": 84000,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 2402,
+        "semantic_binding_storage_bytes": 65560,
+        "instructions": 50443,
+        "native_instructions": 48060,
+        "text_bytes": 217936,
+        "semantic_substitution_frames": 1200,
+        "template_body_transitions": 1200
+      }
+    },
+    "array2400": {
+      "n": 2400,
+      "family": "array",
+      "counters": {
+        "parsed_nodes": 36278,
+        "nodes": 204278,
+        "template_occurrences": 168000,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 4802,
+        "semantic_binding_storage_bytes": 131096,
+        "instructions": 100843,
+        "native_instructions": 96060,
+        "text_bytes": 436336,
+        "semantic_substitution_frames": 2400,
+        "template_body_transitions": 2400
+      }
+    },
+    "lifetime600": {
+      "n": 600,
+      "family": "lifetime",
+      "counters": {
+        "parsed_nodes": 9354,
+        "nodes": 45354,
+        "template_occurrences": 36000,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 2,
+        "semantic_binding_projections": 1202,
+        "semantic_binding_storage_bytes": 32800,
+        "instructions": 16265,
+        "native_instructions": 15075,
+        "text_bytes": 78620,
+        "semantic_substitution_frames": 600,
+        "template_body_transitions": 600
+      }
+    },
+    "lifetime1200": {
+      "n": 1200,
+      "family": "lifetime",
+      "counters": {
+        "parsed_nodes": 18354,
+        "nodes": 90354,
+        "template_occurrences": 72000,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 2,
+        "semantic_binding_projections": 2402,
+        "semantic_binding_storage_bytes": 65568,
+        "instructions": 32465,
+        "native_instructions": 30075,
+        "text_bytes": 157220,
+        "semantic_substitution_frames": 1200,
+        "template_body_transitions": 1200
+      }
+    },
+    "lifetime2400": {
+      "n": 2400,
+      "family": "lifetime",
+      "counters": {
+        "parsed_nodes": 36354,
+        "nodes": 180354,
+        "template_occurrences": 144000,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 2,
+        "semantic_binding_projections": 4802,
+        "semantic_binding_storage_bytes": 131104,
+        "instructions": 64865,
+        "native_instructions": 60075,
+        "text_bytes": 314420,
+        "semantic_substitution_frames": 2400,
+        "template_body_transitions": 2400
+      }
+    }
+  },
+  "equations": {
+    "class": {
+      "parsed_nodes": {
+        "slope": 15.0,
+        "offset": 306.0
+      },
+      "nodes": {
+        "slope": 88.0,
+        "offset": 306.0
+      },
+      "template_occurrences": {
+        "slope": 73.0,
+        "offset": 0.0
+      },
+      "semantic_binding_shapes": {
+        "slope": 0.0,
+        "offset": 1.0
+      },
+      "semantic_binding_members": {
+        "slope": 0.0,
+        "offset": 2.0
+      },
+      "semantic_binding_projections": {
+        "slope": 2.0,
+        "offset": 2.0
+      },
+      "instructions": {
+        "slope": 38.0,
+        "offset": 43.0
+      },
+      "native_instructions": {
+        "slope": 36.0,
+        "offset": 60.0
+      },
+      "text_bytes": {
+        "slope": 157.0,
+        "offset": -80.0
+      },
+      "semantic_substitution_frames": {
+        "slope": 1.0,
+        "offset": 0.0
+      },
+      "template_body_transitions": {
+        "slope": 1.0,
+        "offset": 0.0
+      }
+    },
+    "array": {
+      "parsed_nodes": {
+        "slope": 15.0,
+        "offset": 278.0
+      },
+      "nodes": {
+        "slope": 85.0,
+        "offset": 278.0
+      },
+      "template_occurrences": {
+        "slope": 70.0,
+        "offset": 0.0
+      },
+      "semantic_binding_shapes": {
+        "slope": 0.0,
+        "offset": 1.0
+      },
+      "semantic_binding_members": {
+        "slope": 0.0,
+        "offset": 0.0
+      },
+      "semantic_binding_projections": {
+        "slope": 2.0,
+        "offset": 2.0
+      },
+      "instructions": {
+        "slope": 42.0,
+        "offset": 43.0
+      },
+      "native_instructions": {
+        "slope": 40.0,
+        "offset": 60.0
+      },
+      "text_bytes": {
+        "slope": 182.0,
+        "offset": -464.0
+      },
+      "semantic_substitution_frames": {
+        "slope": 1.0,
+        "offset": 0.0
+      },
+      "template_body_transitions": {
+        "slope": 1.0,
+        "offset": 0.0
+      }
+    },
+    "lifetime": {
+      "parsed_nodes": {
+        "slope": 15.0,
+        "offset": 354.0
+      },
+      "nodes": {
+        "slope": 75.0,
+        "offset": 354.0
+      },
+      "template_occurrences": {
+        "slope": 60.0,
+        "offset": 0.0
+      },
+      "semantic_binding_shapes": {
+        "slope": 0.0,
+        "offset": 1.0
+      },
+      "semantic_binding_members": {
+        "slope": 0.0,
+        "offset": 2.0
+      },
+      "semantic_binding_projections": {
+        "slope": 2.0,
+        "offset": 2.0
+      },
+      "instructions": {
+        "slope": 27.0,
+        "offset": 65.0
+      },
+      "native_instructions": {
+        "slope": 25.0,
+        "offset": 75.0
+      },
+      "text_bytes": {
+        "slope": 131.0,
+        "offset": 20.0
+      },
+      "semantic_substitution_frames": {
+        "slope": 1.0,
+        "offset": 0.0
+      },
+      "template_body_transitions": {
+        "slope": 1.0,
+        "offset": 0.0
+      }
+    }
+  }
+}

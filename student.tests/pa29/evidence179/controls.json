@@ -1,0 +1,2286 @@
+{
+  "compiler_sha256": "0f3c56cbde93b930813690c8e29bf838f1b495a7c653749075fc235942d53583",
+  "rows": [
+    {
+      "source": "student.tests/pa29/source179/ambiguous-base.reject.cpp",
+      "sha256": "9458c5a9a5d824b688e6b119f43ae9640453d5be924847d846d4139fbbb5420c",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/ambiguous-base.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/ambiguous-base.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: ambiguous decomposition base\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/ambiguous-base.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/ambiguous-base.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/ambiguous-base.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/ambiguous-base.reject.cpp:1:105: error: \u2018Base\u2019 is an ambiguous base of \u2018Derived\u2019\n    1 | struct Base{int a;};struct L:Base{};struct R:Base{};struct Derived:L,R{};int main(){Derived d;auto& [x]=d;}\n      |                                                                                                         ^\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/array-constant-class.cpp",
+      "sha256": "2ae42afc3705a19b2304bb504bebbf0556c548257d441274d57530020506831d",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-constant-class.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-constant-class.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/array-constant-class.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W f()\n0000000000000000 W Item::Item(Item const&)\n0000000000000000 W Item::Item(int)\n0000000000000000 W Item::Item(Item const&)\n0000000000000000 W Item::Item(int)\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/array-constant-class.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-constant-class"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-constant-class"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-constant-class.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-constant-class-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-constant-class-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/array-copy.cpp",
+      "sha256": "0ffa7c60b2d4925652e3a5a852d16621f494850e97fda737c1b089dc349cd015",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-copy.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-copy.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/array-copy.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 T get()\n000000000000000c d __constant_array_20\n0000000000000004 D data\n0000000000000000 D evaluations\n0000000000000027 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/array-copy.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-copy"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-copy"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-copy.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-copy-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-copy-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/array-default-lifetime.cpp",
+      "sha256": "9a2d24f7a85a9edca37fe07fc89e9e71bd173f4630d8ecff0120591c9ad9bc9d",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-default-lifetime.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-default-lifetime.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/array-default-lifetime.o"
+        ],
+        "status": 0,
+        "stdout": "                 U _Unwind_Resume\n0000000000000000 T work()\n0000000000000000 W Item::Item(Item const&, Token)\n0000000000000000 W Item::Item()\n0000000000000000 W Item::Item(Item const&, Token)\n0000000000000000 W Item::Item()\n0000000000000000 W Item::~Item()\n0000000000000000 W Item::~Item()\n0000000000000000 W Guard::Guard(Guard const&)\n0000000000000000 W Guard::Guard()\n0000000000000000 W Guard::Guard(Guard const&)\n0000000000000000 W Guard::Guard()\n0000000000000000 W Guard::~Guard()\n0000000000000000 W Guard::~Guard()\n0000000000000000 W Token::Token()\n0000000000000000 W Token::Token()\n0000000000000000 W Token::~Token()\n0000000000000000 W Token::~Token()\n                 U typeinfo for int\n                 U __cxa_allocate_exception\n                 U __cxa_begin_catch\n                 U __cxa_end_catch\n                 U __cxa_throw\n                 U __gxx_personality_v0\n0000000000000008 D dead\n0000000000000000 D live\n0000000000000503 T main\n0000000000000004 D temps\n000000000000000c D throw_default\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/array-default-lifetime.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-default-lifetime"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-default-lifetime"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-default-lifetime.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-default-lifetime-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-default-lifetime-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/array-default-temporary.cpp",
+      "sha256": "401eb71bea6813c44b6716bc64a8e0e9503882d33f9ee39643e65a84bdbb8d77",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-default-temporary.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-default-temporary.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/array-default-temporary.o"
+        ],
+        "status": 0,
+        "stdout": "                 U _Unwind_Resume\n0000000000000000 T work()\n0000000000000000 W Item::Item(Item const&, Token const&)\n0000000000000000 W Item::Item()\n0000000000000000 W Item::Item(Item const&, Token const&)\n0000000000000000 W Item::Item()\n0000000000000000 W Item::~Item()\n0000000000000000 W Item::~Item()\n0000000000000000 W Token::Token()\n0000000000000000 W Token::Token()\n0000000000000000 W Token::~Token()\n0000000000000000 W Token::~Token()\n                 U typeinfo for int\n                 U __cxa_allocate_exception\n                 U __cxa_begin_catch\n                 U __cxa_end_catch\n                 U __cxa_throw\n                 U __gxx_personality_v0\n0000000000000008 D dead\n0000000000000000 D live\n000000000000053f T main\n0000000000000004 D temps\n000000000000000c D throw_default\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/array-default-temporary.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-default-temporary"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-default-temporary"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-default-temporary.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-default-temporary-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-default-temporary-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/array-explicit.cpp",
+      "sha256": "889b2354d04358366469eda3ce95eb9163f6acb3a74644d5fa3abc8ae09cd98d",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-explicit.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-explicit.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/array-explicit.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W Item::Item(Item const&)\n0000000000000000 W Item::Item(int)\n0000000000000000 W Item::Item(Item const&)\n0000000000000000 W Item::Item(int)\n0000000000000000 D copies\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/array-explicit.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-explicit"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-explicit"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-explicit.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-explicit-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-explicit-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/array-explicit.reject.cpp",
+      "sha256": "52ccb874c9747a559276d6cdc19390f5aab0f9475489cccbd3b085f73f03032d",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-explicit.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-explicit.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: invalid fixed call argument\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-explicit.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-explicit.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-explicit.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-explicit.reject.cpp:1:112: error: no matching function for call to \u2018Item::Item(Item&)\u2019\n    1 | struct Item{int v;Item(int n=2):v(n){}explicit Item(const Item& a):v(a.v){}};int main(){Item arr[2];auto [a,b]=arr;}\n      |                                                                                                                ^~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-explicit.reject.cpp:1:112: note: there are 2 candidates\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-explicit.reject.cpp:1:19: note: candidate 1: \u2018Item::Item(int)\u2019\n    1 | struct Item{int v;Item(int n=2):v(n){}explicit Item(const Item& a):v(a.v){}};int main(){Item arr[2];auto [a,b]=arr;}\n      |                   ^~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-explicit.reject.cpp:1:28: note: no known conversion for argument 1 from \u2018Item\u2019 to \u2018int\u2019\n    1 | struct Item{int v;Item(int n=2):v(n){}explicit Item(const Item& a):v(a.v){}};int main(){Item arr[2];auto [a,b]=arr;}\n      |                        ~~~~^~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-explicit.reject.cpp:1:112: note: some candidates omitted; use \u2018-fdiagnostics-all-candidates\u2019 to display them\n    1 | struct Item{int v;Item(int n=2):v(n){}explicit Item(const Item& a):v(a.v){}};int main(){Item arr[2];auto [a,b]=arr;}\n      |                                                                                                                ^~~\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/array-lifetime.cpp",
+      "sha256": "c4a09dc39ca03439e995c94f9f8e1a003a62ad913d03c476c60ba8e428dcb0eb",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-lifetime.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-lifetime.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/array-lifetime.o"
+        ],
+        "status": 0,
+        "stdout": "                 U _Unwind_Resume\n0000000000000501 T large()\n0000000000000000 T small()\n0000000000000000 W Item::Item(Item const&)\n0000000000000000 W Item::Item(int)\n0000000000000000 W Item::Item(Item const&)\n0000000000000000 W Item::Item(int)\n0000000000000000 W Item::~Item()\n0000000000000000 W Item::~Item()\n                 U typeinfo for int\n                 U __cxa_allocate_exception\n                 U __cxa_begin_catch\n                 U __cxa_end_catch\n                 U __cxa_throw\n                 U __gxx_personality_v0\n0000000000000008 D attempts\n0000000000000004 D copies\n000000000000000c D fail_at\n0000000000000000 D live\n0000000000000c63 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/array-lifetime.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-lifetime"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-lifetime"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-lifetime.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-lifetime-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-lifetime-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/array-move.cpp",
+      "sha256": "81f3029f43ac3d124e8f696fa9900d1f4b910842324c677c5a0fc526d332570b",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-move.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-move.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/array-move.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W Item::Item(Item&&)\n0000000000000000 W Item::Item(int)\n0000000000000000 W Item::Item(Item&&)\n0000000000000000 W Item::Item(int)\n0000000000000000 T main\n0000000000000000 D moves\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/array-move.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-move"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-move"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-move.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-move-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-move-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/array-prvalue-constant.cpp",
+      "sha256": "ae9c8ed865de2963bfbbfada2f9638557749672c107cc4c1ae9ec2d4d6caa574",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-prvalue-constant.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-prvalue-constant.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/array-prvalue-constant.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W f()\n0000000000000000 W Item::Item(Item const&)\n0000000000000000 W Item::Item(int)\n0000000000000000 W Item::Item(Item const&)\n0000000000000000 W Item::Item(int)\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/array-prvalue-constant.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-prvalue-constant"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-prvalue-constant"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-prvalue-constant.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-prvalue-constant-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-prvalue-constant-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/array-reference.cpp",
+      "sha256": "e3d1edc7f0b4068a07497685acd4e4650a89bba786a025f6f66150c565b6bbe3",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-reference.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-reference.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/array-reference.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 d __constant_array_9\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/array-reference.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-reference"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-reference"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-reference.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-reference-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-reference-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/array-template.cpp",
+      "sha256": "7121a0eb79039d7628c5aad521fa1523427299a996fbcc80c60bb7cd8639e93c",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-template.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-template.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/array-template.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W int copy<int>(int (&) [2])\n0000000000000000 W int copy<long>(long (&) [2])\n0000000000000000 W int rows<int, 2>(int (&) [2][2])\n0000000000000000 d __constant_array_28\n0000000000000008 d __constant_array_29\n0000000000000018 d __constant_array_30\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/array-template.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-template"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-template"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/array-template.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/array-template-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/array-template-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/bitfield-address.reject.cpp",
+      "sha256": "22eea351f597b03ae8ffd0e65fd6260d54cbda856de84f296a80e7a0bbbb5018",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/bitfield-address.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/bitfield-address.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: address of bit-field\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/bitfield-address.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/bitfield-address.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/bitfield-address.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/bitfield-address.reject.cpp:1:86: error: attempt to take address of bit-field\n    1 | struct Bits{unsigned a:3;unsigned b:4;};int main(){Bits p{1,2};auto& [a,b]=p;auto q=&a;}\n      |                                                                                      ^\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/bitfield.cpp",
+      "sha256": "e33dc881fb0d097f1a6593521c9938818091a32269f2c9f925df76af4e0b1f74",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/bitfield.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/bitfield.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/bitfield.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/bitfield.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/bitfield"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/bitfield"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/bitfield.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/bitfield-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/bitfield-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/class.cpp",
+      "sha256": "7ca0646023692b1aa5f91b4ee265fbed1fdf1107c6fe36e4f8ca891817def195",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/class.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/class.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/class.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 T make(int&)\n0000000000000025 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/class.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/class"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/class"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/class.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/class-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/class-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/const-write.reject.cpp",
+      "sha256": "32210e6f62def5cdd66bf9eea41540fca901a7686de800af3cc72c4de69c6c9d",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/const-write.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/const-write.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: modifiable lvalue required\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/const-write.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/const-write.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/const-write.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/const-write.reject.cpp:1:67: error: assignment of read-only variable \u2018a\u2019\n    1 | struct Pair{int a,b;};int main(){Pair p{1,2};const auto& [a,b]=p;a=4;}\n      |                                                                  ~^~\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/constant.cpp",
+      "sha256": "6a3bd14b283764402db2bd17d5a700da7b54c98815ee133d258ec3a4ad332e26",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/constant.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/constant.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/constant.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W compute()\n0000000000000028 t __aggregate_7\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/constant.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/constant"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/constant"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/constant.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/constant-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/constant-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/copy-list.reject.cpp",
+      "sha256": "4e76637e6ecf6df9a09d301769d60a254d15343eac52e58a1f8e6110f849c65c",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/copy-list.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/copy-list.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: inaccessible class member: _M_array declared in /usr/include/c++/15/initializer_list:58\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/copy-list.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/copy-list.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/copy-list.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/copy-list.reject.cpp:2:51: error: cannot decompose inaccessible member \u2018std::initializer_list<Pair>::_M_array\u2019 of \u2018std::initializer_list<Pair>\u2019\n    2 | struct Pair{int a,b;};int main(){Pair p{1,2};auto [x,y]={p};}\n      |                                                   ^~~~~\nIn file included from /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/copy-list.reject.cpp:1:\n/usr/include/c++/15/initializer_list:58:33: note: declared private here\n   58 |       iterator                  _M_array;\n      |                                 ^~~~~~~~\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/count.reject.cpp",
+      "sha256": "50f14a2d916ec490b3389c59111e1136fb76718e14ee348cd4840c8ca60298af",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/count.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/count.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: too few structured binding names\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/count.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/count.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/count.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/count.reject.cpp:1:39: error: only 1 name provided for structured binding\n    1 | struct Pair{int x,y;};int main(){auto [x]=Pair{1,2};}\n      |                                       ^~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/count.reject.cpp:1:39: note: while \u2018Pair\u2019 decomposes into 2 elements\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/deleted-copy.reject.cpp",
+      "sha256": "79eaf404f5c5f75ad722a13d94ff58ac3622231a374f292d6de8d86d98c1f9a3",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/deleted-copy.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/deleted-copy.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: deleted converting constructor\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/deleted-copy.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/deleted-copy.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/deleted-copy.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/deleted-copy.reject.cpp:1:85: error: use of deleted function \u2018Pair::Pair(const Pair&)\u2019\n    1 | struct Pair{int a,b;Pair(){}Pair(const Pair&)=delete;};int main(){Pair p;auto [a,b]=p;}\n      |                                                                                     ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/deleted-copy.reject.cpp:1:29: note: declared here\n    1 | struct Pair{int a,b;Pair(){}Pair(const Pair&)=delete;};int main(){Pair p;auto [a,b]=p;}\n      |                             ^~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/deleted-copy.reject.cpp:1:85: note: use \u2018-fdiagnostics-all-candidates\u2019 to display considered candidates\n    1 | struct Pair{int a,b;Pair(){}Pair(const Pair&)=delete;};int main(){Pair p;auto [a,b]=p;}\n      |                                                                                     ^\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/direct-init.cpp",
+      "sha256": "75a0e6b918edde3a8b257d1a3bc8db94775a7b7bdaae2dd6910215969c390611",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/direct-init.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/direct-init.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/direct-init.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W Pair::Pair(Pair const&)\n0000000000000000 W Pair::Pair(int)\n0000000000000000 W Pair::Pair(Pair const&)\n0000000000000000 W Pair::Pair(int)\n0000000000000000 D copies\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/direct-init.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/direct-init"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/direct-init"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/direct-init.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/direct-init-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/direct-init-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/discard-capture.cpp",
+      "sha256": "33a5c169f1b28af2f77f79a8a762a2a17cbf91b095bb0e8557b7d4271c7aa883",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/discard-capture.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/discard-capture.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/discard-capture.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W int f<int>()\n0000000000000000 W f<int>()::{lambda()#1}::operator()() const\n0000000000000028 t __aggregate_7\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/discard-capture.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/discard-capture"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/discard-capture"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/discard-capture.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/discard-capture-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/discard-capture.cpp: In lambda function:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/discard-capture.cpp:2:90: warning: captured structured bindings are a C++20 extension [-Wc++20-extensions]\n    2 | template<class T>int f(){if constexpr(true){int x=3;auto [a,b]=Pair{2,x};auto g=[&](){b+=a;return b;};return g()+x;}else{auto [x,y]=T::missing;return x+y;}}\n      |                                                                                          ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/discard-capture.cpp:2:59: note: declared here\n    2 | template<class T>int f(){if constexpr(true){int x=3;auto [a,b]=Pair{2,x};auto g=[&](){b+=a;return b;};return g()+x;}else{auto [x,y]=T::missing;return x+y;}}\n      |                                                           ^\n"
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/discard-capture-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/duplicate.reject.cpp",
+      "sha256": "6e9197520295653bdea5b11573e9f7b302eefd055ed353adf1e9cac0b193779c",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/duplicate.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/duplicate.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: duplicate structured binding name\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/duplicate.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/duplicate.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/duplicate.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/duplicate.reject.cpp:1:42: error: redeclaration of \u2018auto x\u2019\n    1 | struct Pair{int x,y;};int main(){auto [x,x]=Pair{1,2};}\n      |                                          ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/duplicate.reject.cpp:1:40: note: \u2018auto x\u2019 previously declared here\n    1 | struct Pair{int x,y;};int main(){auto [x,x]=Pair{1,2};}\n      |                                        ^\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/empty-count.reject.cpp",
+      "sha256": "824d21c6b3e099f27cdefe89060e7afc62e01b045736676a1712546aff5eb0f3",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/empty-count.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/empty-count.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: too many structured binding names\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/empty-count.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/empty-count.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/empty-count.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/empty-count.reject.cpp:1:32: error: cannot decompose class type \u2018Empty\u2019 without non-static data members\n    1 | struct Empty{};int main(){auto [x]=Empty{};}\n      |                                ^~~\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/goto.reject.cpp",
+      "sha256": "3e0f04cfed8dc387cffabdee1990a19abad33fdf468f8d21e61ed41eb83a7e90",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/goto.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/goto.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: goto bypasses initialization\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/goto.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/goto.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/goto.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/goto.reject.cpp:1:64: error: jump to label \u2018end\u2019\n    1 | struct Pair{int x,y;};int main(){goto end;auto [x,y]=Pair{1,2};end:return 0;}\n      |                                                                ^~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/goto.reject.cpp:1:39: note:   from here\n    1 | struct Pair{int x,y;};int main(){goto end;auto [x,y]=Pair{1,2};end:return 0;}\n      |                                       ^~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/goto.reject.cpp:1:48: note:   crosses initialization of \u2018Pair <structured bindings>\u2019\n    1 | struct Pair{int x,y;};int main(){goto end;auto [x,y]=Pair{1,2};end:return 0;}\n      |                                                ^~~~~\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/inheritance.cpp",
+      "sha256": "92d103248df0e4df4c07f7c56bf8a869a5913add1d40ae05e0a9c5fa078673a9",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/inheritance.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/inheritance.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/inheritance.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W Derived::Derived()\n0000000000000000 W Derived::Derived()\n0000000000000000 W Virtual::Virtual()\n0000000000000000 W Virtual::Virtual()\n0000000000000000 V VTT for Virtual\n0000000000000000 V vtable for Virtual\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/inheritance.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/inheritance"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/inheritance"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/inheritance.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/inheritance-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/inheritance-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/inherited-constant.cpp",
+      "sha256": "fb338b49487a8e30726e0a37e1dfd05bb57b3973584d9bab1bc9596bb911dfdb",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/inherited-constant.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/inherited-constant.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/inherited-constant.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W f()\n0000000000000000 W Derived::Derived()\n0000000000000000 W Derived::Derived()\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/inherited-constant.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/inherited-constant"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/inherited-constant"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/inherited-constant.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/inherited-constant-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/inherited-constant-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/lifetime.cpp",
+      "sha256": "516951ec332c6b50caaa0601e478e5457c856a7aed178a1b0e2cc562d42130df",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/lifetime.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/lifetime.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/lifetime.o"
+        ],
+        "status": 0,
+        "stdout": "                 U _Unwind_Resume\n0000000000000182 T early()\n0000000000000000 T normal()\n0000000000000000 W Pair::Pair(Pair const&)\n0000000000000000 W Pair::Pair(int)\n0000000000000000 W Pair::Pair(Pair const&)\n0000000000000000 W Pair::Pair(int)\n0000000000000000 W Pair::~Pair()\n0000000000000000 W Pair::~Pair()\n                 U typeinfo for int\n                 U __cxa_allocate_exception\n                 U __cxa_begin_catch\n                 U __cxa_end_catch\n                 U __cxa_throw\n                 U __gxx_personality_v0\n0000000000000004 D copies\n0000000000000008 D destroyed\n0000000000000000 D live\n00000000000001c3 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/lifetime.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/lifetime"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/lifetime"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/lifetime.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/lifetime-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/lifetime-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/mixed-base.reject.cpp",
+      "sha256": "35c44060ebf1982981b0f7c418b71e8ec5e1eb4b0a170f824baf6dd62a8ae125",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/mixed-base.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/mixed-base.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: decomposition members have different owners\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/mixed-base.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/mixed-base.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/mixed-base.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/mixed-base.reject.cpp:1:76: error: cannot decompose class type \u2018Derived\u2019: both it and its base class \u2018Base\u2019 have non-static data members\n    1 | struct Base{int a;};struct Derived:Base{int b;};int main(){Derived d;auto& [x,y]=d;}\n      |                                                                            ^~~~~\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/private.reject.cpp",
+      "sha256": "db90a7d4c43f2bd371be650821c254108f85364d97e75504fae101a86aa5df3e",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/private.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/private.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: inaccessible class member: x declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/private.reject.cpp:1\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/private.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/private.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/private.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/private.reject.cpp:1:57: error: cannot decompose inaccessible member \u2018Pair::x\u2019 of \u2018Pair\u2019\n    1 | class Pair{int x;public:int y;};int main(){Pair p;auto& [x,y]=p;}\n      |                                                         ^~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/private.reject.cpp:1:16: note: declared private here\n    1 | class Pair{int x;public:int y;};int main(){Pair p;auto& [x,y]=p;}\n      |                ^\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/range-lifetime.cpp",
+      "sha256": "85b2f90f9f07ac62178c84659273ec71bb6d3a2c79a9d4f598058293ca167b07",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/range-lifetime.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/range-lifetime.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/range-lifetime.o"
+        ],
+        "status": 0,
+        "stdout": "                 U _Unwind_Resume\n0000000000000000 T f()\n0000000000000000 W Pair::Pair(Pair const&)\n0000000000000000 W Pair::Pair(int)\n0000000000000000 W Pair::Pair(Pair const&)\n0000000000000000 W Pair::Pair(int)\n0000000000000000 W Pair::~Pair()\n0000000000000000 W Pair::~Pair()\n                 U typeinfo for int\n                 U __cxa_allocate_exception\n                 U __cxa_begin_catch\n                 U __cxa_end_catch\n                 U __cxa_throw\n                 U __gxx_personality_v0\n0000000000000004 D copies\n0000000000000008 D destroyed\n0000000000000000 D live\n00000000000006bf T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/range-lifetime.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/range-lifetime"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/range-lifetime"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/range-lifetime.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/range-lifetime-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/range-lifetime-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/range.cpp",
+      "sha256": "2aaca28b63049ddc189eab142f9ef324493a369af9b8f075392540f2c37d124a",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/range.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/range.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/range.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W int sum<int, 3>(Pair<int> (&) [3])\n0000000000000178 t __aggregate_23\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/range.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/range"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/range"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/range.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/range-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/range-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/reference-narrow.reject.cpp",
+      "sha256": "72fdb2fc5fae37545eee5c943dd64e0f84eaae4392ee0642888cd6e31fa4e537",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/reference-narrow.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/reference-narrow.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: narrowing list initialization\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/reference-narrow.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/reference-narrow.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/reference-narrow.reject.cpp: In instantiation of \u2018int work(long int) [with int N = 2]\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/reference-narrow.reject.cpp:3:28:   required from here\n    3 | int main() { return work<2>(4000000000L); }\n      |                     ~~~~~~~^~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/reference-narrow.reject.cpp:2:45: error: narrowing conversion of \u2018x\u2019 from \u2018long int\u2019 to \u2018int\u2019 [-Werror=narrowing]\n    2 | template<int N> int work(long x) { Pair p{N,x}; auto [a,b]=p; return a+b; }\n      |                                             ^\ncc1plus: some warnings being treated as errors\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/reference-width.cpp",
+      "sha256": "1c820704e1f2daedddb0f0e4eb322b775380e44bcd4516c8e5e1a8862593f147",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/reference-width.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/reference-width.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/reference-width.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W long work<3>(long)\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/reference-width.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/reference-width"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/reference-width"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/reference-width.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/reference-width-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/reference-width-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/reference.reject.cpp",
+      "sha256": "b8ceaf3353da489ed5f527e4f1a0d60ce32aa54d1a77ce51f253a0817ac89dcd",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/reference.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/reference.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: lvalue binding requires lvalue initializer\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/reference.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/reference.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/reference.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/reference.reject.cpp:1:46: error: cannot bind non-const lvalue reference of type \u2018Pair&\u2019 to an rvalue of type \u2018Pair\u2019\n    1 | struct Pair{int x,y;};int main(){auto& [x,y]=Pair{1,2};}\n      |                                              ^~~~~~~~~\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/self.reject.cpp",
+      "sha256": "253ca616df844eb3e400987308ef08145d3b1b517cf62c6704a426b143ca335b",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/self.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/self.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: use before auto type deduction\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/self.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/self.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/self.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/self.reject.cpp:1:57: error: use of \u2018p\u2019 before deduction of \u2018auto\u2019\n    1 | struct Pair{int x,y;};Pair p{1,2};int main(){auto [p,q]=p;}\n      |                                                         ^\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/template-count.reject.cpp",
+      "sha256": "3b95a7a7bcea12322c435b33722aaaf34f861b9511d660002d428026cfb5d65e",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/template-count.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/template-count.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: too few structured binding names\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/template-count.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/template-count.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/template-count.reject.cpp: In function \u2018void unused()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/template-count.reject.cpp:1:59: error: only 1 name provided for structured binding [-Wtemplate-body]\n    1 | struct Pair{int x,y;};template<class T>void unused(){auto [x]=Pair{1,2};}int main(){}\n      |                                                           ^~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/template-count.reject.cpp:1:59: note: while \u2018Pair\u2019 decomposes into 2 elements\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/template-explicit.reject.cpp",
+      "sha256": "f3a6cd1dc8a60a9a55c002587abc8e64e6b9c76b4c5d526ee9782947f77803fe",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/template-explicit.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/template-explicit.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: invalid fixed call argument\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/template-explicit.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/template-explicit.reject-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true,
+      "host_diagnostic_rule": "N3485 [temp.res]/8: no valid specialization exists for the nondependent invalid copy initialization in this uninstantiated template. A diagnostic is not required; the student must retain its definition-time check, and a host may defer it.\n"
+    },
+    {
+      "source": "student.tests/pa29/source179/template-shadow.cpp",
+      "sha256": "9297949adfc05a4941c161d495185f5606091b3b25d302ad33df72e5b7ceee57",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/template-shadow.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/template-shadow.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/template-shadow.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W int f<Pair>(Pair)\n000000000000003b t __aggregate_7\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/template-shadow.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/template-shadow"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/template-shadow"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/template-shadow.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/template-shadow-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/template-shadow-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/template.cpp",
+      "sha256": "92eab13ccc115c09fe680c43dac5c7ce3ce8d0ed5ec389cbdfdf8b320d7f0f7e",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/template.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/template.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/tmp/pa29-179/controls-complete/template.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W int fixed<int>(int)\n0000000000000000 W int fixed<long>(long)\n0000000000000000 W int dependent<int>(Pair<int>)\n0000000000000000 W long dependent<long>(Pair<long>)\n0000000000000000 W int Box<int>::call<int, int>(int&&, int&&)\n0000000000000161 t __aggregate_14\n000000000000017e t __aggregate_61\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-179/controls-complete/template.o",
+          "-o",
+          "/tmp/pa29-179/controls-complete/template"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/template"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/template.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/template-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-179/controls-complete/template-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/union.reject.cpp",
+      "sha256": "a48b47e7487e3774a91877d6b8cfd3c87f835fba043c7b141939d622ee79a39d",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/union.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/union.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: cannot decompose union\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/union.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/union.reject-host"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/union.reject.cpp: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/union.reject.cpp:1:55: error: cannot decompose union type \u2018Value\u2019\n    1 | union Value{int x;long y;};int main(){Value v{1};auto [x]=v;}\n      |                                                       ^~~\n"
+      },
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source179/unused-deleted-copy.reject.cpp",
+      "sha256": "78a30c0f192de820ed699dbb1854832ec602cbd1d1de16eac5b35976c09e60b6",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/unused-deleted-copy.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/unused-deleted-copy.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: invalid fixed call argument\n"
+      },
+      "passed": true,
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++17",
+          "-Werror=narrowing",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source179/unused-deleted-copy.reject.cpp",
+          "-o",
+          "/tmp/pa29-179/controls-complete/unused-deleted-copy.reject-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_passed": true,
+      "host_diagnostic_rule": "N3485 [temp.res]/8: no valid specialization exists for the nondependent invalid copy initialization in this uninstantiated template. A diagnostic is not required; the student must retain its definition-time check, and a host may defer it.\n"
+    }
+  ]
+}
