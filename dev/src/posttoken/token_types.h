@@ -41,7 +41,7 @@ enum EFundamentalType : unsigned char {
 
 	// 3.9.1.10
 	FT_NULLPTR_T,
-    FT_INT128, FT_UINT128, FT_BITINT, FT_UBITINT, FT_COMPLEX_FLOAT, FT_COMPLEX_DOUBLE, FT_COMPLEX_LONG_DOUBLE
+    FT_INT128, FT_UINT128, FT_BITINT, FT_UBITINT, FT_COMPLEX_FLOAT, FT_COMPLEX_DOUBLE, FT_COMPLEX_LONG_DOUBLE, FT_FLOAT16, FT_FLOAT128, FT_FLOAT32, FT_FLOAT64, FT_FLOAT32X, FT_FLOAT64X, FT_STDFLOAT128
 
 };
 
@@ -122,7 +122,7 @@ enum ETokenType : unsigned char {
 	KW_VOLATILE,
 	KW_WCHAR_T,
 	KW_WHILE,
-    KW_INT128, KW_UINT128, KW_COMPLEX, KW_REAL, KW_IMAG,
+    KW_INT128, KW_UINT128, KW_COMPLEX, KW_REAL, KW_IMAG, KW_FLOAT16, KW_FLOAT128, KW_FLOAT80, KW_FLOAT32, KW_FLOAT64, KW_FLOAT32X, KW_FLOAT64X, KW_STDFLOAT128,
 
 	// operators/punctuation
 	OP_LBRACE,
@@ -181,5 +181,7 @@ ETokenType classify_simple(TextView spelling);
 const char* simple_name(ETokenType type);
 const char* fundamental_name(EFundamentalType type);
 unsigned fundamental_width(EFundamentalType type);
+EFundamentalType floating_representation(EFundamentalType type);
+unsigned floating_precision(EFundamentalType type);
 
 }

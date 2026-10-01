@@ -40,18 +40,27 @@ NodeId Parser::named(Kind kind, NodeId name)
     return node;
 }
 
+bool Parser::floating_identifier(std::size_t ahead)
+{
+    auto op=in.peek(ahead).op;
+    return op==KW_FLOAT16 || (op>=KW_FLOAT32 && op<=KW_STDFLOAT128);
+}
 bool Parser::identifier(std::size_t ahead)
 {
-    return in.peek(ahead).kind == PostTokenKind::identifier;
+    return in.peek(ahead).kind == PostTokenKind::identifier || floating_identifier(ahead);
 }
 
 bool Parser::builtin(std::size_t ahead)
 {
+    // The legacy hosted profile permits headers to declare these names as
+    // typedefs. A declared name owns its identity; an undeclared spelling is
+    // the extended builtin. This uses lexical bindings, never header identity.
+    if (floating_identifier(ahead) && names.lookup(scope,in.peek(ahead).text).category!=Category::Unknown) return false;
     switch (in.peek(ahead).op) {
     case KW_VOID: case KW_BOOL: case KW_CHAR: case KW_WCHAR_T:
     case KW_CHAR16_T: case KW_CHAR32_T: case KW_SHORT: case KW_INT:
     case KW_LONG: case KW_SIGNED: case KW_UNSIGNED: case KW_FLOAT:
-    case KW_COMPLEX: case KW_DOUBLE: case KW_AUTO: case KW_INT128: case KW_UINT128: return true;
+    case KW_COMPLEX: case KW_DOUBLE: case KW_AUTO: case KW_INT128: case KW_UINT128: case KW_FLOAT16: case KW_FLOAT128: case KW_FLOAT80: case KW_FLOAT32: case KW_FLOAT64: case KW_FLOAT32X: case KW_FLOAT64X: case KW_STDFLOAT128: return true;
     default: return false;
     }
 }

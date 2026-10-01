@@ -32,8 +32,7 @@ TypeId Analyzer::decay(TypeId t)
 }
 bool Analyzer::arithmetic(TypeId t) const
 {
-    return complex_type(t) || (integral(t) && !scoped_enum(t)) || (types[t].kind == TypeKind::Fundamental &&
-        types[t].fundamental >= FT_FLOAT && types[t].fundamental <= FT_LONG_DOUBLE);
+    return complex_type(t) || (integral(t) && !scoped_enum(t)) || floating_type(t);
 }
 TypeId Analyzer::promote(TypeId t)
 {
@@ -60,12 +59,19 @@ TypeId Analyzer::arithmetic_type(TypeId a, TypeId b)
     a = promote(a); b = promote(b);
     if (complex_type(a) || complex_type(b)) {
         auto component = arithmetic_type(complex_type(a) ? complex_component(a) : a,complex_type(b) ? complex_component(b) : b);
+        if (types[component].fundamental > FT_LONG_DOUBLE) throw std::runtime_error("unsupported extended complex component");
         return types.fundamental(EFundamentalType(FT_COMPLEX_FLOAT + types[component].fundamental - FT_FLOAT));
     }
     if (!integral(a) || !integral(b)) {
-        if (fundamental(a, FT_LONG_DOUBLE) || fundamental(b, FT_LONG_DOUBLE)) return types.fundamental(FT_LONG_DOUBLE);
-        if (fundamental(a, FT_DOUBLE) || fundamental(b, FT_DOUBLE)) return types.fundamental(FT_DOUBLE);
-        return types.fundamental(FT_FLOAT);
+        if (integral(a)) return b;
+        if (integral(b)) return a;
+        auto af=types[a].fundamental, bf=types[b].fundamental;
+        auto ar=floating_precision(af), br=floating_precision(bf);
+        if (ar!=br) return ar>br?a:b;
+        // Extended fixed-width types have greater subrank than their ordinary
+        // representation; the non-x type wins an equal-format extended pair.
+        auto subrank=[](EFundamentalType f) { return f==FT_FLOAT32 || f==FT_FLOAT64 || f==FT_STDFLOAT128?2:f==FT_FLOAT32X || f==FT_FLOAT64X?1:0; };
+        return subrank(af)>=subrank(bf)?a:b;
     }
     // Rank is distinct from width: both long and long long are 64-bit on LP64.
     unsigned ar = types[a].fundamental, br = types[b].fundamental;

@@ -4,14 +4,16 @@
 #include <iomanip>
 #include <limits>
 #include <cmath>
+#include <cstring>
 namespace native {
 static void operand(const lowir_model::Program& p, Operand o, std::ostream& out)
 {
     switch (o.kind) {
     case Operand::Reg: out << register_name(o.reg); break;
     case Operand::Floating: {
+        if (o.id==Type::F128) { cppgm::ExtendedFloat x; std::memcpy(&x,&o.bits,8); std::memcpy(reinterpret_cast<char*>(&x)+8,&o.displacement,8); out << cppgm::extended_float_text(x); break; }
         long double value = o.floating_value();
-        unsigned quiet_bit = o.id == Type::F32 ? 22 : o.id == Type::F64 ? 51 : 62;
+        unsigned quiet_bit = o.id == Type::F16 ? 9 : o.id == Type::F32 ? 22 : o.id == Type::F64 ? 51 : 62;
         if (std::isnan(value) && !(o.bits & (std::uint64_t(1)<<quiet_bit)))
             out << (std::signbit(value) ? "-snan" : "snan");
         else out << std::setprecision(std::numeric_limits<long double>::max_digits10) << value;
@@ -117,7 +119,8 @@ void dump_header(const lowir_model::Program& p, const std::vector<Instruction>& 
                 if (d.kind == lowir_model::DataItem::Address) {
                     out << "addr " << p.name(p.symbols[d.symbol.index-1].name);
                     if (d.addend) out << (d.addend > 0 ? "+" : "") << d.addend;
-                } else if (d.type.floating()) {
+                } else if (d.type==Type::F128) { operand(p,Operand::floating(d.value,d.type,&p),out); }
+                else if (d.type.floating()) {
                     long double value = d.value.kind == lowir_model::Operand::Floating ? d.value.data.floating :
                         d.value.negative_integer ? static_cast<long double>(std::int64_t(d.value.data.integer)) :
                         static_cast<long double>(d.value.data.integer);

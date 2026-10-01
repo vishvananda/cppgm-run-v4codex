@@ -156,6 +156,7 @@ int run(const std::vector<std::string>& args)
         std::cerr << "{\"driver_ms\":" << std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count()
             << ",\"peak_rss_kib\":" << usage.ru_maxrss << ",\"text_bytes\":" << text
             << ",\"native_functions\":" << stats.functions << ",\"native_instructions\":" << stats.instructions
+            << ",\"extended_work\":" << stats.extended_work << ",\"extended_added\":" << stats.extended_added << ",\"extended_helpers\":" << stats.extended_helpers
             << ",\"preparation_ms\":" << stats.preparation_ms
             << ",\"prepared_instructions\":" << stats.prepared_instructions << ",\"prepared_operands\":" << stats.prepared_operands
             << ",\"inline_calls\":" << stats.inline_calls << ",\"inline_work\":" << stats.inline_work

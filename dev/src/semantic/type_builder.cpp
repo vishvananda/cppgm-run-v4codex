@@ -112,6 +112,14 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         case KW_BOOL: fundamental = FT_BOOL; break;
         case KW_INT128: fundamental = FT_INT128; break;
         case KW_UINT128: fundamental = FT_UINT128; break;
+        case KW_FLOAT32: fundamental = FT_FLOAT32; break;
+        case KW_FLOAT64: fundamental = FT_FLOAT64; break;
+        case KW_FLOAT32X: fundamental = FT_FLOAT32X; break;
+        case KW_FLOAT64X: fundamental = FT_FLOAT64X; break;
+        case KW_STDFLOAT128: fundamental = FT_STDFLOAT128; break;
+        case KW_FLOAT80: fundamental = FT_LONG_DOUBLE; break;
+        case KW_FLOAT16: fundamental = FT_FLOAT16; break;
+        case KW_FLOAT128: fundamental = FT_FLOAT128; break;
         case KW_FLOAT: fundamental = FT_FLOAT; break;
         case KW_DOUBLE: fundamental = FT_DOUBLE; break;
         case KW_VOID: fundamental = FT_VOID; break;
@@ -130,6 +138,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         }
     }
     if (!result) {
+        if ((fundamental>=FT_FLOAT16) && (longs || short_int || unsign || sign)) throw std::runtime_error("invalid extended floating specifiers");
         if (fundamental == FT_INT128 && unsign) fundamental = FT_UINT128;
         if (fundamental == FT_INT) {
             if (short_int) fundamental = unsign ? FT_UNSIGNED_SHORT_INT : FT_SHORT_INT;
@@ -143,7 +152,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         result = types.fundamental(fundamental);
     }
     if (complex) {
-        if (!floating_type(result) || unsign || sign || short_int || bit_width)
+        if (!floating_type(result) || types[result].fundamental > FT_LONG_DOUBLE || unsign || sign || short_int || bit_width)
             throw std::runtime_error("complex requires a real floating component type");
         result = types.fundamental(EFundamentalType(FT_COMPLEX_FLOAT + types[result].fundamental - FT_FLOAT));
     }

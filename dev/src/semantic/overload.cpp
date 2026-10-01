@@ -181,6 +181,14 @@ TypeId Analyzer::fundamental_cast_type(ETokenType op)
             case KW_INT: return types.fundamental(FT_INT);
             case KW_INT128: return types.fundamental(FT_INT128);
             case KW_UINT128: return types.fundamental(FT_UINT128);
+            case KW_FLOAT32: return types.fundamental(FT_FLOAT32);
+            case KW_FLOAT64: return types.fundamental(FT_FLOAT64);
+            case KW_FLOAT32X: return types.fundamental(FT_FLOAT32X);
+            case KW_FLOAT64X: return types.fundamental(FT_FLOAT64X);
+            case KW_STDFLOAT128: return types.fundamental(FT_STDFLOAT128);
+            case KW_FLOAT80: return types.fundamental(FT_LONG_DOUBLE);
+            case KW_FLOAT16: return types.fundamental(FT_FLOAT16);
+            case KW_FLOAT128: return types.fundamental(FT_FLOAT128);
             case KW_BOOL: return types.fundamental(FT_BOOL);
             case KW_CHAR: return types.fundamental(FT_CHAR);
             case KW_SHORT: return types.fundamental(FT_SHORT_INT);

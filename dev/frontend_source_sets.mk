@@ -235,3 +235,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/inline_variable
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/force_inline
 FRONTEND_OBJ_BASENAMES_lowir2native += lowir/force_inline
+
+# Exact binary16/binary128 literal and constant representations.
+$(foreach tool,posttoken ppexpr preproc cppgm++ lowir lowiropt lowir2native,$(eval FRONTEND_OBJ_BASENAMES_$(tool) += support/extended_float))
+$(foreach tool,cppgm++ lowir2native,$(eval FRONTEND_OBJ_BASENAMES_$(tool) += native/extended_float))

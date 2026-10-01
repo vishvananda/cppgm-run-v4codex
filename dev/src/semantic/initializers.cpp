@@ -54,7 +54,10 @@ bool Analyzer::narrowing_needs_value(TypeId from, TypeId target)
         if (fundamental(target,FT_BOOL) && !fundamental(from,FT_BOOL)) covers = false;
         return !covers;
     }
-    return a || width(target) < width(from);
+    if (!a) {
+        return floating_precision(types[target].fundamental)<floating_precision(types[from].fundamental);
+    }
+    return true;
 }
 bool Analyzer::narrowing_conversion(TypeId from, TypeId target, Constant value)
 {
@@ -77,10 +80,8 @@ bool Analyzer::narrowing_conversion(TypeId from, TypeId target, Constant value)
         auto restored = convert(converted,from,true);
         return !same_integer_value(value,restored);
     }
-    long double exact = floating_value(value);
-    long double rounded = fundamental(target,FT_FLOAT) ? static_cast<long double>(float(exact)) :
-        fundamental(target,FT_DOUBLE) ? static_cast<long double>(double(exact)) : exact;
-    return rounded != exact;
+    auto converted=convert(value,target,true);
+    return !converted.valid || floating_value(converted)!=floating_value(value);
 }
 void Analyzer::list_conversion_from(NodeId n, TypeId from, TypeId target, const Conversion* selected)
 {

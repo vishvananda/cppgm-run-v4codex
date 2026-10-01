@@ -16,7 +16,7 @@ void Selector::save_variadic_registers()
     emit(Op::Jcc,Type(),{Operand::label(done)}).condition = XC_E;
     for (unsigned n = 0; n < 8; ++n) {
         auto at = vararg_save; at.displacement += 48+n*16;
-        move(at,Operand::r(xmm(n)),Type::F64);
+        move(at,Operand::r(xmm(n)),Type::F128);
     }
     begin_block(done,0);
 }
@@ -39,7 +39,7 @@ void Selector::variadic(const lowir_model::Instruction& i)
     require(i.type.scalar() || i.type.complex(),"unsupported variadic value class");
     auto dest = allocate(i.destination.index,i.type);
     unsigned overflow = next_label++, done = next_label++;
-    bool fp = i.type == Type::F32 || i.type == Type::F64 || (i.type.complex() && i.type.component() != Type::F80);
+    bool fp = i.type == Type::F32 || i.type == Type::F64 || i.type == Type::F16 || i.type == Type::F128 || (i.type.complex() && i.type.component() != Type::F80);
     unsigned fp_bytes = i.type.complex() && i.type.component() == Type::F64 ? 32 : 16;
     if (i.type != Type::F80 && !(i.type.complex() && i.type.component() == Type::F80)) {
         move(Operand::r(XR_R10),Operand::mem(XR_R11,fp ? 4 : 0),Type::U32);

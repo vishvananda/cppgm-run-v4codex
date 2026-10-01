@@ -12,6 +12,7 @@ std::string Object::name(unsigned id) const {
 }
 Object compile_object(lowir_model::Program& p, native::Statistics& stats, bool host)
 {
+    native::legalize_extended_floats(p,stats);
     Object obj(p.symbols.size()); obj.image.host = host;
     obj.image.host_resume = obj.image.runtime_begin;
     for (const auto& g : p.globals) if (!g.declaration && g.type.kind() == lowir_model::Type::Object) {

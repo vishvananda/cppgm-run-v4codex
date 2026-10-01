@@ -1,4 +1,5 @@
 #pragma once
+#include "support/extended_float.h"
 #include "syntax/ast.h"
 #include <cstdint>
 #include <exception>
@@ -602,7 +603,7 @@ struct DeleteExpression {
 struct StaticValue {
     enum Kind : unsigned char { Invalid, Integer, Floating, Complex, Address, String, MemberFunction, Vtable } kind = Invalid;
     std::uint64_t bits = 0;
-    long double floating = 0;
+    ExtendedFloat floating = 0;
     bool signaling = false;
     EntityId entity = 0;
     NodeId string = 0;

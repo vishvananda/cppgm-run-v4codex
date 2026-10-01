@@ -62,8 +62,10 @@ Constant Analyzer::builtin_value_constant(unsigned operation, TypeId target, Con
         if (integral(source.type)) { auto value = integer_value(source); std::memcpy(bytes,&value,width); }
         else if (floating_type(source.type)) {
             auto value = floating_value(source);
-            if (fundamental(source.type,FT_FLOAT)) { float x = value; std::memcpy(bytes,&x,4); if (floating_signaling(source)) bytes[2] &= 0xbf; }
-            else if (fundamental(source.type,FT_DOUBLE)) { double x = value; std::memcpy(bytes,&x,8); if (floating_signaling(source)) bytes[6] &= 0xf7; }
+            if ((floating_kind(source.type)==FT_FLOAT)) { float x = value; std::memcpy(bytes,&x,4); if (floating_signaling(source)) bytes[2] &= 0xbf; }
+            else if ((floating_kind(source.type)==FT_DOUBLE)) { double x = value; std::memcpy(bytes,&x,8); if (floating_signaling(source)) bytes[6] &= 0xf7; }
+            else if ((floating_kind(source.type)==FT_FLOAT16)) { auto x=half_bits(value); if (floating_signaling(source)) x&=~512u; std::memcpy(bytes,&x,2); }
+            else if ((floating_kind(source.type)==FT_FLOAT128)) { std::memcpy(bytes,&value,16); if (floating_signaling(source)) bytes[13]&=0x7f; }
             else return {};
         } else return {};
         if (integral(target)) {
@@ -71,8 +73,10 @@ Constant Analyzer::builtin_value_constant(unsigned operation, TypeId target, Con
             if (fundamental(target,FT_BOOL) && value > 1) return {};
             return integer_constant(target,value);
         }
-        if (fundamental(target,FT_FLOAT)) { float x; std::uint32_t bits; std::memcpy(&x,bytes,4); std::memcpy(&bits,bytes,4); bool snan = (bits & 0x7fc00000u) == 0x7f800000u && (bits & 0x3fffffu); return floating_constant(target,x,true,snan); }
-        if (fundamental(target,FT_DOUBLE)) { double x; std::uint64_t bits; std::memcpy(&x,bytes,8); std::memcpy(&bits,bytes,8); bool snan = (bits & 0x7ff8000000000000ull) == 0x7ff0000000000000ull && (bits & 0x7ffffffffffffull); return floating_constant(target,x,true,snan); }
+        if ((floating_kind(target)==FT_FLOAT16)) { std::uint16_t x; std::memcpy(&x,bytes,2); return floating_constant(target,half_value(x),true,(x&0x7e00)==0x7c00&&(x&511)); }
+        if ((floating_kind(target)==FT_FLOAT128)) { ExtendedFloat x; std::memcpy(&x,bytes,16); return floating_constant(target,x,true,nan_float(x)&&!(bytes[13]&128)); }
+        if ((floating_kind(target)==FT_FLOAT)) { float x; std::uint32_t bits; std::memcpy(&x,bytes,4); std::memcpy(&bits,bytes,4); bool snan = (bits & 0x7fc00000u) == 0x7f800000u && (bits & 0x3fffffu); return floating_constant(target,x,true,snan); }
+        if ((floating_kind(target)==FT_DOUBLE)) { double x; std::uint64_t bits; std::memcpy(&x,bytes,8); std::memcpy(&bits,bytes,8); bool snan = (bits & 0x7ff8000000000000ull) == 0x7ff0000000000000ull && (bits & 0x7ffffffffffffull); return floating_constant(target,x,true,snan); }
         return {};
     }
     auto lanes = vector_elements(source.type);

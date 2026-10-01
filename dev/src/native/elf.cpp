@@ -17,7 +17,7 @@ static void scalar_data(std::vector<unsigned char>& data, const DataItem& item, 
     if (item.type.floating()) {
         unsigned char bytes[16] = {};
         auto value = native::Operand::floating(item.value,item.type,&p);
-        std::memcpy(bytes,&value.bits,8); std::memcpy(bytes+8,&value.displacement,2);
+        std::memcpy(bytes,&value.bits,8); std::memcpy(bytes+8,&value.displacement,item.type==Type::F128?8:2);
         data.insert(data.end(),bytes,bytes+item.type.bytes());
     } else {
         require(scalar_integer(item.type) || item.type == Type::I128, "native initializer type invalid");

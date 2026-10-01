@@ -88,7 +88,7 @@ void Reader::span(std::uint64_t& bytes, std::uint32_t& alignment)
 }
 Type Reader::type()
 {
-    static const char* const types[] = {"void","i1","i8","u8","i16","u16","i32","u32","i64","i128","f32","f64","f80","ptr"};
+    static const char* const types[] = {"void","i1","i8","u8","i16","u16","i32","u32","i64","i128","f32","f64","f80","f16","f128","ptr"};
     std::string s = word();
     if (s == "c32" || s == "c64" || s == "c80") return Type::complex(s == "c32" ? Type::F32 : s == "c64" ? Type::F64 : Type::F80);
     if (s == "i128a8") return Type::integer128_align8();
@@ -120,6 +120,8 @@ Operand Reader::literal()
     auto special_word = [](const std::string& word) {
         return word == "inf" || word == "INFINITY" || word == "nan" || word == "NAN" || word == "snan" || word == "SNAN";
     };
+    bool extended = !s.empty() && (s.back()=='Q' || s.back()=='q');
+    if (extended) s.pop_back();
     bool special = special_word(s);
     // The writer and checked course views carry format suffixes on infinity.
     // Strip a suffix only after recognizing the complete special-value word;
@@ -141,11 +143,17 @@ Operand Reader::literal()
             require(end != s.c_str() && end == s.c_str() + s.size(), "invalid floating literal");
         }
         Operand result = Operand::floating(negative ? -value : value, signaling);
+        if (extended) {
+            auto n=special?cppgm::ExtendedFloat(value):cppgm::parse_extended_float({s.data(),s.size()});
+            result=Operand::extended(negative?-n:n,signaling);
+        }
         if (!special) {
             std::string signed_text = negative ? "-"+s : s;
             float f32 = std::strtof(signed_text.c_str(),0);
             double f64 = std::strtod(signed_text.c_str(),0);
             FloatingLiteral formats;
+            formats.f128=cppgm::parse_extended_float({signed_text.data(),signed_text.size()});
+            formats.f16=cppgm::half_bits(cppgm::parse_extended_float({signed_text.data(),signed_text.size()},11));
             std::memcpy(&formats.f32,&f32,4); std::memcpy(&formats.f64,&f64,8);
             formats.spelling = p_.intern(signed_text);
             p_.floating_literals.push_back(formats); result.ref = p_.floating_literals.size();

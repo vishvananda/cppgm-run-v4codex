@@ -14,6 +14,8 @@ IRType Procedural::type(TypeId id)
         if (sem.entities[t.entity].underlying) return type(sem.entities[t.entity].underlying);
         return IRType::object(sem.object_size(id), sem.object_alignment(id));
     case TypeKind::Fundamental: {
+        if (floating_representation(t.fundamental) == FT_FLOAT16) return IRType::F16;
+        if (floating_representation(t.fundamental) == FT_FLOAT128) return IRType::F128;
         if (sem.complex_type(id)) return IRType::complex(type(sem.complex_component(id)));
         if (semantic::bit_integer_kind(t.fundamental)) {
             auto bits = t.bound; bool unsign = t.fundamental == FT_UBITINT;
@@ -23,7 +25,7 @@ IRType Procedural::type(TypeId id)
         static const IRType::Kind kinds[] = {IRType::I8, IRType::I16, IRType::I32, IRType::I64, IRType::I64,
             IRType::U8, IRType::U16, IRType::U32, IRType::I64, IRType::I64, IRType::I32, IRType::I8,
             IRType::U16, IRType::U32, IRType::U8, IRType::F32, IRType::F64, IRType::F80, IRType::Void, IRType::I64, IRType::I128, IRType::I128};
-        return kinds[t.fundamental];
+        return kinds[floating_representation(t.fundamental)];
     }
     default: throw std::runtime_error("unsupported lowering type");
     }
@@ -119,7 +121,7 @@ Value Procedural::coerce(Value v, IRType to, bool unsign, bool to_unsigned, bool
 {
     if (v.ir == to) return v;
     Instruction i(Opcode::Convert, to); i.source_type = v.ir;
-    if (to.floating() && v.ir.floating()) i.operation = to.bytes() > v.ir.bytes() ? Operation::Fpext : Operation::Fptrunc;
+    if (to.floating() && v.ir.floating()) i.operation = to.width() > v.ir.width() ? Operation::Fpext : Operation::Fptrunc;
     else if (to.floating()) i.operation = unsign ? Operation::Uitofp : Operation::Sitofp;
     else if (v.ir.floating()) i.operation = to_unsigned ? Operation::Fptoui : Operation::Fptosi;
     else if (to.bytes() == v.ir.bytes()) {

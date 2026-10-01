@@ -11,10 +11,11 @@ std::uint64_t item_hash(const lowir_model::DataItem& item)
     h = mix(h,item.type.kind());
     if (item.kind == lowir_model::DataItem::Address) return mix(mix(h,item.symbol.index),item.addend);
     h = mix(h,item.value.kind);
-    if (item.value.kind != Operand::Floating) return mix(h,item.value.data.integer);
+    if (item.value.kind != Operand::Floating) return mix(mix(h,item.value.data.integer),item.value.integer_high());
     // The target and host are x86-64; the x87 payload occupies ten bytes.
     const auto* bytes = reinterpret_cast<const unsigned char*>(&item.value.data.floating);
-    for (unsigned i = 0; i < 10; ++i) h = mix(h,bytes[i]);
+    h=mix(h,item.value.extended_floating);
+    for (unsigned i = 0; i < (item.value.extended_floating?16u:10u); ++i) h = mix(h,bytes[i]);
     return h;
 }
 bool item_equal(const lowir_model::DataItem& a, const lowir_model::DataItem& b)
@@ -24,7 +25,7 @@ bool item_equal(const lowir_model::DataItem& a, const lowir_model::DataItem& b)
     if (a.type != b.type) return false;
     if (a.kind == lowir_model::DataItem::Address) return a.symbol == b.symbol && a.addend == b.addend;
     if (a.value.kind != b.value.kind) return false;
-    return a.value.kind == Operand::Floating ? !std::memcmp(&a.value.data.floating,&b.value.data.floating,10) : a.value.data.integer == b.value.data.integer;
+    return a.value.kind == Operand::Floating ? a.value.extended_floating==b.value.extended_floating && !std::memcmp(&a.value.data,&b.value.data,a.value.extended_floating?16:10) : a.value.data.integer == b.value.data.integer && a.value.integer_high()==b.value.integer_high();
 }
 }
 void Procedural::initialize_constant_array(EntityId e, Value location, semantic::Constant value)

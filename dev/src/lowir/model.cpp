@@ -62,7 +62,7 @@ Type Type::complex(Type component)
 }
 std::uint32_t Type::bytes() const
 {
-    static const unsigned sizes[] = {0,1,1,1,2,2,4,4,8,16,4,8,16,8};
+    static const unsigned sizes[] = {0,1,1,1,2,2,4,4,8,16,4,8,16,2,16,8};
     return kind() == Object ? std::uint32_t(code_ >> 8) : sizes[kind()];
 }
 std::uint32_t Type::alignment() const
@@ -110,6 +110,10 @@ Operand Operand::floating(long double n, bool signaling)
     o.data.floating = n;
     o.signaling_nan = signaling;
     return o;
+}
+Operand Operand::extended(cppgm::ExtendedFloat n, bool signaling)
+{
+    Operand o; o.kind=Floating; o.extended_floating=true; o.data.extended=n; o.signaling_nan=signaling; return o;
 }
 Operand Operand::null() { Operand o; o.kind = Null; return o; }
 Operand Operand::value(ValueId id) { Operand o; o.kind = Temporary; o.ref = id.index; return o; }

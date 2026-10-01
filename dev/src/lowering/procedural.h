@@ -405,8 +405,8 @@ class Procedural {
     Value arrow_object(NodeId n, std::uint32_t chain);
     Value call(NodeId n, Value destination = Value());
     Value floating_builtin(NodeId n);
-    lowir_model::DataItem floating_data(IRType type, long double value, bool signaling);
-    Value floating_literal(TypeId type, long double value, bool signaling);
+    lowir_model::DataItem floating_data(IRType type, ExtendedFloat value, bool signaling);
+    Value floating_literal(TypeId type, ExtendedFloat value, bool signaling);
     Value overflow_builtin(NodeId n, semantic::Intrinsic intrinsic);
     Value integer_builtin(NodeId n, semantic::Intrinsic intrinsic);
     Value placement_new(NodeId n);

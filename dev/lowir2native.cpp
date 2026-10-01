@@ -52,6 +52,7 @@ int main(int argc, char** argv)
         if (i.stats) {
             rusage usage; getrusage(RUSAGE_SELF,&usage);
             std::cerr << "native_stats read_validate_ms=" << std::chrono::duration<double,std::milli>(parsed-begin).count()
+                << " extended_work=" << stats.extended_work << " extended_added=" << stats.extended_added << " extended_helpers=" << stats.extended_helpers
                 << " preparation_ms=" << stats.preparation_ms
                 << " prepared_instructions=" << stats.prepared_instructions << " prepared_operands=" << stats.prepared_operands
                 << " inline_calls=" << stats.inline_calls << " inline_work=" << stats.inline_work

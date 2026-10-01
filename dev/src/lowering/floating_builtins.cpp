@@ -29,6 +29,7 @@ Value Procedural::floating_builtin(NodeId n)
     auto normal = [&]() {
         long double minimum = x.ir == IRType::F32 ? std::numeric_limits<float>::min() :
             x.ir == IRType::F64 ? std::numeric_limits<double>::min() : std::numeric_limits<long double>::min();
+        if (x.ir==IRType::F16) minimum=static_cast<long double>(half_value(1024));
         Operand limit = Operand::floating(minimum);
         Value negative = emit(Opcode::Unary, x.ir, {limit}, Operation::Neg);
         Value positive_test = compare(Operation::Ge, x.operand, limit);
@@ -55,7 +56,7 @@ Value Procedural::floating_builtin(NodeId n)
         // Read the representation: comparisons lose the sign of -0 and NaNs.
         auto slot = builder->add_slot(0,x.ir);
         emit(Opcode::Store,x.ir,{x.operand,Operand::slot(slot)});
-        auto byte = emit(Opcode::Index,IRType::I8,{Operand::slot(slot),Operand::integer(x.ir == IRType::F80 ? 9 : x.ir == IRType::F64 ? 7 : 3)});
+        auto byte = emit(Opcode::Index,IRType::I8,{Operand::slot(slot),Operand::integer(x.ir == IRType::F16 ? 1 : x.ir == IRType::F128 ? 15 : x.ir == IRType::F80 ? 9 : x.ir == IRType::F64 ? 7 : 3)});
         auto bits = emit(Opcode::Load,IRType::U8,{byte.operand});
         bits = emit(Opcode::Binary,IRType::U8,{bits.operand,Operand::integer(7)},Operation::Ushr);
         result = coerce(bits,IRType::I32);

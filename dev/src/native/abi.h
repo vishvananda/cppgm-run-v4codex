@@ -33,7 +33,7 @@ struct AbiCursor {
             r.count = chunks;
             for (unsigned k = 0; k < chunks; ++k) r.parts[k] = Operand::r(xmm(fp++));
         }
-        else if ((t == Type::F32 || t == Type::F64) && fp < 8) r.parts[0] = Operand::r(xmm(fp++));
+        else if ((t == Type::F32 || t == Type::F64 || t == Type::F16 || t == Type::F128) && fp < 8) r.parts[0] = Operand::r(xmm(fp++));
         else if (!(t.vector() && t.bytes() >= 8) && !t.complex() && !t.floating() && chunks <= 2 && gp+chunks <= 6) {
             r.count = chunks;
             for (unsigned k = 0; k < chunks; ++k) r.parts[k] = Operand::r(regs[gp++]);

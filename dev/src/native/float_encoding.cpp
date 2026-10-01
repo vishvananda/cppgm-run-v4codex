@@ -15,6 +15,27 @@ void Encoder::sse(unsigned opcode, Type type, int reg, Operand rm)
 void Encoder::fmove(Operand to, Operand from, Type t)
 {
     if (to.kind == Operand::Reg && from.kind == Operand::Reg && to.reg == from.reg) return;
+    if (t == Type::F128) {
+        if (from.kind == Operand::Floating) {
+            auto temp=scratch(); store(temp,Operand::imm(from.bits),Type::I64); temp.displacement+=8; store(temp,Operand::imm(from.displacement),Type::I64); from=scratch();
+        }
+        if (to.kind != Operand::Reg && from.kind != Operand::Reg) { fmove(Operand::r(xmm(15)),from,t); from=Operand::r(xmm(15)); }
+        auto reg=to.kind==Operand::Reg?to.reg:from.reg; auto rm=to.kind==Operand::Reg?from:to;
+        if (rm.kind==Operand::Reg) rm.reg-=16;
+        form(to.kind==Operand::Reg?0x0f10:0x0f11,32,reg-16,rm); return;
+    }
+    if (t == Type::F16) {
+        if (to.kind==Operand::Reg) {
+            if (from.kind==Operand::Reg) { auto rm=from; rm.reg-=16; form(0x0f10,32,to.reg-16,rm); }
+            else { if (from.kind==Operand::Floating) mov(Operand::r(XR_RAX),Operand::imm(from.bits)); else load(Operand::r(XR_RAX),from,Type::U16,false);
+                form(0x0f6e,32,to.reg-16,Operand::r(XR_RAX),0,0,0x66); }
+        } else {
+            if (from.kind==Operand::Reg) form(0x0f7e,32,from.reg-16,Operand::r(XR_RAX),0,0,0x66);
+            else if (from.kind==Operand::Floating) mov(Operand::r(XR_RAX),Operand::imm(from.bits));
+            else load(Operand::r(XR_RAX),from,Type::U16,false);
+            store(to,Operand::r(XR_RAX),Type::U16);
+        } return;
+    }
     if (t.vector()) {
         require(t.bytes() == 8 || t.bytes() == 16,"unsupported vector register width");
         auto reg = to.kind == Operand::Reg ? to.reg : from.reg;
@@ -91,6 +112,14 @@ void Encoder::floating(const Instruction& i)
     case Op::Sitofp: case Op::Uitofp: case Op::Fptosi: case Op::Fptoui:
     case Op::Fpext: case Op::Fptrunc: float_convert(i); return;
     default: break;
+    }
+    if (i.type == Type::F16 || i.type == Type::F128) {
+        require(i.op==Op::Fneg,"unlegalized extended floating operation");
+        fmove(scratch(),lhs,i.type); auto sign=scratch(i.type==Type::F16?0:8);
+        load(Operand::r(XR_RAX),sign,i.type==Type::F16?Type::U16:Type::I64,false);
+        mov(Operand::r(XR_R11),Operand::imm(std::uint64_t(1)<<(i.type==Type::F16?15:63)));
+        form(0x31,64,XR_R11,Operand::r(XR_RAX)); store(sign,Operand::r(XR_RAX),i.type==Type::F16?Type::U16:Type::I64);
+        fmove(dst,scratch(),i.type); return;
     }
     if (i.type == Type::F80 || i.source_type == Type::F80) {
         if (i.op == Op::Fneg) { x87_load(lhs,i.type); byte(0xd9); byte(0xe0); }

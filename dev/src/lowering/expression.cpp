@@ -139,9 +139,11 @@ Value Procedural::expression(NodeId n, bool location)
         auto lit = ast.literals[node.literal];
         if (lit.kind == LiteralKind::string) { string_literal(n); return Value(Operand::symbol(strings[n]), IRType::Ptr, fact.type, true); }
         Operand o;
-        if (lit.type == FT_FLOAT) { float v; std::memcpy(&v, lit.scalar.data(), sizeof(v)); o = Operand::floating(v); }
-        else if (lit.type == FT_DOUBLE) { double v; std::memcpy(&v, lit.scalar.data(), sizeof(v)); o = Operand::floating(v); }
-        else if (lit.type == FT_LONG_DOUBLE) { long double v; std::memcpy(&v, lit.scalar.data(), sizeof(v)); o = Operand::floating(v); }
+        if (floating_representation(lit.type) == FT_FLOAT128) { ExtendedFloat v; std::memcpy(&v,lit.scalar.data(),16); o=Operand::extended(v); }
+        else if (floating_representation(lit.type) == FT_FLOAT16) { std::uint16_t v; std::memcpy(&v,lit.scalar.data(),2); o=Operand::floating(static_cast<long double>(half_value(v))); }
+        else if (floating_representation(lit.type) == FT_FLOAT) { float v; std::memcpy(&v, lit.scalar.data(), sizeof(v)); o = Operand::floating(v); }
+        else if (floating_representation(lit.type) == FT_DOUBLE) { double v; std::memcpy(&v, lit.scalar.data(), sizeof(v)); o = Operand::floating(v); }
+        else if (floating_representation(lit.type) == FT_LONG_DOUBLE) { long double v; std::memcpy(&v, lit.scalar.data(), sizeof(v)); o = Operand::floating(v); }
         else { std::uint64_t v = 0; std::memcpy(&v, lit.scalar.data(), fundamental_width(lit.type)); o = Operand::integer(v); }
         return Value(o, type(fact.type), fact.type);
     }
@@ -403,7 +405,7 @@ Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
     // Source C++ evaluation uses the same permitted x87 excess precision as
     // constant evaluation, then materializes each result at its declared type.
     // The explicit course LowIR view retains its exact-width operation contract.
-    if (!linkage.presentation && !compare && a.ir.floating() && a.ir != IRType::F80)
+    if (!linkage.presentation && !compare && (a.ir == IRType::F32 || a.ir == IRType::F64))
         instruction.source_type = IRType::F80;
     v = emit(instruction,{a.operand,b.operand});
     v.type = result; return normalize_bit_integer(v);

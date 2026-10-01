@@ -63,6 +63,7 @@ void compile_image(lowir_model::Program& p, Image& image, const std::vector<Inst
 }
 void compile(lowir_model::Program& p, const std::string& output, std::ostream* mir, Statistics& stats)
 {
+    native::legalize_extended_floats(p,stats);
     auto start = startup(p);
     lowir_model::require(output.empty() || !start.empty(), "executable requires an entry function");
     Image image(p.symbols.size());

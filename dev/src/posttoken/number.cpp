@@ -1,5 +1,6 @@
 // Floating extraction follows the CPPGM PA2 starter; see NOTICE.
 #include "posttoken/number.h"
+#include "support/extended_float.h"
 #include <cstring>
 #include <cstdlib>
 #include <istream>
@@ -56,7 +57,13 @@ static void floating_value(PostToken& token, TextView prefix, TextView suffix, b
     token.kind = PostTokenKind::literal;
     std::string hex;
     if (hexadecimal) hex.assign(prefix.data,prefix.size);
-    if (suffix.equals("f") || suffix.equals("F")) {
+    if (suffix.equals("q") || suffix.equals("Q") || suffix.equals("f128") || suffix.equals("F128")) {
+        token.type = FT_FLOAT128; auto value = parse_extended_float(prefix);
+        std::memcpy(token.scalar.data(),&value,16);
+    } else if (suffix.equals("f16") || suffix.equals("F16")) {
+        token.type = FT_FLOAT16; auto value = half_bits(parse_extended_float(prefix,11));
+        std::memcpy(token.scalar.data(),&value,2);
+    } else if (suffix.equals("f") || suffix.equals("F")) {
         token.type = FT_FLOAT;
         float value = hexadecimal ? std::strtof(hex.c_str(),nullptr) : PA2Decode_float(prefix);
         std::memcpy(token.scalar.data(), &value, 4);
@@ -162,10 +169,18 @@ void decode_number(PostToken& token, IdentifierTable& identifiers, NumberDomain 
         }
     }
     TextView suffix(s.data + p, s.size - p);
+    if (!hosted && (suffix.equals("q") || suffix.equals("Q") || suffix.equals("f16") || suffix.equals("F16") || suffix.equals("f128") || suffix.equals("F128"))) return;
+    EFundamentalType extended_type=FT_VOID;
     if (hosted && floating) {
-        if (suffix.equals("q") || suffix.equals("Q") || suffix.equals("F128") || suffix.equals("f128") ||
-            suffix.equals("F64x") || suffix.equals("f64x")) suffix = TextView("L",1);
-        else if (suffix.equals("F32") || suffix.equals("f32") || suffix.equals("F16") || suffix.equals("f16")) suffix = TextView("F",1);
+        if (suffix.equals("f16") || suffix.equals("F16")) extended_type=FT_FLOAT16;
+        if (suffix.equals("f32") || suffix.equals("F32")) extended_type=FT_FLOAT32;
+        if (suffix.equals("f64") || suffix.equals("F64")) extended_type=FT_FLOAT64;
+        if (suffix.equals("f32x") || suffix.equals("F32x")) extended_type=FT_FLOAT32X;
+        if (suffix.equals("f64x") || suffix.equals("F64x")) extended_type=FT_FLOAT64X;
+        if (suffix.equals("f128") || suffix.equals("F128")) extended_type=FT_STDFLOAT128;
+        
+        if (suffix.equals("F64x") || suffix.equals("f64x") || suffix.equals("w") || suffix.equals("W")) suffix = TextView("L",1);
+        else if (suffix.equals("F32") || suffix.equals("f32")) suffix = TextView("F",1);
         else if (suffix.equals("F64") || suffix.equals("f64") || suffix.equals("F32x") || suffix.equals("f32x")) suffix = TextView();
     }
     if (domain == NumberDomain::integral) {
@@ -193,6 +208,7 @@ void decode_number(PostToken& token, IdentifierTable& identifiers, NumberDomain 
         token.kind = PostTokenKind::user_literal;
     } else if (floating) floating_value(token, token.prefix, suffix, hexadecimal);
     else integer_value(token, TextView(s.data + digit_begin, p - digit_begin), suffix, base);
+    if (token.kind==PostTokenKind::literal && extended_type!=FT_VOID) token.type=extended_type;
 }
 
 }

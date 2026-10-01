@@ -1,4 +1,5 @@
 #pragma once
+#include "support/extended_float.h"
 #include "ir_symbol_model.h"
 #include "preprocess/identifier_table.h"
 #include <initializer_list>
@@ -43,7 +44,7 @@ public:
 class Type {
     std::uint64_t code_;
 public:
-    enum Kind { Void, I1, I8, U8, I16, U16, I32, U32, I64, I128, F32, F64, F80, Ptr, Object };
+    enum Kind { Void, I1, I8, U8, I16, U16, I32, U32, I64, I128, F32, F64, F80, F16, F128, Ptr, Object };
     Type(Kind k = Void) : code_(k) {}
     static Type object(std::uint64_t bytes, std::uint64_t alignment);
     static Type complex(Type component);
@@ -58,7 +59,7 @@ public:
     unsigned abi_alignment() const { return kind() == I128 ? ((code_ >> 8) ? 8 : 16) : alignment(); }
     Kind kind() const { return Kind(code_ & 255); }
     bool integer() const { return kind() >= I1 && kind() <= I128; }
-    bool floating() const { return kind() >= F32 && kind() <= F80; }
+    bool floating() const { return kind() >= F32 && kind() <= F128; }
     bool scalar() const { return integer() || floating() || kind() == Ptr; }
     std::uint32_t bytes() const;
     std::uint32_t alignment() const;
@@ -72,17 +73,19 @@ public:
 struct Operand {
     enum Kind { Integer, Floating, Null, Temporary, Slot, Symbol, Label } kind = Integer;
     std::uint32_t ref = 0;
-    bool signaling_nan = false;
+    bool signaling_nan = false, extended_floating = false;
     bool negative_integer = false, wide_integer = false;
     union Payload {
         std::uint64_t integer;
         long double floating;
+        cppgm::ExtendedFloat extended;
         Payload() : integer(0) {}
     } data;
     std::uint64_t integer_high() const;
     void integer_high(std::uint64_t high);
     static Operand integer(std::uint64_t n);
     static Operand floating(long double n, bool signaling = false);
+    static Operand extended(cppgm::ExtendedFloat n, bool signaling = false);
     static Operand null();
     static Operand value(ValueId id);
     static Operand slot(SlotId id);
@@ -191,7 +194,7 @@ struct Symbol {
 struct ObjectAlias { Name name = 0; SymbolId target; };
 // External decimal text is rounded once for each supported target format at
 // the read boundary. Literal operands use ref as this compact table identity.
-struct FloatingLiteral { std::uint64_t f64; std::uint32_t f32; Name spelling; };
+struct FloatingLiteral { std::uint64_t f64; std::uint32_t f32; Name spelling; cppgm::ExtendedFloat f128; std::uint16_t f16; };
 struct Statistics {
     std::uint64_t source_bytes = 0, tokens = 0, validated_instructions = 0, cfg_edges = 0;
     std::uint64_t inline_calls = 0, inline_work = 0, inline_max_function_work = 0;

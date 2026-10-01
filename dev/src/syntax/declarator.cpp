@@ -37,7 +37,7 @@ NodeId Parser::specifiers(bool type_only, NodeId result)
             in.eat("::");
             auto spec = wrap(type_only ? Kind::Decltype : Kind::DeclSpecifier,type_trait());
             ast[spec].op = KW_DECLTYPE; ast.append(result,spec); have_type = true;
-        } else if (builtin()) {
+        } else if (builtin() && !(have_type && floating_identifier())) {
             ast.append(result, leaf(kind));
             have_type = true;
         } else if (in.is("const") || in.is("volatile")) ast.append(result, leaf(type_only ? Kind::CvQualifier : kind));

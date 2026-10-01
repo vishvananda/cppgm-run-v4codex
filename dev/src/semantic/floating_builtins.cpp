@@ -104,18 +104,19 @@ Constant Analyzer::floating_builtin_constant(const Expression& call, ScopeId sco
     auto form = call.form;
     auto x = floating_value(args.back());
     if (form >= ExpressionForm::FloatGreater && form <= ExpressionForm::FloatUnordered) {
-        auto a = floating_value(args[0]); bool unordered = std::isnan(a) || std::isnan(x);
+        auto a = floating_value(args[0]); bool unordered = nan_float(a) || nan_float(x);
         return Constant(call.type,form == ExpressionForm::FloatUnordered ? unordered : !unordered &&
             (form == ExpressionForm::FloatGreater ? a > x : form == ExpressionForm::FloatGreaterEqual ? a >= x :
             form == ExpressionForm::FloatLess ? a < x : form == ExpressionForm::FloatLessEqual ? a <= x : a != x));
     }
     auto t = args.back().type;
-    auto minimum = fundamental(t,FT_FLOAT) ? std::numeric_limits<float>::min() :
-        fundamental(t,FT_DOUBLE) ? std::numeric_limits<double>::min() : std::numeric_limits<long double>::min();
-    bool normal = std::isfinite(x) && std::fabs(x) >= minimum;
-    if (form == ExpressionForm::FloatClassify) return args[std::isnan(x) ? 0 : std::isinf(x) ? 1 : normal ? 2 : x == 0 ? 4 : 3];
-    return Constant(call.type,form == ExpressionForm::FloatNaN ? std::isnan(x) :
-        form == ExpressionForm::FloatFinite ? std::isfinite(x) : form == ExpressionForm::FloatInfinite ? std::isinf(x) :
-        form == ExpressionForm::FloatSignbit ? std::signbit(x) : normal);
+    ExtendedFloat minimum = (floating_kind(t)==FT_FLOAT) ? std::numeric_limits<float>::min() :
+        (floating_kind(t)==FT_DOUBLE) ? std::numeric_limits<double>::min() : std::numeric_limits<long double>::min();
+    if ((floating_kind(t)==FT_FLOAT16)) minimum=half_value(1024);
+    bool normal = finite_float(x) && (x<0?-x:x) >= minimum;
+    if (form == ExpressionForm::FloatClassify) return args[nan_float(x) ? 0 : (!finite_float(x) && !nan_float(x)) ? 1 : normal ? 2 : x == 0 ? 4 : 3];
+    return Constant(call.type,form == ExpressionForm::FloatNaN ? nan_float(x) :
+        form == ExpressionForm::FloatFinite ? finite_float(x) : form == ExpressionForm::FloatInfinite ? (!finite_float(x) && !nan_float(x)) :
+        form == ExpressionForm::FloatSignbit ? sign_float(x) : normal);
 }
 } }

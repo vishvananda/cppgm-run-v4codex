@@ -7,7 +7,7 @@
 namespace lowir_model {
 void Writer::type(Type t)
 {
-    static const char* const names[] = {"void","i1","i8","u8","i16","u16","i32","u32","i64","i128","f32","f64","f80","ptr"};
+    static const char* const names[] = {"void","i1","i8","u8","i16","u16","i32","u32","i64","i128","f32","f64","f80","f16","f128","ptr"};
     if (t.vector()) out_ << (t.extended_vector() ? "evc<" : "vec<") << t.bytes() << 'x' << t.alignment() << '>';
     else if (t.complex()) out_ << (t.component() == Type::F32 ? "c32" : t.component() == Type::F64 ? "c64" : "c80");
     else if (t == Type::I128 && t.abi_alignment() == 8) out_ << "i128a8";
@@ -28,6 +28,7 @@ void Writer::operand(const Operand& v, Type context)
     case Operand::Null: out_ << "nullptr"; break;
     case Operand::Floating: {
         if (v.ref) { out_ << p_.name(p_.floating_literals.at(v.ref-1).spelling); break; }
+        if (v.extended_floating) { out_ << cppgm::extended_float_text(v.data.extended) << "Q"; break; }
         long double n = v.data.floating;
         if (std::isnan(n)) {
             if (std::signbit(n)) out_ << '-';

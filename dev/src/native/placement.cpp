@@ -176,7 +176,7 @@ void Selector::parameters()
     }
     for (unsigned k = signature.parameters.begin; k != signature.parameters.end(); ++k) {
         const auto& param = p.parameters[k];
-        bool vector = param.type == Type::F32 || param.type == Type::F64;
+        bool vector = param.type.floating() && param.type != Type::F80;
         auto placement = abi.take(param.type,XR_RBP);
         Operand incoming = placement.parts[0];
         f.params.push_back({p.values[param.value.index-1].name,param.type,incoming,placement.count == 2 ? placement.parts[1] : Operand()});

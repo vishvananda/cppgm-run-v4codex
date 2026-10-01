@@ -34,6 +34,13 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     case TypeKind::DependentBitInt:
         result = abi.make(Kind::BitInt,abi_query(t.bound),sem.unsigned_type(t.child)); break;
     case TypeKind::Fundamental: {
+        if (t.fundamental==FT_FLOAT32) { result=abi.builtin(ABI_BUILTIN_TYPE_FLOAT32); break; }
+        if (t.fundamental==FT_FLOAT64) { result=abi.builtin(ABI_BUILTIN_TYPE_FLOAT64); break; }
+        if (t.fundamental==FT_FLOAT32X) { result=abi.builtin(ABI_BUILTIN_TYPE_FLOAT32X); break; }
+        if (t.fundamental==FT_FLOAT64X) { result=abi.builtin(ABI_BUILTIN_TYPE_FLOAT64X); break; }
+        if (t.fundamental==FT_STDFLOAT128) { result=abi.builtin(ABI_BUILTIN_TYPE_STDFLOAT128); break; }
+        if (t.fundamental == FT_FLOAT16) { result=abi.builtin(ABI_BUILTIN_TYPE_FLOAT16); break; }
+        if (t.fundamental == FT_FLOAT128) { result=abi.builtin(ABI_BUILTIN_TYPE_FLOAT128); break; }
         if (sem.complex_type(id)) {
             result = abi.builtin(AbiBuiltinTypeKind(ABI_BUILTIN_TYPE_COMPLEX_FLOAT + t.fundamental - FT_COMPLEX_FLOAT)); break;
         }

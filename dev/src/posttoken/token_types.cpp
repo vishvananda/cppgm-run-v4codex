@@ -57,7 +57,10 @@ ETokenType classify_simple(TextView spelling)
         {"]", OP_RSQUARE},
         {"^", OP_XOR},
         {"^=", OP_XORASS},
-        {"_Complex", KW_COMPLEX}, {"__complex", KW_COMPLEX}, {"__complex__", KW_COMPLEX},
+        {"_Complex", KW_COMPLEX}, {"_Float128", KW_STDFLOAT128}, {"_Float16", KW_FLOAT16},
+        {"_Float32", KW_FLOAT32}, {"_Float32x", KW_FLOAT32X}, {"_Float64", KW_FLOAT64}, {"_Float64x", KW_FLOAT64X},
+        {"__complex", KW_COMPLEX}, {"__complex__", KW_COMPLEX},
+        {"__float128", KW_FLOAT128}, {"__float80", KW_FLOAT80},
         {"__imag", KW_IMAG}, {"__imag__", KW_IMAG},
         {"__int128", KW_INT128}, {"__int128_t", KW_INT128},
         {"__real", KW_REAL}, {"__real__", KW_REAL},
@@ -193,6 +196,14 @@ const char* simple_name(ETokenType type)
     case KW_COMPLEX: return "KW_COMPLEX";
     case KW_REAL: return "KW_REAL";
     case KW_IMAG: return "KW_IMAG";
+    case KW_FLOAT32: return "KW_FLOAT32";
+    case KW_FLOAT64: return "KW_FLOAT64";
+    case KW_FLOAT32X: return "KW_FLOAT32X";
+    case KW_FLOAT64X: return "KW_FLOAT64X";
+    case KW_STDFLOAT128: return "KW_STDFLOAT128";
+    case KW_FLOAT80: return "KW_FLOAT80";
+    case KW_FLOAT16: return "KW_FLOAT16";
+    case KW_FLOAT128: return "KW_FLOAT128";
     case KW_INT128: return "KW_INT128";
     case KW_UINT128: return "KW_UINT128";
     case KW_DYNAMIC_CAST: return "KW_DYNAMIC_CAST";
@@ -322,14 +333,29 @@ const char* fundamental_name(EFundamentalType type)
         "double",
         "long double",
         "void",
-        "nullptr_t", "__int128", "unsigned __int128", "_BitInt", "unsigned _BitInt", "_Complex float", "_Complex double", "_Complex long double",
+        "nullptr_t", "__int128", "unsigned __int128", "_BitInt", "unsigned _BitInt", "_Complex float", "_Complex double", "_Complex long double", "_Float16", "__float128", "_Float32", "_Float64", "_Float32x", "_Float64x", "_Float128",
     };
     return names[type];
 }
 
+EFundamentalType floating_representation(EFundamentalType type)
+{
+    switch (type) {
+    case FT_FLOAT32: return FT_FLOAT;
+    case FT_FLOAT64: case FT_FLOAT32X: return FT_DOUBLE;
+    case FT_FLOAT64X: return FT_LONG_DOUBLE;
+    case FT_STDFLOAT128: return FT_FLOAT128;
+    default: return type;
+    }
+}
+unsigned floating_precision(EFundamentalType type)
+{
+    auto f=floating_representation(type);
+    return f==FT_FLOAT16?11:f==FT_FLOAT?24:f==FT_DOUBLE?53:f==FT_LONG_DOUBLE?64:f==FT_FLOAT128?113:0;
+}
 unsigned fundamental_width(EFundamentalType type)
 {
-    static const unsigned char widths[] = {1, 2, 4, 8, 8, 1, 2, 4, 8, 8, 4, 1, 2, 4, 1, 4, 8, 16, 0, 8, 16, 16, 0, 0, 8, 16, 32};
+    static const unsigned char widths[] = {1, 2, 4, 8, 8, 1, 2, 4, 8, 8, 4, 1, 2, 4, 1, 4, 8, 16, 0, 8, 16, 16, 0, 0, 8, 16, 32, 2, 16, 4, 8, 8, 16, 16};
     return widths[type];
 }
 

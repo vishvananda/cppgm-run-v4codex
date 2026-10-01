@@ -27,7 +27,7 @@ StaticValue Analyzer::static_value(NodeId n, TypeId target)
         result.bits = result.kind == StaticValue::Floating ? result.floating != 0 : 1;
         result.kind = StaticValue::Integer;
     } else if (result.kind == StaticValue::Floating && integral(scalar)) {
-        auto value = convert(floating_constant(types.fundamental(FT_LONG_DOUBLE),result.floating),scalar,true);
+        auto value = convert(floating_constant(types.fundamental(FT_FLOAT128),result.floating),scalar,true);
         result.bits = value.bits; result.kind = value.valid ? StaticValue::Integer : StaticValue::Invalid;
     }
     if (result.kind == StaticValue::Floating && floating_type(scalar)) {
@@ -111,7 +111,7 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     if (kind == Kind::Unary && ast[n].op == OP_STAR)
         return static_value(first, expressions[first].type);
     if (kind == Kind::Unary && (ast[n].op == OP_PLUS || ast[n].op == OP_MINUS) &&
-        types[x.type].kind == TypeKind::Fundamental && types[x.type].fundamental >= FT_FLOAT && types[x.type].fundamental <= FT_LONG_DOUBLE) {
+        floating_type(x.type)) {
         r = static_value(first, x.type);
         if (r.kind == StaticValue::Floating && ast[n].op == OP_MINUS) r.floating = -r.floating;
         return r;
@@ -149,9 +149,11 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     } else if (kind == Kind::KeywordLiteral && ast[n].op == KW_NULLPTR) r.kind = StaticValue::Integer;
     else if (kind == Kind::Literal && ast.literals[ast[n].literal].type >= FT_FLOAT) {
         auto literal = ast.literals[ast[n].literal]; r.kind = StaticValue::Floating;
-        if (literal.type == FT_FLOAT) { float f; std::memcpy(&f, literal.scalar.data(), sizeof f); r.floating = f; }
-        else if (literal.type == FT_DOUBLE) { double f; std::memcpy(&f, literal.scalar.data(), sizeof f); r.floating = f; }
-        else std::memcpy(&r.floating, literal.scalar.data(), sizeof r.floating);
+        if (floating_representation(literal.type) == FT_FLOAT) { float f; std::memcpy(&f, literal.scalar.data(), sizeof f); r.floating = f; }
+        else if (floating_representation(literal.type) == FT_DOUBLE) { double f; std::memcpy(&f, literal.scalar.data(), sizeof f); r.floating = f; }
+        else if (floating_representation(literal.type) == FT_FLOAT128) std::memcpy(&r.floating,literal.scalar.data(),16);
+        else if (floating_representation(literal.type) == FT_FLOAT16) { std::uint16_t bits; std::memcpy(&bits,literal.scalar.data(),2); r.floating=half_value(bits); }
+        else { long double x=0; std::memcpy(&x,literal.scalar.data(),10); r.floating=x; }
     } else {
         Constant c = evaluate(n, facts[n].scope);
         if (c.valid) {

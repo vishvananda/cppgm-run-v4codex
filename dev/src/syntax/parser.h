@@ -43,6 +43,7 @@ private:
     NodeId named(Kind kind, NodeId name);
     bool identifier(std::size_t ahead = 0);
     bool builtin(std::size_t ahead = 0);
+    bool floating_identifier(std::size_t ahead = 0);
     bool type_start(std::size_t ahead = 0);
     struct NameProbe {
         std::size_t end = 0;

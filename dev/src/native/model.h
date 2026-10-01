@@ -90,6 +90,7 @@ struct Function {
     bool frame_pointer = true, shared_epilogue = true;
 };
 struct Statistics {
+    std::uint64_t extended_work = 0, extended_added = 0, extended_helpers = 0;
     std::uint64_t functions = 0, instructions = 0, frame_bytes = 0, text_bytes = 0;
     std::uint64_t value_visits = 0, scratch_carried_reloads = 0;
     std::uint64_t parameter_flow_visits = 0, carry_window_visits = 0, xmm_reuses = 0;
@@ -108,3 +109,5 @@ inline int xmm(unsigned n) { return 16+n; }
 void dump_header(const lowir_model::Program& p, const std::vector<Instruction>& startup, std::ostream& out, bool exceptions = false);
 void dump_function(const lowir_model::Program& p, const Function& f, std::ostream& out);
 } // namespace native
+
+namespace native { void legalize_extended_floats(lowir_model::Program&, Statistics&); }

@@ -196,10 +196,12 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         }
         if ((!integral(t) && !floating_type(t)) || literal.kind == LiteralKind::string) return Constant();
         if (floating_type(t)) {
-            long double value = 0;
-            if (literal.type == FT_FLOAT) { float f; std::memcpy(&f,literal.scalar.data(),sizeof f); value = f; }
-            else if (literal.type == FT_DOUBLE) { double f; std::memcpy(&f,literal.scalar.data(),sizeof f); value = f; }
-            else std::memcpy(&value,literal.scalar.data(),sizeof value);
+            ExtendedFloat value = 0;
+            if (floating_representation(literal.type) == FT_FLOAT) { float f; std::memcpy(&f,literal.scalar.data(),sizeof f); value = f; }
+            else if (floating_representation(literal.type) == FT_DOUBLE) { double f; std::memcpy(&f,literal.scalar.data(),sizeof f); value = f; }
+            else if (floating_representation(literal.type) == FT_FLOAT128) std::memcpy(&value,literal.scalar.data(),16);
+            else if (floating_representation(literal.type) == FT_FLOAT16) { std::uint16_t bits; std::memcpy(&bits,literal.scalar.data(),2); value = half_value(bits); }
+            else { long double extended = 0; std::memcpy(&extended,literal.scalar.data(),10); value = extended; }
             return floating_constant(t,value);
         }
         std::uint64_t bits = 0;

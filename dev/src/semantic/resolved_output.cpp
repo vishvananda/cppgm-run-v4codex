@@ -65,7 +65,7 @@ void Analyzer::write_expression(std::ostream& out, NodeId n, unsigned depth, Typ
         if (zero_cast) out << 0;
         else if (e.form == ExpressionForm::ConstantQuery) {
             auto value = constants[facts[n].value];
-            if (floating_type(value.type)) out << floating_value(value);
+            if (floating_type(value.type)) { if (fundamental(value.type,FT_FLOAT128)) out << extended_float_text(floating_value(value)); else out << static_cast<long double>(floating_value(value)); }
             else out << integer_text(value);
         }
         else if (e.entity && entities[e.entity].kind == EntityKind::Enumerator) {

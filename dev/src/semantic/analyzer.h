@@ -189,7 +189,8 @@ public:
     bool constant_plan(std::uint32_t plan, bool local = false);
     bool static_initialization(EntityId e);
     std::size_t static_requests = 0, static_hits = 0;
-    long double floating_value(Constant value) const;
+    ExtendedFloat floating_value(Constant value) const;
+    EFundamentalType floating_kind(TypeId t) const { return types[t].kind==TypeKind::Fundamental?floating_representation(types[t].fundamental):FT_VOID; }
     bool floating_signaling(Constant v) const { return floating_type(v.type) && floating_constants[v.bits].signaling; }
     using WideInteger = unsigned __int128;
     WideInteger integer_value(Constant value) const;
@@ -784,7 +785,7 @@ private:
     std::vector<Constant> constants;
     // Floating payloads are interned separately; common constants and entity
     // records retain their compact size. Identity excludes x87 padding bytes.
-    struct FloatingConstant { long double value; std::uint64_t significand; std::uint16_t exponent; std::uint32_t next; bool signaling; };
+    struct FloatingConstant { ExtendedFloat value; std::uint64_t significand; std::uint64_t exponent; std::uint32_t next; bool signaling; };
     std::vector<FloatingConstant> floating_constants = std::vector<FloatingConstant>(1);
     Index floating_constant_index;
     struct WideConstant { WideInteger value; std::uint32_t next; };
@@ -792,7 +793,7 @@ private:
     Index wide_constant_index;
     void constant_telemetry(std::ostream& out) const;
     bool floating_type(TypeId type) const;
-    Constant floating_constant(TypeId type, long double value, bool special = false, bool signaling = false);
+    Constant floating_constant(TypeId type, ExtendedFloat value, bool special = false, bool signaling = false);
     TypeId variadic_list_type = 0;
     Index atomic_kinds;
     Index intrinsic_functions, predefined_strings, atomic_signatures, integer_signatures, overflow_signatures;

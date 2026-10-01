@@ -136,7 +136,7 @@ std::size_t Parser::probe_type(std::size_t ahead)
             ahead = in.matching(in.is("[",ahead) ? ahead : ahead+1)+1;
         } else if (in.is("_BitInt",ahead)) {
             ahead = in.matching(ahead+1)+1; base = true;
-        } else if (builtin(ahead)) {
+        } else if (builtin(ahead) && !(base && floating_identifier(ahead))) {
             base = true;
             ++ahead;
         } else if (in.is("const", ahead) || in.is("volatile", ahead)) ++ahead;
