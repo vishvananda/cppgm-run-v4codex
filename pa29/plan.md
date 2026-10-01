@@ -1,12 +1,27 @@
-# PA29 compact plan — implementation159 handoff
+# PA29 compact plan — implementation160 in progress
 
-Target: **PA29 full-stage**. Phase: **validated implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `1ab3499d7046daf5c298d958a8770b413edb3615`.
-Entry: `044d9627`, clean, **317/403**. Code endpoint: `5d2b1657`.
-Current: **321/403**, **82 failures**, four resolved, zero new failures.
+Entry: `8bdc6bbf28980810ae1bc33895243d4de7c15149`, clean, **321/403**, 82 failures.
 All 403 fixtures, reference outputs, harnesses and comparison rules are retained.
-Previous goal turn: progress (audit158 changed code, evidence and suite results).
+Previous goal turn: progress (handoff159 changed code and validated 321/403).
+
+## Current implementation group
+
+Owner: intrinsic invocation, shared member-pointer application and typed unary
+operator recipes. Trace source operands → canonical query / selected receiver
+and argument conversions → typed LowIR → existing member-pointer ABI encoding.
+Complete direct/base, raw-pointer and pointer-like member invocation together,
+including query/SFINAE, cv/ref categories, lifetime, constexpr and exception facts.
+No fabricated syntax, repeated resolution in lowering, or library-name matching.
+Work is bounded by required operator candidates, arguments and base edges; query
+facts and receiver recipes are TU-owned. Freeze entry/final binaries, measure
+common A/A+ABBA compiler latency/RSS and runtime/text, plus new-capability scaling.
+Validation includes existing invoke fixtures, explicit positive/rejection/runtime
+controls, LowIR roundtrip, full stage delta, earlier stages and file audit.
+Further structured intrinsics (source locations, constant evaluation/fences) have
+distinct fact owners and remain implementation work, not audit questions.
 
 ## Completed ownership and spec alignment
 

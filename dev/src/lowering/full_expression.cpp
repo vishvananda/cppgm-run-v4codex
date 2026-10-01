@@ -15,12 +15,13 @@ bool Procedural::unwind_expression(NodeId n, bool body_proof)
     if (x.form == semantic::ExpressionForm::ConstantQuery || x.form == semantic::ExpressionForm::Unreachable) return false;
     EntityId callee = sem.facts[n].entity;
     bool call = (ast[n].kind == Kind::Call && x.form != semantic::ExpressionForm::Cast &&
-        x.form != semantic::ExpressionForm::ListValue && x.form != semantic::ExpressionForm::PseudoDestructor) ||
+        x.form != semantic::ExpressionForm::ListValue && x.form != semantic::ExpressionForm::PseudoDestructor && x.form != semantic::ExpressionForm::InvokeMemberData) ||
         x.form == semantic::ExpressionForm::OperatorCall || (callee && sem.constructor_member(callee));
     bool inline_intrinsic = x.form >= semantic::ExpressionForm::FloatFinite && x.form <= semantic::ExpressionForm::FloatClassify;
     if (call && x.form != semantic::ExpressionForm::Expect && !inline_intrinsic) result = !callee || ((sem.constructor_member(callee) ? sem.constructor_needed(callee) : true) && !sem.function_nonthrowing(callee));
     if (call && body_proof && callee && !sem.object_fact(n).virtual_slot &&
         !sem.object_fact(n).member_pointer && sem.scalar_body_nonthrowing(callee)) result = false;
+    result |= !sem.invoke_receiver_nonthrowing(sem.object_fact(n));
     auto arrow = sem.arrow_chains[sem.object_fact(n).arrow];
     for (unsigned j = 0; j < arrow.count; ++j) result |= !sem.function_nonthrowing(sem.arrow_steps[arrow.first+j].function);
     auto arguments = [&](const semantic::Expression& call) {

@@ -8,6 +8,39 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     auto first_argument = ast[ast[callee].next].first;
     bool invoke = invoke_expression(n,s);
     if (invoke) { callee = first_argument; first_argument = ast[callee].next; }
+    if (invoke && callee) {
+        auto callable = query_fact(expression_query(callee,s));
+        if (!callable.dependent && types[callable.expression.type].kind == TypeKind::MemberPointer) {
+            for (auto a = first_argument; a; a = ast[a].next)
+                if (!template_fixed_expressions.get(ast.nodes.occurrences[a].source)) return false;
+            auto checked = query_fact(expression_query(n,s));
+            if (checked.state == FactState::Failure || checked.incomplete)
+                throw std::runtime_error("invalid fixed member invocation");
+            ++unevaluated_depth;
+            try { expression(callee,s); }
+            catch (...) { --unevaluated_depth; throw; }
+            --unevaluated_depth;
+            auto result = checked.expression;
+            if (!decltype_call_result(n) && class_value(result.type) && result.category == ValueCategory::Prvalue) {
+                complete_class(types[result.type].entity); reject_abstract(result.type);
+                default_destructor(result.type,s,false);
+            }
+            auto use = object_uses[result.object_use];
+            use.node = first_argument; use.member_pointer = use.callee = callee; use.source_owned = true;
+            result.object_use = object_uses.size(); object_uses.push_back(use);
+            std::vector<NodeId> args; std::vector<Conversion> chosen;
+            for (auto a = ast[first_argument].next; a; a = ast[a].next) {
+                chosen.push_back(conversions[result.conversions+args.size()]); args.push_back(a);
+            }
+            store_call(result,args,chosen); result.ready = true; result.inputs = CallInputs::Source;
+            record_discard_form(n,result); expressions.set(n,result);
+            auto returned = result.form == ExpressionForm::InvokeMemberData ? result.type :
+                types[types[callable.expression.type].child].child;
+            { auto& f = facts.edit(n); f.type = returned; f.scope = s; }
+            template_operator_expressions.put(ast.nodes.occurrences[n].source,n);
+            ++template_fixed_call_work; return true;
+        }
+    }
     auto designator = callee;
     while (ast[designator].kind == Kind::Parenthesized) designator = ast[designator].first;
     bool member = ast[designator].kind == Kind::Member;

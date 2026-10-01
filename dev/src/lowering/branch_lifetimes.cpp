@@ -35,6 +35,14 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result, bool effects_onl
     if (discarded.valid()) needed |= cleanup(sem.converted_temporary(discarded));
     auto arrow = sem.arrow_chains[sem.object_fact(n).arrow];
     for (unsigned j = 0; j < arrow.count; ++j) needed |= cleanup(sem.arrow_steps[arrow.first+j].temporary);
+    const auto& dereference = sem.invoke_dereference(sem.object_fact(n));
+    needed |= cleanup(dereference.temporary);
+    for (unsigned j = 0; j < dereference.result.count; ++j) {
+        auto c = sem.conversion_fact(dereference.result.conversions+j);
+        needed |= cleanup(sem.converted_temporary(c));
+        if (c.kind == semantic::Conversion::Kind::User)
+            needed |= cleanup(sem.user_conversions[c.materialization].source_temporary);
+    }
     auto expression = sem.expression_fact(n);
     auto incoming = expression.incoming;
     auto backing_cleanup = [&](const semantic::Conversion& c) {

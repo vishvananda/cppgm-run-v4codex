@@ -77,6 +77,15 @@ void Analyzer::reuse_fixed_operator(NodeId n, NodeId source, ScopeId s, Expressi
     auto receiver = object_uses[result.object_use];
     if (receiver.source_owned) receiver = project_object_use(receiver,n);
     if (receiver.node) expression(receiver.node,s);
+    if (receiver.member_pointer && receiver.callee) {
+        expression(receiver.member_pointer,s);
+        if (receiver.invoke_dereference) {
+            auto op = invoke_dereferences[receiver.invoke_dereference];
+            prepare_range_operation(op,{expressions[receiver.node]},s,!unevaluated_depth);
+            receiver.invoke_dereference = invoke_dereferences.size(); invoke_dereferences.push_back(op);
+        }
+        result.object_use = object_uses.size(); object_uses.push_back(receiver);
+    }
     if (receiver.callee_conversion) {
         auto c = copy_conversion_recipe(conversions[receiver.callee_conversion]);
         apply_conversion(receiver.node,c);

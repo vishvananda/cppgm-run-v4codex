@@ -412,7 +412,7 @@ enum class Intrinsic : unsigned char {
     None, VaStart, VaEnd, VaCopy, StackAlloc, Expect, Abort, Unreachable, AtomicFetchAdd, AtomicAddFetch,
     Clz, Ctz, Popcount, Parity, Ffs, Bswap, Clzg, Ctzg, Popcountg, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow
 };
-enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatNaN, FloatInfinite, FloatNormal, FloatSignbit, FloatGreater, FloatGreaterEqual, FloatLess, FloatLessEqual, FloatLessGreater, FloatUnordered, FloatClassify, InitializerList, ListValue, BoundMember, Expect, Typeid, DynamicCast, TypeinfoEqual, TypeinfoUnequal };
+enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatNaN, FloatInfinite, FloatNormal, FloatSignbit, FloatGreater, FloatGreaterEqual, FloatLess, FloatLessEqual, FloatLessGreater, FloatUnordered, FloatClassify, InitializerList, ListValue, BoundMember, Expect, Typeid, DynamicCast, TypeinfoEqual, TypeinfoUnequal, InvokeMemberData };
 struct RttiExpression {
     TypeId type = 0, source = 0;
     std::int64_t hint = -1;
@@ -455,6 +455,7 @@ struct ObjectUse {
     EntityId callable_entry = 0; // Receiver-free closure ABI; selected declaration stays on the call.
     ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0;
     NodeId member_pointer = 0, callee = 0; // Actual callable of an intrinsic invocation.
+    std::uint32_t invoke_dereference = 0; // Typed unary receiver recipe, never a synthetic expression.
     std::uint32_t member_target = 0; // Completed StaticFact for an immediate member address.
     std::uint32_t arrow = 0;
     std::uint32_t virtual_slot = 0;

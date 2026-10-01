@@ -73,6 +73,10 @@ QueryId Analyzer::qualified_value_query(NodeId name, ScopeId scope, TypeId owner
 }
 QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
 {
+    // An expanded operand owns a lane overlay just as its evaluated expression
+    // does. Querying it in the enclosing scope would bind every occurrence of
+    // a named function parameter pack to the same parameter.
+    s = expanded_scope(n,s);
     auto& source_index = callee ? query_callee_sources : query_sources;
     if (auto old = source_index.get(key(s,n))) return old;
     TypeQuery q; std::vector<QueryId> children;

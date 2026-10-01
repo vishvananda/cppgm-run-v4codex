@@ -183,6 +183,7 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
 {
     auto e = facts[n].entity;
     auto call = expressions[n];
+    if (call.form == ExpressionForm::InvokeMemberData) return constant_read(constant_address(n,s));
     if (call.form >= ExpressionForm::FloatFinite && call.form <= ExpressionForm::FloatClassify)
         return floating_builtin_constant(call,s);
     if (intrinsic_function(e) >= Intrinsic::Clz && intrinsic_function(e) <= Intrinsic::Popcountg)
@@ -212,7 +213,7 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
     if (entities[e].member_info && !entities[e].is_static) {
         if (use.virtual_slot || members[entities[e].member_info].virtual_member) return Constant();
         if (use.node) {
-            object = constant_arrow(use.node,use.arrow);
+            object = use.invoke_dereference ? constant_invoke_receiver(use,s) : constant_arrow(use.node,use.arrow);
         } else if (active_constant) object = constant_activations[active_constant].object;
         // Use the same selected subobjects as runtime lowering. Searching by
         // the declaring class would lose a qualified path through repeated bases.

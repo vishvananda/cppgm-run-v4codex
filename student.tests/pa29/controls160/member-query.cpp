@@ -1,0 +1,25 @@
+template<class T> T&& declval() noexcept;
+template<class A,class B> struct Same { static const bool value=false; };
+template<class A> struct Same<A,A> { static const bool value=true; };
+struct Base {int x; int l() &; int r() &&; int c() const;};
+struct Derived:Base {void operator*()=delete;};
+struct Pointer {Base& operator*() const noexcept;};
+struct ThrowPointer {Base& operator*() const;};
+template<class...> using Void=void;
+template<class, class F, class... A> struct Valid {static const bool value=false;};
+template<class F, class... A> struct Valid<Void<decltype(__builtin_invoke(declval<F>(),declval<A>()...))>,F,A...> {static const bool value=true;};
+typedef int Base::*Data;
+static_assert(Same<decltype(__builtin_invoke(&Base::x,declval<Base&>())),int&>::value,"lvalue");
+static_assert(Same<decltype(__builtin_invoke(&Base::x,declval<const Base&>())),const int&>::value,"cv");
+static_assert(Same<decltype(__builtin_invoke(&Base::x,declval<Base>())),int&&>::value,"xvalue");
+static_assert(Same<decltype(__builtin_invoke(&Base::x,declval<Pointer>())),int&>::value,"dereference");
+static_assert(Valid<void,Data,Derived&>::value,"base precedes dereference");
+static_assert(!Valid<void,Data,int>::value,"bad receiver");
+static_assert(!Valid<void,Data,Base&,int>::value,"excess argument");
+static_assert(!Valid<void,decltype(&Base::l),Base>::value,"ref qualifier");
+static_assert(!Valid<void,decltype(&Base::r),Base&>::value,"ref qualifier");
+static_assert(Valid<void,decltype(&Base::r),Base>::value,"rvalue receiver");
+static_assert(!Valid<void,decltype(&Base::l),const Base&>::value,"const receiver");
+static_assert(noexcept(__builtin_invoke(&Base::x,declval<Pointer>())),"nothrow dereference");
+static_assert(!noexcept(__builtin_invoke(&Base::x,declval<ThrowPointer>())),"throwing dereference");
+int main(){return 0;}

@@ -188,6 +188,8 @@ public:
     const LifetimeUse& lifetime_use(NodeId n) const { return lifetime_uses[lifetime_index.get(n)]; }
     Index initialization_guards;
     bool expression_nonthrowing(NodeId n);
+    bool invoke_receiver_nonthrowing(const ObjectUse& use);
+    const RangeOperation& invoke_dereference(const ObjectUse& use) const { return invoke_dereferences[use.invoke_dereference]; }
     std::uint32_t object_lifetime(EntityId e) const { return object_lifetimes.get(e); }
     unsigned return_count(std::uint32_t state, NodeId context) const { return return_counts.get(key(state, context)); }
     std::vector<LifetimeState> lifetimes = std::vector<LifetimeState>(1);
@@ -592,6 +594,7 @@ private:
     void demand_region(NodeId root);
     ExpressionStore expressions;
     std::vector<ObjectUse> object_uses = std::vector<ObjectUse>(1);
+    std::vector<RangeOperation> invoke_dereferences = std::vector<RangeOperation>(1);
     std::uint32_t prepare_arrow(NodeId node, ScopeId scope);
     std::uint32_t prepare_arrow(Expression object, ScopeId scope, NodeId source, bool demand);
     std::uint32_t constant_arrow_value(std::uint32_t object, std::uint32_t chain);
@@ -1290,6 +1293,11 @@ private:
     std::size_t discard_selections = 0, discard_recipe_uses = 0, discard_materializations = 0;
     Expression resolve_expression(NodeId n, ScopeId s);
     bool invoke_expression(NodeId n, ScopeId s);
+    Expression invoke_call(NodeId n, ScopeId s, NodeId callee, std::vector<NodeId> args);
+    TypeQueryFact invoke_member_value(Expression member, Expression object, ScopeId s, EntityId ordinary);
+    TypeQueryFact query_invoke_member(const TypeQuery& q, const std::vector<TypeQueryFact>& children);
+    std::uint32_t constant_invoke_receiver(const ObjectUse& use, ScopeId s);
+    Constant constant_query_invoke(QueryId id);
     Expression callable_expression(NodeId n, ScopeId s, NodeId callee, std::vector<NodeId> args, Expression fn);
     Expression call_expression(NodeId n, ScopeId s);
     Expression unary_expression(NodeId n, ScopeId s);

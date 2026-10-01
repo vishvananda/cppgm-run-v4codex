@@ -397,6 +397,10 @@ Value Procedural::call(NodeId n, Value destination)
         else expression(ast[member].first);
         return Value(Operand(), IRType::Void, fact.type);
     }
+    if (fact.form == semantic::ExpressionForm::InvokeMemberData) {
+        auto value = member_pointer_object(sem.object_fact(n));
+        value.type = fact.type; value.address = true; return value;
+    }
     if (fact.form == semantic::ExpressionForm::Unreachable) return emit(Opcode::Unreachable, IRType(), {});
     if (fact.form == semantic::ExpressionForm::Abort) return abort_call();
     if (fact.form == semantic::ExpressionForm::Expect) {

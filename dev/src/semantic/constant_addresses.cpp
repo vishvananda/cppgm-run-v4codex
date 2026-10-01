@@ -200,12 +200,14 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
     if (ast[n].kind == Kind::Unary && ast[n].op == OP_STAR) {
         auto v = constant_indirect(evaluate(first,s)); return v.valid && pointer(v.type) ? v.bits : 0;
     }
-    if (ast[n].kind == Kind::Binary && (ast[n].op == OP_DOTSTAR || ast[n].op == OP_ARROWSTAR)) {
-        auto member = evaluate(ast[first].next,s);
+    if ((ast[n].kind == Kind::Binary && (ast[n].op == OP_DOTSTAR || ast[n].op == OP_ARROWSTAR)) ||
+        x.form == ExpressionForm::InvokeMemberData) {
+        auto use = object_fact(n);
+        auto member = evaluate(use.member_pointer,s);
         if (!member.valid || !member.bits || types[member.type].kind != TypeKind::MemberPointer) return 0;
         auto entity = member_constant_value(member).member;
         if (!nonstatic_field(entity)) return 0;
-        auto base = constant_node_object(first);
+        auto base = constant_invoke_receiver(use,s);
         base = constant_base_address(base,entities[types[member.type].entity].type);
         base = constant_member_receiver(base,member);
         return constant_subobject(base,entities[entity].type,entity);

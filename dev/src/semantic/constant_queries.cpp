@@ -103,6 +103,8 @@ Constant Analyzer::constant_query_conversion(QueryId source, Conversion c)
 Constant Analyzer::constant_query_call(QueryId id)
 {
     auto q = type_queries[id]; auto fact = query_fact(id);
+    if (q.name == invoke_builtin && types[query_fact(query_edges[q.offset]).expression.type].kind == TypeKind::MemberPointer)
+        return constant_query_invoke(id);
     auto e = fact.selected;
     auto callee_id = query_edges[q.offset]; auto callee = type_queries[callee_id];
     while (callee.kind == QueryKind::Parenthesized) {

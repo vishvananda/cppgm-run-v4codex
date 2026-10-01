@@ -144,6 +144,7 @@ bool Analyzer::expression_nonthrowing(NodeId n)
             if (auto temporary = reference_temporary(e)) result &= type_destructor_nonthrowing(entities[temporary].type);
         }
     }
+    result &= invoke_receiver_nonthrowing(object_fact(n));
     auto arrow = arrow_chains[object_fact(n).arrow];
     for (unsigned j = 0; j < arrow.count; ++j) {
         auto step = arrow_steps[arrow.first+j];
@@ -173,7 +174,7 @@ bool Analyzer::expression_nonthrowing(NodeId n)
     }
     auto callee = facts[n].entity;
     bool call = (node.kind == Kind::Call && x.form != ExpressionForm::Cast &&
-        x.form != ExpressionForm::ListValue && x.form != ExpressionForm::PseudoDestructor) ||
+        x.form != ExpressionForm::ListValue && x.form != ExpressionForm::PseudoDestructor && x.form != ExpressionForm::InvokeMemberData) ||
         x.form == ExpressionForm::OperatorCall || (callee && constructor_member(callee));
     bool intrinsic = (x.form >= ExpressionForm::FloatFinite && x.form <= ExpressionForm::FloatClassify) ||
         x.form == ExpressionForm::ConstantQuery;
@@ -210,9 +211,10 @@ bool Analyzer::query_nonthrowing(QueryId id, bool temporary)
     bool result = true;
     if (fact.surrogate) result = false; // The converted function pointer has a potentially-throwing call type.
     if (fact.selected) result &= function_nonthrowing(fact.selected);
-    else if (q.kind == QueryKind::Call && fact.expression.form != ExpressionForm::PseudoDestructor &&
+    else if (q.kind == QueryKind::Call && fact.expression.form != ExpressionForm::PseudoDestructor && fact.expression.form != ExpressionForm::InvokeMemberData &&
         type_queries[query_edges[q.offset]].kind != QueryKind::TypeValue) result = false;
     if (fact.deallocation) result &= function_nonthrowing(fact.deallocation);
+    result &= invoke_receiver_nonthrowing(object_uses[fact.expression.object_use]);
     auto arrow = arrow_chains[fact.arrow];
     for (unsigned i = 0; i < arrow.count; ++i) {
         auto step = arrow_steps[arrow.first+i];

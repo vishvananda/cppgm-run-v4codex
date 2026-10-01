@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "support/builtin_registry.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
@@ -8,7 +9,7 @@ bool Analyzer::invoke_expression(NodeId n, ScopeId s)
     if (ast[callee].kind != Kind::IdExpression) return false;
     auto name = ast[callee].detail;
     return ast[name].kind == Kind::Name && ast[name].first == ast[name].last &&
-        terminal(name) == invoke_builtin && !resolve(name,s);
+        invoke_builtin_name(ids.spelling(terminal(name))) && !resolve(name,s);
 }
 Expression Analyzer::callable_expression(NodeId n, ScopeId s, NodeId callee,
     std::vector<NodeId> args, Expression fn)
@@ -85,10 +86,7 @@ Expression Analyzer::callable_expression(NodeId n, ScopeId s, NodeId callee,
         if (args.size() < f.count || (!f.variadic && args.size() != f.count)) throw std::runtime_error("indirect call arity");
         for (unsigned i = 0; i < f.count; ++i) reject_abstract(types.parameters[f.offset+i]);
         if (fn.form == ExpressionForm::BoundMember) {
-            auto bound = object_uses[fn.object_use];
-            record_object(result,bound.node,bound.type,bound.adjustment);
-            object_uses[result.object_use].member_pointer = bound.member_pointer;
-            object_uses[result.object_use].member_target = bound.member_target;
+            result.object_use = fn.object_use;
         } else require_conversion(callee, decay(fn.type));
         std::vector<Conversion> chosen;
         for (std::size_t i = 0; i < args.size(); ++i) {

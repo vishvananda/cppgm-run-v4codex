@@ -8,6 +8,7 @@ enum class FunctionBuiltin : unsigned char {
     Alloca, Expect, Abort, Unreachable, Vsnprintf, Vsprintf,
     Fabs, Fabsf, Fabsl, Abs, Labs, Llabs, Memcpy, Memmove, Memset, Memcmp, Memchr, Strlen, Strchr, Strrchr, Bzero, Strstr, Strpbrk, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, OperatorNew, OperatorDelete
 };
+inline bool invoke_builtin_name(TextView name) { return name.equals("__builtin_invoke"); }
 inline FunctionBuiltin function_builtin(TextView name)
 {
     static const char* const names[] = {"", "__atomic_fetch_add", "__atomic_add_fetch",

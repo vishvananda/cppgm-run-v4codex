@@ -9,7 +9,11 @@ QueryId Analyzer::call_query(NodeId n, ScopeId s)
     while (!template_object_context_index.get(q.context) &&
         (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
         q.context = scopes[q.context].parent;
-    if (invoke_expression(n,s)) q.name = invoke_builtin;
+    if (invoke_expression(n,s)) {
+        q.name = invoke_builtin;
+        auto ordinary = lookup(s,operator_name(OP_STAR));
+        if (function_binding(ordinary)) q.entity = ordinary;
+    }
     else children.push_back(expression_query(first,s,true));
     auto list = ast[first].next;
     if (ast[list].kind == Kind::BracedInit) {
@@ -46,6 +50,8 @@ QueryId Analyzer::call_query(NodeId n, ScopeId s)
 TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQueryFact>& children)
 {
     if (children.empty()) return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
+    if (q.name == invoke_builtin && types[children[0].expression.type].kind == TypeKind::MemberPointer)
+        return query_invoke_member(q,children);
     auto callee_id = query_edges[q.offset]; auto callee = type_queries[callee_id];
     bool parenthesized = callee.kind == QueryKind::Parenthesized;
     while (callee.kind == QueryKind::Parenthesized) {

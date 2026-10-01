@@ -213,7 +213,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         if (!e && builtin_name && name == invoke_builtin) {
             if (args.empty()) throw std::runtime_error("invoke requires a callable");
             auto callable = args.front(); args.erase(args.begin());
-            result = callable_expression(n,s,callable,std::move(args),expressions[callable]);
+            result = invoke_call(n,s,callable,std::move(args));
             if (!result.object_use) record_object(result,0,0,0);
             object_uses[result.object_use].callee = callable;
             return result;
