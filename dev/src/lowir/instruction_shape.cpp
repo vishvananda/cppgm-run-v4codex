@@ -35,7 +35,9 @@ void validate_instruction_shape(const Instruction& i)
         variable = true; require(i.operands.count >= 1 && i.operands.count <= 2, "invalid catch arity"); break;
     case Opcode::EhFilter: variable = true; break;
     case Opcode::Return: arity = i.type == Type() ? 0 : 1; break;
-    case Opcode::Nop: case Opcode::Pause: case Opcode::EhEnd: case Opcode::Resume: case Opcode::Unreachable: break;
+    case Opcode::Nop: case Opcode::Pause:
+        require(i.type == Type(), "processor hint cannot have a value type"); break;
+    case Opcode::EhEnd: case Opcode::Resume: case Opcode::Unreachable: break;
     }
     require(variable || i.operands.count == arity, "invalid instruction arity");
     if (scalar) require(i.type.scalar() || (i.type.kind() == Type::Object &&
