@@ -6,6 +6,9 @@ void Analyzer::record_deferred_function_use(EntityId target)
     // depth. Its potentially evaluated uses belong to the body, while deeper
     // sizeof/decltype operands remain unevaluated even if that body is emitted.
     if (!current_function || !target || unevaluated_depth != body_evaluation_depth) return;
+    // Intrinsics have already validated their direct-call restriction and have
+    // no definition to demand when the enclosing constexpr body is emitted.
+    if (intrinsic_function(target) != Intrinsic::None) return;
     auto identity = key(current_function,target);
     auto id = deferred_function_use_index.get(identity);
     if (!id) {
