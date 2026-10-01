@@ -1,0 +1,23 @@
+[
+  {
+    "handoff": 183,
+    "code": "054d162c",
+    "files": 473,
+    "validated_binary": "337588703754eb605fa5680f99b8bdf88425eb80f0c0a7fb7bc776c8999b66dd",
+    "source_match": true
+  },
+  {
+    "handoff": 184,
+    "code": "52c00f4d",
+    "files": 473,
+    "validated_binary": "7cb0fefbc4e09af9dc5c7dabb0d28f81028a475809e3d4db5f652f99828f4f4a",
+    "source_match": true
+  },
+  {
+    "handoff": 185,
+    "code": "27012cf5",
+    "files": 475,
+    "validated_binary": "5bbd875bcbf039f6b7b57f79f38d6524c88cd53c8ccd1074d5e85d85b1faea68",
+    "source_match": true
+  }
+]

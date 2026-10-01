@@ -1,236 +1,224 @@
-# PA29 checkpoint audit182
+# PA29 accumulated checkpoint audit — loop 186
 
-Target: **PA29 full-stage**. Phase: **checkpointAudit complete; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **checkpoint audit complete; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
-Previous reviewed commit: `667edd800e4e5eb1b1ef92a3108da3bd96c51708`.
-Audit entry: `9211517d1f554f61efa7d6e2e30020dc13171f3f`.
-Last reviewed commit: `52070178897f5894edaf2f35d03a734b781979d4`.
+Previous reviewed commit: `52070178897f5894edaf2f35d03a734b781979d4`.
+Audit entry: `152396e2` (**392/403**, **11 failures**).
+Last reviewed commit: `2df00585bd10d4e2e068934394dffc8adb0a47ed`.
+Reviewed range: **`52070178..2df00585`**, including all three accepted
+handoffs, their records, the combined implementation and this audit's fixes.
 
-Reviewed all **17 commits** from the previous review through the audit code tip:
-three accepted implementation handoffs, their intermediate fixes/records, and the
-audit fix. The combined range changes **79 implementation/build paths**.
-[Range evidence](../student.tests/pa29/evidence182/range.json) retains every commit,
-path and combined implementation-diff digest. [Audit178](audit178.md) preserves
-the previous record and ledger verbatim. The code fix was validated and committed
-first; this records commit makes no further implementation or harness edits.
+The [range record](../student.tests/pa29/evidence186/range.json) enumerates all ten
+entry commits and 56 combined implementation/build paths; the audit adds three
+affected shared implementation paths. The previous handoff made concrete progress
+through committed bit-integer implementation and validation. Entry state was clean,
+and no predecessor build/test process was still running. The reported stage check
+status 2 was a process exit status, not the failure count; the actual baseline was
+11 failures among 403 tests. [Audit182](audit182.md) and all prior evidence remain
+preserved. This audit does not claim PA29 completion or authorize advancing to PA30.
 
-Interruption revalidation found a clean entry tree, the unchanged previous review
-marker, and no inherited build/test process. The interrupted audit is classified
-as no progress; the next available action was the complete range review, followed
-by the concrete fixes and validation below. No wait or stale lock was used as
-completion evidence.
+## Findings and repairs
 
-## Findings and owner repairs
+1. **Prototype inquiries still repeated semantic lookup during default demand.**
+   Handoff183 retained `sizeof(parameter)` but skipped `decltype` and nonpolymorphic
+   `typeid` inquiries. A default is instantiated before runtime parameter objects
+   exist. The reduced [decltype default](../student.tests/pa29/source186/decltype-default.cpp)
+   and [typeid default](../student.tests/pa29/source186/default-typeid-value.cpp)
+   therefore failed at entry with an unbound type-query name.
 
-1. **Array decomposition discarded source element qualifiers.**
-   `binding_object_type` applied ordinary non-reference `auto` deduction to an
-   array. `const int a[2]; auto [x,y]=a` therefore made `x` mutable; volatile
-   arrays also lost volatile destination access semantics. The reduced
-   [array-cv](../student.tests/pa29/source182/array-cv.cpp) assertion fails on entry,
-   and [array-cv-write](../student.tests/pa29/source182/array-cv-write.reject.cpp)
-   is incorrectly accepted. The shared owner now forms the hidden cv A array
-   without removing A's element qualifiers. Ordinary non-array deduction keeps
-   its existing rule. Canonical types carry the corrected fact through template
-   occurrences, range elements, copy plans, projections and constant evaluation.
+   The shared source-default owner now retains canonical operand queries and type
+   recipes, including inquiries reached through a functional or named cast. The
+   query owner substitutes them using the default's complete frame and memoizes
+   the projected occurrence. It does not manufacture a runtime parameter, replay
+   parsing or search by a rendered name. Source validation tracks potentially
+   evaluated contexts; a dependent `typeid` keeps that decision deferred until its
+   type is known. Polymorphic parameter operands are explicitly rejected, while
+   nested `sizeof` operands remain unevaluated and genuine dynamic operand effects
+   still run. [Default inquiry/effect controls](../student.tests/pa29/source186/default-inquiries.cpp)
+   cover multiple types, references, arrays, enclosing/member template frames and
+   both cast forms; [effects](../student.tests/pa29/source186/default-typeid-effects.cpp)
+   additionally checks a dynamically evaluated call containing `sizeof(parameter)`.
 
-   This is the hosted structured-binding extension's
-   [N4659 dcl.struct.bind/1–2](https://timsong-cpp.github.io/cppwp/n4659/dcl.struct.bind)
-   hidden-array rule and referenced element type, not a claim that structured
-   bindings belong to C++11. GCC/Clang outcomes in
-   [entry proof](../student.tests/pa29/evidence182/entry-cv.json) corroborate the
-   rule. Nine new controls cover cv identity, required rejection, dependent and
-   range deduction, class copies, volatile counted loops, and all-handoff effects.
-   Entry fails eight; final passes all nine. Zero-sized class copies retain
-   constructor/destructor effects independently of their empty representation.
+   The rules are C++11 [expr.typeid/2–4](https://timsong-cpp.github.io/cppwp/n3337/expr.typeid)
+   and the adopted [CWG2082](https://cplusplus.github.io/CWG/issues/2082.html)
+   correction to default arguments: unevaluated parameter uses are permitted,
+   potentially evaluated ones are not. Clang accepts the personal polymorphic
+   negative reducer; GCC rejects it. The rule, not compiler agreement, determines
+   its expected rejection. No course oracle is changed.
 
-2. **Mandatory expansion had two phase owners across serialization.**
-   Source lowering expanded calls and set an in-memory `forced_calls_expanded`
-   flag, while the native adapter expanded a newly read Program again. Recursive,
-   depth-limited and budget-limited calls survive a valid expansion; reading the
-   source view therefore supplied another allowance. The reduced
-   [recursive control](../student.tests/pa29/source182/inline-cycle.cpp) produces
-   different source and adapter instructions at entry;
-   [entry evidence](../student.tests/pa29/evidence182/entry-inline.json) records
-   the extra expansion and both disassemblies. The defect concerns phase ownership
-   and pipeline budgets even when both executions happen to return the same value.
+2. **Overflow intrinsics used carrier width rather than bit-integer precision.**
+   Handoff185 integrated widths into ordinary operations, but the inherited generic
+   overflow owner truncated to a LowIR carrier before deciding overflow. For
+   unsigned 7-bit `127 + 1`, the carrier can represent 128 even though the language
+   type cannot. [The reducer](../student.tests/pa29/source186/overflow.cpp) returned
+   failure because the intrinsic incorrectly reported no overflow. The same
+   problem affected 93-bit results carried in `i128a8`.
 
-   Native object preparation is now the sole production expansion owner.
-   `--emit-lowir` renders its unprepared typed input, with original attributes;
-   source object emission and explicit LowIR use the same transform once. This
-   follows the [LowIR force_inline contract](../pa8/lowir.md), which assigns
-   expansion to object preparation, and PA29's representative LowIR requirement.
-   No new text protocol, metadata spelling, semantic reconstruction or fallback
-   compiler is introduced. The existing same-Program guard remains.
+   The shared intrinsic owner now invokes exact-width normalization before the
+   store and representability comparison. The normalized value carries the existing
+   type-qualified proof; widening it for comparison consumes the correct signed or
+   unsigned result. All three operations, signed and unsigned targets, mixed inputs,
+   volatile destinations and widths 1/2/7/9/65/93/127/128 are checked in the
+   [narrow matrix](../student.tests/pa29/source186/overflow-matrix.cpp) and
+   [wide boundaries](../student.tests/pa29/source186/overflow-wide.cpp).
+   The narrow matrix uses independent ordinary-long arithmetic; the wide checks
+   cover mathematical boundary results. This follows the
+   [GNU overflow builtin contract](https://gcc.gnu.org/onlinedocs/gcc/Integer-Overflow-Builtins.html):
+   store the destination conversion and report whether it equals the mathematical
+   result. At most two shifts are added per affected intrinsic. Argument evaluation,
+   volatile storage and exception behavior are retained.
 
-   Telemetry follows the native owner: separate preparation time, prepared
-   instruction/operand totals, inline work/reservation/decline counters and
-   maximum caller reservation. Source lowering reports its original IR.
-   The inspection180 assumption that source and prepared views were identical
-   was replaced with validation/roundtrip of both views; object instructions,
-   relocations, symbols, execution and stats-on/off equality remain required.
-   This adds 13 inspection commands and changes no course oracle. New inspection182
-   additionally requires exact direct/adapter inline-counter equality, including
-   recursion, depth and growth fallbacks. All these checks pass.
-
-No reference correction is needed. All contract inputs, reference sidecars and
-comparison/discovery rules are unchanged. The reference bundle remains pinned to
-source `c2f713cd70d06170632bfde3e75dd6fe1aa44d98`. The earlier personal
-[lifetime179](../student.tests/pa29/lifetime179.md) refinement remains documented
-with its original reducer/results; it changed no course coverage. The zero-size
-class host-effect disagreement in handoff181 remains disclosed rather than being
-used to revise a reference or erase constructor/destructor requirements.
+Entry fails **9 of 15** new controls; final passes all **15**. The
+[combined control](../student.tests/pa29/source186/integrated.cpp) exercises a
+width-deducing guide, demanded `step<7>`/`step<93>` defaults, RTTI, overflow and a
+cv-removing reference base cast with an **8-byte** adjustment. Cast ownership from
+handoff184 is preserved through its complete inherited controls and this combined
+use. Initial exploratory observations and preliminary checks remain in evidence.
+An assembly return with manually dirty padding was not accepted as an ABI proof;
+it fails with both compilers and motivates no implementation or oracle change.
 
 ## Every commit reviewed
 
-| Commit | Content and interaction reviewed |
+| Commit | Content and interactions reviewed |
 |---|---|
-| `cd283a59` | Audit178 records, reviewed marker, retained proof and inherited performance. |
-| `a0a67bdf` | Typed local/member bindings and template/range projections; array deduction owner is repaired here. |
-| `bcef72ad` | Array copy plans, constants, bounded cleanup and ordinary parameter/parser interactions. |
-| `bf487a41` | Narrowing on referred types; completed-copy and default-temporary lifetime controls. |
-| `259329ee` | Decomposition handoff, full suites, controls, scaling and performance evidence. |
-| `6574d6c8` | Callable group entry scope and unchanged baseline. |
-| `639ebd7f` | Static call/subscript selection, receiver evaluation, deduction, queries and typed lowering facts. |
-| `a613b21a` | Mandatory inline CFG/value/slot/EH mapping; dual phase ownership is repaired here. |
-| `95d43769` | Pre-mutation reservations, reused scratch, per-callee exception analysis and conservative fallbacks. |
-| `f613c554` | Static/nonstatic template partial ordering and surrogate conversion ranking. |
-| `c0efbf29` | Callable handoff with final/preliminary validation and performance. |
-| `42a2bac7` | Zero-extent group plan and 16-failure entry evidence. |
-| `e0619de9` | Canonical absent/zero array distinction, typed layout/completeness, lifetimes and native storage. |
-| `f69601ef` | Immediate-context zero-bound rejection, nested parameter packs, static bounds and explicit adapter parity. |
-| `0e47335f` | Wide object extents checked before packing, preventing 4-GiB wrap to zero. |
-| `9211517d` | Zero-extent handoff; 388/403 validation and preserved preliminary/final measurements. |
-| `52070178` | Both shared-owner repairs above; integrated reducers, source/adapter budgets, telemetry and audit check tools. |
+| `a2ce2670` | Audit182 records and immutable reviewed baseline; inherited budgets and reference proofs. |
+| `054d162c` | Distinct guide syntax/registry, deducibility graph, prototype defaults, pack rejection and shared member/declaration paths. Missing inquiry retention repaired here. |
+| `68ee6f8d` | Guide/default handoff, full validation, source binding, first and confirmation performance runs. |
+| `f375d9d7` | Explicit-cast ownership plan; no implementation or acceptance change. |
+| `52c00f4d` | cv-only selection, reference categories, composed base adjustments and member constant identity. |
+| `c5f594fc` | Cast handoff, lifetime and rejection controls, source/adapter/ABI inspection, frozen performance and retained preliminary evidence. |
+| `c6d7a46a` | Deterministic manifest ordering only; no source semantics, contract or benchmark changes. |
+| `8ee20450` | Parsed dependent bit-widths; canonical types/queries, constants, ranks, conversions, template deduction/packs, ABI naming and typed lowering. |
+| `27012cf5` | Bit-integer storage/padding, normalization proof, ABI/variadic alignment and serialization, RTTI and atomic/vector boundaries. Overflow interaction repaired here. |
+| `152396e2` | Bit-integer handoff, coverage/failure ledger, source binding and all performance/inspection records. |
+| `2df00585` | Both shared-owner repairs, cross-handoff reducers and audit validation/performance tools. |
 
-## Architecture trace and correctness interactions
+No contract fixture, reference sidecar, discovery rule or comparison rule changed
+anywhere in this range. The reference bundle remains pinned to source
+`c2f713cd70d06170632bfde3e75dd6fe1aa44d98`. No reference correction is requested or
+made. Earlier reference proofs and all original measurements remain available.
 
-The nontrivial declaration and demanded template are in
-[integrated.cpp](../student.tests/pa29/source182/integrated.cpp): `Z::empty` has a
-known zero extent, and demanded `F<7>::operator()` / `F<8>::operator()` contain
-array decomposition and mandatory inline calls with normal/throwing exits.
+## Architecture and optimization trace
 
-Immutable source buffers feed streaming preprocessing and syntax cursors. The
-cooperating Parser/Analyzer publishes source names once and retains the parsed
-body. Template instantiation uses canonical argument/frame identities and source
-occurrence projections; it does not replay grammar. Non-dependent types and
-binding shapes are shared, while actual local object/alias occurrences have their
-own facts. Dependent-only publication and existing per-specialization demand
-states retain selected constructors, destructors, conversions and function bodies.
+The nontrivial declaration is `Derived : Pad, Base` in the combined control;
+its 93-bit member preserves precision, 16-byte size and 8-byte alignment through
+layout and ELF. The demanded templates are `step<7>` and `step<93>`, whose retained
+body uses a typed default, RTTI and overflow operations. The guide declaration
+has its own identity; it creates no callable body or guide symbol.
 
-`unknown_bound` participates in type hashing/equality, signature shapes and all
-rebuilding operations. A known zero is never completed from an initializer as
-though it were absent. Completeness is an explicit size-query result; element
-alignment and zero bytes survive into typed object layouts. Immediate function
-signature substitution owns zero-bound failure separately from valid GNU body
-layouts; it visits dependent type edges and actual pack lanes. Parenthesized pack
-discovery follows declarator edges without walking nested parameter lists.
-Static array completion selects the indexed member definition without broad
-class/body demand. These changes retain the earlier default/unevaluated/demand
-separation instead of global retries or cache invalidation.
+Immutable source buffers feed the streaming preprocessor/posttoken/parser cursor.
+Delimiter lookahead retains compact positions and does not replay grammar. The
+Parser/Analyzer cooperate on source nodes and facts; template projections retain
+source identity and share fixed decisions. Identifier/type/query identities are
+interned, not rendered signatures. The guide registry uses primary plus canonical
+signature shape; declaration deducibility visits only reachable typed edges with
+a visited index. It does not instantiate a class merely to inspect a signature.
 
-The hidden `source`/copy objects have canonical entity identity. Their binding
-aliases store object/member/element and base-adjustment identities, not synthetic
-frontend declarations or pretty-printed lookup keys. Shape caching is by canonical
-type, and access is checked at each use. The fixed qualifier deduction feeds
-both declaration and range owners. Array-copy initialization retains one selected
-leaf conversion and its defaults; emission expands at most eight leaves, then
-uses a counted loop and a completed-prefix cleanup cursor. Volatile accesses remain
-volatile. Zero bytes suppress representation copies only after operand evaluation;
-positive element counts still invoke observable class copy/destruction effects.
+Concrete bit-width/signedness participates in type hashing/equality, signature
+shape, substitution, pack traversal and deduction. Width queries use existing
+complete-frame memoization, including failure. Cast facts retain reference
+category, constant restrictions, member identity and base adjustments. Defaults
+have separate source-binding, formation and demand states. Their retained query
+identities survive before body parameter publication; repeated use of a completed
+default does not reparse, rebind or globally retry work. There is no new global
+invalidation or process-global cache. The explicit supported scalar limit remains
+signed 2–128 / unsigned 1–128 bits; unsupported concrete widths are diagnosed,
+not silently narrowed. This does not claim arbitrary-precision support or add a
+PA29 performance gate.
 
-Static call operators retain receiver evaluation separately from explicit argument
-conversions and have no implicit-object ABI parameter. Candidate filtering and
-ordering use actual indexed candidates; a neutral static receiver does not hide
-a better explicit conversion or user-defined surrogate cost. Selected declaration,
-receiver/default/conversion and lifetime facts flow directly into lowering.
-No rendered identity or repeated overload resolution is used by the backend.
+Typed lowering consumes those facts directly. Wide bit integers use the serialized
+`i128a8` carrier so stack/variadic alignment survives both production and explicit
+adapters; ordinary `i128` retains its ABI alignment. Type-family tests select
+operations, while full type equality includes the ABI decoration. Existing
+call/register placement, variadic selection and RTTI emission remain shared.
+The native variadic owner admits scalar types only, so its >8 alignment case still
+rounds to the supported 16-byte boundary. Host ABI controls cover both call
+directions, stack/register exhaustion, varargs, aggregate storage and exceptions.
 
-The useful optimization facts are direct callee identity, mandatory attribute,
-fixed boundary, selected conversions and unwind regions. The shared typed LowIR
-expander consumes these facts, checks recursion/depth/frame legality and reserves
-work before mutation. Immutable original bodies are mapped through compact
-value/slot/block IDs; phi inputs name actual split-block exits, and returns retire
-callee EH registrations. Unsupported or exhausted requests keep conservative
-calls. There is no fixed-point whole-program rescan or optional profitability
-search. Attribute expansion is required by the contract even at O0; its bounded
-costs and inherited runtime benefits/regressions are disclosed in performance182.
+The useful optimization fact is a value's exact precision and signedness, plus
+its transient normalization proof. A new operation/conversion clears that proof;
+normalization is omitted only when the value already satisfies the same type.
+The corrected overflow owner uses this fact before comparing the bounded wide
+arithmetic result. Legal wrapping/sign extension is required regardless of level;
+there is no optional profitability choice or iterative pass. Each normalization
+has constant work and at most two shifts, with no added call, branch or source
+multiplication. Optional transform allowances remain unchanged. The inherited
+single native mandatory-inlining owner still checks recursion/depth/frame legality,
+reserves caller/program budgets before mutation, and retains valid calls on a
+missing proof or exhausted budget. Debug/unwind facts and source locations are
+not discarded by these changes.
 
-Original IR pools and per-callee cost/return facts live only during preparation;
-local mapping tables and scratch die on expansion return. Semantic/type/query
-pools belong to each translation unit and are released after typed lowering.
-The native selector/encoder constructs and releases one compact Function at a
-time; only required symbols, object data, relocations and unwind/linkage facts
-survive object emission. Existing arenas and flat indexes retain ownership;
-no process-global mutable cache or per-instruction owning node allocation is added.
-Production never writes/reparses text; explicit adapters are observation boundaries.
+Source/type/query/default storage belongs to the TU; work vectors and flat visited
+indexes die after their bounded check. Source templates/fixed facts are shared;
+only occurrence-dependent facts and immutable substitution frames grow with actual
+demand. No hot per-node owning pointer, deep tree copy or recursive destruction is
+introduced. LowIR is built in memory; text is only an explicit inspection adapter.
+The selector/encoder releases function-local MIR after direct ELF emission and
+retains required linkage/data/relocation/unwind facts. No host compiler, reference
+compiler or assembler supplies the implementation's required output.
 
-[Machine traces](../student.tests/pa29/evidence182/machine-traces.json) retain
-source LowIR, prepared LowIR and selected MIR. Integrated `main` uses a 208-byte
-native frame; retained operator bodies use 80 bytes, and the volatile ten-element
-copy uses 96 bytes. These include actual homes/spills and cleanup state; smaller IR
-is not asserted to imply better runtime. ELF symbol/relocation/unwind inspection
-and host executions are retained. The original debug-location remapping property
-is checked by inspection180's phi fixture. No unsupported claim of complete DWARF
-or later-stage register-allocation quality is made.
+[Machine traces](../student.tests/pa29/evidence186/machine-traces.json) retain source
+AST, original/prepared LowIR and selected MIR. Integrated frames are **304 bytes**
+for `main`, **256** for `step<7>` and **592** for `step<93>`, including actual homes.
+All named native sections, symbolic relocations and complete symbol sets agree
+between direct and serialized-adapter emission; objects with stats on/off agree.
+ELF sections, symbols and unwind frames are inspected. PA5/6 debug views do not
+activate the hosted/template semantic mode: the new full-phase inspection uses
+the production Parser/Analyzer configuration and build-time host environment.
+The preliminary PA6-view rejection is retained, not reported as a code regression
+or used to weaken any course check. Later DWARF/allocator requirements retain their
+owning stages.
 
-## Validation and performance disposition
+## Validation and performance acceptance
 
-The [manifest](../student.tests/pa29/evidence182/manifest.json),
-[validation](../student.tests/pa29/evidence182/validation.json) and
-[source binding](../student.tests/pa29/evidence182/source-binding.json) bind all
-471 implementation/build files, symlink targets, tested binary and commands to
-`52070178`. Validation preceded the code commit; current commit bytes exactly
-match the validated source. Source/fixture edits did not occur afterward.
+[Validation](../student.tests/pa29/evidence186/validation.json) and
+[source binding](../student.tests/pa29/evidence186/source-binding.json) bind the
+475 implementation/build paths and tested binary to `2df00585`. Validation and
+measurements preceded its commit; the committed bytes match. The following commit
+contains audit records only, with no subsequent code edits.
 
-- `make test-pa29`: **388/403**, exit 2, exactly the entry's **15 failures**.
-- Exact prior-through shell command: **4538/4538**, exit 0.
-- `make test-report-through-pa29`: **4926/4941**, exit 2; only PA29 fails.
-- File audit: pass, exit 0, with the same four substantial-header warnings.
-- Controls179/180/181: **42/47/43**, all pass; controls182: **9**, all pass.
-- Inspections179/180/181/182: **91/264/166/132 commands**, all pass (**653 total**).
-- The recursive/depth/growth source and explicit-adapter paths have identical
-  code, symbolic relocations, symbol sets, runtime and expansion counters. The
-  growth case declines 64 requests and remains within every admitted budget.
+- `make test-pa29`: **392/403**, exit 2, exactly the entry's **11 failures**.
+- Exact required prior-through command: **4538/4538**, exit 0.
+- `make test-report-through-pa29`: **4930/4941**, exit 2; only PA29 fails.
+- File audit: exit 0, with the same four inherited substantial-header warnings.
+- Explicit controls183/184/185/186: **53/42/31/15**, all pass (**141** total).
+- Inspections183/184/185/186: **291/194/169/182 commands**, all pass (**836** total).
 
-[Failure identity](../student.tests/pa29/evidence182/stage-delta.json) contains no
-new failures or offsetting personal passes. [Coverage](../student.tests/pa29/evidence182/coverage.json)
-preserves all **403 inputs** and **1,707 contract/harness paths** against both
-previous-review and entry boundaries. Earlier-stage contract validation is full,
-not a subset. No tests, references or comparison rules were weakened.
+[Failure identity](../student.tests/pa29/evidence186/stage-delta.json) contains no
+new failure or offsetting extra passes. [Coverage](../student.tests/pa29/evidence186/coverage.json)
+preserves **403 inputs and 1,707 contract/harness paths** against both entry and
+previous review. Earlier-PA contracts and harnesses are unchanged and fully tested.
 
-[Performance182](performance182.md) records all four dimensions at PA29/O0:
-**440 new observations** plus eight launchers, and verified review of **2,576
-inherited observations** (including all preliminary runs). Seven equivalent
-benchmark object pairs are identical; executable code/data/unwind sections also
-match. Source-corrected cv arrays have final-only scaling with all 24 compilation
-counter checks passing. Noise/outliers and larger-case costs are retained without
-an unsupported speedup claim. Mandatory expansion budgets and all existing limits
-remain enforced. No optional transform was introduced.
-
-Inherited blanket 15% compiler latency/RSS and zero-growth targets remain
-**diagnostic under spec §9**. Earlier mandatory inline costs remain disclosed;
-necessary semantic work and constraints owned by later stages create no extra
-exit gate. No correctness, coverage or mandated limit is reclassified.
+[Performance186](performance186.md) records all four dimensions, **496 new
+observations plus eight launchers**, eight byte-identical object/executable pairs,
+24 corrected-only scaling checks, and verification of **1,144 inherited observations
+plus 24 launchers**. Compiler paired medians are **0.9953–1.0189**, with every
+compiler paired range crossing unity; RSS increases and all noise/outliers are
+preserved. No repeatable avoidable regression or speedup is established. Required
+default/overflow costs are bounded and measured. Mandatory constexpr, storage,
+frame, inline work/growth and precision limits remain unchanged. Historical blanket
+15% latency/RSS and zero-growth targets remain **diagnostic under spec §9**;
+necessary semantics and later-stage constraints do not create extra exit gates.
+Correctness, mandated limits and coverage are not reclassified.
 
 ## Remaining work and handoff quality
 
-The [remaining ledger](../student.tests/pa29/evidence182/remaining.json) groups
-**15 failures** into extended syntax/types/layout **11**, template demand/hosted
-ABI **3**, and legacy trait **1**. Twelve are unfinished implementation; three
-remain independent contract questions (legacy nothrow shorthand, default-sensitive
-nothrow invocability, nested ABI-tag policy). They remain counted failures.
-Extended scalar/vector/complex representation, GNU declaration/expression forms,
-contextual operators, char-traits conversion and hosted ABI should proceed as
-broad owner groups. A valid standard/contract proof remains necessary for any
-future reference correction. Full PA29/through success is required before PA30.
+The [remaining ledger](../student.tests/pa29/evidence186/remaining.json) retains all
+**11 failures**: numeric representation/vendor syntax **7**, hosted template/demand
+and ABI **3**, legacy trait contract **1**. Eight are unfinished implementation;
+three remain independent contract questions (nothrow shorthand, default-sensitive
+invocability and nested ABI tags). All remain counted. Continue broadly through
+floating/complex representation and ABI, vector/contextual syntax, and hosted
+template behavior. A reducer plus cited standard/contract proof remains necessary
+before any future reference correction. Full PA29/root-through success is still
+required before PA30.
 
-The three handoffs represent useful distinct owners and reduce 22 to 15 course
-failures since audit178. However, handling array copy without its exact cv-deduction
-rule, and splitting inline preparation from its serialized-budget boundary,
-left avoidable follow-up fragmentation. Complete each owner through dependent,
-cv/reference, lifetime/exception, ABI and explicit-adapter fallback checks before
-handoff. This audit establishes one complete reviewed code baseline and leaves
-the assignment unfinished; it does not narrow the full-stage objective.
+The three handoffs reduced course failures **15 → 11** since review182. They
+represent distinct useful owners, but inquiry handling stopped after `sizeof`
+and integer integration stopped before generic overflow consumers. Those gaps
+caused avoidable follow-up fragmentation. Complete each owner across source,
+query/default demand, conversion, constant/runtime, storage/ABI and explicit
+adapter boundaries before handoff; keep remaining work in the broad groups above.
 
 ## Audit ledger
 
@@ -243,3 +231,4 @@ the assignment unfinished; it does not narrow the full-stage objective.
 | 174 | `221d6d0e..7139ceb5` (entry `914e1a0a`, three handoffs) | Reviewed all intrinsic/fold/closure increments; fixed discarded conversions/lifetimes, unevaluated capture recipes and combined typed ABI identities/grammar; no reference changes. | PA29 377/403, identical 26 failures and 403 inputs; PA1–28 4538/4538; file audit pass; 218 behavioral and 144 inspection checks; four-dimensional final/historical performance evidence retained. |
 | 178 | `7139ceb5..667edd80` (entry `e59dcaa1`, three handoffs) | Reviewed all source-invocation, declaration/demand and selection increments; fixed declaration-array bounds, initializer definition/dependency ownership and complete default frames; no reference changes. | PA29 381/403, identical 22 failures and 403 inputs; PA1–28 4538/4538; file audit and controls/inspection pass; 776 final observations plus eight launchers, 816 inherited observations reviewed; mandated limits and coverage preserved. |
 | 182 | `667edd80..52070178` (entry `9211517d`, three handoffs) | Reviewed all decomposition, callable/inline and zero-extent increments; fixed array cv deduction and single native preparation ownership; no reference changes. | PA29 388/403, identical 15 failures and 403 inputs; PA1–28 4538/4538; file audit pass; 141 controls and 653 inspection commands pass; 440 new observations plus eight launchers, 2,576 inherited observations verified; budgets and coverage preserved. |
+| 186 | `52070178..2df00585` (entry `152396e2`, three handoffs) | Reviewed all guide/default, cast and bit-integer increments; fixed prototype inquiry reuse and exact-width overflow decisions; no reference changes. | PA29 392/403, identical 11 failures and 403 inputs; PA1–28 4538/4538; file audit pass; 141 controls and 836 inspection commands pass; 496 new observations plus eight launchers, 1,144 inherited observations verified; mandated limits and coverage preserved. |

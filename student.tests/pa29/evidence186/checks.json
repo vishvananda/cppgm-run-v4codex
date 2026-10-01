@@ -1,0 +1,22 @@
+{
+  "groups": {
+    "183": {
+      "controls": 53,
+      "inspection_commands": 291
+    },
+    "184": {
+      "controls": 42,
+      "inspection_commands": 194
+    },
+    "185": {
+      "controls": 31,
+      "inspection_commands": 169
+    },
+    "186": {
+      "controls": 15,
+      "inspection_commands": 182
+    }
+  },
+  "total_controls": 141,
+  "total_inspection_commands": 836
+}

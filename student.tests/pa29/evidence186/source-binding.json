@@ -1,0 +1,10 @@
+{
+  "code_tip": "2df00585bd10d4e2e068934394dffc8adb0a47ed",
+  "tested_binary_sha256": "a4022c8d9e1a288e70aa4010d1a5d574614d35575f319b56ed088865e0d3c785",
+  "implementation_files": 475,
+  "source_matches_validated_snapshot": true,
+  "committed_dev_tree": "2f2bb8e8297f70a2ba526bc669ef07ce1f14868f",
+  "code_unchanged_since_validation": true,
+  "prior_review_binary_matches_accumulated_A": true,
+  "course_paths_unchanged_since_review": true
+}

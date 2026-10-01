@@ -1,0 +1,19 @@
+{
+  "head": "152396e28d16ea41a47bf49788f93bb88aefce79",
+  "reviewed": "52070178897f5894edaf2f35d03a734b781979d4",
+  "total": 403,
+  "failures": [
+    "pa29/tests/compile/200-hosted-type-specifier-functional-cast.t",
+    "pa29/tests/compile/500-builtin-types-and-extern-vars.t",
+    "pa29/tests/compile/500-gnu-ext-vector-scalar-template-deduction.t",
+    "pa29/tests/compile/600-builtin-complex-return.t",
+    "pa29/tests/compile/600-gnu-complex-template-constructor.t",
+    "pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+    "pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+    "pa29/tests/compile/700-hosted-coroutine-contextual-operators-compile.t",
+    "pa29/tests/compile/700-hosted-gnu-float-builtin-spellings.t",
+    "pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+    "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t"
+  ],
+  "binary_sha256": "5bbd875bcbf039f6b7b57f79f38d6524c88cd53c8ccd1074d5e85d85b1faea68"
+}

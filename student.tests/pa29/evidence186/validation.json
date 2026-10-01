@@ -1,0 +1,62 @@
+{
+  "compiler_sha256": "a4022c8d9e1a288e70aa4010d1a5d574614d35575f319b56ed088865e0d3c785",
+  "checks": [
+    {
+      "command": [
+        "make",
+        "test-pa29"
+      ],
+      "status": 2,
+      "log": "/tmp/pa29-186/validation/stage-final.log",
+      "sha256": "9874beb04e0e8c3f0bcc8ffe017e6c74e590a71bebb2e145aa9c26e25b09def2",
+      "summary": [
+        "===== TEST SUMMARY: 392 / 403 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": [
+        "bash",
+        "-c",
+        "n=29; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi"
+      ],
+      "status": 0,
+      "log": "/tmp/pa29-186/validation/prior-final.log",
+      "sha256": "b1ff9611d30d0da259845968d6ec5a5a9b0ee6da2d9810c505780299a5c67a88",
+      "summary": [
+        "===== ALL TESTS PASSED SUCCESSFULLY! (4538 / 4538) ====="
+      ]
+    },
+    {
+      "command": [
+        "make",
+        "test-report-through-pa29"
+      ],
+      "status": 2,
+      "log": "/tmp/pa29-186/validation/through-final.log",
+      "sha256": "b22fcdc6ffabe03e5a15966888e627dcbf5653f6744dd216a36cf44b9d5eb38e",
+      "summary": [
+        "===== TEST SUMMARY: 4930 / 4941 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa29",
+        "--paths",
+        "dev/src"
+      ],
+      "status": 0,
+      "log": "/tmp/pa29-186/validation/file-audit-final.log",
+      "sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f",
+      "summary": [
+        "File audit passed for pa29 with 4 warning(s).",
+        "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+[
+  {
+    "name": "wide-shift",
+    "source": "using U=unsigned _BitInt(93); int main(){volatile U one=1; U x=one<<65; return (x>>65)!=one;}",
+    "expected_accept": true,
+    "entry": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    },
+    "host": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    }
+  },
+  {
+    "name": "signed-field-assignment",
+    "source": "struct S {_BitInt(7) v:4;}; int main(){S s={0}; return (s.v=-1)!=-1;}",
+    "expected_accept": true,
+    "entry": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    },
+    "host": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    }
+  },
+  {
+    "name": "signed-field-prefix",
+    "source": "struct S {_BitInt(7) v:4;}; int main(){S s={-2}; return ++s.v!=-1;}",
+    "expected_accept": true,
+    "entry": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    },
+    "host": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    }
+  },
+  {
+    "name": "default-typeid",
+    "source": "#include <typeinfo>\ntemplate<class T> int f(T p,int n=sizeof(typeid(p))){return n;} int main(){return f(2)!=sizeof(std::type_info);}",
+    "expected_accept": true,
+    "entry": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    },
+    "host": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    }
+  },
+  {
+    "name": "default-noexcept",
+    "source": "template<class T> int f(T p,int n=noexcept(p)){return n;} int main(){return f(2)!=1;}",
+    "expected_accept": true,
+    "entry": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    },
+    "host": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    }
+  },
+  {
+    "name": "default-typeid-value",
+    "source": "#include <typeinfo>\ntemplate<class T> int f(T p,const std::type_info& n=typeid(p)){return n==typeid(T);} int main(){return f(2)!=1;}",
+    "expected_accept": true,
+    "entry": {
+      "status": 1,
+      "stderr": "ERROR: unbound name in type query\n",
+      "stdout": ""
+    },
+    "host": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    }
+  },
+  {
+    "name": "default-typeid-poly",
+    "source": "#include <typeinfo>\nstruct S{virtual ~S(){}};template<class T> int f(T& p,const std::type_info& n=typeid(p)){return 0;}int main(){S s;return f(s);}",
+    "expected_accept": false,
+    "entry": {
+      "status": 1,
+      "stderr": "ERROR: unbound name in type query\n",
+      "stdout": ""
+    },
+    "host": {
+      "status": 0,
+      "stderr": "",
+      "stdout": ""
+    }
+  },
+  {
+    "name": "guide-width",
+    "source": "template<int N>struct Box{}; template<int N> Box(unsigned _BitInt(N))->Box<N>; int main(){Box<7> b;}",
+    "expected_accept": true,
+    "entry": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    },
+    "host": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    }
+  },
+  {
+    "name": "guide-width-duplicate",
+    "source": "template<int N>struct Box{}; template<int N> Box(unsigned _BitInt(N))->Box<N>; template<int M> Box(unsigned _BitInt(M))->Box<M>; ",
+    "expected_accept": false,
+    "entry": {
+      "status": 1,
+      "stderr": "ERROR: duplicate deduction guide\n",
+      "stdout": ""
+    },
+    "host": {
+      "status": 1,
+      "stderr": "/tmp/pa29-186/probes/guide-width-duplicate.cpp:1:96: error: redeclaration of deduction guide\n    1 | template<int N>struct Box{}; template<int N> Box(unsigned _BitInt(N))->Box<N>; template<int M> Box(unsigned _BitInt(M))->Box<M>; \n      |                                                                                                ^\n/tmp/pa29-186/probes/guide-width-duplicate.cpp:1:46: note: previous declaration is here\n    1 | template<int N>struct Box{}; template<int N> Box(unsigned _BitInt(N))->Box<N>; template<int M> Box(unsigned _BitInt(M))->Box<M>; \n      |                                              ^\n1 error generated.\n",
+      "stdout": ""
+    }
+  },
+  {
+    "name": "wide-condition",
+    "source": "using U=unsigned _BitInt(93); int main(){volatile U one=1; U x=one<<65; return !x;}",
+    "expected_accept": true,
+    "entry": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    },
+    "host": {
+      "status": 0,
+      "stderr": "",
+      "stdout": "",
+      "link": 0,
+      "linkerr": "",
+      "run": 0
+    }
+  },
+  {
+    "name": "cast-width-ref",
+    "source": "using S=_BitInt(7); using U=_BitInt(9); U& f(S& s){return const_cast<U&>(s);}",
+    "expected_accept": false,
+    "entry": {
+      "status": 1,
+      "stderr": "ERROR: invalid explicit cast\n",
+      "stdout": ""
+    },
+    "host": {
+      "status": 1,
+      "stderr": "/tmp/pa29-186/probes/cast-width-ref.cpp:1:59: error: const_cast from 'S' (aka '_BitInt(7)') to 'U &' (aka '_BitInt(9) &') is not allowed\n    1 | using S=_BitInt(7); using U=_BitInt(9); U& f(S& s){return const_cast<U&>(s);}\n      |                                                           ^~~~~~~~~~~~~~~~~\n1 error generated.\n",
+      "stdout": ""
+    }
+  }
+]

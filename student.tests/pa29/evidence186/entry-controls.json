@@ -1,0 +1,1038 @@
+{
+  "compiler_sha256": "5bbd875bcbf039f6b7b57f79f38d6524c88cd53c8ccd1074d5e85d85b1faea68",
+  "cases": [
+    {
+      "source": "student.tests/pa29/source186/bitint-default.cpp",
+      "sha256": "f35c0e439ae1efde14c24cbaaa12820ef6228b84eec8f0cde1e5cd9718d2d701",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/bitint-default.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/bitint-defaultstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/bitint-defaultstudent.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/bitint-defaultstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/bitint-defaultstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/bitint-default.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/bitint-defaulthost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/bitint-defaulthost.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/bitint-defaulthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/bitint-defaulthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/bitint-default.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/bitint-default.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source186/cast-wide-member.cpp",
+      "sha256": "647b7eb396d6c453699951e6fe788b296dba92c1c0658651e6144c0ec665d276",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/cast-wide-member.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/cast-wide-memberstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/cast-wide-memberstudent.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/cast-wide-memberstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/cast-wide-memberstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/cast-wide-member.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/cast-wide-memberhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/cast-wide-memberhost.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/cast-wide-memberhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/cast-wide-memberhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/cast-wide-member.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/cast-wide-member.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source186/decltype-default.cpp",
+      "sha256": "aa8c64cf8f8f4f17183bf67ed6f6c6af67e201173031606cacaa4c05e5aa4e76",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/decltype-default.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/decltype-defaultstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unbound name in type query\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/decltype-default.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/decltype-defaulthost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/decltype-defaulthost.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/decltype-defaulthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/decltype-defaulthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/decltype-default.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/decltype-default.lowir"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unbound name in type query\n"
+        }
+      ],
+      "failure": "LowIR validation"
+    },
+    {
+      "source": "student.tests/pa29/source186/default-cast-evaluated.reject.cpp",
+      "sha256": "50337ac37024ca00330478c69650455db42d81e4c333ec7bc91b5334db140b15",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-cast-evaluated.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-cast-evaluated.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: parameter used in evaluated default argument\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-cast-evaluated.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-cast-evaluated.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-cast-evaluated.reject.cpp:1:60: error: default argument references parameter 'p'\n    1 | template<class T> int f(T p,int n=static_cast<decltype(p)>(p)){return n;} int main(){return f(2);}\n      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~^~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-cast-evaluated.reject.cpp:1:93: error: no matching function for call to 'f'\n    1 | template<class T> int f(T p,int n=static_cast<decltype(p)>(p)){return n;} int main(){return f(2);}\n      |                                                                                             ^\n2 errors generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source186/default-evaluated.reject.cpp",
+      "sha256": "aa2a4848db81db9379bec9763e8c21b147cb3c2fcbbef2f741bc75451b81f95e",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-evaluated.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-evaluated.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: parameter used in evaluated default argument\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-evaluated.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-evaluated.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-evaluated.reject.cpp:1:35: error: default argument references parameter 'p'\n    1 | template<class T> int f(T p,int n=p){return n;} int main(){return f(2);}\n      |                                   ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-evaluated.reject.cpp:1:67: error: no matching function for call to 'f'\n    1 | template<class T> int f(T p,int n=p){return n;} int main(){return f(2);}\n      |                                                                   ^\n2 errors generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source186/default-inquiries.cpp",
+      "sha256": "0e63e011deef9c45e7062855a1f321750b77b730a8821918826d65e4f3dc84ac",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-inquiries.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-inquiriesstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unbound name in type query\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-inquiries.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-inquirieshost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/default-inquirieshost.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-inquirieshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/default-inquirieshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-inquiries.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-inquiries.lowir"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unbound name in type query\n"
+        }
+      ],
+      "failure": "LowIR validation"
+    },
+    {
+      "source": "student.tests/pa29/source186/default-typeid-effects.cpp",
+      "sha256": "6ef96f0fcf28b9b3a1a9800d69a3d2dc5b1b77a913ec93038f46fdca1ae3ba69",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-typeid-effects.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-typeid-effectsstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unbound name in type query\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-typeid-effects.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-typeid-effectshost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/default-typeid-effectshost.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-typeid-effectshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/default-typeid-effectshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-typeid-effects.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-typeid-effects.lowir"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unbound name in type query\n"
+        }
+      ],
+      "failure": "LowIR validation"
+    },
+    {
+      "source": "student.tests/pa29/source186/default-typeid-poly.reject.cpp",
+      "sha256": "cb7bcdc4f1c5591cc94170479a485e693cf0848340060b2b855333a2cb93c4f8",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-typeid-poly.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-typeid-poly.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unbound name in type query\n"
+        },
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-typeid-poly.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-typeid-poly.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-typeid-poly.reject.cpp:2:86: error: parameter \u2018p\u2019 may not appear in this context\n    2 | struct S{virtual ~S(){}};template<class T> int f(T& p,const std::type_info& n=typeid(p)){return 0;}int main(){S s;return f(s);}\n      |                                                                                      ^\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source186/default-typeid-value.cpp",
+      "sha256": "2a0d851d01fc4fde106111bf093d46c05d959df8246cb172b4df929d1c24c98e",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-typeid-value.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-typeid-valuestudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unbound name in type query\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-typeid-value.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-typeid-valuehost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/default-typeid-valuehost.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-typeid-valuehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/default-typeid-valuehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/default-typeid-value.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/default-typeid-value.lowir"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unbound name in type query\n"
+        }
+      ],
+      "failure": "LowIR validation"
+    },
+    {
+      "source": "student.tests/pa29/source186/guide-width.cpp",
+      "sha256": "90f4cc757ccea00d418091c9001ebce2403c8a63c042b90ff7bc930f0d4dc550",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/guide-width.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/guide-widthstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/guide-widthstudent.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/guide-widthstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/guide-widthstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/guide-width.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/guide-widthhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/guide-widthhost.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/guide-widthhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/guide-widthhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/guide-width.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/guide-width.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source186/integrated.cpp",
+      "sha256": "9849fff5fe93782ccb6c7c2ee80383e3de3ca590fcbc5671d31f10a0fc763a70",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/integrated.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/integratedstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unbound name in type query\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/integrated.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/integratedhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/integratedhost.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/integratedhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/integratedhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/integrated.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/integrated.lowir"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unbound name in type query\n"
+        }
+      ],
+      "failure": "LowIR validation"
+    },
+    {
+      "source": "student.tests/pa29/source186/overflow-matrix.cpp",
+      "sha256": "5825104f0680e3b61cb5bd6c66a334d455d8e8de4c34e0c5e4b89040c091fff5",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/overflow-matrix.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflow-matrixstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/overflow-matrixstudent.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflow-matrixstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/overflow-matrixstudent"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/overflow-matrix.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflow-matrixhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/overflow-matrixhost.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflow-matrixhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/overflow-matrixhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/overflow-matrix.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflow-matrix.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "failure": "student run"
+    },
+    {
+      "source": "student.tests/pa29/source186/overflow-wide.cpp",
+      "sha256": "f641d7c9f6935391083857509a1f672984448cb9e7cbbf9ec6ffb81a637dc12d",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/overflow-wide.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflow-widestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/overflow-widestudent.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflow-widestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/overflow-widestudent"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/overflow-wide.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflow-widehost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/overflow-widehost.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflow-widehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/overflow-widehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/overflow-wide.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflow-wide.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "failure": "student run"
+    },
+    {
+      "source": "student.tests/pa29/source186/overflow.cpp",
+      "sha256": "4582afcd33a784a5b9ab733013a3e2ee0aa9c7da3e4b32813e5576e50466f85e",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/overflow.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflowstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/overflowstudent.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflowstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/overflowstudent"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/overflow.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflowhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/overflowhost.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflowhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/overflowhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/overflow.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/overflow.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "failure": "student run"
+    },
+    {
+      "source": "student.tests/pa29/source186/wide-overflow.cpp",
+      "sha256": "abb7ae06838f6ccb7d27eeaf7af8393021a57a484a1eb4613b95eaeddf224727",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/wide-overflow.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/wide-overflowstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/wide-overflowstudent.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/wide-overflowstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/wide-overflowstudent"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/wide-overflow.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/wide-overflowhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/entry-controls-final/wide-overflowhost.o",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/wide-overflowhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry-controls-final/wide-overflowhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/entry",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source186/wide-overflow.cpp",
+            "-o",
+            "/tmp/pa29-186/entry-controls-final/wide-overflow.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "failure": "student run"
+    }
+  ]
+}

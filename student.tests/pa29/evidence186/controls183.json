@@ -1,0 +1,2638 @@
+{
+  "compiler_sha256": "a4022c8d9e1a288e70aa4010d1a5d574614d35575f319b56ed088865e0d3c785",
+  "cases": [
+    {
+      "source": "student.tests/pa29/source183/alias.reject.cpp",
+      "sha256": "c302778daab4824225c2e67c699c68703ca1ecbce59bdb7a16fcf6a45085d7a9",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/alias.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/alias.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: deduction guide must share its class template's scope\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/alias.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/alias.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/alias.reject.cpp:1:64: error: cannot specify deduction guide for alias template 'box'\n    1 | template<class T> struct B {};template<class T> using box=B<T>;box(int)->box<int>;\n      |                                                                ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/alias.reject.cpp:1:49: note: template is declared here\n    1 | template<class T> struct B {};template<class T> using box=B<T>;box(int)->box<int>;\n      |                                                 ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/alias.reject.cpp:1:64: error: declarator requires an identifier\n    1 | template<class T> struct B {};template<class T> using box=B<T>;box(int)->box<int>;\n      |                                                                ^~~~~~~~~~~~~~~~~~\n2 errors generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/basic.cpp",
+      "sha256": "ddd99bf72ff5d145c98e7658c3d3ef6666192df8b323e613e419114d12eeb9eb",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/basic.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/basicstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/basicstudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/basicstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/basicstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/basic.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/basicclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/basicclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/basicclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/basicclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/basic.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/basic.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/body.reject.cpp",
+      "sha256": "367bf26556fc42a11e0dafdc637f5b024aa22b58be83feb9a5732a567dd78fd7",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/body.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/body.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: expected ';', found '{' in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/body.reject.cpp:2\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/body.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/body.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/body.reject.cpp:2:1: error: deduction guide cannot have a function definition\n    2 | box(int)->box<int> {}\n      | ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/c-linkage.cpp",
+      "sha256": "2aa7ea87340fcb54ea9a06c2cb4f03aac9c035238c4e3355d08272c768f8a0b5",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/c-linkage.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/c-linkagestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/c-linkagestudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/c-linkagestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/c-linkagestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/c-linkage.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/c-linkageclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/c-linkageclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/c-linkageclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/c-linkageclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/c-linkage.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/c-linkage.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/cv.reject.cpp",
+      "sha256": "c2427bcf8cbf4f5ead8a4d338c0114f1d2831315c0f13bd6dde65408904b91a5",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/cv.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/cv.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: function declaration requires a name\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/cv.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/cv.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/cv.reject.cpp:2:10: error: deduction guide cannot have 'const' qualifier\n    2 | box(int) const ->box<int>;\n      |          ^~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/declarators.cpp",
+      "sha256": "dd5f0c080762ffc87f43bd58895c16ec97b8e05295a58bc566e3d3845cd624a7",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/declarators.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/declaratorsstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/declaratorsstudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/declaratorsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/declaratorsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/declarators.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/declaratorsclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/declaratorsclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/declaratorsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/declaratorsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/declarators.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/declarators.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/deducible.cpp",
+      "sha256": "ec440e8757a5de56b69e0afe3d9c3c9509a65fb1ee4ca6ce64bea81bee9b670f",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/deducible.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/deduciblestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/deduciblestudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/deduciblestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/deduciblestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/deducible.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/deducibleclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/deducibleclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/deducibleclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/deducibleclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/deducible.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/deducible.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/default-lookup.reject.cpp",
+      "sha256": "2eb1ac71db1b726b0304c6a73a4e95ef838576e9396d61abeda990c03f0d9c56",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-lookup.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/default-lookup.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unbound template value name: missing at /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-lookup.reject.cpp:2\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-lookup.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/default-lookup.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-lookup.reject.cpp:2:11: error: use of undeclared identifier 'missing'\n    2 | box(int = missing)->box<int>;\n      |           ^~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/default-order.reject.cpp",
+      "sha256": "1dfbd77a310d71fecd68cbc7a7adcee6758f1eb3020f7c77b2b0fb47f12ec624",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-order.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/default-order.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: missing trailing guide default\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-order.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/default-order.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-order.reject.cpp:2:14: error: missing default argument on parameter\n    2 | box(int=1,int)->box<int>;\n      |              ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/default-pack.reject.cpp",
+      "sha256": "32fe646bb61b2b8ecda5594ee6a4d25696beb94cbe497bb301ec519d073c4133",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-pack.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/default-pack.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: guide parameter pack has a default\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-pack.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/default-pack.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-pack.reject.cpp:2:33: error: parameter pack cannot have a default argument\n    2 | template<class... T> box(T... x = 0)->box<int>;\n      |                                 ^ ~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/default-parameter.reject.cpp",
+      "sha256": "9d1432097906f67266528ec3288d6361eab748914cb7a34cf22e5567f2996c6a",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-parameter.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/default-parameter.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: parameter used in evaluated default argument\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-parameter.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/default-parameter.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-parameter.reject.cpp:2:17: error: default argument references parameter 'x'\n    2 | box(int x,int y=x)->box<int>;\n      |                 ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/default-self.reject.cpp",
+      "sha256": "e96e8e16c5bacb43c84b8d9c33c22f5cf7fd337de92876fa6ad1198730b80880",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-self.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/default-self.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: parameter used in evaluated default argument\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-self.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/default-self.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-self.reject.cpp:2:11: error: default argument references parameter 'x'\n    2 | box(int x=x)->box<int>;\n      |           ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/default-type.reject.cpp",
+      "sha256": "56d789d5c83b61e9cb7cced88a03f08ceb901b1610ac1d2a4a677aa1f64ab477",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-type.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/default-type.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid fixed call argument\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-type.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/default-type.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-type.reject.cpp:2:9: error: cannot initialize a parameter of type 'int' with an lvalue of type 'const char[4]'\n    2 | box(int = \"bad\")->box<int>;\n      |         ^ ~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/default-type.reject.cpp:2:9: note: passing argument to parameter here\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/defaults-no-emission.cpp",
+      "sha256": "437274a1cba4630535b24f923a00610544a2ca833fc07ca9ae293b91f7886879",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/defaults-no-emission.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/defaults-no-emissionstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/defaults-no-emissionstudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/defaults-no-emissionstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/defaults-no-emissionstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/defaults-no-emission.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/defaults-no-emissionclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/defaults-no-emissionclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/defaults-no-emissionclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/defaults-no-emissionclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/defaults-no-emission.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/defaults-no-emission.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/defaults.cpp",
+      "sha256": "ced87087c09de948f451d2520ffb1509515c43d4061a8e177a688a0f638c309c",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/defaults.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/defaultsstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/defaultsstudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/defaultsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/defaultsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/defaults.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/defaultsclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/defaultsclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/defaultsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/defaultsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/defaults.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/defaults.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/duplicate-adjusted.reject.cpp",
+      "sha256": "0bd24881710d0750996ef06b88847127174b84207cc6d2e5e6e9b1907c9a7f34",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-adjusted.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/duplicate-adjusted.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: duplicate deduction guide\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-adjusted.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/duplicate-adjusted.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-adjusted.reject.cpp:2:26: error: redeclaration of deduction guide\n    2 | box(const int)->box<int>;box(int)->box<int>;\n      |                          ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-adjusted.reject.cpp:2:1: note: previous declaration is here\n    2 | box(const int)->box<int>;box(int)->box<int>;\n      | ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/duplicate-array.reject.cpp",
+      "sha256": "1481a92fe8999397fafcf002ad56845bae3ab0902a85d7a79b93df02f8558344",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-array.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/duplicate-array.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: duplicate deduction guide\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-array.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/duplicate-array.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-array.reject.cpp:2:22: error: redeclaration of deduction guide\n    2 | box(int[])->box<int>;box(int*)->box<int>;\n      |                      ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-array.reject.cpp:2:1: note: previous declaration is here\n    2 | box(int[])->box<int>;box(int*)->box<int>;\n      | ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/duplicate-exception.reject.cpp",
+      "sha256": "ddaa746a6439d0eea49170c03402a8bf3bae098d1fff761f027694e23837c44f",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-exception.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/duplicate-exception.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: function declaration requires a name\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-exception.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/duplicate-exception.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-exception.reject.cpp:2:19: error: expected function body after function declarator\n    2 | box(int) noexcept noexcept ->box<int>;\n      |                   ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/duplicate-return.reject.cpp",
+      "sha256": "47a14866ba935c61e72d290370ffe07ae537fec63754dcf0bbb7b23995411316",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-return.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/duplicate-return.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: duplicate deduction guide\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-return.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/duplicate-return.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-return.reject.cpp:2:20: error: functions that differ only in their return type cannot be overloaded\n    2 | box(int)->box<int>;box(int)->box<double>;\n      |                    ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-return.reject.cpp:2:1: note: previous declaration is here\n    2 | box(int)->box<int>;box(int)->box<double>;\n      | ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/duplicate-template.reject.cpp",
+      "sha256": "d1e1c29b93a4af1d7e0d2432684d3025997516c5c93bea135024a4256f0b6629",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-template.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/duplicate-template.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: duplicate deduction guide\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-template.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/duplicate-template.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-template.reject.cpp:2:52: error: redeclaration of deduction guide\n    2 | template<class X> box(X)->box<X>;template<class Y> box(Y)->box<Y>;\n      |                                                    ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate-template.reject.cpp:2:19: note: previous declaration is here\n    2 | template<class X> box(X)->box<X>;template<class Y> box(Y)->box<Y>;\n      |                   ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/duplicate.reject.cpp",
+      "sha256": "301ea692641936f15fe092946782308a247bc782c719c0b5246a17d0784ee45f",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/duplicate.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: duplicate deduction guide\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/duplicate.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate.reject.cpp:2:20: error: redeclaration of deduction guide\n    2 | box(int)->box<int>;box(int)->box<int>;\n      |                    ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/duplicate.reject.cpp:2:1: note: previous declaration is here\n    2 | box(int)->box<int>;box(int)->box<int>;\n      | ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/exception-value.reject.cpp",
+      "sha256": "4a48c5a228b0ec5fedf4fc088f6d42606ac763b4183229c66fc8d57faff8f0b1",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/exception-value.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/exception-value.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: explicit condition is not a constant boolean\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/exception-value.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/exception-value.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/exception-value.reject.cpp:2:37: error: noexcept specifier argument is not a constant expression\n    2 | extern bool state;box(int) noexcept(state)->box<int>;\n      |                                     ^~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/exception-value.reject.cpp:2:37: note: read of non-const variable 'state' is not allowed in a constant expression\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/exception-value.reject.cpp:2:13: note: declared here\n    2 | extern bool state;box(int) noexcept(state)->box<int>;\n      |             ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/exception.cpp",
+      "sha256": "c19f4c21f116eecf061c364637e63553f97bf00d74866e6df692b89412333a9e",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/exception.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/exceptionstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/exceptionstudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/exceptionstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/exceptionstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/exception.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/exceptionclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/exceptionclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/exceptionclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/exceptionclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/exception.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/exception.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/explicit-lookup.reject.cpp",
+      "sha256": "d7f258c1e001643774d8a14538632d91299d4fcf802099b0efdbbee0675dbcec",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/explicit-lookup.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/explicit-lookup.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unbound template value name: missing at /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/explicit-lookup.reject.cpp:2\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/explicit-lookup.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/explicit-lookup.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/explicit-lookup.reject.cpp:2:10: error: use of undeclared identifier 'missing'\n    2 | explicit(missing) box(int)->box<int>;\n      |          ^~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/explicit-value.reject.cpp",
+      "sha256": "963472004d71b9b2bfa52b773848ac7715f393df0ca4595ea0e6e1272ddf380b",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/explicit-value.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/explicit-value.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: explicit condition is not a constant boolean\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/explicit-value.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/explicit-value.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/explicit-value.reject.cpp:2:28: error: explicit specifier argument is not a constant expression\n    2 | extern int state; explicit(state) box(int)->box<int>;\n      |                            ^~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/explicit-value.reject.cpp:2:28: note: read of non-const variable 'state' is not allowed in a constant expression\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/explicit-value.reject.cpp:2:12: note: declared here\n    2 | extern int state; explicit(state) box(int)->box<int>;\n      |            ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/explicit.cpp",
+      "sha256": "37cd0a83f1e663331be176a2db9e52812255d73c2aaef0de1b7439b89b1448b7",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/explicit.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/explicitstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/explicitstudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/explicitstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/explicitstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/explicit.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/explicitclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/explicitclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/explicitclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/explicitclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/explicit.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/explicit.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/function-default-parameter.reject.cpp",
+      "sha256": "4b3dbdb9e60d9038aa53633d7683d5405011dbb22c964375de9eb7b8094060c0",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/function-default-parameter.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/function-default-parameter.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: parameter used in evaluated default argument\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/function-default-parameter.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/function-default-parameter.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/function-default-parameter.reject.cpp:1:33: error: default argument references parameter 'x'\n    1 | template<class T> int f(T x,T y=x){return y;} int main(){return f(7);}\n      |                                 ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/function-default-parameter.reject.cpp:1:65: error: no matching function for call to 'f'\n    1 | template<class T> int f(T x,T y=x){return y;} int main(){return f(7);}\n      |                                                                 ^\n2 errors generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/function-pack-default.reject.cpp",
+      "sha256": "7239e8d06ac142306369327d02f023a8ae3db2bca4224ac73073a5437cbcbf79",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/function-pack-default.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/function-pack-default.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: template parameter pack cannot have a default\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/function-pack-default.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/function-pack-default.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/function-pack-default.reject.cpp:1:20: error: template parameter pack cannot have a default argument\n    1 | template<class... T=int> int f(T...){return 0;} int main(){return f(7);}\n      |                    ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/guide-parameter-scope.cpp",
+      "sha256": "e300151c077b8e7f88f6abb4e7b3b9cec66dc62545b850c345e0d6a9e0721923",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/guide-parameter-scope.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/guide-parameter-scopestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/guide-parameter-scopestudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/guide-parameter-scopestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/guide-parameter-scopestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/guide-parameter-scope.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/guide-parameter-scopeclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/guide-parameter-scopeclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/guide-parameter-scopeclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/guide-parameter-scopeclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/guide-parameter-scope.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/guide-parameter-scope.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/member-defaults.cpp",
+      "sha256": "b2246ea955fe5d400e9d82e99416fea6127b448427ff16629119ceb51a439507",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/member-defaults.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/member-defaultsstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/member-defaultsstudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/member-defaultsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/member-defaultsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/member-defaults.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/member-defaultsclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/member-defaultsclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/member-defaultsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/member-defaultsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/member-defaults.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/member-defaults.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/members.cpp",
+      "sha256": "969baca076c016c23dc7cb9c8eb02a7ff9e529e7218612b1a4f53919da164e2f",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/members.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/membersstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/membersstudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/membersstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/membersstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/members.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/membersclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/membersclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/membersclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/membersclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/members.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/members.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/missing-name.reject.cpp",
+      "sha256": "ed1400eac349a3ef134398f04a29e3fbb0d3fd29ca88d42742c2cec87a9c7401",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/missing-name.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/missing-name.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: function declaration requires a name\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/missing-name.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/missing-name.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/missing-name.reject.cpp:1:6: error: expected unqualified-id\n    1 | int ();\n      |      ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/namespace.cpp",
+      "sha256": "4c471e4c686ccdfe0ce0a4752e89b504f4f73e5e216895913cba0eb095fadb59",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/namespace.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/namespacestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/namespacestudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/namespacestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/namespacestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/namespace.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/namespaceclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/namespaceclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/namespaceclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/namespaceclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/namespace.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/namespace.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/no-demand.cpp",
+      "sha256": "4578b0ef4a2a5559d0dddc3248d4a1a930b75dd3dcd1711a8e8c15beb1515837",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/no-demand.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/no-demandstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/no-demandstudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/no-demandstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/no-demandstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/no-demand.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/no-demandclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/no-demandclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/no-demandclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/no-demandclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/no-demand.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/no-demand.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/nondeduced-expression.reject.cpp",
+      "sha256": "4fb404d99b80b69393d6981c7d778c6ae071cc58600c53c95bdee13b58784056",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/nondeduced-expression.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/nondeduced-expression.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: guide template parameter cannot be deduced\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/nondeduced-expression.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/nondeduced-expression.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/nondeduced-expression.reject.cpp:2:17: error: deduction guide template contains a template parameter that cannot be deduced\n    2 | template<int N> box(int(&)[N+1])->box<int>;\n      |                 ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/nondeduced-expression.reject.cpp:2:14: note: non-deducible template parameter 'N'\n    2 | template<int N> box(int(&)[N+1])->box<int>;\n      |              ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/nondeduced.reject.cpp",
+      "sha256": "361128eb92ca75039755ae99c0851642a450ed2fc2e0d06220aca6e989d2cabc",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/nondeduced.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/nondeduced.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: guide template parameter cannot be deduced\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/nondeduced.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/nondeduced.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/nondeduced.reject.cpp:2:19: error: deduction guide template contains a template parameter that cannot be deduced\n    2 | template<class U> box(typename U::type)->box<U>;\n      |                   ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/nondeduced.reject.cpp:2:16: note: non-deducible template parameter 'U'\n    2 | template<class U> box(typename U::type)->box<U>;\n      |                ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/nonfinal-pack.cpp",
+      "sha256": "1b92d32b7a4c32b2a431824b4a45534359f4427c81c2fa8c7c0454e506827b15",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/nonfinal-pack.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/nonfinal-packstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/nonfinal-packstudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/nonfinal-packstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/nonfinal-packstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/nonfinal-pack.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/nonfinal-packclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/nonfinal-packclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/nonfinal-packclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/nonfinal-packclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/nonfinal-pack.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/nonfinal-pack.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/overloads.cpp",
+      "sha256": "066ae69bb80957657b13743ee4fe1176c099140930df7c8a8364d7cd1aff34d1",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/overloads.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/overloadsstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/overloadsstudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/overloadsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/overloadsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/overloads.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/overloadsclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/overloadsclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/overloadsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/overloadsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/overloads.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/overloads.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/pack-default-head.reject.cpp",
+      "sha256": "b6c0e7b538e6bb6f77ea6e83b66adf3c393ed8a65bd8963137f34847f0c006ae",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/pack-default-head.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/pack-default-head.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: template parameter pack cannot have a default\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/pack-default-head.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/pack-default-head.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/pack-default-head.reject.cpp:2:20: error: template parameter pack cannot have a default argument\n    2 | template<class... T=int> box(T...)->box<int>;\n      |                    ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/patterns.cpp",
+      "sha256": "60c2847e4f7057d7d203f876a141609235c129e313e1c0705187b877228bf6a5",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/patterns.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/patternsstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/patternsstudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/patternsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/patternsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/patterns.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/patternsclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/patternsclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/patternsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/patternsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/patterns.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/patterns.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/qualified-result.reject.cpp",
+      "sha256": "cc3564ee744260159f1fe15692db39cf7f6c42e636bb73424fae37d610bdb3d1",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/qualified-result.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/qualified-result.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: guide result must be the same simple template-id\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/qualified-result.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/qualified-result.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/qualified-result.reject.cpp:2:11: error: deduced type '::box<int>' of deduction guide is not written as a specialization of template 'box'\n    2 | box(int)->::box<int>;\n      |           ^~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/return-parameter.reject.cpp",
+      "sha256": "ad8713b6818e77966e2b2c5c3c4bf37af3ed96606d7aeeb42eb587516f1ee124",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/return-parameter.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/return-parameter.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: guide template parameter cannot be deduced\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/return-parameter.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/return-parameter.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/return-parameter.reject.cpp:2:19: error: deduction guide template contains a template parameter that cannot be deduced\n    2 | template<class U> box(int)->box<U>;\n      |                   ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/return-parameter.reject.cpp:2:16: note: non-deducible template parameter 'U'\n    2 | template<class U> box(int)->box<U>;\n      |                ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/specialization.reject.cpp",
+      "sha256": "5897ef00a171cd57702f3bb85baa69c0f2e8b3e28ea02459f4c007f3096d7ec0",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/specialization.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/specialization.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: deduction guide cannot be specialized\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/specialization.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/specialization.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/specialization.reject.cpp:2:12: error: no function template matches function template specialization '<deduction guide for box>'\n    2 | template<> box(int)->box<int>;\n      |            ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/specialization.reject.cpp:1:26: note: candidate template ignored: failed template argument deduction\n    1 | template<class T> struct box {};\n      |                          ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/specialization.reject.cpp:1:26: note: candidate template ignored: could not match 'box<T>' against 'int'\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/template-missing-name.reject.cpp",
+      "sha256": "60e6b790a398d74ba80021c04cfd3e3abd06b12f9c61224c0a733afb7ac2d14a",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/template-missing-name.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/template-missing-name.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: function declaration requires a name\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/template-missing-name.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/template-missing-name.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/template-missing-name.reject.cpp:1:21: error: expected unqualified-id\n    1 | template<class T> T();\n      |                     ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/unevaluated-defaults.cpp",
+      "sha256": "d65133c4e8073b61c4971c6235d69ec15b63e64b53d95e5e0e4b35c56c32ff51",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unevaluated-defaults.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/unevaluated-defaultsstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/unevaluated-defaultsstudent.o",
+            "-o",
+            "/tmp/pa29-186/controls183/unevaluated-defaultsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/unevaluated-defaultsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unevaluated-defaults.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/unevaluated-defaultsclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unevaluated-defaults.cpp:5:48: warning: sizeof on array function parameter will return size of 'int *' instead of 'int[3]' [-Wsizeof-array-argument]\n    5 | template<class T> int array(T x[3],int n=sizeof(x)){return n;}\n      |                                                ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unevaluated-defaults.cpp:8:47: note: in instantiation of default function argument expression for 'array<int>' required here\n    8 | int main(){int a[3];return f(7)!=sizeof(int)||array(a)!=sizeof(int*)||refs(a)!=sizeof(a)||count<int,char>()!=2;}\n      |                                               ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unevaluated-defaults.cpp:5:31: note: declared here\n    5 | template<class T> int array(T x[3],int n=sizeof(x)){return n;}\n      |                               ^\n1 warning generated.\n"
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-186/controls183/unevaluated-defaultsclang.o",
+            "-o",
+            "/tmp/pa29-186/controls183/unevaluated-defaultsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-186/controls183/unevaluated-defaultsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unevaluated-defaults.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/unevaluated-defaults.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/unexpanded-pack.reject.cpp",
+      "sha256": "88c46476d509c38221dc327c937323fea7ee060c268c5ebda643d44a0d851381",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unexpanded-pack.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/unexpanded-pack.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: unexpanded parameter pack in deduction guide\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unexpanded-pack.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/unexpanded-pack.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unexpanded-pack.reject.cpp:2:22: error: declaration type contains unexpanded parameter pack 'T'\n    2 | template<class... T> box(T)->box<int>;\n      |                      ^   ~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/unknown.reject.cpp",
+      "sha256": "a168b999bc9d8dc72377d8677000d2d83cbea0692545918b22eaef740c7da306",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unknown.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/unknown.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: deduction guide must share its class template's scope\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unknown.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/unknown.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unknown.reject.cpp:1:11: error: no template named 'box'\n    1 | box(int)->box<int>;\n      |           ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unknown.reject.cpp:1:1: error: a type specifier is required for all declarations\n    1 | box(int)->box<int>;\n      | ^\n2 errors generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/unused-parameter.reject.cpp",
+      "sha256": "72d07d1537b0582c19f70e6f6d256fd9129c7ab061e1b9738722d1fc2e169eef",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unused-parameter.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/unused-parameter.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: guide template parameter cannot be deduced\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unused-parameter.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/unused-parameter.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unused-parameter.reject.cpp:2:19: error: deduction guide template contains a template parameter that cannot be deduced\n    2 | template<class U> box(int)->box<int>;\n      |                   ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/unused-parameter.reject.cpp:2:16: note: non-deducible template parameter 'U'\n    2 | template<class U> box(int)->box<int>;\n      |                ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/void-list.reject.cpp",
+      "sha256": "cffaf08e5380858f665deb9d6e45faffdc907969a58e9f6f3fc8916beb97b221",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/void-list.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/void-list.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid void guide parameter\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/void-list.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/void-list.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/void-list.reject.cpp:2:13: error: 'void' must be the first and only parameter if specified\n    2 | box(int,void)->box<int>;\n      |             ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/void.reject.cpp",
+      "sha256": "cefc92a8375d3653dcc3fe7be94335251965c2eae102a8638b93f78f19064315",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/void.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/void.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid void guide parameter\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/void.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/void.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/void.reject.cpp:2:10: error: argument may not have 'void' type\n    2 | box(void x)->box<int>;\n      |          ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/wrong-access.reject.cpp",
+      "sha256": "4183603eb765b54d417f70a45bfdb5ffc3487f82a2c200fab1c21a8041714886",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/wrong-access.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/wrong-access.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: deduction guide must share its class template's access\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/wrong-access.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/wrong-access.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/wrong-access.reject.cpp:1:57: error: deduction guide has different access from the corresponding member template\n    1 | struct outer {template<class T> struct box {}; private: box(int)->box<int>;};\n      |                                                         ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/wrong-access.reject.cpp:1:15: note: member template declared public here\n    1 | struct outer {template<class T> struct box {}; private: box(int)->box<int>;};\n      |               ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/wrong-access.reject.cpp:1:48: note: deduction guide declared private by intervening access specifier\n    1 | struct outer {template<class T> struct box {}; private: box(int)->box<int>;};\n      |                                                ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/wrong-scope.reject.cpp",
+      "sha256": "e5e7f03c838c8f5a09d95e655437993acc3975315091fe435e32fdc80f9ad1e4",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/wrong-scope.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/wrong-scope.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: deduction guide must share its class template's scope\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/wrong-scope.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/wrong-scope.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/wrong-scope.reject.cpp:2:14: error: deduction guide must be declared in the same scope as template 'box'\n    2 | namespace N {box(int)->box<int>;}\n      |              ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/wrong-scope.reject.cpp:1:26: note: template is declared here\n    1 | template<class T> struct box {};\n      |                          ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source183/wrong-target.reject.cpp",
+      "sha256": "91bf6e6b7cf7481512fd0f80b980664c1f32b1a5e3215482b067d0a37d0a1f2d",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/wrong-target.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/wrong-target.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: guide result must be the same simple template-id\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++20",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/wrong-target.reject.cpp",
+            "-o",
+            "/tmp/pa29-186/controls183/wrong-target.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source183/wrong-target.reject.cpp:2:43: error: deduced type 'bag<int>' of deduction guide is not a specialization of template 'box'\n    2 | template<class T> struct bag {};box(int)->bag<int>;\n      |                                           ^~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    }
+  ]
+}
