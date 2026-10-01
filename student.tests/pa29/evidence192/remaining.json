@@ -1,0 +1,22 @@
+{
+  "total": 403,
+  "passed": 402,
+  "failed": 1,
+  "owner_counts": {
+    "nested-template-abi-tag-contract": 1
+  },
+  "failures": [
+    {
+      "test": "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t",
+      "owner": "nested-template-abi-tag-contract",
+      "diagnostic": [
+        "implementation exit status mismatch (expected EXIT_SUCCESS (0), got 255)"
+      ],
+      "diagnostic_provenance": "Current final PA29 suite confirms the failure; descriptive compiler diagnostic/review note retained from audit190.",
+      "disposition": "Independent contract review (fixture unchanged; failure retained)",
+      "review_note": "Implementation176 reducer: GCC and this compiler retain the declared tag; Clang removes it. GCC extension documentation supports retention, but C++11 alone does not prescribe this GNU encoding. Preserve oracle pending contract review; no waiver."
+    }
+  ],
+  "unfinished_implementation_in_completed_scalar_floating_group": [],
+  "next_boundary": "Independent extension-contract review; oracle and failure retained, no waiver."
+}

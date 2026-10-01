@@ -1,0 +1,66 @@
+{
+  "compiler_sha256": "ea6c1861d69f351826ebddcfd6e332ecc85e356a0c525170794753a289cb3b83",
+  "checks": [
+    {
+      "command": [
+        "make",
+        "test-pa29"
+      ],
+      "status": 2,
+      "log": "/tmp/pa29-192/stage-final.log",
+      "sha256": "4ea9eea81d3f76ba3dcff732347195598bde25c48aebecc7e506c08a26dff967",
+      "summary": [
+        "===== TEST SUMMARY: 402 / 403 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": [
+        "make",
+        "test-report-through-pa28"
+      ],
+      "status": 0,
+      "log": "/tmp/pa29-192/prior-final.log",
+      "sha256": "27de22125217fd97a66cf684908900e5be38ebedaefdf2f0d16d4dba640a2df9",
+      "summary": [
+        "===== ALL TESTS PASSED SUCCESSFULLY! (4538 / 4538) ====="
+      ]
+    },
+    {
+      "command": [
+        "make",
+        "test-report-through-pa29"
+      ],
+      "status": 2,
+      "log": "/tmp/pa29-192/through-final.log",
+      "sha256": "630ab856b50ad9b1c5c6240a0c1047fadd248a00b6de153088e1b2706a8c9136",
+      "summary": [
+        "===== TEST SUMMARY: 4940 / 4941 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa29",
+        "--paths",
+        "dev/src"
+      ],
+      "status": 0,
+      "log": "/tmp/pa29-192/file-audit.log",
+      "sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f",
+      "summary": [
+        "File audit passed for pa29 with 4 warning(s).",
+        "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+      ]
+    }
+  ],
+  "personal_control_commands": 81,
+  "inherited_vector_commands": 191,
+  "personal_control_failures": 0,
+  "decoder_cases": 1642,
+  "decoder_failures": 0
+}

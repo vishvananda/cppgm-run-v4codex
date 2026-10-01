@@ -1,0 +1,186 @@
+[
+  {
+    "name": "stage-first",
+    "log_sha256": "fee18a0393bffcab77ffe82319a01566f82b3e35dfeeb7facb07601fb821fdad",
+    "summary": [
+      "pa29/tests/preproc/400-host-gnu-hex-float-pp-number.t: ERROR: checked output does not match reference",
+      "pa29/tests/compile/700-gcc-extended-float-suffixes.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa29/tests/compile/700-hosted-gnu-float-builtin-spellings.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)",
+      "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got 255)",
+      "===== TEST SUMMARY: 399 / 403 TESTS PASSED ====="
+    ],
+    "count_valid": true,
+    "note": "Pre-repair run; final checks supersede."
+  },
+  {
+    "name": "stage-second",
+    "log_sha256": "a34498b6789f6a69345ad01aecd09cdb742effd5081c5c2e0586216996f29222",
+    "summary": [
+      "pa29/tests/run/800-generic-count-trailing-zero-fallback.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+      "pa29/tests/run/800-host-null-macro-pointer-run.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+      "pa29/tests/run/800-hosted-cmath-ceil-run.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+      "pa29/tests/run/800-hosted-cstdio-output-run.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+      "pa29/tests/run/800-noreturn-call-before-break-keeps-default.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+      "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got 255)",
+      "pa29/tests/run/800-short-circuited-arm-demands-callee.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+      "===== TEST SUMMARY: 396 / 403 TESTS PASSED ====="
+    ],
+    "count_valid": true,
+    "note": "Pre-repair run; final checks supersede."
+  },
+  {
+    "name": "stage-third",
+    "log_sha256": "e603465fb74566bc057ca140369f4c2a88d5fa4dce49fa6b307cc130f3977815",
+    "summary": [
+      "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got 255)",
+      "===== TEST SUMMARY: 640 / 641 TESTS PASSED ====="
+    ],
+    "count_valid": false,
+    "note": "Concurrent root reports share .test_counts; final isolated reports supersede their counts."
+  },
+  {
+    "name": "prior-first",
+    "log_sha256": "b5f633106f4abb99525055bfc0538bbf33fa4af8baf8aba1cbb4060fd42f51fa",
+    "summary": [
+      "pa26/tests/general/300-shared-conditional-cleanup-resume.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+      "pa27/tests/general/200-extern-template-member-template-instantiation.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+      "pa27/tests/general/200-host-extern-template-vtable-reference.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+      "===== TEST SUMMARY: 4535 / 4538 TESTS PASSED ====="
+    ],
+    "count_valid": true,
+    "note": "Pre-repair run; final checks supersede."
+  },
+  {
+    "name": "prior-second",
+    "log_sha256": "b4b8eb3bc28ce00e994f20bd6bb7b742f534023aac7f21f8660bf83490ae7ff6",
+    "summary": [
+      "===== ALL TESTS PASSED SUCCESSFULLY! (3763 / 3763) ====="
+    ],
+    "count_valid": false,
+    "note": "Concurrent root reports share .test_counts; final isolated reports supersede their counts."
+  },
+  {
+    "name": "controls-first",
+    "commands": 57,
+    "failures": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "/tmp/pa29-192/controls-first/extended.canonical.lowir",
+          "-o",
+          "/tmp/pa29-192/controls-first/roundtrip.o"
+        ],
+        "status": 1,
+        "expected_success": true,
+        "stdout": "",
+        "stderr": "ERROR: invalid phase-7 token '@' in /tmp/pa29-192/controls-first/extended.canonical.lowir:1\n"
+      },
+      {
+        "command": [
+          "g++",
+          "-std=gnu++11",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/extended.cpp",
+          "-o",
+          "/tmp/pa29-192/controls-first/host"
+        ],
+        "status": 1,
+        "expected_success": true,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/extended.cpp:9:1: warning: floating constant truncated to zero [-Woverflow]\n    9 | static_assert(0x1p-16494Q>0 && 0x1p-16495Q==0,\"quad subnormals\");\n      | ^~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/extended.cpp:12:1: warning: floating constant truncated to zero [-Woverflow]\n   12 | static_assert(0x1p-24F16>0 && 0x1p-25F16==0,\"half subnormals\");\n      | ^~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/extended.cpp:3:15: error: static assertion failed: quad alias\n    3 | static_assert(__is_same(_Float128,__float128),\"quad alias\");\n      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/extended.cpp:4:71: error: static assertion failed: width aliases\n    4 | static_assert(__is_same(_Float32,float) && __is_same(_Float64,double) && __is_same(_Float32x,double),\"width aliases\");\n      |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/extended.cpp:11:31: error: static assertion failed: half ties\n   11 | static_assert(1.00048828125F16==1 && 1.00146484375F16==1.001953125F16,\"half ties\");\n      |               ~~~~~~~~~~~~~~~~^~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/extended.cpp:11:31: note: the comparison reduces to \u2018(1.00048828e+0f == 1.0e+0f)\u2019\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/extended.cpp:12:41: error: static assertion failed: half subnormals\n   12 | static_assert(0x1p-24F16>0 && 0x1p-25F16==0,\"half subnormals\");\n      |                               ~~~~~~~~~~^~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/extended.cpp:12:41: note: the comparison reduces to \u2018(2.98023224e-8f == 0.0f)\u2019\n"
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "/tmp/pa29-192/controls-first/template.canonical.lowir",
+          "-o",
+          "/tmp/pa29-192/controls-first/roundtrip.o"
+        ],
+        "status": 1,
+        "expected_success": true,
+        "stdout": "",
+        "stderr": "ERROR: invalid phase-7 token '@' in /tmp/pa29-192/controls-first/template.canonical.lowir:1\n"
+      },
+      {
+        "command": [
+          "g++",
+          "-std=gnu++11",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/template.cpp",
+          "-o",
+          "/tmp/pa29-192/controls-first/host"
+        ],
+        "status": 1,
+        "expected_success": true,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/template.cpp:1:47: error: static assertion failed: x87 aliases\n    1 | static_assert(__is_same(__float80,long double)&&__is_same(_Float64x,long double),\"x87 aliases\");\n      |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/template.cpp:12:22: warning: ISO C++ does not allow converting to \u2018_Float16\u2019 from \u2018__float128\u2019 with greater conversion rank [-Wnarrowing]\n   12 | constexpr _Float16 h{1.5Q};\n      |                      ^~~~\n"
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "/tmp/pa29-192/controls-first/quad-token.canonical.lowir",
+          "-o",
+          "/tmp/pa29-192/controls-first/roundtrip.o"
+        ],
+        "status": 1,
+        "expected_success": true,
+        "stdout": "",
+        "stderr": "ERROR: invalid phase-7 token '@' in /tmp/pa29-192/controls-first/quad-token.canonical.lowir:1\n"
+      },
+      {
+        "command": [
+          "g++",
+          "-std=gnu++11",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/narrow-half.reject.cpp",
+          "-o",
+          "/tmp/pa29-192/controls-first/reject.o"
+        ],
+        "status": 0,
+        "expected_success": false,
+        "stdout": "",
+        "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/narrow-half.reject.cpp:1:12: warning: ISO C++ does not allow converting to \u2018_Float16\u2019 from \u2018__float128\u2019 with greater conversion rank [-Wnarrowing]\n    1 | _Float16 x{1.00048828125Q};\n      |            ^~~~~~~~~~~~~~\n"
+      },
+      {
+        "command": [
+          "g++",
+          "-std=gnu++11",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source192/narrow-quad.reject.cpp",
+          "-o",
+          "/tmp/pa29-192/controls-first/reject.o"
+        ],
+        "status": 0,
+        "expected_success": false,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    "source": "Pre-final control history; not rebound to final compiler."
+  },
+  {
+    "name": "controls-second",
+    "commands": 64,
+    "failures": [],
+    "source": "Pre-final control history; not rebound to final compiler."
+  },
+  {
+    "name": "controls-third",
+    "commands": 64,
+    "failures": [],
+    "source": "Pre-final control history; not rebound to final compiler."
+  },
+  {
+    "name": "controls-final",
+    "commands": 78,
+    "failures": [],
+    "source": "Pre-final control history; not rebound to final compiler."
+  },
+  {
+    "name": "controls-fourth",
+    "commands": 81,
+    "failures": [],
+    "source": "Pre-final control history; not rebound to final compiler."
+  }
+]

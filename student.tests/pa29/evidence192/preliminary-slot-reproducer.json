@@ -1,0 +1,31 @@
+[
+  {
+    "command": [
+      "/tmp/pa29-192/controls-bound/lowir-host",
+      "student.tests/pa29/source192/slot-truth.lowir",
+      "/tmp/pa29-192/slot-old.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/slot-old.o",
+      "-o",
+      "/tmp/pa29-192/slot-old"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/slot-old"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": ""
+  }
+]

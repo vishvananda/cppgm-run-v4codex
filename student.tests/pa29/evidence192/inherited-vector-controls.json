@@ -1,0 +1,2322 @@
+[
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/vector.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/vector"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/vector.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/vector"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-192/inherited-vector-final/vector.lowir",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+      "--dump-machine-ir",
+      "/tmp/pa29-192/inherited-vector-final/vector.mir",
+      "/tmp/pa29-192/inherited-vector-final/vector.canonical",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/bitcast.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/bitcast"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/bitcast.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/bitcast"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast.lowir",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+      "--dump-machine-ir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast.mir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast.canonical",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-many.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-many.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/vector-many.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-many"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/vector-many"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-many.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-many.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/vector-many.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-many"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/vector-many"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-many.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-many.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-192/inherited-vector-final/vector-many.lowir",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-many.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+      "--dump-machine-ir",
+      "/tmp/pa29-192/inherited-vector-final/vector-many.mir",
+      "/tmp/pa29-192/inherited-vector-final/vector-many.canonical",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-many.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-constant.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-constant.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/vector-constant.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-constant"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/vector-constant"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-constant.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-constant.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/vector-constant.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-constant"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/vector-constant"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-constant.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-constant.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-192/inherited-vector-final/vector-constant.lowir",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-constant.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+      "--dump-machine-ir",
+      "/tmp/pa29-192/inherited-vector-final/vector-constant.mir",
+      "/tmp/pa29-192/inherited-vector-final/vector-constant.canonical",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-constant.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-storage.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-storage.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-storage.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-storage"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/bitcast-storage"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-storage.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-storage.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-storage.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-storage"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/bitcast-storage"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-storage.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-storage.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-storage.lowir",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-storage.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+      "--dump-machine-ir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-storage.mir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-storage.canonical",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-storage.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/sfinae.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/sfinae.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/sfinae.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/sfinae"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/sfinae"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/sfinae.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/sfinae.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/sfinae.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/sfinae"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/sfinae"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/sfinae.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/sfinae.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-192/inherited-vector-final/sfinae.lowir",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/sfinae.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+      "--dump-machine-ir",
+      "/tmp/pa29-192/inherited-vector-final/sfinae.mir",
+      "/tmp/pa29-192/inherited-vector-final/sfinae.canonical",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-fsyntax-only",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/sfinae.cpp"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-static.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-static.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/vector-static.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-static"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/vector-static"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-static.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-static.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/vector-static.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-static"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/vector-static"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-static.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-static.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-192/inherited-vector-final/vector-static.lowir",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-static.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+      "--dump-machine-ir",
+      "/tmp/pa29-192/inherited-vector-final/vector-static.mir",
+      "/tmp/pa29-192/inherited-vector-final/vector-static.canonical",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-static.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-deleted.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-deleted.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-deleted.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-deleted"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/bitcast-deleted"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-deleted.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-deleted.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-deleted.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-deleted"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/bitcast-deleted"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-deleted.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-deleted.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-deleted.lowir",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-deleted.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+      "--dump-machine-ir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-deleted.mir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-deleted.canonical",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-deleted.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-array.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-array.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-array.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-array"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/bitcast-array"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-array.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-array.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-array.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-array"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/bitcast-array"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-array.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-array.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-array.lowir",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-array.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+      "--dump-machine-ir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-array.mir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-array.canonical",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-array.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/builtin-effects.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/builtin-effects.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/builtin-effects.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/builtin-effects"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/builtin-effects"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/builtin-effects.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/builtin-effects.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/builtin-effects.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/builtin-effects"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/builtin-effects"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/builtin-effects.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/builtin-effects.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-192/inherited-vector-final/builtin-effects.lowir",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/builtin-effects.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+      "--dump-machine-ir",
+      "/tmp/pa29-192/inherited-vector-final/builtin-effects.mir",
+      "/tmp/pa29-192/inherited-vector-final/builtin-effects.canonical",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/builtin-effects.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-special.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-special.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-special.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-special"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/bitcast-special"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-special.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-special.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-special.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-special"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/bitcast-special"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-special.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-special.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-special.lowir",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-special.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+      "--dump-machine-ir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-special.mir",
+      "/tmp/pa29-192/inherited-vector-final/bitcast-special.canonical",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/bitcast-special.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-mask-types.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-mask-types.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/vector-mask-types.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-mask-types"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/vector-mask-types"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-mask-types.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-mask-types.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/vector-mask-types.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-mask-types"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/vector-mask-types"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-mask-types.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-mask-types.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-192/inherited-vector-final/vector-mask-types.lowir",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-mask-types.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+      "--dump-machine-ir",
+      "/tmp/pa29-192/inherited-vector-final/vector-mask-types.mir",
+      "/tmp/pa29-192/inherited-vector-final/vector-mask-types.canonical",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-mask-types.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-template.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-template.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/vector-template.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-template"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/vector-template"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-template.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-template.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/vector-template.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-template"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/vector-template"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-template.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-template.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-192/inherited-vector-final/vector-template.lowir",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/vector-template.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+      "--dump-machine-ir",
+      "/tmp/pa29-192/inherited-vector-final/vector-template.mir",
+      "/tmp/pa29-192/inherited-vector-final/vector-template.canonical",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/roundtrip"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-template.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/abi-source.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/abi.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/abi-host.cpp",
+      "/tmp/pa29-192/inherited-vector-final/abi.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/abi"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/abi-host.cpp:15:46: warning: AVX vector argument of type 'W' (vector of 8 'int' values) without 'avx' enabled changes the ABI [-Wpsabi]\n   15 |  return native_wide() && __builtin_reduce_or(nw(w)!=w)==0 && __builtin_reduce_or(nx(x)!=x)==0 && __builtin_reduce_or(ny(y)!=y)==0;}\n      |                                              ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/abi-host.cpp:15:82: warning: AVX vector argument of type 'X' (vector of 16 'int' values) without 'avx512f' enabled changes the ABI [-Wpsabi]\n   15 |  return native_wide() && __builtin_reduce_or(nw(w)!=w)==0 && __builtin_reduce_or(nx(x)!=x)==0 && __builtin_reduce_or(ny(y)!=y)==0;}\n      |                                                                                  ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/abi-host.cpp:15:118: warning: AVX vector argument of type 'Y' (vector of 32 'int' values) without 'avx512f' enabled changes the ABI [-Wpsabi]\n   15 |  return native_wide() && __builtin_reduce_or(nw(w)!=w)==0 && __builtin_reduce_or(nx(x)!=x)==0 && __builtin_reduce_or(ny(y)!=y)==0;}\n      |                                                                                                                      ^\n3 warnings generated.\n"
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/abi"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "objdump",
+      "-dr",
+      "/tmp/pa29-192/inherited-vector-final/abi.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "\n/tmp/pa29-192/inherited-vector-final/abi.o:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000000000 <nc>:\n       0:\t55                   \tpush   %rbp\n       1:\t48 89 e5             \tmov    %rsp,%rbp\n       4:\t48 81 ec 10 00 00 00 \tsub    $0x10,%rsp\n       b:\t40 88 7d f8          \tmov    %dil,-0x8(%rbp)\n       f:\t48 0f b6 45 f8       \tmovzbq -0x8(%rbp),%rax\n      14:\t88 45 f0             \tmov    %al,-0x10(%rbp)\n      17:\t48 0f b6 45 f0       \tmovzbq -0x10(%rbp),%rax\n      1c:\te9 00 00 00 00       \tjmp    21 <nc+0x21>\n      21:\tc9                   \tleave\n      22:\tc3                   \tret\n\n0000000000000023 <nb>:\n      23:\t55                   \tpush   %rbp\n      24:\t48 89 e5             \tmov    %rsp,%rbp\n      27:\t48 81 ec 10 00 00 00 \tsub    $0x10,%rsp\n      2e:\t40 88 7d f8          \tmov    %dil,-0x8(%rbp)\n      32:\t48 0f b6 45 f8       \tmovzbq -0x8(%rbp),%rax\n      37:\t88 45 f0             \tmov    %al,-0x10(%rbp)\n      3a:\t48 0f b6 45 f0       \tmovzbq -0x10(%rbp),%rax\n      3f:\te9 00 00 00 00       \tjmp    44 <nb+0x21>\n      44:\tc9                   \tleave\n      45:\tc3                   \tret\n\n0000000000000046 <ns>:\n      46:\t55                   \tpush   %rbp\n      47:\t48 89 e5             \tmov    %rsp,%rbp\n      4a:\t48 81 ec 10 00 00 00 \tsub    $0x10,%rsp\n      51:\tf2 0f 11 45 f8       \tmovsd  %xmm0,-0x8(%rbp)\n      56:\t48 8b 45 f8          \tmov    -0x8(%rbp),%rax\n      5a:\t48 89 45 f0          \tmov    %rax,-0x10(%rbp)\n      5e:\tf2 0f 10 45 f0       \tmovsd  -0x10(%rbp),%xmm0\n      63:\te9 00 00 00 00       \tjmp    68 <ns+0x22>\n      68:\tc9                   \tleave\n      69:\tc3                   \tret\n\n000000000000006a <ni>:\n      6a:\t55                   \tpush   %rbp\n      6b:\t48 89 e5             \tmov    %rsp,%rbp\n      6e:\t48 81 ec 20 00 00 00 \tsub    $0x20,%rsp\n      75:\t0f 11 45 f0          \tmovups %xmm0,-0x10(%rbp)\n      79:\tf3 44 0f 6f 7d f0    \tmovdqu -0x10(%rbp),%xmm15\n      7f:\tf3 44 0f 7f 7d e0    \tmovdqu %xmm15,-0x20(%rbp)\n      85:\t0f 10 45 e0          \tmovups -0x20(%rbp),%xmm0\n      89:\te9 00 00 00 00       \tjmp    8e <ni+0x24>\n      8e:\tc9                   \tleave\n      8f:\tc3                   \tret\n\n0000000000000090 <native_test>:\n      90:\t55                   \tpush   %rbp\n      91:\t48 89 e5             \tmov    %rsp,%rbp\n      94:\t48 81 ec a0 00 00 00 \tsub    $0xa0,%rsp\n      9b:\tc6 45 f8 00          \tmovb   $0x0,-0x8(%rbp)\n      9f:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n      a5:\t4c 8d 5d f8          \tlea    -0x8(%rbp),%r11\n      a9:\t43 c6 04 03 03       \tmovb   $0x3,(%r11,%r8,1)\n      ae:\tc6 45 f0 00          \tmovb   $0x0,-0x10(%rbp)\n      b2:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n      b8:\t49 c1 e8 03          \tshr    $0x3,%r8\n      bc:\t4c 8d 5d f0          \tlea    -0x10(%rbp),%r11\n      c0:\t4f 8d 0c 03          \tlea    (%r11,%r8,1),%r9\n      c4:\t4d 0f b6 01          \tmovzbq (%r9),%r8\n      c8:\tbf 00 00 00 00       \tmov    $0x0,%edi\n      cd:\t83 e7 07             \tand    $0x7,%edi\n      d0:\t48 89 f9             \tmov    %rdi,%rcx\n      d3:\tbe 01 00 00 00       \tmov    $0x1,%esi\n      d8:\t40 d2 e6             \tshl    %cl,%sil\n      db:\t48 0f b6 f6          \tmovzbq %sil,%rsi\n      df:\t40 80 f6 ff          \txor    $0xff,%sil\n      e3:\t48 0f b6 f6          \tmovzbq %sil,%rsi\n      e7:\t41 20 f0             \tand    %sil,%r8b\n      ea:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n      ee:\t48 89 f9             \tmov    %rdi,%rcx\n      f1:\tbe 01 00 00 00       \tmov    $0x1,%esi\n      f6:\t40 d2 e6             \tshl    %cl,%sil\n      f9:\t48 0f b6 f6          \tmovzbq %sil,%rsi\n      fd:\t41 08 f0             \tor     %sil,%r8b\n     100:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     104:\t45 88 01             \tmov    %r8b,(%r9)\n     107:\t41 b8 01 00 00 00    \tmov    $0x1,%r8d\n     10d:\t49 c1 e8 03          \tshr    $0x3,%r8\n     111:\t4c 8d 5d f0          \tlea    -0x10(%rbp),%r11\n     115:\t4f 8d 0c 03          \tlea    (%r11,%r8,1),%r9\n     119:\t4d 0f b6 01          \tmovzbq (%r9),%r8\n     11d:\tbf 01 00 00 00       \tmov    $0x1,%edi\n     122:\t83 e7 07             \tand    $0x7,%edi\n     125:\t48 89 f9             \tmov    %rdi,%rcx\n     128:\tbe 01 00 00 00       \tmov    $0x1,%esi\n     12d:\t40 d2 e6             \tshl    %cl,%sil\n     130:\t48 0f b6 f6          \tmovzbq %sil,%rsi\n     134:\t40 80 f6 ff          \txor    $0xff,%sil\n     138:\t48 0f b6 f6          \tmovzbq %sil,%rsi\n     13c:\t41 20 f0             \tand    %sil,%r8b\n     13f:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     143:\t48 89 f9             \tmov    %rdi,%rcx\n     146:\tbe 00 00 00 00       \tmov    $0x0,%esi\n     14b:\t40 d2 e6             \tshl    %cl,%sil\n     14e:\t48 0f b6 f6          \tmovzbq %sil,%rsi\n     152:\t41 08 f0             \tor     %sil,%r8b\n     155:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     159:\t45 88 01             \tmov    %r8b,(%r9)\n     15c:\t41 b8 02 00 00 00    \tmov    $0x2,%r8d\n     162:\t49 c1 e8 03          \tshr    $0x3,%r8\n     166:\t4c 8d 5d f0          \tlea    -0x10(%rbp),%r11\n     16a:\t4f 8d 0c 03          \tlea    (%r11,%r8,1),%r9\n     16e:\t4d 0f b6 01          \tmovzbq (%r9),%r8\n     172:\tbf 02 00 00 00       \tmov    $0x2,%edi\n     177:\t83 e7 07             \tand    $0x7,%edi\n     17a:\t48 89 f9             \tmov    %rdi,%rcx\n     17d:\tbe 01 00 00 00       \tmov    $0x1,%esi\n     182:\t40 d2 e6             \tshl    %cl,%sil\n     185:\t48 0f b6 f6          \tmovzbq %sil,%rsi\n     189:\t40 80 f6 ff          \txor    $0xff,%sil\n     18d:\t48 0f b6 f6          \tmovzbq %sil,%rsi\n     191:\t41 20 f0             \tand    %sil,%r8b\n     194:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     198:\t48 89 f9             \tmov    %rdi,%rcx\n     19b:\tbe 01 00 00 00       \tmov    $0x1,%esi\n     1a0:\t40 d2 e6             \tshl    %cl,%sil\n     1a3:\t48 0f b6 f6          \tmovzbq %sil,%rsi\n     1a7:\t41 08 f0             \tor     %sil,%r8b\n     1aa:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     1ae:\t45 88 01             \tmov    %r8b,(%r9)\n     1b1:\t41 b8 03 00 00 00    \tmov    $0x3,%r8d\n     1b7:\t49 c1 e8 03          \tshr    $0x3,%r8\n     1bb:\t4c 8d 5d f0          \tlea    -0x10(%rbp),%r11\n     1bf:\t4f 8d 0c 03          \tlea    (%r11,%r8,1),%r9\n     1c3:\t4d 0f b6 01          \tmovzbq (%r9),%r8\n     1c7:\tbf 03 00 00 00       \tmov    $0x3,%edi\n     1cc:\t83 e7 07             \tand    $0x7,%edi\n     1cf:\t48 89 f9             \tmov    %rdi,%rcx\n     1d2:\tbe 01 00 00 00       \tmov    $0x1,%esi\n     1d7:\t40 d2 e6             \tshl    %cl,%sil\n     1da:\t48 0f b6 f6          \tmovzbq %sil,%rsi\n     1de:\t40 80 f6 ff          \txor    $0xff,%sil\n     1e2:\t48 0f b6 f6          \tmovzbq %sil,%rsi\n     1e6:\t41 20 f0             \tand    %sil,%r8b\n     1e9:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     1ed:\t48 89 f9             \tmov    %rdi,%rcx\n     1f0:\tbe 00 00 00 00       \tmov    $0x0,%esi\n     1f5:\t40 d2 e6             \tshl    %cl,%sil\n     1f8:\t48 0f b6 f6          \tmovzbq %sil,%rsi\n     1fc:\t41 08 f0             \tor     %sil,%r8b\n     1ff:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     203:\t45 88 01             \tmov    %r8b,(%r9)\n     206:\t48 c7 45 e8 00 00 00 \tmovq   $0x0,-0x18(%rbp)\n     20d:\t00 \n     20e:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     214:\t49 c1 e0 01          \tshl    $0x1,%r8\n     218:\t4c 8d 5d e8          \tlea    -0x18(%rbp),%r11\n     21c:\t66 43 c7 04 03 01 00 \tmovw   $0x1,(%r11,%r8,1)\n     223:\t41 b8 01 00 00 00    \tmov    $0x1,%r8d\n     229:\t49 c1 e0 01          \tshl    $0x1,%r8\n     22d:\t4c 8d 5d e8          \tlea    -0x18(%rbp),%r11\n     231:\t66 43 c7 04 03 02 00 \tmovw   $0x2,(%r11,%r8,1)\n     238:\t41 b8 02 00 00 00    \tmov    $0x2,%r8d\n     23e:\t49 c1 e0 01          \tshl    $0x1,%r8\n     242:\t4c 8d 5d e8          \tlea    -0x18(%rbp),%r11\n     246:\t66 43 c7 04 03 03 00 \tmovw   $0x3,(%r11,%r8,1)\n     24d:\t41 b8 03 00 00 00    \tmov    $0x3,%r8d\n     253:\t49 c1 e0 01          \tshl    $0x1,%r8\n     257:\t4c 8d 5d e8          \tlea    -0x18(%rbp),%r11\n     25b:\t66 43 c7 04 03 04 00 \tmovw   $0x4,(%r11,%r8,1)\n     262:\t66 45 0f ef ff       \tpxor   %xmm15,%xmm15\n     267:\tf3 44 0f 7f 7d d0    \tmovdqu %xmm15,-0x30(%rbp)\n     26d:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     273:\t49 c1 e0 02          \tshl    $0x2,%r8\n     277:\t4c 8d 5d d0          \tlea    -0x30(%rbp),%r11\n     27b:\t43 c7 04 03 05 00 00 \tmovl   $0x5,(%r11,%r8,1)\n     282:\t00 \n     283:\t41 b8 01 00 00 00    \tmov    $0x1,%r8d\n     289:\t49 c1 e0 02          \tshl    $0x2,%r8\n     28d:\t4c 8d 5d d0          \tlea    -0x30(%rbp),%r11\n     291:\t43 c7 04 03 06 00 00 \tmovl   $0x6,(%r11,%r8,1)\n     298:\t00 \n     299:\t41 b8 02 00 00 00    \tmov    $0x2,%r8d\n     29f:\t49 c1 e0 02          \tshl    $0x2,%r8\n     2a3:\t4c 8d 5d d0          \tlea    -0x30(%rbp),%r11\n     2a7:\t43 c7 04 03 07 00 00 \tmovl   $0x7,(%r11,%r8,1)\n     2ae:\t00 \n     2af:\t41 b8 03 00 00 00    \tmov    $0x3,%r8d\n     2b5:\t49 c1 e0 02          \tshl    $0x2,%r8\n     2b9:\t4c 8d 5d d0          \tlea    -0x30(%rbp),%r11\n     2bd:\t43 c7 04 03 08 00 00 \tmovl   $0x8,(%r11,%r8,1)\n     2c4:\t00 \n     2c5:\t48 0f b6 7d f8       \tmovzbq -0x8(%rbp),%rdi\n     2ca:\te8 00 00 00 00       \tcall   2cf <native_test+0x23f>\n\t\t\t2cb: R_X86_64_PLT32\thc-0x4\n     2cf:\t88 45 c8             \tmov    %al,-0x38(%rbp)\n     2d2:\tc6 45 c0 00          \tmovb   $0x0,-0x40(%rbp)\n     2d6:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     2dc:\t4c 8d 5d c8          \tlea    -0x38(%rbp),%r11\n     2e0:\t4f 0f be 0c 03       \tmovsbq (%r11,%r8,1),%r9\n     2e5:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     2eb:\t4c 8d 5d f8          \tlea    -0x8(%rbp),%r11\n     2ef:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     2f3:\t44 3a 0f             \tcmp    (%rdi),%r9b\n     2f6:\t41 0f 95 c0          \tsetne  %r8b\n     2fa:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     2fe:\t41 f6 d8             \tneg    %r8b\n     301:\t4d 0f be c0          \tmovsbq %r8b,%r8\n     305:\t41 b9 00 00 00 00    \tmov    $0x0,%r9d\n     30b:\t4c 8d 5d c0          \tlea    -0x40(%rbp),%r11\n     30f:\t47 88 04 0b          \tmov    %r8b,(%r11,%r9,1)\n     313:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     319:\t4c 8d 5d c0          \tlea    -0x40(%rbp),%r11\n     31d:\t4f 8d 0c 03          \tlea    (%r11,%r8,1),%r9\n     321:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     327:\t45 0a 01             \tor     (%r9),%r8b\n     32a:\t4d 0f be c0          \tmovsbq %r8b,%r8\n     32e:\t4d 0f be c8          \tmovsbq %r8b,%r9\n     332:\t45 85 c9             \ttest   %r9d,%r9d\n     335:\t0f 84 05 00 00 00    \tje     340 <native_test+0x2b0>\n     33b:\te9 0f 01 00 00       \tjmp    44f <native_test+0x3bf>\n     340:\t48 0f b6 7d f0       \tmovzbq -0x10(%rbp),%rdi\n     345:\te8 00 00 00 00       \tcall   34a <native_test+0x2ba>\n\t\t\t346: R_X86_64_PLT32\thb-0x4\n     34a:\t88 45 b8             \tmov    %al,-0x48(%rbp)\n     34d:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     353:\t49 c1 e8 03          \tshr    $0x3,%r8\n     357:\t4c 8d 5d b8          \tlea    -0x48(%rbp),%r11\n     35b:\t4f 0f b6 0c 03       \tmovzbq (%r11,%r8,1),%r9\n     360:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     366:\t41 83 e0 07          \tand    $0x7,%r8d\n     36a:\t4c 89 c1             \tmov    %r8,%rcx\n     36d:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n     371:\t41 d2 e9             \tshr    %cl,%r9b\n     374:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n     378:\t41 80 e1 01          \tand    $0x1,%r9b\n     37c:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n     380:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     386:\t45 08 c8             \tor     %r9b,%r8b\n     389:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     38d:\t41 b9 01 00 00 00    \tmov    $0x1,%r9d\n     393:\t49 c1 e9 03          \tshr    $0x3,%r9\n     397:\t4c 8d 5d b8          \tlea    -0x48(%rbp),%r11\n     39b:\t4b 0f b6 3c 0b       \tmovzbq (%r11,%r9,1),%rdi\n     3a0:\t41 b9 01 00 00 00    \tmov    $0x1,%r9d\n     3a6:\t41 83 e1 07          \tand    $0x7,%r9d\n     3aa:\t4c 89 c9             \tmov    %r9,%rcx\n     3ad:\t48 0f b6 ff          \tmovzbq %dil,%rdi\n     3b1:\t40 d2 ef             \tshr    %cl,%dil\n     3b4:\t48 0f b6 ff          \tmovzbq %dil,%rdi\n     3b8:\t40 80 e7 01          \tand    $0x1,%dil\n     3bc:\t48 0f b6 ff          \tmovzbq %dil,%rdi\n     3c0:\t41 08 f8             \tor     %dil,%r8b\n     3c3:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     3c7:\t41 b9 02 00 00 00    \tmov    $0x2,%r9d\n     3cd:\t49 c1 e9 03          \tshr    $0x3,%r9\n     3d1:\t4c 8d 5d b8          \tlea    -0x48(%rbp),%r11\n     3d5:\t4b 0f b6 3c 0b       \tmovzbq (%r11,%r9,1),%rdi\n     3da:\t41 b9 02 00 00 00    \tmov    $0x2,%r9d\n     3e0:\t41 83 e1 07          \tand    $0x7,%r9d\n     3e4:\t4c 89 c9             \tmov    %r9,%rcx\n     3e7:\t48 0f b6 ff          \tmovzbq %dil,%rdi\n     3eb:\t40 d2 ef             \tshr    %cl,%dil\n     3ee:\t48 0f b6 ff          \tmovzbq %dil,%rdi\n     3f2:\t40 80 e7 01          \tand    $0x1,%dil\n     3f6:\t48 0f b6 ff          \tmovzbq %dil,%rdi\n     3fa:\t41 08 f8             \tor     %dil,%r8b\n     3fd:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     401:\t41 b9 03 00 00 00    \tmov    $0x3,%r9d\n     407:\t49 c1 e9 03          \tshr    $0x3,%r9\n     40b:\t4c 8d 5d b8          \tlea    -0x48(%rbp),%r11\n     40f:\t4b 0f b6 3c 0b       \tmovzbq (%r11,%r9,1),%rdi\n     414:\t41 b9 03 00 00 00    \tmov    $0x3,%r9d\n     41a:\t41 83 e1 07          \tand    $0x7,%r9d\n     41e:\t4c 89 c9             \tmov    %r9,%rcx\n     421:\t48 0f b6 ff          \tmovzbq %dil,%rdi\n     425:\t40 d2 ef             \tshr    %cl,%dil\n     428:\t48 0f b6 ff          \tmovzbq %dil,%rdi\n     42c:\t40 80 e7 01          \tand    $0x1,%dil\n     430:\t48 0f b6 ff          \tmovzbq %dil,%rdi\n     434:\t41 08 f8             \tor     %dil,%r8b\n     437:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     43b:\t4d 85 c0             \ttest   %r8,%r8\n     43e:\t41 0f 95 c1          \tsetne  %r9b\n     442:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n     446:\t4c 89 4d b0          \tmov    %r9,-0x50(%rbp)\n     44a:\te9 08 00 00 00       \tjmp    457 <native_test+0x3c7>\n     44f:\t48 c7 45 b0 00 00 00 \tmovq   $0x0,-0x50(%rbp)\n     456:\t00 \n     457:\t4c 8b 45 b0          \tmov    -0x50(%rbp),%r8\n     45b:\t4d 85 c0             \ttest   %r8,%r8\n     45e:\t0f 85 05 00 00 00    \tjne    469 <native_test+0x3d9>\n     464:\te9 d8 01 00 00       \tjmp    641 <native_test+0x5b1>\n     469:\tf2 0f 10 45 e8       \tmovsd  -0x18(%rbp),%xmm0\n     46e:\te8 00 00 00 00       \tcall   473 <native_test+0x3e3>\n\t\t\t46f: R_X86_64_PLT32\ths-0x4\n     473:\tf2 0f 11 45 a8       \tmovsd  %xmm0,-0x58(%rbp)\n     478:\t48 c7 45 a0 00 00 00 \tmovq   $0x0,-0x60(%rbp)\n     47f:\t00 \n     480:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     486:\t49 c1 e0 01          \tshl    $0x1,%r8\n     48a:\t4c 8d 5d a8          \tlea    -0x58(%rbp),%r11\n     48e:\t4f 0f bf 0c 03       \tmovswq (%r11,%r8,1),%r9\n     493:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     499:\t49 c1 e0 01          \tshl    $0x1,%r8\n     49d:\t4c 8d 5d e8          \tlea    -0x18(%rbp),%r11\n     4a1:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     4a5:\t66 44 3b 0f          \tcmp    (%rdi),%r9w\n     4a9:\t41 0f 95 c0          \tsetne  %r8b\n     4ad:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     4b1:\t66 41 f7 d8          \tneg    %r8w\n     4b5:\t4d 0f bf c0          \tmovswq %r8w,%r8\n     4b9:\t41 b9 00 00 00 00    \tmov    $0x0,%r9d\n     4bf:\t49 c1 e1 01          \tshl    $0x1,%r9\n     4c3:\t4c 8d 5d a0          \tlea    -0x60(%rbp),%r11\n     4c7:\t66 47 89 04 0b       \tmov    %r8w,(%r11,%r9,1)\n     4cc:\t41 b8 01 00 00 00    \tmov    $0x1,%r8d\n     4d2:\t49 c1 e0 01          \tshl    $0x1,%r8\n     4d6:\t4c 8d 5d a8          \tlea    -0x58(%rbp),%r11\n     4da:\t4f 0f bf 0c 03       \tmovswq (%r11,%r8,1),%r9\n     4df:\t41 b8 01 00 00 00    \tmov    $0x1,%r8d\n     4e5:\t49 c1 e0 01          \tshl    $0x1,%r8\n     4e9:\t4c 8d 5d e8          \tlea    -0x18(%rbp),%r11\n     4ed:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     4f1:\t66 44 3b 0f          \tcmp    (%rdi),%r9w\n     4f5:\t41 0f 95 c0          \tsetne  %r8b\n     4f9:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     4fd:\t66 41 f7 d8          \tneg    %r8w\n     501:\t4d 0f bf c0          \tmovswq %r8w,%r8\n     505:\t41 b9 01 00 00 00    \tmov    $0x1,%r9d\n     50b:\t49 c1 e1 01          \tshl    $0x1,%r9\n     50f:\t4c 8d 5d a0          \tlea    -0x60(%rbp),%r11\n     513:\t66 47 89 04 0b       \tmov    %r8w,(%r11,%r9,1)\n     518:\t41 b8 02 00 00 00    \tmov    $0x2,%r8d\n     51e:\t49 c1 e0 01          \tshl    $0x1,%r8\n     522:\t4c 8d 5d a8          \tlea    -0x58(%rbp),%r11\n     526:\t4f 0f bf 0c 03       \tmovswq (%r11,%r8,1),%r9\n     52b:\t41 b8 02 00 00 00    \tmov    $0x2,%r8d\n     531:\t49 c1 e0 01          \tshl    $0x1,%r8\n     535:\t4c 8d 5d e8          \tlea    -0x18(%rbp),%r11\n     539:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     53d:\t66 44 3b 0f          \tcmp    (%rdi),%r9w\n     541:\t41 0f 95 c0          \tsetne  %r8b\n     545:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     549:\t66 41 f7 d8          \tneg    %r8w\n     54d:\t4d 0f bf c0          \tmovswq %r8w,%r8\n     551:\t41 b9 02 00 00 00    \tmov    $0x2,%r9d\n     557:\t49 c1 e1 01          \tshl    $0x1,%r9\n     55b:\t4c 8d 5d a0          \tlea    -0x60(%rbp),%r11\n     55f:\t66 47 89 04 0b       \tmov    %r8w,(%r11,%r9,1)\n     564:\t41 b8 03 00 00 00    \tmov    $0x3,%r8d\n     56a:\t49 c1 e0 01          \tshl    $0x1,%r8\n     56e:\t4c 8d 5d a8          \tlea    -0x58(%rbp),%r11\n     572:\t4f 0f bf 0c 03       \tmovswq (%r11,%r8,1),%r9\n     577:\t41 b8 03 00 00 00    \tmov    $0x3,%r8d\n     57d:\t49 c1 e0 01          \tshl    $0x1,%r8\n     581:\t4c 8d 5d e8          \tlea    -0x18(%rbp),%r11\n     585:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     589:\t66 44 3b 0f          \tcmp    (%rdi),%r9w\n     58d:\t41 0f 95 c0          \tsetne  %r8b\n     591:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     595:\t66 41 f7 d8          \tneg    %r8w\n     599:\t4d 0f bf c0          \tmovswq %r8w,%r8\n     59d:\t41 b9 03 00 00 00    \tmov    $0x3,%r9d\n     5a3:\t49 c1 e1 01          \tshl    $0x1,%r9\n     5a7:\t4c 8d 5d a0          \tlea    -0x60(%rbp),%r11\n     5ab:\t66 47 89 04 0b       \tmov    %r8w,(%r11,%r9,1)\n     5b0:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     5b6:\t49 c1 e0 01          \tshl    $0x1,%r8\n     5ba:\t4c 8d 5d a0          \tlea    -0x60(%rbp),%r11\n     5be:\t4f 8d 0c 03          \tlea    (%r11,%r8,1),%r9\n     5c2:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     5c8:\t66 45 0b 01          \tor     (%r9),%r8w\n     5cc:\t4d 0f bf c0          \tmovswq %r8w,%r8\n     5d0:\t41 b9 01 00 00 00    \tmov    $0x1,%r9d\n     5d6:\t49 c1 e1 01          \tshl    $0x1,%r9\n     5da:\t4c 8d 5d a0          \tlea    -0x60(%rbp),%r11\n     5de:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     5e2:\t66 44 0b 07          \tor     (%rdi),%r8w\n     5e6:\t4d 0f bf c0          \tmovswq %r8w,%r8\n     5ea:\t41 b9 02 00 00 00    \tmov    $0x2,%r9d\n     5f0:\t49 c1 e1 01          \tshl    $0x1,%r9\n     5f4:\t4c 8d 5d a0          \tlea    -0x60(%rbp),%r11\n     5f8:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     5fc:\t66 44 0b 07          \tor     (%rdi),%r8w\n     600:\t4d 0f bf c0          \tmovswq %r8w,%r8\n     604:\t41 b9 03 00 00 00    \tmov    $0x3,%r9d\n     60a:\t49 c1 e1 01          \tshl    $0x1,%r9\n     60e:\t4c 8d 5d a0          \tlea    -0x60(%rbp),%r11\n     612:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     616:\t66 44 0b 07          \tor     (%rdi),%r8w\n     61a:\t4d 0f bf c0          \tmovswq %r8w,%r8\n     61e:\t4d 0f bf c8          \tmovswq %r8w,%r9\n     622:\t45 85 c9             \ttest   %r9d,%r9d\n     625:\t41 0f 94 c0          \tsete   %r8b\n     629:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     62d:\t4d 85 c0             \ttest   %r8,%r8\n     630:\t41 0f 95 c1          \tsetne  %r9b\n     634:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n     638:\t4c 89 4d 98          \tmov    %r9,-0x68(%rbp)\n     63c:\te9 08 00 00 00       \tjmp    649 <native_test+0x5b9>\n     641:\t48 c7 45 98 00 00 00 \tmovq   $0x0,-0x68(%rbp)\n     648:\t00 \n     649:\t4c 8b 45 98          \tmov    -0x68(%rbp),%r8\n     64d:\t4d 85 c0             \ttest   %r8,%r8\n     650:\t0f 85 05 00 00 00    \tjne    65b <native_test+0x5cb>\n     656:\te9 d7 01 00 00       \tjmp    832 <native_test+0x7a2>\n     65b:\t0f 10 45 d0          \tmovups -0x30(%rbp),%xmm0\n     65f:\te8 00 00 00 00       \tcall   664 <native_test+0x5d4>\n\t\t\t660: R_X86_64_PLT32\thi-0x4\n     664:\t0f 11 45 80          \tmovups %xmm0,-0x80(%rbp)\n     668:\t66 45 0f ef ff       \tpxor   %xmm15,%xmm15\n     66d:\tf3 44 0f 7f bd 70 ff \tmovdqu %xmm15,-0x90(%rbp)\n     674:\tff ff \n     676:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     67c:\t49 c1 e0 02          \tshl    $0x2,%r8\n     680:\t4c 8d 5d 80          \tlea    -0x80(%rbp),%r11\n     684:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n     688:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     68e:\t49 c1 e0 02          \tshl    $0x2,%r8\n     692:\t4c 8d 5d d0          \tlea    -0x30(%rbp),%r11\n     696:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     69a:\t44 3b 0f             \tcmp    (%rdi),%r9d\n     69d:\t41 0f 95 c0          \tsetne  %r8b\n     6a1:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     6a5:\t41 f7 d8             \tneg    %r8d\n     6a8:\t4d 63 c0             \tmovslq %r8d,%r8\n     6ab:\t41 b9 00 00 00 00    \tmov    $0x0,%r9d\n     6b1:\t49 c1 e1 02          \tshl    $0x2,%r9\n     6b5:\t4c 8d 9d 70 ff ff ff \tlea    -0x90(%rbp),%r11\n     6bc:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n     6c0:\t41 b8 01 00 00 00    \tmov    $0x1,%r8d\n     6c6:\t49 c1 e0 02          \tshl    $0x2,%r8\n     6ca:\t4c 8d 5d 80          \tlea    -0x80(%rbp),%r11\n     6ce:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n     6d2:\t41 b8 01 00 00 00    \tmov    $0x1,%r8d\n     6d8:\t49 c1 e0 02          \tshl    $0x2,%r8\n     6dc:\t4c 8d 5d d0          \tlea    -0x30(%rbp),%r11\n     6e0:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     6e4:\t44 3b 0f             \tcmp    (%rdi),%r9d\n     6e7:\t41 0f 95 c0          \tsetne  %r8b\n     6eb:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     6ef:\t41 f7 d8             \tneg    %r8d\n     6f2:\t4d 63 c0             \tmovslq %r8d,%r8\n     6f5:\t41 b9 01 00 00 00    \tmov    $0x1,%r9d\n     6fb:\t49 c1 e1 02          \tshl    $0x2,%r9\n     6ff:\t4c 8d 9d 70 ff ff ff \tlea    -0x90(%rbp),%r11\n     706:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n     70a:\t41 b8 02 00 00 00    \tmov    $0x2,%r8d\n     710:\t49 c1 e0 02          \tshl    $0x2,%r8\n     714:\t4c 8d 5d 80          \tlea    -0x80(%rbp),%r11\n     718:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n     71c:\t41 b8 02 00 00 00    \tmov    $0x2,%r8d\n     722:\t49 c1 e0 02          \tshl    $0x2,%r8\n     726:\t4c 8d 5d d0          \tlea    -0x30(%rbp),%r11\n     72a:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     72e:\t44 3b 0f             \tcmp    (%rdi),%r9d\n     731:\t41 0f 95 c0          \tsetne  %r8b\n     735:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     739:\t41 f7 d8             \tneg    %r8d\n     73c:\t4d 63 c0             \tmovslq %r8d,%r8\n     73f:\t41 b9 02 00 00 00    \tmov    $0x2,%r9d\n     745:\t49 c1 e1 02          \tshl    $0x2,%r9\n     749:\t4c 8d 9d 70 ff ff ff \tlea    -0x90(%rbp),%r11\n     750:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n     754:\t41 b8 03 00 00 00    \tmov    $0x3,%r8d\n     75a:\t49 c1 e0 02          \tshl    $0x2,%r8\n     75e:\t4c 8d 5d 80          \tlea    -0x80(%rbp),%r11\n     762:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n     766:\t41 b8 03 00 00 00    \tmov    $0x3,%r8d\n     76c:\t49 c1 e0 02          \tshl    $0x2,%r8\n     770:\t4c 8d 5d d0          \tlea    -0x30(%rbp),%r11\n     774:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     778:\t44 3b 0f             \tcmp    (%rdi),%r9d\n     77b:\t41 0f 95 c0          \tsetne  %r8b\n     77f:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     783:\t41 f7 d8             \tneg    %r8d\n     786:\t4d 63 c0             \tmovslq %r8d,%r8\n     789:\t41 b9 03 00 00 00    \tmov    $0x3,%r9d\n     78f:\t49 c1 e1 02          \tshl    $0x2,%r9\n     793:\t4c 8d 9d 70 ff ff ff \tlea    -0x90(%rbp),%r11\n     79a:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n     79e:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     7a4:\t49 c1 e0 02          \tshl    $0x2,%r8\n     7a8:\t4c 8d 9d 70 ff ff ff \tlea    -0x90(%rbp),%r11\n     7af:\t4f 8d 0c 03          \tlea    (%r11,%r8,1),%r9\n     7b3:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     7b9:\t45 0b 01             \tor     (%r9),%r8d\n     7bc:\t4d 63 c0             \tmovslq %r8d,%r8\n     7bf:\t41 b9 01 00 00 00    \tmov    $0x1,%r9d\n     7c5:\t49 c1 e1 02          \tshl    $0x2,%r9\n     7c9:\t4c 8d 9d 70 ff ff ff \tlea    -0x90(%rbp),%r11\n     7d0:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     7d4:\t44 0b 07             \tor     (%rdi),%r8d\n     7d7:\t4d 63 c0             \tmovslq %r8d,%r8\n     7da:\t41 b9 02 00 00 00    \tmov    $0x2,%r9d\n     7e0:\t49 c1 e1 02          \tshl    $0x2,%r9\n     7e4:\t4c 8d 9d 70 ff ff ff \tlea    -0x90(%rbp),%r11\n     7eb:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     7ef:\t44 0b 07             \tor     (%rdi),%r8d\n     7f2:\t4d 63 c0             \tmovslq %r8d,%r8\n     7f5:\t41 b9 03 00 00 00    \tmov    $0x3,%r9d\n     7fb:\t49 c1 e1 02          \tshl    $0x2,%r9\n     7ff:\t4c 8d 9d 70 ff ff ff \tlea    -0x90(%rbp),%r11\n     806:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     80a:\t44 0b 07             \tor     (%rdi),%r8d\n     80d:\t4d 63 c0             \tmovslq %r8d,%r8\n     810:\t45 85 c0             \ttest   %r8d,%r8d\n     813:\t41 0f 94 c1          \tsete   %r9b\n     817:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n     81b:\t4d 85 c9             \ttest   %r9,%r9\n     81e:\t41 0f 95 c0          \tsetne  %r8b\n     822:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     826:\t4c 89 85 68 ff ff ff \tmov    %r8,-0x98(%rbp)\n     82d:\te9 0b 00 00 00       \tjmp    83d <native_test+0x7ad>\n     832:\t48 c7 85 68 ff ff ff \tmovq   $0x0,-0x98(%rbp)\n     839:\t00 00 00 00 \n     83d:\t4c 8b 85 68 ff ff ff \tmov    -0x98(%rbp),%r8\n     844:\t49 63 c0             \tmovslq %r8d,%rax\n     847:\te9 00 00 00 00       \tjmp    84c <native_test+0x7bc>\n     84c:\tc9                   \tleave\n     84d:\tc3                   \tret\n\n000000000000084e <nw>:\n     84e:\t55                   \tpush   %rbp\n     84f:\t48 89 e5             \tmov    %rsp,%rbp\n     852:\t48 81 ec 50 00 00 00 \tsub    $0x50,%rsp\n     859:\t4c 89 7d f8          \tmov    %r15,-0x8(%rbp)\n     85d:\t4c 8d 7d f8          \tlea    -0x8(%rbp),%r15\n     861:\t49 81 e7 e0 ff ff ff \tand    $0xffffffffffffffe0,%r15\n     868:\tf3 44 0f 6f 7d 10    \tmovdqu 0x10(%rbp),%xmm15\n     86e:\tf3 45 0f 7f 7f e0    \tmovdqu %xmm15,-0x20(%r15)\n     874:\tf3 44 0f 6f 7d 20    \tmovdqu 0x20(%rbp),%xmm15\n     87a:\tf3 45 0f 7f 7f f0    \tmovdqu %xmm15,-0x10(%r15)\n     880:\t41 0f 10 47 e0       \tmovups -0x20(%r15),%xmm0\n     885:\t41 0f 10 4f f0       \tmovups -0x10(%r15),%xmm1\n     88a:\te9 00 00 00 00       \tjmp    88f <nw+0x41>\n     88f:\t4c 8b 7d f8          \tmov    -0x8(%rbp),%r15\n     893:\tc9                   \tleave\n     894:\tc3                   \tret\n\n0000000000000895 <nx>:\n     895:\t55                   \tpush   %rbp\n     896:\t48 89 e5             \tmov    %rsp,%rbp\n     899:\t48 81 ec 90 00 00 00 \tsub    $0x90,%rsp\n     8a0:\t4c 89 7d f8          \tmov    %r15,-0x8(%rbp)\n     8a4:\t4c 8d 7d f8          \tlea    -0x8(%rbp),%r15\n     8a8:\t49 81 e7 c0 ff ff ff \tand    $0xffffffffffffffc0,%r15\n     8af:\tf3 44 0f 6f 7d 10    \tmovdqu 0x10(%rbp),%xmm15\n     8b5:\tf3 45 0f 7f 7f c0    \tmovdqu %xmm15,-0x40(%r15)\n     8bb:\tf3 44 0f 6f 7d 20    \tmovdqu 0x20(%rbp),%xmm15\n     8c1:\tf3 45 0f 7f 7f d0    \tmovdqu %xmm15,-0x30(%r15)\n     8c7:\tf3 44 0f 6f 7d 30    \tmovdqu 0x30(%rbp),%xmm15\n     8cd:\tf3 45 0f 7f 7f e0    \tmovdqu %xmm15,-0x20(%r15)\n     8d3:\tf3 44 0f 6f 7d 40    \tmovdqu 0x40(%rbp),%xmm15\n     8d9:\tf3 45 0f 7f 7f f0    \tmovdqu %xmm15,-0x10(%r15)\n     8df:\t41 0f 10 47 c0       \tmovups -0x40(%r15),%xmm0\n     8e4:\t41 0f 10 4f d0       \tmovups -0x30(%r15),%xmm1\n     8e9:\t41 0f 10 57 e0       \tmovups -0x20(%r15),%xmm2\n     8ee:\t41 0f 10 5f f0       \tmovups -0x10(%r15),%xmm3\n     8f3:\te9 00 00 00 00       \tjmp    8f8 <nx+0x63>\n     8f8:\t4c 8b 7d f8          \tmov    -0x8(%rbp),%r15\n     8fc:\tc9                   \tleave\n     8fd:\tc3                   \tret\n\n00000000000008fe <ny>:\n     8fe:\t55                   \tpush   %rbp\n     8ff:\t48 89 e5             \tmov    %rsp,%rbp\n     902:\t48 81 ec 90 01 00 00 \tsub    $0x190,%rsp\n     909:\t4c 89 7d f8          \tmov    %r15,-0x8(%rbp)\n     90d:\t4c 8d 7d f8          \tlea    -0x8(%rbp),%r15\n     911:\t49 81 e7 80 ff ff ff \tand    $0xffffffffffffff80,%r15\n     918:\t49 89 7f f8          \tmov    %rdi,-0x8(%r15)\n     91c:\t49 8d 87 00 ff ff ff \tlea    -0x100(%r15),%rax\n     923:\t48 8d 75 10          \tlea    0x10(%rbp),%rsi\n     927:\t48 89 c7             \tmov    %rax,%rdi\n     92a:\tb9 80 00 00 00       \tmov    $0x80,%ecx\n     92f:\tf3 a4                \trep movsb (%rsi),(%rdi)\n     931:\t4d 8b 57 f8          \tmov    -0x8(%r15),%r10\n     935:\t49 8d 02             \tlea    (%r10),%rax\n     938:\t49 8d b7 00 ff ff ff \tlea    -0x100(%r15),%rsi\n     93f:\t48 89 c7             \tmov    %rax,%rdi\n     942:\tb9 80 00 00 00       \tmov    $0x80,%ecx\n     947:\tf3 a4                \trep movsb (%rsi),(%rdi)\n     949:\t49 8b 47 f8          \tmov    -0x8(%r15),%rax\n     94d:\te9 00 00 00 00       \tjmp    952 <ny+0x54>\n     952:\t4c 8b 7d f8          \tmov    -0x8(%rbp),%r15\n     956:\tc9                   \tleave\n     957:\tc3                   \tret\n\n0000000000000958 <native_wide>:\n     958:\t55                   \tpush   %rbp\n     959:\t48 89 e5             \tmov    %rsp,%rbp\n     95c:\t48 81 ec c0 04 00 00 \tsub    $0x4c0,%rsp\n     963:\t4c 89 7d f8          \tmov    %r15,-0x8(%rbp)\n     967:\t4c 8d 7d f8          \tlea    -0x8(%rbp),%r15\n     96b:\t49 81 e7 80 ff ff ff \tand    $0xffffffffffffff80,%r15\n     972:\t49 8d 7f e0          \tlea    -0x20(%r15),%rdi\n     976:\tb9 20 00 00 00       \tmov    $0x20,%ecx\n     97b:\tb8 00 00 00 00       \tmov    $0x0,%eax\n     980:\tf3 aa                \trep stos %al,(%rdi)\n     982:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     988:\t49 c1 e0 02          \tshl    $0x2,%r8\n     98c:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     990:\t43 c7 04 03 01 00 00 \tmovl   $0x1,(%r11,%r8,1)\n     997:\t00 \n     998:\t41 b8 01 00 00 00    \tmov    $0x1,%r8d\n     99e:\t49 c1 e0 02          \tshl    $0x2,%r8\n     9a2:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     9a6:\t43 c7 04 03 02 00 00 \tmovl   $0x2,(%r11,%r8,1)\n     9ad:\t00 \n     9ae:\t41 b8 02 00 00 00    \tmov    $0x2,%r8d\n     9b4:\t49 c1 e0 02          \tshl    $0x2,%r8\n     9b8:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     9bc:\t43 c7 04 03 03 00 00 \tmovl   $0x3,(%r11,%r8,1)\n     9c3:\t00 \n     9c4:\t41 b8 03 00 00 00    \tmov    $0x3,%r8d\n     9ca:\t49 c1 e0 02          \tshl    $0x2,%r8\n     9ce:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     9d2:\t43 c7 04 03 04 00 00 \tmovl   $0x4,(%r11,%r8,1)\n     9d9:\t00 \n     9da:\t41 b8 04 00 00 00    \tmov    $0x4,%r8d\n     9e0:\t49 c1 e0 02          \tshl    $0x2,%r8\n     9e4:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     9e8:\t43 c7 04 03 05 00 00 \tmovl   $0x5,(%r11,%r8,1)\n     9ef:\t00 \n     9f0:\t41 b8 05 00 00 00    \tmov    $0x5,%r8d\n     9f6:\t49 c1 e0 02          \tshl    $0x2,%r8\n     9fa:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     9fe:\t43 c7 04 03 06 00 00 \tmovl   $0x6,(%r11,%r8,1)\n     a05:\t00 \n     a06:\t41 b8 06 00 00 00    \tmov    $0x6,%r8d\n     a0c:\t49 c1 e0 02          \tshl    $0x2,%r8\n     a10:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     a14:\t43 c7 04 03 07 00 00 \tmovl   $0x7,(%r11,%r8,1)\n     a1b:\t00 \n     a1c:\t41 b8 07 00 00 00    \tmov    $0x7,%r8d\n     a22:\t49 c1 e0 02          \tshl    $0x2,%r8\n     a26:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     a2a:\t43 c7 04 03 08 00 00 \tmovl   $0x8,(%r11,%r8,1)\n     a31:\t00 \n     a32:\t49 8d 7f 80          \tlea    -0x80(%r15),%rdi\n     a36:\tb9 40 00 00 00       \tmov    $0x40,%ecx\n     a3b:\tb8 00 00 00 00       \tmov    $0x0,%eax\n     a40:\tf3 aa                \trep stos %al,(%rdi)\n     a42:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     a48:\t49 c1 e0 02          \tshl    $0x2,%r8\n     a4c:\t4d 8d 5f 80          \tlea    -0x80(%r15),%r11\n     a50:\t43 c7 04 03 09 00 00 \tmovl   $0x9,(%r11,%r8,1)\n     a57:\t00 \n     a58:\t41 b8 01 00 00 00    \tmov    $0x1,%r8d\n     a5e:\t49 c1 e0 02          \tshl    $0x2,%r8\n     a62:\t4d 8d 5f 80          \tlea    -0x80(%r15),%r11\n     a66:\t43 c7 04 03 0a 00 00 \tmovl   $0xa,(%r11,%r8,1)\n     a6d:\t00 \n     a6e:\t41 b8 02 00 00 00    \tmov    $0x2,%r8d\n     a74:\t49 c1 e0 02          \tshl    $0x2,%r8\n     a78:\t4d 8d 5f 80          \tlea    -0x80(%r15),%r11\n     a7c:\t43 c7 04 03 0b 00 00 \tmovl   $0xb,(%r11,%r8,1)\n     a83:\t00 \n     a84:\t49 8d bf 00 ff ff ff \tlea    -0x100(%r15),%rdi\n     a8b:\tb9 80 00 00 00       \tmov    $0x80,%ecx\n     a90:\tb8 00 00 00 00       \tmov    $0x0,%eax\n     a95:\tf3 aa                \trep stos %al,(%rdi)\n     a97:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     a9d:\t49 c1 e0 02          \tshl    $0x2,%r8\n     aa1:\t4d 8d 9f 00 ff ff ff \tlea    -0x100(%r15),%r11\n     aa8:\t43 c7 04 03 11 00 00 \tmovl   $0x11,(%r11,%r8,1)\n     aaf:\t00 \n     ab0:\t41 b8 01 00 00 00    \tmov    $0x1,%r8d\n     ab6:\t49 c1 e0 02          \tshl    $0x2,%r8\n     aba:\t4d 8d 9f 00 ff ff ff \tlea    -0x100(%r15),%r11\n     ac1:\t43 c7 04 03 12 00 00 \tmovl   $0x12,(%r11,%r8,1)\n     ac8:\t00 \n     ac9:\t41 b8 02 00 00 00    \tmov    $0x2,%r8d\n     acf:\t49 c1 e0 02          \tshl    $0x2,%r8\n     ad3:\t4d 8d 9f 00 ff ff ff \tlea    -0x100(%r15),%r11\n     ada:\t43 c7 04 03 13 00 00 \tmovl   $0x13,(%r11,%r8,1)\n     ae1:\t00 \n     ae2:\t49 89 a7 d8 fe ff ff \tmov    %rsp,-0x128(%r15)\n     ae9:\t48 83 ec 20          \tsub    $0x20,%rsp\n     aed:\t48 83 e4 e0          \tand    $0xffffffffffffffe0,%rsp\n     af1:\tf3 45 0f 6f 7f e0    \tmovdqu -0x20(%r15),%xmm15\n     af7:\tf3 44 0f 7f 3c 24    \tmovdqu %xmm15,(%rsp)\n     afd:\tf3 45 0f 6f 7f f0    \tmovdqu -0x10(%r15),%xmm15\n     b03:\tf3 44 0f 7f 7c 24 10 \tmovdqu %xmm15,0x10(%rsp)\n     b0a:\te8 00 00 00 00       \tcall   b0f <native_wide+0x1b7>\n\t\t\tb0b: R_X86_64_PLT32\thw-0x4\n     b0f:\t49 8b a7 d8 fe ff ff \tmov    -0x128(%r15),%rsp\n     b16:\t41 0f 11 87 e0 fe ff \tmovups %xmm0,-0x120(%r15)\n     b1d:\tff \n     b1e:\t41 0f 11 8f f0 fe ff \tmovups %xmm1,-0x110(%r15)\n     b25:\tff \n     b26:\t49 8d bf a0 fe ff ff \tlea    -0x160(%r15),%rdi\n     b2d:\tb9 20 00 00 00       \tmov    $0x20,%ecx\n     b32:\tb8 00 00 00 00       \tmov    $0x0,%eax\n     b37:\tf3 aa                \trep stos %al,(%rdi)\n     b39:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     b3f:\t49 c1 e0 02          \tshl    $0x2,%r8\n     b43:\t4d 8d 9f e0 fe ff ff \tlea    -0x120(%r15),%r11\n     b4a:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n     b4e:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     b54:\t49 c1 e0 02          \tshl    $0x2,%r8\n     b58:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     b5c:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     b60:\t44 3b 0f             \tcmp    (%rdi),%r9d\n     b63:\t41 0f 95 c0          \tsetne  %r8b\n     b67:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     b6b:\t41 f7 d8             \tneg    %r8d\n     b6e:\t4d 63 c0             \tmovslq %r8d,%r8\n     b71:\t41 b9 00 00 00 00    \tmov    $0x0,%r9d\n     b77:\t49 c1 e1 02          \tshl    $0x2,%r9\n     b7b:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     b82:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n     b86:\t41 b8 01 00 00 00    \tmov    $0x1,%r8d\n     b8c:\t49 c1 e0 02          \tshl    $0x2,%r8\n     b90:\t4d 8d 9f e0 fe ff ff \tlea    -0x120(%r15),%r11\n     b97:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n     b9b:\t41 b8 01 00 00 00    \tmov    $0x1,%r8d\n     ba1:\t49 c1 e0 02          \tshl    $0x2,%r8\n     ba5:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     ba9:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     bad:\t44 3b 0f             \tcmp    (%rdi),%r9d\n     bb0:\t41 0f 95 c0          \tsetne  %r8b\n     bb4:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     bb8:\t41 f7 d8             \tneg    %r8d\n     bbb:\t4d 63 c0             \tmovslq %r8d,%r8\n     bbe:\t41 b9 01 00 00 00    \tmov    $0x1,%r9d\n     bc4:\t49 c1 e1 02          \tshl    $0x2,%r9\n     bc8:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     bcf:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n     bd3:\t41 b8 02 00 00 00    \tmov    $0x2,%r8d\n     bd9:\t49 c1 e0 02          \tshl    $0x2,%r8\n     bdd:\t4d 8d 9f e0 fe ff ff \tlea    -0x120(%r15),%r11\n     be4:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n     be8:\t41 b8 02 00 00 00    \tmov    $0x2,%r8d\n     bee:\t49 c1 e0 02          \tshl    $0x2,%r8\n     bf2:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     bf6:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     bfa:\t44 3b 0f             \tcmp    (%rdi),%r9d\n     bfd:\t41 0f 95 c0          \tsetne  %r8b\n     c01:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     c05:\t41 f7 d8             \tneg    %r8d\n     c08:\t4d 63 c0             \tmovslq %r8d,%r8\n     c0b:\t41 b9 02 00 00 00    \tmov    $0x2,%r9d\n     c11:\t49 c1 e1 02          \tshl    $0x2,%r9\n     c15:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     c1c:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n     c20:\t41 b8 03 00 00 00    \tmov    $0x3,%r8d\n     c26:\t49 c1 e0 02          \tshl    $0x2,%r8\n     c2a:\t4d 8d 9f e0 fe ff ff \tlea    -0x120(%r15),%r11\n     c31:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n     c35:\t41 b8 03 00 00 00    \tmov    $0x3,%r8d\n     c3b:\t49 c1 e0 02          \tshl    $0x2,%r8\n     c3f:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     c43:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     c47:\t44 3b 0f             \tcmp    (%rdi),%r9d\n     c4a:\t41 0f 95 c0          \tsetne  %r8b\n     c4e:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     c52:\t41 f7 d8             \tneg    %r8d\n     c55:\t4d 63 c0             \tmovslq %r8d,%r8\n     c58:\t41 b9 03 00 00 00    \tmov    $0x3,%r9d\n     c5e:\t49 c1 e1 02          \tshl    $0x2,%r9\n     c62:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     c69:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n     c6d:\t41 b8 04 00 00 00    \tmov    $0x4,%r8d\n     c73:\t49 c1 e0 02          \tshl    $0x2,%r8\n     c77:\t4d 8d 9f e0 fe ff ff \tlea    -0x120(%r15),%r11\n     c7e:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n     c82:\t41 b8 04 00 00 00    \tmov    $0x4,%r8d\n     c88:\t49 c1 e0 02          \tshl    $0x2,%r8\n     c8c:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     c90:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     c94:\t44 3b 0f             \tcmp    (%rdi),%r9d\n     c97:\t41 0f 95 c0          \tsetne  %r8b\n     c9b:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     c9f:\t41 f7 d8             \tneg    %r8d\n     ca2:\t4d 63 c0             \tmovslq %r8d,%r8\n     ca5:\t41 b9 04 00 00 00    \tmov    $0x4,%r9d\n     cab:\t49 c1 e1 02          \tshl    $0x2,%r9\n     caf:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     cb6:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n     cba:\t41 b8 05 00 00 00    \tmov    $0x5,%r8d\n     cc0:\t49 c1 e0 02          \tshl    $0x2,%r8\n     cc4:\t4d 8d 9f e0 fe ff ff \tlea    -0x120(%r15),%r11\n     ccb:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n     ccf:\t41 b8 05 00 00 00    \tmov    $0x5,%r8d\n     cd5:\t49 c1 e0 02          \tshl    $0x2,%r8\n     cd9:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     cdd:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     ce1:\t44 3b 0f             \tcmp    (%rdi),%r9d\n     ce4:\t41 0f 95 c0          \tsetne  %r8b\n     ce8:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     cec:\t41 f7 d8             \tneg    %r8d\n     cef:\t4d 63 c0             \tmovslq %r8d,%r8\n     cf2:\t41 b9 05 00 00 00    \tmov    $0x5,%r9d\n     cf8:\t49 c1 e1 02          \tshl    $0x2,%r9\n     cfc:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     d03:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n     d07:\t41 b8 06 00 00 00    \tmov    $0x6,%r8d\n     d0d:\t49 c1 e0 02          \tshl    $0x2,%r8\n     d11:\t4d 8d 9f e0 fe ff ff \tlea    -0x120(%r15),%r11\n     d18:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n     d1c:\t41 b8 06 00 00 00    \tmov    $0x6,%r8d\n     d22:\t49 c1 e0 02          \tshl    $0x2,%r8\n     d26:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     d2a:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     d2e:\t44 3b 0f             \tcmp    (%rdi),%r9d\n     d31:\t41 0f 95 c0          \tsetne  %r8b\n     d35:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     d39:\t41 f7 d8             \tneg    %r8d\n     d3c:\t4d 63 c0             \tmovslq %r8d,%r8\n     d3f:\t41 b9 06 00 00 00    \tmov    $0x6,%r9d\n     d45:\t49 c1 e1 02          \tshl    $0x2,%r9\n     d49:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     d50:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n     d54:\t41 b8 07 00 00 00    \tmov    $0x7,%r8d\n     d5a:\t49 c1 e0 02          \tshl    $0x2,%r8\n     d5e:\t4d 8d 9f e0 fe ff ff \tlea    -0x120(%r15),%r11\n     d65:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n     d69:\t41 b8 07 00 00 00    \tmov    $0x7,%r8d\n     d6f:\t49 c1 e0 02          \tshl    $0x2,%r8\n     d73:\t4d 8d 5f e0          \tlea    -0x20(%r15),%r11\n     d77:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     d7b:\t44 3b 0f             \tcmp    (%rdi),%r9d\n     d7e:\t41 0f 95 c0          \tsetne  %r8b\n     d82:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     d86:\t41 f7 d8             \tneg    %r8d\n     d89:\t4d 63 c0             \tmovslq %r8d,%r8\n     d8c:\t41 b9 07 00 00 00    \tmov    $0x7,%r9d\n     d92:\t49 c1 e1 02          \tshl    $0x2,%r9\n     d96:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     d9d:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n     da1:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     da7:\t49 c1 e0 02          \tshl    $0x2,%r8\n     dab:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     db2:\t4f 8d 0c 03          \tlea    (%r11,%r8,1),%r9\n     db6:\t41 b8 00 00 00 00    \tmov    $0x0,%r8d\n     dbc:\t45 0b 01             \tor     (%r9),%r8d\n     dbf:\t4d 63 c0             \tmovslq %r8d,%r8\n     dc2:\t41 b9 01 00 00 00    \tmov    $0x1,%r9d\n     dc8:\t49 c1 e1 02          \tshl    $0x2,%r9\n     dcc:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     dd3:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     dd7:\t44 0b 07             \tor     (%rdi),%r8d\n     dda:\t4d 63 c0             \tmovslq %r8d,%r8\n     ddd:\t41 b9 02 00 00 00    \tmov    $0x2,%r9d\n     de3:\t49 c1 e1 02          \tshl    $0x2,%r9\n     de7:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     dee:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     df2:\t44 0b 07             \tor     (%rdi),%r8d\n     df5:\t4d 63 c0             \tmovslq %r8d,%r8\n     df8:\t41 b9 03 00 00 00    \tmov    $0x3,%r9d\n     dfe:\t49 c1 e1 02          \tshl    $0x2,%r9\n     e02:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     e09:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     e0d:\t44 0b 07             \tor     (%rdi),%r8d\n     e10:\t4d 63 c0             \tmovslq %r8d,%r8\n     e13:\t41 b9 04 00 00 00    \tmov    $0x4,%r9d\n     e19:\t49 c1 e1 02          \tshl    $0x2,%r9\n     e1d:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     e24:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     e28:\t44 0b 07             \tor     (%rdi),%r8d\n     e2b:\t4d 63 c0             \tmovslq %r8d,%r8\n     e2e:\t41 b9 05 00 00 00    \tmov    $0x5,%r9d\n     e34:\t49 c1 e1 02          \tshl    $0x2,%r9\n     e38:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     e3f:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     e43:\t44 0b 07             \tor     (%rdi),%r8d\n     e46:\t4d 63 c0             \tmovslq %r8d,%r8\n     e49:\t41 b9 06 00 00 00    \tmov    $0x6,%r9d\n     e4f:\t49 c1 e1 02          \tshl    $0x2,%r9\n     e53:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     e5a:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     e5e:\t44 0b 07             \tor     (%rdi),%r8d\n     e61:\t4d 63 c0             \tmovslq %r8d,%r8\n     e64:\t41 b9 07 00 00 00    \tmov    $0x7,%r9d\n     e6a:\t49 c1 e1 02          \tshl    $0x2,%r9\n     e6e:\t4d 8d 9f a0 fe ff ff \tlea    -0x160(%r15),%r11\n     e75:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     e79:\t44 0b 07             \tor     (%rdi),%r8d\n     e7c:\t4d 63 c0             \tmovslq %r8d,%r8\n     e7f:\t45 85 c0             \ttest   %r8d,%r8d\n     e82:\t0f 84 05 00 00 00    \tje     e8d <native_wide+0x535>\n     e88:\te9 ad 01 00 00       \tjmp    103a <native_wide+0x6e2>\n     e8d:\t49 89 a7 38 fe ff ff \tmov    %rsp,-0x1c8(%r15)\n     e94:\t48 83 ec 40          \tsub    $0x40,%rsp\n     e98:\t48 83 e4 c0          \tand    $0xffffffffffffffc0,%rsp\n     e9c:\tf3 45 0f 6f 7f 80    \tmovdqu -0x80(%r15),%xmm15\n     ea2:\tf3 44 0f 7f 3c 24    \tmovdqu %xmm15,(%rsp)\n     ea8:\tf3 45 0f 6f 7f 90    \tmovdqu -0x70(%r15),%xmm15\n     eae:\tf3 44 0f 7f 7c 24 10 \tmovdqu %xmm15,0x10(%rsp)\n     eb5:\tf3 45 0f 6f 7f a0    \tmovdqu -0x60(%r15),%xmm15\n     ebb:\tf3 44 0f 7f 7c 24 20 \tmovdqu %xmm15,0x20(%rsp)\n     ec2:\tf3 45 0f 6f 7f b0    \tmovdqu -0x50(%r15),%xmm15\n     ec8:\tf3 44 0f 7f 7c 24 30 \tmovdqu %xmm15,0x30(%rsp)\n     ecf:\te8 00 00 00 00       \tcall   ed4 <native_wide+0x57c>\n\t\t\ted0: R_X86_64_PLT32\thx-0x4\n     ed4:\t49 8b a7 38 fe ff ff \tmov    -0x1c8(%r15),%rsp\n     edb:\t41 0f 11 87 40 fe ff \tmovups %xmm0,-0x1c0(%r15)\n     ee2:\tff \n     ee3:\t41 0f 11 8f 50 fe ff \tmovups %xmm1,-0x1b0(%r15)\n     eea:\tff \n     eeb:\t41 0f 11 97 60 fe ff \tmovups %xmm2,-0x1a0(%r15)\n     ef2:\tff \n     ef3:\t41 0f 11 9f 70 fe ff \tmovups %xmm3,-0x190(%r15)\n     efa:\tff \n     efb:\t49 8d bf c0 fd ff ff \tlea    -0x240(%r15),%rdi\n     f02:\tb9 40 00 00 00       \tmov    $0x40,%ecx\n     f07:\tb8 00 00 00 00       \tmov    $0x0,%eax\n     f0c:\tf3 aa                \trep stos %al,(%rdi)\n     f0e:\t49 c7 87 b8 fd ff ff \tmovq   $0x0,-0x248(%r15)\n     f15:\t00 00 00 00 \n     f19:\t4d 8b 97 b8 fd ff ff \tmov    -0x248(%r15),%r10\n     f20:\t4d 89 97 b0 fd ff ff \tmov    %r10,-0x250(%r15)\n     f27:\t49 83 fa 10          \tcmp    $0x10,%r10\n     f2b:\t0f 82 05 00 00 00    \tjb     f36 <native_wide+0x5de>\n     f31:\te9 67 00 00 00       \tjmp    f9d <native_wide+0x645>\n     f36:\t4d 8b 87 b0 fd ff ff \tmov    -0x250(%r15),%r8\n     f3d:\t49 c1 e0 02          \tshl    $0x2,%r8\n     f41:\t4d 8d 9f 40 fe ff ff \tlea    -0x1c0(%r15),%r11\n     f48:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n     f4c:\t4d 8b 87 b0 fd ff ff \tmov    -0x250(%r15),%r8\n     f53:\t49 c1 e0 02          \tshl    $0x2,%r8\n     f57:\t4d 8d 5f 80          \tlea    -0x80(%r15),%r11\n     f5b:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n     f5f:\t44 3b 0f             \tcmp    (%rdi),%r9d\n     f62:\t41 0f 95 c0          \tsetne  %r8b\n     f66:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n     f6a:\t41 f7 d8             \tneg    %r8d\n     f6d:\t4d 63 c0             \tmovslq %r8d,%r8\n     f70:\t4d 8b 8f b0 fd ff ff \tmov    -0x250(%r15),%r9\n     f77:\t49 c1 e1 02          \tshl    $0x2,%r9\n     f7b:\t4d 8d 9f c0 fd ff ff \tlea    -0x240(%r15),%r11\n     f82:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n     f86:\t4d 8b 87 b0 fd ff ff \tmov    -0x250(%r15),%r8\n     f8d:\t49 83 c0 01          \tadd    $0x1,%r8\n     f91:\t4d 89 87 b8 fd ff ff \tmov    %r8,-0x248(%r15)\n     f98:\te9 7c ff ff ff       \tjmp    f19 <native_wide+0x5c1>\n     f9d:\t41 c7 87 a8 fd ff ff \tmovl   $0x0,-0x258(%r15)\n     fa4:\t00 00 00 00 \n     fa8:\t49 c7 87 a0 fd ff ff \tmovq   $0x0,-0x260(%r15)\n     faf:\t00 00 00 00 \n     fb3:\t4d 8b 97 a0 fd ff ff \tmov    -0x260(%r15),%r10\n     fba:\t4d 89 97 98 fd ff ff \tmov    %r10,-0x268(%r15)\n     fc1:\t49 83 fa 10          \tcmp    $0x10,%r10\n     fc5:\t0f 82 05 00 00 00    \tjb     fd0 <native_wide+0x678>\n     fcb:\te9 41 00 00 00       \tjmp    1011 <native_wide+0x6b9>\n     fd0:\t4d 63 87 a8 fd ff ff \tmovslq -0x258(%r15),%r8\n     fd7:\t4d 8b 8f 98 fd ff ff \tmov    -0x268(%r15),%r9\n     fde:\t49 c1 e1 02          \tshl    $0x2,%r9\n     fe2:\t4d 8d 9f c0 fd ff ff \tlea    -0x240(%r15),%r11\n     fe9:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n     fed:\t44 0b 07             \tor     (%rdi),%r8d\n     ff0:\t4d 63 c0             \tmovslq %r8d,%r8\n     ff3:\t45 89 87 a8 fd ff ff \tmov    %r8d,-0x258(%r15)\n     ffa:\t4d 8b 87 98 fd ff ff \tmov    -0x268(%r15),%r8\n    1001:\t49 83 c0 01          \tadd    $0x1,%r8\n    1005:\t4d 89 87 a0 fd ff ff \tmov    %r8,-0x260(%r15)\n    100c:\te9 a2 ff ff ff       \tjmp    fb3 <native_wide+0x65b>\n    1011:\t4d 63 87 a8 fd ff ff \tmovslq -0x258(%r15),%r8\n    1018:\t45 85 c0             \ttest   %r8d,%r8d\n    101b:\t41 0f 94 c1          \tsete   %r9b\n    101f:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n    1023:\t4d 85 c9             \ttest   %r9,%r9\n    1026:\t41 0f 95 c0          \tsetne  %r8b\n    102a:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n    102e:\t4d 89 87 90 fd ff ff \tmov    %r8,-0x270(%r15)\n    1035:\te9 0b 00 00 00       \tjmp    1045 <native_wide+0x6ed>\n    103a:\t49 c7 87 90 fd ff ff \tmovq   $0x0,-0x270(%r15)\n    1041:\t00 00 00 00 \n    1045:\t4d 8b 87 90 fd ff ff \tmov    -0x270(%r15),%r8\n    104c:\t4d 85 c0             \ttest   %r8,%r8\n    104f:\t0f 85 05 00 00 00    \tjne    105a <native_wide+0x702>\n    1055:\te9 9b 01 00 00       \tjmp    11f5 <native_wide+0x89d>\n    105a:\t4d 8d 97 00 fd ff ff \tlea    -0x300(%r15),%r10\n    1061:\t4d 89 97 f8 fc ff ff \tmov    %r10,-0x308(%r15)\n    1068:\t4d 8d 97 00 ff ff ff \tlea    -0x100(%r15),%r10\n    106f:\t4d 89 97 f0 fc ff ff \tmov    %r10,-0x310(%r15)\n    1076:\t49 89 a7 e8 fc ff ff \tmov    %rsp,-0x318(%r15)\n    107d:\t48 81 ec 80 00 00 00 \tsub    $0x80,%rsp\n    1084:\t48 83 e4 80          \tand    $0xffffffffffffff80,%rsp\n    1088:\t4d 8b 97 f0 fc ff ff \tmov    -0x310(%r15),%r10\n    108f:\t48 8d 04 24          \tlea    (%rsp),%rax\n    1093:\t49 8d 32             \tlea    (%r10),%rsi\n    1096:\t48 89 c7             \tmov    %rax,%rdi\n    1099:\tb9 80 00 00 00       \tmov    $0x80,%ecx\n    109e:\tf3 a4                \trep movsb (%rsi),(%rdi)\n    10a0:\t49 8b bf f8 fc ff ff \tmov    -0x308(%r15),%rdi\n    10a7:\te8 00 00 00 00       \tcall   10ac <native_wide+0x754>\n\t\t\t10a8: R_X86_64_PLT32\thy-0x4\n    10ac:\t49 8b a7 e8 fc ff ff \tmov    -0x318(%r15),%rsp\n    10b3:\t49 8d bf 00 fc ff ff \tlea    -0x400(%r15),%rdi\n    10ba:\tb9 80 00 00 00       \tmov    $0x80,%ecx\n    10bf:\tb8 00 00 00 00       \tmov    $0x0,%eax\n    10c4:\tf3 aa                \trep stos %al,(%rdi)\n    10c6:\t49 c7 87 f8 fb ff ff \tmovq   $0x0,-0x408(%r15)\n    10cd:\t00 00 00 00 \n    10d1:\t4d 8b 97 f8 fb ff ff \tmov    -0x408(%r15),%r10\n    10d8:\t4d 89 97 f0 fb ff ff \tmov    %r10,-0x410(%r15)\n    10df:\t49 83 fa 20          \tcmp    $0x20,%r10\n    10e3:\t0f 82 05 00 00 00    \tjb     10ee <native_wide+0x796>\n    10e9:\te9 6a 00 00 00       \tjmp    1158 <native_wide+0x800>\n    10ee:\t4d 8b 87 f0 fb ff ff \tmov    -0x410(%r15),%r8\n    10f5:\t49 c1 e0 02          \tshl    $0x2,%r8\n    10f9:\t4d 8d 9f 00 fd ff ff \tlea    -0x300(%r15),%r11\n    1100:\t4f 63 0c 03          \tmovslq (%r11,%r8,1),%r9\n    1104:\t4d 8b 87 f0 fb ff ff \tmov    -0x410(%r15),%r8\n    110b:\t49 c1 e0 02          \tshl    $0x2,%r8\n    110f:\t4d 8d 9f 00 ff ff ff \tlea    -0x100(%r15),%r11\n    1116:\t4b 8d 3c 03          \tlea    (%r11,%r8,1),%rdi\n    111a:\t44 3b 0f             \tcmp    (%rdi),%r9d\n    111d:\t41 0f 95 c0          \tsetne  %r8b\n    1121:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n    1125:\t41 f7 d8             \tneg    %r8d\n    1128:\t4d 63 c0             \tmovslq %r8d,%r8\n    112b:\t4d 8b 8f f0 fb ff ff \tmov    -0x410(%r15),%r9\n    1132:\t49 c1 e1 02          \tshl    $0x2,%r9\n    1136:\t4d 8d 9f 00 fc ff ff \tlea    -0x400(%r15),%r11\n    113d:\t47 89 04 0b          \tmov    %r8d,(%r11,%r9,1)\n    1141:\t4d 8b 87 f0 fb ff ff \tmov    -0x410(%r15),%r8\n    1148:\t49 83 c0 01          \tadd    $0x1,%r8\n    114c:\t4d 89 87 f8 fb ff ff \tmov    %r8,-0x408(%r15)\n    1153:\te9 79 ff ff ff       \tjmp    10d1 <native_wide+0x779>\n    1158:\t41 c7 87 e8 fb ff ff \tmovl   $0x0,-0x418(%r15)\n    115f:\t00 00 00 00 \n    1163:\t49 c7 87 e0 fb ff ff \tmovq   $0x0,-0x420(%r15)\n    116a:\t00 00 00 00 \n    116e:\t4d 8b 97 e0 fb ff ff \tmov    -0x420(%r15),%r10\n    1175:\t4d 89 97 d8 fb ff ff \tmov    %r10,-0x428(%r15)\n    117c:\t49 83 fa 20          \tcmp    $0x20,%r10\n    1180:\t0f 82 05 00 00 00    \tjb     118b <native_wide+0x833>\n    1186:\te9 41 00 00 00       \tjmp    11cc <native_wide+0x874>\n    118b:\t4d 63 87 e8 fb ff ff \tmovslq -0x418(%r15),%r8\n    1192:\t4d 8b 8f d8 fb ff ff \tmov    -0x428(%r15),%r9\n    1199:\t49 c1 e1 02          \tshl    $0x2,%r9\n    119d:\t4d 8d 9f 00 fc ff ff \tlea    -0x400(%r15),%r11\n    11a4:\t4b 8d 3c 0b          \tlea    (%r11,%r9,1),%rdi\n    11a8:\t44 0b 07             \tor     (%rdi),%r8d\n    11ab:\t4d 63 c0             \tmovslq %r8d,%r8\n    11ae:\t45 89 87 e8 fb ff ff \tmov    %r8d,-0x418(%r15)\n    11b5:\t4d 8b 87 d8 fb ff ff \tmov    -0x428(%r15),%r8\n    11bc:\t49 83 c0 01          \tadd    $0x1,%r8\n    11c0:\t4d 89 87 e0 fb ff ff \tmov    %r8,-0x420(%r15)\n    11c7:\te9 a2 ff ff ff       \tjmp    116e <native_wide+0x816>\n    11cc:\t4d 63 87 e8 fb ff ff \tmovslq -0x418(%r15),%r8\n    11d3:\t45 85 c0             \ttest   %r8d,%r8d\n    11d6:\t41 0f 94 c1          \tsete   %r9b\n    11da:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n    11de:\t4d 85 c9             \ttest   %r9,%r9\n    11e1:\t41 0f 95 c0          \tsetne  %r8b\n    11e5:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n    11e9:\t4d 89 87 d0 fb ff ff \tmov    %r8,-0x430(%r15)\n    11f0:\te9 0b 00 00 00       \tjmp    1200 <native_wide+0x8a8>\n    11f5:\t49 c7 87 d0 fb ff ff \tmovq   $0x0,-0x430(%r15)\n    11fc:\t00 00 00 00 \n    1200:\t4d 8b 87 d0 fb ff ff \tmov    -0x430(%r15),%r8\n    1207:\t49 63 c0             \tmovslq %r8d,%rax\n    120a:\te9 00 00 00 00       \tjmp    120f <native_wide+0x8b7>\n    120f:\t4c 8b 7d f8          \tmov    -0x8(%rbp),%r15\n    1213:\tc9                   \tleave\n    1214:\tc3                   \tret\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "-SWsrg",
+      "/tmp/pa29-192/inherited-vector-final/abi.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "There are 21 section headers, starting at offset 0x1918:\n\nSection Headers:\n  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0\n  [ 1] .text             PROGBITS        0000000000000000 000040 001215 00  AX  0   0 16\n  [ 2] .data             PROGBITS        0000000000000000 001260 000000 00  WA  0   0 16\n  [ 3] .eh_frame         PROGBITS        0000000000000000 001260 000198 00   A  0   0  8\n  [ 4]                   PROGBITS        0000000000000000 0013f8 000000 00   A  0   0  8\n  [ 5] .data.rel.local   PROGBITS        0000000000000000 0013f8 000000 00  WA  0   0  8\n  [ 6] .init_array       INIT_ARRAY      0000000000000000 0013f8 000000 08  WA  0   0  8\n  [ 7] .fini_array       FINI_ARRAY      0000000000000000 0013f8 000000 08  WA  0   0  8\n  [ 8] .tdata            PROGBITS        0000000000000000 0013f8 000000 00 WAT  0   0  1\n  [ 9] .rela.text        RELA            0000000000000000 0013f8 0000a8 18     17   1  8\n  [10] .rela.data        RELA            0000000000000000 0014a0 000000 18     17   2  8\n  [11] .rela.eh_frame    RELA            0000000000000000 0014a0 0000d8 18     17   3  8\n  [12] .rela.gcc_except_table RELA            0000000000000000 001578 000000 18     17   4  8\n  [13] .rela.data.rel.local RELA            0000000000000000 001578 000000 18     17   5  8\n  [14] .rela.init_array  RELA            0000000000000000 001578 000000 18     17   6  8\n  [15] .rela.fini_array  RELA            0000000000000000 001578 000000 18     17   7  8\n  [16] .rela.tdata       RELA            0000000000000000 001578 000000 18     17   8  8\n  [17] .symtab           SYMTAB          0000000000000000 001578 000258 18     18   9  8\n  [18] .strtab           STRTAB          0000000000000000 0017d0 000043 00      0   0  1\n  [19] .shstrtab         STRTAB          0000000000000000 001813 000101 00      0   0  1\n  [20] .note.GNU-stack   PROGBITS        0000000000000000 001914 000000 00      0   0  1\nKey to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  D (mbind), l (large), p (processor specific)\n\nThere are no section groups in this file.\n\nRelocation section '.rela.text' at offset 0x13f8 contains 7 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n00000000000002cb  0000000e00000004 R_X86_64_PLT32         0000000000000000 hc - 4\n0000000000000346  0000000f00000004 R_X86_64_PLT32         0000000000000000 hb - 4\n000000000000046f  0000001000000004 R_X86_64_PLT32         0000000000000000 hs - 4\n0000000000000660  0000001100000004 R_X86_64_PLT32         0000000000000000 hi - 4\n0000000000000b0b  0000001500000004 R_X86_64_PLT32         0000000000000000 hw - 4\n0000000000000ed0  0000001600000004 R_X86_64_PLT32         0000000000000000 hx - 4\n00000000000010a8  0000001700000004 R_X86_64_PLT32         0000000000000000 hy - 4\n\nRelocation section '.rela.eh_frame' at offset 0x14a0 contains 9 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000020  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 0\n0000000000000048  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 23\n0000000000000070  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 46\n0000000000000098  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 6a\n00000000000000c0  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 90\n00000000000000e8  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 84e\n0000000000000110  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 895\n0000000000000140  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 8fe\n0000000000000170  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 958\n\nSymbol table '.symtab' contains 25 entries:\n   Num:    Value          Size Type    Bind   Vis      Ndx Name\n     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND \n     1: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 .text\n     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    2 .data\n     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    3 .eh_frame\n     4: 0000000000000000     0 SECTION LOCAL  DEFAULT    4 \n     5: 0000000000000000     0 SECTION LOCAL  DEFAULT    5 .data.rel.local\n     6: 0000000000000000     0 SECTION LOCAL  DEFAULT    6 .init_array\n     7: 0000000000000000     0 SECTION LOCAL  DEFAULT    7 .fini_array\n     8: 0000000000000000     0 SECTION LOCAL  DEFAULT    8 .tdata\n     9: 0000000000000000    35 FUNC    GLOBAL DEFAULT    1 nc\n    10: 0000000000000023    35 FUNC    GLOBAL DEFAULT    1 nb\n    11: 0000000000000046    36 FUNC    GLOBAL DEFAULT    1 ns\n    12: 000000000000006a    38 FUNC    GLOBAL DEFAULT    1 ni\n    13: 0000000000000090  1982 FUNC    GLOBAL DEFAULT    1 native_test\n    14: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND hc\n    15: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND hb\n    16: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND hs\n    17: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND hi\n    18: 000000000000084e    71 FUNC    GLOBAL DEFAULT    1 nw\n    19: 0000000000000895   105 FUNC    GLOBAL DEFAULT    1 nx\n    20: 00000000000008fe    90 FUNC    GLOBAL DEFAULT    1 ny\n    21: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND hw\n    22: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND hx\n    23: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND hy\n    24: 0000000000000958  2237 FUNC    GLOBAL DEFAULT    1 native_wide\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "--debug-dump=frames",
+      "/tmp/pa29-192/inherited-vector-final/abi.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..0000000000000023\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 29 to 0000000000000021\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000022\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000023\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000040 0000000000000024 00000044 FDE cie=00000000 pc=0000000000000023..0000000000000046\n  DW_CFA_advance_loc: 1 to 0000000000000024\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000027\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 29 to 0000000000000044\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000045\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000046\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000068 0000000000000024 0000006c FDE cie=00000000 pc=0000000000000046..000000000000006a\n  DW_CFA_advance_loc: 1 to 0000000000000047\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 000000000000004a\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 30 to 0000000000000068\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000069\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 000000000000006a\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000090 0000000000000024 00000094 FDE cie=00000000 pc=000000000000006a..0000000000000090\n  DW_CFA_advance_loc: 1 to 000000000000006b\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 000000000000006e\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 32 to 000000000000008e\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 000000000000008f\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000090\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000b8 0000000000000024 000000bc FDE cie=00000000 pc=0000000000000090..000000000000084e\n  DW_CFA_advance_loc: 1 to 0000000000000091\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000094\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 1976 to 000000000000084c\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 000000000000084d\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 000000000000084e\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000e0 0000000000000024 000000e4 FDE cie=00000000 pc=000000000000084e..0000000000000895\n  DW_CFA_advance_loc: 1 to 000000000000084f\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000852\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000085d\n  DW_CFA_offset: r15 (r15) at cfa-24\n  DW_CFA_advance_loc: 50 to 000000000000088f\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 0000000000000893\n  DW_CFA_restore: r15 (r15)\n  DW_CFA_advance_loc: 1 to 0000000000000894\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000895\n  DW_CFA_restore_state\n  DW_CFA_nop\n\n00000108 000000000000002c 0000010c FDE cie=00000000 pc=0000000000000895..00000000000008fe\n  DW_CFA_advance_loc: 1 to 0000000000000896\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000899\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 00000000000008a4\n  DW_CFA_offset: r15 (r15) at cfa-24\n  DW_CFA_advance_loc4: 84 to 00000000000008f8\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 00000000000008fc\n  DW_CFA_restore: r15 (r15)\n  DW_CFA_advance_loc: 1 to 00000000000008fd\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000008fe\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000138 000000000000002c 0000013c FDE cie=00000000 pc=00000000000008fe..0000000000000958\n  DW_CFA_advance_loc: 1 to 00000000000008ff\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000902\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000090d\n  DW_CFA_offset: r15 (r15) at cfa-24\n  DW_CFA_advance_loc4: 69 to 0000000000000952\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 0000000000000956\n  DW_CFA_restore: r15 (r15)\n  DW_CFA_advance_loc: 1 to 0000000000000957\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000958\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000168 000000000000002c 0000016c FDE cie=00000000 pc=0000000000000958..0000000000001215\n  DW_CFA_advance_loc: 1 to 0000000000000959\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 000000000000095c\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 0000000000000967\n  DW_CFA_offset: r15 (r15) at cfa-24\n  DW_CFA_advance_loc4: 2216 to 000000000000120f\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 0000000000001213\n  DW_CFA_restore: r15 (r15)\n  DW_CFA_advance_loc: 1 to 0000000000001214\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000001215\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/arity.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: expected ',', found ')' in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/arity.reject.cpp:1\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/arity.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/arity.reject.cpp:1:38: error: expected ','\n    1 | int f(){return __builtin_bit_cast(int);}\n      |                                      ^\n      |                                      ,\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/arity.reject.cpp:1:38: error: expected ','\n2 errors generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/fixed-template.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: invalid typed builtin operand\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/fixed-template.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/fixed-template.reject.cpp:1:34: error: size of '__builtin_bit_cast' source type 'double' does not match destination type 'int' (8 vs 4 bytes)\n    1 | template<class T> int f(){return __builtin_bit_cast(int,1.0);}\n      |                                  ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/lanes.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: invalid typed builtin operand\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/lanes.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/lanes.reject.cpp:1:113: error: first two arguments to __builtin_convertvector must have the same number of elements\n    1 | using I=int __attribute__((ext_vector_type(4)));using J=int __attribute__((ext_vector_type(2)));J f(I x){return __builtin_convertvector(x,J);}\n      |                                                                                                                 ^                       ~\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/nontrivial.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: invalid typed builtin operand\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/nontrivial.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/nontrivial.reject.cpp:1:42: error: '__builtin_bit_cast' source type must be trivially copyable\n    1 | struct S{int n;~S(){}};int f(S x){return __builtin_bit_cast(int,x);}\n      |                                          ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/reduce-arity.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: expected ')', found ',' in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/reduce-arity.reject.cpp:1\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/reduce-arity.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/reduce-arity.reject.cpp:1:89: error: too many arguments to function call, expected 1, have 2\n    1 | using I=int __attribute__((ext_vector_type(4)));int f(I x){return __builtin_reduce_or(x,x);}\n      |                                                                                         ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/reduce-float.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: invalid typed builtin operand\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/reduce-float.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/reduce-float.reject.cpp:1:91: error: 1st argument must be a vector of integer types (was 'F' (vector of 4 'float' values))\n    1 | using F=float __attribute__((ext_vector_type(4)));float f(F x){return __builtin_reduce_or(x);}\n      |                                                                                           ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/reference.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: invalid typed builtin operand\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/reference.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/reference.reject.cpp:1:23: error: size of '__builtin_bit_cast' source type 'int' does not match destination type 'int &' (4 vs 8 bytes)\n    1 | int& f(int& x){return __builtin_bit_cast(int&,x);}\n      |                       ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/scalar-convert.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: invalid typed builtin operand\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/scalar-convert.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/scalar-convert.reject.cpp:1:67: error: first argument to __builtin_convertvector must be a vector\n    1 | using I=int __attribute__((ext_vector_type(4)));I f(int x){return __builtin_convertvector(x,I);}\n      |                                                                   ^                       ~\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/size.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: invalid typed builtin operand\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/size.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/size.reject.cpp:1:24: error: size of '__builtin_bit_cast' source type 'double' does not match destination type 'int' (8 vs 4 bytes)\n    1 | int f(double x){return __builtin_bit_cast(int,x);}\n      |                        ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-template-count.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: excess fixed aggregate initializer\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-template-count.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-template-count.reject.cpp:2:39: error: excess elements in vector initializer\n    2 | template<int N> I fixed(){I x{N,2,3,4,5};return x;}\n      |                                       ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-template-lane.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: invalid fixed call argument\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-template-lane.reject.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/vector-template-lane.reject.cpp:2:37: error: cannot initialize a vector element of type 'int' with an rvalue of type 'std::nullptr_t'\n    2 | template<int N> I fixed(){I x{N,2,3,nullptr};return x;}\n      |                                     ^~~~~~~\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/gnu-abi-source.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/gnu.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-mno-avx",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/gnu-abi-host.cpp",
+      "/tmp/pa29-192/inherited-vector-final/gnu.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/gnu"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/gnu-abi-host.cpp: In function \u2018V host_vector(V)\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/gnu-abi-host.cpp:2:29: warning: AVX vector return without AVX enabled changes the ABI [-Wpsabi]\n    2 | extern \"C\" V host_vector(V x){return x;}\n      |                             ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/gnu-abi-host.cpp:2:14: note: the ABI for passing parameters with 32-byte alignment has changed in GCC 4.6\n    2 | extern \"C\" V host_vector(V x){return x;}\n      |              ^~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/gnu-abi-host.cpp:2:14: warning: AVX vector argument without AVX enabled changes the ABI [-Wpsabi]\n"
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/gnu"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/qualification.cpp",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/qualification.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-192/inherited-vector-final/qualification.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/qualification"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/qualification"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-I/home/vishvananda/work/private/v4codex/checkout/dev/src",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls191/abi-adapter.cpp",
+      "/home/vishvananda/work/private/v4codex/checkout/obj/dev/preprocess/source.o",
+      "/home/vishvananda/work/private/v4codex/checkout/obj/dev/preprocess/identifier_table.o",
+      "/home/vishvananda/work/private/v4codex/checkout/obj/dev/abi/itanium/graph.o",
+      "/home/vishvananda/work/private/v4codex/checkout/obj/dev/abi/itanium/graph_validation.o",
+      "/home/vishvananda/work/private/v4codex/checkout/obj/dev/abi/itanium/vocabulary.o",
+      "/home/vishvananda/work/private/v4codex/checkout/obj/dev/abi/itanium/encoder.o",
+      "/home/vishvananda/work/private/v4codex/checkout/obj/dev/abi/itanium/function_encoder.o",
+      "/home/vishvananda/work/private/v4codex/checkout/obj/dev/abi/itanium/expression_encoder.o",
+      "/home/vishvananda/work/private/v4codex/checkout/obj/dev/abi/itanium/fact_reader.o",
+      "/home/vishvananda/work/private/v4codex/checkout/obj/dev/abi/itanium/type_reader.o",
+      "/home/vishvananda/work/private/v4codex/checkout/obj/dev/abi/itanium/function_reader.o",
+      "/home/vishvananda/work/private/v4codex/checkout/obj/dev/abi/itanium/argument_reader.o",
+      "/home/vishvananda/work/private/v4codex/checkout/obj/dev/abi/itanium/fact_writer.o",
+      "-o",
+      "/tmp/pa29-192/inherited-vector-final/adapter"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-192/inherited-vector-final/adapter"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "6HolderIXu18__builtin_bit_castiXfp_EEEE\n",
+    "stderr": ""
+  }
+]

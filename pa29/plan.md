@@ -1,81 +1,76 @@
-# PA29 compact plan — implementation192 in progress
+# PA29 compact plan — implementation192 handoff
 
-Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `2df00585bd10d4e2e068934394dffc8adb0a47ed`.
 Last reviewed commit: `5aaf16d15f8e50925c0b75a5485893a958501b85`.
 Entry HEAD: `4becf437ada14c36b01baae1d608428a621a5317`, clean, **399/403**.
-Current work: [implementation192](implementation192.md). The prior handoff evidence
-below remains historical until the current validation replaces it.
-Implementation tip: `f542b3768ea22d35a2a2e18b87f5169472dbdf20`.
-The record commit follows this tip without implementation changes. Review markers
-are preserved; this handoff returns control to Ralph, not stage certification.
+Implementation tip: `dca6f1f2`; the following record commit changes no implementation.
+Review markers are preserved. This returns control to Ralph, not certification.
 
 ## Design/spec alignment
 
-[Implementation191](implementation191.md) completes the vector/intrinsic owner:
-retained type-operand syntax → canonical queries/deduction and recorded
-conversions → constant/static/runtime values → typed LowIR → native ABI/object.
-It adds comparison masks, lane conversion/reduction and representation bit casts;
-packed bool vectors and GNU/Clang vector ABI identities survive every adapter.
-ABI vendor-expression nodes preserve typed operands and have reader/writer checks.
-Fixed and dependent template initializers and constructor members reach the same
-initializer-plan owner. No parser replay, fixture recognition, production host
-compiler delegation or hidden textual phase transport is introduced.
+[Implementation192](implementation192.md) completes the scalar floating owner:
+exact literal bits → canonical type/precision → constants/conversions/layout →
+typed `f16`/`f128` LowIR → native storage, arithmetic and host ABI. GNU and
+standardized-width types retain their C++ identities; explicit lexical typedefs
+support the captured legacy header profile. Related integer-rounding, full-width
+constant-array keys, variadic storage and raw LowIR truth defects are repaired.
+There is no parser replay, fixture recognition, production host compilation or
+hidden textual phase transport. Helpers use ordinary typed runtime calls.
 
-Facts live in the TU with canonical keys and existing completion invalidation.
-Function temporaries/MIR have bounded lifetimes. Per-operation lowering emits at
-most eight lane bodies or one counted loop; wider work/storage follows required
-lanes. Constant evaluation charges the existing evaluator. Related array/copy,
-side-effect, static storage, template-definition, member and ABI defects found
-while extending this owner are repaired. The [prior audit](audit.md), earlier
-ledgers and [three inherited reference proofs](reference-corrections189.md) remain;
-this turn changes no contract fixture, reference or harness.
+Literal scanning is linear with a fixed-format limb bound; facts and numeric
+indexes belong to the TU. Native legalization runs once in O(input + output),
+creates at most six operations per input and releases replaced pools. Constants
+charge the existing evaluator. No optional optimization pass is added.
+[Prior audit](audit.md), [vector work](implementation191.md) and inherited
+measurements remain. One [proved Q-token correction](reference-corrections192.md)
+changes type/representation bytes; inputs, statuses and comparison rules remain.
 
 ## Validation and performance
 
-[Final checks](../student.tests/pa29/evidence191/validation.json): `make test-pa29`
-**399/403** (exit 2); PA1–28 **4538/4538** (exit 0); root through PA29
-**4937/4941** (exit 2), only the four retained PA29 failures. File audit passes
-with four inherited header warnings. Explicit personal controls pass **191/191
-commands**, covering O0/O2, checked runtime, rejection/template cases, source
-LowIR/roundtrip/native MIR, ABI fact serialization and ELF/unwind inspection.
-[Coverage](../student.tests/pa29/evidence191/coverage.json) preserves all **403
-inputs and 1,707 contract/harness paths**. [Progress](../student.tests/pa29/evidence191/stage-delta.json)
-is **5→4 failures**, no new failures or reduced coverage. Source/binary hashes
-bind the checks to the committed implementation.
+[Final checks](../student.tests/pa29/evidence192/validation.json): PA29 **402/403**
+(exit 2); PA1–28 **4538/4538** (exit 0); root through PA29 **4940/4941**
+(exit 2), only the retained ABI-tag case. File audit passes with four inherited
+header warnings. Explicit controls pass **84/84** commands, inherited vector
+controls **191/191**, and the independent rational decoder **1642/1642** cases.
+O0/O2 execution, host calls/layout/varargs, LowIR roundtrips, raw truth branches,
+rejections and ELF/MIR/unwind inspection are covered. [Coverage](../student.tests/pa29/evidence192/coverage.json)
+preserves all **403 inputs and 1,707 contract/harness paths**, with only the
+proved reference correction. [Progress](../student.tests/pa29/evidence192/stage-delta.json)
+is **4→1 failures**, with no new failures or reduced coverage. Source/binary
+hashes bind the checks to committed implementation.
 
-[Performance191](performance191.md) retains **544 observations plus 32 launchers**,
-including the pre-repair observations. Final evidence has A/A and six ABBA blocks
-on four equivalent pairs plus six corrected-only owner scaling controls. All
-four common object/executable pairs are byte-identical; every paired timing range
-crosses unity. Compiler RSS increases 88–348 KiB on common workloads. Demand work
-scales with demanded facts; 16/64/256-lane controls keep 5,711 LowIR instructions
-constant. Compiler latency/RSS, runtime/text, raw spreads and checked outputs are
-reported together; no optimization benefit is claimed against invalid entry code.
-All inherited measurements remain. Under spec §9 the inherited blanket 15% and
-zero-growth targets remain diagnostic. Mandatory evaluator/native/inline/time
-budgets, correctness and coverage are unchanged; later-stage obligations add no
-PA29 gate.
+[Performance192](performance192.md) retains **640 observations plus 32 launchers**,
+four A/A + six ABBA common pairs, six corrected-only scaling controls and
+launcher calibration. Compiler latency/RSS and runtime/text are reported together,
+with raw spreads and checked outputs. Common images remain byte-identical;
+final compile ratios are 1.004–1.017 with every range crossing unity. Scalar
+format work/text scales with demand. No benefit is claimed against rejected
+entry programs. Spec §9 keeps inherited blanket 15% and zero-growth targets
+diagnostic; mandated evaluator/native/inline/time limits remain unchanged.
+Later-stage obligations add no PA29 gate, and correctness failures remain counted.
 
-## Remaining groups and handoff ledger
+## Remaining group and handoff ledger
 
-| Owner | Cases | Required next boundary |
+| Owner | Failures | Disposition and next boundary |
 |---|---:|---|
-| Binary16/binary128 representation and ABI | 3 | Genuine formats across syntax/literals, constants, typed IR, storage, operations and calls/returns; unfinished implementation. |
-| Nested-template ABI-tag contract | 1 | Independent extension/contract proof after the existing GCC/Clang-disagreement reducer; oracle and failure retained, no waiver. |
+| Scalar extended floating representation/ABI | 0 | Completed; no known unfinished requirement in this group. |
+| Nested-template ABI-tag contract | 1 | Independent extension-contract review; GCC/Clang disagreement reducer and unchanged oracle retained. No waiver. |
 
-The [failure ledger](../student.tests/pa29/evidence191/remaining.json) preserves
-all identities and dispositions. Full PA29/root-through success and the whole
-stage audit remain required before PA30. Further vector changes do not supply
-the new floating representations or resolve the separate ABI-tag contract;
-starting either requires a distinct broad owner investigation/implementation.
+The [failure ledger](../student.tests/pa29/evidence192/remaining.json) retains
+its identity and proof boundary. Further floating work cannot decide the separate
+attribute/naming policy. Its existing reducer does not supply the authorized
+proof needed to change the reference; repeating that investigation would not
+extend this completed owner. Full PA29/root-through success and whole-stage
+review remain required before PA30.
 
-- `599e3ad6`: entry ownership/data-flow/validation plan, preserved review markers.
-- `66179d47`: typed intrinsic/vector semantics, constants, LowIR/native and ABI graph.
-- `37d03290`: representation edge cases, packed static values and distinct vector ABI.
-- `f542b376`: scaling-discovered fixed/dependent initializer and member repairs;
-  completed controls and reproducible owner benchmark.
-- Following record commit: final checks, performance, preservation and handoff
-  evidence. The implementation handoff goal is complete once this record is
-  committed cleanly; the whole assignment remains unfinished as listed above.
+- `f3a80433`: entry ownership/data-flow/complexity/validation plan; review markers.
+- `f3c93919`: exact formats, canonical semantics, typed IR/native ABI, controls
+  and documented Q-token reference proof.
+- `5369931a`: parameter-only floating branch legalization, layout/roundtrip
+  controls and reproducible scaling harness.
+- `dca6f1f2`: isolated bit-initialized-slot truth repair and regression control.
+- Following record commit: final checks, preserved preliminary evidence,
+  performance and handoff ledger. Once committed cleanly, complete the
+  implementation handoff goal; the whole assignment remains unfinished above.
