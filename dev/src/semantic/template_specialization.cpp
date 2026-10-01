@@ -9,6 +9,7 @@ void Analyzer::select_explicit_specialization(EntityId e, NodeId source)
     if (!entities[e].explicit_specialization) {
         auto spec = entities[e].specialization;
         if (entities[e].complete || entities[e].definition ||
+            (entities[e].kind == EntityKind::Function && (entities[e].emission & Entity::Used)) ||
             (spec && specializations[spec].body != FactState::NotStarted))
             throw std::runtime_error("specialization after instantiation");
         entities[e].explicit_specialization = true;
@@ -18,6 +19,13 @@ void Analyzer::select_explicit_specialization(EntityId e, NodeId source)
         entities[e].constexpr_function = false;
         entities[e].deleted_function = false;
         entities[e].source = source;
+        if (entities[e].kind == EntityKind::Function && !spec && entities[e].member_info) {
+            // A non-template member's explicit specialization owns its own
+            // attributes. The enclosing primary still retains its declaration.
+            for (auto t = abi_tag_heads.get(e); t; t = abi_tags[t].next)
+                abi_tag_members.put(key(e,abi_tags[t].name),0);
+            abi_tag_heads.put(e,0); effective_abi_tag_heads.put(e,0);
+        }
         if (entities[e].kind == EntityKind::Variable) {
             entities[e].initializer = 0; entities[e].constant = Constant();
         }

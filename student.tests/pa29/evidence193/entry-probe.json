@@ -1,0 +1,342 @@
+{
+  "ordinary-inline": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN5Plain5valueB4keepEi\n0000000000000016 T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN5Plain5valueB4keepEi\n000000000000001b T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN5Plain5valueB4keepEi\n0000000000000020 T main\n"
+    }
+  },
+  "ordinary-outside": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000017 T _Z3usei\n0000000000000000 T _ZN5Plain5valueB4keepEi\n000000000000002d T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000013 T _Z3usei\n0000000000000000 T _ZN5Plain5valueB4keepEi\n000000000000002e T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000010 T _Z3usei\n0000000000000000 T _ZN5Plain5valueB4keepEi\n0000000000000030 T main\n"
+    }
+  },
+  "ordinary-repeated": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000017 T _Z3usei\n0000000000000000 T _ZN5Plain5valueB4keepEi\n000000000000002d T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000013 T _Z3usei\n0000000000000000 T _ZN5Plain5valueB4keepEi\n000000000000002e T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000010 T _Z3usei\n0000000000000000 T _ZN5Plain5valueB4keepEi\n0000000000000030 T main\n"
+    }
+  },
+  "ordinary-declaration": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN5Plain5valueB4keepEi\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN5Plain5valueB4keepEi\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN5Plain5valueB4keepEi\n"
+    }
+  },
+  "direct-inline": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5valueB4keepEi\n0000000000000016 T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5valueB4keepEi\n000000000000001b T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5valueB4keepEi\n0000000000000020 T main\n"
+    }
+  },
+  "direct-outside": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5valueB4keepEi\n0000000000000016 T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5valueB4keepEi\n000000000000001b T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5valueEi\n0000000000000020 T main\n"
+    }
+  },
+  "direct-repeated": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5valueB4keepEi\n0000000000000016 T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5valueB4keepEi\n000000000000001b T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5valueB4keepEi\n0000000000000020 T main\n"
+    }
+  },
+  "direct-declaration": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN3BoxIiE5valueB4keepEi\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN3BoxIiE5valueB4keepEi\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN3BoxIiE5valueB4keepEi\n"
+    }
+  },
+  "nested-inline": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEi\n0000000000000016 T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEi\n000000000000001b T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEi\n0000000000000020 T main\n"
+    }
+  },
+  "nested-outside": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEi\n0000000000000016 T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEi\n000000000000001b T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner5valueEi\n0000000000000020 T main\n"
+    }
+  },
+  "nested-repeated": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEi\n0000000000000016 T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEi\n000000000000001b T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEi\n0000000000000020 T main\n"
+    }
+  },
+  "nested-declaration": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN3BoxIiE5Inner5valueB4keepEi\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN3BoxIiE5Inner5valueB4keepEi\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN3BoxIiE5Inner5valueB4keepEi\n"
+    }
+  },
+  "deep-inline": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner4Leaf5valueB4keepEi\n0000000000000016 T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner4Leaf5valueB4keepEi\n000000000000001b T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner4Leaf5valueB4keepEi\n0000000000000020 T main\n"
+    }
+  },
+  "deep-outside": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner4Leaf5valueB4keepEi\n0000000000000016 T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner4Leaf5valueB4keepEi\n000000000000001b T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner4Leaf5valueEi\n0000000000000020 T main\n"
+    }
+  },
+  "deep-repeated": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner4Leaf5valueB4keepEi\n0000000000000016 T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner4Leaf5valueB4keepEi\n000000000000001b T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5Inner4Leaf5valueB4keepEi\n0000000000000020 T main\n"
+    }
+  },
+  "deep-declaration": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN3BoxIiE5Inner4Leaf5valueB4keepEi\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN3BoxIiE5Inner4Leaf5valueB4keepEi\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN3BoxIiE5Inner4Leaf5valueB4keepEi\n"
+    }
+  },
+  "member_template-inline": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5InnerIlE5valueB4keepEi\n0000000000000016 T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5InnerIlE5valueB4keepEi\n000000000000001b T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5InnerIlE5valueB4keepEi\n0000000000000020 T main\n"
+    }
+  },
+  "member_template-outside": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5InnerIlE5valueB4keepEi\n0000000000000016 T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5InnerIlE5valueB4keepEi\n000000000000001b T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5InnerIlE5valueEi\n0000000000000020 T main\n"
+    }
+  },
+  "member_template-repeated": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5InnerIlE5valueB4keepEi\n0000000000000016 T main\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5InnerIlE5valueB4keepEi\n000000000000001b T main\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n0000000000000000 W _ZN3BoxIiE5InnerIlE5valueB4keepEi\n0000000000000020 T main\n"
+    }
+  },
+  "member_template-declaration": {
+    "/tmp/pa29-193/entry": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN3BoxIiE5InnerIlE5valueB4keepEi\n"
+    },
+    "g++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN3BoxIiE5InnerIlE5valueB4keepEi\n"
+    },
+    "clang++": {
+      "status": 0,
+      "stderr": "",
+      "symbols": "0000000000000000 T _Z3usei\n                 U _ZN3BoxIiE5InnerIlE5valueB4keepEi\n"
+    }
+  }
+}

@@ -1,0 +1,107 @@
+[
+  {
+    "name": "ordering",
+    "compiler": "/tmp/pa29-193/entry",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 T _Z10early_calli\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEi\n0000000000000008 D early_address\n0000000000000000 D early_object\n0000000000000010 D late_address\n0000000000000016 T main\n"
+  },
+  {
+    "name": "ordering",
+    "compiler": "clang++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 T _Z10early_calli\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEi\n0000000000000000 D early_address\n0000000000000000 B early_object\n0000000000000008 D late_address\n0000000000000020 T main\n"
+  },
+  {
+    "name": "ordering",
+    "compiler": "g++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 T _Z10early_calli\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEi\n0000000000000000 D early_address\n0000000000000000 B early_object\n0000000000000008 D late_address\n000000000000001b T main\n"
+  },
+  {
+    "name": "overloads",
+    "compiler": "/tmp/pa29-193/entry",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 V _ZN3BoxIiE5Inner4dataB4dataE\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4dropEi\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEl\n0000000000000000 W _ZN3BoxIiE5Inner6insideB6inlineEi\n0000000000000000 W _ZN3BoxIiE5Inner6memberB6memberIiEEiT_\n0000000000000000 W _ZNK3BoxIiE5Inner6methodB6methodEi\n0000000000000000 T main\n"
+  },
+  {
+    "name": "overloads",
+    "compiler": "clang++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 V _ZN3BoxIiE5Inner4dataB4dataE\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEl\n0000000000000000 W _ZN3BoxIiE5Inner5valueEi\n0000000000000000 W _ZN3BoxIiE5Inner6insideB6inlineEi\n0000000000000000 W _ZN3BoxIiE5Inner6memberIiEEiT_\n0000000000000000 W _ZNK3BoxIiE5Inner6methodEi\n0000000000000000 T main\n"
+  },
+  {
+    "name": "overloads",
+    "compiler": "g++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 u _ZN3BoxIiE5Inner4dataB4dataE\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4dropEi\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEl\n0000000000000000 W _ZN3BoxIiE5Inner6insideB6inlineEi\n0000000000000000 W _ZN3BoxIiE5Inner6memberB6memberIiEEiT_\n0000000000000000 W _ZNK3BoxIiE5Inner6methodB6methodEi\n                 U __stack_chk_fail\n0000000000000000 T main\n"
+  },
+  {
+    "name": "specialization",
+    "compiler": "/tmp/pa29-193/entry",
+    "status": 1,
+    "stderr": "ERROR: member specialization requires an implicit class specialization\n",
+    "symbols": ""
+  },
+  {
+    "name": "specialization",
+    "compiler": "clang++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000010 T _ZN3BoxIcE5Inner5valueB4keepEi\n0000000000000000 W _ZN3BoxIiE5Inner5valueEi\n0000000000000000 T _ZN3BoxIlE5Inner5valueEi\n0000000000000020 T main\n"
+  },
+  {
+    "name": "specialization",
+    "compiler": "g++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000014 T _ZN3BoxIcE5Inner5valueB4keepEi\n0000000000000000 W _ZN3BoxIiE5Inner5valueB4keepEi\n0000000000000000 T _ZN3BoxIlE5Inner5valueEi\n0000000000000027 T main\n"
+  },
+  {
+    "name": "multitag",
+    "compiler": "/tmp/pa29-193/entry",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 W _ZN5OuterIiE5Inner5valueB1aB1zEi\n0000000000000000 T main\n"
+  },
+  {
+    "name": "multitag",
+    "compiler": "clang++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 W _ZN5OuterIiE5Inner5valueB1aB1zEi\n0000000000000000 T main\n"
+  },
+  {
+    "name": "multitag",
+    "compiler": "g++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 W _ZN5OuterIiE5Inner5valueB1aB1zEi\n0000000000000000 T main\n"
+  },
+  {
+    "name": "template-functions",
+    "compiler": "/tmp/pa29-193/entry",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 W _Z7free_fnB4keepIiEiT_\n0000000000000000 V _ZN3BoxIiE4dataB4keepE\n0000000000000000 W _ZN3BoxIiE5Inner6memberB4keepIiEEiT_\n0000000000000000 W _ZN3BoxIiE6memberB4keepIiEEiT_\n0000000000000000 W _ZN5Plain6memberB4keepIiEEiT_\n0000000000000000 T main\n"
+  },
+  {
+    "name": "template-functions",
+    "compiler": "clang++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 W _Z7free_fnB4keepIiEiT_\n0000000000000000 V _ZN3BoxIiE4dataB4keepE\n0000000000000000 W _ZN3BoxIiE5Inner6memberIiEEiT_\n0000000000000000 W _ZN3BoxIiE6memberIiEEiT_\n0000000000000000 W _ZN5Plain6memberB4keepIiEEiT_\n0000000000000000 T main\n"
+  },
+  {
+    "name": "template-functions",
+    "compiler": "g++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 W _Z7free_fnB4keepIiEiT_\n0000000000000000 W _Z7free_fnIiEiT_\n0000000000000000 u _ZN3BoxIiE4dataB4keepE\n0000000000000000 W _ZN3BoxIiE5Inner6memberB4keepIiEEiT_\n0000000000000000 W _ZN3BoxIiE6memberB4keepIiEEiT_\n0000000000000000 W _ZN5Plain6memberB4keepIiEEiT_\n0000000000000000 T main\n"
+  }
+]

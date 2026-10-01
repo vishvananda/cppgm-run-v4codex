@@ -17,7 +17,7 @@ abi_mangle::Id Procedural::abi_template_head(EntityId entity)
 }
 abi_mangle::Id Procedural::abi_tagged_name(EntityId e, abi_mangle::Id name)
 {
-    auto head = sem.abi_tag_heads.get(e);
+    auto head = sem.effective_abi_tag_head(e);
     if (!head) return name;
     std::vector<abi_mangle::Id> tags;
     for (auto t = head; t; t = sem.abi_tags[t].next)

@@ -3,6 +3,17 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+std::uint32_t Analyzer::effective_abi_tag_head(EntityId e) const
+{
+    // An out-of-class definition of a dependent class's function supplies
+    // its explicit tags in the hosted ABI. Retain the declared attributes;
+    // select the tag set published when this member was instantiated. Later
+    // definitions must not change an already established ABI identity.
+    // Function-template specializations copy this fact in attribute inheritance;
+    // consumers never have to walk the specialization or lexical owner chain.
+    if (auto tags = effective_abi_tag_heads.get(e)) return tags-1;
+    return abi_tag_heads.get(e);
+}
 syntax::FunctionEffects Analyzer::function_effects(EntityId e) const
 {
     auto effect = entities[e].effects;
@@ -19,7 +30,7 @@ void Analyzer::inherit_native_attributes(EntityId e, EntityId pattern)
 {
     entities[e].effects = std::max(entities[e].effects,entities[pattern].effects);
     entities[e].exclude_instantiation |= entities[pattern].exclude_instantiation;
-    for (auto t = abi_tag_heads.get(pattern); t; t = abi_tags[t].next) {
+    for (auto t = effective_abi_tag_head(pattern); t; t = abi_tags[t].next) {
         auto tag = abi_tags[t].name; auto k = key(e,tag);
         if (abi_tag_members.get(k)) continue;
         abi_tag_members.put(k,1);

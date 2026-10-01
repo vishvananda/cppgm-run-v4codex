@@ -439,7 +439,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         for (auto candidate : candidates(e)) specialized_template |= entities[candidate].template_info != 0;
     if (source == explicit_specialization_source && scopes[owner].kind == ScopeKind::Class && !specialized_template) {
         auto cls = scopes[owner].entity;
-        if (!entities[cls].specialization || entities[cls].explicit_specialization)
+        if (!definition_owner(cls).specialization)
             throw std::runtime_error("member specialization requires an implicit class specialization");
         bool match = false;
         for (auto member : candidates(e))
@@ -535,8 +535,15 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && function && scopes[owner].kind == ScopeKind::Class) {
         member_facts(e);
         auto m = entities[e].member_info;
-        if (definitions && ast.nodes.occurrences[d].context && !members[m].prototype)
+        if (definitions && ast.nodes.occurrences[d].context && !members[m].prototype) {
             members[m].prototype = template_prototype_sources.get(ast.nodes.occurrences[d].source);
+            // Select explicit ABI tags with the declaration, not at emission.
+            // A later definition cannot rename a previously instantiated member.
+            if (auto prototype = members[m].prototype) {
+                auto tags = definition_abi_tag_heads.get(prototype);
+                effective_abi_tag_heads.put(e,tags ? tags : abi_tag_heads.get(e)+1);
+            }
+        }
         if (conversion_target && !members[m].conversion_target) {
             auto info = entities[scopes[owner].entity].class_info;
             members[m].conversion_target = conversion_target;

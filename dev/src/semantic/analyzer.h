@@ -119,7 +119,10 @@ public:
     Index assembler_names; // EntityId -> interned explicit object name.
     Index section_names, weak_symbols; // EntityId -> immutable object attributes.
     Index abi_tag_members, abi_tag_heads;
+    Index definition_abi_tag_heads; // Matched member prototype -> definition tag head + 1.
+    Index effective_abi_tag_heads; // Concrete member -> selected tag head + 1.
     std::vector<syntax::AbiTag> abi_tags = std::vector<syntax::AbiTag>(1);
+    std::uint32_t effective_abi_tag_head(EntityId) const;
     void native_attributes(EntityId, NodeId);
     void inherit_native_attributes(EntityId, EntityId);
     syntax::FunctionEffects function_effects(EntityId) const;

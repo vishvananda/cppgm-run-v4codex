@@ -396,6 +396,11 @@ std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t
         if (current >= 0 && previous >= 0 && current != previous)
             throw std::runtime_error("conflicting template member exception specifications");
         retain_member_signature(prototype.declarator,prototype.environment,d,head,primary);
+        // Preserve the declaration's attribute facts, but publish the explicit
+        // definition tag set (including empty) for hosted member instantiation.
+        // A prototype is selected once by canonical signature, independently
+        // of demand order; unrelated overloads and data members retain tags.
+        definition_abi_tag_heads.put(p,abi_tag_heads.get(facts[d].entity)+1);
         return p;
     }
     // Special-member and not-yet-established declaration types retain their

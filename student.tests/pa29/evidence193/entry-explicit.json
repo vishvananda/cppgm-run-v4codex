@@ -1,0 +1,44 @@
+[
+  {
+    "name": "explicit-member",
+    "compiler": "/tmp/pa29-193/entry",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 W _ZN3BoxIiE5valueB4keepEi\n0000000000000000 W _ZN3BoxIiE6memberB4keepIiEEiT_\n0000000000000000 T _ZN3BoxIlE5valueB4keepEi\n0000000000000017 T _ZN3BoxIlE6memberB4keepIiEEiT_\n000000000000002e T main\n"
+  },
+  {
+    "name": "explicit-member",
+    "compiler": "clang++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 W _ZN3BoxIiE5valueEi\n0000000000000000 W _ZN3BoxIiE6memberIiEEiT_\n0000000000000000 T _ZN3BoxIlE5valueEi\n0000000000000010 T _ZN3BoxIlE6memberIiEEiT_\n0000000000000020 T main\n"
+  },
+  {
+    "name": "explicit-member",
+    "compiler": "g++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 W _ZN3BoxIiE5valueB4keepEi\n0000000000000000 W _ZN3BoxIiE6memberB4keepIiEEiT_\n0000000000000000 T _ZN3BoxIlE5valueEi\n0000000000000014 T _ZN3BoxIlE6memberIiEEiT_\n0000000000000027 T main\n"
+  },
+  {
+    "name": "extern",
+    "compiler": "/tmp/pa29-193/entry",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 T _Z4calli\n                 U _ZN3BoxIiE5Inner5valueB4keepEi\n"
+  },
+  {
+    "name": "extern",
+    "compiler": "clang++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 T _Z4calli\n                 U _ZN3BoxIiE5Inner5valueEi\n"
+  },
+  {
+    "name": "extern",
+    "compiler": "g++",
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 T _Z4calli\n                 U _ZN3BoxIiE5Inner5valueB4keepEi\n"
+  }
+]
