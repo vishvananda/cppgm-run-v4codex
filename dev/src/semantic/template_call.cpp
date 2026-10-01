@@ -458,8 +458,15 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
             auto query = substitute_query(condition,bindings,cache,frame);
             if (!query) { specializations[index].declaration = FactState::Failure; return 0; }
             members[entities[e].member_info].explicit_condition = query;
-            if (!query_fact(query).dependent)
-                members[entities[e].member_info].explicit_constructor = explicit_condition_value(query,entities[e].owner);
+            if (!query_fact(query).dependent) {
+                // A constructor template's explicit-specifier is immediate
+                // substitution context. Invalid conversion/constant evaluation
+                // removes this candidate; failures inside demanded definitions
+                // still propagate from the ordinary semantic owners.
+                auto value = explicit_condition(query,entities[e].owner);
+                if (!value.valid) { specializations[index].declaration = FactState::Failure; return 0; }
+                members[entities[e].member_info].explicit_constructor = constant_truth(value);
+            }
         }
     }
     specializations[index].entity = e; specializations[index].declaration = FactState::Success;

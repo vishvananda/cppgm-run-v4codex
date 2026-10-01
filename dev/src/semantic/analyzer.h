@@ -1200,6 +1200,7 @@ private:
     Index injected_class_owners;
     void inject_class(ScopeId owner, ScopeId members);
     void explicit_specifier(EntityId e, NodeId source, ScopeId scope);
+    Constant explicit_condition(QueryId query, ScopeId scope);
     bool explicit_condition_value(QueryId query, ScopeId scope);
     void virtual_declaration(EntityId e, NodeId d, NodeId init, NodeId specs, NodeId source, ScopeId s);
     std::uint32_t compose_subobject(std::uint32_t outer, std::uint32_t inner);
