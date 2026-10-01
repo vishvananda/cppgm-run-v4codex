@@ -1,0 +1,79 @@
+{
+  "code_tip": "cce8634c3c835cf6d5e8f4fa5fea0db213959718",
+  "compiler_sha256": "1eef9991b4b5e054a1f875126423aaee540a93c3fc03f48befbde321a7174eb5",
+  "commands": {
+    "make test-pa29": 2,
+    "make test-report-through-pa28": 0,
+    "make test-report-through-pa29": 2
+  },
+  "file_audit_status": 0,
+  "stage_progress_preserved": true,
+  "controls": {
+    "inherited158": {
+      "passed": 34,
+      "total": 34
+    },
+    "inherited159": {
+      "passed": 47,
+      "total": 47
+    },
+    "inherited160": {
+      "passed": 46,
+      "total": 46
+    },
+    "inherited161": {
+      "passed": 45,
+      "total": 45
+    },
+    "controls": {
+      "passed": 49,
+      "total": 49
+    }
+  },
+  "logs": {
+    "stage-final.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit162/stage-final.log",
+      "sha256": "fceb444fbd65a3821512df45b91af9f17c2da946be5060d7df45a2134082fcc4",
+      "tail": [
+        "pa29/tests/run/800-pretty-function-owner-template-arguments-run.t: ERROR: linked program exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+        "pa29/tests/run/800-source-location-builtin-macros-run.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+        "===== TEST SUMMARY: 338 / 403 TESTS PASSED =====",
+        "make[1]: *** [Makefile:292: test-report-nobuild] Error 1",
+        "make: *** [Makefile:483: test-pa29] Error 2"
+      ]
+    },
+    "prior-final.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit162/prior-final.log",
+      "sha256": "b1ff9611d30d0da259845968d6ec5a5a9b0ee6da2d9810c505780299a5c67a88",
+      "tail": [
+        "===== pa26 =====",
+        "===== pa27 =====",
+        "PA27 global-section properties: PASS (3/3)",
+        "===== pa28 =====",
+        "===== ALL TESTS PASSED SUCCESSFULLY! (4538 / 4538) ====="
+      ]
+    },
+    "through-final.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit162/through-final.log",
+      "sha256": "474fe7593c259454d16afe3a651ce082d74e382c7a821fda2fcaa7f1740a54bb",
+      "tail": [
+        "pa29/tests/run/800-pretty-function-owner-template-arguments-run.t: ERROR: linked program exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+        "pa29/tests/run/800-source-location-builtin-macros-run.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+        "===== TEST SUMMARY: 4876 / 4941 TESTS PASSED =====",
+        "make[1]: *** [Makefile:292: test-report-nobuild] Error 1",
+        "make: *** [Makefile:276: test-report-through-pa29] Error 2"
+      ]
+    },
+    "file-audit-final.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit162/file-audit-final.log",
+      "sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f",
+      "tail": [
+        "File audit passed for pa29 with 4 warning(s).",
+        "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+      ]
+    }
+  }
+}

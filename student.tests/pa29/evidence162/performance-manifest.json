@@ -1,0 +1,73 @@
+{
+  "code_tip": "cce8634c3c835cf6d5e8f4fa5fea0db213959718",
+  "binaries": {
+    "reviewed": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit162/reviewed-cppgm++",
+      "sha256": "9ed4d6c3164faee5c4ba7f4478ca45a0cd318b28f051be5d5c88446b09dc1ff7",
+      "bytes": 3935752
+    },
+    "entry": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit162/entry-cppgm++",
+      "sha256": "8e211405aef3a5e24e65bd807efb795f699982487fd9ecc37d7f3b7298b6a781",
+      "bytes": 4005656
+    },
+    "preliminary": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit162/final-cppgm++",
+      "sha256": "8930d1a1c7bcd59d045cf62e1eb706b939125557de18a1a30e8bd523542961d1",
+      "bytes": 4009912
+    },
+    "final": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit162/accepted-cppgm++",
+      "sha256": "1eef9991b4b5e054a1f875126423aaee540a93c3fc03f48befbde321a7174eb5",
+      "bytes": 4009912
+    }
+  },
+  "files": {
+    "student.tests/pa29/evidence162/preliminary-cumulative.json": {
+      "sha256": "29b4609069f2bf1e3daf247c0726dfd128794537d8bcda86de8f7bc3f53c95ab",
+      "observations": 224
+    },
+    "student.tests/pa29/evidence162/preliminary-audit-cost.json": {
+      "sha256": "92f9ca9ff09bec619dfa6b6bb4f0fb846d85a6298ac32568e9c0735238df7150",
+      "observations": 224
+    },
+    "student.tests/pa29/evidence162/preliminary-affected.json": {
+      "sha256": "24ef807dd56619d0996599f6decbf43ab41304c44a5db49b5bd818b3966a78d2",
+      "observations": 96
+    },
+    "student.tests/pa29/evidence162/cumulative-performance.json": {
+      "sha256": "5f120bc8ed1df5d15d47754d8f129b73e0a8dc9d6c0b80f5636df3bbfae3c958",
+      "observations": 224
+    },
+    "student.tests/pa29/evidence162/audit-cost-performance.json": {
+      "sha256": "ce3977af77ac35697160d860a2c55eb9a7e3d7a04abed04de1824a03e4cf78b2",
+      "observations": 224
+    },
+    "student.tests/pa29/evidence162/affected-performance.json": {
+      "sha256": "31c8bbb7025e5876ee390b23fdec6dafaac588d853518c4f5732b5107ec9ce40",
+      "observations": 96
+    }
+  },
+  "scripts": {
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "student.tests/pa29/performance162.py": "975c7a4aa40d18df0e539c5f51139c974d9db8fe5bdf869ffe06511f1d230a98",
+    "student.tests/pa29/audit162.py": "d1b009ac8c6a403ea12cf032dcb3e23ff6f0634dd6ae569d094488cb85101dfc",
+    "student.tests/pa29/controls162.py": "e40941d69ed5ff33519ef0aff61e2c89c756e05310e593f2931264f54ffc4193",
+    "student.tests/pa29/inspection162.py": "562120d4150d5d008011a8c8b760c58ec9956a8e0b77e33f8e995c765f66e62c"
+  },
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "cpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           46 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  32\nOn-line CPU(s) list:                     0-31\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) CPU @ 2.20GHz\nCPU family:                              6\nModel:                                   79\nThread(s) per core:                      2\nCore(s) per socket:                      16\nSocket(s):                               1\nStepping:                                0\nBogoMIPS:                                4399.99\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm rdseed adx smap xsaveopt arat md_clear arch_capabilities\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               512 KiB (16 instances)\nL1i cache:                               512 KiB (16 instances)\nL2 cache:                                4 MiB (16 instances)\nL3 cache:                                55 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-31\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Mitigation; PTE Inversion\nVulnerability Mds:                       Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Meltdown:                  Mitigation; PTI\nVulnerability Mmio stale data:           Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Mitigation; IBRS\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; IBRS; IBPB conditional; STIBP conditional; RSB filling; PBRSB-eIBRS Not affected; BHI SW loop, KVM SW loop\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Vmscape:                   Not affected\n",
+  "host_compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "build_flags": "-std=gnu++11 -Wall -O3",
+  "measured_flags": [
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "affinity": [
+    "taskset",
+    "-c",
+    "0"
+  ],
+  "protocol": "Each common run retains 224 observations: AAAA then six ABBA blocks, four workloads, compiler and runtime separately. Each affected run retains 96 observations: eight compile and eight runtime samples at each of six demand shapes, plus six launcher calibrations. Preliminary and final measurements retained. No compiler build or correctness suite overlapped timing. Light review/evidence activity and external scheduling uncontrolled; the final file audit overlapped the last two unaligned2400 runtime samples. No outliers removed. Host g++ links generated objects, plus libatomic for fallbacks."
+}

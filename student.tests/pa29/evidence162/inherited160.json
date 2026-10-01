@@ -1,0 +1,594 @@
+{
+  "compiler_sha256": "1eef9991b4b5e054a1f875126423aaee540a93c3fc03f48befbde321a7174eb5",
+  "checks": [
+    {
+      "name": "member-adl compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls160/member-adl.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-adl.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-adl link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-adl.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-adl"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-adl run",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-adl"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-arguments compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls160/member-arguments.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-arguments.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-arguments link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-arguments.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-arguments"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-arguments run",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-arguments"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-constexpr compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls160/member-constexpr.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-constexpr.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-constexpr link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-constexpr.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-constexpr"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-constexpr run",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-constexpr"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-demand compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls160/member-demand.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-demand.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-demand link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-demand.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-demand"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-demand run",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-demand"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-fixed-lifetime compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls160/member-fixed-lifetime.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-fixed-lifetime.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-fixed-lifetime link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-fixed-lifetime.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-fixed-lifetime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-fixed-lifetime run",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-fixed-lifetime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-lifetime compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls160/member-lifetime.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-lifetime.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-lifetime link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-lifetime.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-lifetime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-lifetime run",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-lifetime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-ordinary-lookup compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls160/member-ordinary-lookup.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-ordinary-lookup.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-ordinary-lookup link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-ordinary-lookup.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-ordinary-lookup"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-ordinary-lookup run",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-ordinary-lookup"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-query compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls160/member-query.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-query.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-query link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-query.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-query"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-query run",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-query"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-runtime compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls160/member-runtime.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-runtime.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-runtime link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-runtime.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-runtime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-runtime run",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-runtime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-template compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls160/member-template.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-template.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-template link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-template.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-template"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-template run",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-template"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-virtual-base compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls160/member-virtual-base.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-virtual-base.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-virtual-base link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-virtual-base.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-virtual-base"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-virtual-base run",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/member-virtual-base"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "missing",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/missing-reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invoke requires a callable\n"
+    },
+    {
+      "name": "noncallable",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/noncallable-reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: called object is not a function\n"
+    },
+    {
+      "name": "missing-receiver",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/missing-receiver-reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: member invocation requires a receiver\n"
+    },
+    {
+      "name": "extra-data",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/extra-data-reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: operator& in /home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/extra-data-reject.cpp:5\n"
+    },
+    {
+      "name": "bad-receiver",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/bad-receiver-reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: operator& in /home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/bad-receiver-reject.cpp:5\n"
+    },
+    {
+      "name": "private-base",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/private-base-reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: operator& in /home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/private-base-reject.cpp:5\n"
+    },
+    {
+      "name": "ambiguous-base",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/ambiguous-base-reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: operator& in /home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/ambiguous-base-reject.cpp:5\n"
+    },
+    {
+      "name": "deleted-dereference",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/deleted-dereference-reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: operator& in /home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/deleted-dereference-reject.cpp:5\n"
+    },
+    {
+      "name": "private-dereference",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/private-dereference-reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: operator& in /home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/private-dereference-reject.cpp:5\n"
+    },
+    {
+      "name": "bad-argument",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/bad-argument-reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: operator& in /home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/bad-argument-reject.cpp:5\n"
+    },
+    {
+      "name": "rvalue-qualified",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/rvalue-qualified-reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: operator& in /home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/rvalue-qualified-reject.cpp:5\n"
+    },
+    {
+      "name": "const-receiver",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/const-receiver-reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: operator& in /home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/const-receiver-reject.cpp:5\n"
+    },
+    {
+      "name": "extra-qualified",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/extra-qualified-reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit162/controls160-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: __builtin_invoke\n"
+    }
+  ]
+}
