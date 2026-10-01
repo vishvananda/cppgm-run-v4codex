@@ -1,0 +1,54 @@
+{
+  "implementation_commits": [
+    "6bf7812b",
+    "94faedf1"
+  ],
+  "stage": "pa30",
+  "stage_complete": false,
+  "handoff_group": "alias identity in namespace lookup and class partial pattern matching",
+  "entry": {
+    "passed": 129,
+    "total": 153,
+    "failed": 24
+  },
+  "final": {
+    "passed": 132,
+    "total": 153,
+    "failed": 21
+  },
+  "progress": {
+    "fixed_existing": 3,
+    "regressions": 0,
+    "coverage_reduced": false
+  },
+  "priorThroughTests": {
+    "passed": 4941,
+    "total": 4941,
+    "status": 0
+  },
+  "fileAudit": {
+    "status": 0,
+    "inherited_warnings": 4
+  },
+  "controls": {
+    "commands": 23,
+    "status": 0
+  },
+  "performance": {
+    "observations": 404,
+    "launch_calibrations": 16,
+    "mandatory_compile_limit_seconds": 45,
+    "optional_transforms": 0,
+    "equivalent_objects_and_executables_identical": true
+  },
+  "reference_correction": "pa30/reference-correction197.md",
+  "review_markers_preserved": true,
+  "independent_review_pending": true,
+  "unfinished_implementation": "pa30/plan.md",
+  "boundary": "Lookup and ordering identity decisions now succeed in every previously affected fixture; remaining prerequisites, bounds, access, conversions and lowering require different facts.",
+  "evidence_verification": {
+    "command": "python3 student.tests/pa30/verify197.py",
+    "passed": 725
+  },
+  "final_step": "Commit evidence/docs and verify git status is empty; this does not certify the assignment."
+}

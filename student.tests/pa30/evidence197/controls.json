@@ -1,0 +1,298 @@
+{
+  "compiler": "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+  "sha256": "a1831b93894474154093239b8d42af0353d859cf806bb64d5ca02bc0fa1866ec",
+  "commands": [
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/base-alias.reject.cpp",
+        "-o",
+        "/tmp/pa30-197/controls/base-alias.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.005897702649235725,
+      "stdout": "",
+      "stderr": "ERROR: ambiguous lookup\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/namespace-convergence.cpp",
+        "-o",
+        "/tmp/pa30-197/controls/namespace-convergence.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005733562633395195,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-197/controls/namespace-convergence.o",
+        "-o",
+        "/tmp/pa30-197/controls/namespace-convergence"
+      ],
+      "status": 0,
+      "wall_s": 0.05003052204847336,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-197/controls/namespace-convergence"
+      ],
+      "status": 0,
+      "wall_s": 0.001524491235613823,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/namespace-convergence.cpp",
+        "-o",
+        "/tmp/pa30-197/controls/namespace-convergence.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.004809573292732239,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-197/controls/namespace-convergence.native",
+        "/tmp/pa30-197/controls/namespace-convergence.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0035865362733602524,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-197/controls/namespace-convergence.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0007416624575853348,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/namespace-distinct.reject.cpp",
+        "-o",
+        "/tmp/pa30-197/controls/namespace-distinct.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.0048105716705322266,
+      "stdout": "",
+      "stderr": "ERROR: ambiguous unqualified lookup\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/namespace-entity.reject.cpp",
+        "-o",
+        "/tmp/pa30-197/controls/namespace-entity.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.004797013476490974,
+      "stdout": "",
+      "stderr": "ERROR: ambiguous unqualified lookup\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/namespace-target.reject.cpp",
+        "-o",
+        "/tmp/pa30-197/controls/namespace-target.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.004865745082497597,
+      "stdout": "",
+      "stderr": "ERROR: ambiguous unqualified lookup\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/partial-alias-order.cpp",
+        "-o",
+        "/tmp/pa30-197/controls/partial-alias-order.o"
+      ],
+      "status": 0,
+      "wall_s": 0.006764750927686691,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-197/controls/partial-alias-order.o",
+        "-o",
+        "/tmp/pa30-197/controls/partial-alias-order"
+      ],
+      "status": 0,
+      "wall_s": 0.051722873002290726,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-197/controls/partial-alias-order"
+      ],
+      "status": 0,
+      "wall_s": 0.0016146879643201828,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/partial-alias-order.cpp",
+        "-o",
+        "/tmp/pa30-197/controls/partial-alias-order.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005571315065026283,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-197/controls/partial-alias-order.native",
+        "/tmp/pa30-197/controls/partial-alias-order.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.003282744437456131,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-197/controls/partial-alias-order.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0007186401635408401,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/partial-ambiguous.reject.cpp",
+        "-o",
+        "/tmp/pa30-197/controls/partial-ambiguous.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.005120132118463516,
+      "stdout": "",
+      "stderr": "ERROR: ambiguous partial specialization\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/partial-private.cpp",
+        "-o",
+        "/tmp/pa30-197/controls/partial-private.o"
+      ],
+      "status": 0,
+      "wall_s": 0.0061379726976156235,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-197/controls/partial-private.o",
+        "-o",
+        "/tmp/pa30-197/controls/partial-private"
+      ],
+      "status": 0,
+      "wall_s": 0.04882773198187351,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-197/controls/partial-private"
+      ],
+      "status": 0,
+      "wall_s": 0.0015236344188451767,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/partial-private.cpp",
+        "-o",
+        "/tmp/pa30-197/controls/partial-private.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0044237170368433,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-197/controls/partial-private.native",
+        "/tmp/pa30-197/controls/partial-private.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.002937210723757744,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-197/controls/partial-private.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0005693323910236359,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "implementation_commit": "94faedf12200563a8886acf21ee1c0ada8c998b3",
+  "files": {
+    "dev/src/semantic/class_pattern_selection.cpp": "cd97bd728a80ae5258aac75c18d314f760a2d0968985495b7afc8008f8785ccf",
+    "dev/src/semantic/lookup.cpp": "394f168a1caa8f74f5ef432fc7c58465998a3ebbadf0bcf72f8932e5a0231dd9",
+    "dev/src/semantic/template_signature_shape.cpp": "409d7a65752193b6c64d782a8c5ab60d23f1c80f4d3bfd7d9eba4660c8a96814",
+    "spec.md": "d8eefee01a6102f63602b1989c19987d51bdf8f2e1ded0d60e52d7b68a76d3c3",
+    "dev/frontend_source_sets.mk": "981e934c92387d876ef493f48833feb842b3ac2a350f78c51cfeb916639f282f",
+    "pa30/README.md": "81e0a985a16c83f07d0b8b971bc1785806bbbc1d894e294a46327a5001f613e7",
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "pa6/tests/general/300-ambiguous-using-directive-type-bad.ref": "3fefe8163c2751ec5bda25b71672de0caee3b41bd198d0f704ee99c1857a50aa",
+    "pa6/tests/general/300-ambiguous-using-directive-type-bad.ref.exit_status": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d",
+    "pa6/tests/general/300-ambiguous-using-directive-type-bad.ref.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pa6/tests/general/300-ambiguous-using-directive-type-bad.t": "a8a44e285400c93fadf0eb5f04ce39c7a03831622bba5910b3d8e2f57235dc81",
+    "student.tests/pa30/source197/partial-private.cpp": "39e88f70b4be412e8a447e9315bfa9b7c7c683a3461666077bcbc3dd65943fc4",
+    "student.tests/pa30/source197/base-alias.reject.cpp": "812ce7515d214a97b3b5b78c41713d0b0428333f1380bbcb266494ae504e9740",
+    "student.tests/pa30/source197/namespace-target.reject.cpp": "0d36a7bdb37391cc870d14694289aa66f80b39dc546aa376576c91311797168b",
+    "student.tests/pa30/source197/partial-ambiguous.reject.cpp": "03236104fff2476e1973174e44bf8c7020b58b84d8377c999573864505dc214b",
+    "student.tests/pa30/source197/namespace-distinct.reject.cpp": "e89acbe9ea4c75b8eea0cadd7778f5c6d9006a9b2df0e70d2e142dc7a8f40fad",
+    "student.tests/pa30/source197/partial-alias-order.cpp": "9e1ad79ea2b157f25f54028b590e1de954c7d678c2a5777470c00947438c2972",
+    "student.tests/pa30/source197/namespace-convergence.cpp": "957d01fb17348deef357b9ecc89e3d3f3e47797c14c270b3d6aa2f97f5dada4f",
+    "student.tests/pa30/source197/namespace-entity.reject.cpp": "a857d081d01f82eceea58c4013f67d7f3d4429346095ddfc3619bb6fe20915d0",
+    "student.tests/pa30/equivalent197.py": "7c309a180053f4b876eab1fb259ea12b9958201c4a1aae586acdf2d9c0860108",
+    "student.tests/pa30/hosted197.py": "96d1bfc82ec1fc034a0815ce2d93f585be503a7d43e44e40a7cec664190831c2",
+    "student.tests/pa30/followup197.py": "185cc270ed8780efb643a22d6e2467475b5814068bfd13cecb7802aa908200c9",
+    "student.tests/pa30/verify197.py": "3df00b81c56efb467f26c268cc77e9538241fcce8dfe6a3ae0956d2524ba749a",
+    "student.tests/pa30/check197.py": "89e7a12ccccf0e5e657744b4b863055b920663ba997076d0f5f8cd0f04691e6d",
+    "student.tests/pa30/performance197.py": "7d6d61ceabec661a711fa0ef1462dc2ae0a4d40b24ab2eaa17e84a3c1e056de6"
+  },
+  "compiler_sha256": "a1831b93894474154093239b8d42af0353d859cf806bb64d5ca02bc0fa1866ec"
+}

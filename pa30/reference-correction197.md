@@ -19,14 +19,19 @@ use ill-formed only when the declarations do not declare the same entity (and
 are not functions). Here both denote `int`, so `value` has type `int`.
 Sources: checked-in `doc/n3485.txt`, lines 8105–8120 and 9541–9544;
 [WG21 N3337](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf),
-the same C++11 clauses. [CWG 2218](https://cplusplus.github.io/CWG/issues/2218.html)
+the same C++11 clauses. [CWG 14](https://cplusplus.github.io/CWG/issues/14.html),
+Issue 2, explicitly resolves this namespace typedef question as valid (April
+1999); the underlying type is the entity for namespace lookup. [CWG 2218](https://cplusplus.github.io/CWG/issues/2218.html)
 later clarified lookup's declaration-set wording and explicitly describes
 alias-declarations as the established same-entity case; it is corroboration,
 not the basis for imposing a newer language feature.
 
-This does not collapse class-base declaration sets: [class.member.lookup]
-§10.2/6 compares declaration sets and subobjects before §10.2/7 permits use of
-an unambiguous result. Distinct base member typedefs remain ambiguous.
+The existing PA30 `400-base-same-type-alias-ambiguous-bad.t` contract remains
+unchanged, as does the class-base merge path. Its member-typedef case is retained
+as an explicit rejection control. The namespace rule above does not authorize
+changing that contract. Independent review should reconcile its declaration-set
+interpretation with [class.member.lookup] §10.2/3,6–7 (including /3's type
+normalization wording); no base-lookup reference correction is asserted here.
 
 Bundle binding: `reference-binaries/manifest.tsv` source revision
 `c2f713cd70d06170632bfde3e75dd6fe1aa44d98`, bundle SHA256
