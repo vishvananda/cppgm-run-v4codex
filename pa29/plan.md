@@ -1,12 +1,33 @@
-# PA29 compact plan — implementation163 handoff
+# PA29 compact plan — implementation164 in progress
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implement; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `cce8634c3c835cf6d5e8f4fa5fea0db213959718`.
 Previous review: `1ab3499d7046daf5c298d958a8770b413edb3615`.
 Implementation163 entry: `3bc61ecba6d68eb2821022d7d58ac53ae5305f84`, **338/403**.
 Code tip: `a6f3d6a2`. Current: **345/403**, **58 failures**; seven removed,
 none added. All 403 fixtures, references, sidecars and comparison rules remain.
+
+## Active implementation164
+
+Entry: `e5690337`, **345/403**, 58 failures. Previous turn: progress (committed
+assembly behavior and verified checks); no inherited live process remains.
+Review markers above remain unchanged.
+
+Initial owner group: function-context strings and source-location intrinsics.
+Trace declaration/specialization identity and source coordinates into semantic
+query facts, constant storage and direct LowIR/object emission. Fix pretty-name
+rendering, enclosing-template argument retention and dependent array queries
+together; extend to the source-context builtin family where the same facts apply.
+Use one string per declaration/kind, immutable query keys including context,
+linear rendering in emitted bytes and no grammar replay or semantic text keys.
+Record remaining unrelated owners separately from independent review questions.
+
+Validation: focused required fixtures plus explicit personal controls, full
+PA29/prior-through reports, file audit, LowIR roundtrip/object behavior, frozen
+common A/A+ABBA and affected demand scaling (latency/RSS/runtime/text). PA29/O0
+acceptance; no optional transform/work/growth budget is added. Entry binary and
+required-suite log frozen in `/tmp/pa29-164` before implementation.
 
 ## Design and completed group
 
