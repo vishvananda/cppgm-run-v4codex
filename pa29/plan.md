@@ -1,10 +1,24 @@
-# PA29 compact plan — implementation179
+# PA29 compact plan — implementation180
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `667edd800e4e5eb1b1ef92a3108da3bd96c51708`.
 Previous reviewed commit: `7139ceb5769eea12c6e2e00b54932f09d59c79b5`.
-Entry HEAD: `cd283a59949c9d56236f6022d018bd3f2057105c`.
+Entry HEAD: `259329eec6b08718a059b5198cb32b4f5b5ac17f`.
+
+## Active group180
+
+Entry: 385/403, 18 failures. Shared callable semantics owns static call operators
+and force-inline direct calls. Static selection retains a discarded receiver
+and explicit argument conversions, consumed by constant evaluation and lowering;
+force-inline consumes typed LowIR identities, without frontend replay. Candidate
+work follows actual overloads. Inline work/growth must be bounded with explicit
+cycle/legality handling and per-function storage. Validate templates, defaults,
+receiver effects, overload ranking, exception/control flow, ABI and IR adapters.
+Freeze entry compiler before edits; measure all four dimensions with A/A+ABBA
+on equivalent inputs and separate newly-correct workloads. No optional inlining
+policy is added at O0. The prior handoff/evidence remains linked below until the
+final ledger refresh. Review markers above are unchanged.
 
 ## Design and spec alignment
 
