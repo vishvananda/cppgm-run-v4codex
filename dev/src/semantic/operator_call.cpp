@@ -29,14 +29,14 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         ++candidate_work;
         if (entities[e].template_info) {
             if (!definitions) continue;
-            e = deduce_function(e,args,scopes[entities[e].owner].kind == ScopeKind::Class && !entities[e].is_static);
+            e = deduce_function(e,args,scopes[entities[e].owner].kind == ScopeKind::Class);
             if (!e) continue;
         }
         if (declarations.size() > 1) {
             if (concrete_candidates.get(e)) continue;
             concrete_candidates.put(e,1);
         }
-        bool member = entities[e].member_info && !entities[e].is_static;
+        bool member = entities[e].member_info != 0;
         Type f = types[entities[e].type];
         if (members[entities[e].member_info].transfer == TransferKind::MoveAssignment &&
             members[entities[e].member_info].synthetic && deleted_transfer(e)) continue;
@@ -59,7 +59,8 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         for (std::size_t i = 0; valid && i < args.size(); ++i) {
             Conversion c;
             if (member && !i) {
-                c = object_conversion(e, object, expressions[args[0]].category, naming);
+                if (entities[e].is_static) { c.rank = 0; c.target = object; }
+                else c = object_conversion(e, object, expressions[args[0]].category, naming);
             } else {
                 TypeId wanted = i-member < f.count ? types.parameters[f.offset+i-member] : 0;
                 if (args[i]) c = wanted ? conversion(args[i], wanted) : ellipsis_conversion(args[i]);
@@ -101,8 +102,12 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     if (viable.empty()) return false;
     auto better_candidate = [&](std::size_t a, std::size_t b) {
         auto x = sequences.data()+viable[a].offset, y = sequences.data()+viable[b].offset;
-        if (better(x,y,args.size())) return true;
-        for (unsigned i = 0; i < args.size(); ++i)
+        // A static member's contrived receiver conversion is neither better nor
+        // worse. The receiver is still evaluated, but is not an argument.
+        auto skip = (viable[a].member && entities[viable[a].entity].is_static) ||
+            (viable[b].member && entities[viable[b].entity].is_static) ? 1u : 0u;
+        if (better(x+skip,y+skip,args.size()-skip)) return true;
+        for (unsigned i = skip; i < args.size(); ++i)
             if (better(y+i,x+i,1)) return false;
         auto ea = viable[a].entity, eb = viable[b].entity;
         return ea && eb && ((!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb,args.size(),true));
@@ -169,9 +174,12 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     bool rtti_compare = typeinfo_comparison(selected.entity,op);
     if (!recipe && !rtti_compare) { demand_member(entry ? entry : selected.entity); demand_specialization(selected.entity); }
     if (selected.member) {
-        record_object(result, args[0], types.parameters[types[call_type(selected.entity)].offset],
-            base_steps(object, scopes[entities[selected.entity].owner].entity));
-        object_uses[result.object_use].virtual_slot = virtual_dispatch(selected.entity);
+        if (entities[selected.entity].is_static) record_object(result,args[0],0,0);
+        else {
+            record_object(result, args[0], types.parameters[types[call_type(selected.entity)].offset],
+                base_steps(object, scopes[entities[selected.entity].owner].entity));
+            object_uses[result.object_use].virtual_slot = virtual_dispatch(selected.entity);
+        }
         object_uses[result.object_use].source_owned = recipe;
         object_uses[result.object_use].callable_entry = entry;
     }

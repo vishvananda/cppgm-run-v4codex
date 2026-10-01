@@ -54,13 +54,13 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     auto declarations = candidates(family);
     for (auto e : declarations) {
         ++candidate_work;
-        if (entities[e].template_info) e = deduce_function(e,args,scopes[entities[e].owner].kind == ScopeKind::Class && !entities[e].is_static);
+        if (entities[e].template_info) e = deduce_function(e,args,scopes[entities[e].owner].kind == ScopeKind::Class);
         if (!e) continue;
         if (declarations.size() > 1) {
             if (concrete_candidates.get(e)) continue;
             concrete_candidates.put(e,1);
         }
-        bool member = entities[e].member_info && !entities[e].is_static;
+        bool member = entities[e].member_info != 0;
         if (members[entities[e].member_info].transfer == TransferKind::MoveAssignment &&
             members[entities[e].member_info].synthetic && deleted_transfer(e)) continue;
         auto f = types[entities[e].type];
@@ -78,8 +78,11 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         }
         unsigned begin = sequences.size(); bool valid = true;
         for (unsigned i = 0; valid && i < args.size(); ++i) {
-            auto c = member && !i ? object_conversion(e,object,args[0].category,naming) :
-                i-member < f.count ? conversion_value(args[i],types.parameters[f.offset+i-member]) : ellipsis_conversion_value(args[i]);
+            Conversion c;
+            if (member && !i) {
+                if (entities[e].is_static) { c.rank = 0; c.target = object; }
+                else c = object_conversion(e,object,args[0].category,naming);
+            } else c = i-member < f.count ? conversion_value(args[i],types.parameters[f.offset+i-member]) : ellipsis_conversion_value(args[i]);
             valid = c.valid(); sequences.push_back(c);
         }
         if (valid) viable.push_back({e,begin,0,0}); else sequences.resize(begin);
@@ -147,8 +150,11 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     }
     auto preferred = [&](unsigned a, unsigned b) {
         auto x = sequences.data()+viable[a].offset, y = sequences.data()+viable[b].offset;
-        if (better(x,y,args.size())) return true;
-        for (unsigned i = 0; i < args.size(); ++i)
+        auto static_receiver = [&](unsigned i) { auto e = viable[i].entity;
+            return e && !viable[i].surrogate && entities[e].member_info && entities[e].is_static; };
+        auto skip = static_receiver(a) || static_receiver(b) ? 1u : 0u;
+        if (better(x+skip,y+skip,args.size()-skip)) return true;
+        for (unsigned i = skip; i < args.size(); ++i)
             if (better(y+i,x+i,1)) return false;
         auto ea = viable[a].entity, eb = viable[b].entity;
         return ea && eb && ((!entities[ea].specialization && entities[eb].specialization) || template_more_specialized(ea,eb,args.size(),true));
@@ -181,11 +187,12 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
     r.selected = selected.entity;
     r.surrogate = selected.surrogate;
     std::vector<Conversion> chosen(sequences.begin()+selected.offset,sequences.begin()+selected.offset+args.size());
-    for (unsigned i = 0; i < args.size(); ++i)
+    auto skip_receiver = selected.entity && !selected.surrogate && entities[selected.entity].member_info && entities[selected.entity].is_static ? 1u : 0u;
+    for (unsigned i = skip_receiver; i < args.size(); ++i)
         if (!valid_fixed_conversion(args[i],0,chosen[i],q.context)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
     if (selected.entity && !selected.surrogate) {
         auto f = types[entities[selected.entity].type];
-        bool member = entities[selected.entity].member_info && !entities[selected.entity].is_static;
+        bool member = entities[selected.entity].member_info != 0;
         for (unsigned i = args.size()-member; i < f.count; ++i) {
             Conversion c; default_argument(selected.entity,i,&c,DefaultReason::Recipe); chosen.push_back(c);
         }

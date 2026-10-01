@@ -153,6 +153,10 @@ Constant Analyzer::constant_query_call(QueryId id)
             object = constant_base_projection(constant_base_projection(object,use.qualifier_adjustment),use.adjustment);
         } else object = constant_base_address(object,entities[scopes[entities[e].owner].entity].type);
         if (!object) return Constant();
+    } else if (entities[e].member_info && entities[e].is_static &&
+        (q.kind != QueryKind::Call || (callee.kind != QueryKind::Member && class_value(query_fact(callee_id).expression.type)))) {
+        if (!constant_query_object(callee_id)) return Constant();
+        first_argument = 1;
     } else if (q.kind == QueryKind::Call && callee.kind == QueryKind::Member) {
         auto receiver = query_edges[callee.offset];
         if (!(callee.op == OP_ARROW ? constant_query_arrow(receiver,query_fact(callee_id).arrow) : constant_query_object(receiver))) return Constant();

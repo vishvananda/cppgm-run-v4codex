@@ -79,6 +79,8 @@ void Analyzer::declare_operator(EntityId e, NodeId name)
     entities[e].key = op;
     Type function = types[entities[e].type];
     bool member = scopes[entities[e].owner].kind == ScopeKind::Class;
+    if (member && entities[e].is_static && (function.cv || function.ref != RefQualifier::None))
+        throw std::runtime_error("static operator cannot have object qualifiers");
     if (op == KW_NEW || op == KW_DELETE) {
         entities[e].is_static |= member; entities[e].array_allocation = array_operator(name);
         if (op == KW_NEW && (!pointer(function.child) || !fundamental(types[function.child].child,FT_VOID) || !function.count ||
@@ -93,6 +95,6 @@ void Analyzer::declare_operator(EntityId e, NodeId name)
     if (!class_operand) throw std::runtime_error("operator needs a class or enum operand");
     if (!member && (op == OP_ASS || op == OP_LPAREN || op == OP_LSQUARE || op == OP_ARROW))
         throw std::runtime_error("operator must be a member");
-    if (member && entities[e].is_static) throw std::runtime_error("operator cannot be static");
+    if (member && entities[e].is_static && op != OP_LPAREN && op != OP_LSQUARE) throw std::runtime_error("operator cannot be static");
 }
 } }

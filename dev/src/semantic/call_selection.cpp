@@ -67,8 +67,9 @@ CallSelection Analyzer::select_call(EntityId family, const std::vector<Expressio
     auto preferred = [&](unsigned a, unsigned b) {
         auto x = sequences.data()+viable[a].offset, y = sequences.data()+viable[b].offset;
         auto arguments = count+(object!=0);
-        if (better(x,y,arguments)) return true;
-        for (unsigned i = 0; i < arguments; ++i)
+        auto skip = object && (entities[viable[a].entity].is_static || entities[viable[b].entity].is_static) ? 1u : 0u;
+        if (better(x+skip,y+skip,arguments-skip)) return true;
+        for (unsigned i = skip; i < arguments; ++i)
             if (better(y+i,x+i,1)) return false;
         auto ae = viable[a].entity, be = viable[b].entity;
         bool conversion = members[entities[ae].member_info].conversion_target && members[entities[be].member_info].conversion_target;

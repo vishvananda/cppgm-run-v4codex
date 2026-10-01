@@ -28,7 +28,7 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
             auto object = types.qualify(entities[scopes[entities[pattern].owner].entity].type,t.cv);
             parameters.push_back(types.compound(t.ref == RefQualifier::Rvalue ? TypeKind::RRef : TypeKind::LRef,object));
         }
-        auto count = arguments-member;
+        auto count = arguments-(operator_call && entities[pattern].member_info != 0);
         bool pack = t.count && types[types.parameters[t.offset+t.count-1]].kind == TypeKind::PackExpansion;
         // Keep a symbolic tail even when its actual expansion is empty:
         // partial ordering does not depend on a deduced pack's length.
