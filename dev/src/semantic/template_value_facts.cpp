@@ -87,7 +87,7 @@ std::uint32_t Analyzer::query_value(QueryId id)
             value = constants[query_value(query_edges[query.offset])];
         } else if (query.kind == QueryKind::Cast) {
             auto operand = query_edges[query.offset];
-            if (fact.initialization) value = constant_query_list(fact.initialization);
+            if (fact.initialization) value = constant_list_plan(fact.initialization);
             else if (fact.expression.count) {
                 auto result = constant_query_conversion(operand,conversions[fact.expression.conversions]);
                 value = convert(result,query.type,true);
@@ -160,7 +160,7 @@ std::uint32_t Analyzer::query_value(QueryId id)
         } else if (fact.selected && (query.kind == QueryKind::Unary || query.kind == QueryKind::Binary)) {
             value = constant_query_call(id);
         } else if (query.kind == QueryKind::ListInitialization || fact.initialization) {
-            value = constant_query_list(fact.initialization);
+            value = constant_list_plan(fact.initialization);
         } else if (query.kind == QueryKind::Call && fact.expression.form == ExpressionForm::ConstantQuery) {
             value = Constant(fact.expression.type,constants[query_value(query_edges[query.offset+1])].valid);
         } else if (query.kind == QueryKind::Call && fact.expression.form == ExpressionForm::Expect) {

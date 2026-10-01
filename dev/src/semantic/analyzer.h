@@ -413,7 +413,7 @@ private:
     void store_query_arguments(Expression& call, const std::vector<QueryId>& args, const std::vector<Conversion>& chosen);
     bool valid_query_list(std::uint32_t plan);
     bool validate_query_list(std::uint32_t plan);
-    Constant constant_query_list(std::uint32_t plan);
+    Constant constant_list_plan(std::uint32_t plan);
     void prepare_list(NodeId n, Conversion& c);
     void store_call(Expression& owner, const std::vector<NodeId>& args, const std::vector<Conversion>& selected);
     EntityId global_allocation(ETokenType op, bool array);
@@ -495,6 +495,9 @@ private:
     std::uint64_t scalar_transfer_work = 0;
     Index anonymous_objects;
     Index constant_constructors, constant_objects, constant_value_objects;
+    struct ConstantDataKey { Constant value; std::uint32_t object = 0, next = 0; };
+    std::vector<ConstantDataKey> constant_data_keys = std::vector<ConstantDataKey>(1);
+    std::uint32_t constant_value_object(Constant value);
     Index static_vptr_objects, static_construction_objects;
     void prepare_static_vptrs();
     std::vector<ConstantObject> constructor_constants = std::vector<ConstantObject>(1), object_constants = std::vector<ConstantObject>(1);

@@ -231,11 +231,21 @@ bool Analyzer::validate_query_list(std::uint32_t id)
     };
     bool valid = check(); list_plans[id].validation = valid ? FactState::Success : FactState::Failure; return valid;
 }
-Constant Analyzer::constant_query_list(std::uint32_t id)
+Constant Analyzer::constant_list_plan(std::uint32_t id)
 {
-    auto plan = list_plans[id]; if (!valid_query_list(id)) return Constant();
+    auto plan = list_plans[id];
+    bool query = plan.query || plan.call.inputs == CallInputs::Query;
+    if (query) { if (!valid_query_list(id)) return Constant(); }
+    else validate_list_plan(id);
     plan = list_plans[id];
-    auto argument = [&](unsigned i) { return constant_query_conversion(query_edges[plan.call.arguments+i],conversions[plan.call.conversions+i]); };
+    // Fixed source lists and substituted query lists share the typed recipe.
+    // Execute its recorded conversions directly; constant demand must not
+    // manufacture runtime temporaries or resolve the initializer again.
+    auto argument = [&](unsigned i) {
+        auto c = conversions[plan.call.conversions+i];
+        return query ? constant_query_conversion(query_edges[plan.call.arguments+i],c) :
+            constant_node_conversion(call_argument(plan.call,i),c,plan.scope);
+    };
     if (plan.direct_binding) return argument(0);
     Constant value;
     if (plan.literal) {
@@ -268,7 +278,8 @@ Constant Analyzer::constant_query_list(std::uint32_t id)
         std::vector<EvaluatedPart> parts;
         for (unsigned i = 0; i < plan.call.argument_count; ++i) {
             auto field = list_fields[plan.fields+i]; EvaluatedPart p;
-            p.selector = field.field ? field.field : field.index; p.count = field.count; p.value = argument(i); parts.push_back(p);
+            p.selector = field.field ? field.field : field.index; p.count = field.count;
+            p.value = constant_field_value(field.field,argument(i)); parts.push_back(p);
         }
         value = evaluated_object(value_type(plan.target),parts);
     } else if (plan.constructor) {

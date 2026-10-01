@@ -70,7 +70,9 @@ SymbolId Procedural::rtti_type(TypeId id)
     auto info = abi_type_global(id,abi_mangle::TargetKind::Typeinfo);
     rtti_symbols.put(id,info.index);
     if (p.symbols[info.index-1].kind != Symbol::Unknown) return info;
-    if (t.kind == TypeKind::Fundamental && !semantic::bit_integer_kind(t.fundamental) && (linkage.host || (linkage.presentation && t.fundamental == FT_VOID))) {
+    // The host runtime supplies standard fundamental RTTI, but extension
+    // types own their ordinary COMDAT definition just like bit integers.
+    if (t.kind == TypeKind::Fundamental && !semantic::bit_integer_kind(t.fundamental) && !sem.complex_type(id) && (linkage.host || (linkage.presentation && t.fundamental == FT_VOID))) {
         Global g; g.symbol = info; g.declaration = true; p.globals.push_back(g);
         auto& symbol = p.symbols[info.index-1]; symbol.kind = Symbol::GlobalSymbol; symbol.entity = p.globals.size();
         symbol.metadata.binding = SBM_STRONG; symbol.metadata.role = SR_RTTI_DATA; return info;
@@ -150,8 +152,7 @@ SymbolId Procedural::rtti_function(unsigned role)
 void Procedural::rtti_failure(unsigned role)
 {
     emit(Opcode::Call,IRType::Void,{Operand::symbol(rtti_function(role))});
-    if (result_type() == IRType::Void) emit(Opcode::Return,IRType(),{});
-    else emit(Opcode::Return,result_type(),{result_type().floating() ? Operand::floating(0) : Operand::integer(0)});
+    exception_fallback();
 }
 Value Procedural::rtti_expression(NodeId n)
 {

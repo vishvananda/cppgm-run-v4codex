@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include <cmath>
 #include <complex>
 namespace cppgm { namespace semantic {
 bool Analyzer::complex_type(TypeId t) const
@@ -66,6 +67,11 @@ Constant Analyzer::complex_binary(ETokenType op, Constant a, Constant b)
     else if (op == OP_STAR) z = x*y;
     else if (op == OP_DIV && y != std::complex<long double>()) z = x/y;
     else return {};
-    return complex_constant(common,floating_constant(ar.type,z.real()),floating_constant(ar.type,z.imag()));
+    // As for scalar floating arithmetic, an already admitted infinity/NaN
+    // can propagate through constant evaluation. Finite overflow remains a
+    // failed constant expression; it must not invent an exceptional input.
+    bool special = !std::isfinite(x.real()) || !std::isfinite(x.imag()) ||
+        !std::isfinite(y.real()) || !std::isfinite(y.imag());
+    return complex_constant(common,floating_constant(ar.type,z.real(),special),floating_constant(ar.type,z.imag(),special));
 }
 } }

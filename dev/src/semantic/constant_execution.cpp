@@ -298,6 +298,7 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
 {
     SourceInvocationScope invocation(source_invocation,0,c.default_argument);
     if (c.constant_forbidden || c.ellipsis_unavailable) return Constant();
+    if (c.kind == Conversion::Kind::ListPlan) return constant_list_plan(c.materialization);
     if (c.ellipsis_object && !literal_type(value_type(c.target))) return Constant();
     // Implicit and braced argument conversions create temporaries too. Use
     // their recorded materialization, including reference-bound objects,

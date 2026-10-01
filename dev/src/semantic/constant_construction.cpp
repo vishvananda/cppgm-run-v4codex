@@ -4,8 +4,19 @@
 namespace cppgm { namespace semantic {
 const ConstantObject& Analyzer::constant_value_data(Constant value)
 {
-    auto k = key(value.type,value.bits);
-    if (auto known = constant_value_objects.get(k)) return object_constants[known];
+    return object_constants[constant_value_object(value)];
+}
+std::uint32_t Analyzer::constant_value_object(Constant value)
+{
+    // Complex values pack two constant identities into all 64 payload bits.
+    // A (type, uint32_t) key loses the imaginary part. Hash the full typed
+    // payload and compare it at the owning fact; hash collisions are not keys.
+    auto k = value.bits ^ (std::uint64_t(value.type)*0x9e3779b97f4a7c15ULL);
+    for (auto i = constant_value_objects.get(k); i; i = constant_data_keys[i].next) {
+        const auto& entry = constant_data_keys[i];
+        if (entry.value.type == value.type && entry.value.bits == value.bits && entry.value.valid == value.valid)
+            return entry.object;
+    }
     ConstantObject result; result.first = constant_fields.size(); result.valid = constant_object_fields(value);
     if (!result.valid) constant_fields.resize(result.first);
     else {
@@ -13,8 +24,10 @@ const ConstantObject& Analyzer::constant_value_data(Constant value)
         std::stable_sort(constant_fields.begin()+result.first,constant_fields.end(),
             [](const ConstantField& a, const ConstantField& b) { return a.offset < b.offset; });
     }
-    auto id = object_constants.size(); object_constants.push_back(result); constant_value_objects.put(k,id);
-    return object_constants[id];
+    auto id = object_constants.size(); object_constants.push_back(result);
+    ConstantDataKey entry; entry.value = value; entry.object = id; entry.next = constant_value_objects.get(k);
+    constant_value_objects.put(k,constant_data_keys.size()); constant_data_keys.push_back(entry);
+    return id;
 }
 void Analyzer::prepare_static_vptrs()
 {
@@ -52,7 +65,7 @@ void Analyzer::prepare_static_vptrs()
                     if (dynamic_class(cls) && size(object.type) == 8 && data.count == 1 &&
                         constant_fields[data.first].value.kind == StaticValue::Vtable)
                         static_vptr_objects.put(action.object,cls);
-                    else static_construction_objects.put(action.object,constant_value_objects.get(key(value.type,value.bits)));
+                    else static_construction_objects.put(action.object,constant_value_object(value));
                 }
             }
         }

@@ -50,6 +50,8 @@ void Analyzer::constant_telemetry(std::ostream& out) const
     out        << ",\"semantic_floating_constants\":" << floating_constants.size()-1
         << ",\"semantic_wide_constants\":" << wide_constants.size()-1
         << ",\"semantic_wide_constant_bytes\":" << wide_constants.capacity()*sizeof(WideConstant)
+        << ",\"semantic_constant_data_facts\":" << constant_data_keys.size()-1
+        << ",\"semantic_constant_data_key_bytes\":" << constant_data_keys.capacity()*sizeof(ConstantDataKey)
         << ",\"semantic_constant_bodies\":" << constant_bodies.size()-1
         << ",\"semantic_constant_activations\":" << constant_activations.size()-1
         << ",\"semantic_constant_execution_steps\":" << constant_steps

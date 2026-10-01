@@ -112,7 +112,16 @@ Operand Reader::literal()
     bool negative = accept("-");
     std::string s = word();
     if (s == "nullptr") { require(!negative, "negative null pointer"); return Operand::null(); }
-    bool special = s == "inf" || s == "INFINITY" || s == "nan" || s == "NAN" || s == "snan" || s == "SNAN";
+    auto special_word = [](const std::string& word) {
+        return word == "inf" || word == "INFINITY" || word == "nan" || word == "NAN" || word == "snan" || word == "SNAN";
+    };
+    bool special = special_word(s);
+    // The writer and checked course views carry format suffixes on infinity.
+    // Strip a suffix only after recognizing the complete special-value word;
+    // the final 'f' in unsuffixed "inf" is part of the word itself.
+    if (!special && s.size() > 1 && std::strchr("fFlL",s.back()) && special_word(s.substr(0,s.size()-1))) {
+        s.pop_back(); special = true;
+    }
     bool hex = s.size() > 2 && s[0] == '0' && (s[1] == 'x' || s[1] == 'X');
     bool fp = special || s.find('.') != std::string::npos ||
         s.find_first_of(hex ? "pP" : "eE") != std::string::npos;

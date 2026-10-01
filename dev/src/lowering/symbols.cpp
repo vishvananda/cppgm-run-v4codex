@@ -585,11 +585,10 @@ void Procedural::function_body(EntityId e, bool base)
     if (!ended) {
         clean_inline(live,0);
         if (!function_try) finish_constructor_handlers();
-        if (result_type() == IRType::Void) emit(Opcode::Return, IRType(), {});
-        else if (sem.class_value(returned)) {
-            exception_fallback();
-        }
-        else emit(Opcode::Return, result_type(), {result_type().floating() ? Operand::floating(0) : Operand::integer(0)});
+        // Continuations can be unreachable after all handlers returned. Keep
+        // their terminator valid for every typed result, including complex
+        // storage, using the same owner as exception continuations.
+        exception_fallback();
     }
     emit_cleanups();
     finish_exception_boundary();
