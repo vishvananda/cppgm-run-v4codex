@@ -1,0 +1,91 @@
+[
+  {
+    "command": [
+      "python3",
+      "student.tests/pa29/check191.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-reviewed191"
+    ],
+    "status": 0,
+    "wall_s": 6.078121894970536,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/audit194-reviewed-validation-0.log",
+    "tail": "191 commands, 0 failures\n"
+  },
+  {
+    "command": [
+      "python3",
+      "student.tests/pa29/check192.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-reviewed192"
+    ],
+    "status": 0,
+    "wall_s": 4.1970958560705185,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/audit194-reviewed-validation-1.log",
+    "tail": "84 commands, 0 failures\n"
+  },
+  {
+    "command": [
+      "python3",
+      "student.tests/pa29/check193.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-reviewed193"
+    ],
+    "status": 0,
+    "wall_s": 24.38431493192911,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/audit194-reviewed-validation-2.log",
+    "tail": "366 commands, 70 properties, 0 failures\n"
+  },
+  {
+    "command": [
+      "python3",
+      "student.tests/pa29/check194.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-reviewed194"
+    ],
+    "status": 0,
+    "wall_s": 5.304758857935667,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/audit194-reviewed-validation-3.log",
+    "tail": "76 commands, 11 properties passed\n"
+  },
+  {
+    "command": [
+      "python3",
+      "student.tests/pa29/check_decoder192.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-reviewed-decoder"
+    ],
+    "status": 0,
+    "wall_s": 3.1645279061049223,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/audit194-reviewed-validation-4.log",
+    "tail": "{\"cases\": 1642, \"failed\": 0}\n"
+  },
+  {
+    "command": [
+      "make",
+      "test-pa29"
+    ],
+    "status": 0,
+    "wall_s": 1.9101747628301382,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/audit194-reviewed-validation-5.log",
+    "tail": "  LINK    posttoken\n  LINK    ppexpr\n  LINK    preproc\n===== pa29 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (403 / 403) =====\n"
+  },
+  {
+    "command": [
+      "make",
+      "test-report-through-pa29"
+    ],
+    "status": 0,
+    "wall_s": 15.599104696884751,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/audit194-reviewed-validation-6.log",
+    "tail": "  LINK    posttoken\n  LINK    ppexpr\n  LINK    preproc\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== pa21 =====\n===== pa22 =====\n===== pa23 =====\n===== pa24 =====\nPA24 native contract properties: PASS (14/14)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\n===== pa25 =====\n===== pa26 =====\n===== pa27 =====\nPA27 global-section properties: PASS (3/3)\n===== pa28 =====\n===== pa29 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (4941 / 4941) =====\n"
+  },
+  {
+    "command": [
+      "perl",
+      "scripts/cppgm_file_audit.pl",
+      "--stage",
+      "pa29",
+      "--paths",
+      "dev/src"
+    ],
+    "status": 0,
+    "wall_s": 5.07276751473546,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/audit194-reviewed-validation-7.log",
+    "tail": "File audit passed for pa29 with 4 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n"
+  }
+]

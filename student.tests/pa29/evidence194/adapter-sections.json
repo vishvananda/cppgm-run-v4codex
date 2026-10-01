@@ -1,0 +1,50 @@
+{
+  "integrated": {
+    "-dr": {
+      "equal": true,
+      "hashes": [
+        "94a24ab07c00c170e6b57a5c012f5941f1484f8718a64a4e47937973d5028439",
+        "94a24ab07c00c170e6b57a5c012f5941f1484f8718a64a4e47937973d5028439"
+      ]
+    },
+    "-s": {
+      "equal": true,
+      "hashes": [
+        "918c493c340ef3d272c982f4d63194761161801a2d27644bb31bd021892742e9",
+        "918c493c340ef3d272c982f4d63194761161801a2d27644bb31bd021892742e9"
+      ]
+    }
+  },
+  "nan-source": {
+    "-dr": {
+      "equal": true,
+      "hashes": [
+        "44f82a97e0ee2a0e6deb37886ca929dc97faf0da0466ff0c36f378a2d05cad20",
+        "44f82a97e0ee2a0e6deb37886ca929dc97faf0da0466ff0c36f378a2d05cad20"
+      ]
+    },
+    "-s": {
+      "equal": true,
+      "hashes": [
+        "62f30d8933fc476b69423224ef28343b7ff68b5785fb9d76813061e43a5bd452",
+        "62f30d8933fc476b69423224ef28343b7ff68b5785fb9d76813061e43a5bd452"
+      ]
+    }
+  },
+  "quad-classification": {
+    "-dr": {
+      "equal": true,
+      "hashes": [
+        "ab02b0b8e7139921a8d03ce7717fc3ece9f83d81197daceeface2efaaf4511a1",
+        "ab02b0b8e7139921a8d03ce7717fc3ece9f83d81197daceeface2efaaf4511a1"
+      ]
+    },
+    "-s": {
+      "equal": true,
+      "hashes": [
+        "133ba2199173c6b43ecf5ec9160b11d51aae1eb3f965e124cf318cff0585e6e4",
+        "133ba2199173c6b43ecf5ec9160b11d51aae1eb3f965e124cf318cff0585e6e4"
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "adapter_sha256": "1d12f5a607af6f07c699c97eb4681a8fc3ac84dba8d78421bef335e1755191e7",
+  "sources": {
+    "nan.lowir": {
+      "source": "function @f16_snan() -> f16 [linkage=c, binding=strong] {\n  block ^entry:\n    return f16 snan\n}\nfunction @f16_nan() -> f16 [linkage=c, binding=strong] {\n  block ^entry:\n    return f16 nan\n}\nfunction @f32_snan() -> f32 [linkage=c, binding=strong] {\n  block ^entry:\n    return f32 snan\n}\nfunction @f32_nan() -> f32 [linkage=c, binding=strong] {\n  block ^entry:\n    return f32 nan\n}\nfunction @f64_snan() -> f64 [linkage=c, binding=strong] {\n  block ^entry:\n    return f64 snan\n}\nfunction @f64_nan() -> f64 [linkage=c, binding=strong] {\n  block ^entry:\n    return f64 nan\n}\nfunction @f80_snan() -> f80 [linkage=c, binding=strong] {\n  block ^entry:\n    return f80 snan\n}\nfunction @f80_nan() -> f80 [linkage=c, binding=strong] {\n  block ^entry:\n    return f80 nan\n}\nfunction @f128_snan() -> f128 [linkage=c, binding=strong] {\n  block ^entry:\n    return f128 snan\n}\nfunction @f128_nan() -> f128 [linkage=c, binding=strong] {\n  block ^entry:\n    return f128 nan\n}\nfunction @quad_suffixed() -> f128 [linkage=c, binding=strong] {\n block ^entry:\n return f128 -snanQ\n}\nglobal @global_f16_snan : f16 [linkage=c, binding=strong] = snan\nglobal @global_f16_nan : f16 [linkage=c, binding=strong] = nan\nglobal @global_f32_snan : f32 [linkage=c, binding=strong] = snan\nglobal @global_f32_nan : f32 [linkage=c, binding=strong] = nan\nglobal @global_f64_snan : f64 [linkage=c, binding=strong] = snan\nglobal @global_f64_nan : f64 [linkage=c, binding=strong] = nan\nglobal @global_f80_snan : f80 [linkage=c, binding=strong] = snan\nglobal @global_f80_nan : f80 [linkage=c, binding=strong] = nan\nglobal @global_f128_snan : f128 [linkage=c, binding=strong] = snan\nglobal @global_f128_nan : f128 [linkage=c, binding=strong] = nan\n",
+      "sha256": "259c40b073a7accd15e76130f3e4ff339387477b9195b98d6e82077480671cb4"
+    },
+    "nan-host.cpp": {
+      "source": "#include <cstring>\n#include <cstdio>\nextern \"C\" _Float16 f16_snan(), f16_nan();\nextern \"C\" float f32_snan(), f32_nan();\nextern \"C\" double f64_snan(), f64_nan();\nextern \"C\" long double f80_snan(), f80_nan();\nextern \"C\" __float128 f128_snan(), f128_nan(), quad_suffixed();\ntemplate<class T> bool check(T v,unsigned quiet_byte,unsigned quiet_mask,bool signal,bool negative=false) {\n unsigned char bytes[sizeof(T)];std::memcpy(bytes,&v,sizeof v);\n bool quiet=bytes[quiet_byte]&quiet_mask;\n bool payload=bytes[quiet_byte]&(quiet_mask-1);\n for(unsigned i=0;i<quiet_byte;++i)payload|=bytes[i]!=0;\n bool sign=bytes[sizeof(T)==16 && quiet_byte==7?9:sizeof(T)-1]&128;\n return quiet!=signal && (quiet||payload) && sign==negative;\n}\n#define GLOBAL(T,K) extern \"C\" T global_##K##_snan, global_##K##_nan;\nGLOBAL(_Float16,f16) GLOBAL(float,f32) GLOBAL(double,f64) GLOBAL(long double,f80) GLOBAL(__float128,f128)\nint main(){int failures=0;\n#define CHECK(T,B,M) failures+=!check(T##_snan(),B,M,true);failures+=!check(T##_nan(),B,M,false);\n CHECK(f16,1,2) CHECK(f32,2,64) CHECK(f64,6,8) CHECK(f80,7,64) CHECK(f128,13,128)\n#undef CHECK\n#define CHECK(T,B,M) failures+=!check(global_##T##_snan,B,M,true);failures+=!check(global_##T##_nan,B,M,false);\n CHECK(f16,1,2) CHECK(f32,2,64) CHECK(f64,6,8) CHECK(f80,7,64) CHECK(f128,13,128)\n failures+=!check(quad_suffixed(),13,128,true,true);\n std::printf(\"failures=%d\\n\",failures);return failures;\n}\n",
+      "sha256": "d72ebd11b2100000a76e480d279a0ade7193fe3a6a954e774f39e1c4e68d95cc"
+    }
+  },
+  "commands": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit194-check192/lowir-host",
+        "student.tests/pa29/source194/nan.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/nan-entry-expanded.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "student.tests/pa29/source194/nan-host.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/nan-entry-expanded.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/nan-entry-expanded"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/nan-entry-expanded"
+      ],
+      "status": 5,
+      "stdout": "failures=5\n",
+      "stderr": ""
+    }
+  ]
+}

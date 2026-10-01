@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+    "-c",
+    "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source194/integrated.cpp",
+    "-o",
+    "/home/vishvananda/work/private/v4codex/artifacts/audit194-no-host.o"
+  ],
+  "environment_overrides": {
+    "PATH": "/nonexistent",
+    "CPPGM_HOST_CXX": "/nonexistent"
+  },
+  "status": 0,
+  "stdout": "",
+  "stderr": "",
+  "object_bytes_identical": true
+}

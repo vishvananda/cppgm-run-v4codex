@@ -1,0 +1,48 @@
+{
+  "commands": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit194-check192/lowir-host",
+        "student.tests/pa29/source194/nan.lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/nan-entry.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "student.tests/pa29/source194/nan-host.cpp",
+        "/home/vishvananda/work/private/v4codex/artifacts/nan-entry.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/nan-entry"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/nan-entry"
+      ],
+      "status": 3,
+      "stdout": "failures=3\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "dev/lowir",
+        "student.tests/pa29/source194/nan.lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/nan-entry.canonical.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "canonical": "function @f16_snan() -> f16 [linkage=c, binding=strong] {\n  block ^entry:\n    return f16 snan\n}\nfunction @f16_nan() -> f16 [linkage=c, binding=strong] {\n  block ^entry:\n    return f16 nan\n}\nfunction @f32_snan() -> f32 [linkage=c, binding=strong] {\n  block ^entry:\n    return f32 snan\n}\nfunction @f32_nan() -> f32 [linkage=c, binding=strong] {\n  block ^entry:\n    return f32 nan\n}\nfunction @f64_snan() -> f64 [linkage=c, binding=strong] {\n  block ^entry:\n    return f64 snan\n}\nfunction @f64_nan() -> f64 [linkage=c, binding=strong] {\n  block ^entry:\n    return f64 nan\n}\nfunction @f80_snan() -> f80 [linkage=c, binding=strong] {\n  block ^entry:\n    return f80 snan\n}\nfunction @f80_nan() -> f80 [linkage=c, binding=strong] {\n  block ^entry:\n    return f80 nan\n}\nfunction @f128_snan() -> f128 [linkage=c, binding=strong] {\n  block ^entry:\n    return f128 snan\n}\nfunction @f128_nan() -> f128 [linkage=c, binding=strong] {\n  block ^entry:\n    return f128 nan\n}\nfunction @quad_suffixed() -> f128 [linkage=c, binding=strong] {\n  block ^entry:\n    return f128 -nanQ\n}\n",
+  "source": "function @f16_snan() -> f16 [linkage=c, binding=strong] {\n  block ^entry:\n    return f16 snan\n}\nfunction @f16_nan() -> f16 [linkage=c, binding=strong] {\n  block ^entry:\n    return f16 nan\n}\nfunction @f32_snan() -> f32 [linkage=c, binding=strong] {\n  block ^entry:\n    return f32 snan\n}\nfunction @f32_nan() -> f32 [linkage=c, binding=strong] {\n  block ^entry:\n    return f32 nan\n}\nfunction @f64_snan() -> f64 [linkage=c, binding=strong] {\n  block ^entry:\n    return f64 snan\n}\nfunction @f64_nan() -> f64 [linkage=c, binding=strong] {\n  block ^entry:\n    return f64 nan\n}\nfunction @f80_snan() -> f80 [linkage=c, binding=strong] {\n  block ^entry:\n    return f80 snan\n}\nfunction @f80_nan() -> f80 [linkage=c, binding=strong] {\n  block ^entry:\n    return f80 nan\n}\nfunction @f128_snan() -> f128 [linkage=c, binding=strong] {\n  block ^entry:\n    return f128 snan\n}\nfunction @f128_nan() -> f128 [linkage=c, binding=strong] {\n  block ^entry:\n    return f128 nan\n}\nfunction @quad_suffixed() -> f128 [linkage=c, binding=strong] {\n block ^entry:\n return f128 -snanQ\n}\n",
+  "source_sha256": "3dd4afcfc00b88ef5c5fa1e2a48311574bad30925af94029d2703c6bd656f395"
+}

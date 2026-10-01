@@ -1,0 +1,205 @@
+[
+  {
+    "stage": 191,
+    "dataset": "common-performance.json",
+    "sha256": "019d49314987b9a823ef395f863ddd70b3dc980433d4413d124a95adcd37d28d",
+    "observations": 224,
+    "launchers": 0,
+    "binaries": {
+      "A": {
+        "exists": true,
+        "sha256": "98bbbe6a9acc9f606c564a19c1cba5efae7b52d356f6692439fe62b7980b12b5",
+        "verified": true
+      },
+      "B": {
+        "exists": true,
+        "sha256": "697a1cf4f6dcd402d60d756528aaffc7d15aaae3ed55c4287e71b62420e64eb3",
+        "verified": true
+      }
+    },
+    "input_hashes_checked": 0,
+    "paired_groups_checked": 8
+  },
+  {
+    "stage": 191,
+    "dataset": "owner-performance.json",
+    "sha256": "fe3c27eb8dc6c52d368fa8e868962736a6879c8d806875843f066fb191eb57f0",
+    "observations": 96,
+    "launchers": 16,
+    "binaries": {
+      "A": {
+        "exists": true,
+        "sha256": "98bbbe6a9acc9f606c564a19c1cba5efae7b52d356f6692439fe62b7980b12b5",
+        "verified": true
+      },
+      "B": {
+        "exists": true,
+        "sha256": "697a1cf4f6dcd402d60d756528aaffc7d15aaae3ed55c4287e71b62420e64eb3",
+        "verified": true
+      }
+    },
+    "input_hashes_checked": 6,
+    "paired_groups_checked": 0
+  },
+  {
+    "stage": 192,
+    "dataset": "common-performance.json",
+    "sha256": "1fb485ee1acdabd4b75cf16c51e0a804127e8d078effddaf4dd837c11e563f14",
+    "observations": 224,
+    "launchers": 0,
+    "binaries": {
+      "A": {
+        "exists": true,
+        "sha256": "697a1cf4f6dcd402d60d756528aaffc7d15aaae3ed55c4287e71b62420e64eb3",
+        "verified": true
+      },
+      "B": {
+        "exists": true,
+        "sha256": "88661fad89ec2e9caf03996e1516f0b5098f1bd6a411ae54664332d05cd6ec14",
+        "verified": true
+      }
+    },
+    "input_hashes_checked": 0,
+    "paired_groups_checked": 8
+  },
+  {
+    "stage": 192,
+    "dataset": "owner-performance.json",
+    "sha256": "a47c3910ab8add93b3c54c3244d97eac3a46e2367c426db722da7dd7e0ff13be",
+    "observations": 96,
+    "launchers": 16,
+    "binaries": {
+      "A": {
+        "exists": true,
+        "sha256": "697a1cf4f6dcd402d60d756528aaffc7d15aaae3ed55c4287e71b62420e64eb3",
+        "verified": true
+      },
+      "B": {
+        "exists": true,
+        "sha256": "88661fad89ec2e9caf03996e1516f0b5098f1bd6a411ae54664332d05cd6ec14",
+        "verified": true
+      }
+    },
+    "input_hashes_checked": 6,
+    "paired_groups_checked": 0
+  },
+  {
+    "stage": 193,
+    "dataset": "common-performance.json",
+    "sha256": "f3c1be17c22bd3a6a61d440d47ae3e17dd19438cafab4acea1b0fba1b941116f",
+    "observations": 224,
+    "launchers": 0,
+    "binaries": {
+      "A": {
+        "exists": true,
+        "sha256": "88661fad89ec2e9caf03996e1516f0b5098f1bd6a411ae54664332d05cd6ec14",
+        "verified": true
+      },
+      "B": {
+        "exists": true,
+        "sha256": "3ff6daafb3ff6c4dd23f6445619f78e3d169e1e90589800cccf1615a08c5c689",
+        "verified": true
+      }
+    },
+    "input_hashes_checked": 0,
+    "paired_groups_checked": 8
+  },
+  {
+    "stage": 193,
+    "dataset": "owner-performance.json",
+    "sha256": "da75a6563537913b05ac8bc0af1f2a3091470f3653222fd51ed2c6aa6d549cc2",
+    "observations": 216,
+    "launchers": 16,
+    "binaries": {
+      "A": {
+        "exists": true,
+        "sha256": "88661fad89ec2e9caf03996e1516f0b5098f1bd6a411ae54664332d05cd6ec14",
+        "verified": true
+      },
+      "B": {
+        "exists": true,
+        "sha256": "3ff6daafb3ff6c4dd23f6445619f78e3d169e1e90589800cccf1615a08c5c689",
+        "verified": true
+      }
+    },
+    "input_hashes_checked": 6,
+    "paired_groups_checked": 6
+  },
+  {
+    "stage": 191,
+    "dataset": "preliminary-common-performance.json",
+    "sha256": "dcfdfea5d614367a2a8e60d3cacdfc1ef27524c8ff0d35d8c7d2c8c620a5267e",
+    "observations": 224,
+    "launchers": 0,
+    "binaries": {
+      "A": {
+        "exists": true,
+        "sha256": "98bbbe6a9acc9f606c564a19c1cba5efae7b52d356f6692439fe62b7980b12b5",
+        "current_sha256": "98bbbe6a9acc9f606c564a19c1cba5efae7b52d356f6692439fe62b7980b12b5",
+        "verified": true
+      },
+      "B": {
+        "exists": true,
+        "sha256": "59d277b7f4329df728afe2ab7ebe9df2360bfaf373371033c6715f3b13101d8e",
+        "current_sha256": "697a1cf4f6dcd402d60d756528aaffc7d15aaae3ed55c4287e71b62420e64eb3",
+        "verified": false,
+        "disposition": "Historical scratch path reused. Preserve original observations; do not claim current byte verification or use as final acceptance."
+      }
+    },
+    "input_hashes_checked": 0,
+    "paired_groups_checked": 8
+  },
+  {
+    "stage": 192,
+    "dataset": "preliminary-common-performance.json",
+    "sha256": "7cf0f86aaef8ab625432f6b11b8aec5c415b5f61249f43351c8fb26ce0009926",
+    "observations": 224,
+    "launchers": 0,
+    "binaries": {
+      "A": {
+        "exists": true,
+        "sha256": "697a1cf4f6dcd402d60d756528aaffc7d15aaae3ed55c4287e71b62420e64eb3",
+        "current_sha256": "697a1cf4f6dcd402d60d756528aaffc7d15aaae3ed55c4287e71b62420e64eb3",
+        "verified": true
+      },
+      "B": {
+        "exists": true,
+        "sha256": "ea6c1861d69f351826ebddcfd6e332ecc85e356a0c525170794753a289cb3b83",
+        "current_sha256": "ea6c1861d69f351826ebddcfd6e332ecc85e356a0c525170794753a289cb3b83",
+        "verified": true
+      }
+    },
+    "input_hashes_checked": 0,
+    "paired_groups_checked": 8
+  },
+  {
+    "stage": 192,
+    "dataset": "preliminary-owner-performance.json",
+    "sha256": "a09023ef94d5fcf9c34936f6b93f2847b3e1dfc6b48e9ac865ea8b97df6347b2",
+    "observations": 96,
+    "launchers": 16,
+    "binaries": {
+      "A": {
+        "exists": true,
+        "sha256": "697a1cf4f6dcd402d60d756528aaffc7d15aaae3ed55c4287e71b62420e64eb3",
+        "current_sha256": "697a1cf4f6dcd402d60d756528aaffc7d15aaae3ed55c4287e71b62420e64eb3",
+        "verified": true
+      },
+      "B": {
+        "exists": true,
+        "sha256": "ea6c1861d69f351826ebddcfd6e332ecc85e356a0c525170794753a289cb3b83",
+        "current_sha256": "ea6c1861d69f351826ebddcfd6e332ecc85e356a0c525170794753a289cb3b83",
+        "verified": true
+      }
+    },
+    "input_hashes_checked": 6,
+    "paired_groups_checked": 0
+  },
+  {
+    "stage": 191,
+    "dataset": "preliminary-owner-launchers.json",
+    "observations": 0,
+    "launchers": 16,
+    "disposition": "Original startup calibration retained, no workload gain claim."
+  }
+]

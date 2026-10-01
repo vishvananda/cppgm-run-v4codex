@@ -1,73 +1,74 @@
-# PA29 compact plan — implementation193 handoff
+# PA29 compact plan — final audit194
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage passing**.
-Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
-Previous reviewed commit: `2df00585bd10d4e2e068934394dffc8adb0a47ed`.
-Last reviewed commit: `5aaf16d15f8e50925c0b75a5485893a958501b85`.
-Entry HEAD: `71b9f44aa662154c0c072fd9e4df6510324fce09`, clean, **402/403**.
-Implementation tip: `60db24f609676f3cf60af549978939b2ecd39f60`.
-Review markers remain unchanged. This handoff returns control to Ralph;
-independent whole-stage review is required before advancement.
-Previous turn classification: progress (implementation192 completed floating
-representation/ABI, 399→402, with preserved evidence).
+Target: **PA29 full-stage**. Phase: **audit complete**.
+Stage base: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
+Previous reviewed code: `5aaf16d15f8e50925c0b75a5485893a958501b85`.
+Entry: `bb864d43`, clean; implementation191–193 still required independent review.
+Last reviewed implementation: **`60c3c356`**. No PA30 work started.
+Previous goal turn: **progress** (implementation193 closed the last course failure).
 
-## Design/spec alignment
+## Final Spec Alignment and changes
 
-[Implementation193](implementation193.md) completes the remaining effective
-member ABI-attribute owner. Source tags → indexed definition/prototype match →
-member-instantiation snapshot → typed ABI name → ELF symbol/relocation.
-The unchanged contract selects visible out-of-class definition tags; a prior
-member instantiation keeps its established identity. Related nested explicit
-specialization and queued-instantiation ordering defects are repaired.
-There is no fixture/name recognition, production host compiler, textual phase
-transport, grammar replay or global retry.
+[Final audit](audit.md) independently reconstructs streaming source/tokens,
+integrated parser/semantic graph, canonical identity and indexed lookup,
+retained template facts/frames and precise demand, direct typed LowIR, bounded
+preparation, per-function MIR and direct ELF. Representative `<cmath>`, aligned
+nested-template, vector, ABI-tag and extended-float data reaches actual encoded
+objects, with explicit adapter/CFI inspection and recorded release boundaries.
+All 14 commits/85 implementation paths since checkpoint190 are accounted for;
+its [original audit/ledger](audit190.md) is preserved.
 
-Two TU-owned flat numeric indexes hold one selected head per prototype/member.
-Effective lookup is O(1) average; tag work follows actual attributes. Existing
-signature/demand indexes and cached definition-owner facts serve all nested and
-direct members. There is no optimizer pass or executable-work growth.
-[Prior audit](audit.md), [vector work](implementation191.md), [floating work](implementation192.md)
-and their measurements remain. No reference, bundle or harness changes occur.
+The audit fixed two downstream representation defects in existing owners:
+
+1. Half/quad signaling NaNs lost their signaling flag in native literals;
+   quad text and MIR also lost it. Preserve sign, nonzero payload and signaling
+   identity through globals, instructions, writer and machine view.
+2. Quad classification thresholds in an x87 literal carrier were written with
+   insufficient decimal precision. Emit exact quad text in f128 context, keeping
+   direct and adapted classification equivalent at the subnormal boundary.
+
+`60c3c356` contains both fixes and explicit reducers/integration controls.
+No new production source, optimizer, reference/harness edit or comparison change.
+No known required PA29 correctness, architecture, self-containment or timeout
+item remains. Unsupported vector indexing and later hosted/optimizer/inception
+surfaces are explicitly scoped by the handout, not silently claimed as complete.
 
 ## Validation and performance
 
-[Final checks](../student.tests/pa29/evidence193/validation.json), all exit 0:
-PA29 **403/403**; exact PA1–28 command **4538/4538**; root through PA29
-**4941/4941**; file audit passes with four inherited header warnings.
-Explicit [controls](../student.tests/pa29/evidence193/controls.json) pass
-**366/366 commands and 70/70 properties**: O0/O2 execution/symbols, Clang peer
-linking, declaration/definition order, overloads, template/member specialization,
-rejection boundaries, five LowIR roundtrips, MIR/ELF/unwind inspection and
-telemetry equivalence. Preliminary control evidence retains the discovered and
-repaired late-specialization failure.
+[Final validation](../student.tests/pa29/evidence194/validation.json), all exit 0:
 
-[Coverage](../student.tests/pa29/evidence193/coverage.json) preserves all
-**403 inputs and 1,707 contract/harness paths** byte-for-byte.
-[Progress](../student.tests/pa29/evidence193/stage-delta.json) is **1→0 failures**,
-with no new failures or reduced coverage. [Source binding](../student.tests/pa29/evidence193/source-binding.json)
-pins tested code and compiler to the implementation commit.
+- `make test-pa29`: **403/403**.
+- `make test-report-through-pa29`: **4941/4941**, **29/29 stages**.
+- `perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src`: pass,
+  four inherited substantial-header warnings.
+- Controls191–194: **717 commands, 81 properties**; decoder **1642 cases**.
+  Direct/adapter code/data sections agree; stats-on/off and no-host-PATH object
+  checks agree. ELF symbols, relocations, unwind and MIR inspected.
 
-[Performance193](performance193.md): **440 observations plus 16 launchers**,
-four A/A samples and six ABBA blocks on seven equivalent paired workloads,
-plus corrected-only scaling at 256/1,024/4,096 members. Compiler latency/RSS,
-checked runtime/text, raw spreads and existing work counters are retained.
-All seven equivalent A/B image pairs are byte-identical; every paired timing
-range crosses unity. One source-signature match serves N member applications;
-work, memory and code scale with demand. No speedup is claimed. Necessary
-metadata costs are bounded and reported. Spec §9 keeps inherited unsupported
-blanket targets diagnostic; mandated evaluator/inline/native/time limits remain.
+[Coverage](../student.tests/pa29/evidence194/coverage.json) proves all 403 inputs
+and 1,763 fixture/harness/manifest paths unchanged since entry. The supplied
+5104-case summary differs from both its raw log and fresh reports; actual
+4941-case evidence and unchanged hashes govern this audit. The five inherited
+reference corrections remain documented with reducer, clause/contract and
+bundle proof. No additional reference is corrected.
 
-## Handoff ledger
+[Performance194](performance194.md): **448 final observations plus 16 launchers**,
+eight frozen equivalent A/B image pairs, A/A and six ABBA blocks per mode.
+Compiler latency/RSS, checked runtime/text, counters and every spread remain.
+No generated-code speedup is claimed; no repeatable avoidable regression is
+established. Another 224 preliminary observations and 1,624 historical
+observations/80 launchers are retained, including explicit historical scratch
+binary limitations. Necessary representation work is bounded and measured.
+Inherited blanket 15%/zero-growth targets remain diagnostic under spec §9;
+mandated evaluator/inline/native/time limits and coverage are preserved.
 
-| Owner | Unfinished implementation | Independent review |
-|---|---|---|
-| Effective member ABI tags and specialization identity | None known; the last course failure and related defects are fixed and validated. | Verify hosted-policy scope, stable selection and source-to-ELF trace. |
-| PA29 as a whole | No remaining required-test failure; no known open implementation item in this handoff. | Full architecture/correctness/performance audit, including implementation191–193 and inherited findings. Not waived. |
+## Final ledger
 
-[Remaining-work record](../student.tests/pa29/evidence193/remaining.json) separates
-implementation completion from independent review. No PA30 work is started.
-
-- `d9ad3a92`: entry owner/data-flow/complexity/validation plan; preserved markers.
-- `60db24f6`: semantic selection, nested/late specialization fixes and controls.
-- Following record commit: final validation, complete performance evidence,
-  source/coverage binding and this handoff ledger; no implementation edits.
+| Work | State |
+|---|---|
+| Whole-stage independent architecture and performance review | Complete; source and representative machine flow inspected. |
+| Unreviewed vector/floating/ABI-tag handoffs191–193 | Reviewed, integrated, revalidated; no unaudited handoff left. |
+| Audit representation repairs | Committed in `60c3c356`; required and explicit checks pass. |
+| Final plan/audit/evidence consolidation | This documentation/evidence commit; tested implementation hashes unchanged. |
+| Required exit and repository state | Checks pass; final clean status verified after committing this record. |
+| Remaining required PA29 work | None. |

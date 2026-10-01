@@ -1,0 +1,76 @@
+[
+  {
+    "command": [
+      "dev/cppgm++",
+      "-c",
+      "student.tests/pa29/source194/quad-classification.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-check194/classify.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-check194/classify.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-check194/classify"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-check194/classify"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "student.tests/pa29/source194/quad-classification.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-check194/classify.lowir"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-check194/lowir-host",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-check194/classify.lowir",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-check194/classify-adapter.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-check194/classify-adapter.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-check194/classify-adapter"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit194-check194/classify-adapter"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": ""
+  }
+]
