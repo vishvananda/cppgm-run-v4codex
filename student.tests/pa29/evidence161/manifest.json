@@ -1,0 +1,125 @@
+{
+  "entry_commit": "7f0a2c4b06f7b81442c41c8f5bbdb6ed423977e4",
+  "code_commit": "802f28fd1f76f292ddf8e774c59d7695e197f9c8",
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "machine": "x86_64",
+  "cpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           46 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  32\nOn-line CPU(s) list:                     0-31\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) CPU @ 2.20GHz\nCPU family:                              6\nModel:                                   79\nThread(s) per core:                      2\nCore(s) per socket:                      16\nSocket(s):                               1\nStepping:                                0\nBogoMIPS:                                4399.99\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm rdseed adx smap xsaveopt arat md_clear arch_capabilities\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               512 KiB (16 instances)\nL1i cache:                               512 KiB (16 instances)\nL2 cache:                                4 MiB (16 instances)\nL3 cache:                                55 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-31\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Mitigation; PTE Inversion\nVulnerability Mds:                       Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Meltdown:                  Mitigation; PTI\nVulnerability Mmio stale data:           Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Mitigation; IBRS\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; IBRS; IBPB conditional; STIBP conditional; RSB filling; PBRSB-eIBRS Not affected; BHI SW loop, KVM SW loop\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Vmscape:                   Not affected\n",
+  "host_compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "build_command": "make -j16 build",
+  "build_flags": "-std=gnu++11 -Wall -O3",
+  "measured_flags": [
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "performance_commands": [
+    "PERF_CPU=0 python3 student.tests/pa27/performance147_common.py /tmp/pa29-161/common /tmp/pa29-161/compiler-A /tmp/pa29-161/compiler-B",
+    "PERF_CPU=0 python3 student.tests/pa29/performance161.py /tmp/pa29-161/affected-final /tmp/pa29-161/compiler-A /tmp/pa29-161/compiler-B"
+  ],
+  "binaries": {
+    "A": {
+      "path": "/tmp/pa29-161/compiler-A",
+      "bytes": 3962664,
+      "sha256": "90163dc53f791fe5fe10b52cb69ac8b77c5afa1bee77dfdf1b2c4e80803bb3cc"
+    },
+    "B": {
+      "path": "/tmp/pa29-161/compiler-B",
+      "bytes": 4005656,
+      "sha256": "8e211405aef3a5e24e65bd807efb795f699982487fd9ecc37d7f3b7298b6a781"
+    }
+  },
+  "files": {
+    "student.tests/pa29/evidence161/stage-delta.json": {
+      "bytes": 1151,
+      "sha256": "28e32a1f2e012d1d34e8e59af4f6fbd0e0ebaa34d93cc7e499cc0c3ca2251691"
+    },
+    "student.tests/pa29/evidence161/remaining.json": {
+      "bytes": 27310,
+      "sha256": "a09576027460eeedede7f5957e9f62596204c9242b4fa4a352caa86b9bd0f5ba"
+    },
+    "student.tests/pa29/evidence161/inspection.json": {
+      "bytes": 14534,
+      "sha256": "1e3b9e30cd2283a924445b9f543e242a9bd8448cd1329dc0e69fa1725a208a99"
+    },
+    "student.tests/pa29/evidence161/controls.json": {
+      "bytes": 15833,
+      "sha256": "251e64994315a8a996e7a2c8a0d556d11de6306a33c2f788fc043273040adb7c"
+    },
+    "student.tests/pa29/evidence161/affected-performance.json": {
+      "bytes": 683818,
+      "sha256": "7bfaa8c2746d3370f277df298896966765166921a3b9b93902c9f48edd01dd63"
+    },
+    "student.tests/pa29/evidence161/common-performance.json": {
+      "bytes": 1465902,
+      "sha256": "3c3368f8362126c23ee74baa7ae4142b36d9a90c07ba16e9bb56727276bbbf09"
+    },
+    "student.tests/pa29/evidence161/validation.json": {
+      "bytes": 4456,
+      "sha256": "cb0c8f5dde7227ad2b60d1889a49696a907c7223b8189770be1b5c195d5f9f43"
+    },
+    "student.tests/pa29/controls161.py": {
+      "bytes": 2917,
+      "sha256": "e5b369a591d7b9587519ce48e0d4236d90bdd81cd75ac3f0c40e74a085503280"
+    },
+    "student.tests/pa29/inspection161.py": {
+      "bytes": 3014,
+      "sha256": "191a280c9b125f751ff942c8f83a71b3f0a20da9cc5d531dea5c2b324aff6025"
+    },
+    "student.tests/pa29/ir-object161.cpp": {
+      "bytes": 588,
+      "sha256": "177d81f7f8b4fd34e52170c52aa5788973565551966d24ef916f4e0c8e625620"
+    },
+    "student.tests/pa29/performance161.py": {
+      "bytes": 4645,
+      "sha256": "5cec76771ad38171cddced36bf77fc1efc38932b8a767da7e88a2fc1494d33c4"
+    },
+    "student.tests/pa29/controls161/atomic-padding.cpp": {
+      "bytes": 1260,
+      "sha256": "55880561f2c27c291b48bc45fa7e65c2a1aa22ab46e0e63f32e0de17fe6bb855"
+    },
+    "student.tests/pa29/controls161/atomic-query.cpp": {
+      "bytes": 665,
+      "sha256": "418969738cfab5c5d6e39e664d2b87a236639b18dee6fdd9ece630f984d4bceb"
+    },
+    "student.tests/pa29/controls161/atomic-runtime.cpp": {
+      "bytes": 2745,
+      "sha256": "708854394957a9131f30597286603eb55c9a9db554ad2eae368b9e0f42259790"
+    },
+    "student.tests/pa29/controls161/atomic-hosted.cpp": {
+      "bytes": 477,
+      "sha256": "67082c46aa219f7f07ec9406b330eff7a2715e0274e14b1a3c70a4dfdf03df8a"
+    },
+    "student.tests/pa29/controls161/atomic-generic.cpp": {
+      "bytes": 1025,
+      "sha256": "27b49ed25ba11af6e30d19faad789044c38ec836f5a3f62842ef615c138740dd"
+    },
+    "student.tests/pa29/controls161/atomic-identity.cpp": {
+      "bytes": 484,
+      "sha256": "85d338d02e28cbb8e71549c6122c61c99cdfd7a4317ad17e2a7a287a22016f4e"
+    },
+    "student.tests/pa29/controls161/atomic-layout.cpp": {
+      "bytes": 627,
+      "sha256": "65d6a52b56e28fe4c4e4c713638e8dbe2bf76463d8aface6b3fe0ed1960b65d0"
+    },
+    "student.tests/pa29/controls161/atomic-fallback.cpp": {
+      "bytes": 1371,
+      "sha256": "7aa0d33988028426214dc65f9aff7324e667b51da4a2434f65e042bc19571ca0"
+    },
+    "student.tests/pa29/controls161/atomic-host.cpp": {
+      "bytes": 1025,
+      "sha256": "536aa30afe044c1d9465d9a8cb2a55550ecae480ef22b3306f2083777be93cf7"
+    },
+    "student.tests/pa27/performance147_common.py": {
+      "bytes": 5392,
+      "sha256": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3"
+    },
+    "pa29/implementation161.md": {
+      "bytes": 5728,
+      "sha256": "346876e6f25a11ce0f9e26dfd981c3c2df0b141e612b478ac6374a15eb0505df"
+    },
+    "pa29/performance161.md": {
+      "bytes": 6181,
+      "sha256": "ac43e88ee04bd0756491c201973da3db749479195c335fa254745fd5487d2ae6"
+    }
+  }
+}

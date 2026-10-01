@@ -1,0 +1,26 @@
+{
+  "entry": "7f0a2c4b06f7b81442c41c8f5bbdb6ed423977e4",
+  "code_tip": "802f28fd1f76f292ddf8e774c59d7695e197f9c8",
+  "total": 403,
+  "before_pass": 323,
+  "after_pass": 338,
+  "resolved": [
+    "pa29/tests/compile/200-atomic-member-is-a-literal-subobject.t",
+    "pa29/tests/compile/500-c11-atomic-builtins.t",
+    "pa29/tests/compile/500-c11-atomic-template-member.t",
+    "pa29/tests/compile/500-c11-atomic-type-specifier.t",
+    "pa29/tests/compile/500-c11-class-atomic-builtins.t",
+    "pa29/tests/compile/500-gnu-atomic-fetch-builtins.t",
+    "pa29/tests/compile/500-gnu-atomic-load-store-builtins.t",
+    "pa29/tests/compile/500-gnu-atomic-n-builtins.t",
+    "pa29/tests/compile/600-c11-atomic-member-initialization.t",
+    "pa29/tests/compile/600-extension-atomic-template-member.t",
+    "pa29/tests/compile/600-gnu-sync-interprocess-builtins.t",
+    "pa29/tests/compile/600-gnu-sync-lock-builtins.t",
+    "pa29/tests/compile/700-c11-atomic-sixteen-byte-alignment.t",
+    "pa29/tests/preproc/300-has-feature-atomic.t",
+    "pa29/tests/run/900-atomic-noexcept-has-no-terminate-boundary.t"
+  ],
+  "new_failures": [],
+  "unchanged_failures": 65
+}
