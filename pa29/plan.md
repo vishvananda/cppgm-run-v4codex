@@ -1,6 +1,6 @@
-# PA29 compact plan — audit190
+# PA29 compact plan — implementation191
 
-Target: **PA29 full-stage**. Phase: **checkpoint audit complete; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `2df00585bd10d4e2e068934394dffc8adb0a47ed`.
 Last reviewed commit: `5aaf16d15f8e50925c0b75a5485893a958501b85`.
@@ -67,3 +67,26 @@ work omitted fixed-list recipe evaluation. Avoid that fragmentation by finishing
 an owner across source/query/demand, constant/static/runtime/ABI and adapter
 boundaries before handoff. Keep the remaining groups broad. Historical handoffs,
 [prior audit](audit186.md), all measurements and the cumulative audit ledger remain.
+
+## Implementation191 active work
+
+Entry HEAD: `32c1f5f43cde4e09f623f0e5d606a51d170e8203`; clean, 398/403.
+Previous turn: verified progress (audit190 repaired owners and recorded evidence).
+Review markers above are preserved. Baseline failures/coverage are those in
+`evidence190/remaining.json`; no existing fixture or comparison will be removed.
+
+First owner group: vector expressions and type-operand intrinsics. Trace retained
+syntax/type operands → canonical vector types and deduction → recorded operand
+conversions/intrinsic identity → ordinary typed LowIR → native object. Complete
+comparison, conversion/reduction and bit-cast semantics used by the hosted
+fixture, with related validation, template demand, constant/query and adapter
+consumers examined together. Work/storage must track source and vector lanes;
+no token replay, named-type special cases or hidden backend channel.
+
+Validation: explicit personal positive/negative/template/runtime/LowIR controls,
+required PA29 and PA1–28 reports, file audit; freeze entry/current binaries and
+inputs for A/A and ABBA compiler latency/RSS plus executable runtime/text on
+correct equivalent controls, and corrected-only measurements where entry fails.
+Floating formats remain unfinished implementation. ABI-tag mismatch remains an
+independent contract question; neither is waived. Handoff boundary remains open
+until the complete owner is validated and related defects are resolved.
