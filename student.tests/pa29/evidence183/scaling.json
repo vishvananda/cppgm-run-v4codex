@@ -1,0 +1,989 @@
+{
+  "observations": [
+    {
+      "workload": "guides600",
+      "sample": 0,
+      "expected": {
+        "semantic_deduction_guides": 600,
+        "semantic_deduction_guide_parameters": 1200,
+        "parsed_nodes": 33829,
+        "nodes": 33829,
+        "semantic_specializations": 1201,
+        "semantic_type_substitution_work": 1800,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 3601,
+        "semantic_query_edges": 3000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 36864
+    },
+    {
+      "workload": "guides600",
+      "sample": 1,
+      "expected": {
+        "semantic_deduction_guides": 600,
+        "semantic_deduction_guide_parameters": 1200,
+        "parsed_nodes": 33829,
+        "nodes": 33829,
+        "semantic_specializations": 1201,
+        "semantic_type_substitution_work": 1800,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 3601,
+        "semantic_query_edges": 3000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 36864
+    },
+    {
+      "workload": "guides600",
+      "sample": 2,
+      "expected": {
+        "semantic_deduction_guides": 600,
+        "semantic_deduction_guide_parameters": 1200,
+        "parsed_nodes": 33829,
+        "nodes": 33829,
+        "semantic_specializations": 1201,
+        "semantic_type_substitution_work": 1800,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 3601,
+        "semantic_query_edges": 3000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 36864
+    },
+    {
+      "workload": "guides600",
+      "sample": 3,
+      "expected": {
+        "semantic_deduction_guides": 600,
+        "semantic_deduction_guide_parameters": 1200,
+        "parsed_nodes": 33829,
+        "nodes": 33829,
+        "semantic_specializations": 1201,
+        "semantic_type_substitution_work": 1800,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 3601,
+        "semantic_query_edges": 3000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 36864
+    },
+    {
+      "workload": "guides600",
+      "sample": 4,
+      "expected": {
+        "semantic_deduction_guides": 600,
+        "semantic_deduction_guide_parameters": 1200,
+        "parsed_nodes": 33829,
+        "nodes": 33829,
+        "semantic_specializations": 1201,
+        "semantic_type_substitution_work": 1800,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 3601,
+        "semantic_query_edges": 3000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 36864
+    },
+    {
+      "workload": "guides600",
+      "sample": 5,
+      "expected": {
+        "semantic_deduction_guides": 600,
+        "semantic_deduction_guide_parameters": 1200,
+        "parsed_nodes": 33829,
+        "nodes": 33829,
+        "semantic_specializations": 1201,
+        "semantic_type_substitution_work": 1800,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 3601,
+        "semantic_query_edges": 3000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 36864
+    },
+    {
+      "workload": "guides600",
+      "sample": 6,
+      "expected": {
+        "semantic_deduction_guides": 600,
+        "semantic_deduction_guide_parameters": 1200,
+        "parsed_nodes": 33829,
+        "nodes": 33829,
+        "semantic_specializations": 1201,
+        "semantic_type_substitution_work": 1800,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 3601,
+        "semantic_query_edges": 3000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 36864
+    },
+    {
+      "workload": "guides600",
+      "sample": 7,
+      "expected": {
+        "semantic_deduction_guides": 600,
+        "semantic_deduction_guide_parameters": 1200,
+        "parsed_nodes": 33829,
+        "nodes": 33829,
+        "semantic_specializations": 1201,
+        "semantic_type_substitution_work": 1800,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 3601,
+        "semantic_query_edges": 3000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 36864
+    },
+    {
+      "workload": "guides1200",
+      "sample": 0,
+      "expected": {
+        "semantic_deduction_guides": 1200,
+        "semantic_deduction_guide_parameters": 2400,
+        "parsed_nodes": 67429,
+        "nodes": 67429,
+        "semantic_specializations": 2401,
+        "semantic_type_substitution_work": 3600,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 7201,
+        "semantic_query_edges": 6000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 73728
+    },
+    {
+      "workload": "guides1200",
+      "sample": 1,
+      "expected": {
+        "semantic_deduction_guides": 1200,
+        "semantic_deduction_guide_parameters": 2400,
+        "parsed_nodes": 67429,
+        "nodes": 67429,
+        "semantic_specializations": 2401,
+        "semantic_type_substitution_work": 3600,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 7201,
+        "semantic_query_edges": 6000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 73728
+    },
+    {
+      "workload": "guides1200",
+      "sample": 2,
+      "expected": {
+        "semantic_deduction_guides": 1200,
+        "semantic_deduction_guide_parameters": 2400,
+        "parsed_nodes": 67429,
+        "nodes": 67429,
+        "semantic_specializations": 2401,
+        "semantic_type_substitution_work": 3600,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 7201,
+        "semantic_query_edges": 6000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 73728
+    },
+    {
+      "workload": "guides1200",
+      "sample": 3,
+      "expected": {
+        "semantic_deduction_guides": 1200,
+        "semantic_deduction_guide_parameters": 2400,
+        "parsed_nodes": 67429,
+        "nodes": 67429,
+        "semantic_specializations": 2401,
+        "semantic_type_substitution_work": 3600,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 7201,
+        "semantic_query_edges": 6000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 73728
+    },
+    {
+      "workload": "guides1200",
+      "sample": 4,
+      "expected": {
+        "semantic_deduction_guides": 1200,
+        "semantic_deduction_guide_parameters": 2400,
+        "parsed_nodes": 67429,
+        "nodes": 67429,
+        "semantic_specializations": 2401,
+        "semantic_type_substitution_work": 3600,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 7201,
+        "semantic_query_edges": 6000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 73728
+    },
+    {
+      "workload": "guides1200",
+      "sample": 5,
+      "expected": {
+        "semantic_deduction_guides": 1200,
+        "semantic_deduction_guide_parameters": 2400,
+        "parsed_nodes": 67429,
+        "nodes": 67429,
+        "semantic_specializations": 2401,
+        "semantic_type_substitution_work": 3600,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 7201,
+        "semantic_query_edges": 6000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 73728
+    },
+    {
+      "workload": "guides1200",
+      "sample": 6,
+      "expected": {
+        "semantic_deduction_guides": 1200,
+        "semantic_deduction_guide_parameters": 2400,
+        "parsed_nodes": 67429,
+        "nodes": 67429,
+        "semantic_specializations": 2401,
+        "semantic_type_substitution_work": 3600,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 7201,
+        "semantic_query_edges": 6000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 73728
+    },
+    {
+      "workload": "guides1200",
+      "sample": 7,
+      "expected": {
+        "semantic_deduction_guides": 1200,
+        "semantic_deduction_guide_parameters": 2400,
+        "parsed_nodes": 67429,
+        "nodes": 67429,
+        "semantic_specializations": 2401,
+        "semantic_type_substitution_work": 3600,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 7201,
+        "semantic_query_edges": 6000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 73728
+    },
+    {
+      "workload": "guides2400",
+      "sample": 0,
+      "expected": {
+        "semantic_deduction_guides": 2400,
+        "semantic_deduction_guide_parameters": 4800,
+        "parsed_nodes": 134629,
+        "nodes": 134629,
+        "semantic_specializations": 4801,
+        "semantic_type_substitution_work": 7200,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 14401,
+        "semantic_query_edges": 12000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 147456
+    },
+    {
+      "workload": "guides2400",
+      "sample": 1,
+      "expected": {
+        "semantic_deduction_guides": 2400,
+        "semantic_deduction_guide_parameters": 4800,
+        "parsed_nodes": 134629,
+        "nodes": 134629,
+        "semantic_specializations": 4801,
+        "semantic_type_substitution_work": 7200,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 14401,
+        "semantic_query_edges": 12000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 147456
+    },
+    {
+      "workload": "guides2400",
+      "sample": 2,
+      "expected": {
+        "semantic_deduction_guides": 2400,
+        "semantic_deduction_guide_parameters": 4800,
+        "parsed_nodes": 134629,
+        "nodes": 134629,
+        "semantic_specializations": 4801,
+        "semantic_type_substitution_work": 7200,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 14401,
+        "semantic_query_edges": 12000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 147456
+    },
+    {
+      "workload": "guides2400",
+      "sample": 3,
+      "expected": {
+        "semantic_deduction_guides": 2400,
+        "semantic_deduction_guide_parameters": 4800,
+        "parsed_nodes": 134629,
+        "nodes": 134629,
+        "semantic_specializations": 4801,
+        "semantic_type_substitution_work": 7200,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 14401,
+        "semantic_query_edges": 12000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 147456
+    },
+    {
+      "workload": "guides2400",
+      "sample": 4,
+      "expected": {
+        "semantic_deduction_guides": 2400,
+        "semantic_deduction_guide_parameters": 4800,
+        "parsed_nodes": 134629,
+        "nodes": 134629,
+        "semantic_specializations": 4801,
+        "semantic_type_substitution_work": 7200,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 14401,
+        "semantic_query_edges": 12000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 147456
+    },
+    {
+      "workload": "guides2400",
+      "sample": 5,
+      "expected": {
+        "semantic_deduction_guides": 2400,
+        "semantic_deduction_guide_parameters": 4800,
+        "parsed_nodes": 134629,
+        "nodes": 134629,
+        "semantic_specializations": 4801,
+        "semantic_type_substitution_work": 7200,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 14401,
+        "semantic_query_edges": 12000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 147456
+    },
+    {
+      "workload": "guides2400",
+      "sample": 6,
+      "expected": {
+        "semantic_deduction_guides": 2400,
+        "semantic_deduction_guide_parameters": 4800,
+        "parsed_nodes": 134629,
+        "nodes": 134629,
+        "semantic_specializations": 4801,
+        "semantic_type_substitution_work": 7200,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 14401,
+        "semantic_query_edges": 12000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 147456
+    },
+    {
+      "workload": "guides2400",
+      "sample": 7,
+      "expected": {
+        "semantic_deduction_guides": 2400,
+        "semantic_deduction_guide_parameters": 4800,
+        "parsed_nodes": 134629,
+        "nodes": 134629,
+        "semantic_specializations": 4801,
+        "semantic_type_substitution_work": 7200,
+        "template_body_transitions": 0,
+        "semantic_body_checks": 3,
+        "semantic_type_query_work": 14401,
+        "semantic_query_edges": 12000,
+        "instructions": 70,
+        "operands": 110,
+        "prepared_instructions": 70,
+        "prepared_operands": 110
+      },
+      "guide_capacity_bytes": 147456
+    },
+    {
+      "workload": "defaults600",
+      "sample": 0,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 9270,
+        "nodes": 35670,
+        "semantic_specializations": 600,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 600,
+        "template_default_facts": 600,
+        "template_body_transitions": 600,
+        "semantic_body_checks": 603,
+        "instructions": 10271,
+        "operands": 15712,
+        "prepared_instructions": 10271,
+        "prepared_operands": 15712
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults600",
+      "sample": 1,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 9270,
+        "nodes": 35670,
+        "semantic_specializations": 600,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 600,
+        "template_default_facts": 600,
+        "template_body_transitions": 600,
+        "semantic_body_checks": 603,
+        "instructions": 10271,
+        "operands": 15712,
+        "prepared_instructions": 10271,
+        "prepared_operands": 15712
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults600",
+      "sample": 2,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 9270,
+        "nodes": 35670,
+        "semantic_specializations": 600,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 600,
+        "template_default_facts": 600,
+        "template_body_transitions": 600,
+        "semantic_body_checks": 603,
+        "instructions": 10271,
+        "operands": 15712,
+        "prepared_instructions": 10271,
+        "prepared_operands": 15712
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults600",
+      "sample": 3,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 9270,
+        "nodes": 35670,
+        "semantic_specializations": 600,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 600,
+        "template_default_facts": 600,
+        "template_body_transitions": 600,
+        "semantic_body_checks": 603,
+        "instructions": 10271,
+        "operands": 15712,
+        "prepared_instructions": 10271,
+        "prepared_operands": 15712
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults600",
+      "sample": 4,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 9270,
+        "nodes": 35670,
+        "semantic_specializations": 600,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 600,
+        "template_default_facts": 600,
+        "template_body_transitions": 600,
+        "semantic_body_checks": 603,
+        "instructions": 10271,
+        "operands": 15712,
+        "prepared_instructions": 10271,
+        "prepared_operands": 15712
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults600",
+      "sample": 5,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 9270,
+        "nodes": 35670,
+        "semantic_specializations": 600,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 600,
+        "template_default_facts": 600,
+        "template_body_transitions": 600,
+        "semantic_body_checks": 603,
+        "instructions": 10271,
+        "operands": 15712,
+        "prepared_instructions": 10271,
+        "prepared_operands": 15712
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults600",
+      "sample": 6,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 9270,
+        "nodes": 35670,
+        "semantic_specializations": 600,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 600,
+        "template_default_facts": 600,
+        "template_body_transitions": 600,
+        "semantic_body_checks": 603,
+        "instructions": 10271,
+        "operands": 15712,
+        "prepared_instructions": 10271,
+        "prepared_operands": 15712
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults600",
+      "sample": 7,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 9270,
+        "nodes": 35670,
+        "semantic_specializations": 600,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 600,
+        "template_default_facts": 600,
+        "template_body_transitions": 600,
+        "semantic_body_checks": 603,
+        "instructions": 10271,
+        "operands": 15712,
+        "prepared_instructions": 10271,
+        "prepared_operands": 15712
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults1200",
+      "sample": 0,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 18270,
+        "nodes": 71070,
+        "semantic_specializations": 1200,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 1200,
+        "template_default_facts": 1200,
+        "template_body_transitions": 1200,
+        "semantic_body_checks": 1203,
+        "instructions": 20471,
+        "operands": 31312,
+        "prepared_instructions": 20471,
+        "prepared_operands": 31312
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults1200",
+      "sample": 1,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 18270,
+        "nodes": 71070,
+        "semantic_specializations": 1200,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 1200,
+        "template_default_facts": 1200,
+        "template_body_transitions": 1200,
+        "semantic_body_checks": 1203,
+        "instructions": 20471,
+        "operands": 31312,
+        "prepared_instructions": 20471,
+        "prepared_operands": 31312
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults1200",
+      "sample": 2,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 18270,
+        "nodes": 71070,
+        "semantic_specializations": 1200,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 1200,
+        "template_default_facts": 1200,
+        "template_body_transitions": 1200,
+        "semantic_body_checks": 1203,
+        "instructions": 20471,
+        "operands": 31312,
+        "prepared_instructions": 20471,
+        "prepared_operands": 31312
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults1200",
+      "sample": 3,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 18270,
+        "nodes": 71070,
+        "semantic_specializations": 1200,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 1200,
+        "template_default_facts": 1200,
+        "template_body_transitions": 1200,
+        "semantic_body_checks": 1203,
+        "instructions": 20471,
+        "operands": 31312,
+        "prepared_instructions": 20471,
+        "prepared_operands": 31312
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults1200",
+      "sample": 4,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 18270,
+        "nodes": 71070,
+        "semantic_specializations": 1200,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 1200,
+        "template_default_facts": 1200,
+        "template_body_transitions": 1200,
+        "semantic_body_checks": 1203,
+        "instructions": 20471,
+        "operands": 31312,
+        "prepared_instructions": 20471,
+        "prepared_operands": 31312
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults1200",
+      "sample": 5,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 18270,
+        "nodes": 71070,
+        "semantic_specializations": 1200,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 1200,
+        "template_default_facts": 1200,
+        "template_body_transitions": 1200,
+        "semantic_body_checks": 1203,
+        "instructions": 20471,
+        "operands": 31312,
+        "prepared_instructions": 20471,
+        "prepared_operands": 31312
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults1200",
+      "sample": 6,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 18270,
+        "nodes": 71070,
+        "semantic_specializations": 1200,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 1200,
+        "template_default_facts": 1200,
+        "template_body_transitions": 1200,
+        "semantic_body_checks": 1203,
+        "instructions": 20471,
+        "operands": 31312,
+        "prepared_instructions": 20471,
+        "prepared_operands": 31312
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults1200",
+      "sample": 7,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 18270,
+        "nodes": 71070,
+        "semantic_specializations": 1200,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 1200,
+        "template_default_facts": 1200,
+        "template_body_transitions": 1200,
+        "semantic_body_checks": 1203,
+        "instructions": 20471,
+        "operands": 31312,
+        "prepared_instructions": 20471,
+        "prepared_operands": 31312
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults2400",
+      "sample": 0,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 36270,
+        "nodes": 141870,
+        "semantic_specializations": 2400,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 2400,
+        "template_default_facts": 2400,
+        "template_body_transitions": 2400,
+        "semantic_body_checks": 2403,
+        "instructions": 40871,
+        "operands": 62512,
+        "prepared_instructions": 40871,
+        "prepared_operands": 62512
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults2400",
+      "sample": 1,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 36270,
+        "nodes": 141870,
+        "semantic_specializations": 2400,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 2400,
+        "template_default_facts": 2400,
+        "template_body_transitions": 2400,
+        "semantic_body_checks": 2403,
+        "instructions": 40871,
+        "operands": 62512,
+        "prepared_instructions": 40871,
+        "prepared_operands": 62512
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults2400",
+      "sample": 2,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 36270,
+        "nodes": 141870,
+        "semantic_specializations": 2400,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 2400,
+        "template_default_facts": 2400,
+        "template_body_transitions": 2400,
+        "semantic_body_checks": 2403,
+        "instructions": 40871,
+        "operands": 62512,
+        "prepared_instructions": 40871,
+        "prepared_operands": 62512
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults2400",
+      "sample": 3,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 36270,
+        "nodes": 141870,
+        "semantic_specializations": 2400,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 2400,
+        "template_default_facts": 2400,
+        "template_body_transitions": 2400,
+        "semantic_body_checks": 2403,
+        "instructions": 40871,
+        "operands": 62512,
+        "prepared_instructions": 40871,
+        "prepared_operands": 62512
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults2400",
+      "sample": 4,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 36270,
+        "nodes": 141870,
+        "semantic_specializations": 2400,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 2400,
+        "template_default_facts": 2400,
+        "template_body_transitions": 2400,
+        "semantic_body_checks": 2403,
+        "instructions": 40871,
+        "operands": 62512,
+        "prepared_instructions": 40871,
+        "prepared_operands": 62512
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults2400",
+      "sample": 5,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 36270,
+        "nodes": 141870,
+        "semantic_specializations": 2400,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 2400,
+        "template_default_facts": 2400,
+        "template_body_transitions": 2400,
+        "semantic_body_checks": 2403,
+        "instructions": 40871,
+        "operands": 62512,
+        "prepared_instructions": 40871,
+        "prepared_operands": 62512
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults2400",
+      "sample": 6,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 36270,
+        "nodes": 141870,
+        "semantic_specializations": 2400,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 2400,
+        "template_default_facts": 2400,
+        "template_body_transitions": 2400,
+        "semantic_body_checks": 2403,
+        "instructions": 40871,
+        "operands": 62512,
+        "prepared_instructions": 40871,
+        "prepared_operands": 62512
+      },
+      "guide_capacity_bytes": 36
+    },
+    {
+      "workload": "defaults2400",
+      "sample": 7,
+      "expected": {
+        "semantic_deduction_guides": 0,
+        "parsed_nodes": 36270,
+        "nodes": 141870,
+        "semantic_specializations": 2400,
+        "semantic_template_default_binding_work": 1,
+        "template_default_argument_work": 2400,
+        "template_default_facts": 2400,
+        "template_body_transitions": 2400,
+        "semantic_body_checks": 2403,
+        "instructions": 40871,
+        "operands": 62512,
+        "prepared_instructions": 40871,
+        "prepared_operands": 62512
+      },
+      "guide_capacity_bytes": 36
+    }
+  ],
+  "compiler_sha256": "337588703754eb605fa5680f99b8bdf88425eb80f0c0a7fb7bc776c8999b66dd"
+}

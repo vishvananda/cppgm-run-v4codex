@@ -1,0 +1,89 @@
+{
+  "compiler_sha256": "27de74d246ace237d351a2b4b2f59365be53651bff1b99c9d9bccfa829dcd648",
+  "rows": [
+    {
+      "command": [
+        "/tmp/pa29-183/entry",
+        "-O0",
+        "-c",
+        "/tmp/pa29-183/owner/guides600.cpp",
+        "-o",
+        "/tmp/pa29-183/entry-probe.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: expected type specifier in /tmp/pa29-183/owner/guides600.cpp:2 near '('\n",
+      "source_sha256": "31da97c5f6e6df9d0ed1be33b8391a5f712e3965f8003f0d3aa0aec4f74b12b3"
+    },
+    {
+      "command": [
+        "/tmp/pa29-183/entry",
+        "-O0",
+        "-c",
+        "/tmp/pa29-183/owner/guides1200.cpp",
+        "-o",
+        "/tmp/pa29-183/entry-probe.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: expected type specifier in /tmp/pa29-183/owner/guides1200.cpp:2 near '('\n",
+      "source_sha256": "1e353f46d443b9eba7f00af98e848988983e2a8acaf5a5f0b7cfa6069045c4b0"
+    },
+    {
+      "command": [
+        "/tmp/pa29-183/entry",
+        "-O0",
+        "-c",
+        "/tmp/pa29-183/owner/guides2400.cpp",
+        "-o",
+        "/tmp/pa29-183/entry-probe.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: expected type specifier in /tmp/pa29-183/owner/guides2400.cpp:2 near '('\n",
+      "source_sha256": "ba44f8f7d478e20a60a34d4c34d77c8f49dc22e1ab5961abd0c54ce5638fa564"
+    },
+    {
+      "command": [
+        "/tmp/pa29-183/entry",
+        "-O0",
+        "-c",
+        "/tmp/pa29-183/owner/defaults600.cpp",
+        "-o",
+        "/tmp/pa29-183/entry-probe.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: x\n",
+      "source_sha256": "deef5ef32617efcbeca32dacea24052dd900a28ccc65b80f3e11c2aa83ae69f6"
+    },
+    {
+      "command": [
+        "/tmp/pa29-183/entry",
+        "-O0",
+        "-c",
+        "/tmp/pa29-183/owner/defaults1200.cpp",
+        "-o",
+        "/tmp/pa29-183/entry-probe.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: x\n",
+      "source_sha256": "7f5914a079761c7713f0d99a077eae3cfaa00357fc513e578a18e211c3f0f36d"
+    },
+    {
+      "command": [
+        "/tmp/pa29-183/entry",
+        "-O0",
+        "-c",
+        "/tmp/pa29-183/owner/defaults2400.cpp",
+        "-o",
+        "/tmp/pa29-183/entry-probe.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: x\n",
+      "source_sha256": "bf00e1db3bfceeb3d40bfc85544fa4fa7080f363d7ae47e9039c923f440ebdfc"
+    }
+  ]
+}
