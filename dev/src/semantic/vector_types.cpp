@@ -6,7 +6,7 @@ TypeId Analyzer::vector_type(TypeId lane, QueryId query, bool extended)
     auto dependent_lane = dependent_type(lane), dependent_width = query_fact(query).dependent;
     auto type = types[lane];
     if (!dependent_lane && (type.kind != TypeKind::Fundamental || !arithmetic(lane) ||
-        (!extended && fundamental(lane,FT_BOOL)) || (type.cv & 4))) return 0;
+        (bit_integer_kind(type.fundamental) || (!extended && fundamental(lane,FT_BOOL))) || (type.cv & 4))) return 0;
     std::uint64_t count = 0;
     if (!dependent_width) {
         auto value = constants[query_value(query)];

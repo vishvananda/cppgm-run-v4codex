@@ -52,6 +52,20 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         return deduce_sequence(std::vector<ArgumentId>(argument_types.begin()+x.offset,argument_types.begin()+x.offset+x.count),
             std::vector<ArgumentId>(argument_types.begin()+y.offset,argument_types.begin()+y.offset+y.count),bindings,kind,prefix);
     }
+    if (p.kind == TypeKind::DependentBitInt) {
+        bool dependent = a.kind == TypeKind::DependentBitInt;
+        if (!dependent && (a.kind != TypeKind::Fundamental || !bit_integer_kind(a.fundamental))) return false;
+        if (is_unsigned(p.child) != is_unsigned(dependent ? a.child : actual)) return false;
+        ArgumentId count;
+        if (dependent) count = value_argument_id(a.bound);
+        else {
+            TypeQuery q; q.type = types.fundamental(FT_UNSIGNED_INT); q.value = a.bound;
+            count = value_argument_id(intern_query(q,{}));
+        }
+        auto query = type_queries[p.bound];
+        if (query.kind == QueryKind::TemplateValueParameter) count = convert_argument(count,query.type);
+        return count && deduce_type(value_argument_id(p.bound),count,bindings,kind,prefix);
+    }
     if (p.kind == TypeKind::DependentExtVector) {
         if (a.kind != TypeKind::ExtVector && a.kind != TypeKind::DependentExtVector) return false;
         ArgumentId count;
@@ -65,7 +79,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         return count && deduce_type(value_argument_id(p.bound),count,bindings,kind,prefix) &&
             deduce_type(p.child,a.child,bindings,kind,prefix);
     }
-    if (p.kind == TypeKind::DependentBitInt || p.kind == TypeKind::DependentVector) return true; // vendor dependent vector shapes are non-deduced
+    if (p.kind == TypeKind::DependentVector) return true; // vendor dependent vector shapes are non-deduced
     if (p.kind == TypeKind::DependentArray) {
         if ((a.kind != TypeKind::Array && a.kind != TypeKind::DependentArray) || a.unknown_bound || (a.kind == TypeKind::Array && !a.bound)) return false;
         ArgumentId bound;

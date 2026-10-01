@@ -48,7 +48,7 @@ TypeId Analyzer::promote_expression(NodeId n)
     auto expression = expressions[n];
     auto field = field_fact(expression.entity);
     TypeId t = decay(expression.type);
-    if (field.bit_field && types[t].kind != TypeKind::Named) {
+    if (field.bit_field && types[t].kind != TypeKind::Named && !bit_integer_kind(types[t].fundamental)) {
         if (field.width < 32 || (field.width == 32 && !is_unsigned(t))) return types.fundamental(FT_INT);
         if (field.width == 32) return types.fundamental(FT_UNSIGNED_INT);
     }

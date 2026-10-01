@@ -8,7 +8,8 @@ namespace lowir_model {
 void Writer::type(Type t)
 {
     static const char* const names[] = {"void","i1","i8","u8","i16","u16","i32","u32","i64","i128","f32","f64","f80","ptr"};
-    if (t.kind() == Type::Object) out_ << "obj<" << t.bytes() << 'x' << t.alignment() << '>';
+    if (t == Type::I128 && t.abi_alignment() == 8) out_ << "i128a8";
+    else if (t.kind() == Type::Object) out_ << "obj<" << t.bytes() << 'x' << t.alignment() << '>';
     else out_ << names[t.kind()];
 }
 void Writer::symbol(SymbolId id) { out_ << p_.name(p_.symbols.at(id.index-1).name); }

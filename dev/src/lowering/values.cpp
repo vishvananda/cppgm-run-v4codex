@@ -16,7 +16,7 @@ IRType Procedural::type(TypeId id)
         if (semantic::bit_integer_kind(t.fundamental)) {
             auto bits = t.bound; bool unsign = t.fundamental == FT_UBITINT;
             return bits <= 8 ? (unsign ? IRType::U8 : IRType::I8) : bits <= 16 ? (unsign ? IRType::U16 : IRType::I16) :
-                bits <= 32 ? (unsign ? IRType::U32 : IRType::I32) : bits <= 64 ? IRType::I64 : IRType::I128;
+                bits <= 32 ? (unsign ? IRType::U32 : IRType::I32) : bits <= 64 ? IRType(IRType::I64) : IRType::integer128_align8();
         }
         static const IRType::Kind kinds[] = {IRType::I8, IRType::I16, IRType::I32, IRType::I64, IRType::I64,
             IRType::U8, IRType::U16, IRType::U32, IRType::I64, IRType::I64, IRType::I32, IRType::I8,
@@ -79,7 +79,7 @@ Value Procedural::load(Value v)
     if (sem.types[v.type].kind == TypeKind::Array || sem.types[v.type].kind == TypeKind::Function) return address(v);
     if (v.cached && !(sem.types[v.type].cv & 2)) return Value(v.stored, type(v.type), v.type);
     Instruction i(Opcode::Load, type(v.type)); i.is_volatile = sem.types[v.type].cv & 2;
-    Value r = emit(i, {v.operand}); r.type = v.type; r.member_zero_adjustment = v.member_zero_adjustment; return r;
+    Value r = emit(i, {v.operand}); r.type = v.type; r.member_zero_adjustment = v.member_zero_adjustment; return normalize_bit_integer(r);
 }
 Value Procedural::address(Value v)
 {
@@ -159,7 +159,7 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen, bool preserve_wid
     TypeId from = v.type;
     if (sem.types[to].kind == TypeKind::MemberPointer && (!from || sem.types[from].kind != TypeKind::MemberPointer))
         return member_pointer_value(0,to);
-    v = load(v);
+    v = normalize_bit_integer(load(v));
     IRType target = type(to);
     if (from && sem.types[from].kind == TypeKind::Fundamental && sem.types[from].fundamental == FT_NULLPTR_T && target == IRType::I64)
         return Value(Operand::integer(0), target, to);

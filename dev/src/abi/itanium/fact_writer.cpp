@@ -86,6 +86,8 @@ std::string FactWriter::type(Id id) {
         for (Id i = 0; i < n.count; ++i) result += ' ' + g.spelling(g.child(n, i));
         return result;
     }
+    case Kind::BitInt:
+        return std::string(n.b ? "ubitint" : "bitint") + (n.a ? "-expr " + ref('x',n.a) : " " + std::to_string(n.value));
     case Kind::Builtin: return abi_builtin_type_word(static_cast<AbiBuiltinTypeKind>(n.a));
     case Kind::TemplateHead: return join_form({"template-head",list(n,'t')});
     case Kind::TemplateParameterDeclaration: return join_form({"template-declaration ",std::to_string(n.a),n.a ? " "+ref('t',n.b) : ""});

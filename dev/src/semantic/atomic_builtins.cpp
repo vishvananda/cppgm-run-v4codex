@@ -4,7 +4,7 @@ namespace cppgm { namespace semantic {
 bool Analyzer::atomic_operand(TypeId id)
 {
     auto t = types[id];
-    if (t.cv || t.kind == TypeKind::Array || t.kind == TypeKind::Function ||
+    if ((t.kind == TypeKind::Fundamental && bit_integer_kind(t.fundamental)) || t.cv || t.kind == TypeKind::Array || t.kind == TypeKind::Function ||
         t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || fundamental(id,FT_VOID)) return false;
     return dependent_type(id) || builtin_type_property(unsigned(BuiltinTrait::TriviallyCopyable),id);
 }

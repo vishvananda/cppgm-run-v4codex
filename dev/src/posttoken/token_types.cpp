@@ -316,14 +316,14 @@ const char* fundamental_name(EFundamentalType type)
         "double",
         "long double",
         "void",
-        "nullptr_t", "__int128", "unsigned __int128",
+        "nullptr_t", "__int128", "unsigned __int128", "_BitInt", "unsigned _BitInt",
     };
     return names[type];
 }
 
 unsigned fundamental_width(EFundamentalType type)
 {
-    static const unsigned char widths[] = {1, 2, 4, 8, 8, 1, 2, 4, 8, 8, 4, 1, 2, 4, 1, 4, 8, 16, 0, 8, 16, 16};
+    static const unsigned char widths[] = {1, 2, 4, 8, 8, 1, 2, 4, 8, 8, 4, 1, 2, 4, 1, 4, 8, 16, 0, 8, 16, 16, 0, 0};
     return widths[type];
 }
 

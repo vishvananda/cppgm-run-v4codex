@@ -27,7 +27,7 @@ struct AbiCursor {
             r.count = chunks;
             for (unsigned k = 0; k < chunks; ++k) r.parts[k] = Operand::r(regs[gp++]);
         } else {
-            unsigned alignment = t == Type::I128 ? 16 : std::max(8u,t.alignment());
+            unsigned alignment = std::max(8u,t.abi_alignment());
             stack_alignment = std::max(stack_alignment,alignment);
             stack = ((stack-stack_origin+alignment-1)&~std::uint64_t(alignment-1))+stack_origin;
             r.parts[0] = Operand::mem(stack_base,stack); r.memory = true;

@@ -23,7 +23,7 @@ using IRType = lowir_model::Type;
 struct Value {
     Operand operand;
     IRType ir;
-    TypeId type = 0;
+    TypeId type = 0, normalized_integer = 0;
     EntityId bit_field = 0, parameter_object = 0;
     std::uint64_t init_offset = 0;
     bool address = false, cached = false, nonnull = false, member_zero_adjustment = false;

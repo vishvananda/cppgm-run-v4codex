@@ -70,7 +70,7 @@ SymbolId Procedural::rtti_type(TypeId id)
     auto info = abi_type_global(id,abi_mangle::TargetKind::Typeinfo);
     rtti_symbols.put(id,info.index);
     if (p.symbols[info.index-1].kind != Symbol::Unknown) return info;
-    if (t.kind == TypeKind::Fundamental && (linkage.host || (linkage.presentation && t.fundamental == FT_VOID))) {
+    if (t.kind == TypeKind::Fundamental && !semantic::bit_integer_kind(t.fundamental) && (linkage.host || (linkage.presentation && t.fundamental == FT_VOID))) {
         Global g; g.symbol = info; g.declaration = true; p.globals.push_back(g);
         auto& symbol = p.symbols[info.index-1]; symbol.kind = Symbol::GlobalSymbol; symbol.entity = p.globals.size();
         symbol.metadata.binding = SBM_STRONG; symbol.metadata.role = SR_RTTI_DATA; return info;

@@ -69,6 +69,13 @@ Id FactReader::compact(const std::string& word) {
 Id FactReader::type(const Words& w, std::size_t& p) {
     Nesting nesting(depth);
     std::string op = take(w, p);
+    if (op == "bitint" || op == "ubitint" || op == "bitint-expr" || op == "ubitint-expr") {
+        bool unsign = op[0] == 'u', dependent = op.find("-expr") != std::string::npos;
+        auto operand = take(w,p);
+        auto width = dependent ? 0 : index_value(operand);
+        if (!dependent && width < (unsign ? 1u : 2u)) throw std::runtime_error("invalid bit-integer ABI width");
+        return g.make(Kind::BitInt,dependent ? reference(operand,BindingKind::Expression) : 0,unsign,0,width);
+    }
     if (op == "template-head") return g.make(Kind::TemplateHead,0,0,0,0,refs(w,p,BindingKind::Type));
     if (op == "template-declaration") {
         auto kind = index_value(take(w,p));

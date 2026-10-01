@@ -53,7 +53,7 @@ void Selector::variadic(const lowir_model::Instruction& i)
     }
     begin_block(overflow,0);
     move(Operand::r(XR_RAX),Operand::mem(XR_R11,8),Type::Ptr);
-    if (i.type == Type::F80 || i.type == Type::I128) {
+    if (i.type.abi_alignment() > 8) {
         emit(Op::Add,Type::Ptr,{Operand::r(XR_RAX),Operand::imm(15)});
         emit(Op::And,Type::Ptr,{Operand::r(XR_RAX),Operand::imm(-16)});
     }

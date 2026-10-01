@@ -1,0 +1,12 @@
+using U93 = unsigned _BitInt(93);
+using S7 = _BitInt(7);
+struct Payload { char lead; U93 wide; char tail; };
+U93 student_stack(long,long,long,long,long,long,long,U93,long);
+U93 host_stack(long,long,long,long,long,long,long,U93,long);
+Payload student_object(Payload);
+Payload host_object(Payload);
+S7 student_small(S7);
+S7 host_small(S7);
+U93 student_variadic(int,...);
+U93 host_variadic(int,...);
+int host_drive();

@@ -16,7 +16,10 @@ for src in sorted((root/'student.tests/pa29/source185').glob('*.cpp')):
   r=run([binary,'-std='+standard,'-c',src,'-o',obj]);row['checks'].append(r)
   if (r['status']==0)!=ok:row['failure']=label+' acceptance'
   if ok and r['status']==0:
-   r=run(['g++',obj,'-o',exe]);row['checks'].append(r)
+   helpers=[]
+   if src.stem=='abi':
+    helper=out/'abi.host.o';hr=run(['clang++','-std=c++11','-c',root/'student.tests/pa29/support185/abi.host.cpp','-o',helper]);row['checks'].append(hr);assert hr['status']==0;helpers=[helper]
+   r=run(['g++',obj,*helpers,'-o',exe]);row['checks'].append(r)
    if r['status']:row['failure']=label+' link'
    else:
     r=run([exe]);row['checks'].append(r)

@@ -48,8 +48,8 @@ Index Analyzer::deducible_parameters(TypeId function)
             break;
         case TypeKind::ArgumentPack: argument_list(argument_packs[type.bound]); break;
         case TypeKind::PackExpansion: work.push_back(type.bound); break;
-        case TypeKind::DependentBitInt: case TypeKind::DependentName: case TypeKind::Decltype: case TypeKind::DependentVector: break;
-        case TypeKind::DependentArray: case TypeKind::DependentExtVector:
+        case TypeKind::DependentName: case TypeKind::Decltype: case TypeKind::DependentVector: break;
+        case TypeKind::DependentBitInt: case TypeKind::DependentArray: case TypeKind::DependentExtVector:
             work.push_back(value_argument_id(type.bound)); work.push_back(type.child); break;
         case TypeKind::Function: parameter_list(type); work.push_back(type.child); break;
         case TypeKind::MemberPointer: work.push_back(type.member_owner()); work.push_back(type.child); break;

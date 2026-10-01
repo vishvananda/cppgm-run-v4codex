@@ -46,6 +46,10 @@ public:
     enum Kind { Void, I1, I8, U8, I16, U16, I32, U32, I64, I128, F32, F64, F80, Ptr, Object };
     Type(Kind k = Void) : code_(k) {}
     static Type object(std::uint64_t bytes, std::uint64_t alignment);
+    // Same 128-bit operations, distinct SysV stack alignment for bit-precise
+    // scalars. The decoration travels in signatures, values and the IR view.
+    static Type integer128_align8() { Type t(I128); t.code_ |= std::uint64_t(1)<<8; return t; }
+    unsigned abi_alignment() const { return kind() == I128 ? ((code_ >> 8) ? 8 : 16) : alignment(); }
     Kind kind() const { return Kind(code_ & 255); }
     bool integer() const { return kind() >= I1 && kind() <= I128; }
     bool floating() const { return kind() >= F32 && kind() <= F80; }
@@ -53,6 +57,9 @@ public:
     std::uint32_t bytes() const;
     std::uint32_t alignment() const;
     unsigned width() const;
+    // Family tests select operations; full type equality includes ABI facts.
+    bool operator==(Kind k) const { return kind() == k; }
+    bool operator!=(Kind k) const { return kind() != k; }
     bool operator==(Type b) const { return code_ == b.code_; }
     bool operator!=(Type b) const { return !(*this == b); }
 };
