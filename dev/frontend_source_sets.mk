@@ -229,3 +229,6 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/inline_validation
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/source_builtins lowering/source_strings
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/object_initializer
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/inline_variable
+
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/force_inline
+FRONTEND_OBJ_BASENAMES_lowir2native += lowir/force_inline

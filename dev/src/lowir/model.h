@@ -181,6 +181,7 @@ struct ObjectAlias { Name name = 0; SymbolId target; };
 struct FloatingLiteral { std::uint64_t f64; std::uint32_t f32; Name spelling; };
 struct Statistics {
     std::uint64_t source_bytes = 0, tokens = 0, validated_instructions = 0, cfg_edges = 0;
+    std::uint64_t inline_calls = 0, inline_work = 0, inline_max_function_work = 0;
 };
 // Pool growth is counted where it happens, without a global allocator hook.
 // Timing/peak RSS and capacity accounting are emitted only when requested.
@@ -225,6 +226,7 @@ struct Program {
     Pool<ObjectAlias> aliases;
     Pool<FloatingLiteral> floating_literals;
     Statistics stats;
+    bool forced_calls_expanded = false; // Object preparation, once per completed program.
     Name intern(const std::string& name);
     std::string name(Name id) const;
     SymbolId symbol(Name name);
@@ -255,6 +257,7 @@ public:
 };
 void read_program(Program& p, const std::string& text, const std::string& source);
 void validate(Program& p);
+void expand_forced_calls(Program& p);
 void write_program(const Program& p, std::ostream& out);
 Program construct_exercise(const std::string& name);
 Program parse_lowir_program_text(const std::string& text, const std::string& source = "<memory>");

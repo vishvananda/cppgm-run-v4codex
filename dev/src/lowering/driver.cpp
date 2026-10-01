@@ -63,6 +63,7 @@ void build_program(lowir_model::Program& program, const std::vector<std::string>
     }
     auto lifecycle_start = Clock::now();
     linkage.finish_lifecycle(program);
+    lowir_model::expand_forced_calls(program);
     lowering_ms += std::chrono::duration<double, std::milli>(Clock::now()-lifecycle_start).count();
     if (stats) {
         struct rusage usage; getrusage(RUSAGE_SELF, &usage);
@@ -77,6 +78,9 @@ void build_program(lowir_model::Program& program, const std::vector<std::string>
             << ",\"initializer_units\":" << linkage.initializers.size() << ",\"finalizer_units\":" << linkage.finalizers.size()
             << ",\"abi_nodes\":" << linkage.abi.size() << ",\"abi_bytes\":" << linkage.abi.storage_bytes()
             << ",\"instructions\":" << program.instructions.size() << ",\"operands\":" << program.operands.size()
+            << ",\"inline_calls\":" << program.stats.inline_calls
+            << ",\"inline_work\":" << program.stats.inline_work
+            << ",\"inline_max_function_work\":" << program.stats.inline_max_function_work
             << ",\"ir_pool_growths\":" << program.pool_allocations()
             << ",\"ir_capacity_bytes\":" << program.pool_storage_bytes() << "}\n";
     }

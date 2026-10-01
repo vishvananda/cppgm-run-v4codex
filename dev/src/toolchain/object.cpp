@@ -10,7 +10,7 @@ std::string Object::name(unsigned id) const {
     auto view = names.spelling(symbols[id].name);
     return std::string(view.data,view.size);
 }
-Object compile_object(const lowir_model::Program& p, native::Statistics& stats, bool host)
+Object compile_object(lowir_model::Program& p, native::Statistics& stats, bool host)
 {
     Object obj(p.symbols.size()); obj.image.host = host;
     obj.image.host_resume = obj.image.runtime_begin;

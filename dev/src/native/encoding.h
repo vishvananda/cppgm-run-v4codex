@@ -91,6 +91,6 @@ std::vector<Instruction> startup(SymbolId, unsigned, const std::vector<SymbolId>
 std::vector<Instruction> startup(const lowir_model::Program& p);
 void encode_data(const lowir_model::Program& p, Image& image);
 void write_executable(Image& image, const std::string& path);
-void compile_image(const lowir_model::Program&, Image&, const std::vector<Instruction>&, std::ostream*, Statistics&);
-void compile(const lowir_model::Program& p, const std::string& output, std::ostream* mir, Statistics& stats);
+void compile_image(lowir_model::Program&, Image&, const std::vector<Instruction>&, std::ostream*, Statistics&);
+void compile(lowir_model::Program& p, const std::string& output, std::ostream* mir, Statistics& stats);
 } // namespace native

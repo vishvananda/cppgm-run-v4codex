@@ -7,8 +7,9 @@ Function builtin_strlen(const lowir_model::Program&,const lowir_model::Function&
 std::vector<bool> object_demand(const lowir_model::Program&);
 using Clock = std::chrono::steady_clock;
 static double ms(Clock::time_point begin) { return std::chrono::duration<double,std::milli>(Clock::now()-begin).count(); }
-void compile_image(const lowir_model::Program& p, Image& image, const std::vector<Instruction>& start, std::ostream* mir, Statistics& stats)
+void compile_image(lowir_model::Program& p, Image& image, const std::vector<Instruction>& start, std::ostream* mir, Statistics& stats)
 {
+    lowir_model::expand_forced_calls(p);
     Encoder encoder(image);
     Workspace workspace(p);
     if (image.host) {
@@ -47,7 +48,7 @@ void compile_image(const lowir_model::Program& p, Image& image, const std::vecto
     }
     stats.text_bytes = image.code.size();
 }
-void compile(const lowir_model::Program& p, const std::string& output, std::ostream* mir, Statistics& stats)
+void compile(lowir_model::Program& p, const std::string& output, std::ostream* mir, Statistics& stats)
 {
     auto start = startup(p);
     lowir_model::require(output.empty() || !start.empty(), "executable requires an entry function");
