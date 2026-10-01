@@ -70,7 +70,21 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
         edge(a, Role::Context); require(c <= 1);
         if (!c) text(b); else require(!b);
         sequence(Role::Type); return;
-    case Kind::Lambda: edge(a, Role::Context); sequence(Role::Type); return;
+    case Kind::Lambda:
+        edge(a, Role::Context);
+        for (unsigned i = 0; i < children.size(); ++i)
+            if (i || (*this)[children[i]].kind != Kind::TemplateHead) edge(children[i],Role::Type);
+        return;
+    case Kind::TemplateHead:
+        for (auto id : children) require((*this)[id].kind == Kind::TemplateParameterDeclaration);
+        return;
+    case Kind::TemplateParameterDeclaration:
+        require(a <= 3);
+        if (a == 1) edge(b,Role::Type);
+        else if (a == 2) require((*this)[b].kind == Kind::TemplateHead);
+        else if (a == 3) require((*this)[b].kind == Kind::TemplateParameterDeclaration);
+        else require(!b);
+        break;
     case Kind::RawContext: case Kind::SymbolEntity: text(a); break;
     case Kind::DependentValue:
         edge(a, Role::Type); require((*this)[b].kind == Kind::Value || (*this)[b].kind == Kind::WideValue || (*this)[b].kind == Kind::NegativeWideValue); break;

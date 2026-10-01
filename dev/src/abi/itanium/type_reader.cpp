@@ -69,6 +69,12 @@ Id FactReader::compact(const std::string& word) {
 Id FactReader::type(const Words& w, std::size_t& p) {
     Nesting nesting(depth);
     std::string op = take(w, p);
+    if (op == "template-head") return g.make(Kind::TemplateHead,0,0,0,0,refs(w,p,BindingKind::Type));
+    if (op == "template-declaration") {
+        auto kind = index_value(take(w,p));
+        auto value = kind ? type(w,p) : 0;
+        return g.make(Kind::TemplateParameterDeclaration,kind,value);
+    }
     if (op == "name" || op == "named") return g.path(take(w, p));
     if (op == "template-param" || op == "template-param-subst" || op == "template-param-template") {
         auto index = index_value(take(w, p));

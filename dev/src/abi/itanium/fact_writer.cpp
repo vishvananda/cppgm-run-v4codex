@@ -87,6 +87,8 @@ std::string FactWriter::type(Id id) {
         return result;
     }
     case Kind::Builtin: return abi_builtin_type_word(static_cast<AbiBuiltinTypeKind>(n.a));
+    case Kind::TemplateHead: return join_form({"template-head",list(n,'t')});
+    case Kind::TemplateParameterDeclaration: return join_form({"template-declaration ",std::to_string(n.a),n.a ? " "+ref('t',n.b) : ""});
     case Kind::Parameter: return join_form({std::string(n.b ? "template-param-subst " : "template-param "), std::to_string(n.value)});
     case Kind::Pointer: return join_form({"ptr ", ref('t', n.a)});
     case Kind::Reference: return join_form({"ref ", ref('t', n.a)});

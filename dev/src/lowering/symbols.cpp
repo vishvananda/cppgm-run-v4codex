@@ -42,7 +42,8 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     }
     case TypeKind::Named: {
         auto e = sem.entities[t.entity];
-        if (e.template_parameter) result = abi.make(abi_mangle::Kind::Parameter,0,1,0,sem.template_ordinal(t.entity));
+        if (sem.placeholder_entity(t.entity)) result = abi.builtin(ABI_BUILTIN_TYPE_AUTO);
+        else if (e.template_parameter) result = abi.make(abi_mangle::Kind::Parameter,0,1,0,sem.template_ordinal(t.entity));
         else if (sem.closure(t.entity).function && sem.closure(t.entity).enclosing) {
             auto closure = sem.closure(t.entity);
             auto enclosing = sem.entities[closure.enclosing];
@@ -55,6 +56,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
             }
             auto f = sem.types[closure.signature];
             std::vector<abi_mangle::Id> params;
+            if (sem.entities[closure.function].template_info) params.push_back(abi_template_head(closure.function));
             for (unsigned i = 0; i < f.count; ++i) params.push_back(abi_type(sem.types.parameters[f.offset+i]));
             result = abi.make(abi_mangle::Kind::Lambda,abi_function_context(closure.enclosing),!closure.ordinal,f.variadic,
                 closure.ordinal ? closure.ordinal-1 : 0,params);

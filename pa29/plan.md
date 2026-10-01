@@ -94,7 +94,7 @@ validated implementation handoff, not assignment completion.
 
 Entry is clean, PA29 370/403 (33 failures). Previous turn supplied validated
 progress (fold owner); its markers and evidence remain preserved above.
-Owner: explicit-template lambda closure and function-template semantics (eight
+Owner: explicit-template lambda closure and function-template semantics (seven
 existing failures). Data flow: parse head once, retain canonical parameters and
 lexical bindings, create a member-template call operator, substitute through the
 existing specialization frames, then consume selected calls/capture fields in
@@ -105,3 +105,10 @@ Validate focused acceptance/rejection/runtime/inspection controls, every require
 suite and unchanged coverage; freeze entry/final binaries for A/A+ABBA latency,
 RSS, runtime and text evidence. Optional optimizer work/growth budget is zero.
 Remaining groups and independent contract questions above stay unresolved.
+
+Implementation173 progress: all seven explicit-template lambda fixtures now
+compile (377/403 preliminary PA29); 52 personal checks pass. Retained source
+heads/capture recipes, ordinary specialization frames and typed adapter records
+cover packs/defaults/noexcept, captures and function-pointer conversions. ABI
+heads and deduced returns are typed, and hosted inline/template-local entities
+retain ODR linkage. Final reports/performance evidence remain outstanding.

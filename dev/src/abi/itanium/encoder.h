@@ -38,6 +38,8 @@ private:
     void literal(const Node& node);
     void context(Id id);
     void local_component(Id id);
+    void template_head(Id id);
+    void template_parameter_declaration(Id id);
     void external(Id id);
     void args(const Node& node);
 };

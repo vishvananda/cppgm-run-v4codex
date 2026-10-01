@@ -57,6 +57,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/initializer_plan
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/aggregate_helpers
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/special_members semantic/transfer_actions lowering/transfers
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/class_values lowering/class_values lowering/branch_lifetimes
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/closure_conversion
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/lambda
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/lambda
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/placeholder

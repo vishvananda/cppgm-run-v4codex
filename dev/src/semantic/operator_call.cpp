@@ -72,6 +72,9 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     if (op == OP_LPAREN) {
         Index seen;
         for (EntityId e : conversion_candidates(object)) {
+            // A surrogate needs a concrete function signature. A conversion
+            // template has no target type to deduce from during an object call.
+            if (entities[e].template_info) continue;
             TypeId target = decay(types[entities[e].type].child);
             if (!pointer(target) || types[types[target].child].kind != TypeKind::Function || seen.get(target)) continue;
             seen.put(target,1);

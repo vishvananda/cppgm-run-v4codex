@@ -2,6 +2,7 @@
 namespace cppgm { namespace semantic {
 EntityId Analyzer::deduce_conversion(EntityId pattern, TypeId target)
 {
+    if (closure_conversion_templates.get(pattern)) return deduce_closure_conversion(pattern,target);
     // [temp.deduct.conv]: the destination supplies A, and only the declared
     // conversion type supplies P. No body or token replay participates.
     auto head = templates[entities[pattern].template_info];

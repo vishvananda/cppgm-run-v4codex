@@ -1,5 +1,20 @@
 #include "lowering/procedural.h"
 namespace cppgm { namespace lowering {
+abi_mangle::Id Procedural::abi_template_head(EntityId entity)
+{
+    const auto head = sem.template_head(entity);
+    std::vector<abi_mangle::Id> declarations;
+    for (unsigned i = 0; i < head.count; ++i) {
+        auto p = sem.template_parameter(head.offset+i);
+        auto e = sem.entities[p];
+        auto kind = e.kind == semantic::EntityKind::Parameter ? 1u : e.template_info ? 2u : 0u;
+        auto value = kind == 1 ? abi_type(e.type) : kind == 2 ? abi_template_head(p) : 0;
+        auto decl = abi.make(abi_mangle::Kind::TemplateParameterDeclaration,kind,value);
+        if (e.parameter_pack) decl = abi.make(abi_mangle::Kind::TemplateParameterDeclaration,3,decl);
+        declarations.push_back(decl);
+    }
+    return abi.make(abi_mangle::Kind::TemplateHead,0,0,0,0,declarations);
+}
 abi_mangle::Id Procedural::abi_tagged_name(EntityId e, abi_mangle::Id name)
 {
     auto head = sem.abi_tag_heads.get(e);
@@ -115,7 +130,8 @@ bool Procedural::local_abi_type(TypeId t)
             local |= local_abi_argument(sem.template_argument(args.offset+j));
     } else if (type.kind == TypeKind::Named) {
         auto e = sem.entities[type.entity];
-        local |= sem.closure(type.entity).function != 0;
+        auto closure = sem.closure(type.entity);
+        local |= closure.function && (!linkage.host || !closure.enclosing);
         local |= internal_scope(e.owner) || local_abi_scope(e.owner);
         auto args = sem.specialization_arguments(type.entity);
         for (unsigned j = 0; j < args.count; ++j) local |= local_abi_argument(sem.template_argument(args.offset+j));
@@ -130,8 +146,15 @@ bool Procedural::local_abi_scope(semantic::ScopeId s)
     if (local_abi_scopes.size() <= s) local_abi_scopes.resize(sem.scopes.size());
     if (local_abi_scopes[s]) return local_abi_scopes[s] == 2;
     auto scope = sem.scopes[s];
-    bool local = scope.kind == semantic::ScopeKind::Function || local_abi_scope(scope.parent);
-    if (scope.kind == semantic::ScopeKind::Class) local |= sem.closure(scope.entity).function != 0;
+    bool local = local_abi_scope(scope.parent);
+    if (scope.kind == semantic::ScopeKind::Function) {
+        auto fn = sem.entities[scope.entity];
+        local |= !linkage.host || (!fn.inline_function && !fn.specialization && !fn.template_member) || internal_entity(scope.entity);
+    }
+    if (scope.kind == semantic::ScopeKind::Class) {
+        auto closure = sem.closure(scope.entity);
+        local |= closure.function && (!linkage.host || !closure.enclosing);
+    }
     if (scope.kind == semantic::ScopeKind::Class && sem.entities[scope.entity].specialization)
         local |= local_abi_type(sem.entities[scope.entity].type);
     local_abi_scopes[s] = local ? 2 : 1; return local;

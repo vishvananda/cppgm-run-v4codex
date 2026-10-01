@@ -176,6 +176,9 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_body_checks\":" << body_checks
         << ",\"semantic_closures\":" << closures.size()-1
         << ",\"semantic_capture_edges\":" << closure_captures.size()-1
+        << ",\"semantic_capture_patterns\":" << closure_capture_recipes.size()-1
+        << ",\"semantic_capture_candidates\":" << closure_capture_candidates.size()
+        << ",\"semantic_closure_adapters\":" << closure_adapter_facts.size()-1
         << ",\"semantic_range_plans\":" << ranges.size()-1
         << ",\"semantic_initializer_independence_work\":" << initializer_independence_work
         << ",\"semantic_initializer_independence_hits\":" << initializer_independence_hits

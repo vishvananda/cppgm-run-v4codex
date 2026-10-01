@@ -34,6 +34,10 @@ void Analyzer::instantiate_function(EntityId e)
         parent = substitution_frame(index,pattern.source_parameters,pattern.source_count,parent);
     auto frame = substitution_frame(index,pattern.offset,pattern.count,parent);
     attach_template_context(context,frame);
+    if (closure_functions.get(e)) {
+        auto source_function = template_declaration_sources.get(ast.nodes.occurrences[pattern.source].source);
+        if (source_function) substitution_binding_cache.put(key(frame,source_function),e);
+    }
     auto signature = template_signature_sources.get(ast.nodes.occurrences[pattern.declarator].source);
     if (auto first = template_first_signature_index.get(spec.pattern)) {
         // A redeclaration's callable type and body parameters share the first

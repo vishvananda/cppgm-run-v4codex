@@ -378,6 +378,7 @@ NodeId Parser::lambda()
     ast.append(result, captures);
     ScopeId saved = scope;
     scope = names.enter(scope);
+    if (in.is("<")) ast.append(result, template_parameters());
     if (in.is("(")) {
         ScopeId parameter_scope;
         NodeId decl = wrap(Kind::LambdaDeclarator, parameters(parameter_scope));

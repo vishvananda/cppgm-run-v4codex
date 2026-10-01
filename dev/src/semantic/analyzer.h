@@ -111,6 +111,9 @@ public:
     TypeArguments pack_arguments(ArgumentId a) const { return argument_packs[types[a].bound]; }
     TypeId argument_type(ArgumentId a) { return value_argument(a) ? query_fact(argument_query(a)).expression.type : a; }
     unsigned template_ordinal(EntityId e) const { return parameter_ordinals.get(e)-1; }
+    bool placeholder_entity(EntityId e) const { return e && e == placeholder_parameter; }
+    const TemplateFunction& template_head(EntityId e) const { return templates[entities[e].template_info]; }
+    EntityId template_parameter(unsigned index) const { return template_parameters[index]; }
     const TypeQuery& type_query(QueryId id) const { return type_queries[id]; }
     EntityId type_query_selection(QueryId id) const { return query_facts[id].selected; }
     QueryId type_query_child(QueryId id, unsigned i) const { return query_edges[type_queries[id].offset+i]; }
@@ -303,6 +306,7 @@ public:
         EntityId entity = 0, function = 0, enclosing = 0, conversion = 0, thunk = 0;
         NodeId source = 0;
         TypeId signature = 0;
+        std::uint32_t signature_group = 0;
         unsigned ordinal = 0, local_ordinal = 0;
         unsigned first_capture = 0, last_capture = 0, parent = 0;
         TypeId this_type = 0;
@@ -316,9 +320,15 @@ public:
         unsigned conversion = 0;
         bool by_copy = false;
     };
+    struct ClosureAdapter {
+        EntityId function = 0, conversion = 0, thunk = 0;
+    };
+    struct ClosureCapturePattern {
+        std::uint32_t begin = 0, count = 0;
+    };
     std::vector<ClosureCapture> closure_captures = std::vector<ClosureCapture>(1);
     const Closure& closure(EntityId e) const { return closures[closure_entities.get(e)]; }
-    const Closure& closure_adapter(EntityId e) const { return closures[closure_adapters.get(e)]; }
+    const ClosureAdapter& closure_adapter(EntityId e) const { return closure_adapter_facts[closure_adapters.get(e)]; }
 private:
     Index range_index;
     std::vector<RangePlan> ranges = std::vector<RangePlan>(1);
@@ -507,11 +517,20 @@ private:
     Index field_index, local_class_names, local_enum_functions, local_enum_ordinals;
     std::vector<Closure> closures = std::vector<Closure>(1);
     Index closure_entities, closure_functions, closure_occurrences, closure_adapters;
+    std::vector<ClosureAdapter> closure_adapter_facts = std::vector<ClosureAdapter>(1);
+    Index closure_conversion_templates, closure_conversion_instances;
+    Index closure_capture_patterns;
+    std::vector<ClosureCapturePattern> closure_capture_recipes = std::vector<ClosureCapturePattern>(1);
+    std::vector<EntityId> closure_capture_candidates;
+    void bind_template_captures(NodeId source, ScopeId scope, EntityId function);
+    void prepare_closure_conversion(unsigned closure);
+    EntityId deduce_closure_conversion(EntityId pattern, TypeId target);
     Index closure_capture_index;
     Index closure_patterns, closure_pattern_captures;
     unsigned require_capture(unsigned closure, EntityId object);
     unsigned capture_object(EntityId object);
     void prepare_captures(unsigned closure, ScopeId scope);
+    void prepare_template_captures(unsigned closure, ScopeId scope);
     void prepare_capture_initializers(unsigned closure, ScopeId scope);
     TypeId capture_type(unsigned capture);
     Expression lambda_expression(NodeId n, ScopeId s);

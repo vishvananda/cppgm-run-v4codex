@@ -157,7 +157,10 @@ void Analyzer::demand_member(EntityId e, MemberDemandReason reason)
     if (first_use && closure_adapter(e).function) {
         auto adapter = closure_adapter(e);
         if (e == adapter.conversion) use_selected_function(adapter.thunk,true);
-        else activate_deferred_function_uses(adapter.function);
+        else {
+            if (entities[adapter.function].specialization) instantiate_function(adapter.function);
+            activate_deferred_function_uses(adapter.function);
+        }
     }
     if (definitions && entities[e].specialization && !entities[e].template_info) demand_specialization(e);
     std::uint32_t m = entities[e].member_info;

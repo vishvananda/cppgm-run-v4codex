@@ -308,6 +308,7 @@ void Analyzer::bind_template_body(const Body& body)
     check_constexpr_signature(body.entity);
     auto owner = entities[body.entity].template_info ? templates[entities[body.entity].template_info].environment : body.owner;
     auto fs = make_scope(ScopeKind::Function,owner,entities[body.entity].name,body.entity,false);
+    if (closure_patterns.get(body.entity)) entities[body.entity].scope = fs;
     template_pattern_scopes.put(fs,1);
     auto d = body.declarator; NodeId params = 0;
     while (d) {

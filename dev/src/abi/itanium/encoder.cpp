@@ -213,12 +213,28 @@ void Encoder::local_component(Id id) {
         }
     } else {
         output += "Ul";
-        if (!n.count && !n.c) output += 'v';
-        for (Id i = 0; i < n.count; ++i) type(g.child(n, i));
+        Id first = n.count && g[g.child(n,0)].kind == Kind::TemplateHead ? 1 : 0;
+        if (first) template_head(g.child(n,0));
+        if (n.count == first && !n.c) output += 'v';
+        for (Id i = first; i < n.count; ++i) type(g.child(n, i));
         if (n.c) output += 'z';
         output += 'E';
         if (!n.b) output += std::to_string(n.value);
         output += '_';
+    }
+}
+void Encoder::template_head(Id id) {
+    const auto n = g[id];
+    for (Id i = 0; i < n.count; ++i) template_parameter_declaration(g.child(n,i));
+}
+void Encoder::template_parameter_declaration(Id id) {
+    Nesting nesting(depth);
+    const auto n = g[id];
+    switch (n.a) {
+    case 0: output += "Ty"; break;
+    case 1: output += "Tn"; type(n.b); break;
+    case 2: output += "Tt"; template_head(n.b); output += 'E'; break;
+    case 3: output += "Tp"; template_parameter_declaration(n.b); break;
     }
 }
 std::string mangle(Graph& graph, const Target& target) {

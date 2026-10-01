@@ -1,6 +1,70 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+void Analyzer::bind_template_captures(NodeId source, ScopeId scope, EntityId function)
+{
+    using syntax::Kind;
+    std::vector<EntityId> candidates; Index seen;
+    auto add = [&](EntityId e) {
+        if (e) {
+            if (entities[e].template_parameter || entities[e].is_static || entities[e].external_decl ||
+                entities[e].thread_local_storage || scopes[entities[e].owner].kind == ScopeKind::Namespace ||
+                encloses(entities[function].scope,entities[e].owner)) return;
+            if (scopes[entities[e].owner].kind == ScopeKind::Class) e = 0;
+            else if (entities[e].kind != EntityKind::Variable && entities[e].kind != EntityKind::Parameter) return;
+        }
+        if (!seen.get(e)) { seen.put(e,1); candidates.push_back(e); }
+    };
+    for (auto c = ast[child(source,Kind::LambdaIntroducer)].first; c; c = ast[c].next) {
+        if (ast[c].op == KW_THIS) add(0);
+        else {
+            auto name = ast[c].op == OP_AMP ? ast[ast[c].detail].text : ast[c].text;
+            if (name) if (auto e = lookup(scope,name,Lookup::Ordinary)) add(e);
+        }
+    }
+    std::vector<NodeId> work(1,child(source,Kind::Compound));
+    while (!work.empty()) {
+        auto n = work.back(); work.pop_back(); auto node = ast[n];
+        if (node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack || node.kind == Kind::Decltype ||
+            node.kind == Kind::Noexcept || node.kind == Kind::TypeTrait) continue;
+        if (node.kind == Kind::Lambda) {
+            // Nested bodies already own their capture edges. Propagate those
+            // crossing this operator, without walking the nested body again.
+            auto recipe = closure_capture_recipes[closure_capture_patterns.get(ast.nodes.occurrences[n].source)];
+            for (unsigned i = 0; i < recipe.count; ++i) add(closure_capture_candidates[recipe.begin+i]);
+            continue;
+        }
+        if (node.kind == Kind::IdExpression) {
+            auto binding = template_bindings[template_binding_index.get(ast.nodes.occurrences[node.detail].source)];
+            if (binding.entity) add(binding.entity);
+            continue;
+        }
+        if (node.kind == Kind::KeywordLiteral && node.op == KW_THIS) { add(0); continue; }
+        if (node.detail) work.push_back(node.detail);
+        for (auto c = node.first; c; c = ast[c].next) work.push_back(c);
+    }
+    ClosureCapturePattern recipe; recipe.begin = closure_capture_candidates.size(); recipe.count = candidates.size();
+    closure_capture_candidates.insert(closure_capture_candidates.end(),candidates.begin(),candidates.end());
+    closure_capture_patterns.put(ast.nodes.occurrences[source].source,closure_capture_recipes.size());
+    closure_capture_recipes.push_back(recipe);
+}
+void Analyzer::prepare_template_captures(unsigned id, ScopeId scope)
+{
+    auto source = closures[id].source;
+    auto recipe = closure_capture_recipes[closure_capture_patterns.get(ast.nodes.occurrences[source].source)];
+    auto frame = template_type_contexts.get(ast.nodes.occurrences[source].context);
+    for (unsigned i = 0; i < recipe.count; ++i) {
+        auto e = closure_capture_candidates[recipe.begin+i];
+        if (!e) { require_capture(id,0); continue; }
+        if (entities[e].template_pattern) e = substitution_binding(frame,e);
+        if (!closures[id].capture_default && entities[e].constant.valid) continue;
+        if (!encloses(entities[e].owner,scope)) continue;
+        if (auto pack = entity_pack_arguments.get(e)) {
+            auto elements = pack_arguments(pack);
+            for (unsigned j = 0; j < elements.count; ++j) require_capture(id,argument_types[elements.offset+j]);
+        } else require_capture(id,e);
+    }
+}
 unsigned Analyzer::capture_object(EntityId object)
 {
     auto id = closure_functions.get(current_function);
@@ -19,6 +83,8 @@ unsigned Analyzer::require_capture(unsigned id, EntityId object)
     auto identity = key(id,object);
     if (auto known = closure_capture_index.get(identity)) return known;
     auto closure = closures[id];
+    if (class_facts[entities[closure.entity].class_info].layout_state != FactState::NotStarted)
+        throw std::logic_error("capture added after closure layout");
     if (!closure.capture_default)
         throw std::runtime_error("object requires lambda capture");
     if (!object && !closure.this_type) throw std::runtime_error("this outside nonstatic member");

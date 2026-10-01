@@ -433,6 +433,7 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     entities[e].is_static = entities[pattern].is_static;
     entities[e].access = entities[pattern].access;
     entities[e].key = entities[pattern].key;
+    if (auto closure = closure_functions.get(pattern)) closure_functions.put(e,closure);
     if (auto suffix = literal_functions.get(pattern)) literal_functions.put(e,suffix);
     entities[e].defaults = partial ? entities[pattern].defaults : specialization_defaults(pattern,frame);
     if (partial) {

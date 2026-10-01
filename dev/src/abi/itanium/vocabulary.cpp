@@ -40,6 +40,7 @@ const WordCode terminals[] = {
 }
 AbiBuiltinTypeKind abi_builtin_type_kind(const std::string& word, std::size_t* width) {
     if (width) *width = 0;
+    if (word == "auto") return ABI_BUILTIN_TYPE_AUTO;
     for (unsigned i = 1; i < sizeof(builtins) / sizeof(*builtins); ++i)
         if (word == builtins[i].word) return static_cast<AbiBuiltinTypeKind>(i);
     return ABI_BUILTIN_TYPE_NONE;
@@ -48,11 +49,13 @@ bool abi_is_builtin_type_word(const std::string& word) {
     return abi_builtin_type_kind(word, nullptr) != ABI_BUILTIN_TYPE_NONE;
 }
 const char* abi_builtin_type_code(AbiBuiltinTypeKind kind) {
+    if (kind == ABI_BUILTIN_TYPE_AUTO) return "Da";
     if (kind <= ABI_BUILTIN_TYPE_NONE || kind > ABI_BUILTIN_TYPE_NULLPTR)
         throw std::runtime_error("unsupported builtin ABI type");
     return builtins[kind].code;
 }
 const char* abi_builtin_type_word(AbiBuiltinTypeKind kind) {
+    if (kind == ABI_BUILTIN_TYPE_AUTO) return "auto";
     if (kind <= ABI_BUILTIN_TYPE_NONE || kind > ABI_BUILTIN_TYPE_NULLPTR)
         throw std::runtime_error("unsupported builtin ABI type");
     return builtins[kind].word;
