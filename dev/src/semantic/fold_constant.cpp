@@ -24,7 +24,7 @@ Constant Analyzer::constant_fold_conversion(Constant value, const Conversion& c)
     }
     return convert(value,c.target,true);
 }
-Constant Analyzer::constant_fold(NodeId n, ScopeId s)
+Constant Analyzer::constant_fold(NodeId n, ScopeId s, Constant* callable)
 {
     struct Frame { unsigned id, phase = 0; Constant left; explicit Frame(unsigned i) : id(i) {} };
     std::vector<Frame> work; work.emplace_back(fold_root(n)); Constant value;
@@ -61,6 +61,24 @@ Constant Analyzer::constant_fold(NodeId n, ScopeId s)
             } else args.push_back(a);
             args.push_back(b); value = execute_constant(op.function,args,receiver);
         } else if (op.op == OP_COMMA) value = b;
+        else if (op.op == OP_DOTSTAR || op.op == OP_ARROWSTAR) {
+            b = constant_indirect(b);
+            if (!b.valid || !b.bits || types[b.type].kind != TypeKind::MemberPointer) return {};
+            if (op.op == OP_ARROWSTAR) a = constant_indirect(a);
+            auto address = unsigned(a.bits);
+            address = constant_base_projection(address,op.adjustment);
+            address = constant_member_receiver(address,b);
+            if (!address) return {};
+            auto member = member_constant_value(b).member;
+            if (op.result.form == ExpressionForm::BoundMember) {
+                if (!callable) return {};
+                *callable = b;
+                value = Constant(types.compound(TypeKind::LRef,constant_addresses[address].type),address);
+            } else {
+                address = constant_subobject(address,entities[member].type,member);
+                value = Constant(types.compound(TypeKind::LRef,op.result.type),address);
+            }
+        }
         else if (syntax::expression_precedence(op.op) == 2) {
             auto address = unsigned(a.bits); auto storage = constant_addresses[address].storage;
             if (!active_constant || !address || !constant_storage[storage].live || !constant_storage[storage].frame) return {};

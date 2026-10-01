@@ -957,10 +957,14 @@ private:
     std::uint32_t query_value(QueryId id);
     QueryId fold_query(NodeId node, ScopeId scope);
     Index fold_source_queries;
+    Index fold_query_nodes;
+    QueryId fold_value_step = 0;
+    std::size_t fold_value_steps = 0;
+    void schedule_fold_value(QueryId root);
     Index fold_roots;
     std::vector<FoldStep> fold_steps = std::vector<FoldStep>(1);
     Expression fold_expression(NodeId node, ScopeId scope);
-    Constant constant_fold(NodeId node, ScopeId scope);
+    Constant constant_fold(NodeId node, ScopeId scope, Constant* callable = nullptr);
     Constant constant_fold_conversion(Constant value, const Conversion& conversion);
     QueryId reduce_fold_query(TypeQuery query, const std::vector<QueryId>& operands);
     bool bind_template_size(NodeId node, ScopeId scope);

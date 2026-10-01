@@ -208,9 +208,15 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
     }
     auto use = object_fact(n);
     auto member_pointer = use.member_pointer;
+    std::uint32_t folded_receiver = 0;
     Constant member_value;
     if (member_pointer) {
-        auto value = evaluate(member_pointer,s);
+        Constant value;
+        if (fold_root(member_pointer)) {
+            auto receiver = constant_fold(member_pointer,s,&value);
+            if (!receiver.valid) return {};
+            folded_receiver = receiver.bits;
+        } else value = evaluate(member_pointer,s);
         if (!value.valid || !value.bits || types[value.type].kind != TypeKind::MemberPointer) return Constant();
         member_value = value; e = member_constant_value(value).member;
     }
@@ -227,13 +233,14 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
     std::uint32_t object = 0;
     if (entities[e].member_info && !entities[e].is_static) {
         if (use.virtual_slot || members[entities[e].member_info].virtual_member) return Constant();
-        if (use.node) {
+        if (folded_receiver) object = folded_receiver;
+        else if (use.node) {
             object = use.invoke_dereference ? constant_invoke_receiver(use,s) : constant_arrow(use.node,use.arrow);
         } else if (active_constant) object = constant_activations[active_constant].object;
         // Use the same selected subobjects as runtime lowering. Searching by
         // the declaring class would lose a qualified path through repeated bases.
         object = constant_base_projection(constant_base_projection(object,use.qualifier_adjustment),use.adjustment);
-        if (member_pointer) object = constant_member_receiver(object,member_value);
+        if (member_pointer && !folded_receiver) object = constant_member_receiver(object,member_value);
         if (!object) return Constant();
     }
     std::vector<Constant> args;

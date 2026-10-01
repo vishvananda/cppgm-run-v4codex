@@ -89,6 +89,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_variable
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_packs semantic/template_pack_expansion semantic/query_new
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_pack_recipe
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/fold semantic/fold_expression semantic/fold_constant lowering/fold
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/fold_query_value
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_class
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/class_pattern_selection semantic/template_deduction semantic/template_ordering
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/deduction_parameters

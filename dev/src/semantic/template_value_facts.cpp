@@ -38,6 +38,9 @@ std::uint32_t Analyzer::query_value(QueryId id)
     }
     if (state == FactState::Active) throw std::runtime_error("recursive constant query");
     if (state == FactState::Failure) throw std::runtime_error("failed constant query");
+    if (fold_query_nodes.get(id) && fold_value_step != id) {
+        schedule_fold_value(id); return query_values[slot].constant;
+    }
     query_values[slot].state = FactState::Active; ++query_value_work;
     auto mode_uses = evaluation_mode_uses;
     try {

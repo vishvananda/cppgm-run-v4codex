@@ -42,11 +42,13 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
         args.push_back(abi_argument(sem.template_argument(pack.offset+j)));
     switch (q.kind) {
     case QueryKind::Fold: {
-        unsigned pattern = q.count == 2 && q.value ? 1 : 0;
-        auto expansion = sem.type_query_child(id,pattern);
-        auto operand = abi_query(sem.type_query_child(expansion,0));
-        auto init = q.count == 2 ? child(!pattern) : 0;
-        result = abi.make(Kind::Fold,operand,init,abi_mangle::operation(query_operation(q.op,false)),q.value); break;
+        auto operand = [&](unsigned i) {
+            auto query = sem.type_query_child(id,i);
+            if (sem.type_query(query).kind == QueryKind::Expansion) query = sem.type_query_child(query,0);
+            return abi_query(query);
+        };
+        auto first = operand(0), second = q.count == 2 ? operand(1) : 0;
+        result = abi.make(Kind::Fold,first,second,abi_mangle::operation(query_operation(q.op,false)),q.value); break;
     }
     case QueryKind::IntegerPack:
         result = abi.make(Kind::TypeTrait,abi.string("__integer_pack"),0,0,0,{child(0)}); break;

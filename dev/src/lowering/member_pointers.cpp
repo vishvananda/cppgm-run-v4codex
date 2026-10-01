@@ -59,6 +59,7 @@ Value Procedural::member_pointer_conversion(Value value, const semantic::Convers
 }
 Value Procedural::member_pointer_object(const semantic::ObjectUse& use, Value* function)
 {
+    if (sem.fold_root(use.member_pointer)) return fold(use.member_pointer,true,function);
     Value object = expression(use.node,true);
     if (use.invoke_dereference) object = address(range_operation(sem.invoke_dereference(use),{object}));
     else object = sem.types[sem.expression_fact(use.node).type].kind == TypeKind::Pointer ? load(object) : address(object);

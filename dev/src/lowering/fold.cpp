@@ -1,7 +1,7 @@
 #include "lowering/procedural.h"
 #include <stdexcept>
 namespace cppgm { namespace lowering {
-Value Procedural::fold_operation(const semantic::RangeOperation& op, Value a, Value b)
+Value Procedural::fold_operation(const semantic::RangeOperation& op, Value a, Value b, Value* callable)
 {
     if (op.function) return range_operation(op,{a,b});
     if (op.op == OP_COMMA) return b;
@@ -9,6 +9,17 @@ Value Procedural::fold_operation(const semantic::RangeOperation& op, Value a, Va
         auto object = op.op == OP_ARROWSTAR ? load(a) : address(a);
         object = base_projection(object,op.adjustment);
         auto member = load(b);
+        if (op.result.form == semantic::ExpressionForm::BoundMember) {
+            if (!callable) throw std::logic_error("bound fold requires a callable consumer");
+            *callable = coerce(member,IRType::I64,true,true);
+            *callable = emit(Opcode::Copy,IRType::Ptr,{callable->operand});
+            if (!member.member_zero_adjustment) {
+                auto high = emit(Opcode::Binary,IRType::I128,{member.operand,Operand::integer(64)},Operation::Shr);
+                auto adjustment = coerce(high,IRType::I64,true,true);
+                object = emit(Opcode::Index,IRType::I8,{object.operand,adjustment.operand});
+            }
+            return object;
+        }
         auto offset = emit(Opcode::Binary,IRType::I64,{member.operand,Operand::integer(1)},Operation::Sub);
         Instruction index(Opcode::Index,IRType::I8); index.projection = ir_model::IPK_FIELD;
         auto value = emit(index,{object.operand,offset.operand});
@@ -30,7 +41,7 @@ Value Procedural::fold_operation(const semantic::RangeOperation& op, Value a, Va
     }
     return operation(op.op,typed_conversion(a,first),typed_conversion(b,second),op.result.type);
 }
-Value Procedural::fold(NodeId n, bool location)
+Value Procedural::fold(NodeId n, bool location, Value* callable)
 {
     struct Frame {
         unsigned id, phase = 0; Value left;
@@ -72,7 +83,7 @@ Value Procedural::fold(NodeId n, bool location)
             start(frame.end);
             merge_temporaries(frame.common,land ? rhs_live : frame.common,land ? frame.common : rhs_live,frame.selector);
             value = emit(Opcode::Load,IRType::I64,{Operand::slot(frame.result)}); value.type = op.result.type;
-        } else value = fold_operation(op,frame.left,value);
+        } else value = fold_operation(op,frame.left,value,callable);
         work.pop_back();
     }
     return value;

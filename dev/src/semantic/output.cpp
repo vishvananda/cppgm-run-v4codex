@@ -259,6 +259,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"template_default_demands\":" << default_demand_work
         << ",\"semantic_pack_expansion_work\":" << expansion_work
         << ",\"semantic_fold_steps\":" << fold_steps.size()-1
+        << ",\"semantic_fold_value_steps\":" << fold_value_steps
         << ",\"semantic_pack_expansion_lanes\":" << expansion_lanes
         << ",\"semantic_substitution_frames\":" << substitution_frames.size()-1
         << ",\"semantic_argument_packs\":" << argument_packs.size() - 1

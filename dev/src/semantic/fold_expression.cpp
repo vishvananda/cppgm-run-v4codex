@@ -59,7 +59,14 @@ Expression Analyzer::fold_expression(NodeId n, ScopeId s)
     }
     fold_roots.put(n,root);
     auto result = fold_steps[root].operation.result;
-    result.form = ExpressionForm::Ordinary; result.conversions = result.count = 0;
+    if (result.form == ExpressionForm::BoundMember) {
+        auto use = object_uses[result.object_use]; use.member_pointer = n;
+        // This source owns a typed reduction, including both final operands.
+        // The callable consumer evaluates that plan once as a bound pair.
+        use.adjustment = 0;
+        result.object_use = object_uses.size(); object_uses.push_back(use);
+    } else result.form = ExpressionForm::Ordinary;
+    result.conversions = result.count = 0;
     result.arguments = result.argument_count = 0; result.incoming = 0;
     if (fold_steps[root].operation.temporary) {
         record_object(result,0,0,0);

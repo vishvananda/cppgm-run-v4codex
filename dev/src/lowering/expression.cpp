@@ -109,9 +109,9 @@ Value Procedural::expression(NodeId n, bool location)
     }
     if (node.kind == Kind::TypeTrait && BuiltinTrait(node.flags) == BuiltinTrait::Offsetof && !sem.constant_fact(n).valid) return offsetof_expression(n);
     if (fact.form == semantic::ExpressionForm::ConstantQuery || node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack || node.kind == Kind::TypeTrait) {
-        if (type(fact.type) == IRType::Void) return Value();
         auto c = sem.constant_fact(n);
         if (!c.valid) throw std::logic_error("missing semantic constant");
+        if (type(fact.type) == IRType::Void) return Value();
         if (node.op == KW_NOEXCEPT) return Value(integer_operand(c),type(c.type),c.type);
         if (type(c.type).floating()) {
             auto v = floating_literal(c.type,sem.floating_value(c),sem.floating_signaling(c));
@@ -482,7 +482,10 @@ Value Procedural::call(NodeId n, Value destination)
     } else if (object_use.member_pointer) {
         call_work[begin] = object_use.member_target ?
             emit(Opcode::Addr,IRType(),{Operand::symbol(member_function_symbol(sem.member_target_value(object_use.member_target).entity))}).operand : member_function.operand;
-        i.signature = signature(sem.expression_fact(object_use.member_pointer).type);
+        auto pointer_type = sem.expression_fact(object_use.member_pointer).type;
+        if (auto root = sem.fold_root(object_use.member_pointer))
+            pointer_type = sem.fold_step(sem.fold_step(root).right).operation.result.type;
+        i.signature = signature(pointer_type);
     } else if (object_use.virtual_slot) {
         call_work[begin] = virtual_function(Value(call_work[begin+1+indirect_result],IRType::Ptr),object_use.virtual_slot).operand;
         i.signature = virtual_signature(selected);

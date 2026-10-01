@@ -19,12 +19,14 @@ QueryId Analyzer::reduce_fold_query(TypeQuery q, const std::vector<QueryId>& ope
     for (unsigned i = 1; i < operands.size(); ++i) {
         auto operand = operands[left ? i : operands.size()-1-i];
         result = intern_query(q,left ? std::vector<QueryId>{result,operand} : std::vector<QueryId>{operand,result});
+        fold_query_nodes.put(result,1);
         // Complete each step before extending the chain: linear work and no
         // pack-length recursion during type checking.
         query_fact(result);
     }
     TypeQuery paren; paren.kind = QueryKind::Parenthesized;
-    return intern_query(paren,{result}); // decltype of a fold is always parenthesized.
+    result = intern_query(paren,{result}); // decltype of a fold is always parenthesized.
+    fold_query_nodes.put(result,1); return result;
 }
 QueryId Analyzer::fold_query(NodeId n, ScopeId s)
 {
