@@ -1,0 +1,80 @@
+{
+  "closures600": {
+    "compile_samples": 8,
+    "counters": {
+      "semantic_closures": 600,
+      "semantic_capture_edges": 600,
+      "semantic_capture_patterns": 1,
+      "semantic_capture_candidates": 1,
+      "semantic_specializations": 1800,
+      "template_body_transitions": 1800,
+      "semantic_body_checks": 1802
+    },
+    "text_bytes": 126955
+  },
+  "closures1200": {
+    "compile_samples": 8,
+    "counters": {
+      "semantic_closures": 1200,
+      "semantic_capture_edges": 1200,
+      "semantic_capture_patterns": 1,
+      "semantic_capture_candidates": 1,
+      "semantic_specializations": 3600,
+      "template_body_transitions": 3600,
+      "semantic_body_checks": 3602
+    },
+    "text_bytes": 254155
+  },
+  "closures2400": {
+    "compile_samples": 8,
+    "counters": {
+      "semantic_closures": 2400,
+      "semantic_capture_edges": 2400,
+      "semantic_capture_patterns": 1,
+      "semantic_capture_candidates": 1,
+      "semantic_specializations": 7200,
+      "template_body_transitions": 7200,
+      "semantic_body_checks": 7202
+    },
+    "text_bytes": 508555
+  },
+  "calls600": {
+    "compile_samples": 8,
+    "counters": {
+      "semantic_closures": 2,
+      "semantic_capture_edges": 2,
+      "semantic_capture_patterns": 2,
+      "semantic_capture_candidates": 2,
+      "semantic_specializations": 601,
+      "template_body_transitions": 601,
+      "semantic_body_checks": 604
+    },
+    "text_bytes": 40402
+  },
+  "calls1200": {
+    "compile_samples": 8,
+    "counters": {
+      "semantic_closures": 2,
+      "semantic_capture_edges": 2,
+      "semantic_capture_patterns": 2,
+      "semantic_capture_candidates": 2,
+      "semantic_specializations": 1201,
+      "template_body_transitions": 1201,
+      "semantic_body_checks": 1204
+    },
+    "text_bytes": 80602
+  },
+  "calls2400": {
+    "compile_samples": 8,
+    "counters": {
+      "semantic_closures": 2,
+      "semantic_capture_edges": 2,
+      "semantic_capture_patterns": 2,
+      "semantic_capture_candidates": 2,
+      "semantic_specializations": 2401,
+      "template_body_transitions": 2401,
+      "semantic_body_checks": 2404
+    },
+    "text_bytes": 161002
+  }
+}

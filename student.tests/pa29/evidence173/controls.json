@@ -1,0 +1,823 @@
+{
+  "compiler_sha256": "e740d3bbdf679f9a31e4479a9b2ac0715d7b9b85d5eda098cb8e9d64aafde343",
+  "inputs": {
+    "student.tests/pa29/controls173/abi-types.cpp": "1b5a04e15c238ec9fbef64806a6b0ef71121388481d7e3205c83a61e0842457b",
+    "student.tests/pa29/controls173/bad-const-copy.cpp": "9aa7fa333a848910bd3b029daf7b2161a818bca94cae187c973366d89704f3e8",
+    "student.tests/pa29/controls173/bad-copy-address.cpp": "c036cb4888486ef61e6378a79bc0315ba47e096c935449e018463e9da94308bc",
+    "student.tests/pa29/controls173/bad-empty-head.cpp": "46a5d9fe36c6b03dfebe85048dbc015650b012d2dd98c880828152496259149f",
+    "student.tests/pa29/controls173/bad-fixed-name.cpp": "d8f1f98dff02f13978e5d81c21f2fe8c8f55769d63043cc67b3ec2182243b982",
+    "student.tests/pa29/controls173/bad-no-capture.cpp": "31aed7c071f590beac0d669ed6f5f3e822ec1073e52f1b6c18af9b9aa4ff1b92",
+    "student.tests/pa29/controls173/bad-repeated-head.cpp": "36e8cb562d956658ac3fb2b2ddc5670a46a0eb46dff023f64a0dae809acdfb4d",
+    "student.tests/pa29/controls173/bad-return-conversion.cpp": "4ab8084b2a8c3221c77a628a39be5205acbe4e357c932ac003fa8eecd43c2f22",
+    "student.tests/pa29/controls173/bad-shadow-head.cpp": "a1f560295af4693c7387c70eb3e1719cbd4abe948aec8dd28eca4d28fc0df080",
+    "student.tests/pa29/controls173/calls.cpp": "459a96e8e8dd722bd872f2f501acbcab76993729088e0ad8755a33af9c3ce651",
+    "student.tests/pa29/controls173/capture-packs.cpp": "0a61eda968c885521de84e8279ae589377181b33e669669571cb3b5efd9cdfc0",
+    "student.tests/pa29/controls173/captures.cpp": "4758cd2139d839ca7da724c3215aefd5571c73dbf2fff8046ca963c148b2176d",
+    "student.tests/pa29/controls173/cleanup.cpp": "cb212c43c5ac6e8d5525554d51423f5d007b2a0e1057c8da292681ba73af9280",
+    "student.tests/pa29/controls173/constant-capture.cpp": "7705b7e85870179b554d83e1cfd0097e0d329419e65da7d465776aae58e5850e",
+    "student.tests/pa29/controls173/conversion-packs.cpp": "dd5408a92f1cf9a77b17d43cf5e9d05d2fddd29bc6e19a45f4f6472f482aafdc",
+    "student.tests/pa29/controls173/conversion.cpp": "c809af68d71858d1031ce42317cd22a92392bc64b08d3266e0d38f297cb7f672",
+    "student.tests/pa29/controls173/defaults-noexcept.cpp": "35f86add2b5d3af8c072555c96008f6ddfa2e1393db271887f43fd0f7074e23e",
+    "student.tests/pa29/controls173/definition-lookup.cpp": "389748118ea8cecfda43558d985cd2726f282a99b48a3eacda8a0aac9837dab1",
+    "student.tests/pa29/controls173/layout-before-call.cpp": "53375d58804b3221a00da91548c9f81e340dcf3a77d1176c688c747d5df41ec8",
+    "student.tests/pa29/controls173/member-capture.cpp": "ab205106688c4dd15d88da6f3768581f7a4eab1358d4d5d2ceced82e0df0b9c4",
+    "student.tests/pa29/controls173/object-queries.cpp": "e80677c05486ef95f7e5ec96dbb81ea3072981be4b02db01b8e379bc22b84d57",
+    "student.tests/pa29/controls173/substitution.cpp": "7f250b8caf0a8adb7a3f36401af9d2d353cb3c8c12f02c1972f303bdbac6c1c4",
+    "student.tests/pa29/controls173/template-heads.cpp": "d78a398ad6aceaed7fca07589b84733bb0689919bc8d9a144a350d3e53e9a47a",
+    "student.tests/pa29/controls173/unevaluated-capture.cpp": "09efd6d62430ae7e324e3f2d84bc454e70278b23900acb1a8beb12fcc1547503",
+    "student.tests/pa29/controls173/unused-capture.cpp": "5d49a1e1507dd0425a552ab214222bc51a78eddda3b08a4a93e686f7e8b055e5"
+  },
+  "checks": [
+    {
+      "name": "abi-types compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/abi-types.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/abi-types.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "abi-types link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/abi-types.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/abi-types"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "abi-types runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/abi-types"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bad-const-copy compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/bad-const-copy.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/bad-const-copy.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: modifiable lvalue required\n"
+    },
+    {
+      "name": "bad-copy-address compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/bad-copy-address.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/bad-copy-address.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: capture added after closure layout\n"
+    },
+    {
+      "name": "bad-empty-head compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/bad-empty-head.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/bad-empty-head.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: lambda template head cannot be empty\n"
+    },
+    {
+      "name": "bad-fixed-name compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/bad-fixed-name.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/bad-fixed-name.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unbound template value name: undeclared at /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/bad-fixed-name.cpp:1\n"
+    },
+    {
+      "name": "bad-no-capture compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/bad-no-capture.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/bad-no-capture.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: object requires lambda capture\n"
+    },
+    {
+      "name": "bad-repeated-head compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/bad-repeated-head.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/bad-repeated-head.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: called object is not a function\n"
+    },
+    {
+      "name": "bad-return-conversion compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/bad-return-conversion.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/bad-return-conversion.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid implicit conversion\n"
+    },
+    {
+      "name": "bad-shadow-head compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/bad-shadow-head.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/bad-shadow-head.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: declaration redeclares template parameter\n"
+    },
+    {
+      "name": "calls compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/calls.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/calls.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "calls link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/calls.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/calls"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "calls runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/calls"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-packs compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/capture-packs.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/capture-packs.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-packs link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/capture-packs.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/capture-packs"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-packs runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/capture-packs"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "captures compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/captures.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/captures.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "captures link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/captures.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/captures"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "captures runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/captures"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "cleanup compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/cleanup.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/cleanup.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "cleanup link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/cleanup.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/cleanup"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "cleanup runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/cleanup"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "constant-capture compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/constant-capture.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/constant-capture.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "constant-capture link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/constant-capture.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/constant-capture"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "constant-capture runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/constant-capture"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "conversion-packs compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/conversion-packs.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/conversion-packs.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "conversion-packs link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/conversion-packs.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/conversion-packs"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "conversion-packs runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/conversion-packs"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "conversion compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/conversion.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/conversion.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "conversion link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/conversion.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/conversion"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "conversion runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/conversion"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "defaults-noexcept compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/defaults-noexcept.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/defaults-noexcept.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "defaults-noexcept link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/defaults-noexcept.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/defaults-noexcept"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "defaults-noexcept runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/defaults-noexcept"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "definition-lookup compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/definition-lookup.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/definition-lookup.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "definition-lookup link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/definition-lookup.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/definition-lookup"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "definition-lookup runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/definition-lookup"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "layout-before-call compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/layout-before-call.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/layout-before-call.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "layout-before-call link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/layout-before-call.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/layout-before-call"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "layout-before-call runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/layout-before-call"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-capture compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/member-capture.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/member-capture.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-capture link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/member-capture.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/member-capture"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-capture runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/member-capture"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "object-queries compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/object-queries.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/object-queries.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "object-queries link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/object-queries.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/object-queries"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "object-queries runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/object-queries"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "substitution compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/substitution.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/substitution.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "substitution link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/substitution.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/substitution"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "substitution runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/substitution"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "template-heads compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/template-heads.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/template-heads.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "template-heads link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/template-heads.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/template-heads"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "template-heads runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/template-heads"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "unevaluated-capture compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/unevaluated-capture.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/unevaluated-capture.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "unevaluated-capture link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/unevaluated-capture.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/unevaluated-capture"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "unevaluated-capture runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/unevaluated-capture"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "unused-capture compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls173/unused-capture.cpp",
+        "-o",
+        "/tmp/pa29-173/release-controls/unused-capture.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "unused-capture link",
+      "args": [
+        "g++",
+        "/tmp/pa29-173/release-controls/unused-capture.o",
+        "-o",
+        "/tmp/pa29-173/release-controls/unused-capture"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "unused-capture runtime",
+      "args": [
+        "/tmp/pa29-173/release-controls/unused-capture"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

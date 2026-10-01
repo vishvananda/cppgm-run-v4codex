@@ -1,0 +1,25 @@
+{
+  "implementation_commit": "128e7e3932ec21353ab352f68200852e715e6a93",
+  "compiler_sha256": "e740d3bbdf679f9a31e4479a9b2ac0715d7b9b85d5eda098cb8e9d64aafde343",
+  "stage_progress": "33 -> 26 failures; 403 tests unchanged; zero new failures",
+  "earlier_tests": "4538/4538",
+  "stage_tests": "377/403",
+  "through_tests": "4915/4941; unfinished stage",
+  "file_audit": "pass, four inherited warnings",
+  "controls": 59,
+  "inspection_checks": 29,
+  "coverage_paths_unchanged": 1707,
+  "remaining_owner_counts": {
+    "extended-syntax-types-and-layout": 17,
+    "template-demand-and-hosted-abi": 7,
+    "legacy-traits-and-lifetime-proofs": 1,
+    "structured-intrinsic-operands": 1
+  },
+  "independent_questions_counted": 2,
+  "final_performance_main_samples": 376,
+  "preserved_performance_main_samples": 1128,
+  "source_unchanged_since_validation": true,
+  "review_markers_preserved": true,
+  "references_and_harness_unchanged": true,
+  "scope": "Implementation handoff complete; PA29 and independent audit unfinished"
+}

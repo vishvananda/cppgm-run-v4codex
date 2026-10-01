@@ -1,0 +1,115 @@
+{
+  "memory": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 293,
+    "differences": {
+      "semantic_capture_candidates": [
+        null,
+        0
+      ],
+      "semantic_capture_patterns": [
+        null,
+        0
+      ],
+      "semantic_closure_adapters": [
+        null,
+        0
+      ]
+    }
+  },
+  "floating": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 293,
+    "differences": {
+      "semantic_capture_candidates": [
+        null,
+        0
+      ],
+      "semantic_capture_patterns": [
+        null,
+        0
+      ],
+      "semantic_closure_adapters": [
+        null,
+        0
+      ]
+    }
+  },
+  "exceptions": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 293,
+    "differences": {
+      "semantic_capture_candidates": [
+        null,
+        0
+      ],
+      "semantic_capture_patterns": [
+        null,
+        0
+      ],
+      "semantic_closure_adapters": [
+        null,
+        0
+      ]
+    }
+  },
+  "pruning": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 293,
+    "differences": {
+      "semantic_capture_candidates": [
+        null,
+        0
+      ],
+      "semantic_capture_patterns": [
+        null,
+        0
+      ],
+      "semantic_closure_adapters": [
+        null,
+        0
+      ]
+    }
+  },
+  "ordinary1200": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 291,
+    "differences": {
+      "semantic_argument_packs": [
+        2406,
+        2407
+      ],
+      "semantic_capture_candidates": [
+        null,
+        1
+      ],
+      "semantic_capture_patterns": [
+        null,
+        1
+      ],
+      "semantic_closure_adapters": [
+        null,
+        0
+      ],
+      "semantic_lookup_work": [
+        46879,
+        46881
+      ]
+    }
+  }
+}

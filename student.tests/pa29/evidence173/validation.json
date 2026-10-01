@@ -1,0 +1,47 @@
+{
+  "code_tip": "128e7e3932ec21353ab352f68200852e715e6a93",
+  "entry": "51fde1023d4d8f4135bf88429a0706a3c49fa7eb",
+  "compiler_sha256": "e740d3bbdf679f9a31e4479a9b2ac0715d7b9b85d5eda098cb8e9d64aafde343",
+  "checks": [
+    {
+      "command": "make test-pa29",
+      "status": 2,
+      "log": "/tmp/pa29-173/release-validation/stage.log",
+      "sha256": "d3e1d3450911df212c07a0909fa7a76e60e92348446c1981c053147b59b23405",
+      "summary": [
+        "===== TEST SUMMARY: 377 / 403 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": "make test-report-through-pa28",
+      "status": 0,
+      "log": "/tmp/pa29-173/release-validation/prior.log",
+      "sha256": "62fafee2304dafac1d6eb44703da74008c028ee3cc40be97d2e4ca4702c208ba",
+      "summary": [
+        "===== ALL TESTS PASSED SUCCESSFULLY! (4538 / 4538) ====="
+      ]
+    },
+    {
+      "command": "make test-report-through-pa29",
+      "status": 2,
+      "log": "/tmp/pa29-173/release-validation/through.log",
+      "sha256": "bad0d651b173b44c817e6e0546bb8cd4cdb95d82f1bff029789faf7e679243e2",
+      "summary": [
+        "===== TEST SUMMARY: 4915 / 4941 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src",
+      "status": 0,
+      "log": "/tmp/pa29-173/release-validation/file-audit.log",
+      "sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f",
+      "summary": [
+        "File audit passed for pa29 with 4 warning(s).",
+        "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+      ]
+    }
+  ]
+}

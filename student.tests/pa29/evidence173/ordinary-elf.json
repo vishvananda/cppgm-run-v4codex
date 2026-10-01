@@ -1,0 +1,21 @@
+{
+  "A": {
+    "object_sha256": "fe2a298b75146d24591d4ebedef02d49ab3c6fd2c9ada273804c406ebfbc2b65",
+    "section_headers": 3621,
+    "comdat_groups": 1200,
+    "function_bindings": {
+      "LOCAL": 1200,
+      "GLOBAL": 2,
+      "WEAK": 1200
+    }
+  },
+  "B": {
+    "object_sha256": "362c37ea7ee3e26c5fda1aea23a74dae2163120f892bf07d5b2803a120c9c8f8",
+    "section_headers": 6021,
+    "comdat_groups": 2400,
+    "function_bindings": {
+      "GLOBAL": 2,
+      "WEAK": 2400
+    }
+  }
+}
