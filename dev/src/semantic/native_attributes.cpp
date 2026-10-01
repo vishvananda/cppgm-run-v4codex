@@ -39,6 +39,7 @@ void Analyzer::native_attributes(EntityId e, NodeId n)
     }
     if (entities[e].kind == EntityKind::Function) entities[e].effects = std::max(entities[e].effects,value.effects);
     if (value.weak) weak_symbols.put(e,1);
+    if (value.no_unique_address && entities[e].kind == EntityKind::Variable) field_metadata(e).no_unique_address = true;
     if (!value.section) return;
     const auto& entity = entities[e];
     if (entity.kind != EntityKind::Variable ||

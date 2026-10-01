@@ -32,13 +32,15 @@ std::uint32_t Analyzer::prepare_zero_initialization(TypeId t)
                 parts.push_back({id,offset});
             };
             auto info = entities[type.entity].class_info;
-            for (auto b = class_facts[info].first_base; b; b = bases[b].next) add(entities[bases[b].base].type,bases[b].offset);
+            for (auto b = class_facts[info].first_base; b; b = bases[b].next)
+                if (!empty_class(entities[bases[b].base].type)) add(entities[bases[b].base].type,bases[b].offset);
             std::uint64_t unit_offset = 0, unit_bytes = 0; bool unit = false;
             for (auto d = scopes[entities[type.entity].scope].first_decl; d; d = declarations[d].next) {
                 EntityId field = declarations[d].entity;
                 if (!nonstatic_field(field) || entities[field].owner != entities[type.entity].scope) continue;
                 TypeId child = entities[field].type; auto offset = entities[field].member_offset;
                 auto bits = field_fact(field);
+                if (bits.no_unique_address && empty_class(child)) continue;
                 if (bits.bit_field) {
                     plan.bulk &= !(types[child].cv & 2);
                     if (!bits.declared_width) { unit = false; continue; }

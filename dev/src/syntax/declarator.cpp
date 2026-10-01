@@ -110,6 +110,7 @@ NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts, 
 {
     NodeId result = make(abstract ? Kind::AbstractDeclarator : Kind::Declarator);
     DeclaratorFacts parsed;
+    std::uint32_t alignment = 0;
     bool has_pointer = false;
     while (in.is("*") || in.is("&") || in.is("&&") ||
            (identifier() && in.is("::", probe_name().end) && in.is("*", probe_name().end + 1))) {
@@ -124,9 +125,10 @@ NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts, 
         has_pointer = true;
         for (;;) {
             NativeAttributes native;
-            ast[result].flags |= attributes(0,&native);
+            ast[result].flags |= attributes(&alignment,&native);
             native_attributes(result,native);
-            if (in.is("const") || in.is("volatile")) ast.append(result, leaf(Kind::CvQualifier));
+            if (in.is("_Nonnull") || in.is("_Nullable") || in.is("_Null_unspecified") || in.is("_Nullable_result")) in.take();
+            else if (in.is("const") || in.is("volatile")) ast.append(result, leaf(Kind::CvQualifier));
             else break;
         }
     }
@@ -151,7 +153,7 @@ NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts, 
     }
     for (;;) {
         NativeAttributes native;
-        ast[result].flags |= attributes(0,&native);
+        ast[result].flags |= attributes(&alignment,&native);
         native_attributes(result,native);
         if (in.eat("[")) {
             unsigned saved = angle_expression;
@@ -182,6 +184,7 @@ NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts, 
     // The operator nearest the name decides function versus object. Nested
     // facts propagate once; prefix pointers apply after this level's suffixes.
     if (parsed.first_operator == TOK_INVALID && has_pointer) parsed.first_operator = OP_STAR;
+    if (alignment) ast.alignment_owners.put(result,alignment);
     if (facts) *facts = parsed;
     return ast[result].first ? result : 0;
 }

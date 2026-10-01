@@ -25,6 +25,11 @@ public:
     std::vector<Declaration> declarations;
     FactStore facts;
     QueryId type_operation_query(NodeId n, ScopeId s);
+    QueryId offsetof_query(NodeId, ScopeId);
+    TypeQueryFact query_offsetof(QueryId, const TypeQuery&, const std::vector<TypeQueryFact>&);
+    struct OffsetofStep { std::uint64_t offset = 0, stride = 0; };
+    Index offsetof_layout_index, offsetof_path_queries;
+    std::vector<OffsetofStep> offsetof_layouts = std::vector<OffsetofStep>(1);
     TypeQueryFact query_builtin_trait(QueryId id, const TypeQuery& query);
     bool builtin_type_property(unsigned trait, TypeId type);
     Index builtin_trait_values, builtin_type_properties;
@@ -107,6 +112,7 @@ public:
     std::string integer_text(Constant value) const;
     Constant constant_fact(NodeId n) const { return facts[n].value ? constants[facts[n].value] : Constant(); }
     std::uint64_t object_size(TypeId t) { return size(t); }
+    std::uint64_t storage_alignment(EntityId e);
     std::uint64_t object_alignment(TypeId t) { return size(t, true); }
     bool unsigned_type(TypeId t) const { return is_unsigned(t); }
     TypeId call_type(EntityId e) const;
@@ -479,24 +485,35 @@ private:
     std::vector<FieldFacts> field_facts = std::vector<FieldFacts>(1);
     Index field_projection_index;
     std::vector<FieldProjection> field_projections = std::vector<FieldProjection>(1);
-    std::uint64_t alignment_attributes(NodeId n, ScopeId s);
+    std::uint64_t gnu_alignment_constant(Constant value);
+    TypeId aligned_typedef(TypeId type, NodeId source, NodeId specs, NodeId declarator, ScopeId scope);
+    std::uint64_t alignment_attributes(NodeId n, ScopeId s, bool* strict = 0);
     FieldFacts& field_metadata(EntityId e);
     Constant constant_field_value(EntityId field, Constant value);
     void bit_field_properties(EntityId field, Constant count);
     void bit_field_declaration(NodeId n, ScopeId s);
     void class_layout(EntityId e);
-    // Bounded canonical summaries for empty-subobject overlap checks. A count
-    // above 64 means unknown; layout then reserves disjoint storage.
-    std::vector<EntityId> layout_empty_types;
+    // Cache at most 64 exact empty positions per class. Larger footprints
+    // retain the canonical subobject graph and use address-directed queries.
+    struct EmptyPosition { EntityId type; std::uint64_t offset; };
+    std::vector<EmptyPosition> layout_empty_types;
     std::size_t layout_empty_work = 0, layout_empty_fallbacks = 0;
     struct EmptyLayout {
         Analyzer& sem;
-        Index seen;
-        std::vector<EntityId> types;
-        bool unknown = false;
+        Index seen, offset_ids, frontiers;
+        std::vector<std::uint64_t> offsets;
+        std::vector<EmptyPosition> positions;
+        struct Placement { TypeId type; std::uint64_t offset; };
+        std::vector<Placement> large;
         explicit EmptyLayout(Analyzer& s) : sem(s) {}
-        void insert(EntityId e);
-        bool merge(TypeId t);
+        unsigned offset_id(std::uint64_t offset);
+        void insert(EntityId e, std::uint64_t offset);
+        bool has(TypeId type);
+        bool contains(TypeId type, EntityId empty, std::uint64_t offset);
+        bool overlaps(TypeId a, std::uint64_t at, TypeId b, std::uint64_t bt);
+        bool conflicts(TypeId type, std::uint64_t offset);
+        void add(TypeId type, std::uint64_t offset);
+        std::uint64_t place(TypeId type, std::uint64_t start, std::uint64_t alignment, bool zero);
         void publish(std::uint32_t info, EntityId empty);
     };
     syntax::AstView ast;

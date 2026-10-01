@@ -181,7 +181,7 @@ void Procedural::emit_aggregate_helpers()
             Value base = emit(Opcode::Load, IRType::Ptr, {Operand::slot(slots[0])});
             Instruction index(Opcode::Index, IRType::I8); index.projection = ir_model::IPK_FIELD;
             Value at = emit(index, {base.operand, Operand::integer(sem.entities[field].member_offset)});
-            at.type = t; at.address = true; at.init_offset = sem.entities[field].member_offset; at.initializing = true;
+            at.type = t; at.address = true; at.overlapping = sem.field_fact(field).no_unique_address; at.init_offset = sem.entities[field].member_offset; at.initializing = true;
             if (sem.field_fact(field).bit_field) at.bit_field = field;
             if (defaulted) initialize_plan(aggregate_actions[helper.actions+j],at);
             else if (array) {

@@ -48,6 +48,7 @@ void Procedural::global_plan(std::uint32_t plan)
     std::uint64_t bytes = 0;
     for (auto child = action.first; child; child = sem.initializers[child].next) {
         auto item = sem.initializers[child];
+        if (sem.field_fact(item.field).no_unique_address && sem.empty_class(item.type)) continue;
         auto at = item.field ? sem.entities[item.field].member_offset : item.index * sem.object_size(item.type);
         if (at > bytes) { DataItem zero; zero.zero_bytes = at-bytes; p.data.push_back(zero); bytes = at; }
         if (sem.field_fact(item.field).bit_field) { global_bit_field(child, bytes); continue; }
@@ -122,7 +123,7 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
             auto offset = item.field ? sem.entities[item.field].member_offset : (item.index+j)*sem.object_size(item.type);
             Instruction index(Opcode::Index, IRType::I8); index.projection = item.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
             Value at = !item.field && !offset ? base : emit(index, {base.operand, Operand::integer(offset)});
-            at.type = item.type; at.address = true; at.init_offset = location.init_offset+offset;
+            at.type = item.type; at.address = true; at.overlapping = sem.field_fact(item.field).no_unique_address; at.init_offset = location.init_offset+offset;
             if (sem.field_fact(item.field).bit_field) { at.bit_field = item.field; at.initializing = true; }
             auto before = live;
             if (!(target.kind == TypeKind::Array && call_aggregate_helper(child, at))) initialize_plan(child, at);

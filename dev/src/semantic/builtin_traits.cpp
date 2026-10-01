@@ -70,6 +70,7 @@ TypeId transform_type(Analyzer& sem, BuiltinTrait trait, TypeId t)
 QueryId Analyzer::type_operation_query(NodeId n, ScopeId s)
 {
     auto node = ast[n]; auto first = node.first;
+    if (node.kind == syntax::Kind::TypeTrait && BuiltinTrait(node.flags) == BuiltinTrait::Offsetof) return offsetof_query(n,s);
     TypeQuery q; std::vector<QueryId> children;
     if (node.kind == syntax::Kind::TypeTrait && node.flags) {
         q.kind = QueryKind::BuiltinTrait; q.value = node.flags; q.name = node.text;

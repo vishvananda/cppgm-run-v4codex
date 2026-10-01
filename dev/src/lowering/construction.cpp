@@ -95,6 +95,7 @@ void Procedural::constructor_body(EntityId e, bool base)
         Instruction i(Opcode::Index, IRType::I8); i.projection = action.field ? ir_model::IPK_FIELD : ir_model::IPK_NONE;
         Value at = emit(i, {base.operand, Operand::integer(offset)});
         at.type = action.type; at.address = true;
+        at.overlapping = !action.field || field.no_unique_address;
         if (field.bit_field) {
             at.bit_field = action.field; at.initializing = true; at.init_offset = offset;
         }
@@ -132,6 +133,7 @@ Value Procedural::initialization_address(Value root, bool indirect, const std::v
         }
         at = emit(i, {at.operand, index});
         offset += step.offset * (step.element ? sem.object_size(step.element) : 1);
+        at.overlapping = !step.field || sem.field_fact(step.entity).no_unique_address;
         if (sem.field_fact(step.entity).bit_field) at.bit_field = step.entity;
     }
     at.init_offset = offset; at.initializing = true;

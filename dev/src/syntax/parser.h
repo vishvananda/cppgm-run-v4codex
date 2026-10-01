@@ -60,7 +60,7 @@ private:
     NodeId template_arguments();
     NodeId operator_name();
     unsigned attributes(std::uint32_t* alignment = 0, NativeAttributes* native = 0);
-    unsigned balanced(const char* open, const char* close, NativeAttributes* native = 0);
+    unsigned balanced(const char* open, const char* close, NativeAttributes* native = 0, std::uint32_t* alignment = 0);
     void native_attributes(NodeId, NativeAttributes);
 
     NodeId declaration();

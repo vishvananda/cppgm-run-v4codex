@@ -5,7 +5,7 @@
 namespace cppgm { namespace syntax {
 void Parser::native_attributes(NodeId owner, NativeAttributes value)
 {
-    if (!value.section && !value.weak && !value.tags && value.effects == FunctionEffects::Unknown) return;
+    if (!value.section && !value.weak && !value.tags && !value.no_unique_address && value.effects == FunctionEffects::Unknown) return;
     owner = ast.nodes.occurrences[owner].source;
     auto prior = ast.native_attribute_owners.get(owner);
     if (prior) {
@@ -13,6 +13,7 @@ void Parser::native_attributes(NodeId owner, NativeAttributes value)
         if (old.section && value.section && old.section != value.section) throw std::runtime_error("conflicting section attributes");
         if (value.section) old.section = value.section;
         old.weak |= value.weak;
+        old.no_unique_address |= value.no_unique_address;
         old.effects = std::max(old.effects,value.effects);
         // Attributes are published only after this declaration's parse. Link
         // its fresh list to the prior immutable prefix without copying nodes.
@@ -26,12 +27,24 @@ void Parser::native_attributes(NodeId owner, NativeAttributes value)
         ast.native_attributes.push_back(value);
     }
 }
-unsigned Parser::balanced(const char* open, const char* close, NativeAttributes* native)
+unsigned Parser::balanced(const char* open, const char* close, NativeAttributes* native, std::uint32_t* alignment)
 {
     unsigned result = 0;
     in.require(open);
     while (!in.is(close)) {
         if (in.peek().kind == PostTokenKind::eof) throw std::runtime_error("unterminated attribute");
+        // Only attribute names have meaning. Identifiers in an unknown
+        // attribute's arguments must never become declaration properties.
+        bool unscoped = true;
+        if (identifier() && in.is("::",1)) {
+            bool known = in.is("gnu") || in.is("clang");
+            in.take(); in.take(); unscoped = false;
+            if (!known) {
+                in.take();
+                if (in.is("(")) { auto end = in.matching(0); for (std::size_t i=0;i<=end;++i) in.take(); }
+                continue;
+            }
+        }
         if (in.is("abi_tag") || in.is("__abi_tag__")) {
             in.take(); in.require("(");
             do {
@@ -71,10 +84,23 @@ unsigned Parser::balanced(const char* open, const char* close, NativeAttributes*
             if (native->section && native->section != name) throw std::runtime_error("conflicting section attributes");
             native->section = name;
         }
-        else if (in.is("(")) result |= balanced("(", ")",native);
-        else if (in.is("[")) result |= balanced("[", "]");
+        else if (in.is("aligned") || in.is("__aligned__")) {
+            in.take();
+            NodeId operand = 0;
+            if (in.eat("(")) { operand = expression(2); in.require(")"); }
+            if (alignment) {
+                ast.alignments.push_back({operand,*alignment,false,true});
+                *alignment = ast.alignments.size()-1;
+            }
+        }
+        else if (in.is("(")) result |= balanced("(", ")",native,alignment);
+        else if (in.is("[")) result |= balanced("[", "]",native,alignment);
         else if (in.is("{")) result |= balanced("{", "}");
         else {
+            if (unscoped && (in.is("no_unique_address") || in.is("__no_unique_address__"))) {
+                if (in.is("(",1)) throw std::runtime_error("no_unique_address takes no arguments");
+                if (native) native->no_unique_address = true;
+            }
             if (native && (in.is("pure") || in.is("__pure__"))) native->effects = std::max(native->effects,FunctionEffects::ReadOnly);
             if (native && (in.is("const") || in.is("__const__"))) native->effects = FunctionEffects::ReadNone;
             if (native && (in.is("weak") || in.is("__weak__"))) native->weak = true;
@@ -87,6 +113,7 @@ unsigned Parser::balanced(const char* open, const char* close, NativeAttributes*
                 result |= 16;
             }
             in.take();
+            if (in.is("(")) { auto end = in.matching(0); for (std::size_t i=0;i<=end;++i) in.take(); }
         }
     }
     in.take(); return result;
@@ -96,7 +123,7 @@ unsigned Parser::attributes(std::uint32_t* alignment, NativeAttributes* native)
 {
     unsigned result = 0;
     for (;;) {
-        if (in.is("[") && in.is("[", 1)) result |= balanced("[", "]");
+        if (in.is("[") && in.is("[", 1)) result |= balanced("[", "]",native,alignment);
         else if (in.eat("alignas")) {
             in.require("(");
             bool is_type = type_operand();
@@ -108,7 +135,7 @@ unsigned Parser::attributes(std::uint32_t* alignment, NativeAttributes* native)
             }
         } else if (in.is("__attribute__") || in.is("__attribute")) {
             in.take();
-            result |= balanced("(", ")",native);
+            result |= balanced("(", ")",native,alignment);
         } else break;
     }
     return result;

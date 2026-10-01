@@ -166,8 +166,8 @@ void Procedural::global(EntityId e)
     }
     // Completed aggregates and explicitly aligned objects carry exact byte
     // layout. The native writer must not re-pad their individual scalar items.
-    if (!g.declaration && !linkage.presentation && (g.structured || sem.field_fact(e).alignment)) {
-        auto alignment = std::max(sem.object_alignment(t),sem.field_fact(e).alignment);
+    if (!g.declaration && !linkage.presentation && (g.structured || sem.field_fact(e).alignment || sem.field_fact(e).type_alignment)) {
+        auto alignment = sem.storage_alignment(e);
         g.type = IRType::object(sem.object_size(t),alignment); g.structured = true;
     }
     if (prior.kind == Symbol::GlobalSymbol) { p.globals[prior.entity-1] = g; return; }

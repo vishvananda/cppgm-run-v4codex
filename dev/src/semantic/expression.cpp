@@ -199,9 +199,16 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     case Kind::Cast: return cast_expression(n, s, type_id(first, s), ast[first].next);
     case Kind::TypeTrait: case Kind::Sizeof: {
         if (ast[n].kind == Kind::TypeTrait && ast[n].flags) {
-            auto query = expression_query(n,s); r = query_fact(query).expression;
-            r.form = ExpressionForm::ConstantQuery;
-            facts.edit(n).value = query_value(query); return r;
+            auto query = expression_query(n,s);
+            if (query_fact(query).state == FactState::Failure) throw std::runtime_error("invalid type operation");
+            r = query_fact(query).expression;
+            if (type_queries[query].kind == QueryKind::Offsetof)
+                for (auto step = ast[first].next; step; step = ast[step].next)
+                    if (ast[step].kind == Kind::Subscript) expression(ast[step].first,s);
+            auto value = query_value(query);
+            r.form = type_queries[query].kind == QueryKind::Offsetof && !constants[value].valid ?
+                ExpressionForm::Ordinary : ExpressionForm::ConstantQuery;
+            facts.edit(n).value = value; return r;
         }
         if (ast[n].op == KW_TYPEID) return typeid_expression(n,s);
         ++unevaluated_depth;
@@ -218,7 +225,9 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         // Layout can instantiate a class whose bounds/enumerators publish
         // other constants. Reserve this query's identity only after that
         // dependency completes, so it cannot point at a nested query's value.
-        Constant value(r.type, size(t, ast[n].op == KW_ALIGNOF));
+        auto entity = ast[first].kind == Kind::TypeId ? 0 : expressions[first].entity;
+        auto bytes = ast[n].op == KW_ALIGNOF && entity && entities[entity].kind == EntityKind::Variable ? storage_alignment(entity) : size(t,ast[n].op == KW_ALIGNOF);
+        Constant value(r.type,bytes);
         facts.edit(n).value = constants.size(); constants.push_back(value);
         return r;
     }

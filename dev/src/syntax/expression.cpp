@@ -151,6 +151,9 @@ NodeId Parser::primary()
         ast.append(result,expression(2)); in.require(",");
         ast.append(result,type_id()); in.require(")"); return result;
     }
+    if (in.is("::") && builtin_trait(ids.spelling(in.peek(1).text)) == BuiltinTrait::Offsetof && in.is("(",2)) {
+        in.take(); return type_trait();
+    }
     if (builtin_trait(ids.spelling(token.text)) != BuiltinTrait::None && in.is("(",1)) return type_trait();
     if (token.kind == PostTokenKind::literal || token.kind == PostTokenKind::user_literal)
         return leaf(Kind::Literal);
@@ -237,7 +240,19 @@ NodeId Parser::type_trait()
     if (trait != BuiltinTrait::None) {
         ast[result].flags = unsigned(trait);
         in.require("("); unsigned saved = angle_expression; angle_expression = 0;
-        if (!in.is(")")) do {
+        if (trait == BuiltinTrait::Offsetof) {
+            ast.append(result,type_id()); in.require(",");
+            if (!identifier()) throw std::runtime_error("offsetof requires a member designator");
+            ast.append(result,leaf(Kind::Identifier));
+            for (;;) {
+                if (in.eat(".")) {
+                    if (!identifier()) throw std::runtime_error("offsetof requires a member name");
+                    ast.append(result,leaf(Kind::Identifier));
+                } else if (in.eat("[")) {
+                    ast.append(result,wrap(Kind::Subscript,expression())); in.require("]");
+                } else break;
+            }
+        } else if (!in.is(")")) do {
             auto operand = type_id();
             if (in.eat("...")) operand = wrap(Kind::PackExpression,operand);
             ast.append(result,operand);

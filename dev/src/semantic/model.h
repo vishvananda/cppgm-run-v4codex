@@ -60,8 +60,10 @@ struct Type {
     RefQualifier ref = RefQualifier::None;
     EFundamentalType fundamental = FT_INT;
     bool variadic = false;
+    unsigned char alignment = 0; // Source storage alignment: log2(bytes)+1; absent in signatures.
     TypeId child = 0;
     EntityId entity = 0;
+    std::uint32_t alignment_queries = 0; // Pending storage expressions, erased from signatures.
     // MemberPointer uses this slot for its canonical owner TypeId. Its entity
     // is only the Named owner projection consumed after substitution.
     std::uint64_t bound = 0;
@@ -84,6 +86,8 @@ public:
     TypeId alias_target(TypeId type);
     TypeId pack_expansion(ArgumentId pattern, std::uint32_t captures);
     TypeId compound(TypeKind k, TypeId child, std::uint64_t bound = 0);
+    TypeId aligned(TypeId t, std::uint64_t bytes, std::uint32_t queries = 0);
+    unsigned storage_alignment(TypeId t) const;
     TypeId qualify(TypeId t, unsigned cv);
     TypeId unqualified(TypeId t);
     TypeId function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv = 0, RefQualifier ref = RefQualifier::None);
@@ -128,7 +132,7 @@ struct ClassFacts {
     ScopeId default_constructor = 0, member_initializer_scope = 0;
     FactState layout_state = FactState::NotStarted;
     std::uint32_t empty_types_begin = 0, empty_types_count = 0;
-    bool aggregate = true, empty = true, nearly_empty = false;
+    bool aggregate = true, empty = true, nearly_empty = false, strict_alignment = false;
     std::uint32_t virtual_info = 0;
     std::uint32_t lifecycle_begin = 0, lifecycle_count = 0;
     std::uint32_t vtt_secondary = 0, vtt_base_size = 0, vtt_size = 0;
@@ -154,6 +158,8 @@ struct FieldFacts {
     std::uint64_t alignment = 0, declared_width = 0;
     TypeId storage_type = 0;
     unsigned char shift = 0, width = 0;
+    unsigned char type_alignment = 0;
+    bool no_unique_address = false, strict_alignment = false;
     bool bit_field = false, may_clear_unit = true, unit_transfer = false;
 };
 enum class InitKind : unsigned char { Scalar, Group, String, Constructor, Value, Converted };

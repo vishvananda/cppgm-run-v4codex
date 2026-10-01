@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "support/type_traits.h"
 namespace cppgm { namespace semantic {
 bool Analyzer::independent_constructor(EntityId ctor, bool local_objects)
 {
@@ -109,6 +110,9 @@ bool Analyzer::independent_initializer(NodeId n)
         // A polymorphic typeid evaluates its operand. It may observe earlier
         // aggregate members, so it cannot be hoisted into helper arguments.
         safe = ast[n].op != KW_TYPEID || !rtti_expression(n).dynamic;
+        if (ast[n].kind == Kind::TypeTrait && BuiltinTrait(ast[n].flags) == BuiltinTrait::Offsetof)
+            for (auto step = ast[ast[n].first].next; step; step = ast[step].next)
+                if (ast[step].kind == Kind::Subscript) safe &= independent_initializer(ast[step].first);
         break;
     case Kind::IdExpression: {
         auto kind = types[entities[value.entity].type].kind;

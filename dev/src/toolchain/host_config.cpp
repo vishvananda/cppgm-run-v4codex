@@ -45,7 +45,7 @@ void host_environment(std::vector<std::string>& includes, std::vector<std::strin
         "__cpp_unicode_literals=200710L", "__cpp_raw_strings=200710L", "__cpp_user_defined_literals=200809L"};
     for (auto feature : features) defaults.push_back(std::string("-D")+feature);
     const char* aliases[] = {"__extension__=", "__restrict=", "__restrict__=",
-        "__decltype=decltype", "__inline=inline", "__inline__=inline", "__const=const", "__const__=const",
+        "__thread=thread_local", "__decltype=decltype", "__inline=inline", "__inline__=inline", "__const=const", "__const__=const",
         "__volatile=volatile", "__volatile__=volatile", "__signed=signed", "__signed__=signed"};
     for (auto alias : aliases) defaults.push_back(std::string("-D")+alias);
     defaults.insert(defaults.end(),macros.begin(),macros.end());

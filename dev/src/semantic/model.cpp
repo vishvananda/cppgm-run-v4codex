@@ -14,7 +14,7 @@ TypeId Types::intern(Type t, const std::vector<TypeId>& params)
 {
     std::uint64_t hash = mix(unsigned(t.kind) | (t.cv << 8) | (unsigned(t.fundamental) << 16) |
                              (unsigned(t.variadic) << 24) | (unsigned(t.ref) << 25));
-    hash ^= mix(t.child) ^ mix(std::uint64_t(t.entity) << 32) ^ mix(t.bound);
+    hash ^= mix(std::uint64_t(t.alignment_queries) << 32) ^ mix(t.alignment) ^ mix(t.child) ^ mix(std::uint64_t(t.entity) << 32) ^ mix(t.bound);
     for (TypeId p : params) hash = mix(hash ^ p);
     if (slots.empty() || records.size() * 2 >= slots.size()) {
         slots.assign(slots.empty() ? 64 : slots.size() * 2, 0);
@@ -30,7 +30,7 @@ TypeId Types::intern(Type t, const std::vector<TypeId>& params)
         const Type& a = records[slots[p]];
         bool same = hashes[slots[p]] == hash && a.kind == t.kind && a.cv == t.cv &&
             a.fundamental == t.fundamental && a.child == t.child && a.entity == t.entity &&
-            a.bound == t.bound && a.variadic == t.variadic && a.ref == t.ref && a.count == params.size();
+            a.alignment == t.alignment && a.alignment_queries == t.alignment_queries && a.bound == t.bound && a.variadic == t.variadic && a.ref == t.ref && a.count == params.size();
         for (std::size_t i = 0; same && i < params.size(); ++i) same = parameters[a.offset + i] == params[i];
         if (same) return slots[p];
         p = (p + 1) & (slots.size() - 1);
@@ -85,13 +85,21 @@ TypeId Types::compound(TypeKind k, TypeId child, std::uint64_t bound)
         child = base.child;
     }
     Type t; t.kind = k; t.child = child; t.bound = bound;
+    if (k == TypeKind::Array || k == TypeKind::DependentArray) { t.alignment = base.alignment; t.alignment_queries = base.alignment_queries; }
     return intern(t, {});
 }
+TypeId Types::aligned(TypeId id, std::uint64_t bytes, std::uint32_t queries)
+{
+    auto t = records[id]; t.alignment = bytes ? 1 : 0; t.alignment_queries = queries;
+    while (bytes > 1) { ++t.alignment; bytes >>= 1; }
+    return intern(t,std::vector<TypeId>(parameters.begin()+t.offset,parameters.begin()+t.offset+t.count));
+}
+unsigned Types::storage_alignment(TypeId id) const { return records[id].alignment; }
 TypeId Types::qualify(TypeId id, unsigned cv)
 {
     Type t = records[id];
     if (!cv || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || t.kind == TypeKind::Function) return id;
-    if (t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray) return compound(t.kind, qualify(t.child, cv), t.bound);
+    if (t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray) return aligned(compound(t.kind, qualify(t.child, cv), t.bound),t.alignment ? std::uint64_t(1) << (t.alignment-1) : 0,t.alignment_queries);
     t.cv |= cv;
     if (t.kind == TypeKind::DependentName)
         return intern(t,std::vector<TypeId>(parameters.begin()+t.offset,parameters.begin()+t.offset+t.count));
@@ -101,7 +109,7 @@ TypeId Types::unqualified(TypeId id)
 {
     Type t = records[id];
     if (t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray)
-        return compound(t.kind,unqualified(t.child),t.bound);
+        return aligned(compound(t.kind,unqualified(t.child),t.bound),t.alignment ? std::uint64_t(1) << (t.alignment-1) : 0,t.alignment_queries);
     // Member-function cv is part of its signature, not top-level object cv.
     if (t.kind == TypeKind::Function) return id;
     if (!t.cv) return id;
@@ -146,6 +154,10 @@ TypeId Types::signature(TypeId id)
     if (signatures[id]) return signatures[id];
     ++signature_work;
     Type t = records[id];
+    if (t.alignment || t.alignment_queries) {
+        t.alignment = 0; t.alignment_queries = 0;
+        auto result = signature(intern(t,std::vector<TypeId>(parameters.begin()+t.offset,parameters.begin()+t.offset+t.count))); signatures[id] = result; return result;
+    }
     if (t.kind == TypeKind::Function) {
         std::vector<TypeId> source(parameters.begin() + t.offset, parameters.begin() + t.offset + t.count);
         for (TypeId& p : source) p = adjusted(p);

@@ -202,3 +202,5 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/integer_builtins lowering/integer_bui
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/hint_builtins
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/overflow_builtins lowering/overflow_builtins
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/floating_constants
+
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/offsetof lowering/offsetof

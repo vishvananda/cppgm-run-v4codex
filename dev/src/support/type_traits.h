@@ -9,7 +9,7 @@ enum class BuiltinTrait : unsigned char {
     Const, Volatile, Void, Array, BoundedArray, UnboundedArray, LvalueReference, RvalueReference, Reference,
         Pointer, Function, Object, Integral, Floating, Arithmetic, Fundamental, Compound, Referenceable, Signed,
         Unsigned, Scalar, MemberPointer, MemberObjectPointer, MemberFunctionPointer,
-    ArrayRank, Aggregate, Destructible, TriviallyDestructible, NothrowDestructible, Convertible, NothrowConvertible,
+    ArrayRank, Offsetof, Aggregate, Destructible, TriviallyDestructible, NothrowDestructible, Convertible, NothrowConvertible,
     RemoveCV, RemoveConst, RemoveVolatile, RemoveReference, RemoveCVRef, RemovePointer, RemoveExtent,
         RemoveAllExtents, AddPointer, AddLRef, AddRRef, MakeSigned, MakeUnsigned
 };
@@ -30,7 +30,7 @@ inline BuiltinTrait builtin_trait(TextView text)
         "__is_object", "__is_integral", "__is_floating_point", "__is_arithmetic", "__is_fundamental",
         "__is_compound", "__is_referenceable", "__is_signed", "__is_unsigned", "__is_scalar",
         "__is_member_pointer", "__is_member_object_pointer", "__is_member_function_pointer",
-        "__array_rank", "__is_aggregate", "__is_destructible", "__is_trivially_destructible", "__is_nothrow_destructible",
+        "__array_rank", "__builtin_offsetof", "__is_aggregate", "__is_destructible", "__is_trivially_destructible", "__is_nothrow_destructible",
         "__is_convertible", "__is_nothrow_convertible", "__remove_cv",
         "__remove_const", "__remove_volatile", "__remove_reference_t", "__remove_cvref", "__remove_pointer",
         "__remove_extent", "__remove_all_extents", "__add_pointer", "__add_lvalue_reference",

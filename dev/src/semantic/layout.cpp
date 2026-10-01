@@ -20,6 +20,7 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment, bool probe)
 {
     Type t = types[id];
     if (definitions && t.kind == TypeKind::Named && entities[t.entity].class_info) complete_class(t.entity);
+    if (alignment && t.alignment) return std::uint64_t(1) << (t.alignment-1);
     if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return size(t.child, alignment,probe);
     if (t.kind == TypeKind::Pointer) return 8;
     if (t.kind == TypeKind::MemberPointer) return !alignment && types[t.child].kind == TypeKind::Function ? 16 : 8;
@@ -72,7 +73,7 @@ void Analyzer::class_layout(EntityId e)
         const auto& fact = class_facts[entities[base].class_info];
         cursor = fact.nonvirtual_size*8; extent = fact.nonvirtual_size;
         align = std::max(align,fact.nonvirtual_alignment);
-        empty.merge(entities[base].type);
+        empty.add(entities[base].type,0);
     }
     for (auto b = class_facts[info].first_base; b; b = bases[b].next)
         if (b != primary && !bases[b].virtual_base) order.push_back(b);
@@ -81,12 +82,8 @@ void Analyzer::class_layout(EntityId e)
         size(base);
         auto base_info = entities[types[base].entity].class_info;
         auto bytes = class_facts[base_info].nonvirtual_size;
-        bases[b].offset = class_facts[entities[types[base].entity].class_info].empty ? 0 : layout_align(cursor/8, class_facts[base_info].nonvirtual_alignment);
-        // A repeated empty type may not share an address. Type summaries are
-        // conservative: on overlap (or budget exhaustion), place this entire
-        // subobject beyond existing storage instead of searching for a hole.
-        if (empty.merge(base) && bases[b].offset < extent)
-            bases[b].offset = layout_align(extent,class_facts[base_info].nonvirtual_alignment);
+        bases[b].offset = empty.place(base,layout_align(cursor/8,class_facts[base_info].nonvirtual_alignment),
+            class_facts[base_info].nonvirtual_alignment,class_facts[base_info].empty);
         if (!bases[b].virtual_base) {
             const auto& fact = class_facts[base_info];
             if (fact.empty) nearly_empty &= bases[b].offset == 0;
@@ -106,11 +103,12 @@ void Analyzer::class_layout(EntityId e)
         Entity member = entities[id];
         if (member.kind != EntityKind::Variable || member.is_static || member.owner != entities[e].scope) continue;
         auto f = field_fact(id);
-        if (!f.bit_field || f.declared_width) nearly_empty = false;
         bool reference = types[member.type].kind == TypeKind::LRef || types[member.type].kind == TypeKind::RRef;
-        auto field_align = reference ? 8 : size(member.type, true);
+        auto field_align = reference ? 8 : f.type_alignment ? std::uint64_t(1) << (f.type_alignment-1) : size(member.type, true);
         auto field_size = reference ? 8 : size(member.type);
-        if (f.alignment && f.alignment < field_align) throw std::runtime_error("weakened field alignment");
+        bool overlapping_empty = f.no_unique_address && !reference && empty_class(member.type);
+        if (!overlapping_empty && (!f.bit_field || f.declared_width)) nearly_empty = false;
+        if (f.strict_alignment && f.alignment && f.alignment < field_align) throw std::runtime_error("weakened field alignment");
         if (class_facts[info].packing) field_align = std::min<std::uint64_t>(field_align, class_facts[info].packing);
         field_align = std::max(field_align, f.alignment);
         if (!f.bit_field || member.name) align = std::max(align, field_align);
@@ -130,11 +128,14 @@ void Analyzer::class_layout(EntityId e)
             auto end = layout_add(at, f.declared_width);
             cursor = is_union ? std::max(cursor, end) : end;
         } else {
-            std::uint64_t offset = layout_align(layout_add(at, 7)/8, field_align);
-            if (!reference && empty.merge(member.type) && !is_union && offset < extent)
-                offset = layout_align(extent,field_align);
+            std::uint64_t offset = overlapping_empty ? 0 : layout_align(layout_add(at, 7)/8, field_align);
+            if (!reference && !is_union)
+                offset = empty.place(member.type,layout_align(layout_add(at,7)/8,field_align),field_align,overlapping_empty);
+            else if (!reference) empty.add(member.type,offset);
             entities[id].member_offset = offset;
             auto end = layout_add(offset, field_size);
+            extent = std::max(extent,end);
+            if (overlapping_empty) continue;
             ordinary_end = std::max(ordinary_end, end);
             if (end > std::numeric_limits<std::uint64_t>::max()/8) throw std::runtime_error("field layout overflow");
             cursor = is_union ? std::max(cursor, end*8) : end*8;
@@ -142,7 +143,7 @@ void Analyzer::class_layout(EntityId e)
         class_facts[info].empty = false;
     }
     auto requested = class_facts[info].requested_alignment;
-    if (requested && requested < align) throw std::runtime_error("weakened class alignment");
+    if (class_facts[info].strict_alignment && requested && requested < align) throw std::runtime_error("weakened class alignment");
     align = std::max(align, requested);
     class_facts[info].nonvirtual_alignment = align;
     auto data_size = std::max<std::uint64_t>(std::max<std::uint64_t>(1,extent),layout_add(cursor,7)/8);

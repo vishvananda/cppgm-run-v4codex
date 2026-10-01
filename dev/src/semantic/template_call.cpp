@@ -47,7 +47,7 @@ bool Analyzer::dependent_type(TypeId id)
     if (type_dependence[id]) return type_dependence[id] == 2;
     ++dependence_work;
     Type t = types[id];
-    bool dependent = t.kind == TypeKind::PackExpansion || t.kind == TypeKind::AliasApplication;
+    bool dependent = t.alignment_queries || t.kind == TypeKind::PackExpansion || t.kind == TypeKind::AliasApplication;
     if (t.kind == TypeKind::ArgumentPack) {
         auto args = argument_packs[t.bound];
         for (unsigned j = 0; j < args.count; ++j) dependent |= dependent_argument(argument_types[args.offset+j]);
@@ -132,6 +132,7 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
                 return 0;
             if (fundamental(child,FT_VOID) || types[child].kind == TypeKind::Function ||
                 types[child].kind == TypeKind::LRef || types[child].kind == TypeKind::RRef || abstract_value(child)) return 0;
+            if (types.storage_alignment(child) && !dependent_type(child) && size(child)%size(child,true)) return 0;
             result = types.compound(TypeKind::Array,child,std::uint64_t(integer_value(value)));
         }
         result = types.qualify(result,p.cv);
@@ -251,8 +252,21 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         if (reference && (p.kind == TypeKind::Pointer || p.kind == TypeKind::Array || p.kind == TypeKind::MemberPointer)) return 0;
         if ((p.kind == TypeKind::LRef || p.kind == TypeKind::RRef) && fundamental(child, FT_VOID)) return 0;
         if (p.kind == TypeKind::Array && (fundamental(child, FT_VOID) || types[child].kind == TypeKind::Function || abstract_value(child))) return 0;
+        if (p.kind == TypeKind::Array && types.storage_alignment(child) && !dependent_type(child) && size(child)%size(child,true)) return 0;
         result = types.compound(p.kind, child, p.bound);
         result = types.qualify(result, p.cv);
+    }
+    if (result && (p.alignment || p.alignment_queries)) {
+        std::uint64_t alignment = p.alignment ? std::uint64_t(1) << (p.alignment-1) : 0;
+        std::vector<ArgumentId> pending;
+        auto pack = argument_packs[p.alignment_queries];
+        for (unsigned j = 0; j < pack.count; ++j) {
+            auto q = substitute_query(argument_query(argument_types[pack.offset+j]),bindings,cache,owner);
+            if (!q) return 0;
+            if (query_fact(q).dependent) pending.push_back(0x80000000U | q);
+            else alignment = std::max(alignment,gnu_alignment_constant(constants[query_value(q)]));
+        }
+        result = types.aligned(result,alignment,pending.empty() ? 0 : intern_arguments(pending));
     }
     // A completed dependent-name failure belongs to the same immutable
     // type/frame key as success. Missing bindings and members of an active

@@ -1,5 +1,6 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
+#include <algorithm>
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
@@ -109,11 +110,12 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
 void Analyzer::class_attributes(NodeId n, ScopeId s, EntityId e, bool definition)
 {
     if (calls) {
-        auto alignment = alignment_attributes(n, s);
+        bool strict = false;
+        auto alignment = alignment_attributes(n, s, &strict);
         auto& f = class_facts[entities[e].class_info];
         if (alignment) {
-            if (f.requested_alignment && alignment != f.requested_alignment) throw std::runtime_error("inconsistent class alignment");
-            f.requested_alignment = alignment;
+            if ((strict || f.strict_alignment) && f.requested_alignment && alignment != f.requested_alignment) throw std::runtime_error("inconsistent class alignment");
+            f.requested_alignment = std::max(f.requested_alignment,alignment); f.strict_alignment |= strict;
         }
         if (definition) f.final_class = ast[n].flags & 4;
         if (definition) f.packing = (ast[n].flags & 32) ? 1 : ast.class_packing.get(n);

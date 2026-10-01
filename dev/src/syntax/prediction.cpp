@@ -132,7 +132,9 @@ std::size_t Parser::probe_type(std::size_t ahead)
 {
     bool base = false;
     for (;;) {
-        if (builtin(ahead)) {
+        if ((in.is("[",ahead) && in.is("[",ahead+1)) || in.is("__attribute__",ahead) || in.is("__attribute",ahead)) {
+            ahead = in.matching(in.is("[",ahead) ? ahead : ahead+1)+1;
+        } else if (builtin(ahead)) {
             base = true;
             ++ahead;
         } else if (in.is("const", ahead) || in.is("volatile", ahead)) ++ahead;

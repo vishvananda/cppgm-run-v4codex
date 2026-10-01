@@ -1,4 +1,5 @@
 #include "lowering/procedural.h"
+#include "support/type_traits.h"
 #include <cstring>
 #include <stdexcept>
 namespace cppgm { namespace lowering {
@@ -106,6 +107,7 @@ Value Procedural::expression(NodeId n, bool location)
         Value v = converted(operand, c);
         v.type = fact.type; return v;
     }
+    if (node.kind == Kind::TypeTrait && BuiltinTrait(node.flags) == BuiltinTrait::Offsetof && !sem.constant_fact(n).valid) return offsetof_expression(n);
     if (fact.form == semantic::ExpressionForm::ConstantQuery || node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack || node.kind == Kind::TypeTrait) {
         auto c = sem.constant_fact(n);
         if (!c.valid) throw std::logic_error("missing semantic constant");

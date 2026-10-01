@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "support/type_traits.h"
 #include <cstring>
 #include <limits>
 #include <stdexcept>
@@ -232,6 +233,21 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
     }
     case Kind::SizeofPack: return constants[query_value(expression_query(n,s))];
     case Kind::Sizeof: case Kind::TypeTrait: {
+        if (ast[n].kind == Kind::TypeTrait && BuiltinTrait(ast[n].flags) == BuiltinTrait::Offsetof && active_constant) {
+            expression_query(n,s);
+            std::uint64_t offset = 0;
+            for (auto part = ast[first].next; part; part = ast[part].next) {
+                auto id = offsetof_path_queries.get(part);
+                if (query_fact(id).state == FactState::Failure) return Constant();
+                auto step = offsetof_layouts[offsetof_layout_index.get(id)]; offset += step.offset;
+                if (step.stride) {
+                    auto index = evaluate(ast[part].first,s);
+                    if (!index.valid) return Constant();
+                    offset += std::uint64_t(integer_value(index))*step.stride;
+                }
+            }
+            return Constant(types.fundamental(FT_UNSIGNED_LONG_INT),offset);
+        }
         if (ast[n].kind == Kind::TypeTrait && ast[n].flags) return constants[query_value(expression_query(n,s))];
         if (ast[n].op == KW_TYPEID) return Constant();
         if (ast[n].op == KW_NOEXCEPT) return constants[facts[n].value];

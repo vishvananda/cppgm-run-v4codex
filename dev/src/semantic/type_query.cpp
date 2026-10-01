@@ -518,7 +518,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         for (unsigned i = 0; i < pack.count; ++i) r.dependent |= dependent_argument(argument_types[pack.offset+i]);
     }
     auto& x = r.expression;
-    if (q.kind == QueryKind::IntegerPack || q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack)
+    if (q.kind == QueryKind::Offsetof || q.kind == QueryKind::IntegerPack || q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack)
         x.type = types.fundamental(q.op == KW_NOEXCEPT ? FT_BOOL : FT_UNSIGNED_LONG_INT);
     if (q.kind == QueryKind::BuiltinTrait && !type_transform(BuiltinTrait(q.value)))
         x.type = types.fundamental(BuiltinTrait(q.value) == BuiltinTrait::ArrayRank ? FT_UNSIGNED_LONG_INT : FT_BOOL);
@@ -567,6 +567,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::IntegerPack: x.type = types.fundamental(FT_UNSIGNED_LONG_INT); break;
     case QueryKind::VaArg: case QueryKind::Typeof: r = query_builtin_operand(q,children); break;
     case QueryKind::BuiltinTrait: r = query_builtin_trait(id,q); break;
+    case QueryKind::Offsetof: r = query_offsetof(id,q,children); break;
     case QueryKind::List:
         x.form = ExpressionForm::InitializerList; x.inputs = CallInputs::Query;
         x.arguments = id; x.argument_count = q.count; break;

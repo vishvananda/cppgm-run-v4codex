@@ -26,7 +26,7 @@ struct Value {
     EntityId bit_field = 0, parameter_object = 0;
     std::uint64_t init_offset = 0;
     bool address = false, cached = false, nonnull = false, member_zero_adjustment = false;
-    bool initializing = false;
+    bool initializing = false, overlapping = false;
     Operand stored;
     SlotId materialized;
     Value() {}
@@ -304,6 +304,7 @@ class Procedural {
     void numeric_string_literal(NodeId n);
     void literal_arguments(NodeId n);
     semantic::Index numeric_strings;
+    Value offsetof_expression(NodeId);
     void global_data(NodeId n, TypeId t);
     lowir_model::DataItem constant_data(NodeId n, TypeId t);
     IRType type(TypeId t);

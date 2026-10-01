@@ -67,8 +67,8 @@ Value Procedural::address(Value v)
 {
     if (!v.address) throw std::logic_error("missing addressable semantic value");
     if (v.operand.kind == Operand::Slot || v.operand.kind == Operand::Symbol) {
-        auto object = v.parameter_object;
-        v = emit(Opcode::Addr, IRType(), {v.operand}); v.parameter_object = object;
+        auto object = v.parameter_object; auto overlap = v.overlapping;
+        v = emit(Opcode::Addr, IRType(), {v.operand}); v.parameter_object = object; v.overlapping = overlap;
     }
     v.address = false; v.ir = IRType::Ptr; return v;
 }

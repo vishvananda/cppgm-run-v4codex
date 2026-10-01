@@ -218,6 +218,8 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
     for (std::size_t i = suffixes.size(); i; --i) {
         NodeId c = suffixes[i - 1];
         if (ast[c].kind == Kind::Array) {
+            if (calls && types.storage_alignment(base) && !dependent_type(base) && size(base)%size(base,true))
+                throw std::runtime_error("array element size is not a multiple of its alignment");
             std::uint64_t bound = 0;
             if (ast[c].first) {
                 if (definitions && !ast.nodes.occurrences[c].context && (template_type_probe || active_template_scope) &&
@@ -415,6 +417,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
             throw std::runtime_error("variable specialization redefinition");
         select_explicit_specialization(e,source);
     }
+    if (!function && types.storage_alignment(t)) field_metadata(e).type_alignment = types.storage_alignment(t);
     if (block_extern) { block_extern_entities.put(key(owner,id),e); bind(s,id,e); }
     else if (hidden_external) bind(owner,id,e);
     if (calls && scopes[owner].kind == ScopeKind::Namespace && spec_has(specs,KW_STATIC) &&

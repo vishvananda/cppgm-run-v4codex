@@ -18,13 +18,14 @@ Constant Analyzer::constant_field_value(EntityId field, Constant value)
     }
     return value;
 }
-std::uint64_t Analyzer::alignment_attributes(NodeId n, ScopeId s)
+std::uint64_t Analyzer::alignment_attributes(NodeId n, ScopeId s, bool* strict)
 {
     std::uint64_t result = 0;
     for (auto a = ast.alignment_owners.get(n); a; a = ast.alignments[a].next) {
         auto attribute = ast.alignments[a];
         std::uint64_t value;
-        if (attribute.type) value = size(type_id(attribute.operand, s), true);
+        if (attribute.gnu && !attribute.operand) value = 16;
+        else if (attribute.type) value = size(type_id(attribute.operand, s), true);
         else {
             auto c = evaluate(attribute.operand, s);
             if (!c.valid || !integral(c.type) || (negative_constant(c) || integer_value(c) > ~std::uint64_t(0)))
@@ -32,9 +33,41 @@ std::uint64_t Analyzer::alignment_attributes(NodeId n, ScopeId s)
             value = std::uint64_t(integer_value(c));
         }
         if (value && (value & (value-1))) throw std::runtime_error("alignment is not a power of two");
+        if (strict && value && !attribute.gnu) *strict = true;
+        if (attribute.gnu && !value) throw std::runtime_error("GNU alignment must be nonzero");
         result = std::max(result, value);
     }
     return result;
+}
+std::uint64_t Analyzer::gnu_alignment_constant(Constant c)
+{
+    if (!c.valid || !integral(c.type) || negative_constant(c) || integer_value(c) > ~std::uint64_t(0))
+        throw std::runtime_error("invalid GNU alignment constant");
+    auto value = std::uint64_t(integer_value(c));
+    if (!value || (value & (value-1))) throw std::runtime_error("GNU alignment must be a nonzero power of two");
+    return value;
+}
+TypeId Analyzer::aligned_typedef(TypeId type, NodeId source, NodeId specs, NodeId declarator, ScopeId scope)
+{
+    std::uint64_t alignment = 0; bool present = false;
+    std::vector<ArgumentId> pending;
+    for (auto n : {source,specs,declarator})
+        for (auto a = ast.alignment_owners.get(n); a; a = ast.alignments[a].next) {
+            auto attribute = ast.alignments[a]; present = true;
+            if (!attribute.gnu || types[type].kind == TypeKind::Function)
+                throw std::runtime_error("invalid typedef alignment");
+            if (!attribute.operand) { alignment = std::max(alignment,std::uint64_t(16)); continue; }
+            if (pattern_scope(scope)) bind_template_expression(attribute.operand,scope);
+            auto q = expression_query(attribute.operand,scope);
+            if (query_fact(q).dependent) pending.push_back(0x80000000U | q);
+            else alignment = std::max(alignment,gnu_alignment_constant(constants[query_value(q)]));
+        }
+    return present ? types.aligned(type,alignment,pending.empty() ? 0 : intern_arguments(pending)) : type;
+}
+std::uint64_t Analyzer::storage_alignment(EntityId e)
+{
+    auto f = field_fact(e);
+    return std::max(f.alignment,f.type_alignment ? std::uint64_t(1) << (f.type_alignment-1) : size(entities[e].type,true));
 }
 FieldFacts& Analyzer::field_metadata(EntityId e)
 {

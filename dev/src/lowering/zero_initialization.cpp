@@ -4,6 +4,9 @@
 namespace cppgm { namespace lowering {
 void Procedural::zero_object(TypeId t, Value object)
 {
+    // Empty potentially-overlapping subobjects own no representation bytes.
+    // Retain complete-object zeroing and all constructor/destructor effects.
+    if (object.overlapping && sem.empty_class(t)) return;
     auto plan = sem.zero_initialization(t);
     if (!plan) throw std::logic_error("missing zero-initialization plan");
     zero_plan(plan,object);

@@ -82,6 +82,12 @@ NodeId Parser::class_specifier()
     }
     in.take();
     scope = saved_scope;
+    if (in.is("__attribute__") || in.is("__attribute")) {
+        NativeAttributes suffix;
+        ast[result].flags |= attributes(&alignment,&suffix);
+        native_attributes(result,suffix);
+        if (alignment) ast.alignment_owners.put(result,alignment);
+    }
     ast[result].literal = ast.class_regions.size();
     ast.class_regions.push_back(ClassRegion{region_begin, in.consumed});
     current_class = saved_class;

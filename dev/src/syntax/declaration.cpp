@@ -121,10 +121,11 @@ NodeId Parser::namespace_declaration()
 {
     bool is_inline = in.eat("inline");
     in.require("namespace");
+    unsigned flags = attributes();
     Token token;
     if (identifier()) token = in.take();
     NodeId result = ast.make(Kind::Namespace, token);
-    ast[result].flags |= attributes();
+    ast[result].flags |= flags | attributes();
     if (in.eat("=")) {
         ast[result].kind = Kind::NamespaceAlias;
         NodeId n = name();

@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "support/type_traits.h"
 #include "semantic/definition_access.h"
 #include <stdexcept>
 
@@ -107,6 +108,12 @@ bool Analyzer::expression_nonthrowing(NodeId n)
     if (auto known = expression_exception_facts.get(n)) return known == 2;
     ++exception_work;
     auto node = ast[n]; auto x = expressions[n];
+    if (node.kind == Kind::TypeTrait && BuiltinTrait(node.flags) == BuiltinTrait::Offsetof) {
+        bool result = true;
+        for (auto step = ast[node.first].next; step; step = ast[step].next)
+            if (ast[step].kind == Kind::Subscript) result &= expression_nonthrowing(ast[step].first);
+        expression_exception_facts.put(n,result ? 2 : 1); return result;
+    }
     if (x.form == ExpressionForm::ConstantQuery || x.form == ExpressionForm::Abort || x.form == ExpressionForm::Unreachable) return true;
     if (x.form == ExpressionForm::Typeid) return !rtti_expression(n).dynamic;
     if (x.form == ExpressionForm::DynamicCast)

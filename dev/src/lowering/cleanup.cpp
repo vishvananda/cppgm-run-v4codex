@@ -59,8 +59,9 @@ void Procedural::activate_temporary(EntityId e)
 SlotId Procedural::source_slot(EntityId e)
 {
     auto storage = type(sem.entities[e].type);
-    auto alignment = sem.field_fact(e).alignment;
-    if (!linkage.presentation && alignment > storage.alignment()) storage = IRType::object(storage.bytes(),alignment);
+    auto field = sem.field_fact(e);
+    auto alignment = field.alignment || field.type_alignment ? sem.storage_alignment(e) : storage.alignment();
+    if (!linkage.presentation && alignment != storage.alignment()) storage = IRType::object(storage.bytes(),alignment);
     if (!sem.entities[e].name) return builder->add_slot(0,storage);
     auto name = p.intern("$" + spelling(sem.entities[e].name));
     if (slot_names.get(name)) name = p.intern("$" + spelling(sem.entities[e].name) + "__" + std::to_string(e));

@@ -1,4 +1,5 @@
 #include "semantic/analyzer.h"
+#include "support/type_traits.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
@@ -130,7 +131,7 @@ bool Analyzer::bind_template_expression(NodeId n, ScopeId s, bool callee)
         auto kind = ast[n].kind;
         if (dependent && template_body_values) {
             template_value_dependence.put(ast.nodes.occurrences[n].source,1);
-            if (kind == Kind::Sizeof || kind == Kind::SizeofPack || kind == Kind::TypeTrait) bind_template_size(n,s);
+            if (kind == Kind::Sizeof || kind == Kind::SizeofPack || (kind == Kind::TypeTrait && BuiltinTrait(ast[n].flags) != BuiltinTrait::Offsetof)) bind_template_size(n,s);
         }
         // Value dependence alone does not change scalar operand types or the
         // selected built-in conversions. Each checker still requires complete
@@ -251,6 +252,12 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
         return true;
     }
     if (node.kind == Kind::Identifier) return false; // A declaration's own name.
+    if (node.kind == Kind::TypeTrait && BuiltinTrait(node.flags) == BuiltinTrait::Offsetof) {
+        bool dependent = dependent_type(type_id(node.first,s));
+        for (auto c = ast[node.first].next; c; c = ast[c].next)
+            if (ast[c].kind == Kind::Subscript) dependent |= bind_template_expression(ast[c].first,s);
+        return dependent;
+    }
     if (node.kind == Kind::TypeTrait && node.flags) {
         bool dependent = false;
         for (auto c = node.first; c; c = ast[c].next)

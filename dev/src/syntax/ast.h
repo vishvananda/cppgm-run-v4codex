@@ -176,14 +176,18 @@ struct Node {
     std::uint32_t literal = 0;
 };
 
-struct AlignmentAttribute { NodeId operand; std::uint32_t next; bool type; };
+struct AlignmentAttribute {
+    NodeId operand; std::uint32_t next; bool type, gnu;
+    AlignmentAttribute(NodeId o = 0, std::uint32_t n = 0, bool t = false, bool g = false)
+        : operand(o), next(n), type(t), gnu(g) {}
+};
 enum class FunctionEffects : unsigned char { Unknown, ReadOnly, ReadNone };
 struct AbiTag { IdentifierId name; std::uint32_t next; };
 struct NativeAttributes {
     IdentifierId section = 0;
     std::uint32_t tags = 0;
     FunctionEffects effects = FunctionEffects::Unknown;
-    bool weak = false;
+    bool weak = false, no_unique_address = false;
 };
 
 struct ClassRegion { std::size_t begin, end; };

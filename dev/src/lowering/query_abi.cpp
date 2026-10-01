@@ -43,6 +43,7 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     switch (q.kind) {
     case QueryKind::IntegerPack:
         result = abi.make(Kind::TypeTrait,abi.string("__integer_pack"),0,0,0,{child(0)}); break;
+    case QueryKind::Offsetof: throw std::runtime_error("dependent offsetof ABI expression is unsupported");
     case QueryKind::VaArg: throw std::runtime_error("dependent va_arg ABI expression is unsupported");
     case QueryKind::Typeof: throw std::runtime_error("dependent typeof ABI expression is unsupported");
     case QueryKind::BuiltinTrait:
