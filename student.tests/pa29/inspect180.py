@@ -113,7 +113,7 @@ for name,text in fixtures.items():
   run([root/'dev/lowir2native',ir,'--dump-machine-ir',out/'phi.mir'])
   assert 'callee.cpp' in (out/'phi.mir').read_text()
  assert ('call i32 @keep' in prepared.read_text()) if name=='noinline' else int(counts.split()[0])>0
-# Mandatory-call bounds terminate with diagnostics; input storage and output are
+# Mandatory-call eligibility has conservative fallbacks; input storage and output are
 # bounded even when a short acyclic call graph denotes exponential expansion.
 for name,text,diagnostic in [
  ('cycle','function @f() -> void [force_inline=yes] { block ^b: call void @f() return void }','recursive'),
@@ -121,5 +121,7 @@ for name,text,diagnostic in [
  ('growth','\n'.join('function @f%d() -> void [force_inline=yes] {block ^b: %s return void}'%(i,('call void @f%d() call void @f%d()'%(i+1,i+1)) if i<22 else 'nop') for i in range(23)),'budget'),
  ('frame','function @f() -> ptr [force_inline=yes] {block ^b: %p = stack_alloc 8 return ptr %p} function @main() -> i32 [role=entry] {block ^b: %p = call ptr @f() return i32 0}','stack'),
 ]:
- ir=out/(name+'.lowir');ir.write_text(text+'\n');run([out/'ir-object',ir,out/(name+'.prepared'),out/(name+'.o')],False);assert diagnostic in rows[-1]['stderr'],rows[-1]
+ ir=out/(name+'.lowir');ir.write_text(text+'\n');counts=run([out/'ir-object',ir,out/(name+'.prepared'),out/(name+'.o')]).split()
+ assert int(counts[2])>0 and int(counts[1])<=int(counts[3])<=4194304 and int(counts[4])<=262144
+ assert 'call ' in (out/(name+'.prepared')).read_text()
 print('inspection passed',len(rows),flush=True)

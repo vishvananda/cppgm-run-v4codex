@@ -5,8 +5,8 @@ namespace lowir_model {
 namespace {
 // Mandatory attribute expansion, not an optimization-level heuristic. Original
 // bodies are immutable during this traversal. Every call consumes its own budget;
-// cycles and unsupported frame semantics diagnose instead of silently ignoring
-// the attribute. No fixed-point scan or semantic reconstruction is involved.
+// cycles, unsupported frame semantics and exhausted budgets retain valid calls.
+// Eligibility never relaxes the existing call boundary. No fixed-point scan or semantic reconstruction is involved.
 class Expander {
     Program& p;
     Pool<Instruction> instructions;
@@ -31,8 +31,9 @@ class Expander {
         ValueId straight_result;
     };
     void charge(unsigned amount) {
-        require(amount <= 262144-work && amount <= 4194304-total,"force-inline expansion budget exceeded");
-        work += amount; total += amount;
+        // Admission reserves an upper bound before mutation; this counter
+        // measures actual copied/synthesized instruction, operand and slot work.
+        p.stats.inline_work += amount;
     }
     BlockId block() {
         Block b; b.owner = owner; p.blocks.push_back(b); return BlockId(p.blocks.size());
@@ -49,10 +50,10 @@ class Expander {
         current = id; auto& b = p.blocks[id.index-1];
         b.defined = true; b.instructions.begin = p.instructions.size(); p.block_order.push_back(id);
     }
-    void emit(Instruction i, const std::vector<Operand>& args, bool added = true) {
-        if (added) charge(1+args.size());
-        i.operands.begin = p.operands.size(); i.operands.count = args.size();
-        for (auto a : args) p.operands.push_back(a);
+    void emit(Instruction i, const Operand* args, unsigned count, bool added) {
+        if (added) charge(1+count);
+        i.operands.begin = p.operands.size(); i.operands.count = count;
+        for (unsigned n = 0; n < count; ++n) p.operands.push_back(args[n]);
         validate_instruction_shape(i);
         if (i.destination) {
             auto& v = p.values[i.destination.index-1];
@@ -62,6 +63,8 @@ class Expander {
         }
         p.instructions.push_back(i); ++p.blocks[current.index-1].instructions.count;
     }
+    void emit(Instruction i, const std::vector<Operand>& args, bool added = true) { emit(i,args.data(),args.size(),added); }
+    void emit(Instruction i, std::initializer_list<Operand> args) { emit(i,args.begin(),args.size(),true); }
     Operand mapped(Operand a, const Context& c) {
         if (a.kind == Operand::Temporary && c.clone) a.ref = c.values.get(a.ref);
         else if (a.kind == Operand::Slot && c.clone) a.ref = c.slots.get(a.ref);
@@ -76,32 +79,23 @@ class Expander {
         return symbol.kind == Symbol::FunctionSymbol && symbol.metadata.force_inline && !symbol.metadata.no_inline &&
             !functions[symbol.entity-1].declaration ? symbol.entity : 0;
     }
-    void return_regions(unsigned f) {
+    std::uint64_t return_regions(unsigned f) {
         // A return retires all registrations belonging to the callee's frame.
         // A cloned return must perform those pops before joining its caller.
         // Analyze only demanded callee CFG edges, once per immutable body.
         cppgm::IdIndex incoming, cleanup;
         std::vector<unsigned> pending;
         auto body = functions[f-1].blocks;
-        bool regions = false;
+        std::uint64_t retirement = 0;
         for (unsigned b = body.begin; b < body.end(); ++b) {
             auto id = order[b].index; auto range = blocks[id-1].instructions;
             for (unsigned n = range.begin; n < range.end(); ++n) {
                 auto i = instructions[n];
-                regions |= i.opcode == Opcode::EhTry || i.opcode == Opcode::EhCleanup;
                 if (i.opcode == Opcode::EhCleanup && !i.operands.count) cleanup.put(id,1);
                 if (i.opcode != Opcode::EhCatch && i.opcode != Opcode::EhCatchAll &&
                     i.opcode != Opcode::EhFilter && !(i.opcode == Opcode::EhCleanup && !i.operands.count)) break;
             }
         }
-        // Regions can begin after ordinary instructions; this is a bounded
-        // local CFG analysis, not a proof that all blocks are reachable.
-        if (!regions) for (unsigned b = body.begin; b < body.end(); ++b) {
-            auto range = blocks[order[b].index-1].instructions;
-            for (unsigned n = range.begin; n < range.end(); ++n)
-                regions |= instructions[n].opcode == Opcode::EhTry || instructions[n].opcode == Opcode::EhCleanup;
-        }
-        if (!regions) return;
         auto edge = [&](unsigned id, unsigned depth) {
             auto old = incoming.get(id);
             if (!old) { incoming.put(id,depth+1); pending.push_back(id); }
@@ -121,33 +115,42 @@ class Expander {
                 } else if (i.opcode == Opcode::Jump || i.opcode == Opcode::Branch || i.opcode == Opcode::Switch) {
                     for (unsigned k = i.operands.begin; k < i.operands.end(); ++k)
                         if (operands[k].kind == Operand::Label) edge(operands[k].ref,depth);
-                } else if (i.opcode == Opcode::Return) return_depths.put(n+1,depth+1);
+                } else if (i.opcode == Opcode::Return) { return_depths.put(n+1,depth+1); retirement += depth+1; }
             }
         }
+        return retirement;
     }
-    void check(unsigned f, unsigned depth) {
-        require(depth <= 64 && !active[f],"recursive or excessively deep force-inline call");
-        require(!functions[f-1].declaration,"force-inline call has no definition");
+    bool check(unsigned f, unsigned depth) {
+        if (depth > 64 || active[f] || functions[f-1].declaration) return false;
         const auto& sig = p.signatures[functions[f-1].signature.index-1];
-        require(sig.boundary.arity == CAM_FIXED,"cannot force-inline a variadic function");
+        if (sig.boundary.arity != CAM_FIXED) return false;
         if (!costs[f]) {
-            unsigned cost = 1;
+            // Reserve local work including parameter boundary copies, slots,
+            // continuation plumbing and return-region retirement. Nested calls
+            // request their own reservation; the parent has already reserved
+            // enough to finish even if every nested request is declined.
+            std::uint64_t cost = 5+8ull*sig.parameters.count+2ull*functions[f-1].slots.count;
+            bool regions = false;
             auto body = functions[f-1].blocks;
             for (unsigned b = body.begin; b < body.end(); ++b) {
                 auto range = blocks[order[b].index-1].instructions;
                 for (unsigned n = range.begin; n < range.end(); ++n) {
                     const auto& i = instructions[n];
-                    require(i.opcode != Opcode::StackAlloc && i.opcode != Opcode::VaStart && i.opcode != Opcode::VaArg,
-                        "cannot force-inline dynamic stack or variadic frame operations");
-                    require(i.operands.count < 262144 && cost <= 262144-1-i.operands.count,"force-inline body exceeds budget");
-                    cost += 1+i.operands.count;
+                    if (i.opcode == Opcode::StackAlloc || i.opcode == Opcode::VaStart || i.opcode == Opcode::VaArg) {
+                        costs[f] = ~0u; return false;
+                    }
+                    cost += 1ull+i.operands.count;
+                    regions |= i.opcode == Opcode::EhTry || i.opcode == Opcode::EhCleanup;
+                    if (i.opcode == Opcode::Return) cost += 5;
                 }
             }
-            costs[f] = cost; return_regions(f);
+            if (regions) cost += return_regions(f);
+            costs[f] = cost <= 262144 ? unsigned(cost) : ~0u;
         }
-        require(costs[f] <= 262144-work && costs[f] <= 4194304-total,"force-inline expansion budget exceeded");
+        if (costs[f] > 262144-work || costs[f] > 4194304-total) return false;
+        work += costs[f]; total += costs[f]; return true;
     }
-    void body(unsigned f, Context& c, unsigned depth, const std::vector<Operand>& actuals = {}) {
+    void body(unsigned f, Context& c, unsigned depth, const Operand* actuals = nullptr, unsigned actual_count = 0) {
         const auto source = functions[f-1];
         const auto sig = p.signatures[source.signature.index-1];
         active[f] = true;
@@ -167,7 +170,7 @@ class Expander {
             }
         }
         if (c.clone) {
-            require(actuals.size() == sig.parameters.count,"force-inline argument arity");
+            require(actual_count == sig.parameters.count,"force-inline argument arity");
             for (unsigned j = 0; j < sig.parameters.count; ++j) {
                 auto param = p.parameters[sig.parameters.begin+j];
                 auto a = actuals[j];
@@ -193,15 +196,18 @@ class Expander {
             }
             if (!c.straight) emit(Instruction(Opcode::Jump),{Operand::label(BlockId(c.entries.get(order[source.blocks.begin].index)))});
         }
+        std::vector<Operand> args; // Reused scratch, never one allocation per instruction.
         for (unsigned b = source.blocks.begin; b < source.blocks.end(); ++b) {
             auto old = order[b]; if (!c.straight) start(BlockId(c.entries.get(old.index)));
             auto range = blocks[old.index-1].instructions;
             for (unsigned n = range.begin; n < range.end(); ++n) {
-                auto i = instructions[n]; std::vector<Operand> args;
+                auto i = instructions[n]; args.clear();
                 for (unsigned k = i.operands.begin; k < i.operands.end(); ++k) args.push_back(mapped(operands[k],c));
                 if (i.destination && c.clone) i.destination = ValueId(c.values.get(i.destination.index));
-                if (auto callee = target(i)) {
-                    check(callee,depth+1); ++p.stats.inline_calls;
+                auto callee = target(i);
+                if (callee && !check(callee,depth+1)) { ++p.stats.inline_declined; callee = 0; }
+                if (callee) {
+                    ++p.stats.inline_calls;
                     Context nested; nested.clone = true;
                     auto range = functions[callee-1].blocks;
                     nested.straight = range.count == 1 && (i.type.scalar() || i.type == Type()) &&
@@ -211,8 +217,7 @@ class Expander {
                         nested.continuation = block();
                         if (i.destination) nested.result = slot(i.type);
                     }
-                    std::vector<Operand> actual(args.begin()+1,args.end());
-                    body(callee,nested,depth+1,actual);
+                    body(callee,nested,depth+1,args.data()+1,args.size()-1);
                     if (!nested.straight) start(nested.continuation);
                     if (!nested.straight && i.destination) { Instruction load(Opcode::Load,i.type); load.destination = i.destination; load.debug = i.debug;
                         emit(load,{Operand::slot(nested.result)}); }
@@ -259,7 +264,8 @@ public:
             p.functions[f-1].slots.begin = slot_begin; p.functions[f-1].slots.count = p.slot_order.size()-slot_begin;
             p.stats.inline_max_function_work = std::max<std::uint64_t>(p.stats.inline_max_function_work,work);
         }
-        p.stats.inline_work = total;
+        p.stats.inline_budget_work = total;
+        require(p.stats.inline_work <= total,"inline work exceeded its admission proof");
     }
 };
 }

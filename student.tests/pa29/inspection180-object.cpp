@@ -11,6 +11,6 @@ int main(int argc, char** argv) {
         std::ofstream out(argv[2]); lowir_model::write_program(p,out); out.close();
         native::Statistics stats;
         cppgm::toolchain::write_host_object(cppgm::toolchain::compile_object(p,stats,true),argv[3]);
-        std::cout << p.stats.inline_calls << ' ' << p.stats.inline_work << '\n';
+        std::cout << p.stats.inline_calls << ' ' << p.stats.inline_work << ' ' << p.stats.inline_declined << ' ' << p.stats.inline_budget_work << ' ' << p.stats.inline_max_function_work << '\n';
     } catch (const std::exception& e) { std::cerr << e.what() << '\n'; return 1; }
 }

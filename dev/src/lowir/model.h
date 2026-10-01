@@ -182,6 +182,7 @@ struct FloatingLiteral { std::uint64_t f64; std::uint32_t f32; Name spelling; };
 struct Statistics {
     std::uint64_t source_bytes = 0, tokens = 0, validated_instructions = 0, cfg_edges = 0;
     std::uint64_t inline_calls = 0, inline_work = 0, inline_max_function_work = 0;
+    std::uint64_t inline_declined = 0, inline_budget_work = 0;
 };
 // Pool growth is counted where it happens, without a global allocator hook.
 // Timing/peak RSS and capacity accounting are emitted only when requested.
