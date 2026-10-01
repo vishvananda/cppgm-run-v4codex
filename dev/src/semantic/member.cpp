@@ -223,6 +223,7 @@ void Analyzer::default_initialize(EntityId object, NodeId declarator)
 }
 bool Analyzer::derived_from(TypeId from, TypeId to)
 {
+    if ((types[from].cv | types[to].cv) & 4) return false;
     if (types[from].kind != TypeKind::Named || types[to].kind != TypeKind::Named) return false;
     EntityId source = types[from].entity, target = types[to].entity;
     if (source == target) return false;

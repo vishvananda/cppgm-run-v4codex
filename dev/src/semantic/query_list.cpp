@@ -97,7 +97,7 @@ TypeQueryFact Analyzer::query_list_initialization(QueryId id)
     }
     auto leaf = t;
     while (types[leaf].kind == TypeKind::Array) leaf = types[leaf].child;
-    if (!plan.direct_binding && (!ref || target.kind == TypeKind::RRef || types[leaf].cv == 1)) {
+    if (!plan.direct_binding && (!ref || target.kind == TypeKind::RRef || (types[leaf].cv & 3) == 1)) {
         if (class_value(t)) {
             complete_class(types[t].entity);
             if (!entities[types[t].entity].complete) return incomplete_query(t);

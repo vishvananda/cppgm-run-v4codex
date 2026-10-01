@@ -7,7 +7,8 @@ unsigned object_cv(const Types& types, TypeId type)
 {
     // [basic.type.qualifier]/5: an array has its element's qualification.
     while (types[type].kind == TypeKind::Array) type = types[type].child;
-    return types[type].cv;
+    // Atomic storage is part of type identity, not cv-qualification.
+    return types[type].cv & 3;
 }
 }
 

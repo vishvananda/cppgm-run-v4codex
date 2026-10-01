@@ -68,7 +68,7 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
             }
         }
         if (op == KW_REINTERPET_CAST && x.category != ValueCategory::Prvalue &&
-            !(types[x.type].cv & ~types[target.child].cv)) compatible = true;
+            !(types[x.type].cv & ~types[target.child].cv & 3)) compatible = true;
         if (!compatible) return invalid();
         if (target.kind == TypeKind::LRef && x.category != ValueCategory::Lvalue && !(types[target.child].cv & 1))
             return invalid();
@@ -113,7 +113,7 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
             auto path = base_path(a,types[b].entity);
             if (!path || base_adjustments[path].ambiguous) return invalid();
         }
-        bool preserves_cv = !(types[a].cv & ~types[b].cv);
+        bool preserves_cv = !(types[a].cv & ~types[b].cv & 3);
         pointer_cast = (cstyle || preserves_cv) && (reinterpret ||
             (fundamental(a, FT_VOID) && types[b].kind != TypeKind::Function) || derived_from(b, a));
         if (pointer_cast && op != KW_REINTERPET_CAST && derived_from(b, a)) {

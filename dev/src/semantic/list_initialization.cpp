@@ -97,7 +97,7 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
         }
         TypeId qualified = t;
         while (types[qualified].kind == TypeKind::Array) qualified = types[qualified].child;
-        bool can_bind = !ref || target.kind == TypeKind::RRef || types[qualified].cv == 1;
+        bool can_bind = !ref || target.kind == TypeKind::RRef || (types[qualified].cv & 3) == 1;
         if (!plan.direct_binding && can_bind) {
             if (class_value(t)) {
                 complete_class(types[t].entity);

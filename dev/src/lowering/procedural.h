@@ -341,6 +341,7 @@ class Procedural {
     Value unary(NodeId n);
     Value binary(NodeId n, bool location);
     bool inline_atomic(TypeId type);
+    Value atomic_scalar(AtomicOp op, IRType raw, Operand object, Operand value, Operand expected, bool native);
     Value atomic_runtime(AtomicOp op, std::uint64_t bytes, Operand object, Operand value, Operand result = Operand());
     Operand atomic_buffer(Value value);
     IRType atomic_representation(TypeId type);

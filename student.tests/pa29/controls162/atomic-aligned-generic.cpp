@@ -1,0 +1,1 @@
+struct X{long a,b;};typedef X A __attribute__((aligned(1)));struct Holder {char guard;A value;};alignas(16) Holder storage;int main(){A* p=&storage.value;X x={3,4},y={};__atomic_store(p,&x,5);__atomic_load(p,&y,5);return y.a==3 && y.b==4?0:1;}

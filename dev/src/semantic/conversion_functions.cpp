@@ -229,7 +229,7 @@ Conversion Analyzer::reference_user_conversion(Expression source, TypeId to, boo
     if (types[to].kind == TypeKind::LRef) {
         auto c = conversion_function_value(source,to,direct,ReferenceBinding::Lvalue);
         if (c.valid() || c.ambiguous) return c;
-        if (types[target].cv != 1) return result;
+        if ((types[target].cv & 3) != 1) return result;
     }
     auto c = conversion_function_value(source,to,direct,ReferenceBinding::Rvalue);
     if (c.valid() || c.ambiguous) return c;

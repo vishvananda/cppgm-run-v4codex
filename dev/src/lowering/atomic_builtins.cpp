@@ -26,7 +26,10 @@ Value Procedural::atomic_call(NodeId n, Value destination)
         result.type = sem.types.fundamental(FT_LONG_INT); return convert(result,fact.type);
     }
     auto target = sem.types[args[0].type].child;
+    auto source = sem.expression_fact(sem.call_argument(fact,0));
+    if (source.storage_type) target = sem.types[source.storage_type].child;
     auto bytes = (op == AtomicOp::TestSet || (op == AtomicOp::Clear && !kind.sync())) ? 1 : sem.object_size(target);
+    bool native = bytes == 1 || inline_atomic(target);
     if ((kind.form == AtomicForm::Generic || kind.form == AtomicForm::C11) && !inline_atomic(target)) {
         auto buffer = [&](unsigned j) { return kind.form == AtomicForm::Generic ? args[j].operand : atomic_buffer(args[j]); };
         if (op == AtomicOp::Store || op == AtomicOp::Init) {
@@ -46,6 +49,9 @@ Value Procedural::atomic_call(NodeId n, Value destination)
     }
     // All operations consume the same integer object representation in LowIR.
     IRType raw = bytes == 1 ? IRType::U8 : bytes == 2 ? IRType::U16 : bytes == 4 ? IRType::U32 : bytes == 8 ? IRType::I64 : IRType::I128;
+    auto primitive = [&](AtomicOp action, Operand object, Operand value, Operand expected) {
+        return atomic_scalar(action,raw,object,value,expected,native);
+    };
     auto bits = [&](Value value, bool pointer) {
         return pointer ? emit(Opcode::Load,raw,{value.operand}) : atomic_bits(value,raw);
     };
@@ -59,14 +65,14 @@ Value Procedural::atomic_call(NodeId n, Value destination)
     };
     auto address = args[0].operand;
     if (op == AtomicOp::Load) {
-        auto value = emit(Opcode::AtomicLoad,raw,{address,Operand::integer(5)});
+        auto value = primitive(AtomicOp::Load,address,Operand(),Operand());
         if (kind.form != AtomicForm::Generic) return result(value);
         emit(Opcode::Store,raw,{value.operand,args[1].operand}); return none;
     }
     if (op == AtomicOp::Clear || op == AtomicOp::Store || op == AtomicOp::Init) {
         auto value = op == AtomicOp::Clear ? Value(Operand::integer(0),raw) : bits(args[1],kind.form == AtomicForm::Generic);
         if (op == AtomicOp::Init) emit(Opcode::Store,raw,{value.operand,address});
-        else emit(Opcode::AtomicStore,raw,{value.operand,address,Operand::integer(5)});
+        else primitive(AtomicOp::Store,address,value.operand,Operand());
         return none;
     }
     if (op == AtomicOp::Compare) {
@@ -84,7 +90,7 @@ Value Procedural::atomic_call(NodeId n, Value destination)
             auto initial = bits(args[1],false); emit(Opcode::Store,raw,{initial.operand,expected});
         }
         auto expected_pointer = this->address(Value(expected,raw,0,true)).operand;
-        auto success = emit(Opcode::AtomicCompareExchange,raw,{address,expected_pointer,desired.operand,Operand::integer(5),Operand::integer(5)});
+        auto success = primitive(AtomicOp::Compare,address,desired.operand,expected_pointer);
         if (padded) {
             auto done = block(), failed = block();
             emit(Opcode::Branch,IRType(),{success.operand,Operand::label(done),Operand::label(failed)});
@@ -95,31 +101,32 @@ Value Procedural::atomic_call(NodeId n, Value destination)
     }
     auto value = op == AtomicOp::TestSet ? Value(Operand::integer(1),raw) : bits(args[1],kind.form == AtomicForm::Generic);
     if (op == AtomicOp::Exchange || op == AtomicOp::TestSet) {
-        auto old = emit(Opcode::AtomicExchange,raw,{address,value.operand,Operand::integer(5)});
+        auto old = primitive(AtomicOp::Exchange,address,value.operand,Operand());
         if (kind.form == AtomicForm::Generic) { emit(Opcode::Store,raw,{old.operand,args[2].operand}); return none; }
         if (op == AtomicOp::TestSet) { old.type = sem.types.fundamental(FT_UNSIGNED_CHAR); return convert(old,fact.type); }
         return result(old);
     }
-    if (op == AtomicOp::Add || op == AtomicOp::Sub) {
-        if (kind.form == AtomicForm::C11 && sem.types[target].kind == TypeKind::Pointer)
-            value = emit(Opcode::Binary,raw,{value.operand,Operand::integer(sem.object_size(sem.types[target].child))},Operation::Mul);
+    if ((op == AtomicOp::Add || op == AtomicOp::Sub) && kind.form == AtomicForm::C11 && sem.types[target].kind == TypeKind::Pointer)
+        value = emit(Opcode::Binary,raw,{value.operand,Operand::integer(sem.object_size(sem.types[target].child))},Operation::Mul);
+    if ((op == AtomicOp::Add || op == AtomicOp::Sub) && native) {
         if (op == AtomicOp::Sub) value = emit(Opcode::Binary,raw,{Operand::integer(0),value.operand},Operation::Sub);
         auto next = emit(Opcode::AtomicAddFetch,raw,{address,value.operand,Operand::integer(5)});
         if (!kind.updated) next = emit(Opcode::Binary,raw,{next.operand,value.operand},Operation::Sub);
         return result(next);
     }
-    // One strong-CAS loop implements each bitwise RMW. Arguments are evaluated
+    // One strong-CAS loop implements remaining RMWs. Arguments are evaluated
     // outside the loop; failure refreshes expected. Compiler work/growth is O(1).
     auto expected = Operand::slot(builder->add_slot(0,raw));
-    auto initial = emit(Opcode::AtomicLoad,raw,{address,Operand::integer(5)});
+    auto initial = primitive(AtomicOp::Load,address,Operand(),Operand());
     emit(Opcode::Store,raw,{initial.operand,expected});
     auto expected_pointer = this->address(Value(expected,raw,0,true)).operand;
     auto retry = block(), done = block(); jump(retry); start(retry);
     auto prior = emit(Opcode::Load,raw,{expected});
-    auto action = op == AtomicOp::Or ? Operation::Or : op == AtomicOp::Xor ? Operation::Xor : Operation::And;
+    auto action = op == AtomicOp::Add ? Operation::Add : op == AtomicOp::Sub ? Operation::Sub :
+        op == AtomicOp::Or ? Operation::Or : op == AtomicOp::Xor ? Operation::Xor : Operation::And;
     auto next = emit(Opcode::Binary,raw,{prior.operand,value.operand},action);
     if (op == AtomicOp::Nand) next = emit(Opcode::Unary,raw,{next.operand},Operation::Bitnot);
-    auto success = emit(Opcode::AtomicCompareExchange,raw,{address,expected_pointer,next.operand,Operand::integer(5),Operand::integer(5)});
+    auto success = primitive(AtomicOp::Compare,address,next.operand,expected_pointer);
     emit(Opcode::Branch,IRType(),{success.operand,Operand::label(done),Operand::label(retry)});
     start(done); return result(kind.updated ? next : prior);
 }

@@ -134,8 +134,8 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen, bool preserve_wid
 {
     if (reference(to)) {
         TypeId referred = sem.types[to].child;
-        if (!v.address || v.bit_field || sem.types.non_atomic(sem.types.unqualified(v.type)) != sem.types.unqualified(referred)) {
-            SlotId existing = sem.types.non_atomic(sem.types.unqualified(v.type)) == sem.types.unqualified(referred) ? v.materialized : SlotId();
+        if (!v.address || v.bit_field || sem.types.unqualified(v.type) != sem.types.unqualified(referred)) {
+            SlotId existing = sem.types.unqualified(v.type) == sem.types.unqualified(referred) ? v.materialized : SlotId();
             bool pointer_conversion = sem.types[referred].kind == TypeKind::Pointer &&
                 sem.types[v.type].kind != TypeKind::Pointer;
             v = convert(v, referred);

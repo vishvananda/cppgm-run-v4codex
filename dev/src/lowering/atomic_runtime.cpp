@@ -3,7 +3,25 @@ namespace cppgm { namespace lowering {
 bool Procedural::inline_atomic(TypeId t)
 {
     auto bytes = sem.object_size(t);
-    return bytes && bytes <= 16 && !(bytes & (bytes-1)) && (bytes < 16 || sem.object_alignment(t) >= 16);
+    return bytes && bytes <= 16 && !(bytes & (bytes-1)) && sem.object_alignment(t) >= bytes;
+}
+Value Procedural::atomic_scalar(AtomicOp op, IRType raw, Operand object, Operand value, Operand expected, bool native)
+{
+    if (native) {
+        if (op == AtomicOp::Load) return emit(Opcode::AtomicLoad,raw,{object,Operand::integer(5)});
+        if (op == AtomicOp::Store) return emit(Opcode::AtomicStore,raw,{value,object,Operand::integer(5)});
+        if (op == AtomicOp::Exchange) return emit(Opcode::AtomicExchange,raw,{object,value,Operand::integer(5)});
+        return emit(Opcode::AtomicCompareExchange,raw,{object,expected,value,Operand::integer(5),Operand::integer(5)});
+    }
+    // Preserve the storage proof at the builtin boundary. In particular an
+    // aligned(1) alias must not regain the canonical type's native alignment.
+    auto buffer = op == AtomicOp::Load ? Operand() : Operand::slot(builder->add_slot(0,raw));
+    if (op != AtomicOp::Load) emit(Opcode::Store,raw,{value,buffer});
+    if (op == AtomicOp::Compare) return atomic_runtime(op,raw.bytes(),object,buffer,expected);
+    if (op == AtomicOp::Store) return atomic_runtime(op,raw.bytes(),object,buffer);
+    auto result = Operand::slot(builder->add_slot(0,raw));
+    atomic_runtime(op,raw.bytes(),object,op == AtomicOp::Load ? result : buffer,result);
+    return emit(Opcode::Load,raw,{result});
 }
 Operand Procedural::atomic_buffer(Value value)
 {

@@ -63,14 +63,9 @@ Value Procedural::atomic_update(Value location, Value rhs, ETokenType op, TypeId
     auto retry = block(), done = block(); jump(retry); start(retry);
     auto prior = emit(Opcode::Load,raw,{expected});
     auto old = atomic_value(prior,target);
-    Value next;
-    if (sem.types[target].kind == TypeKind::Fundamental && sem.types[target].fundamental == FT_BOOL)
-        next = Value(Operand::integer(1),IRType::U8,target);
-    else {
-        auto lhs = convert(old,computation);
-        if (op != OP_LSHIFT && op != OP_RSHIFT && lhs.ir != IRType::Ptr && rhs.ir != IRType::Ptr) rhs = convert(rhs,computation);
-        next = convert(operation(op,lhs,rhs,computation),target);
-    }
+    auto lhs = convert(old,computation);
+    if (op != OP_LSHIFT && op != OP_RSHIFT && lhs.ir != IRType::Ptr && rhs.ir != IRType::Ptr) rhs = convert(rhs,computation);
+    auto next = convert(operation(op,lhs,rhs,computation),target);
     auto bits = atomic_bits(next,raw);
     auto success = emit(Opcode::AtomicCompareExchange,raw,{pointer,expected_pointer,bits.operand,Operand::integer(5),Operand::integer(5)});
     emit(Opcode::Branch,IRType(),{success.operand,Operand::label(done),Operand::label(retry)});
