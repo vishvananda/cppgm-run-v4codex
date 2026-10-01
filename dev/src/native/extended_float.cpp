@@ -153,9 +153,10 @@ void legalize_extended_floats(lowir_model::Program& p, Statistics& stats) {
     // operations, no fixed point, speculative optimization or semantic lookup.
     bool needed=false;
     for (const auto& i:p.instructions) if (extended(i.type)||extended(i.source_type)) { needed=true; break; }
-    // A raw LowIR branch can consume a floating parameter without any other
-    // floating instruction. Parameter values carry that type in the value pool.
+    // A raw LowIR branch can consume a floating parameter or bit-initialized
+    // slot without any other floating instruction. Consult their typed pools.
     if (!needed) for (const auto& v:p.values) if (extended(v.type)) { needed=true; break; }
+    if (!needed) for (const auto& s:p.slots) if (extended(s.type)) { needed=true; break; }
     if (needed) {
         auto input=p.instructions.size(), functions=p.functions.size();
         Legalizer(p).run(); stats.extended_work+=input; stats.extended_added+=p.instructions.size()-input;

@@ -1,0 +1,10 @@
+function @main() -> i32 [linkage=c, binding=strong] {
+  slot $x : f16
+  block ^entry:
+    store u16 32768, $x
+    branch $x, ^yes, ^no
+  block ^yes:
+    return i32 1
+  block ^no:
+    return i32 0
+}
