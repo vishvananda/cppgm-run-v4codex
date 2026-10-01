@@ -1,0 +1,246 @@
+{
+  "all_common_work_counters_equal": true,
+  "all_common_objects_and_executables_identical": true,
+  "affected": [
+    {
+      "workload": "blocks600",
+      "sample": 0,
+      "body_transitions": 600,
+      "body_checks": 603,
+      "object_uses": 602,
+      "tokens": 7417,
+      "parsed_nodes": 11187,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks600",
+      "sample": 1,
+      "body_transitions": 600,
+      "body_checks": 603,
+      "object_uses": 602,
+      "tokens": 7417,
+      "parsed_nodes": 11187,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks600",
+      "sample": 2,
+      "body_transitions": 600,
+      "body_checks": 603,
+      "object_uses": 602,
+      "tokens": 7417,
+      "parsed_nodes": 11187,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks600",
+      "sample": 3,
+      "body_transitions": 600,
+      "body_checks": 603,
+      "object_uses": 602,
+      "tokens": 7417,
+      "parsed_nodes": 11187,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks600",
+      "sample": 4,
+      "body_transitions": 600,
+      "body_checks": 603,
+      "object_uses": 602,
+      "tokens": 7417,
+      "parsed_nodes": 11187,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks600",
+      "sample": 5,
+      "body_transitions": 600,
+      "body_checks": 603,
+      "object_uses": 602,
+      "tokens": 7417,
+      "parsed_nodes": 11187,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks600",
+      "sample": 6,
+      "body_transitions": 600,
+      "body_checks": 603,
+      "object_uses": 602,
+      "tokens": 7417,
+      "parsed_nodes": 11187,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks600",
+      "sample": 7,
+      "body_transitions": 600,
+      "body_checks": 603,
+      "object_uses": 602,
+      "tokens": 7417,
+      "parsed_nodes": 11187,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks1200",
+      "sample": 0,
+      "body_transitions": 1200,
+      "body_checks": 1203,
+      "object_uses": 1202,
+      "tokens": 14617,
+      "parsed_nodes": 21987,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks1200",
+      "sample": 1,
+      "body_transitions": 1200,
+      "body_checks": 1203,
+      "object_uses": 1202,
+      "tokens": 14617,
+      "parsed_nodes": 21987,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks1200",
+      "sample": 2,
+      "body_transitions": 1200,
+      "body_checks": 1203,
+      "object_uses": 1202,
+      "tokens": 14617,
+      "parsed_nodes": 21987,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks1200",
+      "sample": 3,
+      "body_transitions": 1200,
+      "body_checks": 1203,
+      "object_uses": 1202,
+      "tokens": 14617,
+      "parsed_nodes": 21987,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks1200",
+      "sample": 4,
+      "body_transitions": 1200,
+      "body_checks": 1203,
+      "object_uses": 1202,
+      "tokens": 14617,
+      "parsed_nodes": 21987,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks1200",
+      "sample": 5,
+      "body_transitions": 1200,
+      "body_checks": 1203,
+      "object_uses": 1202,
+      "tokens": 14617,
+      "parsed_nodes": 21987,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks1200",
+      "sample": 6,
+      "body_transitions": 1200,
+      "body_checks": 1203,
+      "object_uses": 1202,
+      "tokens": 14617,
+      "parsed_nodes": 21987,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks1200",
+      "sample": 7,
+      "body_transitions": 1200,
+      "body_checks": 1203,
+      "object_uses": 1202,
+      "tokens": 14617,
+      "parsed_nodes": 21987,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks2400",
+      "sample": 0,
+      "body_transitions": 2400,
+      "body_checks": 2403,
+      "object_uses": 2402,
+      "tokens": 29017,
+      "parsed_nodes": 43587,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks2400",
+      "sample": 1,
+      "body_transitions": 2400,
+      "body_checks": 2403,
+      "object_uses": 2402,
+      "tokens": 29017,
+      "parsed_nodes": 43587,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks2400",
+      "sample": 2,
+      "body_transitions": 2400,
+      "body_checks": 2403,
+      "object_uses": 2402,
+      "tokens": 29017,
+      "parsed_nodes": 43587,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks2400",
+      "sample": 3,
+      "body_transitions": 2400,
+      "body_checks": 2403,
+      "object_uses": 2402,
+      "tokens": 29017,
+      "parsed_nodes": 43587,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks2400",
+      "sample": 4,
+      "body_transitions": 2400,
+      "body_checks": 2403,
+      "object_uses": 2402,
+      "tokens": 29017,
+      "parsed_nodes": 43587,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks2400",
+      "sample": 5,
+      "body_transitions": 2400,
+      "body_checks": 2403,
+      "object_uses": 2402,
+      "tokens": 29017,
+      "parsed_nodes": 43587,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks2400",
+      "sample": 6,
+      "body_transitions": 2400,
+      "body_checks": 2403,
+      "object_uses": 2402,
+      "tokens": 29017,
+      "parsed_nodes": 43587,
+      "substitution_work": 0
+    },
+    {
+      "workload": "blocks2400",
+      "sample": 7,
+      "body_transitions": 2400,
+      "body_checks": 2403,
+      "object_uses": 2402,
+      "tokens": 29017,
+      "parsed_nodes": 43587,
+      "substitution_work": 0
+    }
+  ]
+}

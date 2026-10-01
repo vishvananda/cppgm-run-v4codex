@@ -1,0 +1,47 @@
+{
+  "entry": "217dc69ff3f741114d2614688b1e4e2eec335980",
+  "implementation": "3b670e563981e880077ad6385e0f64ce45158fdf",
+  "harness": "9772ca29",
+  "binaries": {
+    "entry": {
+      "path": "/tmp/pa29-169/entry-cppgm",
+      "sha256": "52127cc1e1c96b82c9a0b9c8ff6a6b79e7be34d36ef65b034df97caf50b846d3",
+      "bytes": 4105424
+    },
+    "final": {
+      "path": "/tmp/pa29-169/final-cppgm",
+      "sha256": "c32d9d5fd263397d87c23171ee73ec80250d8869967b9456c40d2baa9990e63a",
+      "bytes": 4109760
+    }
+  },
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "affinity": [
+    "taskset",
+    "-c",
+    "0"
+  ],
+  "flags": {
+    "common": [
+      "-O0",
+      "-c",
+      "--stats"
+    ],
+    "affected": [
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "--stats"
+    ]
+  },
+  "scripts": {
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "student.tests/pa29/performance169.py": "d8dad402729a99fb1144e0371c43a3bd7e61aa54740bc967e42f308d6850142f",
+    "student.tests/pa29/controls169.py": "a63078cdb3bcdafa21a0ff5381138b61eff57babb35542ccb70d9164342c9cc5",
+    "student.tests/pa29/inspection169.py": "e814b3110d8573099071cf315ebe1895ab9871d4d22bc1bdd4711e37565e616b",
+    "student.tests/pa29/validate169.py": "dbb89b4c7a36d798e95dfca34a0453cc9ac9a377c85de554ceec7b9251f4b3d5"
+  },
+  "protocol": "Four A/A observations then six ABBA blocks per common workload/mode (224 observations); eight affected samples per size/mode (48 observations) and six launcher samples. No build/test overlapped final timing. Documentation and external scheduling uncontrolled; all observations retained.",
+  "artifact_directory": "/tmp/pa29-169",
+  "optional_work_budget": 0,
+  "optional_growth_budget": 0
+}

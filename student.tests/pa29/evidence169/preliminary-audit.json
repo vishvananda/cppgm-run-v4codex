@@ -1,0 +1,16 @@
+[
+  {
+    "status": 1,
+    "finding": "declare_object 247 lines",
+    "resolution": "extract declaration scope owner"
+  },
+  {
+    "status": 1,
+    "finding": "declare_object 241 lines",
+    "resolution": "extract destructor identifier formation"
+  },
+  {
+    "status": 0,
+    "warnings": 4
+  }
+]

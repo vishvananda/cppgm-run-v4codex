@@ -1,0 +1,47 @@
+[
+  {
+    "args": [
+      "clang++",
+      "--version"
+    ],
+    "status": 0,
+    "stdout": "Ubuntu clang version 21.1.8 (6ubuntu1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: /usr/lib/llvm-21/bin\n",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "clang++",
+      "-std=c++11",
+      "-fblocks",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/pending169/clang-block-catch.cpp",
+      "-o",
+      "/tmp/pa29-169/host-diagnostic/reducer"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "/tmp/pa29-169/host-diagnostic/reducer"
+    ],
+    "status": -11,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "args": [
+      "clang++",
+      "-std=c++11",
+      "-fblocks",
+      "-S",
+      "-emit-llvm",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/pending169/clang-block-catch.cpp",
+      "-o",
+      "/tmp/pa29-169/host-diagnostic/reducer.ll"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

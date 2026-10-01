@@ -1,0 +1,384 @@
+{
+  "compiler_sha256": "b955bae210e0c3ce79a4b7713d8cb8cda85230f21908b7cf0e717e4b125b64ad",
+  "inputs": {
+    "student.tests/pa29/controls169/abi.cpp": "1e4a7b17c833b0d39889f784d66a939aebf1213b7390c6aa752e81b99cf98e0a",
+    "student.tests/pa29/controls169/abi.host.cpp": "cdeca572ea895abd437a34a802e2869ed78873d7322ed1edb0d53ce85d7ca708",
+    "student.tests/pa29/controls169/bad-argument.cpp": "65afb9b7514e841ec0df38fa3d8005d8dd82e850339b43467f0ad6e8458280c1",
+    "student.tests/pa29/controls169/bad-arithmetic.cpp": "1ee7fae543b35caeca1a9650ab49f1671324878fd6d8d224a81eb750b53b1df0",
+    "student.tests/pa29/controls169/bad-arity.cpp": "17c470893afbc24125ba8aaae7d19a5a82a18a6e92a1a679b62527a3e39e29af",
+    "student.tests/pa29/controls169/bad-const-write.cpp": "eb391065e4ba3698236b92a6d62888e0009efba68eb9006e70a9c38ee754d766",
+    "student.tests/pa29/controls169/bad-dependent-body.cpp": "4abd48d2914f4ce39b591ce5de9fbdc6ad23bd385acf969f61b77c205ee053a3",
+    "student.tests/pa29/controls169/bad-dereference.cpp": "20e176150b139faa808f88fd2fcfbad55909f2aef0473cde57943a68093312ae",
+    "student.tests/pa29/controls169/bad-fixed-body.cpp": "85b1af236392a336faa033a0e52b59272cef626f5673bcb93ab31b49b05166e3",
+    "student.tests/pa29/controls169/bad-implicit-function.cpp": "724b45b50ca87a250eec481eed639ef53c69c9f48aa593c01fe2931f07182476",
+    "student.tests/pa29/controls169/bad-implicit-void.cpp": "6751a0b3c10e9e664a30b34b8e1202e69c462a422de83e707b7d53c18310001a",
+    "student.tests/pa29/controls169/bad-increment.cpp": "2fece2533ae8f0dea07af4d444a2906151f4070c1ffe223e72f5032396656eb3",
+    "student.tests/pa29/controls169/bad-nonfunction.cpp": "3659330b2465f50beb0f011aa4d4583f7fc4df8feb186fe127695693ff760564",
+    "student.tests/pa29/controls169/bad-ordered.cpp": "b2e516b9d364f1329b55fb92bc05073b2bcc15dfad418160e059a2aca64d688d",
+    "student.tests/pa29/controls169/bad-qualified-function.cpp": "1ef181929ed644e0dc1ed779b4678dddea47fd0594a42a4f465036a5a33796e3",
+    "student.tests/pa29/controls169/bad-signature.cpp": "0c9dca75c6ffcf0ad975286a17a91fb16576280ca1933e0b052a2c50c17f1e54",
+    "student.tests/pa29/controls169/invoke.cpp": "7a5b1d50e5d7908c6494d86e4d3accdb055000c95d7ce03efedf14ddefc419ea",
+    "student.tests/pa29/controls169/storage.cpp": "09a60a392b1aadb2158b3631af617f3f3e67031cab19980a057acec8eac06d49"
+  },
+  "checks": [
+    {
+      "name": "abi compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/abi.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/abi.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "abi host",
+      "args": [
+        "clang++",
+        "-std=c++11",
+        "-fblocks",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/abi.host.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/abi.host.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "abi link",
+      "args": [
+        "g++",
+        "/tmp/pa29-169/controls-second/abi.o",
+        "/tmp/pa29-169/controls-second/abi.host.o",
+        "-o",
+        "/tmp/pa29-169/controls-second/abi"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "abi runtime",
+      "args": [
+        "/tmp/pa29-169/controls-second/abi"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bad-argument compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-argument.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-argument.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: indirect argument conversion\n"
+    },
+    {
+      "name": "bad-arithmetic compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-arithmetic.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-arithmetic.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: arithmetic operands required\n"
+    },
+    {
+      "name": "bad-arity compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-arity.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: indirect call arity\n"
+    },
+    {
+      "name": "bad-const-write compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-const-write.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-const-write.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: modifiable lvalue required\n"
+    },
+    {
+      "name": "bad-dependent-body compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-dependent-body.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-dependent-body.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: indirect argument conversion\n"
+    },
+    {
+      "name": "bad-dereference compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-dereference.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-dereference.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid dereference\n"
+    },
+    {
+      "name": "bad-fixed-body compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-fixed-body.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-fixed-body.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-fixed-body.cpp:1\n"
+    },
+    {
+      "name": "bad-implicit-function compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-implicit-function.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-implicit-function.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid implicit conversion\n"
+    },
+    {
+      "name": "bad-implicit-void compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-implicit-void.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-implicit-void.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid implicit conversion\n"
+    },
+    {
+      "name": "bad-increment compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-increment.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-increment.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid increment operand\n"
+    },
+    {
+      "name": "bad-nonfunction compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-nonfunction.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-nonfunction.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: block pointer requires an unqualified function type\n"
+    },
+    {
+      "name": "bad-ordered compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-ordered.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-ordered.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: arithmetic operands required\n"
+    },
+    {
+      "name": "bad-qualified-function compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-qualified-function.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-qualified-function.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: block pointer requires an unqualified function type\n"
+    },
+    {
+      "name": "bad-signature compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/bad-signature.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/bad-signature.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: expected expression, found '^'\n"
+    },
+    {
+      "name": "invoke compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/invoke.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/invoke.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "invoke link",
+      "args": [
+        "g++",
+        "/tmp/pa29-169/controls-second/invoke.o",
+        "-o",
+        "/tmp/pa29-169/controls-second/invoke"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "invoke runtime",
+      "args": [
+        "/tmp/pa29-169/controls-second/invoke"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "storage compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls169/storage.cpp",
+        "-o",
+        "/tmp/pa29-169/controls-second/storage.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "storage link",
+      "args": [
+        "g++",
+        "/tmp/pa29-169/controls-second/storage.o",
+        "-o",
+        "/tmp/pa29-169/controls-second/storage"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "storage runtime",
+      "args": [
+        "/tmp/pa29-169/controls-second/storage"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

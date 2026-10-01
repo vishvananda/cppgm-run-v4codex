@@ -1,0 +1,408 @@
+{
+  "entry": "217dc69ff3f741114d2614688b1e4e2eec335980",
+  "implementation": "3b670e563981e880077ad6385e0f64ce45158fdf",
+  "passing": 361,
+  "total": 403,
+  "failures": [
+    {
+      "test": "pa29/tests/compile/200-hosted-type-specifier-functional-cast.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-bitint-signed-static-cast-template-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-bitint-static-cast-template-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-builtin-types-and-extern-vars.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-darwin-wait-status-constant-expression.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-ext-vector-scalar-template-deduction.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-hosted-special-members-and-control-flow.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-instantiated-templated-lambda-default-ref-capture.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-instantiated-templated-lambda-no-capture.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-make-integer-seq-cstyle-cast-count.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-nontemplate-deduction-guide-declaration.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-templated-lambda-class-template-method-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-templated-lambda-gnu-attribute-before-noexcept.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-templated-lambda-no-parameter-clause.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-templated-lambda-parameter-clause.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-builtin-complex-return.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-fold-expression-alias-decltype-result.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-fold-expression-static-assert.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-fold-expression-template-arg-trait.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-gnu-complex-template-constructor.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+      "owner": "legacy-traits-and-lifetime-proofs",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Independent contract review (fixture unchanged; failure retained)"
+    },
+    {
+      "test": "pa29/tests/compile/600-instantiated-templated-lambda-default-arg.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-structured-binding-class-decomposition.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-structured-binding-function-template-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-structured-binding-gnu-attr-class-template-method.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-structured-binding-range-for-template-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-gnu-zero-length-array-member-compile.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-coroutine-contextual-operators-compile.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-gnu-float-builtin-spellings.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-integer-pack-tuple-defer-compile.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Independent contract review (fixture unchanged; failure retained)"
+    },
+    {
+      "test": "pa29/tests/compile/700-nonstl-empty-value-pack-nested-alias.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-nonstl-type-pack-element-nested-alias.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-static-call-operator-extension.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-type-pack-element-inherited-partial-member-alias-call.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-type-pack-element-partial-member-alias-pack-call.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/run/800-always-inline-codegen-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "linked program exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/run/800-excluded-member-escapes-explicit-instantiation-declaration-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/run/800-inline-variable-merges-across-translation-units-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "implementation exit status mismatch (expected EXIT_SUCCESS (0), got 255)"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/run/800-source-location-builtin-macros-run.t",
+      "owner": "structured-intrinsic-operands",
+      "diagnostic": [
+        "implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))"
+      ],
+      "diagnostic_provenance": "implementation169 final required-suite output; inherited owner label is not root-cause proof",
+      "disposition": "Unfinished implementation"
+    }
+  ],
+  "additional_unfinished": [
+    {
+      "owner": "source-invocation context",
+      "test": "pa29/tests/run/800-source-location-builtin-macros-run.t",
+      "reducer": "student.tests/pa29/pending165/source-invocation.cpp",
+      "disposition": "Unfinished implementation: lexical versus nested default/member-initializer invocation coordinates need separate typed facts"
+    },
+    {
+      "owner": "required combined extended-vector fixture",
+      "test": "pa29/tests/compile/500-gnu-ext-vector-scalar-template-deduction.t",
+      "disposition": "Unfinished: templated-lambda parsing is the first blocker. Runtime vector operation lowering is outside the README scope; the fixture remains required and unchanged."
+    }
+  ],
+  "resolved_reducers": [
+    "student.tests/pa29/pending164/evaluation-context.cpp",
+    "student.tests/pa29/pending165/aggregate-mutation.cpp (resolved and explicitly validated by implementation168)"
+  ],
+  "independent_review": [
+    "Accumulated implementation167-169 range after f07f78236eb475648834ed78afbca6c864f64408 remains unaudited.",
+    "Forward-declared trait and explicitly-false nothrow-invocable oracle questions remain open; fixture failures and comparison rules unchanged.",
+    "Optional external Clang 21.1.8/libstdc++ block catch-by-value defect: retained host-only reducer; student value catches and cross-compiler reference catches pass. No course oracle changed."
+  ]
+}
