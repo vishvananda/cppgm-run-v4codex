@@ -52,6 +52,11 @@ int main(int argc, char** argv)
         if (i.stats) {
             rusage usage; getrusage(RUSAGE_SELF,&usage);
             std::cerr << "native_stats read_validate_ms=" << std::chrono::duration<double,std::milli>(parsed-begin).count()
+                << " preparation_ms=" << stats.preparation_ms
+                << " prepared_instructions=" << stats.prepared_instructions << " prepared_operands=" << stats.prepared_operands
+                << " inline_calls=" << stats.inline_calls << " inline_work=" << stats.inline_work
+                << " inline_declined=" << stats.inline_declined << " inline_budget_work=" << stats.inline_budget_work
+                << " inline_max_function_work=" << stats.inline_max_function_work
                 << " selection_ms=" << stats.selection_ms << " encoding_ms=" << stats.encoding_ms
                 << " peak_rss_kib=" << usage.ru_maxrss << " functions=" << stats.functions
                 << " instructions=" << stats.instructions << " frame_bytes=" << stats.frame_bytes

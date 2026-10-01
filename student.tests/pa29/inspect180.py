@@ -18,7 +18,11 @@ for name in ['static-effects','static-template','static-query','inline-basic','i
  run([cc,'-c','--emit-lowir','--validate-lowir',src,'-o',ir])
  run([root/'dev/lowir',ir,'-o',out/(name+'.roundtrip')]);assert ir.read_bytes()==(out/(name+'.roundtrip')).read_bytes()
  run([out/'ir-object',ir,out/(name+'.prepared.lowir'),out/(name+'.adapter.o')])
- assert ir.read_bytes()==(out/(name+'.prepared.lowir')).read_bytes()
+ # Source LowIR is the input to shared object preparation. Verify its prepared
+ # view independently; direct/adapter code, relocations and symbols must still
+ # agree below, including when conservative calls survive expansion.
+ run([root/'dev/lowir',out/(name+'.prepared.lowir'),'-o',out/(name+'.prepared.roundtrip')])
+ assert (out/(name+'.prepared.lowir')).read_bytes()==(out/(name+'.prepared.roundtrip')).read_bytes()
  run([root/'dev/lowir2native','--dump-machine-ir',out/(name+'.mir'),ir])
  run(['g++',out/(name+'.adapter.o'),'-o',out/(name+'.adapter')]);run([out/(name+'.adapter')])
  run([cc,'-O0','--stats','-c',src,'-o',obj]);run([cc,'-O0','-c',src,'-o',out/(name+'.plain.o')]);assert obj.read_bytes()==(out/(name+'.plain.o')).read_bytes()

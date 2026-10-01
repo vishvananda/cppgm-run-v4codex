@@ -93,7 +93,9 @@ struct Statistics {
     std::uint64_t functions = 0, instructions = 0, frame_bytes = 0, text_bytes = 0;
     std::uint64_t value_visits = 0, scratch_carried_reloads = 0;
     std::uint64_t parameter_flow_visits = 0, carry_window_visits = 0, xmm_reuses = 0;
-    double selection_ms = 0, encoding_ms = 0;
+    std::uint64_t inline_calls = 0, inline_work = 0, inline_declined = 0, inline_budget_work = 0, inline_max_function_work = 0;
+    std::uint64_t prepared_instructions = 0, prepared_operands = 0;
+    double preparation_ms = 0, selection_ms = 0, encoding_ms = 0;
 };
 void prepare_host_eh(Function&);
 const char* register_name(int reg);

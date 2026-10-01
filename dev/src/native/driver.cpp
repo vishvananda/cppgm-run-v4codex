@@ -1,5 +1,6 @@
 #include "native/encoding.h"
 #include "native/selection.h"
+#include <algorithm>
 #include <chrono>
 namespace native {
 Function builtin_tls(const lowir_model::Program&,const lowir_model::Function&);
@@ -9,7 +10,19 @@ using Clock = std::chrono::steady_clock;
 static double ms(Clock::time_point begin) { return std::chrono::duration<double,std::milli>(Clock::now()-begin).count(); }
 void compile_image(lowir_model::Program& p, Image& image, const std::vector<Instruction>& start, std::ostream* mir, Statistics& stats)
 {
+    // Both source and explicit LowIR enter object preparation here. The source
+    // view retains original bodies/attributes, so a text adapter cannot spend
+    // a fresh budget on calls already expanded by source lowering.
+    auto preparation = Clock::now();
     lowir_model::expand_forced_calls(p);
+    stats.preparation_ms += ms(preparation);
+    stats.inline_calls += p.stats.inline_calls;
+    stats.inline_work += p.stats.inline_work;
+    stats.inline_declined += p.stats.inline_declined;
+    stats.inline_budget_work += p.stats.inline_budget_work;
+    stats.inline_max_function_work = std::max(stats.inline_max_function_work,p.stats.inline_max_function_work);
+    stats.prepared_instructions += p.instructions.size();
+    stats.prepared_operands += p.operands.size();
     Encoder encoder(image);
     Workspace workspace(p);
     if (image.host) {

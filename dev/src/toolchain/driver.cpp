@@ -156,6 +156,11 @@ int run(const std::vector<std::string>& args)
         std::cerr << "{\"driver_ms\":" << std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count()
             << ",\"peak_rss_kib\":" << usage.ru_maxrss << ",\"text_bytes\":" << text
             << ",\"native_functions\":" << stats.functions << ",\"native_instructions\":" << stats.instructions
+            << ",\"preparation_ms\":" << stats.preparation_ms
+            << ",\"prepared_instructions\":" << stats.prepared_instructions << ",\"prepared_operands\":" << stats.prepared_operands
+            << ",\"inline_calls\":" << stats.inline_calls << ",\"inline_work\":" << stats.inline_work
+            << ",\"inline_declined\":" << stats.inline_declined << ",\"inline_budget_work\":" << stats.inline_budget_work
+            << ",\"inline_max_function_work\":" << stats.inline_max_function_work
             << ",\"link_definition_work\":" << link_definitions << ",\"link_relocation_work\":" << link_relocations
             << ",\"runtime_functions\":" << runtime_stats.functions << ",\"runtime_instructions\":" << runtime_stats.instructions
             << ",\"runtime_text_bytes\":" << runtime_stats.text_bytes

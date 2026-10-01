@@ -22,7 +22,12 @@ TypeId Analyzer::binding_object_type(NodeId specs, NodeId d, Expression value)
         ref = ast[c].op;
     }
     if (!value.type || dependent_type(value.type) || pattern_class_type(value.type)) return 0;
-    if (ref == TOK_INVALID) return types.qualify(types.unqualified(value.type),cv);
+    if (ref == TOK_INVALID) {
+        // Array decomposition defines a hidden cv A object, not an ordinary
+        // auto value: A includes the source array's element qualifiers.
+        auto base = types[value.type].kind == TypeKind::Array ? value.type : types.unqualified(value.type);
+        return types.qualify(base,cv);
+    }
     if (ref == OP_AMP && value.category != ValueCategory::Lvalue && !(cv & 1))
         throw std::runtime_error("lvalue binding requires lvalue initializer");
     auto t = types.qualify(value.type,cv);
