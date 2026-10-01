@@ -145,7 +145,7 @@ Id FactReader::type(const Words& w, std::size_t& p) {
         auto bound = index_value(take(w, p)); Id element = type(w, p);
         return g.make(op == "array" ? Kind::Array : Kind::Vector, element, 0, 0, bound);
     }
-    if (op == "decltype") return g.make(Kind::Decltype, reference(take(w, p), BindingKind::Expression));
+    if (op == "decltype" || op == "decltype-id") return g.make(Kind::Decltype, reference(take(w, p), BindingKind::Expression),op == "decltype-id");
     if (op == "unnamed-local-type") {
         Id ctx = reference(take(w,p),BindingKind::Context);
         auto ordinal = index_value(take(w,p));

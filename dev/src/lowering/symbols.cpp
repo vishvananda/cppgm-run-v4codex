@@ -91,7 +91,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
             std::vector<abi_mangle::Id> operands;
             for (unsigned j = 0; j < args.count; ++j) operands.push_back(abi_type(sem.template_argument(args.offset+j)));
             result = abi.make(abi_mangle::Kind::Transform,0,abi.string(spelling(query.name)),0,0,operands);
-        } else result = abi.make(abi_mangle::Kind::Decltype,abi_query(t.entity));
+        } else result = abi.make(abi_mangle::Kind::Decltype,abi_query(t.entity),t.bound);
         break;
     }
     case TypeKind::DependentName: {

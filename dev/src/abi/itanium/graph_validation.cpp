@@ -64,7 +64,8 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
     case Kind::FunctionType:
         edge(a, Role::Type); qualifiers(b); require(c <= 1); sequence(Role::Type); return;
     case Kind::MemberPointer: edge(a, Role::Type); edge(b, Role::Type); break;
-    case Kind::Decltype: case Kind::ExpressionArgument: case Kind::ExprPack:
+    case Kind::Decltype: require(b <= 1); edge(a,Role::Expression); break;
+    case Kind::ExpressionArgument: case Kind::ExprPack:
         edge(a, Role::Expression); break;
     case Kind::Local:
         edge(a, Role::Context); require(c <= 1);

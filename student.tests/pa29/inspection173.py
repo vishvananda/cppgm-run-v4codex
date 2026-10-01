@@ -8,16 +8,18 @@ def run(name,args):
  rows.append(dict(name=name,args=list(map(str,args)),status=p.returncode,passed=p.returncode==0,stdout=p.stdout.decode(errors='replace'),stderr=p.stderr.decode(errors='replace')))
  (out/'results.json').write_text(json.dumps(dict(compiler_sha256=hashlib.sha256(cc.read_bytes()).hexdigest(),checks=rows),indent=2)+'\n')
  assert not p.returncode,rows[-1];return p.stdout.decode()
-for name in ['student','template']:
+for name in ['student','template','decltype']:
  for label,binary in [('student',cc),('host','clang++')]:
   run(name+' '+label+' object',[binary,'-std=c++11' if label=='student' else '-std=c++20','-c',src/(name+'.cpp'),'-o',out/(name+'-'+label+'.o')])
  symbols={label:run(name+' '+label+' symbols',['nm','--defined-only',out/(name+'-'+label+'.o')]) for label in ['student','host']}
- selected={k:{' '.join(l.split()[1:]) for l in s.splitlines() if '_clI' in l and 'callback' not in l} for k,s in symbols.items()}
+ selected={k:{' '.join(l.split()[1:]) for l in s.splitlines() if ((name=='decltype' and l.split()[1]=='W') or '_clI' in l) and 'callback' not in l} for k,s in symbols.items()}
  assert selected['student']==selected['host'],selected
 for label,binary in [('student',cc),('host','clang++')]:
  run(label+' peer compile',[binary,'-std=c++11' if label=='student' else '-std=c++20','-c',src/'host.cpp','-o',out/'peer.o'])
  run(label+' peer link',['g++',out/'student-student.o',out/'peer.o','-o',out/'peer'])
  run(label+' peer runtime',[out/'peer'])
+run('decltype host peer',['g++','-std=c++11',src/'decltype-peer.cpp',out/'decltype-student.o','-o',out/'decltype-peer'])
+run('decltype peer runtime',[out/'decltype-peer'])
 source=root/'student.tests/pa29/controls173/calls.cpp'
 for mode in ['--emit-ast','--emit-lowir']:
  run(mode,[cc,mode,source,'-o',out/(mode[7:]+'.txt')])

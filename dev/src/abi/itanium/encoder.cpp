@@ -174,7 +174,7 @@ void Encoder::type(Id id) {
         qualifiers(n.b & 12);
         output += 'E'; break;
     case Kind::MemberPointer: output += 'M'; type(n.a); type(n.b); break;
-    case Kind::Decltype: output += "DT"; expression(n.a); output += 'E'; break;
+    case Kind::Decltype: output += n.b ? "Dt" : "DT"; expression(n.a); output += 'E'; break;
     case Kind::Local: case Kind::Lambda:
         context(n.a); local_component(id); break;
     default: throw std::runtime_error("fact is not an ABI type");
