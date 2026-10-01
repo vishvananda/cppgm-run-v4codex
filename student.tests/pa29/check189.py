@@ -29,13 +29,22 @@ for src in sorted((root / 'student.tests/pa29/controls189').glob('*.cpp')):
     for cc in [compiler, 'g++', 'clang++']:
         obj = out / (src.stem + '.o')
         exe = out / src.stem
-        run([cc, '-std=c++11', '-O0', '-c', src, '-o', obj], ok)
+        p = run([cc, '-std=c++11', '-O0', '-c', src, '-o', obj], ok)
+        if cc == compiler and src.stem in ('assertion-false-reject', 'assertion-dependent-reject',
+                                           'assertion-fixed-reject', 'assertion-messages-reject'):
+            expected = {'assertion-false-reject': 'converted false',
+                        'assertion-dependent-reject': 'dependent false',
+                        'assertion-fixed-reject': 'fixed false',
+                        'assertion-messages-reject': 'wide message\\0after zero'}[src.stem]
+            assert expected in p.stderr, p.stderr
         if ok:
             run(['g++', obj, '-o', exe])
             run([exe, 'runtime-input'])
             if cc == compiler:
                 syms = run(['nm', '-C', obj]).stdout
                 assert 'dormant' not in syms
+                if src.stem == 'assertion-context':
+                    assert 'operator bool' not in syms and 'operator int' not in syms
                 images[src.stem] = dict(object_sha256=hashlib.sha256(obj.read_bytes()).hexdigest(),
                                        symbols=syms)
     if ok:

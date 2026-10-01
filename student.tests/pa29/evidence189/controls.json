@@ -5,9 +5,99 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-conversions.cpp",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-conversions.o"
+      "/tmp/pa29-189/controls-complete/assertion-ambiguous-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp:5: ambiguous conversion\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-ambiguous-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp:5:15: error: conversion from \u2018choice\u2019 to \u2018bool\u2019 is ambiguous\n    5 | static_assert(choice{}, \"ambiguous conversion\");\n      |               ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp:5:15: note: there are 2 candidates\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp:2:13: note: candidate 1: \u2018constexpr choice::operator int() const\u2019\n    2 |   constexpr operator int() const { return 1; }\n      |             ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp:3:13: note: candidate 2: \u2018constexpr choice::operator double() const\u2019\n    3 |   constexpr operator double() const { return 1; }\n      |             ^~~~~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-ambiguous-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp:5:15: error: conversion from 'choice' to 'bool' is ambiguous\n    5 | static_assert(choice{}, \"ambiguous conversion\");\n      |               ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp:2:13: note: candidate function\n    2 |   constexpr operator int() const { return 1; }\n      |             ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp:3:13: note: candidate function\n    3 |   constexpr operator double() const { return 1; }\n      |             ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-character-message-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-character-message-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion message requires a string literal\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-character-message-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-character-message-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-character-message-reject.cpp:1:21: warning: \u2018static_assert\u2019 with non-string message only available with \u2018-std=c++2c\u2019 or \u2018-std=gnu++2c\u2019 [-Wc++26-extensions]\n    1 | static_assert(true, 'x');\n      |                     ^~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-character-message-reject.cpp:1:25: error: request for member \u2018size\u2019 in \u2018'x'\u2019, which is of non-class type \u2018char\u2019\n    1 | static_assert(true, 'x');\n      |                         ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-character-message-reject.cpp:1:15: error: constexpr string must be a string literal or object with \u2018size\u2019 and \u2018data\u2019 members\n    1 | static_assert(true, 'x');\n      |               ^~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-character-message-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-character-message-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-character-message-reject.cpp:1:21: warning: 'static_assert' with a user-generated message is a C++26 extension [-Wc++26-extensions]\n    1 | static_assert(true, 'x');\n      |                     ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-character-message-reject.cpp:1:21: error: the message in a static assertion must be a string literal or an object with 'data()' and 'size()' member functions\n1 warning and 1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-context.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-context.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -17,9 +107,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-conversions.o",
+      "/tmp/pa29-189/controls-complete/assertion-context.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-conversions"
+      "/tmp/pa29-189/controls-complete/assertion-context"
     ],
     "status": 0,
     "expected_success": true,
@@ -28,7 +118,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-conversions",
+      "/tmp/pa29-189/controls-complete/assertion-context",
       "runtime-input"
     ],
     "status": 0,
@@ -40,7 +130,739 @@
     "command": [
       "nm",
       "-C",
-      "/tmp/pa29-189/controls-final/defined-conversions.o"
+      "/tmp/pa29-189/controls-complete/assertion-context.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "0000000000000000 W int function<true>()\n0000000000000004 d constant\n0000000000000005 D instantiated\n0000000000000000 T main\n0000000000000000 D object\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-context.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-context.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-complete/assertion-context.o",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-context"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-complete/assertion-context",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-context.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-context.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-context.cpp:16:15: warning: implicit conversion from 'double' to 'bool' changes value from 1.5 to true [-Wliteral-conversion]\n   16 | static_assert(1.5, \"floating contextual bool\");\n      | ~~~~~~~~~~~~~ ^~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-context.cpp:17:16: warning: address of 'object' will always evaluate to 'true' [-Wpointer-bool-conversion]\n   17 | static_assert(&object, \"object pointer\");\n      | ~~~~~~~~~~~~~  ^~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-context.cpp:20:15: warning: '__builtin_is_constant_evaluated' will always evaluate to 'true' in a manifestly constant-evaluated expression [-Wconstant-evaluated]\n   20 | static_assert(__builtin_is_constant_evaluated(), \"manifest assertion evaluation\");\n      |               ^\n3 warnings generated.\n"
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-complete/assertion-context.o",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-context"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-complete/assertion-context",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-context.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-context.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-189/controls-complete/assertion-context.lowir",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-context.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-deleted-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-deleted-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: selected deleted conversion function\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-deleted-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-deleted-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-deleted-reject.cpp:2:15: error: use of deleted function \u2018choice::operator bool() const\u2019\n    2 | static_assert(choice{}, \"deleted conversion\");\n      |               ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-deleted-reject.cpp:1:26: note: declared here\n    1 | struct choice { explicit operator bool() const = delete; };\n      |                          ^~~~~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-deleted-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-deleted-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-deleted-reject.cpp:2:15: error: attempt to use a deleted function\n    2 | static_assert(choice{}, \"deleted conversion\");\n      |               ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-deleted-reject.cpp:1:26: note: 'operator bool' has been explicitly marked deleted here\n    1 | struct choice { explicit operator bool() const = delete; };\n      |                          ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-dependent-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-dependent-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-dependent-reject.cpp:2: dependent false\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-dependent-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-dependent-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-dependent-reject.cpp: In instantiation of \u2018struct check<false>\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-dependent-reject.cpp:3:14:   required from here\n    3 | check<false> instantiated;\n      |              ^~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-dependent-reject.cpp:2:47: error: static assertion failed: dependent false\n    2 | template<bool B> struct check { static_assert(choice<B>{}, \"dependent false\"); };\n      |                                               ^~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-dependent-reject.cpp:2:47: note: \u2018choice<false>()\u2019 evaluates to false\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-dependent-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-dependent-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-dependent-reject.cpp:2:47: error: static assertion failed due to requirement 'choice<false>{}': dependent false\n    2 | template<bool B> struct check { static_assert(choice<B>{}, \"dependent false\"); };\n      |                                               ^~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-dependent-reject.cpp:3:14: note: in instantiation of template class 'check<false>' requested here\n    3 | check<false> instantiated;\n      |              ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-explicit-int-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-explicit-int-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-explicit-int-reject.cpp:2: explicit int is not contextual bool\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-explicit-int-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-explicit-int-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-explicit-int-reject.cpp:2:15: error: invalid user-defined conversion from \u2018choice\u2019 to \u2018bool\u2019 [-fpermissive]\n    2 | static_assert(choice{}, \"explicit int is not contextual bool\");\n      |               ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-explicit-int-reject.cpp:1:36: note: candidate is: \u2018constexpr choice::operator int() const\u2019 (near match)\n    1 | struct choice { constexpr explicit operator int() const { return 1; } };\n      |                                    ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-explicit-int-reject.cpp:1:36: note: return type \u2018int\u2019 of explicit conversion function cannot be converted to \u2018bool\u2019 with a qualification conversion\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-explicit-int-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-explicit-int-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-explicit-int-reject.cpp:2:15: error: value of type 'choice' is not contextually convertible to 'bool'\n    2 | static_assert(choice{}, \"explicit int is not contextual bool\");\n      |               ^~~~~~~~\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-false-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-false-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-false-reject.cpp:2: converted false\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-false-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-false-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-false-reject.cpp:2:15: error: static assertion failed: converted false\n    2 | static_assert(choice{}, \"converted false\");\n      |               ^~~~~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-false-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-false-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-false-reject.cpp:2:15: error: static assertion failed due to requirement 'choice{}': converted false\n    2 | static_assert(choice{}, \"converted false\");\n      |               ^~~~~~~~\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-fixed-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-fixed-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-fixed-reject.cpp:2: fixed false\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-fixed-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-fixed-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-fixed-reject.cpp: In instantiation of \u2018struct unused<int>\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-fixed-reject.cpp:3:13:   required from here\n    3 | unused<int> instantiated;\n      |             ^~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-fixed-reject.cpp:2:49: error: static assertion failed: fixed false\n    2 | template<class T> struct unused { static_assert(choice{}, \"fixed false\"); };\n      |                                                 ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-fixed-reject.cpp:2:49: note: \u2018choice()\u2019 evaluates to false\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-fixed-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-fixed-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-fixed-reject.cpp:2:49: error: static assertion failed due to requirement 'choice{}': fixed false\n    2 | template<class T> struct unused { static_assert(choice{}, \"fixed false\"); };\n      |                                                 ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-fixed-reject.cpp:3:13: note: in instantiation of template class 'unused<int>' requested here\n    3 | unused<int> instantiated;\n      |             ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-lifetime-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-lifetime-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: constexpr member requires a literal class\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-lifetime-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-lifetime-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-lifetime-reject.cpp:5:15: error: non-constant condition for static assertion\n    5 | static_assert(choice{}, \"nonliteral receiver\");\n      |               ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-lifetime-reject.cpp:5:15: error: call to non-\u2018constexpr\u2019 function \u2018choice::operator bool() const\u2019\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-lifetime-reject.cpp:2:22: note: \u2018choice::operator bool() const\u2019 declared here\n    2 |   constexpr explicit operator bool() const { return true; }\n      |                      ^~~~~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-lifetime-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-lifetime-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-lifetime-reject.cpp:5:15: error: static assertion expression is not an integral constant expression\n    5 | static_assert(choice{}, \"nonliteral receiver\");\n      |               ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-lifetime-reject.cpp:5:21: note: non-literal type 'choice' cannot be used in a constant expression\n    5 | static_assert(choice{}, \"nonliteral receiver\");\n      |                     ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-message-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-message-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion message requires a string literal\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-message-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-message-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-message-reject.cpp:1:21: warning: \u2018static_assert\u2019 with non-string message only available with \u2018-std=c++2c\u2019 or \u2018-std=gnu++2c\u2019 [-Wc++26-extensions]\n    1 | static_assert(true, 123);\n      |                     ^~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-message-reject.cpp:1:25: error: request for member \u2018size\u2019 in \u2018123\u2019, which is of non-class type \u2018int\u2019\n    1 | static_assert(true, 123);\n      |                         ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-message-reject.cpp:1:15: error: constexpr string must be a string literal or object with \u2018size\u2019 and \u2018data\u2019 members\n    1 | static_assert(true, 123);\n      |               ^~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-message-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-message-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-message-reject.cpp:1:21: warning: 'static_assert' with a user-generated message is a C++26 extension [-Wc++26-extensions]\n    1 | static_assert(true, 123);\n      |                     ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-message-reject.cpp:1:21: error: the message in a static assertion must be a string literal or an object with 'data()' and 'size()' member functions\n1 warning and 1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-messages-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-messages-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-messages-reject.cpp:1: wide message\\0after zero\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-messages-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-messages-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-messages-reject.cpp:1:15: error: static assertion failed: wide \n    1 | static_assert(false, L\"wide \" \"message\\0after zero\");\n      |               ^~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-messages-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-messages-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-messages-reject.cpp:1:22: warning: encoding prefix 'L' on an unevaluated string literal has no effect and is incompatible with c++2c [-Winvalid-unevaluated-string]\n    1 | static_assert(false, L\"wide \" \"message\\0after zero\");\n      |                      ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-messages-reject.cpp:1:39: error: invalid escape sequence '\\0' in an unevaluated string literal\n    1 | static_assert(false, L\"wide \" \"message\\0after zero\");\n      |                                       ^~\n1 warning and 1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-nonconstant-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-nonconstant-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-nonconstant-reject.cpp:2: nonconstant bool\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-nonconstant-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-nonconstant-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-nonconstant-reject.cpp:2:15: error: non-constant condition for static assertion\n    2 | static_assert(choice{}, \"nonconstant bool\");\n      |               ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-nonconstant-reject.cpp:2:15: error: call to non-\u2018constexpr\u2019 function \u2018choice::operator bool() const\u2019\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-nonconstant-reject.cpp:1:26: note: \u2018choice::operator bool() const\u2019 declared here\n    1 | struct choice { explicit operator bool() const { return true; } };\n      |                          ^~~~~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-nonconstant-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-nonconstant-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-nonconstant-reject.cpp:2:15: error: static assertion expression is not an integral constant expression\n    2 | static_assert(choice{}, \"nonconstant bool\");\n      |               ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-nonconstant-reject.cpp:2:15: note: non-constexpr function 'operator bool' cannot be used in a constant expression\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-nonconstant-reject.cpp:1:26: note: declared here\n    1 | struct choice { explicit operator bool() const { return true; } };\n      |                          ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-null-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-null-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-null-reject.cpp:1: null is false\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-null-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-null-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-null-reject.cpp:1:15: error: static assertion failed: null is false\n    1 | static_assert(nullptr, \"null is false\");\n      |               ^~~~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-null-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-null-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-null-reject.cpp:1:15: warning: implicit conversion of nullptr constant to 'bool' [-Wnull-conversion]\n    1 | static_assert(nullptr, \"null is false\");\n      | ~~~~~~~~~~~~~ ^~~~~~~\n      |               false\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-null-reject.cpp:1:15: error: static assertion failed due to requirement 'nullptr': null is false\n    1 | static_assert(nullptr, \"null is false\");\n      |               ^~~~~~~\n1 warning and 1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-private-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-private-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: inaccessible class member: operator declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-private-reject.cpp:1\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-private-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-private-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-private-reject.cpp:2:15: error: \u2018constexpr choice::operator bool() const\u2019 is private within this context\n    2 | static_assert(choice{}, \"private conversion\");\n      |               ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-private-reject.cpp:1:35: note: declared private here\n    1 | class choice { constexpr explicit operator bool() const { return true; } };\n      |                                   ^~~~~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-private-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-private-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-private-reject.cpp:2:15: error: 'operator bool' is a private member of 'choice'\n    2 | static_assert(choice{}, \"private conversion\");\n      |               ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-private-reject.cpp:1:35: note: implicitly declared private here\n    1 | class choice { constexpr explicit operator bool() const { return true; } };\n      |                                   ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-suffix-message-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-suffix-message-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion message requires a string literal\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-suffix-message-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-suffix-message-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-suffix-message-reject.cpp:1:21: warning: \u2018static_assert\u2019 with non-string message only available with \u2018-std=c++2c\u2019 or \u2018-std=gnu++2c\u2019 [-Wc++26-extensions]\n    1 | static_assert(true, \"message\"_suffix);\n      |                     ^~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-suffix-message-reject.cpp:1:21: error: unable to find string literal operator \u2018operator\"\"_suffix\u2019 with \u2018const char [8]\u2019, \u2018long unsigned int\u2019 arguments\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-suffix-message-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-suffix-message-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-suffix-message-reject.cpp:1:21: warning: 'static_assert' with a user-generated message is a C++26 extension [-Wc++26-extensions]\n    1 | static_assert(true, \"message\"_suffix);\n      |                     ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-suffix-message-reject.cpp:1:30: error: no matching literal operator for call to 'operator\"\"_suffix' with arguments of types 'const char *' and 'unsigned long', and no matching literal operator template\n    1 | static_assert(true, \"message\"_suffix);\n      |                              ^\n1 warning and 1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-unconvertible-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-unconvertible-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-unconvertible-reject.cpp:2: no bool conversion\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-unconvertible-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-unconvertible-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-unconvertible-reject.cpp:2:15: error: could not convert \u2018choice()\u2019 from \u2018choice\u2019 to \u2018bool\u2019\n    2 | static_assert(choice{}, \"no bool conversion\");\n      |               ^~~~~~~~\n      |               |\n      |               choice\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-unconvertible-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/assertion-unconvertible-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-unconvertible-reject.cpp:2:15: error: value of type 'choice' is not contextually convertible to 'bool'\n    2 | static_assert(choice{}, \"no bool conversion\");\n      |               ^~~~~~~~\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-conversions.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-complete/defined-conversions.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-complete/defined-conversions.o",
+      "-o",
+      "/tmp/pa29-189/controls-complete/defined-conversions"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-complete/defined-conversions",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nm",
+      "-C",
+      "/tmp/pa29-189/controls-complete/defined-conversions.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -55,7 +877,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-conversions.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-conversions.o"
+      "/tmp/pa29-189/controls-complete/defined-conversions.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -65,9 +887,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-conversions.o",
+      "/tmp/pa29-189/controls-complete/defined-conversions.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-conversions"
+      "/tmp/pa29-189/controls-complete/defined-conversions"
     ],
     "status": 0,
     "expected_success": true,
@@ -76,7 +898,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-conversions",
+      "/tmp/pa29-189/controls-complete/defined-conversions",
       "runtime-input"
     ],
     "status": 0,
@@ -92,7 +914,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-conversions.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-conversions.o"
+      "/tmp/pa29-189/controls-complete/defined-conversions.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -102,9 +924,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-conversions.o",
+      "/tmp/pa29-189/controls-complete/defined-conversions.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-conversions"
+      "/tmp/pa29-189/controls-complete/defined-conversions"
     ],
     "status": 0,
     "expected_success": true,
@@ -113,7 +935,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-conversions",
+      "/tmp/pa29-189/controls-complete/defined-conversions",
       "runtime-input"
     ],
     "status": 0,
@@ -127,7 +949,7 @@
       "--emit-lowir",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-conversions.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-conversions.lowir"
+      "/tmp/pa29-189/controls-complete/defined-conversions.lowir"
     ],
     "status": 0,
     "expected_success": true,
@@ -137,9 +959,9 @@
   {
     "command": [
       "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
-      "/tmp/pa29-189/controls-final/defined-conversions.lowir",
+      "/tmp/pa29-189/controls-complete/defined-conversions.lowir",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-conversions.canonical"
+      "/tmp/pa29-189/controls-complete/defined-conversions.canonical"
     ],
     "status": 0,
     "expected_success": true,
@@ -154,12 +976,12 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-false-reject.o"
+      "/tmp/pa29-189/controls-complete/defined-false-reject.o"
     ],
     "status": 1,
     "expected_success": false,
     "stdout": "",
-    "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp:6\n"
+    "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp:6: false\n"
   },
   {
     "command": [
@@ -169,7 +991,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-false-reject.o"
+      "/tmp/pa29-189/controls-complete/defined-false-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -184,7 +1006,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-false-reject.o"
+      "/tmp/pa29-189/controls-complete/defined-false-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -199,7 +1021,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-traits.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-traits.o"
+      "/tmp/pa29-189/controls-complete/defined-traits.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -209,9 +1031,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-traits.o",
+      "/tmp/pa29-189/controls-complete/defined-traits.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-traits"
+      "/tmp/pa29-189/controls-complete/defined-traits"
     ],
     "status": 0,
     "expected_success": true,
@@ -220,7 +1042,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-traits",
+      "/tmp/pa29-189/controls-complete/defined-traits",
       "runtime-input"
     ],
     "status": 0,
@@ -232,7 +1054,7 @@
     "command": [
       "nm",
       "-C",
-      "/tmp/pa29-189/controls-final/defined-traits.o"
+      "/tmp/pa29-189/controls-complete/defined-traits.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -247,7 +1069,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-traits.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-traits.o"
+      "/tmp/pa29-189/controls-complete/defined-traits.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -257,9 +1079,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-traits.o",
+      "/tmp/pa29-189/controls-complete/defined-traits.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-traits"
+      "/tmp/pa29-189/controls-complete/defined-traits"
     ],
     "status": 0,
     "expected_success": true,
@@ -268,7 +1090,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-traits",
+      "/tmp/pa29-189/controls-complete/defined-traits",
       "runtime-input"
     ],
     "status": 0,
@@ -284,7 +1106,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-traits.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-traits.o"
+      "/tmp/pa29-189/controls-complete/defined-traits.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -294,9 +1116,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-traits.o",
+      "/tmp/pa29-189/controls-complete/defined-traits.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-traits"
+      "/tmp/pa29-189/controls-complete/defined-traits"
     ],
     "status": 0,
     "expected_success": true,
@@ -305,7 +1127,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-traits",
+      "/tmp/pa29-189/controls-complete/defined-traits",
       "runtime-input"
     ],
     "status": 0,
@@ -319,7 +1141,7 @@
       "--emit-lowir",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-traits.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-traits.lowir"
+      "/tmp/pa29-189/controls-complete/defined-traits.lowir"
     ],
     "status": 0,
     "expected_success": true,
@@ -329,9 +1151,9 @@
   {
     "command": [
       "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
-      "/tmp/pa29-189/controls-final/defined-traits.lowir",
+      "/tmp/pa29-189/controls-complete/defined-traits.lowir",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-traits.canonical"
+      "/tmp/pa29-189/controls-complete/defined-traits.canonical"
     ],
     "status": 0,
     "expected_success": true,
@@ -346,7 +1168,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-and-substitution.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/demand-and-substitution.o"
+      "/tmp/pa29-189/controls-complete/demand-and-substitution.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -356,9 +1178,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/demand-and-substitution.o",
+      "/tmp/pa29-189/controls-complete/demand-and-substitution.o",
       "-o",
-      "/tmp/pa29-189/controls-final/demand-and-substitution"
+      "/tmp/pa29-189/controls-complete/demand-and-substitution"
     ],
     "status": 0,
     "expected_success": true,
@@ -367,7 +1189,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/demand-and-substitution",
+      "/tmp/pa29-189/controls-complete/demand-and-substitution",
       "runtime-input"
     ],
     "status": 0,
@@ -379,7 +1201,7 @@
     "command": [
       "nm",
       "-C",
-      "/tmp/pa29-189/controls-final/demand-and-substitution.o"
+      "/tmp/pa29-189/controls-complete/demand-and-substitution.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -394,7 +1216,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-and-substitution.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/demand-and-substitution.o"
+      "/tmp/pa29-189/controls-complete/demand-and-substitution.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -404,9 +1226,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/demand-and-substitution.o",
+      "/tmp/pa29-189/controls-complete/demand-and-substitution.o",
       "-o",
-      "/tmp/pa29-189/controls-final/demand-and-substitution"
+      "/tmp/pa29-189/controls-complete/demand-and-substitution"
     ],
     "status": 0,
     "expected_success": true,
@@ -415,7 +1237,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/demand-and-substitution",
+      "/tmp/pa29-189/controls-complete/demand-and-substitution",
       "runtime-input"
     ],
     "status": 0,
@@ -431,7 +1253,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-and-substitution.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/demand-and-substitution.o"
+      "/tmp/pa29-189/controls-complete/demand-and-substitution.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -441,9 +1263,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/demand-and-substitution.o",
+      "/tmp/pa29-189/controls-complete/demand-and-substitution.o",
       "-o",
-      "/tmp/pa29-189/controls-final/demand-and-substitution"
+      "/tmp/pa29-189/controls-complete/demand-and-substitution"
     ],
     "status": 0,
     "expected_success": true,
@@ -452,7 +1274,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/demand-and-substitution",
+      "/tmp/pa29-189/controls-complete/demand-and-substitution",
       "runtime-input"
     ],
     "status": 0,
@@ -466,7 +1288,7 @@
       "--emit-lowir",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-and-substitution.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/demand-and-substitution.lowir"
+      "/tmp/pa29-189/controls-complete/demand-and-substitution.lowir"
     ],
     "status": 0,
     "expected_success": true,
@@ -476,9 +1298,9 @@
   {
     "command": [
       "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
-      "/tmp/pa29-189/controls-final/demand-and-substitution.lowir",
+      "/tmp/pa29-189/controls-complete/demand-and-substitution.lowir",
       "-o",
-      "/tmp/pa29-189/controls-final/demand-and-substitution.canonical"
+      "/tmp/pa29-189/controls-complete/demand-and-substitution.canonical"
     ],
     "status": 0,
     "expected_success": true,
@@ -493,7 +1315,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/demand-body-reject.o"
+      "/tmp/pa29-189/controls-complete/demand-body-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -508,7 +1330,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/demand-body-reject.o"
+      "/tmp/pa29-189/controls-complete/demand-body-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -523,7 +1345,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/demand-body-reject.o"
+      "/tmp/pa29-189/controls-complete/demand-body-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -538,7 +1360,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-member-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/forward-member-reject.o"
+      "/tmp/pa29-189/controls-complete/forward-member-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -553,7 +1375,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-member-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/forward-member-reject.o"
+      "/tmp/pa29-189/controls-complete/forward-member-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -568,7 +1390,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-member-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/forward-member-reject.o"
+      "/tmp/pa29-189/controls-complete/forward-member-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -583,7 +1405,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/forward-nested-reject.o"
+      "/tmp/pa29-189/controls-complete/forward-nested-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -598,7 +1420,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/forward-nested-reject.o"
+      "/tmp/pa29-189/controls-complete/forward-nested-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -613,7 +1435,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/forward-nested-reject.o"
+      "/tmp/pa29-189/controls-complete/forward-nested-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -628,7 +1450,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/source-trait-identity.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/source-trait-identity.o"
+      "/tmp/pa29-189/controls-complete/source-trait-identity.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -638,9 +1460,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/source-trait-identity.o",
+      "/tmp/pa29-189/controls-complete/source-trait-identity.o",
       "-o",
-      "/tmp/pa29-189/controls-final/source-trait-identity"
+      "/tmp/pa29-189/controls-complete/source-trait-identity"
     ],
     "status": 0,
     "expected_success": true,
@@ -649,7 +1471,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/source-trait-identity",
+      "/tmp/pa29-189/controls-complete/source-trait-identity",
       "runtime-input"
     ],
     "status": 0,
@@ -661,7 +1483,7 @@
     "command": [
       "nm",
       "-C",
-      "/tmp/pa29-189/controls-final/source-trait-identity.o"
+      "/tmp/pa29-189/controls-complete/source-trait-identity.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -676,7 +1498,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/source-trait-identity.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/source-trait-identity.o"
+      "/tmp/pa29-189/controls-complete/source-trait-identity.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -686,9 +1508,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/source-trait-identity.o",
+      "/tmp/pa29-189/controls-complete/source-trait-identity.o",
       "-o",
-      "/tmp/pa29-189/controls-final/source-trait-identity"
+      "/tmp/pa29-189/controls-complete/source-trait-identity"
     ],
     "status": 0,
     "expected_success": true,
@@ -697,7 +1519,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/source-trait-identity",
+      "/tmp/pa29-189/controls-complete/source-trait-identity",
       "runtime-input"
     ],
     "status": 0,
@@ -713,7 +1535,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/source-trait-identity.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/source-trait-identity.o"
+      "/tmp/pa29-189/controls-complete/source-trait-identity.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -723,9 +1545,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/source-trait-identity.o",
+      "/tmp/pa29-189/controls-complete/source-trait-identity.o",
       "-o",
-      "/tmp/pa29-189/controls-final/source-trait-identity"
+      "/tmp/pa29-189/controls-complete/source-trait-identity"
     ],
     "status": 0,
     "expected_success": true,
@@ -734,7 +1556,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/source-trait-identity",
+      "/tmp/pa29-189/controls-complete/source-trait-identity",
       "runtime-input"
     ],
     "status": 0,
@@ -748,7 +1570,7 @@
       "--emit-lowir",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/source-trait-identity.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/source-trait-identity.lowir"
+      "/tmp/pa29-189/controls-complete/source-trait-identity.lowir"
     ],
     "status": 0,
     "expected_success": true,
@@ -758,9 +1580,9 @@
   {
     "command": [
       "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
-      "/tmp/pa29-189/controls-final/source-trait-identity.lowir",
+      "/tmp/pa29-189/controls-complete/source-trait-identity.lowir",
       "-o",
-      "/tmp/pa29-189/controls-final/source-trait-identity.canonical"
+      "/tmp/pa29-189/controls-complete/source-trait-identity.canonical"
     ],
     "status": 0,
     "expected_success": true,
@@ -774,7 +1596,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
       "-o",
-      "/tmp/pa29-189/controls-final/reject.o"
+      "/tmp/pa29-189/controls-complete/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -790,7 +1612,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
       "-o",
-      "/tmp/pa29-189/controls-final/reject.o"
+      "/tmp/pa29-189/controls-complete/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -806,7 +1628,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
       "-o",
-      "/tmp/pa29-189/controls-final/reject.o"
+      "/tmp/pa29-189/controls-complete/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -820,7 +1642,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
       "-o",
-      "/tmp/pa29-189/controls-final/reject.o"
+      "/tmp/pa29-189/controls-complete/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -836,7 +1658,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
       "-o",
-      "/tmp/pa29-189/controls-final/reject.o"
+      "/tmp/pa29-189/controls-complete/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -852,7 +1674,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
       "-o",
-      "/tmp/pa29-189/controls-final/reject.o"
+      "/tmp/pa29-189/controls-complete/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -866,12 +1688,12 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
       "-o",
-      "/tmp/pa29-189/controls-final/reject.o"
+      "/tmp/pa29-189/controls-complete/reject.o"
     ],
     "status": 1,
     "expected_success": false,
     "stdout": "",
-    "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t:24\n"
+    "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t:24: cache\n"
   },
   {
     "command": [
@@ -882,7 +1704,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
       "-o",
-      "/tmp/pa29-189/controls-final/reject.o"
+      "/tmp/pa29-189/controls-complete/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -898,7 +1720,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
       "-o",
-      "/tmp/pa29-189/controls-final/reject.o"
+      "/tmp/pa29-189/controls-complete/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -914,7 +1736,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original.o"
+      "/tmp/pa29-189/controls-complete/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -924,9 +1746,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-original.o",
+      "/tmp/pa29-189/controls-complete/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -935,7 +1757,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -953,7 +1775,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original.o"
+      "/tmp/pa29-189/controls-complete/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -963,9 +1785,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-original.o",
+      "/tmp/pa29-189/controls-complete/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -974,7 +1796,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -992,7 +1814,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original.o"
+      "/tmp/pa29-189/controls-complete/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1002,9 +1824,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-original.o",
+      "/tmp/pa29-189/controls-complete/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1013,7 +1835,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1029,7 +1851,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original.o"
+      "/tmp/pa29-189/controls-complete/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1039,9 +1861,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-original.o",
+      "/tmp/pa29-189/controls-complete/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1050,7 +1872,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1068,7 +1890,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original.o"
+      "/tmp/pa29-189/controls-complete/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1078,9 +1900,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-original.o",
+      "/tmp/pa29-189/controls-complete/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1089,7 +1911,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1107,7 +1929,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original.o"
+      "/tmp/pa29-189/controls-complete/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1117,9 +1939,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-original.o",
+      "/tmp/pa29-189/controls-complete/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1128,7 +1950,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1144,7 +1966,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original.o"
+      "/tmp/pa29-189/controls-complete/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1154,9 +1976,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-original.o",
+      "/tmp/pa29-189/controls-complete/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1165,7 +1987,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1183,7 +2005,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original.o"
+      "/tmp/pa29-189/controls-complete/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1193,9 +2015,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-original.o",
+      "/tmp/pa29-189/controls-complete/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1204,7 +2026,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1222,7 +2044,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original.o"
+      "/tmp/pa29-189/controls-complete/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1232,9 +2054,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/defined-original.o",
+      "/tmp/pa29-189/controls-complete/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1243,7 +2065,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/defined-original"
+      "/tmp/pa29-189/controls-complete/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -1256,9 +2078,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-final/defined-traits-spelling.cpp",
+      "/tmp/pa29-189/controls-complete/defined-traits-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling.o"
+      "/tmp/pa29-189/controls-complete/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1268,9 +2090,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/spelling.o",
+      "/tmp/pa29-189/controls-complete/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling"
+      "/tmp/pa29-189/controls-complete/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -1279,7 +2101,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/spelling",
+      "/tmp/pa29-189/controls-complete/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -1293,9 +2115,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-final/defined-traits-spelling.cpp",
+      "/tmp/pa29-189/controls-complete/defined-traits-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling.o"
+      "/tmp/pa29-189/controls-complete/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1305,9 +2127,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/spelling.o",
+      "/tmp/pa29-189/controls-complete/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling"
+      "/tmp/pa29-189/controls-complete/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -1316,7 +2138,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/spelling",
+      "/tmp/pa29-189/controls-complete/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -1330,9 +2152,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-final/defined-traits-spelling.cpp",
+      "/tmp/pa29-189/controls-complete/defined-traits-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling.o"
+      "/tmp/pa29-189/controls-complete/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1342,9 +2164,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/spelling.o",
+      "/tmp/pa29-189/controls-complete/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling"
+      "/tmp/pa29-189/controls-complete/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -1353,7 +2175,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/spelling",
+      "/tmp/pa29-189/controls-complete/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -1367,9 +2189,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-final/defined-conversions-spelling.cpp",
+      "/tmp/pa29-189/controls-complete/defined-conversions-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling.o"
+      "/tmp/pa29-189/controls-complete/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1379,9 +2201,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/spelling.o",
+      "/tmp/pa29-189/controls-complete/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling"
+      "/tmp/pa29-189/controls-complete/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -1390,7 +2212,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/spelling",
+      "/tmp/pa29-189/controls-complete/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -1404,9 +2226,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-final/defined-conversions-spelling.cpp",
+      "/tmp/pa29-189/controls-complete/defined-conversions-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling.o"
+      "/tmp/pa29-189/controls-complete/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1416,9 +2238,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/spelling.o",
+      "/tmp/pa29-189/controls-complete/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling"
+      "/tmp/pa29-189/controls-complete/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -1427,7 +2249,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/spelling",
+      "/tmp/pa29-189/controls-complete/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -1441,9 +2263,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-final/defined-conversions-spelling.cpp",
+      "/tmp/pa29-189/controls-complete/defined-conversions-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling.o"
+      "/tmp/pa29-189/controls-complete/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1453,9 +2275,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/spelling.o",
+      "/tmp/pa29-189/controls-complete/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling"
+      "/tmp/pa29-189/controls-complete/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -1464,7 +2286,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/spelling",
+      "/tmp/pa29-189/controls-complete/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -1478,9 +2300,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-final/source-trait-identity-spelling.cpp",
+      "/tmp/pa29-189/controls-complete/source-trait-identity-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling.o"
+      "/tmp/pa29-189/controls-complete/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1490,9 +2312,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/spelling.o",
+      "/tmp/pa29-189/controls-complete/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling"
+      "/tmp/pa29-189/controls-complete/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -1501,7 +2323,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/spelling",
+      "/tmp/pa29-189/controls-complete/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -1515,9 +2337,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-final/source-trait-identity-spelling.cpp",
+      "/tmp/pa29-189/controls-complete/source-trait-identity-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling.o"
+      "/tmp/pa29-189/controls-complete/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1527,9 +2349,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/spelling.o",
+      "/tmp/pa29-189/controls-complete/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling"
+      "/tmp/pa29-189/controls-complete/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -1538,7 +2360,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/spelling",
+      "/tmp/pa29-189/controls-complete/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -1552,9 +2374,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-final/source-trait-identity-spelling.cpp",
+      "/tmp/pa29-189/controls-complete/source-trait-identity-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling.o"
+      "/tmp/pa29-189/controls-complete/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1564,9 +2386,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-final/spelling.o",
+      "/tmp/pa29-189/controls-complete/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-final/spelling"
+      "/tmp/pa29-189/controls-complete/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -1575,7 +2397,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-final/spelling",
+      "/tmp/pa29-189/controls-complete/spelling",
       "runtime-input"
     ],
     "status": 0,

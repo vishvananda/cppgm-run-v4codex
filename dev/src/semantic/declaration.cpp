@@ -397,13 +397,44 @@ void Analyzer::declaration(NodeId n, ScopeId s)
     case Kind::BitField: if (calls) bit_field_declaration(n, s); break;
     case Kind::Template: template_declaration(n, s); break;
     case Kind::StaticAssert: {
+        if (calls && expressions[n].ready) break;
         struct Unevaluated { unsigned& depth; Unevaluated(unsigned& d):depth(d){++depth;} ~Unevaluated(){--depth;} } guard(unevaluated_depth);
-        Constant v = evaluate(ast[n].first, s);
+        EvaluationScope evaluation(*this,true);
+        auto operand = ast[n].first;
+        Constant v;
+        if (calls) {
+            expression(operand,s);
+            // A constant object identity is not its contextual boolean value.
+            // Select/check the real conversion once, including explicit bool,
+            // access and deletion; constant execution consumes that same fact.
+            Expression assertion; assertion.type = types.fundamental(FT_BOOL);
+            auto conversion = boolean_conversion(operand);
+            if (conversion.valid()) {
+                record_conversion(assertion,operand,conversion);
+                v = constant_node_conversion(operand,conversions[assertion.conversions],s);
+            }
+            assertion.ready = true; expressions.set(n,assertion);
+        } else v = evaluate(operand,s);
         if (!v.valid || scoped_enum(v.type) || !constant_truth(v)) {
             const auto& loc = static_cast<const syntax::Ast&>(ast).locations[ast[n].location];
             auto file = ids.spelling(loc.presumed_file);
-            throw std::runtime_error("static assertion is not a true integral constant in " +
-                std::string(file.data,file.size) + ":" + std::to_string(loc.line));
+            std::string diagnostic = "static assertion is not a true constant boolean in " +
+                std::string(file.data,file.size) + ":" + std::to_string(loc.line);
+            if (auto message = ast[operand].next) {
+                auto literal = ast.literals[ast[message].literal];
+                auto width = fundamental_width(literal.type);
+                diagnostic += ": ";
+                // Only failure renders the retained literal. Preserve basic
+                // characters in every encoding, even after an embedded NUL.
+                for (unsigned i = 0; i+1 < literal.elements; ++i) {
+                    unsigned unit = 0;
+                    for (unsigned b = 0; b < width; ++b)
+                        unit |= unsigned(static_cast<unsigned char>(ast.literal_bytes[literal.offset+i*width+b])) << (8*b);
+                    if (!unit) diagnostic += "\\0";
+                    else if (unit < 128) diagnostic += char(unit);
+                }
+            }
+            throw std::runtime_error(diagnostic);
         }
         break;
     }

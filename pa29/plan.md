@@ -25,6 +25,11 @@ lookup/initializer fact → typed LowIR → ELF. Work must follow demanded facts
 indexed dependencies, with TU-owned identity/cache lifetimes; no library-name
 recognition, synthesized definitions or global retry is acceptable.
 
+Extended owner: shared static-assertion contextual conversion and message syntax.
+A class constant was incorrectly tested by its object identity; record and execute
+the selected boolean conversion, preserving access/deletion and constexpr rules.
+Messages validate at parse time and render only on failure.
+
 Validation: explicit positive/negative controls and source-to-object inspections;
 frozen entry/final compiler evidence under spec §9 if source changes; all PA29
 fixtures, earlier stages and file audit. Float/half and vector representation

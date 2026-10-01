@@ -1,4 +1,8 @@
 {
+  "assertion-context": {
+    "object_sha256": "8f089ab3544ccc4b68ba7a64913fb9e25724ec8caa4df94dcf97d556b8f5a7fe",
+    "symbols": "0000000000000000 W int function<true>()\n0000000000000004 d constant\n0000000000000005 D instantiated\n0000000000000000 T main\n0000000000000000 D object\n"
+  },
   "defined-conversions": {
     "object_sha256": "882a28c53b0e1d36050996729c7410391a03d592a72ffce2f3d3ac8dc2efe18b",
     "symbols": "0000000000000000 W probe<character>::to_int(character)\n0000000000000000 W probe<character>::to_char(unsigned int)\n0000000000000000 W probe<int>::to_int(int)\n0000000000000000 W probe<int>::to_char(long)\n0000000000000000 W traits<character>::to_int_type(character)\n0000000000000000 W traits<character>::to_char_type(unsigned int)\n0000000000000000 W traits<int>::to_int_type(int)\n0000000000000000 W traits<int>::to_char_type(long)\n0000000000000000 W character::character(unsigned int)\n0000000000000000 W character::character(unsigned int)\n0000000000000000 W character::operator unsigned int() const\n0000000000000000 D deferred\n0000000000000000 T main\n"

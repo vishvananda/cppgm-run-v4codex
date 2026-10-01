@@ -49,7 +49,7 @@ about an undefined hosted primary is descriptive, not a class definition.
 
 ## Positive coverage and observed behavior
 
-`python3 student.tests/pa29/check189.py OUT` runs **123 commands**. The three
+`python3 student.tests/pa29/check189.py OUT` runs **180 commands**. The three
 original inputs are rejected by the student compiler, GCC and Clang. Each
 ordinary-name reducer is also rejected by the pinned reference compiler; that
 reference accepts all three original inputs. The change of spelling therefore
@@ -70,12 +70,16 @@ Additional positive controls cover primary and explicit specialization identity,
 throwing/deleted/move constructors, false primaries despite nothrow callables,
 true partial specializations despite throwing callables, pointers preceding a
 definition, missing/private-member SFINAE, and dormant invalid member bodies.
-A demanded invalid body is rejected. Four positive LowIR outputs validate;
+A demanded invalid body is rejected. Five positive LowIR outputs validate;
 symbol/LowIR inspection proves dormant bodies are not emitted.
 
 [Control evidence](../student.tests/pa29/evidence189/controls.json) and
 [pinned-reference observations](../student.tests/pa29/evidence189/reference-observations.json)
 retain commands, statuses and diagnostics. No reference compiler contributes to
-the implementation or generated program. The underlying implementation already
-satisfies this behavior group; no compiler source change is warranted by these
-failures. The corrected sidecars remain subject to independent Ralph review.
+the implementation or generated program. The original three failures do not warrant a library-name workaround. Extending
+the controls found and fixed a separate shared defect: static assertions now
+select and execute contextual boolean conversions, validate their message
+literals, and retain message text in failure diagnostics. These controls cover
+false, nonconstant, deleted, private and ambiguous conversions, template demand,
+pointers and encoded messages. The corrected sidecars remain subject to
+independent Ralph review.

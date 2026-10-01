@@ -192,7 +192,13 @@ NodeId Parser::static_assertion()
     in.require("static_assert");
     in.require("(");
     NodeId result = wrap(Kind::StaticAssert, expression(2));
-    if (in.eat(",")) ast.append(result, leaf(Kind::Message));
+    if (in.eat(",")) {
+        auto token = in.peek();
+        const auto& message = ast.literals[token.literal];
+        if (token.kind != PostTokenKind::literal || message.kind != LiteralKind::string || message.suffix)
+            throw std::runtime_error("static assertion message requires a string literal");
+        ast.append(result, leaf(Kind::Message));
+    }
     in.require(")");
     in.require(";");
     return result;
