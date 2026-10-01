@@ -142,9 +142,22 @@ void Analyzer::write_scope(std::ostream& out, ScopeId s, unsigned depth) const
     for (ScopeId c = scope.first_child; c; c = scopes[c].next) write_scope(out, c, depth + 1);
 }
 void Analyzer::write(std::ostream& out) const { out << "translation-unit\n"; write_scope(out, global, 1); }
+namespace {
+void closure_counts(std::ostream& out, std::size_t closures, std::size_t captures,
+    std::size_t patterns, std::size_t candidates, std::size_t adapters)
+{
+    out << ",\"semantic_closures\":" << closures
+        << ",\"semantic_capture_edges\":" << captures
+        << ",\"semantic_capture_patterns\":" << patterns
+        << ",\"semantic_capture_candidates\":" << candidates
+        << ",\"semantic_closure_adapters\":" << adapters;
+}
+}
 void Analyzer::telemetry(std::ostream& out) const
 {
     constant_telemetry(out);
+    closure_counts(out,closures.size()-1,closure_captures.size()-1,
+        closure_capture_recipes.size()-1,closure_capture_candidates.size(),closure_adapter_facts.size()-1);
     const auto stats = virtual_telemetry(virtual_classes);
     out << ",\"semantic_ms\":" << analysis_ms
         << ",\"semantic_angle_names\":" << angle_name_work
@@ -174,11 +187,6 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_template_initializer_binding_queued\":" << template_initializer_binding_queued
         << ",\"template_body_transitions\":" << template_bodies
         << ",\"semantic_body_checks\":" << body_checks
-        << ",\"semantic_closures\":" << closures.size()-1
-        << ",\"semantic_capture_edges\":" << closure_captures.size()-1
-        << ",\"semantic_capture_patterns\":" << closure_capture_recipes.size()-1
-        << ",\"semantic_capture_candidates\":" << closure_capture_candidates.size()
-        << ",\"semantic_closure_adapters\":" << closure_adapter_facts.size()-1
         << ",\"semantic_range_plans\":" << ranges.size()-1
         << ",\"semantic_initializer_independence_work\":" << initializer_independence_work
         << ",\"semantic_initializer_independence_hits\":" << initializer_independence_hits
