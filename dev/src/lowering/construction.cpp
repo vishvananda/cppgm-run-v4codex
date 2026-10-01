@@ -74,7 +74,7 @@ void Procedural::constructor_body(EntityId e, bool base)
                 {{offset, action.field != 0}});
             finish_subobject(action); continue;
         }
-        if (action.initializer && (t.kind == TypeKind::Array || (t.kind == TypeKind::Named && sem.entities[t.entity].class_info)) &&
+        if (action.initializer && (t.kind == TypeKind::Array || semantic::vector_kind(t.kind) || (t.kind == TypeKind::Named && sem.entities[t.entity].class_info)) &&
             !sem.facts[action.initializer].entity) {
             std::vector<InitProjection> path(1, {offset, action.field != 0, action.field});
             aggregate_initialize(action.initializer, action.type, Value(Operand::slot(this_slot), IRType::Ptr), true, path);

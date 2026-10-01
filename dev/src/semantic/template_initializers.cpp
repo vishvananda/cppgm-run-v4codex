@@ -4,7 +4,7 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 bool Analyzer::template_aggregate_type(TypeId target) const
 {
-    return aggregate_type(target) || (types[target].kind == TypeKind::Named &&
+    return aggregate_type(target) || vector_kind(types[target].kind) || (types[target].kind == TypeKind::Named &&
         template_pattern_aggregates.get(types[target].entity) == 2);
 }
 bool Analyzer::fixed_initializer_operands(NodeId n) const
@@ -152,7 +152,7 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
         }
         cursor = ast[source].next; return true;
     }
-    if (class_value(target) && !grouped) {
+    if ((class_value(target) || vector_kind(types[target].kind)) && !grouped) {
         auto value = template_statement_value(source,s);
         if (value.type) {
             auto c = conversion_value(value,target);
@@ -163,7 +163,8 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
         }
     }
     auto type = types[target];
-    if (type.kind == TypeKind::Array) {
+    if (vector_kind(type.kind)) type.bound = vector_elements(target);
+    if (type.kind == TypeKind::Array || vector_kind(type.kind)) {
         std::uint64_t i = 0;
         bool complete = true;
         while (inner && (type.unknown_bound || i < type.bound)) {

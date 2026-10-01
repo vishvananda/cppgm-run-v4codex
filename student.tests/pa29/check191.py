@@ -10,7 +10,7 @@ def run(args,ok=True):
  (out/'checks.json').write_text(json.dumps(rows,indent=2)+'\n')
  if (p.returncode==0)!=ok:failed.append(row);return False
  return True
-for name in ['vector','bitcast','vector-many','vector-constant','bitcast-storage','sfinae','vector-static','bitcast-deleted','bitcast-array','builtin-effects','bitcast-special','vector-mask-types']:
+for name in ['vector','bitcast','vector-many','vector-constant','bitcast-storage','sfinae','vector-static','bitcast-deleted','bitcast-array','builtin-effects','bitcast-special','vector-mask-types','vector-template']:
  for level in ['-O0','-O2']:
   obj=out/(name+'.o');exe=out/name
   if run([cc,level,'-c',src/(name+'.cpp'),'-o',obj]):

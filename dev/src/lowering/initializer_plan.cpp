@@ -175,7 +175,7 @@ void Procedural::aggregate_plan(std::uint32_t plan, Value root, bool indirect, s
     auto action = sem.initializers[plan];
     auto target = sem.types[action.type];
     if (target.cv & 4) atomic_padding(action.type,address(initialization_address(root,indirect,path)));
-    if (action.kind == InitKind::Value || action.kind == InitKind::Converted || action.kind == InitKind::Constructor) {
+    if (action.kind == InitKind::Value || action.kind == InitKind::Converted || action.kind == InitKind::Constructor || semantic::vector_kind(target.kind)) {
         Value at = initialization_address(root, indirect, path); at.type = action.type;
         initialize_plan(plan, at); if (initialized) *initialized = at; return;
     }
