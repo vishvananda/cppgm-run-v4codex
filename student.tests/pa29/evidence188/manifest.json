@@ -1,0 +1,36 @@
+{
+  "entry": "c1caa0fc6b2985a633c4db587097ac5c08c30c75",
+  "implementation": "bf8bc00f66e6ef9c9a0fec7da71d2486ef4ba1c7",
+  "stage_base": "2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543",
+  "last_reviewed": "2df00585bd10d4e2e068934394dffc8adb0a47ed",
+  "observations": 880,
+  "launchers": 16,
+  "checks": {
+    "priorThroughTests": "pass",
+    "fileAudit": "pass",
+    "stageProgress": "pass",
+    "stageTests": "395/403; eight original failures remain"
+  },
+  "files": {
+    "student.tests/pa29/evidence188/common-performance.json": "97b5f3d70fd5f704908efd5b639d60fbaea9155183ec7f9745e88f2470315cb7",
+    "student.tests/pa29/evidence188/controls.json": "0bc4206e9f956ee53eef83b4689663303027c5a95cb6253e10849a740924789c",
+    "student.tests/pa29/evidence188/coverage.json": "d375137c554df67778267f92c4969e94c2d8fba6282cb8e4b91f3dec21f89dd2",
+    "student.tests/pa29/evidence188/inspection.json": "1f60053b26a2a3adfb7f1ea1e34a17c20b11e76e3ae25ec31bdb62758b5901e3",
+    "student.tests/pa29/evidence188/owner-performance.json": "6b4f8019ae7deea015fca61d9a2bfbdd1f4a57b14a63cd766957e439ffe431dd",
+    "student.tests/pa29/evidence188/performance-summary.json": "d4878043d40300d9ddaaeeaf2c7ecbbbae42034edc7a9c6ee4946d78f7ae56c4",
+    "student.tests/pa29/evidence188/preliminary-common-performance.json": "1c7179dcd3fa9718c182343227c728d000b5f03098a071b8ebac4f20740b095d",
+    "student.tests/pa29/evidence188/preliminary-owner-performance.json": "450c181f0339594b36e378d46d224356a7d516395e7912b588309f97357ac85f",
+    "student.tests/pa29/evidence188/preliminary-source-binding.json": "568c1b3d52035d7affabef9e5967a5b5af92e71e146f32e745d437cbb671d9dc",
+    "student.tests/pa29/evidence188/remaining.json": "94541a89afe1a5f19383ec2370dc74db41ef71cffbbf5639e47387ba9cd33f22",
+    "student.tests/pa29/evidence188/scaling.json": "c0a70f3ffdc7b178b5579cde76447e4efe33be64e80c3e1513c80404f8290bc5",
+    "student.tests/pa29/evidence188/source-binding.json": "2890faa914339677dc99613871a7d59a6a03389fa4c31a70e55d0b683390f3ea",
+    "student.tests/pa29/evidence188/validation.json": "58bab18a2784195bf1335cf19c39861b1b1539f1f3c24fa9c703b029f3ad57a1",
+    "pa29/plan.md": "a09bd2ec2e3c66f682c8def2a4850d0ed9154357e318dcdb5a00077ba5098bb7",
+    "pa29/handoff188.md": "6934a863777cc9870ebf8829d2e46fc9da81efca528b89ca4bb95f4d429ce80e",
+    "pa29/performance188.md": "52dc09367584be8dfb1a8e8d9defcde33d140fdc0a6c416de2df06f91cefa9f7",
+    "student.tests/pa29/check188.py": "9ee38e8d768f19996f476e250e9aec25dd80bfe414f2dc7dd7544336406545d4",
+    "student.tests/pa29/validate188.py": "e232b2a4bb1a67c862de3e692638dccd97d362c5b8e256295e622640551c49fb",
+    "student.tests/pa29/analyze188.py": "0737732dd9f5d1113efd4b21d47bf28f911e746bdc1a47c9b8e4f2f70ccf112f",
+    "student.tests/pa29/performance188.py": "864749415dc9982a54f5be9796892bc1eaa192fb95a513a1ee568456dc915565"
+  }
+}

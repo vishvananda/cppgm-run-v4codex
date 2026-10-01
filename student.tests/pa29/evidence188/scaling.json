@@ -1,0 +1,466 @@
+{
+  "final_observations": 440,
+  "preliminary_observations": 440,
+  "final_launchers": 8,
+  "preliminary_launchers": 8,
+  "checks": [
+    {
+      "workload": "contextual600",
+      "trial": 0,
+      "asserted_counters": {
+        "tokens": 27139,
+        "parsed_nodes": 48220,
+        "nodes": 48220,
+        "semantic_template_initializer_binding_work": 1200,
+        "semantic_template_binding_work": 22800,
+        "semantic_template_bindings": 4800,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual600",
+      "trial": 1,
+      "asserted_counters": {
+        "tokens": 27139,
+        "parsed_nodes": 48220,
+        "nodes": 48220,
+        "semantic_template_initializer_binding_work": 1200,
+        "semantic_template_binding_work": 22800,
+        "semantic_template_bindings": 4800,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual600",
+      "trial": 2,
+      "asserted_counters": {
+        "tokens": 27139,
+        "parsed_nodes": 48220,
+        "nodes": 48220,
+        "semantic_template_initializer_binding_work": 1200,
+        "semantic_template_binding_work": 22800,
+        "semantic_template_bindings": 4800,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual600",
+      "trial": 3,
+      "asserted_counters": {
+        "tokens": 27139,
+        "parsed_nodes": 48220,
+        "nodes": 48220,
+        "semantic_template_initializer_binding_work": 1200,
+        "semantic_template_binding_work": 22800,
+        "semantic_template_bindings": 4800,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual600",
+      "trial": 4,
+      "asserted_counters": {
+        "tokens": 27139,
+        "parsed_nodes": 48220,
+        "nodes": 48220,
+        "semantic_template_initializer_binding_work": 1200,
+        "semantic_template_binding_work": 22800,
+        "semantic_template_bindings": 4800,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual600",
+      "trial": 5,
+      "asserted_counters": {
+        "tokens": 27139,
+        "parsed_nodes": 48220,
+        "nodes": 48220,
+        "semantic_template_initializer_binding_work": 1200,
+        "semantic_template_binding_work": 22800,
+        "semantic_template_bindings": 4800,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual600",
+      "trial": 6,
+      "asserted_counters": {
+        "tokens": 27139,
+        "parsed_nodes": 48220,
+        "nodes": 48220,
+        "semantic_template_initializer_binding_work": 1200,
+        "semantic_template_binding_work": 22800,
+        "semantic_template_bindings": 4800,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual600",
+      "trial": 7,
+      "asserted_counters": {
+        "tokens": 27139,
+        "parsed_nodes": 48220,
+        "nodes": 48220,
+        "semantic_template_initializer_binding_work": 1200,
+        "semantic_template_binding_work": 22800,
+        "semantic_template_bindings": 4800,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual1200",
+      "trial": 0,
+      "asserted_counters": {
+        "tokens": 54139,
+        "parsed_nodes": 96220,
+        "nodes": 96220,
+        "semantic_template_initializer_binding_work": 2400,
+        "semantic_template_binding_work": 45600,
+        "semantic_template_bindings": 9600,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual1200",
+      "trial": 1,
+      "asserted_counters": {
+        "tokens": 54139,
+        "parsed_nodes": 96220,
+        "nodes": 96220,
+        "semantic_template_initializer_binding_work": 2400,
+        "semantic_template_binding_work": 45600,
+        "semantic_template_bindings": 9600,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual1200",
+      "trial": 2,
+      "asserted_counters": {
+        "tokens": 54139,
+        "parsed_nodes": 96220,
+        "nodes": 96220,
+        "semantic_template_initializer_binding_work": 2400,
+        "semantic_template_binding_work": 45600,
+        "semantic_template_bindings": 9600,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual1200",
+      "trial": 3,
+      "asserted_counters": {
+        "tokens": 54139,
+        "parsed_nodes": 96220,
+        "nodes": 96220,
+        "semantic_template_initializer_binding_work": 2400,
+        "semantic_template_binding_work": 45600,
+        "semantic_template_bindings": 9600,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual1200",
+      "trial": 4,
+      "asserted_counters": {
+        "tokens": 54139,
+        "parsed_nodes": 96220,
+        "nodes": 96220,
+        "semantic_template_initializer_binding_work": 2400,
+        "semantic_template_binding_work": 45600,
+        "semantic_template_bindings": 9600,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual1200",
+      "trial": 5,
+      "asserted_counters": {
+        "tokens": 54139,
+        "parsed_nodes": 96220,
+        "nodes": 96220,
+        "semantic_template_initializer_binding_work": 2400,
+        "semantic_template_binding_work": 45600,
+        "semantic_template_bindings": 9600,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual1200",
+      "trial": 6,
+      "asserted_counters": {
+        "tokens": 54139,
+        "parsed_nodes": 96220,
+        "nodes": 96220,
+        "semantic_template_initializer_binding_work": 2400,
+        "semantic_template_binding_work": 45600,
+        "semantic_template_bindings": 9600,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual1200",
+      "trial": 7,
+      "asserted_counters": {
+        "tokens": 54139,
+        "parsed_nodes": 96220,
+        "nodes": 96220,
+        "semantic_template_initializer_binding_work": 2400,
+        "semantic_template_binding_work": 45600,
+        "semantic_template_bindings": 9600,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual2400",
+      "trial": 0,
+      "asserted_counters": {
+        "tokens": 108139,
+        "parsed_nodes": 192220,
+        "nodes": 192220,
+        "semantic_template_initializer_binding_work": 4800,
+        "semantic_template_binding_work": 91200,
+        "semantic_template_bindings": 19200,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual2400",
+      "trial": 1,
+      "asserted_counters": {
+        "tokens": 108139,
+        "parsed_nodes": 192220,
+        "nodes": 192220,
+        "semantic_template_initializer_binding_work": 4800,
+        "semantic_template_binding_work": 91200,
+        "semantic_template_bindings": 19200,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual2400",
+      "trial": 2,
+      "asserted_counters": {
+        "tokens": 108139,
+        "parsed_nodes": 192220,
+        "nodes": 192220,
+        "semantic_template_initializer_binding_work": 4800,
+        "semantic_template_binding_work": 91200,
+        "semantic_template_bindings": 19200,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual2400",
+      "trial": 3,
+      "asserted_counters": {
+        "tokens": 108139,
+        "parsed_nodes": 192220,
+        "nodes": 192220,
+        "semantic_template_initializer_binding_work": 4800,
+        "semantic_template_binding_work": 91200,
+        "semantic_template_bindings": 19200,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual2400",
+      "trial": 4,
+      "asserted_counters": {
+        "tokens": 108139,
+        "parsed_nodes": 192220,
+        "nodes": 192220,
+        "semantic_template_initializer_binding_work": 4800,
+        "semantic_template_binding_work": 91200,
+        "semantic_template_bindings": 19200,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual2400",
+      "trial": 5,
+      "asserted_counters": {
+        "tokens": 108139,
+        "parsed_nodes": 192220,
+        "nodes": 192220,
+        "semantic_template_initializer_binding_work": 4800,
+        "semantic_template_binding_work": 91200,
+        "semantic_template_bindings": 19200,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual2400",
+      "trial": 6,
+      "asserted_counters": {
+        "tokens": 108139,
+        "parsed_nodes": 192220,
+        "nodes": 192220,
+        "semantic_template_initializer_binding_work": 4800,
+        "semantic_template_binding_work": 91200,
+        "semantic_template_bindings": 19200,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    },
+    {
+      "workload": "contextual2400",
+      "trial": 7,
+      "asserted_counters": {
+        "tokens": 108139,
+        "parsed_nodes": 192220,
+        "nodes": 192220,
+        "semantic_template_initializer_binding_work": 4800,
+        "semantic_template_binding_work": 91200,
+        "semantic_template_bindings": 19200,
+        "semantic_specializations": 0,
+        "template_body_transitions": 0,
+        "instructions": 73,
+        "operands": 118,
+        "native_instructions": 104,
+        "native_functions": 4,
+        "text_bytes": 460
+      }
+    }
+  ],
+  "equivalent_pairs": 7,
+  "program_images_unchanged_by_refinement": true
+}

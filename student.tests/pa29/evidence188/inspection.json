@@ -1,0 +1,71 @@
+{
+  "artifacts": {
+    "controls-final/contextual.ast": {
+      "bytes": 7261,
+      "sha256": "f9f46b4c189be78adb620eecc371760731dec62a6a7703f203be7163a353cd54"
+    },
+    "controls-final/contextual.canonical": {
+      "bytes": 1393,
+      "sha256": "c619e99e7d83489a07305ad498d82e43e59fc3fc6f4d8746a8152d162c6624f3"
+    },
+    "controls-final/contextual.lowir": {
+      "bytes": 1393,
+      "sha256": "c619e99e7d83489a07305ad498d82e43e59fc3fc6f4d8746a8152d162c6624f3"
+    },
+    "controls-final/identifiers.ast": {
+      "bytes": 17552,
+      "sha256": "205a0053015a348132c32d0805f26c6a051cf8273fd8b94ca31d4f216140a779"
+    },
+    "controls-final/identifiers.canonical": {
+      "bytes": 10129,
+      "sha256": "7d1ddaf035c533db15a52bac43727eccc14c054c4afa52a393dd83215badc65f"
+    },
+    "controls-final/identifiers.lowir": {
+      "bytes": 10129,
+      "sha256": "7d1ddaf035c533db15a52bac43727eccc14c054c4afa52a393dd83215badc65f"
+    },
+    "controls-final/nested.ast": {
+      "bytes": 3877,
+      "sha256": "99138c930eea1884417d49f8699eb7a3a4b3c4194c5a9f2a81af301f37cc514b"
+    },
+    "controls-final/nested.canonical": {
+      "bytes": 103,
+      "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+    },
+    "controls-final/nested.lowir": {
+      "bytes": 103,
+      "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+    },
+    "controls-final/precedence.ast": {
+      "bytes": 2846,
+      "sha256": "d8077970fa8abe5e0efd2d5cc9a439af4bdd834b00650cbf44fb6ddf3f1c2779"
+    },
+    "controls-final/precedence.canonical": {
+      "bytes": 103,
+      "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+    },
+    "controls-final/precedence.lowir": {
+      "bytes": 103,
+      "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4"
+    },
+    "controls-final/rejected.ast": {
+      "bytes": 20,
+      "sha256": "b023183b130280c5413ed9cbe365c9e2364303ec1a06f7982137d2ea5f130cee"
+    },
+    "controls-final/throw-comma.ast": {
+      "bytes": 6675,
+      "sha256": "8104c3f94a5729f1f9f50b4cfa22d2c7ecf88c863fae6a175694f4b4306c7002"
+    },
+    "controls-final/throw-comma.canonical": {
+      "bytes": 7849,
+      "sha256": "a4623ff2cc8ec4476d3b7f78511c39b7ac74bf1e9db8ca807ab8dcc790f77e34"
+    },
+    "controls-final/throw-comma.lowir": {
+      "bytes": 7849,
+      "sha256": "a4623ff2cc8ec4476d3b7f78511c39b7ac74bf1e9db8ca807ab8dcc790f77e34"
+    }
+  },
+  "precedence_assertions": 5,
+  "unemitted_coroutine_symbols": true,
+  "unreachable_throw_tail_has_no_call": true
+}

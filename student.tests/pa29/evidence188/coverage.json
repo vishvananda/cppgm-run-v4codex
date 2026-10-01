@@ -1,0 +1,9 @@
+{
+  "entry": "c1caa0fc6b2985a633c4db587097ac5c08c30c75",
+  "unchanged": true,
+  "total_stage_inputs": 403,
+  "contract_harness_files": 1707,
+  "predecessor_manifest": "student.tests/pa29/evidence186/coverage.json",
+  "predecessor_manifest_sha256": "bc47296bed8798f139c14091a3df105de3c3619761d247e47eea4958f40a1aa7",
+  "compared_all_hashes": true
+}
