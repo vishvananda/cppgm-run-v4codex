@@ -1,0 +1,106 @@
+[
+  {
+    "command": [
+      "/tmp/pa29-189/cppgm-A",
+      "-std=c++11",
+      "-c",
+      "student.tests/pa29/controls189/assertion-explicit-int-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/entry-context.o"
+    ],
+    "source_sha256": "cbf66273d941110f9a625d50ca2089c10a56a35350b43c8ad77118bfb51a78a5",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/cppgm-A",
+      "-std=c++11",
+      "-c",
+      "student.tests/pa29/controls189/constructor-template-private-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/entry-context.o"
+    ],
+    "source_sha256": "cc033b1234ee525f3604ace2af1d63b449d25b2038fa37e7077c8e9ab730f78c",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/cppgm-A",
+      "-std=c++11",
+      "-c",
+      "student.tests/pa29/controls189/contextual-specifiers.cpp",
+      "-o",
+      "/tmp/pa29-189/entry-context.o"
+    ],
+    "source_sha256": "c8a0e1e5509984aff8a53edc4a2fcea947a40c0ca343720a018d1e25528fa316",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/cppgm-A",
+      "-std=c++11",
+      "-c",
+      "student.tests/pa29/controls189/explicit-private-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/entry-context.o"
+    ],
+    "source_sha256": "1df3a9752d5c5ec536a236debc67307880dab52ac458feb2a3463688b2679a28",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/cppgm-A",
+      "-std=c++11",
+      "-c",
+      "student.tests/pa29/controls189/explicit-template-private-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/entry-context.o"
+    ],
+    "source_sha256": "5059e5f2c9bb52d3429228a0e14d5abb1523f2d8ad09798b7466d02b4fc86fbb",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/cppgm-A",
+      "-std=c++17",
+      "-c",
+      "student.tests/pa29/controls189/guide-private-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/entry-context.o"
+    ],
+    "source_sha256": "48d7f6b3f14b74d498cc314c3b697fab22e24865bf3ea8b1b796750895fe6d74",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/cppgm-A",
+      "-std=c++11",
+      "-c",
+      "student.tests/pa29/controls189/noexcept-private-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/entry-context.o"
+    ],
+    "source_sha256": "731fedccfa7dad6dddf1458fe98351e136f4ed0af60cf0577d7419f3118dbc30",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/cppgm-A",
+      "-std=c++11",
+      "-c",
+      "student.tests/pa29/controls189/noexcept-template-private-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/entry-context.o"
+    ],
+    "source_sha256": "3c734778c4044cd730032175986bf0e97139a659ee458e664c81aaba2ad5ca73",
+    "status": 1,
+    "stderr": "ERROR: invalid fixed call argument\n"
+  }
+]

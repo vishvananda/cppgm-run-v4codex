@@ -1,0 +1,62 @@
+[
+  {
+    "source": "student.tests/pa29/controls189/assertion-ambiguous-reject.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls189/assertion-context.cpp",
+    "status": 1,
+    "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/controls189/assertion-context.cpp:19\n"
+  },
+  {
+    "source": "student.tests/pa29/controls189/assertion-deleted-reject.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls189/assertion-dependent-reject.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls189/assertion-explicit-int-reject.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls189/assertion-false-reject.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls189/assertion-fixed-reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/controls189/assertion-fixed-reject.cpp:2\n"
+  },
+  {
+    "source": "student.tests/pa29/controls189/assertion-message-reject.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls189/assertion-messages-reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/controls189/assertion-messages-reject.cpp:1\n"
+  },
+  {
+    "source": "student.tests/pa29/controls189/assertion-nonconstant-reject.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls189/assertion-private-reject.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls189/assertion-unconvertible-reject.cpp",
+    "status": 0,
+    "stderr": ""
+  }
+]

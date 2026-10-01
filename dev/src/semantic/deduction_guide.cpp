@@ -61,7 +61,7 @@ void Analyzer::deduction_guide(NodeId n, ScopeId s)
             bind_template_expression(ast[spec].first,s);
             guide.explicit_condition = expression_query(ast[spec].first,s);
             if (!query_fact(guide.explicit_condition).dependent)
-                guide.explicit_guide = explicit_condition_value(guide.explicit_condition);
+                guide.explicit_guide = explicit_condition_value(guide.explicit_condition,s);
         }
     }
     for (auto q = ast[params].next; q; q = ast[q].next) {
@@ -72,7 +72,7 @@ void Analyzer::deduction_guide(NodeId n, ScopeId s)
             bind_template_expression(ast[q].first,scope);
             guide.exception_condition = expression_query(ast[q].first,scope);
             if (!query_fact(guide.exception_condition).dependent)
-                guide.nonthrowing = explicit_condition_value(guide.exception_condition);
+                guide.nonthrowing = explicit_condition_value(guide.exception_condition,scope);
         }
     }
     std::uint32_t shape;

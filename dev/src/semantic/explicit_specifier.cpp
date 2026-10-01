@@ -16,13 +16,14 @@ void Analyzer::explicit_specifier(EntityId e, NodeId source, ScopeId scope)
         bool dependent = query_fact(query).dependent;
         members[member].explicit_condition = dependent ? query : 0;
         if (!dependent)
-            members[member].explicit_constructor = explicit_condition_value(query);
+            members[member].explicit_constructor = explicit_condition_value(query,scope);
     }
 }
-bool Analyzer::explicit_condition_value(QueryId query)
+bool Analyzer::explicit_condition_value(QueryId query, ScopeId scope)
 {
+    EvaluationScope evaluation(*this,true);
     auto conversion = boolean_conversion_value(query_fact(query).expression);
-    if (!conversion.valid()) throw std::runtime_error("invalid explicit condition conversion");
+    check_fixed_conversion(query_fact(query).expression,0,conversion,scope);
     auto value = constant_query_conversion(query,conversion);
     if (!value.valid)
         throw std::runtime_error("explicit condition is not a constant boolean");

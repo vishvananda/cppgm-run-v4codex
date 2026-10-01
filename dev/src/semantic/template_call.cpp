@@ -459,7 +459,7 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
             if (!query) { specializations[index].declaration = FactState::Failure; return 0; }
             members[entities[e].member_info].explicit_condition = query;
             if (!query_fact(query).dependent)
-                members[entities[e].member_info].explicit_constructor = explicit_condition_value(query);
+                members[entities[e].member_info].explicit_constructor = explicit_condition_value(query,entities[e].owner);
         }
     }
     specializations[index].entity = e; specializations[index].declaration = FactState::Success;

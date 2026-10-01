@@ -3,6 +3,10 @@
     "object_sha256": "8f089ab3544ccc4b68ba7a64913fb9e25724ec8caa4df94dcf97d556b8f5a7fe",
     "symbols": "0000000000000000 W int function<true>()\n0000000000000004 d constant\n0000000000000005 D instantiated\n0000000000000000 T main\n0000000000000000 D object\n"
   },
+  "contextual-specifiers": {
+    "object_sha256": "9cdd58fdf18623be5a2a3d52fa7a1072f001de35cf6c0d9c5dd1d8ea8cd22e8e",
+    "symbols": "000000000000000b T noisy()\n0000000000000000 T quiet()\n0000000000000000 W friend_value<private_condition>::f()\n0000000000000000 W friend_value<private_condition>::friend_value()\n0000000000000000 W friend_value<private_condition>::friend_value<int>(int)\n0000000000000000 W friend_value<private_condition>::friend_value()\n0000000000000000 W friend_value<private_condition>::friend_value<int>(int)\n0000000000000000 W direct::direct(int)\n0000000000000000 W direct::direct(int)\n0000000000000000 W allowed::f()\n0000000000000000 W allowed::allowed()\n0000000000000000 W allowed::allowed()\n0000000000000000 W implicit::implicit(int)\n0000000000000000 W implicit::implicit(int)\n0000000000000016 T main\n"
+  },
   "defined-conversions": {
     "object_sha256": "882a28c53b0e1d36050996729c7410391a03d592a72ffce2f3d3ac8dc2efe18b",
     "symbols": "0000000000000000 W probe<character>::to_int(character)\n0000000000000000 W probe<character>::to_char(unsigned int)\n0000000000000000 W probe<int>::to_int(int)\n0000000000000000 W probe<int>::to_char(long)\n0000000000000000 W traits<character>::to_int_type(character)\n0000000000000000 W traits<character>::to_char_type(unsigned int)\n0000000000000000 W traits<int>::to_int_type(int)\n0000000000000000 W traits<int>::to_char_type(long)\n0000000000000000 W character::character(unsigned int)\n0000000000000000 W character::character(unsigned int)\n0000000000000000 W character::operator unsigned int() const\n0000000000000000 D deferred\n0000000000000000 T main\n"

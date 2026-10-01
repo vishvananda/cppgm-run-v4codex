@@ -26,10 +26,14 @@ def run(args, ok=True):
 images = {}
 for src in sorted((root / 'student.tests/pa29/controls189').glob('*.cpp')):
     ok = not src.stem.endswith('-reject')
-    for cc in [compiler, 'g++', 'clang++']:
+    # GCC here rejects the explicit bool conversion in a member-template's
+    # dependent explicit-specifier; Clang and the required extension accept it.
+    hosts = ['clang++'] if src.stem == 'contextual-specifiers' else ['g++', 'clang++']
+    for cc in [compiler, *hosts]:
         obj = out / (src.stem + '.o')
         exe = out / src.stem
-        p = run([cc, '-std=c++11', '-O0', '-c', src, '-o', obj], ok)
+        standard = '-std=c++17' if src.stem.startswith('guide-') else '-std=c++11'
+        p = run([cc, standard, '-O0', '-c', src, '-o', obj], ok)
         if cc == compiler and src.stem in ('assertion-false-reject', 'assertion-dependent-reject',
                                            'assertion-fixed-reject', 'assertion-messages-reject'):
             expected = {'assertion-false-reject': 'converted false',

@@ -28,7 +28,9 @@ recognition, synthesized definitions or global retry is acceptable.
 Extended owner: shared static-assertion contextual conversion and message syntax.
 A class constant was incorrectly tested by its object identity; record and execute
 the selected boolean conversion, preserving access/deletion and constexpr rules.
-Messages validate at parse time and render only on failure.
+Messages validate at parse time and render only on failure. The same conversion
+review fixes missing access validation in concrete noexcept and explicit
+conditions, passing lexical scope through constructor and deduction-guide demand.
 
 Validation: explicit positive/negative controls and source-to-object inspections;
 frozen entry/final compiler evidence under spec §9 if source changes; all PA29

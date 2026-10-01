@@ -1,61 +1,97 @@
 [
   {
     "source": "student.tests/pa29/controls189/assertion-ambiguous-reject.cpp",
+    "source_sha256": "784a4cd6e68e82b187beb3be83bc16f0af6e4ff40a682b3493d5024e1996a73b",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls189/assertion-character-message-reject.cpp",
+    "source_sha256": "a8d73aa797fa4a050d5858ec9d6330b24cd8a4a836785efd68a4d5c6cdebd3fb",
     "status": 0,
     "stderr": ""
   },
   {
     "source": "student.tests/pa29/controls189/assertion-context.cpp",
+    "source_sha256": "3d1324983f0d465f3ca4f186673b944fb80e3ee4be7eebb9eeeb443632c2d595",
     "status": 1,
     "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/controls189/assertion-context.cpp:19\n"
   },
   {
     "source": "student.tests/pa29/controls189/assertion-deleted-reject.cpp",
+    "source_sha256": "9400871a0ba1b574582d7262859ef2093a78d528e71d2263790ab1e34e78b547",
     "status": 0,
     "stderr": ""
   },
   {
     "source": "student.tests/pa29/controls189/assertion-dependent-reject.cpp",
+    "source_sha256": "b3836f69766e92643321e3d4d50a499280aac9606d24079604c7ba7ec382a8f5",
     "status": 0,
     "stderr": ""
   },
   {
     "source": "student.tests/pa29/controls189/assertion-explicit-int-reject.cpp",
+    "source_sha256": "cbf66273d941110f9a625d50ca2089c10a56a35350b43c8ad77118bfb51a78a5",
     "status": 0,
     "stderr": ""
   },
   {
     "source": "student.tests/pa29/controls189/assertion-false-reject.cpp",
+    "source_sha256": "397de2afc6aff661e0e2ceaf2cf65ab9ef47eaa5d8888083dffac4f3afe46ae0",
     "status": 0,
     "stderr": ""
   },
   {
     "source": "student.tests/pa29/controls189/assertion-fixed-reject.cpp",
+    "source_sha256": "cd6df87897e7684a2467453dfa0f8fb3cb321cdd211c1948d31cef1bb886fbf4",
     "status": 1,
     "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/controls189/assertion-fixed-reject.cpp:2\n"
   },
   {
+    "source": "student.tests/pa29/controls189/assertion-lifetime-reject.cpp",
+    "source_sha256": "a35faa12ff82c39433a2c966ec91a905f0d78c8ff2c734da00394ee1d0835ef4",
+    "status": 1,
+    "stderr": "ERROR: constexpr member requires a literal class\n"
+  },
+  {
     "source": "student.tests/pa29/controls189/assertion-message-reject.cpp",
+    "source_sha256": "043c4cd8f4e729d8355deb6be67529558e13d1868f107c2c7abf54f886a15cba",
     "status": 0,
     "stderr": ""
   },
   {
     "source": "student.tests/pa29/controls189/assertion-messages-reject.cpp",
+    "source_sha256": "3a8c5d72202d838fed743233f9f5ed87c7c7dc0207accc6b3fec843c0999cc4b",
     "status": 1,
     "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/controls189/assertion-messages-reject.cpp:1\n"
   },
   {
     "source": "student.tests/pa29/controls189/assertion-nonconstant-reject.cpp",
+    "source_sha256": "c0a647af8a13c444030f55e2cd8cc4a172457f674a4736bab028cd79ca10055f",
     "status": 0,
     "stderr": ""
   },
   {
+    "source": "student.tests/pa29/controls189/assertion-null-reject.cpp",
+    "source_sha256": "525de084f6a96ff42499753d873a916f824b772ca6c73d09830a3148570a7faa",
+    "status": 1,
+    "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/controls189/assertion-null-reject.cpp:1\n"
+  },
+  {
     "source": "student.tests/pa29/controls189/assertion-private-reject.cpp",
+    "source_sha256": "90e5c35aad5c11393eea82a1be728e5a6231fb3f470cfadbaf3a1c84e1fd9f5e",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls189/assertion-suffix-message-reject.cpp",
+    "source_sha256": "bf04472f4786e47f7bc9bc1d22122cd4bd6f82f44f5f93f47ad7aa3e28ab5760",
     "status": 0,
     "stderr": ""
   },
   {
     "source": "student.tests/pa29/controls189/assertion-unconvertible-reject.cpp",
+    "source_sha256": "2cbbe2dcdc38cda886bb6703beed367840279e6988c6db8f190ca2af973bde62",
     "status": 0,
     "stderr": ""
   }

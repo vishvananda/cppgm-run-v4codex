@@ -56,6 +56,7 @@ void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
 }
 unsigned Analyzer::evaluate_exception_specification(EntityId e, std::uint32_t id)
 {
+    EvaluationScope evaluation(*this,true);
     auto fact = exception_specifications[id];
     if (fact.state == FactState::Success) return fact.specification;
     if (fact.state == FactState::Active) throw std::runtime_error("recursive exception specification demand");
@@ -110,6 +111,7 @@ unsigned Analyzer::evaluate_exception_specification(EntityId e, std::uint32_t id
             }
             expression(node,scope);
             auto conversion = boolean_conversion(node);
+            check_fixed_conversion(expressions[node],node,conversion,scope);
             value = constant_node_conversion(node,conversion,scope);
             }
             if (!value.valid) throw std::runtime_error("nonconstant noexcept specification");

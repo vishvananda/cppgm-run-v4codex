@@ -60,13 +60,19 @@ for(int i=0;i<{iterations};++i){{auto c=probe<character<0>>::from((state*17+(i&1
 state=probe<character<0>>::to(c);total=(total+state)%65521;}}
 return total=={total}&&state=={state}?0:1;}}
 '''
-for n in [600, 1200, 2400]:
-    name = 'demand' + str(n)
+for kind, n in [(kind, n) for kind in ['demand', 'contexts'] for n in [600, 1200, 2400]]:
+    name = kind + str(n)
     src, obj, exe = [out / (name + suffix) for suffix in ['.cpp', '.o', '']]
-    source = prefix + ''.join(
-        f'static_assert(__is_same(probe<character<{i}>>::int_type,int),"member");'
-        f'static_assert(invert<source_property<character<{i}>>>::value,"source false");\n'
-        for i in range(n)) + runtime
+    if kind == 'demand':
+        source = prefix + ''.join(
+            f'static_assert(__is_same(probe<character<{i}>>::int_type,int),"member");'
+            f'static_assert(invert<source_property<character<{i}>>>::value,"source false");\n'
+            for i in range(n)) + runtime
+    else:
+        source = prefix + 'struct truth {constexpr explicit operator bool()const{return true;}};\n'
+        source += ''.join(
+            f'struct scope{i}{{explicit(truth{{}}) scope{i}(){{}} void f()noexcept(truth{{}}){{}}}};'
+            f'static_assert(truth{{}},"contextual conversion");\n' for i in range(n)) + runtime
     src.write_text(source)
     record['inputs'][name] = dict(source=source, sha256=sha(src), N=n,
                                  expected=[state, total], seed=7, iterations=iterations)
