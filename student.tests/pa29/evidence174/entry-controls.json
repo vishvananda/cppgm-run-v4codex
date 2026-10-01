@@ -1,0 +1,464 @@
+{
+  "compiler_sha256": "e740d3bbdf679f9a31e4479a9b2ac0715d7b9b85d5eda098cb8e9d64aafde343",
+  "inputs": {
+    "student.tests/pa29/controls174/bad-volatile-single.cpp": "d7907f5044f8a117a0795ebc70c5d1ca401c29cb57c9ad2368b68c953f0afcd1",
+    "student.tests/pa29/controls174/capture-decltype-nested.cpp": "35fb0b39cc01d9ca64f828790f8ea15c6f85f3b1691ecf3b5ca12600d0ca3f0d",
+    "student.tests/pa29/controls174/capture-decltype.cpp": "3b89b66ed627335dae4440cf4914a48d52b38fc2a07613f4e37b9afed21694c4",
+    "student.tests/pa29/controls174/capture-type-query.cpp": "886c972dd9e323e2d26d2bcc2c8f237d8991d84c5fe8ee89f78266f4fcab4c56",
+    "student.tests/pa29/controls174/integrated.cpp": "145809cb702230206a1e96e3f0586c41fd4a6bb9f8e71ebb84e2988f46e7118d",
+    "student.tests/pa29/controls174/volatile-comma.cpp": "6197fc6076b5b88168c6057955e2961acd9b710d748587d6c26e2ee1667266b4",
+    "student.tests/pa29/controls174/volatile-noexcept.cpp": "f63ccce779f0bb79bb0b422afd4cc197eab936283ca9f35ab508f62c578f8d70",
+    "student.tests/pa29/controls174/volatile-return.cpp": "131f1ebceb807d5a8c4dc4d35ca0b1ee0ace6c0c96a22745545069353efe2b86",
+    "student.tests/pa29/controls174/volatile-scalar.cpp": "8239482d8b1f26ba4540c0c8c4f2df06d064b26fee7955906885ec67120eb28e",
+    "student.tests/pa29/controls174/volatile-single.cpp": "cfa2d08a9b9cd5bded5edca128968a8654e36fa3df40de62f625148ef81c055d",
+    "student.tests/pa29/controls174/volatile-throw.cpp": "7c94ecf15bf0f767efe480cb890ee8f29deab144df5065ce50d3cf7b2bbeeb7b",
+    "student.tests/pa29/controls174/volatile-value.cpp": "70d05a16eb5583fcdfdeee43c49bdb141420e707ffe2d4a06eccc2f0cd5d1794"
+  },
+  "checks": [
+    {
+      "name": "bad-volatile-single compile",
+      "args": [
+        "/tmp/pa29-174/entry-cppgm",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/bad-volatile-single.cpp",
+        "-o",
+        "/tmp/pa29-174/entry-controls/bad-volatile-single.o"
+      ],
+      "status": 0,
+      "passed": false,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-decltype-nested compile",
+      "args": [
+        "/tmp/pa29-174/entry-cppgm",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/capture-decltype-nested.cpp",
+        "-o",
+        "/tmp/pa29-174/entry-controls/capture-decltype-nested.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-decltype-nested link",
+      "args": [
+        "g++",
+        "/tmp/pa29-174/entry-controls/capture-decltype-nested.o",
+        "-o",
+        "/tmp/pa29-174/entry-controls/capture-decltype-nested"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-decltype-nested runtime",
+      "args": [
+        "/tmp/pa29-174/entry-controls/capture-decltype-nested"
+      ],
+      "status": 1,
+      "passed": false,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-decltype compile",
+      "args": [
+        "/tmp/pa29-174/entry-cppgm",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/capture-decltype.cpp",
+        "-o",
+        "/tmp/pa29-174/entry-controls/capture-decltype.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-decltype link",
+      "args": [
+        "g++",
+        "/tmp/pa29-174/entry-controls/capture-decltype.o",
+        "-o",
+        "/tmp/pa29-174/entry-controls/capture-decltype"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-decltype runtime",
+      "args": [
+        "/tmp/pa29-174/entry-controls/capture-decltype"
+      ],
+      "status": 1,
+      "passed": false,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-type-query compile",
+      "args": [
+        "/tmp/pa29-174/entry-cppgm",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/capture-type-query.cpp",
+        "-o",
+        "/tmp/pa29-174/entry-controls/capture-type-query.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-type-query link",
+      "args": [
+        "g++",
+        "/tmp/pa29-174/entry-controls/capture-type-query.o",
+        "-o",
+        "/tmp/pa29-174/entry-controls/capture-type-query"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-type-query runtime",
+      "args": [
+        "/tmp/pa29-174/entry-controls/capture-type-query"
+      ],
+      "status": 1,
+      "passed": false,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated compile",
+      "args": [
+        "/tmp/pa29-174/entry-cppgm",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/integrated.cpp",
+        "-o",
+        "/tmp/pa29-174/entry-controls/integrated.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated link",
+      "args": [
+        "g++",
+        "/tmp/pa29-174/entry-controls/integrated.o",
+        "-o",
+        "/tmp/pa29-174/entry-controls/integrated"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated runtime",
+      "args": [
+        "/tmp/pa29-174/entry-controls/integrated"
+      ],
+      "status": 1,
+      "passed": false,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-comma compile",
+      "args": [
+        "/tmp/pa29-174/entry-cppgm",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/volatile-comma.cpp",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-comma.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-comma link",
+      "args": [
+        "g++",
+        "/tmp/pa29-174/entry-controls/volatile-comma.o",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-comma"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-comma runtime",
+      "args": [
+        "/tmp/pa29-174/entry-controls/volatile-comma"
+      ],
+      "status": 1,
+      "passed": false,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-noexcept compile",
+      "args": [
+        "/tmp/pa29-174/entry-cppgm",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/volatile-noexcept.cpp",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-noexcept.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-noexcept link",
+      "args": [
+        "g++",
+        "/tmp/pa29-174/entry-controls/volatile-noexcept.o",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-noexcept"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-noexcept runtime",
+      "args": [
+        "/tmp/pa29-174/entry-controls/volatile-noexcept"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-return compile",
+      "args": [
+        "/tmp/pa29-174/entry-cppgm",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/volatile-return.cpp",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-return.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-return link",
+      "args": [
+        "g++",
+        "/tmp/pa29-174/entry-controls/volatile-return.o",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-return"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-return runtime",
+      "args": [
+        "/tmp/pa29-174/entry-controls/volatile-return"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-scalar compile",
+      "args": [
+        "/tmp/pa29-174/entry-cppgm",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/volatile-scalar.cpp",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-scalar.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-scalar link",
+      "args": [
+        "g++",
+        "/tmp/pa29-174/entry-controls/volatile-scalar.o",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-scalar"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-scalar runtime",
+      "args": [
+        "/tmp/pa29-174/entry-controls/volatile-scalar"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-single compile",
+      "args": [
+        "/tmp/pa29-174/entry-cppgm",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/volatile-single.cpp",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-single.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-single link",
+      "args": [
+        "g++",
+        "/tmp/pa29-174/entry-controls/volatile-single.o",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-single"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-single runtime",
+      "args": [
+        "/tmp/pa29-174/entry-controls/volatile-single"
+      ],
+      "status": 1,
+      "passed": false,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-throw compile",
+      "args": [
+        "/tmp/pa29-174/entry-cppgm",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/volatile-throw.cpp",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-throw.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-throw link",
+      "args": [
+        "g++",
+        "/tmp/pa29-174/entry-controls/volatile-throw.o",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-throw"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-throw runtime",
+      "args": [
+        "/tmp/pa29-174/entry-controls/volatile-throw"
+      ],
+      "status": 2,
+      "passed": false,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-value compile",
+      "args": [
+        "/tmp/pa29-174/entry-cppgm",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/volatile-value.cpp",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-value.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-value link",
+      "args": [
+        "g++",
+        "/tmp/pa29-174/entry-controls/volatile-value.o",
+        "-o",
+        "/tmp/pa29-174/entry-controls/volatile-value"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-value runtime",
+      "args": [
+        "/tmp/pa29-174/entry-controls/volatile-value"
+      ],
+      "status": 1,
+      "passed": false,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

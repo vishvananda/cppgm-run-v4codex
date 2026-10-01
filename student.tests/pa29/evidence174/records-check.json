@@ -1,0 +1,50 @@
+{
+  "reviewed_code_tip": "7139ceb5769eea12c6e2e00b54932f09d59c79b5",
+  "compiler_sha256": "21589b947593a5fb156d6bc2379f3278d7c178bc53875e11b399e40a43176019",
+  "priorThroughTests": "pass: 4538/4538",
+  "fileAudit": "pass: four inherited header warnings",
+  "stageProgressPreserved": "pass: same 26 failures, 403 inputs, 1707 contract paths",
+  "controls": [
+    {
+      "name": "controls170",
+      "checks": 28
+    },
+    {
+      "name": "controls171",
+      "checks": 45
+    },
+    {
+      "name": "controls172",
+      "checks": 51
+    },
+    {
+      "name": "controls173",
+      "checks": 59
+    },
+    {
+      "name": "controls174",
+      "checks": 35
+    },
+    {
+      "name": "inspection171",
+      "checks": 13
+    },
+    {
+      "name": "inspection172",
+      "checks": 13
+    },
+    {
+      "name": "inspection173",
+      "checks": 29
+    },
+    {
+      "name": "inspection174",
+      "checks": 89
+    }
+  ],
+  "performance_observations": 1048,
+  "performance_launchers": 6,
+  "local_record_links_checked": 36,
+  "code_unchanged_since_reviewed_tip": true,
+  "records_only_followup_required": true
+}

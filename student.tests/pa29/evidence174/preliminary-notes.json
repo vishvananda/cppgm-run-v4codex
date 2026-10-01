@@ -1,0 +1,6 @@
+{
+  "initial_graph_check": "The first standalone graph check returned 3 because FactWriter names definitions by graph IDs and its return type was allocated after its parameters. Constructing the return type first aligned the explicit text roundtrip allocation order; mangled output equivalence had already passed. This changed only the personal test.",
+  "initial_exception_adapter": "The first explicit LowIR standalone native link for volatile-throw lacked hosted __cxa/RTTI support. The retained preliminary-inspection.json records this failure. The final inspection uses the existing own-compiler object writer through an explicit test adapter, then the assignment-permitted host link.",
+  "abi_regression": "The first ABI grouping patch passed 85 personal inspections but failed one prior PA28 qualifier-mangling fixture. Its full validation and symbols are retained; the final source-argument encoder correction passes that fixture and 89 inspections, followed by all required reports.",
+  "preliminary_perf": "The pre-ABI correctness revision passed required checks. After 168 observations, the run was deliberately terminated to investigate integrated ABI names; all observations were retained and final timing uses the complete corrected compiler."
+}

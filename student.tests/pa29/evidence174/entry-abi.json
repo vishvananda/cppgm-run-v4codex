@@ -1,0 +1,23 @@
+[
+  {
+    "source": "student.tests/pa29/inspection174/index.cpp",
+    "symbols": {
+      "entry": "0000000000000000 W _Z5firstIJiiEE19__type_pack_elementILi0EJDpT_EES2_\n",
+      "host": "0000000000000000 W _Z5firstIJiiEE19__type_pack_elementILm0EJDpT_EES2_\n"
+    }
+  },
+  {
+    "source": "student.tests/pa29/inspection174/packs.cpp",
+    "symbols": {
+      "entry": "0000000000000000 W _Z5countIiJLi1ELi2EEEi4PackIT_XspT0_EE\n",
+      "host": "0000000000000000 W _Z5countIiTpTnT_JLi1ELi2EEEi4PackIS0_JXspT0_EEE\n"
+    }
+  },
+  {
+    "source": "student.tests/pa29/inspection174/scope.cpp",
+    "symbols": {
+      "entry": "0000000000000000 W _Z5outerIiET_S0_\n0000000000000000 W _ZZ5outerIiET_S0_ENKUlTyS0_E_clIiEEDaS0_\n",
+      "host": "0000000000000000 W _Z5outerIiET_S0_\n0000000000000000 W _ZZ5outerIiET_S0_ENKUlTyS0_E_clIiEEDaS0_\n"
+    }
+  }
+]

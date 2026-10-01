@@ -1,0 +1,249 @@
+{
+  "cumulative/memory": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 291,
+    "differences": {
+      "semantic_capture_candidates": [
+        null,
+        0
+      ],
+      "semantic_capture_patterns": [
+        null,
+        0
+      ],
+      "semantic_closure_adapters": [
+        null,
+        0
+      ],
+      "semantic_fold_steps": [
+        null,
+        0
+      ],
+      "semantic_fold_value_steps": [
+        null,
+        0
+      ]
+    },
+    "images_equal": true
+  },
+  "cumulative/floating": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 291,
+    "differences": {
+      "semantic_capture_candidates": [
+        null,
+        0
+      ],
+      "semantic_capture_patterns": [
+        null,
+        0
+      ],
+      "semantic_closure_adapters": [
+        null,
+        0
+      ],
+      "semantic_fold_steps": [
+        null,
+        0
+      ],
+      "semantic_fold_value_steps": [
+        null,
+        0
+      ]
+    },
+    "images_equal": true
+  },
+  "cumulative/exceptions": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 291,
+    "differences": {
+      "semantic_capture_candidates": [
+        null,
+        0
+      ],
+      "semantic_capture_patterns": [
+        null,
+        0
+      ],
+      "semantic_closure_adapters": [
+        null,
+        0
+      ],
+      "semantic_fold_steps": [
+        null,
+        0
+      ],
+      "semantic_fold_value_steps": [
+        null,
+        0
+      ]
+    },
+    "images_equal": true
+  },
+  "cumulative/pruning": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 291,
+    "differences": {
+      "semantic_capture_candidates": [
+        null,
+        0
+      ],
+      "semantic_capture_patterns": [
+        null,
+        0
+      ],
+      "semantic_closure_adapters": [
+        null,
+        0
+      ],
+      "semantic_fold_steps": [
+        null,
+        0
+      ],
+      "semantic_fold_value_steps": [
+        null,
+        0
+      ]
+    },
+    "images_equal": true
+  },
+  "audit/memory": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 296,
+    "differences": {},
+    "images_equal": true
+  },
+  "audit/floating": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 296,
+    "differences": {},
+    "images_equal": true
+  },
+  "audit/exceptions": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 296,
+    "differences": {},
+    "images_equal": true
+  },
+  "audit/pruning": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 296,
+    "differences": {},
+    "images_equal": true
+  },
+  "affected/selection1200": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 296,
+    "differences": {},
+    "images_equal": true
+  },
+  "affected/sequence2400": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 295,
+    "differences": {
+      "abi_nodes": [
+        2419,
+        2420
+      ]
+    },
+    "images_equal": false
+  },
+  "affected/integer-pack2400": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 295,
+    "differences": {
+      "abi_nodes": [
+        2419,
+        2420
+      ]
+    },
+    "images_equal": false
+  },
+  "affected/runtime1200": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 296,
+    "differences": {},
+    "images_equal": true
+  },
+  "affected/query24000": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 296,
+    "differences": {},
+    "images_equal": true
+  },
+  "affected/ordinary1200": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 296,
+    "differences": {},
+    "images_equal": true
+  },
+  "affected/closures1200": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 296,
+    "differences": {},
+    "images_equal": true
+  },
+  "affected/calls1200": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 296,
+    "differences": {},
+    "images_equal": false
+  },
+  "repeat/pruning": {
+    "compile_samples": {
+      "A": 16,
+      "B": 12
+    },
+    "equal_existing_counters": 296,
+    "differences": {},
+    "images_equal": true
+  }
+}

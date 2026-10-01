@@ -1,91 +1,64 @@
-# PA29 compact plan — implementation173 handoff
+# PA29 compact plan — checkpoint audit174
 
-Target: **PA29 full-stage**. Phase: **implement; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **checkpointAudit complete; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
-Last reviewed commit: `221d6d0e4930da05db2913bdf5f50d808f89c744`.
-Entry HEAD: `51fde1023d4d8f4135bf88429a0706a3c49fa7eb`.
-Validated implementation: `128e7e39`.
+Previous reviewed commit: `221d6d0e4930da05db2913bdf5f50d808f89c744`.
+Audit entry: `914e1a0a07e40884c91c0b967b0421eea9ef0d48`.
+Last reviewed commit: `7139ceb5769eea12c6e2e00b54932f09d59c79b5`.
 
-## Design and completed owner
+## Reviewed ownership and fixes
 
-Explicit-template lambdas retain their parsed head, canonical parameters and
-lexical bindings. A closure owns a member-template call operator; ordinary
-specialization frames supply enclosing and deduced arguments. Definition-time
-capture recipes propagate nested capture dependencies once. Each concrete closure
-establishes its fields and initialization before calls or layout; specializations
-cannot append storage after layout. Non-dependent source facts are shared, and
-bodies remain dormant until required. Selected calls and pointer adapters consume
-typed parameter, conversion, capture, exception and lifetime facts in LowIR.
+The [audit](audit.md) reviews every commit and combined source change across
+implementation171–173: builtin template identities/sequences/deduction, retained
+fold queries and reduction, and explicit-template closures/capture/ABI. Source
+regions remain parsed once; dependent substitution uses canonical arguments and
+immutable frames. Typed selections, conversions, layouts, lifetimes and ABI facts
+flow directly through LowIR, per-function MIR and ELF. Explicit text tools remain
+adapters. The audit fixes three interacting owners:
 
-The group includes packs, explicit/default arguments, dependent trailing returns
-and substitution failure, `noexcept`, mutable/copy/reference/this/nested captures,
-copying and cleanup, function-pointer conversions and their distinct ABI entries.
-The [closure](https://timsong-cpp.github.io/cppwp/n4868/expr.prim.lambda.closure)
-and [capture](https://timsong-cpp.github.io/cppwp/n4868/expr.prim.lambda.capture)
-rules define this hosted explicit-template extension. Typed ABI head declarations,
-`auto` returns, lexical numbering and host ODR linkage retain the existing shared
-mangler; the source `decltype` identity bit now reaches its `Dt`/`DT` encoding.
-[ABI rules](https://itanium-cxx-abi.github.io/cxx-abi/abi.html#mangling-type)
-and the [host head grammar](https://github.com/llvm/llvm-project/blob/main/clang/lib/AST/ItaniumMangle.cpp)
-support those encodings. No fixture, reference or comparison rule changed.
+- Preserve discarded fold forms and selected volatile conversions through query,
+  temporary creation, exception facts, cleanup and runtime lowering.
+- Exclude declaration-form unevaluated decltype/typeof operands from capture
+  recipes, including nested closures; no observable capture copy is invented.
+- Preserve the builtin index's converted type, argument-pack grouping and
+  parameter-pack substitution identity in ABI facts. The encoder distinguishes
+  resolved type arguments from unresolved qualifier argument sequences.
 
-Work/storage track source nodes, capture dependency edges and demanded
-specializations/IR, plus required overload candidates. Source capture recipes and
-adapter records occupy contiguous TU storage; flat indexes use complete source,
-frame, declaration and specialization identities. Scratch vectors end with their
-operation; source and semantic facts end with the TU. No grammar replay, fake
-function AST, textual phase transport, global invalidation or unrelated body
-demand is introduced. Optional optimizer work and code-growth budgets are zero.
+## Validation and performance acceptance
 
-## Validation and performance
+PA29 **377/403**, exactly the entry's **26 failures**; PA1–28 **4538/4538**;
+through PA29 **4915/4941**. No new failure is offset by personal passes. All **403**
+inputs and **1,707** contract/harness paths remain byte-identical to entry and the
+previous review. **218** behavioral controls and **144** inspection checks pass;
+the new controls expose nine entry failures and cover integrated host peers,
+volatile effects/unwind, AST, LowIR/MIR/native, typed ABI and telemetry equivalence.
+File audit passes with four unchanged inherited header warnings.
 
-- PA29 **377/403**: all seven existing explicit-template-lambda failures fixed;
-  **26** remain, with no new failures. PA1–28 **4538/4538**; through PA29
-  **4915/4941**. A through-PA29 pass is still required before advancement.
-- **59** focused and **29** inspection checks pass: acceptance/rejection/runtime,
-  nested and pack captures, defaults/query substitution, cleanup, host names and
-  peers, typed ABI roundtrip, AST, LowIR roundtrip, MIR/native and telemetry.
-- File audit passes with four unchanged inherited header warnings. Required
-  reports ran sequentially on the final compiler. [Validation](../student.tests/pa29/evidence173/validation.json),
-  [delta](../student.tests/pa29/evidence173/stage-delta.json) and
-  [coverage](../student.tests/pa29/evidence173/coverage.json) retain all 403 inputs
-  and all 1,707 contract/harness paths unchanged from entry.
+[Performance174](performance174.md) applies spec §9 to **PA29/O0**, both the full
+review range and audit changes. Frozen A/A+ABBA compilation/RSS and checked
+runtime/text evidence includes affected owners and scaling, with preliminary and
+historical observations retained. No optional optimization or speedup is claimed.
+Inherited blanket 15%/zero-growth targets are diagnostic, not additional gates;
+mandated generator/evaluator/native limits, correctness and coverage remain.
+Heavier runtime, optimizer/allocation and self-hosting remain PA30–34 work.
 
-[Performance173](performance173.md) records frozen compiler latency/RSS and
-checked executable runtime/text, A/A noise and ABBA spread, source/capture/body
-counts and explicit budgets. No optimization speedup is claimed. All observations
-are retained, including preliminary binaries preceding the final query/ABI fixes.
-Historical [performance172](performance172.md), [performance171](performance171.md)
-and [performance170](performance170.md) remain unchanged. Unsupported blanket
-15%/zero-growth targets remain diagnostic under spec §9; mandated limits,
-correctness and coverage are preserved. PA30–34 still own heavier hosted runtime,
-optimization/allocation and self-hosting.
+## Remaining broad work
 
-## Remaining work and handoff ledger
-
-The [remaining ledger](../student.tests/pa29/evidence173/remaining.json) groups
+The [remaining ledger](../student.tests/pa29/evidence174/remaining.json) retains
 extended syntax/types/layout **17**, template demand/hosted ABI **7**, legacy trait
-**1**, and source-invocation intrinsic operands **1**. Numeric representations,
-structured bindings, control flow/conditional explicit, deduction guides,
-zero-length arrays, static call operators, source coordinates and hosted emission
-remain implementation work. Audit170's two independent contract questions
-(nothrow default-construction shorthand and nothrow-invocable cache default) remain
-unresolved, counted failures. Preserve its char-traits discussion and existing
-alignment, dependent offsetof ABI and convertible-index reducers. Nothing is
-waived or silently corrected.
+**1**, and source-invocation intrinsic operands **1**. These include numeric
+representations, structured bindings/control flow, conditional explicit,
+deduction guides, zero-length arrays, static receivers, source coordinates and
+hosted emission. Through-PA29 success is required before advancing to PA30.
 
-| Range | Implementation result | Independent review |
-|---|---|---|
-| audit170 through `221d6d0e` | Reviewed owner corrections; history in [audit.md](audit.md) | Completed for that range; stage unfinished |
-| entry `6525c1af` → `846ef3fb` | Pack selection, sequences, aliases, head matching and deduction; 42 → 36 failures | Awaiting Ralph's audit |
-| entry `1bc21c57` → `827b4c7c` | Fold syntax/substitution, constants/runtime, lifetimes, callable/ABI facts and bounded traversal; 36 → 33 failures | Awaiting Ralph's audit |
-| entry `51fde102` → `128e7e39` | Explicit-template closure heads, captures, callable specializations, pointer adapters, queries and ABI; 33 → 26 failures | Awaiting Ralph's audit; whole-stage requirements remain open |
+[Audit170](audit170.md) preserves the char-traits analysis, alignment/dependent
+offsetof/convertible-index reducers, and both unresolved contract questions:
+nothrow default-construction shorthand and nothrow-invocable cache default.
+Both remain counted failures; no fixture, reference or comparison rule changed.
 
-Boundary: all seven fixtures owned by explicit-template closure construction are
-resolved. Work continued through runtime storage, lookup, packs, conversions,
-exception/cleanup, query rejection and ABI peers beyond their compile-only oracle.
-The remaining failures require different numeric/layout representations,
-decomposition/control nodes, static-receiver evaluation, emission state or source
-origin handling. Extending the closure-template owner cannot supply those facts.
-This completes the implementation handoff, not the assignment or its independent
-whole-stage audit. Both unfinished implementation and review questions remain.
+The three handoffs have distinct owners. Separating query and ABI followups from
+their main owners nevertheless added avoidable fragmentation: discarded-value,
+unevaluated-capture and cross-owner ABI gaps survived isolated checks. Future
+handoffs should finish direct/dependent/query/discarded uses, lifetime effects
+and integrated host linkage together. All three accumulated handoffs are now
+reviewed; stage completion remains open.

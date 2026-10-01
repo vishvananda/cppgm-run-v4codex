@@ -1,0 +1,66 @@
+[
+  {
+    "source": "student.tests/pa29/controls174/bad-volatile-single.cpp",
+    "compiler": "entry",
+    "compile_status": 0,
+    "stderr": "",
+    "link_status": 0,
+    "runtime_status": 0
+  },
+  {
+    "source": "student.tests/pa29/controls174/bad-volatile-single.cpp",
+    "compiler": "host",
+    "compile_status": 0,
+    "stderr": "student.tests/pa29/controls174/bad-volatile-single.cpp:2:53: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]\n    2 | template<class... T> void discard(T&... objects) { (objects, ...); }\n      |                                                     ^~~~~~~\nstudent.tests/pa29/controls174/bad-volatile-single.cpp:3:28: note: in instantiation of function template specialization 'discard<volatile V>' requested here\n    3 | int main() { volatile V a; discard(a); }\n      |                            ^\n1 warning generated.\n",
+    "link_status": 0,
+    "runtime_status": 0
+  },
+  {
+    "source": "student.tests/pa29/controls174/volatile-comma.cpp",
+    "compiler": "entry",
+    "compile_status": 0,
+    "stderr": "",
+    "link_status": 0,
+    "runtime_status": 1
+  },
+  {
+    "source": "student.tests/pa29/controls174/volatile-comma.cpp",
+    "compiler": "host",
+    "compile_status": 0,
+    "stderr": "student.tests/pa29/controls174/volatile-comma.cpp:7:53: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]\n    7 | template<class... T> void discard(T&... objects) { (objects, ...); }\n      |                                                     ^~~~~~~\nstudent.tests/pa29/controls174/volatile-comma.cpp:10:5: note: in instantiation of function template specialization 'discard<volatile V, volatile V, volatile V>' requested here\n   10 |     discard(a, b, c);\n      |     ^\nstudent.tests/pa29/controls174/volatile-comma.cpp:7:53: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]\n    7 | template<class... T> void discard(T&... objects) { (objects, ...); }\n      |                                                     ^~~~~~~\nstudent.tests/pa29/controls174/volatile-comma.cpp:7:53: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]\n    7 | template<class... T> void discard(T&... objects) { (objects, ...); }\n      |                                                     ^~~~~~~\n3 warnings generated.\n",
+    "link_status": 0,
+    "runtime_status": 1
+  },
+  {
+    "source": "student.tests/pa29/controls174/volatile-return.cpp",
+    "compiler": "entry",
+    "compile_status": 0,
+    "stderr": "",
+    "link_status": 0,
+    "runtime_status": 0
+  },
+  {
+    "source": "student.tests/pa29/controls174/volatile-return.cpp",
+    "compiler": "host",
+    "compile_status": 0,
+    "stderr": "",
+    "link_status": 0,
+    "runtime_status": 0
+  },
+  {
+    "source": "student.tests/pa29/controls174/volatile-single.cpp",
+    "compiler": "entry",
+    "compile_status": 0,
+    "stderr": "",
+    "link_status": 0,
+    "runtime_status": 1
+  },
+  {
+    "source": "student.tests/pa29/controls174/volatile-single.cpp",
+    "compiler": "host",
+    "compile_status": 0,
+    "stderr": "student.tests/pa29/controls174/volatile-single.cpp:3:58: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]\n    3 | template<class... T> void discard(T&... objects) { (..., objects); }\n      |                                                          ^~~~~~~\nstudent.tests/pa29/controls174/volatile-single.cpp:4:28: note: in instantiation of function template specialization 'discard<volatile V>' requested here\n    4 | int main() { volatile V a; discard(a); return copied == 1 ? 0 : 1; }\n      |                            ^\n1 warning generated.\n",
+    "link_status": 0,
+    "runtime_status": 1
+  }
+]

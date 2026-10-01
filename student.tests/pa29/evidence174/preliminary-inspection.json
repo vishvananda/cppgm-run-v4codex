@@ -1,0 +1,515 @@
+{
+  "compiler_sha256": "2fd7ea086abef2ee027fd470e6764700e0126cdea1918cddd112ea975358760f",
+  "checks": [
+    {
+      "name": "capture-decltype-nested LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/capture-decltype-nested.cpp",
+        "-o",
+        "/tmp/pa29-174/inspection174/capture-decltype-nested.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-decltype-nested LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-174/inspection174/capture-decltype-nested.lowir",
+        "-o",
+        "/tmp/pa29-174/inspection174/capture-decltype-nested.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-decltype-nested MIR and native",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-174/inspection174/capture-decltype-nested.mir",
+        "/tmp/pa29-174/inspection174/capture-decltype-nested.roundtrip",
+        "-o",
+        "/tmp/pa29-174/inspection174/capture-decltype-nested.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-decltype-nested native runtime",
+      "args": [
+        "/tmp/pa29-174/inspection174/capture-decltype-nested.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-decltype LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/capture-decltype.cpp",
+        "-o",
+        "/tmp/pa29-174/inspection174/capture-decltype.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-decltype LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-174/inspection174/capture-decltype.lowir",
+        "-o",
+        "/tmp/pa29-174/inspection174/capture-decltype.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-decltype MIR and native",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-174/inspection174/capture-decltype.mir",
+        "/tmp/pa29-174/inspection174/capture-decltype.roundtrip",
+        "-o",
+        "/tmp/pa29-174/inspection174/capture-decltype.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-decltype native runtime",
+      "args": [
+        "/tmp/pa29-174/inspection174/capture-decltype.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-type-query LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/capture-type-query.cpp",
+        "-o",
+        "/tmp/pa29-174/inspection174/capture-type-query.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-type-query LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-174/inspection174/capture-type-query.lowir",
+        "-o",
+        "/tmp/pa29-174/inspection174/capture-type-query.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-type-query MIR and native",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-174/inspection174/capture-type-query.mir",
+        "/tmp/pa29-174/inspection174/capture-type-query.roundtrip",
+        "-o",
+        "/tmp/pa29-174/inspection174/capture-type-query.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "capture-type-query native runtime",
+      "args": [
+        "/tmp/pa29-174/inspection174/capture-type-query.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/integrated.cpp",
+        "-o",
+        "/tmp/pa29-174/inspection174/integrated.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-174/inspection174/integrated.lowir",
+        "-o",
+        "/tmp/pa29-174/inspection174/integrated.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated MIR and native",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-174/inspection174/integrated.mir",
+        "/tmp/pa29-174/inspection174/integrated.roundtrip",
+        "-o",
+        "/tmp/pa29-174/inspection174/integrated.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated native runtime",
+      "args": [
+        "/tmp/pa29-174/inspection174/integrated.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-comma LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/volatile-comma.cpp",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-comma.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-comma LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-174/inspection174/volatile-comma.lowir",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-comma.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-comma MIR and native",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-174/inspection174/volatile-comma.mir",
+        "/tmp/pa29-174/inspection174/volatile-comma.roundtrip",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-comma.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-comma native runtime",
+      "args": [
+        "/tmp/pa29-174/inspection174/volatile-comma.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-noexcept LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/volatile-noexcept.cpp",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-noexcept.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-noexcept LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-174/inspection174/volatile-noexcept.lowir",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-noexcept.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-noexcept MIR and native",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-174/inspection174/volatile-noexcept.mir",
+        "/tmp/pa29-174/inspection174/volatile-noexcept.roundtrip",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-noexcept.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-noexcept native runtime",
+      "args": [
+        "/tmp/pa29-174/inspection174/volatile-noexcept.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-return LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/volatile-return.cpp",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-return.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-return LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-174/inspection174/volatile-return.lowir",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-return.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-return MIR and native",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-174/inspection174/volatile-return.mir",
+        "/tmp/pa29-174/inspection174/volatile-return.roundtrip",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-return.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-return native runtime",
+      "args": [
+        "/tmp/pa29-174/inspection174/volatile-return.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-scalar LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/volatile-scalar.cpp",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-scalar.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-scalar LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-174/inspection174/volatile-scalar.lowir",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-scalar.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-scalar MIR and native",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-174/inspection174/volatile-scalar.mir",
+        "/tmp/pa29-174/inspection174/volatile-scalar.roundtrip",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-scalar.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-scalar native runtime",
+      "args": [
+        "/tmp/pa29-174/inspection174/volatile-scalar.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-single LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/volatile-single.cpp",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-single.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-single LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-174/inspection174/volatile-single.lowir",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-single.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-single MIR and native",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-174/inspection174/volatile-single.mir",
+        "/tmp/pa29-174/inspection174/volatile-single.roundtrip",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-single.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-single native runtime",
+      "args": [
+        "/tmp/pa29-174/inspection174/volatile-single.native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-throw LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls174/volatile-throw.cpp",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-throw.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-throw LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-174/inspection174/volatile-throw.lowir",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-throw.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "volatile-throw MIR and native",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-174/inspection174/volatile-throw.mir",
+        "/tmp/pa29-174/inspection174/volatile-throw.roundtrip",
+        "-o",
+        "/tmp/pa29-174/inspection174/volatile-throw.native"
+      ],
+      "status": 1,
+      "passed": false,
+      "stdout": "",
+      "stderr": "ERROR: unresolved native symbol\n"
+    }
+  ]
+}

@@ -1,0 +1,245 @@
+[
+  {
+    "path": "student.tests/pa29/evidence171/affected-performance.json",
+    "sha256": "1f403134791fc2adc7a64091501ae56f8a05b74c0f39edea27c7ceb0973b56c4",
+    "observations": 144,
+    "launchers": 6,
+    "binaries": {
+      "A": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/entry-cppgm++",
+        "sha256": "903311489c421c043e4c1c4e998b660d9d76de23e52d69eca7b025944606e50b",
+        "bytes": 4109848
+      },
+      "B": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/final-cppgm++",
+        "sha256": "6ec65e33acebc670a0f27cf9f61f917b181da2437906102891ebf568025c0b8d",
+        "bytes": 4126688
+      }
+    },
+    "all_recorded_runs_successful": true,
+    "binaries_unchanged_where_present": {
+      "A": true,
+      "B": true
+    }
+  },
+  {
+    "path": "student.tests/pa29/evidence171/common-performance.json",
+    "sha256": "44bfa472dc2b85954b9385699ec29bc6d90c4a76def6889cf6ce0fe2c0b646fd",
+    "observations": 224,
+    "launchers": 0,
+    "binaries": {
+      "A": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/entry-cppgm++",
+        "sha256": "903311489c421c043e4c1c4e998b660d9d76de23e52d69eca7b025944606e50b"
+      },
+      "B": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/final-cppgm++",
+        "sha256": "6ec65e33acebc670a0f27cf9f61f917b181da2437906102891ebf568025c0b8d"
+      }
+    },
+    "all_recorded_runs_successful": true,
+    "binaries_unchanged_where_present": {
+      "A": true,
+      "B": true
+    }
+  },
+  {
+    "path": "student.tests/pa29/evidence171/large-generators.json",
+    "sha256": "d39379ab8d079de15c7ac6e74bd11b5678e9672f5909658259aee636f4eae922",
+    "observations": 96,
+    "launchers": 6,
+    "binaries": {
+      "A": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/entry-cppgm++",
+        "sha256": "903311489c421c043e4c1c4e998b660d9d76de23e52d69eca7b025944606e50b",
+        "bytes": 4109848
+      },
+      "B": {
+        "path": "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/final-cppgm++",
+        "sha256": "6ec65e33acebc670a0f27cf9f61f917b181da2437906102891ebf568025c0b8d",
+        "bytes": 4126688
+      }
+    },
+    "all_recorded_runs_successful": true,
+    "binaries_unchanged_where_present": {
+      "A": true,
+      "B": true
+    }
+  },
+  {
+    "path": "student.tests/pa29/evidence172/affected-performance.json",
+    "sha256": "7d6bd41cf55a94ac2b8b830c5a035efbe385ea0004d7299771ec94f1745de070",
+    "observations": 96,
+    "launchers": 8,
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-172/entry",
+        "sha256": "6ec65e33acebc670a0f27cf9f61f917b181da2437906102891ebf568025c0b8d",
+        "bytes": 4126688
+      },
+      "B": {
+        "path": "/tmp/pa29-172/final",
+        "sha256": "0bd9511fa0e5e0e59457472c56d5d3b4d586e26a0a779dc2906f590d8a589146",
+        "bytes": 4166352
+      }
+    },
+    "all_recorded_runs_successful": true,
+    "binaries_unchanged_where_present": {
+      "A": true,
+      "B": true
+    }
+  },
+  {
+    "path": "student.tests/pa29/evidence172/common-performance.json",
+    "sha256": "443c85972db38580b7d3707f502f9d5b64cd5d2b430cb8e6b4ca5952fc09017e",
+    "observations": 224,
+    "launchers": 0,
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-172/entry",
+        "sha256": "6ec65e33acebc670a0f27cf9f61f917b181da2437906102891ebf568025c0b8d"
+      },
+      "B": {
+        "path": "/tmp/pa29-172/final",
+        "sha256": "0bd9511fa0e5e0e59457472c56d5d3b4d586e26a0a779dc2906f590d8a589146"
+      }
+    },
+    "all_recorded_runs_successful": true,
+    "binaries_unchanged_where_present": {
+      "A": true,
+      "B": true
+    }
+  },
+  {
+    "path": "student.tests/pa29/evidence173/closure-performance.json",
+    "sha256": "d9099ea77b7e49b2962aa3d3ebe92da37adcb0d8d26f06a5234786b30fc7499e",
+    "observations": 152,
+    "launchers": 8,
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-173/entry",
+        "sha256": "0bd9511fa0e5e0e59457472c56d5d3b4d586e26a0a779dc2906f590d8a589146",
+        "bytes": 4166352
+      },
+      "B": {
+        "path": "/tmp/pa29-173/release",
+        "sha256": "e740d3bbdf679f9a31e4479a9b2ac0715d7b9b85d5eda098cb8e9d64aafde343",
+        "bytes": 4187928
+      }
+    },
+    "all_recorded_runs_successful": true,
+    "binaries_unchanged_where_present": {
+      "A": true,
+      "B": true
+    }
+  },
+  {
+    "path": "student.tests/pa29/evidence173/common-performance.json",
+    "sha256": "d1ce382c8fcb8a2385ac1d8691d4e6b5490ec7684ea267e1f6f7959027b345c6",
+    "observations": 224,
+    "launchers": 0,
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-173/entry",
+        "sha256": "0bd9511fa0e5e0e59457472c56d5d3b4d586e26a0a779dc2906f590d8a589146"
+      },
+      "B": {
+        "path": "/tmp/pa29-173/release",
+        "sha256": "e740d3bbdf679f9a31e4479a9b2ac0715d7b9b85d5eda098cb8e9d64aafde343"
+      }
+    },
+    "all_recorded_runs_successful": true,
+    "binaries_unchanged_where_present": {
+      "A": true,
+      "B": true
+    }
+  },
+  {
+    "path": "student.tests/pa29/evidence173/preliminary-closure-performance.json",
+    "sha256": "2a39c7d4eba2b8f16bb8f89caa92e1b332d674fa3441a8e5d6a9ad70afac7b85",
+    "observations": 152,
+    "launchers": 8,
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-173/entry",
+        "sha256": "0bd9511fa0e5e0e59457472c56d5d3b4d586e26a0a779dc2906f590d8a589146",
+        "bytes": 4166352
+      },
+      "B": {
+        "path": "/tmp/pa29-173/final",
+        "sha256": "3bb38e4302130dbb3bf94d0383a7f95336267d5d4227ac3232fde616a13b00d6",
+        "bytes": 4183832
+      }
+    },
+    "all_recorded_runs_successful": true,
+    "binaries_unchanged_where_present": {
+      "A": true,
+      "B": true
+    }
+  },
+  {
+    "path": "student.tests/pa29/evidence173/preliminary-common-performance.json",
+    "sha256": "10b51a4b83e2f67dd2af5a2a0a669b3862c1b56e6aeb5bc7c652b2dcdca9e63f",
+    "observations": 224,
+    "launchers": 0,
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-173/entry",
+        "sha256": "0bd9511fa0e5e0e59457472c56d5d3b4d586e26a0a779dc2906f590d8a589146"
+      },
+      "B": {
+        "path": "/tmp/pa29-173/final",
+        "sha256": "3bb38e4302130dbb3bf94d0383a7f95336267d5d4227ac3232fde616a13b00d6"
+      }
+    },
+    "all_recorded_runs_successful": true,
+    "binaries_unchanged_where_present": {
+      "A": true,
+      "B": true
+    }
+  },
+  {
+    "path": "student.tests/pa29/evidence173/query-fixed-closure-performance.json",
+    "sha256": "5696d01d44602bf31a0213b0a64cb3f3c77e1679d15e020f19e0ef989561e979",
+    "observations": 152,
+    "launchers": 8,
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-173/entry",
+        "sha256": "0bd9511fa0e5e0e59457472c56d5d3b4d586e26a0a779dc2906f590d8a589146",
+        "bytes": 4166352
+      },
+      "B": {
+        "path": "/tmp/pa29-173/handoff",
+        "sha256": "84bee4851514e255784434501fb1a4e3603bfa15c6503711ec802c2ff3ec7a83",
+        "bytes": 4187928
+      }
+    },
+    "all_recorded_runs_successful": true,
+    "binaries_unchanged_where_present": {
+      "A": true,
+      "B": true
+    }
+  },
+  {
+    "path": "student.tests/pa29/evidence173/query-fixed-common-performance.json",
+    "sha256": "3cc6d1744aa2b7e7bec606223cb41907c17c38a476b50dcd2d03293b1481b345",
+    "observations": 224,
+    "launchers": 0,
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-173/entry",
+        "sha256": "0bd9511fa0e5e0e59457472c56d5d3b4d586e26a0a779dc2906f590d8a589146"
+      },
+      "B": {
+        "path": "/tmp/pa29-173/handoff",
+        "sha256": "84bee4851514e255784434501fb1a4e3603bfa15c6503711ec802c2ff3ec7a83"
+      }
+    },
+    "all_recorded_runs_successful": true,
+    "binaries_unchanged_where_present": {
+      "A": true,
+      "B": true
+    }
+  }
+]

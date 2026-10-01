@@ -1,0 +1,7 @@
+{
+  "source": "student.tests/pa29/inspection174/packs.cpp",
+  "source_sha256": "642a04107573571890f571e20a3da2b3c68b38841817891c8fdfecd1c24bd56b",
+  "host": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "symbols": "0000000000000000 W _Z5countIiJLi1ELi2EEEi4PackIT_JXspT0_EEE\n",
+  "clang_default_note": "Current Clang additionally emits template parameter declarations in the function argument list. GCC and clang -fclang-abi-compat=17 agree on the target legacy function-template grammar; the pack grouping J...E is common to both."
+}

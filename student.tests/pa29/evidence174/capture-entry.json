@@ -1,0 +1,18 @@
+[
+  {
+    "source": "student.tests/pa29/controls174/capture-decltype-nested.cpp",
+    "compiler": "entry",
+    "status": 0,
+    "stderr": "",
+    "link": 0,
+    "runtime": 1
+  },
+  {
+    "source": "student.tests/pa29/controls174/capture-decltype.cpp",
+    "compiler": "entry",
+    "status": 0,
+    "stderr": "",
+    "link": 0,
+    "runtime": 1
+  }
+]

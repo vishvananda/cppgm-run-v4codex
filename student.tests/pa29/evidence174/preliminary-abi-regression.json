@@ -1,0 +1,22 @@
+{
+  "entry": {
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 W _Z16check_ratio_pairILl1ELl2ETnN9enable_ifIXsr10and_valuesI8is_ratioI5ratioIXT_EXT0_EEES1_IS2_IXT0_EXT_EEEEE5valueEiE4typeELi0EElv\n0000000000000000 D exported_check_ratio_pair\n0000000000000000 T main\n"
+  },
+  "final": {
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 W _Z16check_ratio_pairILl1ELl2ETnN9enable_ifIXsr10and_valuesIJ8is_ratioI5ratioIXT_EXT0_EEES1_IS2_IXT0_EXT_EEEEEE5valueEiE4typeELi0EElv\n0000000000000000 D exported_check_ratio_pair\n0000000000000000 T main\n"
+  },
+  "clang": {
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 W _Z16check_ratio_pairILl1ELl2ETnN9enable_ifIXsr10and_valuesI8is_ratioI5ratioIXT_EXT0_EEES1_IS2_IXT0_EXT_EEEEE5valueEiE4typeELi0EElv\n0000000000000000 D exported_check_ratio_pair\n0000000000000000 T main\n"
+  },
+  "gcc": {
+    "status": 0,
+    "stderr": "",
+    "symbols": "0000000000000000 W _Z16check_ratio_pairILl1ELl2ELi0EElv\n0000000000000000 D exported_check_ratio_pair\n0000000000000000 T main\n"
+  }
+}
