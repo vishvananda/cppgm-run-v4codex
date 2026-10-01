@@ -197,6 +197,10 @@ EntityId Analyzer::merge_lookup(EntityId a, EntityId b)
     if (!a || a == b) return b;
     if (!b) return a;
     if (a == ambiguous || b == ambiguous) return ambiguous;
+    auto namespace_name = [&](EntityId e) {
+        return entities[e].kind == EntityKind::Namespace || entities[e].kind == EntityKind::NamespaceAlias;
+    };
+    if (namespace_name(a) && namespace_name(b) && target(a) == target(b)) return a;
     if (function_binding(a) && function_binding(b)) {
         EntityId e = make_entity(EntityKind::Overload, 0, entities[a].name, 0);
         entities[e].first = a; entities[e].second = b;
@@ -206,8 +210,16 @@ EntityId Analyzer::merge_lookup(EntityId a, EntityId b)
             template_pattern_entities.get(a) == 2 || template_pattern_entities.get(b) == 2 ? 2 : 1);
         return e;
     }
-    // The PA6 contract distinguishes independently declared aliases, including
-    // aliases for the same type. Multiple paths to one entity remain unique.
+    // [dcl.typedef] aliases name their associated type, not a new entity.
+    // Namespace directives can therefore converge on the same canonical type.
+    // Class-base lookup still merges declaration sets ([class.member.lookup]);
+    // distinct member typedef declarations must not become interchangeable.
+    auto namespace_type = [&](EntityId e) {
+        return scopes[entities[e].owner].kind == ScopeKind::Namespace &&
+            !entities[e].template_info &&
+            (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias);
+    };
+    if (namespace_type(a) && namespace_type(b) && entities[a].type == entities[b].type) return a;
     return ambiguous;
 }
 EntityId Analyzer::imported(ScopeId s, IdentifierId n, Lookup mode, std::uint64_t visit)
