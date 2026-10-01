@@ -1,12 +1,29 @@
-# PA29 compact plan — implementation183 handoff
+# PA29 compact plan — implementation184 in progress
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `667edd800e4e5eb1b1ef92a3108da3bd96c51708`.
 Audit entry: `9211517d1f554f61efa7d6e2e30020dc13171f3f`.
 Last reviewed commit: `52070178897f5894edaf2f35d03a734b781979d4`.
 Implementation183 entry HEAD: `a2ce2670669e0ef392d61b1e1e4aeb6f2e302467`.
 Implementation code commit: `054d162c`.
+Implementation184 entry HEAD: `68ee6f8d` (389/403; 14 failures).
+
+## Current implementation group
+
+Own explicit cv-only cast selection in `semantic/explicit_conversion.cpp` and
+its constant-address consumers. The Darwin wait-status fixture currently sends
+a same-object C-style cv cast through the reinterpretation path. Retain the
+selected conversion on the typed expression, preserve address/storage identity,
+and test pointer/reference/member-pointer and template forms plus composed base
+adjustments. Selection follows C++11 [expr.cast]/4; constant evaluation follows
+the chosen operation, not source spelling. Work is bounded by the reachable
+type qualification chain and required base edges, with no new global cache or
+parser/lowering representation. Validate runtime, constexpr, SFINAE and negative
+controls explicitly, then full earlier/stage gates and file audit. Freeze entry
+and final binaries for A/A and ABBA compiler latency/RSS and runtime/text evidence;
+newly accepted cases get final-only owner scaling. Preserve all existing review
+markers, remaining implementation and independent contract questions below.
 
 ## Design and spec alignment
 
