@@ -181,7 +181,7 @@ void Analyzer::write_resolved(std::ostream& out, NodeId n, unsigned depth) const
     case Kind::NamespaceAlias: case Kind::EmptyDeclaration: case Kind::Inline: case Kind::StaticAssert: case Kind::Template:
         return;
     case Kind::Compound: case Kind::Return: case Kind::ExpressionStatement: case Kind::If: case Kind::Then: case Kind::Else:
-    case Kind::While: case Kind::Do: case Kind::For: case Kind::ForInit: case Kind::Iteration: case Kind::Switch:
+    case Kind::While: case Kind::Do: case Kind::For: case Kind::ForInit: case Kind::SelectionInit: case Kind::Iteration: case Kind::Switch:
     case Kind::Case: case Kind::Default: case Kind::Break: case Kind::Continue: case Kind::Condition:
         indent(out, depth); out << syntax::kind_name(node.kind) << '\n';
         for (NodeId c = node.first; c; c = ast[c].next) write_resolved(out, c, depth + 1);

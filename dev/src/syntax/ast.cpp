@@ -129,6 +129,7 @@ const char* kind_name(Kind kind)
         "do-statement",
         "for-statement",
         "for-init-statement",
+        "selection-init-statement",
         "range-for-statement",
         "range-declaration",
         "range-initializer",

@@ -87,8 +87,20 @@ Constant Analyzer::execute_constant_condition(NodeId n, ScopeId s)
     if (!first) return Constant(types.fundamental(FT_BOOL),1);
     if (ast[first].kind == Kind::ConditionDeclaration) {
         auto e = facts[n].entity;
-        if (!constant_local(e,s)) return Constant();
-        return convert(constant_frame->values[constant_frame->bindings.get(e)],facts[n].type,true);
+        Constant value;
+        if (active_constant && constant_frame) {
+            if (!constant_local(e,s)) return Constant();
+            value = constant_frame->values[constant_frame->bindings.get(e)];
+        } else value = constant_entity_value(e);
+        if (!value.valid) return Constant();
+        auto conversion = conversions[expressions[n].conversions];
+        if (conversion.kind == Conversion::Kind::User) {
+            auto object = constant_entity_address(e);
+            object = constant_base_address(object,entities[scopes[entities[conversion.function].owner].entity].type);
+            if (!object || members[entities[conversion.function].member_info].virtual_member) return Constant();
+            return constant_result_conversion(execute_constant(conversion.function,{},object),conversion);
+        }
+        return convert(value,facts[n].type,true);
     }
     return constant_node_conversion(first,conversions[expressions[n].conversions],s);
 }
@@ -99,23 +111,29 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
     if (!constant_step()) return failure;
     if (facts[n].scope) s = facts[n].scope;
     auto first = ast[n].first;
+    // Control-header declarations have the lifetime of their selection/loop,
+    // including when execution returns early from a selected substatement.
+    auto kind = ast[n].kind;
+    bool scoped = kind == Kind::Compound || kind == Kind::Then || kind == Kind::Else ||
+        kind == Kind::If || kind == Kind::Switch || kind == Kind::For || kind == Kind::While || kind == Kind::Do;
+    struct Scope {
+        Analyzer& sem; ConstantFrame& frame; std::size_t begin; bool active;
+        Scope(Analyzer& s, bool a):sem(s),frame(*s.constant_frame),begin(frame.locals.size()),active(a){}
+        ~Scope(){
+            if (!active) return;
+            for (auto i = begin; i < frame.locals.size(); ++i) {
+                auto e = frame.locals[i];
+                if (auto address = frame.addresses.get(e)) {
+                    auto storage = sem.constant_addresses[address].storage;
+                    sem.constant_storage[storage].live = false; sem.constant_storage[storage].frame = 0;
+                }
+                frame.bindings.put(e,0); frame.addresses.put(e,0);
+            }
+            frame.locals.resize(begin);
+        }
+    } scope(*this,scoped);
     switch (ast[n].kind) {
     case Kind::Compound: case Kind::Then: case Kind::Else: {
-        struct Scope {
-            Analyzer& sem; ConstantFrame& frame; std::size_t begin;
-            Scope(Analyzer& s):sem(s),frame(*s.constant_frame),begin(frame.locals.size()){}
-            ~Scope(){
-                for (auto i = begin; i < frame.locals.size(); ++i) {
-                    auto e = frame.locals[i];
-                    if (auto address = frame.addresses.get(e)) {
-                        auto storage = sem.constant_addresses[address].storage;
-                        sem.constant_storage[storage].live = false; sem.constant_storage[storage].frame = 0;
-                    }
-                    frame.bindings.put(e,0); frame.addresses.put(e,0);
-                }
-                frame.locals.resize(begin);
-            }
-        } scope(*this);
         for (auto c = first; c; c = ast[c].next) {
             auto result = execute_constant_statement(c,s);
             if (result.flow != ConstantFlow::Next) return result;
@@ -143,9 +161,12 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
         return {value.valid ? ConstantFlow::Return : ConstantFlow::Failure,value};
     }
     case Kind::If: {
-        auto condition = execute_constant_condition(first,s);
+        auto initial = execute_constant_statement(child(n,Kind::SelectionInit),s);
+        if (initial.flow != ConstantFlow::Next) return initial;
+        auto test = child(n,Kind::Condition);
+        auto condition = execute_constant_condition(test,s);
         if (!condition.valid) return failure;
-        auto yes = ast[first].next;
+        auto yes = ast[test].next;
         return execute_constant_statement(condition.bits ? yes : ast[yes].next,s);
     }
     case Kind::For: case Kind::While: case Kind::Do: {
@@ -172,6 +193,12 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
             if (result.flow != ConstantFlow::Next) return result;
         }
     }
+    case Kind::SelectionInit:
+        for (auto c = first; c; c = ast[c].next) {
+            auto result = execute_constant_statement(c,s);
+            if (result.flow != ConstantFlow::Next) return result;
+        }
+        return next;
     case Kind::ExpressionStatement: case Kind::ForInit: case Kind::Iteration:
         for (auto c = first; c; c = ast[c].next) {
             if (ast[c].kind == Kind::SimpleDeclaration) {

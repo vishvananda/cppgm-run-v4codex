@@ -30,6 +30,9 @@ void Analyzer::bind_template_condition(NodeId n, ScopeId s, bool is_switch)
     if (ast[c].kind == Kind::ConditionDeclaration) {
         bind_template_declaration(c,s);
         auto d = ast[ast[c].first].next, entity = facts[d].entity;
+        auto type = entities[entity].type;
+        if (types[type].kind == TypeKind::Array || types[type].kind == TypeKind::Function)
+            throw std::runtime_error("condition declares an array or function");
         facts.edit(n).entity = entity;
         value.type = value_type(entities[entity].type); value.category = ValueCategory::Lvalue;
     } else {

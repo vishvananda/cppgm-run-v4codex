@@ -55,7 +55,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             enter_initialization(); // Even an empty body forbids incoming jumps.
             visit(ast[n].first); active = saved; region = prior; return;
         }
-        bool recorded = k == Kind::Compound || k == Kind::Then || k == Kind::Else || k == Kind::ForInit || k == Kind::Iteration ||
+        bool recorded = k == Kind::Compound || k == Kind::Then || k == Kind::Else || k == Kind::ForInit || k == Kind::SelectionInit || k == Kind::Iteration ||
             k == Kind::If || k == Kind::For || k == Kind::RangeFor || k == Kind::While || k == Kind::Do || k == Kind::Switch || k == Kind::Condition ||
             k == Kind::SimpleDeclaration || k == Kind::Class || k == Kind::ExpressionStatement || k == Kind::Assembly || k == Kind::Return || k == Kind::Goto ||
             k == Kind::Break || k == Kind::Continue || k == Kind::Label || k == Kind::Case || k == Kind::Default ||
@@ -67,6 +67,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         LifetimeUse use; use.entry = use.exit = live; use.context = context;
         use.expression_region = region;
         auto record_use = [&]() {
+            if (binding_only) return;
             // Empty lifetimes need no record. Source EH context is owned by
             // lowering; a lexical return context alone carries no cleanup.
             if (!(use.entry || use.exit || use.target || use.expression_region)) return;
@@ -94,7 +95,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         if (k == Kind::Return) {
             visit(ast[n].first);
             use.context = body;
-            auto key_id = key(live, body); if (live) return_counts.put(key_id, return_counts.get(key_id) + 1); record_use(); return;
+            auto key_id = key(live, body); if (live && !binding_only) return_counts.put(key_id, return_counts.get(key_id) + 1); record_use(); return;
         }
         if (k == Kind::Break || k == Kind::Continue) {
             use.target = k == Kind::Break ? break_live : continue_live;
@@ -155,11 +156,12 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             k == Kind::Switch || k == Kind::While || k == Kind::For || k == Kind::Do || k == Kind::Try || k == Kind::Handler;
         if (k == Kind::Switch) switch_entry = active;
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
-            if (!binding_only && k == Kind::If && (ast[n].flags & 1) &&
-                ast[c].kind != Kind::Condition && ast[c].kind !=
-                (constant_truth(constants[facts[n].value]) ? Kind::Then : Kind::Else)) continue;
+            bool discarded = !binding_only && k == Kind::If && (ast[n].flags & 1) &&
+                ast[c].kind != Kind::SelectionInit && ast[c].kind != Kind::Condition && ast[c].kind !=
+                (constant_truth(constants[facts[n].value]) ? Kind::Then : Kind::Else);
+            if (discarded && ast.nodes.occurrences[n].context) continue;
             bool header = (loop || k == Kind::Switch) &&
-                (ast[c].kind == Kind::Condition || ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration);
+                (ast[c].kind == Kind::Condition || ast[c].kind == Kind::SelectionInit || ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration);
             auto loop_break = break_live, loop_continue = continue_live;
             auto loop_break_exception = break_exception, loop_continue_exception = continue_exception;
             auto loop_break_region = break_region, loop_continue_region = continue_region;
@@ -168,7 +170,18 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
                 break_exception = saved_break_exception; continue_exception = saved_continue_exception;
                 break_region = saved_break_region; continue_region = saved_continue_region;
             }
+            // A constexpr-if substatement is control-flow-limited even when
+            // it declares no objects. Its incoming jump/case edges must stay
+            // within the same substatement, including definition-time checks.
+            bool limited = k == Kind::If && (ast[n].flags & 1) &&
+                (ast[c].kind == Kind::Then || ast[c].kind == Kind::Else);
+            auto before = active;
+            if (limited) enter_initialization();
+            auto prior_binding = binding_only;
+            binding_only |= discarded;
             visit(c);
+            binding_only = prior_binding;
+            if (limited) active = before;
             if (header) {
                 break_live = loop_break; continue_live = loop_continue;
                 break_exception = loop_break_exception; continue_exception = loop_continue_exception;

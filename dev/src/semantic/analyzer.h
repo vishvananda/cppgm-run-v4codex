@@ -734,6 +734,7 @@ private:
     Index function_families, function_signatures, function_ref_modes;
     std::size_t expression_work = 0, candidate_work = 0, conversion_work = 0, dependence_work = 0;
     TypeId return_type = 0;
+    EntityId discarded_return_function = 0;
     unsigned loop_depth = 0, switch_depth = 0;
     unsigned unevaluated_depth = 0;
     struct SwitchContext { TypeId type = 0; bool has_default = false; Index labels; };

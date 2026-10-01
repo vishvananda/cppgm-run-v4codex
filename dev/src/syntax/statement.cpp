@@ -3,6 +3,23 @@
 
 namespace cppgm { namespace syntax {
 
+namespace {
+void condition_specifiers(const Ast& ast, NodeId specs)
+{
+    for (auto s = ast[specs].first; s; s = ast[s].next) {
+        switch (ast[s].op) {
+        case KW_TYPEDEF: case KW_EXTERN: case KW_STATIC: case KW_THREAD_LOCAL:
+        case KW_REGISTER: case KW_MUTABLE: case KW_INLINE: case KW_FRIEND:
+        case KW_VIRTUAL: case KW_EXPLICIT:
+            throw std::runtime_error("invalid condition declaration specifier");
+        default: break;
+        }
+        if (ast[s].kind == Kind::Class || (ast[s].kind == Kind::Enum && (ast[s].flags & 1)))
+            throw std::runtime_error("class or enum definition in condition");
+    }
+}
+}
+
 NodeId Parser::compound()
 {
     in.require("{");
@@ -25,11 +42,14 @@ NodeId Parser::condition()
         (identifier(probe_type(0)) || in.is("*", probe_type(0)) || in.is("&", probe_type(0)))) {
         NodeId decl = make(Kind::ConditionDeclaration);
         ast.append(decl, specifiers());
+        condition_specifiers(ast,ast[decl].first);
         NodeId d = declarator();
         ast.append(decl, d);
         bind_declarator(d, Category::Value, scope);
         NodeId init = initializer();
         if (!init) throw std::runtime_error("condition declaration requires initializer");
+        if (ast[ast[init].first].kind == Kind::ParenInitializer)
+            throw std::runtime_error("condition requires brace or equal initializer");
         ast.append(decl, init);
         ast.append(result, decl);
     } else ast.append(result, expression());
@@ -45,7 +65,37 @@ NodeId Parser::selection()
     NodeId result = make(is_if ? Kind::If : Kind::Switch);
     if (is_if && in.eat("constexpr")) ast[result].flags |= 1;
     in.require("(");
-    ast.append(result, condition());
+    // Parse the shared declaration/expression prefix once. The following
+    // delimiter decides whether it initializes the selection or is its test.
+    NodeId initial = 0;
+    bool initialized = false;
+    if (in.eat(";")) initialized = true;
+    else if (in.is("using")) {
+        initial = using_declaration();
+        if (ast[initial].kind != Kind::Alias) throw std::runtime_error("selection initializer requires an alias declaration");
+        initialized = true;
+    } else if (declaration_start() && declaration_ahead()) {
+        initial = simple_declaration(false);
+        initialized = in.eat(";");
+        if (!initialized) {
+            auto specs = ast[initial].first, list = ast[specs].next;
+            auto item = ast[list].first, d = ast[item].first, init = ast[d].next;
+            if (ast[initial].kind != Kind::SimpleDeclaration || !item || ast[item].next || !init ||
+                ast[ast[init].first].kind == Kind::ParenInitializer)
+                throw std::runtime_error("invalid condition declaration");
+            ast[initial].kind = Kind::ConditionDeclaration;
+            condition_specifiers(ast,specs);
+            ast[specs].next = d; ast[initial].last = init;
+        }
+    } else {
+        initial = expression();
+        initialized = in.eat(";");
+        if (initialized) initial = wrap(Kind::ExpressionStatement,initial);
+    }
+    if (initialized) {
+        ast.append(result,wrap(Kind::SelectionInit,initial));
+        ast.append(result,condition());
+    } else ast.append(result,wrap(Kind::Condition,initial));
     in.require(")");
     ast.append(result, is_if ? wrap(Kind::Then, substatement()) : substatement());
     if (is_if && in.eat("else")) ast.append(result, wrap(Kind::Else, substatement()));

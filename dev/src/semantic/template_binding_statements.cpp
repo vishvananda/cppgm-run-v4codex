@@ -30,11 +30,11 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
         if (sw) { ++switch_depth; switches.emplace_back(); }
         auto control = make_scope(ScopeKind::Control,s,0,0,false); template_pattern_scopes.put(control,1); facts.edit(n).scope = control;
         for (auto c = node.first; c; c = ast[c].next) {
-            bool header = ast[c].kind == Kind::Condition || ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration;
+            bool header = ast[c].kind == Kind::Condition || ast[c].kind == Kind::SelectionInit || ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration;
             if (header && loop) --loop_depth;
             if (header && sw) --switch_depth;
             if (ast[c].kind == Kind::Condition) bind_template_condition(c,control,sw);
-            else if (ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration ||
+            else if (ast[c].kind == Kind::SelectionInit || ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration ||
                 ast[c].kind == Kind::Then || ast[c].kind == Kind::Else || ast[c].kind == Kind::Compound)
                 bind_template_statement(c,control);
             else bind_template_statement(c,make_scope(ScopeKind::Block,control,0,0,false));
@@ -85,6 +85,9 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
         if (switches.back().has_default) throw std::runtime_error("duplicate default label");
         switches.back().has_default = true;
         bind_template_statement(node.first,s); return;
+    case Kind::SelectionInit:
+        for (auto c = node.first; c; c = ast[c].next) bind_template_statement(c,s);
+        return;
     case Kind::ForInit:
         for (auto c = node.first; c; c = ast[c].next) {
             if (ast[c].kind == Kind::SimpleDeclaration) bind_template_statement(c,s);

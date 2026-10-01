@@ -1,12 +1,26 @@
-# PA29 compact plan — implementation176 handoff
+# PA29 compact plan — implementation177 in progress
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `221d6d0e4930da05db2913bdf5f50d808f89c744`.
 Audit entry: `914e1a0a07e40884c91c0b967b0421eea9ef0d48`.
 Last reviewed commit: `7139ceb5769eea12c6e2e00b54932f09d59c79b5`.
 Implementation176 entry: `2b7a513297b2e9719fcd5686d3c1c97ee7565b13`.
 Implementation code: `207743ae`, `61756cf8`, `1b19e9ac`.
+Implementation177 entry: `d69d57fc28bfc308f8223e3090fb9e9ab37c4823` (380/403).
+
+## Active behavior group
+
+Selection initialization and constexpr branch demand. The parser owns a single
+parsed initializer in the selection scope; semantic/template binding owns the
+declarations, condition conversion and selected branch. Constant evaluation,
+lifetime/jump analysis and lowering consume those typed facts. Work is linear
+in the parsed/selected statements with existing constexpr budgets. Validate
+ordinary/template if and switch initializers, aliases, discarded dependent
+branches, scope, destruction and exceptional/control exits. Freeze entry/final
+binaries for compiler latency/RSS and checked runtime/text evidence at PA29/O0.
+Prior goal turn was validated implementation176 progress; entry has no live job.
+Stage base and review markers above are preserved.
 
 ## Design/spec alignment and completed group
 

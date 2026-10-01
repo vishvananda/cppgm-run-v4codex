@@ -38,6 +38,8 @@ void Analyzer::resolve_condition(NodeId n, ScopeId s, bool is_switch)
         TypeId deduction = 0;
         t = spec_has(specs,KW_AUTO) ? deduced_object_type(specs,d,ast[d].next,s,deduction) :
             declarator(d, specifiers(specs, s), s);
+        if (types[t].kind == TypeKind::Array || types[t].kind == TypeKind::Function)
+            throw std::runtime_error("condition declares an array or function");
         facts.edit(n).entity = declare_object(d, ast[d].next, t, specs, s, c);
     } else t = expression(c, s).type;
     Expression value; value.type = t;
@@ -102,24 +104,32 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
         ScopeId control = make_scope(ScopeKind::Control, s);
         facts.edit(n).scope = control;
         if (ast[n].kind == Kind::If && (ast[n].flags & 1)) {
+            resolve_statement(child(n,Kind::SelectionInit),control);
             auto cond = child(n,Kind::Condition); resolve_condition(cond,control,false);
-            if (facts[cond].entity) throw std::runtime_error("constexpr if requires an expression condition");
-            auto value = execute_constant_condition(cond,control);
+            Constant value;
+            { EvaluationScope selection(*this,true); value = execute_constant_condition(cond,control); }
             if (!value.valid) throw std::runtime_error("constexpr if condition is not constant");
             facts.edit(n).value = constants.size(); constants.push_back(value);
             auto selected = constant_truth(value) ? Kind::Then : Kind::Else;
-            for (auto c = ast[cond].next; c; c = ast[c].next)
-                if (!ast.nodes.occurrences[n].context || ast[c].kind == selected) resolve_statement(c,control);
+            for (auto c = ast[cond].next; c; c = ast[c].next) {
+                if (ast.nodes.occurrences[n].context && ast[c].kind != selected) continue;
+                struct DiscardedReturn {
+                    EntityId& owner; EntityId saved;
+                    DiscardedReturn(EntityId& o, EntityId f, bool discarded):owner(o),saved(o) { if (discarded) owner = f; }
+                    ~DiscardedReturn() { owner = saved; }
+                } discarded(discarded_return_function,current_function,ast[c].kind != selected);
+                resolve_statement(c,control);
+            }
             return;
         }
         if (loop) ++loop_depth;
         if (sw) { ++switch_depth; switches.emplace_back(); }
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
-            bool header = ast[c].kind == Kind::Condition || ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration;
+            bool header = ast[c].kind == Kind::Condition || ast[c].kind == Kind::SelectionInit || ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration;
             if (header && loop) --loop_depth;
             if (header && sw) --switch_depth;
             if (ast[c].kind == Kind::Condition) resolve_condition(c, control, sw);
-            else if (ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration || ast[c].kind == Kind::Then || ast[c].kind == Kind::Else)
+            else if (ast[c].kind == Kind::SelectionInit || ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration || ast[c].kind == Kind::Then || ast[c].kind == Kind::Else)
                 resolve_statement(c, control);
             else resolve_statement(c, ast[c].kind == Kind::Compound ? control : make_scope(ScopeKind::Block, control));
             if (header && loop) ++loop_depth;
@@ -139,6 +149,13 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
     case Kind::Return:
         for (auto scope=s; scope && scopes[scope].kind != ScopeKind::Function; scope=scopes[scope].parent)
             if (constructor_handler_scopes.get(scope)) throw std::runtime_error("return in constructor function-try handler");
+        if (current_function && discarded_return_function == current_function && placeholder_returns.get(current_function)) {
+            auto value = ast[n].first;
+            if (ast[value].kind == Kind::BracedInit) {
+                for (auto c = ast[value].first; c; c = ast[c].next) expression(c,s);
+            } else if (value) expression(value,s);
+            return;
+        }
         if (placeholder_returns.get(current_function)) deduce_return(n,s);
         if (class_value(return_type)) { record_class_return(n,s); return; }
         if (ast[n].first) {
@@ -176,6 +193,9 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
         if (switches.back().has_default) throw std::runtime_error("duplicate default label");
         switches.back().has_default = true;
         resolve_statement(ast[n].first, s); return;
+    case Kind::SelectionInit:
+        for (NodeId c = ast[n].first; c; c = ast[c].next) resolve_statement(c,s);
+        return;
     case Kind::ExpressionStatement: case Kind::ForInit: case Kind::Iteration:
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
             if (ast[c].kind == Kind::SimpleDeclaration) resolve_statement(c, s);

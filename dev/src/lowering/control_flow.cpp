@@ -270,11 +270,14 @@ bool Procedural::mark_control_entries(NodeId n)
     if (!n) return false;
     ++control_work;
     Kind k = ast[n].kind;
-    if (k == Kind::If && (ast[n].flags & 1) && sem.facts[n].value)
-        return control_entries[n] = mark_control_entries(child(n,sem.constant_fact(n).bits ? Kind::Then : Kind::Else));
+    if (k == Kind::If && (ast[n].flags & 1) && sem.facts[n].value) {
+        auto initial = mark_control_entries(child(n,Kind::SelectionInit));
+        auto selected = mark_control_entries(child(n,sem.constant_fact(n).bits ? Kind::Then : Kind::Else));
+        return control_entries[n] = initial || selected;
+    }
     bool entry = k == Kind::Label || k == Kind::Case || k == Kind::Default;
     switch (k) {
-    case Kind::Compound: case Kind::Then: case Kind::Else: case Kind::Label:
+    case Kind::Compound: case Kind::SelectionInit: case Kind::Then: case Kind::Else: case Kind::Label:
     case Kind::Case: case Kind::Default: case Kind::If: case Kind::Switch:
     case Kind::While: case Kind::Do: case Kind::For: case Kind::RangeFor:
     case Kind::Try: case Kind::Handler:
@@ -287,6 +290,8 @@ bool Procedural::mark_control_entries(NodeId n)
 }
 void Procedural::switch_statement(NodeId n)
 {
+    auto lifetime = lifetime_use(n);
+    statement(child(n,Kind::SelectionInit));
     NodeId cond = child(n, Kind::Condition), body = ast[cond].next;
     Value value;
     if (sem.facts[cond].entity) {
@@ -304,18 +309,23 @@ void Procedural::switch_statement(NodeId n)
         value = incoming(ast[cond].first); finish_full_expression(initial);
     }
     BlockId dispatch = block(), end = block(), saved = break_target;
+    BlockId cleanup = lifetime.exit != lifetime.entry ? block() : end;
     break_target = end;
     std::vector<NodeId> cases; NodeId fallback = 0;
     collect_cases(body, cases, fallback);
     jump(dispatch); start(dispatch);
-    std::vector<Operand> operands{value.operand, Operand::label(fallback ? labels[fallback] : end)};
+    std::vector<Operand> operands{value.operand, Operand::label(fallback ? labels[fallback] : cleanup)};
     for (NodeId c : cases) {
         auto constant = sem.constant_fact(ast[c].first);
         if (!constant.valid) throw std::logic_error("missing semantic case value");
         operands.push_back(integer_operand(constant)); operands.push_back(Operand::label(labels[c]));
     }
     emit(Instruction(Opcode::Switch), operands);
-    statement(body); jump(end); start(end); break_target = saved;
+    statement(body); jump(cleanup);
+    if (cleanup.index != end.index) {
+        start(cleanup); clean_inline(lifetime.exit,lifetime.entry); jump(end);
+    }
+    start(end); live = lifetime.entry; break_target = saved;
 }
 void Procedural::statement(NodeId n)
 {
@@ -360,6 +370,9 @@ void Procedural::statement(NodeId n)
         }
         return;
     }
+    case Kind::SelectionInit:
+        for (NodeId c = ast[n].first; c; c = ast[c].next) statement(c);
+        return;
     case Kind::ExpressionStatement: case Kind::Iteration: case Kind::ForInit:
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
             if (ast[c].kind == Kind::SimpleDeclaration) statement(c);
@@ -383,8 +396,10 @@ void Procedural::statement(NodeId n)
     case Kind::Break: exit_exception_contexts(sem.jump_exception_targets.get(n),lifetime.target); jump(break_target); return;
     case Kind::Continue: exit_exception_contexts(sem.jump_exception_targets.get(n),lifetime.target); jump(continue_target); return;
     case Kind::If: {
+        statement(child(n,Kind::SelectionInit));
         if (ast[n].flags & 1) {
             if (!sem.facts[n].value) throw std::logic_error("constexpr if lacks selection fact");
+            if (auto entity = sem.facts[child(n,Kind::Condition)].entity) object(entity);
             auto selected = sem.constant_fact(n).bits ? Kind::Then : Kind::Else;
             statement(child(n,selected));
             if (!ended) clean_inline(lifetime.exit,lifetime.entry);

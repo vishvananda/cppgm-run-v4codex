@@ -79,6 +79,7 @@ enum class Kind : unsigned char {
     Do,
     For,
     ForInit,
+    SelectionInit,
     RangeFor,
     RangeDeclaration,
     RangeInitializer,
