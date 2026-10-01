@@ -26,7 +26,7 @@ for source in sorted((root/'student.tests/pa29/source179').glob('*.cpp')):
   row['passed']=all(v['status']==0 for v in row.values() if isinstance(v,dict))
  else:row['passed']=False
  host=out/(source.stem+'-host')
- row['host_compile']=run(['g++','-std=c++17','-O0',source,'-o',host])
+ row['host_compile']=run(['g++','-std=c++17','-Werror=narrowing','-O0',source,'-o',host])
  if reject:
   permitted=source.with_suffix('.ifndr')
   row['host_passed']=row['host_compile']['status']!=0 or permitted.exists()

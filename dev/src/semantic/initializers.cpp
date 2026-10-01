@@ -44,6 +44,7 @@ void Analyzer::list_conversion(NodeId n, TypeId target)
 }
 bool Analyzer::narrowing_needs_value(TypeId from, TypeId target)
 {
+    from = value_type(from); target = value_type(target);
     if (!arithmetic(from) || !arithmetic(target)) return false;
     bool a = integral(from), b = integral(target);
     if (!a && b) return false;
@@ -57,6 +58,7 @@ bool Analyzer::narrowing_needs_value(TypeId from, TypeId target)
 }
 bool Analyzer::narrowing_conversion(TypeId from, TypeId target, Constant value)
 {
+    from = value_type(from); target = value_type(target);
     if (!arithmetic(from) || !arithmetic(target)) return false;
     bool a = integral(from), b = integral(target);
     if (!a && b) return true;
