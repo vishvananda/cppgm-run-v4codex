@@ -1,0 +1,10 @@
+case guard
+guard-type named ::ns::value
+case first
+reference-temporary named ::ns::value 0
+case second
+reference-temporary named ::ns::value 1
+case base36
+reference-temporary named ::ns::value 37
+case destruction
+reference-guard named ::ns::value 1

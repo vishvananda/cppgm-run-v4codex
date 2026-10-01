@@ -163,7 +163,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         if (entities[e].kind != EntityKind::Variable && entities[e].kind != EntityKind::Parameter &&
             entities[e].kind != EntityKind::Enumerator && entities[e].kind != EntityKind::Function)
             throw std::runtime_error("expression requires value name");
-        r.type = value_type(entities[e].type);
+        r.type = value_type(variable_expression_type(e));
         if (entities[e].constant.valid && scopes[entities[e].owner].kind != ScopeKind::Namespace &&
             scopes[entities[e].owner].kind != ScopeKind::Class) {
             ScopeId use = s;

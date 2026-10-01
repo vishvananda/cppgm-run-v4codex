@@ -381,8 +381,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         return e;
     }
     bool defer_inline = definitions && !function && scopes[s].kind == ScopeKind::Class &&
-        spec_has(specs,KW_STATIC) && spec_has(specs,KW_INLINE) && ast.nodes.occurrences[source].context &&
-        !(types[t].kind == TypeKind::Array && !types[t].bound);
+        spec_has(specs,KW_STATIC) && spec_has(specs,KW_INLINE) && ast.nodes.occurrences[source].context;
     if (calls && init && !defer_inline) {
         auto source = init;
         while (ast[source].kind == Kind::Initializer) source = ast[source].first;
@@ -525,14 +524,14 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         if (constructor && !special && !source_constructor) class_facts[entities[cls].class_info].aggregate = false;
     }
     if (calls) virtual_declaration(e, d, init, specs, source, s);
-    if (calls && init && !function && types[t].kind == TypeKind::Array && !types[t].bound) {
+    if (calls && init && !function && !defer_inline && types[t].kind == TypeKind::Array && !types[t].bound) {
         // The entity is visible during its initializer, but its bound is not
         // guessed from source clauses: brace elision may consume several per
         // element. Reuse the checked plan when publishing the completed type.
         t = complete_array_initializer(init,entities[e].type,definition_scope);
         canonical = types.signature(t); entities[e].type = canonical;
     }
-    if (calls && !function && spec_has(specs,KW_CONSTEXPR) && !literal_type(canonical))
+    if (calls && !function && !defer_inline && spec_has(specs,KW_CONSTEXPR) && !literal_type(canonical))
         throw std::runtime_error("constexpr variable requires a literal type");
     record(block_extern ? s : owner, e, d, t, kind);
     if (defer_inline) {

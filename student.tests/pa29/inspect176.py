@@ -33,6 +33,9 @@ for stem in ['inline-shared','inline-temporaries']:
 # Retained question: implementation agrees with GCC and disagrees with Clang.
 for label,front in [('student',cc),('gcc','g++'),('clang','clang++')]:
  obj=out/(label+'-tag.o');run([front,'-std=c++11','-c',source/'tag-review.cpp','-o',obj]);run(['nm',obj])
+names=out/'support-names.txt'
+run([root/'dev/abimangle','-o',names,source/'support-names.facts'])
+assert names.read_text().splitlines()==['_ZGVN2ns5valueE','_ZGRN2ns5valueE_','_ZGRN2ns5valueE0_','_ZGRN2ns5valueE10_','_ZGVN2ns5valueE0_']
 ir=out/'inline.lowir'
 run([cc,'--emit-lowir',source/'inline-redeclarations.cpp','-o',ir])
 run([root/'dev/lowir',ir,'-o',out/'inline.roundtrip'])

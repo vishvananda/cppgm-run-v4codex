@@ -64,6 +64,12 @@ void Analyzer::finish_object_initializer(EntityId e, NodeId init, NodeId d, Node
     if (definitions && !unevaluated_depth && local_static(e) && static_initialization(e))
         demand_constant_relocations(constant_initialize(init,t,definition_scope,object_constructor(e)));
 }
+TypeId Analyzer::variable_expression_type(EntityId e)
+{
+    auto type = types[entities[e].type];
+    if (type.kind == TypeKind::Array && !type.bound) initialize_inline_variable(e);
+    return entities[e].type;
+}
 void Analyzer::initialize_inline_variable(EntityId e)
 {
     auto index = inline_variable_definitions.get(e);
@@ -71,7 +77,7 @@ void Analyzer::initialize_inline_variable(EntityId e)
     auto def = inline_variable_recipes[index];
     if (def.state == FactState::Success) { ++inline_variable_hits; return; }
     if (def.state == FactState::Active) return; // The declaration is visible in its own initializer.
-    if (def.state == FactState::Failure) throw std::runtime_error("failed inline variable initializer");
+    if (def.state == FactState::Failure) throw FailedSemanticFact(SemanticFact::InitializerBinding,e,def.declarator);
     inline_variable_recipes[index].state = FactState::Active; ++inline_variable_initializers;
     auto saved = access_override;
     access_override = entities[e].owner;
@@ -82,6 +88,13 @@ void Analyzer::initialize_inline_variable(EntityId e)
             while (ast[source].kind == Kind::Initializer) source = ast[source].first;
             expand_expression_list(source,def.scope);
         }
+        auto type = entities[e].type;
+        if (init && types[type].kind == TypeKind::Array && !types[type].bound) {
+            type = complete_array_initializer(init,type,def.scope);
+            entities[e].type = types.signature(type); facts.edit(def.declarator).type = type;
+        }
+        if (spec_has(def.specifiers,KW_CONSTEXPR) && !literal_type(type))
+            throw std::runtime_error("constexpr variable requires a literal type");
         finish_object_initializer(e,init,def.declarator,def.specifiers,def.scope,def.scope,entities[e].type,false);
         inline_variable_recipes[index].state = FactState::Success;
     } catch (...) {

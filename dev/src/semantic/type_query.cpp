@@ -637,7 +637,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             entity = specialize_variable(entity,std::vector<TypeId>(argument_types.begin()+pack.offset,argument_types.begin()+pack.offset+pack.count),false);
             if (!entity) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
         }
-        x.type = value_type(entities[entity].type); x.entity = entity;
+        x.type = value_type(variable_expression_type(entity)); x.entity = entity;
         r.declared_type = entities[entity].type;
         if (kind != EntityKind::Enumerator) x.category = ValueCategory::Lvalue;
         record_object(x,0,0,0); object_uses[x.object_use].naming_scope = entities[cls].scope;
@@ -657,6 +657,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             if (!q.entity) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
             q.type = entities[q.entity].type;
         }
+        if (q.entity && types[q.type].kind == TypeKind::Array && !types[q.type].bound) q.type = variable_expression_type(q.entity);
         x.type = value_type(types.signature(q.type)); r.declared_type = q.type;
         x.category = ValueCategory::Lvalue; x.entity = q.entity;
         if (q.entity && nonstatic_field(q.entity))

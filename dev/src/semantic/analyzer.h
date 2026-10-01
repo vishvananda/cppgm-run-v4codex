@@ -1256,6 +1256,7 @@ private:
     bool instantiate_member_definition(EntityId e);
     void demand_template_storage(EntityId e);
     void initialize_inline_variable(EntityId e);
+    TypeId variable_expression_type(EntityId e);
     Index inline_variable_definitions;
     struct InlineVariableDefinition {
         NodeId declarator = 0, specifiers = 0;

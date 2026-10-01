@@ -7,7 +7,7 @@ Expression Analyzer::member_value(EntityId e, unsigned object_cv, ValueCategory 
     if (kind != EntityKind::Variable && kind != EntityKind::Enumerator && !function_binding(e))
         throw std::runtime_error("member expression requires a value");
     Expression result; result.entity = e;
-    auto declared = entities[e].type;
+    auto declared = variable_expression_type(e);
     result.type = value_type(declared);
     bool reference = types[declared].kind == TypeKind::LRef || types[declared].kind == TypeKind::RRef;
     if (nonstatic_field(e) && !reference)
