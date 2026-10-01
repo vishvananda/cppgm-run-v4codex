@@ -1,9 +1,9 @@
-# PA29 compact plan — implementation172 handoff
+# PA29 compact plan — implementation173 in progress
 
 Target: **PA29 full-stage**. Phase: **implement; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `221d6d0e4930da05db2913bdf5f50d808f89c744`.
-Entry HEAD: `1bc21c576272364e790fad3920a76dab9e624558`.
+Entry HEAD: `51fde1023d4d8f4135bf88429a0706a3c49fa7eb`.
 Validated implementation: `827b4c7c41a7a15b8d769e8f04915ae43cf791d7`.
 
 ## Design and completed owner
@@ -89,3 +89,19 @@ numeric/layout machinery, emission state or source-origin handling; they cannot
 be completed by extending this fold owner alone. Independent whole-stage audit
 and full through-PA29 success remain necessary before advancement. This is a
 validated implementation handoff, not assignment completion.
+
+## Implementation173 working group
+
+Entry is clean, PA29 370/403 (33 failures). Previous turn supplied validated
+progress (fold owner); its markers and evidence remain preserved above.
+Owner: explicit-template lambda closure and function-template semantics (eight
+existing failures). Data flow: parse head once, retain canonical parameters and
+lexical bindings, create a member-template call operator, substitute through the
+existing specialization frames, then consume selected calls/capture fields in
+typed lowering. Work tracks source nodes, captures and demanded specializations;
+no token replay, synthetic function AST or broad retry. Extend through packs,
+defaults, nested captures, noexcept and runtime calls while this owner applies.
+Validate focused acceptance/rejection/runtime/inspection controls, every required
+suite and unchanged coverage; freeze entry/final binaries for A/A+ABBA latency,
+RSS, runtime and text evidence. Optional optimizer work/growth budget is zero.
+Remaining groups and independent contract questions above stay unresolved.
