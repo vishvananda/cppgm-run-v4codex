@@ -1,0 +1,23 @@
+{
+  "entry": "54ddacb1ced906e692ea94bde5110b0757e1b2af",
+  "implementation": "383fae654342b08ce9a0fc2c654d7ab06fd81434",
+  "binaries": {
+    "A": {
+      "path": "/tmp/pa29-189/cppgm-A",
+      "sha256": "9b97c1daef27a2d152d82fe80e4d40ec33287ce684187983de40ef36378874e4"
+    },
+    "B": {
+      "path": "/tmp/pa29-189/cppgm-handoff",
+      "sha256": "9d36f0bbcb3ddccc57853370d8003f6103eadbfcd0fe50a171994fccab950294"
+    }
+  },
+  "files": {
+    "dev/src/semantic/analyzer.h": "a7deeae0e1777adb09e8bd9ced83c6ea4917115b061cc7ce3d4ff576863fab6c",
+    "dev/src/semantic/declaration.cpp": "6c51ab077eed6ca5b26993021e21a815d025c0211235a34542259ca4e9a0ed18",
+    "dev/src/semantic/deduction_guide.cpp": "0b8e953d84af9f97cb6444e1a3141c98a713c102deb06e14bd88afdf2b9a738d",
+    "dev/src/semantic/exception_specification.cpp": "48b7405faac641cb7049ee55390543e50feb1b492cae4a6487f1875946b5bc37",
+    "dev/src/semantic/explicit_specifier.cpp": "98d80ac414a4c27b2f4fe13c30398039c2cbf76b213961554401113ee583775d",
+    "dev/src/semantic/template_call.cpp": "26b55c2bbfc7e33de8bd958565d666d30460120f392ad5efa52b5db97e6c7501",
+    "dev/src/syntax/declaration.cpp": "cce5367113515cd75dd8593486a9958b85a12a751ef0829d2f65a3bb362cf8a3"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "entry": "54ddacb1ced906e692ea94bde5110b0757e1b2af",
+  "total_stage_inputs": 403,
+  "compared_contract_harness_paths": 1707,
+  "unchanged_paths": 1704,
+  "original_inputs_unchanged": true,
+  "discovery_and_comparison_unchanged": true,
+  "changes": {
+    "pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.ref.exit_status": {
+      "before": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d",
+      "after": "1dc64892b790edfc09c7508c5d25169bae9436f6bcbe5737d9dc6146c8d89dd9"
+    },
+    "pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.ref.exit_status": {
+      "before": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d",
+      "after": "1dc64892b790edfc09c7508c5d25169bae9436f6bcbe5737d9dc6146c8d89dd9"
+    },
+    "pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.ref.exit_status": {
+      "before": "9eb7741d8048b03ac34ac16732addd2a5e147f90397461ca21adf12c9ef98d9d",
+      "after": "1dc64892b790edfc09c7508c5d25169bae9436f6bcbe5737d9dc6146c8d89dd9"
+    }
+  },
+  "proof": "pa29/reference-corrections189.md",
+  "correction_id": "pa29-189-template-demand"
+}

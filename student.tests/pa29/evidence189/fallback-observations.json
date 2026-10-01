@@ -1,0 +1,47 @@
+[
+  {
+    "label": "entry",
+    "command": [
+      "/tmp/pa29-189/cppgm-A",
+      "-std=c++11",
+      "-c",
+      "student.tests/pa29/controls189/conditional-fallback.cpp",
+      "-o",
+      "/tmp/pa29-189/fallback-entry.o"
+    ],
+    "compiler_sha256": "9b97c1daef27a2d152d82fe80e4d40ec33287ce684187983de40ef36378874e4",
+    "source_sha256": "d7dc83d54ede8bfe5c73a0e253be75b5305278008c30ff619cf4c81fb5bf818c",
+    "status": 1,
+    "stderr": "ERROR: explicit condition is not a constant boolean\n"
+  },
+  {
+    "label": "access",
+    "command": [
+      "/tmp/pa29-189/cppgm-final",
+      "-std=c++11",
+      "-c",
+      "student.tests/pa29/controls189/conditional-fallback.cpp",
+      "-o",
+      "/tmp/pa29-189/fallback-access.o"
+    ],
+    "compiler_sha256": "4b6945aeedff5fde8ee2bd43541c13e5db13b6ea8935552e5c2cdca592f03dc8",
+    "source_sha256": "d7dc83d54ede8bfe5c73a0e253be75b5305278008c30ff619cf4c81fb5bf818c",
+    "status": 1,
+    "stderr": "ERROR: invalid fixed call argument\n"
+  },
+  {
+    "label": "handoff",
+    "command": [
+      "/tmp/pa29-189/cppgm-handoff",
+      "-std=c++11",
+      "-c",
+      "student.tests/pa29/controls189/conditional-fallback.cpp",
+      "-o",
+      "/tmp/pa29-189/fallback-handoff.o"
+    ],
+    "compiler_sha256": "9d36f0bbcb3ddccc57853370d8003f6103eadbfcd0fe50a171994fccab950294",
+    "source_sha256": "d7dc83d54ede8bfe5c73a0e253be75b5305278008c30ff619cf4c81fb5bf818c",
+    "status": 0,
+    "stderr": ""
+  }
+]

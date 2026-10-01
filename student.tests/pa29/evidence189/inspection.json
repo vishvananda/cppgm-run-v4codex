@@ -1,0 +1,101 @@
+{
+  "artifacts": {
+    "controls-handoff-final3/assertion-context.canonical": {
+      "sha256": "20e5941ba9fb7db799b03d7d2edb672199eb66000b08a8212052fd1342d4c233",
+      "bytes": 1119
+    },
+    "controls-handoff-final3/assertion-context.lowir": {
+      "sha256": "20e5941ba9fb7db799b03d7d2edb672199eb66000b08a8212052fd1342d4c233",
+      "bytes": 1119
+    },
+    "controls-handoff-final3/conditional-fallback.canonical": {
+      "sha256": "920a4b439c874e391ef9e3d6ad066a467c11507331f4fc7737da67b5af9bbe72",
+      "bytes": 5163
+    },
+    "controls-handoff-final3/conditional-fallback.lowir": {
+      "sha256": "920a4b439c874e391ef9e3d6ad066a467c11507331f4fc7737da67b5af9bbe72",
+      "bytes": 5163
+    },
+    "controls-handoff-final3/contextual-specifiers.canonical": {
+      "sha256": "defbad487471686aa3f8dbacbf582a36973a835d52849794f54cc7f97dc27963",
+      "bytes": 2445
+    },
+    "controls-handoff-final3/contextual-specifiers.lowir": {
+      "sha256": "defbad487471686aa3f8dbacbf582a36973a835d52849794f54cc7f97dc27963",
+      "bytes": 2445
+    },
+    "controls-handoff-final3/defined-conversions.canonical": {
+      "sha256": "bdae9ffcd1228cf4528040ac54cded5f5c4572078903ecb9ded4ceeccc760d7a",
+      "bytes": 4503
+    },
+    "controls-handoff-final3/defined-conversions.lowir": {
+      "sha256": "bdae9ffcd1228cf4528040ac54cded5f5c4572078903ecb9ded4ceeccc760d7a",
+      "bytes": 4503
+    },
+    "controls-handoff-final3/defined-traits.canonical": {
+      "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4",
+      "bytes": 103
+    },
+    "controls-handoff-final3/defined-traits.lowir": {
+      "sha256": "7b9bbadc5af59934a47c5b8fb3568c9c84b6b74b2bd8566d4cd05bfc9a57b4b4",
+      "bytes": 103
+    },
+    "controls-handoff-final3/demand-and-substitution.canonical": {
+      "sha256": "f05fec1c031497f03f0510e6fc314d39fc20646a6bb85ab83e15bf2f9bdfd115",
+      "bytes": 2394
+    },
+    "controls-handoff-final3/demand-and-substitution.lowir": {
+      "sha256": "f05fec1c031497f03f0510e6fc314d39fc20646a6bb85ab83e15bf2f9bdfd115",
+      "bytes": 2394
+    },
+    "controls-handoff-final3/source-trait-identity.canonical": {
+      "sha256": "e8499cef7e579cb6382ccf2b3328c0a49b47294c44bc6f5a2a72ab8214a0d54e",
+      "bytes": 330
+    },
+    "controls-handoff-final3/source-trait-identity.lowir": {
+      "sha256": "e8499cef7e579cb6382ccf2b3328c0a49b47294c44bc6f5a2a72ab8214a0d54e",
+      "bytes": 330
+    }
+  },
+  "controls": 221,
+  "dormant_bodies_not_emitted": true,
+  "assertion_conversions_not_emitted": true,
+  "sources": {
+    "student.tests/pa29/controls189/assertion-ambiguous-reject.cpp": "784a4cd6e68e82b187beb3be83bc16f0af6e4ff40a682b3493d5024e1996a73b",
+    "student.tests/pa29/controls189/assertion-character-message-reject.cpp": "a8d73aa797fa4a050d5858ec9d6330b24cd8a4a836785efd68a4d5c6cdebd3fb",
+    "student.tests/pa29/controls189/assertion-context.cpp": "3d1324983f0d465f3ca4f186673b944fb80e3ee4be7eebb9eeeb443632c2d595",
+    "student.tests/pa29/controls189/assertion-deleted-reject.cpp": "9400871a0ba1b574582d7262859ef2093a78d528e71d2263790ab1e34e78b547",
+    "student.tests/pa29/controls189/assertion-dependent-reject.cpp": "b3836f69766e92643321e3d4d50a499280aac9606d24079604c7ba7ec382a8f5",
+    "student.tests/pa29/controls189/assertion-explicit-int-reject.cpp": "cbf66273d941110f9a625d50ca2089c10a56a35350b43c8ad77118bfb51a78a5",
+    "student.tests/pa29/controls189/assertion-false-reject.cpp": "397de2afc6aff661e0e2ceaf2cf65ab9ef47eaa5d8888083dffac4f3afe46ae0",
+    "student.tests/pa29/controls189/assertion-fixed-reject.cpp": "cd6df87897e7684a2467453dfa0f8fb3cb321cdd211c1948d31cef1bb886fbf4",
+    "student.tests/pa29/controls189/assertion-lifetime-reject.cpp": "a35faa12ff82c39433a2c966ec91a905f0d78c8ff2c734da00394ee1d0835ef4",
+    "student.tests/pa29/controls189/assertion-message-reject.cpp": "043c4cd8f4e729d8355deb6be67529558e13d1868f107c2c7abf54f886a15cba",
+    "student.tests/pa29/controls189/assertion-messages-reject.cpp": "3a8c5d72202d838fed743233f9f5ed87c7c7dc0207accc6b3fec843c0999cc4b",
+    "student.tests/pa29/controls189/assertion-nonconstant-reject.cpp": "c0a647af8a13c444030f55e2cd8cc4a172457f674a4736bab028cd79ca10055f",
+    "student.tests/pa29/controls189/assertion-null-reject.cpp": "525de084f6a96ff42499753d873a916f824b772ca6c73d09830a3148570a7faa",
+    "student.tests/pa29/controls189/assertion-private-reject.cpp": "90e5c35aad5c11393eea82a1be728e5a6231fb3f470cfadbaf3a1c84e1fd9f5e",
+    "student.tests/pa29/controls189/assertion-suffix-message-reject.cpp": "bf04472f4786e47f7bc9bc1d22122cd4bd6f82f44f5f93f47ad7aa3e28ab5760",
+    "student.tests/pa29/controls189/assertion-unconvertible-reject.cpp": "2cbbe2dcdc38cda886bb6703beed367840279e6988c6db8f190ca2af973bde62",
+    "student.tests/pa29/controls189/character-definitions.h": "a5b83a2f57bfd9796fb9364124d82cb8cdb6c776dac1959a3c1aea1cab2633ce",
+    "student.tests/pa29/controls189/conditional-body-reject.cpp": "ea2719f7db6bd6d9920e3797b413601b09faf3f67caccb79e826ee44c16201dd",
+    "student.tests/pa29/controls189/conditional-fallback.cpp": "d7dc83d54ede8bfe5c73a0e253be75b5305278008c30ff619cf4c81fb5bf818c",
+    "student.tests/pa29/controls189/constructor-template-private-reject.cpp": "cc033b1234ee525f3604ace2af1d63b449d25b2038fa37e7077c8e9ab730f78c",
+    "student.tests/pa29/controls189/contextual-specifiers.cpp": "c8a0e1e5509984aff8a53edc4a2fcea947a40c0ca343720a018d1e25528fa316",
+    "student.tests/pa29/controls189/defined-conversions.cpp": "4ca8a384da35dc068645c4582ee6777b19b4de827229feb8100e7eedba66da27",
+    "student.tests/pa29/controls189/defined-false-reject.cpp": "3449f018a3325d5397e4f7837a0e047a61be650985221320e104071356ac7c6a",
+    "student.tests/pa29/controls189/defined-traits.cpp": "de6ace355515b7987e3dbe06a437ee17066ddf43c8448def0fa6871146fe55c8",
+    "student.tests/pa29/controls189/demand-and-substitution.cpp": "7474c3a83532748f9d0641a40527973da101f9f8573c1cf1c717b905e4d140b2",
+    "student.tests/pa29/controls189/demand-body-reject.cpp": "8315b874a28b5e3ef0142c626bd9dd11639ab32066bbf7244877b313ae4aaed8",
+    "student.tests/pa29/controls189/explicit-private-reject.cpp": "1df3a9752d5c5ec536a236debc67307880dab52ac458feb2a3463688b2679a28",
+    "student.tests/pa29/controls189/explicit-template-private-reject.cpp": "5059e5f2c9bb52d3429228a0e14d5abb1523f2d8ad09798b7466d02b4fc86fbb",
+    "student.tests/pa29/controls189/forward-member-reject.cpp": "8fd37e9788273367ca0330d023c0021d4657dd9260a9f2fbdb4b170ca528fa63",
+    "student.tests/pa29/controls189/forward-nested-reject.cpp": "639cdb7deb66e433b9fddb5fb4bb19ff87262fb7df3bacb491fac0a21de4cca1",
+    "student.tests/pa29/controls189/guide-private-reject.cpp": "48d7f6b3f14b74d498cc314c3b697fab22e24865bf3ea8b1b796750895fe6d74",
+    "student.tests/pa29/controls189/invocation-definition.h": "adc8e0342c4c8e56f7813f4e7b55b9de853796d9bfd98c33c93326aed1c466b6",
+    "student.tests/pa29/controls189/noexcept-private-reject.cpp": "731fedccfa7dad6dddf1458fe98351e136f4ed0af60cf0577d7419f3118dbc30",
+    "student.tests/pa29/controls189/noexcept-template-private-reject.cpp": "3c734778c4044cd730032175986bf0e97139a659ee458e664c81aaba2ad5ca73",
+    "student.tests/pa29/controls189/source-trait-identity.cpp": "0e785926874445212fee3f341094c5589cb1c03f57a7dffb6476f2fd8357c23d",
+    "student.tests/pa29/controls189/trait-definitions.h": "02d1df8daf92ef666eadbc18a7c0a8d7511098041cff345ab1e2a4431edeed31"
+  }
+}

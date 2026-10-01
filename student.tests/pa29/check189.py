@@ -29,6 +29,10 @@ for src in sorted((root / 'student.tests/pa29/controls189').glob('*.cpp')):
     # GCC here rejects the explicit bool conversion in a member-template's
     # dependent explicit-specifier; Clang and the required extension accept it.
     hosts = ['clang++'] if src.stem == 'contextual-specifiers' else ['g++', 'clang++']
+    # Clang suppresses the demanded-definition error inside this extension's
+    # condition. GCC corroborates the required hard-error boundary instead.
+    if src.stem == 'conditional-body-reject':
+        hosts = ['g++']
     for cc in [compiler, *hosts]:
         obj = out / (src.stem + '.o')
         exe = out / src.stem

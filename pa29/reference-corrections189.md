@@ -49,7 +49,7 @@ about an undefined hosted primary is descriptive, not a class definition.
 
 ## Positive coverage and observed behavior
 
-`python3 student.tests/pa29/check189.py OUT` runs **207 commands**. The three
+`python3 student.tests/pa29/check189.py OUT` runs **221 commands**. The three
 original inputs are rejected by the student compiler, GCC and Clang. Each
 ordinary-name reducer is also rejected by the pinned reference compiler; that
 reference accepts all three original inputs. The change of spelling therefore
@@ -70,7 +70,7 @@ Additional positive controls cover primary and explicit specialization identity,
 throwing/deleted/move constructors, false primaries despite nothrow callables,
 true partial specializations despite throwing callables, pointers preceding a
 definition, missing/private-member SFINAE, and dormant invalid member bodies.
-A demanded invalid body is rejected. Six positive LowIR outputs validate;
+A demanded invalid body is rejected. Seven positive LowIR outputs validate;
 symbol/LowIR inspection proves dormant bodies are not emitted.
 
 [Control evidence](../student.tests/pa29/evidence189/controls.json) and
@@ -91,3 +91,8 @@ constructor/guide conditions. Friend contexts remain valid. The dedicated
 its dependent explicit-bool member-template case, so GCC is not used as that
 extension control's oracle. The three corrected course fixtures and their
 positive definitions are still exercised with both host compilers.
+
+Conditional-specifier substitution failures are also preserved: invalid immediate
+conditions remove constructor-template candidates, while errors in demanded
+definitions remain hard errors. See [handoff189](handoff189.md) for the extension
+rule and the documented host disagreement on the demanded-definition negative.

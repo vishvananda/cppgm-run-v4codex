@@ -1,0 +1,162 @@
+{
+  "demand": {
+    "points": [
+      {
+        "N": 600,
+        "counters": {
+          "tokens": 21923,
+          "parsed_nodes": 23302,
+          "nodes": 115236,
+          "semantic_specializations": 3005,
+          "template_body_transitions": 0,
+          "semantic_candidate_work": 35,
+          "instructions": 101,
+          "native_functions": 7
+        },
+        "samples": 12
+      },
+      {
+        "N": 1200,
+        "counters": {
+          "tokens": 43523,
+          "parsed_nodes": 46102,
+          "nodes": 229836,
+          "semantic_specializations": 6005,
+          "template_body_transitions": 0,
+          "semantic_candidate_work": 35,
+          "instructions": 101,
+          "native_functions": 7
+        },
+        "samples": 12
+      },
+      {
+        "N": 2400,
+        "counters": {
+          "tokens": 86723,
+          "parsed_nodes": 91702,
+          "nodes": 459036,
+          "semantic_specializations": 12005,
+          "template_body_transitions": 0,
+          "semantic_candidate_work": 35,
+          "instructions": 101,
+          "native_functions": 7
+        },
+        "samples": 12
+      }
+    ],
+    "linear_equations": {
+      "tokens": {
+        "slope": 36.0,
+        "intercept": 323.0
+      },
+      "parsed_nodes": {
+        "slope": 38.0,
+        "intercept": 502.0
+      },
+      "nodes": {
+        "slope": 191.0,
+        "intercept": 636.0
+      },
+      "semantic_specializations": {
+        "slope": 5.0,
+        "intercept": 5.0
+      },
+      "template_body_transitions": {
+        "slope": 0.0,
+        "intercept": 0.0
+      },
+      "semantic_candidate_work": {
+        "slope": 0.0,
+        "intercept": 35.0
+      },
+      "instructions": {
+        "slope": 0.0,
+        "intercept": 101.0
+      },
+      "native_functions": {
+        "slope": 0.0,
+        "intercept": 7.0
+      }
+    }
+  },
+  "contexts": {
+    "points": [
+      {
+        "N": 600,
+        "counters": {
+          "tokens": 22540,
+          "parsed_nodes": 24522,
+          "nodes": 24764,
+          "semantic_specializations": 7,
+          "template_body_transitions": 0,
+          "semantic_candidate_work": 1835,
+          "instructions": 101,
+          "native_functions": 7
+        },
+        "samples": 12
+      },
+      {
+        "N": 1200,
+        "counters": {
+          "tokens": 44740,
+          "parsed_nodes": 48522,
+          "nodes": 48764,
+          "semantic_specializations": 7,
+          "template_body_transitions": 0,
+          "semantic_candidate_work": 3635,
+          "instructions": 101,
+          "native_functions": 7
+        },
+        "samples": 12
+      },
+      {
+        "N": 2400,
+        "counters": {
+          "tokens": 89140,
+          "parsed_nodes": 96522,
+          "nodes": 96764,
+          "semantic_specializations": 7,
+          "template_body_transitions": 0,
+          "semantic_candidate_work": 7235,
+          "instructions": 101,
+          "native_functions": 7
+        },
+        "samples": 12
+      }
+    ],
+    "linear_equations": {
+      "tokens": {
+        "slope": 37.0,
+        "intercept": 340.0
+      },
+      "parsed_nodes": {
+        "slope": 40.0,
+        "intercept": 522.0
+      },
+      "nodes": {
+        "slope": 40.0,
+        "intercept": 764.0
+      },
+      "semantic_specializations": {
+        "slope": 0.0,
+        "intercept": 7.0
+      },
+      "template_body_transitions": {
+        "slope": 0.0,
+        "intercept": 0.0
+      },
+      "semantic_candidate_work": {
+        "slope": 3.0,
+        "intercept": 35.0
+      },
+      "instructions": {
+        "slope": 0.0,
+        "intercept": 101.0
+      },
+      "native_functions": {
+        "slope": 0.0,
+        "intercept": 7.0
+      }
+    }
+  }
+}

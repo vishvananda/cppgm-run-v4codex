@@ -7,7 +7,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-ambiguous-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-ambiguous-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -22,7 +22,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-ambiguous-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-ambiguous-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -37,7 +37,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-ambiguous-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-ambiguous-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-ambiguous-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -52,7 +52,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-character-message-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-character-message-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-character-message-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -67,7 +67,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-character-message-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-character-message-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-character-message-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -82,7 +82,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-character-message-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-character-message-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-character-message-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -97,7 +97,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-context.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-context.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -107,9 +107,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/assertion-context.o",
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-context"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context"
     ],
     "status": 0,
     "expected_success": true,
@@ -118,7 +118,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/assertion-context",
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context",
       "runtime-input"
     ],
     "status": 0,
@@ -130,7 +130,7 @@
     "command": [
       "nm",
       "-C",
-      "/tmp/pa29-189/controls-contexts-final/assertion-context.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -145,7 +145,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-context.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-context.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -155,9 +155,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/assertion-context.o",
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-context"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context"
     ],
     "status": 0,
     "expected_success": true,
@@ -166,7 +166,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/assertion-context",
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context",
       "runtime-input"
     ],
     "status": 0,
@@ -182,7 +182,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-context.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-context.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -192,9 +192,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/assertion-context.o",
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-context"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context"
     ],
     "status": 0,
     "expected_success": true,
@@ -203,7 +203,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/assertion-context",
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context",
       "runtime-input"
     ],
     "status": 0,
@@ -217,7 +217,7 @@
       "--emit-lowir",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-context.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-context.lowir"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context.lowir"
     ],
     "status": 0,
     "expected_success": true,
@@ -227,9 +227,9 @@
   {
     "command": [
       "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
-      "/tmp/pa29-189/controls-contexts-final/assertion-context.lowir",
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context.lowir",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-context.canonical"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-context.canonical"
     ],
     "status": 0,
     "expected_success": true,
@@ -244,7 +244,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-deleted-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-deleted-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-deleted-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -259,7 +259,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-deleted-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-deleted-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-deleted-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -274,7 +274,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-deleted-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-deleted-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-deleted-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -289,7 +289,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-dependent-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-dependent-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-dependent-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -304,7 +304,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-dependent-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-dependent-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-dependent-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -319,7 +319,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-dependent-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-dependent-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-dependent-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -334,7 +334,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-explicit-int-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-explicit-int-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-explicit-int-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -349,7 +349,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-explicit-int-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-explicit-int-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-explicit-int-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -364,7 +364,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-explicit-int-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-explicit-int-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-explicit-int-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -379,7 +379,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-false-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-false-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-false-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -394,7 +394,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-false-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-false-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-false-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -409,7 +409,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-false-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-false-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-false-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -424,7 +424,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-fixed-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-fixed-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-fixed-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -439,7 +439,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-fixed-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-fixed-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-fixed-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -454,7 +454,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-fixed-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-fixed-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-fixed-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -469,7 +469,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-lifetime-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-lifetime-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-lifetime-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -484,7 +484,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-lifetime-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-lifetime-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-lifetime-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -499,7 +499,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-lifetime-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-lifetime-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-lifetime-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -514,7 +514,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-message-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-message-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-message-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -529,7 +529,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-message-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-message-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-message-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -544,7 +544,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-message-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-message-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-message-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -559,7 +559,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-messages-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-messages-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-messages-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -574,7 +574,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-messages-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-messages-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-messages-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -589,7 +589,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-messages-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-messages-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-messages-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -604,7 +604,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-nonconstant-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-nonconstant-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-nonconstant-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -619,7 +619,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-nonconstant-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-nonconstant-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-nonconstant-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -634,7 +634,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-nonconstant-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-nonconstant-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-nonconstant-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -649,7 +649,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-null-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-null-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-null-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -664,7 +664,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-null-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-null-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-null-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -679,7 +679,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-null-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-null-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-null-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -694,7 +694,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -709,7 +709,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -724,7 +724,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -739,7 +739,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-suffix-message-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-suffix-message-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-suffix-message-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -754,7 +754,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-suffix-message-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-suffix-message-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-suffix-message-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -769,7 +769,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-suffix-message-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-suffix-message-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-suffix-message-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -784,7 +784,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-unconvertible-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-unconvertible-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-unconvertible-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -799,7 +799,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-unconvertible-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-unconvertible-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-unconvertible-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -814,7 +814,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/assertion-unconvertible-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/assertion-unconvertible-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/assertion-unconvertible-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -827,14 +827,191 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/constructor-template-private-reject.cpp",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-body-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/constructor-template-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/conditional-body-reject.o"
     ],
     "status": 1,
     "expected_success": false,
     "stdout": "",
-    "stderr": "ERROR: invalid fixed call argument\n"
+    "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-body-reject.cpp:2: demanded definition is ill-formed\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-body-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-body-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-body-reject.cpp:8:21: warning: \u2018explicit(bool)\u2019 only available with \u2018-std=c++20\u2019 or \u2018-std=gnu++20\u2019 [-Wc++20-extensions]\n    8 |   template<class T> explicit(T{}) value(T) {}\n      |                     ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-body-reject.cpp: In instantiation of \u2018struct demanded<int>\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-body-reject.cpp:5:53:   required from \u2018constexpr condition<T>::operator bool() const [with T = int]\u2019\n    5 |   constexpr explicit operator bool() const { return sizeof(demanded<T>) != 0; }\n      |                                                     ^~~~~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-body-reject.cpp:8:35:   required by substitution of \u2018template<class T> value::value(T) [with T = condition<int>]\u2019\n    8 |   template<class T> explicit(T{}) value(T) {}\n      |                                   ^~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-body-reject.cpp:11:38:   required from here\n   11 | int main() { value v(condition<int>{}); }\n      |                                      ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-body-reject.cpp:2:27: error: static assertion failed: demanded definition is ill-formed\n    2 |   static_assert(sizeof(T) == 0, \"demanded definition is ill-formed\");\n      |                 ~~~~~~~~~~^~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-body-reject.cpp:2:27: note: the comparison reduces to \u2018(4 == 0)\u2019\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-fallback.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback.o",
+      "-o",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nm",
+      "-C",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "0000000000000000 W value::value(...)\n0000000000000000 W value::value<true_condition>(true_condition)\n0000000000000000 W value::value<false_condition>(false_condition)\n0000000000000000 W value::value(...)\n0000000000000000 W value::value<true_condition>(true_condition)\n0000000000000000 W value::value<false_condition>(false_condition)\n0000000000000000 T main\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-fallback.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-fallback.cpp:13:21: warning: \u2018explicit(bool)\u2019 only available with \u2018-std=c++20\u2019 or \u2018-std=gnu++20\u2019 [-Wc++20-extensions]\n   13 |   template<class T> explicit(T{}) value(T) : selected(1) {}\n      |                     ^~~~~~~~\n"
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback.o",
+      "-o",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-fallback.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-fallback.cpp:13:29: warning: explicit(bool) is a C++20 extension [-Wc++20-extensions]\n   13 |   template<class T> explicit(T{}) value(T) : selected(1) {}\n      |                             ^\n1 warning generated.\n"
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback.o",
+      "-o",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/conditional-fallback.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback.lowir",
+      "-o",
+      "/tmp/pa29-189/controls-handoff-final3/conditional-fallback.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/constructor-template-private-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-handoff-final3/constructor-template-private-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: no viable constructor\n"
   },
   {
     "command": [
@@ -844,7 +1021,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/constructor-template-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/constructor-template-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/constructor-template-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -859,7 +1036,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/constructor-template-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/constructor-template-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/constructor-template-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -874,7 +1051,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/contextual-specifiers.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/contextual-specifiers.o"
+      "/tmp/pa29-189/controls-handoff-final3/contextual-specifiers.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -884,9 +1061,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/contextual-specifiers.o",
+      "/tmp/pa29-189/controls-handoff-final3/contextual-specifiers.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/contextual-specifiers"
+      "/tmp/pa29-189/controls-handoff-final3/contextual-specifiers"
     ],
     "status": 0,
     "expected_success": true,
@@ -895,7 +1072,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/contextual-specifiers",
+      "/tmp/pa29-189/controls-handoff-final3/contextual-specifiers",
       "runtime-input"
     ],
     "status": 0,
@@ -907,7 +1084,7 @@
     "command": [
       "nm",
       "-C",
-      "/tmp/pa29-189/controls-contexts-final/contextual-specifiers.o"
+      "/tmp/pa29-189/controls-handoff-final3/contextual-specifiers.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -922,7 +1099,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/contextual-specifiers.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/contextual-specifiers.o"
+      "/tmp/pa29-189/controls-handoff-final3/contextual-specifiers.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -932,9 +1109,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/contextual-specifiers.o",
+      "/tmp/pa29-189/controls-handoff-final3/contextual-specifiers.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/contextual-specifiers"
+      "/tmp/pa29-189/controls-handoff-final3/contextual-specifiers"
     ],
     "status": 0,
     "expected_success": true,
@@ -943,7 +1120,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/contextual-specifiers",
+      "/tmp/pa29-189/controls-handoff-final3/contextual-specifiers",
       "runtime-input"
     ],
     "status": 0,
@@ -957,7 +1134,7 @@
       "--emit-lowir",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/contextual-specifiers.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/contextual-specifiers.lowir"
+      "/tmp/pa29-189/controls-handoff-final3/contextual-specifiers.lowir"
     ],
     "status": 0,
     "expected_success": true,
@@ -967,9 +1144,9 @@
   {
     "command": [
       "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
-      "/tmp/pa29-189/controls-contexts-final/contextual-specifiers.lowir",
+      "/tmp/pa29-189/controls-handoff-final3/contextual-specifiers.lowir",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/contextual-specifiers.canonical"
+      "/tmp/pa29-189/controls-handoff-final3/contextual-specifiers.canonical"
     ],
     "status": 0,
     "expected_success": true,
@@ -984,7 +1161,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-conversions.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -994,9 +1171,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions"
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions"
     ],
     "status": 0,
     "expected_success": true,
@@ -1005,7 +1182,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions",
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions",
       "runtime-input"
     ],
     "status": 0,
@@ -1017,7 +1194,7 @@
     "command": [
       "nm",
       "-C",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1032,7 +1209,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-conversions.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1042,9 +1219,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions"
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions"
     ],
     "status": 0,
     "expected_success": true,
@@ -1053,7 +1230,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions",
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions",
       "runtime-input"
     ],
     "status": 0,
@@ -1069,7 +1246,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-conversions.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1079,9 +1256,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions"
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions"
     ],
     "status": 0,
     "expected_success": true,
@@ -1090,7 +1267,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions",
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions",
       "runtime-input"
     ],
     "status": 0,
@@ -1104,7 +1281,7 @@
       "--emit-lowir",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-conversions.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions.lowir"
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions.lowir"
     ],
     "status": 0,
     "expected_success": true,
@@ -1114,9 +1291,9 @@
   {
     "command": [
       "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions.lowir",
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions.lowir",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions.canonical"
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions.canonical"
     ],
     "status": 0,
     "expected_success": true,
@@ -1131,7 +1308,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-false-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-false-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1146,7 +1323,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-false-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-false-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1161,7 +1338,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-false-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-false-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1176,7 +1353,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-traits.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1186,9 +1363,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits"
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits"
     ],
     "status": 0,
     "expected_success": true,
@@ -1197,7 +1374,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-traits",
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits",
       "runtime-input"
     ],
     "status": 0,
@@ -1209,7 +1386,7 @@
     "command": [
       "nm",
       "-C",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1224,7 +1401,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-traits.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1234,9 +1411,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits"
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits"
     ],
     "status": 0,
     "expected_success": true,
@@ -1245,7 +1422,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-traits",
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits",
       "runtime-input"
     ],
     "status": 0,
@@ -1261,7 +1438,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-traits.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1271,9 +1448,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits"
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits"
     ],
     "status": 0,
     "expected_success": true,
@@ -1282,7 +1459,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-traits",
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits",
       "runtime-input"
     ],
     "status": 0,
@@ -1296,7 +1473,7 @@
       "--emit-lowir",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-traits.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits.lowir"
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits.lowir"
     ],
     "status": 0,
     "expected_success": true,
@@ -1306,9 +1483,9 @@
   {
     "command": [
       "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits.lowir",
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits.lowir",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits.canonical"
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits.canonical"
     ],
     "status": 0,
     "expected_success": true,
@@ -1323,7 +1500,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-and-substitution.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution.o"
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1333,9 +1510,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution.o",
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution"
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution"
     ],
     "status": 0,
     "expected_success": true,
@@ -1344,7 +1521,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution",
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution",
       "runtime-input"
     ],
     "status": 0,
@@ -1356,7 +1533,7 @@
     "command": [
       "nm",
       "-C",
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution.o"
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1371,7 +1548,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-and-substitution.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution.o"
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1381,9 +1558,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution.o",
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution"
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution"
     ],
     "status": 0,
     "expected_success": true,
@@ -1392,7 +1569,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution",
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution",
       "runtime-input"
     ],
     "status": 0,
@@ -1408,7 +1585,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-and-substitution.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution.o"
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1418,9 +1595,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution.o",
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution"
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution"
     ],
     "status": 0,
     "expected_success": true,
@@ -1429,7 +1606,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution",
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution",
       "runtime-input"
     ],
     "status": 0,
@@ -1443,7 +1620,7 @@
       "--emit-lowir",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-and-substitution.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution.lowir"
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution.lowir"
     ],
     "status": 0,
     "expected_success": true,
@@ -1453,9 +1630,9 @@
   {
     "command": [
       "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution.lowir",
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution.lowir",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/demand-and-substitution.canonical"
+      "/tmp/pa29-189/controls-handoff-final3/demand-and-substitution.canonical"
     ],
     "status": 0,
     "expected_success": true,
@@ -1470,7 +1647,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/demand-body-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/demand-body-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1485,7 +1662,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/demand-body-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/demand-body-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1500,7 +1677,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/demand-body-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/demand-body-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1515,12 +1692,12 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/explicit-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/explicit-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/explicit-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
     "stdout": "",
-    "stderr": "ERROR: invalid fixed call argument\n"
+    "stderr": "ERROR: explicit condition is not a constant boolean\n"
   },
   {
     "command": [
@@ -1530,7 +1707,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/explicit-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/explicit-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/explicit-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1545,7 +1722,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/explicit-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/explicit-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/explicit-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1560,12 +1737,12 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/explicit-template-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/explicit-template-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/explicit-template-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
     "stdout": "",
-    "stderr": "ERROR: invalid fixed call argument\n"
+    "stderr": "ERROR: explicit condition is not a constant boolean\n"
   },
   {
     "command": [
@@ -1575,7 +1752,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/explicit-template-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/explicit-template-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/explicit-template-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1590,7 +1767,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/explicit-template-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/explicit-template-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/explicit-template-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1605,7 +1782,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-member-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/forward-member-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/forward-member-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1620,7 +1797,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-member-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/forward-member-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/forward-member-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1635,7 +1812,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-member-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/forward-member-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/forward-member-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1650,7 +1827,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/forward-nested-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/forward-nested-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1665,7 +1842,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/forward-nested-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/forward-nested-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1680,7 +1857,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/forward-nested-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/forward-nested-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1695,12 +1872,12 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/guide-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/guide-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/guide-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
     "stdout": "",
-    "stderr": "ERROR: invalid fixed call argument\n"
+    "stderr": "ERROR: explicit condition is not a constant boolean\n"
   },
   {
     "command": [
@@ -1710,7 +1887,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/guide-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/guide-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/guide-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1725,7 +1902,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/guide-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/guide-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/guide-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1740,7 +1917,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/noexcept-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/noexcept-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/noexcept-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1755,7 +1932,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/noexcept-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/noexcept-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/noexcept-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1770,7 +1947,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/noexcept-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/noexcept-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/noexcept-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1785,7 +1962,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/noexcept-template-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/noexcept-template-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/noexcept-template-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1800,7 +1977,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/noexcept-template-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/noexcept-template-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/noexcept-template-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1815,7 +1992,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/noexcept-template-private-reject.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/noexcept-template-private-reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/noexcept-template-private-reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1830,7 +2007,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/source-trait-identity.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity.o"
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1840,9 +2017,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity.o",
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity"
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity"
     ],
     "status": 0,
     "expected_success": true,
@@ -1851,7 +2028,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity",
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity",
       "runtime-input"
     ],
     "status": 0,
@@ -1863,7 +2040,7 @@
     "command": [
       "nm",
       "-C",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity.o"
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1878,7 +2055,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/source-trait-identity.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity.o"
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1888,9 +2065,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity.o",
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity"
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity"
     ],
     "status": 0,
     "expected_success": true,
@@ -1899,7 +2076,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity",
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity",
       "runtime-input"
     ],
     "status": 0,
@@ -1915,7 +2092,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/source-trait-identity.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity.o"
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -1925,9 +2102,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity.o",
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity"
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity"
     ],
     "status": 0,
     "expected_success": true,
@@ -1936,7 +2113,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity",
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity",
       "runtime-input"
     ],
     "status": 0,
@@ -1950,7 +2127,7 @@
       "--emit-lowir",
       "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/source-trait-identity.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity.lowir"
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity.lowir"
     ],
     "status": 0,
     "expected_success": true,
@@ -1960,9 +2137,9 @@
   {
     "command": [
       "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity.lowir",
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity.lowir",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity.canonical"
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity.canonical"
     ],
     "status": 0,
     "expected_success": true,
@@ -1976,7 +2153,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -1992,7 +2169,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -2008,7 +2185,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -2022,7 +2199,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -2038,7 +2215,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -2054,7 +2231,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -2068,7 +2245,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -2084,7 +2261,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -2100,7 +2277,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/reject.o"
+      "/tmp/pa29-189/controls-handoff-final3/reject.o"
     ],
     "status": 1,
     "expected_success": false,
@@ -2116,7 +2293,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2126,9 +2303,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2137,7 +2314,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2155,7 +2332,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2165,9 +2342,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2176,7 +2353,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2194,7 +2371,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2204,9 +2381,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2215,7 +2392,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2231,7 +2408,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2241,9 +2418,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2252,7 +2429,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2270,7 +2447,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2280,9 +2457,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2291,7 +2468,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2309,7 +2486,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2319,9 +2496,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2330,7 +2507,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2346,7 +2523,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2356,9 +2533,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2367,7 +2544,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2385,7 +2562,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2395,9 +2572,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2406,7 +2583,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2424,7 +2601,7 @@
       "-c",
       "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2434,9 +2611,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/defined-original.o",
+      "/tmp/pa29-189/controls-handoff-final3/defined-original.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2445,7 +2622,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/defined-original"
+      "/tmp/pa29-189/controls-handoff-final3/defined-original"
     ],
     "status": 0,
     "expected_success": true,
@@ -2458,9 +2635,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits-spelling.cpp",
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o"
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2470,9 +2647,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o",
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling"
+      "/tmp/pa29-189/controls-handoff-final3/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -2481,7 +2658,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/spelling",
+      "/tmp/pa29-189/controls-handoff-final3/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -2495,9 +2672,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits-spelling.cpp",
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o"
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2507,9 +2684,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o",
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling"
+      "/tmp/pa29-189/controls-handoff-final3/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -2518,7 +2695,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/spelling",
+      "/tmp/pa29-189/controls-handoff-final3/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -2532,9 +2709,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-contexts-final/defined-traits-spelling.cpp",
+      "/tmp/pa29-189/controls-handoff-final3/defined-traits-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o"
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2544,9 +2721,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o",
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling"
+      "/tmp/pa29-189/controls-handoff-final3/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -2555,7 +2732,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/spelling",
+      "/tmp/pa29-189/controls-handoff-final3/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -2569,9 +2746,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions-spelling.cpp",
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o"
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2581,9 +2758,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o",
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling"
+      "/tmp/pa29-189/controls-handoff-final3/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -2592,7 +2769,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/spelling",
+      "/tmp/pa29-189/controls-handoff-final3/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -2606,9 +2783,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions-spelling.cpp",
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o"
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2618,9 +2795,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o",
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling"
+      "/tmp/pa29-189/controls-handoff-final3/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -2629,7 +2806,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/spelling",
+      "/tmp/pa29-189/controls-handoff-final3/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -2643,9 +2820,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-contexts-final/defined-conversions-spelling.cpp",
+      "/tmp/pa29-189/controls-handoff-final3/defined-conversions-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o"
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2655,9 +2832,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o",
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling"
+      "/tmp/pa29-189/controls-handoff-final3/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -2666,7 +2843,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/spelling",
+      "/tmp/pa29-189/controls-handoff-final3/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -2680,9 +2857,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity-spelling.cpp",
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o"
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2692,9 +2869,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o",
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling"
+      "/tmp/pa29-189/controls-handoff-final3/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -2703,7 +2880,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/spelling",
+      "/tmp/pa29-189/controls-handoff-final3/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -2717,9 +2894,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity-spelling.cpp",
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o"
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2729,9 +2906,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o",
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling"
+      "/tmp/pa29-189/controls-handoff-final3/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -2740,7 +2917,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/spelling",
+      "/tmp/pa29-189/controls-handoff-final3/spelling",
       "runtime-input"
     ],
     "status": 0,
@@ -2754,9 +2931,9 @@
       "-std=c++11",
       "-O0",
       "-c",
-      "/tmp/pa29-189/controls-contexts-final/source-trait-identity-spelling.cpp",
+      "/tmp/pa29-189/controls-handoff-final3/source-trait-identity-spelling.cpp",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o"
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o"
     ],
     "status": 0,
     "expected_success": true,
@@ -2766,9 +2943,9 @@
   {
     "command": [
       "g++",
-      "/tmp/pa29-189/controls-contexts-final/spelling.o",
+      "/tmp/pa29-189/controls-handoff-final3/spelling.o",
       "-o",
-      "/tmp/pa29-189/controls-contexts-final/spelling"
+      "/tmp/pa29-189/controls-handoff-final3/spelling"
     ],
     "status": 0,
     "expected_success": true,
@@ -2777,7 +2954,7 @@
   },
   {
     "command": [
-      "/tmp/pa29-189/controls-contexts-final/spelling",
+      "/tmp/pa29-189/controls-handoff-final3/spelling",
       "runtime-input"
     ],
     "status": 0,
