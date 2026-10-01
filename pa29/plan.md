@@ -1,10 +1,11 @@
-# PA29 compact plan — implementation175 handoff
+# PA29 compact plan — implementation176 active
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `221d6d0e4930da05db2913bdf5f50d808f89c744`.
 Audit entry: `914e1a0a07e40884c91c0b967b0421eea9ef0d48`.
 Last reviewed commit: `7139ceb5769eea12c6e2e00b54932f09d59c79b5`.
+Implementation176 entry: `2b7a513297b2e9719fcd5686d3c1c97ee7565b13`.
 Implementation175 entry: `235ffa3947d7921a1c34c66198f590df5aa77de2`.
 Implementation code: `3edfe15e`, `393b19cc`, `7bb44553`, `704538c1`.
 
@@ -72,3 +73,23 @@ or a forced-inline transform; the current pipeline only retains that attribute.
 Those owners cannot be repaired by further extending source-invocation facts.
 This concrete ownership boundary ends the implementation handoff. Stage base and
 Last reviewed commit are preserved; mandatory independent review is outstanding.
+
+## Implementation176 work ledger
+
+Entry: clean HEAD above, PA29 378/403 (25 failures). Previous goal turn was
+progress: implementation175 committed a validated source-invocation group. No
+live compiler/build process remains. Stage base and Last reviewed are preserved.
+
+Initial related group: hosted declaration identity and emission. Owners are
+syntax native attributes → canonical semantic entities and explicit-instantiation
+demand → typed symbol/lifetime metadata → ELF/COMDAT. Retain inline-variable and
+excluded-member facts at declaration; reuse them by identity during demand and
+emission. Investigate the nested out-of-class member's ABI-tag expectation
+before changing correct inherited naming. Work must follow declaration and
+demand edges (average O(1) indexed facts, linear emitted IR); no grammar replay,
+text keys, global retries or new optimization pass. Validate ordinary/templated
+declarations, two-TU address identity, unused/used excluded members, and symbol
+inspection; freeze entry/final latency/RSS and checked runtime/text evidence.
+
+Remaining implementation and independent review from the preceding ledger remain
+active and unwaived. Final boundary and evidence will replace this active entry.
