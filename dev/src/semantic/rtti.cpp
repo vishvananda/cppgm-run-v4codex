@@ -65,10 +65,13 @@ Expression Analyzer::typeid_expression(NodeId n, ScopeId s)
     else {
         // Formation queries check the operand without materialization or body
         // demand. Only a polymorphic glvalue promotes it to evaluated work.
-        auto operand = rtti_operand(expression_query(first,s));
+        auto query = expression_query(first,s);
+        auto operand = rtti_operand(query);
         use.type = operand.type;
         if (class_value(use.type)) size(use.type);
         use.dynamic = operand.category != ValueCategory::Prvalue && class_value(use.type) && polymorphic(types[use.type].entity);
+        if (use.dynamic && default_inquiry_queries.get(ast.nodes.occurrences[first].source) && evaluated_prototype_parameter(query))
+            throw std::runtime_error("parameter used in evaluated default typeid operand");
         if (use.dynamic) expression(first,s);
     }
     if (!use.type) throw std::runtime_error("typeid requires a resolved type");

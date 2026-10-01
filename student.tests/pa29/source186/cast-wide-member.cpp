@@ -1,0 +1,1 @@
+using I=_BitInt(93);struct A{I n;};struct P{int m;};struct B:P,A{constexpr B():P{1},A{7}{}};constexpr B b;constexpr const I B::*pm=&A::n;constexpr I B::*qm=(I B::*)pm;static_assert(b.*qm==7,"");int main(){return b.*qm!=7;}

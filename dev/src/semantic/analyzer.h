@@ -1011,6 +1011,8 @@ private:
     void complete_query_class(EntityId entity);
     TypeQueryFact incomplete_query(TypeId type);
     Index query_sources, query_callee_sources, signature_parameters;
+    Index default_inquiry_queries;
+    bool evaluated_prototype_parameter(QueryId query);
     std::size_t query_work = 0;
     std::uint64_t query_value_key(QueryId id) const {
         return key(id,(source_invocation.defaulted ? source_invocation.site*2 : 0) + unsigned(manifest_evaluation));

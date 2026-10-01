@@ -52,6 +52,9 @@ Value Procedural::overflow_builtin(NodeId n, semantic::Intrinsic kind)
         high = binary(Operation::Add,binary(Operation::Xor,high,mask),binary(Operation::And,sign,compare(Operation::Eq,low,zero)));
     }
     auto stored = coerce(low,type(target)); stored.type = target;
+    // Overflow is measured against the destination's language precision,
+    // which can be narrower than its LowIR storage carrier.
+    stored = normalize_bit_integer(stored);
     Instruction write(Opcode::Store,stored.ir); write.is_volatile = sem.types[target].cv & 2;
     emit(write,{stored.operand,destination.operand});
     auto expected = coerce(stored,wide,sem.unsigned_type(target));

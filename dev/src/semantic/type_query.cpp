@@ -79,6 +79,17 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     s = expanded_scope(n,s);
     auto& source_index = callee ? query_callee_sources : query_sources;
     if (auto old = source_index.get(key(s,n))) return old;
+    auto occurrence = ast.nodes.occurrences[n];
+    if (!callee && occurrence.context) if (auto query = default_inquiry_queries.get(occurrence.source)) {
+        // A prototype supplies type/category facts, never runtime parameter
+        // objects. Reuse its query under the complete default environment.
+        auto frame = template_type_contexts.get(occurrence.context);
+        if (!frame) throw std::logic_error("default inquiry has no substitution frame");
+        Index bindings, cache;
+        query = substitute_query(query,bindings,cache,frame);
+        if (!query) throw std::runtime_error("invalid default inquiry operand");
+        source_index.put(key(s,n),query); return query;
+    }
     TypeQuery q; std::vector<QueryId> children;
     auto node = ast[n]; auto first = node.first;
     switch (node.kind) {
