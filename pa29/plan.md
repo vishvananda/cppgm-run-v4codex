@@ -1,77 +1,69 @@
-# PA29 compact plan — implementation189
+# PA29 compact plan — audit190
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **checkpoint audit complete; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
-Previous reviewed commit: `52070178897f5894edaf2f35d03a734b781979d4`.
-Last reviewed commit: `2df00585bd10d4e2e068934394dffc8adb0a47ed`.
-Implementation189 entry: `54ddacb1ced906e692ea94bde5110b0757e1b2af`, clean,
-**395/403**, eight failures. Review markers are unchanged. The preceding goal
-turn made verified progress; entry inspection found no live compiler/test work.
+Previous reviewed commit: `2df00585bd10d4e2e068934394dffc8adb0a47ed`.
+Last reviewed commit: `5aaf16d15f8e50925c0b75a5485893a958501b85`.
+Audit entry: `bac893d42bba792ab2ce3c868a69cd183acb73bc`, clean, **398/403**.
+The preceding implementation turn made verified progress; no live work needed
+continuation at audit entry. `fail (2)` was exit status; five failures is the
+preservation baseline. The record commit follows the code tip with no code edits.
 
 ## Design/spec alignment
 
-[Handoff189](handoff189.md) completes the template-definition/declared-value group
-and extends it through constant boolean conditions. Three incorrect success
-oracles are corrected with [reducers, C++11/contract proof and bundle revision](reference-corrections189.md).
-No primary definitions or trait values are fabricated from library names.
+[Audit190](audit.md) reviews every commit and the combined source across all
+three accepted handoffs since review186: complex values/ABI, contextual syntax,
+and template-definition/constant-condition behavior. Its
+[range manifest](../student.tests/pa29/evidence190/range.json) records all 14 commits
+through the repair and 82 combined implementation/build paths.
 
-Static assertions now select/check and execute the actual contextual conversion,
-including explicit bool, access and deletion. Template dependence and immutable
-source identities remain intact. Messages validate during parsing and render only
-on failure. Concrete noexcept and conditional explicit/guide conditions use the
-existing typed validator with their lexical access scope; friend access survives.
-Constructor-template condition failures publish a
-failed specialization result and allow fallback candidates; demanded-definition
-errors remain hard errors.
+Audit repairs complete the static constant-data key, propagate valid complex
+infinity/NaN inputs, emit extension RTTI, keep complex continuations typed,
+execute retained source/query list recipes through one constant owner, and read
+the writer's special-value suffixes. No grammar replay, global retry, fake
+runtime materialization or textual production transport is added. Canonical
+facts live in the TU; function MIR dies after encoding. The demanded integrated
+template trace crosses all three handoffs through host ELF and unwind output.
 
-Source nodes → canonical declarations/query facts → recorded conversions →
-constant execution or typed LowIR → ELF. Existing complete-fact identity caches,
-parent-linked frames, TU arenas and function release boundaries remain. There is
-no new cache, grammar replay, global retry, textual phase transport, optimizer,
-ABI representation or per-node allocation. Work follows actual lookup candidates,
-demanded facts and message code units; ready assertions are not rechecked.
+Three inherited reference corrections are accepted on
+[reduced C++11/contract proofs and pinned bundle revision](reference-corrections189.md).
+No fixture/reference/harness changes occurred in audit190. All original inputs
+and comparison rules remain. Undefined library templates are not invented.
 
 ## Validation and performance
 
-`make test-pa29`: **398/403**, five failures, exit 2. PA1–28: **4538/4538**.
-Root through PA29: **4936/4941**, exactly those five failures. File audit passes
-with four inherited header-division warnings. **221 explicit commands**, seven
-validated LowIR outputs and symbol inspections pass. All **403 original inputs**
-remain; of **1,707** contract/harness paths, only three proven exit-status
-corrections differ. The entry compiler also accepted eleven invalid assertion
-controls and rejected the valid assertion composite; those defects are fixed.
+`make test-pa29`: **398/403**, exactly the same five failures, exit 2.
+PA1–28: **4538/4538**, exit 0. Root through PA29: **4936/4941**, only PA29 fails.
+File audit passes with the four inherited header-division warnings. Explicit
+controls187/188/189/190 pass **470 commands**; full-phase AST/LowIR/native/ELF
+inspection passes **82 commands**. All **403 inputs and 1,707 contract/harness
+paths** are preserved since entry; three proven exit-status corrections are the
+only changes since the previous review. Source and binary hashes bind validation
+to the reviewed code tip. Failure identity is unchanged, so progress passes.
 
-[Performance189](performance189.md) retains **1,512 observations and 24 launchers**:
-frozen preliminary/final comparisons, A/A calibration, six ABBA blocks, compiler
-latency/RSS and runtime/text. Final measurements cover four common workloads and
-template/assertion/specifier demand at 600/1200/2400 declarations. Generated images
-are unchanged across the ten final equivalent pairs; semantic work counters scale
-linearly. No speedup is claimed. Mandatory evaluator/native/time limits remain;
-inherited blanket 15%/zero-growth targets remain diagnostic under spec §9.
+[Performance190](performance190.md) retains **656 new observations plus 16
+launchers**, frozen binaries/inputs/flags, A/A calibration and six ABBA blocks on
+correct equivalent pairs, and corrected-only scaling on the repaired owners.
+Ten equivalent object/executable pairs are byte-identical. All four dimensions,
+noise/outliers, bounded fact growth and **2,936 historical observations plus 56
+launchers** are retained and checked. No speedup or repeatable avoidable regression
+is established. Mandatory evaluator/native/inline/time budgets are unchanged.
+Inherited 15% latency/RSS and zero-growth targets are diagnostic under spec §9;
+necessary semantics and later PA30–34 obligations create no additional PA29 gate.
 
-## Remaining groups and handoff ledger
+## Remaining broad groups
 
-The [five-case ledger](../student.tests/pa29/evidence189/remaining.json) separates
-unfinished implementation from independent review:
-
-| Owner | Cases | Disposition |
+| Owner | Cases | Next complete boundary |
 |---|---:|---|
-| Binary128/half representation and ABI | 3 | Unfinished; genuine formats, operations, typed IR and ABI needed. |
-| Executable vectors and type-operand intrinsics | 1 | Unfinished; vector reduction/comparison, conversion and lowering needed. |
-| Nested-template ABI-tag policy | 1 | Independent contract question from implementation176; unchanged and counted. |
+| Binary128/half representation and ABI | 3 | Genuine formats, constants/operations, typed IR, storage and calls/returns. |
+| Vector expressions and type-operand intrinsics | 1 | Deduction, conversions/reduction/comparison and required typed lowering. |
+| Nested-template ABI-tag contract | 1 | Independent reducer and extension/contract proof; retain the current oracle and failure meanwhile. |
 
-`d0df835d` records entry ownership; `32e2430a` records reference proof/corrections;
-`4ed34a87` fixes contextual assertions/messages; `e08707fc` completes specifier
-access contexts; `383fae65` preserves conditional-specifier SFINAE. The evidence
-commit binds final artifacts in the
-[manifest](../student.tests/pa29/evidence189/manifest.json).
-The group was extended through definitions, specialization, deferred demand,
-constant/runtime values, assertion conversion/message rules and all adjacent
-constant boolean access consumers found defective. Remaining numeric/vector cases
-require new representations/operations and cannot be supplied by another demand
-or contextual-conversion correction. This is the concrete handoff boundary.
-
-Ralph independently reviews these changes and reference corrections. Full
-PA29/root-through success and whole-stage audit remain required before PA30.
-[Audit186](audit.md), all review markers, historical handoffs and measurements
-remain retained; no outstanding requirement is waived.
+The [failure ledger](../student.tests/pa29/evidence190/remaining.json) preserves
+all five cases. Full PA29/root-through success remains required before PA30.
+The three handoffs reduced failures 11→5 (three by proven reference correction).
+Complex work omitted static-key/RTTI/continuation consumers; constant-condition
+work omitted fixed-list recipe evaluation. Avoid that fragmentation by finishing
+an owner across source/query/demand, constant/static/runtime/ABI and adapter
+boundaries before handoff. Keep the remaining groups broad. Historical handoffs,
+[prior audit](audit186.md), all measurements and the cumulative audit ledger remain.

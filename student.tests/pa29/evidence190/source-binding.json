@@ -1,0 +1,11 @@
+{
+  "code_commit": "5aaf16d15f8e50925c0b75a5485893a958501b85",
+  "dev_tree": "4ff01077ee53b7c2dd5f266f73c7788742ec570f",
+  "validated_source_sha256": "3fbd3ea889f7cfcdadae9e47890dfdb860347ba51fd859878ebed5d8cfd997bf",
+  "compiler_sha256": "98bbbe6a9acc9f606c564a19c1cba5efae7b52d356f6692439fe62b7980b12b5",
+  "tracked_dev_paths": 477,
+  "worktree_matches_validated_source": true,
+  "worktree_dev_matches_committed_tree": true,
+  "symlink_policy": "Validation hashes resolved file contents; git tree additionally pins symlink identities and target spellings.",
+  "records_commit_policy": "Following commit changes only audit records; no further implementation or personal test edits."
+}

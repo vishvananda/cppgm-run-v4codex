@@ -1,0 +1,75 @@
+[
+  {
+    "source": "student.tests/pa29/controls190/complex-special.cpp",
+    "command": [
+      "/tmp/pa29-audit190/entry-cppgm++",
+      "-c",
+      "student.tests/pa29/controls190/complex-special.cpp",
+      "-o",
+      "/tmp/pa29-audit190/entry-controls/complex-special.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: nonconstant constexpr object initializer\n"
+  },
+  {
+    "source": "student.tests/pa29/controls190/complex-rtti.cpp",
+    "command": [
+      "/tmp/pa29-audit190/entry-cppgm++",
+      "-c",
+      "student.tests/pa29/controls190/complex-rtti.cpp",
+      "-o",
+      "/tmp/pa29-audit190/entry-controls/complex-rtti.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: typeid requires std::type_info\n"
+  },
+  {
+    "source": "student.tests/pa29/controls190/complex-identity.cpp",
+    "command": [
+      "/tmp/pa29-audit190/entry-cppgm++",
+      "-c",
+      "student.tests/pa29/controls190/complex-identity.cpp",
+      "-o",
+      "/tmp/pa29-audit190/entry-controls/complex-identity.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls190/complex-identity.cpp",
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/entry-controls/complex-identity.o",
+      "-o",
+      "/tmp/pa29-audit190/entry-controls/complex-identity"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls190/complex-identity.cpp",
+    "command": [
+      "/tmp/pa29-audit190/entry-controls/complex-identity"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls190/integrated.cpp",
+    "command": [
+      "/tmp/pa29-audit190/entry-cppgm++",
+      "-c",
+      "student.tests/pa29/controls190/integrated.cpp",
+      "-o",
+      "/tmp/pa29-audit190/entry-controls/integrated.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true constant boolean in student.tests/pa29/controls190/integrated.cpp:17: shared fixed conversion\n"
+  }
+]

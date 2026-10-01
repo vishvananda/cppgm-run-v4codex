@@ -1,0 +1,757 @@
+[
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/contextual.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/contextual.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/controls188-final/contextual.o",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/contextual"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/controls188-final/contextual"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-ast",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/contextual.ast",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/contextual.cpp"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-lowir",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/contextual.lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/contextual.cpp"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-audit190/controls188-final/contextual.lowir",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/contextual.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/identifiers.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/identifiers.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/controls188-final/identifiers.o",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/identifiers"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/controls188-final/identifiers"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-ast",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/identifiers.ast",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/identifiers.cpp"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-lowir",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/identifiers.lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/identifiers.cpp"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-audit190/controls188-final/identifiers.lowir",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/identifiers.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/identifiers.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/controls188-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/identifiers.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/controls188-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/nested.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/nested.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/controls188-final/nested.o",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/nested"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/controls188-final/nested"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-ast",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/nested.ast",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/nested.cpp"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-lowir",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/nested.lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/nested.cpp"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-audit190/controls188-final/nested.lowir",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/nested.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/precedence.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/precedence.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/controls188-final/precedence.o",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/precedence"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/controls188-final/precedence"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-ast",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/precedence.ast",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/precedence.cpp"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-lowir",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/precedence.lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/precedence.cpp"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-audit190/controls188-final/precedence.lowir",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/precedence.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/throw-comma.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/throw-comma.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/controls188-final/throw-comma.o",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/throw-comma"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/controls188-final/throw-comma"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-ast",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/throw-comma.ast",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/throw-comma.cpp"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-lowir",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/throw-comma.lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/throw-comma.cpp"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-audit190/controls188-final/throw-comma.lowir",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/throw-comma.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/throw-comma.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/controls188-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls188/throw-comma.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/controls188-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nm",
+      "-C",
+      "/tmp/pa29-audit190/controls188-final/contextual.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "0000000000000000 T ordinary_identifier_use()\n0000000000000000 W Deferred<int>::ordinary()\n0000000000000000 D co_await\n0000000000000008 D co_return\n0000000000000004 D co_yield\n0000000000000046 T main\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-ast",
+      "/home/vishvananda/work/private/v4codex/checkout/pa5/tests/general/200-unsupported-co-return-bad.t",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/rejected.ast"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: coroutine syntax requires a retained template body\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/namespace.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: constant variable template required\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/member-initializer.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: coroutine operation outside an evaluated function body\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/default.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: coroutine operation outside an evaluated function body\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/local-default.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: coroutine operation outside an evaluated function body\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/local-class-initializer.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: coroutine operation outside an evaluated function body\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/sizeof.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: coroutine operation outside an evaluated function body\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/decltype.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: coroutine operation outside an evaluated function body\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/noexcept.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: coroutine operation outside an evaluated function body\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/await-empty.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: expected expression, found ';'\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/yield-empty.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: expected expression, found ';'\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/await-unbound.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: unbound template value name: missing at /tmp/pa29-audit190/controls188-final/await-unbound.cpp:1\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/yield-unbound.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: unbound template value name: missing at /tmp/pa29-audit190/controls188-final/yield-unbound.cpp:1\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/return-unbound.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: unbound template value name: missing at /tmp/pa29-audit190/controls188-final/return-unbound.cpp:1\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/await-fixed-error.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: arithmetic operands required\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/yield-fixed-error.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: arithmetic operands required\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/return-fixed-error.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: arithmetic operands required\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/after-error.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: unbound template value name: missing at /tmp/pa29-audit190/controls188-final/after-error.cpp:1\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/direct-demand.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: coroutine syntax requires a retained template body\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/template-demand.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: coroutine promise and frame lowering is not implemented\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/member-demand.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: coroutine promise and frame lowering is not implemented\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/controls188-final/auto-demand.cpp",
+      "-o",
+      "/tmp/pa29-audit190/controls188-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: coroutine promise and frame lowering is not implemented\n"
+  }
+]

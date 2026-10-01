@@ -1,0 +1,32 @@
+[
+  {
+    "file": "student.tests/pa29/evidence190/common-performance.json",
+    "sha256": "8f16955f2ee0540c272137229c41eea36ce97116a59c999bf00ba486ba6c9457",
+    "observations": 224,
+    "launchers": 0,
+    "binary_and_input_hashes_verified": true,
+    "sequence_and_paired_results_recomputed": true,
+    "all_statuses_zero": true,
+    "equivalent_images_identical": true
+  },
+  {
+    "file": "student.tests/pa29/evidence190/existing-owner-performance.json",
+    "sha256": "39a65d9a82d2e1cfb16fd769db63bc3170299b7f41f9a4da0817bab94adaabed",
+    "observations": 336,
+    "launchers": 8,
+    "binary_and_input_hashes_verified": true,
+    "sequence_and_paired_results_recomputed": true,
+    "all_statuses_zero": true,
+    "equivalent_images_identical": true
+  },
+  {
+    "file": "student.tests/pa29/evidence190/owner-performance.json",
+    "sha256": "21f8591911a2234b05ffe5b72f6242734b0327f37ec1ebef0c3d1e65b34217b7",
+    "observations": 96,
+    "launchers": 8,
+    "binary_and_input_hashes_verified": true,
+    "sequence_and_paired_results_recomputed": false,
+    "all_statuses_zero": true,
+    "equivalent_images_identical": false
+  }
+]

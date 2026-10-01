@@ -1,0 +1,1069 @@
+[
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-special.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-special.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/checks-final/complex-special.o",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-special"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/complex-special"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-special.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-special.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/checks-final/complex-special.o",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-special"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/complex-special"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-include",
+      "typeinfo",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-special.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-special.cpp:12:48: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]\n   12 | static_assert(__builtin_isinf(__real__ product)&&__builtin_isinf(__imag__ product),\"multiply recovery\");\n      |                                                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-special.cpp:12:48: note: use '&' for a bitwise operation\n   12 | static_assert(__builtin_isinf(__real__ product)&&__builtin_isinf(__imag__ product),\"multiply recovery\");\n      |                                                ^~~~~~~~~~~~~~~~~\n      |                                                &\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-special.cpp:12:48: note: remove constant to silence this warning\n   12 | static_assert(__builtin_isinf(__real__ product)&&__builtin_isinf(__imag__ product),\"multiply recovery\");\n      |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-special.cpp:13:49: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]\n   13 | static_assert(__builtin_isinf(__real__ quotient)&&__builtin_isinf(__imag__ quotient),\"divide recovery\");\n      |                                                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-special.cpp:13:49: note: use '&' for a bitwise operation\n   13 | static_assert(__builtin_isinf(__real__ quotient)&&__builtin_isinf(__imag__ quotient),\"divide recovery\");\n      |                                                 ^~~~~~~~~~~~~~~~~\n      |                                                 &\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-special.cpp:13:49: note: remove constant to silence this warning\n   13 | static_assert(__builtin_isinf(__real__ quotient)&&__builtin_isinf(__imag__ quotient),\"divide recovery\");\n      |                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n2 warnings generated.\n"
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nm",
+      "/tmp/pa29-audit190/checks-final/complex-special.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "0000000000000000 W _Z3addICdET_S0_S0_\n0000000000000030 d _ZL10difference\n0000000000000020 d _ZL3nan\n0000000000000010 d _ZL3sum\n0000000000000060 d _ZL4wide\n0000000000000080 d _ZL6narrow\n0000000000000040 d _ZL7product\n0000000000000000 d _ZL8infinite\n0000000000000050 d _ZL8quotient\n0000000000000088 d __string_15\n0000000000000000 T main\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-special.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-special.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-audit190/checks-final/complex-special.lowir",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-special.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "-SWsrg",
+      "/tmp/pa29-audit190/checks-final/complex-special.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "There are 23 section headers, starting at offset 0x798:\n\nSection Headers:\n  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0\n  [ 1] .text             PROGBITS        0000000000000000 000040 000188 00  AX  0   0 16\n  [ 2] .data             PROGBITS        0000000000000000 0001d0 000089 00  WA  0   0 16\n  [ 3] .eh_frame         PROGBITS        0000000000000000 000260 000068 00   A  0   0  8\n  [ 4]                   PROGBITS        0000000000000000 0002c8 000000 00   A  0   0  8\n  [ 5] .data.rel.local   PROGBITS        0000000000000000 0002c8 000000 00  WA  0   0  8\n  [ 6] .init_array       INIT_ARRAY      0000000000000000 0002c8 000000 08  WA  0   0  8\n  [ 7] .fini_array       FINI_ARRAY      0000000000000000 0002c8 000000 08  WA  0   0  8\n  [ 8] .tdata            PROGBITS        0000000000000000 0002c8 000000 00 WAT  0   0  1\n  [ 9] .rela.text        RELA            0000000000000000 0002c8 000030 18     17   1  8\n  [10] .rela.data        RELA            0000000000000000 0002f8 000000 18     17   2  8\n  [11] .rela.eh_frame    RELA            0000000000000000 0002f8 000030 18     17   3  8\n  [12] .rela.gcc_except_table RELA            0000000000000000 000328 000000 18     17   4  8\n  [13] .rela.data.rel.local RELA            0000000000000000 000328 000000 18     17   5  8\n  [14] .rela.init_array  RELA            0000000000000000 000328 000000 18     17   6  8\n  [15] .rela.fini_array  RELA            0000000000000000 000328 000000 18     17   7  8\n  [16] .rela.tdata       RELA            0000000000000000 000328 000000 18     17   8  8\n  [17] .symtab           SYMTAB          0000000000000000 000328 0001f8 18     18  19  8\n  [18] .strtab           STRTAB          0000000000000000 000520 00007f 00      0   0  1\n  [19] .shstrtab         STRTAB          0000000000000000 00059f 000121 00      0   0  1\n  [20] .note.GNU-stack   PROGBITS        0000000000000000 0006c0 000000 00      0   0  1\n  [21] .text._Z3addICdET_S0_S0_ PROGBITS        0000000000000000 0006c0 0000ca 00 AXG  0   0  1\n  [22] .group            GROUP           0000000000000000 00078c 000008 04     17  19  4\nKey to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  D (mbind), l (large), p (processor specific)\n\nCOMDAT group section [   22] `.group' [_Z3addICdET_S0_S0_] contains 1 sections:\n   [Index]    Name\n   [   21]   .text._Z3addICdET_S0_S0_\n\nRelocation section '.rela.text' at offset 0x2c8 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n000000000000006f  0000001300000004 R_X86_64_PLT32         0000000000000000 _Z3addICdET_S0_S0_ - 4\n000000000000011c  0000000b00000002 R_X86_64_PC32          0000000000000010 _ZL3sum + 4\n\nRelocation section '.rela.eh_frame' at offset 0x2f8 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000020  0000000900000002 R_X86_64_PC32          0000000000000000 .text._Z3addICdET_S0_S0_ + 0\n0000000000000048  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 0\n\nSymbol table '.symtab' contains 21 entries:\n   Num:    Value          Size Type    Bind   Vis      Ndx Name\n     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND \n     1: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 .text\n     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    2 .data\n     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    3 .eh_frame\n     4: 0000000000000000     0 SECTION LOCAL  DEFAULT    4 \n     5: 0000000000000000     0 SECTION LOCAL  DEFAULT    5 .data.rel.local\n     6: 0000000000000000     0 SECTION LOCAL  DEFAULT    6 .init_array\n     7: 0000000000000000     0 SECTION LOCAL  DEFAULT    7 .fini_array\n     8: 0000000000000000     0 SECTION LOCAL  DEFAULT    8 .tdata\n     9: 0000000000000000     0 SECTION LOCAL  DEFAULT   21 .text._Z3addICdET_S0_S0_\n    10: 0000000000000000    16 OBJECT  LOCAL  DEFAULT    2 _ZL8infinite\n    11: 0000000000000010    16 OBJECT  LOCAL  DEFAULT    2 _ZL3sum\n    12: 0000000000000020    16 OBJECT  LOCAL  DEFAULT    2 _ZL3nan\n    13: 0000000000000030    16 OBJECT  LOCAL  DEFAULT    2 _ZL10difference\n    14: 0000000000000040    16 OBJECT  LOCAL  DEFAULT    2 _ZL7product\n    15: 0000000000000050    16 OBJECT  LOCAL  DEFAULT    2 _ZL8quotient\n    16: 0000000000000060    32 OBJECT  LOCAL  DEFAULT    2 _ZL4wide\n    17: 0000000000000080     8 OBJECT  LOCAL  DEFAULT    2 _ZL6narrow\n    18: 0000000000000088     1 OBJECT  LOCAL  DEFAULT    2 __string_15\n    19: 0000000000000000   202 FUNC    WEAK   DEFAULT   21 _Z3addICdET_S0_S0_\n    20: 0000000000000000   392 FUNC    GLOBAL DEFAULT    1 main\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "--debug-dump=frames",
+      "/tmp/pa29-audit190/checks-final/complex-special.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..00000000000000ca\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 196 to 00000000000000c8\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 00000000000000c9\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000000ca\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000040 0000000000000024 00000044 FDE cie=00000000 pc=0000000000000000..0000000000000188\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 386 to 0000000000000186\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000187\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000188\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "objdump",
+      "-dr",
+      "/tmp/pa29-audit190/checks-final/complex-special.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "\n/tmp/pa29-audit190/checks-final/complex-special.o:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000000000 <main>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec a0 00 00 00 \tsub    $0xa0,%rsp\n   b:\t48 63 ff             \tmovslq %edi,%rdi\n   e:\t48 63 c7             \tmovslq %edi,%rax\n  11:\tf2 4c 0f 2a f0       \tcvtsi2sd %rax,%xmm14\n  16:\tf2 41 0f 10 c6       \tmovsd  %xmm14,%xmm0\n  1b:\t48 b8 00 00 00 00 00 \tmovabs $0x7ff0000000000000,%rax\n  22:\t00 f0 7f \n  25:\t48 89 45 f0          \tmov    %rax,-0x10(%rbp)\n  29:\tf2 0f 11 45 f8       \tmovsd  %xmm0,-0x8(%rbp)\n  2e:\tf2 0f 10 45 f0       \tmovsd  -0x10(%rbp),%xmm0\n  33:\tf2 0f 10 4d f8       \tmovsd  -0x8(%rbp),%xmm1\n  38:\tf2 0f 11 45 e0       \tmovsd  %xmm0,-0x20(%rbp)\n  3d:\tf2 0f 11 4d e8       \tmovsd  %xmm1,-0x18(%rbp)\n  42:\tf3 44 0f 6f 7d e0    \tmovdqu -0x20(%rbp),%xmm15\n  48:\tf3 44 0f 7f 7d d0    \tmovdqu %xmm15,-0x30(%rbp)\n  4e:\tf3 44 0f 6f 7d e0    \tmovdqu -0x20(%rbp),%xmm15\n  54:\tf3 44 0f 7f 7d c0    \tmovdqu %xmm15,-0x40(%rbp)\n  5a:\tf2 0f 10 45 d0       \tmovsd  -0x30(%rbp),%xmm0\n  5f:\tf2 0f 10 4d d8       \tmovsd  -0x28(%rbp),%xmm1\n  64:\tf2 0f 10 55 c0       \tmovsd  -0x40(%rbp),%xmm2\n  69:\tf2 0f 10 5d c8       \tmovsd  -0x38(%rbp),%xmm3\n  6e:\te8 00 00 00 00       \tcall   73 <main+0x73>\n\t\t\t6f: R_X86_64_PLT32\t_Z3addICdET_S0_S0_-0x4\n  73:\tf2 0f 11 45 b0       \tmovsd  %xmm0,-0x50(%rbp)\n  78:\tf2 0f 11 4d b8       \tmovsd  %xmm1,-0x48(%rbp)\n  7d:\tf2 0f 10 45 b0       \tmovsd  -0x50(%rbp),%xmm0\n  82:\tf2 0f 10 4d b8       \tmovsd  -0x48(%rbp),%xmm1\n  87:\tf2 0f 11 45 a0       \tmovsd  %xmm0,-0x60(%rbp)\n  8c:\tf2 0f 11 4d a8       \tmovsd  %xmm1,-0x58(%rbp)\n  91:\tf2 0f 10 45 a0       \tmovsd  -0x60(%rbp),%xmm0\n  96:\t48 b8 00 00 00 00 00 \tmovabs $0x7ff0000000000000,%rax\n  9d:\t00 f0 7f \n  a0:\t66 48 0f 6e c8       \tmovq   %rax,%xmm1\n  a5:\t48 b8 00 00 00 00 00 \tmovabs $0x8000000000000000,%rax\n  ac:\t00 00 80 \n  af:\t66 4c 0f 6e f8       \tmovq   %rax,%xmm15\n  b4:\t41 0f 57 cf          \txorps  %xmm15,%xmm1\n  b8:\tf2 44 0f 10 f0       \tmovsd  %xmm0,%xmm14\n  bd:\t48 b8 00 00 00 00 00 \tmovabs $0x7ff0000000000000,%rax\n  c4:\t00 f0 7f \n  c7:\t66 4c 0f 6e f8       \tmovq   %rax,%xmm15\n  cc:\t66 45 0f 2e f7       \tucomisd %xmm15,%xmm14\n  d1:\t41 0f 94 c2          \tsete   %r10b\n  d5:\t41 0f 9b c3          \tsetnp  %r11b\n  d9:\t45 20 da             \tand    %r11b,%r10b\n  dc:\t4d 0f b6 d2          \tmovzbq %r10b,%r10\n  e0:\t4d 89 d0             \tmov    %r10,%r8\n  e3:\tf2 44 0f 10 f0       \tmovsd  %xmm0,%xmm14\n  e8:\t66 44 0f 2e f1       \tucomisd %xmm1,%xmm14\n  ed:\t41 0f 94 c2          \tsete   %r10b\n  f1:\t41 0f 9b c3          \tsetnp  %r11b\n  f5:\t45 20 da             \tand    %r11b,%r10b\n  f8:\t4d 0f b6 d2          \tmovzbq %r10b,%r10\n  fc:\t4d 89 d1             \tmov    %r10,%r9\n  ff:\t45 09 c8             \tor     %r9d,%r8d\n 102:\t4d 63 c0             \tmovslq %r8d,%r8\n 105:\t45 85 c0             \ttest   %r8d,%r8d\n 108:\t0f 85 05 00 00 00    \tjne    113 <main+0x113>\n 10e:\te9 3d 00 00 00       \tjmp    150 <main+0x150>\n 113:\tf2 0f 10 45 a8       \tmovsd  -0x58(%rbp),%xmm0\n 118:\tf2 0f 10 0d 00 00 00 \tmovsd  0x0(%rip),%xmm1        # 120 <main+0x120>\n 11f:\t00 \n\t\t\t11c: R_X86_64_PC32\t_ZL3sum+0x4\n 120:\tf2 44 0f 10 f0       \tmovsd  %xmm0,%xmm14\n 125:\t66 44 0f 2e f1       \tucomisd %xmm1,%xmm14\n 12a:\t41 0f 94 c2          \tsete   %r10b\n 12e:\t41 0f 9b c3          \tsetnp  %r11b\n 132:\t45 20 da             \tand    %r11b,%r10b\n 135:\t4d 0f b6 d2          \tmovzbq %r10b,%r10\n 139:\t4d 89 d0             \tmov    %r10,%r8\n 13c:\t4d 85 c0             \ttest   %r8,%r8\n 13f:\t41 0f 95 c1          \tsetne  %r9b\n 143:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n 147:\t4c 89 4d 98          \tmov    %r9,-0x68(%rbp)\n 14b:\te9 08 00 00 00       \tjmp    158 <main+0x158>\n 150:\t48 c7 45 98 00 00 00 \tmovq   $0x0,-0x68(%rbp)\n 157:\t00 \n 158:\t4c 8b 45 98          \tmov    -0x68(%rbp),%r8\n 15c:\t4d 85 c0             \ttest   %r8,%r8\n 15f:\t0f 85 05 00 00 00    \tjne    16a <main+0x16a>\n 165:\te9 0c 00 00 00       \tjmp    176 <main+0x176>\n 16a:\tc7 45 90 00 00 00 00 \tmovl   $0x0,-0x70(%rbp)\n 171:\te9 07 00 00 00       \tjmp    17d <main+0x17d>\n 176:\tc7 45 90 01 00 00 00 \tmovl   $0x1,-0x70(%rbp)\n 17d:\t48 63 45 90          \tmovslq -0x70(%rbp),%rax\n 181:\te9 00 00 00 00       \tjmp    186 <main+0x186>\n 186:\tc9                   \tleave\n 187:\tc3                   \tret\n\nDisassembly of section .text._Z3addICdET_S0_S0_:\n\n0000000000000000 <_Z3addICdET_S0_S0_>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec a0 00 00 00 \tsub    $0xa0,%rsp\n   b:\tf2 0f 11 45 f0       \tmovsd  %xmm0,-0x10(%rbp)\n  10:\tf2 0f 11 4d f8       \tmovsd  %xmm1,-0x8(%rbp)\n  15:\tf2 0f 11 55 e0       \tmovsd  %xmm2,-0x20(%rbp)\n  1a:\tf2 0f 11 5d e8       \tmovsd  %xmm3,-0x18(%rbp)\n  1f:\tf3 44 0f 6f 7d f0    \tmovdqu -0x10(%rbp),%xmm15\n  25:\tf3 44 0f 7f 7d d0    \tmovdqu %xmm15,-0x30(%rbp)\n  2b:\tf3 44 0f 6f 7d e0    \tmovdqu -0x20(%rbp),%xmm15\n  31:\tf3 44 0f 7f 7d c0    \tmovdqu %xmm15,-0x40(%rbp)\n  37:\tf3 44 0f 6f 7d d0    \tmovdqu -0x30(%rbp),%xmm15\n  3d:\tf3 44 0f 7f 7d b0    \tmovdqu %xmm15,-0x50(%rbp)\n  43:\tf3 44 0f 6f 7d c0    \tmovdqu -0x40(%rbp),%xmm15\n  49:\tf3 44 0f 7f 7d a0    \tmovdqu %xmm15,-0x60(%rbp)\n  4f:\tf2 0f 10 45 b0       \tmovsd  -0x50(%rbp),%xmm0\n  54:\tf2 0f 10 4d b8       \tmovsd  -0x48(%rbp),%xmm1\n  59:\tf2 0f 10 55 a0       \tmovsd  -0x60(%rbp),%xmm2\n  5e:\tf2 0f 10 5d a8       \tmovsd  -0x58(%rbp),%xmm3\n  63:\tf2 0f 11 8d 60 ff ff \tmovsd  %xmm1,-0xa0(%rbp)\n  6a:\tff \n  6b:\tdd 85 60 ff ff ff    \tfldl   -0xa0(%rbp)\n  71:\tf2 0f 11 9d 70 ff ff \tmovsd  %xmm3,-0x90(%rbp)\n  78:\tff \n  79:\tdd 85 70 ff ff ff    \tfldl   -0x90(%rbp)\n  7f:\tde c1                \tfaddp  %st,%st(1)\n  81:\tdd 5d 80             \tfstpl  -0x80(%rbp)\n  84:\tf2 0f 10 4d 80       \tmovsd  -0x80(%rbp),%xmm1\n  89:\tf2 0f 11 85 60 ff ff \tmovsd  %xmm0,-0xa0(%rbp)\n  90:\tff \n  91:\tdd 85 60 ff ff ff    \tfldl   -0xa0(%rbp)\n  97:\tf2 0f 11 95 70 ff ff \tmovsd  %xmm2,-0x90(%rbp)\n  9e:\tff \n  9f:\tdd 85 70 ff ff ff    \tfldl   -0x90(%rbp)\n  a5:\tde c1                \tfaddp  %st,%st(1)\n  a7:\tdd 5d 80             \tfstpl  -0x80(%rbp)\n  aa:\tf2 0f 10 45 80       \tmovsd  -0x80(%rbp),%xmm0\n  af:\tf2 0f 11 45 90       \tmovsd  %xmm0,-0x70(%rbp)\n  b4:\tf2 0f 11 4d 98       \tmovsd  %xmm1,-0x68(%rbp)\n  b9:\tf2 0f 10 45 90       \tmovsd  -0x70(%rbp),%xmm0\n  be:\tf2 0f 10 4d 98       \tmovsd  -0x68(%rbp),%xmm1\n  c3:\te9 00 00 00 00       \tjmp    c8 <_Z3addICdET_S0_S0_+0xc8>\n  c8:\tc9                   \tleave\n  c9:\tc3                   \tret\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-rtti.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-rtti.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/checks-final/complex-rtti.o",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-rtti"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/complex-rtti"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-rtti.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-rtti.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/checks-final/complex-rtti.o",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-rtti"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/complex-rtti"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-include",
+      "typeinfo",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-rtti.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nm",
+      "/tmp/pa29-audit190/checks-final/complex-rtti.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "                 U _Unwind_Resume\n0000000000000000 W _Z6caughtICdEiT_\n0000000000000000 W _Z6caughtICeEiT_\n0000000000000000 W _Z6caughtICfEiT_\n0000000000000000 W _ZNKSt9type_info4nameEv\n0000000000000000 W _ZNKSt9type_infoeqERKS_\n0000000000000000 W _ZNKSt9type_infoneERKS_\n0000000000000000 W _ZNSt9exceptionC2Ev\n0000000000000000 V _ZTICd\n0000000000000000 V _ZTICe\n0000000000000000 V _ZTICf\n0000000000000000 V _ZTIPCd\n0000000000000000 V _ZTSCd\n0000000000000000 V _ZTSCe\n0000000000000000 V _ZTSCf\n0000000000000000 V _ZTSPCd\n                 U _ZTVN10__cxxabiv119__pointer_type_infoE\n                 U _ZTVN10__cxxabiv123__fundamental_type_infoE\n                 U _ZTVSt9exception\n                 U __cxa_allocate_exception\n                 U __cxa_begin_catch\n                 U __cxa_end_catch\n                 U __cxa_throw\n                 U __gxx_personality_v0\n0000000000000000 T main\n                 U strcmp\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-rtti.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-rtti.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-audit190/checks-final/complex-rtti.lowir",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-rtti.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "-SWsrg",
+      "/tmp/pa29-audit190/checks-final/complex-rtti.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "There are 60 section headers, starting at offset 0x2108:\n\nSection Headers:\n  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0\n  [ 1] .text             PROGBITS        0000000000000000 000040 0004df 00  AX  0   0 16\n  [ 2] .data             PROGBITS        0000000000000000 000520 000013 00  WA  0   0 16\n  [ 3] .eh_frame         PROGBITS        0000000000000000 000538 0001b0 00   A  0   0  8\n  [ 4] .gcc_except_table PROGBITS        0000000000000000 0006e8 000076 00   A  0   0  8\n  [ 5] .data.rel.local   PROGBITS        0000000000000000 000760 000028 00  WA  0   0  8\n  [ 6] .init_array       INIT_ARRAY      0000000000000000 000788 000000 08  WA  0   0  8\n  [ 7] .fini_array       FINI_ARRAY      0000000000000000 000788 000000 08  WA  0   0  8\n  [ 8] .tdata            PROGBITS        0000000000000000 000788 000000 00 WAT  0   0  1\n  [ 9] .rela.text        RELA            0000000000000000 000788 0002d0 18     17   1  8\n  [10] .rela.data        RELA            0000000000000000 000a58 000000 18     17   2  8\n  [11] .rela.eh_frame    RELA            0000000000000000 000a58 000138 18     17   3  8\n  [12] .rela.gcc_except_table RELA            0000000000000000 000b90 000090 18     17   4  8\n  [13] .rela.data.rel.local RELA            0000000000000000 000c20 000078 18     17   5  8\n  [14] .rela.init_array  RELA            0000000000000000 000c98 000000 18     17   6  8\n  [15] .rela.fini_array  RELA            0000000000000000 000c98 000000 18     17   7  8\n  [16] .rela.tdata       RELA            0000000000000000 000c98 000000 18     17   8  8\n  [17] .symtab           SYMTAB          0000000000000000 000c98 0004b0 18     18  24  8\n  [18] .strtab           STRTAB          0000000000000000 001148 0001a6 00      0   0  1\n  [19] .shstrtab         STRTAB          0000000000000000 0012ee 00036c 00      0   0  1\n  [20] .note.GNU-stack   PROGBITS        0000000000000000 00165a 000000 00      0   0  1\n  [21] .text._ZNKSt9type_info4nameEv PROGBITS        0000000000000000 00165a 000055 00 AXG  0   0  1\n  [22] .group            GROUP           0000000000000000 0016b0 000008 04     17  24  4\n  [23] .text._ZNKSt9type_infoeqERKS_ PROGBITS        0000000000000000 0016b8 0000d7 00 AXG  0   0  1\n  [24] .group            GROUP           0000000000000000 001790 00000c 04     17  25  4\n  [25] .text._ZNKSt9type_infoneERKS_ PROGBITS        0000000000000000 00179c 000034 00 AXG  0   0  1\n  [26] .group            GROUP           0000000000000000 0017d0 000008 04     17  26  4\n  [27] .text._Z6caughtICfEiT_ PROGBITS        0000000000000000 0017d8 00018b 00 AXG  0   0  1\n  [28] .group            GROUP           0000000000000000 001964 00000c 04     17  29  4\n  [29] .text._Z6caughtICdEiT_ PROGBITS        0000000000000000 001970 0001a0 00 AXG  0   0  1\n  [30] .group            GROUP           0000000000000000 001b10 00000c 04     17  30  4\n  [31] .text._Z6caughtICeEiT_ PROGBITS        0000000000000000 001b1c 0001e7 00 AXG  0   0  1\n  [32] .group            GROUP           0000000000000000 001d04 00000c 04     17  31  4\n  [33] .text._ZNSt9exceptionC2Ev PROGBITS        0000000000000000 001d10 000020 00 AXG  0   0  1\n  [34] .group            GROUP           0000000000000000 001d30 00000c 04     17  32  4\n  [35] .data._ZTSCf      PROGBITS        0000000000000000 001d3c 000003 00 WAG  0   0  1\n  [36] .group            GROUP           0000000000000000 001d40 000008 04     17  35  4\n  [37] .data._ZTICf      PROGBITS        0000000000000000 001d48 000010 00 WAG  0   0  8\n  [38] .group            GROUP           0000000000000000 001d58 00000c 04     17  34  4\n  [39] .data._ZTSCd      PROGBITS        0000000000000000 001d64 000003 00 WAG  0   0  1\n  [40] .group            GROUP           0000000000000000 001d68 000008 04     17  38  4\n  [41] .data._ZTICd      PROGBITS        0000000000000000 001d70 000010 00 WAG  0   0  8\n  [42] .group            GROUP           0000000000000000 001d80 00000c 04     17  37  4\n  [43] .data._ZTSCe      PROGBITS        0000000000000000 001d8c 000003 00 WAG  0   0  1\n  [44] .group            GROUP           0000000000000000 001d90 000008 04     17  40  4\n  [45] .data._ZTICe      PROGBITS        0000000000000000 001d98 000010 00 WAG  0   0  8\n  [46] .group            GROUP           0000000000000000 001da8 00000c 04     17  39  4\n  [47] .data._ZTSPCd     PROGBITS        0000000000000000 001db4 000004 00 WAG  0   0  1\n  [48] .group            GROUP           0000000000000000 001db8 000008 04     17  43  4\n  [49] .data._ZTIPCd     PROGBITS        0000000000000000 001dc0 000020 00 WAG  0   0  8\n  [50] .group            GROUP           0000000000000000 001de0 00000c 04     17  42  4\n  [51] .rela.text._ZNKSt9type_infoeqERKS_ RELA            0000000000000000 001df0 000030 18   G 17  23  8\n  [52] .rela.text._Z6caughtICfEiT_ RELA            0000000000000000 001e20 0000a8 18   G 17  27  8\n  [53] .rela.text._Z6caughtICdEiT_ RELA            0000000000000000 001ec8 0000a8 18   G 17  29  8\n  [54] .rela.text._Z6caughtICeEiT_ RELA            0000000000000000 001f70 0000a8 18   G 17  31  8\n  [55] .rela.text._ZNSt9exceptionC2Ev RELA            0000000000000000 002018 000018 18   G 17  33  8\n  [56] .rela.data._ZTICf RELA            0000000000000000 002030 000030 18   G 17  37  8\n  [57] .rela.data._ZTICd RELA            0000000000000000 002060 000030 18   G 17  41  8\n  [58] .rela.data._ZTICe RELA            0000000000000000 002090 000030 18   G 17  45  8\n  [59] .rela.data._ZTIPCd RELA            0000000000000000 0020c0 000048 18   G 17  49  8\nKey to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  D (mbind), l (large), p (processor specific)\n\nCOMDAT group section [   22] `.group' [_ZNKSt9type_info4nameEv] contains 1 sections:\n   [Index]    Name\n   [   21]   .text._ZNKSt9type_info4nameEv\n\nCOMDAT group section [   24] `.group' [_ZNKSt9type_infoeqERKS_] contains 2 sections:\n   [Index]    Name\n   [   23]   .text._ZNKSt9type_infoeqERKS_\n   [   51]   .rela.text._ZNKSt9type_infoeqERKS_\n\nCOMDAT group section [   26] `.group' [_ZNKSt9type_infoneERKS_] contains 1 sections:\n   [Index]    Name\n   [   25]   .text._ZNKSt9type_infoneERKS_\n\nCOMDAT group section [   28] `.group' [_Z6caughtICfEiT_] contains 2 sections:\n   [Index]    Name\n   [   27]   .text._Z6caughtICfEiT_\n   [   52]   .rela.text._Z6caughtICfEiT_\n\nCOMDAT group section [   30] `.group' [_Z6caughtICdEiT_] contains 2 sections:\n   [Index]    Name\n   [   29]   .text._Z6caughtICdEiT_\n   [   53]   .rela.text._Z6caughtICdEiT_\n\nCOMDAT group section [   32] `.group' [_Z6caughtICeEiT_] contains 2 sections:\n   [Index]    Name\n   [   31]   .text._Z6caughtICeEiT_\n   [   54]   .rela.text._Z6caughtICeEiT_\n\nCOMDAT group section [   34] `.group' [_ZNSt9exceptionC2Ev] contains 2 sections:\n   [Index]    Name\n   [   33]   .text._ZNSt9exceptionC2Ev\n   [   55]   .rela.text._ZNSt9exceptionC2Ev\n\nCOMDAT group section [   36] `.group' [_ZTSCf] contains 1 sections:\n   [Index]    Name\n   [   35]   .data._ZTSCf\n\nCOMDAT group section [   38] `.group' [_ZTICf] contains 2 sections:\n   [Index]    Name\n   [   37]   .data._ZTICf\n   [   56]   .rela.data._ZTICf\n\nCOMDAT group section [   40] `.group' [_ZTSCd] contains 1 sections:\n   [Index]    Name\n   [   39]   .data._ZTSCd\n\nCOMDAT group section [   42] `.group' [_ZTICd] contains 2 sections:\n   [Index]    Name\n   [   41]   .data._ZTICd\n   [   57]   .rela.data._ZTICd\n\nCOMDAT group section [   44] `.group' [_ZTSCe] contains 1 sections:\n   [Index]    Name\n   [   43]   .data._ZTSCe\n\nCOMDAT group section [   46] `.group' [_ZTICe] contains 2 sections:\n   [Index]    Name\n   [   45]   .data._ZTICe\n   [   58]   .rela.data._ZTICe\n\nCOMDAT group section [   48] `.group' [_ZTSPCd] contains 1 sections:\n   [Index]    Name\n   [   47]   .data._ZTSPCd\n\nCOMDAT group section [   50] `.group' [_ZTIPCd] contains 2 sections:\n   [Index]    Name\n   [   49]   .data._ZTIPCd\n   [   59]   .rela.data._ZTIPCd\n\nRelocation section '.rela.text' at offset 0x788 contains 30 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n00000000000000de  0000001d00000004 R_X86_64_PLT32         0000000000000000 _Z6caughtICfEiT_ - 4\n000000000000010d  0000001e00000004 R_X86_64_PLT32         0000000000000000 _Z6caughtICdEiT_ - 4\n0000000000000164  0000001f00000004 R_X86_64_PLT32         0000000000000000 _Z6caughtICeEiT_ - 4\n0000000000000197  0000002200000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICf - 4\n000000000000019e  0000002500000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICd - 4\n00000000000001a9  0000001900000004 R_X86_64_PLT32         0000000000000000 _ZNKSt9type_infoeqERKS_ - 4\n00000000000001c0  0000002500000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICd - 4\n00000000000001c7  0000002700000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICe - 4\n00000000000001d2  0000001900000004 R_X86_64_PLT32         0000000000000000 _ZNKSt9type_infoeqERKS_ - 4\n00000000000001e9  0000002200000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICf - 4\n00000000000001f0  0000002200000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICf - 4\n00000000000001fb  0000001a00000004 R_X86_64_PLT32         0000000000000000 _ZNKSt9type_infoneERKS_ - 4\n0000000000000224  0000002900000004 R_X86_64_PLT32         0000000000000000 __cxa_allocate_exception - 4\n0000000000000235  0000002a00000009 R_X86_64_GOTPCREL      0000000000000000 _ZTIPCd - 4\n0000000000000245  0000002d00000004 R_X86_64_PLT32         0000000000000000 __cxa_throw - 4\n0000000000000279  0000002e00000004 R_X86_64_PLT32         0000000000000000 __cxa_begin_catch - 4\n00000000000002a1  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n00000000000002b0  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n00000000000002ba  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n00000000000002ce  0000002900000004 R_X86_64_PLT32         0000000000000000 __cxa_allocate_exception - 4\n0000000000000300  0000002500000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICd - 4\n0000000000000310  0000002d00000004 R_X86_64_PLT32         0000000000000000 __cxa_throw - 4\n000000000000034b  0000002e00000004 R_X86_64_PLT32         0000000000000000 __cxa_begin_catch - 4\n0000000000000350  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n000000000000035f  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n0000000000000386  0000002e00000004 R_X86_64_PLT32         0000000000000000 __cxa_begin_catch - 4\n00000000000003ee  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n00000000000003fd  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n0000000000000407  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n00000000000004d9  0000003000000004 R_X86_64_PLT32         0000000000000000 _Unwind_Resume - 4\n\nRelocation section '.rela.eh_frame' at offset 0xa58 contains 13 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000020  0000000900000002 R_X86_64_PC32          0000000000000000 .text._ZNKSt9type_info4nameEv + 0\n0000000000000050  0000000a00000002 R_X86_64_PC32          0000000000000000 .text._ZNKSt9type_infoeqERKS_ + 0\n0000000000000088  0000000b00000002 R_X86_64_PC32          0000000000000000 .text._ZNKSt9type_infoneERKS_ + 0\n00000000000000bb  0000000500000002 R_X86_64_PC32          0000000000000000 .data.rel.local + 20\n00000000000000d0  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 0\n00000000000000d9  0000000400000002 R_X86_64_PC32          0000000000000000 .gcc_except_table + 0\n0000000000000100  0000000c00000002 R_X86_64_PC32          0000000000000000 .text._Z6caughtICfEiT_ + 0\n0000000000000109  0000000400000002 R_X86_64_PC32          0000000000000000 .gcc_except_table + 34\n0000000000000130  0000000d00000002 R_X86_64_PC32          0000000000000000 .text._Z6caughtICdEiT_ + 0\n0000000000000139  0000000400000002 R_X86_64_PC32          0000000000000000 .gcc_except_table + 4a\n0000000000000160  0000000e00000002 R_X86_64_PC32          0000000000000000 .text._Z6caughtICeEiT_ + 0\n0000000000000169  0000000400000002 R_X86_64_PC32          0000000000000000 .gcc_except_table + 60\n0000000000000190  0000000f00000002 R_X86_64_PC32          0000000000000000 .text._ZNSt9exceptionC2Ev + 0\n\nRelocation section '.rela.gcc_except_table' at offset 0xb90 contains 6 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000028  0000000500000002 R_X86_64_PC32          0000000000000000 .data.rel.local + 0\n000000000000002c  0000000500000002 R_X86_64_PC32          0000000000000000 .data.rel.local + 8\n0000000000000030  0000000500000002 R_X86_64_PC32          0000000000000000 .data.rel.local + 10\n0000000000000046  0000000500000002 R_X86_64_PC32          0000000000000000 .data.rel.local + 8\n000000000000005c  0000000500000002 R_X86_64_PC32          0000000000000000 .data.rel.local + 0\n0000000000000072  0000000500000002 R_X86_64_PC32          0000000000000000 .data.rel.local + 18\n\nRelocation section '.rela.data.rel.local' at offset 0xc20 contains 5 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000000  0000002500000001 R_X86_64_64            0000000000000000 _ZTICd + 0\n0000000000000008  0000002200000001 R_X86_64_64            0000000000000000 _ZTICf + 0\n0000000000000010  0000002a00000001 R_X86_64_64            0000000000000000 _ZTIPCd + 0\n0000000000000018  0000002700000001 R_X86_64_64            0000000000000000 _ZTICe + 0\n0000000000000020  0000003100000001 R_X86_64_64            0000000000000000 __gxx_personality_v0 + 0\n\nRelocation section '.rela.text._ZNKSt9type_infoeqERKS_' at offset 0x1df0 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000081  0000001800000004 R_X86_64_PLT32         0000000000000000 _ZNKSt9type_info4nameEv - 4\n000000000000008f  0000001b00000004 R_X86_64_PLT32         0000000000000000 strcmp - 4\n\nRelocation section '.rela.text._Z6caughtICfEiT_' at offset 0x1e20 contains 7 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000022  0000002900000004 R_X86_64_PLT32         0000000000000000 __cxa_allocate_exception - 4\n0000000000000047  0000002200000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICf - 4\n0000000000000057  0000002d00000004 R_X86_64_PLT32         0000000000000000 __cxa_throw - 4\n0000000000000085  0000002e00000004 R_X86_64_PLT32         0000000000000000 __cxa_begin_catch - 4\n000000000000011a  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n0000000000000127  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n0000000000000185  0000003000000004 R_X86_64_PLT32         0000000000000000 _Unwind_Resume - 4\n\nRelocation section '.rela.text._Z6caughtICdEiT_' at offset 0x1ec8 contains 7 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n000000000000002b  0000002900000004 R_X86_64_PLT32         0000000000000000 __cxa_allocate_exception - 4\n0000000000000054  0000002500000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICd - 4\n0000000000000064  0000002d00000004 R_X86_64_PLT32         0000000000000000 __cxa_throw - 4\n0000000000000092  0000002e00000004 R_X86_64_PLT32         0000000000000000 __cxa_begin_catch - 4\n0000000000000129  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n0000000000000136  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n000000000000019a  0000003000000004 R_X86_64_PLT32         0000000000000000 _Unwind_Resume - 4\n\nRelocation section '.rela.text._Z6caughtICeEiT_' at offset 0x1f70 contains 7 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000030  0000002900000004 R_X86_64_PLT32         0000000000000000 __cxa_allocate_exception - 4\n0000000000000069  0000002700000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICe - 4\n0000000000000079  0000002d00000004 R_X86_64_PLT32         0000000000000000 __cxa_throw - 4\n00000000000000a7  0000002e00000004 R_X86_64_PLT32         0000000000000000 __cxa_begin_catch - 4\n000000000000016d  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n000000000000017a  0000002f00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n00000000000001e1  0000003000000004 R_X86_64_PLT32         0000000000000000 _Unwind_Resume - 4\n\nRelocation section '.rela.text._ZNSt9exceptionC2Ev' at offset 0x2018 contains 1 entry:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n000000000000000e  0000002100000009 R_X86_64_GOTPCREL      0000000000000000 _ZTVSt9exception - 4\n\nRelocation section '.rela.data._ZTICf' at offset 0x2030 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000000  0000002400000001 R_X86_64_64            0000000000000000 _ZTVN10__cxxabiv123__fundamental_type_infoE + 10\n0000000000000008  0000002300000001 R_X86_64_64            0000000000000000 _ZTSCf + 0\n\nRelocation section '.rela.data._ZTICd' at offset 0x2060 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000000  0000002400000001 R_X86_64_64            0000000000000000 _ZTVN10__cxxabiv123__fundamental_type_infoE + 10\n0000000000000008  0000002600000001 R_X86_64_64            0000000000000000 _ZTSCd + 0\n\nRelocation section '.rela.data._ZTICe' at offset 0x2090 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000000  0000002400000001 R_X86_64_64            0000000000000000 _ZTVN10__cxxabiv123__fundamental_type_infoE + 10\n0000000000000008  0000002800000001 R_X86_64_64            0000000000000000 _ZTSCe + 0\n\nRelocation section '.rela.data._ZTIPCd' at offset 0x20c0 contains 3 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000000  0000002c00000001 R_X86_64_64            0000000000000000 _ZTVN10__cxxabiv119__pointer_type_infoE + 10\n0000000000000008  0000002b00000001 R_X86_64_64            0000000000000000 _ZTSPCd + 0\n0000000000000018  0000002500000001 R_X86_64_64            0000000000000000 _ZTICd + 0\n\nSymbol table '.symtab' contains 50 entries:\n   Num:    Value          Size Type    Bind   Vis      Ndx Name\n     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND \n     1: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 .text\n     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    2 .data\n     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    3 .eh_frame\n     4: 0000000000000000     0 SECTION LOCAL  DEFAULT    4 .gcc_except_table\n     5: 0000000000000000     0 SECTION LOCAL  DEFAULT    5 .data.rel.local\n     6: 0000000000000000     0 SECTION LOCAL  DEFAULT    6 .init_array\n     7: 0000000000000000     0 SECTION LOCAL  DEFAULT    7 .fini_array\n     8: 0000000000000000     0 SECTION LOCAL  DEFAULT    8 .tdata\n     9: 0000000000000000     0 SECTION LOCAL  DEFAULT   21 .text._ZNKSt9type_info4nameEv\n    10: 0000000000000000     0 SECTION LOCAL  DEFAULT   23 .text._ZNKSt9type_infoeqERKS_\n    11: 0000000000000000     0 SECTION LOCAL  DEFAULT   25 .text._ZNKSt9type_infoneERKS_\n    12: 0000000000000000     0 SECTION LOCAL  DEFAULT   27 .text._Z6caughtICfEiT_\n    13: 0000000000000000     0 SECTION LOCAL  DEFAULT   29 .text._Z6caughtICdEiT_\n    14: 0000000000000000     0 SECTION LOCAL  DEFAULT   31 .text._Z6caughtICeEiT_\n    15: 0000000000000000     0 SECTION LOCAL  DEFAULT   33 .text._ZNSt9exceptionC2Ev\n    16: 0000000000000000     0 SECTION LOCAL  DEFAULT   35 .data._ZTSCf\n    17: 0000000000000000     0 SECTION LOCAL  DEFAULT   37 .data._ZTICf\n    18: 0000000000000000     0 SECTION LOCAL  DEFAULT   39 .data._ZTSCd\n    19: 0000000000000000     0 SECTION LOCAL  DEFAULT   41 .data._ZTICd\n    20: 0000000000000000     0 SECTION LOCAL  DEFAULT   43 .data._ZTSCe\n    21: 0000000000000000     0 SECTION LOCAL  DEFAULT   45 .data._ZTICe\n    22: 0000000000000000     0 SECTION LOCAL  DEFAULT   47 .data._ZTSPCd\n    23: 0000000000000000     0 SECTION LOCAL  DEFAULT   49 .data._ZTIPCd\n    24: 0000000000000000    85 FUNC    WEAK   DEFAULT   21 _ZNKSt9type_info4nameEv\n    25: 0000000000000000   215 FUNC    WEAK   DEFAULT   23 _ZNKSt9type_infoeqERKS_\n    26: 0000000000000000    52 FUNC    WEAK   DEFAULT   25 _ZNKSt9type_infoneERKS_\n    27: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND strcmp\n    28: 0000000000000000  1247 FUNC    GLOBAL DEFAULT    1 main\n    29: 0000000000000000   395 FUNC    WEAK   DEFAULT   27 _Z6caughtICfEiT_\n    30: 0000000000000000   416 FUNC    WEAK   DEFAULT   29 _Z6caughtICdEiT_\n    31: 0000000000000000   487 FUNC    WEAK   DEFAULT   31 _Z6caughtICeEiT_\n    32: 0000000000000000    32 FUNC    WEAK   DEFAULT   33 _ZNSt9exceptionC2Ev\n    33: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _ZTVSt9exception\n    34: 0000000000000000    16 OBJECT  WEAK   DEFAULT   37 _ZTICf\n    35: 0000000000000000     3 OBJECT  WEAK   DEFAULT   35 _ZTSCf\n    36: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _ZTVN10__cxxabiv123__fundamental_type_infoE\n    37: 0000000000000000    16 OBJECT  WEAK   DEFAULT   41 _ZTICd\n    38: 0000000000000000     3 OBJECT  WEAK   DEFAULT   39 _ZTSCd\n    39: 0000000000000000    16 OBJECT  WEAK   DEFAULT   45 _ZTICe\n    40: 0000000000000000     3 OBJECT  WEAK   DEFAULT   43 _ZTSCe\n    41: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __cxa_allocate_exception\n    42: 0000000000000000    32 OBJECT  WEAK   DEFAULT   49 _ZTIPCd\n    43: 0000000000000000     4 OBJECT  WEAK   DEFAULT   47 _ZTSPCd\n    44: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _ZTVN10__cxxabiv119__pointer_type_infoE\n    45: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __cxa_throw\n    46: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __cxa_begin_catch\n    47: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __cxa_end_catch\n    48: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _Unwind_Resume\n    49: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __gxx_personality_v0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "--debug-dump=frames",
+      "/tmp/pa29-audit190/checks-final/complex-rtti.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 000000000000002c 0000001c FDE cie=00000000 pc=0000000000000000..0000000000000055\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000000f\n  DW_CFA_offset: r3 (rbx) at cfa-32\n  DW_CFA_advance_loc4: 64 to 000000000000004f\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 0000000000000053\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 0000000000000054\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000055\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000048 0000000000000034 0000004c FDE cie=00000000 pc=0000000000000000..00000000000000d7\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000000f\n  DW_CFA_offset: r3 (rbx) at cfa-32\n  DW_CFA_advance_loc: 4 to 0000000000000013\n  DW_CFA_offset: r12 (r12) at cfa-40\n  DW_CFA_advance_loc: 4 to 0000000000000017\n  DW_CFA_offset: r13 (r13) at cfa-48\n  DW_CFA_advance_loc4: 178 to 00000000000000c9\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 00000000000000cd\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 4 to 00000000000000d1\n  DW_CFA_restore: r12 (r12)\n  DW_CFA_advance_loc: 4 to 00000000000000d5\n  DW_CFA_restore: r13 (r13)\n  DW_CFA_advance_loc: 1 to 00000000000000d6\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000000d7\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000080 0000000000000024 00000084 FDE cie=00000000 pc=0000000000000000..0000000000000034\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 46 to 0000000000000032\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000033\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000034\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000a8 000000000000001c 00000000 CIE\n  Version:               1\n  Augmentation:          \"zPLR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     9b 65 ff ff ff 1b 1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000c8 000000000000002c 00000024 FDE cie=000000a8 pc=0000000000000000..00000000000004df\n  Augmentation data:     27 ff ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 14 to 0000000000000012\n  DW_CFA_offset: r3 (rbx) at cfa-336\n  DW_CFA_advance_loc4: 1037 to 000000000000041f\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 7 to 0000000000000426\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 0000000000000427\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000428\n  DW_CFA_restore_state\n  DW_CFA_nop\n\n000000f8 000000000000002c 00000054 FDE cie=000000a8 pc=0000000000000000..000000000000018b\n  Augmentation data:     2b ff ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000000f\n  DW_CFA_offset: r3 (rbx) at cfa-88\n  DW_CFA_advance_loc4: 304 to 000000000000013f\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 0000000000000143\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 0000000000000144\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000145\n  DW_CFA_restore_state\n  DW_CFA_nop\n\n00000128 000000000000002c 00000084 FDE cie=000000a8 pc=0000000000000000..00000000000001a0\n  Augmentation data:     11 ff ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000000f\n  DW_CFA_offset: r3 (rbx) at cfa-112\n  DW_CFA_advance_loc4: 319 to 000000000000014e\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 0000000000000152\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 0000000000000153\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000154\n  DW_CFA_restore_state\n  DW_CFA_nop\n\n00000158 000000000000002c 000000b4 FDE cie=000000a8 pc=0000000000000000..00000000000001e7\n  Augmentation data:     f7 fe ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 14 to 0000000000000012\n  DW_CFA_offset: r3 (rbx) at cfa-224\n  DW_CFA_advance_loc4: 384 to 0000000000000192\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 7 to 0000000000000199\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 000000000000019a\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 000000000000019b\n  DW_CFA_restore_state\n  DW_CFA_nop\n\n00000188 0000000000000024 0000018c FDE cie=00000000 pc=0000000000000000..0000000000000020\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 26 to 000000000000001e\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 000000000000001f\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000020\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "objdump",
+      "-dr",
+      "/tmp/pa29-audit190/checks-final/complex-rtti.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "\n/tmp/pa29-audit190/checks-final/complex-rtti.o:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000000000 <main>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 70 01 00 00 \tsub    $0x170,%rsp\n   b:\t48 89 9d c0 fe ff ff \tmov    %rbx,-0x140(%rbp)\n  12:\tb8 00 00 40 40       \tmov    $0x40400000,%eax\n  17:\t89 45 e8             \tmov    %eax,-0x18(%rbp)\n  1a:\tb8 00 00 80 40       \tmov    $0x40800000,%eax\n  1f:\t89 45 ec             \tmov    %eax,-0x14(%rbp)\n  22:\tf3 0f 10 45 e8       \tmovss  -0x18(%rbp),%xmm0\n  27:\tf3 0f 10 4d ec       \tmovss  -0x14(%rbp),%xmm1\n  2c:\tf3 0f 11 45 e0       \tmovss  %xmm0,-0x20(%rbp)\n  31:\tf3 0f 11 4d e4       \tmovss  %xmm1,-0x1c(%rbp)\n  36:\t48 b8 00 00 00 00 00 \tmovabs $0x4008000000000000,%rax\n  3d:\t00 08 40 \n  40:\t48 89 45 d0          \tmov    %rax,-0x30(%rbp)\n  44:\t48 b8 00 00 00 00 00 \tmovabs $0x4010000000000000,%rax\n  4b:\t00 10 40 \n  4e:\t48 89 45 d8          \tmov    %rax,-0x28(%rbp)\n  52:\tf2 0f 10 45 d0       \tmovsd  -0x30(%rbp),%xmm0\n  57:\tf2 0f 10 4d d8       \tmovsd  -0x28(%rbp),%xmm1\n  5c:\tf2 0f 11 45 c0       \tmovsd  %xmm0,-0x40(%rbp)\n  61:\tf2 0f 11 4d c8       \tmovsd  %xmm1,-0x38(%rbp)\n  66:\t48 b8 00 00 00 00 00 \tmovabs $0xc000000000000000,%rax\n  6d:\t00 00 c0 \n  70:\t48 89 85 90 fe ff ff \tmov    %rax,-0x170(%rbp)\n  77:\t66 c7 85 98 fe ff ff \tmovw   $0x4000,-0x168(%rbp)\n  7e:\t00 40 \n  80:\tdb ad 90 fe ff ff    \tfldt   -0x170(%rbp)\n  86:\tdb 7d a0             \tfstpt  -0x60(%rbp)\n  89:\t48 b8 00 00 00 00 00 \tmovabs $0x8000000000000000,%rax\n  90:\t00 00 80 \n  93:\t48 89 85 90 fe ff ff \tmov    %rax,-0x170(%rbp)\n  9a:\t66 c7 85 98 fe ff ff \tmovw   $0x4001,-0x168(%rbp)\n  a1:\t01 40 \n  a3:\tdb ad 90 fe ff ff    \tfldt   -0x170(%rbp)\n  a9:\tdb 7d b0             \tfstpt  -0x50(%rbp)\n  ac:\tdb 6d a0             \tfldt   -0x60(%rbp)\n  af:\tdb 7d 90             \tfstpt  -0x70(%rbp)\n  b2:\tdb 6d b0             \tfldt   -0x50(%rbp)\n  b5:\tdb 7d 80             \tfstpt  -0x80(%rbp)\n  b8:\tdb 6d 90             \tfldt   -0x70(%rbp)\n  bb:\tdb bd 60 ff ff ff    \tfstpt  -0xa0(%rbp)\n  c1:\tdb 6d 80             \tfldt   -0x80(%rbp)\n  c4:\tdb bd 70 ff ff ff    \tfstpt  -0x90(%rbp)\n  ca:\t48 8b 45 e0          \tmov    -0x20(%rbp),%rax\n  ce:\t48 89 85 58 ff ff ff \tmov    %rax,-0xa8(%rbp)\n  d5:\tf2 0f 10 85 58 ff ff \tmovsd  -0xa8(%rbp),%xmm0\n  dc:\tff \n  dd:\te8 00 00 00 00       \tcall   e2 <main+0xe2>\n\t\t\tde: R_X86_64_PLT32\t_Z6caughtICfEiT_-0x4\n  e2:\t48 63 c0             \tmovslq %eax,%rax\n  e5:\t85 c0                \ttest   %eax,%eax\n  e7:\t0f 84 9d 00 00 00    \tje     18a <main+0x18a>\n  ed:\tf3 44 0f 6f 7d c0    \tmovdqu -0x40(%rbp),%xmm15\n  f3:\tf3 44 0f 7f bd 48 ff \tmovdqu %xmm15,-0xb8(%rbp)\n  fa:\tff ff \n  fc:\tf2 0f 10 85 48 ff ff \tmovsd  -0xb8(%rbp),%xmm0\n 103:\tff \n 104:\tf2 0f 10 8d 50 ff ff \tmovsd  -0xb0(%rbp),%xmm1\n 10b:\tff \n 10c:\te8 00 00 00 00       \tcall   111 <main+0x111>\n\t\t\t10d: R_X86_64_PLT32\t_Z6caughtICdEiT_-0x4\n 111:\t48 63 c0             \tmovslq %eax,%rax\n 114:\t85 c0                \ttest   %eax,%eax\n 116:\t0f 84 6e 00 00 00    \tje     18a <main+0x18a>\n 11c:\tf3 44 0f 6f bd 60 ff \tmovdqu -0xa0(%rbp),%xmm15\n 123:\tff ff \n 125:\tf3 44 0f 7f bd 20 ff \tmovdqu %xmm15,-0xe0(%rbp)\n 12c:\tff ff \n 12e:\tf3 44 0f 6f bd 70 ff \tmovdqu -0x90(%rbp),%xmm15\n 135:\tff ff \n 137:\tf3 44 0f 7f bd 30 ff \tmovdqu %xmm15,-0xd0(%rbp)\n 13e:\tff ff \n 140:\t48 83 ec 20          \tsub    $0x20,%rsp\n 144:\tf3 44 0f 6f bd 20 ff \tmovdqu -0xe0(%rbp),%xmm15\n 14b:\tff ff \n 14d:\tf3 44 0f 7f 3c 24    \tmovdqu %xmm15,(%rsp)\n 153:\tf3 44 0f 6f bd 30 ff \tmovdqu -0xd0(%rbp),%xmm15\n 15a:\tff ff \n 15c:\tf3 44 0f 7f 7c 24 10 \tmovdqu %xmm15,0x10(%rsp)\n 163:\te8 00 00 00 00       \tcall   168 <main+0x168>\n\t\t\t164: R_X86_64_PLT32\t_Z6caughtICeEiT_-0x4\n 168:\t48 83 c4 20          \tadd    $0x20,%rsp\n 16c:\t48 63 c0             \tmovslq %eax,%rax\n 16f:\t89 85 18 ff ff ff    \tmov    %eax,-0xe8(%rbp)\n 175:\t4c 63 95 18 ff ff ff \tmovslq -0xe8(%rbp),%r10\n 17c:\t45 85 d2             \ttest   %r10d,%r10d\n 17f:\t0f 84 05 00 00 00    \tje     18a <main+0x18a>\n 185:\te9 0a 00 00 00       \tjmp    194 <main+0x194>\n 18a:\tb8 01 00 00 00       \tmov    $0x1,%eax\n 18f:\te9 8b 02 00 00       \tjmp    41f <main+0x41f>\n 194:\t4c 8b 05 00 00 00 00 \tmov    0x0(%rip),%r8        # 19b <main+0x19b>\n\t\t\t197: R_X86_64_GOTPCREL\t_ZTICf-0x4\n 19b:\t4c 8b 0d 00 00 00 00 \tmov    0x0(%rip),%r9        # 1a2 <main+0x1a2>\n\t\t\t19e: R_X86_64_GOTPCREL\t_ZTICd-0x4\n 1a2:\t4c 89 c7             \tmov    %r8,%rdi\n 1a5:\t4c 89 ce             \tmov    %r9,%rsi\n 1a8:\te8 00 00 00 00       \tcall   1ad <main+0x1ad>\n\t\t\t1a9: R_X86_64_PLT32\t_ZNKSt9type_infoeqERKS_-0x4\n 1ad:\t48 0f b6 c0          \tmovzbq %al,%rax\n 1b1:\t48 89 c7             \tmov    %rax,%rdi\n 1b4:\t40 84 ff             \ttest   %dil,%dil\n 1b7:\t0f 85 57 00 00 00    \tjne    214 <main+0x214>\n 1bd:\t4c 8b 05 00 00 00 00 \tmov    0x0(%rip),%r8        # 1c4 <main+0x1c4>\n\t\t\t1c0: R_X86_64_GOTPCREL\t_ZTICd-0x4\n 1c4:\t4c 8b 0d 00 00 00 00 \tmov    0x0(%rip),%r9        # 1cb <main+0x1cb>\n\t\t\t1c7: R_X86_64_GOTPCREL\t_ZTICe-0x4\n 1cb:\t4c 89 c7             \tmov    %r8,%rdi\n 1ce:\t4c 89 ce             \tmov    %r9,%rsi\n 1d1:\te8 00 00 00 00       \tcall   1d6 <main+0x1d6>\n\t\t\t1d2: R_X86_64_PLT32\t_ZNKSt9type_infoeqERKS_-0x4\n 1d6:\t48 0f b6 c0          \tmovzbq %al,%rax\n 1da:\t48 89 c7             \tmov    %rax,%rdi\n 1dd:\t40 84 ff             \ttest   %dil,%dil\n 1e0:\t0f 85 2e 00 00 00    \tjne    214 <main+0x214>\n 1e6:\t4c 8b 05 00 00 00 00 \tmov    0x0(%rip),%r8        # 1ed <main+0x1ed>\n\t\t\t1e9: R_X86_64_GOTPCREL\t_ZTICf-0x4\n 1ed:\t4c 8b 0d 00 00 00 00 \tmov    0x0(%rip),%r9        # 1f4 <main+0x1f4>\n\t\t\t1f0: R_X86_64_GOTPCREL\t_ZTICf-0x4\n 1f4:\t4c 89 c7             \tmov    %r8,%rdi\n 1f7:\t4c 89 ce             \tmov    %r9,%rsi\n 1fa:\te8 00 00 00 00       \tcall   1ff <main+0x1ff>\n\t\t\t1fb: R_X86_64_PLT32\t_ZNKSt9type_infoneERKS_-0x4\n 1ff:\t48 0f b6 c0          \tmovzbq %al,%rax\n 203:\t48 89 c7             \tmov    %rax,%rdi\n 206:\t40 84 ff             \ttest   %dil,%dil\n 209:\t0f 85 05 00 00 00    \tjne    214 <main+0x214>\n 20f:\te9 0a 00 00 00       \tjmp    21e <main+0x21e>\n 214:\tb8 02 00 00 00       \tmov    $0x2,%eax\n 219:\te9 01 02 00 00       \tjmp    41f <main+0x41f>\n 21e:\tbf 08 00 00 00       \tmov    $0x8,%edi\n 223:\te8 00 00 00 00       \tcall   228 <main+0x228>\n\t\t\t224: R_X86_64_PLT32\t__cxa_allocate_exception-0x4\n 228:\t49 89 c0             \tmov    %rax,%r8\n 22b:\t4c 8d 55 c0          \tlea    -0x40(%rbp),%r10\n 22f:\t4d 89 10             \tmov    %r10,(%r8)\n 232:\t4c 8b 0d 00 00 00 00 \tmov    0x0(%rip),%r9        # 239 <main+0x239>\n\t\t\t235: R_X86_64_GOTPCREL\t_ZTIPCd-0x4\n 239:\t4c 89 c7             \tmov    %r8,%rdi\n 23c:\t4c 89 ce             \tmov    %r9,%rsi\n 23f:\tba 00 00 00 00       \tmov    $0x0,%edx\n 244:\te8 00 00 00 00       \tcall   249 <main+0x249>\n\t\t\t245: R_X86_64_PLT32\t__cxa_throw-0x4\n 249:\tb8 00 00 00 00       \tmov    $0x0,%eax\n 24e:\te9 cc 01 00 00       \tjmp    41f <main+0x41f>\n 253:\t4c 8b 55 f8          \tmov    -0x8(%rbp),%r10\n 257:\t4c 89 95 10 ff ff ff \tmov    %r10,-0xf0(%rbp)\n 25e:\t4c 63 45 f0          \tmovslq -0x10(%rbp),%r8\n 262:\t41 83 f8 01          \tcmp    $0x1,%r8d\n 266:\t0f 84 05 00 00 00    \tje     271 <main+0x271>\n 26c:\te9 52 00 00 00       \tjmp    2c3 <main+0x2c3>\n 271:\t48 8b bd 10 ff ff ff \tmov    -0xf0(%rbp),%rdi\n 278:\te8 00 00 00 00       \tcall   27d <main+0x27d>\n\t\t\t279: R_X86_64_PLT32\t__cxa_begin_catch-0x4\n 27d:\t49 89 c0             \tmov    %rax,%r8\n 280:\t4c 89 85 08 ff ff ff \tmov    %r8,-0xf8(%rbp)\n 287:\t4c 8b 85 08 ff ff ff \tmov    -0xf8(%rbp),%r8\n 28e:\t4c 8d 5d c0          \tlea    -0x40(%rbp),%r11\n 292:\t4d 39 d8             \tcmp    %r11,%r8\n 295:\t0f 85 05 00 00 00    \tjne    2a0 <main+0x2a0>\n 29b:\te9 0f 00 00 00       \tjmp    2af <main+0x2af>\n 2a0:\te8 00 00 00 00       \tcall   2a5 <main+0x2a5>\n\t\t\t2a1: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 2a5:\tb8 03 00 00 00       \tmov    $0x3,%eax\n 2aa:\te9 70 01 00 00       \tjmp    41f <main+0x41f>\n 2af:\te8 00 00 00 00       \tcall   2b4 <main+0x2b4>\n\t\t\t2b0: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 2b4:\te9 0f 00 00 00       \tjmp    2c8 <main+0x2c8>\n 2b9:\te8 00 00 00 00       \tcall   2be <main+0x2be>\n\t\t\t2ba: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 2be:\te9 11 02 00 00       \tjmp    4d4 <main+0x4d4>\n 2c3:\te9 0c 02 00 00       \tjmp    4d4 <main+0x4d4>\n 2c8:\tbf 10 00 00 00       \tmov    $0x10,%edi\n 2cd:\te8 00 00 00 00       \tcall   2d2 <main+0x2d2>\n\t\t\t2ce: R_X86_64_PLT32\t__cxa_allocate_exception-0x4\n 2d2:\t48 89 c3             \tmov    %rax,%rbx\n 2d5:\tf3 44 0f 6f 7d c0    \tmovdqu -0x40(%rbp),%xmm15\n 2db:\tf3 44 0f 7f bd f8 fe \tmovdqu %xmm15,-0x108(%rbp)\n 2e2:\tff ff \n 2e4:\tf2 0f 10 85 f8 fe ff \tmovsd  -0x108(%rbp),%xmm0\n 2eb:\tff \n 2ec:\tf2 0f 10 8d 00 ff ff \tmovsd  -0x100(%rbp),%xmm1\n 2f3:\tff \n 2f4:\tf2 0f 11 03          \tmovsd  %xmm0,(%rbx)\n 2f8:\tf2 0f 11 4b 08       \tmovsd  %xmm1,0x8(%rbx)\n 2fd:\t4c 8b 05 00 00 00 00 \tmov    0x0(%rip),%r8        # 304 <main+0x304>\n\t\t\t300: R_X86_64_GOTPCREL\t_ZTICd-0x4\n 304:\t48 89 df             \tmov    %rbx,%rdi\n 307:\t4c 89 c6             \tmov    %r8,%rsi\n 30a:\tba 00 00 00 00       \tmov    $0x0,%edx\n 30f:\te8 00 00 00 00       \tcall   314 <main+0x314>\n\t\t\t310: R_X86_64_PLT32\t__cxa_throw-0x4\n 314:\tb8 00 00 00 00       \tmov    $0x0,%eax\n 319:\te9 01 01 00 00       \tjmp    41f <main+0x41f>\n 31e:\t4c 8b 55 f8          \tmov    -0x8(%rbp),%r10\n 322:\t4c 89 95 f0 fe ff ff \tmov    %r10,-0x110(%rbp)\n 329:\t4c 63 55 f0          \tmovslq -0x10(%rbp),%r10\n 32d:\t44 89 95 e8 fe ff ff \tmov    %r10d,-0x118(%rbp)\n 334:\t41 83 fa 02          \tcmp    $0x2,%r10d\n 338:\t0f 84 05 00 00 00    \tje     343 <main+0x343>\n 33e:\te9 25 00 00 00       \tjmp    368 <main+0x368>\n 343:\t48 8b bd f0 fe ff ff \tmov    -0x110(%rbp),%rdi\n 34a:\te8 00 00 00 00       \tcall   34f <main+0x34f>\n\t\t\t34b: R_X86_64_PLT32\t__cxa_begin_catch-0x4\n 34f:\te8 00 00 00 00       \tcall   354 <main+0x354>\n\t\t\t350: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 354:\tb8 04 00 00 00       \tmov    $0x4,%eax\n 359:\te9 c1 00 00 00       \tjmp    41f <main+0x41f>\n 35e:\te8 00 00 00 00       \tcall   363 <main+0x363>\n\t\t\t35f: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 363:\te9 6c 01 00 00       \tjmp    4d4 <main+0x4d4>\n 368:\t4c 63 95 e8 fe ff ff \tmovslq -0x118(%rbp),%r10\n 36f:\t41 83 fa 03          \tcmp    $0x3,%r10d\n 373:\t0f 84 05 00 00 00    \tje     37e <main+0x37e>\n 379:\te9 92 00 00 00       \tjmp    410 <main+0x410>\n 37e:\t48 8b bd f0 fe ff ff \tmov    -0x110(%rbp),%rdi\n 385:\te8 00 00 00 00       \tcall   38a <main+0x38a>\n\t\t\t386: R_X86_64_PLT32\t__cxa_begin_catch-0x4\n 38a:\t49 89 c0             \tmov    %rax,%r8\n 38d:\tf3 45 0f 6f 38       \tmovdqu (%r8),%xmm15\n 392:\tf3 44 0f 7f bd d8 fe \tmovdqu %xmm15,-0x128(%rbp)\n 399:\tff ff \n 39b:\tf2 0f 10 85 d8 fe ff \tmovsd  -0x128(%rbp),%xmm0\n 3a2:\tff \n 3a3:\tf2 0f 10 8d e0 fe ff \tmovsd  -0x120(%rbp),%xmm1\n 3aa:\tff \n 3ab:\tf2 0f 11 85 c8 fe ff \tmovsd  %xmm0,-0x138(%rbp)\n 3b2:\tff \n 3b3:\tf2 0f 11 8d d0 fe ff \tmovsd  %xmm1,-0x130(%rbp)\n 3ba:\tff \n 3bb:\tf2 0f 10 85 d0 fe ff \tmovsd  -0x130(%rbp),%xmm0\n 3c2:\tff \n 3c3:\tb8 04 00 00 00       \tmov    $0x4,%eax\n 3c8:\tf2 4c 0f 2a f0       \tcvtsi2sd %rax,%xmm14\n 3cd:\tf2 41 0f 10 ce       \tmovsd  %xmm14,%xmm1\n 3d2:\tf2 44 0f 10 f0       \tmovsd  %xmm0,%xmm14\n 3d7:\t66 44 0f 2e f1       \tucomisd %xmm1,%xmm14\n 3dc:\t0f 8a 0b 00 00 00    \tjp     3ed <main+0x3ed>\n 3e2:\t0f 85 05 00 00 00    \tjne    3ed <main+0x3ed>\n 3e8:\te9 0f 00 00 00       \tjmp    3fc <main+0x3fc>\n 3ed:\te8 00 00 00 00       \tcall   3f2 <main+0x3f2>\n\t\t\t3ee: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 3f2:\tb8 05 00 00 00       \tmov    $0x5,%eax\n 3f7:\te9 23 00 00 00       \tjmp    41f <main+0x41f>\n 3fc:\te8 00 00 00 00       \tcall   401 <main+0x401>\n\t\t\t3fd: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 401:\te9 0f 00 00 00       \tjmp    415 <main+0x415>\n 406:\te8 00 00 00 00       \tcall   40b <main+0x40b>\n\t\t\t407: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 40b:\te9 c4 00 00 00       \tjmp    4d4 <main+0x4d4>\n 410:\te9 bf 00 00 00       \tjmp    4d4 <main+0x4d4>\n 415:\tb8 00 00 00 00       \tmov    $0x0,%eax\n 41a:\te9 00 00 00 00       \tjmp    41f <main+0x41f>\n 41f:\t48 8b 9d c0 fe ff ff \tmov    -0x140(%rbp),%rbx\n 426:\tc9                   \tleave\n 427:\tc3                   \tret\n 428:\t48 89 45 f8          \tmov    %rax,-0x8(%rbp)\n 42c:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 433:\t81 fa 01 00 00 00    \tcmp    $0x1,%edx\n 439:\t0f 85 07 00 00 00    \tjne    446 <main+0x446>\n 43f:\tc7 45 f0 01 00 00 00 \tmovl   $0x1,-0x10(%rbp)\n 446:\t48 8d a5 90 fe ff ff \tlea    -0x170(%rbp),%rsp\n 44d:\te9 01 fe ff ff       \tjmp    253 <main+0x253>\n 452:\t48 89 45 f8          \tmov    %rax,-0x8(%rbp)\n 456:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 45d:\t48 8d a5 90 fe ff ff \tlea    -0x170(%rbp),%rsp\n 464:\te9 50 fe ff ff       \tjmp    2b9 <main+0x2b9>\n 469:\t48 89 45 f8          \tmov    %rax,-0x8(%rbp)\n 46d:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 474:\t81 fa 02 00 00 00    \tcmp    $0x2,%edx\n 47a:\t0f 85 07 00 00 00    \tjne    487 <main+0x487>\n 480:\tc7 45 f0 02 00 00 00 \tmovl   $0x2,-0x10(%rbp)\n 487:\t81 fa 03 00 00 00    \tcmp    $0x3,%edx\n 48d:\t0f 85 07 00 00 00    \tjne    49a <main+0x49a>\n 493:\tc7 45 f0 03 00 00 00 \tmovl   $0x3,-0x10(%rbp)\n 49a:\t48 8d a5 90 fe ff ff \tlea    -0x170(%rbp),%rsp\n 4a1:\te9 78 fe ff ff       \tjmp    31e <main+0x31e>\n 4a6:\t48 89 45 f8          \tmov    %rax,-0x8(%rbp)\n 4aa:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 4b1:\t48 8d a5 90 fe ff ff \tlea    -0x170(%rbp),%rsp\n 4b8:\te9 a1 fe ff ff       \tjmp    35e <main+0x35e>\n 4bd:\t48 89 45 f8          \tmov    %rax,-0x8(%rbp)\n 4c1:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 4c8:\t48 8d a5 90 fe ff ff \tlea    -0x170(%rbp),%rsp\n 4cf:\te9 32 ff ff ff       \tjmp    406 <main+0x406>\n 4d4:\t48 8b 7d f8          \tmov    -0x8(%rbp),%rdi\n 4d8:\te8 00 00 00 00       \tcall   4dd <main+0x4dd>\n\t\t\t4d9: R_X86_64_PLT32\t_Unwind_Resume-0x4\n 4dd:\t0f 0b                \tud2\n\nDisassembly of section .text._ZNKSt9type_info4nameEv:\n\n0000000000000000 <_ZNKSt9type_info4nameEv>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 10 00 00 00 \tsub    $0x10,%rsp\n   b:\t48 89 5d f0          \tmov    %rbx,-0x10(%rbp)\n   f:\t48 89 fb             \tmov    %rdi,%rbx\n  12:\t4c 8b 43 08          \tmov    0x8(%rbx),%r8\n  16:\t4d 0f be 08          \tmovsbq (%r8),%r9\n  1a:\t4d 0f be c1          \tmovsbq %r9b,%r8\n  1e:\t41 83 f8 2a          \tcmp    $0x2a,%r8d\n  22:\t0f 84 05 00 00 00    \tje     2d <_ZNKSt9type_info4nameEv+0x2d>\n  28:\te9 11 00 00 00       \tjmp    3e <_ZNKSt9type_info4nameEv+0x3e>\n  2d:\t4c 8b 43 08          \tmov    0x8(%rbx),%r8\n  31:\t4d 8d 48 01          \tlea    0x1(%r8),%r9\n  35:\t4c 89 4d f8          \tmov    %r9,-0x8(%rbp)\n  39:\te9 08 00 00 00       \tjmp    46 <_ZNKSt9type_info4nameEv+0x46>\n  3e:\t4c 8b 43 08          \tmov    0x8(%rbx),%r8\n  42:\t4c 89 45 f8          \tmov    %r8,-0x8(%rbp)\n  46:\t48 8b 45 f8          \tmov    -0x8(%rbp),%rax\n  4a:\te9 00 00 00 00       \tjmp    4f <_ZNKSt9type_info4nameEv+0x4f>\n  4f:\t48 8b 5d f0          \tmov    -0x10(%rbp),%rbx\n  53:\tc9                   \tleave\n  54:\tc3                   \tret\n\nDisassembly of section .text._ZNKSt9type_infoeqERKS_:\n\n0000000000000000 <_ZNKSt9type_infoeqERKS_>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 20 00 00 00 \tsub    $0x20,%rsp\n   b:\t48 89 5d f0          \tmov    %rbx,-0x10(%rbp)\n   f:\t4c 89 65 e8          \tmov    %r12,-0x18(%rbp)\n  13:\t4c 89 6d e0          \tmov    %r13,-0x20(%rbp)\n  17:\t48 89 fb             \tmov    %rdi,%rbx\n  1a:\t49 89 f4             \tmov    %rsi,%r12\n  1d:\t41 ba 00 00 00 00    \tmov    $0x0,%r10d\n  23:\t45 84 d2             \ttest   %r10b,%r10b\n  26:\t0f 85 05 00 00 00    \tjne    31 <_ZNKSt9type_infoeqERKS_+0x31>\n  2c:\te9 0f 00 00 00       \tjmp    40 <_ZNKSt9type_infoeqERKS_+0x40>\n  31:\t4c 39 e3             \tcmp    %r12,%rbx\n  34:\t0f 94 c0             \tsete   %al\n  37:\t48 0f b6 c0          \tmovzbq %al,%rax\n  3b:\te9 89 00 00 00       \tjmp    c9 <_ZNKSt9type_infoeqERKS_+0xc9>\n  40:\t4c 8b 43 08          \tmov    0x8(%rbx),%r8\n  44:\t4d 3b 44 24 08       \tcmp    0x8(%r12),%r8\n  49:\t0f 84 05 00 00 00    \tje     54 <_ZNKSt9type_infoeqERKS_+0x54>\n  4f:\te9 0a 00 00 00       \tjmp    5e <_ZNKSt9type_infoeqERKS_+0x5e>\n  54:\tb8 01 00 00 00       \tmov    $0x1,%eax\n  59:\te9 6b 00 00 00       \tjmp    c9 <_ZNKSt9type_infoeqERKS_+0xc9>\n  5e:\t4c 8b 43 08          \tmov    0x8(%rbx),%r8\n  62:\t4d 0f be 08          \tmovsbq (%r8),%r9\n  66:\t4d 0f be c1          \tmovsbq %r9b,%r8\n  6a:\t41 83 f8 2a          \tcmp    $0x2a,%r8d\n  6e:\t0f 85 05 00 00 00    \tjne    79 <_ZNKSt9type_infoeqERKS_+0x79>\n  74:\te9 3b 00 00 00       \tjmp    b4 <_ZNKSt9type_infoeqERKS_+0xb4>\n  79:\t4c 8b 6b 08          \tmov    0x8(%rbx),%r13\n  7d:\t4c 89 e7             \tmov    %r12,%rdi\n  80:\te8 00 00 00 00       \tcall   85 <_ZNKSt9type_infoeqERKS_+0x85>\n\t\t\t81: R_X86_64_PLT32\t_ZNKSt9type_info4nameEv-0x4\n  85:\t49 89 c0             \tmov    %rax,%r8\n  88:\t4c 89 ef             \tmov    %r13,%rdi\n  8b:\t4c 89 c6             \tmov    %r8,%rsi\n  8e:\te8 00 00 00 00       \tcall   93 <_ZNKSt9type_infoeqERKS_+0x93>\n\t\t\t8f: R_X86_64_PLT32\tstrcmp-0x4\n  93:\t48 63 c0             \tmovslq %eax,%rax\n  96:\t85 c0                \ttest   %eax,%eax\n  98:\t41 0f 94 c0          \tsete   %r8b\n  9c:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n  a0:\t4d 85 c0             \ttest   %r8,%r8\n  a3:\t41 0f 95 c1          \tsetne  %r9b\n  a7:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n  ab:\t4c 89 4d f8          \tmov    %r9,-0x8(%rbp)\n  af:\te9 08 00 00 00       \tjmp    bc <_ZNKSt9type_infoeqERKS_+0xbc>\n  b4:\t48 c7 45 f8 00 00 00 \tmovq   $0x0,-0x8(%rbp)\n  bb:\t00 \n  bc:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  c0:\t49 0f b6 c0          \tmovzbq %r8b,%rax\n  c4:\te9 00 00 00 00       \tjmp    c9 <_ZNKSt9type_infoeqERKS_+0xc9>\n  c9:\t48 8b 5d f0          \tmov    -0x10(%rbp),%rbx\n  cd:\t4c 8b 65 e8          \tmov    -0x18(%rbp),%r12\n  d1:\t4c 8b 6d e0          \tmov    -0x20(%rbp),%r13\n  d5:\tc9                   \tleave\n  d6:\tc3                   \tret\n\nDisassembly of section .text._ZNKSt9type_infoneERKS_:\n\n0000000000000000 <_ZNKSt9type_infoneERKS_>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 30 00 00 00 \tsub    $0x30,%rsp\n   b:\t4c 8b 47 08          \tmov    0x8(%rdi),%r8\n   f:\t4c 3b 46 08          \tcmp    0x8(%rsi),%r8\n  13:\t41 0f 94 c1          \tsete   %r9b\n  17:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n  1b:\t4c 89 c8             \tmov    %r9,%rax\n  1e:\tba 00 00 00 00       \tmov    $0x0,%edx\n  23:\t48 39 d0             \tcmp    %rdx,%rax\n  26:\t0f 94 c0             \tsete   %al\n  29:\t48 0f b6 c0          \tmovzbq %al,%rax\n  2d:\te9 00 00 00 00       \tjmp    32 <_ZNKSt9type_infoneERKS_+0x32>\n  32:\tc9                   \tleave\n  33:\tc3                   \tret\n\nDisassembly of section .text._Z6caughtICfEiT_:\n\n0000000000000000 <_Z6caughtICfEiT_>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 80 00 00 00 \tsub    $0x80,%rsp\n   b:\t48 89 5d b8          \tmov    %rbx,-0x48(%rbp)\n   f:\tf2 0f 11 45 e8       \tmovsd  %xmm0,-0x18(%rbp)\n  14:\t48 8b 45 e8          \tmov    -0x18(%rbp),%rax\n  18:\t48 89 45 e0          \tmov    %rax,-0x20(%rbp)\n  1c:\tbf 08 00 00 00       \tmov    $0x8,%edi\n  21:\te8 00 00 00 00       \tcall   26 <_Z6caughtICfEiT_+0x26>\n\t\t\t22: R_X86_64_PLT32\t__cxa_allocate_exception-0x4\n  26:\t48 89 c3             \tmov    %rax,%rbx\n  29:\t48 8b 45 e0          \tmov    -0x20(%rbp),%rax\n  2d:\t48 89 45 d8          \tmov    %rax,-0x28(%rbp)\n  31:\tf3 0f 10 45 d8       \tmovss  -0x28(%rbp),%xmm0\n  36:\tf3 0f 10 4d dc       \tmovss  -0x24(%rbp),%xmm1\n  3b:\tf3 0f 11 03          \tmovss  %xmm0,(%rbx)\n  3f:\tf3 0f 11 4b 04       \tmovss  %xmm1,0x4(%rbx)\n  44:\t4c 8b 05 00 00 00 00 \tmov    0x0(%rip),%r8        # 4b <_Z6caughtICfEiT_+0x4b>\n\t\t\t47: R_X86_64_GOTPCREL\t_ZTICf-0x4\n  4b:\t48 89 df             \tmov    %rbx,%rdi\n  4e:\t4c 89 c6             \tmov    %r8,%rsi\n  51:\tba 00 00 00 00       \tmov    $0x0,%edx\n  56:\te8 00 00 00 00       \tcall   5b <_Z6caughtICfEiT_+0x5b>\n\t\t\t57: R_X86_64_PLT32\t__cxa_throw-0x4\n  5b:\tb8 00 00 00 00       \tmov    $0x0,%eax\n  60:\te9 da 00 00 00       \tjmp    13f <_Z6caughtICfEiT_+0x13f>\n  65:\t4c 8b 55 f8          \tmov    -0x8(%rbp),%r10\n  69:\t4c 89 55 d0          \tmov    %r10,-0x30(%rbp)\n  6d:\t4c 63 45 f0          \tmovslq -0x10(%rbp),%r8\n  71:\t41 83 f8 01          \tcmp    $0x1,%r8d\n  75:\t0f 84 05 00 00 00    \tje     80 <_Z6caughtICfEiT_+0x80>\n  7b:\te9 b0 00 00 00       \tjmp    130 <_Z6caughtICfEiT_+0x130>\n  80:\t48 8b 7d d0          \tmov    -0x30(%rbp),%rdi\n  84:\te8 00 00 00 00       \tcall   89 <_Z6caughtICfEiT_+0x89>\n\t\t\t85: R_X86_64_PLT32\t__cxa_begin_catch-0x4\n  89:\t49 89 c0             \tmov    %rax,%r8\n  8c:\t4c 89 45 c8          \tmov    %r8,-0x38(%rbp)\n  90:\t4c 8b 45 c8          \tmov    -0x38(%rbp),%r8\n  94:\tf3 41 0f 10 00       \tmovss  (%r8),%xmm0\n  99:\tb8 03 00 00 00       \tmov    $0x3,%eax\n  9e:\tf3 4c 0f 2a f0       \tcvtsi2ss %rax,%xmm14\n  a3:\tf3 41 0f 10 ce       \tmovss  %xmm14,%xmm1\n  a8:\tf3 44 0f 10 f0       \tmovss  %xmm0,%xmm14\n  ad:\t44 0f 2e f1          \tucomiss %xmm1,%xmm14\n  b1:\t0f 8a 53 00 00 00    \tjp     10a <_Z6caughtICfEiT_+0x10a>\n  b7:\t0f 84 05 00 00 00    \tje     c2 <_Z6caughtICfEiT_+0xc2>\n  bd:\te9 48 00 00 00       \tjmp    10a <_Z6caughtICfEiT_+0x10a>\n  c2:\t4c 8b 45 c8          \tmov    -0x38(%rbp),%r8\n  c6:\tf3 41 0f 10 40 04    \tmovss  0x4(%r8),%xmm0\n  cc:\tb8 04 00 00 00       \tmov    $0x4,%eax\n  d1:\tf3 4c 0f 2a f0       \tcvtsi2ss %rax,%xmm14\n  d6:\tf3 41 0f 10 ce       \tmovss  %xmm14,%xmm1\n  db:\tf3 44 0f 10 f0       \tmovss  %xmm0,%xmm14\n  e0:\t44 0f 2e f1          \tucomiss %xmm1,%xmm14\n  e4:\t41 0f 94 c2          \tsete   %r10b\n  e8:\t41 0f 9b c3          \tsetnp  %r11b\n  ec:\t45 20 da             \tand    %r11b,%r10b\n  ef:\t4d 0f b6 d2          \tmovzbq %r10b,%r10\n  f3:\t4d 89 d0             \tmov    %r10,%r8\n  f6:\t4d 85 c0             \ttest   %r8,%r8\n  f9:\t41 0f 95 c1          \tsetne  %r9b\n  fd:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n 101:\t4c 89 4d c0          \tmov    %r9,-0x40(%rbp)\n 105:\te9 08 00 00 00       \tjmp    112 <_Z6caughtICfEiT_+0x112>\n 10a:\t48 c7 45 c0 00 00 00 \tmovq   $0x0,-0x40(%rbp)\n 111:\t00 \n 112:\t4c 8b 45 c0          \tmov    -0x40(%rbp),%r8\n 116:\t49 63 d8             \tmovslq %r8d,%rbx\n 119:\te8 00 00 00 00       \tcall   11e <_Z6caughtICfEiT_+0x11e>\n\t\t\t11a: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 11e:\t48 89 d8             \tmov    %rbx,%rax\n 121:\te9 19 00 00 00       \tjmp    13f <_Z6caughtICfEiT_+0x13f>\n 126:\te8 00 00 00 00       \tcall   12b <_Z6caughtICfEiT_+0x12b>\n\t\t\t127: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 12b:\te9 50 00 00 00       \tjmp    180 <_Z6caughtICfEiT_+0x180>\n 130:\te9 4b 00 00 00       \tjmp    180 <_Z6caughtICfEiT_+0x180>\n 135:\tb8 00 00 00 00       \tmov    $0x0,%eax\n 13a:\te9 00 00 00 00       \tjmp    13f <_Z6caughtICfEiT_+0x13f>\n 13f:\t48 8b 5d b8          \tmov    -0x48(%rbp),%rbx\n 143:\tc9                   \tleave\n 144:\tc3                   \tret\n 145:\t48 89 45 f8          \tmov    %rax,-0x8(%rbp)\n 149:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 150:\t81 fa 01 00 00 00    \tcmp    $0x1,%edx\n 156:\t0f 85 07 00 00 00    \tjne    163 <_Z6caughtICfEiT_+0x163>\n 15c:\tc7 45 f0 01 00 00 00 \tmovl   $0x1,-0x10(%rbp)\n 163:\t48 8d 65 80          \tlea    -0x80(%rbp),%rsp\n 167:\te9 f9 fe ff ff       \tjmp    65 <_Z6caughtICfEiT_+0x65>\n 16c:\t48 89 45 f8          \tmov    %rax,-0x8(%rbp)\n 170:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 177:\t48 8d 65 80          \tlea    -0x80(%rbp),%rsp\n 17b:\te9 a6 ff ff ff       \tjmp    126 <_Z6caughtICfEiT_+0x126>\n 180:\t48 8b 7d f8          \tmov    -0x8(%rbp),%rdi\n 184:\te8 00 00 00 00       \tcall   189 <_Z6caughtICfEiT_+0x189>\n\t\t\t185: R_X86_64_PLT32\t_Unwind_Resume-0x4\n 189:\t0f 0b                \tud2\n\nDisassembly of section .text._Z6caughtICdEiT_:\n\n0000000000000000 <_Z6caughtICdEiT_>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 90 00 00 00 \tsub    $0x90,%rsp\n   b:\t48 89 5d a0          \tmov    %rbx,-0x60(%rbp)\n   f:\tf2 0f 11 45 e0       \tmovsd  %xmm0,-0x20(%rbp)\n  14:\tf2 0f 11 4d e8       \tmovsd  %xmm1,-0x18(%rbp)\n  19:\tf3 44 0f 6f 7d e0    \tmovdqu -0x20(%rbp),%xmm15\n  1f:\tf3 44 0f 7f 7d d0    \tmovdqu %xmm15,-0x30(%rbp)\n  25:\tbf 10 00 00 00       \tmov    $0x10,%edi\n  2a:\te8 00 00 00 00       \tcall   2f <_Z6caughtICdEiT_+0x2f>\n\t\t\t2b: R_X86_64_PLT32\t__cxa_allocate_exception-0x4\n  2f:\t48 89 c3             \tmov    %rax,%rbx\n  32:\tf3 44 0f 6f 7d d0    \tmovdqu -0x30(%rbp),%xmm15\n  38:\tf3 44 0f 7f 7d c0    \tmovdqu %xmm15,-0x40(%rbp)\n  3e:\tf2 0f 10 45 c0       \tmovsd  -0x40(%rbp),%xmm0\n  43:\tf2 0f 10 4d c8       \tmovsd  -0x38(%rbp),%xmm1\n  48:\tf2 0f 11 03          \tmovsd  %xmm0,(%rbx)\n  4c:\tf2 0f 11 4b 08       \tmovsd  %xmm1,0x8(%rbx)\n  51:\t4c 8b 05 00 00 00 00 \tmov    0x0(%rip),%r8        # 58 <_Z6caughtICdEiT_+0x58>\n\t\t\t54: R_X86_64_GOTPCREL\t_ZTICd-0x4\n  58:\t48 89 df             \tmov    %rbx,%rdi\n  5b:\t4c 89 c6             \tmov    %r8,%rsi\n  5e:\tba 00 00 00 00       \tmov    $0x0,%edx\n  63:\te8 00 00 00 00       \tcall   68 <_Z6caughtICdEiT_+0x68>\n\t\t\t64: R_X86_64_PLT32\t__cxa_throw-0x4\n  68:\tb8 00 00 00 00       \tmov    $0x0,%eax\n  6d:\te9 dc 00 00 00       \tjmp    14e <_Z6caughtICdEiT_+0x14e>\n  72:\t4c 8b 55 f8          \tmov    -0x8(%rbp),%r10\n  76:\t4c 89 55 b8          \tmov    %r10,-0x48(%rbp)\n  7a:\t4c 63 45 f0          \tmovslq -0x10(%rbp),%r8\n  7e:\t41 83 f8 01          \tcmp    $0x1,%r8d\n  82:\t0f 84 05 00 00 00    \tje     8d <_Z6caughtICdEiT_+0x8d>\n  88:\te9 b2 00 00 00       \tjmp    13f <_Z6caughtICdEiT_+0x13f>\n  8d:\t48 8b 7d b8          \tmov    -0x48(%rbp),%rdi\n  91:\te8 00 00 00 00       \tcall   96 <_Z6caughtICdEiT_+0x96>\n\t\t\t92: R_X86_64_PLT32\t__cxa_begin_catch-0x4\n  96:\t49 89 c0             \tmov    %rax,%r8\n  99:\t4c 89 45 b0          \tmov    %r8,-0x50(%rbp)\n  9d:\t4c 8b 45 b0          \tmov    -0x50(%rbp),%r8\n  a1:\tf2 41 0f 10 00       \tmovsd  (%r8),%xmm0\n  a6:\tb8 03 00 00 00       \tmov    $0x3,%eax\n  ab:\tf2 4c 0f 2a f0       \tcvtsi2sd %rax,%xmm14\n  b0:\tf2 41 0f 10 ce       \tmovsd  %xmm14,%xmm1\n  b5:\tf2 44 0f 10 f0       \tmovsd  %xmm0,%xmm14\n  ba:\t66 44 0f 2e f1       \tucomisd %xmm1,%xmm14\n  bf:\t0f 8a 54 00 00 00    \tjp     119 <_Z6caughtICdEiT_+0x119>\n  c5:\t0f 84 05 00 00 00    \tje     d0 <_Z6caughtICdEiT_+0xd0>\n  cb:\te9 49 00 00 00       \tjmp    119 <_Z6caughtICdEiT_+0x119>\n  d0:\t4c 8b 45 b0          \tmov    -0x50(%rbp),%r8\n  d4:\tf2 41 0f 10 40 08    \tmovsd  0x8(%r8),%xmm0\n  da:\tb8 04 00 00 00       \tmov    $0x4,%eax\n  df:\tf2 4c 0f 2a f0       \tcvtsi2sd %rax,%xmm14\n  e4:\tf2 41 0f 10 ce       \tmovsd  %xmm14,%xmm1\n  e9:\tf2 44 0f 10 f0       \tmovsd  %xmm0,%xmm14\n  ee:\t66 44 0f 2e f1       \tucomisd %xmm1,%xmm14\n  f3:\t41 0f 94 c2          \tsete   %r10b\n  f7:\t41 0f 9b c3          \tsetnp  %r11b\n  fb:\t45 20 da             \tand    %r11b,%r10b\n  fe:\t4d 0f b6 d2          \tmovzbq %r10b,%r10\n 102:\t4d 89 d0             \tmov    %r10,%r8\n 105:\t4d 85 c0             \ttest   %r8,%r8\n 108:\t41 0f 95 c1          \tsetne  %r9b\n 10c:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n 110:\t4c 89 4d a8          \tmov    %r9,-0x58(%rbp)\n 114:\te9 08 00 00 00       \tjmp    121 <_Z6caughtICdEiT_+0x121>\n 119:\t48 c7 45 a8 00 00 00 \tmovq   $0x0,-0x58(%rbp)\n 120:\t00 \n 121:\t4c 8b 45 a8          \tmov    -0x58(%rbp),%r8\n 125:\t49 63 d8             \tmovslq %r8d,%rbx\n 128:\te8 00 00 00 00       \tcall   12d <_Z6caughtICdEiT_+0x12d>\n\t\t\t129: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 12d:\t48 89 d8             \tmov    %rbx,%rax\n 130:\te9 19 00 00 00       \tjmp    14e <_Z6caughtICdEiT_+0x14e>\n 135:\te8 00 00 00 00       \tcall   13a <_Z6caughtICdEiT_+0x13a>\n\t\t\t136: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 13a:\te9 56 00 00 00       \tjmp    195 <_Z6caughtICdEiT_+0x195>\n 13f:\te9 51 00 00 00       \tjmp    195 <_Z6caughtICdEiT_+0x195>\n 144:\tb8 00 00 00 00       \tmov    $0x0,%eax\n 149:\te9 00 00 00 00       \tjmp    14e <_Z6caughtICdEiT_+0x14e>\n 14e:\t48 8b 5d a0          \tmov    -0x60(%rbp),%rbx\n 152:\tc9                   \tleave\n 153:\tc3                   \tret\n 154:\t48 89 45 f8          \tmov    %rax,-0x8(%rbp)\n 158:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 15f:\t81 fa 01 00 00 00    \tcmp    $0x1,%edx\n 165:\t0f 85 07 00 00 00    \tjne    172 <_Z6caughtICdEiT_+0x172>\n 16b:\tc7 45 f0 01 00 00 00 \tmovl   $0x1,-0x10(%rbp)\n 172:\t48 8d a5 70 ff ff ff \tlea    -0x90(%rbp),%rsp\n 179:\te9 f4 fe ff ff       \tjmp    72 <_Z6caughtICdEiT_+0x72>\n 17e:\t48 89 45 f8          \tmov    %rax,-0x8(%rbp)\n 182:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 189:\t48 8d a5 70 ff ff ff \tlea    -0x90(%rbp),%rsp\n 190:\te9 a0 ff ff ff       \tjmp    135 <_Z6caughtICdEiT_+0x135>\n 195:\t48 8b 7d f8          \tmov    -0x8(%rbp),%rdi\n 199:\te8 00 00 00 00       \tcall   19e <_Z6caughtICdEiT_+0x19e>\n\t\t\t19a: R_X86_64_PLT32\t_Unwind_Resume-0x4\n 19e:\t0f 0b                \tud2\n\nDisassembly of section .text._Z6caughtICeEiT_:\n\n0000000000000000 <_Z6caughtICeEiT_>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 00 01 00 00 \tsub    $0x100,%rsp\n   b:\t48 89 9d 30 ff ff ff \tmov    %rbx,-0xd0(%rbp)\n  12:\tf3 44 0f 6f 7d 10    \tmovdqu 0x10(%rbp),%xmm15\n  18:\tf3 44 0f 7f 7d d0    \tmovdqu %xmm15,-0x30(%rbp)\n  1e:\tf3 44 0f 6f 7d 20    \tmovdqu 0x20(%rbp),%xmm15\n  24:\tf3 44 0f 7f 7d e0    \tmovdqu %xmm15,-0x20(%rbp)\n  2a:\tbf 20 00 00 00       \tmov    $0x20,%edi\n  2f:\te8 00 00 00 00       \tcall   34 <_Z6caughtICeEiT_+0x34>\n\t\t\t30: R_X86_64_PLT32\t__cxa_allocate_exception-0x4\n  34:\t48 89 c3             \tmov    %rax,%rbx\n  37:\tf3 44 0f 6f 7d d0    \tmovdqu -0x30(%rbp),%xmm15\n  3d:\tf3 44 0f 7f 7d b0    \tmovdqu %xmm15,-0x50(%rbp)\n  43:\tf3 44 0f 6f 7d e0    \tmovdqu -0x20(%rbp),%xmm15\n  49:\tf3 44 0f 7f 7d c0    \tmovdqu %xmm15,-0x40(%rbp)\n  4f:\tdb 6d b0             \tfldt   -0x50(%rbp)\n  52:\tdb 7d a0             \tfstpt  -0x60(%rbp)\n  55:\tdb 6d c0             \tfldt   -0x40(%rbp)\n  58:\tdb 7d 90             \tfstpt  -0x70(%rbp)\n  5b:\tdb 6d a0             \tfldt   -0x60(%rbp)\n  5e:\tdb 3b                \tfstpt  (%rbx)\n  60:\tdb 6d 90             \tfldt   -0x70(%rbp)\n  63:\tdb 7b 10             \tfstpt  0x10(%rbx)\n  66:\t4c 8b 05 00 00 00 00 \tmov    0x0(%rip),%r8        # 6d <_Z6caughtICeEiT_+0x6d>\n\t\t\t69: R_X86_64_GOTPCREL\t_ZTICe-0x4\n  6d:\t48 89 df             \tmov    %rbx,%rdi\n  70:\t4c 89 c6             \tmov    %r8,%rsi\n  73:\tba 00 00 00 00       \tmov    $0x0,%edx\n  78:\te8 00 00 00 00       \tcall   7d <_Z6caughtICeEiT_+0x7d>\n\t\t\t79: R_X86_64_PLT32\t__cxa_throw-0x4\n  7d:\tb8 00 00 00 00       \tmov    $0x0,%eax\n  82:\te9 0b 01 00 00       \tjmp    192 <_Z6caughtICeEiT_+0x192>\n  87:\t4c 8b 55 f8          \tmov    -0x8(%rbp),%r10\n  8b:\t4c 89 55 88          \tmov    %r10,-0x78(%rbp)\n  8f:\t4c 63 45 f0          \tmovslq -0x10(%rbp),%r8\n  93:\t41 83 f8 01          \tcmp    $0x1,%r8d\n  97:\t0f 84 05 00 00 00    \tje     a2 <_Z6caughtICeEiT_+0xa2>\n  9d:\te9 e1 00 00 00       \tjmp    183 <_Z6caughtICeEiT_+0x183>\n  a2:\t48 8b 7d 88          \tmov    -0x78(%rbp),%rdi\n  a6:\te8 00 00 00 00       \tcall   ab <_Z6caughtICeEiT_+0xab>\n\t\t\ta7: R_X86_64_PLT32\t__cxa_begin_catch-0x4\n  ab:\t49 89 c0             \tmov    %rax,%r8\n  ae:\t4c 89 45 80          \tmov    %r8,-0x80(%rbp)\n  b2:\t4c 8b 45 80          \tmov    -0x80(%rbp),%r8\n  b6:\t41 db 28             \tfldt   (%r8)\n  b9:\tdb bd 70 ff ff ff    \tfstpt  -0x90(%rbp)\n  bf:\tb8 03 00 00 00       \tmov    $0x3,%eax\n  c4:\t48 89 85 00 ff ff ff \tmov    %rax,-0x100(%rbp)\n  cb:\tdf ad 00 ff ff ff    \tfildll -0x100(%rbp)\n  d1:\tdb bd 60 ff ff ff    \tfstpt  -0xa0(%rbp)\n  d7:\tdb ad 60 ff ff ff    \tfldt   -0xa0(%rbp)\n  dd:\tdb ad 70 ff ff ff    \tfldt   -0x90(%rbp)\n  e3:\tdf e9                \tfucomip %st(1),%st\n  e5:\tdd d8                \tfstp   %st(0)\n  e7:\t0f 8a 6a 00 00 00    \tjp     157 <_Z6caughtICeEiT_+0x157>\n  ed:\t0f 84 05 00 00 00    \tje     f8 <_Z6caughtICeEiT_+0xf8>\n  f3:\te9 5f 00 00 00       \tjmp    157 <_Z6caughtICeEiT_+0x157>\n  f8:\t4c 8b 45 80          \tmov    -0x80(%rbp),%r8\n  fc:\t41 db 68 10          \tfldt   0x10(%r8)\n 100:\tdb bd 50 ff ff ff    \tfstpt  -0xb0(%rbp)\n 106:\tb8 04 00 00 00       \tmov    $0x4,%eax\n 10b:\t48 89 85 00 ff ff ff \tmov    %rax,-0x100(%rbp)\n 112:\tdf ad 00 ff ff ff    \tfildll -0x100(%rbp)\n 118:\tdb bd 40 ff ff ff    \tfstpt  -0xc0(%rbp)\n 11e:\tdb ad 40 ff ff ff    \tfldt   -0xc0(%rbp)\n 124:\tdb ad 50 ff ff ff    \tfldt   -0xb0(%rbp)\n 12a:\tdf e9                \tfucomip %st(1),%st\n 12c:\tdd d8                \tfstp   %st(0)\n 12e:\t41 0f 94 c2          \tsete   %r10b\n 132:\t41 0f 9b c3          \tsetnp  %r11b\n 136:\t45 20 da             \tand    %r11b,%r10b\n 139:\t4d 0f b6 d2          \tmovzbq %r10b,%r10\n 13d:\t4d 89 d0             \tmov    %r10,%r8\n 140:\t4d 85 c0             \ttest   %r8,%r8\n 143:\t41 0f 95 c1          \tsetne  %r9b\n 147:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n 14b:\t4c 89 8d 38 ff ff ff \tmov    %r9,-0xc8(%rbp)\n 152:\te9 0b 00 00 00       \tjmp    162 <_Z6caughtICeEiT_+0x162>\n 157:\t48 c7 85 38 ff ff ff \tmovq   $0x0,-0xc8(%rbp)\n 15e:\t00 00 00 00 \n 162:\t4c 8b 85 38 ff ff ff \tmov    -0xc8(%rbp),%r8\n 169:\t49 63 d8             \tmovslq %r8d,%rbx\n 16c:\te8 00 00 00 00       \tcall   171 <_Z6caughtICeEiT_+0x171>\n\t\t\t16d: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 171:\t48 89 d8             \tmov    %rbx,%rax\n 174:\te9 19 00 00 00       \tjmp    192 <_Z6caughtICeEiT_+0x192>\n 179:\te8 00 00 00 00       \tcall   17e <_Z6caughtICeEiT_+0x17e>\n\t\t\t17a: R_X86_64_PLT32\t__cxa_end_catch-0x4\n 17e:\te9 59 00 00 00       \tjmp    1dc <_Z6caughtICeEiT_+0x1dc>\n 183:\te9 54 00 00 00       \tjmp    1dc <_Z6caughtICeEiT_+0x1dc>\n 188:\tb8 00 00 00 00       \tmov    $0x0,%eax\n 18d:\te9 00 00 00 00       \tjmp    192 <_Z6caughtICeEiT_+0x192>\n 192:\t48 8b 9d 30 ff ff ff \tmov    -0xd0(%rbp),%rbx\n 199:\tc9                   \tleave\n 19a:\tc3                   \tret\n 19b:\t48 89 45 f8          \tmov    %rax,-0x8(%rbp)\n 19f:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 1a6:\t81 fa 01 00 00 00    \tcmp    $0x1,%edx\n 1ac:\t0f 85 07 00 00 00    \tjne    1b9 <_Z6caughtICeEiT_+0x1b9>\n 1b2:\tc7 45 f0 01 00 00 00 \tmovl   $0x1,-0x10(%rbp)\n 1b9:\t48 8d a5 00 ff ff ff \tlea    -0x100(%rbp),%rsp\n 1c0:\te9 c2 fe ff ff       \tjmp    87 <_Z6caughtICeEiT_+0x87>\n 1c5:\t48 89 45 f8          \tmov    %rax,-0x8(%rbp)\n 1c9:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 1d0:\t48 8d a5 00 ff ff ff \tlea    -0x100(%rbp),%rsp\n 1d7:\te9 9d ff ff ff       \tjmp    179 <_Z6caughtICeEiT_+0x179>\n 1dc:\t48 8b 7d f8          \tmov    -0x8(%rbp),%rdi\n 1e0:\te8 00 00 00 00       \tcall   1e5 <_Z6caughtICeEiT_+0x1e5>\n\t\t\t1e1: R_X86_64_PLT32\t_Unwind_Resume-0x4\n 1e5:\t0f 0b                \tud2\n\nDisassembly of section .text._ZNSt9exceptionC2Ev:\n\n0000000000000000 <_ZNSt9exceptionC2Ev>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 10 00 00 00 \tsub    $0x10,%rsp\n   b:\t4c 8b 05 00 00 00 00 \tmov    0x0(%rip),%r8        # 12 <_ZNSt9exceptionC2Ev+0x12>\n\t\t\te: R_X86_64_GOTPCREL\t_ZTVSt9exception-0x4\n  12:\t4d 8d 48 10          \tlea    0x10(%r8),%r9\n  16:\t4c 89 0f             \tmov    %r9,(%rdi)\n  19:\te9 00 00 00 00       \tjmp    1e <_ZNSt9exceptionC2Ev+0x1e>\n  1e:\tc9                   \tleave\n  1f:\tc3                   \tret\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-identity.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-identity.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/checks-final/complex-identity.o",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-identity"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/complex-identity"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-identity.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-identity.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/checks-final/complex-identity.o",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-identity"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/complex-identity"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-include",
+      "typeinfo",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-identity.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nm",
+      "/tmp/pa29-audit190/checks-final/complex-identity.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "0000000000000000 T _Z4readRKCd\n0000000000000010 d _ZL2d1\n0000000000000020 d _ZL2d2\n0000000000000000 d _ZL2f1\n0000000000000008 d _ZL2f2\n0000000000000030 d _ZL2l1\n0000000000000050 d _ZL2l2\n0000000000000070 d _ZL4plus\n0000000000000080 d _ZL5minus\n0000000000000000 V _ZN6valuesILi4EE5valueE\n0000000000000000 V _ZN6valuesILi9EE5valueE\n0000000000000017 T main\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-identity.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-identity.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-audit190/checks-final/complex-identity.lowir",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/complex-identity.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "-SWsrg",
+      "/tmp/pa29-audit190/checks-final/complex-identity.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "There are 25 section headers, starting at offset 0x940:\n\nSection Headers:\n  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0\n  [ 1] .text             PROGBITS        0000000000000000 000040 000253 00  AX  0   0 16\n  [ 2] .data             PROGBITS        0000000000000000 0002a0 000090 00  WA  0   0 16\n  [ 3] .eh_frame         PROGBITS        0000000000000000 000330 000068 00   A  0   0  8\n  [ 4]                   PROGBITS        0000000000000000 000398 000000 00   A  0   0  8\n  [ 5] .data.rel.local   PROGBITS        0000000000000000 000398 000000 00  WA  0   0  8\n  [ 6] .init_array       INIT_ARRAY      0000000000000000 000398 000000 08  WA  0   0  8\n  [ 7] .fini_array       FINI_ARRAY      0000000000000000 000398 000000 08  WA  0   0  8\n  [ 8] .tdata            PROGBITS        0000000000000000 000398 000000 00 WAT  0   0  1\n  [ 9] .rela.text        RELA            0000000000000000 000398 000150 18     17   1  8\n  [10] .rela.data        RELA            0000000000000000 0004e8 000000 18     17   2  8\n  [11] .rela.eh_frame    RELA            0000000000000000 0004e8 000030 18     17   3  8\n  [12] .rela.gcc_except_table RELA            0000000000000000 000518 000000 18     17   4  8\n  [13] .rela.data.rel.local RELA            0000000000000000 000518 000000 18     17   5  8\n  [14] .rela.init_array  RELA            0000000000000000 000518 000000 18     17   6  8\n  [15] .rela.fini_array  RELA            0000000000000000 000518 000000 18     17   7  8\n  [16] .rela.tdata       RELA            0000000000000000 000518 000000 18     17   8  8\n  [17] .symtab           SYMTAB          0000000000000000 000518 000228 18     18  19  8\n  [18] .strtab           STRTAB          0000000000000000 000740 00007f 00      0   0  1\n  [19] .shstrtab         STRTAB          0000000000000000 0007bf 00014b 00      0   0  1\n  [20] .note.GNU-stack   PROGBITS        0000000000000000 00090a 000000 00      0   0  1\n  [21] .data._ZN6valuesILi4EE5valueE PROGBITS        0000000000000000 000910 000010 00 WAG  0   0  8\n  [22] .group            GROUP           0000000000000000 000920 000008 04     17  21  4\n  [23] .data._ZN6valuesILi9EE5valueE PROGBITS        0000000000000000 000928 000010 00 WAG  0   0  8\n  [24] .group            GROUP           0000000000000000 000938 000008 04     17  22  4\nKey to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  D (mbind), l (large), p (processor specific)\n\nCOMDAT group section [   22] `.group' [_ZN6valuesILi4EE5valueE] contains 1 sections:\n   [Index]    Name\n   [   21]   .data._ZN6valuesILi4EE5valueE\n\nCOMDAT group section [   24] `.group' [_ZN6valuesILi9EE5valueE] contains 1 sections:\n   [Index]    Name\n   [   23]   .data._ZN6valuesILi9EE5valueE\n\nRelocation section '.rela.text' at offset 0x398 contains 14 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000026  0000000b00000002 R_X86_64_PC32          0000000000000000 _ZL2f1 + 0\n0000000000000052  0000000c00000002 R_X86_64_PC32          0000000000000008 _ZL2f2 + 0\n000000000000008c  0000000d00000002 R_X86_64_PC32          0000000000000010 _ZL2d1 - 4\n0000000000000094  0000001300000004 R_X86_64_PLT32         0000000000000000 _Z4readRKCd - 4\n00000000000000c0  0000000e00000002 R_X86_64_PC32          0000000000000020 _ZL2d2 - 4\n00000000000000c8  0000001300000004 R_X86_64_PLT32         0000000000000000 _Z4readRKCd - 4\n0000000000000102  0000000f00000002 R_X86_64_PC32          0000000000000030 _ZL2l1 + c\n0000000000000130  0000001000000002 R_X86_64_PC32          0000000000000050 _ZL2l2 + c\n000000000000016e  0000001500000009 R_X86_64_GOTPCREL      0000000000000000 _ZN6valuesILi4EE5valueE - 4\n0000000000000176  0000001300000004 R_X86_64_PLT32         0000000000000000 _Z4readRKCd - 4\n00000000000001a2  0000001600000009 R_X86_64_GOTPCREL      0000000000000000 _ZN6valuesILi9EE5valueE - 4\n00000000000001aa  0000001300000004 R_X86_64_PLT32         0000000000000000 _Z4readRKCd - 4\n00000000000001e6  0000001100000002 R_X86_64_PC32          0000000000000070 _ZL4plus + 4\n0000000000000211  0000001200000002 R_X86_64_PC32          0000000000000080 _ZL5minus + 4\n\nRelocation section '.rela.eh_frame' at offset 0x4e8 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000020  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 0\n0000000000000048  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 17\n\nSymbol table '.symtab' contains 23 entries:\n   Num:    Value          Size Type    Bind   Vis      Ndx Name\n     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND \n     1: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 .text\n     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    2 .data\n     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    3 .eh_frame\n     4: 0000000000000000     0 SECTION LOCAL  DEFAULT    4 \n     5: 0000000000000000     0 SECTION LOCAL  DEFAULT    5 .data.rel.local\n     6: 0000000000000000     0 SECTION LOCAL  DEFAULT    6 .init_array\n     7: 0000000000000000     0 SECTION LOCAL  DEFAULT    7 .fini_array\n     8: 0000000000000000     0 SECTION LOCAL  DEFAULT    8 .tdata\n     9: 0000000000000000     0 SECTION LOCAL  DEFAULT   21 .data._ZN6valuesILi4EE5valueE\n    10: 0000000000000000     0 SECTION LOCAL  DEFAULT   23 .data._ZN6valuesILi9EE5valueE\n    11: 0000000000000000     8 OBJECT  LOCAL  DEFAULT    2 _ZL2f1\n    12: 0000000000000008     8 OBJECT  LOCAL  DEFAULT    2 _ZL2f2\n    13: 0000000000000010    16 OBJECT  LOCAL  DEFAULT    2 _ZL2d1\n    14: 0000000000000020    16 OBJECT  LOCAL  DEFAULT    2 _ZL2d2\n    15: 0000000000000030    32 OBJECT  LOCAL  DEFAULT    2 _ZL2l1\n    16: 0000000000000050    32 OBJECT  LOCAL  DEFAULT    2 _ZL2l2\n    17: 0000000000000070    16 OBJECT  LOCAL  DEFAULT    2 _ZL4plus\n    18: 0000000000000080    16 OBJECT  LOCAL  DEFAULT    2 _ZL5minus\n    19: 0000000000000000    23 FUNC    GLOBAL DEFAULT    1 _Z4readRKCd\n    20: 0000000000000017   572 FUNC    GLOBAL DEFAULT    1 main\n    21: 0000000000000000    16 OBJECT  WEAK   DEFAULT   21 _ZN6valuesILi4EE5valueE\n    22: 0000000000000000    16 OBJECT  WEAK   DEFAULT   23 _ZN6valuesILi9EE5valueE\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "--debug-dump=frames",
+      "/tmp/pa29-audit190/checks-final/complex-identity.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..0000000000000017\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 17 to 0000000000000015\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000016\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000017\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000040 0000000000000024 00000044 FDE cie=00000000 pc=0000000000000017..0000000000000253\n  DW_CFA_advance_loc: 1 to 0000000000000018\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 000000000000001b\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 566 to 0000000000000251\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000252\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000253\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "objdump",
+      "-dr",
+      "/tmp/pa29-audit190/checks-final/complex-identity.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "\n/tmp/pa29-audit190/checks-final/complex-identity.o:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000000000 <_Z4readRKCd>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 30 00 00 00 \tsub    $0x30,%rsp\n   b:\tf2 0f 10 47 08       \tmovsd  0x8(%rdi),%xmm0\n  10:\te9 00 00 00 00       \tjmp    15 <_Z4readRKCd+0x15>\n  15:\tc9                   \tleave\n  16:\tc3                   \tret\n\n0000000000000017 <main>:\n  17:\t55                   \tpush   %rbp\n  18:\t48 89 e5             \tmov    %rsp,%rbp\n  1b:\t48 81 ec 80 00 00 00 \tsub    $0x80,%rsp\n  22:\tf3 0f 10 05 00 00 00 \tmovss  0x0(%rip),%xmm0        # 2a <main+0x13>\n  29:\t00 \n\t\t\t26: R_X86_64_PC32\t_ZL2f1\n  2a:\tb8 04 00 00 00       \tmov    $0x4,%eax\n  2f:\tf3 4c 0f 2a f0       \tcvtsi2ss %rax,%xmm14\n  34:\tf3 41 0f 10 ce       \tmovss  %xmm14,%xmm1\n  39:\tf3 44 0f 10 f0       \tmovss  %xmm0,%xmm14\n  3e:\t44 0f 2e f1          \tucomiss %xmm1,%xmm14\n  42:\t0f 8a 37 00 00 00    \tjp     7f <main+0x68>\n  48:\t0f 85 31 00 00 00    \tjne    7f <main+0x68>\n  4e:\tf3 0f 10 05 00 00 00 \tmovss  0x0(%rip),%xmm0        # 56 <main+0x3f>\n  55:\t00 \n\t\t\t52: R_X86_64_PC32\t_ZL2f2\n  56:\tb8 09 00 00 00       \tmov    $0x9,%eax\n  5b:\tf3 4c 0f 2a f0       \tcvtsi2ss %rax,%xmm14\n  60:\tf3 41 0f 10 ce       \tmovss  %xmm14,%xmm1\n  65:\tf3 44 0f 10 f0       \tmovss  %xmm0,%xmm14\n  6a:\t44 0f 2e f1          \tucomiss %xmm1,%xmm14\n  6e:\t0f 8a 0b 00 00 00    \tjp     7f <main+0x68>\n  74:\t0f 85 05 00 00 00    \tjne    7f <main+0x68>\n  7a:\te9 0a 00 00 00       \tjmp    89 <main+0x72>\n  7f:\tb8 01 00 00 00       \tmov    $0x1,%eax\n  84:\te9 c8 01 00 00       \tjmp    251 <main+0x23a>\n  89:\t4c 8d 05 00 00 00 00 \tlea    0x0(%rip),%r8        # 90 <main+0x79>\n\t\t\t8c: R_X86_64_PC32\t_ZL2d1-0x4\n  90:\t4c 89 c7             \tmov    %r8,%rdi\n  93:\te8 00 00 00 00       \tcall   98 <main+0x81>\n\t\t\t94: R_X86_64_PLT32\t_Z4readRKCd-0x4\n  98:\tb8 04 00 00 00       \tmov    $0x4,%eax\n  9d:\tf2 4c 0f 2a f0       \tcvtsi2sd %rax,%xmm14\n  a2:\tf2 41 0f 10 ce       \tmovsd  %xmm14,%xmm1\n  a7:\tf2 44 0f 10 f0       \tmovsd  %xmm0,%xmm14\n  ac:\t66 44 0f 2e f1       \tucomisd %xmm1,%xmm14\n  b1:\t0f 8a 3f 00 00 00    \tjp     f6 <main+0xdf>\n  b7:\t0f 85 39 00 00 00    \tjne    f6 <main+0xdf>\n  bd:\t4c 8d 05 00 00 00 00 \tlea    0x0(%rip),%r8        # c4 <main+0xad>\n\t\t\tc0: R_X86_64_PC32\t_ZL2d2-0x4\n  c4:\t4c 89 c7             \tmov    %r8,%rdi\n  c7:\te8 00 00 00 00       \tcall   cc <main+0xb5>\n\t\t\tc8: R_X86_64_PLT32\t_Z4readRKCd-0x4\n  cc:\tb8 09 00 00 00       \tmov    $0x9,%eax\n  d1:\tf2 4c 0f 2a f0       \tcvtsi2sd %rax,%xmm14\n  d6:\tf2 41 0f 10 ce       \tmovsd  %xmm14,%xmm1\n  db:\tf2 44 0f 10 f0       \tmovsd  %xmm0,%xmm14\n  e0:\t66 44 0f 2e f1       \tucomisd %xmm1,%xmm14\n  e5:\t0f 8a 0b 00 00 00    \tjp     f6 <main+0xdf>\n  eb:\t0f 85 05 00 00 00    \tjne    f6 <main+0xdf>\n  f1:\te9 0a 00 00 00       \tjmp    100 <main+0xe9>\n  f6:\tb8 02 00 00 00       \tmov    $0x2,%eax\n  fb:\te9 51 01 00 00       \tjmp    251 <main+0x23a>\n 100:\tdb 2d 00 00 00 00    \tfldt   0x0(%rip)        # 106 <main+0xef>\n\t\t\t102: R_X86_64_PC32\t_ZL2l1+0xc\n 106:\tdb 7d f0             \tfstpt  -0x10(%rbp)\n 109:\tb8 04 00 00 00       \tmov    $0x4,%eax\n 10e:\t48 89 45 80          \tmov    %rax,-0x80(%rbp)\n 112:\tdf 6d 80             \tfildll -0x80(%rbp)\n 115:\tdb 7d e0             \tfstpt  -0x20(%rbp)\n 118:\tdb 6d e0             \tfldt   -0x20(%rbp)\n 11b:\tdb 6d f0             \tfldt   -0x10(%rbp)\n 11e:\tdf e9                \tfucomip %st(1),%st\n 120:\tdd d8                \tfstp   %st(0)\n 122:\t0f 8a 39 00 00 00    \tjp     161 <main+0x14a>\n 128:\t0f 85 33 00 00 00    \tjne    161 <main+0x14a>\n 12e:\tdb 2d 00 00 00 00    \tfldt   0x0(%rip)        # 134 <main+0x11d>\n\t\t\t130: R_X86_64_PC32\t_ZL2l2+0xc\n 134:\tdb 7d d0             \tfstpt  -0x30(%rbp)\n 137:\tb8 09 00 00 00       \tmov    $0x9,%eax\n 13c:\t48 89 45 80          \tmov    %rax,-0x80(%rbp)\n 140:\tdf 6d 80             \tfildll -0x80(%rbp)\n 143:\tdb 7d c0             \tfstpt  -0x40(%rbp)\n 146:\tdb 6d c0             \tfldt   -0x40(%rbp)\n 149:\tdb 6d d0             \tfldt   -0x30(%rbp)\n 14c:\tdf e9                \tfucomip %st(1),%st\n 14e:\tdd d8                \tfstp   %st(0)\n 150:\t0f 8a 0b 00 00 00    \tjp     161 <main+0x14a>\n 156:\t0f 85 05 00 00 00    \tjne    161 <main+0x14a>\n 15c:\te9 0a 00 00 00       \tjmp    16b <main+0x154>\n 161:\tb8 03 00 00 00       \tmov    $0x3,%eax\n 166:\te9 e6 00 00 00       \tjmp    251 <main+0x23a>\n 16b:\t4c 8b 05 00 00 00 00 \tmov    0x0(%rip),%r8        # 172 <main+0x15b>\n\t\t\t16e: R_X86_64_GOTPCREL\t_ZN6valuesILi4EE5valueE-0x4\n 172:\t4c 89 c7             \tmov    %r8,%rdi\n 175:\te8 00 00 00 00       \tcall   17a <main+0x163>\n\t\t\t176: R_X86_64_PLT32\t_Z4readRKCd-0x4\n 17a:\tb8 04 00 00 00       \tmov    $0x4,%eax\n 17f:\tf2 4c 0f 2a f0       \tcvtsi2sd %rax,%xmm14\n 184:\tf2 41 0f 10 ce       \tmovsd  %xmm14,%xmm1\n 189:\tf2 44 0f 10 f0       \tmovsd  %xmm0,%xmm14\n 18e:\t66 44 0f 2e f1       \tucomisd %xmm1,%xmm14\n 193:\t0f 8a 3f 00 00 00    \tjp     1d8 <main+0x1c1>\n 199:\t0f 85 39 00 00 00    \tjne    1d8 <main+0x1c1>\n 19f:\t4c 8b 05 00 00 00 00 \tmov    0x0(%rip),%r8        # 1a6 <main+0x18f>\n\t\t\t1a2: R_X86_64_GOTPCREL\t_ZN6valuesILi9EE5valueE-0x4\n 1a6:\t4c 89 c7             \tmov    %r8,%rdi\n 1a9:\te8 00 00 00 00       \tcall   1ae <main+0x197>\n\t\t\t1aa: R_X86_64_PLT32\t_Z4readRKCd-0x4\n 1ae:\tb8 09 00 00 00       \tmov    $0x9,%eax\n 1b3:\tf2 4c 0f 2a f0       \tcvtsi2sd %rax,%xmm14\n 1b8:\tf2 41 0f 10 ce       \tmovsd  %xmm14,%xmm1\n 1bd:\tf2 44 0f 10 f0       \tmovsd  %xmm0,%xmm14\n 1c2:\t66 44 0f 2e f1       \tucomisd %xmm1,%xmm14\n 1c7:\t0f 8a 0b 00 00 00    \tjp     1d8 <main+0x1c1>\n 1cd:\t0f 85 05 00 00 00    \tjne    1d8 <main+0x1c1>\n 1d3:\te9 0a 00 00 00       \tjmp    1e2 <main+0x1cb>\n 1d8:\tb8 04 00 00 00       \tmov    $0x4,%eax\n 1dd:\te9 6f 00 00 00       \tjmp    251 <main+0x23a>\n 1e2:\tf2 0f 10 05 00 00 00 \tmovsd  0x0(%rip),%xmm0        # 1ea <main+0x1d3>\n 1e9:\t00 \n\t\t\t1e6: R_X86_64_PC32\t_ZL4plus+0x4\n 1ea:\tf2 0f 11 45 b8       \tmovsd  %xmm0,-0x48(%rbp)\n 1ef:\t4c 0f b6 45 bf       \tmovzbq -0x41(%rbp),%r8\n 1f4:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n 1f8:\t41 c0 e8 07          \tshr    $0x7,%r8b\n 1fc:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n 200:\t4d 0f be c8          \tmovsbq %r8b,%r9\n 204:\t45 85 c9             \ttest   %r9d,%r9d\n 207:\t0f 85 30 00 00 00    \tjne    23d <main+0x226>\n 20d:\tf2 0f 10 05 00 00 00 \tmovsd  0x0(%rip),%xmm0        # 215 <main+0x1fe>\n 214:\t00 \n\t\t\t211: R_X86_64_PC32\t_ZL5minus+0x4\n 215:\tf2 0f 11 45 b0       \tmovsd  %xmm0,-0x50(%rbp)\n 21a:\t4c 0f b6 45 b7       \tmovzbq -0x49(%rbp),%r8\n 21f:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n 223:\t41 c0 e8 07          \tshr    $0x7,%r8b\n 227:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n 22b:\t4d 0f be c8          \tmovsbq %r8b,%r9\n 22f:\t45 85 c9             \ttest   %r9d,%r9d\n 232:\t0f 84 05 00 00 00    \tje     23d <main+0x226>\n 238:\te9 0a 00 00 00       \tjmp    247 <main+0x230>\n 23d:\tb8 05 00 00 00       \tmov    $0x5,%eax\n 242:\te9 0a 00 00 00       \tjmp    251 <main+0x23a>\n 247:\tb8 00 00 00 00       \tmov    $0x0,%eax\n 24c:\te9 00 00 00 00       \tjmp    251 <main+0x23a>\n 251:\tc9                   \tleave\n 252:\tc3                   \tret\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/fixed-lists.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/fixed-lists.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/checks-final/fixed-lists.o",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/fixed-lists"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/fixed-lists"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/fixed-lists.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/fixed-lists.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/checks-final/fixed-lists.o",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/fixed-lists"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/fixed-lists"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-include",
+      "typeinfo",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/fixed-lists.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/fixed-lists.cpp:31:22: warning: implicit truncation from 'int' to bit-field changes value from 5 to 1 [-Wbitfield-constant-conversion]\n   31 |   static_assert(bits{5},\"bitfield conversion\");\n      |                      ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/fixed-lists.cpp:31:22: warning: implicit truncation from 'int' to bit-field changes value from 5 to 1 [-Wbitfield-constant-conversion]\n   31 |   static_assert(bits{5},\"bitfield conversion\");\n      |                      ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/fixed-lists.cpp:37:19: note: in instantiation of function template specialization 'check<aggregate>' requested here\n   37 | int main(){return check<aggregate>();}\n      |                   ^\n2 warnings generated.\n"
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nm",
+      "/tmp/pa29-audit190/checks-final/fixed-lists.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "0000000000000000 W _Z5checkI9aggregateEiv\n0000000000000000 d _ZL5three\n0000000000000000 T main\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/fixed-lists.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/fixed-lists.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-audit190/checks-final/fixed-lists.lowir",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/fixed-lists.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "-SWsrg",
+      "/tmp/pa29-audit190/checks-final/fixed-lists.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "There are 23 section headers, starting at offset 0x3b8:\n\nSection Headers:\n  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0\n  [ 1] .text             PROGBITS        0000000000000000 000040 000013 00  AX  0   0 16\n  [ 2] .data             PROGBITS        0000000000000000 000060 000004 00  WA  0   0 16\n  [ 3] .eh_frame         PROGBITS        0000000000000000 000068 000068 00   A  0   0  8\n  [ 4]                   PROGBITS        0000000000000000 0000d0 000000 00   A  0   0  8\n  [ 5] .data.rel.local   PROGBITS        0000000000000000 0000d0 000000 00  WA  0   0  8\n  [ 6] .init_array       INIT_ARRAY      0000000000000000 0000d0 000000 08  WA  0   0  8\n  [ 7] .fini_array       FINI_ARRAY      0000000000000000 0000d0 000000 08  WA  0   0  8\n  [ 8] .tdata            PROGBITS        0000000000000000 0000d0 000000 00 WAT  0   0  1\n  [ 9] .rela.text        RELA            0000000000000000 0000d0 000018 18     17   1  8\n  [10] .rela.data        RELA            0000000000000000 0000e8 000000 18     17   2  8\n  [11] .rela.eh_frame    RELA            0000000000000000 0000e8 000030 18     17   3  8\n  [12] .rela.gcc_except_table RELA            0000000000000000 000118 000000 18     17   4  8\n  [13] .rela.data.rel.local RELA            0000000000000000 000118 000000 18     17   5  8\n  [14] .rela.init_array  RELA            0000000000000000 000118 000000 18     17   6  8\n  [15] .rela.fini_array  RELA            0000000000000000 000118 000000 18     17   7  8\n  [16] .rela.tdata       RELA            0000000000000000 000118 000000 18     17   8  8\n  [17] .symtab           SYMTAB          0000000000000000 000118 000138 18     18  11  8\n  [18] .strtab           STRTAB          0000000000000000 000250 000027 00      0   0  1\n  [19] .shstrtab         STRTAB          0000000000000000 000277 000125 00      0   0  1\n  [20] .note.GNU-stack   PROGBITS        0000000000000000 00039c 000000 00      0   0  1\n  [21] .text._Z5checkI9aggregateEiv PROGBITS        0000000000000000 00039c 000010 00 AXG  0   0  1\n  [22] .group            GROUP           0000000000000000 0003ac 000008 04     17  12  4\nKey to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  D (mbind), l (large), p (processor specific)\n\nCOMDAT group section [   22] `.group' [_Z5checkI9aggregateEiv] contains 1 sections:\n   [Index]    Name\n   [   21]   .text._Z5checkI9aggregateEiv\n\nRelocation section '.rela.text' at offset 0xd0 contains 1 entry:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000005  0000000c00000004 R_X86_64_PLT32         0000000000000000 _Z5checkI9aggregateEiv - 4\n\nRelocation section '.rela.eh_frame' at offset 0xe8 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000020  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 0\n0000000000000048  0000000900000002 R_X86_64_PC32          0000000000000000 .text._Z5checkI9aggregateEiv + 0\n\nSymbol table '.symtab' contains 13 entries:\n   Num:    Value          Size Type    Bind   Vis      Ndx Name\n     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND \n     1: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 .text\n     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    2 .data\n     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    3 .eh_frame\n     4: 0000000000000000     0 SECTION LOCAL  DEFAULT    4 \n     5: 0000000000000000     0 SECTION LOCAL  DEFAULT    5 .data.rel.local\n     6: 0000000000000000     0 SECTION LOCAL  DEFAULT    6 .init_array\n     7: 0000000000000000     0 SECTION LOCAL  DEFAULT    7 .fini_array\n     8: 0000000000000000     0 SECTION LOCAL  DEFAULT    8 .tdata\n     9: 0000000000000000     0 SECTION LOCAL  DEFAULT   21 .text._Z5checkI9aggregateEiv\n    10: 0000000000000000     4 OBJECT  LOCAL  DEFAULT    2 _ZL5three\n    11: 0000000000000000    19 FUNC    GLOBAL DEFAULT    1 main\n    12: 0000000000000000    16 FUNC    WEAK   DEFAULT   21 _Z5checkI9aggregateEiv\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "--debug-dump=frames",
+      "/tmp/pa29-audit190/checks-final/fixed-lists.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..0000000000000013\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 13 to 0000000000000011\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000012\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000013\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000040 0000000000000024 00000044 FDE cie=00000000 pc=0000000000000000..0000000000000010\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 10 to 000000000000000e\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 000000000000000f\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000010\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "objdump",
+      "-dr",
+      "/tmp/pa29-audit190/checks-final/fixed-lists.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "\n/tmp/pa29-audit190/checks-final/fixed-lists.o:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000000000 <main>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\te8 00 00 00 00       \tcall   9 <main+0x9>\n\t\t\t5: R_X86_64_PLT32\t_Z5checkI9aggregateEiv-0x4\n   9:\t48 63 c0             \tmovslq %eax,%rax\n   c:\te9 00 00 00 00       \tjmp    11 <main+0x11>\n  11:\tc9                   \tleave\n  12:\tc3                   \tret\n\nDisassembly of section .text._Z5checkI9aggregateEiv:\n\n0000000000000000 <_Z5checkI9aggregateEiv>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\tb8 00 00 00 00       \tmov    $0x0,%eax\n   9:\te9 00 00 00 00       \tjmp    e <_Z5checkI9aggregateEiv+0xe>\n   e:\tc9                   \tleave\n   f:\tc3                   \tret\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/integrated.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/integrated.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/checks-final/integrated.o",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/integrated"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/integrated"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-O2",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/integrated.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/integrated.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-audit190/checks-final/integrated.o",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/integrated"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/integrated"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-include",
+      "typeinfo",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/integrated.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/integrated.cpp:10:11: warning: explicit(bool) is a C++20 extension [-Wc++20-extensions]\n   10 |   explicit(condition<C>{::value}) box(T v):value(v){}\n      |           ^\n1 warning generated.\n"
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/host"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nm",
+      "/tmp/pa29-audit190/checks-final/integrated.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "                 U _Unwind_Resume\n0000000000000000 W _Z9roundtripICdET_S0_\n0000000000000000 d _ZL5value\n0000000000000000 W _ZN3boxICdEC1ECd\n0000000000000000 W _ZN3boxICdEC2ECd\n0000000000000000 W _ZNK3boxICdE3getEv\n0000000000000000 W _ZNK3boxICdE4readEv\n0000000000000000 W _ZNK3boxICdE8co_awaitEv\n0000000000000000 V _ZTICd\n0000000000000000 V _ZTSCd\n                 U _ZTVN10__cxxabiv123__fundamental_type_infoE\n                 U __cxa_allocate_exception\n                 U __cxa_begin_catch\n                 U __cxa_end_catch\n                 U __cxa_throw\n                 U __gxx_personality_v0\n0000000000000000 T main\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "--emit-lowir",
+      "--validate-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/integrated.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/integrated.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-audit190/checks-final/integrated.lowir",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/integrated.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "-SWsrg",
+      "/tmp/pa29-audit190/checks-final/integrated.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "There are 38 section headers, starting at offset 0xe18:\n\nSection Headers:\n  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0\n  [ 1] .text             PROGBITS        0000000000000000 000040 000147 00  AX  0   0 16\n  [ 2] .data             PROGBITS        0000000000000000 000190 000015 00  WA  0   0 16\n  [ 3] .eh_frame         PROGBITS        0000000000000000 0001a8 000130 00   A  0   0  8\n  [ 4] .gcc_except_table PROGBITS        0000000000000000 0002d8 000016 00   A  0   0  8\n  [ 5] .data.rel.local   PROGBITS        0000000000000000 0002f0 000010 00  WA  0   0  8\n  [ 6] .init_array       INIT_ARRAY      0000000000000000 000300 000000 08  WA  0   0  8\n  [ 7] .fini_array       FINI_ARRAY      0000000000000000 000300 000000 08  WA  0   0  8\n  [ 8] .tdata            PROGBITS        0000000000000000 000300 000000 00 WAT  0   0  1\n  [ 9] .rela.text        RELA            0000000000000000 000300 000060 18     17   1  8\n  [10] .rela.data        RELA            0000000000000000 000360 000000 18     17   2  8\n  [11] .rela.eh_frame    RELA            0000000000000000 000360 0000c0 18     17   3  8\n  [12] .rela.gcc_except_table RELA            0000000000000000 000420 000018 18     17   4  8\n  [13] .rela.data.rel.local RELA            0000000000000000 000438 000030 18     17   5  8\n  [14] .rela.init_array  RELA            0000000000000000 000468 000000 18     17   6  8\n  [15] .rela.fini_array  RELA            0000000000000000 000468 000000 18     17   7  8\n  [16] .rela.tdata       RELA            0000000000000000 000468 000000 18     17   8  8\n  [17] .symtab           SYMTAB          0000000000000000 000468 000318 18     18  17  8\n  [18] .strtab           STRTAB          0000000000000000 000780 00012c 00      0   0  1\n  [19] .shstrtab         STRTAB          0000000000000000 0008ac 000222 00      0   0  1\n  [20] .note.GNU-stack   PROGBITS        0000000000000000 000ace 000000 00      0   0  1\n  [21] .text._ZN3boxICdEC1ECd PROGBITS        0000000000000000 000ace 000052 00 AXG  0   0  1\n  [22] .group            GROUP           0000000000000000 000b20 000008 04     17  18  4\n  [23] .text._ZNK3boxICdE4readEv PROGBITS        0000000000000000 000b28 000013 00 AXG  0   0  1\n  [24] .group            GROUP           0000000000000000 000b3c 00000c 04     17  19  4\n  [25] .text._ZNK3boxICdE8co_awaitEv PROGBITS        0000000000000000 000b48 000022 00 AXG  0   0  1\n  [26] .group            GROUP           0000000000000000 000b6c 000008 04     17  20  4\n  [27] .text._ZNK3boxICdE3getEv PROGBITS        0000000000000000 000b74 000027 00 AXG  0   0  1\n  [28] .group            GROUP           0000000000000000 000b9c 000008 04     17  21  4\n  [29] .text._Z9roundtripICdET_S0_ PROGBITS        0000000000000000 000ba4 00014b 00 AXG  0   0  1\n  [30] .group            GROUP           0000000000000000 000cf0 00000c 04     17  22  4\n  [31] .data._ZTSCd      PROGBITS        0000000000000000 000cfc 000003 00 WAG  0   0  1\n  [32] .group            GROUP           0000000000000000 000d00 000008 04     17  25  4\n  [33] .data._ZTICd      PROGBITS        0000000000000000 000d08 000010 00 WAG  0   0  8\n  [34] .group            GROUP           0000000000000000 000d18 00000c 04     17  24  4\n  [35] .rela.text._ZNK3boxICdE4readEv RELA            0000000000000000 000d28 000018 18   G 17  23  8\n  [36] .rela.text._Z9roundtripICdET_S0_ RELA            0000000000000000 000d40 0000a8 18   G 17  29  8\n  [37] .rela.data._ZTICd RELA            0000000000000000 000de8 000030 18   G 17  33  8\nKey to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  D (mbind), l (large), p (processor specific)\n\nCOMDAT group section [   22] `.group' [_ZN3boxICdEC1ECd] contains 1 sections:\n   [Index]    Name\n   [   21]   .text._ZN3boxICdEC1ECd\n\nCOMDAT group section [   24] `.group' [_ZNK3boxICdE4readEv] contains 2 sections:\n   [Index]    Name\n   [   23]   .text._ZNK3boxICdE4readEv\n   [   35]   .rela.text._ZNK3boxICdE4readEv\n\nCOMDAT group section [   26] `.group' [_ZNK3boxICdE8co_awaitEv] contains 1 sections:\n   [Index]    Name\n   [   25]   .text._ZNK3boxICdE8co_awaitEv\n\nCOMDAT group section [   28] `.group' [_ZNK3boxICdE3getEv] contains 1 sections:\n   [Index]    Name\n   [   27]   .text._ZNK3boxICdE3getEv\n\nCOMDAT group section [   30] `.group' [_Z9roundtripICdET_S0_] contains 2 sections:\n   [Index]    Name\n   [   29]   .text._Z9roundtripICdET_S0_\n   [   36]   .rela.text._Z9roundtripICdET_S0_\n\nCOMDAT group section [   32] `.group' [_ZTSCd] contains 1 sections:\n   [Index]    Name\n   [   31]   .data._ZTSCd\n\nCOMDAT group section [   34] `.group' [_ZTICd] contains 2 sections:\n   [Index]    Name\n   [   33]   .data._ZTICd\n   [   37]   .rela.data._ZTICd\n\nRelocation section '.rela.text' at offset 0x300 contains 4 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000043  0000001200000004 R_X86_64_PLT32         0000000000000000 _ZN3boxICdEC1ECd - 4\n000000000000004c  0000001500000004 R_X86_64_PLT32         0000000000000000 _ZNK3boxICdE3getEv - 4\n0000000000000065  0000001600000004 R_X86_64_PLT32         0000000000000000 _Z9roundtripICdET_S0_ - 4\n00000000000000c7  0000001300000004 R_X86_64_PLT32         0000000000000000 _ZNK3boxICdE4readEv - 4\n\nRelocation section '.rela.eh_frame' at offset 0x360 contains 8 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000020  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 0\n0000000000000048  0000000900000002 R_X86_64_PC32          0000000000000000 .text._ZN3boxICdEC1ECd + 0\n0000000000000070  0000000a00000002 R_X86_64_PC32          0000000000000000 .text._ZNK3boxICdE4readEv + 0\n0000000000000098  0000000b00000002 R_X86_64_PC32          0000000000000000 .text._ZNK3boxICdE8co_awaitEv + 0\n00000000000000c0  0000000c00000002 R_X86_64_PC32          0000000000000000 .text._ZNK3boxICdE3getEv + 0\n00000000000000f3  0000000500000002 R_X86_64_PC32          0000000000000000 .data.rel.local + 8\n0000000000000108  0000000d00000002 R_X86_64_PC32          0000000000000000 .text._Z9roundtripICdET_S0_ + 0\n0000000000000111  0000000400000002 R_X86_64_PC32          0000000000000000 .gcc_except_table + 0\n\nRelocation section '.rela.gcc_except_table' at offset 0x420 contains 1 entry:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000012  0000000500000002 R_X86_64_PC32          0000000000000000 .data.rel.local + 0\n\nRelocation section '.rela.data.rel.local' at offset 0x438 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000000  0000001800000001 R_X86_64_64            0000000000000000 _ZTICd + 0\n0000000000000008  0000002000000001 R_X86_64_64            0000000000000000 __gxx_personality_v0 + 0\n\nRelocation section '.rela.text._ZNK3boxICdE4readEv' at offset 0xd28 contains 1 entry:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000005  0000001400000004 R_X86_64_PLT32         0000000000000000 _ZNK3boxICdE8co_awaitEv - 4\n\nRelocation section '.rela.text._Z9roundtripICdET_S0_' at offset 0xd40 contains 7 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n000000000000002b  0000001700000004 R_X86_64_PLT32         0000000000000000 __cxa_allocate_exception - 4\n0000000000000054  0000001800000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICd - 4\n0000000000000064  0000001b00000004 R_X86_64_PLT32         0000000000000000 __cxa_throw - 4\n00000000000000a2  0000001c00000004 R_X86_64_PLT32         0000000000000000 __cxa_begin_catch - 4\n00000000000000bd  0000001d00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n00000000000000d1  0000001d00000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n0000000000000145  0000001e00000004 R_X86_64_PLT32         0000000000000000 _Unwind_Resume - 4\n\nRelocation section '.rela.data._ZTICd' at offset 0xde8 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000000  0000001a00000001 R_X86_64_64            0000000000000000 _ZTVN10__cxxabiv123__fundamental_type_infoE + 10\n0000000000000008  0000001900000001 R_X86_64_64            0000000000000000 _ZTSCd + 0\n\nSymbol table '.symtab' contains 33 entries:\n   Num:    Value          Size Type    Bind   Vis      Ndx Name\n     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND \n     1: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 .text\n     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    2 .data\n     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    3 .eh_frame\n     4: 0000000000000000     0 SECTION LOCAL  DEFAULT    4 .gcc_except_table\n     5: 0000000000000000     0 SECTION LOCAL  DEFAULT    5 .data.rel.local\n     6: 0000000000000000     0 SECTION LOCAL  DEFAULT    6 .init_array\n     7: 0000000000000000     0 SECTION LOCAL  DEFAULT    7 .fini_array\n     8: 0000000000000000     0 SECTION LOCAL  DEFAULT    8 .tdata\n     9: 0000000000000000     0 SECTION LOCAL  DEFAULT   21 .text._ZN3boxICdEC1ECd\n    10: 0000000000000000     0 SECTION LOCAL  DEFAULT   23 .text._ZNK3boxICdE4readEv\n    11: 0000000000000000     0 SECTION LOCAL  DEFAULT   25 .text._ZNK3boxICdE8co_awaitEv\n    12: 0000000000000000     0 SECTION LOCAL  DEFAULT   27 .text._ZNK3boxICdE3getEv\n    13: 0000000000000000     0 SECTION LOCAL  DEFAULT   29 .text._Z9roundtripICdET_S0_\n    14: 0000000000000000     0 SECTION LOCAL  DEFAULT   31 .data._ZTSCd\n    15: 0000000000000000     0 SECTION LOCAL  DEFAULT   33 .data._ZTICd\n    16: 0000000000000000    16 OBJECT  LOCAL  DEFAULT    2 _ZL5value\n    17: 0000000000000000   327 FUNC    GLOBAL DEFAULT    1 main\n    18: 0000000000000000    82 FUNC    WEAK   DEFAULT   21 _ZN3boxICdEC1ECd\n    19: 0000000000000000    19 FUNC    WEAK   DEFAULT   23 _ZNK3boxICdE4readEv\n    20: 0000000000000000    34 FUNC    WEAK   DEFAULT   25 _ZNK3boxICdE8co_awaitEv\n    21: 0000000000000000    39 FUNC    WEAK   DEFAULT   27 _ZNK3boxICdE3getEv\n    22: 0000000000000000   331 FUNC    WEAK   DEFAULT   29 _Z9roundtripICdET_S0_\n    23: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __cxa_allocate_exception\n    24: 0000000000000000    16 OBJECT  WEAK   DEFAULT   33 _ZTICd\n    25: 0000000000000000     3 OBJECT  WEAK   DEFAULT   31 _ZTSCd\n    26: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _ZTVN10__cxxabiv123__fundamental_type_infoE\n    27: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __cxa_throw\n    28: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __cxa_begin_catch\n    29: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __cxa_end_catch\n    30: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _Unwind_Resume\n    31: 0000000000000000    82 FUNC    WEAK   DEFAULT   21 _ZN3boxICdEC2ECd\n    32: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __gxx_personality_v0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "--debug-dump=frames",
+      "/tmp/pa29-audit190/checks-final/integrated.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..0000000000000147\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 321 to 0000000000000145\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000146\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000147\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000040 0000000000000024 00000044 FDE cie=00000000 pc=0000000000000000..0000000000000052\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000000f\n  DW_CFA_offset: r3 (rbx) at cfa-72\n  DW_CFA_advance_loc: 61 to 000000000000004c\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 0000000000000050\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 0000000000000051\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000052\n  DW_CFA_restore_state\n  DW_CFA_nop\n\n00000068 0000000000000024 0000006c FDE cie=00000000 pc=0000000000000000..0000000000000013\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 13 to 0000000000000011\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000012\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000013\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000090 0000000000000024 00000094 FDE cie=00000000 pc=0000000000000000..0000000000000022\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 28 to 0000000000000020\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000021\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000022\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000b8 0000000000000024 000000bc FDE cie=00000000 pc=0000000000000000..0000000000000027\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 33 to 0000000000000025\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000026\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000027\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000e0 000000000000001c 00000000 CIE\n  Version:               1\n  Augmentation:          \"zPLR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     9b 15 ff ff ff 1b 1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000100 000000000000002c 00000024 FDE cie=000000e0 pc=0000000000000000..000000000000014b\n  Augmentation data:     ef fe ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000000f\n  DW_CFA_offset: r3 (rbx) at cfa-136\n  DW_CFA_advance_loc4: 234 to 00000000000000f9\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 00000000000000fd\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 00000000000000fe\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000000ff\n  DW_CFA_restore_state\n  DW_CFA_nop\n\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "objdump",
+      "-dr",
+      "/tmp/pa29-audit190/checks-final/integrated.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "\n/tmp/pa29-audit190/checks-final/integrated.o:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000000000 <main>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec a0 00 00 00 \tsub    $0xa0,%rsp\n   b:\t48 63 ff             \tmovslq %edi,%rdi\n   e:\t83 c7 02             \tadd    $0x2,%edi\n  11:\t48 63 ff             \tmovslq %edi,%rdi\n  14:\t48 63 c7             \tmovslq %edi,%rax\n  17:\tf2 4c 0f 2a f0       \tcvtsi2sd %rax,%xmm14\n  1c:\tf2 41 0f 10 c6       \tmovsd  %xmm14,%xmm0\n  21:\tf2 0f 11 45 e0       \tmovsd  %xmm0,-0x20(%rbp)\n  26:\t48 b8 00 00 00 00 00 \tmovabs $0x4010000000000000,%rax\n  2d:\t00 10 40 \n  30:\t48 89 45 e8          \tmov    %rax,-0x18(%rbp)\n  34:\t48 8d 7d f0          \tlea    -0x10(%rbp),%rdi\n  38:\tf2 0f 10 45 e0       \tmovsd  -0x20(%rbp),%xmm0\n  3d:\tf2 0f 10 4d e8       \tmovsd  -0x18(%rbp),%xmm1\n  42:\te8 00 00 00 00       \tcall   47 <main+0x47>\n\t\t\t43: R_X86_64_PLT32\t_ZN3boxICdEC1ECd-0x4\n  47:\t48 8d 7d f0          \tlea    -0x10(%rbp),%rdi\n  4b:\te8 00 00 00 00       \tcall   50 <main+0x50>\n\t\t\t4c: R_X86_64_PLT32\t_ZNK3boxICdE3getEv-0x4\n  50:\tf2 0f 11 45 d0       \tmovsd  %xmm0,-0x30(%rbp)\n  55:\tf2 0f 11 4d d8       \tmovsd  %xmm1,-0x28(%rbp)\n  5a:\tf2 0f 10 45 d0       \tmovsd  -0x30(%rbp),%xmm0\n  5f:\tf2 0f 10 4d d8       \tmovsd  -0x28(%rbp),%xmm1\n  64:\te8 00 00 00 00       \tcall   69 <main+0x69>\n\t\t\t65: R_X86_64_PLT32\t_Z9roundtripICdET_S0_-0x4\n  69:\tf2 0f 11 45 c0       \tmovsd  %xmm0,-0x40(%rbp)\n  6e:\tf2 0f 11 4d c8       \tmovsd  %xmm1,-0x38(%rbp)\n  73:\tf2 0f 10 45 c0       \tmovsd  -0x40(%rbp),%xmm0\n  78:\tf2 0f 10 4d c8       \tmovsd  -0x38(%rbp),%xmm1\n  7d:\tf2 0f 11 45 b0       \tmovsd  %xmm0,-0x50(%rbp)\n  82:\tf2 0f 11 4d b8       \tmovsd  %xmm1,-0x48(%rbp)\n  87:\tf2 0f 10 45 b0       \tmovsd  -0x50(%rbp),%xmm0\n  8c:\tb8 03 00 00 00       \tmov    $0x3,%eax\n  91:\tf2 4c 0f 2a f0       \tcvtsi2sd %rax,%xmm14\n  96:\tf2 41 0f 10 ce       \tmovsd  %xmm14,%xmm1\n  9b:\tf2 44 0f 10 f0       \tmovsd  %xmm0,%xmm14\n  a0:\t66 44 0f 2e f1       \tucomisd %xmm1,%xmm14\n  a5:\t0f 8a 64 00 00 00    \tjp     10f <main+0x10f>\n  ab:\t0f 84 05 00 00 00    \tje     b6 <main+0xb6>\n  b1:\te9 59 00 00 00       \tjmp    10f <main+0x10f>\n  b6:\tf2 44 0f 10 7d b8    \tmovsd  -0x48(%rbp),%xmm15\n  bc:\tf2 44 0f 11 7d a8    \tmovsd  %xmm15,-0x58(%rbp)\n  c2:\t48 8d 7d f0          \tlea    -0x10(%rbp),%rdi\n  c6:\te8 00 00 00 00       \tcall   cb <main+0xcb>\n\t\t\tc7: R_X86_64_PLT32\t_ZNK3boxICdE4readEv-0x4\n  cb:\t48 63 c0             \tmovslq %eax,%rax\n  ce:\t49 89 c0             \tmov    %rax,%r8\n  d1:\t49 63 c0             \tmovslq %r8d,%rax\n  d4:\tf2 4c 0f 2a f0       \tcvtsi2sd %rax,%xmm14\n  d9:\tf2 41 0f 10 c6       \tmovsd  %xmm14,%xmm0\n  de:\tf2 44 0f 10 75 a8    \tmovsd  -0x58(%rbp),%xmm14\n  e4:\t66 44 0f 2e f0       \tucomisd %xmm0,%xmm14\n  e9:\t41 0f 94 c2          \tsete   %r10b\n  ed:\t41 0f 9b c3          \tsetnp  %r11b\n  f1:\t45 20 da             \tand    %r11b,%r10b\n  f4:\t4d 0f b6 d2          \tmovzbq %r10b,%r10\n  f8:\t4d 89 d0             \tmov    %r10,%r8\n  fb:\t4d 85 c0             \ttest   %r8,%r8\n  fe:\t41 0f 95 c1          \tsetne  %r9b\n 102:\t4d 0f b6 c9          \tmovzbq %r9b,%r9\n 106:\t4c 89 4d a0          \tmov    %r9,-0x60(%rbp)\n 10a:\te9 08 00 00 00       \tjmp    117 <main+0x117>\n 10f:\t48 c7 45 a0 00 00 00 \tmovq   $0x0,-0x60(%rbp)\n 116:\t00 \n 117:\t4c 8b 45 a0          \tmov    -0x60(%rbp),%r8\n 11b:\t4d 85 c0             \ttest   %r8,%r8\n 11e:\t0f 85 05 00 00 00    \tjne    129 <main+0x129>\n 124:\te9 0c 00 00 00       \tjmp    135 <main+0x135>\n 129:\tc7 45 98 00 00 00 00 \tmovl   $0x0,-0x68(%rbp)\n 130:\te9 07 00 00 00       \tjmp    13c <main+0x13c>\n 135:\tc7 45 98 01 00 00 00 \tmovl   $0x1,-0x68(%rbp)\n 13c:\t48 63 45 98          \tmovslq -0x68(%rbp),%rax\n 140:\te9 00 00 00 00       \tjmp    145 <main+0x145>\n 145:\tc9                   \tleave\n 146:\tc3                   \tret\n\nDisassembly of section .text._ZN3boxICdEC1ECd:\n\n0000000000000000 <_ZN3boxICdEC1ECd>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 70 00 00 00 \tsub    $0x70,%rsp\n   b:\t48 89 5d c8          \tmov    %rbx,-0x38(%rbp)\n   f:\t48 89 fb             \tmov    %rdi,%rbx\n  12:\tf2 0f 11 45 f0       \tmovsd  %xmm0,-0x10(%rbp)\n  17:\tf2 0f 11 4d f8       \tmovsd  %xmm1,-0x8(%rbp)\n  1c:\tf3 44 0f 6f 7d f0    \tmovdqu -0x10(%rbp),%xmm15\n  22:\tf3 44 0f 7f 7d e0    \tmovdqu %xmm15,-0x20(%rbp)\n  28:\tf3 44 0f 6f 7d e0    \tmovdqu -0x20(%rbp),%xmm15\n  2e:\tf3 44 0f 7f 7d d0    \tmovdqu %xmm15,-0x30(%rbp)\n  34:\tf2 0f 10 45 d0       \tmovsd  -0x30(%rbp),%xmm0\n  39:\tf2 0f 10 4d d8       \tmovsd  -0x28(%rbp),%xmm1\n  3e:\tf2 0f 11 03          \tmovsd  %xmm0,(%rbx)\n  42:\tf2 0f 11 4b 08       \tmovsd  %xmm1,0x8(%rbx)\n  47:\te9 00 00 00 00       \tjmp    4c <_ZN3boxICdEC1ECd+0x4c>\n  4c:\t48 8b 5d c8          \tmov    -0x38(%rbp),%rbx\n  50:\tc9                   \tleave\n  51:\tc3                   \tret\n\nDisassembly of section .text._ZNK3boxICdE4readEv:\n\n0000000000000000 <_ZNK3boxICdE4readEv>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\te8 00 00 00 00       \tcall   9 <_ZNK3boxICdE4readEv+0x9>\n\t\t\t5: R_X86_64_PLT32\t_ZNK3boxICdE8co_awaitEv-0x4\n   9:\t48 63 c0             \tmovslq %eax,%rax\n   c:\te9 00 00 00 00       \tjmp    11 <_ZNK3boxICdE4readEv+0x11>\n  11:\tc9                   \tleave\n  12:\tc3                   \tret\n\nDisassembly of section .text._ZNK3boxICdE8co_awaitEv:\n\n0000000000000000 <_ZNK3boxICdE8co_awaitEv>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 30 00 00 00 \tsub    $0x30,%rsp\n   b:\tf2 0f 10 47 08       \tmovsd  0x8(%rdi),%xmm0\n  10:\tf2 4c 0f 2c d0       \tcvttsd2si %xmm0,%r10\n  15:\t4d 63 d2             \tmovslq %r10d,%r10\n  18:\t4c 89 d0             \tmov    %r10,%rax\n  1b:\te9 00 00 00 00       \tjmp    20 <_ZNK3boxICdE8co_awaitEv+0x20>\n  20:\tc9                   \tleave\n  21:\tc3                   \tret\n\nDisassembly of section .text._ZNK3boxICdE3getEv:\n\n0000000000000000 <_ZNK3boxICdE3getEv>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 40 00 00 00 \tsub    $0x40,%rsp\n   b:\tf3 44 0f 6f 3f       \tmovdqu (%rdi),%xmm15\n  10:\tf3 44 0f 7f 7d f0    \tmovdqu %xmm15,-0x10(%rbp)\n  16:\tf2 0f 10 45 f0       \tmovsd  -0x10(%rbp),%xmm0\n  1b:\tf2 0f 10 4d f8       \tmovsd  -0x8(%rbp),%xmm1\n  20:\te9 00 00 00 00       \tjmp    25 <_ZNK3boxICdE3getEv+0x25>\n  25:\tc9                   \tleave\n  26:\tc3                   \tret\n\nDisassembly of section .text._Z9roundtripICdET_S0_:\n\n0000000000000000 <_Z9roundtripICdET_S0_>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec b0 00 00 00 \tsub    $0xb0,%rsp\n   b:\t48 89 5d 88          \tmov    %rbx,-0x78(%rbp)\n   f:\tf2 0f 11 45 e0       \tmovsd  %xmm0,-0x20(%rbp)\n  14:\tf2 0f 11 4d e8       \tmovsd  %xmm1,-0x18(%rbp)\n  19:\tf3 44 0f 6f 7d e0    \tmovdqu -0x20(%rbp),%xmm15\n  1f:\tf3 44 0f 7f 7d d0    \tmovdqu %xmm15,-0x30(%rbp)\n  25:\tbf 10 00 00 00       \tmov    $0x10,%edi\n  2a:\te8 00 00 00 00       \tcall   2f <_Z9roundtripICdET_S0_+0x2f>\n\t\t\t2b: R_X86_64_PLT32\t__cxa_allocate_exception-0x4\n  2f:\t48 89 c3             \tmov    %rax,%rbx\n  32:\tf3 44 0f 6f 7d d0    \tmovdqu -0x30(%rbp),%xmm15\n  38:\tf3 44 0f 7f 7d c0    \tmovdqu %xmm15,-0x40(%rbp)\n  3e:\tf2 0f 10 45 c0       \tmovsd  -0x40(%rbp),%xmm0\n  43:\tf2 0f 10 4d c8       \tmovsd  -0x38(%rbp),%xmm1\n  48:\tf2 0f 11 03          \tmovsd  %xmm0,(%rbx)\n  4c:\tf2 0f 11 4b 08       \tmovsd  %xmm1,0x8(%rbx)\n  51:\t4c 8b 05 00 00 00 00 \tmov    0x0(%rip),%r8        # 58 <_Z9roundtripICdET_S0_+0x58>\n\t\t\t54: R_X86_64_GOTPCREL\t_ZTICd-0x4\n  58:\t48 89 df             \tmov    %rbx,%rdi\n  5b:\t4c 89 c6             \tmov    %r8,%rsi\n  5e:\tba 00 00 00 00       \tmov    $0x0,%edx\n  63:\te8 00 00 00 00       \tcall   68 <_Z9roundtripICdET_S0_+0x68>\n\t\t\t64: R_X86_64_PLT32\t__cxa_throw-0x4\n  68:\t66 45 0f ef ff       \tpxor   %xmm15,%xmm15\n  6d:\tf3 44 0f 7f 7d b0    \tmovdqu %xmm15,-0x50(%rbp)\n  73:\tf2 0f 10 45 b0       \tmovsd  -0x50(%rbp),%xmm0\n  78:\tf2 0f 10 4d b8       \tmovsd  -0x48(%rbp),%xmm1\n  7d:\te9 77 00 00 00       \tjmp    f9 <_Z9roundtripICdET_S0_+0xf9>\n  82:\t4c 8b 55 f8          \tmov    -0x8(%rbp),%r10\n  86:\t4c 89 55 a8          \tmov    %r10,-0x58(%rbp)\n  8a:\t4c 63 45 f0          \tmovslq -0x10(%rbp),%r8\n  8e:\t41 83 f8 01          \tcmp    $0x1,%r8d\n  92:\t0f 84 05 00 00 00    \tje     9d <_Z9roundtripICdET_S0_+0x9d>\n  98:\te9 3d 00 00 00       \tjmp    da <_Z9roundtripICdET_S0_+0xda>\n  9d:\t48 8b 7d a8          \tmov    -0x58(%rbp),%rdi\n  a1:\te8 00 00 00 00       \tcall   a6 <_Z9roundtripICdET_S0_+0xa6>\n\t\t\ta2: R_X86_64_PLT32\t__cxa_begin_catch-0x4\n  a6:\t49 89 c0             \tmov    %rax,%r8\n  a9:\t4c 89 45 a0          \tmov    %r8,-0x60(%rbp)\n  ad:\t4c 8b 45 a0          \tmov    -0x60(%rbp),%r8\n  b1:\tf3 45 0f 6f 38       \tmovdqu (%r8),%xmm15\n  b6:\tf3 44 0f 7f 7d 90    \tmovdqu %xmm15,-0x70(%rbp)\n  bc:\te8 00 00 00 00       \tcall   c1 <_Z9roundtripICdET_S0_+0xc1>\n\t\t\tbd: R_X86_64_PLT32\t__cxa_end_catch-0x4\n  c1:\tf2 0f 10 45 90       \tmovsd  -0x70(%rbp),%xmm0\n  c6:\tf2 0f 10 4d 98       \tmovsd  -0x68(%rbp),%xmm1\n  cb:\te9 29 00 00 00       \tjmp    f9 <_Z9roundtripICdET_S0_+0xf9>\n  d0:\te8 00 00 00 00       \tcall   d5 <_Z9roundtripICdET_S0_+0xd5>\n\t\t\td1: R_X86_64_PLT32\t__cxa_end_catch-0x4\n  d5:\te9 66 00 00 00       \tjmp    140 <_Z9roundtripICdET_S0_+0x140>\n  da:\te9 61 00 00 00       \tjmp    140 <_Z9roundtripICdET_S0_+0x140>\n  df:\t66 45 0f ef ff       \tpxor   %xmm15,%xmm15\n  e4:\tf3 44 0f 7f 7d b0    \tmovdqu %xmm15,-0x50(%rbp)\n  ea:\tf2 0f 10 45 b0       \tmovsd  -0x50(%rbp),%xmm0\n  ef:\tf2 0f 10 4d b8       \tmovsd  -0x48(%rbp),%xmm1\n  f4:\te9 00 00 00 00       \tjmp    f9 <_Z9roundtripICdET_S0_+0xf9>\n  f9:\t48 8b 5d 88          \tmov    -0x78(%rbp),%rbx\n  fd:\tc9                   \tleave\n  fe:\tc3                   \tret\n  ff:\t48 89 45 f8          \tmov    %rax,-0x8(%rbp)\n 103:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 10a:\t81 fa 01 00 00 00    \tcmp    $0x1,%edx\n 110:\t0f 85 07 00 00 00    \tjne    11d <_Z9roundtripICdET_S0_+0x11d>\n 116:\tc7 45 f0 01 00 00 00 \tmovl   $0x1,-0x10(%rbp)\n 11d:\t48 8d a5 50 ff ff ff \tlea    -0xb0(%rbp),%rsp\n 124:\te9 59 ff ff ff       \tjmp    82 <_Z9roundtripICdET_S0_+0x82>\n 129:\t48 89 45 f8          \tmov    %rax,-0x8(%rbp)\n 12d:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 134:\t48 8d a5 50 ff ff ff \tlea    -0xb0(%rbp),%rsp\n 13b:\te9 90 ff ff ff       \tjmp    d0 <_Z9roundtripICdET_S0_+0xd0>\n 140:\t48 8b 7d f8          \tmov    -0x8(%rbp),%rdi\n 144:\te8 00 00 00 00       \tcall   149 <_Z9roundtripICdET_S0_+0x149>\n\t\t\t145: R_X86_64_PLT32\t_Unwind_Resume-0x4\n 149:\t0f 0b                \tud2\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/abi-source.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/abi.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/abi-host.cpp",
+      "/tmp/pa29-audit190/checks-final/abi.o",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/abi"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/abi"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/abi-host.cpp",
+      "/tmp/pa29-audit190/checks-final/abi.o",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/abi"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-audit190/checks-final/abi"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "-SWsrg",
+      "/tmp/pa29-audit190/checks-final/abi.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "There are 44 section headers, starting at offset 0x1648:\n\nSection Headers:\n  [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al\n  [ 0]                   NULL            0000000000000000 000000 000000 00      0   0  0\n  [ 1] .text             PROGBITS        0000000000000000 000040 000657 00  AX  0   0 16\n  [ 2] .data             PROGBITS        0000000000000000 0006a0 000013 00  WA  0   0 16\n  [ 3] .eh_frame         PROGBITS        0000000000000000 0006b8 000170 00   A  0   0  8\n  [ 4] .gcc_except_table PROGBITS        0000000000000000 000828 00003b 00   A  0   0  8\n  [ 5] .data.rel.local   PROGBITS        0000000000000000 000868 000020 00  WA  0   0  8\n  [ 6] .init_array       INIT_ARRAY      0000000000000000 000888 000000 08  WA  0   0  8\n  [ 7] .fini_array       FINI_ARRAY      0000000000000000 000888 000000 08  WA  0   0  8\n  [ 8] .tdata            PROGBITS        0000000000000000 000888 000000 00 WAT  0   0  1\n  [ 9] .rela.text        RELA            0000000000000000 000888 000288 18     17   1  8\n  [10] .rela.data        RELA            0000000000000000 000b10 000000 18     17   2  8\n  [11] .rela.eh_frame    RELA            0000000000000000 000b10 0000d8 18     17   3  8\n  [12] .rela.gcc_except_table RELA            0000000000000000 000be8 000048 18     17   4  8\n  [13] .rela.data.rel.local RELA            0000000000000000 000c30 000060 18     17   5  8\n  [14] .rela.init_array  RELA            0000000000000000 000c90 000000 18     17   6  8\n  [15] .rela.fini_array  RELA            0000000000000000 000c90 000000 18     17   7  8\n  [16] .rela.tdata       RELA            0000000000000000 000c90 000000 18     17   8  8\n  [17] .symtab           SYMTAB          0000000000000000 000c90 000438 18     18  18  8\n  [18] .strtab           STRTAB          0000000000000000 0010c8 00017e 00      0   0  1\n  [19] .shstrtab         STRTAB          0000000000000000 001246 00022c 00      0   0  1\n  [20] .note.GNU-stack   PROGBITS        0000000000000000 001472 000000 00      0   0  1\n  [21] .text._ZNSt9exceptionC2Ev PROGBITS        0000000000000000 001472 000020 00 AXG  0   0  1\n  [22] .group            GROUP           0000000000000000 001494 00000c 04     17  27  4\n  [23] .data._ZTSCf      PROGBITS        0000000000000000 0014a0 000003 00 WAG  0   0  1\n  [24] .group            GROUP           0000000000000000 0014a4 000008 04     17  31  4\n  [25] .data._ZTICf      PROGBITS        0000000000000000 0014b0 000010 00 WAG  0   0  8\n  [26] .group            GROUP           0000000000000000 0014c0 00000c 04     17  30  4\n  [27] .data._ZTSCd      PROGBITS        0000000000000000 0014cc 000003 00 WAG  0   0  1\n  [28] .group            GROUP           0000000000000000 0014d0 000008 04     17  35  4\n  [29] .data._ZTICd      PROGBITS        0000000000000000 0014d8 000010 00 WAG  0   0  8\n  [30] .group            GROUP           0000000000000000 0014e8 00000c 04     17  34  4\n  [31] .data._ZTSCe      PROGBITS        0000000000000000 0014f4 000003 00 WAG  0   0  1\n  [32] .group            GROUP           0000000000000000 0014f8 000008 04     17  37  4\n  [33] .data._ZTICe      PROGBITS        0000000000000000 001500 000010 00 WAG  0   0  8\n  [34] .group            GROUP           0000000000000000 001510 00000c 04     17  36  4\n  [35] .data._ZTSPCd     PROGBITS        0000000000000000 00151c 000004 00 WAG  0   0  1\n  [36] .group            GROUP           0000000000000000 001520 000008 04     17  41  4\n  [37] .data._ZTIPCd     PROGBITS        0000000000000000 001528 000020 00 WAG  0   0  8\n  [38] .group            GROUP           0000000000000000 001548 00000c 04     17  40  4\n  [39] .rela.text._ZNSt9exceptionC2Ev RELA            0000000000000000 001558 000018 18   G 17  21  8\n  [40] .rela.data._ZTICf RELA            0000000000000000 001570 000030 18   G 17  25  8\n  [41] .rela.data._ZTICd RELA            0000000000000000 0015a0 000030 18   G 17  29  8\n  [42] .rela.data._ZTICe RELA            0000000000000000 0015d0 000030 18   G 17  33  8\n  [43] .rela.data._ZTIPCd RELA            0000000000000000 001600 000048 18   G 17  37  8\nKey to Flags:\n  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),\n  L (link order), O (extra OS processing required), G (group), T (TLS),\n  C (compressed), x (unknown), o (OS specific), E (exclude),\n  D (mbind), l (large), p (processor specific)\n\nCOMDAT group section [   22] `.group' [_ZNSt9exceptionC2Ev] contains 2 sections:\n   [Index]    Name\n   [   21]   .text._ZNSt9exceptionC2Ev\n   [   39]   .rela.text._ZNSt9exceptionC2Ev\n\nCOMDAT group section [   24] `.group' [_ZTSCf] contains 1 sections:\n   [Index]    Name\n   [   23]   .data._ZTSCf\n\nCOMDAT group section [   26] `.group' [_ZTICf] contains 2 sections:\n   [Index]    Name\n   [   25]   .data._ZTICf\n   [   40]   .rela.data._ZTICf\n\nCOMDAT group section [   28] `.group' [_ZTSCd] contains 1 sections:\n   [Index]    Name\n   [   27]   .data._ZTSCd\n\nCOMDAT group section [   30] `.group' [_ZTICd] contains 2 sections:\n   [Index]    Name\n   [   29]   .data._ZTICd\n   [   41]   .rela.data._ZTICd\n\nCOMDAT group section [   32] `.group' [_ZTSCe] contains 1 sections:\n   [Index]    Name\n   [   31]   .data._ZTSCe\n\nCOMDAT group section [   34] `.group' [_ZTICe] contains 2 sections:\n   [Index]    Name\n   [   33]   .data._ZTICe\n   [   42]   .rela.data._ZTICe\n\nCOMDAT group section [   36] `.group' [_ZTSPCd] contains 1 sections:\n   [Index]    Name\n   [   35]   .data._ZTSPCd\n\nCOMDAT group section [   38] `.group' [_ZTIPCd] contains 2 sections:\n   [Index]    Name\n   [   37]   .data._ZTIPCd\n   [   43]   .rela.data._ZTIPCd\n\nRelocation section '.rela.text' at offset 0x888 contains 27 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000022  0000001d00000004 R_X86_64_PLT32         0000000000000000 __cxa_allocate_exception - 4\n0000000000000047  0000001e00000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICf - 4\n0000000000000057  0000002100000004 R_X86_64_PLT32         0000000000000000 __cxa_throw - 4\n0000000000000091  0000001d00000004 R_X86_64_PLT32         0000000000000000 __cxa_allocate_exception - 4\n00000000000000ba  0000002200000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICd - 4\n00000000000000ca  0000002100000004 R_X86_64_PLT32         0000000000000000 __cxa_throw - 4\n0000000000000106  0000001d00000004 R_X86_64_PLT32         0000000000000000 __cxa_allocate_exception - 4\n000000000000013f  0000002400000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICe - 4\n000000000000014f  0000002100000004 R_X86_64_PLT32         0000000000000000 __cxa_throw - 4\n0000000000000235  0000001500000004 R_X86_64_PLT32         0000000000000000 host_f - 4\n0000000000000269  0000002600000004 R_X86_64_PLT32         0000000000000000 __cxa_begin_catch - 4\n00000000000002de  0000002700000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n00000000000002ed  0000002700000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n00000000000002f7  0000002700000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n0000000000000325  0000001600000004 R_X86_64_PLT32         0000000000000000 host_d - 4\n0000000000000359  0000002600000004 R_X86_64_PLT32         0000000000000000 __cxa_begin_catch - 4\n00000000000003ee  0000002700000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n00000000000003fd  0000002700000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n0000000000000407  0000002700000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n000000000000045d  0000001700000004 R_X86_64_PLT32         0000000000000000 host_l - 4\n0000000000000495  0000002600000004 R_X86_64_PLT32         0000000000000000 __cxa_begin_catch - 4\n0000000000000532  0000002700000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n0000000000000541  0000002700000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n000000000000054b  0000002700000004 R_X86_64_PLT32         0000000000000000 __cxa_end_catch - 4\n000000000000062d  0000002b00000004 R_X86_64_PLT32         0000000000000000 _Unwind_Resume - 4\n000000000000063a  0000002200000009 R_X86_64_GOTPCREL      0000000000000000 _ZTICd - 4\n000000000000064c  0000002800000009 R_X86_64_GOTPCREL      0000000000000000 _ZTIPCd - 4\n\nRelocation section '.rela.eh_frame' at offset 0xb10 contains 9 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000020  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 0\n0000000000000050  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 66\n0000000000000080  0000000100000002 R_X86_64_PC32          0000000000000000 .text + d9\n00000000000000bb  0000000500000002 R_X86_64_PC32          0000000000000000 .data.rel.local + 18\n00000000000000d0  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 15e\n00000000000000d9  0000000400000002 R_X86_64_PC32          0000000000000000 .gcc_except_table + 0\n0000000000000100  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 633\n0000000000000128  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 645\n0000000000000150  0000000900000002 R_X86_64_PC32          0000000000000000 .text._ZNSt9exceptionC2Ev + 0\n\nRelocation section '.rela.gcc_except_table' at offset 0xbe8 contains 3 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n000000000000002f  0000000500000002 R_X86_64_PC32          0000000000000000 .data.rel.local + 0\n0000000000000033  0000000500000002 R_X86_64_PC32          0000000000000000 .data.rel.local + 8\n0000000000000037  0000000500000002 R_X86_64_PC32          0000000000000000 .data.rel.local + 10\n\nRelocation section '.rela.data.rel.local' at offset 0xc30 contains 4 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000000  0000002400000001 R_X86_64_64            0000000000000000 _ZTICe + 0\n0000000000000008  0000002200000001 R_X86_64_64            0000000000000000 _ZTICd + 0\n0000000000000010  0000001e00000001 R_X86_64_64            0000000000000000 _ZTICf + 0\n0000000000000018  0000002c00000001 R_X86_64_64            0000000000000000 __gxx_personality_v0 + 0\n\nRelocation section '.rela.text._ZNSt9exceptionC2Ev' at offset 0x1558 contains 1 entry:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n000000000000000e  0000001c00000009 R_X86_64_GOTPCREL      0000000000000000 _ZTVSt9exception - 4\n\nRelocation section '.rela.data._ZTICf' at offset 0x1570 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000000  0000002000000001 R_X86_64_64            0000000000000000 _ZTVN10__cxxabiv123__fundamental_type_infoE + 10\n0000000000000008  0000001f00000001 R_X86_64_64            0000000000000000 _ZTSCf + 0\n\nRelocation section '.rela.data._ZTICd' at offset 0x15a0 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000000  0000002000000001 R_X86_64_64            0000000000000000 _ZTVN10__cxxabiv123__fundamental_type_infoE + 10\n0000000000000008  0000002300000001 R_X86_64_64            0000000000000000 _ZTSCd + 0\n\nRelocation section '.rela.data._ZTICe' at offset 0x15d0 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000000  0000002000000001 R_X86_64_64            0000000000000000 _ZTVN10__cxxabiv123__fundamental_type_infoE + 10\n0000000000000008  0000002500000001 R_X86_64_64            0000000000000000 _ZTSCe + 0\n\nRelocation section '.rela.data._ZTIPCd' at offset 0x1600 contains 3 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000000  0000002a00000001 R_X86_64_64            0000000000000000 _ZTVN10__cxxabiv119__pointer_type_infoE + 10\n0000000000000008  0000002900000001 R_X86_64_64            0000000000000000 _ZTSPCd + 0\n0000000000000018  0000002200000001 R_X86_64_64            0000000000000000 _ZTICd + 0\n\nSymbol table '.symtab' contains 45 entries:\n   Num:    Value          Size Type    Bind   Vis      Ndx Name\n     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND \n     1: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 .text\n     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    2 .data\n     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    3 .eh_frame\n     4: 0000000000000000     0 SECTION LOCAL  DEFAULT    4 .gcc_except_table\n     5: 0000000000000000     0 SECTION LOCAL  DEFAULT    5 .data.rel.local\n     6: 0000000000000000     0 SECTION LOCAL  DEFAULT    6 .init_array\n     7: 0000000000000000     0 SECTION LOCAL  DEFAULT    7 .fini_array\n     8: 0000000000000000     0 SECTION LOCAL  DEFAULT    8 .tdata\n     9: 0000000000000000     0 SECTION LOCAL  DEFAULT   21 .text._ZNSt9exceptionC2Ev\n    10: 0000000000000000     0 SECTION LOCAL  DEFAULT   23 .data._ZTSCf\n    11: 0000000000000000     0 SECTION LOCAL  DEFAULT   25 .data._ZTICf\n    12: 0000000000000000     0 SECTION LOCAL  DEFAULT   27 .data._ZTSCd\n    13: 0000000000000000     0 SECTION LOCAL  DEFAULT   29 .data._ZTICd\n    14: 0000000000000000     0 SECTION LOCAL  DEFAULT   31 .data._ZTSCe\n    15: 0000000000000000     0 SECTION LOCAL  DEFAULT   33 .data._ZTICe\n    16: 0000000000000000     0 SECTION LOCAL  DEFAULT   35 .data._ZTSPCd\n    17: 0000000000000000     0 SECTION LOCAL  DEFAULT   37 .data._ZTIPCd\n    18: 0000000000000000   102 FUNC    GLOBAL DEFAULT    1 native_f\n    19: 0000000000000066   115 FUNC    GLOBAL DEFAULT    1 native_d\n    20: 00000000000000d9   133 FUNC    GLOBAL DEFAULT    1 native_l\n    21: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND host_f\n    22: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND host_d\n    23: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND host_l\n    24: 000000000000015e  1237 FUNC    GLOBAL DEFAULT    1 native_catches\n    25: 0000000000000633    18 FUNC    GLOBAL DEFAULT    1 native_type\n    26: 0000000000000645    18 FUNC    GLOBAL DEFAULT    1 native_pointer_type\n    27: 0000000000000000    32 FUNC    WEAK   DEFAULT   21 _ZNSt9exceptionC2Ev\n    28: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _ZTVSt9exception\n    29: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __cxa_allocate_exception\n    30: 0000000000000000    16 OBJECT  WEAK   DEFAULT   25 _ZTICf\n    31: 0000000000000000     3 OBJECT  WEAK   DEFAULT   23 _ZTSCf\n    32: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _ZTVN10__cxxabiv123__fundamental_type_infoE\n    33: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __cxa_throw\n    34: 0000000000000000    16 OBJECT  WEAK   DEFAULT   29 _ZTICd\n    35: 0000000000000000     3 OBJECT  WEAK   DEFAULT   27 _ZTSCd\n    36: 0000000000000000    16 OBJECT  WEAK   DEFAULT   33 _ZTICe\n    37: 0000000000000000     3 OBJECT  WEAK   DEFAULT   31 _ZTSCe\n    38: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __cxa_begin_catch\n    39: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __cxa_end_catch\n    40: 0000000000000000    32 OBJECT  WEAK   DEFAULT   37 _ZTIPCd\n    41: 0000000000000000     4 OBJECT  WEAK   DEFAULT   35 _ZTSPCd\n    42: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _ZTVN10__cxxabiv119__pointer_type_infoE\n    43: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _Unwind_Resume\n    44: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __gxx_personality_v0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "readelf",
+      "--debug-dump=frames",
+      "/tmp/pa29-audit190/checks-final/abi.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 000000000000002c 0000001c FDE cie=00000000 pc=0000000000000000..0000000000000066\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000000f\n  DW_CFA_offset: r3 (rbx) at cfa-48\n  DW_CFA_advance_loc4: 81 to 0000000000000060\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 0000000000000064\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 0000000000000065\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000066\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000048 000000000000002c 0000004c FDE cie=00000000 pc=0000000000000066..00000000000000d9\n  DW_CFA_advance_loc: 1 to 0000000000000067\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 000000000000006a\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 0000000000000075\n  DW_CFA_offset: r3 (rbx) at cfa-72\n  DW_CFA_advance_loc4: 94 to 00000000000000d3\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 00000000000000d7\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 00000000000000d8\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000000d9\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000078 000000000000002c 0000007c FDE cie=00000000 pc=00000000000000d9..000000000000015e\n  DW_CFA_advance_loc: 1 to 00000000000000da\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 00000000000000dd\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 00000000000000e8\n  DW_CFA_offset: r3 (rbx) at cfa-120\n  DW_CFA_advance_loc4: 112 to 0000000000000158\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 000000000000015c\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 000000000000015d\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 000000000000015e\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000a8 000000000000001c 00000000 CIE\n  Version:               1\n  Augmentation:          \"zPLR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     9b 5d ff ff ff 1b 1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000c8 000000000000002c 00000024 FDE cie=000000a8 pc=000000000000015e..0000000000000633\n  Augmentation data:     27 ff ff ff\n  DW_CFA_advance_loc: 1 to 000000000000015f\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000162\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 1025 to 0000000000000563\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000564\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000565\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000f8 0000000000000024 000000fc FDE cie=00000000 pc=0000000000000633..0000000000000645\n  DW_CFA_advance_loc: 1 to 0000000000000634\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000637\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 12 to 0000000000000643\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000644\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000645\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000120 0000000000000024 00000124 FDE cie=00000000 pc=0000000000000645..0000000000000657\n  DW_CFA_advance_loc: 1 to 0000000000000646\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000649\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 12 to 0000000000000655\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000656\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000657\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000148 0000000000000024 0000014c FDE cie=00000000 pc=0000000000000000..0000000000000020\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 26 to 000000000000001e\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 000000000000001f\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000020\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/checks-final/overflow.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: nonconstant constexpr object initializer\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-c",
+      "/tmp/pa29-audit190/checks-final/zero-divisor.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: nonconstant constexpr object initializer\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/tmp/pa29-audit190/checks-final/false-list.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true constant boolean in /tmp/pa29-audit190/checks-final/false-list.cpp:1: fixed false\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/tmp/pa29-audit190/checks-final/false-list.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/tmp/pa29-audit190/checks-final/false-list.cpp:1:111: error: static assertion failed due to requirement 'C{2}': fixed false\n    1 | struct C{int n;constexpr explicit operator bool()const{return n==3;}};template<class T>void f(){static_assert(C{2},\"fixed false\");}\n      |                                                                                                               ^~~~\n/tmp/pa29-audit190/checks-final/false-list.cpp:2:12: note: in instantiation of function template specialization 'f<int>' requested here\n    2 | int main(){f<int>();}\n      |            ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/tmp/pa29-audit190/checks-final/narrow-list.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: narrowing list initialization\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/tmp/pa29-audit190/checks-final/narrow-list.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/tmp/pa29-audit190/checks-final/narrow-list.cpp:1:113: error: type 'double' cannot be narrowed to 'int' in initializer list [-Wc++11-narrowing]\n    1 | struct C{int n;constexpr explicit operator bool()const{return true;}};template<class T>void f(){static_assert(C{1.5},\"narrow\");}\n      |                                                                                                                 ^~~\n/tmp/pa29-audit190/checks-final/narrow-list.cpp:1:113: note: insert an explicit cast to silence this issue\n    1 | struct C{int n;constexpr explicit operator bool()const{return true;}};template<class T>void f(){static_assert(C{1.5},\"narrow\");}\n      |                                                                                                                 ^~~\n      |                                                                                                                 static_cast<int>( )\n/tmp/pa29-audit190/checks-final/narrow-list.cpp:1:113: warning: implicit conversion from 'double' to 'int' changes value from 1.5 to 1 [-Wliteral-conversion]\n    1 | struct C{int n;constexpr explicit operator bool()const{return true;}};template<class T>void f(){static_assert(C{1.5},\"narrow\");}\n      |                                                                                                                ~^~~\n/tmp/pa29-audit190/checks-final/narrow-list.cpp:1:113: error: type 'double' cannot be narrowed to 'int' in initializer list [-Wc++11-narrowing]\n    1 | struct C{int n;constexpr explicit operator bool()const{return true;}};template<class T>void f(){static_assert(C{1.5},\"narrow\");}\n      |                                                                                                                 ^~~\n/tmp/pa29-audit190/checks-final/narrow-list.cpp:2:12: note: in instantiation of function template specialization 'f<int>' requested here\n    2 | int main(){f<int>();}\n      |            ^\n/tmp/pa29-audit190/checks-final/narrow-list.cpp:1:113: note: insert an explicit cast to silence this issue\n    1 | struct C{int n;constexpr explicit operator bool()const{return true;}};template<class T>void f(){static_assert(C{1.5},\"narrow\");}\n      |                                                                                                                 ^~~\n      |                                                                                                                 static_cast<int>( )\n1 warning and 2 errors generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/tmp/pa29-audit190/checks-final/lifetime-list.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: constexpr member requires a literal class\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/tmp/pa29-audit190/checks-final/lifetime-list.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/tmp/pa29-audit190/checks-final/lifetime-list.cpp:1:118: error: static assertion expression is not an integral constant expression\n    1 | struct C{int n;~C(){} constexpr explicit operator bool()const{return true;}};template<class T>void f(){static_assert(C{3},\"lifetime\");}\n      |                                                                                                                      ^~~~\n/tmp/pa29-audit190/checks-final/lifetime-list.cpp:1:119: note: non-literal type 'C' cannot be used in a constant expression\n    1 | struct C{int n;~C(){} constexpr explicit operator bool()const{return true;}};template<class T>void f(){static_assert(C{3},\"lifetime\");}\n      |                                                                                                                       ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/tmp/pa29-audit190/checks-final/nonconstant-list.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true constant boolean in /tmp/pa29-audit190/checks-final/nonconstant-list.cpp:1: nonconstant\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/tmp/pa29-audit190/checks-final/nonconstant-list.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/tmp/pa29-audit190/checks-final/nonconstant-list.cpp:1:101: error: static assertion expression is not an integral constant expression\n    1 | struct C{int n;explicit operator bool()const{return true;}};template<class T>void f(){static_assert(C{3},\"nonconstant\");}\n      |                                                                                                     ^~~~\n/tmp/pa29-audit190/checks-final/nonconstant-list.cpp:1:101: note: non-constexpr function 'operator bool' cannot be used in a constant expression\n/tmp/pa29-audit190/checks-final/nonconstant-list.cpp:1:25: note: declared here\n    1 | struct C{int n;explicit operator bool()const{return true;}};template<class T>void f(){static_assert(C{3},\"nonconstant\");}\n      |                         ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/tmp/pa29-audit190/checks-final/access-list.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: inaccessible class member: C declared in /tmp/pa29-audit190/checks-final/access-list.cpp:1\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-c",
+      "/tmp/pa29-audit190/checks-final/access-list.cpp",
+      "-o",
+      "/tmp/pa29-audit190/checks-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/tmp/pa29-audit190/checks-final/access-list.cpp:1:143: error: calling a private constructor of class 'C'\n    1 | class C{int n;constexpr C(int x):n(x){} public:constexpr explicit operator bool()const{return true;}};template<class T>void f(){static_assert(C{3},\"private\");}\n      |                                                                                                                                               ^\n/tmp/pa29-audit190/checks-final/access-list.cpp:1:25: note: implicitly declared private here\n    1 | class C{int n;constexpr C(int x):n(x){} public:constexpr explicit operator bool()const{return true;}};template<class T>void f(){static_assert(C{3},\"private\");}\n      |                         ^\n1 error generated.\n"
+  }
+]

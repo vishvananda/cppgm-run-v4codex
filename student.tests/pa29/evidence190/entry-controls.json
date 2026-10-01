@@ -1,0 +1,111 @@
+{
+  "compiler_sha256": "9d36f0bbcb3ddccc57853370d8003f6103eadbfcd0fe50a171994fccab950294",
+  "rows": [
+    {
+      "source": "student.tests/pa29/controls190/complex-special.cpp",
+      "source_sha256": "04150ff40f61ad86938ec1a1a7e5fc005c08c850ea08edeb9c10a8127c7adf18",
+      "command": [
+        "/tmp/pa29-audit190/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-special.cpp",
+        "-o",
+        "/tmp/pa29-audit190/entry-controls-final/complex-special.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: nonconstant constexpr object initializer\n"
+    },
+    {
+      "source": "student.tests/pa29/controls190/complex-identity.cpp",
+      "source_sha256": "4e5a258b31f17708dec737e4a895c0ee9f0c2a716bc2cb4b6322e74294ae5a31",
+      "command": [
+        "/tmp/pa29-audit190/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-identity.cpp",
+        "-o",
+        "/tmp/pa29-audit190/entry-controls-final/complex-identity.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "source": "student.tests/pa29/controls190/complex-identity.cpp",
+      "source_sha256": "4e5a258b31f17708dec737e4a895c0ee9f0c2a716bc2cb4b6322e74294ae5a31",
+      "command": [
+        "g++",
+        "/tmp/pa29-audit190/entry-controls-final/complex-identity.o",
+        "-o",
+        "/tmp/pa29-audit190/entry-controls-final/complex-identity"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "source": "student.tests/pa29/controls190/complex-identity.cpp",
+      "source_sha256": "4e5a258b31f17708dec737e4a895c0ee9f0c2a716bc2cb4b6322e74294ae5a31",
+      "command": [
+        "/tmp/pa29-audit190/entry-controls-final/complex-identity"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "source": "student.tests/pa29/controls190/complex-rtti.cpp",
+      "source_sha256": "39f9ff408a74741bcc519c73da5399b87fbcbc9f06bb15ecdbdec9125b684c0e",
+      "command": [
+        "/tmp/pa29-audit190/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/complex-rtti.cpp",
+        "-o",
+        "/tmp/pa29-audit190/entry-controls-final/complex-rtti.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "source": "student.tests/pa29/controls190/complex-rtti.cpp",
+      "source_sha256": "39f9ff408a74741bcc519c73da5399b87fbcbc9f06bb15ecdbdec9125b684c0e",
+      "command": [
+        "g++",
+        "/tmp/pa29-audit190/entry-controls-final/complex-rtti.o",
+        "-o",
+        "/tmp/pa29-audit190/entry-controls-final/complex-rtti"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/pa29-audit190/entry-controls-final/complex-rtti.o: in function `main':\n(.text+0x197): undefined reference to `typeinfo for float _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: (.text+0x19e): undefined reference to `typeinfo for double _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: (.text+0x1c0): undefined reference to `typeinfo for double _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: (.text+0x1c7): undefined reference to `typeinfo for long double _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: (.text+0x1e9): undefined reference to `typeinfo for float _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: (.text+0x1f0): undefined reference to `typeinfo for float _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: (.text+0x300): undefined reference to `typeinfo for double _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/pa29-audit190/entry-controls-final/complex-rtti.o:(.data.rel.local+0x0): undefined reference to `typeinfo for double _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/pa29-audit190/entry-controls-final/complex-rtti.o:(.data.rel.local+0x8): undefined reference to `typeinfo for float _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/pa29-audit190/entry-controls-final/complex-rtti.o:(.data.rel.local+0x18): undefined reference to `typeinfo for long double _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/pa29-audit190/entry-controls-final/complex-rtti.o: in function `int caught<float _Complex>(float _Complex)':\n(.text._Z6caughtICfEiT_[_Z6caughtICfEiT_]+0x47): undefined reference to `typeinfo for float _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/pa29-audit190/entry-controls-final/complex-rtti.o: in function `int caught<double _Complex>(double _Complex)':\n(.text._Z6caughtICdEiT_[_Z6caughtICdEiT_]+0x54): undefined reference to `typeinfo for double _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/pa29-audit190/entry-controls-final/complex-rtti.o: in function `int caught<long double _Complex>(long double _Complex)':\n(.text._Z6caughtICeEiT_[_Z6caughtICeEiT_]+0x69): undefined reference to `typeinfo for long double _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/pa29-audit190/entry-controls-final/complex-rtti.o:(.data._ZTIPCd[_ZTIPCd]+0x18): undefined reference to `typeinfo for double _Complex'\ncollect2: error: ld returned 1 exit status\n"
+    },
+    {
+      "source": "student.tests/pa29/controls190/fixed-lists.cpp",
+      "source_sha256": "fe3f6fb35653afb70d4dbb9d5abef14bf259bfd49a1b285afe651ed153fa9fa7",
+      "command": [
+        "/tmp/pa29-audit190/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/fixed-lists.cpp",
+        "-o",
+        "/tmp/pa29-audit190/entry-controls-final/fixed-lists.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/fixed-lists.cpp:28: fixed aggregate\n"
+    },
+    {
+      "source": "student.tests/pa29/controls190/integrated.cpp",
+      "source_sha256": "94f9729f0c37f0cd08bef907d735848e7ef7bbe40a8ff5526bf6538067b80f0a",
+      "command": [
+        "/tmp/pa29-audit190/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/integrated.cpp",
+        "-o",
+        "/tmp/pa29-audit190/entry-controls-final/integrated.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: static assertion is not a true constant boolean in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls190/integrated.cpp:17: shared fixed conversion\n"
+    }
+  ]
+}

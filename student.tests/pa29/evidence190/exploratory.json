@@ -1,0 +1,187 @@
+{
+  "sources": {
+    "elaborated-later.cpp": "struct V{int x;};struct A{int f(){return co_await.x;} struct V co_await;};int main(){A a;a.co_await.x=3;return a.f()==3?0:1;}\n",
+    "constexpr-round.cpp": "constexpr auto c=__builtin_complex(4097.f,4096.f);constexpr auto d=c*c;int main(){auto z=c*c;return __real__ d==__real__ z?0:1;}\n",
+    "fixed.cpp": "template<class T>struct C{T value;constexpr explicit operator bool()const{return value>0;}};template<class T>void f(){static_assert(C<int>{3},\"fixed\");}int main(){f<int>();}",
+    "guide-private.cpp": "class F{constexpr explicit operator bool()const{return true;}};template<class T>struct A{A(T){}};template<class T> explicit(T{}) A(T)->A<T>;int main(){A a(F{});}\n",
+    "initializer-spelling.cpp": "struct co_await{};struct A{int x=sizeof(co_await);co_await f(){return {};}};int main(){A a; a.f();return 0;}\n",
+    "using-later.cpp": "struct B{int co_await(){return 3;}};struct D:B{int f(){return co_await();}using B::co_await;};int main(){D d;return d.f()==3?0:1;}\n",
+    "complex-constexpr-special.cpp": "constexpr auto c=__builtin_complex(__builtin_inf(),1.);constexpr auto d=c+c;static_assert(__builtin_isinf(__real__ d),\"infinity\");int main(){}\n",
+    "parameter-spelling.cpp": "struct Z{};struct A{int (*co_await)(Z);int f(){return co_await(Z{});}};int f(Z){return 4;}int main(){A a;a.co_await=f;return a.f()==4?0:1;}\n",
+    "bool-complex-context.cpp": "constexpr auto x=__builtin_complex(0.,2.);static_assert(x,\"complex\");struct A{explicit(x) A(int){}};void f()noexcept(x){};int main(){A a(3);f();}\n",
+    "complex-snapshot.cpp": "using C=_Complex double; C z; C change(){z=__builtin_complex(7.,8.);return z;} int main(){z=__builtin_complex(3.,4.); C c=z+change();return (__real__ c==10&&__imag__ c==12)||(__real__ c==14&&__imag__ c==16)?0:1;}\n",
+    "complex-throw.cpp": "using C=_Complex double; int main(){try{throw __builtin_complex(3.,4.);}catch(C c){return __real__ c==3&&__imag__ c==4?0:1;}}\n"
+  },
+  "observations": [
+    {
+      "name": "complex-throw",
+      "compiler": "dev/cppgm++",
+      "status": 0,
+      "stderr": "",
+      "link": 1,
+      "link_err": "/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/pa29-audit190/probes/test.o: in function `main':\n(.text+0x50): undefined reference to `typeinfo for double _Complex'\n/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/pa29-audit190/probes/test.o:(.data.rel.local+0x0): undefined reference to `typeinfo for double _Complex'\ncollect2: error: ld returned 1 exit status\n"
+    },
+    {
+      "name": "complex-throw",
+      "compiler": "clang++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "complex-constexpr-special",
+      "compiler": "dev/cppgm++",
+      "status": 1,
+      "stderr": "ERROR: nonconstant constexpr object initializer\n"
+    },
+    {
+      "name": "complex-constexpr-special",
+      "compiler": "clang++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "complex-snapshot",
+      "compiler": "dev/cppgm++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "complex-snapshot",
+      "compiler": "clang++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "using-later",
+      "compiler": "dev/cppgm++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "using-later",
+      "compiler": "clang++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "elaborated-later",
+      "compiler": "dev/cppgm++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "elaborated-later",
+      "compiler": "clang++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "initializer-spelling",
+      "compiler": "dev/cppgm++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "initializer-spelling",
+      "compiler": "clang++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "parameter-spelling",
+      "compiler": "dev/cppgm++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "parameter-spelling",
+      "compiler": "clang++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "constexpr-round",
+      "compiler": "dev/cppgm++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 1
+    },
+    {
+      "name": "constexpr-round",
+      "compiler": "clang++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "guide-private",
+      "compiler": "dev/cppgm++",
+      "status": 1,
+      "stderr": "ERROR: sizeof unsupported or incomplete type\n"
+    },
+    {
+      "name": "guide-private",
+      "compiler": "clang++",
+      "status": 0,
+      "stderr": "/tmp/pa29-audit190/probes/guide-private.cpp:1:124: warning: explicit(bool) is a C++20 extension [-Wc++20-extensions]\n    1 | class F{constexpr explicit operator bool()const{return true;}};template<class T>struct A{A(T){}};template<class T> explicit(T{}) A(T)->A<T>;int main(){A a(F{});}\n      |                                                                                                                            ^\n1 warning generated.\n",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "bool-complex-context",
+      "compiler": "dev/cppgm++",
+      "status": 0,
+      "stderr": "",
+      "link": 0,
+      "link_err": "",
+      "run": 0
+    },
+    {
+      "name": "bool-complex-context",
+      "compiler": "clang++",
+      "status": 1,
+      "stderr": "/tmp/pa29-audit190/probes/bool-complex-context.cpp:1:87: warning: explicit(bool) is a C++20 extension [-Wc++20-extensions]\n    1 | constexpr auto x=__builtin_complex(0.,2.);static_assert(x,\"complex\");struct A{explicit(x) A(int){}};void f()noexcept(x){};int main(){A a(3);f();}\n      |                                                                                       ^\n/tmp/pa29-audit190/probes/bool-complex-context.cpp:1:88: error: conversion from 'const _Complex double' to 'bool' is not allowed in a converted constant expression\n    1 | constexpr auto x=__builtin_complex(0.,2.);static_assert(x,\"complex\");struct A{explicit(x) A(int){}};void f()noexcept(x){};int main(){A a(3);f();}\n      |                                                                                        ^\n/tmp/pa29-audit190/probes/bool-complex-context.cpp:1:118: error: conversion from 'const _Complex double' to 'bool' is not allowed in a converted constant expression\n    1 | constexpr auto x=__builtin_complex(0.,2.);static_assert(x,\"complex\");struct A{explicit(x) A(int){}};void f()noexcept(x){};int main(){A a(3);f();}\n      |                                                                                                                      ^\n1 warning and 2 errors generated.\n"
+    }
+  ]
+}

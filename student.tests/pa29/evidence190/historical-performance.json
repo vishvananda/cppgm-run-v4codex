@@ -1,0 +1,1027 @@
+[
+  {
+    "file": "student.tests/pa29/evidence187/common-performance.json",
+    "sha256": "25f77a9f283f191ecb9026d486ac95af44fb5553d897053cc0b96a3262db279a",
+    "observations": 224,
+    "launchers": 0,
+    "inputs": {
+      "memory": "ad74bc60b3e37a4b7dd42e53f3137389be2e09828b0a75837f10ea204565c2d0",
+      "floating": "567413130cbfc8765c233904ec35a74c34f7da9e417f628eb040d39fcacd6aa7",
+      "exceptions": "b7703606b21b30e2fa8a9be3fb6b552530cb0d93b99d8af96858896119f67567",
+      "pruning": "292ec6cdfc03502a7c54f695f96f374b02162e16d0d6d45575efcd801694cc36"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-187/entry-cppgm++",
+        "sha256": "a4022c8d9e1a288e70aa4010d1a5d574614d35575f319b56ed088865e0d3c785"
+      },
+      "B": {
+        "path": "/tmp/pa29-187/handoff-cppgm++",
+        "sha256": "56b1cff876e48842f2328e6a4a297b05cef25a0b1152b697720dc1e4e85148d1"
+      }
+    },
+    "paired": {
+      "memory/compile": {
+        "median": 1.01660333056022,
+        "range": [
+          0.9926658511713858,
+          1.0487910201791646
+        ]
+      },
+      "memory/runtime": {
+        "median": 1.0016373069425903,
+        "range": [
+          0.9924709121756417,
+          1.113944855322978
+        ]
+      },
+      "floating/compile": {
+        "median": 0.9967395381370368,
+        "range": [
+          0.8530395540405465,
+          1.5430829919369222
+        ]
+      },
+      "floating/runtime": {
+        "median": 0.9991990405731415,
+        "range": [
+          0.9940490672615231,
+          1.0013092079483035
+        ]
+      },
+      "exceptions/compile": {
+        "median": 1.0067521039561058,
+        "range": [
+          0.9768968715716603,
+          1.6614078549754387
+        ]
+      },
+      "exceptions/runtime": {
+        "median": 1.0004924837067082,
+        "range": [
+          0.9404841813838198,
+          1.0655848705401327
+        ]
+      },
+      "pruning/compile": {
+        "median": 0.9647147026503351,
+        "range": [
+          0.7806306876952661,
+          1.3472440435425752
+        ]
+      },
+      "pruning/runtime": {
+        "median": 1.0013868139611541,
+        "range": [
+          0.9981239935785308,
+          1.0092313830083262
+        ]
+      }
+    }
+  },
+  {
+    "file": "student.tests/pa29/evidence187/owner-performance.json",
+    "sha256": "192be8b706ed306fc89666d0649f30cc63583d0f2126e0d512f53aeee96778d4",
+    "observations": 48,
+    "launchers": 8,
+    "inputs": {
+      "complex600": "a44a30e2aee5a7e0639fa3a52589985930ed97fa093256d0f7c83f6b4ebfed7b",
+      "complex1200": "c15217d8fbd4c808ca435c146f882252a15a3899d2090e749d247490cf954f1d",
+      "complex2400": "5fc010880681e5a72b58722b09b77ba0213616b4f931203055838d8b33a23b5f"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-187/entry-cppgm++",
+        "sha256": "a4022c8d9e1a288e70aa4010d1a5d574614d35575f319b56ed088865e0d3c785"
+      },
+      "B": {
+        "path": "/tmp/pa29-187/handoff-cppgm++",
+        "sha256": "56b1cff876e48842f2328e6a4a297b05cef25a0b1152b697720dc1e4e85148d1"
+      }
+    },
+    "paired": {}
+  },
+  {
+    "file": "student.tests/pa29/evidence187/preliminary-common-performance.json",
+    "sha256": "622981679202f7f34436ced6af8145c8d5277c4fa5c6f28dcfaf07b53767e9c5",
+    "observations": 224,
+    "launchers": 0,
+    "inputs": {
+      "memory": "ad74bc60b3e37a4b7dd42e53f3137389be2e09828b0a75837f10ea204565c2d0",
+      "floating": "567413130cbfc8765c233904ec35a74c34f7da9e417f628eb040d39fcacd6aa7",
+      "exceptions": "b7703606b21b30e2fa8a9be3fb6b552530cb0d93b99d8af96858896119f67567",
+      "pruning": "292ec6cdfc03502a7c54f695f96f374b02162e16d0d6d45575efcd801694cc36"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-187/entry-cppgm++",
+        "sha256": "a4022c8d9e1a288e70aa4010d1a5d574614d35575f319b56ed088865e0d3c785"
+      },
+      "B": {
+        "path": "/tmp/pa29-187/final-cppgm++",
+        "sha256": "e10bfd2e14589bceb230eb6c532e3f96adf84c5799c8f62b5f13b41372189793"
+      }
+    },
+    "paired": {
+      "memory/compile": {
+        "median": 0.9516807184249543,
+        "range": [
+          0.900693104560717,
+          1.1722104481718019
+        ]
+      },
+      "memory/runtime": {
+        "median": 0.9968707396044526,
+        "range": [
+          0.9488724450087866,
+          1.1016478344224667
+        ]
+      },
+      "floating/compile": {
+        "median": 1.0059628070151552,
+        "range": [
+          0.6908748544030323,
+          1.3072354220700835
+        ]
+      },
+      "floating/runtime": {
+        "median": 1.0055881611976707,
+        "range": [
+          0.9235314447618248,
+          1.0546158747765264
+        ]
+      },
+      "exceptions/compile": {
+        "median": 0.9892347643159489,
+        "range": [
+          0.6031645230018687,
+          1.0584918975441167
+        ]
+      },
+      "exceptions/runtime": {
+        "median": 0.9507752740225011,
+        "range": [
+          0.6882982910106011,
+          1.052513558867931
+        ]
+      },
+      "pruning/compile": {
+        "median": 1.0304699941738749,
+        "range": [
+          0.6964508653654476,
+          1.0886911895354896
+        ]
+      },
+      "pruning/runtime": {
+        "median": 0.9963186435020428,
+        "range": [
+          0.9703564858413991,
+          1.005409239572819
+        ]
+      }
+    }
+  },
+  {
+    "file": "student.tests/pa29/evidence187/preliminary-owner-performance.json",
+    "sha256": "71f940b43228aa21935c293480651ee26dffe586a033afe2210dee7b3848ce97",
+    "observations": 48,
+    "launchers": 8,
+    "inputs": {
+      "complex600": "a44a30e2aee5a7e0639fa3a52589985930ed97fa093256d0f7c83f6b4ebfed7b",
+      "complex1200": "c15217d8fbd4c808ca435c146f882252a15a3899d2090e749d247490cf954f1d",
+      "complex2400": "5fc010880681e5a72b58722b09b77ba0213616b4f931203055838d8b33a23b5f"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-187/entry-cppgm++",
+        "sha256": "a4022c8d9e1a288e70aa4010d1a5d574614d35575f319b56ed088865e0d3c785"
+      },
+      "B": {
+        "path": "/tmp/pa29-187/final-cppgm++",
+        "sha256": "e10bfd2e14589bceb230eb6c532e3f96adf84c5799c8f62b5f13b41372189793"
+      }
+    },
+    "paired": {}
+  },
+  {
+    "file": "student.tests/pa29/evidence188/common-performance.json",
+    "sha256": "97b5f3d70fd5f704908efd5b639d60fbaea9155183ec7f9745e88f2470315cb7",
+    "observations": 224,
+    "launchers": 0,
+    "inputs": {
+      "memory": "ad74bc60b3e37a4b7dd42e53f3137389be2e09828b0a75837f10ea204565c2d0",
+      "floating": "567413130cbfc8765c233904ec35a74c34f7da9e417f628eb040d39fcacd6aa7",
+      "exceptions": "b7703606b21b30e2fa8a9be3fb6b552530cb0d93b99d8af96858896119f67567",
+      "pruning": "292ec6cdfc03502a7c54f695f96f374b02162e16d0d6d45575efcd801694cc36"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-188/entry-cppgm++",
+        "sha256": "56b1cff876e48842f2328e6a4a297b05cef25a0b1152b697720dc1e4e85148d1"
+      },
+      "B": {
+        "path": "/tmp/pa29-188/final-cppgm++",
+        "sha256": "9b97c1daef27a2d152d82fe80e4d40ec33287ce684187983de40ef36378874e4"
+      }
+    },
+    "paired": {
+      "memory/compile": {
+        "median": 1.0202772064919046,
+        "range": [
+          0.8693551075268217,
+          1.134915121250504
+        ]
+      },
+      "memory/runtime": {
+        "median": 1.0129816576810549,
+        "range": [
+          0.8659721558277528,
+          1.1457877983534162
+        ]
+      },
+      "floating/compile": {
+        "median": 0.9187054932160008,
+        "range": [
+          0.6908375227781492,
+          1.34625189673229
+        ]
+      },
+      "floating/runtime": {
+        "median": 0.9929373737376607,
+        "range": [
+          0.912019382707863,
+          1.1108936098490478
+        ]
+      },
+      "exceptions/compile": {
+        "median": 0.9836557174762992,
+        "range": [
+          0.937794370045235,
+          1.2093947468405049
+        ]
+      },
+      "exceptions/runtime": {
+        "median": 0.9920062242124439,
+        "range": [
+          0.9608443249679438,
+          1.0099114790417891
+        ]
+      },
+      "pruning/compile": {
+        "median": 1.0012747811492526,
+        "range": [
+          0.926520506432337,
+          1.1894067104676993
+        ]
+      },
+      "pruning/runtime": {
+        "median": 1.037260983343705,
+        "range": [
+          1.0019115840018797,
+          1.444249745666034
+        ]
+      }
+    }
+  },
+  {
+    "file": "student.tests/pa29/evidence188/owner-performance.json",
+    "sha256": "6b4f8019ae7deea015fca61d9a2bfbdd1f4a57b14a63cd766957e439ffe431dd",
+    "observations": 216,
+    "launchers": 8,
+    "inputs": {
+      "names600": "33d833da0700025d5dd6c0d3ad3121985039fa7883d96440d97c17c742e4232c",
+      "names1200": "c739fb2333901410ac30aa03cc99832d9ac5229d6b550bed38c5ad3bd76aa379",
+      "names2400": "2f1f78f3771f9a8c1b65ad2c47408205f49ac719892e4700366bff809884a72e",
+      "contextual600": "daae8ee63b205d12b9b41b149176ba1776a69707ef5b1f92927948b1ac9e8e1e",
+      "contextual1200": "a08a8e046e664d0b994400f4c2c1ee97925981344019fc88c8b85f2d2dabb4b6",
+      "contextual2400": "04aa61d38c620a2522f40f81f9a9e8dfccc544b3ae51d22034d0cbc48f38948e"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-188/entry-cppgm++",
+        "sha256": "56b1cff876e48842f2328e6a4a297b05cef25a0b1152b697720dc1e4e85148d1"
+      },
+      "B": {
+        "path": "/tmp/pa29-188/final-cppgm++",
+        "sha256": "9b97c1daef27a2d152d82fe80e4d40ec33287ce684187983de40ef36378874e4"
+      }
+    },
+    "paired": {
+      "names600/compile": {
+        "median": 1.0142894834441225,
+        "range": [
+          0.9394590393546445,
+          1.070967972428495
+        ]
+      },
+      "names600/runtime": {
+        "median": 1.0064299166469217,
+        "range": [
+          0.9306617155835873,
+          1.1320676197489934
+        ]
+      },
+      "names1200/compile": {
+        "median": 1.027193524933384,
+        "range": [
+          0.8602476861742893,
+          1.1037976230151307
+        ]
+      },
+      "names1200/runtime": {
+        "median": 0.9614144219067968,
+        "range": [
+          0.7795334577424508,
+          1.0313637854786044
+        ]
+      },
+      "names2400/compile": {
+        "median": 1.0273355820909922,
+        "range": [
+          0.9121575275062531,
+          1.651699924239011
+        ]
+      },
+      "names2400/runtime": {
+        "median": 0.99449841144333,
+        "range": [
+          0.8337420997455661,
+          1.3483022299831646
+        ]
+      }
+    }
+  },
+  {
+    "file": "student.tests/pa29/evidence188/preliminary-common-performance.json",
+    "sha256": "1c7179dcd3fa9718c182343227c728d000b5f03098a071b8ebac4f20740b095d",
+    "observations": 224,
+    "launchers": 0,
+    "inputs": {
+      "memory": "ad74bc60b3e37a4b7dd42e53f3137389be2e09828b0a75837f10ea204565c2d0",
+      "floating": "567413130cbfc8765c233904ec35a74c34f7da9e417f628eb040d39fcacd6aa7",
+      "exceptions": "b7703606b21b30e2fa8a9be3fb6b552530cb0d93b99d8af96858896119f67567",
+      "pruning": "292ec6cdfc03502a7c54f695f96f374b02162e16d0d6d45575efcd801694cc36"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-188/entry-cppgm++",
+        "sha256": "56b1cff876e48842f2328e6a4a297b05cef25a0b1152b697720dc1e4e85148d1"
+      },
+      "B": {
+        "path": "/tmp/pa29-188/preliminary-cppgm++",
+        "sha256": "3d23ee72c5e9dc097e3b8b7ac624b0ef854e81e0228fcd44ff1c5ea8afd9f894"
+      }
+    },
+    "paired": {
+      "memory/compile": {
+        "median": 0.9603998900892441,
+        "range": [
+          0.9276885676826386,
+          1.0359691584370194
+        ]
+      },
+      "memory/runtime": {
+        "median": 0.9995859203003408,
+        "range": [
+          0.9811474907667999,
+          1.0053896656385473
+        ]
+      },
+      "floating/compile": {
+        "median": 0.9884020795275598,
+        "range": [
+          0.2871488103966754,
+          1.0030156641961432
+        ]
+      },
+      "floating/runtime": {
+        "median": 0.9933858396996018,
+        "range": [
+          0.9484513414725445,
+          3.9115923723537533
+        ]
+      },
+      "exceptions/compile": {
+        "median": 1.0036209713027593,
+        "range": [
+          0.9972124626930758,
+          1.114050309036539
+        ]
+      },
+      "exceptions/runtime": {
+        "median": 0.9980518105962699,
+        "range": [
+          0.9776636929151508,
+          1.0664690648151745
+        ]
+      },
+      "pruning/compile": {
+        "median": 1.0022801121986857,
+        "range": [
+          0.9746655294657145,
+          1.5122932555966802
+        ]
+      },
+      "pruning/runtime": {
+        "median": 0.9844705526828552,
+        "range": [
+          0.9524655246253317,
+          1.0617997426472467
+        ]
+      }
+    }
+  },
+  {
+    "file": "student.tests/pa29/evidence188/preliminary-owner-performance.json",
+    "sha256": "450c181f0339594b36e378d46d224356a7d516395e7912b588309f97357ac85f",
+    "observations": 216,
+    "launchers": 8,
+    "inputs": {
+      "names600": "33d833da0700025d5dd6c0d3ad3121985039fa7883d96440d97c17c742e4232c",
+      "names1200": "c739fb2333901410ac30aa03cc99832d9ac5229d6b550bed38c5ad3bd76aa379",
+      "names2400": "2f1f78f3771f9a8c1b65ad2c47408205f49ac719892e4700366bff809884a72e",
+      "contextual600": "daae8ee63b205d12b9b41b149176ba1776a69707ef5b1f92927948b1ac9e8e1e",
+      "contextual1200": "a08a8e046e664d0b994400f4c2c1ee97925981344019fc88c8b85f2d2dabb4b6",
+      "contextual2400": "04aa61d38c620a2522f40f81f9a9e8dfccc544b3ae51d22034d0cbc48f38948e"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-188/entry-cppgm++",
+        "sha256": "56b1cff876e48842f2328e6a4a297b05cef25a0b1152b697720dc1e4e85148d1"
+      },
+      "B": {
+        "path": "/tmp/pa29-188/preliminary-cppgm++",
+        "sha256": "3d23ee72c5e9dc097e3b8b7ac624b0ef854e81e0228fcd44ff1c5ea8afd9f894"
+      }
+    },
+    "paired": {
+      "names600/compile": {
+        "median": 1.0795662331447295,
+        "range": [
+          1.0678069622352246,
+          1.1180717109847147
+        ]
+      },
+      "names600/runtime": {
+        "median": 0.9988767160357909,
+        "range": [
+          0.9631541079845961,
+          1.001834186405311
+        ]
+      },
+      "names1200/compile": {
+        "median": 1.093081596170729,
+        "range": [
+          0.8235557736334649,
+          1.121758448236478
+        ]
+      },
+      "names1200/runtime": {
+        "median": 1.002180504164437,
+        "range": [
+          0.9989887531712713,
+          1.2330830331119553
+        ]
+      },
+      "names2400/compile": {
+        "median": 1.1154493648307682,
+        "range": [
+          1.0949931580350476,
+          1.4941226243516164
+        ]
+      },
+      "names2400/runtime": {
+        "median": 0.9987311460395052,
+        "range": [
+          0.9939852673702357,
+          1.0061086430776733
+        ]
+      }
+    }
+  },
+  {
+    "file": "student.tests/pa29/evidence189/common-performance.json",
+    "sha256": "9134706c68bc3af51b9298739ddf0296f0965db6f8a1d6fed35c1eeee0c0fe6e",
+    "observations": 224,
+    "launchers": 0,
+    "inputs": {
+      "memory": "ad74bc60b3e37a4b7dd42e53f3137389be2e09828b0a75837f10ea204565c2d0",
+      "floating": "567413130cbfc8765c233904ec35a74c34f7da9e417f628eb040d39fcacd6aa7",
+      "exceptions": "b7703606b21b30e2fa8a9be3fb6b552530cb0d93b99d8af96858896119f67567",
+      "pruning": "292ec6cdfc03502a7c54f695f96f374b02162e16d0d6d45575efcd801694cc36"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-189/cppgm-A",
+        "sha256": "9b97c1daef27a2d152d82fe80e4d40ec33287ce684187983de40ef36378874e4"
+      },
+      "B": {
+        "path": "/tmp/pa29-189/cppgm-handoff",
+        "sha256": "9d36f0bbcb3ddccc57853370d8003f6103eadbfcd0fe50a171994fccab950294"
+      }
+    },
+    "paired": {
+      "memory/compile": {
+        "median": 1.0006848403762323,
+        "range": [
+          0.9925084469712824,
+          1.258674733892329
+        ]
+      },
+      "memory/runtime": {
+        "median": 0.9999713113633548,
+        "range": [
+          0.9862924939212098,
+          1.0068175617124229
+        ]
+      },
+      "floating/compile": {
+        "median": 1.0013803095240794,
+        "range": [
+          0.9011201284947332,
+          1.277105530748808
+        ]
+      },
+      "floating/runtime": {
+        "median": 0.9988079492704047,
+        "range": [
+          0.876920329063075,
+          1.0055700068614566
+        ]
+      },
+      "exceptions/compile": {
+        "median": 0.998076515652375,
+        "range": [
+          0.9893703372584174,
+          1.681866715718255
+        ]
+      },
+      "exceptions/runtime": {
+        "median": 1.0007930644370915,
+        "range": [
+          0.9849245577758735,
+          1.011940894878773
+        ]
+      },
+      "pruning/compile": {
+        "median": 0.9923059291562755,
+        "range": [
+          0.7319581604416985,
+          1.000293096961192
+        ]
+      },
+      "pruning/runtime": {
+        "median": 1.000211228269861,
+        "range": [
+          0.9963869783333664,
+          1.0548436758741737
+        ]
+      }
+    }
+  },
+  {
+    "file": "student.tests/pa29/evidence189/intermediate-common-performance.json",
+    "sha256": "5c22521357a0760706a1da30e5dbc378c3bef3b1a4beb47682b152bc4bd783b6",
+    "observations": 224,
+    "launchers": 0,
+    "inputs": {
+      "memory": "ad74bc60b3e37a4b7dd42e53f3137389be2e09828b0a75837f10ea204565c2d0",
+      "floating": "567413130cbfc8765c233904ec35a74c34f7da9e417f628eb040d39fcacd6aa7",
+      "exceptions": "b7703606b21b30e2fa8a9be3fb6b552530cb0d93b99d8af96858896119f67567",
+      "pruning": "292ec6cdfc03502a7c54f695f96f374b02162e16d0d6d45575efcd801694cc36"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-189/cppgm-A",
+        "sha256": "9b97c1daef27a2d152d82fe80e4d40ec33287ce684187983de40ef36378874e4"
+      },
+      "B": {
+        "path": "/tmp/pa29-189/cppgm-final",
+        "sha256": "4b6945aeedff5fde8ee2bd43541c13e5db13b6ea8935552e5c2cdca592f03dc8"
+      }
+    },
+    "paired": {
+      "memory/compile": {
+        "median": 0.9807124003991552,
+        "range": [
+          0.7332327399460679,
+          1.034092062642956
+        ]
+      },
+      "memory/runtime": {
+        "median": 1.0108643913480324,
+        "range": [
+          0.9837055934863324,
+          1.0419995108957982
+        ]
+      },
+      "floating/compile": {
+        "median": 0.9914309142374155,
+        "range": [
+          0.8741664167345872,
+          1.0693088544688598
+        ]
+      },
+      "floating/runtime": {
+        "median": 1.0162005709152262,
+        "range": [
+          0.9897447415361337,
+          1.0572383697190013
+        ]
+      },
+      "exceptions/compile": {
+        "median": 0.9654825513386673,
+        "range": [
+          0.7136608697620204,
+          1.0518293481642575
+        ]
+      },
+      "exceptions/runtime": {
+        "median": 0.9639300857066839,
+        "range": [
+          0.592036441767309,
+          1.1347071498445969
+        ]
+      },
+      "pruning/compile": {
+        "median": 0.9398427619631785,
+        "range": [
+          0.8125057241594161,
+          1.076744983703128
+        ]
+      },
+      "pruning/runtime": {
+        "median": 0.9870207138060593,
+        "range": [
+          0.975583818502723,
+          1.0138566341511475
+        ]
+      }
+    }
+  },
+  {
+    "file": "student.tests/pa29/evidence189/intermediate-owner-performance.json",
+    "sha256": "82c89023304a44b4a0810961ab6cc3b43063fc5a8040ff4f127a748435ee6374",
+    "observations": 336,
+    "launchers": 8,
+    "inputs": {
+      "demand600": "d94712c113835a3c9f7bb0dedacad77754a9ce814601d2eeb93ea0dc14c6d4d2",
+      "demand1200": "bf37c13ea4920255a9ae45be7f23803da86646d71634e6632725633ebcd659fd",
+      "demand2400": "4dbb9ab51f16b269b2b5a546494ac9ca032329a5ec040b4610a3b435678f4d62",
+      "contexts600": "add5ac64e050238b451b9cd32e58d70f81f2d6b2748424a2ee7d30f3ef5ad4bd",
+      "contexts1200": "40a2555336f8d42644a564dbda65d33695bf0f0416cd98b552847e1d13a8cef5",
+      "contexts2400": "5497b41ae671759c545b68cf6083e5ee0a00d3924a7b36686592c7e23402c70d"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-189/cppgm-A",
+        "sha256": "9b97c1daef27a2d152d82fe80e4d40ec33287ce684187983de40ef36378874e4"
+      },
+      "B": {
+        "path": "/tmp/pa29-189/cppgm-final",
+        "sha256": "4b6945aeedff5fde8ee2bd43541c13e5db13b6ea8935552e5c2cdca592f03dc8"
+      }
+    },
+    "paired": {
+      "demand600/compile": {
+        "median": 0.8814820585005889,
+        "range": [
+          0.6848209498699863,
+          0.985878179437194
+        ]
+      },
+      "demand600/runtime": {
+        "median": 0.995941095106361,
+        "range": [
+          0.9339408882087573,
+          1.0225243363237644
+        ]
+      },
+      "demand1200/compile": {
+        "median": 1.0328522101422517,
+        "range": [
+          0.9667986214113607,
+          1.1364804322094064
+        ]
+      },
+      "demand1200/runtime": {
+        "median": 1.0155667809706246,
+        "range": [
+          0.9722877638001911,
+          1.052199649279695
+        ]
+      },
+      "demand2400/compile": {
+        "median": 0.959213039320689,
+        "range": [
+          0.797607367747199,
+          1.0821092472302885
+        ]
+      },
+      "demand2400/runtime": {
+        "median": 0.9957129491526332,
+        "range": [
+          0.8493252151803524,
+          1.1386762883512087
+        ]
+      },
+      "contexts600/compile": {
+        "median": 0.9762245715514803,
+        "range": [
+          0.8154765178657034,
+          1.4686763310856044
+        ]
+      },
+      "contexts600/runtime": {
+        "median": 1.021333362108142,
+        "range": [
+          0.9920377734398247,
+          1.1779855783446074
+        ]
+      },
+      "contexts1200/compile": {
+        "median": 1.0945797083089743,
+        "range": [
+          0.8320189661024031,
+          1.388424153431465
+        ]
+      },
+      "contexts1200/runtime": {
+        "median": 0.9980545825170581,
+        "range": [
+          0.4511469774961173,
+          1.2552938021648736
+        ]
+      },
+      "contexts2400/compile": {
+        "median": 1.0484839366462804,
+        "range": [
+          0.9155328375376717,
+          1.0551251566554771
+        ]
+      },
+      "contexts2400/runtime": {
+        "median": 1.0034519673100288,
+        "range": [
+          0.9624762154524554,
+          1.0104213856671997
+        ]
+      }
+    }
+  },
+  {
+    "file": "student.tests/pa29/evidence189/owner-performance.json",
+    "sha256": "92c2ae03396dae4bef2b5e7666e85f797847db92e14d43a0517fb9ca329648c9",
+    "observations": 336,
+    "launchers": 8,
+    "inputs": {
+      "demand600": "d94712c113835a3c9f7bb0dedacad77754a9ce814601d2eeb93ea0dc14c6d4d2",
+      "demand1200": "bf37c13ea4920255a9ae45be7f23803da86646d71634e6632725633ebcd659fd",
+      "demand2400": "4dbb9ab51f16b269b2b5a546494ac9ca032329a5ec040b4610a3b435678f4d62",
+      "contexts600": "add5ac64e050238b451b9cd32e58d70f81f2d6b2748424a2ee7d30f3ef5ad4bd",
+      "contexts1200": "40a2555336f8d42644a564dbda65d33695bf0f0416cd98b552847e1d13a8cef5",
+      "contexts2400": "5497b41ae671759c545b68cf6083e5ee0a00d3924a7b36686592c7e23402c70d"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-189/cppgm-A",
+        "sha256": "9b97c1daef27a2d152d82fe80e4d40ec33287ce684187983de40ef36378874e4"
+      },
+      "B": {
+        "path": "/tmp/pa29-189/cppgm-handoff",
+        "sha256": "9d36f0bbcb3ddccc57853370d8003f6103eadbfcd0fe50a171994fccab950294"
+      }
+    },
+    "paired": {
+      "demand600/compile": {
+        "median": 1.0300544832166745,
+        "range": [
+          0.8913205487014305,
+          1.0569121994921602
+        ]
+      },
+      "demand600/runtime": {
+        "median": 0.9863629736407302,
+        "range": [
+          0.95238097895764,
+          1.2606907245802945
+        ]
+      },
+      "demand1200/compile": {
+        "median": 1.011873559455934,
+        "range": [
+          0.9387321922731833,
+          1.1339363528067379
+        ]
+      },
+      "demand1200/runtime": {
+        "median": 1.0000944281255084,
+        "range": [
+          0.9736731420018866,
+          1.0027094697731045
+        ]
+      },
+      "demand2400/compile": {
+        "median": 1.0225945873767568,
+        "range": [
+          0.9970092781232552,
+          1.085510501427655
+        ]
+      },
+      "demand2400/runtime": {
+        "median": 0.999048388402298,
+        "range": [
+          0.9982547995861983,
+          1.0185654053936375
+        ]
+      },
+      "contexts600/compile": {
+        "median": 1.0149073199826582,
+        "range": [
+          1.0061725912658213,
+          1.0331765940558029
+        ]
+      },
+      "contexts600/runtime": {
+        "median": 1.0010904582115334,
+        "range": [
+          0.9959794891529148,
+          1.0292855213294339
+        ]
+      },
+      "contexts1200/compile": {
+        "median": 1.0280378855375578,
+        "range": [
+          1.009377670259388,
+          3.128533774599059
+        ]
+      },
+      "contexts1200/runtime": {
+        "median": 0.9969400435866504,
+        "range": [
+          0.9911228740270216,
+          1.003373856873365
+        ]
+      },
+      "contexts2400/compile": {
+        "median": 1.038948703641629,
+        "range": [
+          0.6469000607653285,
+          1.1415275623064913
+        ]
+      },
+      "contexts2400/runtime": {
+        "median": 0.9904502693231672,
+        "range": [
+          0.890979013265813,
+          1.0218481042185403
+        ]
+      }
+    }
+  },
+  {
+    "file": "student.tests/pa29/evidence189/preliminary-common-performance.json",
+    "sha256": "9dc9599193a603c6e30397672c943901c226b71286e8551cb7bad79ea0b04200",
+    "observations": 224,
+    "launchers": 0,
+    "inputs": {
+      "memory": "ad74bc60b3e37a4b7dd42e53f3137389be2e09828b0a75837f10ea204565c2d0",
+      "floating": "567413130cbfc8765c233904ec35a74c34f7da9e417f628eb040d39fcacd6aa7",
+      "exceptions": "b7703606b21b30e2fa8a9be3fb6b552530cb0d93b99d8af96858896119f67567",
+      "pruning": "292ec6cdfc03502a7c54f695f96f374b02162e16d0d6d45575efcd801694cc36"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-189/cppgm-A",
+        "sha256": "9b97c1daef27a2d152d82fe80e4d40ec33287ce684187983de40ef36378874e4"
+      },
+      "B": {
+        "path": "/tmp/pa29-189/cppgm-B",
+        "sha256": "e6aa56e127c5aa2d87c8bd89d8e557c5a29ccbb54be4db0ef62951220ccdbde9"
+      }
+    },
+    "paired": {
+      "memory/compile": {
+        "median": 0.994411433594778,
+        "range": [
+          0.4705958483586653,
+          1.0116500541901026
+        ]
+      },
+      "memory/runtime": {
+        "median": 0.9949089880229811,
+        "range": [
+          0.9837943955236288,
+          1.0021800075210836
+        ]
+      },
+      "floating/compile": {
+        "median": 0.9974365690425036,
+        "range": [
+          0.8883975057071473,
+          1.4183539231995879
+        ]
+      },
+      "floating/runtime": {
+        "median": 0.9991158874817416,
+        "range": [
+          0.9947857673140628,
+          1.006212138054211
+        ]
+      },
+      "exceptions/compile": {
+        "median": 0.9932250337816078,
+        "range": [
+          0.9913019495825482,
+          1.7255688607414075
+        ]
+      },
+      "exceptions/runtime": {
+        "median": 0.9982405091968871,
+        "range": [
+          0.9894926239802916,
+          1.0552139913179077
+        ]
+      },
+      "pruning/compile": {
+        "median": 1.0016859860439717,
+        "range": [
+          0.9882674136866813,
+          1.350987998712034
+        ]
+      },
+      "pruning/runtime": {
+        "median": 1.0013963225558973,
+        "range": [
+          0.9939664218993856,
+          1.0049685373949504
+        ]
+      }
+    }
+  },
+  {
+    "file": "student.tests/pa29/evidence189/preliminary-owner-performance.json",
+    "sha256": "27a9d855604e7ef8a219e4386b81ff7bd1fce63a3697219a2c18bc5de27fe76c",
+    "observations": 168,
+    "launchers": 8,
+    "inputs": {
+      "demand600": "d94712c113835a3c9f7bb0dedacad77754a9ce814601d2eeb93ea0dc14c6d4d2",
+      "demand1200": "bf37c13ea4920255a9ae45be7f23803da86646d71634e6632725633ebcd659fd",
+      "demand2400": "4dbb9ab51f16b269b2b5a546494ac9ca032329a5ec040b4610a3b435678f4d62"
+    },
+    "binaries": {
+      "A": {
+        "path": "/tmp/pa29-189/cppgm-A",
+        "sha256": "9b97c1daef27a2d152d82fe80e4d40ec33287ce684187983de40ef36378874e4"
+      },
+      "B": {
+        "path": "/tmp/pa29-189/cppgm-B",
+        "sha256": "e6aa56e127c5aa2d87c8bd89d8e557c5a29ccbb54be4db0ef62951220ccdbde9"
+      }
+    },
+    "paired": {
+      "demand600/compile": {
+        "median": 1.0125039122711779,
+        "range": [
+          0.8912874993790898,
+          1.032371490812541
+        ]
+      },
+      "demand600/runtime": {
+        "median": 0.9904323633772995,
+        "range": [
+          0.9675189422330033,
+          1.000314160004265
+        ]
+      },
+      "demand1200/compile": {
+        "median": 1.0086436878604395,
+        "range": [
+          0.9942687420715143,
+          1.2424309478373003
+        ]
+      },
+      "demand1200/runtime": {
+        "median": 1.0011722165855477,
+        "range": [
+          0.9941723359230531,
+          1.019765730891414
+        ]
+      },
+      "demand2400/compile": {
+        "median": 0.998144908868186,
+        "range": [
+          0.9886072240641056,
+          1.0921697910806625
+        ]
+      },
+      "demand2400/runtime": {
+        "median": 0.9859803361029635,
+        "range": [
+          0.764236317441918,
+          0.9994445311153871
+        ]
+      }
+    }
+  }
+]
