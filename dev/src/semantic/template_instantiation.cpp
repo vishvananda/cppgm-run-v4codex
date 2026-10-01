@@ -76,7 +76,7 @@ void Analyzer::instantiate_parameters(NodeId d, std::uint32_t context, std::uint
         if (!occurrence) throw std::logic_error("signature parameter has no occurrence identity");
         auto type = facts[p].type;
         check_substituted_type_access(p,frame);
-        auto params = child(ast[ast[p].first].next,syntax::Kind::ParameterPack) ? expansion_parameters(type) : 0;
+        auto params = declarator_pack(ast[ast[p].first].next) ? expansion_parameters(type) : 0;
         // The signature distinguishes an actual pack from the comma-optional
         // C ellipsis after an unnamed ordinary parameter. Preserve that rule
         // when publishing its body/declaration occurrences as well.

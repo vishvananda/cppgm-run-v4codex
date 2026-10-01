@@ -279,13 +279,13 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                 params.push_back(parameter(p, parameter_scope));
                 if (template_type_probe && !params.back()) return 0;
                 NodeId d = ast[ast[p].first].next;
-                if (definitions && child(d,Kind::ParameterPack)) {
+                if (definitions && declarator_pack(d)) {
                     // An unnamed nondependent parameter followed by ... is
                     // the comma-optional C varargs form, not a pack expansion.
                     if (!decl_name(d) && !argument_packs[expansion_parameters(params.back())].count) variadic = true;
                     else params.back() = types.compound(TypeKind::PackExpansion,0,params.back());
                 }
-                else if (child(d,Kind::ParameterPack)) variadic = true;
+                else if (declarator_pack(d)) variadic = true;
                 auto id = terminal(decl_name(d));
                 if (parameter_scope != s && id) {
                     auto e = make_entity(EntityKind::Parameter,parameter_scope,id,p);

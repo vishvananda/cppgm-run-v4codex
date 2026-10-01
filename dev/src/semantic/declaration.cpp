@@ -539,7 +539,7 @@ void Analyzer::function_body(const Body& body)
         IdentifierId name = terminal(decl_name(ast[ast[p].first].next));
         EntityId e = make_entity(EntityKind::Parameter, fs, name, p);
         entities[e].type = parameter_body_type(t);
-        if (!expanded_parameters || !child(ast[ast[p].first].next,Kind::ParameterPack)) bind(fs,name,e);
+        if (!expanded_parameters || !declarator_pack(ast[ast[p].first].next)) bind(fs,name,e);
         record(fs, e, p, t, EntityKind::Parameter);
         if (calls && class_value(entities[e].type)) register_destruction(e);
     }

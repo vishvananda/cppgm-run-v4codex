@@ -52,7 +52,7 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
         auto name = terminal(decl_name(decl));
         auto e = make_entity(EntityKind::Parameter,scope,name,p);
         entities[e].template_pattern = true;
-        entities[e].parameter_pack = child(decl,Kind::ParameterPack) != 0;
+        entities[e].parameter_pack = declarator_pack(decl) != 0;
         entities[e].type = type ? parameter_body_type(type) : 0;
         template_pattern_entities.put(e,!type || dependent_type(type) ? 2 : 1);
         signature_parameters.put(e,++ordinal); bind(scope,name,e);
@@ -128,7 +128,7 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source)
     bool seen = false;
     for (NodeId p = ast[params].first; p && i < f.count; p = ast[p].next, ++i) {
         NodeId a = child(p, Kind::DefaultArgument);
-        bool pack = child(ast[ast[p].first].next,Kind::ParameterPack) != 0;
+        bool pack = declarator_pack(ast[ast[p].first].next) != 0;
         unsigned index = entities[e].defaults + i;
         if (a) {
             if (pack) throw std::runtime_error("function parameter pack cannot have a default argument");

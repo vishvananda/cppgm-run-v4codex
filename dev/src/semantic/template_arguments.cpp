@@ -141,7 +141,7 @@ ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
         }
         auto type = types.signature(type_id(n,scope));
         auto d = ast[ast[n].first].next;
-        return child(d,Kind::ParameterPack) ? types.compound(TypeKind::PackExpansion,0,type) : type;
+        return declarator_pack(d) ? types.compound(TypeKind::PackExpansion,0,type) : type;
     }
     // A dependent class alias may not have been recognizable to the parser.
     if (ast[n].kind == Kind::IdExpression) {

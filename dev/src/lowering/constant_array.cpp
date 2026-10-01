@@ -33,6 +33,7 @@ void Procedural::initialize_constant_array(EntityId e, Value location, semantic:
     semantic::Analyzer::EvaluationScope mode(sem,sem.required_constant_object(e));
     SymbolId source(constant_arrays.get(e));
     auto bytes = sem.object_size(target), alignment = sem.object_alignment(target);
+    if (!bytes) return; // No representation copy and no backing constant object.
     if (!source.index) {
         lowir_model::Range data; data.begin = p.data.size();
         if (sem.class_value(target)) global_constant_fields(sem.constant_value_data(value.valid ? value : sem.entities[e].constant),target);

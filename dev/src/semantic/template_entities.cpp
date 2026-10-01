@@ -43,7 +43,7 @@ void Analyzer::declare_template_parameters(NodeId params, ScopeId ts, std::uint3
             entities[e].template_parameter = true;
             bool pack = child(p,Kind::ParameterPack) != 0;
             for (auto decl = d; decl; decl = ast[child(decl,Kind::NestedDeclarator)].first)
-                pack |= child(decl,Kind::ParameterPack) != 0;
+                pack |= declarator_pack(decl) != 0;
             entities[e].parameter_pack = pack;
             entities[e].type = types.unqualified(type);
             entities[e].initializer = child(p,Kind::DefaultTemplateArgument);

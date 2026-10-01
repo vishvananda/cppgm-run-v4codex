@@ -9,14 +9,14 @@ void Analyzer::bind_function_packs(NodeId parameters, ScopeId scope)
     Index lists;
     std::vector<std::vector<ArgumentId>> groups;
     for (auto p = ast[parameters].first; p; p = ast[p].next) {
-        if (!child(ast[ast[p].first].next,syntax::Kind::ParameterPack)) continue;
+        if (!declarator_pack(ast[ast[p].first].next)) continue;
         auto source = ast.nodes.occurrences[p].source;
         auto index = lists.get(source);
         if (!index) { groups.emplace_back(); index = groups.size(); lists.put(source,index); }
         groups[index-1].push_back(facts[p].entity);
     }
     for (auto p = ast.nodes[parameters].first; p; p = ast.nodes[p].next) {
-        if (!child(ast[ast[p].first].next,syntax::Kind::ParameterPack)) continue;
+        if (!declarator_pack(ast[ast[p].first].next)) continue;
         auto source = ast.nodes.occurrences[p].source;
         auto pattern = template_declaration_sources.get(source);
         auto name = terminal(decl_name(ast[ast[p].first].next));

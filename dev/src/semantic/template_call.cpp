@@ -403,7 +403,7 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     }
     TypeId type = substitute_type(entities[pattern].type, bindings, cache,frame);
     auto returned = raw ? substitute_type(types[raw].child,bindings,cache,frame) : 0;
-    if (!type || (raw && !returned)) {
+    if (!type || (raw && !returned) || !valid_signature_extents(entities[pattern].type,frame)) {
         specializations[index].declaration = FactState::Failure;
         if (incomplete_substitution) retain_query_prerequisite(incomplete_specializations,index);
         return 0;

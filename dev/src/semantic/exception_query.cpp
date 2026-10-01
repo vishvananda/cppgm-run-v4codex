@@ -42,7 +42,7 @@ QueryId Analyzer::template_exception_query(EntityId function, std::uint32_t id)
         if (!type) throw std::logic_error("exception parameter lacks its declared type");
         auto e = make_entity(EntityKind::Parameter,scope,name,p);
         entities[e].type = parameter_body_type(type);
-        entities[e].parameter_pack = child(decl,syntax::Kind::ParameterPack) != 0;
+        entities[e].parameter_pack = declarator_pack(decl) != 0;
         signature_parameters.put(e,++ordinal); bind(scope,name,e);
     }
     auto query = expression_query(fact.expression,scope);

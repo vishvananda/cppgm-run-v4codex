@@ -324,7 +324,7 @@ void Analyzer::bind_template_body(const Body& body)
         auto declared_type = facts[p].type;
         if (!declared_type) declared_type = bind_template_type(specs,decl,fs);
         auto e = pattern_declaration(EntityKind::Parameter,fs,terminal(decl_name(decl)),p,dependent);
-        entities[e].parameter_pack = child(decl,Kind::ParameterPack) != 0;
+        entities[e].parameter_pack = declarator_pack(decl) != 0;
         // Type queries can refer to an earlier parameter while the signature
         // is being instantiated, before runtime parameter objects exist.
         signature_parameters.put(e,++ordinal);

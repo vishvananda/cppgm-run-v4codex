@@ -1,6 +1,46 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+bool Analyzer::valid_signature_extents(TypeId signature, std::uint32_t frame)
+{
+    // GNU declarations admit [0], but [temp.deduct] still rejects a zero
+    // bound formed in a function template's immediate substitution context.
+    // This is a signature fact, not a failure of the canonical array type:
+    // the same substituted type remains valid in a class or function body.
+    if (!host_abi || !frame || !dependent_type(signature)) return true;
+    std::vector<TypeId> work(1,signature);
+    Index seen, bindings, cache;
+    for (std::size_t j = 0; j < work.size(); ++j) {
+        auto id = work[j];
+        if (!dependent_type(id) || seen.get(id)) continue;
+        seen.put(id,1);
+        auto type = types[id];
+        if (type.kind == TypeKind::DependentArray || (type.kind == TypeKind::Array && !type.unknown_bound && !type.bound)) {
+            auto parameters = argument_packs[expansion_parameters(id)];
+            std::vector<ArgumentId> packs;
+            for (unsigned k = 0; k < parameters.count; ++k) {
+                auto parameter = argument_types[parameters.offset+k];
+                if (argument_pack(substitution_argument(frame,parameter))) packs.push_back(parameter);
+            }
+            auto pack = packs.empty() ? 0 : intern_arguments(packs);
+            auto count = pack ? expansion_count(pack,bindings,frame) : 1;
+            if (count == UnequalPacks) return false;
+            for (int lane = 0; lane < count; ++lane) {
+                auto environment = pack ? expansion_frame(frame,pack,lane) : frame;
+                auto result = substitute_type(id,bindings,cache,environment);
+                if (!result) return false;
+                if (types[result].kind == TypeKind::Array && !types[result].unknown_bound && !types[result].bound) return false;
+            }
+        }
+        // Named class members and dependent lookup results are outside this
+        // immediate context. Alias applications retain their substituted shape.
+        if (type.child) work.push_back(type.child);
+        if (type.kind == TypeKind::Function)
+            for (unsigned k = 0; k < type.count; ++k) work.push_back(types.parameters[type.offset+k]);
+        if (type.kind == TypeKind::PackExpansion && !value_argument(type.bound)) work.push_back(type.bound);
+    }
+    return true;
+}
 void Analyzer::retain_type_access(NodeId part, TypeId qualifier, ScopeId scope, IdentifierId name)
 {
     auto occurrence = ast.nodes.occurrences[part];

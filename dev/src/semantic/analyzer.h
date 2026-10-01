@@ -1155,6 +1155,7 @@ private:
     bool operator_expression(NodeId n, ScopeId s, ETokenType op, std::vector<NodeId> args, Expression& result, bool recipe = false);
     NodeId decl_name(NodeId d) const;
     NodeId child(NodeId n, syntax::Kind k) const;
+    NodeId declarator_pack(NodeId n) const;
     bool spec_has(NodeId n, ETokenType op) const;
     bool encloses(ScopeId outer, ScopeId inner) const;
     ScopeId make_scope(ScopeKind k, ScopeId parent, IdentifierId name = 0, EntityId e = 0, bool visible = true);
@@ -1264,6 +1265,7 @@ private:
     bool type_access_subtree(NodeId node);
     void check_substituted_type_access(NodeId node, std::uint32_t frame);
     bool substituted_type_access(NodeId node, std::uint32_t frame);
+    bool valid_signature_extents(TypeId signature, std::uint32_t frame);
     Index template_type_access_sources, template_type_access_subtrees, template_type_access_states;
     std::vector<TemplateTypeAccess> template_type_accesses = std::vector<TemplateTypeAccess>(1);
     std::size_t template_type_access_work = 0;

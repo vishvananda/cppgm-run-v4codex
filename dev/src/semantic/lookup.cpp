@@ -338,6 +338,18 @@ NodeId Analyzer::child(NodeId n, Kind k) const
     for (NodeId c = ast[n].first; c; c = ast[c].next) if (ast[c].kind == k) return c;
     return 0;
 }
+NodeId Analyzer::declarator_pack(NodeId n) const
+{
+    // Parenthesized pointer/reference declarators retain the ellipsis beside
+    // their identifier. Function parameter lists inside the declarator own
+    // separate packs and must not be searched here.
+    while (n) {
+        if (auto pack = child(n,Kind::ParameterPack)) return pack;
+        auto nested = child(n,Kind::NestedDeclarator);
+        n = ast[nested].first;
+    }
+    return 0;
+}
 bool Analyzer::spec_has(NodeId n, ETokenType op) const
 {
     for (NodeId c = ast[n].first; c; c = ast[c].next) if (ast[c].op == op) return true;

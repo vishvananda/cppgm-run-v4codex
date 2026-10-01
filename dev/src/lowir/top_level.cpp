@@ -38,7 +38,7 @@ void Reader::global(bool declaration)
             g.structured = true;
             while (!at("}")) { p_.data.push_back(data_item(Type(), true)); ++g.data.count; }
             expect("}");
-            require(g.data.count != 0, "empty structured global");
+            require(g.data.count != 0 || (typed && g.type.kind() == Type::Object && !g.type.bytes()), "empty structured global");
         } else {
             require(typed && g.type.scalar(), "invalid scalar global");
             p_.data.push_back(data_item(g.type, false));
