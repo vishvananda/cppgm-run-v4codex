@@ -249,7 +249,7 @@ void Analyzer::check_template_initialization(NodeId n, TypeId target, ScopeId s,
         }
         auto value = template_statement_value(child,s);
         if (!value.type && value.form != ExpressionForm::Overload) return;
-        auto c = class_value(value.type) ? conversion_function_value(value,target,true) : conversion_value(value,target);
+        auto c = direct_initialization_conversion(value,target,expressions[child].ready ? child : 0);
         check_fixed_conversion(value,expressions[child].ready ? child : 0,c,s);
         remember_initialization(child,c); return;
     }

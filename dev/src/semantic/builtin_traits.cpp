@@ -91,7 +91,8 @@ TypeQueryFact Analyzer::query_builtin_trait(QueryId id, const TypeQuery& query)
     auto trait = BuiltinTrait(query.value);
     auto args = argument_packs[query.arguments];
     bool convertible = trait == BuiltinTrait::Convertible || trait == BuiltinTrait::NothrowConvertible;
-    bool binary = convertible || trait == BuiltinTrait::Same || trait == BuiltinTrait::BaseOf ||
+    bool reference_temporary = trait >= BuiltinTrait::ReferenceBindsTemporary && trait <= BuiltinTrait::ReferenceConvertsTemporary;
+    bool binary = convertible || reference_temporary || trait == BuiltinTrait::Same || trait == BuiltinTrait::BaseOf ||
         trait == BuiltinTrait::Assignable || trait == BuiltinTrait::NothrowAssignable || trait == BuiltinTrait::TriviallyAssignable;
     bool construct = trait == BuiltinTrait::Constructible || trait == BuiltinTrait::NothrowConstructible || trait == BuiltinTrait::TriviallyConstructible;
     if (!args.count || (binary ? args.count != 2 : !construct && args.count != 1))
@@ -120,7 +121,10 @@ TypeQueryFact Analyzer::query_builtin_trait(QueryId id, const TypeQuery& query)
         result.expression.type = transformed; return result;
     }
     bool value = false;
-    if (trait == BuiltinTrait::Same) value = t == argument_types[args.offset+1];
+    if (reference_temporary) {
+        TraitProbe probe(immediate_query_probe,explicit_instantiation_naming,access_override,global);
+        value = reference_temporary_property(unsigned(trait),t,argument_types[args.offset+1]);
+    } else if (trait == BuiltinTrait::Same) value = t == argument_types[args.offset+1];
     else if (trait == BuiltinTrait::BaseOf) {
         auto u = argument_types[args.offset+1];
         bool classes = class_value(t) && class_value(u) && entities[types[t].entity].key != KW_UNION && entities[types[u].entity].key != KW_UNION;
@@ -184,9 +188,7 @@ TypeQueryFact Analyzer::query_builtin_trait(QueryId id, const TypeQuery& query)
                 value = values.empty() && !ref;
                 if (values.size() == 1) {
                     auto x = values[0];
-                    auto c = standard_conversion(x,t);
-                    if (!c.valid() && class_value(x.type)) c = conversion_function_value(x,t,true,ref);
-                    if (!c.valid()) c = conversion_value(x,t);
+                    auto c = direct_initialization_conversion(x,t);
                     value = valid_fixed_conversion(x,0,c,global);
                     if (value && nothrow) value = conversion_nonthrowing(c);
                     if (value && trivial) value = c.kind == Conversion::Kind::Standard;
@@ -222,6 +224,8 @@ TypeQueryFact Analyzer::query_builtin_trait(QueryId id, const TypeQuery& query)
 bool Analyzer::builtin_type_property(unsigned operation, TypeId t)
 {
     auto trait = BuiltinTrait(operation);
+    if (trait >= BuiltinTrait::TrivialConstructor && trait <= BuiltinTrait::NothrowAssign)
+        return legacy_type_property(operation,t);
     auto type = types[t];
     bool named = type.kind == TypeKind::Named;
     bool enumeration = named && entities[type.entity].key == KW_ENUM;

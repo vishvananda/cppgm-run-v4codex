@@ -48,7 +48,7 @@ void Analyzer::resolve_condition(NodeId n, ScopeId s, bool is_switch)
     if (retained) ++statement_conversion_uses;
     if (class_value(value_type(t))) {
         Conversion conversion = retained ? copy_conversion_recipe(conversions[retained]) :
-            conversion_function(facts[n].entity ? n : c,target,!is_switch,false,facts[n].entity);
+            conversion_function(facts[n].entity ? n : c,target,!is_switch,ReferenceBinding::Any,facts[n].entity);
         if (retained && facts[n].entity && conversion.kind == Conversion::Kind::User)
             user_conversions[conversion.materialization].object_entity = facts[n].entity;
         Expression result; result.type = target; result.ready = true;

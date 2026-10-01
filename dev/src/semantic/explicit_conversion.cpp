@@ -43,9 +43,8 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
         // [expr.static.cast]/2-3 binds a related glvalue directly. In
         // particular an lvalue-to-rvalue-reference cast is not an implicit
         // reference conversion and must not select a user conversion first.
-        if (!selected.valid() && class_value(value.type) && !related)
-            selected = conversion_function_value(value,to,true);
-        if (ref && !related && !selected.valid()) selected = conversion_value(value,to,true,operand);
+        if (!selected.valid() && !related)
+            selected = direct_initialization_conversion(value,to,operand);
         if (selected.valid() && (selected.kind == Conversion::Kind::User || (ref && (!related || bit_field)))) {
             if (bit_field && ref) selected.temporary = true;
             return selected;

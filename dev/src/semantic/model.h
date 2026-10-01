@@ -466,6 +466,7 @@ struct ArrowStep {
     unsigned adjustment = 0, virtual_slot = 0;
 };
 struct ArrowChain { std::uint32_t first = 0, count = 0; TypeId type = 0; };
+enum class ReferenceBinding : unsigned char { Any, Lvalue, Rvalue };
 struct Conversion {
     TypeId target = 0;
     std::uint32_t adjustment = 0; // Canonical BaseAdjustment chain; zero is the identity path.

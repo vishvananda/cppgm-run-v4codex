@@ -354,7 +354,7 @@ void Analyzer::require_conversion(NodeId n, TypeId target, bool direct)
     if (retained && conversions[retained].target == target) ++statement_conversion_uses;
     else retained = retained_initialization(n,target);
     Conversion c = retained && conversions[retained].target == target ? copy_conversion_recipe(conversions[retained]) :
-        direct && class_value(expressions[n].type) ? conversion_function(n,target,true) : conversion(n, target);
+        direct ? direct_initialization_conversion(expressions[n],target,n) : conversion(n, target);
     if (!c.valid()) throw std::runtime_error("invalid implicit conversion");
     apply_conversion(n, c);
     expressions.incoming(n,conversions.size());

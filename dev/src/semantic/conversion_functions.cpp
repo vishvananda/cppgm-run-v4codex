@@ -107,13 +107,13 @@ EntityId Analyzer::resolve_conversion_name(NodeId name, ScopeId use)
     } else target = type_id(type,use);
     return conversion_lookup(owner,target);
 }
-Conversion Analyzer::conversion_function(NodeId n, TypeId to, bool explicit_allowed, bool direct_reference, EntityId object_entity)
+Conversion Analyzer::conversion_function(NodeId n, TypeId to, bool explicit_allowed, ReferenceBinding binding, EntityId object_entity)
 {
     Expression source = expressions[n];
     if (object_entity) { source.type = value_type(entities[object_entity].type); source.category = ValueCategory::Lvalue; }
-    return conversion_function_value(source,to,explicit_allowed,direct_reference,object_entity);
+    return conversion_function_value(source,to,explicit_allowed,binding,object_entity);
 }
-Conversion Analyzer::conversion_function_value(Expression source, TypeId to, bool explicit_allowed, bool direct_reference, EntityId object_entity)
+Conversion Analyzer::conversion_function_value(Expression source, TypeId to, bool explicit_allowed, ReferenceBinding binding, EntityId object_entity)
 {
     Conversion result; result.target = to;
     struct Candidate { EntityId function; Conversion object, second; };
@@ -128,7 +128,9 @@ Conversion Analyzer::conversion_function_value(Expression source, TypeId to, boo
         if (templated) {
             auto declared = types[entities[e].type].child;
             bool returns_reference = types[declared].kind == TypeKind::LRef || types[declared].kind == TypeKind::RRef;
-            if (direct_reference && !returns_reference) continue;
+            if (binding == ReferenceBinding::Lvalue && types[declared].kind != TypeKind::LRef) continue;
+            if (binding == ReferenceBinding::Rvalue && types[declared].kind == TypeKind::LRef &&
+                types[types[declared].child].kind != TypeKind::Function) continue;
             // A value result initializes the referred-to object. Its required
             // type is unqualified; the final sequence records the binding's
             // cv/category. Reference-return deduction retains that reference.
@@ -143,7 +145,13 @@ Conversion Analyzer::conversion_function_value(Expression source, TypeId to, boo
         value.category = types[declared].kind == TypeKind::LRef ? ValueCategory::Lvalue :
             types[declared].kind == TypeKind::RRef ? ValueCategory::Xvalue : ValueCategory::Prvalue;
         Conversion second = standard_conversion(value,to);
-        if (!second.valid() || (direct_reference && (value.category == ValueCategory::Prvalue || second.temporary))) continue;
+        if (!second.valid()) continue;
+        if (binding != ReferenceBinding::Any) {
+            if (second.temporary) continue;
+            if (binding == ReferenceBinding::Lvalue && value.category != ValueCategory::Lvalue) continue;
+            if (binding == ReferenceBinding::Rvalue && value.category == ValueCategory::Lvalue &&
+                types[value.type].kind != TypeKind::Function) continue;
+        }
         if ((templated || m.explicit_constructor) && second.rank != 0) continue;
         if (second.kind == Conversion::Kind::Construction && value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(to)) {
             // The call result initializes this complete object directly.
@@ -199,14 +207,40 @@ Conversion Analyzer::conversion_value(Expression source, TypeId to, bool user, N
     Conversion result = standard_conversion(source,to,n);
     if (result.valid() || !user) return result;
     bool ref = types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef;
-    if (ref) {
-        // A failed binding to a reference-related object cannot be repaired by
-        // copying that same object into a temporary ([dcl.init.ref]).
-        auto target = types[to].child;
-        if (types.unqualified(source.type) == types.unqualified(target) || derived_from(source.type,target)) return result;
-        auto direct = conversion_function_value(source,to,false,true);
-        if (direct.valid()) return direct;
+    if (ref) return reference_user_conversion(source,to,false,n);
+    return user_conversion_value(source,to,n);
+}
+Conversion Analyzer::direct_initialization_conversion(Expression source, TypeId to, NodeId n)
+{
+    auto c = standard_conversion(source,to,n);
+    if (c.valid()) return c;
+    if (types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef)
+        return reference_user_conversion(source,to,true,n);
+    if (class_value(source.type)) c = conversion_function_value(source,to,true);
+    return c.valid() || c.ambiguous ? c : conversion_value(source,to,true,n);
+}
+Conversion Analyzer::reference_user_conversion(Expression source, TypeId to, bool direct, NodeId n)
+{
+    Conversion result; result.target = to;
+    auto target = types[to].child;
+    // [dcl.init.ref]: a related glvalue cannot be copied to repair a failed
+    // category/cv binding. The caller already tried the standard conversion.
+    if (types.unqualified(source.type) == types.unqualified(target) || derived_from(source.type,target)) return result;
+    if (types[to].kind == TypeKind::LRef) {
+        auto c = conversion_function_value(source,to,direct,ReferenceBinding::Lvalue);
+        if (c.valid() || c.ambiguous) return c;
+        if (types[target].cv != 1) return result;
     }
+    auto c = conversion_function_value(source,to,direct,ReferenceBinding::Rvalue);
+    if (c.valid() || c.ambiguous) return c;
+    // Only the indirect binding phase permits value-changing conversions.
+    // Its intermediate object is copy-initialized even for T& r(source).
+    return user_conversion_value(source,to,n);
+}
+Conversion Analyzer::user_conversion_value(Expression source, TypeId to, NodeId n)
+{
+    Conversion result; result.target = to;
+    bool ref = types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef;
     Conversion function = conversion_function_value(source,to);
     Conversion constructor; constructor.target = to;
     TypeId target = value_type(to);

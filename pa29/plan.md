@@ -1,6 +1,6 @@
-# PA29 compact plan after checkpoint audit158
+# PA29 compact plan — implementation159
 
-Target: **PA29 full-stage**. Phase: **checkpointAudit complete; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `1ab3499d7046daf5c298d958a8770b413edb3615`.
 Audit entry: `764305061a4d88a8bb9088216ac31c2ab8395a08`, clean, **316/403**.
@@ -68,3 +68,30 @@ small publication/access/metadata fixes and repeated plan/evidence handoffs
 fragmented review unnecessarily. Close each ownership path before handing it off.
 Run `make test-pa29` and the root through report; full PA29 acceptance still
 requires all remaining failures to be resolved. This audit does not advance stages.
+
+## Active implementation159
+
+Entry HEAD `044d9627e7ed4f466426e1f0470c58646dc9b592`, clean, 317/403.
+Previous goal turn: progress (audit158 changed authoritative code, evidence and
+required-suite result). Stage/review markers above remain unchanged.
+
+Owner group: legacy construction/copy/assignment and reference-temporary traits.
+The shared builtin registry feeds probes and parsing; canonical type queries
+feed existing special-member/exception and conversion recipes; constants flow
+through template substitution and typed lowering. No body demand merely to
+answer a trait. Inspect required member families/selected conversion only, cache
+by operation and canonical operands, TU lifetime; no whole-program search.
+Validate dependent/nondependent, cv/ref, access/deletion, exception and
+materialization cases, runtime constants, LowIR and telemetry; extend related
+trait failures as the same facts support them. Freeze entry/final binaries;
+measure common A/A and ABBA compile/RSS plus runtime/text, and new-demand
+scaling. Optional transform work/growth budget remains zero.
+
+The forward-declared std trait fixture remains an independent contract question
+recorded by audit158, not a reason to inject library-name semantics. All other
+groups above remain unfinished implementation. This is not a handoff boundary.
+
+First increment: shared registry plus six legacy member traits, three lifetime
+traits and ordered direct-reference conversion selection. Course 321/403 (four
+resolved, no new failures); explicit controls 41/41. Before handoff, close the
+identified selected-subobject triviality edge and rerun all required checks.

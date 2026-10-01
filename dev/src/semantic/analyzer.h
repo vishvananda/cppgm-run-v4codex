@@ -32,6 +32,8 @@ public:
     std::vector<OffsetofStep> offsetof_layouts = std::vector<OffsetofStep>(1);
     TypeQueryFact query_builtin_trait(QueryId id, const TypeQuery& query);
     bool builtin_type_property(unsigned trait, TypeId type);
+    bool legacy_type_property(unsigned trait, TypeId type);
+    bool reference_temporary_property(unsigned trait, TypeId target, TypeId source);
     Index builtin_trait_values, builtin_type_properties;
     Index assembler_names; // EntityId -> interned explicit object name.
     Index section_names, weak_symbols; // EntityId -> immutable object attributes.
@@ -1306,8 +1308,11 @@ private:
     Conversion conversion(NodeId n, TypeId target, bool user = true);
     Conversion conversion_value(Expression source, TypeId target, bool user = true, NodeId node = 0);
     Conversion standard_conversion(Expression source, TypeId target, NodeId node = 0);
-    Conversion conversion_function(NodeId n, TypeId target, bool explicit_allowed = false, bool direct_reference = false, EntityId object = 0);
-    Conversion conversion_function_value(Expression source, TypeId target, bool explicit_allowed = false, bool direct_reference = false, EntityId object = 0);
+    Conversion conversion_function(NodeId n, TypeId target, bool explicit_allowed = false, ReferenceBinding binding = ReferenceBinding::Any, EntityId object = 0);
+    Conversion direct_initialization_conversion(Expression source, TypeId target, NodeId node = 0);
+    Conversion reference_user_conversion(Expression source, TypeId target, bool direct, NodeId node);
+    Conversion user_conversion_value(Expression source, TypeId target, NodeId node);
+    Conversion conversion_function_value(Expression source, TypeId target, bool explicit_allowed = false, ReferenceBinding binding = ReferenceBinding::Any, EntityId object = 0);
     void prepare_user_conversion(NodeId n, Conversion& conversion, ConversionUse use = ConversionUse::Temporary);
     std::vector<EntityId> conversion_candidates(TypeId source);
     EntityId conversion_lookup(ScopeId owner, TypeId target, bool deduce = true);
