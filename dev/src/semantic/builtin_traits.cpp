@@ -77,6 +77,11 @@ QueryId Analyzer::type_operation_query(NodeId n, ScopeId s)
         std::vector<ArgumentId> args;
         for (auto a = first; a; a = ast[a].next)
             append_template_argument(a,s,template_argument_node(a,s),args);
+        // The builtin alias's index has a size_t parameter type. Retain that
+        // converted identity even when its type pack remains dependent, so
+        // substitution and ABI consumers see the same template argument.
+        if (BuiltinTrait(node.flags) == BuiltinTrait::TypePackElement && !args.empty())
+            if (auto index = convert_argument(args[0],types.fundamental(FT_UNSIGNED_LONG_INT))) args[0] = index;
         q.arguments = intern_arguments(args);
     } else {
         q.kind = node.op == KW_TYPEID ? QueryKind::Typeid : QueryKind::Sizeof; q.op = node.op;

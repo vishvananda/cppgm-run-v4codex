@@ -31,23 +31,6 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result, bool effects_onl
     ++full_expression_work;
     auto temporary = sem.object_fact(n).temporary;
     bool needed = !omit_result && !sem.object_lifetime(temporary) && cleanup(temporary);
-    if (auto root = sem.fold_root(n)) {
-        std::vector<unsigned> work{root};
-        while (!work.empty()) {
-            auto id = work.back(); work.pop_back(); auto step = sem.fold_step(id);
-            if (step.source) { needed |= cleanup_expression(step.source,omit_result && id == root,effects_only); continue; }
-            auto op = step.operation;
-            if (!omit_result || id != root) needed |= cleanup(op.temporary);
-            for (unsigned i = 0; i < op.result.count; ++i) {
-                auto c = sem.conversion_fact(op.result.conversions+i);
-                needed |= cleanup(sem.converted_temporary(c));
-                if (c.kind == semantic::Conversion::Kind::User) needed |= cleanup(sem.user_conversions[c.materialization].source_temporary);
-            }
-            work.push_back(step.left); work.push_back(step.right);
-        }
-        cleanup_expressions[key] |= (needed ? 2 : 1) << shift;
-        return needed;
-    }
     const auto& discarded = sem.discarded_conversion(n);
     if (discarded.valid()) needed |= cleanup(sem.converted_temporary(discarded));
     auto arrow = sem.arrow_chains[sem.object_fact(n).arrow];
@@ -107,7 +90,26 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result, bool effects_onl
             if (auto call = conversion_call(sem.conversion_fact(sem.closure_captures[i].conversion))) arguments(*call);
     if (expression.form == semantic::ExpressionForm::Typeid && sem.rtti_expression(n).dynamic)
         needed |= cleanup_expression(ast[n].first,false,effects_only);
-    if (ast[n].kind != syntax::Kind::Lambda && ast[n].kind != syntax::Kind::Sizeof && ast[n].kind != syntax::Kind::TypeTrait)
+    if (auto root = sem.fold_root(n)) {
+        std::vector<unsigned> work{root};
+        while (!work.empty()) {
+            auto id = work.back(); work.pop_back(); auto step = sem.fold_step(id);
+            if (step.source) { needed |= cleanup_expression(step.source,omit_result && id == root,effects_only); continue; }
+            auto op = step.operation;
+            auto c = sem.conversion_fact(step.discarded);
+            needed |= cleanup(sem.converted_temporary(c));
+            if (auto call = conversion_call(c)) arguments(*call);
+            if (!omit_result || id != root) needed |= cleanup(op.temporary);
+            for (unsigned i = 0; i < op.result.count; ++i) {
+                auto conversion = sem.conversion_fact(op.result.conversions+i);
+                needed |= cleanup(sem.converted_temporary(conversion));
+                if (conversion.kind == semantic::Conversion::Kind::User)
+                    needed |= cleanup(sem.user_conversions[conversion.materialization].source_temporary);
+                if (auto call = conversion_call(conversion)) arguments(*call);
+            }
+            work.push_back(step.left); work.push_back(step.right);
+        }
+    } else if (ast[n].kind != syntax::Kind::Lambda && ast[n].kind != syntax::Kind::Sizeof && ast[n].kind != syntax::Kind::TypeTrait)
     for (NodeId child = ast[n].first; child; child = ast[child].next) {
         bool omit = omit_result && (ast[n].kind == syntax::Kind::Parenthesized || ast[n].kind == syntax::Kind::Initializer ||
             (ast[n].kind == syntax::Kind::Conditional && child != ast[n].first));

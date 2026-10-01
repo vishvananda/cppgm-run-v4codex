@@ -53,6 +53,13 @@ Expression Analyzer::fold_expression(NodeId n, ScopeId s)
             op.adjustment = object_uses[op.result.object_use].adjustment;
             size(object_uses[op.result.object_use].type);
         } else if (!op.function && op.op == OP_COMMA) {
+            // The query already checked the discarded left operand. Attach
+            // its concrete storage/lifetime once, just like other conversions.
+            if (auto conversion = query_discarded_conversions.get(id)) {
+                auto c = conversions[conversion];
+                if (!unevaluated_depth) c = prepare_typed_conversion(args[0],c,s);
+                step.discarded = conversions.size(); conversions.push_back(c);
+            }
             op.result = args[1]; op.result.conversions = op.result.count = 0;
         } else prepare_range_operation(op,args,s,!unevaluated_depth);
         root = fold_steps.size(); fold_steps.push_back(step);

@@ -42,5 +42,6 @@ private:
     void template_parameter_declaration(Id id);
     void external(Id id);
     void args(const Node& node);
+    void unresolved_args(const Node& node);
 };
 } // namespace abi_mangle

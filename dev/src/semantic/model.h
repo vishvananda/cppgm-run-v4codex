@@ -509,6 +509,7 @@ struct RangeOperation {
 struct FoldStep {
     NodeId source = 0;
     std::uint32_t left = 0, right = 0;
+    std::uint32_t discarded = 0;
     RangeOperation operation;
 };
 struct RangePlan {

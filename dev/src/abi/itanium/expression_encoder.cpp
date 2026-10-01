@@ -79,6 +79,19 @@ void Encoder::argument(Id id) {
     default: throw std::runtime_error("fact is not an ABI argument");
     }
 }
+void Encoder::unresolved_args(const Node& n) {
+    // An unresolved qualifier encodes its source argument sequence. Semantic
+    // head matching grouped trailing arguments, but that is not an argument
+    // pack in this grammar. Resolved types retain their ordinary J...E form.
+    output += 'I';
+    for (Id i = 0; i < n.count; ++i) {
+        auto id = g.child(n,i); const auto& arg = g[id];
+        if (arg.kind == Kind::ArgumentPack)
+            for (Id j = 0; j < arg.count; ++j) argument(g.child(arg,j));
+        else argument(id);
+    }
+    output += 'E';
+}
 void Encoder::expression(Id id) {
     const Node n = g[id];
     Nesting nesting(depth);
@@ -139,7 +152,7 @@ void Encoder::expression(Id id) {
                 std::vector<Id> scopes;
                 for (auto p = n.c; p; p = g[p].a) scopes.push_back(p);
                 for (auto p = scopes.rbegin(); p != scopes.rend(); ++p) {
-                    if (g[*p].kind == Kind::Template) args(g[*p]); else source(g[*p].b);
+                    if (g[*p].kind == Kind::Template) unresolved_args(g[*p]); else source(g[*p].b);
                 }
                 output += 'E';
             } else type(n.c);
@@ -155,7 +168,7 @@ void Encoder::expression(Id id) {
             for (auto p = name.a; p; p = g[p].a) scopes.push_back(p);
             output += "sr";
             for (auto p = scopes.rbegin(); p != scopes.rend(); ++p) {
-                if (g[*p].kind == Kind::Template) args(g[*p]);
+                if (g[*p].kind == Kind::Template) unresolved_args(g[*p]);
                 else source(g[*p].b);
             }
             output += 'E';

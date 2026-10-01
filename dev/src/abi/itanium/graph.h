@@ -24,6 +24,8 @@ enum class Kind : std::uint8_t {
     TemplateHead, TemplateParameterDeclaration
 };
 struct Node {
+    // Parameter.c distinguishes a parameter pack from an ordinary parameter
+    // with the same encoded ordinal; it is not a mangling component or edge.
     Kind kind = Kind::Name;
     Id a = 0, b = 0, c = 0; // kind-specific child IDs, string IDs, or enum values
     // WideValue/NegativeWideValue: a is the declared type, b/c the high half,

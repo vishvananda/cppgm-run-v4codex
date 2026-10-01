@@ -9,6 +9,9 @@ void Analyzer::record_discard_form(NodeId n, Expression& result) const
     // and comma wrappers. Fixed template uses retain the same immutable bit.
     if (result.form == ExpressionForm::Ordinary) {
         auto kind = ast[n].kind;
+        // The retained reduction has the source form of its final operation
+        // (or its sole operand). Do not erase that fact at the fold wrapper.
+        if (kind == Kind::Fold) return;
         if (kind == Kind::Parenthesized) result.discarded_form = expressions[ast[n].first].discarded_form;
         else if (kind == Kind::Conditional) {
             auto second = ast[ast[n].first].next;

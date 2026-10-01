@@ -76,9 +76,10 @@ Id FactReader::type(const Words& w, std::size_t& p) {
         return g.make(Kind::TemplateParameterDeclaration,kind,value);
     }
     if (op == "name" || op == "named") return g.path(take(w, p));
-    if (op == "template-param" || op == "template-param-subst" || op == "template-param-template") {
+    if (op == "template-param" || op == "template-param-subst" || op == "template-param-template" || op == "template-param-pack") {
         auto index = index_value(take(w, p));
-        Id param = g.make(Kind::Parameter, 0, op == "template-param-subst", 0, index);
+        bool pack = op == "template-param-pack";
+        Id param = g.make(Kind::Parameter, 0, op == "template-param-subst" || pack, pack, index);
         if (op != "template-param-template") return param;
         return g.make(Kind::Template, param, 0, 0, 0, refs(w, p, BindingKind::Argument));
     }

@@ -67,8 +67,15 @@ Value Procedural::fold(NodeId n, bool location, Value* callable)
                 emit(Opcode::Branch,IRType(),{test.operand,Operand::label(land ? rhs : frame.short_path),Operand::label(land ? frame.short_path : rhs)});
                 start(rhs);
             } else if (!op.function && op.op == OP_COMMA) {
-                // A discarded volatile glvalue is still an observable load.
-                if (sem.types[value.type].cv & 2) load(value);
+                auto c = sem.conversion_fact(step.discarded);
+                if (c.valid()) {
+                    typed_conversion(value,c);
+                    activate_temporary(sem.converted_temporary(c));
+                } else {
+                    auto left = sem.fold_step(step.left).operation.result;
+                    if (left.discarded_form && left.category == ValueCategory::Lvalue &&
+                        (sem.types[left.type].cv & 2)) load(value);
+                }
             }
             work.emplace_back(step.right); continue;
         }

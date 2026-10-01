@@ -65,16 +65,11 @@ abi_mangle::Id Procedural::abi_entity_name(EntityId e)
     if (sem.entities[pattern].template_parameter) name = abi_type(sem.entities[pattern].type);
     auto pack = sem.specialization_arguments(e);
     std::vector<abi_mangle::Id> arguments;
-    bool dependent = sem.dependent_type(entity.type);
     for (unsigned j = 0; j < pack.count; ++j) {
         auto arg = sem.template_argument(pack.offset+j);
-        // A dependent template-id retains its argument list, before matching
-        // a class head groups trailing arguments into a semantic pack.
-        if (dependent && sem.argument_pack(arg)) {
-            auto values = sem.pack_arguments(arg);
-            for (unsigned k = 0; k < values.count; ++k)
-                arguments.push_back(abi_argument(sem.template_argument(values.offset+k)));
-        } else arguments.push_back(abi_argument(arg));
+        // Grouping belongs to the matched template head, including dependent
+        // arguments. A retained pack is an ABI J...E sequence, not a flat list.
+        arguments.push_back(abi_argument(arg));
     }
     return entity.kind == semantic::EntityKind::Type ? abi_template_type(name,arguments) :
         abi.make(abi_mangle::Kind::Template,name,0,0,0,arguments);

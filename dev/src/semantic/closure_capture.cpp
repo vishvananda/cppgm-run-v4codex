@@ -26,7 +26,8 @@ void Analyzer::bind_template_captures(NodeId source, ScopeId scope, EntityId fun
     while (!work.empty()) {
         auto n = work.back(); work.pop_back(); auto node = ast[n];
         if (node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack || node.kind == Kind::Decltype ||
-            node.kind == Kind::Noexcept || node.kind == Kind::TypeTrait) continue;
+            node.kind == Kind::Noexcept || node.kind == Kind::TypeTrait ||
+            (node.kind == Kind::DeclSpecifier && node.op == KW_DECLTYPE)) continue;
         if (node.kind == Kind::Lambda) {
             // Nested bodies already own their capture edges. Propagate those
             // crossing this operator, without walking the nested body again.

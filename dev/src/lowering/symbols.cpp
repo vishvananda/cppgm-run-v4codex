@@ -43,7 +43,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     case TypeKind::Named: {
         auto e = sem.entities[t.entity];
         if (sem.placeholder_entity(t.entity)) result = abi.builtin(ABI_BUILTIN_TYPE_AUTO);
-        else if (e.template_parameter) result = abi.make(abi_mangle::Kind::Parameter,0,1,0,sem.template_ordinal(t.entity));
+        else if (e.template_parameter) result = abi.make(abi_mangle::Kind::Parameter,0,1,e.parameter_pack,sem.template_ordinal(t.entity));
         else if (sem.closure(t.entity).function && sem.closure(t.entity).enclosing) {
             auto closure = sem.closure(t.entity);
             auto enclosing = sem.entities[closure.enclosing];
