@@ -1,0 +1,241 @@
+{
+  "entry": "235ffa3947d7921a1c34c66198f590df5aa77de2",
+  "total": 403,
+  "passed": 378,
+  "failed": 25,
+  "owner_counts": {
+    "extended-syntax-types-and-layout": 17,
+    "template-demand-and-hosted-abi": 7,
+    "legacy-traits-and-lifetime-proofs": 1
+  },
+  "failures": [
+    {
+      "test": "pa29/tests/compile/200-hosted-type-specifier-functional-cast.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-bitint-signed-static-cast-template-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-bitint-static-cast-template-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-builtin-types-and-extern-vars.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-darwin-wait-status-constant-expression.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-ext-vector-scalar-template-deduction.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-hosted-special-members-and-control-flow.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/500-nontemplate-deduction-guide-declaration.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-builtin-complex-return.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-gnu-complex-template-constructor.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+      "owner": "legacy-traits-and-lifetime-proofs",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Independent contract review (fixture unchanged; failure retained)",
+      "review_note": "Preserve audit170 contract discussion; no reference correction or waiver. Failure remains counted."
+    },
+    {
+      "test": "pa29/tests/compile/600-structured-binding-class-decomposition.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-structured-binding-function-template-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-structured-binding-gnu-attr-class-template-method.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/600-structured-binding-range-for-template-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-gnu-zero-length-array-member-compile.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation",
+      "review_note": "Preserve audit170 contract discussion; no reference correction or waiver. Failure remains counted."
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-coroutine-contextual-operators-compile.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-gnu-float-builtin-spellings.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Independent contract review (fixture unchanged; failure retained)",
+      "review_note": "Preserve audit170 contract discussion; no reference correction or waiver. Failure remains counted."
+    },
+    {
+      "test": "pa29/tests/compile/700-static-call-operator-extension.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/run/800-always-inline-codegen-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "linked program exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/run/800-excluded-member-escapes-explicit-instantiation-declaration-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/run/800-inline-variable-merges-across-translation-units-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    },
+    {
+      "test": "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "implementation exit status mismatch (expected EXIT_SUCCESS (0), got 255)"
+      ],
+      "diagnostic_provenance": "Confirmed by implementation175 final full suite; inherited semantic ownership.",
+      "disposition": "Unfinished implementation"
+    }
+  ]
+}

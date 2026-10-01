@@ -1,0 +1,667 @@
+{
+  "compiler_sha256": "3305fd803dccd1ebf63ec54e8ed3f7cf20b97ed1ececebb8e866858b4027bb0f",
+  "rows": [
+    {
+      "source": "student.tests/pa29/source175/address.reject.cpp",
+      "sha256": "789519a92f5f8eb9a2e128f0cb5cb3545539399b3fdd102c5c8dfd2d7cd97f4c",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/address.reject.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/address.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: source intrinsic requires a direct call\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/arity-column.reject.cpp",
+      "sha256": "52ba1413278317815ae33d8814537a9f9aab3a81a0cb087a7c2fdb7498f70bfc",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/arity-column.reject.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/arity-column.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: no viable function\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/arity-file.reject.cpp",
+      "sha256": "8db9c3c85d5431a024416bbab38e25d72e79af30b82cb985cf154e49031b9c8f",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/arity-file.reject.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/arity-file.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: no viable function\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/arity-function.reject.cpp",
+      "sha256": "44a535cb42597f3e79c94d77ff249d58d4a6b1cf56d6398bb6f64c17253aea3c",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/arity-function.reject.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/arity-function.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: no viable function\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/arity-line.reject.cpp",
+      "sha256": "3dbaa9eafd769ded2bf169a80fb516e891afcbd9da5511d481b4141341328d3d",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/arity-line.reject.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/arity-line.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: no viable function\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/calls.cpp",
+      "sha256": "634d269ca041570bcee41d1a2d3d86cacef8effc1f06d5610ee4a9f43d4b917e",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/calls.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/calls.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-175/controls9/calls.o",
+          "-o",
+          "/tmp/pa29-175/controls9/calls"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-175/controls9/calls"
+        ],
+        "status": 0,
+        "stdout": "213 9 426 4 210 211 213 12\n",
+        "stderr": ""
+      },
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/calls.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/calls-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-175/controls9/calls-host"
+        ],
+        "status": 0,
+        "stdout": "213 9 426 4 210 211 213 12\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/columns.cpp",
+      "sha256": "8f9b84c8ae9b1930f83b432bc98e9a8632b9e3420fd521194b04e7bf9bdb07ab",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/columns.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/columns.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-175/controls9/columns.o",
+          "-o",
+          "/tmp/pa29-175/controls9/columns"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-175/controls9/columns"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/decay.reject.cpp",
+      "sha256": "eac516faa2ecc4cdc44c7a63785b917ebb430c98cbb918326dd00d4e89db5757",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/decay.reject.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/decay.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: invalid implicit conversion\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/lifetimes.cpp",
+      "sha256": "dc92d7a94dce241439207d6a89ca589ebefa89e874ebf3cd044b88a1043a5e57",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/lifetimes.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/lifetimes.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-175/controls9/lifetimes.o",
+          "-o",
+          "/tmp/pa29-175/controls9/lifetimes"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-175/controls9/lifetimes"
+        ],
+        "status": 0,
+        "stdout": "503 503 503 503 504 1 8 8\n",
+        "stderr": ""
+      },
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/lifetimes.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/lifetimes-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-175/controls9/lifetimes-host"
+        ],
+        "status": 0,
+        "stdout": "503 503 503 503 504 1 8 8\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/locations.cpp",
+      "sha256": "df85dc56ba65d1a63b49df6fb658416512ae13b97c4ca9cb424f29d9f99d717e",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/locations.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/locations.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-175/controls9/locations.o",
+          "-o",
+          "/tmp/pa29-175/controls9/locations"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-175/controls9/locations"
+        ],
+        "status": 0,
+        "stdout": "109 109 109 109 11 main main virtual-source.cpp S\n",
+        "stderr": ""
+      },
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/locations.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/locations-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-175/controls9/locations-host"
+        ],
+        "status": 0,
+        "stdout": "109 109 109 109 11 main main virtual-source.cpp S\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/macros.cpp",
+      "sha256": "95b4a94a1962e55fc25e7f8cfc1fa98a9edf2f7e5b4745e691cb774ac5620150",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/macros.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/macros.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-175/controls9/macros.o",
+          "-o",
+          "/tmp/pa29-175/controls9/macros"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-175/controls9/macros"
+        ],
+        "status": 0,
+        "stdout": "704 704 call-site.cpp\n",
+        "stderr": ""
+      },
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/macros.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/macros-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-175/controls9/macros-host"
+        ],
+        "status": 0,
+        "stdout": "704 704 call-site.cpp\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/members.cpp",
+      "sha256": "6589223077742da17cd702f29ed34d608c9ddf83cc6ed5ca7560e44a73c72005",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/members.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/members.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-175/controls9/members.o",
+          "-o",
+          "/tmp/pa29-175/controls9/members"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-175/controls9/members"
+        ],
+        "status": 0,
+        "stdout": "300 302 303 Plain 6 7 9 11 12 304 305 15 Box\n",
+        "stderr": ""
+      },
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/members.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/members-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-175/controls9/members-host"
+        ],
+        "status": 0,
+        "stdout": "300 302 303 Plain 6 7 9 11 12 304 305 15 Box\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/noexcept.cpp",
+      "sha256": "e9a7e260d7eda0a52d2452697f74dace50644ccef6237bb5cb78a6ddf6f52636",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/noexcept.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/noexcept.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-175/controls9/noexcept.o",
+          "-o",
+          "/tmp/pa29-175/controls9/noexcept"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-175/controls9/noexcept"
+        ],
+        "status": 0,
+        "stdout": "3 7\n",
+        "stderr": ""
+      },
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/noexcept.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/noexcept-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-175/controls9/noexcept-host"
+        ],
+        "status": 0,
+        "stdout": "3 7\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/qualification.reject.cpp",
+      "sha256": "280707a8f9de839eac30a89c3cdd78e58c04a33ea94f7a231c82d18decccdb8a",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/qualification.reject.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/qualification.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: unknown expression name: __builtin_LINE\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/queries.cpp",
+      "sha256": "a52b92071769482c3c5fca4f25d55a224e5680186741ff8a7b2e57189624a921",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/queries.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/queries.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-175/controls9/queries.o",
+          "-o",
+          "/tmp/pa29-175/controls9/queries"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-175/controls9/queries"
+        ],
+        "status": 0,
+        "stdout": "8 8 t operator() 408\n",
+        "stderr": ""
+      },
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/queries.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/queries-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-175/controls9/queries-host"
+        ],
+        "status": 0,
+        "stdout": "8 8 t operator() 408\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/query-address.reject.cpp",
+      "sha256": "d614096fd736386276940b9aa864f862f07dc57d3942632a7fe0ebb44cccd215",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/query-address.reject.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/query-address.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: source intrinsic requires a direct call\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source175/strings.cpp",
+      "sha256": "0c1bf2b15fd016637540c2e1f1b74b82b3420173c9f8ae407cbb562c94aafa6b",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/strings.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/strings.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/tmp/pa29-175/controls9/strings.o",
+          "-o",
+          "/tmp/pa29-175/controls9/strings"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/tmp/pa29-175/controls9/strings"
+        ],
+        "status": 0,
+        "stdout": "/ / / 0 17 / / s main\n",
+        "stderr": ""
+      },
+      "host_compile": {
+        "command": [
+          "g++",
+          "-std=c++11",
+          "-O0",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source175/strings.cpp",
+          "-o",
+          "/tmp/pa29-175/controls9/strings-host"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "host_run": {
+        "command": [
+          "/tmp/pa29-175/controls9/strings-host"
+        ],
+        "status": 0,
+        "stdout": "/ / / 0 17 / / s main\n",
+        "stderr": ""
+      },
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "entry": "235ffa3947d7921a1c34c66198f590df5aa77de2",
+  "code_tip": "704538c1bb71085efeb514dbc6711bf74dd4d080",
+  "compiler_sha256": "3305fd803dccd1ebf63ec54e8ed3f7cf20b97ed1ececebb8e866858b4027bb0f",
+  "checks": [
+    {
+      "command": "make test-pa29",
+      "status": 2,
+      "log": "/tmp/pa29-175/validation-final/stage.log",
+      "sha256": "9bb2ed433e73bb47289b5d8d72dbefaf655dd1e978aa5b19335f2fbac9b51760",
+      "summary": [
+        "===== TEST SUMMARY: 378 / 403 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": "make test-report-through-pa28",
+      "status": 0,
+      "log": "/tmp/pa29-175/validation-final/prior.log",
+      "sha256": "62fafee2304dafac1d6eb44703da74008c028ee3cc40be97d2e4ca4702c208ba",
+      "summary": [
+        "===== ALL TESTS PASSED SUCCESSFULLY! (4538 / 4538) ====="
+      ]
+    },
+    {
+      "command": "make test-report-through-pa29",
+      "status": 2,
+      "log": "/tmp/pa29-175/validation-final/through.log",
+      "sha256": "f5279a2cb99c160466b07bcef3a2061d916cf297803425d869a896344fc5c418",
+      "summary": [
+        "===== TEST SUMMARY: 4916 / 4941 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src",
+      "status": 0,
+      "log": "/tmp/pa29-175/validation-final/file-audit.log",
+      "sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f",
+      "summary": [
+        "File audit passed for pa29 with 4 warning(s).",
+        "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+      ]
+    }
+  ]
+}

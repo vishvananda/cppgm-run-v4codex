@@ -1,0 +1,54 @@
+{
+  "assertions": [
+    {
+      "n": 600,
+      "source_sites": 1212,
+      "specializations": 600,
+      "body_checks": 602,
+      "type_query_work": 611,
+      "value_query_work": 601,
+      "parsed_nodes": 9253,
+      "samples_checked": 8
+    },
+    {
+      "n": 1200,
+      "source_sites": 2412,
+      "specializations": 1200,
+      "body_checks": 1202,
+      "type_query_work": 1211,
+      "value_query_work": 1201,
+      "parsed_nodes": 18253,
+      "samples_checked": 8
+    },
+    {
+      "n": 2400,
+      "source_sites": 4812,
+      "specializations": 2400,
+      "body_checks": 2402,
+      "type_query_work": 2411,
+      "value_query_work": 2401,
+      "parsed_nodes": 36253,
+      "samples_checked": 8
+    }
+  ],
+  "object_evolution": [
+    {
+      "n": 600,
+      "preliminary_object_bytes": 245720,
+      "final_object_bytes": 245496,
+      "text_bytes": 46360
+    },
+    {
+      "n": 1200,
+      "preliminary_object_bytes": 489712,
+      "final_object_bytes": 489488,
+      "text_bytes": 92560
+    },
+    {
+      "n": 2400,
+      "preliminary_object_bytes": 979312,
+      "final_object_bytes": 979088,
+      "text_bytes": 184960
+    }
+  ]
+}

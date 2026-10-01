@@ -1,0 +1,42 @@
+{
+  "entry": "235ffa3947d7921a1c34c66198f590df5aa77de2",
+  "code_tip": "704538c1bb71085efeb514dbc6711bf74dd4d080",
+  "images": {
+    "entry": {
+      "path": "/tmp/pa29-175/entry",
+      "sha256": "21589b947593a5fb156d6bc2379f3278d7c178bc53875e11b399e40a43176019",
+      "bytes": 4188000
+    },
+    "preliminary": {
+      "path": "/tmp/pa29-175/final",
+      "sha256": "f3544b4709e0e9d101fd2845dc60696345babf61122a4ed69d0965b0a55266ff",
+      "bytes": 4196856
+    },
+    "final": {
+      "path": "/tmp/pa29-175/final-checked",
+      "sha256": "3305fd803dccd1ebf63ec54e8ed3f7cf20b97ed1ececebb8e866858b4027bb0f",
+      "bytes": 4205512
+    }
+  },
+  "source_regions": "Parsed once; occurrence/site identities remain TU-owned. Runtime strings emitted by IdentifierId only when consumed.",
+  "prior_turn": "Progress: audit174 changed committed state and evidence; no active wait to resume.",
+  "evidence_files": {
+    "common-performance.json": "260e2bc9384636f699001c6c0ef6a0d3f031c257cf42bb71b57f3281b08d4d58",
+    "controls.json": "38e07177674f083a08a465cebacf9f952aaf0f17b95a46a152704060a8b2eff5",
+    "coverage.json": "e24c3cdf22c8690e7eb8d0eb663c9a4b1d4664d4f47670e561cdf1a1e639c6b8",
+    "inspection.json": "6bf2c281027a18d64428f93f8970d53974e2c5e3e365ce0fba07046c4e0a3c74",
+    "preliminary-common.json": "3398addaa9bae0700cb5855d1953904c452f2c2b20b76a1101fff55b6a6881e4",
+    "preliminary-source.json": "7ff35dbb93f58170309cccd2cadba7d595dafb9fbe2615835f69479dba99c3af",
+    "remaining.json": "3682b3c3f2a22fe0f9ed3526431125dcc554af611790eee9b3047da10270cabe",
+    "scaling.json": "eefc790361224cd57d5c9ae49813b9797e432bc188a495f1d2a66bedf63e682b",
+    "source-performance.json": "c004a962ba79628a4516ac44c9c845e69a258295432fb98d6c0360b8a23ed07c",
+    "stage-delta.json": "131e541f36932819455542291167c7fd9910eaf8e5e75b8a6aae9286fff77105",
+    "validation.json": "58a2290b9beb78cabdf71eaee89baa83b54b5a5c02f631fa620efc8f40e3bedb"
+  },
+  "scripts": {
+    "student.tests/pa29/test175.py": "cbf060eb1d0e0775c3c1bfdc4a6d1083374889f68421042cdeb92eb2ce85491d",
+    "student.tests/pa29/inspect175.py": "fc377a5d8c84f9cdc5cab8598d8bf8541f19bcc2dc0ea7fc4e882343d28d9904",
+    "student.tests/pa29/performance175.py": "a6171eb5cec043ef8a3ecbdba08a0642279e9fe5da6486bd5b3c72dccc96084e",
+    "student.tests/pa29/validate175.py": "f1100f9b1eef22c506853391ef6d8514e6b1a675618ccaba4e78bbc2f1a19b91"
+  }
+}

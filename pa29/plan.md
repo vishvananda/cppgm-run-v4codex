@@ -1,82 +1,74 @@
-# PA29 compact plan — implementation175
+# PA29 compact plan — implementation175 handoff
 
-Target: **PA29 full-stage**. Phase: **implementation175 active; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `221d6d0e4930da05db2913bdf5f50d808f89c744`.
 Audit entry: `914e1a0a07e40884c91c0b967b0421eea9ef0d48`.
 Last reviewed commit: `7139ceb5769eea12c6e2e00b54932f09d59c79b5`.
+Implementation175 entry: `235ffa3947d7921a1c34c66198f590df5aa77de2`.
+Implementation code: `3edfe15e`, `393b19cc`, `7bb44553`, `704538c1`.
 
-## Reviewed ownership and fixes
+## Design/spec alignment and completed group
 
-The [audit](audit.md) reviews every commit and combined source change across
-implementation171–173: builtin template identities/sequences/deduction, retained
-fold queries and reduction, and explicit-template closures/capture/ABI. Source
-regions remain parsed once; dependent substitution uses canonical arguments and
-immutable frames. Typed selections, conversions, layouts, lifetimes and ABI facts
-flow directly through LowIR, per-function MIR and ELF. Explicit text tools remain
-adapters. The audit fixes three interacting owners:
+[Implementation175](implementation175.md) completes source-invocation intrinsics:
+FILE/LINE/FUNCTION/COLUMN, direct and qualified calls, macro locations, constexpr
+and runtime uses, nested/default arguments, constructor/member initializers,
+implicit objects/arrays/statics/new, and query/address diagnostics. Immutable
+source sites and conversion-use markers flow into both evaluators. Complete
+query keys include invocation/evaluation context and per-query revision. Parsed
+regions and checked default recipes remain shared; no grammar replay, semantic
+cloning, textual transport or lowering-time overload resolution was added.
 
-- Preserve discarded fold forms and selected volatile conversions through query,
-  temporary creation, exception facts, cleanup and runtime lowering.
-- Exclude declaration-form unevaluated decltype/typeof operands from capture
-  recipes, including nested closures; no observable capture copy is invented.
-- Preserve the builtin index's converted type, argument-pack grouping and
-  parameter-pack substitution identity in ABI facts. The encoder distinguishes
-  resolved type arguments from unresolved qualifier argument sequences.
+Sites and lexical ancestors use indexed identities. Work follows actual nodes,
+queries and invocation edges; lowering follows emitted operations. Required string
+objects have one emission identity per interned content and are emitted only when
+a runtime address is consumed. Evaluated character reads and line-only calls emit
+none. TU records and per-evaluation scratch retain explicit release boundaries.
 
-## Validation and performance acceptance
+## Validation and performance
 
-PA29 **377/403**, exactly the entry's **26 failures**; PA1–28 **4538/4538**;
-through PA29 **4915/4941**. No new failure is offset by personal passes. All **403**
-inputs and **1,707** contract/harness paths remain byte-identical to entry and the
-previous review. **218** behavioral controls and **144** inspection checks pass;
-the new controls expose nine entry failures and cover integrated host peers,
-volatile effects/unwind, AST, LowIR/MIR/native, typed ABI and telemetry equivalence.
-File audit passes with four unchanged inherited header warnings.
+PA29 **378/403**: **26 → 25 failures**, exactly one fixed course fixture and no
+new failures. PA1–28 **4538/4538**; through PA29 **4916/4941**. All **403** inputs
+and **1,707** contract/harness paths remain unchanged. **17** focused controls and
+**37** inspection commands plus assertions pass. File audit passes with four
+inherited header warnings. [Evidence](../student.tests/pa29/evidence175/validation.json)
+includes commands, binary/log hashes, coverage and the exact failure delta.
 
-[Performance174](performance174.md) applies spec §9 to **PA29/O0**, both the full
-review range and audit changes. Frozen A/A+ABBA compilation/RSS and checked
-runtime/text evidence includes affected owners and scaling, with preliminary and
-historical observations retained. No optional optimization or speedup is claimed.
-Inherited blanket 15%/zero-growth targets are diagnostic, not additional gates;
-mandated generator/evaluator/native limits, correctness and coverage remain.
-Heavier runtime, optimizer/allocation and self-hosting remain PA30–34 work.
+[Performance175](performance175.md) applies spec §9 to **PA29/O0**. Frozen A/A+ABBA
+compiler latency/RSS and checked runtime/text measurements cover the common
+frontend/loop/memory/floating/exception workloads. Affected 600/1200/2400-call
+inputs provide required-semantics scaling and live runtime checks. Preliminary
+measurements are retained. No optional transform or speedup is claimed; optional
+optimization work/growth budget is zero. Inherited blanket 15%/zero-growth targets
+remain diagnostic rather than extra exit gates. Mandated evaluator/generator,
+native capacity and course timeout limits, correctness and coverage are preserved.
+Higher optimization, heavier hosted runtime and self-hosting remain PA30–34 work.
 
-## Remaining broad work
+## Remaining implementation and independent review
 
-The [remaining ledger](../student.tests/pa29/evidence174/remaining.json) retains
-extended syntax/types/layout **17**, template demand/hosted ABI **7**, legacy trait
-**1**, and source-invocation intrinsic operands **1**. These include numeric
-representations, structured bindings/control flow, conditional explicit,
-deduction guides, zero-length arrays, static receivers, source coordinates and
-hosted emission. Through-PA29 success is required before advancing to PA30.
+The [remaining ledger](../student.tests/pa29/evidence175/remaining.json) retains
+extended syntax/types/layout **17**, template demand/hosted ABI **7**, and legacy
+trait **1**. Examples include numeric representations, structured bindings,
+conditional explicit/control flow, deduction guides, zero-length arrays, static
+receivers and hosted emission. Through-PA29 success is required before PA30.
 
-[Audit170](audit170.md) preserves the char-traits analysis, alignment/dependent
-offsetof/convertible-index reducers, and both unresolved contract questions:
-nothrow default-construction shorthand and nothrow-invocable cache default.
-Both remain counted failures; no fixture, reference or comparison rule changed.
+[Audit174](audit.md) and its [performance evidence](performance174.md) remain the
+last independent review. [Audit170](audit170.md) preserves the char-traits,
+alignment/dependent-offset/convertible-index reducers and two independent
+contract questions: nothrow default-construction shorthand and nothrow-invocable
+cache default. Both remain counted failures; neither is waived. The char-traits
+case remains unfinished implementation. The new code still requires independent
+review; this handoff does not certify the whole stage.
 
-The three handoffs have distinct owners. Separating query and ABI followups from
-their main owners nevertheless added avoidable fragmentation: discarded-value,
-unevaluated-capture and cross-owner ABI gaps survived isolated checks. Future
-handoffs should finish direct/dependent/query/discarded uses, lifetime effects
-and integrated host linkage together. All three accumulated handoffs are now
-reviewed; stage completion remains open.
+## Handoff ledger and boundary
 
-## Implementation175 entry and work
-
-Entry HEAD: `235ffa3947d7921a1c34c66198f590df5aa77de2`; previous turn was
-progress (audit174 committed evidence and fixes), not an active process wait.
-Stage base and Last reviewed commit above remain unchanged. Baseline 377/403.
-
-Initial group: source-invocation intrinsics. Owner: shared builtin registry and
-semantic call facts; immutable source coordinates and lexical function identity
-flow to constexpr evaluation and typed LowIR. Default argument/member initializer
-uses must distinguish lexical context from invocation context without reparsing,
-cloning semantic trees, or keying semantic facts by text. Work follows calls and
-actual default-use edges, with O(1) indexed completed-fact lookup. Extend direct,
-macro, dependent, unevaluated, nested-default and member-initializer cases together;
-measure compiler wall/RSS and executable runtime/text with frozen binaries. No
-optional optimization is planned. Validation: explicit personal reducers, PA29,
-through PA28, file audit, unchanged coverage, and final committed clean state.
-Remaining implementation and independent contract questions above are not waived.
+The previous goal turn was progress (committed audit174), with no live process to
+resume. Implementation175 extended the initial intrinsic fix through implicit
+construction, invocation-sensitive caches, lazy support-string emission and
+deferred-definition demand. The pending165 source-invocation reducer is resolved.
+No known required defect remains in this completed group. Other failures require
+new numeric/decomposition representations, declaration/template ABI mechanisms,
+or a forced-inline transform; the current pipeline only retains that attribute.
+Those owners cannot be repaired by further extending source-invocation facts.
+This concrete ownership boundary ends the implementation handoff. Stage base and
+Last reviewed commit are preserved; mandatory independent review is outstanding.
