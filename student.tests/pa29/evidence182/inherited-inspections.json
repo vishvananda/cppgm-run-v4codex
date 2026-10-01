@@ -1,0 +1,27 @@
+[
+  {
+    "command": [
+      "python3",
+      "student.tests/pa29/inspect179.py",
+      "/tmp/pa29-182/inspection179"
+    ],
+    "status": 0
+  },
+  {
+    "command": [
+      "python3",
+      "student.tests/pa29/inspect180.py",
+      "/tmp/pa29-182/inspection180",
+      "/tmp/pa29-182/controls180"
+    ],
+    "status": 0
+  },
+  {
+    "command": [
+      "python3",
+      "student.tests/pa29/inspect181.py",
+      "/tmp/pa29-182/inspection181"
+    ],
+    "status": 0
+  }
+]

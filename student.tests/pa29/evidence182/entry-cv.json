@@ -1,0 +1,38 @@
+[
+  {
+    "command": [
+      "/tmp/pa29-182/entry-cppgm++",
+      "-std=c++17",
+      "-c",
+      "student.tests/pa29/source182/array-cv.cpp",
+      "-o",
+      "/tmp/pa29-182/entry.o"
+    ],
+    "status": 1,
+    "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/source182/array-cv.cpp:4\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-c",
+      "student.tests/pa29/source182/array-cv.cpp",
+      "-o",
+      "/tmp/pa29-182/gcc.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++17",
+      "-c",
+      "student.tests/pa29/source182/array-cv.cpp",
+      "-o",
+      "/tmp/pa29-182/clang.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  }
+]

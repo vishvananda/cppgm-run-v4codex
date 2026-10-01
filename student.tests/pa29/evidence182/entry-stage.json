@@ -1,0 +1,22 @@
+{
+  "status": 2,
+  "total": 403,
+  "failed": [
+    "pa29/tests/compile/200-hosted-type-specifier-functional-cast.t",
+    "pa29/tests/compile/500-bitint-signed-static-cast-template-body.t",
+    "pa29/tests/compile/500-bitint-static-cast-template-body.t",
+    "pa29/tests/compile/500-builtin-types-and-extern-vars.t",
+    "pa29/tests/compile/500-darwin-wait-status-constant-expression.t",
+    "pa29/tests/compile/500-gnu-ext-vector-scalar-template-deduction.t",
+    "pa29/tests/compile/500-nontemplate-deduction-guide-declaration.t",
+    "pa29/tests/compile/600-builtin-complex-return.t",
+    "pa29/tests/compile/600-gnu-complex-template-constructor.t",
+    "pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+    "pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+    "pa29/tests/compile/700-hosted-coroutine-contextual-operators-compile.t",
+    "pa29/tests/compile/700-hosted-gnu-float-builtin-spellings.t",
+    "pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+    "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t"
+  ],
+  "sha256": "b4b965be223994dfc818f8cdb3f61171716257f7d24e6162f3afba90e094a314"
+}

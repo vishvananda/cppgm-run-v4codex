@@ -1,0 +1,29 @@
+[
+  {
+    "command": [
+      "python3",
+      "student.tests/pa29/test179.py",
+      "/tmp/pa29-182/controls179",
+      "dev/cppgm++"
+    ],
+    "status": 0
+  },
+  {
+    "command": [
+      "python3",
+      "student.tests/pa29/test180.py",
+      "/tmp/pa29-182/controls180",
+      "dev/cppgm++"
+    ],
+    "status": 0
+  },
+  {
+    "command": [
+      "python3",
+      "student.tests/pa29/test181.py",
+      "/tmp/pa29-182/controls181",
+      "dev/cppgm++"
+    ],
+    "status": 0
+  }
+]

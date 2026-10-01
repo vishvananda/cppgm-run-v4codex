@@ -1,0 +1,529 @@
+{
+  "compiler_sha256": "904c8098efb5c370abfa0af1185b48dd774f539d77d5a697b47b674dd65f32a7",
+  "cases": [
+    {
+      "source": "student.tests/pa29/source182/array-cv-class.cpp",
+      "sha256": "2c79f0e31144f1fcaaf0bec347c0fb2f2767a82543c00b5793d37bd81c16e608",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv-class.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-cv-classstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv-class.cpp:6\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv-class.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-cv-classclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-182/entry-controls/array-cv-classclang.o",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-cv-classclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-controls/array-cv-classclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv-class.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-cv-class.lowir"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv-class.cpp:6\n"
+        }
+      ],
+      "failure": "LowIR validation"
+    },
+    {
+      "source": "student.tests/pa29/source182/array-cv-write.reject.cpp",
+      "sha256": "80acfd3cee46bc26c2f3b31bdb06c3ae4580ecc31d27d1cf7b3dbe24ff789857",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv-write.reject.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-cv-write.rejectstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv-write.reject.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-cv-write.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv-write.reject.cpp:1:57: error: cannot assign to variable 'x' with const-qualified type 'const int'\n    1 | int main() { const int data[2]={1,2}; auto [x,y]=data; x=3; }\n      |                                                        ~^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv-write.reject.cpp:1:45: note: variable 'x' declared const here\n    1 | int main() { const int data[2]={1,2}; auto [x,y]=data; x=3; }\n      |                                             ^\n1 error generated.\n"
+        }
+      ],
+      "failure": "student acceptance"
+    },
+    {
+      "source": "student.tests/pa29/source182/array-cv.cpp",
+      "sha256": "9dace788928ad8eb4a600aa06679841bf178d0b90b47266d92f850c893f40b48",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-cvstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv.cpp:4\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-cvclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-182/entry-controls/array-cvclang.o",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-cvclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-controls/array-cvclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-cv.lowir"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-cv.cpp:4\n"
+        }
+      ],
+      "failure": "LowIR validation"
+    },
+    {
+      "source": "student.tests/pa29/source182/array-range-cv.cpp",
+      "sha256": "d553c30f51879ab0fc1b2f4c460a501e5fa143d23e08e2de3e7778bb601ead9e",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-range-cv.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-range-cvstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-range-cv.cpp:5\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-range-cv.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-range-cvclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-182/entry-controls/array-range-cvclang.o",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-range-cvclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-controls/array-range-cvclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-range-cv.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-range-cv.lowir"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-range-cv.cpp:5\n"
+        }
+      ],
+      "failure": "LowIR validation"
+    },
+    {
+      "source": "student.tests/pa29/source182/array-template-cv.cpp",
+      "sha256": "6abd69532b20b9cb8f21629a5296bed42bba4ce72abe2e9972b9455f3e658303",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-template-cv.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-template-cvstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-template-cv.cpp:3\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-template-cv.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-template-cvclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-182/entry-controls/array-template-cvclang.o",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-template-cvclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-controls/array-template-cvclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-template-cv.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-template-cv.lowir"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-template-cv.cpp:3\n"
+        }
+      ],
+      "failure": "LowIR validation"
+    },
+    {
+      "source": "student.tests/pa29/source182/array-volatile-loop.cpp",
+      "sha256": "50c0643f579799c9fa35e36410786fc86bf386ce1268dc97c96c581627a5706f",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-volatile-loop.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-volatile-loopstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-volatile-loop.cpp:4\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-volatile-loop.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-volatile-loopclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-182/entry-controls/array-volatile-loopclang.o",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-volatile-loopclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-controls/array-volatile-loopclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-volatile-loop.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/array-volatile-loop.lowir"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/array-volatile-loop.cpp:4\n"
+        }
+      ],
+      "failure": "LowIR validation"
+    },
+    {
+      "source": "student.tests/pa29/source182/inline-cycle.cpp",
+      "sha256": "ad4b09d1122207d3b3c5093f296875f613bdfb1801e49a9b4d63a9c2ac745230",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/inline-cycle.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/inline-cyclestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-182/entry-controls/inline-cyclestudent.o",
+            "-o",
+            "/tmp/pa29-182/entry-controls/inline-cyclestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-controls/inline-cyclestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/inline-cycle.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/inline-cycleclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-182/entry-controls/inline-cycleclang.o",
+            "-o",
+            "/tmp/pa29-182/entry-controls/inline-cycleclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-controls/inline-cycleclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/inline-cycle.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/inline-cycle.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source182/integrated.cpp",
+      "sha256": "f51f52a0476ad403e4a6979229c316e8a4ecae52040c5233320ca5125616f448",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/integrated.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/integratedstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/integrated.cpp:9\n"
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/integrated.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/integrated.lowir"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/integrated.cpp:9\n"
+        }
+      ],
+      "failure": "LowIR validation"
+    },
+    {
+      "source": "student.tests/pa29/source182/zero-array-copy.cpp",
+      "sha256": "03683358804c0445d4e69022d5dda2b991cc40cc4372e1c8e20128d8bc51a80d",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-std=c++17",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/zero-array-copy.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/zero-array-copystudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/zero-array-copy.cpp:6\n"
+        },
+        {
+          "command": [
+            "/tmp/pa29-182/entry-cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/zero-array-copy.cpp",
+            "-o",
+            "/tmp/pa29-182/entry-controls/zero-array-copy.lowir"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source182/zero-array-copy.cpp:6\n"
+        }
+      ],
+      "failure": "LowIR validation"
+    }
+  ]
+}

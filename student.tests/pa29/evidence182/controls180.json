@@ -1,0 +1,3675 @@
+[
+  {
+    "name": "inline-basic",
+    "accepted": true,
+    "sha256": "ded6dfc025125e92e937008b28d6cd940392169153b8a0fb9fcbbd3522ca42b3",
+    "source": "__attribute__((always_inline)) inline int f(int x){return x+1;} int main(){return f(5)!=6;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-basic.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-basicstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-basicstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-basicstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-basicstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-basic.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-basicclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-basicclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-basicclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-basicclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-basic.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-basic.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-branch",
+    "accepted": true,
+    "sha256": "55070cefa5eea09db359c3561ff8abc3b34aeccc19b44acefc0854f133b5520f",
+    "source": "__attribute__((always_inline)) inline int f(int x){if(x<0)return -x;return x+1;} int main(){return f(-3)!=3||f(4)!=5;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-branch.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-branchstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-branchstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-branchstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-branchstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-branch.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-branchclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-branchclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-branchclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-branchclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-branch.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-branch.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-loop",
+    "accepted": true,
+    "sha256": "c55d4fbe5a18ffb8ec83c965ec8c100d12e0b22cd98bd84681a2cae84282f157",
+    "source": "__attribute__((always_inline)) inline int f(int x){int s=0;for(int i=0;i<x;++i)s+=i;return s;} int main(){return f(8)!=28||f(3)!=3;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-loop.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-loopstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-loopstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-loopstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-loopstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-loop.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-loopclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-loopclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-loopclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-loopclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-loop.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-loop.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-nested",
+    "accepted": true,
+    "sha256": "6747e3b1cd53d1d6f4b360c2feeb3cf130015523a15b5387c9ba4767e00d86e8",
+    "source": "__attribute__((always_inline)) inline int f(int x){return x+1;} __attribute__((always_inline)) inline int g(int x){return f(x)*2;} int main(){return g(4)!=10;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-nested.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-nestedstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-nestedstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-nestedstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-nestedstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-nested.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-nestedclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-nestedclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-nestedclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-nestedclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-nested.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-nested.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-effects",
+    "accepted": true,
+    "sha256": "fd0c8b724e0c6338eff36a496063bbf7e117eab1399d497856262a352eb2bd11",
+    "source": "int n; __attribute__((always_inline)) inline int f(int x){return x+x;} int next(){return ++n;} int main(){return f(next())!=2||n!=1;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-effects.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-effectsstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-effectsstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-effectsstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-effectsstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-effects.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-effectsclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-effectsclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-effectsclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-effectsclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-effects.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-effects.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-reference",
+    "accepted": true,
+    "sha256": "4d75475e61c74120f00b79adc00143a3c9d144524c9c77dad7deeeb77e89ff92",
+    "source": "__attribute__((always_inline)) inline int& f(int& x){return x;} int main(){int n=3;f(n)=8;return n!=8;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-reference.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-referencestudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-referencestudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-referencestudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-referencestudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-reference.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-referenceclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-referenceclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-referenceclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-referenceclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-reference.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-reference.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-float",
+    "accepted": true,
+    "sha256": "444313b0a65ac3beb7b6018eb0558f2cea02d11f8f1b916f2e37fd84394b7b79",
+    "source": "__attribute__((always_inline)) inline double f(double x){return x*.5+1.;} int main(){return f(6.)!=4.;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-float.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-floatstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-floatstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-floatstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-floatstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-float.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-floatclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-floatclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-floatclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-floatclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-float.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-float.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-object",
+    "accepted": true,
+    "sha256": "3c72c859fa41abd430074e035c72167aa99f93ccdaaa966fea8b69e2c6976df4",
+    "source": "struct P{long x,y;}; __attribute__((always_inline)) inline P f(P p){p.x+=p.y;return p;} int main(){P p={3,4};P q=f(p);return p.x!=3||q.x!=7||q.y!=4;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-object.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-objectstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-objectstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-objectstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-objectstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-object.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-objectclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-objectclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-objectclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-objectclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-object.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-object.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-dtor",
+    "accepted": true,
+    "sha256": "430e010b26d8ba2a55a1ab62ca5e9a5e7aee4af89ab366c1bbce0a16c98cb92b",
+    "source": "int n;struct G{~G(){++n;}}; __attribute__((always_inline)) inline int f(int x){G g;return x+1;} int main(){int x=f(4);return x!=5||n!=1;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-dtor.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-dtorstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-dtorstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-dtorstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-dtorstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-dtor.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-dtorclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-dtorclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-dtorclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-dtorclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-dtor.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-dtor.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-throw",
+    "accepted": true,
+    "sha256": "05906aed6255cb81c263c56068b88692bf0311a2dd0a00e0016a3fed0cb933e1",
+    "source": "int n;struct G{~G(){++n;}}; __attribute__((always_inline)) inline void f(int x){G g;throw x;} int main(){try{f(4);}catch(int x){return x!=4||n!=1;}return 2;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-throw.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-throwstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-throwstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-throwstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-throwstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-throw.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-throwclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-throwclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-throwclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-throwclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-throw.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-throw.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-catch",
+    "accepted": true,
+    "sha256": "39a21c2ece63121154d618a89ae1871e5f1756be5638f589b83d6f2b5b81cf80",
+    "source": "__attribute__((always_inline)) inline int f(int x){try{throw x;}catch(int y){return y+1;}} int main(){return f(4)!=5;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-catch.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-catchstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-catchstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-catchstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-catchstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-catch.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-catchclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-catchclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-catchclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-catchclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-catch.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-catch.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-noreturn",
+    "accepted": true,
+    "sha256": "cf70ba693028f19b61c7da113dd6bf7d5091a140694a1ea7c2e849e610f66c48",
+    "source": "__attribute__((always_inline,noreturn)) inline void f(){for(;;){}} int g(int x){if(x<0)f();return x*2;} int main(){return g(4)!=8;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-noreturn.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-noreturnstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-noreturnstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-noreturnstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-noreturnstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-noreturn.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-noreturnclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-noreturnclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-noreturnclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-noreturnclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-noreturn.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-noreturn.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-static-local",
+    "accepted": true,
+    "sha256": "a1b27de6b5f35dda97daeccbaf3e32ea72820c9d1c7a72bb1790d73db8cba787",
+    "source": "__attribute__((always_inline)) inline int f(){static int n=0;return ++n;} int main(){return f()!=1||f()!=2;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-static-local.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-static-localstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-static-localstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-static-localstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-static-localstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-static-local.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-static-localclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-static-localclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-static-localclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-static-localclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-static-local.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-static-local.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-static-operator",
+    "accepted": true,
+    "sha256": "91afbf63d5909ab6eadf1685602bff8e69401ba6f5e3516ecc18eaf2b70428d3",
+    "source": "struct F{__attribute__((always_inline)) static int operator()(int x){return x*3;}}; int main(){return F()(4)!=12;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-static-operator.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-static-operatorstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-static-operatorstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-static-operatorstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-static-operatorstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-static-operator.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-static-operatorclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-static-operatorclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-static-operatorclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-static-operatorclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-static-operator.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-static-operator.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-long-double",
+    "accepted": true,
+    "sha256": "c73149db6434f0c4a2ea4841ee58d29b1fe76cf5ec445a0cf1a0463afbeb63ea",
+    "source": "__attribute__((always_inline)) inline long double f(long double x){return x*.5L+1.L;} int main(){return f(6.L)!=4.L;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-long-double.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-long-doublestudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-long-doublestudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-long-doublestudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-long-doublestudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-long-double.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-long-doubleclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-long-doubleclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-long-doubleclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-long-doubleclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-long-double.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-long-double.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-atomic",
+    "accepted": true,
+    "sha256": "00cb348a3b0c46e71dc6d3706c14cc1966d64fcc9bf9c01f142b6689fe27327e",
+    "source": "int n; __attribute__((always_inline)) inline int f(){return __atomic_add_fetch(&n,1,5);} int main(){return f()!=1||f()!=2;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-atomic.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-atomicstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-atomicstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-atomicstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-atomicstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-atomic.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-atomicclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-atomicclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-atomicclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-atomicclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-atomic.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-atomic.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-void",
+    "accepted": true,
+    "sha256": "e02b78f35d3231ab37e2a1612c15df0b6160bca0399345180b3618efafad0982",
+    "source": "int n; __attribute__((always_inline)) inline void f(){++n;} int main(){f();f();return n!=2;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-void.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-voidstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-voidstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-voidstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-voidstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-void.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-voidclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-voidclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-voidclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-voidclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-void.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-void.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-rethrow",
+    "accepted": true,
+    "sha256": "104527352743b5fbc233140e30d1260063b73f76534a680dfaabd62886707431",
+    "source": "int n;struct G{~G(){++n;}}; __attribute__((always_inline)) inline void f(){try{G g;throw 7;}catch(int){G h;throw;}} int main(){try{f();}catch(int x){return x!=7||n!=2;}return 3;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-rethrow.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-rethrowstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-rethrowstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-rethrowstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-rethrowstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-rethrow.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-rethrowclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-rethrowclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-rethrowclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-rethrowclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-rethrow.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-rethrow.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-dependent-query",
+    "accepted": true,
+    "sha256": "07bbe44ab694deeb81732b02a9894d40dcca3710b5a324e534a5bfbdd4f128a6",
+    "source": "struct F { static constexpr int operator()(int x=5) noexcept {return x+2;} }; template<class T> constexpr auto call(T t)->decltype(t()){return t();} static_assert(call(F())==7,\"value\"); int main(){return call(F())!=7;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-dependent-query.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-dependent-querystudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-dependent-querystudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-dependent-querystudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-dependent-querystudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-dependent-query.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-dependent-queryclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-dependent-queryclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-dependent-queryclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-dependent-queryclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-dependent-query.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-dependent-query.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-noexcept-receiver",
+    "accepted": true,
+    "sha256": "4d3c4d8c2823fa0cb3b46e8845a8ee9e1c7a2ce87967aa16c505dec92146e204",
+    "source": "struct F {F() noexcept(false){} static int operator()() noexcept{return 1;} }; static_assert(!noexcept(F()()),\"receiver throws\"); int main(){return F()()!=1;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-noexcept-receiver.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-noexcept-receiverstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-noexcept-receiverstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-noexcept-receiverstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-noexcept-receiverstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-noexcept-receiver.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-noexcept-receiverclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-noexcept-receiverclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-noexcept-receiverclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-noexcept-receiverclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-noexcept-receiver.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-noexcept-receiver.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-reference-qualifier",
+    "accepted": false,
+    "sha256": "ae332d548915ca3025fb13765360b81d262da03139f36ce5ba74981fbf5078c2",
+    "source": "struct F {static int operator()() & {return 1;} }; int main(){return 0;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-reference-qualifier.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-reference-qualifierstudent.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: ref qualifier requires ordinary nonstatic member\n"
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-reference-qualifier.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-reference-qualifierclang.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/tmp/pa29-182/controls180/static-reference-qualifier.cpp:1:35: error: static member function cannot have '&' qualifier\n    1 | struct F {static int operator()() & {return 1;} }; int main(){return 0;}\n      |                                   ^\n1 error generated.\n"
+      }
+    ]
+  },
+  {
+    "name": "inline-recursive-fallback",
+    "accepted": true,
+    "sha256": "278e91d985c5dddd5ca3f33b8054a77e351a7760e947fe43528df9a213740b62",
+    "source": "__attribute__((always_inline)) inline int f(int x){return x?f(x-1)+1:0;} int main(){return f(6)!=6;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-recursive-fallback.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-recursive-fallbackstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-recursive-fallbackstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-recursive-fallbackstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-recursive-fallbackstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-recursive-fallback.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-recursive-fallbackclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-recursive-fallbackclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-recursive-fallbackclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-recursive-fallbackclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-recursive-fallback.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-recursive-fallback.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-variadic-fallback",
+    "accepted": true,
+    "sha256": "2b09db08e2d8529127ae53e6a8b97d0f792211ef2ed8ca2c7f6c1cad2348a794",
+    "source": "__attribute__((always_inline)) inline int f(int x,...){return x+1;} int main(){return f(5,9)!=6;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-variadic-fallback.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-variadic-fallbackstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-variadic-fallbackstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-variadic-fallbackstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-variadic-fallbackstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-variadic-fallback.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-variadic-fallbackclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-variadic-fallbackclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-variadic-fallbackclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-variadic-fallbackclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-variadic-fallback.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-variadic-fallback.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "inline-stack-fallback",
+    "accepted": true,
+    "sha256": "b48917ea6ba29cbf2338fc0c0c0748920607629a913726ba05c4c355cbb62155",
+    "source": "__attribute__((always_inline)) inline int f(int n){int* p=(int*)__builtin_alloca(n*sizeof(int));p[0]=n;return p[0];} int main(){return f(5)!=5;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-stack-fallback.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-stack-fallbackstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-stack-fallbackstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-stack-fallbackstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-stack-fallbackstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/inline-stack-fallback.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-stack-fallbackclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/inline-stack-fallbackclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-stack-fallbackclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/inline-stack-fallbackclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/inline-stack-fallback.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/inline-stack-fallback.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-mixed-template",
+    "accepted": true,
+    "sha256": "bcaa4e347809ad35170b2e686aa53f2b273f50d39f524772452ebc3822fcfc3b",
+    "source": "struct F {\n    template<class T> static int operator()(T*) { return 1; }\n    template<class T> int operator()(T) const { return 2; }\n};\nint main() { int x=0; return F()(&x)!=1 || F()(x)!=2; }\n",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-mixed-template.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixed-templatestudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-mixed-templatestudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixed-templatestudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-mixed-templatestudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-mixed-template.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixed-templateclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-mixed-templateclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixed-templateclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-mixed-templateclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-mixed-template.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixed-template.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-surrogate",
+    "accepted": true,
+    "sha256": "80809a729d7bd7964c118e0ff5714bb16a45cf8abe6cada3898852b62bf63d21",
+    "source": "int other(int) { return 9; }\nstruct F {\n    static int operator()(int x) { return x+1; }\n    using P=int(*)(int);\n    operator P() const { return other; }\n};\nint main() { return F()(4)!=5; }\n",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-surrogate.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-surrogatestudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-surrogatestudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-surrogatestudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-surrogatestudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-surrogate.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-surrogateclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-surrogateclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-surrogateclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-surrogateclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-surrogate.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-surrogate.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-surrogate-query",
+    "accepted": true,
+    "sha256": "331e6314b31ce687292fdecb81c2cc59d92db94ba5a57692bc591e01dda47806",
+    "source": "int other(int){return 9;} struct F{static constexpr int operator()(int x){return x+1;} using P=int(*)(int);operator P() const{return other;}}; template<class T> constexpr auto call(T t)->decltype(t(4)){return t(4);} static_assert(call(F())==5,\"direct\"); int main(){return call(F())!=5;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-surrogate-query.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-surrogate-querystudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-surrogate-querystudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-surrogate-querystudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-surrogate-querystudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-surrogate-query.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-surrogate-queryclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-surrogate-queryclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-surrogate-queryclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-surrogate-queryclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-surrogate-query.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-surrogate-query.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-mixed-template-query",
+    "accepted": true,
+    "sha256": "017d97391cc13108f612f89fd4b1dbb038d37f21f777c7e01c479319566f0fd2",
+    "source": "struct F{template<class T> static int operator()(T*){return 1;} template<class T> int operator()(T)const{return 2;}};template<class T> auto call(T t,int* p)->decltype(t(p)){return t(p);} int main(){int x=0;return call(F(),&x)!=1;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-mixed-template-query.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixed-template-querystudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-mixed-template-querystudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixed-template-querystudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-mixed-template-querystudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-mixed-template-query.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixed-template-queryclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-mixed-template-queryclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixed-template-queryclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-mixed-template-queryclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-mixed-template-query.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixed-template-query.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-call",
+    "accepted": true,
+    "sha256": "8f2fbed82a09ee7b27c2884134cb8196fd5baf4e100adee3c0120e038660806b",
+    "source": "struct F { static int operator()(int x){return x+1;} }; int main(){return F()(6)!=7;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-call.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-callstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-callstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-callstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-callstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-call.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-callclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-callclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-callclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-callclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-call.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-call.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-subscript",
+    "accepted": true,
+    "sha256": "302b713e1490ed541c5a87de639a0549f410eeeb8f88a0722774e5a0b689f0dc",
+    "source": "struct F { static int operator[](int x){return x+1;} }; int main(){return F()[6]!=7;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-subscript.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-subscriptstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-subscriptstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-subscriptstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-subscriptstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-subscript.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-subscriptclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-subscriptclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-subscriptclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-subscriptclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-subscript.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-subscript.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-template",
+    "accepted": true,
+    "sha256": "8867c5c146df142f855ca17b31a6a0215f1cd2f0bc61fdeb6774979d9c61b911",
+    "source": "struct F { template<class T> static T operator()(T x){return x+1;} }; template<class T> int call(T t){return t(8);} int main(){return call(F())!=9;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-template.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-templatestudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-templatestudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-templatestudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-templatestudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-template.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-templateclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-templateclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-templateclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-templateclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-template.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-template.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-default",
+    "accepted": true,
+    "sha256": "01d48e6b8dc0e80e32c182dccb0ce33cc945354f83da15ec223b3e6d4563c47a",
+    "source": "struct F { static int operator()(int x=9){return x;} }; int main(){return F()()!=9;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-default.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-defaultstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-defaultstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-defaultstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-defaultstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-default.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-defaultclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-defaultclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-defaultclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-defaultclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-default.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-default.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-effects",
+    "accepted": true,
+    "sha256": "5ce92fc5a83945d6b4c1d2b4fd253616fb97b637157e85f3f2479f7dde8abf47",
+    "source": "int made,dead; struct F { F(){++made;} ~F(){++dead;} static int operator()(int x){return x+made;} }; int main(){int x=F()(8);return x!=9||made!=1||dead!=1;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-effects.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-effectsstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-effectsstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-effectsstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-effectsstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-effects.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-effectsclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-effectsclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-effectsclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-effectsclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-effects.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-effects.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-query",
+    "accepted": true,
+    "sha256": "34f0f8fd4475a20cc47b46e3aa94164b20123846bbe054133b9cc8c629fa5e9e",
+    "source": "struct F { static constexpr int operator()(int x=5) noexcept {return x+2;} }; template<class T> auto call(T t)->decltype(t()){return t();} static_assert(F()()==7,\"value\"); static_assert(noexcept(F()(1)),\"noexcept\"); int main(){return call(F())!=7;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-query.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-querystudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-querystudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-querystudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-querystudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-query.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-queryclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-queryclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-queryclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-queryclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-query.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-query.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-fixed",
+    "accepted": true,
+    "sha256": "a23eabc575657e479b50a56aedf4a1e6b0d77fb3fd64aa36a9a75dabc0ec8382",
+    "source": "struct F { static int operator()(int x=4){return x;} }; template<class T> int call(T){return F()();} int main(){return call(0)!=4;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-fixed.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-fixedstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-fixedstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-fixedstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-fixedstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-fixed.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-fixedclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-fixedclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-fixedclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-fixedclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-fixed.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-fixed.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-pointer",
+    "accepted": true,
+    "sha256": "13103ea443f3f4cb20f0086f3ee956a8cc912ff5b58ce16d1e57bf2dab7f1afd",
+    "source": "struct F { static int operator()(int x){return x+1;} }; int main(){int(*p)(int)=&F::operator();return p(5)!=6;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-pointer.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-pointerstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-pointerstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-pointerstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-pointerstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-pointer.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-pointerclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-pointerclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-pointerclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-pointerclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-pointer.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-pointer.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-inherited",
+    "accepted": true,
+    "sha256": "393f8c0c3360ff91d659c8eb9a2befa98f3a842630f0f665bc4219f9277dc2f9",
+    "source": "struct F { static int operator()(int x){return x+1;} }; struct G:F{}; int main(){const G g;return g(5)!=6;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-inherited.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-inheritedstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-inheritedstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-inheritedstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-inheritedstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-inherited.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-inheritedclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-inheritedclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-inheritedclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-inheritedclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-inherited.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-inherited.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-mixed",
+    "accepted": true,
+    "sha256": "772123a8794dda907d75e3079c67aedb7ee24c902a4e77381339bd3610e2f3fd",
+    "source": "struct F { static int operator()(int x){return 1;} int operator()(long) const {return 2;} }; int main(){F f;return f(5)!=1||f(5L)!=2||f.operator()(5)!=1;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-mixed.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixedstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-mixedstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixedstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-mixedstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-mixed.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixedclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-mixedclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixedclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-mixedclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-mixed.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-mixed.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-partial",
+    "accepted": true,
+    "sha256": "e66c91793cbe5e5869673d4dc7b11d6877108e2f9f3b63ce81430e2e856c9350",
+    "source": "struct F { template<class T> static int operator()(T*){return 1;} template<class T> static int operator()(T){return 2;} }; int main(){int x;return F()(&x)!=1||F()(x)!=2;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-partial.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-partialstudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-partialstudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-partialstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-partialstudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-partial.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-partialclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-partialclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-partialclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-partialclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-partial.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-partial.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-reference",
+    "accepted": true,
+    "sha256": "be1881b328a3a1134b5f9d158a6ce2f2a87f0ab19146648f54aafcb9fd763921",
+    "source": "struct F { static int& operator()(int& x){return x;} }; int main(){int x=3;F()(x)=7;return x!=7;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-reference.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-referencestudent.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-referencestudent.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-referencestudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-referencestudent"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-reference.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-referenceclang.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-182/controls180/static-referenceclang.o",
+          "-o",
+          "/tmp/pa29-182/controls180/static-referenceclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-182/controls180/static-referenceclang"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-c",
+          "--emit-lowir",
+          "--validate-lowir",
+          "/tmp/pa29-182/controls180/static-reference.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-reference.lowir"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "name": "static-private",
+    "accepted": false,
+    "sha256": "949e67294e22f31a6cb2d003ca9901053d73d8b0ccf0f1bb30093cf21e509e56",
+    "source": "struct F { private: static int operator()(int){return 1;} }; int main(){return F()(1);}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-private.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-privatestudent.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: inaccessible class member: operator() declared in /tmp/pa29-182/controls180/static-private.cpp:1\n"
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-private.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-privateclang.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/tmp/pa29-182/controls180/static-private.cpp:1:83: error: 'operator()' is a private member of 'F'\n    1 | struct F { private: static int operator()(int){return 1;} }; int main(){return F()(1);}\n      |                                                                                ~~~^\n/tmp/pa29-182/controls180/static-private.cpp:1:32: note: declared private here\n    1 | struct F { private: static int operator()(int){return 1;} }; int main(){return F()(1);}\n      |                                ^\n1 error generated.\n"
+      }
+    ]
+  },
+  {
+    "name": "static-deleted",
+    "accepted": false,
+    "sha256": "3daa7a72c886e421dd31a6e4846f5f68227716aaca75f368aa8030b93c1c5621",
+    "source": "struct F { static int operator()(int)=delete; }; int main(){return F()(1);}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-deleted.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-deletedstudent.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: deleted operator\n"
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-deleted.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-deletedclang.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/tmp/pa29-182/controls180/static-deleted.cpp:1:68: error: call to deleted function call operator in type 'F'\n    1 | struct F { static int operator()(int)=delete; }; int main(){return F()(1);}\n      |                                                                    ^~~\n/tmp/pa29-182/controls180/static-deleted.cpp:1:23: note: candidate function has been explicitly deleted\n    1 | struct F { static int operator()(int)=delete; }; int main(){return F()(1);}\n      |                       ^\n/tmp/pa29-182/controls180/static-deleted.cpp:1:71: error: attempt to use a deleted function\n    1 | struct F { static int operator()(int)=delete; }; int main(){return F()(1);}\n      |                                                                       ^\n/tmp/pa29-182/controls180/static-deleted.cpp:1:23: note: 'operator()' has been explicitly marked deleted here\n    1 | struct F { static int operator()(int)=delete; }; int main(){return F()(1);}\n      |                       ^\n2 errors generated.\n"
+      }
+    ]
+  },
+  {
+    "name": "static-wrong-arity",
+    "accepted": false,
+    "sha256": "bab3dd2827d67e015cbbd0c2de3b123b6554a036cdb749698345f0d45455b461",
+    "source": "struct F { static int operator()(int){return 1;} }; int main(){return F()();}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-wrong-arity.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-wrong-aritystudent.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: called object is not a function\n"
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-wrong-arity.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-wrong-arityclang.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/tmp/pa29-182/controls180/static-wrong-arity.cpp:1:71: error: no matching function for call to object of type 'F'\n    1 | struct F { static int operator()(int){return 1;} }; int main(){return F()();}\n      |                                                                       ^~~\n/tmp/pa29-182/controls180/static-wrong-arity.cpp:1:23: note: candidate function not viable: requires 1 argument, but 0 were provided\n    1 | struct F { static int operator()(int){return 1;} }; int main(){return F()();}\n      |                       ^          ~~~\n1 error generated.\n"
+      }
+    ]
+  },
+  {
+    "name": "static-illegal-op",
+    "accepted": false,
+    "sha256": "f4c807d758741005d92f23859cf5399e424cd6161f6950504668f272d4aecaa4",
+    "source": "struct F { static int operator+(F){return 1;} }; int main(){return 0;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-illegal-op.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-illegal-opstudent.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: operator cannot be static\n"
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-illegal-op.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-illegal-opclang.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/tmp/pa29-182/controls180/static-illegal-op.cpp:1:23: error: overloaded 'operator+' cannot be a static member function\n    1 | struct F { static int operator+(F){return 1;} }; int main(){return 0;}\n      |                       ^\n1 error generated.\n"
+      }
+    ]
+  },
+  {
+    "name": "static-ambiguous",
+    "accepted": false,
+    "sha256": "1e931b7921e46655e607bf05c4d238ad985d1f1549dfad6a2ad8521f5dd76be3",
+    "source": "struct F { static int operator()(int,long){return 1;} int operator()(long,int)const{return 2;} }; int main(){return F()(1,1);}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-ambiguous.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-ambiguousstudent.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: ambiguous operator overload\n"
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-ambiguous.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-ambiguousclang.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/tmp/pa29-182/controls180/static-ambiguous.cpp:1:117: error: call to object of type 'F' is ambiguous\n    1 | struct F { static int operator()(int,long){return 1;} int operator()(long,int)const{return 2;} }; int main(){return F()(1,1);}\n      |                                                                                                                     ^~~\n/tmp/pa29-182/controls180/static-ambiguous.cpp:1:23: note: candidate function\n    1 | struct F { static int operator()(int,long){return 1;} int operator()(long,int)const{return 2;} }; int main(){return F()(1,1);}\n      |                       ^\n/tmp/pa29-182/controls180/static-ambiguous.cpp:1:59: note: candidate function\n    1 | struct F { static int operator()(int,long){return 1;} int operator()(long,int)const{return 2;} }; int main(){return F()(1,1);}\n      |                                                           ^\n1 error generated.\n"
+      }
+    ]
+  },
+  {
+    "name": "static-this",
+    "accepted": false,
+    "sha256": "72029c36f6eace25d37695578994458dee08ccc3d20618a0754ffdfaa0b2e2fa",
+    "source": "struct F { static F* operator()(){return this;} }; int main(){return 0;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-this.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-thisstudent.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: this outside nonstatic member\n"
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-this.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-thisclang.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/tmp/pa29-182/controls180/static-this.cpp:1:42: error: invalid use of 'this' outside of a non-static member function\n    1 | struct F { static F* operator()(){return this;} }; int main(){return 0;}\n      |                                          ^\n1 error generated.\n"
+      }
+    ]
+  },
+  {
+    "name": "static-qualifier",
+    "accepted": false,
+    "sha256": "5278b88ac6aacec2a56e195f00db10e95f5d7685bf607e379a2c9574283a7bab",
+    "source": "struct F { static int operator()() const{return 1;} }; int main(){return 0;}",
+    "checks": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-c",
+          "/tmp/pa29-182/controls180/static-qualifier.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-qualifierstudent.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: static operator cannot have object qualifiers\n"
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=c++11",
+          "-Wno-c++23-extensions",
+          "-c",
+          "/tmp/pa29-182/controls180/static-qualifier.cpp",
+          "-o",
+          "/tmp/pa29-182/controls180/static-qualifierclang.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "/tmp/pa29-182/controls180/static-qualifier.cpp:1:36: error: static member function cannot have 'const' qualifier\n    1 | struct F { static int operator()() const{return 1;} }; int main(){return 0;}\n      |                                    ^~~~~\n1 error generated.\n"
+      }
+    ]
+  }
+]

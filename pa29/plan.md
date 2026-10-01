@@ -1,59 +1,56 @@
-# PA29 compact plan — implementation181
+# PA29 compact plan — checkpointAudit182
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **checkpointAudit complete; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
-Last reviewed commit: `667edd800e4e5eb1b1ef92a3108da3bd96c51708`.
-Previous reviewed commit: `7139ceb5769eea12c6e2e00b54932f09d59c79b5`.
-Entry HEAD: `c0efbf2992a9e58dbaa2d1e7300496012eed5988`.
-Code tip: `0e47335f`.
+Previous reviewed commit: `667edd800e4e5eb1b1ef92a3108da3bd96c51708`.
+Audit entry: `9211517d1f554f61efa7d6e2e30020dc13171f3f`.
+Last reviewed commit: `52070178897f5894edaf2f35d03a734b781979d4`.
 
-## Design and spec alignment
+## Reviewed design and fixes
 
-The completed group is **GNU zero-extent array identity, layout and lifetime**.
-A canonical type distinguishes absent and zero bounds. Existing declaration,
-substitution, initialization, conversion and ABI owners consume that fact;
-production still constructs typed LowIR and direct ELF without text transport.
-Related fixes include immediate-context substitution failure, parenthesized
-parameter packs, static member definition bounds, zero-sized class effects,
-allocation element counts, explicit adapter parity and pre-encoding width limits.
-[Handoff181](handoff181.md) records ownership, data flow, complexity and boundaries.
-[Audit178](audit.md), [handoff180](handoff180.md) and all review markers remain intact.
+Reviewed the complete **17-commit** range across three accepted handoffs and
+this audit fix, including combined changes to **79 implementation/build paths**.
+[Audit182](audit.md) records every commit, ownership trace, findings and ledger;
+[range evidence](../student.tests/pa29/evidence182/range.json) binds the range.
+[Audit178](audit178.md) and handoffs179–181 remain preserved.
 
-## Validation and performance
+Two shared-owner defects are repaired: array structured bindings retain source
+element cv-qualifiers; mandatory inline expansion has one native preparation
+owner, so source LowIR and explicit adapters receive the same single budget.
+Typed alias/copy/lifetime facts, canonical array identity and separate demand
+states remain shared. Production uses typed LowIR, per-function MIR and direct
+ELF. The integrated control combines all three handoffs through exception cleanup.
+The code fixes were validated and committed before these record-only updates.
 
-PA29 **387 → 388/403**: one original failure removed, **15 remain**, no new
-failures. PA1–28 **4538/4538**; through PA29 **4926/4941**. File audit passes
-with four inherited warnings. All 403 inputs and 1,707 contract/harness paths
-remain unchanged. **43** personal controls and **166** inspection commands pass.
-Final commands, source hashes and coverage are bound in the
-[evidence manifest](../student.tests/pa29/evidence181/manifest.json).
+## Validation and performance disposition
 
-[Performance181](performance181.md) records compiler latency/RSS and runtime/text
-size at PA29/O0: **440 final** observations and **440 preliminary** observations
-preserved, with A/A+ABBA on equivalent inputs and final-only zero-extent scaling.
-No optional optimization is introduced; equivalent benchmark text is unchanged.
-Array emission keeps its existing eight-element expansion bound; larger live
-arrays use counted loops.
-Canonical Type storage remains 40 bytes; each allocation fact adds one eight-byte
-logical element-count multiplier. Existing mandated limits remain enforced,
-including the corrected pre-narrowing object extent check. Inherited blanket
-15%/zero-growth targets remain diagnostic under spec §9.
+PA29 **388/403**, the identical **15** entry failures; PA1–28 **4538/4538**;
+through PA29 **4926/4941**. File audit passes with four inherited warnings.
+All **403** inputs and **1,707** contract/harness paths are unchanged.
+**141** explicit controls and **653** inspection commands pass, including
+recursive/depth/growth fallback, source/adapter object and work-counter equality,
+volatile accesses, zero-size copy/destruction, native symbols/unwind and telemetry.
+The [manifest](../student.tests/pa29/evidence182/manifest.json) binds tested source,
+compiler, checks, coverage, controls and measurements to the reviewed code tip.
 
-## Remaining groups and handoff ledger
+[Performance182](performance182.md) retains **440** new performance observations
+plus eight launchers and verifies **2,576** inherited observations. Equivalent
+benchmark objects are identical; corrected cv-array cases have final-only scaling.
+Compiler latency/RSS and runtime/text are reported together with all noise/spread.
+No optional transform is added. Mandatory inline budgets and existing compiler
+limits remain enforced. Inherited blanket 15%/zero-growth targets remain diagnostic
+under spec §9; necessary semantic costs and later-stage work add no exit gate.
 
-The [15-case ledger](../student.tests/pa29/evidence181/remaining.json) separates
-**12 unfinished implementation** cases from **3 independent contract questions**,
-all still failures: extended syntax/types **11**, template demand/hosted ABI **3**,
-legacy trait **1**. No reference correction, coverage reduction or waiver occurs.
+## Remaining groups and handoff quality
 
-The completed group covers scalar/class, constant/runtime, template, ABI,
-exception, alignment and storage-limit boundaries. The remaining failures need
-extended numeric/complex types, vector intrinsics, GNU expression/syntax forms,
-library conversion or ABI policy; they do not use the repaired zero-bound facts.
-That separate ownership is the concrete boundary for this incomplete handoff.
+The [15-case ledger](../student.tests/pa29/evidence182/remaining.json) groups work
+as extended syntax/types **11**, template demand/hosted ABI **3**, legacy trait **1**.
+It retains **12 implementation cases** and **3 independent contract questions**;
+none is waived. No reference, fixture, comparison rule or bundle revision changes.
+Full PA29 and through-report success remain prerequisites for PA30.
 
-Commits `e0619de9`, `f69601ef`, `0e47335f` implement and validate the group;
-`42a2bac7` records entry scope. The final record commit returns control to Ralph
-for independent review. This handoff ends implementation181, not the assignment
-or its audit; full-stage success and whole-stage review remain prerequisites
-for advancement.
+Finish broad owners with their cv/reference, substitution, lifetime/exception,
+ABI and adapter-budget interactions before handoff. The three groups made useful
+progress (22 → 15 failures), but array deduction and serialization fallback gaps
+caused avoidable follow-up fragmentation. This audit establishes one reviewed
+code baseline; it does not mark the assignment complete.

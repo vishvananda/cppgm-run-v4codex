@@ -1,0 +1,2165 @@
+[
+  {
+    "group": "common",
+    "workload": "memory",
+    "object_sha256": "28798e83ffc231f2394886236fa230283a93ac20adbdb526111201a60dc7c98a",
+    "executable_identical": true,
+    "noncode_differences": [],
+    "sections_A": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "a83784786c514a5df42a2dd9589b0578dfc36110e0ecb958e7d9c714b8bc9481"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "3dc17c2ed1a45a69d20c26c612a9de239df3a8e81939e694863fa9ebdde1fe46"
+      },
+      ".dynsym": {
+        "size": 144,
+        "flags": 2,
+        "sha256": "1f3e090299e3439eca2553208f582e6a31fe8bb13621ce2cc4e947fb3540af32"
+      },
+      ".dynstr": {
+        "size": 136,
+        "flags": 2,
+        "sha256": "1ebb6477350735b7aaffa0722657e8aa2dc3f452e7b6d823c89c0ef553b39594"
+      },
+      ".gnu.version": {
+        "size": 12,
+        "flags": 2,
+        "sha256": "a34ed64980ae36b960721ec5d9060098e21886185ce7f718f0ead6e81647f2b8"
+      },
+      ".gnu.version_r": {
+        "size": 48,
+        "flags": 2,
+        "sha256": "737c192fcba8f03a6c76f78a9e3b4bffaa8886fb86148bb5eaf68b28a9971393"
+      },
+      ".rela.dyn": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "b300bdc2da6ae1b3afb504b7ce923ef4d8218c04003304c70019fa70b87b8fa5"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "32ba27aa0337d9cfc8ea254cad5c23d9ce706d558fc951f59928cddd215a1d87"
+      },
+      ".plt": {
+        "size": 16,
+        "flags": 6,
+        "sha256": "28fa8899b6faa3069876ebec64f8ba25d08c134c5988f73e2bff0cb3d61451c1"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "90b299583b161255057cfd29715eabae21c7ecbc0960222f4a3ad932131e4f73"
+      },
+      ".text": {
+        "size": 151633,
+        "flags": 6,
+        "sha256": "5bcb1f544fe09791813d5412cd509e656dfeb462f54d38c1555eba8a75fa750f"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 19260,
+        "flags": 2,
+        "sha256": "1f2bccd2a524606b9f28c503a25e8a1fc8452904d7ae0c080112b6dd5de70ee7"
+      },
+      ".eh_frame": {
+        "size": 86648,
+        "flags": 2,
+        "sha256": "4f19d6858572f6ed8ed1b9f30733519f20898a42795179220c1e093a304a4904"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "d8976de582fe8d334ffc3195bdd441cca83296b591d394141e6b558a06051b38"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "c17e9a541ac7d1696b2e85dcfa24db1d4ec6f452d707721c68fc13b1784636af"
+      },
+      ".dynamic": {
+        "size": 448,
+        "flags": 3,
+        "sha256": "035dc8d4e894a852966f3ef9bb140067cd708674ab76596731e54b41420508ef"
+      },
+      ".got": {
+        "size": 64,
+        "flags": 3,
+        "sha256": "289b167dfaa2d8327fb7126fc66653492afad55b1d4f8b17948cdeafdc5b8bbe"
+      },
+      ".data": {
+        "size": 16,
+        "flags": 3,
+        "sha256": "444b4267ce13d2af5755657a9886e077c2579a95d5a13728ab23609a14ae0400"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 58464,
+        "flags": 0,
+        "sha256": "c7fecb7c650c7ce296b085ef28a345e8de973cff994c3d8b879de543fc7d801f"
+      },
+      ".strtab": {
+        "size": 44963,
+        "flags": 0,
+        "sha256": "9f52ce05e531e00bb2d3a70d470fa7d97c521f0262727b6a883eec1ff34c3d4f"
+      },
+      ".shstrtab": {
+        "size": 268,
+        "flags": 0,
+        "sha256": "7e1c7e7d65fcf49951a2a21bdf6dd5ecba9a660256183de3c84033c2ef7eabd9"
+      }
+    },
+    "sections_B": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "a83784786c514a5df42a2dd9589b0578dfc36110e0ecb958e7d9c714b8bc9481"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "3dc17c2ed1a45a69d20c26c612a9de239df3a8e81939e694863fa9ebdde1fe46"
+      },
+      ".dynsym": {
+        "size": 144,
+        "flags": 2,
+        "sha256": "1f3e090299e3439eca2553208f582e6a31fe8bb13621ce2cc4e947fb3540af32"
+      },
+      ".dynstr": {
+        "size": 136,
+        "flags": 2,
+        "sha256": "1ebb6477350735b7aaffa0722657e8aa2dc3f452e7b6d823c89c0ef553b39594"
+      },
+      ".gnu.version": {
+        "size": 12,
+        "flags": 2,
+        "sha256": "a34ed64980ae36b960721ec5d9060098e21886185ce7f718f0ead6e81647f2b8"
+      },
+      ".gnu.version_r": {
+        "size": 48,
+        "flags": 2,
+        "sha256": "737c192fcba8f03a6c76f78a9e3b4bffaa8886fb86148bb5eaf68b28a9971393"
+      },
+      ".rela.dyn": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "b300bdc2da6ae1b3afb504b7ce923ef4d8218c04003304c70019fa70b87b8fa5"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "32ba27aa0337d9cfc8ea254cad5c23d9ce706d558fc951f59928cddd215a1d87"
+      },
+      ".plt": {
+        "size": 16,
+        "flags": 6,
+        "sha256": "28fa8899b6faa3069876ebec64f8ba25d08c134c5988f73e2bff0cb3d61451c1"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "90b299583b161255057cfd29715eabae21c7ecbc0960222f4a3ad932131e4f73"
+      },
+      ".text": {
+        "size": 151633,
+        "flags": 6,
+        "sha256": "5bcb1f544fe09791813d5412cd509e656dfeb462f54d38c1555eba8a75fa750f"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 19260,
+        "flags": 2,
+        "sha256": "1f2bccd2a524606b9f28c503a25e8a1fc8452904d7ae0c080112b6dd5de70ee7"
+      },
+      ".eh_frame": {
+        "size": 86648,
+        "flags": 2,
+        "sha256": "4f19d6858572f6ed8ed1b9f30733519f20898a42795179220c1e093a304a4904"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "d8976de582fe8d334ffc3195bdd441cca83296b591d394141e6b558a06051b38"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "c17e9a541ac7d1696b2e85dcfa24db1d4ec6f452d707721c68fc13b1784636af"
+      },
+      ".dynamic": {
+        "size": 448,
+        "flags": 3,
+        "sha256": "035dc8d4e894a852966f3ef9bb140067cd708674ab76596731e54b41420508ef"
+      },
+      ".got": {
+        "size": 64,
+        "flags": 3,
+        "sha256": "289b167dfaa2d8327fb7126fc66653492afad55b1d4f8b17948cdeafdc5b8bbe"
+      },
+      ".data": {
+        "size": 16,
+        "flags": 3,
+        "sha256": "444b4267ce13d2af5755657a9886e077c2579a95d5a13728ab23609a14ae0400"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 58464,
+        "flags": 0,
+        "sha256": "c7fecb7c650c7ce296b085ef28a345e8de973cff994c3d8b879de543fc7d801f"
+      },
+      ".strtab": {
+        "size": 44963,
+        "flags": 0,
+        "sha256": "9f52ce05e531e00bb2d3a70d470fa7d97c521f0262727b6a883eec1ff34c3d4f"
+      },
+      ".shstrtab": {
+        "size": 268,
+        "flags": 0,
+        "sha256": "7e1c7e7d65fcf49951a2a21bdf6dd5ecba9a660256183de3c84033c2ef7eabd9"
+      }
+    }
+  },
+  {
+    "group": "common",
+    "workload": "floating",
+    "object_sha256": "1d336c199b2695e783552f12dcddd9a0364cb2d495dc8dc5d9fab29ce7a02bc7",
+    "executable_identical": true,
+    "noncode_differences": [],
+    "sections_A": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "e00819a9a4eb2bb5b991b946cb432ccc0a4e23fc8985fd5701ec9dceab160f4a"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "3dc17c2ed1a45a69d20c26c612a9de239df3a8e81939e694863fa9ebdde1fe46"
+      },
+      ".dynsym": {
+        "size": 144,
+        "flags": 2,
+        "sha256": "1f3e090299e3439eca2553208f582e6a31fe8bb13621ce2cc4e947fb3540af32"
+      },
+      ".dynstr": {
+        "size": 136,
+        "flags": 2,
+        "sha256": "1ebb6477350735b7aaffa0722657e8aa2dc3f452e7b6d823c89c0ef553b39594"
+      },
+      ".gnu.version": {
+        "size": 12,
+        "flags": 2,
+        "sha256": "a34ed64980ae36b960721ec5d9060098e21886185ce7f718f0ead6e81647f2b8"
+      },
+      ".gnu.version_r": {
+        "size": 48,
+        "flags": 2,
+        "sha256": "737c192fcba8f03a6c76f78a9e3b4bffaa8886fb86148bb5eaf68b28a9971393"
+      },
+      ".rela.dyn": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "b300bdc2da6ae1b3afb504b7ce923ef4d8218c04003304c70019fa70b87b8fa5"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "32ba27aa0337d9cfc8ea254cad5c23d9ce706d558fc951f59928cddd215a1d87"
+      },
+      ".plt": {
+        "size": 16,
+        "flags": 6,
+        "sha256": "28fa8899b6faa3069876ebec64f8ba25d08c134c5988f73e2bff0cb3d61451c1"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "90b299583b161255057cfd29715eabae21c7ecbc0960222f4a3ad932131e4f73"
+      },
+      ".text": {
+        "size": 151474,
+        "flags": 6,
+        "sha256": "ab814a6c0a9c6e1e74007467ef1f7a3e7f5175c5b8b01164b3f01c3a360eb88b"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 19260,
+        "flags": 2,
+        "sha256": "5fb412701b9abb2815c2547b30c5ce514bbd11b885c8e17d9f953e02d69b48e4"
+      },
+      ".eh_frame": {
+        "size": 86648,
+        "flags": 2,
+        "sha256": "aeced43382698d0c1a422792284c5148ac120e21c1581b568d6a3099572e840f"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "d8976de582fe8d334ffc3195bdd441cca83296b591d394141e6b558a06051b38"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "c17e9a541ac7d1696b2e85dcfa24db1d4ec6f452d707721c68fc13b1784636af"
+      },
+      ".dynamic": {
+        "size": 448,
+        "flags": 3,
+        "sha256": "a67f20473072a2a295a14478919b4d3ff6334ad57367e00f0b99a041ad625088"
+      },
+      ".got": {
+        "size": 64,
+        "flags": 3,
+        "sha256": "289b167dfaa2d8327fb7126fc66653492afad55b1d4f8b17948cdeafdc5b8bbe"
+      },
+      ".data": {
+        "size": 16,
+        "flags": 3,
+        "sha256": "444b4267ce13d2af5755657a9886e077c2579a95d5a13728ab23609a14ae0400"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 58464,
+        "flags": 0,
+        "sha256": "b742be4034f83da36ecc36fe5195d79d41f671e0ee96da2a808fef83b9e962f2"
+      },
+      ".strtab": {
+        "size": 44963,
+        "flags": 0,
+        "sha256": "387c367fa6dfdabd6e70d5c366f76cc37713f26483ff93f8270a67eff5f52146"
+      },
+      ".shstrtab": {
+        "size": 268,
+        "flags": 0,
+        "sha256": "7e1c7e7d65fcf49951a2a21bdf6dd5ecba9a660256183de3c84033c2ef7eabd9"
+      }
+    },
+    "sections_B": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "e00819a9a4eb2bb5b991b946cb432ccc0a4e23fc8985fd5701ec9dceab160f4a"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "3dc17c2ed1a45a69d20c26c612a9de239df3a8e81939e694863fa9ebdde1fe46"
+      },
+      ".dynsym": {
+        "size": 144,
+        "flags": 2,
+        "sha256": "1f3e090299e3439eca2553208f582e6a31fe8bb13621ce2cc4e947fb3540af32"
+      },
+      ".dynstr": {
+        "size": 136,
+        "flags": 2,
+        "sha256": "1ebb6477350735b7aaffa0722657e8aa2dc3f452e7b6d823c89c0ef553b39594"
+      },
+      ".gnu.version": {
+        "size": 12,
+        "flags": 2,
+        "sha256": "a34ed64980ae36b960721ec5d9060098e21886185ce7f718f0ead6e81647f2b8"
+      },
+      ".gnu.version_r": {
+        "size": 48,
+        "flags": 2,
+        "sha256": "737c192fcba8f03a6c76f78a9e3b4bffaa8886fb86148bb5eaf68b28a9971393"
+      },
+      ".rela.dyn": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "b300bdc2da6ae1b3afb504b7ce923ef4d8218c04003304c70019fa70b87b8fa5"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "32ba27aa0337d9cfc8ea254cad5c23d9ce706d558fc951f59928cddd215a1d87"
+      },
+      ".plt": {
+        "size": 16,
+        "flags": 6,
+        "sha256": "28fa8899b6faa3069876ebec64f8ba25d08c134c5988f73e2bff0cb3d61451c1"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "90b299583b161255057cfd29715eabae21c7ecbc0960222f4a3ad932131e4f73"
+      },
+      ".text": {
+        "size": 151474,
+        "flags": 6,
+        "sha256": "ab814a6c0a9c6e1e74007467ef1f7a3e7f5175c5b8b01164b3f01c3a360eb88b"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 19260,
+        "flags": 2,
+        "sha256": "5fb412701b9abb2815c2547b30c5ce514bbd11b885c8e17d9f953e02d69b48e4"
+      },
+      ".eh_frame": {
+        "size": 86648,
+        "flags": 2,
+        "sha256": "aeced43382698d0c1a422792284c5148ac120e21c1581b568d6a3099572e840f"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "d8976de582fe8d334ffc3195bdd441cca83296b591d394141e6b558a06051b38"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "c17e9a541ac7d1696b2e85dcfa24db1d4ec6f452d707721c68fc13b1784636af"
+      },
+      ".dynamic": {
+        "size": 448,
+        "flags": 3,
+        "sha256": "a67f20473072a2a295a14478919b4d3ff6334ad57367e00f0b99a041ad625088"
+      },
+      ".got": {
+        "size": 64,
+        "flags": 3,
+        "sha256": "289b167dfaa2d8327fb7126fc66653492afad55b1d4f8b17948cdeafdc5b8bbe"
+      },
+      ".data": {
+        "size": 16,
+        "flags": 3,
+        "sha256": "444b4267ce13d2af5755657a9886e077c2579a95d5a13728ab23609a14ae0400"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 58464,
+        "flags": 0,
+        "sha256": "b742be4034f83da36ecc36fe5195d79d41f671e0ee96da2a808fef83b9e962f2"
+      },
+      ".strtab": {
+        "size": 44963,
+        "flags": 0,
+        "sha256": "387c367fa6dfdabd6e70d5c366f76cc37713f26483ff93f8270a67eff5f52146"
+      },
+      ".shstrtab": {
+        "size": 268,
+        "flags": 0,
+        "sha256": "7e1c7e7d65fcf49951a2a21bdf6dd5ecba9a660256183de3c84033c2ef7eabd9"
+      }
+    }
+  },
+  {
+    "group": "common",
+    "workload": "exceptions",
+    "object_sha256": "6f5a4a53dd1b55afcd6092df67128070e991feaffcf21bb3098b4c0d8cd84363",
+    "executable_identical": true,
+    "noncode_differences": [],
+    "sections_A": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "d9532e12384a0807e5824febe880beb9fb75dd80d494a14639582d44429d68f1"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "fa6d0a7f5a39430aae22ca8cafab27385c25c321776aea0952151531105c2d13"
+      },
+      ".dynsym": {
+        "size": 312,
+        "flags": 2,
+        "sha256": "88434c3d983568878e91176ad68e4f648388bf4e8815ff7d8a49c37083e195cb"
+      },
+      ".dynstr": {
+        "size": 297,
+        "flags": 2,
+        "sha256": "f16a841692d0b28569f7b56d6d7219ff908dd55f335f840104101b2fefd5b96d"
+      },
+      ".gnu.version": {
+        "size": 26,
+        "flags": 2,
+        "sha256": "c422deba14fdf165c59e9cfb22306f45edaa3e4c4481d02d9edf1351b540f72b"
+      },
+      ".gnu.version_r": {
+        "size": 112,
+        "flags": 2,
+        "sha256": "556e001606ee72671448f0b8e97d22f67ba79754511a1ca86b8549bed541075c"
+      },
+      ".rela.dyn": {
+        "size": 264,
+        "flags": 2,
+        "sha256": "06d4fa27aa0b0d9c6714bfb5224536a608c57cab37ef8c0358756fd5ae3f2203"
+      },
+      ".rela.plt": {
+        "size": 120,
+        "flags": 66,
+        "sha256": "9b5e5de9ee4a5834b0b90ba80a355017c36602a284de4e53a6e976a998ea2068"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "47e6d0351ad66e4f13b2f3597b6cf510bec941463875717a3d24f36b402d77b9"
+      },
+      ".plt": {
+        "size": 96,
+        "flags": 6,
+        "sha256": "4a67be74b223f25c417b0a0439cb6e813b21893e9e8e63ede3d29fe012fec3c9"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "3bd62b96295d6b831f59a80ebdf96454729958f21792cea93db8d03c70428d3c"
+      },
+      ".text": {
+        "size": 151781,
+        "flags": 6,
+        "sha256": "8a7f4db9c4f7dd332d8976b3d68037d01954d3387c67dab65cf93c8409cb4878"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 19268,
+        "flags": 2,
+        "sha256": "6bf9b37bd7fe6635f7a8319b442c4f03617a3072e5dac4e4cb6d141189d01af4"
+      },
+      ".eh_frame": {
+        "size": 86732,
+        "flags": 2,
+        "sha256": "5cf184b09f2163166237dfc34ee0487862fe241697150bf8da152dfba1570e7a"
+      },
+      ".gcc_except_table": {
+        "size": 26,
+        "flags": 2,
+        "sha256": "2e830716c596dcb912b1e4df2edd5ade7b52637e28563c7a3cb5ad4b22040355"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "98062ae572cc0119a575ecbde803050a9f3b40a2193b073e09fa2cc5af537f10"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "07acb5f3e9e20c1f658a7a478bcbc8cfc1a3aa361f2bc1bd7f46b97260715138"
+      },
+      ".dynamic": {
+        "size": 528,
+        "flags": 3,
+        "sha256": "b2f418e75d966a9ceb658970f9817b611b668ef153de0b506a5df39832c6a8ad"
+      },
+      ".got": {
+        "size": 112,
+        "flags": 3,
+        "sha256": "ca211c414a776e1d4e8bda0c27e8c85ef0b447013a42eb2624f51462cbb44e49"
+      },
+      ".data": {
+        "size": 40,
+        "flags": 3,
+        "sha256": "91fd47c6c13555eed550bdeed967d4d78dac37bce9f5f73e788758666be77289"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 58704,
+        "flags": 0,
+        "sha256": "d377c8e986830910ab00735dd5a028bedfb154ac391ab442998a163ef0fc287e"
+      },
+      ".strtab": {
+        "size": 45182,
+        "flags": 0,
+        "sha256": "a2e882f9b3f64e72c2efc8c8fb1875d6432b903a4c2a1177003122cbfab0e8a7"
+      },
+      ".shstrtab": {
+        "size": 291,
+        "flags": 0,
+        "sha256": "adfcd1cef509b4485bc1dbbaeef56035c8cdb144c2226b6e1d7df6d159681eb1"
+      }
+    },
+    "sections_B": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "d9532e12384a0807e5824febe880beb9fb75dd80d494a14639582d44429d68f1"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "fa6d0a7f5a39430aae22ca8cafab27385c25c321776aea0952151531105c2d13"
+      },
+      ".dynsym": {
+        "size": 312,
+        "flags": 2,
+        "sha256": "88434c3d983568878e91176ad68e4f648388bf4e8815ff7d8a49c37083e195cb"
+      },
+      ".dynstr": {
+        "size": 297,
+        "flags": 2,
+        "sha256": "f16a841692d0b28569f7b56d6d7219ff908dd55f335f840104101b2fefd5b96d"
+      },
+      ".gnu.version": {
+        "size": 26,
+        "flags": 2,
+        "sha256": "c422deba14fdf165c59e9cfb22306f45edaa3e4c4481d02d9edf1351b540f72b"
+      },
+      ".gnu.version_r": {
+        "size": 112,
+        "flags": 2,
+        "sha256": "556e001606ee72671448f0b8e97d22f67ba79754511a1ca86b8549bed541075c"
+      },
+      ".rela.dyn": {
+        "size": 264,
+        "flags": 2,
+        "sha256": "06d4fa27aa0b0d9c6714bfb5224536a608c57cab37ef8c0358756fd5ae3f2203"
+      },
+      ".rela.plt": {
+        "size": 120,
+        "flags": 66,
+        "sha256": "9b5e5de9ee4a5834b0b90ba80a355017c36602a284de4e53a6e976a998ea2068"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "47e6d0351ad66e4f13b2f3597b6cf510bec941463875717a3d24f36b402d77b9"
+      },
+      ".plt": {
+        "size": 96,
+        "flags": 6,
+        "sha256": "4a67be74b223f25c417b0a0439cb6e813b21893e9e8e63ede3d29fe012fec3c9"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "3bd62b96295d6b831f59a80ebdf96454729958f21792cea93db8d03c70428d3c"
+      },
+      ".text": {
+        "size": 151781,
+        "flags": 6,
+        "sha256": "8a7f4db9c4f7dd332d8976b3d68037d01954d3387c67dab65cf93c8409cb4878"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 19268,
+        "flags": 2,
+        "sha256": "6bf9b37bd7fe6635f7a8319b442c4f03617a3072e5dac4e4cb6d141189d01af4"
+      },
+      ".eh_frame": {
+        "size": 86732,
+        "flags": 2,
+        "sha256": "5cf184b09f2163166237dfc34ee0487862fe241697150bf8da152dfba1570e7a"
+      },
+      ".gcc_except_table": {
+        "size": 26,
+        "flags": 2,
+        "sha256": "2e830716c596dcb912b1e4df2edd5ade7b52637e28563c7a3cb5ad4b22040355"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "98062ae572cc0119a575ecbde803050a9f3b40a2193b073e09fa2cc5af537f10"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "07acb5f3e9e20c1f658a7a478bcbc8cfc1a3aa361f2bc1bd7f46b97260715138"
+      },
+      ".dynamic": {
+        "size": 528,
+        "flags": 3,
+        "sha256": "b2f418e75d966a9ceb658970f9817b611b668ef153de0b506a5df39832c6a8ad"
+      },
+      ".got": {
+        "size": 112,
+        "flags": 3,
+        "sha256": "ca211c414a776e1d4e8bda0c27e8c85ef0b447013a42eb2624f51462cbb44e49"
+      },
+      ".data": {
+        "size": 40,
+        "flags": 3,
+        "sha256": "91fd47c6c13555eed550bdeed967d4d78dac37bce9f5f73e788758666be77289"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 58704,
+        "flags": 0,
+        "sha256": "d377c8e986830910ab00735dd5a028bedfb154ac391ab442998a163ef0fc287e"
+      },
+      ".strtab": {
+        "size": 45182,
+        "flags": 0,
+        "sha256": "a2e882f9b3f64e72c2efc8c8fb1875d6432b903a4c2a1177003122cbfab0e8a7"
+      },
+      ".shstrtab": {
+        "size": 291,
+        "flags": 0,
+        "sha256": "adfcd1cef509b4485bc1dbbaeef56035c8cdb144c2226b6e1d7df6d159681eb1"
+      }
+    }
+  },
+  {
+    "group": "common",
+    "workload": "pruning",
+    "object_sha256": "28798e83ffc231f2394886236fa230283a93ac20adbdb526111201a60dc7c98a",
+    "executable_identical": true,
+    "noncode_differences": [],
+    "sections_A": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "a83784786c514a5df42a2dd9589b0578dfc36110e0ecb958e7d9c714b8bc9481"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "3dc17c2ed1a45a69d20c26c612a9de239df3a8e81939e694863fa9ebdde1fe46"
+      },
+      ".dynsym": {
+        "size": 144,
+        "flags": 2,
+        "sha256": "1f3e090299e3439eca2553208f582e6a31fe8bb13621ce2cc4e947fb3540af32"
+      },
+      ".dynstr": {
+        "size": 136,
+        "flags": 2,
+        "sha256": "1ebb6477350735b7aaffa0722657e8aa2dc3f452e7b6d823c89c0ef553b39594"
+      },
+      ".gnu.version": {
+        "size": 12,
+        "flags": 2,
+        "sha256": "a34ed64980ae36b960721ec5d9060098e21886185ce7f718f0ead6e81647f2b8"
+      },
+      ".gnu.version_r": {
+        "size": 48,
+        "flags": 2,
+        "sha256": "737c192fcba8f03a6c76f78a9e3b4bffaa8886fb86148bb5eaf68b28a9971393"
+      },
+      ".rela.dyn": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "b300bdc2da6ae1b3afb504b7ce923ef4d8218c04003304c70019fa70b87b8fa5"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "32ba27aa0337d9cfc8ea254cad5c23d9ce706d558fc951f59928cddd215a1d87"
+      },
+      ".plt": {
+        "size": 16,
+        "flags": 6,
+        "sha256": "28fa8899b6faa3069876ebec64f8ba25d08c134c5988f73e2bff0cb3d61451c1"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "90b299583b161255057cfd29715eabae21c7ecbc0960222f4a3ad932131e4f73"
+      },
+      ".text": {
+        "size": 151633,
+        "flags": 6,
+        "sha256": "5bcb1f544fe09791813d5412cd509e656dfeb462f54d38c1555eba8a75fa750f"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 19260,
+        "flags": 2,
+        "sha256": "1f2bccd2a524606b9f28c503a25e8a1fc8452904d7ae0c080112b6dd5de70ee7"
+      },
+      ".eh_frame": {
+        "size": 86648,
+        "flags": 2,
+        "sha256": "4f19d6858572f6ed8ed1b9f30733519f20898a42795179220c1e093a304a4904"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "d8976de582fe8d334ffc3195bdd441cca83296b591d394141e6b558a06051b38"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "c17e9a541ac7d1696b2e85dcfa24db1d4ec6f452d707721c68fc13b1784636af"
+      },
+      ".dynamic": {
+        "size": 448,
+        "flags": 3,
+        "sha256": "035dc8d4e894a852966f3ef9bb140067cd708674ab76596731e54b41420508ef"
+      },
+      ".got": {
+        "size": 64,
+        "flags": 3,
+        "sha256": "289b167dfaa2d8327fb7126fc66653492afad55b1d4f8b17948cdeafdc5b8bbe"
+      },
+      ".data": {
+        "size": 16,
+        "flags": 3,
+        "sha256": "444b4267ce13d2af5755657a9886e077c2579a95d5a13728ab23609a14ae0400"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 58464,
+        "flags": 0,
+        "sha256": "c7fecb7c650c7ce296b085ef28a345e8de973cff994c3d8b879de543fc7d801f"
+      },
+      ".strtab": {
+        "size": 44963,
+        "flags": 0,
+        "sha256": "9f52ce05e531e00bb2d3a70d470fa7d97c521f0262727b6a883eec1ff34c3d4f"
+      },
+      ".shstrtab": {
+        "size": 268,
+        "flags": 0,
+        "sha256": "7e1c7e7d65fcf49951a2a21bdf6dd5ecba9a660256183de3c84033c2ef7eabd9"
+      }
+    },
+    "sections_B": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "a83784786c514a5df42a2dd9589b0578dfc36110e0ecb958e7d9c714b8bc9481"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "3dc17c2ed1a45a69d20c26c612a9de239df3a8e81939e694863fa9ebdde1fe46"
+      },
+      ".dynsym": {
+        "size": 144,
+        "flags": 2,
+        "sha256": "1f3e090299e3439eca2553208f582e6a31fe8bb13621ce2cc4e947fb3540af32"
+      },
+      ".dynstr": {
+        "size": 136,
+        "flags": 2,
+        "sha256": "1ebb6477350735b7aaffa0722657e8aa2dc3f452e7b6d823c89c0ef553b39594"
+      },
+      ".gnu.version": {
+        "size": 12,
+        "flags": 2,
+        "sha256": "a34ed64980ae36b960721ec5d9060098e21886185ce7f718f0ead6e81647f2b8"
+      },
+      ".gnu.version_r": {
+        "size": 48,
+        "flags": 2,
+        "sha256": "737c192fcba8f03a6c76f78a9e3b4bffaa8886fb86148bb5eaf68b28a9971393"
+      },
+      ".rela.dyn": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "b300bdc2da6ae1b3afb504b7ce923ef4d8218c04003304c70019fa70b87b8fa5"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "32ba27aa0337d9cfc8ea254cad5c23d9ce706d558fc951f59928cddd215a1d87"
+      },
+      ".plt": {
+        "size": 16,
+        "flags": 6,
+        "sha256": "28fa8899b6faa3069876ebec64f8ba25d08c134c5988f73e2bff0cb3d61451c1"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "90b299583b161255057cfd29715eabae21c7ecbc0960222f4a3ad932131e4f73"
+      },
+      ".text": {
+        "size": 151633,
+        "flags": 6,
+        "sha256": "5bcb1f544fe09791813d5412cd509e656dfeb462f54d38c1555eba8a75fa750f"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 19260,
+        "flags": 2,
+        "sha256": "1f2bccd2a524606b9f28c503a25e8a1fc8452904d7ae0c080112b6dd5de70ee7"
+      },
+      ".eh_frame": {
+        "size": 86648,
+        "flags": 2,
+        "sha256": "4f19d6858572f6ed8ed1b9f30733519f20898a42795179220c1e093a304a4904"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "d8976de582fe8d334ffc3195bdd441cca83296b591d394141e6b558a06051b38"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "c17e9a541ac7d1696b2e85dcfa24db1d4ec6f452d707721c68fc13b1784636af"
+      },
+      ".dynamic": {
+        "size": 448,
+        "flags": 3,
+        "sha256": "035dc8d4e894a852966f3ef9bb140067cd708674ab76596731e54b41420508ef"
+      },
+      ".got": {
+        "size": 64,
+        "flags": 3,
+        "sha256": "289b167dfaa2d8327fb7126fc66653492afad55b1d4f8b17948cdeafdc5b8bbe"
+      },
+      ".data": {
+        "size": 16,
+        "flags": 3,
+        "sha256": "444b4267ce13d2af5755657a9886e077c2579a95d5a13728ab23609a14ae0400"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 58464,
+        "flags": 0,
+        "sha256": "c7fecb7c650c7ce296b085ef28a345e8de973cff994c3d8b879de543fc7d801f"
+      },
+      ".strtab": {
+        "size": 44963,
+        "flags": 0,
+        "sha256": "9f52ce05e531e00bb2d3a70d470fa7d97c521f0262727b6a883eec1ff34c3d4f"
+      },
+      ".shstrtab": {
+        "size": 268,
+        "flags": 0,
+        "sha256": "7e1c7e7d65fcf49951a2a21bdf6dd5ecba9a660256183de3c84033c2ef7eabd9"
+      }
+    }
+  },
+  {
+    "group": "owner",
+    "workload": "straight2400",
+    "object_sha256": "87cb6928d1107108cd568be570330df7587fa82c9b74f41eb19fb742a29891fe",
+    "executable_identical": false,
+    "noncode_differences": [
+      ".strtab"
+    ],
+    "sections_A": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "1f76c350b1a05afafe7ec9d40375c5a0970514c8b4ae026a32a213eb874c6020"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "13e9970905d612268bc041017cbb7fff41ea33ea958b479c012fb684aae03079"
+      },
+      ".dynsym": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "67f8d2156131a39f9cde89671a97696b7f989ff88745f1a6b34618d8d581929f"
+      },
+      ".dynstr": {
+        "size": 150,
+        "flags": 2,
+        "sha256": "a396c3e150a59f6430554b4c1c9a69a8c3eea6101d60c5a4e9568f45f5a5d3e9"
+      },
+      ".gnu.version": {
+        "size": 16,
+        "flags": 2,
+        "sha256": "fa74f413975beb166dbe62e8ac5f53e651e63b68b6f969e2b61f01027378cccc"
+      },
+      ".gnu.version_r": {
+        "size": 48,
+        "flags": 2,
+        "sha256": "7bcc39b0716108b21a724eb43a90e2858924faca9800ae2a7d190014d444d109"
+      },
+      ".rela.dyn": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "89f40400f4f6026027dce3329751638e932f5ac289c1a13c827e20a9723b6e41"
+      },
+      ".rela.plt": {
+        "size": 48,
+        "flags": 66,
+        "sha256": "679938a34c51b117f0ebfb14858081f8dc5c233d04462a3d299794607ee4f334"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "fc26d8b75e3b25ea6999c980788c35264241b29f71e3d562f84536dd6d246c99"
+      },
+      ".plt": {
+        "size": 48,
+        "flags": 6,
+        "sha256": "5d546749e1b2ae5c1d55033a9781e9c1c26b008a3f7e26564fe8081cb03c160b"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "44eb7a3a18e8afc09b935a414ebd94e29df6ac7d4e84d541cc3727b8446ad254"
+      },
+      ".text": {
+        "size": 122451,
+        "flags": 6,
+        "sha256": "97d7bf1d822908b79e3b6c2a44889ca9fc727d78b9aa47098be2523fe06590d8"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 52,
+        "flags": 2,
+        "sha256": "ecc8b59765bcb03d84f8e257adb695c92538e8246014584b8cef7d1b4e820279"
+      },
+      ".eh_frame": {
+        "size": 204,
+        "flags": 2,
+        "sha256": "d2ae7b2b645ec8724341c688acc42dab6f07c4691360ec1d59a8fd914328f134"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "fe5ef9b64424605122be1a23cca9885d6718a6ab4189baebf4d2dd7f8d2606a6"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "28537b7a9443e32d47c17819a933b9e3004afd3d9cd140def1cdc360e0bcc858"
+      },
+      ".dynamic": {
+        "size": 496,
+        "flags": 3,
+        "sha256": "f0d1fd5fb085e1e684cdb5cd98e0db821a03939d0aed7d87919c091a4bc4da0b"
+      },
+      ".got": {
+        "size": 80,
+        "flags": 3,
+        "sha256": "c963d16a3ca60119eb0b3200fb4e5e6c8bae0b6fa1944e1013ad43ad926324a5"
+      },
+      ".data": {
+        "size": 24,
+        "flags": 3,
+        "sha256": "fe4e13e658fbb1b80476fcf8cdd182a9847f39460d3c5dacd2321ad32a29a438"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 936,
+        "flags": 0,
+        "sha256": "e04d1c36b6e38af19fb3fcc1a1d298f90dcbd48bd3c7c80ef6d5ed36014a28e2"
+      },
+      ".strtab": {
+        "size": 531,
+        "flags": 0,
+        "sha256": "63af9d17c3bb02f6a5ef4f58d9572970e3d1f29f716e303ce4f07340871a88e1"
+      },
+      ".shstrtab": {
+        "size": 273,
+        "flags": 0,
+        "sha256": "78be6d789d97b8135577f5483c99100750ab8f365dffd4260128a4c5a1d71bf6"
+      }
+    },
+    "sections_B": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "1f76c350b1a05afafe7ec9d40375c5a0970514c8b4ae026a32a213eb874c6020"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "13e9970905d612268bc041017cbb7fff41ea33ea958b479c012fb684aae03079"
+      },
+      ".dynsym": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "67f8d2156131a39f9cde89671a97696b7f989ff88745f1a6b34618d8d581929f"
+      },
+      ".dynstr": {
+        "size": 150,
+        "flags": 2,
+        "sha256": "a396c3e150a59f6430554b4c1c9a69a8c3eea6101d60c5a4e9568f45f5a5d3e9"
+      },
+      ".gnu.version": {
+        "size": 16,
+        "flags": 2,
+        "sha256": "fa74f413975beb166dbe62e8ac5f53e651e63b68b6f969e2b61f01027378cccc"
+      },
+      ".gnu.version_r": {
+        "size": 48,
+        "flags": 2,
+        "sha256": "7bcc39b0716108b21a724eb43a90e2858924faca9800ae2a7d190014d444d109"
+      },
+      ".rela.dyn": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "89f40400f4f6026027dce3329751638e932f5ac289c1a13c827e20a9723b6e41"
+      },
+      ".rela.plt": {
+        "size": 48,
+        "flags": 66,
+        "sha256": "679938a34c51b117f0ebfb14858081f8dc5c233d04462a3d299794607ee4f334"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "fc26d8b75e3b25ea6999c980788c35264241b29f71e3d562f84536dd6d246c99"
+      },
+      ".plt": {
+        "size": 48,
+        "flags": 6,
+        "sha256": "5d546749e1b2ae5c1d55033a9781e9c1c26b008a3f7e26564fe8081cb03c160b"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "44eb7a3a18e8afc09b935a414ebd94e29df6ac7d4e84d541cc3727b8446ad254"
+      },
+      ".text": {
+        "size": 122451,
+        "flags": 6,
+        "sha256": "97d7bf1d822908b79e3b6c2a44889ca9fc727d78b9aa47098be2523fe06590d8"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 52,
+        "flags": 2,
+        "sha256": "ecc8b59765bcb03d84f8e257adb695c92538e8246014584b8cef7d1b4e820279"
+      },
+      ".eh_frame": {
+        "size": 204,
+        "flags": 2,
+        "sha256": "d2ae7b2b645ec8724341c688acc42dab6f07c4691360ec1d59a8fd914328f134"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "fe5ef9b64424605122be1a23cca9885d6718a6ab4189baebf4d2dd7f8d2606a6"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "28537b7a9443e32d47c17819a933b9e3004afd3d9cd140def1cdc360e0bcc858"
+      },
+      ".dynamic": {
+        "size": 496,
+        "flags": 3,
+        "sha256": "f0d1fd5fb085e1e684cdb5cd98e0db821a03939d0aed7d87919c091a4bc4da0b"
+      },
+      ".got": {
+        "size": 80,
+        "flags": 3,
+        "sha256": "c963d16a3ca60119eb0b3200fb4e5e6c8bae0b6fa1944e1013ad43ad926324a5"
+      },
+      ".data": {
+        "size": 24,
+        "flags": 3,
+        "sha256": "fe4e13e658fbb1b80476fcf8cdd182a9847f39460d3c5dacd2321ad32a29a438"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 936,
+        "flags": 0,
+        "sha256": "e04d1c36b6e38af19fb3fcc1a1d298f90dcbd48bd3c7c80ef6d5ed36014a28e2"
+      },
+      ".strtab": {
+        "size": 531,
+        "flags": 0,
+        "sha256": "6cf7111a3feefe5ca3518b92c1775a273e8cfba4dfb20cc9c4ebe79fd19f45c8"
+      },
+      ".shstrtab": {
+        "size": 273,
+        "flags": 0,
+        "sha256": "78be6d789d97b8135577f5483c99100750ab8f365dffd4260128a4c5a1d71bf6"
+      }
+    }
+  },
+  {
+    "group": "owner",
+    "workload": "branch1200",
+    "object_sha256": "852089a15178aceaf036fce837fd53e7ff2114930f31b883ef52ebdb1538bf28",
+    "executable_identical": false,
+    "noncode_differences": [
+      ".strtab"
+    ],
+    "sections_A": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "a27dd9b83399c158cbf822c432a50b22e4a038e2617bbcd44932f1569eb49cb2"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "13e9970905d612268bc041017cbb7fff41ea33ea958b479c012fb684aae03079"
+      },
+      ".dynsym": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "67f8d2156131a39f9cde89671a97696b7f989ff88745f1a6b34618d8d581929f"
+      },
+      ".dynstr": {
+        "size": 150,
+        "flags": 2,
+        "sha256": "a396c3e150a59f6430554b4c1c9a69a8c3eea6101d60c5a4e9568f45f5a5d3e9"
+      },
+      ".gnu.version": {
+        "size": 16,
+        "flags": 2,
+        "sha256": "fa74f413975beb166dbe62e8ac5f53e651e63b68b6f969e2b61f01027378cccc"
+      },
+      ".gnu.version_r": {
+        "size": 48,
+        "flags": 2,
+        "sha256": "7bcc39b0716108b21a724eb43a90e2858924faca9800ae2a7d190014d444d109"
+      },
+      ".rela.dyn": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "b4568bd0ecca2d052fb2084b1d48e2545a8582ac7e66704c835acc09b506dd24"
+      },
+      ".rela.plt": {
+        "size": 48,
+        "flags": 66,
+        "sha256": "707fa0674947266bd5c99584fedfe21c4bdbd00198607886937109eea771387a"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "c95054817ce7ff54ec89002748118f6ce4048f6925fcfeb87b501ab2dfff4315"
+      },
+      ".plt": {
+        "size": 48,
+        "flags": 6,
+        "sha256": "a8e073cec9264d5af2de5f8c24d8659210274e7d34500e670211ef44321e20bc"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "e2b684bd6ba944e58a640e8d4d86138173e9e9590f74c59fa8f80a585f1bb120"
+      },
+      ".text": {
+        "size": 204455,
+        "flags": 6,
+        "sha256": "09a070b64cb1cf5c30c91a61a26838000de953c1e2ffebbcf5a632e1b7bad09e"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 52,
+        "flags": 2,
+        "sha256": "9d47de8e6f8654127b7b46ac5859d7dfdd61583b4484c0af8e07638cb5c677f0"
+      },
+      ".eh_frame": {
+        "size": 208,
+        "flags": 2,
+        "sha256": "319be6c98ca0b1b303f947e33b874cc77cc5208b8ffc6018c7f54f44af03cd00"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "fe5ef9b64424605122be1a23cca9885d6718a6ab4189baebf4d2dd7f8d2606a6"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "28537b7a9443e32d47c17819a933b9e3004afd3d9cd140def1cdc360e0bcc858"
+      },
+      ".dynamic": {
+        "size": 496,
+        "flags": 3,
+        "sha256": "71f9b8c259b5ceb6c26a11a608b1c0e076136186e8779f3c1d88f1076ebdf713"
+      },
+      ".got": {
+        "size": 80,
+        "flags": 3,
+        "sha256": "6e7ea8db660a99738192823c7bfcc945a0f6beadd96f09e45a2a9ee7b99b1d1f"
+      },
+      ".data": {
+        "size": 24,
+        "flags": 3,
+        "sha256": "7a7b0cdb357b13e9f415c1bf56571bbc9c14ab60ed9c14ce207cf8bc66bca097"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 936,
+        "flags": 0,
+        "sha256": "d2787d54dd52a0467fce9f0e5f821f4e9a4727c018971b2e4bfd8ed9cf94db3f"
+      },
+      ".strtab": {
+        "size": 529,
+        "flags": 0,
+        "sha256": "d2f400ffb8bf318f3b7b811d88d76a81e243dd6b0cc279dfd39e8bfc2f4ab0c3"
+      },
+      ".shstrtab": {
+        "size": 273,
+        "flags": 0,
+        "sha256": "78be6d789d97b8135577f5483c99100750ab8f365dffd4260128a4c5a1d71bf6"
+      }
+    },
+    "sections_B": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "a27dd9b83399c158cbf822c432a50b22e4a038e2617bbcd44932f1569eb49cb2"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "13e9970905d612268bc041017cbb7fff41ea33ea958b479c012fb684aae03079"
+      },
+      ".dynsym": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "67f8d2156131a39f9cde89671a97696b7f989ff88745f1a6b34618d8d581929f"
+      },
+      ".dynstr": {
+        "size": 150,
+        "flags": 2,
+        "sha256": "a396c3e150a59f6430554b4c1c9a69a8c3eea6101d60c5a4e9568f45f5a5d3e9"
+      },
+      ".gnu.version": {
+        "size": 16,
+        "flags": 2,
+        "sha256": "fa74f413975beb166dbe62e8ac5f53e651e63b68b6f969e2b61f01027378cccc"
+      },
+      ".gnu.version_r": {
+        "size": 48,
+        "flags": 2,
+        "sha256": "7bcc39b0716108b21a724eb43a90e2858924faca9800ae2a7d190014d444d109"
+      },
+      ".rela.dyn": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "b4568bd0ecca2d052fb2084b1d48e2545a8582ac7e66704c835acc09b506dd24"
+      },
+      ".rela.plt": {
+        "size": 48,
+        "flags": 66,
+        "sha256": "707fa0674947266bd5c99584fedfe21c4bdbd00198607886937109eea771387a"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "c95054817ce7ff54ec89002748118f6ce4048f6925fcfeb87b501ab2dfff4315"
+      },
+      ".plt": {
+        "size": 48,
+        "flags": 6,
+        "sha256": "a8e073cec9264d5af2de5f8c24d8659210274e7d34500e670211ef44321e20bc"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "e2b684bd6ba944e58a640e8d4d86138173e9e9590f74c59fa8f80a585f1bb120"
+      },
+      ".text": {
+        "size": 204455,
+        "flags": 6,
+        "sha256": "09a070b64cb1cf5c30c91a61a26838000de953c1e2ffebbcf5a632e1b7bad09e"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 52,
+        "flags": 2,
+        "sha256": "9d47de8e6f8654127b7b46ac5859d7dfdd61583b4484c0af8e07638cb5c677f0"
+      },
+      ".eh_frame": {
+        "size": 208,
+        "flags": 2,
+        "sha256": "319be6c98ca0b1b303f947e33b874cc77cc5208b8ffc6018c7f54f44af03cd00"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "fe5ef9b64424605122be1a23cca9885d6718a6ab4189baebf4d2dd7f8d2606a6"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "28537b7a9443e32d47c17819a933b9e3004afd3d9cd140def1cdc360e0bcc858"
+      },
+      ".dynamic": {
+        "size": 496,
+        "flags": 3,
+        "sha256": "71f9b8c259b5ceb6c26a11a608b1c0e076136186e8779f3c1d88f1076ebdf713"
+      },
+      ".got": {
+        "size": 80,
+        "flags": 3,
+        "sha256": "6e7ea8db660a99738192823c7bfcc945a0f6beadd96f09e45a2a9ee7b99b1d1f"
+      },
+      ".data": {
+        "size": 24,
+        "flags": 3,
+        "sha256": "7a7b0cdb357b13e9f415c1bf56571bbc9c14ab60ed9c14ce207cf8bc66bca097"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 936,
+        "flags": 0,
+        "sha256": "d2787d54dd52a0467fce9f0e5f821f4e9a4727c018971b2e4bfd8ed9cf94db3f"
+      },
+      ".strtab": {
+        "size": 529,
+        "flags": 0,
+        "sha256": "f7205ccefa82726c639035039f3d96bc17313c855b2aad0d85e76198991410f7"
+      },
+      ".shstrtab": {
+        "size": 273,
+        "flags": 0,
+        "sha256": "78be6d789d97b8135577f5483c99100750ab8f365dffd4260128a4c5a1d71bf6"
+      }
+    }
+  },
+  {
+    "group": "owner",
+    "workload": "floating1200",
+    "object_sha256": "9711af86901401e5b3025b79d30c88fe7f5076e33f646a78340489fc16edab8d",
+    "executable_identical": false,
+    "noncode_differences": [
+      ".strtab"
+    ],
+    "sections_A": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "35cde3634a64077b39b44f7d2e9df81252eeca13cbd4ab8bfc64a91e181f8aef"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "13e9970905d612268bc041017cbb7fff41ea33ea958b479c012fb684aae03079"
+      },
+      ".dynsym": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "67f8d2156131a39f9cde89671a97696b7f989ff88745f1a6b34618d8d581929f"
+      },
+      ".dynstr": {
+        "size": 150,
+        "flags": 2,
+        "sha256": "a396c3e150a59f6430554b4c1c9a69a8c3eea6101d60c5a4e9568f45f5a5d3e9"
+      },
+      ".gnu.version": {
+        "size": 16,
+        "flags": 2,
+        "sha256": "fa74f413975beb166dbe62e8ac5f53e651e63b68b6f969e2b61f01027378cccc"
+      },
+      ".gnu.version_r": {
+        "size": 48,
+        "flags": 2,
+        "sha256": "7bcc39b0716108b21a724eb43a90e2858924faca9800ae2a7d190014d444d109"
+      },
+      ".rela.dyn": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "22fd4a2181cdee3aa0d51d0d2b7ddbf4858ae28d4ecadf9d77caa09eca5c61aa"
+      },
+      ".rela.plt": {
+        "size": 48,
+        "flags": 66,
+        "sha256": "0c4f25ac2557d3d95cac2c33a7784ae8e1f0947cfa101a6f7bbd38ec09570790"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "8a2643c69b96d3ccd7d6313ad42e821be5638fb9362107f743e1b6bce091d9b5"
+      },
+      ".plt": {
+        "size": 48,
+        "flags": 6,
+        "sha256": "2e39d127e469b2d2e82d57d3b66ea5050890d01aaef7486f9f86cfafbe8c38ea"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "1b2e6b921c96c7242633e5cbb001e9076a2d3762795114a0e408944e7810a415"
+      },
+      ".text": {
+        "size": 193251,
+        "flags": 6,
+        "sha256": "8c517fe2e12afb574ccd9a624655130806ca29b002364fd607c50f7de27eff38"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 52,
+        "flags": 2,
+        "sha256": "cceb0cff176c931daad15cac4bc43b377bb87972850b777b58657708d088fabe"
+      },
+      ".eh_frame": {
+        "size": 204,
+        "flags": 2,
+        "sha256": "0103953f55026db35d56b50fdf02bf33effb1bd02b988fbb7dc920a8d49ff1ec"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "fe5ef9b64424605122be1a23cca9885d6718a6ab4189baebf4d2dd7f8d2606a6"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "28537b7a9443e32d47c17819a933b9e3004afd3d9cd140def1cdc360e0bcc858"
+      },
+      ".dynamic": {
+        "size": 496,
+        "flags": 3,
+        "sha256": "0f5ea33e711d3014aaa269b1ceecf6024c9722d2e67b16e3fdc4093c5885e611"
+      },
+      ".got": {
+        "size": 80,
+        "flags": 3,
+        "sha256": "b587838ff6ac0d64b2aaedc458f14ab6e7e99cdbd2bdc1d5ee5e86857e6d0f85"
+      },
+      ".data": {
+        "size": 24,
+        "flags": 3,
+        "sha256": "19d219f358e50fb36c23c65108a2b9a5d5e42e7abfd391bec2c591817976a0f8"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 936,
+        "flags": 0,
+        "sha256": "f146c7b59b9f4e53f1eba29e3da98147f821455c60c61244ae7acb555ec26bee"
+      },
+      ".strtab": {
+        "size": 531,
+        "flags": 0,
+        "sha256": "72e938474de791ad6780b18b2d548b99fe6345ca6f5cdae6f35a8f89ae5baa69"
+      },
+      ".shstrtab": {
+        "size": 273,
+        "flags": 0,
+        "sha256": "78be6d789d97b8135577f5483c99100750ab8f365dffd4260128a4c5a1d71bf6"
+      }
+    },
+    "sections_B": {
+      "": {
+        "size": 0,
+        "flags": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".note.gnu.build-id": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "35cde3634a64077b39b44f7d2e9df81252eeca13cbd4ab8bfc64a91e181f8aef"
+      },
+      ".interp": {
+        "size": 28,
+        "flags": 2,
+        "sha256": "9097c98ea70f6f3b01d50145eb72bf55ad1f4e9713bccf27bd6405d6254eed00"
+      },
+      ".gnu.hash": {
+        "size": 36,
+        "flags": 2,
+        "sha256": "13e9970905d612268bc041017cbb7fff41ea33ea958b479c012fb684aae03079"
+      },
+      ".dynsym": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "67f8d2156131a39f9cde89671a97696b7f989ff88745f1a6b34618d8d581929f"
+      },
+      ".dynstr": {
+        "size": 150,
+        "flags": 2,
+        "sha256": "a396c3e150a59f6430554b4c1c9a69a8c3eea6101d60c5a4e9568f45f5a5d3e9"
+      },
+      ".gnu.version": {
+        "size": 16,
+        "flags": 2,
+        "sha256": "fa74f413975beb166dbe62e8ac5f53e651e63b68b6f969e2b61f01027378cccc"
+      },
+      ".gnu.version_r": {
+        "size": 48,
+        "flags": 2,
+        "sha256": "7bcc39b0716108b21a724eb43a90e2858924faca9800ae2a7d190014d444d109"
+      },
+      ".rela.dyn": {
+        "size": 192,
+        "flags": 2,
+        "sha256": "22fd4a2181cdee3aa0d51d0d2b7ddbf4858ae28d4ecadf9d77caa09eca5c61aa"
+      },
+      ".rela.plt": {
+        "size": 48,
+        "flags": 66,
+        "sha256": "0c4f25ac2557d3d95cac2c33a7784ae8e1f0947cfa101a6f7bbd38ec09570790"
+      },
+      ".init": {
+        "size": 27,
+        "flags": 6,
+        "sha256": "8a2643c69b96d3ccd7d6313ad42e821be5638fb9362107f743e1b6bce091d9b5"
+      },
+      ".plt": {
+        "size": 48,
+        "flags": 6,
+        "sha256": "2e39d127e469b2d2e82d57d3b66ea5050890d01aaef7486f9f86cfafbe8c38ea"
+      },
+      ".plt.got": {
+        "size": 8,
+        "flags": 6,
+        "sha256": "1b2e6b921c96c7242633e5cbb001e9076a2d3762795114a0e408944e7810a415"
+      },
+      ".text": {
+        "size": 193251,
+        "flags": 6,
+        "sha256": "8c517fe2e12afb574ccd9a624655130806ca29b002364fd607c50f7de27eff38"
+      },
+      ".fini": {
+        "size": 13,
+        "flags": 6,
+        "sha256": "6a4f3e5efc7c1f7ee7d6f21afd9ed040ba1d7f0b97bb12b016f5b176cc558bd8"
+      },
+      ".rodata": {
+        "size": 4,
+        "flags": 18,
+        "sha256": "7b11c1133330cd161071bf23a0c9b6ce5320a8f3a0f83620035a72be46df4104"
+      },
+      ".eh_frame_hdr": {
+        "size": 52,
+        "flags": 2,
+        "sha256": "cceb0cff176c931daad15cac4bc43b377bb87972850b777b58657708d088fabe"
+      },
+      ".eh_frame": {
+        "size": 204,
+        "flags": 2,
+        "sha256": "0103953f55026db35d56b50fdf02bf33effb1bd02b988fbb7dc920a8d49ff1ec"
+      },
+      ".note.gnu.property": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "3bdfd4490ce4eec87206b962d1c567641092e84b05b1fffb509b6fef1d0b7ee9"
+      },
+      ".note.ABI-tag": {
+        "size": 32,
+        "flags": 2,
+        "sha256": "6e48317ad93a8ac2dc04321465ede06d1274543fc8ab172e68171a9d684bb313"
+      },
+      ".init_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "fe5ef9b64424605122be1a23cca9885d6718a6ab4189baebf4d2dd7f8d2606a6"
+      },
+      ".fini_array": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "28537b7a9443e32d47c17819a933b9e3004afd3d9cd140def1cdc360e0bcc858"
+      },
+      ".dynamic": {
+        "size": 496,
+        "flags": 3,
+        "sha256": "0f5ea33e711d3014aaa269b1ceecf6024c9722d2e67b16e3fdc4093c5885e611"
+      },
+      ".got": {
+        "size": 80,
+        "flags": 3,
+        "sha256": "b587838ff6ac0d64b2aaedc458f14ab6e7e99cdbd2bdc1d5ee5e86857e6d0f85"
+      },
+      ".data": {
+        "size": 24,
+        "flags": 3,
+        "sha256": "19d219f358e50fb36c23c65108a2b9a5d5e42e7abfd391bec2c591817976a0f8"
+      },
+      ".bss": {
+        "size": 8,
+        "flags": 3,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      ".comment": {
+        "size": 38,
+        "flags": 48,
+        "sha256": "7279768e949900221d5c7a7c42c0a6f60a2968a610c1554e1c82d3d24552fade"
+      },
+      ".symtab": {
+        "size": 936,
+        "flags": 0,
+        "sha256": "f146c7b59b9f4e53f1eba29e3da98147f821455c60c61244ae7acb555ec26bee"
+      },
+      ".strtab": {
+        "size": 531,
+        "flags": 0,
+        "sha256": "0c9b88ceb20d8605b6e1152d0d490ae58e24a1ec6052b3ed25523c1e90894493"
+      },
+      ".shstrtab": {
+        "size": 273,
+        "flags": 0,
+        "sha256": "78be6d789d97b8135577f5483c99100750ab8f365dffd4260128a4c5a1d71bf6"
+      }
+    }
+  }
+]

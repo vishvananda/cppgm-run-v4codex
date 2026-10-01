@@ -1,0 +1,19 @@
+{
+  "code_tip": "52070178897f5894edaf2f35d03a734b781979d4",
+  "all_source_bytes_match_validation": true,
+  "earlier_audit_preserved_verbatim": true,
+  "review_markers_match": true,
+  "ledger_rows_added": 1,
+  "required_checks_verified": true,
+  "coverage_files": 1707,
+  "stage_inputs": 403,
+  "remaining_failures": 15,
+  "performance_manifest_verified": true,
+  "record_paths": [
+    "pa29/plan.md",
+    "pa29/audit.md",
+    "pa29/audit178.md",
+    "pa29/performance182.md"
+  ],
+  "manifest_sha256": "c75c5d793b1153511603958d3a1d9369d644325a3a5f80ca252bb682dbfd946e"
+}

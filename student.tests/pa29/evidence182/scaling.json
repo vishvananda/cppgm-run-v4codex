@@ -1,0 +1,413 @@
+{
+  "equations_checked_in_all_final_cv_compilations": true,
+  "checks": [
+    {
+      "workload": "cv-array600",
+      "block": 0,
+      "metrics": {
+        "parsed_nodes": 9284,
+        "template_occurrences": 45600,
+        "nodes": 54884,
+        "instructions": 21643,
+        "prepared_instructions": 21643,
+        "prepared_operands": 34271,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 1202,
+        "text_bytes": 103504
+      },
+      "binding_storage_bytes": 32792
+    },
+    {
+      "workload": "cv-array600",
+      "block": 0,
+      "metrics": {
+        "parsed_nodes": 9284,
+        "template_occurrences": 45600,
+        "nodes": 54884,
+        "instructions": 21643,
+        "prepared_instructions": 21643,
+        "prepared_operands": 34271,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 1202,
+        "text_bytes": 103504
+      },
+      "binding_storage_bytes": 32792
+    },
+    {
+      "workload": "cv-array600",
+      "block": 0,
+      "metrics": {
+        "parsed_nodes": 9284,
+        "template_occurrences": 45600,
+        "nodes": 54884,
+        "instructions": 21643,
+        "prepared_instructions": 21643,
+        "prepared_operands": 34271,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 1202,
+        "text_bytes": 103504
+      },
+      "binding_storage_bytes": 32792
+    },
+    {
+      "workload": "cv-array600",
+      "block": 0,
+      "metrics": {
+        "parsed_nodes": 9284,
+        "template_occurrences": 45600,
+        "nodes": 54884,
+        "instructions": 21643,
+        "prepared_instructions": 21643,
+        "prepared_operands": 34271,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 1202,
+        "text_bytes": 103504
+      },
+      "binding_storage_bytes": 32792
+    },
+    {
+      "workload": "cv-array600",
+      "block": 1,
+      "metrics": {
+        "parsed_nodes": 9284,
+        "template_occurrences": 45600,
+        "nodes": 54884,
+        "instructions": 21643,
+        "prepared_instructions": 21643,
+        "prepared_operands": 34271,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 1202,
+        "text_bytes": 103504
+      },
+      "binding_storage_bytes": 32792
+    },
+    {
+      "workload": "cv-array600",
+      "block": 1,
+      "metrics": {
+        "parsed_nodes": 9284,
+        "template_occurrences": 45600,
+        "nodes": 54884,
+        "instructions": 21643,
+        "prepared_instructions": 21643,
+        "prepared_operands": 34271,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 1202,
+        "text_bytes": 103504
+      },
+      "binding_storage_bytes": 32792
+    },
+    {
+      "workload": "cv-array600",
+      "block": 1,
+      "metrics": {
+        "parsed_nodes": 9284,
+        "template_occurrences": 45600,
+        "nodes": 54884,
+        "instructions": 21643,
+        "prepared_instructions": 21643,
+        "prepared_operands": 34271,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 1202,
+        "text_bytes": 103504
+      },
+      "binding_storage_bytes": 32792
+    },
+    {
+      "workload": "cv-array600",
+      "block": 1,
+      "metrics": {
+        "parsed_nodes": 9284,
+        "template_occurrences": 45600,
+        "nodes": 54884,
+        "instructions": 21643,
+        "prepared_instructions": 21643,
+        "prepared_operands": 34271,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 1202,
+        "text_bytes": 103504
+      },
+      "binding_storage_bytes": 32792
+    },
+    {
+      "workload": "cv-array1200",
+      "block": 0,
+      "metrics": {
+        "parsed_nodes": 18284,
+        "template_occurrences": 91200,
+        "nodes": 109484,
+        "instructions": 43243,
+        "prepared_instructions": 43243,
+        "prepared_operands": 68471,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 2402,
+        "text_bytes": 206704
+      },
+      "binding_storage_bytes": 65560
+    },
+    {
+      "workload": "cv-array1200",
+      "block": 0,
+      "metrics": {
+        "parsed_nodes": 18284,
+        "template_occurrences": 91200,
+        "nodes": 109484,
+        "instructions": 43243,
+        "prepared_instructions": 43243,
+        "prepared_operands": 68471,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 2402,
+        "text_bytes": 206704
+      },
+      "binding_storage_bytes": 65560
+    },
+    {
+      "workload": "cv-array1200",
+      "block": 0,
+      "metrics": {
+        "parsed_nodes": 18284,
+        "template_occurrences": 91200,
+        "nodes": 109484,
+        "instructions": 43243,
+        "prepared_instructions": 43243,
+        "prepared_operands": 68471,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 2402,
+        "text_bytes": 206704
+      },
+      "binding_storage_bytes": 65560
+    },
+    {
+      "workload": "cv-array1200",
+      "block": 0,
+      "metrics": {
+        "parsed_nodes": 18284,
+        "template_occurrences": 91200,
+        "nodes": 109484,
+        "instructions": 43243,
+        "prepared_instructions": 43243,
+        "prepared_operands": 68471,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 2402,
+        "text_bytes": 206704
+      },
+      "binding_storage_bytes": 65560
+    },
+    {
+      "workload": "cv-array1200",
+      "block": 1,
+      "metrics": {
+        "parsed_nodes": 18284,
+        "template_occurrences": 91200,
+        "nodes": 109484,
+        "instructions": 43243,
+        "prepared_instructions": 43243,
+        "prepared_operands": 68471,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 2402,
+        "text_bytes": 206704
+      },
+      "binding_storage_bytes": 65560
+    },
+    {
+      "workload": "cv-array1200",
+      "block": 1,
+      "metrics": {
+        "parsed_nodes": 18284,
+        "template_occurrences": 91200,
+        "nodes": 109484,
+        "instructions": 43243,
+        "prepared_instructions": 43243,
+        "prepared_operands": 68471,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 2402,
+        "text_bytes": 206704
+      },
+      "binding_storage_bytes": 65560
+    },
+    {
+      "workload": "cv-array1200",
+      "block": 1,
+      "metrics": {
+        "parsed_nodes": 18284,
+        "template_occurrences": 91200,
+        "nodes": 109484,
+        "instructions": 43243,
+        "prepared_instructions": 43243,
+        "prepared_operands": 68471,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 2402,
+        "text_bytes": 206704
+      },
+      "binding_storage_bytes": 65560
+    },
+    {
+      "workload": "cv-array1200",
+      "block": 1,
+      "metrics": {
+        "parsed_nodes": 18284,
+        "template_occurrences": 91200,
+        "nodes": 109484,
+        "instructions": 43243,
+        "prepared_instructions": 43243,
+        "prepared_operands": 68471,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 2402,
+        "text_bytes": 206704
+      },
+      "binding_storage_bytes": 65560
+    },
+    {
+      "workload": "cv-array2400",
+      "block": 0,
+      "metrics": {
+        "parsed_nodes": 36284,
+        "template_occurrences": 182400,
+        "nodes": 218684,
+        "instructions": 86443,
+        "prepared_instructions": 86443,
+        "prepared_operands": 136871,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 4802,
+        "text_bytes": 413104
+      },
+      "binding_storage_bytes": 131096
+    },
+    {
+      "workload": "cv-array2400",
+      "block": 0,
+      "metrics": {
+        "parsed_nodes": 36284,
+        "template_occurrences": 182400,
+        "nodes": 218684,
+        "instructions": 86443,
+        "prepared_instructions": 86443,
+        "prepared_operands": 136871,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 4802,
+        "text_bytes": 413104
+      },
+      "binding_storage_bytes": 131096
+    },
+    {
+      "workload": "cv-array2400",
+      "block": 0,
+      "metrics": {
+        "parsed_nodes": 36284,
+        "template_occurrences": 182400,
+        "nodes": 218684,
+        "instructions": 86443,
+        "prepared_instructions": 86443,
+        "prepared_operands": 136871,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 4802,
+        "text_bytes": 413104
+      },
+      "binding_storage_bytes": 131096
+    },
+    {
+      "workload": "cv-array2400",
+      "block": 0,
+      "metrics": {
+        "parsed_nodes": 36284,
+        "template_occurrences": 182400,
+        "nodes": 218684,
+        "instructions": 86443,
+        "prepared_instructions": 86443,
+        "prepared_operands": 136871,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 4802,
+        "text_bytes": 413104
+      },
+      "binding_storage_bytes": 131096
+    },
+    {
+      "workload": "cv-array2400",
+      "block": 1,
+      "metrics": {
+        "parsed_nodes": 36284,
+        "template_occurrences": 182400,
+        "nodes": 218684,
+        "instructions": 86443,
+        "prepared_instructions": 86443,
+        "prepared_operands": 136871,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 4802,
+        "text_bytes": 413104
+      },
+      "binding_storage_bytes": 131096
+    },
+    {
+      "workload": "cv-array2400",
+      "block": 1,
+      "metrics": {
+        "parsed_nodes": 36284,
+        "template_occurrences": 182400,
+        "nodes": 218684,
+        "instructions": 86443,
+        "prepared_instructions": 86443,
+        "prepared_operands": 136871,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 4802,
+        "text_bytes": 413104
+      },
+      "binding_storage_bytes": 131096
+    },
+    {
+      "workload": "cv-array2400",
+      "block": 1,
+      "metrics": {
+        "parsed_nodes": 36284,
+        "template_occurrences": 182400,
+        "nodes": 218684,
+        "instructions": 86443,
+        "prepared_instructions": 86443,
+        "prepared_operands": 136871,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 4802,
+        "text_bytes": 413104
+      },
+      "binding_storage_bytes": 131096
+    },
+    {
+      "workload": "cv-array2400",
+      "block": 1,
+      "metrics": {
+        "parsed_nodes": 36284,
+        "template_occurrences": 182400,
+        "nodes": 218684,
+        "instructions": 86443,
+        "prepared_instructions": 86443,
+        "prepared_operands": 136871,
+        "semantic_binding_shapes": 1,
+        "semantic_binding_members": 0,
+        "semantic_binding_projections": 4802,
+        "text_bytes": 413104
+      },
+      "binding_storage_bytes": 131096
+    }
+  ]
+}

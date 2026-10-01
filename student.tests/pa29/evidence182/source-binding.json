@@ -1,0 +1,43 @@
+{
+  "code_tip": "52070178897f5894edaf2f35d03a734b781979d4",
+  "validated_files": 471,
+  "all_commit_bytes_match": true,
+  "symlinks": {
+    "dev/abimangle-ref": {
+      "target": "../scripts/run_reference_binary.sh",
+      "resolved": "scripts/run_reference_binary.sh"
+    },
+    "dev/cppgm++-ref": {
+      "target": "../scripts/run_reference_binary.sh",
+      "resolved": "scripts/run_reference_binary.sh"
+    },
+    "dev/lowir-ref": {
+      "target": "../scripts/run_reference_binary.sh",
+      "resolved": "scripts/run_reference_binary.sh"
+    },
+    "dev/lowir2native-ref": {
+      "target": "../scripts/run_reference_binary.sh",
+      "resolved": "scripts/run_reference_binary.sh"
+    },
+    "dev/lowiropt-ref": {
+      "target": "../scripts/run_reference_binary.sh",
+      "resolved": "scripts/run_reference_binary.sh"
+    },
+    "dev/posttoken-ref": {
+      "target": "../scripts/run_reference_binary.sh",
+      "resolved": "scripts/run_reference_binary.sh"
+    },
+    "dev/ppexpr-ref": {
+      "target": "../scripts/run_reference_binary.sh",
+      "resolved": "scripts/run_reference_binary.sh"
+    },
+    "dev/pptoken-ref": {
+      "target": "../scripts/run_reference_binary.sh",
+      "resolved": "scripts/run_reference_binary.sh"
+    },
+    "dev/preproc-ref": {
+      "target": "../scripts/run_reference_binary.sh",
+      "resolved": "scripts/run_reference_binary.sh"
+    }
+  }
+}
