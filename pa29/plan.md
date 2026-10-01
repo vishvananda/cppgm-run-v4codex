@@ -1,9 +1,9 @@
-# PA29 compact plan — implementation171 handoff
+# PA29 compact plan — implementation172 in progress
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implement; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `221d6d0e4930da05db2913bdf5f50d808f89c744`.
-Entry HEAD: `6525c1af86e05edcf558186adec96a8c72521500`.
+Entry HEAD: `1bc21c576272364e790fad3920a76dab9e624558`.
 Validated implementation: `846ef3fb` (records-only handoff follows).
 
 ## Design and completed owner
@@ -75,3 +75,18 @@ or source-origin handling; it cannot extend this completed argument-query owner
 without starting another broad semantic group. The two inherited oracle concerns
 remain separate review questions with failures still counted. Full through-PA29
 success and independent whole-stage review remain necessary before advancement.
+
+## Active behavior group (172)
+
+Baseline 367/403, 36 failures. Fold expressions own three failures in parser
+primary expressions and typed template queries. Parse each fold once; retain
+operator, direction and operands. Substitution expands only the pack operand
+through immutable lane frames and records typed operator/conversion facts.
+Lowering must consume those facts, including short circuit and overloaded
+operators, without synthesized frontend syntax. Work/storage scale with consumed
+pack elements and required operator candidates; no optional optimization budget.
+Validate all four forms, empty/single/multiple packs, diagnostics, substitution,
+constant/type queries and runtime side effects; then required stage/prior/audit
+gates. Freeze entry/final binaries for equivalent A/A+ABBA and new-capability
+compiler latency/RSS plus executable runtime/text evidence. Existing review
+markers and all independent review questions above remain unchanged.
