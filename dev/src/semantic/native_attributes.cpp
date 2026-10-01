@@ -18,6 +18,7 @@ syntax::FunctionEffects Analyzer::function_effects(EntityId e) const
 void Analyzer::inherit_native_attributes(EntityId e, EntityId pattern)
 {
     entities[e].effects = std::max(entities[e].effects,entities[pattern].effects);
+    entities[e].exclude_instantiation |= entities[pattern].exclude_instantiation;
     for (auto t = abi_tag_heads.get(pattern); t; t = abi_tags[t].next) {
         auto tag = abi_tags[t].name; auto k = key(e,tag);
         if (abi_tag_members.get(k)) continue;
@@ -28,6 +29,10 @@ void Analyzer::inherit_native_attributes(EntityId e, EntityId pattern)
 void Analyzer::native_attributes(EntityId e, NodeId n)
 {
     if (!n) return;
+    auto occurrence = ast.nodes.occurrences[n];
+    if (occurrence.context)
+        if (auto pattern = template_declaration_sources.get(occurrence.source))
+            if (pattern != e) native_attribute_patterns.put(e,pattern);
     auto a = ast.native_attribute_owners.get(ast.nodes.occurrences[n].source);
     if (!a) return;
     auto value = ast.native_attributes[a];
@@ -39,6 +44,7 @@ void Analyzer::native_attributes(EntityId e, NodeId n)
     }
     if (entities[e].kind == EntityKind::Function) entities[e].effects = std::max(entities[e].effects,value.effects);
     if (value.weak) weak_symbols.put(e,1);
+    entities[e].exclude_instantiation |= value.exclude_instantiation;
     if (value.no_unique_address && entities[e].kind == EntityKind::Variable) field_metadata(e).no_unique_address = true;
     if (!value.section) return;
     const auto& entity = entities[e];
@@ -76,6 +82,13 @@ void Analyzer::declaration_attributes(EntityId e, NodeId specs, NodeId source, N
         entities[e].inline_function |= spec_has(child(source, Kind::MemberSpecifiers), KW_INLINE) || entities[e].constexpr_function;
     }
     if (entities[e].kind == EntityKind::Variable && spec_has(specs,KW_CONSTEXPR)) constexpr_declarations.put(e,2);
+    if (entities[e].kind == EntityKind::Variable && spec_has(specs,KW_INLINE)) {
+        auto scope = scopes[entities[e].owner].kind;
+        if (scope != ScopeKind::Namespace && scope != ScopeKind::Template &&
+            !(scope == ScopeKind::Class && entities[e].is_static))
+            throw std::runtime_error("inline variable requires namespace scope or static member");
+        entities[e].inline_variable = true;
+    }
     entities[e].thread_local_storage |= spec_has(specs, KW_THREAD_LOCAL);
     entities[e].external_decl |= spec_has(specs, KW_EXTERN) || linkage_extern_declarations.get(source);
 }

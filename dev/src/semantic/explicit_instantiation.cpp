@@ -1,19 +1,32 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+bool Analyzer::excluded_from_class_instantiation(EntityId e) const
+{
+    while (e) {
+        if (entities[e].exclude_instantiation) return true;
+        e = native_attribute_patterns.get(e);
+    }
+    return false;
+}
 bool Analyzer::instantiation_suppressed(EntityId e) const
 {
     auto entity = entities[e];
     if (entity.explicit_specialization || entity.instantiation_definition || entity.inline_function) return false;
     if (entity.instantiation_declaration) return true;
+    // The attribute excludes the member from its enclosing class's explicit
+    // instantiation only. A direct instantiation of the member still owns it.
+    if (excluded_from_class_instantiation(e)) return false;
     if (scopes[entity.owner].kind != ScopeKind::Class || entity.template_info || entity.specialization) return false;
     if (entity.member_info && members[entity.member_info].synthetic) return false;
     // Naming a class also instantiates its non-template nested classes.
     // A member template specialization still owns an independent demand.
     for (auto scope = entity.owner; scopes[scope].kind == ScopeKind::Class;) {
-        auto cls = entities[scopes[scope].entity];
+        auto owner = scopes[scope].entity;
+        auto cls = entities[owner];
         if (cls.explicit_specialization || cls.instantiation_definition) return false;
         if (cls.instantiation_declaration) return true;
+        if (excluded_from_class_instantiation(owner)) return false;
         if (cls.specialization || cls.template_info) return false;
         scope = cls.owner;
     }
@@ -130,7 +143,7 @@ void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
         if (!entities[cls].complete) throw std::runtime_error("explicit instantiation of incomplete class");
         for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
             auto member = declarations[d].entity;
-            if (entities[member].owner != entities[cls].scope || entities[member].template_info) continue;
+            if (entities[member].owner != entities[cls].scope || entities[member].template_info || excluded_from_class_instantiation(member)) continue;
             bool defined = instantiate_member_definition(member);
             if (entities[member].member_info) {
                 auto m = entities[member].member_info;

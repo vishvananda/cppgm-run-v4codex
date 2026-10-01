@@ -1,0 +1,10 @@
+#include "inline-shared.h"
+const void* other(int n) {
+  switch(n) {
+  case 0: return letters; case 1: return &scalar; case 2: return &dynamic;
+  case 3: return &object; case 4: return &reference; case 5: return &Members::value;
+  case 6: return &TemplateMembers<int>::value; case 7: return &variable<long>;
+  case 8: return &private_value; default: return &tls;
+  }
+}
+int from_other() { return tls; }

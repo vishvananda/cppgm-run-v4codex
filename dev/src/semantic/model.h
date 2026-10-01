@@ -203,12 +203,13 @@ struct Entity {
     enum Builtin : unsigned char { NoBuiltin, Memcpy, Memmove, Strlen, Malloc, Free } builtin = NoBuiltin;
     bool c_linkage = false, external_decl = false, thread_local_storage = false, inline_function = false;
     bool no_inline = false, force_inline = false, stable_prefix = false;
-    bool constexpr_function = false;
+    bool constexpr_function = false, inline_variable = false;
     unsigned char allocation_runtime = 0;
     bool array_allocation = false;
     bool mutable_field = false;
     bool template_member = false, template_pattern = false, explicit_specialization = false;
     bool instantiation_declaration = false, instantiation_definition = false;
+    bool exclude_instantiation = false;
     unsigned char exception_spec = 0; // Low two bits: absent, direct noexcept, throwing, parenthesized true; bit 7: seen.
     enum Emission : unsigned char { HiddenFriend = 1, Used = 2 };
     unsigned char emission = 0;

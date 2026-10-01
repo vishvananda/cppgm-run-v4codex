@@ -230,6 +230,7 @@ std::string FactWriter::write(const Target& t) {
     case TargetKind::ConstructionVtable: result = "construction-vtable " + ref('t', t.type) + ' ' + std::to_string(t.this_adjust) + ' ' + ref('t', t.base); break;
     case TargetKind::TlsWrapper: result = "tls-wrapper-type " + ref('t', t.type); break;
     case TargetKind::TlsInitializer: result = "tls-initializer-type " + ref('t', t.type); break;
+    case TargetKind::Guard: result = "guard-type " + ref('t', t.type); break;
     case TargetKind::VirtualThunk:
         result = "virtual-base-thunk " + std::to_string(t.vcall_offset) +
             " this-adjust " + std::to_string(t.this_adjust) + " function " + function(t.function); break;

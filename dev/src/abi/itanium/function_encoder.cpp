@@ -69,6 +69,7 @@ std::string Encoder::target(const Target& t) {
         integer(t.this_adjust, t.this_adjust < 0); output += '_'; type(t.base); break;
     case TargetKind::TlsWrapper: output += "TW"; type(t.type); break;
     case TargetKind::TlsInitializer: output += "TH"; type(t.type); break;
+    case TargetKind::Guard: output += "GV"; type(t.type); break;
     case TargetKind::VirtualThunk:
         output += "Tv"; integer(t.this_adjust, t.this_adjust < 0); output += '_';
         integer(t.vcall_offset, t.vcall_offset < 0); output += '_';

@@ -174,7 +174,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     bool entry = name == "main" && e.owner == sem.global && e.kind == semantic::EntityKind::Function;
     SymbolMetadata metadata;
     metadata.object_root = e.instantiation_definition;
-    metadata.binding = internal ? SBM_INTERNAL : !external && (e.inline_function || (!e.explicit_specialization && (e.specialization || e.template_member))) ? SBM_WEAK : SBM_STRONG;
+    metadata.binding = internal ? SBM_INTERNAL : !external && (e.inline_function || e.inline_variable || (!e.explicit_specialization && (e.specialization || e.template_member))) ? SBM_WEAK : SBM_STRONG;
     if (sem.weak_symbols.get(id) && !internal) metadata.binding = SBM_WEAK;
     if (auto section = sem.section_names.get(id)) metadata.section = p.intern(spelling(section));
     metadata.inline_hint = e.inline_function; metadata.no_inline = e.no_inline; metadata.force_inline = e.force_inline && !e.no_inline;
@@ -220,7 +220,11 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
         else if (e.kind == semantic::EntityKind::Function)
             key = (std::uint64_t(1) << 32) | abi_mangle::function_entity(abi, target.function);
         else key = (std::uint64_t(2) << 32) | aname;
-            if (auto previous = linkage.external.get(key)) { ++linkage.hits; return (base ? base_symbols[id] : symbols[id]) = SymbolId(previous); }
+        if (auto previous = linkage.external.get(key)) {
+            ++linkage.hits;
+            if (e.inline_variable && !external) p.symbols[previous-1].metadata.binding = metadata.binding;
+            return (base ? base_symbols[id] : symbols[id]) = SymbolId(previous);
+        }
     }
     if (entry) {
         metadata.role = SR_ENTRY; metadata.keep_alias = true;
@@ -386,7 +390,7 @@ void Procedural::run()
 {
     std::vector<EntityId> reference_objects, deferred_conversions;
     for (auto storage : sem.reference_storage) {
-        if (!storage.reference || !sem.local_static(storage.reference) || !sem.destructor_needed(sem.object_destructor(storage.object))) continue;
+        if (!storage.reference || (!sem.local_static(storage.reference) && !sem.entities[storage.reference].inline_variable) || !sem.destructor_needed(sem.object_destructor(storage.object))) continue;
         auto next = local_static_references.get(storage.reference);
         local_static_references.put(storage.reference,local_static_reference_objects.size());
         local_static_reference_objects.push_back({storage.object,next});

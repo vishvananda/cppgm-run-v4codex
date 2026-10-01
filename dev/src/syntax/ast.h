@@ -195,7 +195,7 @@ struct NativeAttributes {
     IdentifierId section = 0;
     std::uint32_t tags = 0;
     FunctionEffects effects = FunctionEffects::Unknown;
-    bool weak = false, no_unique_address = false;
+    bool weak = false, no_unique_address = false, exclude_instantiation = false;
 };
 
 struct ClassRegion { std::size_t begin, end; };

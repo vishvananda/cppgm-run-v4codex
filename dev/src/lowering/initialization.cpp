@@ -87,7 +87,10 @@ void Procedural::global(EntityId e)
     auto prior = p.symbols[g.symbol.index-1];
     if (prior.kind == Symbol::GlobalSymbol) {
         if (g.declaration) return;
-        if (!p.globals[prior.entity-1].declaration) throw std::runtime_error("multiple global definitions");
+        if (!p.globals[prior.entity-1].declaration) {
+            if (entity.inline_variable) return; // One already-emitted canonical object in a merged unit.
+            throw std::runtime_error("multiple global definitions");
+        }
     }
     g.structured = (sem.types[t].kind == TypeKind::MemberPointer && sem.types[sem.types[t].child].kind == TypeKind::Function) || sem.types[t].kind == TypeKind::Array || (sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info);
     if (!g.structured) g.type = type(t);
@@ -173,10 +176,17 @@ void Procedural::global(EntityId e)
         auto alignment = sem.storage_alignment(e);
         g.type = IRType::object(sem.object_size(t),alignment); g.structured = true;
     }
-    if (prior.kind == Symbol::GlobalSymbol) { p.globals[prior.entity-1] = g; return; }
-    p.globals.push_back(g);
-    auto& sym = p.symbols[g.symbol.index-1]; sym.kind = Symbol::GlobalSymbol; sym.entity = p.globals.size();
-    if (sem.local_static(e)) prepare_local_static(e,!sem.static_initialization(e));
+    if (prior.kind == Symbol::GlobalSymbol) p.globals[prior.entity-1] = g;
+    else {
+        p.globals.push_back(g);
+        auto& sym = p.symbols[g.symbol.index-1]; sym.kind = Symbol::GlobalSymbol; sym.entity = p.globals.size();
+    }
+    if (!g.declaration && entity.inline_variable && !entity.thread_local_storage) {
+        bool dynamic = !sem.static_initialization(e);
+        prepare_local_static(e,dynamic);
+        if (!dynamic && local_statics[local_static_index.get(e)].guard) global_initializers.push_back(e);
+    }
+    else if (sem.local_static(e)) prepare_local_static(e,!sem.static_initialization(e));
     else if (linkage.host && entity.thread_local_storage && !tls_wrappers.get(e)) prepare_tls(e);
 }
 void Procedural::object(EntityId e)

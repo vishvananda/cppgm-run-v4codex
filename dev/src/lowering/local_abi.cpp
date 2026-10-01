@@ -93,7 +93,7 @@ bool Procedural::internal_entity(EntityId id)
     auto e = sem.entities[id];
     bool local = (!e.c_linkage && internal_scope(e.owner)) || local_abi_scope(e.owner) ||
         (sem.scopes[e.owner].kind != semantic::ScopeKind::Class &&
-         (e.is_static || (e.kind == semantic::EntityKind::Variable && (sem.types[e.type].cv & 1) && !e.external_decl)));
+         (e.is_static || (e.kind == semantic::EntityKind::Variable && (sem.types[e.type].cv & 1) && !e.external_decl && !e.inline_variable)));
     if (!local && e.specialization) {
         auto args = sem.specialization_arguments(id);
         for (unsigned j = 0; j < args.count; ++j) local |= local_abi_argument(sem.template_argument(args.offset+j));

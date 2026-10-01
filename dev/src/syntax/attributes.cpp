@@ -12,7 +12,7 @@ void Parser::native_attributes(NodeId owner, NativeAttributes value)
         auto next = ast[a].next; ast[a].next = 0; ast.append(type_owner,a); a = next;
     }
     value.vector_attributes = 0;
-    if (!value.section && !value.weak && !value.tags && !value.no_unique_address && value.effects == FunctionEffects::Unknown) return;
+    if (!value.section && !value.weak && !value.tags && !value.no_unique_address && !value.exclude_instantiation && value.effects == FunctionEffects::Unknown) return;
     owner = ast.nodes.occurrences[owner].source;
     auto prior = ast.native_attribute_owners.get(owner);
     if (prior) {
@@ -21,6 +21,7 @@ void Parser::native_attributes(NodeId owner, NativeAttributes value)
         if (value.section) old.section = value.section;
         old.weak |= value.weak;
         old.no_unique_address |= value.no_unique_address;
+        old.exclude_instantiation |= value.exclude_instantiation;
         old.effects = std::max(old.effects,value.effects);
         // Attributes are published only after this declaration's parse. Link
         // its fresh list to the prior immutable prefix without copying nodes.
@@ -122,6 +123,10 @@ unsigned Parser::balanced(const char* open, const char* close, NativeAttributes*
             if (native && (in.is("pure") || in.is("__pure__"))) native->effects = std::max(native->effects,FunctionEffects::ReadOnly);
             if (native && (in.is("const") || in.is("__const__"))) native->effects = FunctionEffects::ReadNone;
             if (native && (in.is("weak") || in.is("__weak__"))) native->weak = true;
+            if (in.is("exclude_from_explicit_instantiation") || in.is("__exclude_from_explicit_instantiation__")) {
+                if (in.is("(",1)) throw std::runtime_error("exclude_from_explicit_instantiation takes no arguments");
+                if (native) native->exclude_instantiation = true;
+            }
             if (using_if_exists_attribute(ids.spelling(in.peek().text))) result |= UsingIfExists;
             if (in.is("packed") || in.is("__packed__")) result |= 32;
             if (in.is("noinline") || in.is("__noinline__")) result |= 64;

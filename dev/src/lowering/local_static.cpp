@@ -12,6 +12,12 @@ void Procedural::prepare_local_static(EntityId e, bool dynamic)
         DataItem zero; zero.zero_bytes = 8; p.data.push_back(zero); p.globals.push_back(g);
         auto& symbol = p.symbols[g.symbol.index-1]; symbol.kind = Symbol::GlobalSymbol;
         symbol.entity = p.globals.size(); symbol.metadata.binding = SBM_INTERNAL;
+        if (sem.entities[e].inline_variable && !internal_entity(e)) {
+            abi_mangle::Target target; target.kind = abi_mangle::TargetKind::Guard;
+            target.type = abi_entity_name(e);
+            symbol.metadata.object = p.intern(abi_mangle::mangle(abi,target));
+            symbol.metadata.binding = SBM_WEAK;
+        }
         if (sem.entities[e].thread_local_storage) symbol.metadata.storage = GSM_THREAD_LOCAL;
         local.guard = g.symbol;
     }

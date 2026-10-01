@@ -250,7 +250,7 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
                 entities[e].type = types.signature(type); facts.edit(d).type = type;
                 if (function) template_type_sources.put(ast.nodes.occurrences[d].source,type+1);
             }
-            if (function) declaration_attributes(e,specs,n,d);
+            if (function || kind == EntityKind::Variable) declaration_attributes(e,specs,n,d);
             auto special_init = child(init,Kind::SpecialInitializer);
             if (!special_init) special_init = child(child(n,Kind::Initializer),Kind::SpecialInitializer);
             if (function && special_init && ast[special_init].op == KW_DELETE) entities[e].deleted_function = true;

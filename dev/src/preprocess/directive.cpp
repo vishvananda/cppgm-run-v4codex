@@ -171,6 +171,7 @@ ExpansionToken Preprocessor::builtin(const ExpansionToken& head, unsigned kind, 
     if (kind == 4) value = attribute.is("no_unique_address") || attribute.is("__no_unique_address__") ? 201803 :
         attribute.is("noreturn") || attribute.is("carries_dependency") ? 200809 : 0;
     if (kind == 5) value = using_if_exists_attribute(attribute.token.spelling) || attribute.is("cppgm_stable_prefix") || attribute.is("__cppgm_stable_prefix__") ||
+        attribute.is("exclude_from_explicit_instantiation") || attribute.is("__exclude_from_explicit_instantiation__") ||
         attribute.is("packed") || attribute.is("__packed__") || attribute.is("noinline") || attribute.is("__noinline__") ||
         (!hosted_ && (attribute.is("always_inline") || attribute.is("__always_inline__")));
     if (kind == 16) value = classify_simple(attribute.token.spelling) == TOK_INVALID &&

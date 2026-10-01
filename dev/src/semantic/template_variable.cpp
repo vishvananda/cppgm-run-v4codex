@@ -19,6 +19,7 @@ EntityId Analyzer::declare_variable_template(NodeId d, NodeId init, TypeId type,
     if (list && !primary) throw std::runtime_error("variable partial specialization without primary");
     auto e = make_entity(EntityKind::Variable,owner,id,source);
     entities[e].is_static = member;
+    declaration_attributes(e,ast[source].first,source,d);
     entities[e].type = type; template_facts(e,s);
     auto head = templates[entities[e].template_info];
     for (unsigned j = 0; j < head.count; ++j) {
@@ -82,6 +83,7 @@ EntityId Analyzer::specialize_variable(EntityId primary, const std::vector<TypeI
         spec.entity = make_entity(EntityKind::Variable,entities[primary].owner,entities[primary].name,entities[primary].source);
         entities[spec.entity].access = entities[primary].access;
         entities[spec.entity].is_static = entities[primary].is_static;
+        entities[spec.entity].inline_variable = entities[primary].inline_variable;
         spec.declaration = FactState::Active;
         index = specializations.size(); specializations.push_back(spec);
         specialization_index.put(key(primary,pack),index); entities[spec.entity].specialization = index;

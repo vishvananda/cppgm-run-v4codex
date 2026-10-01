@@ -1237,6 +1237,8 @@ private:
     bool retain_template_definition(NodeId n, ScopeId s, ScopeId owner_head = 0, NodeId member_template = 0);
     void explicit_instantiation(NodeId n, ScopeId s);
     bool instantiation_suppressed(EntityId entity) const;
+    bool excluded_from_class_instantiation(EntityId entity) const;
+    Index native_attribute_patterns;
     bool explicit_instantiation_naming = false;
     void retain_type_access(NodeId part, TypeId qualifier, ScopeId scope, IdentifierId name);
     bool type_access_subtree(NodeId node);

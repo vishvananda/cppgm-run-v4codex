@@ -486,8 +486,12 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && init && !function && entities[e].is_static && scopes[owner].kind == ScopeKind::Class &&
         entities[e].initializer && source != explicit_specialization_source)
         throw std::runtime_error("static member initializer specified twice");
-    if (!function && !specialized_member_declaration && !external && !(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source;
-    if (init && !function) { entities[e].initializer = init; if (!(scopes[s].kind == ScopeKind::Class && entities[e].is_static)) entities[e].definition = source; }
+    bool member_declaration = scopes[s].kind == ScopeKind::Class && entities[e].is_static && !entities[e].inline_variable;
+    if (calls && !function && entities[e].inline_variable && entities[e].definition &&
+        (init || (!external && !member_declaration)))
+        throw std::runtime_error("inline variable defined twice in one translation unit");
+    if (!function && !specialized_member_declaration && !external && !member_declaration) entities[e].definition = source;
+    if (init && !function) { entities[e].initializer = init; if (!member_declaration) entities[e].definition = source; }
     if (calls && function) { function_defaults(e, d, definition_scope, source); exception_specification(e, d, definition_scope); }
     auto special = child(init, Kind::SpecialInitializer);
     if (!special) special = child(child(source, Kind::Initializer), Kind::SpecialInitializer);
@@ -530,7 +534,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     record(block_extern ? s : owner, e, d, t, kind);
     bool member_initializer = calls && init && !function && scopes[s].kind == ScopeKind::Class && !entities[e].is_static;
     if (calls && init && !function && scopes[s].kind == ScopeKind::Class && entities[e].is_static &&
-        !spec_has(specs, KW_CONSTEXPR) && (!(types[t].cv & 1) || !integral(t)))
+        !entities[e].inline_variable && !spec_has(specs, KW_CONSTEXPR) && (!(types[t].cv & 1) || !integral(t)))
         throw std::runtime_error("in-class static initializer requires const integral or constexpr member");
     if (calls && !function && !entities[e].is_static && scopes[owner].kind == ScopeKind::Class && entities[e].access != Access::Public)
         class_facts[entities[scopes[owner].entity].class_info].aggregate = false;
@@ -553,7 +557,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         (spec_has(specs,KW_CONSTEXPR) || (init && !member_initializer && !entities[e].is_static &&
             !entities[e].external_decl && scopes[owner].kind != ScopeKind::Namespace && scopes[owner].kind != ScopeKind::Class)))
         prepare_constant_array(e,spec_has(specs,KW_CONSTEXPR));
-    if (calls && !entities[e].initializer && !function && !alias && scopes[s].kind != ScopeKind::Class && !external) default_initialize(e,d);
+    if (calls && !entities[e].initializer && !function && !alias && (scopes[s].kind != ScopeKind::Class || entities[e].inline_variable) && !external) default_initialize(e,d);
     if (init && !alias && !function && (!calls || (types[t].kind != TypeKind::LRef && types[t].kind != TypeKind::RRef)) && (integral(t) || floating_type(value_type(t))) && !member_initializer) {
         EvaluationScope mode(*this,!calls || spec_has(specs,KW_CONSTEXPR) ||
             (types[t].cv == 1 && integral(t)) || entities[e].is_static || scopes[owner].kind == ScopeKind::Namespace);
@@ -578,7 +582,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         throw std::runtime_error("constexpr object requires initializer");
     if (calls && init && spec_has(specs, KW_CONSTEXPR) && integral(t) && ast[ast[init].first].kind == Kind::Literal)
         facts.edit(ast[init].first).type = t;
-    if (calls && !function && !alias && !member_initializer && scopes[s].kind != ScopeKind::Class && !external) register_destruction(e);
+    if (calls && !function && !alias && !member_initializer && (scopes[s].kind != ScopeKind::Class || entities[e].inline_variable) && !external) register_destruction(e);
     if (definitions && !function && !alias && entities[e].definition && scopes[s].kind == ScopeKind::Namespace)
         demand_class_constant_storage(t);
     if (definitions && !unevaluated_depth && local_static(e) && static_initialization(e))

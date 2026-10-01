@@ -374,6 +374,9 @@ std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t
     }
     if (auto p = template_signature_index.get(key(group,signature))) {
         auto prototype = template_prototypes[p];
+        // Attribute redeclarations affect this canonical source member only;
+        // existing specializations consume its monotonic fact through an edge.
+        entities[facts[prototype.declarator].entity].exclude_instantiation |= entities[facts[d].entity].exclude_instantiation;
         if (prototype.inline_definition) throw std::runtime_error("template member was already defined in its class");
         if (types[declared].kind != TypeKind::Function) {
             auto member = facts[prototype.declarator].entity;
