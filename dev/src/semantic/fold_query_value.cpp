@@ -9,8 +9,8 @@ void Analyzer::schedule_fold_value(QueryId root)
     std::vector<Frame> work; work.emplace_back(root);
     while (!work.empty()) {
         auto& frame = work.back(); auto id = frame.id;
-        auto slot = query_value_index.get(key(id,manifest_evaluation));
-        if (slot && query_values[slot].state == FactState::Success) { work.pop_back(); continue; }
+        auto slot = query_value_index.get(query_value_key(id));
+        if (slot && query_values[slot].revision == query_revisions.get(id) && query_values[slot].state == FactState::Success) { work.pop_back(); continue; }
         if (!fold_query_nodes.get(id)) { query_value(id); work.pop_back(); continue; }
         auto q = type_queries[id];
         if (!frame.phase) {

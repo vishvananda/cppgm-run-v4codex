@@ -26,7 +26,7 @@ QueryId Analyzer::intern_query(TypeQuery q, const std::vector<QueryId>& children
     std::uint64_t hash = 1469598103934665603ULL;
     auto add = [&](std::uint64_t x) { hash = (hash ^ x) * 1099511628211ULL; };
     add(unsigned(q.kind)); add(q.op); add(q.type); add(q.entity); add(q.name);
-    add(q.context); add(q.naming); add(q.arguments); add(q.value); add(q.null_pointer_constant); add(q.dependent_name);
+    add(q.context); add(q.naming); add(q.arguments); add(q.value); add(q.source_site); add(q.null_pointer_constant); add(q.dependent_name);
     for (auto c : children) add(c);
     if (query_slots.empty() || type_queries.size()*2 >= query_slots.size()) {
         query_slots.assign(query_slots.empty() ? 32 : query_slots.size()*2,0);
@@ -41,7 +41,7 @@ QueryId Analyzer::intern_query(TypeQuery q, const std::vector<QueryId>& children
         auto p = type_queries[id];
         bool same = query_hashes[id] == hash && p.kind == q.kind && p.op == q.op && p.type == q.type &&
             p.entity == q.entity && p.name == q.name && p.context == q.context && p.naming == q.naming &&
-            p.arguments == q.arguments && p.value == q.value && p.count == children.size() &&
+            p.arguments == q.arguments && p.source_site == q.source_site && p.value == q.value && p.count == children.size() &&
             p.null_pointer_constant == q.null_pointer_constant && p.dependent_name == q.dependent_name;
         for (unsigned i = 0; same && i < p.count; ++i) same = query_edges[p.offset+i] == children[i];
         if (same) return id;

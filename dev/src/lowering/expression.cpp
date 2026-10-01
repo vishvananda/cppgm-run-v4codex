@@ -6,6 +6,7 @@ namespace cppgm { namespace lowering {
 using syntax::Kind;
 Value Procedural::expression(NodeId n, bool location)
 {
+    SourceInvocationScope invocation(source_invocation,sem.source_site(n));
     if (!n) throw std::logic_error("missing expression node");
     guard_expression(n);
     auto node = ast[n];

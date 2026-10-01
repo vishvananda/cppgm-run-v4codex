@@ -132,6 +132,7 @@ Constant Analyzer::evaluate(NodeId n, ScopeId s)
         default: break;
         }
     }
+    if (source_invocation.defaulted) return evaluate_value(n,s);
     auto cached = manifest_evaluation || expressions[n].form == ExpressionForm::ConstantQuery ? facts[n].value : runtime_constants.get(n);
     if (cached) {
         if (mode_sensitive_values.get(cached)) ++evaluation_mode_uses;

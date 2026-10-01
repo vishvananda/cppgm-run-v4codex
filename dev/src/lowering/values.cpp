@@ -172,6 +172,7 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen, bool preserve_wid
 }
 Value Procedural::converted(NodeId n, const semantic::Conversion& c)
 {
+    SourceInvocationScope invocation(source_invocation,0,c.default_argument);
     if (c.reference) if (auto temporary = sem.retained_scalar(n,c.target)) {
         auto destination = binding(temporary);
         if (!sem.entities[temporary].constant.valid) {

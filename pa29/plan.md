@@ -1,6 +1,6 @@
-# PA29 compact plan — checkpoint audit174
+# PA29 compact plan — implementation175
 
-Target: **PA29 full-stage**. Phase: **checkpointAudit complete; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation175 active; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `221d6d0e4930da05db2913bdf5f50d808f89c744`.
 Audit entry: `914e1a0a07e40884c91c0b967b0421eea9ef0d48`.
@@ -62,3 +62,21 @@ unevaluated-capture and cross-owner ABI gaps survived isolated checks. Future
 handoffs should finish direct/dependent/query/discarded uses, lifetime effects
 and integrated host linkage together. All three accumulated handoffs are now
 reviewed; stage completion remains open.
+
+## Implementation175 entry and work
+
+Entry HEAD: `235ffa3947d7921a1c34c66198f590df5aa77de2`; previous turn was
+progress (audit174 committed evidence and fixes), not an active process wait.
+Stage base and Last reviewed commit above remain unchanged. Baseline 377/403.
+
+Initial group: source-invocation intrinsics. Owner: shared builtin registry and
+semantic call facts; immutable source coordinates and lexical function identity
+flow to constexpr evaluation and typed LowIR. Default argument/member initializer
+uses must distinguish lexical context from invocation context without reparsing,
+cloning semantic trees, or keying semantic facts by text. Work follows calls and
+actual default-use edges, with O(1) indexed completed-fact lookup. Extend direct,
+macro, dependent, unevaluated, nested-default and member-initializer cases together;
+measure compiler wall/RSS and executable runtime/text with frozen binaries. No
+optional optimization is planned. Validation: explicit personal reducers, PA29,
+through PA28, file audit, unchanged coverage, and final committed clean state.
+Remaining implementation and independent contract questions above are not waived.

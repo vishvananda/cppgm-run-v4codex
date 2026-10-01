@@ -45,6 +45,7 @@ QueryId Analyzer::call_query(NodeId n, ScopeId s)
             }
         }
     }
+    if (source_builtins_present) q.source_site = remember_source_site(n,s);
     return intern_query(q,children);
 }
 TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQueryFact>& children)

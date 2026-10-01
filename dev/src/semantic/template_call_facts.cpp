@@ -152,6 +152,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     if (selected && typeinfo_comparison(selected,OP_EQ)) result.form = ExpressionForm::TypeinfoEqual;
     if (selected && typeinfo_comparison(selected,OP_NE)) result.form = ExpressionForm::TypeinfoUnequal;
     expressions.set(n,result); { auto& published = facts.edit(n); published.type = f.child; published.scope = s; published.entity = selected; }
+    if (source_builtins_present) remember_source_site(n,s);
     ++template_fixed_call_work;
     } catch (...) { --unevaluated_depth; throw; }
     --unevaluated_depth; return true;

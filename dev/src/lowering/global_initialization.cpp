@@ -20,6 +20,7 @@ void Procedural::global_initialization()
     builder.reset(new FunctionBuilder(p, function)); this_slot = SlotId();
     start(block());
     for (EntityId e : global_initializers) {
+        SourceInvocationScope invocation(source_invocation,sem.object_source_sites.get(e));
         initialized_units = semantic::Index();
         auto entity = sem.entities[e];
         Value location(Operand::symbol(symbols[e]), type(entity.type), entity.type, true);

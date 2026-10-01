@@ -178,6 +178,7 @@ void Procedural::global(EntityId e)
 }
 void Procedural::object(EntityId e)
 {
+    SourceInvocationScope invocation(source_invocation,sem.object_source_sites.get(e));
     if (sem.entities[e].external_decl && sem.scopes[sem.entities[e].owner].kind == semantic::ScopeKind::Namespace) return;
     if (sem.local_static(e)) { initialize_local_static(e); return; }
     initialized_units = semantic::Index();
@@ -238,6 +239,7 @@ void Procedural::object(EntityId e)
 }
 void Procedural::initialize(NodeId n, TypeId t, Value location)
 {
+    SourceInvocationScope invocation(source_invocation,sem.source_site(n));
     if (auto source = sem.class_initialization(n,t).source) {
         construct_value(source,sem.conversion_fact(sem.class_initialization(n,t).conversion),address(location)); return;
     }

@@ -83,6 +83,7 @@ std::uint32_t Analyzer::constant_constructor(EntityId ctor)
     ConstantObject summary; summary.first = constructor_constant_actions.size();
     for (unsigned j = 0; j < member.action_count; ++j) {
         auto action = subobject_actions[member.action_begin+j];
+        SourceInvocationScope invocation(source_invocation,action.source_site,action.source_site != 0,true);
         auto t = types[action.type];
         if (!action.field || !action.initializer || (t.cv & 6) || field_fact(action.field).bit_field ||
             t.kind == TypeKind::Array || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef ||
@@ -97,15 +98,16 @@ std::uint32_t Analyzer::constant_constructor(EntityId ctor)
         if (!parameter && static_value(source, action.type).kind == StaticValue::Invalid) {
             constructor_constant_actions.resize(summary.first); return index;
         }
-        constructor_constant_actions.push_back({action.field, action.type, source, parameter});
+        constructor_constant_actions.push_back({action.field, action.type, source, parameter, action.source_site});
     }
     summary.count = constructor_constant_actions.size()-summary.first; summary.valid = true;
     constructor_constants[index] = summary; return index;
 }
 const ConstantObject& Analyzer::constant_construction(NodeId n, TypeId t)
 {
+    SourceInvocationScope invocation(source_invocation,source_site(n));
     auto k = key(n,t);
-    if (auto known = constant_objects.get(k)) return object_constants[known];
+    if (auto known = source_invocation.defaulted ? 0 : constant_objects.get(k)) return object_constants[known];
     ConstantObject result; result.first = constant_fields.size();
     EntityId ctor = facts[n].entity;
     if (constructor_member(ctor) && entities[ctor].constexpr_function) {
@@ -122,11 +124,13 @@ const ConstantObject& Analyzer::constant_construction(NodeId n, TypeId t)
         // side-effect-free static value after its selected conversion.
         for (unsigned j = 0; result.valid && j < call.argument_count; ++j) {
             auto conversion = conversions[call.conversions+j];
+            SourceInvocationScope argument(source_invocation,0,conversion.default_argument);
             result.valid = conversion.kind != Conversion::Kind::Construction &&
                 static_value(call_argument(call,j), conversion.target).kind != StaticValue::Invalid;
         }
         for (unsigned j = 0; result.valid && j < summary.count; ++j) {
             auto action = constructor_constant_actions[summary.first+j];
+            SourceInvocationScope source_context(source_invocation,action.source_site,action.source_site != 0,action.source_site != 0);
             NodeId source = action.argument ? call_argument(call,action.argument-1) : action.source;
             if (action.argument) {
                 auto converted = conversions[call.conversions+action.argument-1];
@@ -135,6 +139,8 @@ const ConstantObject& Analyzer::constant_construction(NodeId n, TypeId t)
                 if (converted.kind == Conversion::Kind::Construction ||
                     types.unqualified(converted.target) != types.unqualified(action.type)) { result.valid = false; break; }
             }
+            SourceInvocationScope argument_context(source_invocation,0,
+                action.argument && conversions[call.conversions+action.argument-1].default_argument);
             StaticValue value = static_value(source, action.type);
             result.valid = value.kind != StaticValue::Invalid;
             if (result.valid) constant_fields.push_back({action.field, action.type, value,entities[action.field].member_offset});
@@ -146,7 +152,7 @@ const ConstantObject& Analyzer::constant_construction(NodeId n, TypeId t)
         std::stable_sort(constant_fields.begin()+result.first,constant_fields.end(),
             [](const ConstantField& a, const ConstantField& b) { return a.offset < b.offset; });
     }
-    auto index = object_constants.size(); object_constants.push_back(result); constant_objects.put(k, index);
+    auto index = object_constants.size(); object_constants.push_back(result); if (!source_invocation.defaulted) constant_objects.put(k, index);
     return object_constants[index];
 }
 } }

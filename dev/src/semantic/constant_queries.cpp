@@ -12,7 +12,7 @@ std::uint32_t Analyzer::constant_query_arrow(QueryId id, std::uint32_t chain)
 std::uint32_t Analyzer::constant_query_object(QueryId id)
 {
     auto cache_key = key(id,manifest_evaluation);
-    if (auto known = constant_query_receivers.get(cache_key)) {
+    if (auto known = source_invocation.defaulted ? 0 : constant_query_receivers.get(cache_key)) {
         query_value(id); // Propagate mode dependence from the cached value.
         return known;
     }
@@ -59,7 +59,8 @@ std::uint32_t Analyzer::constant_query_object(QueryId id)
     if (!v.valid) return 0;
     if (types[v.type].kind == TypeKind::LRef || types[v.type].kind == TypeKind::RRef) return v.bits;
     auto result = constant_storage_address(v.type,v);
-    constant_query_receivers.put(cache_key,result); return result;
+    if (!source_invocation.defaulted) constant_query_receivers.put(cache_key,result);
+    return result;
 }
 Constant Analyzer::constant_query_conversion(QueryId source, Conversion c)
 {
@@ -108,6 +109,7 @@ Constant Analyzer::constant_query_conversion(QueryId source, Conversion c)
 Constant Analyzer::constant_query_call(QueryId id)
 {
     auto q = type_queries[id]; auto fact = query_fact(id);
+    SourceInvocationScope invocation(source_invocation,q.source_site);
     if (q.name == invoke_builtin && types[query_fact(query_edges[q.offset]).expression.type].kind == TypeKind::MemberPointer)
         return constant_query_invoke(id);
     auto e = fact.selected;
@@ -122,6 +124,8 @@ Constant Analyzer::constant_query_call(QueryId id)
             e = constant_storage[constant_addresses[value.bits].storage].entity;
         else return Constant();
     }
+    if (intrinsic_function(e) >= Intrinsic::SourceFile && intrinsic_function(e) <= Intrinsic::SourceColumn)
+        return source_builtin_constant(intrinsic_function(e),source_invocation.site);
     if (intrinsic_function(e) == Intrinsic::IsConstantEvaluated) {
         ++evaluation_mode_uses;
         return Constant(types.fundamental(FT_BOOL),manifest_evaluation);

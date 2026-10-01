@@ -154,6 +154,10 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     base = base && separate;
     if (deleting) return deleting_symbol(id);
     if ((base ? base_symbols[id] : symbols[id])) return base ? base_symbols[id] : symbols[id];
+    if (sem.predefined_string(id) && !e.name) {
+        auto sid = fresh_symbol("@__source_string_"+std::to_string(id));
+        symbols[id] = sid; p.symbols[sid.index-1].metadata.binding = SBM_INTERNAL; return sid;
+    }
     if (sem.local_static(id)) {
         // A local declaration has no namespace variable ABI name. Distinct
         // lexical declarations and specializations already have distinct IDs.

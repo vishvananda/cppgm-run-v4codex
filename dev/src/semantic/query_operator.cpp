@@ -123,6 +123,9 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
             r.expression = args[1]; r.expression.conversions = r.expression.count = 0; return r;
         }
         if (q.op == OP_AMP && args.size() == 1 && args[0].category != ValueCategory::Prvalue && !field_fact(args[0].entity).bit_field) {
+            auto intrinsic = intrinsic_function(args[0].entity);
+            if (intrinsic >= Intrinsic::SourceFile && intrinsic <= Intrinsic::SourceColumn)
+                return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
             auto member = args[0].entity;
             if (q.value && member && nonstatic_field(member)) {
                 if (!accessible(member,q.context,object_uses[args[0].object_use].naming_scope,

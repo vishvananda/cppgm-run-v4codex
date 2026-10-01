@@ -371,7 +371,7 @@ struct FieldProjection {
 };
 struct SubobjectAction {
     EntityId field; TypeId type; NodeId initializer; EntityId constructor; std::uint32_t base;
-    std::uint32_t storage = 0, receiver_storage = 0;
+    std::uint32_t storage = 0, receiver_storage = 0, source_site = 0;
     SubobjectAction(EntityId f, TypeId t, NodeId i, EntityId c, std::uint32_t b = 0)
         : field(f), type(t), initializer(i), constructor(c), base(b) {}
 };
@@ -413,7 +413,7 @@ struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool 
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
 enum class Intrinsic : unsigned char {
     None, VaStart, VaEnd, VaCopy, StackAlloc, Expect, Abort, Unreachable, Atomic,
-    Clz, Ctz, Popcount, Parity, Ffs, Bswap, Clzg, Ctzg, Popcountg, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, IsConstantEvaluated
+    Clz, Ctz, Popcount, Parity, Ffs, Bswap, Clzg, Ctzg, Popcountg, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, IsConstantEvaluated, SourceFile, SourceLine, SourceFunction, SourceColumn
 };
 enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatNaN, FloatInfinite, FloatNormal, FloatSignbit, FloatGreater, FloatGreaterEqual, FloatLess, FloatLessEqual, FloatLessGreater, FloatUnordered, FloatClassify, InitializerList, ListValue, BoundMember, Expect, Typeid, DynamicCast, TypeinfoEqual, TypeinfoUnequal, InvokeMemberData };
 struct RttiExpression {
@@ -479,10 +479,10 @@ struct Conversion {
     std::uint32_t materialization = 0;
     unsigned char rank = 255, qualification = 0;
     bool reference : 1, temporary : 1, derived : 1, empty_copy : 1, fold_widen : 1, implicit_move : 1;
-    bool storage_write : 1;
+    bool storage_write : 1, default_argument : 1;
     bool preserve_widen : 1, ambiguous : 1, constant_forbidden : 1, ellipsis_object : 1, ellipsis_unavailable : 1;
     Conversion() : reference(false), temporary(false), derived(false), empty_copy(false), fold_widen(false),
-        implicit_move(false), storage_write(false), preserve_widen(false), ambiguous(false), constant_forbidden(false), ellipsis_object(false), ellipsis_unavailable(false) {}
+        implicit_move(false), storage_write(false), default_argument(false), preserve_widen(false), ambiguous(false), constant_forbidden(false), ellipsis_object(false), ellipsis_unavailable(false) {}
     unsigned char preference = 0;
     enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction, User, ListPlan, List, QueryList };
     Kind kind = Kind::Standard;
@@ -605,7 +605,7 @@ struct StaticValue {
 };
 struct ConstantField { EntityId field; TypeId type; StaticValue value; std::uint64_t offset; };
 struct ConstantObject { std::uint32_t first = 0, count = 0; bool valid = false; };
-struct ConstructorConstantAction { EntityId field; TypeId type; NodeId source; std::uint32_t argument; };
+struct ConstructorConstantAction { EntityId field; TypeId type; NodeId source; std::uint32_t argument, source_site; };
 struct Fact { NodeId target = 0; TypeId type = 0; EntityId entity = 0; ScopeId scope = 0; std::uint32_t value = 0; };
 
 } }

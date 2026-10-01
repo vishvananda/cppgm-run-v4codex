@@ -7,13 +7,13 @@ StaticValue Analyzer::static_value(NodeId n, TypeId target)
     ++static_requests;
     std::uint64_t key = (std::uint64_t(n) << 32) | target;
     auto& cache = manifest_evaluation ? static_index : runtime_static_index;
-    unsigned index = cache.get(key);
+    unsigned index = source_invocation.defaulted ? 0 : cache.get(key);
     if (index) {
         ++static_hits;
         return static_facts[index-1].state == FactState::Success ? static_facts[index-1].value : StaticValue();
     }
     index = static_facts.size()+1;
-    cache.put(key, index);
+    if (!source_invocation.defaulted) cache.put(key, index);
     StaticFact fact; fact.state = FactState::Active; static_facts.push_back(fact);
     StaticValue result = static_value_impl(n, target);
     // Apply the requested conversion on every path, including wrappers,

@@ -36,6 +36,7 @@ void Analyzer::demand_function_expression(const Expression& value)
 Expression Analyzer::expression(NodeId n, ScopeId s)
 {
     if (expressions[n].ready) {
+        if (source_builtins_present && ast[n].kind == Kind::Call) remember_source_site(n,s);
         if (!unevaluated_depth) expressions.evaluated(n,true);
         if ((!unevaluated_depth || active_default_fact) && definitions) demand_template_storage(expressions[n].entity);
         demand_function_expression(expressions[n]);
@@ -48,6 +49,8 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     }
     facts.edit(n).scope = s;
     Expression result = resolve_expression(n, s);
+    if (source_builtins_present && (ast[n].kind == Kind::Call || ast[n].kind == Kind::New || result.form == ExpressionForm::Construction ||
+        result.form == ExpressionForm::OperatorCall || result.form == ExpressionForm::ListValue)) remember_source_site(n,s);
     storage_expression(n,result);
     // Reused fixed template facts share type/conversions, but capture storage
     // belongs to this checked occurrence and enclosing closure specialization.

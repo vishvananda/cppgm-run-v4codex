@@ -6,11 +6,15 @@ inline bool integer_pack_builtin(TextView name) { return name.equals("__integer_
 enum class FunctionBuiltin : unsigned char {
     None, Strcmp, Strncmp, VaStart, VaEnd, VaCopy,
     Alloca, Expect, Abort, Unreachable, Vsnprintf, Vsprintf,
-    Fabs, Fabsf, Fabsl, Abs, Labs, Llabs, Memcpy, Memmove, Memset, Memcmp, Memchr, Strlen, Strchr, Strrchr, Bzero, Strstr, Strpbrk, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, OperatorNew, OperatorDelete, IsConstantEvaluated
+    Fabs, Fabsf, Fabsl, Abs, Labs, Llabs, Memcpy, Memmove, Memset, Memcmp, Memchr, Strlen, Strchr, Strrchr, Bzero, Strstr, Strpbrk, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, OperatorNew, OperatorDelete, IsConstantEvaluated, SourceFile, SourceLine, SourceFunction, SourceColumn
 };
 inline bool invoke_builtin_name(TextView name) { return name.equals("__builtin_invoke"); }
 inline FunctionBuiltin function_builtin(TextView name)
 {
+    if (name.equals("__builtin_FILE")) return FunctionBuiltin::SourceFile;
+    if (name.equals("__builtin_LINE")) return FunctionBuiltin::SourceLine;
+    if (name.equals("__builtin_FUNCTION")) return FunctionBuiltin::SourceFunction;
+    if (name.equals("__builtin_COLUMN")) return FunctionBuiltin::SourceColumn;
     static const char* const names[] = {"",
         "__builtin_strcmp", "__builtin_strncmp", "__builtin_va_start", "__builtin_va_end",
         "__builtin_va_copy", "__builtin_alloca", "__builtin_expect", "__builtin_abort",

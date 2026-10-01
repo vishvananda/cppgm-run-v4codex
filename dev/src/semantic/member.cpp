@@ -214,6 +214,7 @@ void Analyzer::default_initialize(EntityId object, NodeId declarator)
     } else ctor = check_default_initialization(t,entities[object].owner);
     if (!ctor) return;
     prepare_default_call(ctor);
+    if (source_builtins_present) object_source_sites.put(object,remember_source_site(declarator,entities[object].owner));
     members[entities[ctor].member_info].source_demand = true;
     members[entities[ctor].member_info].complete_entry = true;
     if (scopes[entities[object].owner].kind == ScopeKind::Namespace) {

@@ -7,6 +7,7 @@ namespace cppgm { namespace lowering {
 using semantic::EntityId;
 using semantic::TypeId;
 using semantic::NodeId;
+using semantic::SourceInvocationScope;
 using semantic::TypeKind;
 using semantic::ValueCategory;
 using lowir_model::Operand;
@@ -61,6 +62,7 @@ struct Linkage {
 // The semantic TU outlives this adapter; all mappings are dense canonical IDs.
 // Function-local construction state is discarded when its body is complete.
 class Procedural {
+    semantic::SourceInvocation source_invocation;
     syntax::AstView ast;
     semantic::Analyzer& sem;
     IdentifierTable& identifiers;

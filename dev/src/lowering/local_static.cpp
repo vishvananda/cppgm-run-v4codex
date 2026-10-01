@@ -39,6 +39,7 @@ void Procedural::prepare_local_static(EntityId e, bool dynamic)
 }
 void Procedural::initialize_local_static(EntityId e)
 {
+    SourceInvocationScope invocation(source_invocation,sem.object_source_sites.get(e));
     auto local = local_statics[local_static_index.get(e)];
     if (!local.guard) return;
     Value guard = emit(Opcode::Load,IRType::I64,{Operand::symbol(local.guard)});

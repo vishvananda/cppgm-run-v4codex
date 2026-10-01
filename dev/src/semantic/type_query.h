@@ -15,6 +15,7 @@ struct TypeQuery {
     IdentifierId name = 0;
     ScopeId context = 0, naming = 0;
     std::uint32_t arguments = 0, offset = 0, count = 0;
+    std::uint32_t source_site = 0; // Invocation identity for context-sensitive builtin/default values.
     std::uint64_t value = 0;
 };
 struct TypeQueryFact {

@@ -43,6 +43,7 @@ std::uint32_t Analyzer::constant_body(EntityId e)
 }
 Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& args, std::uint32_t object, bool zero)
 {
+    SourceInvocationScope invocation(source_invocation,0,false,true);
     if (!constant_depth) { constant_remaining = 1000000; constant_limited = constant_unavailable = false; }
     auto body_id = constant_body(e);
     if (!body_id) { constant_unavailable = true; return Constant(); }
@@ -107,6 +108,7 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
             bool valid = true;
             for (unsigned j = 0; valid && j < member.action_count; ++j) {
                 auto action = subobject_actions[member.action_begin+j];
+                SourceInvocationScope source(source_invocation,action.source_site,action.source_site != 0,true);
                 Constant v;
                 constant_activations[id].object = constant_construction_receiver(builder,receiver,action.receiver_storage);
                 if (member.inherited_constructor && action.constructor == member.inherited_constructor) {
@@ -189,8 +191,11 @@ Constant Analyzer::execute_constant_node(NodeId n, ScopeId s)
 }
 Constant Analyzer::constant_call(NodeId n, ScopeId s)
 {
+    SourceInvocationScope invocation(source_invocation,source_site(n));
     auto e = facts[n].entity;
     auto call = expressions[n];
+    if (intrinsic_function(e) >= Intrinsic::SourceFile && intrinsic_function(e) <= Intrinsic::SourceColumn)
+        return source_builtin_constant(intrinsic_function(e),source_invocation.site);
     if (intrinsic_function(e) == Intrinsic::IsConstantEvaluated) {
         ++evaluation_mode_uses;
         return Constant(types.fundamental(FT_BOOL),manifest_evaluation);
@@ -286,6 +291,7 @@ Constant Analyzer::constant_result_conversion(Constant value, const Conversion& 
 }
 Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
 {
+    SourceInvocationScope invocation(source_invocation,0,c.default_argument);
     if (c.constant_forbidden || c.ellipsis_unavailable) return Constant();
     if (c.ellipsis_object && !literal_type(value_type(c.target))) return Constant();
     // Implicit and braced argument conversions create temporaries too. Use

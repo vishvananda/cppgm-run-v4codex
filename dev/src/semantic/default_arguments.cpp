@@ -221,7 +221,7 @@ NodeId Analyzer::default_argument(EntityId e, unsigned parameter, Conversion* co
     }
     if (reason == DefaultReason::Argument && !active_default_fact) demand_default_fact(id);
     auto fact = default_argument_facts[id];
-    if (converted) *converted = copy_conversion_recipe(conversions[fact.conversion]);
+    if (converted) { *converted = copy_conversion_recipe(conversions[fact.conversion]); converted->default_argument = true; }
     return fact.value;
 }
 void Analyzer::record_default_dependency(DefaultDependencyKind kind, std::uint32_t target)

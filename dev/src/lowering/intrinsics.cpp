@@ -23,6 +23,8 @@ Value Procedural::intrinsic_call(NodeId n, semantic::Intrinsic intrinsic)
     }
     if (intrinsic == semantic::Intrinsic::IsConstantEvaluated)
         return Value(Operand::integer(0),IRType::I8,fact.type);
+    if (intrinsic >= semantic::Intrinsic::SourceFile && intrinsic <= semantic::Intrinsic::SourceColumn)
+        return constant_operand(sem.source_builtin_constant(intrinsic,source_invocation.site),fact.type);
     auto first = argument(0);
     if (intrinsic == semantic::Intrinsic::Prefetch || intrinsic == semantic::Intrinsic::AssumeAligned) {
         for (unsigned j = 1; j < fact.argument_count; ++j) argument(j);

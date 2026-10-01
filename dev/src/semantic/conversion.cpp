@@ -165,6 +165,8 @@ bool Analyzer::similar_type(TypeId a, TypeId b)
 }
 Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
 {
+    if (intrinsic_function(x.entity) >= Intrinsic::SourceFile && intrinsic_function(x.entity) <= Intrinsic::SourceColumn &&
+        types[x.type].kind == TypeKind::Function) return Conversion();
     ++conversion_work;
     Conversion c; c.target = to;
     Type target = types[to];
@@ -317,7 +319,8 @@ void Analyzer::select_function(NodeId n, EntityId e, bool direct)
 void Analyzer::use_selected_function(EntityId e, bool direct)
 {
     auto intrinsic = intrinsic_function(e);
-    if ((intrinsic == Intrinsic::Atomic || intrinsic == Intrinsic::IsConstantEvaluated) && !direct)
+    if ((intrinsic == Intrinsic::Atomic || intrinsic == Intrinsic::IsConstantEvaluated ||
+        (intrinsic >= Intrinsic::SourceFile && intrinsic <= Intrinsic::SourceColumn)) && !direct)
         throw std::runtime_error("compiler intrinsic requires a direct call");
     if (destructor_member(e)) members[entities[e].member_info].retained_root = true;
     if (direct && entities[e].member_info) members[entities[e].member_info].emission_reference = true;
@@ -435,6 +438,7 @@ Conversion Analyzer::boolean_conversion_value(Expression source, NodeId n)
 void Analyzer::initialize(NodeId n, TypeId target, ScopeId s, InitializationMode mode)
 {
     s = expanded_scope(n,s);
+    if (source_builtins_present) remember_source_site(n,s);
     auto source = n;
     while (ast[source].kind == Kind::Initializer) source = ast[source].first;
     expand_expression_list(source,s);

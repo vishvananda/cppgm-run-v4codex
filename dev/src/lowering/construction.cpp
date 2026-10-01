@@ -4,6 +4,7 @@ namespace cppgm { namespace lowering {
 using syntax::Kind;
 void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base, bool entry)
 {
+    SourceInvocationScope invocation(source_invocation,sem.source_site(init));
     guard_expression(init,true);
     if (object.type) atomic_padding(object.type,object);
     if (init && sem.object_fact(init).value_initialize) {
@@ -56,6 +57,7 @@ void Procedural::constructor_body(EntityId e, bool base)
     bool vptr_written = false;
     for (unsigned j = 0; j < m.action_count; ++j) {
         auto action = sem.subobject_actions[m.action_begin+j];
+        SourceInvocationScope source(source_invocation,action.source_site,action.source_site != 0,true);
         auto offset = action.field ? (sem.entities[action.field].member_offset + sem.construction_storage[action.storage].offset) : sem.lifecycle_bases[action.base].offset;
         if (base && action.base && sem.lifecycle_bases[action.base].virtual_base) continue;
         construction_base = action.base;

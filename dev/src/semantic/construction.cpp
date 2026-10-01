@@ -361,7 +361,11 @@ void Analyzer::constructor_actions(EntityId e)
                 members[entities[selected].member_info].polymorphic_base_entry |= dynamic_class(cls);
             }
         } else if (ctor) members[entities[ctor].member_info].complete_entry = true;
-        if (initial || ctor) work.push_back({field, type, initial, ctor, base});
+        if (initial || ctor) {
+            work.push_back({field, type, initial, ctor, base});
+            if (source_builtins_present && (!initial || (field && initial == entities[field].initializer)))
+                work.back().source_site = remember_source_site(entities[e].definition ? entities[e].definition : entities[e].source ? entities[e].source : entities[cls].source,scope);
+        }
     };
     for (unsigned j = 0; j < lifecycle_count(cls); ++j) {
         auto id = lifecycle_begin(cls)+j;

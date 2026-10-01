@@ -31,6 +31,15 @@ EntityId Analyzer::builtin_function(IdentifierId name)
         entities[e].exception_spec = 129;
         intrinsic_functions.put(e,unsigned(Intrinsic::IsConstantEvaluated)); return e;
     }
+    if (builtin >= FunctionBuiltin::SourceFile && builtin <= FunctionBuiltin::SourceColumn) {
+        source_builtins_present = true;
+        auto kind = Intrinsic(unsigned(Intrinsic::SourceFile) + unsigned(builtin) - unsigned(FunctionBuiltin::SourceFile));
+        auto result = kind == Intrinsic::SourceLine || kind == Intrinsic::SourceColumn ?
+            types.fundamental(FT_UNSIGNED_INT) : types.compound(TypeKind::Pointer,types.qualify(types.fundamental(FT_CHAR),1));
+        auto e = declare_function(global,name,0,types.function(result,{},false));
+        entities[e].exception_spec = 129;
+        intrinsic_functions.put(e,unsigned(kind)); return e;
+    }
     if (auto hint = hint_builtin(name)) return hint;
     if (auto runtime = runtime_builtin(name)) return runtime;
     if (auto integer = integer_builtin_function(name)) return integer;

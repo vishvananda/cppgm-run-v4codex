@@ -105,6 +105,7 @@ Constant Analyzer::constant_init_plan(std::uint32_t id, ScopeId s)
 }
 Constant Analyzer::constant_initialize(NodeId n, TypeId t, ScopeId s, EntityId ctor)
 {
+    SourceInvocationScope invocation(source_invocation,source_site(n));
     auto init = class_initialization(n,t);
     if (init.source) return constant_node_conversion(init.source,conversions[init.conversion],s);
     if (auto plan = initializer_plan(n,t)) return constant_init_plan(plan,s);

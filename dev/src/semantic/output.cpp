@@ -363,6 +363,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_entity_bytes\":" << sizeof(Entity)
         << ",\"semantic_class_facts\":" << class_facts.size() - 1
         << ",\"semantic_constants\":" << constants.size() - 2
+        << ",\"source_invocation_sites\":" << source_sites.size()-1
         << ",\"semantic_value_queries\":" << query_values.size() - 1
         << ",\"semantic_value_query_work\":" << query_value_work
         << ",\"semantic_template_value_sources\":" << template_value_work

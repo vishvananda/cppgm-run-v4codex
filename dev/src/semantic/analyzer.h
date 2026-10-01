@@ -5,6 +5,7 @@
 #include "semantic/fact_store.h"
 #include "semantic/template_binding.h"
 #include "semantic/model.h"
+#include "semantic/source_invocation.h"
 #include "syntax/parser.h"
 
 namespace cppgm { namespace semantic {
@@ -18,6 +19,16 @@ public:
     Analyzer(syntax::Ast& ast, IdentifierTable& ids, bool calls = false, bool definitions = false, bool host_abi = false);
     void consume(NodeId declaration) override;
     void finish();
+    struct SourceSite { unsigned line = 0; EntityId file = 0, function = 0; };
+    SourceInvocation source_invocation;
+    bool source_builtins_present = false;
+    Index source_site_index, source_string_index, source_function_scopes, object_source_sites;
+    std::vector<SourceSite> source_sites = std::vector<SourceSite>(1);
+    unsigned remember_source_site(NodeId n, ScopeId s);
+    unsigned source_site(NodeId n) const { return source_builtins_present ? source_site_index.get(n) : 0; }
+    Constant source_builtin_constant(Intrinsic kind, unsigned site);
+    EntityId source_string(IdentifierId text, NodeId source);
+
     void resolve_assembly(NodeId, ScopeId, bool pattern = false);
     void require_body_facts(EntityId e) const;
     bool deferred_inline_function(EntityId e) const;
@@ -966,7 +977,10 @@ private:
     TypeQueryFact incomplete_query(TypeId type);
     Index query_sources, query_callee_sources, signature_parameters;
     std::size_t query_work = 0;
-    struct QueryValue { std::uint32_t constant = 0; FactState state = FactState::NotStarted; };
+    std::uint64_t query_value_key(QueryId id) const {
+        return key(id,(source_invocation.defaulted ? source_invocation.site*2 : 0) + unsigned(manifest_evaluation));
+    }
+    struct QueryValue { std::uint32_t constant = 0, revision = 0; FactState state = FactState::NotStarted; };
     Index query_value_index, template_value_queries, template_value_dependence;
     std::vector<QueryValue> query_values = std::vector<QueryValue>(1);
     bool template_body_values = false;

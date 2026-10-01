@@ -25,11 +25,13 @@ bool Analyzer::bind_template_size(NodeId node, ScopeId scope)
 }
 std::uint32_t Analyzer::query_value(QueryId id)
 {
-    auto cache_key = key(id,manifest_evaluation);
+    auto cache_key = query_value_key(id);
     auto slot = query_value_index.get(cache_key);
     if (!slot) {
         slot = query_values.size(); query_values.push_back(QueryValue()); query_value_index.put(cache_key,slot);
     }
+    auto revision = query_revisions.get(id);
+    if (query_values[slot].revision != revision) { query_values[slot] = QueryValue(); query_values[slot].revision = revision; }
     auto state = query_values[slot].state;
     if (state == FactState::Success) {
         auto value = query_values[slot].constant;
