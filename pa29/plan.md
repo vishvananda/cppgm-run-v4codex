@@ -1,92 +1,91 @@
-# PA29 compact plan — implementation172 in progress
+# PA29 compact plan — implementation172 handoff
 
 Target: **PA29 full-stage**. Phase: **implement; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `221d6d0e4930da05db2913bdf5f50d808f89c744`.
 Entry HEAD: `1bc21c576272364e790fad3920a76dab9e624558`.
-Validated implementation: `846ef3fb` (records-only handoff follows).
+Validated implementation: `827b4c7c41a7a15b8d769e8f04915ae43cf791d7`.
 
 ## Design and completed owner
 
-Builtin template aliases now retain canonical typed argument queries for
-`__type_pack_element` and `__make_integer_seq`. Argument syntax is parsed once;
-selection and generation consume retained arguments and immutable substitution
-frames. First-class uses lazily create real typed template heads, with no fake
-syntax or body. Existing alias specialization facts memoize success/failure;
-query facts resolve direct, dependent, nested/empty and indirect applications.
-Lowering receives the selected type and uses typed template arguments for ABI
-names. The [extension signatures](https://clang.llvm.org/docs/LanguageExtensions.html#builtin-type-aliases)
-define selection and sequence generation; references are unchanged.
+Fold expressions now retain operator, direction and source operands in one
+parsed node. Canonical typed queries preserve definition lookup and immutable
+substitution frames; pack expansion reduces them to selected operators and
+conversion facts. Runtime prvalues survive query expansion; constant template
+argument formation retains its separate checks. Nested folds own their packs.
+Typed `FoldStep` records feed constant execution and LowIR/MIR/native lowering,
+including short circuit, overloaded calls, bound member calls and cleanup.
+No synthetic syntax, textual phase transport, global invalidation or unrelated
+body demand is added. ABI operands retain source order.
 
-GNU hosted head matching defers dependent non-type parameter types. Application
-checks actual values, and deduction preserves a concrete integral argument's
-type. The latter fixes the PA17 regression discovered during this handoff.
-No declaration scans, source replay, textual transport, global invalidation,
-unrelated body demand or optional optimization was added.
+All four forms, empty identities, association and substitution failure follow
+the PA29 hosted extension's [fold grammar](https://timsong-cpp.github.io/cppwp/n4659/expr.prim.fold)
+and [pack reduction rules](https://timsong-cpp.github.io/cppwp/n4659/temp.variadic).
+These are later-standard extensions to the cumulative C++11 compiler.
+[Itanium expression encodings](https://itanium-cxx-abi.github.io/cxx-abi/abi.html#mangling-expressions)
+define `fl/fr/fL/fR`. No contract fixture or reference was changed.
 
-Selection validates consumed arguments in O(n), then chooses the indexed type;
-generation is O(n) in produced elements and retains the existing 1,048,576-element
-ceiling. Alias heads have bounded fixed size and TU lifetime; queries/argument
-slices live in the existing canonical arenas, temporaries die at operation exit.
-Existing evaluator/backend limits remain unchanged. Optional optimizer work and
-code-growth budgets are zero; required semantic/code costs are measured below.
+Work/storage scale with consumed pack elements and emitted operations, plus
+language-required overload candidates. Queries and typed steps use contiguous
+TU arenas and identity indexes; temporary traversal vectors die at operation or
+function exit. Iterative reduction and explicit traversal stacks avoid recursive
+fold spines, including the 24,000-element alias that exposed a stack overflow.
+Existing query/mode and constexpr activation keys retain validity and failures.
+Required evaluator, generator and backend limits remain unchanged. Optional
+optimizer work and code-growth budgets are zero.
 
 ## Validation and performance
 
-- PA29 **367/403**, six original failures fixed, **36** remain, no new failures.
-- PA1–28 **4538/4538**; through PA29 **4905/4941**, PA29 alone unfinished.
+- PA29 **370/403**: three existing fold failures fixed, **33** remain; no new
+  failures. PA1–28 **4538/4538**; through PA29 **4908/4941**.
 - File audit passes with four unchanged inherited header warnings.
-- **45** focused checks, **28** inherited integration checks and **13** inspection
-  checks pass, including a Clang ABI peer, typed IR roundtrip and telemetry
-  equivalence. Results are in [evidence171](../student.tests/pa29/evidence171/validation.json).
-- [Failure delta](../student.tests/pa29/evidence171/stage-delta.json) and
-  [coverage](../student.tests/pa29/evidence171/coverage.json) preserve all 403 inputs
-  and all 1,707 tracked contract/harness paths against entry.
+- **51** focused checks and **13** inspection checks pass: all fold forms,
+  type/constant/runtime use, nested/empty packs, SFINAE, sequencing, overloads,
+  exceptions/cleanup, member pointers, host ABI peer, AST, LowIR roundtrip,
+  MIR/native execution and telemetry equivalence.
+- Required reports ran sequentially on the final compiler. Earlier overlapping
+  report attempts are not evidence. [Validation](../student.tests/pa29/evidence172/validation.json),
+  [failure delta](../student.tests/pa29/evidence172/stage-delta.json) and
+  [coverage](../student.tests/pa29/evidence172/coverage.json) preserve all 403
+  inputs and all 1,707 tracked PA29 contract/harness paths against entry.
 
-[Performance171](performance171.md) records frozen A/A+ABBA common workloads and
-new-capability scaling, compiler latency/RSS and executable runtime/text together.
-An entry rejection is never treated as a speed baseline. No speedup is claimed.
-Historical measurements, including [performance170](performance170.md), remain
-unchanged. Historical blanket 15%/zero-growth targets remain diagnostic under
-spec §9; no mandated limit, correctness rule or coverage was relaxed. Larger
-hosted runtime, optimization/allocation and self-hosting keep PA30–34 ownership.
+[Performance172](performance172.md) retains all 224 common A/A+ABBA observations
+and 96 new-capability observations, with compiler latency/RSS and executable
+runtime/text. Common outputs are byte-identical and existing work counters
+unchanged; every paired timing range crosses 1. No speedup is claimed.
+Required runtime fold steps are `2N+8`, alias value steps `N`; the 24,000-element
+alias takes median 0.1543 s / peak 31,092 KiB. Compiler size grows 0.96%.
+Entry rejects new-capability inputs and is not an equivalent speed baseline.
+
+Historical [performance171](performance171.md) and [performance170](performance170.md)
+remain unchanged. Unsupported blanket 15%/zero-growth gates remain diagnostic
+under spec §9; no mandated limit, correctness rule or coverage was relaxed.
+Heavier hosted runtime, optimization/allocation and self-hosting retain PA30–34
+ownership. Necessary semantic costs are disclosed, not used to excuse regressions.
 
 ## Remaining work and handoff ledger
 
-The [remaining ledger](../student.tests/pa29/evidence171/remaining.json) retains
-extended syntax/types/layout **27**, hosted template/emission **7**, legacy trait
+The [remaining ledger](../student.tests/pa29/evidence172/remaining.json) groups
+extended syntax/types/layout **24**, hosted template/emission **7**, legacy trait
 **1**, and source-invocation intrinsic operands **1**. Numeric representations,
-templated lambdas, folds, bindings, conditional explicit/control flow, zero-length
+templated lambdas, bindings, conditional explicit/control flow, zero-length
 arrays, source coordinates and hosted emission remain implementation work.
-Retain the existing alignment, dependent offsetof ABI and convertible-index
-reducers, and audit170's contract questions; none is waived or silently corrected.
+Audit170's two independent contract questions (nothrow default-construction
+shorthand and nothrow-invocable cache default) remain unresolved, counted failures.
+Preserve its char-traits discussion and existing alignment, dependent offsetof
+ABI and convertible-index reducers. Nothing is waived or silently corrected.
 
 | Range | Implementation result | Independent review |
 |---|---|---|
 | audit170 through `221d6d0e` | Previously reviewed owner corrections; historical ledger in [audit.md](audit.md) | Completed for that recorded range; stage unfinished |
-| entry `6525c1af` → `846ef3fb` | Pack selection, sequence generation, nested/empty/indirect aliases, dependent head matching and exact integral deduction; 42 → 36 failures | New range awaits Ralph's independent audit; passing checks do not certify the whole stage |
+| entry `6525c1af` → `846ef3fb` | Pack selection, sequence generation, nested/empty/indirect aliases, dependent head matching and exact integral deduction; 42 → 36 failures | Awaiting Ralph's independent audit |
+| entry `1bc21c57` → `827b4c7c` | Fold grammar, substitution, types/constants, runtime/lifetimes, callable facts, ABI and bounded traversal; 36 → 33 failures | Awaiting Ralph's independent audit; checks do not certify the whole stage |
 
-Boundary: all six failing fixtures owned by these builtin template/pack operations
-are resolved, including first-class identity and emitted ABI/runtime use. Nearby
-[probes](../student.tests/pa29/evidence171/boundary-probes.json) reach distinct
-vector-expression/closure, syntax or contract owners. Further stage work requires
-new closure/fold/binding representations, numeric/ABI machinery, emission state
-or source-origin handling; it cannot extend this completed argument-query owner
-without starting another broad semantic group. The two inherited oracle concerns
-remain separate review questions with failures still counted. Full through-PA29
-success and independent whole-stage review remain necessary before advancement.
-
-## Active behavior group (172)
-
-Baseline 367/403, 36 failures. Fold expressions own three failures in parser
-primary expressions and typed template queries. Parse each fold once; retain
-operator, direction and operands. Substitution expands only the pack operand
-through immutable lane frames and records typed operator/conversion facts.
-Lowering must consume those facts, including short circuit and overloaded
-operators, without synthesized frontend syntax. Work/storage scale with consumed
-pack elements and required operator candidates; no optional optimization budget.
-Validate all four forms, empty/single/multiple packs, diagnostics, substitution,
-constant/type queries and runtime side effects; then required stage/prior/audit
-gates. Freeze entry/final binaries for equivalent A/A+ABBA and new-capability
-compiler latency/RSS plus executable runtime/text evidence. Existing review
-markers and all independent review questions above remain unchanged.
+Boundary: all three fold-owned failing fixtures are resolved. Work extended
+beyond those type/constant fixtures through runtime operators, short circuit,
+temporary cleanup, constexpr/member calls, ABI peers and large-pack traversal.
+The remaining failures require distinct closure/binding/control representations,
+numeric/layout machinery, emission state or source-origin handling; they cannot
+be completed by extending this fold owner alone. Independent whole-stage audit
+and full through-PA29 success remain necessary before advancement. This is a
+validated implementation handoff, not assignment completion.

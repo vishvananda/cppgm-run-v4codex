@@ -1,0 +1,720 @@
+{
+  "compiler_sha256": "0bd9511fa0e5e0e59457472c56d5d3b4d586e26a0a779dc2906f590d8a589146",
+  "inputs": {
+    "student.tests/pa29/controls172/abi.cpp": "de8f292483e909d23977a5191a16993332ac80316af4352ad6fcca3c0a747e71",
+    "student.tests/pa29/controls172/bad-bad-operator.cpp": "bdcfbd169d6930ff82e11c31dd1634308d96fddcdd817575d77fedfebe96b928",
+    "student.tests/pa29/controls172/bad-both-packs.cpp": "f1813c780183874d2b4ff4fb16c058eab77e09eeb55f29666f83f675e55d3b0f",
+    "student.tests/pa29/controls172/bad-empty-plus.cpp": "cba8c5488bec242cc2e409f9e74fee08f84b7532f484feb5d900409c9524275c",
+    "student.tests/pa29/controls172/bad-mismatched-operator.cpp": "0d2f760489cb2cb303d683b3b038f05055cfd471ff992f6976424bee384bbbec",
+    "student.tests/pa29/controls172/bad-mismatched-packs.cpp": "6357a7296a299964af8d5ec8607baef1c513351696e29e65b8abfd75f4421e8b",
+    "student.tests/pa29/controls172/bad-nested-no-pack.cpp": "217adee514fd2820563682e7810e2df7efd2ec51961254bb1574981c62e1260c",
+    "student.tests/pa29/controls172/bad-no-pack.cpp": "64208c5ce6379cd24e4f2197b5f581fcb8dcda14999877deb96ad485ebaad4af",
+    "student.tests/pa29/controls172/bad-nonintegral.cpp": "90d8c80aae23a4a582b9bb36e07ed4e594243ecd9103b8487df77241218518ba",
+    "student.tests/pa29/controls172/bad-operand-precedence.cpp": "55ad52e7bb65b551df375ac335ca5b0bd17ac29b2d5ce4972e5be31b3ebdc176",
+    "student.tests/pa29/controls172/cleanup.cpp": "97613aaff384dba994eff67ad749feb71ee52239fe75bfc3ddb3e29c5780cae7",
+    "student.tests/pa29/controls172/constant-types.cpp": "f96578cb2ea12d192ed73295fc6f71ff8193848f8660c23828984c9db9a65116",
+    "student.tests/pa29/controls172/constexpr-calls.cpp": "7466896a62a59a1206229524d3b8650ca0b2f5788f651e648d5040527e86878e",
+    "student.tests/pa29/controls172/directions.cpp": "ce9e6d08c5ba5f922792c3c38f9a365c1189716c57ad796bc4e05d04a46d3aed",
+    "student.tests/pa29/controls172/member-functions.cpp": "8d8cca3af9acaeebcf6f5d0d68fae6e172c1a83340c87cdac3178c2ddf90a4b3",
+    "student.tests/pa29/controls172/nested.cpp": "768a570c6d21a1ceedac3d3f7c57cc1de025bf96b594170d5e5fdc6fa203a897",
+    "student.tests/pa29/controls172/noexcept.cpp": "1ebeeb89045526436c9935a5b2d66109d4303df3c0375d61e2db0e3dadf7ae9d",
+    "student.tests/pa29/controls172/operators.cpp": "278d3ed3ae794521e0eb734d9bbfaf1037b8db8bdc3e8b52f16d2ef8b8c2b95e",
+    "student.tests/pa29/controls172/overload.cpp": "3fcb9f3ee39c825b029a2208a5d9c2bca28741b16055819b0dbff4727ff9dee9",
+    "student.tests/pa29/controls172/overloaded-logical.cpp": "9fcd1ff0ef978ddd1d0664add8be6a1f0eca8a18654bc01459008806e7cebae9",
+    "student.tests/pa29/controls172/sfinae.cpp": "e09fc2d9631d7f1c34a0ff45520d924efe62b405eb9d482a2ba8fc5756210c2b",
+    "student.tests/pa29/controls172/side-effects.cpp": "23a2f09f04a5188e9bb7d5608a65438050895cb891ea085bcb1e440178159d89",
+    "student.tests/pa29/controls172/throw-cleanup.cpp": "4db64603feb401d3c4909742e105c344e4d8d5b505ca3571ae1379e55a09d47a"
+  },
+  "checks": [
+    {
+      "name": "abi compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/abi.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/abi.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "abi link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/abi.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/abi"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "abi runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/abi"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bad-bad-operator compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/bad-bad-operator.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/bad-bad-operator.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: operator+\n"
+    },
+    {
+      "name": "bad-both-packs compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/bad-both-packs.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/bad-both-packs.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: fold requires exactly one unexpanded pack operand\n"
+    },
+    {
+      "name": "bad-empty-plus compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/bad-empty-plus.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/bad-empty-plus.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: operator+ in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/bad-empty-plus.cpp:1\n"
+    },
+    {
+      "name": "bad-mismatched-operator compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/bad-mismatched-operator.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/bad-mismatched-operator.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: fold operators must match\n"
+    },
+    {
+      "name": "bad-mismatched-packs compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/bad-mismatched-packs.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/bad-mismatched-packs.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: fold has unresolved or mismatched packs\n"
+    },
+    {
+      "name": "bad-nested-no-pack compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/bad-nested-no-pack.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/bad-nested-no-pack.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: fold requires exactly one unexpanded pack operand\n"
+    },
+    {
+      "name": "bad-no-pack compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/bad-no-pack.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/bad-no-pack.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: fold requires exactly one unexpanded pack operand\n"
+    },
+    {
+      "name": "bad-nonintegral compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/bad-nonintegral.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/bad-nonintegral.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/bad-nonintegral.cpp:1\n"
+    },
+    {
+      "name": "bad-operand-precedence compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/bad-operand-precedence.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/bad-operand-precedence.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: fold operand must be a cast-expression\n"
+    },
+    {
+      "name": "cleanup compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/cleanup.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/cleanup.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "cleanup link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/cleanup.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/cleanup"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "cleanup runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/cleanup"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "constant-types compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/constant-types.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/constant-types.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "constant-types link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/constant-types.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/constant-types"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "constant-types runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/constant-types"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "constexpr-calls compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/constexpr-calls.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/constexpr-calls.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "constexpr-calls link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/constexpr-calls.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/constexpr-calls"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "constexpr-calls runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/constexpr-calls"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "directions compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/directions.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/directions.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "directions link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/directions.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/directions"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "directions runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/directions"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-functions compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/member-functions.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/member-functions.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-functions link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/member-functions.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/member-functions"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "member-functions runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/member-functions"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "nested compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/nested.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/nested.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "nested link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/nested.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/nested"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "nested runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/nested"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "noexcept compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/noexcept.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/noexcept.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "noexcept link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/noexcept.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/noexcept"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "noexcept runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/noexcept"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "operators compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/operators.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/operators.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "operators link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/operators.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/operators"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "operators runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/operators"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "overload compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/overload.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/overload.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "overload link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/overload.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/overload"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "overload runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/overload"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "overloaded-logical compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/overloaded-logical.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/overloaded-logical.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "overloaded-logical link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/overloaded-logical.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/overloaded-logical"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "overloaded-logical runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/overloaded-logical"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "sfinae compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/sfinae.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/sfinae.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "sfinae link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/sfinae.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/sfinae"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "sfinae runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/sfinae"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "side-effects compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/side-effects.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/side-effects.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "side-effects link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/side-effects.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/side-effects"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "side-effects runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/side-effects"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "throw-cleanup compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls172/throw-cleanup.cpp",
+        "-o",
+        "/tmp/pa29-172/controls-final/throw-cleanup.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "throw-cleanup link",
+      "args": [
+        "g++",
+        "/tmp/pa29-172/controls-final/throw-cleanup.o",
+        "-o",
+        "/tmp/pa29-172/controls-final/throw-cleanup"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "throw-cleanup runtime",
+      "args": [
+        "/tmp/pa29-172/controls-final/throw-cleanup"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "entry": "1bc21c576272364e790fad3920a76dab9e624558",
+  "code_tip": "827b4c7c41a7a15b8d769e8f04915ae43cf791d7",
+  "compiler_sha256": "0bd9511fa0e5e0e59457472c56d5d3b4d586e26a0a779dc2906f590d8a589146",
+  "scope": "Validated implementation handoff; full PA29 remains unfinished",
+  "gates": {
+    "priorThroughTests": "pass: 4538/4538",
+    "fileAudit": "pass: four unchanged inherited warnings",
+    "stageProgress": "pass: 36 -> 33 existing failures; no new failures or reduced coverage",
+    "stageTests": "unfinished: 370/403"
+  },
+  "focused_checks": 51,
+  "inspection_checks": 13,
+  "unchanged_contract_paths": 1707,
+  "review_markers_preserved": true,
+  "uncommitted_compiler_changes": false,
+  "reference_corrections": false,
+  "all_related_fold_fixture_failures_resolved": true,
+  "boundary": "Fold owner completed through runtime lifetimes, callable/ABI facts and large-pack evaluation; remaining failures require distinct closure/binding/control, numeric/layout, emission or source-origin owners.",
+  "independent_review": "implementation171 and implementation172 ranges await Ralph audit; inherited contract questions remain counted failures",
+  "evidence": {
+    "affected-performance.json": "7d6bd41cf55a94ac2b8b830c5a035efbe385ea0004d7299771ec94f1745de070",
+    "common-counter-delta.json": "2df39ad891c3c06dd5ca2df213ccc3590aeca120348e3461012109d1d38535ef",
+    "common-performance.json": "443c85972db38580b7d3707f502f9d5b64cd5d2b430cb8e6b4ca5952fc09017e",
+    "contract-preservation.json": "3ae45bd4cfe3e410d1129b3b93ea68bd900477659585c73cbb717b89b31257e7",
+    "controls.json": "22e9d45ac776048cc04ea9758b951a7ab4bf41b0e2540eda777780e32c94b69d",
+    "coverage.json": "9170093e516eb079a257227c114e99e8f74c395eb16c3c51a2ccdf67a13dead3",
+    "inspection.json": "e618353f83f6d32430eb45843186f8bc6752163a9c88ae32eeeb39cd60c13426",
+    "performance-manifest.json": "40f3ceb8b8c246bc7841463ff8e3613b958fc33d41caf5e95f843fb5e13f2090",
+    "remaining.json": "8f58851215edfe01c199015800623993a85e567d76403be5767e8a86d5630e18",
+    "scaling-counters.json": "acd3756239b76e71e59408ba7069d1aa4303409abcc62378360f3a926624c07f",
+    "stage-delta.json": "3f0e3677b99d3608723c3b1cf7a95ba28d848e19f402cc58ebf13fc88e3844b7",
+    "validation.json": "f4023f0df130ea9338da7228902718cae7f89b3c66525a13c78357b2066a1f4b"
+  }
+}

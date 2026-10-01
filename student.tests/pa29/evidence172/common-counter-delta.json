@@ -1,0 +1,22 @@
+{
+  "memory": {
+    "all_existing_counters_equal": true,
+    "new_fold_counters_zero": true,
+    "objects_and_executables_identical": true
+  },
+  "floating": {
+    "all_existing_counters_equal": true,
+    "new_fold_counters_zero": true,
+    "objects_and_executables_identical": true
+  },
+  "exceptions": {
+    "all_existing_counters_equal": true,
+    "new_fold_counters_zero": true,
+    "objects_and_executables_identical": true
+  },
+  "pruning": {
+    "all_existing_counters_equal": true,
+    "new_fold_counters_zero": true,
+    "objects_and_executables_identical": true
+  }
+}

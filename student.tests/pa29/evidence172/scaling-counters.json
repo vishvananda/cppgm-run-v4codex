@@ -1,0 +1,56 @@
+{
+  "runtime600": {
+    "all_eight_samples_match": {
+      "semantic_fold_steps": 1208,
+      "semantic_fold_value_steps": 0,
+      "semantic_type_query_work": 2420,
+      "semantic_pack_expansion_lanes": 603
+    },
+    "text_bytes": 39741
+  },
+  "runtime1200": {
+    "all_eight_samples_match": {
+      "semantic_fold_steps": 2408,
+      "semantic_fold_value_steps": 0,
+      "semantic_type_query_work": 4820,
+      "semantic_pack_expansion_lanes": 1203
+    },
+    "text_bytes": 79341
+  },
+  "runtime2400": {
+    "all_eight_samples_match": {
+      "semantic_fold_steps": 4808,
+      "semantic_fold_value_steps": 0,
+      "semantic_type_query_work": 9620,
+      "semantic_pack_expansion_lanes": 2403
+    },
+    "text_bytes": 158541
+  },
+  "query6000": {
+    "all_eight_samples_match": {
+      "semantic_fold_steps": 0,
+      "semantic_fold_value_steps": 6000,
+      "semantic_type_query_work": 6008,
+      "semantic_pack_expansion_lanes": 6000
+    },
+    "text_bytes": 491
+  },
+  "query12000": {
+    "all_eight_samples_match": {
+      "semantic_fold_steps": 0,
+      "semantic_fold_value_steps": 12000,
+      "semantic_type_query_work": 12008,
+      "semantic_pack_expansion_lanes": 12000
+    },
+    "text_bytes": 491
+  },
+  "query24000": {
+    "all_eight_samples_match": {
+      "semantic_fold_steps": 0,
+      "semantic_fold_value_steps": 24000,
+      "semantic_type_query_work": 24008,
+      "semantic_pack_expansion_lanes": 24000
+    },
+    "text_bytes": 491
+  }
+}

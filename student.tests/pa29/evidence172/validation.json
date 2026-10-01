@@ -1,0 +1,47 @@
+{
+  "code_tip": "827b4c7c41a7a15b8d769e8f04915ae43cf791d7",
+  "entry": "1bc21c576272364e790fad3920a76dab9e624558",
+  "compiler_sha256": "0bd9511fa0e5e0e59457472c56d5d3b4d586e26a0a779dc2906f590d8a589146",
+  "checks": [
+    {
+      "command": "make test-pa29",
+      "status": 2,
+      "log": "/tmp/pa29-172/validation/stage.log",
+      "sha256": "7a01ac2284a63d1564915838dcfdeca591e440d532bdb328e6d5863eff203483",
+      "summary": [
+        "===== TEST SUMMARY: 370 / 403 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": "make test-report-through-pa28",
+      "status": 0,
+      "log": "/tmp/pa29-172/validation/prior.log",
+      "sha256": "62fafee2304dafac1d6eb44703da74008c028ee3cc40be97d2e4ca4702c208ba",
+      "summary": [
+        "===== ALL TESTS PASSED SUCCESSFULLY! (4538 / 4538) ====="
+      ]
+    },
+    {
+      "command": "make test-report-through-pa29",
+      "status": 2,
+      "log": "/tmp/pa29-172/validation/through.log",
+      "sha256": "323195979cba4d36f87e30e7b56e19d36f8122592e594173ffa8782bf1bbfd19",
+      "summary": [
+        "===== TEST SUMMARY: 4908 / 4941 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src",
+      "status": 0,
+      "log": "/tmp/pa29-172/validation/file-audit.log",
+      "sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f",
+      "summary": [
+        "File audit passed for pa29 with 4 warning(s).",
+        "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+      ]
+    }
+  ]
+}
