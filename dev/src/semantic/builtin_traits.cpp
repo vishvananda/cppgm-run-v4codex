@@ -47,6 +47,11 @@ TypeId transform_type(Analyzer& sem, BuiltinTrait trait, TypeId t)
         bool enumeration = type.kind == TypeKind::Named && sem.entities[type.entity].key == KW_ENUM;
         if (enumeration) type = types[sem.entities[type.entity].underlying];
         auto f = type.fundamental;
+        if (type.kind == TypeKind::Fundamental && bit_integer_kind(f)) {
+            bool unsign = trait == BuiltinTrait::MakeUnsigned;
+            if (!unsign && type.bound < 2) return 0;
+            return types.qualify(types.bit_integer(type.bound,unsign),types[t].cv);
+        }
         if (type.kind != TypeKind::Fundamental || f == FT_BOOL ||
             !(f < FT_BOOL || f == FT_INT128 || f == FT_UINT128)) return 0;
         bool uns = trait == BuiltinTrait::MakeUnsigned;

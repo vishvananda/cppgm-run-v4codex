@@ -47,7 +47,8 @@ struct UnavailableSemanticFact : std::exception {
     const char* what() const noexcept override { return "semantic prerequisite unavailable"; }
 };
 
-enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray, ArgumentPack, PackExpansion, AliasApplication, Vector, DependentVector, ExtVector, DependentExtVector, BlockPointer };
+inline bool bit_integer_kind(EFundamentalType f) { return f == FT_BITINT || f == FT_UBITINT; }
+enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray, ArgumentPack, PackExpansion, AliasApplication, Vector, DependentVector, ExtVector, DependentExtVector, BlockPointer, DependentBitInt };
 inline bool vector_kind(TypeKind k) { return k == TypeKind::Vector || k == TypeKind::ExtVector; }
 inline bool dependent_vector_kind(TypeKind k) { return k == TypeKind::DependentVector || k == TypeKind::DependentExtVector; }
 // The lookup obligation is part of a dependent name's canonical identity.
@@ -84,6 +85,7 @@ public:
     std::vector<TypeId> parameters;
     std::size_t probes = 0, signature_work = 0;
     TypeId fundamental(EFundamentalType f);
+    TypeId bit_integer(unsigned width, bool unsign);
     TypeId named(EntityId e);
     TypeId alias_application(EntityId alias, TypeId result, std::uint32_t arguments);
     TypeId alias_target(TypeId type);

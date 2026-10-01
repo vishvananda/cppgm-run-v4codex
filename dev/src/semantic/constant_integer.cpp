@@ -5,7 +5,7 @@
 namespace cppgm { namespace semantic {
 Analyzer::WideInteger Analyzer::integer_value(Constant v) const
 {
-    if (width(v.type) == 128) return wide_constants.at(v.bits).value;
+    if (width(v.type) > 64) return wide_constants.at(v.bits).value;
     return is_unsigned(v.type) ? WideInteger(v.bits) : WideInteger(__int128(std::int64_t(v.bits)));
 }
 Constant Analyzer::integer_constant(TypeId t, WideInteger value)
@@ -15,7 +15,7 @@ Constant Analyzer::integer_constant(TypeId t, WideInteger value)
         auto mask = (WideInteger(1) << bits)-1;
         value &= mask;
         if (!is_unsigned(t) && (value & (WideInteger(1) << (bits-1)))) value |= ~mask;
-        return Constant(t,std::uint64_t(value));
+        if (bits <= 64) return Constant(t,std::uint64_t(value));
     }
     if (!value) return Constant(t,0);
     auto hash = std::uint64_t(value) ^ (std::uint64_t(value >> 64)*0x9e3779b97f4a7c15ULL);

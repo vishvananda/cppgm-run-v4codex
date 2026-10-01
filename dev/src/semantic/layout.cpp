@@ -61,6 +61,10 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment, bool probe, bool* comple
         }
         return t.bound * element;
     }
+    if (t.kind == TypeKind::Fundamental && bit_integer_kind(t.fundamental)) {
+        unsigned bytes = 1; while (bytes*8 < t.bound) bytes *= 2;
+        return alignment && bytes > 8 ? 8 : bytes;
+    }
     if (t.kind == TypeKind::Fundamental && t.fundamental != FT_VOID) return fundamental_width(t.fundamental);
     if (t.kind == TypeKind::Named && entities[t.entity].key == KW_ENUM) return size(entities[t.entity].underlying, alignment,probe,complete);
     if (t.kind == TypeKind::Named && entities[t.entity].complete) {

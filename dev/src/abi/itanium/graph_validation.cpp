@@ -7,7 +7,7 @@ namespace {
 enum class Role { Type, Argument, Expression, Context, Entity };
 bool accepts(Kind kind, Role role) {
     switch (role) {
-    case Role::Type: return kind <= Kind::Lambda;
+    case Role::Type: return kind == Kind::BitInt || kind <= Kind::Lambda;
     case Role::Argument: return kind == Kind::WideValue || kind == Kind::NegativeWideValue || (kind >= Kind::TypeArgument && kind <= Kind::EntityArgument);
     case Role::Expression:
         return kind == Kind::Fold || kind == Kind::Value || kind == Kind::WideValue || kind == Kind::NegativeWideValue || kind == Kind::AlignofType || kind == Kind::DestructorName || kind == Kind::ExprThis || kind == Kind::InitList || kind == Kind::DesignatedInit || kind == Kind::TypeidType || kind == Kind::TypeidExpression || kind == Kind::NewExpression || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
@@ -29,6 +29,7 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
     auto sequence = [&](Role role) { for (Id id : children) edge(id, role); };
     auto qualifiers = [&](Id bits) { require(bits <= 15 && (bits & 12) != 12); };
     switch (kind) {
+    case Kind::BitInt: if (a) edge(a,Role::Expression); require(b <= 1); break;
     case Kind::Name: if (a) edge(a, Role::Type); text(b); break;
     case Kind::Standard: abi_standard_substitution_code(static_cast<AbiStandardSubstitutionKind>(a)); break;
     case Kind::Builtin: abi_builtin_type_code(static_cast<AbiBuiltinTypeKind>(a)); break;

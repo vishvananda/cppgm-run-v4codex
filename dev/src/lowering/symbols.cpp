@@ -31,7 +31,12 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
         if (t.cv & 3) result = abi.cv(result,t.cv & 3);
     }
     else switch (t.kind) {
+    case TypeKind::DependentBitInt:
+        result = abi.make(Kind::BitInt,abi_query(t.bound),sem.unsigned_type(t.child)); break;
     case TypeKind::Fundamental: {
+        if (semantic::bit_integer_kind(t.fundamental)) {
+            result = abi.make(Kind::BitInt,0,sem.unsigned_type(id),0,t.bound); break;
+        }
         static const AbiBuiltinTypeKind kinds[] = {ABI_BUILTIN_TYPE_SIGNED_CHAR, ABI_BUILTIN_TYPE_SHORT,
             ABI_BUILTIN_TYPE_INT, ABI_BUILTIN_TYPE_LONG, ABI_BUILTIN_TYPE_LONG_LONG,
             ABI_BUILTIN_TYPE_UNSIGNED_CHAR, ABI_BUILTIN_TYPE_UNSIGNED_SHORT, ABI_BUILTIN_TYPE_UNSIGNED_INT,

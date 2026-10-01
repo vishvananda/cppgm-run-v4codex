@@ -52,7 +52,7 @@ bool Analyzer::dependent_type(TypeId id)
         auto args = argument_packs[t.bound];
         for (unsigned j = 0; j < args.count; ++j) dependent |= dependent_argument(argument_types[args.offset+j]);
     }
-    dependent |= t.kind == TypeKind::DependentName || t.kind == TypeKind::Decltype || t.kind == TypeKind::DependentArray || dependent_vector_kind(t.kind) ||
+    dependent |= t.kind == TypeKind::DependentName || t.kind == TypeKind::Decltype || t.kind == TypeKind::DependentArray || t.kind == TypeKind::DependentBitInt || dependent_vector_kind(t.kind) ||
         (t.kind == TypeKind::Named && (entities[t.entity].template_parameter || entities[t.entity].template_pattern));
     if (t.kind == TypeKind::Named && entities[t.entity].specialization) {
         auto pattern = specialization_pattern(t.entity);
@@ -124,6 +124,12 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         substitute_arguments(pattern,bindings,cache,owner,args);
         for (auto arg : args) if (!arg) return 0;
         result = args.size() == 1 ? args[0] : make_argument_pack(args);
+    } else if (p.kind == TypeKind::DependentBitInt) {
+        auto query = substitute_query(p.bound,bindings,cache,owner);
+        if (!query) return 0;
+        result = bit_integer_type(query,is_unsigned(p.child));
+        if (result) result = types.qualify(result,p.cv);
+        complete_failure = true;
     } else if (dependent_vector_kind(p.kind)) {
         auto lane = substitute_type(p.child,bindings,cache,owner);
         auto query = substitute_query(p.bound,bindings,cache,owner);

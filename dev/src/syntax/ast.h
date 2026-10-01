@@ -148,7 +148,7 @@ enum class Kind : unsigned char {
     Capture,
     VaArg,
     FunctionName,
-    AtomicType,
+    AtomicType, BitIntType,
     VectorAttribute,
     Assembly,
     AssemblyOperand,

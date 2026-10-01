@@ -16,7 +16,13 @@ NodeId Parser::specifiers(bool type_only, NodeId result)
         Kind kind = type_only ? Kind::TypeSpecifier : Kind::DeclSpecifier;
         auto global_prefix = in.is("::") ? 1u : 0u;
         auto trait = builtin_trait(ids.spelling(in.peek(global_prefix).text));
-        if (!have_type && in.is("_Atomic") && in.is("(",1)) {
+        if (in.is("_BitInt")) {
+            in.take(); in.require("(");
+            auto saved = angle_expression; angle_expression = 0;
+            auto spec = wrap(Kind::BitIntType,expression(2));
+            angle_expression = saved; in.require(")");
+            ast.append(result,spec); have_type = true;
+        } else if (!have_type && in.is("_Atomic") && in.is("(",1)) {
             in.take(); in.require("(");
             auto spec = wrap(Kind::AtomicType,type_id());
             in.require(")"); ast.append(result,spec); have_type = true;

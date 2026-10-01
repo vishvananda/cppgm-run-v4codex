@@ -41,7 +41,7 @@ enum EFundamentalType : unsigned char {
 
 	// 3.9.1.10
 	FT_NULLPTR_T,
-    FT_INT128, FT_UINT128
+    FT_INT128, FT_UINT128, FT_BITINT, FT_UBITINT
 
 };
 

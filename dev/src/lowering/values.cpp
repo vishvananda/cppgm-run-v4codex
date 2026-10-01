@@ -13,6 +13,11 @@ IRType Procedural::type(TypeId id)
         if (sem.entities[t.entity].underlying) return type(sem.entities[t.entity].underlying);
         return IRType::object(sem.object_size(id), sem.object_alignment(id));
     case TypeKind::Fundamental: {
+        if (semantic::bit_integer_kind(t.fundamental)) {
+            auto bits = t.bound; bool unsign = t.fundamental == FT_UBITINT;
+            return bits <= 8 ? (unsign ? IRType::U8 : IRType::I8) : bits <= 16 ? (unsign ? IRType::U16 : IRType::I16) :
+                bits <= 32 ? (unsign ? IRType::U32 : IRType::I32) : bits <= 64 ? IRType::I64 : IRType::I128;
+        }
         static const IRType::Kind kinds[] = {IRType::I8, IRType::I16, IRType::I32, IRType::I64, IRType::I64,
             IRType::U8, IRType::U16, IRType::U32, IRType::I64, IRType::I64, IRType::I32, IRType::I8,
             IRType::U16, IRType::U32, IRType::U8, IRType::F32, IRType::F64, IRType::F80, IRType::Void, IRType::I64, IRType::I128, IRType::I128};
@@ -171,7 +176,7 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen, bool preserve_wid
             v = emit(Opcode::Copy, target, {v.operand});
         else v.ir = target;
     } else v = coerce(v, target, unsign, sem.unsigned_type(to), fold_widen, preserve_widen);
-    v.type = to; return v;
+    v.type = to; return normalize_bit_integer(v);
 }
 Value Procedural::converted(NodeId n, const semantic::Conversion& c)
 {

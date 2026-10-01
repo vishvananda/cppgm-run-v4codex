@@ -134,6 +134,8 @@ std::size_t Parser::probe_type(std::size_t ahead)
     for (;;) {
         if ((in.is("[",ahead) && in.is("[",ahead+1)) || in.is("__attribute__",ahead) || in.is("__attribute",ahead)) {
             ahead = in.matching(in.is("[",ahead) ? ahead : ahead+1)+1;
+        } else if (in.is("_BitInt",ahead)) {
+            ahead = in.matching(ahead+1)+1; base = true;
         } else if (builtin(ahead)) {
             base = true;
             ++ahead;

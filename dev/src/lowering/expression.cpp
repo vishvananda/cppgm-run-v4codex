@@ -269,7 +269,7 @@ Value Procedural::unary(NodeId n)
     if (op == OP_LNOT) v = truth_operand(v);
     if (op == OP_LNOT) v = emit(Opcode::Compare, v.ir, {v.operand, v.ir.floating() ? Operand::floating(0) : Operand::integer(0)}, Operation::Eq);
     else if (op != OP_PLUS) v = emit(Opcode::Unary, v.ir, {v.operand}, op == OP_MINUS ? Operation::Neg : Operation::Bitnot);
-    v.type = fact.type; return v;
+    v.type = fact.type; return normalize_bit_integer(v);
 }
 Value Procedural::binary(NodeId n, bool location)
 {
@@ -394,7 +394,7 @@ Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
     if (!linkage.presentation && !compare && a.ir.floating() && a.ir != IRType::F80)
         instruction.source_type = IRType::F80;
     v = emit(instruction,{a.operand,b.operand});
-    v.type = result; return v;
+    v.type = result; return normalize_bit_integer(v);
 }
 Value Procedural::call(NodeId n, Value destination)
 {

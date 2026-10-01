@@ -198,7 +198,7 @@ const char* kind_name(Kind kind)
         "capture",
         "va-arg-expression",
         "function-name",
-        "atomic-type-specifier",
+        "atomic-type-specifier", "bit-integer-type-specifier",
         "vector-type-attribute",
         "asm-statement",
         "asm-operand",

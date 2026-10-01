@@ -69,7 +69,7 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
         result = abi.make(Kind::DesignatedInit,child(0),abi.string(spelling(q.name))); break;
     case QueryKind::This: result = abi.make(Kind::ExprThis); break;
     case QueryKind::Value:
-        if (sem.integral_type(q.type) && (sem.type_width(q.type) == 128 || sem.types[q.type].kind == TypeKind::Named)) {
+        if (sem.integral_type(q.type) && (sem.type_width(q.type) > 64 || sem.types[q.type].kind == TypeKind::Named)) {
             auto constant = semantic::Constant(q.type,q.value);
             auto bits = sem.integer_value(constant);
             result = abi.wide_value(abi_type(q.type),std::uint64_t(bits),std::uint64_t(bits >> 64),sem.negative_constant(constant));

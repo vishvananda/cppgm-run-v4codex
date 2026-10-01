@@ -332,6 +332,7 @@ class Procedural {
     Value store_bit_field(Value v, Value location, SlotId container = SlotId());
     Value initialization_value(NodeId n, TypeId t);
     Value address(Value v);
+    Value normalize_bit_integer(Value value);
     Value convert(Value v, TypeId target, bool fold_widen = false, bool preserve_widen = false);
     Value coerce(Value v, IRType target, bool unsign = false, bool to_unsigned = false, bool fold_widen = false, bool preserve_widen = false);
     Value converted(NodeId n, const semantic::Conversion& c);

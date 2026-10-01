@@ -67,7 +67,7 @@ std::uint32_t Analyzer::expansion_parameters(ArgumentId pattern)
                 for (unsigned j = 0; j < args.count; ++j) work.push_back(argument_types[args.offset+j]);
             }
             if (t.kind == TypeKind::Decltype) work.push_back(0x80000000U|t.entity);
-            if (t.kind == TypeKind::DependentArray || dependent_vector_kind(t.kind)) work.push_back(0x80000000U|t.bound);
+            if (t.kind == TypeKind::DependentArray || t.kind == TypeKind::DependentBitInt || dependent_vector_kind(t.kind)) work.push_back(0x80000000U|t.bound);
             if (t.kind == TypeKind::MemberPointer) work.push_back(t.member_owner());
             if (t.child) work.push_back(t.child);
             for (unsigned j = 0; j < t.count; ++j) work.push_back(types.parameters[t.offset+j]);

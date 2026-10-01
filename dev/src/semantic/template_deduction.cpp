@@ -65,7 +65,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         return count && deduce_type(value_argument_id(p.bound),count,bindings,kind,prefix) &&
             deduce_type(p.child,a.child,bindings,kind,prefix);
     }
-    if (p.kind == TypeKind::DependentVector) return true; // vendor dependent vector shapes are non-deduced
+    if (p.kind == TypeKind::DependentBitInt || p.kind == TypeKind::DependentVector) return true; // vendor dependent vector shapes are non-deduced
     if (p.kind == TypeKind::DependentArray) {
         if ((a.kind != TypeKind::Array && a.kind != TypeKind::DependentArray) || a.unknown_bound || (a.kind == TypeKind::Array && !a.bound)) return false;
         ArgumentId bound;
@@ -104,6 +104,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         bindings.put(p.entity, value); return true;
     }
     if (p.kind != a.kind) return false;
+    if (p.kind == TypeKind::Fundamental && p.bound != a.bound) return false;
     if (kind != DeductionKind::Call && p.cv != a.cv) return false;
     if ((p.kind == TypeKind::Array || vector_kind(p.kind)) && (p.bound != a.bound || p.unknown_bound != a.unknown_bound)) return false;
     if (p.kind == TypeKind::MemberPointer && !deduce_type(p.member_owner(),a.member_owner(),bindings,kind,prefix)) return false;

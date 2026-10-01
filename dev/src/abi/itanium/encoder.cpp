@@ -75,7 +75,7 @@ bool Encoder::standard_namespace(Id id) const {
 }
 bool Encoder::candidate(Id id) const {
     const Node& n = g[id];
-    return n.kind != Kind::Builtin && n.kind != Kind::Standard &&
+    return n.kind != Kind::Builtin && !(n.kind == Kind::BitInt && !n.a) && n.kind != Kind::Standard &&
         !(n.kind == Kind::Parameter && !n.b) && !standard_namespace(id);
 }
 bool Encoder::nested(Id id) const {
@@ -173,6 +173,10 @@ void Encoder::type(Id id) {
         if (n.c) output += 'z';
         qualifiers(n.b & 12);
         output += 'E'; break;
+    case Kind::BitInt:
+        output += n.b ? "DU" : "DB";
+        if (n.a) expression(n.a); else output += std::to_string(n.value);
+        output += '_'; break;
     case Kind::MemberPointer: output += 'M'; type(n.a); type(n.b); break;
     case Kind::Decltype: output += n.b ? "Dt" : "DT"; expression(n.a); output += 'E'; break;
     case Kind::Local: case Kind::Lambda:

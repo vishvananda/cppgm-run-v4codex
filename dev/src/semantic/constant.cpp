@@ -11,7 +11,7 @@ bool Analyzer::integral(TypeId id) const
     const Type& t = types[id];
     if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return integral(t.child);
     if (t.kind == TypeKind::Named) return entities[t.entity].key == KW_ENUM;
-    return t.kind == TypeKind::Fundamental && (t.fundamental <= FT_BOOL || t.fundamental == FT_INT128 || t.fundamental == FT_UINT128);
+    return t.kind == TypeKind::Fundamental && (t.fundamental <= FT_BOOL || t.fundamental == FT_INT128 || t.fundamental == FT_UINT128 || bit_integer_kind(t.fundamental));
 }
 bool Analyzer::scoped_enum(TypeId t) const { return types[t].kind == TypeKind::Named && entities[types[t].entity].scoped; }
 bool Analyzer::is_unsigned(TypeId id) const
@@ -19,13 +19,13 @@ bool Analyzer::is_unsigned(TypeId id) const
     const Type& t = types[id];
     if (t.kind == TypeKind::Named) return is_unsigned(entities[t.entity].underlying);
     return (t.fundamental >= FT_UNSIGNED_CHAR && t.fundamental <= FT_UNSIGNED_LONG_LONG_INT) ||
-        t.fundamental == FT_UINT128 || t.fundamental == FT_CHAR16_T || t.fundamental == FT_CHAR32_T || t.fundamental == FT_BOOL;
+        t.fundamental == FT_UINT128 || t.fundamental == FT_UBITINT || t.fundamental == FT_CHAR16_T || t.fundamental == FT_CHAR32_T || t.fundamental == FT_BOOL;
 }
 unsigned Analyzer::width(TypeId id) const
 {
     const Type& t = types[id];
     if (t.kind == TypeKind::Named) return width(entities[t.entity].underlying);
-    return fundamental_width(t.fundamental) * 8;
+    return bit_integer_kind(t.fundamental) ? t.bound : fundamental_width(t.fundamental) * 8;
 }
 Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
 {

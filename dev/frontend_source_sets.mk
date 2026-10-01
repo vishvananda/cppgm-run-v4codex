@@ -224,6 +224,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += syntax/assembly syntax/assembly_template seman
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/evaluation_context lowering/context_initialization
 
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/bit_integer lowering/bit_integer
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/vector_types
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/inline_validation
 

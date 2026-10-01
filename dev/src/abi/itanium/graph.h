@@ -21,7 +21,7 @@ enum class Kind : std::uint8_t {
     Conversion, Cast, TemplateId, TypeTrait, SizeofType, Member, ObjectMember,
     ExprPack, UnresolvedName, SizeofPack, EntityExpression, FunctionEntity, VariableEntity, SymbolEntity,
     AlignofType, DestructorName, ExprThis, InitList, TypeidType, TypeidExpression, NewExpression, WideValue, NegativeWideValue, DesignatedInit, Fold,
-    TemplateHead, TemplateParameterDeclaration
+    TemplateHead, TemplateParameterDeclaration, BitInt
 };
 struct Node {
     // Parameter.c distinguishes a parameter pack from an ordinary parameter

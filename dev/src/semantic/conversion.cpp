@@ -38,6 +38,7 @@ bool Analyzer::arithmetic(TypeId t) const
 TypeId Analyzer::promote(TypeId t)
 {
     if (types[t].kind == TypeKind::Named && integral(t) && !scoped_enum(t)) t = entities[types[t].entity].underlying;
+    if (types[t].kind == TypeKind::Fundamental && bit_integer_kind(types[t].fundamental)) return types.non_atomic(types.unqualified(t));
     if (fundamental(t, FT_WCHAR_T)) return types.fundamental(FT_INT);
     if (fundamental(t, FT_CHAR32_T)) return types.fundamental(FT_UNSIGNED_INT);
     return integral(t) && width(t) < 32 ? types.fundamental(FT_INT) : types.non_atomic(types.unqualified(t));
@@ -68,11 +69,16 @@ TypeId Analyzer::arithmetic_type(TypeId a, TypeId b)
     else if (is_unsigned(a)) ar -= FT_UNSIGNED_CHAR;
     if (width(b) == 128) br = FT_LONG_LONG_INT+1;
     else if (is_unsigned(b)) br -= FT_UNSIGNED_CHAR;
+    // Bit-precise types rank below ordinary integers of equal width.
+    // Preserve long/long-long rank within the ordinary group.
+    ar = width(a)*16 + (bit_integer_kind(types[a].fundamental) ? 0 : ar+1);
+    br = width(b)*16 + (bit_integer_kind(types[b].fundamental) ? 0 : br+1);
     if (is_unsigned(a) == is_unsigned(b)) return ar >= br ? a : b;
     TypeId u = is_unsigned(a) ? a : b, s = is_unsigned(a) ? b : a;
     unsigned ur = is_unsigned(a) ? ar : br, sr = is_unsigned(a) ? br : ar;
     if (ur >= sr) return u;
     if (width(s) > width(u)) return s;
+    if (bit_integer_kind(types[s].fundamental)) return types.bit_integer(width(s),true);
     return types.fundamental(width(s) == 128 ? FT_UINT128 : EFundamentalType(types[s].fundamental + FT_UNSIGNED_CHAR));
 }
 bool Analyzer::object_pointer(TypeId t)

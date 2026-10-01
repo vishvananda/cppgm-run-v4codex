@@ -53,6 +53,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
     TypeId result = 0;
     unsigned cv = 0, longs = 0;
     bool unsign = false, sign = false, short_int = false;
+    NodeId bit_width = 0;
     EFundamentalType fundamental = FT_INT;
     for (NodeId c = ast[n].first; c; c = ast[c].next) {
         const syntax::Node node = ast[c];
@@ -62,6 +63,10 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
             continue;
         }
         if (node.kind == Kind::VectorAttribute) continue;
+        if (node.kind == Kind::BitIntType) {
+            if (bit_width) throw std::runtime_error("duplicate bit-integer specifier");
+            bit_width = node.first; continue;
+        }
         if (node.kind == Kind::AtomicType) {
             result = type_id(node.first,s);
             if (!atomic_operand(result)) throw std::runtime_error("invalid atomic type operand");
@@ -111,6 +116,16 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         case KW_VOID: fundamental = FT_VOID; break;
         case KW_AUTO: if (calls) result = placeholder_type(); break;
         default: break;
+        }
+    }
+    if (bit_width) {
+        if (result || longs || short_int || (unsign && sign) || fundamental != FT_INT || spec_has(n,KW_INT))
+            throw std::runtime_error("invalid bit-integer type specifiers");
+        if (pattern_scope(s)) bind_template_expression(bit_width,s);
+        result = bit_integer_type(expression_query(bit_width,s),unsign);
+        if (!result) {
+            if (template_type_probe) return 0;
+            throw std::runtime_error("invalid bit-integer width (supported range: signed 2..128, unsigned 1..128)");
         }
     }
     if (!result) {

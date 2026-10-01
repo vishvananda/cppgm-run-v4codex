@@ -42,6 +42,11 @@ TypeId Types::intern(Type t, const std::vector<TypeId>& params)
     return slots[p];
 }
 TypeId Types::fundamental(EFundamentalType f) { Type t; t.fundamental = f; return intern(t, {}); }
+TypeId Types::bit_integer(unsigned width, bool unsign)
+{
+    Type t; t.fundamental = unsign ? FT_UBITINT : FT_BITINT; t.bound = width;
+    return intern(t,{});
+}
 TypeId Types::named(EntityId e) { Type t; t.kind = TypeKind::Named; t.entity = e; return intern(t, {}); }
 TypeId Types::alias_application(EntityId alias, TypeId result, std::uint32_t arguments)
 {

@@ -54,7 +54,7 @@ std::uint32_t Analyzer::template_signature_shape(ArgumentId argument)
         } else if (t.kind == TypeKind::MemberPointer) add(t.member_owner());
         else if (t.kind == TypeKind::Decltype) {
             add(0x80000000U|t.entity); shape.push_back(t.bound);
-        } else if (t.kind == TypeKind::DependentArray || dependent_vector_kind(t.kind)) add(0x80000000U|t.bound);
+        } else if (t.kind == TypeKind::DependentArray || t.kind == TypeKind::DependentBitInt || dependent_vector_kind(t.kind)) add(0x80000000U|t.bound);
         else if (t.kind == TypeKind::PackExpansion) {
             if (!t.entity) add(t.bound);
             else {

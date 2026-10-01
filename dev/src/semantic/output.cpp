@@ -67,7 +67,11 @@ void Analyzer::write_type(std::ostream& out, TypeId id, NodeId display_name, ETo
     if (t.kind != TypeKind::Function && (t.cv & 2)) out << "volatile ";
     switch (t.kind) {
     case TypeKind::AliasApplication: write_type(out,t.child); break;
-    case TypeKind::Fundamental: out << fundamental_name(t.fundamental); break;
+    case TypeKind::Fundamental:
+        if (bit_integer_kind(t.fundamental)) out << (t.fundamental == FT_UBITINT ? "unsigned " : "") << "_BitInt(" << t.bound << ")";
+        else out << fundamental_name(t.fundamental);
+        break;
+    case TypeKind::DependentBitInt: out << (types[t.child].fundamental == FT_UNSIGNED_INT ? "unsigned " : "") << "_BitInt width query " << t.bound; break;
     case TypeKind::ExtVector: out << "extended vector " << t.bound << " lanes of "; write_type(out,t.child); break;
     case TypeKind::DependentExtVector: out << "vector lanes query " << t.bound << " of "; write_type(out,t.child); break;
     case TypeKind::Vector: out << "vector " << t.bound << " bytes of "; write_type(out,t.child); break;

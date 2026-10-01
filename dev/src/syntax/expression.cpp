@@ -210,8 +210,8 @@ NodeId Parser::primary()
         auto result = named(Kind::IdExpression,name(true));
         ast[result].op = KW_TYPENAME; return result;
     }
-    if (builtin()) {
-        if (builtin(1)) {
+    if (in.is("_BitInt") || builtin()) {
+        if (in.is("_BitInt") || in.is("_BitInt",1) || builtin(1)) {
             NodeId result = make(Kind::IdExpression);
             ast[result].detail = wrap(Kind::TypeId, specifiers(true));
             return result;

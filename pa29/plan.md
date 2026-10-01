@@ -1,12 +1,24 @@
-# PA29 compact plan — implementation184 handoff
+# PA29 compact plan — implementation185 in progress
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implement; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `667edd800e4e5eb1b1ef92a3108da3bd96c51708`.
 Audit entry: `9211517d1f554f61efa7d6e2e30020dc13171f3f`.
 Last reviewed commit: `52070178897f5894edaf2f35d03a734b781979d4`.
 Implementation184 entry HEAD: `68ee6f8d12349e4ba9576963c200178cf4ae629e`.
 Implementation code commit: `52c00f4d`.
+Implementation185 entry HEAD: `c6d7a46abacfb0862c3955f2367dd902a6a714e6`.
+
+Current group: dependent `_BitInt` type construction, concrete integer semantics
+and shared ABI/lowering. Owner: parser type specifiers → canonical type/query
+facts → substitution/conversion/constants → typed LowIR → native integer path.
+Widths use existing bounded 128-bit scalar machinery; type identity retains exact
+precision and signedness. Initial required bit-integer pair and 14 controls pass. Complete the native
+stack-alignment, padding and RTTI boundaries before handoff. Validation includes undemanded/demanded templates,
+invalid widths, conversions/arithmetic, host ABI and stage/prior/file gates.
+Compiler latency/RSS and executable runtime/text will use frozen A/B evidence.
+The numeric float/complex/vector owners and independent contract questions remain
+separate obligations; no reference change is presumed from host agreement.
 
 ## Design and spec alignment
 
