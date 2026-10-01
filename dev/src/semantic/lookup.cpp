@@ -262,6 +262,7 @@ EntityId Analyzer::lookup(ScopeId s, IdentifierId n, Lookup mode, bool qualified
     if (definitions && scopes[s].kind == ScopeKind::Class) complete_class(scopes[s].entity);
     if (qualified) {
         auto found = imported(s, n, mode, ++walk);
+        if (!found && s == global && mode != Lookup::Tag && mode != Lookup::Namespace) found = builtin_type_template(n);
         if (found == ~EntityId(0)) throw std::runtime_error("ambiguous lookup");
         return found;
     }
@@ -298,6 +299,7 @@ EntityId Analyzer::lookup(ScopeId s, IdentifierId n, Lookup mode, bool qualified
                 work.push_back(edges[edge].target);
         }
         EntityId direct = local(s, n, mode), nominated = pending.get(s);
+        if (!direct && s == global && mode != Lookup::Tag && mode != Lookup::Namespace) direct = builtin_type_template(n);
         EntityId result = merge_lookup(direct, nominated);
         if (result == ambiguous)
             throw std::runtime_error("ambiguous unqualified lookup");

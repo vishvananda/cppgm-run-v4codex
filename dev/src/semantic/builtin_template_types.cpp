@@ -1,6 +1,55 @@
 #include "semantic/analyzer.h"
 #include "support/type_traits.h"
 namespace cppgm { namespace semantic {
+EntityId Analyzer::builtin_type_template(IdentifierId name)
+{
+    if (!definitions || !name) return 0;
+    auto trait = builtin_trait(ids.spelling(name));
+    if (!template_type_transform(trait)) return 0;
+    // A builtin alias has a real template identity and typed parameter head.
+    // Construct it only on lookup, with no invented source or parsed body.
+    auto environment = make_scope(ScopeKind::Template,global,0,0,false);
+    auto parameter = [&](ScopeId scope, TypeId value_type, bool pack) {
+        auto p = make_entity(value_type ? EntityKind::Parameter : EntityKind::Type,scope,0,0);
+        entities[p].template_parameter = true; entities[p].parameter_pack = pack;
+        entities[p].key = value_type ? TOK_INVALID : KW_TYPENAME;
+        entities[p].type = value_type ? value_type : types.named(p);
+        return p;
+    };
+    auto head = [&](ScopeId scope, const std::vector<EntityId>& params) {
+        TemplateFunction record; record.environment = scope; record.offset = template_parameters.size(); record.count = params.size();
+        for (unsigned j = 0; j < params.size(); ++j) {
+            template_parameters.push_back(params[j]); parameter_ordinals.put(params[j],j+1);
+        }
+        auto id = templates.size(); templates.push_back(record); return id;
+    };
+    std::vector<EntityId> params; std::vector<ArgumentId> args;
+    if (trait == BuiltinTrait::TypePackElement) {
+        auto index = parameter(environment,types.fundamental(FT_UNSIGNED_LONG_INT),false);
+        auto pack = parameter(environment,0,true);
+        params = {index,pack};
+        args = {parameter_argument(index),types.pack_expansion(entities[pack].type,0)};
+    } else {
+        auto sequence = parameter(environment,0,false);
+        entities[sequence].key = KW_TEMPLATE;
+        entities[sequence].class_info = class_facts.size(); class_facts.push_back(ClassFacts());
+        auto nested = make_scope(ScopeKind::Template,environment,0,0,false);
+        auto element = parameter(nested,0,false);
+        auto values = parameter(nested,entities[element].type,true);
+        entities[sequence].template_info = head(nested,{element,values});
+        auto type = parameter(environment,0,false);
+        auto count = parameter(environment,entities[type].type,false);
+        params = {sequence,type,count};
+        args = {entities[sequence].type,entities[type].type,parameter_argument(count)};
+    }
+    auto alias = make_entity(EntityKind::Alias,global,name,0);
+    entities[alias].template_info = head(environment,params);
+    TypeQuery query; query.kind = QueryKind::BuiltinTrait; query.name = name;
+    query.value = unsigned(trait); query.arguments = intern_arguments(args);
+    entities[alias].type = types.decltype_type(intern_query(query,{}),false);
+    bind(global,name,alias);
+    return alias;
+}
 TypeQueryFact Analyzer::query_template_type_trait(const TypeQuery& query)
 {
     auto args = argument_packs[query.arguments];

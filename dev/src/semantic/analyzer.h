@@ -59,6 +59,7 @@ public:
     std::vector<OffsetofStep> offsetof_layouts = std::vector<OffsetofStep>(1);
     TypeQueryFact query_builtin_trait(QueryId id, const TypeQuery& query);
     TypeQueryFact query_template_type_trait(const TypeQuery& query);
+    EntityId builtin_type_template(IdentifierId name);
     bool builtin_type_property(unsigned trait, TypeId type);
     bool legacy_type_property(unsigned trait, TypeId type);
     bool legacy_member_trivial(EntityId member);
