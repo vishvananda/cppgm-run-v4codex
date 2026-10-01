@@ -199,23 +199,7 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         for (auto c = first; c; c = ast[c].next) children.push_back(expression_query(c,s));
         break;
     case Kind::Cast: {
-        if (node.op != OP_LPAREN && node.op != KW_STATIC_CAST &&
-            node.op != KW_CONST_CAST && node.op != KW_REINTERPET_CAST && node.op != KW_DYNAMIC_CAST) {
-            if (template_type_probe) return 0;
-            throw std::runtime_error("cast is not supported in a constant type query");
-        }
-        q.kind = QueryKind::Cast; q.op = node.op; q.type = type_id(first,s); q.context = s;
-        auto child = expression_query(ast[first].next,s);
-        if (node.op == OP_LPAREN && ast[ast[first].next].kind == Kind::BracedInit) {
-            q.value = 1; // Source compound literal, distinct from semantic list formation.
-            children.push_back(child); break;
-        }
-        if (template_type_probe) {
-            if (!q.type || !child) return 0;
-            auto type = query_fact(child).expression.type;
-            if (!type && !query_fact(child).dependent) return 0;
-        }
-        children.push_back(child); break;
+        auto id = cast_query(n,s); source_index.put(key(s,n),id); return id;
     }
     case Kind::Unary: case Kind::Postfix: case Kind::Binary: case Kind::Subscript: case Kind::Assignment:
         q.kind = node.kind == Kind::Unary || node.kind == Kind::Postfix ? QueryKind::Unary : QueryKind::Binary; q.op = node.op;

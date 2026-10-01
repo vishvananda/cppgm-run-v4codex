@@ -956,6 +956,7 @@ private:
     std::size_t value_conversion_variants = 0, value_conversion_records = 0;
     QueryId intern_query(TypeQuery query, const std::vector<QueryId>& children);
     QueryId expression_query(NodeId n, ScopeId s, bool callee = false);
+    QueryId cast_query(NodeId n, ScopeId scope);
     QueryId qualified_value_query(NodeId name, ScopeId scope, TypeId owner);
     QueryId substitute_query(QueryId id, const Index& bindings, Index& cache, std::uint32_t owner = 0);
     TypeQueryFact query_fact(QueryId id);
