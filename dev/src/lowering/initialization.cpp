@@ -79,6 +79,9 @@ void Procedural::global_data(NodeId n, TypeId t)
 }
 void Procedural::global(EntityId e)
 {
+    // Typed source-string support objects may be demanded by static evaluation
+    // during lowering. Their pooled byte slices are emitted after all globals.
+    if (sem.predefined_string(e) && !sem.entities[e].name) { symbol(e); return; }
     auto entity = sem.entities[e]; TypeId t = entity.type;
     Global g; g.symbol = symbols[e]; g.declaration = !entity.definition || sem.emission_suppressed(e);
     auto prior = p.symbols[g.symbol.index-1];

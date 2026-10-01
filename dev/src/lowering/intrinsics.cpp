@@ -1,4 +1,5 @@
 #include "lowering/procedural.h"
+#include <stdexcept>
 
 namespace cppgm { namespace lowering {
 Value Procedural::intrinsic_call(NodeId n, semantic::Intrinsic intrinsic)
@@ -23,8 +24,14 @@ Value Procedural::intrinsic_call(NodeId n, semantic::Intrinsic intrinsic)
     }
     if (intrinsic == semantic::Intrinsic::IsConstantEvaluated)
         return Value(Operand::integer(0),IRType::I8,fact.type);
-    if (intrinsic >= semantic::Intrinsic::SourceFile && intrinsic <= semantic::Intrinsic::SourceColumn)
-        return constant_operand(sem.source_builtin_constant(intrinsic,source_invocation.site),fact.type);
+    if (intrinsic >= semantic::Intrinsic::SourceFile && intrinsic <= semantic::Intrinsic::SourceColumn) {
+        if (!source_invocation.site) throw std::logic_error("missing lowered source invocation fact");
+        auto site = sem.source_sites[source_invocation.site];
+        if (intrinsic == semantic::Intrinsic::SourceLine || intrinsic == semantic::Intrinsic::SourceColumn)
+            return Value(Operand::integer(intrinsic == semantic::Intrinsic::SourceLine ? site.line : 0),IRType::I32,fact.type);
+        auto symbol = source_string_symbol(intrinsic == semantic::Intrinsic::SourceFile ? site.file : site.function);
+        return address(Value(Operand::symbol(symbol),IRType::Ptr,fact.type,true));
+    }
     auto first = argument(0);
     if (intrinsic == semantic::Intrinsic::Prefetch || intrinsic == semantic::Intrinsic::AssumeAligned) {
         for (unsigned j = 1; j < fact.argument_count; ++j) argument(j);

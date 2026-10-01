@@ -63,6 +63,11 @@ struct Linkage {
 // Function-local construction state is discarded when its body is complete.
 class Procedural {
     semantic::SourceInvocation source_invocation;
+    semantic::Index source_string_symbols;
+    struct SourceString { IdentifierId text; SymbolId symbol; };
+    std::vector<SourceString> source_strings;
+    SymbolId source_string_symbol(IdentifierId text);
+    void emit_source_strings();
     syntax::AstView ast;
     semantic::Analyzer& sem;
     IdentifierTable& identifiers;

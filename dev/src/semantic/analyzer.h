@@ -19,10 +19,10 @@ public:
     Analyzer(syntax::Ast& ast, IdentifierTable& ids, bool calls = false, bool definitions = false, bool host_abi = false);
     void consume(NodeId declaration) override;
     void finish();
-    struct SourceSite { unsigned line = 0; EntityId file = 0, function = 0; };
+    struct SourceSite { unsigned line = 0; IdentifierId file = 0, function = 0; NodeId source = 0; };
     SourceInvocation source_invocation;
     bool source_builtins_present = false;
-    Index source_site_index, source_string_index, source_function_scopes, object_source_sites;
+    Index source_site_index, source_string_index, source_function_scopes, source_function_names, object_source_sites;
     std::vector<SourceSite> source_sites = std::vector<SourceSite>(1);
     unsigned remember_source_site(NodeId n, ScopeId s);
     unsigned source_site(NodeId n) const { return source_builtins_present ? source_site_index.get(n) : 0; }

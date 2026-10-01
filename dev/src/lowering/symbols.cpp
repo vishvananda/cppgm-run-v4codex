@@ -153,11 +153,11 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     bool base_only = base_only_entry(id);
     base = base && separate;
     if (deleting) return deleting_symbol(id);
-    if ((base ? base_symbols[id] : symbols[id])) return base ? base_symbols[id] : symbols[id];
     if (sem.predefined_string(id) && !e.name) {
-        auto sid = fresh_symbol("@__source_string_"+std::to_string(id));
-        symbols[id] = sid; p.symbols[sid.index-1].metadata.binding = SBM_INTERNAL; return sid;
+        if (symbols.size() <= id) symbols.resize(id+1);
+        return symbols[id] = source_string_symbol(sem.predefined_string(id));
     }
+    if ((base ? base_symbols[id] : symbols[id])) return base ? base_symbols[id] : symbols[id];
     if (sem.local_static(id)) {
         // A local declaration has no namespace variable ABI name. Distinct
         // lexical declarations and specializations already have distinct IDs.
@@ -394,6 +394,7 @@ void Procedural::run()
     }
     for (EntityId e = 1; e < sem.entities.size(); ++e) {
         auto entity = sem.entities[e];
+        if (sem.predefined_string(e) && !entity.name) continue; // Demand support bytes only through a consumed address.
         if (entity.template_pattern) continue;
         if (sem.deferred_inline_function(e) && !(entity.emission & semantic::Entity::Used) &&
             !entity.instantiation_definition) continue;
@@ -456,7 +457,7 @@ void Procedural::run()
     // Preserve the established temporary-before-declaration presentation order.
     for (auto e : reference_objects) reference_global(e);
     for (EntityId e = 1; e < sem.entities.size(); ++e)
-        if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable && !sem.static_temporary(e).object) global(e);
+        if (e < symbols.size() && symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable && !sem.static_temporary(e).object) global(e);
     emit_vtables();
     for (EntityId e : definitions) {
         function_body(e);
@@ -484,6 +485,7 @@ void Procedural::run()
     // The adapter can introduce runtime declarations. Publish the presentation
     // schedule only after every emission queue has finished.
     order_lifecycle_entries();
+    emit_source_strings();
 }
 void Procedural::function_body(EntityId e, bool base)
 {
