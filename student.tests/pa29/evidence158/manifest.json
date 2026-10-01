@@ -1,0 +1,79 @@
+{
+  "build": "make -C dev -j8 cppgm++",
+  "build_flags": "-std=gnu++11 -Wall -O3 (inherited build configuration)",
+  "measured_flags": [
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "affinity": [
+    "taskset",
+    "-c",
+    "0"
+  ],
+  "host_tools": {
+    "host_compiler": {
+      "command": [
+        "g++",
+        "--version"
+      ],
+      "status": 0,
+      "output": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+    },
+    "uname": {
+      "command": [
+        "uname",
+        "-a"
+      ],
+      "status": 0,
+      "output": "Linux instance-20260513-022623 7.0.0-1005-gcp #5-Ubuntu SMP PREEMPT Tue May 26 15:11:20 UTC 2026 x86_64 GNU/Linux\n"
+    },
+    "cpu": {
+      "command": [
+        "lscpu"
+      ],
+      "status": 0,
+      "output": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           46 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  32\nOn-line CPU(s) list:                     0-31\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) CPU @ 2.20GHz\nCPU family:                              6\nModel:                                   79\nThread(s) per core:                      2\nCore(s) per socket:                      16\nSocket(s):                               1\nStepping:                                0\nBogoMIPS:                                4399.99\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm rdseed adx smap xsaveopt arat md_clear arch_capabilities\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               512 KiB (16 instances)\nL1i cache:                               512 KiB (16 instances)\nL2 cache:                                4 MiB (16 instances)\nL3 cache:                                55 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-31\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Mitigation; PTE Inversion\nVulnerability Mds:                       Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Meltdown:                  Mitigation; PTI\nVulnerability Mmio stale data:           Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Mitigation; IBRS\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; IBRS; IBPB conditional; STIBP conditional; RSB filling; PBRSB-eIBRS Not affected; BHI SW loop, KVM SW loop\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Vmscape:                   Not affected\n"
+    },
+    "storage": {
+      "command": [
+        "df",
+        "-B1",
+        "/tmp",
+        "/home/vishvananda/work/private/v4codex"
+      ],
+      "status": 0,
+      "output": "Filesystem       1B-blocks        Used Available Use% Mounted on\n/dev/loop5     20957446144 20433817600 506851328  98% /tmp\n/dev/loop5     20957446144 20433817600 506851328  98% /home/vishvananda/work/private/v4codex\n"
+    }
+  },
+  "binaries": {
+    "stage_base": {
+      "path": "/tmp/pa29-155/base",
+      "sha256": "79a205ace278949bd6fa118eeb9e35b1ab59a61007fc21f18746a257b7e5f727",
+      "bytes": 3807008
+    },
+    "entry": {
+      "path": "/tmp/pa29-158/entry",
+      "sha256": "84642180af8de176d1f8496122bf786e1b87935aeb1c37b233f74accfbfc36c3",
+      "bytes": 3930992
+    },
+    "final": {
+      "path": "/tmp/pa29-158/final",
+      "sha256": "9ed4d6c3164faee5c4ba7f4478ca45a0cd318b28f051be5d5c88446b09dc1ff7",
+      "bytes": 3935752
+    }
+  },
+  "scripts": {
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "student.tests/pa29/performance158.py": "9f2f68474d73ce1f4be0fd75327df807fef058cd7b08575654ba0fb3821402a8",
+    "student.tests/pa29/controls158.py": "6d53788b0716846dca24ac18d7a4970e743de52d0724b61f840154903521c455"
+  },
+  "raw": {
+    "student.tests/pa29/evidence158/cumulative-performance.json": "3b65e658ea3b6a5c7a0994ecf44b7868b232f6905e339509383e1d50088aa909",
+    "student.tests/pa29/evidence158/affected-performance.json": "b9c6cfb2db0e0a6cc42d4c68a2d1053ec5ab4b83bda363ad36709cb8075a3bf0",
+    "student.tests/pa29/evidence158/audit-cost-performance.json": "63fa50020807ff1509621037f89569444b8fa6da97eac009d0c22bd405764d04"
+  },
+  "protocol": "Two independent 224-observation common runs: AAAA then six ABBA blocks per workload/mode. New capability: eight compile and eight runtime samples per size, six launcher calibrations. Separate sequential benchmark processes; no tests/builds overlapped; light review/evidence work and external scheduling uncontrolled. All checksums pass; no outliers discarded.",
+  "reviewed_code_commit": "1ab3499d7046daf5c298d958a8770b413edb3615",
+  "all_common_objects_and_executables_identical": true
+}

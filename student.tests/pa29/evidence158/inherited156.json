@@ -1,0 +1,540 @@
+{
+  "compiler_sha256": "9ed4d6c3164faee5c4ba7f4478ca45a0cd318b28f051be5d5c88446b09dc1ff7",
+  "checks": [
+    {
+      "name": "floating compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls156/floating.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/floating.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "floating link",
+      "args": [
+        "g++",
+        "/tmp/pa29-158/final-inherited156/floating.o",
+        "-lm",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/floating"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "floating execute",
+      "args": [
+        "/tmp/pa29-158/final-inherited156/floating"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "hints compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls156/hints.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/hints.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "hints link",
+      "args": [
+        "g++",
+        "/tmp/pa29-158/final-inherited156/hints.o",
+        "-lm",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/hints"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "hints execute",
+      "args": [
+        "/tmp/pa29-158/final-inherited156/hints"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "inspection compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls156/inspection.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/inspection.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "inspection link",
+      "args": [
+        "g++",
+        "/tmp/pa29-158/final-inherited156/inspection.o",
+        "-lm",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/inspection"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "inspection execute",
+      "args": [
+        "/tmp/pa29-158/final-inherited156/inspection"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integer compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls156/integer.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/integer.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integer link",
+      "args": [
+        "g++",
+        "/tmp/pa29-158/final-inherited156/integer.o",
+        "-lm",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/integer"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integer execute",
+      "args": [
+        "/tmp/pa29-158/final-inherited156/integer"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "runtime compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls156/runtime.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/runtime.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "runtime link",
+      "args": [
+        "g++",
+        "/tmp/pa29-158/final-inherited156/runtime.o",
+        "-lm",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/runtime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "runtime execute",
+      "args": [
+        "/tmp/pa29-158/final-inherited156/runtime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "__builtin_clz()",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad0.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "__builtin_clz(1,2)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad1.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "__builtin_bswap64(1,2)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad2.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "__builtin_ctzg(1u,2,3)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad3.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "__builtin_popcountg(1u,2)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad4.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "__builtin_clzg(1)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad5.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "__builtin_popcountg(true)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad6.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "__builtin_sqrt(1,2)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad7.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "__builtin_frexp(1.0,3)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad8.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "__builtin_remquo(1.0,2.0)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad9.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "__builtin_modf(1.0,(int*)0)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad10.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "__builtin_memcpy(0,0)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad11.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "__builtin_prefetch()",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad12.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "wrong::__builtin_sqrt(4.0)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/bad13.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: __builtin_sqrt\n"
+    },
+    {
+      "name": "not constant __builtin_clz(0u)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/badconstant.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: nonconstant constexpr initializer\n"
+    },
+    {
+      "name": "not constant __builtin_ctzg(0u)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/badconstant.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: nonconstant constexpr initializer\n"
+    },
+    {
+      "name": "overflow matrix compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/overflow.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/overflow.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "overflow matrix link",
+      "args": [
+        "g++",
+        "/tmp/pa29-158/final-inherited156/overflow.o",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/overflow"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "overflow matrix execute 1944 cases",
+      "args": [
+        "/tmp/pa29-158/final-inherited156/overflow"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "invalid __builtin_add_overflow(1,2,(bool*)0)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/badextension.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "invalid __builtin_sub_overflow(1.0,2,(int*)0)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/badextension.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "invalid __builtin_mul_overflow(1,2,(const int*)0)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/badextension.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "invalid __builtin_add_overflow(1,2)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/badextension.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "invalid __builtin_prefetch((int*)0,2)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/badextension.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid prefetch hint\n"
+    },
+    {
+      "name": "invalid __builtin_prefetch((int*)0,0,4)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-158/final-inherited156/badextension.cpp",
+        "-o",
+        "/tmp/pa29-158/final-inherited156/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid prefetch hint\n"
+    }
+  ]
+}
