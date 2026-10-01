@@ -1,0 +1,1225 @@
+[
+  {
+    "path": "/tmp/pa29-180/controls-static/controls.json",
+    "sha256": "3fb7016c73486f0c62627b9ac38b9809262cf03ae58d9a45630cea796a2d23bc",
+    "total": 19,
+    "failed": [
+      {
+        "name": "static-call",
+        "accepted": true,
+        "sha256": "8f2fbed82a09ee7b27c2884134cb8196fd5baf4e100adee3c0120e038660806b",
+        "source": "struct F { static int operator()(int x){return x+1;} }; int main(){return F()(6)!=7;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-call.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-callstudent.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-callstudent.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-callstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-callstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-call.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-callclang.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-callclang.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-callclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-callclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-c",
+              "--emit-lowir",
+              "--audit-lowir",
+              "/tmp/pa29-180/controls-static/static-call.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-call.lowir"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "ERROR: unsupported driver option: --audit-lowir\n"
+          }
+        ],
+        "failure": "LowIR audit"
+      },
+      {
+        "name": "static-subscript",
+        "accepted": true,
+        "sha256": "302b713e1490ed541c5a87de639a0549f410eeeb8f88a0722774e5a0b689f0dc",
+        "source": "struct F { static int operator[](int x){return x+1;} }; int main(){return F()[6]!=7;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-subscript.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-subscriptstudent.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-subscriptstudent.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-subscriptstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-subscriptstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-subscript.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-subscriptclang.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-subscriptclang.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-subscriptclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-subscriptclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-c",
+              "--emit-lowir",
+              "--audit-lowir",
+              "/tmp/pa29-180/controls-static/static-subscript.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-subscript.lowir"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "ERROR: unsupported driver option: --audit-lowir\n"
+          }
+        ],
+        "failure": "LowIR audit"
+      },
+      {
+        "name": "static-template",
+        "accepted": true,
+        "sha256": "8867c5c146df142f855ca17b31a6a0215f1cd2f0bc61fdeb6774979d9c61b911",
+        "source": "struct F { template<class T> static T operator()(T x){return x+1;} }; template<class T> int call(T t){return t(8);} int main(){return call(F())!=9;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-template.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-templatestudent.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-templatestudent.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-templatestudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-templatestudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-template.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-templateclang.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-templateclang.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-templateclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-templateclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-c",
+              "--emit-lowir",
+              "--audit-lowir",
+              "/tmp/pa29-180/controls-static/static-template.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-template.lowir"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "ERROR: unsupported driver option: --audit-lowir\n"
+          }
+        ],
+        "failure": "LowIR audit"
+      },
+      {
+        "name": "static-default",
+        "accepted": true,
+        "sha256": "01d48e6b8dc0e80e32c182dccb0ce33cc945354f83da15ec223b3e6d4563c47a",
+        "source": "struct F { static int operator()(int x=9){return x;} }; int main(){return F()()!=9;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-default.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-defaultstudent.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-defaultstudent.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-defaultstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-defaultstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-default.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-defaultclang.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-defaultclang.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-defaultclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-defaultclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-c",
+              "--emit-lowir",
+              "--audit-lowir",
+              "/tmp/pa29-180/controls-static/static-default.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-default.lowir"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "ERROR: unsupported driver option: --audit-lowir\n"
+          }
+        ],
+        "failure": "LowIR audit"
+      },
+      {
+        "name": "static-effects",
+        "accepted": true,
+        "sha256": "5ce92fc5a83945d6b4c1d2b4fd253616fb97b637157e85f3f2479f7dde8abf47",
+        "source": "int made,dead; struct F { F(){++made;} ~F(){++dead;} static int operator()(int x){return x+made;} }; int main(){int x=F()(8);return x!=9||made!=1||dead!=1;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-effects.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-effectsstudent.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-effectsstudent.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-effectsstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-effectsstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-effects.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-effectsclang.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-effectsclang.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-effectsclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-effectsclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-c",
+              "--emit-lowir",
+              "--audit-lowir",
+              "/tmp/pa29-180/controls-static/static-effects.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-effects.lowir"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "ERROR: unsupported driver option: --audit-lowir\n"
+          }
+        ],
+        "failure": "LowIR audit"
+      },
+      {
+        "name": "static-query",
+        "accepted": true,
+        "sha256": "34f0f8fd4475a20cc47b46e3aa94164b20123846bbe054133b9cc8c629fa5e9e",
+        "source": "struct F { static constexpr int operator()(int x=5) noexcept {return x+2;} }; template<class T> auto call(T t)->decltype(t()){return t();} static_assert(F()()==7,\"value\"); static_assert(noexcept(F()(1)),\"noexcept\"); int main(){return call(F())!=7;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-query.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-querystudent.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-querystudent.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-querystudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-querystudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-query.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-queryclang.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-queryclang.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-queryclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-queryclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-c",
+              "--emit-lowir",
+              "--audit-lowir",
+              "/tmp/pa29-180/controls-static/static-query.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-query.lowir"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "ERROR: unsupported driver option: --audit-lowir\n"
+          }
+        ],
+        "failure": "LowIR audit"
+      },
+      {
+        "name": "static-fixed",
+        "accepted": true,
+        "sha256": "a23eabc575657e479b50a56aedf4a1e6b0d77fb3fd64aa36a9a75dabc0ec8382",
+        "source": "struct F { static int operator()(int x=4){return x;} }; template<class T> int call(T){return F()();} int main(){return call(0)!=4;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-fixed.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-fixedstudent.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-fixedstudent.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-fixedstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-fixedstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-fixed.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-fixedclang.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-fixedclang.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-fixedclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-fixedclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-c",
+              "--emit-lowir",
+              "--audit-lowir",
+              "/tmp/pa29-180/controls-static/static-fixed.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-fixed.lowir"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "ERROR: unsupported driver option: --audit-lowir\n"
+          }
+        ],
+        "failure": "LowIR audit"
+      },
+      {
+        "name": "static-pointer",
+        "accepted": true,
+        "sha256": "13103ea443f3f4cb20f0086f3ee956a8cc912ff5b58ce16d1e57bf2dab7f1afd",
+        "source": "struct F { static int operator()(int x){return x+1;} }; int main(){int(*p)(int)=&F::operator();return p(5)!=6;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-pointer.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-pointerstudent.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-pointerstudent.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-pointerstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-pointerstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-pointer.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-pointerclang.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-pointerclang.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-pointerclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-pointerclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-c",
+              "--emit-lowir",
+              "--audit-lowir",
+              "/tmp/pa29-180/controls-static/static-pointer.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-pointer.lowir"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "ERROR: unsupported driver option: --audit-lowir\n"
+          }
+        ],
+        "failure": "LowIR audit"
+      },
+      {
+        "name": "static-inherited",
+        "accepted": true,
+        "sha256": "393f8c0c3360ff91d659c8eb9a2befa98f3a842630f0f665bc4219f9277dc2f9",
+        "source": "struct F { static int operator()(int x){return x+1;} }; struct G:F{}; int main(){const G g;return g(5)!=6;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-inherited.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-inheritedstudent.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-inheritedstudent.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-inheritedstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-inheritedstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-inherited.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-inheritedclang.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-inheritedclang.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-inheritedclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-inheritedclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-c",
+              "--emit-lowir",
+              "--audit-lowir",
+              "/tmp/pa29-180/controls-static/static-inherited.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-inherited.lowir"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "ERROR: unsupported driver option: --audit-lowir\n"
+          }
+        ],
+        "failure": "LowIR audit"
+      },
+      {
+        "name": "static-mixed",
+        "accepted": true,
+        "sha256": "772123a8794dda907d75e3079c67aedb7ee24c902a4e77381339bd3610e2f3fd",
+        "source": "struct F { static int operator()(int x){return 1;} int operator()(long) const {return 2;} }; int main(){F f;return f(5)!=1||f(5L)!=2||f.operator()(5)!=1;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-mixed.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-mixedstudent.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-mixedstudent.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-mixedstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-mixedstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-mixed.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-mixedclang.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-mixedclang.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-mixedclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-mixedclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-c",
+              "--emit-lowir",
+              "--audit-lowir",
+              "/tmp/pa29-180/controls-static/static-mixed.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-mixed.lowir"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "ERROR: unsupported driver option: --audit-lowir\n"
+          }
+        ],
+        "failure": "LowIR audit"
+      },
+      {
+        "name": "static-partial",
+        "accepted": true,
+        "sha256": "e66c91793cbe5e5869673d4dc7b11d6877108e2f9f3b63ce81430e2e856c9350",
+        "source": "struct F { template<class T> static int operator()(T*){return 1;} template<class T> static int operator()(T){return 2;} }; int main(){int x;return F()(&x)!=1||F()(x)!=2;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-partial.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-partialstudent.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-partialstudent.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-partialstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-partialstudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-partial.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-partialclang.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-partialclang.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-partialclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-partialclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-c",
+              "--emit-lowir",
+              "--audit-lowir",
+              "/tmp/pa29-180/controls-static/static-partial.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-partial.lowir"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "ERROR: unsupported driver option: --audit-lowir\n"
+          }
+        ],
+        "failure": "LowIR audit"
+      },
+      {
+        "name": "static-reference",
+        "accepted": true,
+        "sha256": "be1881b328a3a1134b5f9d158a6ce2f2a87f0ab19146648f54aafcb9fd763921",
+        "source": "struct F { static int& operator()(int& x){return x;} }; int main(){int x=3;F()(x)=7;return x!=7;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-reference.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-referencestudent.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-referencestudent.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-referencestudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-referencestudent"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-reference.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-referenceclang.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-static/static-referenceclang.o",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-referenceclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-static/static-referenceclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-c",
+              "--emit-lowir",
+              "--audit-lowir",
+              "/tmp/pa29-180/controls-static/static-reference.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-reference.lowir"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "ERROR: unsupported driver option: --audit-lowir\n"
+          }
+        ],
+        "failure": "LowIR audit"
+      },
+      {
+        "name": "static-qualifier",
+        "accepted": false,
+        "sha256": "5278b88ac6aacec2a56e195f00db10e95f5d7685bf607e379a2c9574283a7bab",
+        "source": "struct F { static int operator()() const{return 1;} }; int main(){return 0;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-qualifier.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-qualifierstudent.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-static/static-qualifier.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-static/static-qualifierclang.o"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "/tmp/pa29-180/controls-static/static-qualifier.cpp:1:36: error: static member function cannot have 'const' qualifier\n    1 | struct F { static int operator()() const{return 1;} }; int main(){return 0;}\n      |                                    ^~~~~\n1 error generated.\n"
+          }
+        ],
+        "failure": "student acceptance"
+      }
+    ]
+  },
+  {
+    "path": "/tmp/pa29-180/controls-static2/controls.json",
+    "sha256": "4a584b7585abe50c65fe42b97d0c326d13723f163d89f6620abd04321b6655f5",
+    "total": 19,
+    "failed": []
+  },
+  {
+    "path": "/tmp/pa29-180/controls-inline/controls.json",
+    "sha256": "f679162e284202b2526fa06f0baecef68f7471a35fed2c6ad497150b8a517432",
+    "total": 33,
+    "failed": []
+  },
+  {
+    "path": "/tmp/pa29-180/controls-inline2/controls.json",
+    "sha256": "c7092baec836cb7862767719ea1730963301155a373c6d3cc8b87725558c76dc",
+    "total": 33,
+    "failed": []
+  },
+  {
+    "path": "/tmp/pa29-180/controls-final/controls.json",
+    "sha256": "bac899302af715df636fc4aee8a867b733a60491428102dd4ee5814ef6dbb2de",
+    "total": 33,
+    "failed": []
+  },
+  {
+    "path": "/tmp/pa29-180/controls-complete/controls.json",
+    "sha256": "91b90ad7554ea7175e9ba351ab8a8392724f2c71a2bbf0af1b5b3846721a67c6",
+    "total": 40,
+    "failed": [
+      {
+        "name": "inline-rethrow",
+        "accepted": true,
+        "sha256": "104527352743b5fbc233140e30d1260063b73f76534a680dfaabd62886707431",
+        "source": "int n;struct G{~G(){++n;}}; __attribute__((always_inline)) inline void f(){try{G g;throw 7;}catch(int){G h;throw;}} int main(){try{f();}catch(int x){return x!=7||n!=2;}return 3;}",
+        "checks": [
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-std=c++11",
+              "-c",
+              "/tmp/pa29-180/controls-complete/inline-rethrow.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-complete/inline-rethrowstudent.o"
+            ],
+            "status": 1,
+            "stdout": "",
+            "stderr": "ERROR: inconsistent protected regions at native control join\n"
+          },
+          {
+            "command": [
+              "clang++",
+              "-std=c++11",
+              "-Wno-c++23-extensions",
+              "-c",
+              "/tmp/pa29-180/controls-complete/inline-rethrow.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-complete/inline-rethrowclang.o"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "g++",
+              "/tmp/pa29-180/controls-complete/inline-rethrowclang.o",
+              "-o",
+              "/tmp/pa29-180/controls-complete/inline-rethrowclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/tmp/pa29-180/controls-complete/inline-rethrowclang"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+              "-c",
+              "--emit-lowir",
+              "--validate-lowir",
+              "/tmp/pa29-180/controls-complete/inline-rethrow.cpp",
+              "-o",
+              "/tmp/pa29-180/controls-complete/inline-rethrow.lowir"
+            ],
+            "status": 0,
+            "stdout": "",
+            "stderr": ""
+          }
+        ],
+        "failure": "student acceptance"
+      }
+    ]
+  },
+  {
+    "path": "/tmp/pa29-180/controls-eh/controls.json",
+    "sha256": "89e62b673be6e4c1776fb8a8f72f446217f098b5b2490c7d68991881ca450b33",
+    "total": 40,
+    "failed": []
+  },
+  {
+    "path": "/tmp/pa29-180/controls-fallback/controls.json",
+    "sha256": "c6e22f79c1741ea4c8bcaeaa09b67a95b83e72cedec57acf87002f7d924cfe55",
+    "total": 43,
+    "failed": []
+  },
+  {
+    "path": "/tmp/pa29-180/controls-final180/controls.json",
+    "sha256": "3caafd910714a99fe94ed33c6a10391fd175a1bb7d6c69e04c315f1ab8efa5fc",
+    "total": 43,
+    "failed": []
+  },
+  {
+    "path": "/tmp/pa29-180/controls-ranking/controls.json",
+    "sha256": "501f61f1118549d45f538925899c87fd76611bc5a06ca5c33fd37f6f42d67eec",
+    "total": 47,
+    "failed": []
+  }
+]

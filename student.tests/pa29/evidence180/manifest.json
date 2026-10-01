@@ -1,0 +1,57 @@
+{
+  "code_tip": "f613c5549812dd306d6e7a97ead04c944283db22",
+  "entry": "259329eec6b08718a059b5198cb32b4f5b5ac17f",
+  "stage_base": "2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543",
+  "last_reviewed": "667edd800e4e5eb1b1ef92a3108da3bd96c51708",
+  "compiler_sha256": "292b3fe3c141518d9837c3b4a7953b64d620e8db6ac86532d4795c7b63427683",
+  "entry_compiler_sha256": "0f3c56cbde93b930813690c8e29bf838f1b495a7c653749075fc235942d53583",
+  "flags": [
+    "-std=c++11",
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "common_flags": [
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "machine": "Linux instance-20260513-022623 7.0.0-1005-gcp #5-Ubuntu SMP PREEMPT Tue May 26 15:11:20 UTC 2026 x86_64 GNU/Linux",
+  "host_compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: /usr/lib/llvm-21/bin\n",
+  "evidence": {
+    "adapter-equivalence.json": "0fe79288d08ac668a5396dd82e697cafc9805f4e695ac12c0c7228c8660f6742",
+    "common-performance.json": "19189d02638dfd8b088fe902f6e284bf9597f9439402ecb0fb7e705adcaefc69",
+    "control-attempts.json": "388263efc21b446aaf087eca38afecd499e3edfffc9083501b5cf3355ce7ff27",
+    "controls.json": "501f61f1118549d45f538925899c87fd76611bc5a06ca5c33fd37f6f42d67eec",
+    "coverage.json": "6ceb8aec3279d78cd99866c4a2bbcc437d7398e4cc00f59acddcb40bdec1227e",
+    "elf-comparison.json": "ee843e70b650f8df35817c25885bb066b1be1888a08dea3e6b1c90c171370d7b",
+    "entry.json": "80d18c80cb7c60a97c4de911a8ec1c04bd61c66708a9f2dd112eefc9d38823c5",
+    "handoff-audit.json": "676fe2e6e5fb57cf31085a687683c4ca6675e5d923f5ec5b04d7ceb7a8a5e665",
+    "inspection.json": "28d95c67ae33d60ba16c4ff4c429ab633c7383b1d5402d11f52f8df1f552a6c7",
+    "owner-performance.json": "b8b382247ba507892951e779acab60929b3f357fe2f34a85ab705945aacf86c8",
+    "preliminary-common-performance.json": "4ef08a4a53f035fbe65af1cf69c937d1fdd6a82f582d41bddaa03160c799db0e",
+    "preliminary-owner-performance.json": "df7f47fc777c1f37010d3926b0999debf40cb9e53fd24931d930579565b95e73",
+    "preliminary-rethrow-controls.json": "91b90ad7554ea7175e9ba351ab8a8392724f2c71a2bbf0af1b5b3846721a67c6",
+    "remaining.json": "08616b0616b280fffc0d29ee4f7695677a36a0ba0f7cd1d4234a36f11d91d903",
+    "scaling.json": "61c2943df4d69f9d16888cba02a69b961f455c0dd1dba5c4da2000d5bd046d17",
+    "stage-delta.json": "717410d04af2cd18cfda4f05116bffe440729944886c4fb332ccacc3fbf10a44",
+    "validated-source.json": "45acd720c44e40276ce912ced1e2201d063e85eeab7c33901af2580eee0236e7",
+    "validation.json": "c85960511876fdc101de14436179aeb39787c40dd7da70545b63c0183cde3df3"
+  },
+  "scripts": {
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "student.tests/pa29/analyze180.py": "c7f921c4447205f91e79f6c82f544691e95bc7db415e1f7df6647e597db1acd0",
+    "student.tests/pa29/inspect180.py": "76cfaabeaac62e9775c1e42bbb921d972c87308c30ac7b17467df2931df2aa73",
+    "student.tests/pa29/inspection180-object.cpp": "9b93ad7f1b0d6fae44a8063141deb9af56ad3cc274e1b4d9fadd1fa64244e66c",
+    "student.tests/pa29/performance180.py": "4cb22576742169b56ed9bf86d02a9d9126535797d75a27c9a6de3eee279ee60c",
+    "student.tests/pa29/static-mixed-template180.cpp": "ed03853ba590d63baa183506a167b765fa41af711e23e4f2aaf120bb33897d61",
+    "student.tests/pa29/static-surrogate180.cpp": "06eb3bee7e4fcd1325f9bd2aa928b030d6f5a93fcaf51c3160158d3977646ed0",
+    "student.tests/pa29/test180.py": "f091fa69aa398db0194a7eeefe5c1864e19acc6edb93a71b62245ed6f5aa0722",
+    "student.tests/pa29/validate180.py": "90d26e33ebf78d3ff67ba66c5a9e2cd73007ccd5d38ef154ad00f4209983c8d9"
+  },
+  "inherited_performance": {
+    "pa29/performance179.md": "3a4fac854f390a32ecc347187f49a6498e3b3d902c7bb05f6ff35754f69f843d",
+    "student.tests/pa29/evidence179/common-performance.json": "989e3e9a0ecb5b16faf33447bd57a7f88e43d7ea6cf59a46f95b7845e36c00b1",
+    "student.tests/pa29/evidence179/owner-performance.json": "1497bbd9847c1a1e3e02f1c5ac17f56e318cfd2ffbae52eb208e500e6e773cb7"
+  }
+}

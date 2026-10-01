@@ -1,0 +1,61 @@
+{
+  "scope": "Implementation180 completed behavior group; independent whole-stage audit and 16 failures remain.",
+  "code_tip": "f613c5549812dd306d6e7a97ead04c944283db22",
+  "requirements": [
+    {
+      "requirement": "current-stage implementation progress",
+      "proven": true,
+      "evidence": "stage-delta.json, validation.json",
+      "details": "18 -> 16 failures, 387/403; no added contract inputs"
+    },
+    {
+      "requirement": "earlier assignments pass",
+      "proven": true,
+      "evidence": "validation.json",
+      "details": "4538/4538"
+    },
+    {
+      "requirement": "file audit passes",
+      "proven": true,
+      "evidence": "validation.json",
+      "details": "four inherited warnings"
+    },
+    {
+      "requirement": "coverage, references, comparison rules preserved",
+      "proven": true,
+      "evidence": "coverage.json",
+      "details": "403 inputs unchanged against entry and last-reviewed commit"
+    },
+    {
+      "requirement": "completed callable group and known interactions",
+      "proven": true,
+      "evidence": "controls.json, inspection.json, ../../../pa29/handoff180.md",
+      "details": "47 runtime/rejection/query controls; 251 typed IR/CFG/native/debug/limit inspection commands"
+    },
+    {
+      "requirement": "spec architecture and ownership",
+      "proven": true,
+      "evidence": "../../../dev/src/lowir/force_inline.cpp, ../../../pa29/handoff180.md",
+      "details": "typed identities, per-callee CFG facts, bounded reservations, conservative fallback, no text transport or host delegation"
+    },
+    {
+      "requirement": "all four performance dimensions with stage-scoped acceptance",
+      "proven": true,
+      "evidence": "common-performance.json, owner-performance.json, scaling.json, ../../../pa29/performance180.md",
+      "details": "552 final observations, A/A+ABBA for equivalent correct inputs, static extension final-only; all 552 preliminary observations retained; costs and budgets disclosed"
+    },
+    {
+      "requirement": "unfinished implementation separated from independent questions",
+      "proven": true,
+      "evidence": "remaining.json, ../../../pa29/handoff180.md",
+      "details": "13 implementation failures, three contract questions; none waived"
+    },
+    {
+      "requirement": "review markers and concrete handoff boundary",
+      "proven": true,
+      "evidence": "../../../pa29/plan.md, ../../../pa29/handoff180.md",
+      "details": "Stage base and last-reviewed unchanged; remaining owners require distinct semantic representations/policies"
+    }
+  ],
+  "final_repository_gate": "Verify git status --short is empty after committing this evidence; recorded in the final tool result."
+}

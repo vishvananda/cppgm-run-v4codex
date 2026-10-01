@@ -1,71 +1,62 @@
 # PA29 compact plan — implementation180
 
-Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `667edd800e4e5eb1b1ef92a3108da3bd96c51708`.
 Previous reviewed commit: `7139ceb5769eea12c6e2e00b54932f09d59c79b5`.
 Entry HEAD: `259329eec6b08718a059b5198cb32b4f5b5ac17f`.
-
-## Active group180
-
-Entry: 385/403, 18 failures. Shared callable semantics owns static call operators
-and force-inline direct calls. Static selection retains a discarded receiver
-and explicit argument conversions, consumed by constant evaluation and lowering;
-force-inline consumes typed LowIR identities, without frontend replay. Candidate
-work follows actual overloads. Inline work/growth must be bounded with explicit
-cycle/legality handling and per-function storage. Validate templates, defaults,
-receiver effects, overload ranking, exception/control flow, ABI and IR adapters.
-Freeze entry compiler before edits; measure all four dimensions with A/A+ABBA
-on equivalent inputs and separate newly-correct workloads. No optional inlining
-policy is added at O0. The prior handoff/evidence remains linked below until the
-final ledger refresh. Review markers above are unchanged.
+Code tip: `f613c5549812dd306d6e7a97ead04c944283db22`.
 
 ## Design and spec alignment
 
 The cumulative pipeline remains streaming source → integrated semantic graph →
-typed LowIR → per-function MIR → direct ELF. [Audit178](audit.md) retains the
-previous accumulated review and [performance178](performance178.md) its evidence.
-This increment completes local class/member and array decomposition: one hidden
-object, typed aliases and canonical member shapes, shared initialization,
-template/range facts, constant evaluation and normal/unwind destruction. Array
-copies emit at most eight leaves or one counted loop with prefix cleanup.
-
-Shared fixes resolve unnamed parameter-array parsing, source-versus-destination
-constexpr constructor identity and arithmetic narrowing through reference types.
-No source replay, whole-registry retry, textual phase transport, optional
-optimizer or host/reference implementation delegation was introduced.
+typed LowIR → per-function MIR → direct ELF. This group completes static callable
+selection and mandatory inline preparation, extending through static subscripts,
+mixed member templates, surrogates, constants, receiver/default effects, typed
+ABI boundaries, phi edges, exceptional returns and bounded conservative fallback.
+Selected calls retain an evaluated receiver without an implicit-object parameter.
+The shared LowIR transform uses typed identity maps and per-callee return-region
+facts; it never replays frontend syntax or reconstructs semantics through names.
+[Handoff180](handoff180.md) records owners, data flow, complexity and repairs.
+[Audit178](audit.md) and the preceding [handoff179](handoff179.md) remain intact.
 
 ## Validation and performance
 
-PA29 **381 → 385/403**: four original failures removed, **18 remain**, no new
-failures. PA1–28 **4538/4538**; through PA29 **4923/4941**. File audit passes
+PA29 **385 → 387/403**: two original failures removed, **16 remain**, no new
+failures. PA1–28 **4538/4538**; through PA29 **4925/4941**. File audit passes
 with four inherited warnings. All 403 stage inputs and 1,707 contract/harness
-paths are unchanged across entry and review. Personal controls pass **42**;
-inspection commands pass **91**. Exact commands, status and source binding are
-in [evidence179](../student.tests/pa29/evidence179/manifest.json).
+paths remain unchanged across entry and review. Personal controls pass **47**;
+inspection commands pass **251**. Exact commands, source binding and coverage
+are in [evidence180](../student.tests/pa29/evidence180/manifest.json).
 
-[Performance179](performance179.md) reports all four dimensions at PA29/O0:
-224 final A/A+ABBA observations on equivalent inputs, 144 final-only observations
-on newly correct decomposition, eight launchers, and all 224 preliminary common
-observations retained. Entry rejects the new syntax; no false speedup baseline
-is used. Shapes are cached once per canonical type; projections scale with
-actual bindings. Optional optimization work/growth budgets remain zero.
-Inherited blanket 15% and zero-growth targets remain diagnostic under spec §9;
-mandated limits, correctness and coverage remain unchanged.
+[Performance180](performance180.md) reports all four dimensions at PA29/O0:
+**552 final** observations, **552 preliminary** observations preserved, A/A+ABBA
+for equivalent inputs and final-only scaling for newly accepted static calls.
+Common executable images are identical. Large straight-line and branching
+inline workloads improve runtime; compiler latency/RSS and floating-point text
+costs are disclosed. Optional optimization work/growth remains zero. Mandatory
+expansion reserves at most 262,144 units/caller and 4,194,304/program, depth 64;
+unsafe or over-budget calls remain valid calls. Actual work is bounded by
+reservation. Inherited blanket 15% and zero-growth targets remain diagnostic
+under spec §9; mandated limits, correctness and coverage are unchanged.
 
 ## Remaining groups and handoff
 
-The [18-case ledger](../student.tests/pa29/evidence179/remaining.json) separates
-unfinished implementation from three independent contract questions, all still
-counted failures: extended syntax/types/layout **13**, template demand/hosted ABI
-**4**, legacy trait **1**. Char-traits conversion remains implementation work.
-No reference correction or waiver is claimed. General tuple-protocol and
-namespace-scope decomposition were not implemented in this local-binding group.
+The [16-case ledger](../student.tests/pa29/evidence180/remaining.json) distinguishes
+unfinished implementation **13** from independent contract questions **3**, all
+still counted failures: extended syntax/types/layout **12**, template demand/
+hosted ABI **3**, legacy trait **1**. Char-traits conversion remains implementation
+work. There is no reference correction, coverage reduction or waiver.
 
-[Handoff179](handoff179.md) records ownership, data flow, complexity, validations,
-repaired interactions and the concrete boundary: remaining cases require
-separate type representations, GNU/coroutine rules, inline control flow, library
-conversion or ABI policy rather than additional decomposition machinery.
-Commits `a0a67bdf`, `bcef72ad`, `bf487a41` form the coherent implementation;
-the final record commit returns control for independent review. Full stage and
-through-PA29 checks plus whole-stage audit are still required before advancement.
+The completed callable group is validated across declaration, deduction/query,
+constant/runtime, ABI, exception and budget boundaries. Remaining failures need
+separate extended numeric/vector/complex representations, layout, GNU constants,
+deduction-guide/coroutine syntax, library conversion or ABI policy; they do not
+consume the changed callable facts or inline remapping. That concrete ownership
+boundary makes further related fixes impractical in this group.
+
+Commits `639ebd7f`, `a613b21a`, `95d43769`, `f613c554` implement the group;
+`6574d6c8` records entry scope. The final record commit returns control for
+independent review. This handoff does not certify the whole assignment. Full
+stage/through-PA29 success and resolution of whole-stage audit findings remain
+required before advancement; preserved review markers are not advanced here.

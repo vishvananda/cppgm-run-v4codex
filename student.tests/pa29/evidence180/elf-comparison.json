@@ -1,0 +1,18 @@
+{
+  "memory": {
+    "object_identical": true,
+    "executable_identical": true
+  },
+  "floating": {
+    "object_identical": true,
+    "executable_identical": true
+  },
+  "exceptions": {
+    "object_identical": true,
+    "executable_identical": true
+  },
+  "pruning": {
+    "object_identical": true,
+    "executable_identical": true
+  }
+}

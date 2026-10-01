@@ -1,0 +1,93 @@
+{
+  "inline-basic": {
+    "direct_sha256": "c227feb8e58702f7366fea08c221a0677b629e489b4cd0aa7363b4c81d2a4cb6",
+    "adapter_sha256": "c227feb8e58702f7366fea08c221a0677b629e489b4cd0aa7363b4c81d2a4cb6",
+    "identical_bytes": true,
+    "identical_instructions_and_symbolic_relocations": true,
+    "identical_symbols": true
+  },
+  "inline-branch": {
+    "direct_sha256": "7a99e76d5de8012154ea14c37832f1d1dc9f3cc882873e250e595a2c469691a9",
+    "adapter_sha256": "7a99e76d5de8012154ea14c37832f1d1dc9f3cc882873e250e595a2c469691a9",
+    "identical_bytes": true,
+    "identical_instructions_and_symbolic_relocations": true,
+    "identical_symbols": true
+  },
+  "inline-catch": {
+    "direct_sha256": "06c42224cd9917f1fc55eaa21ccb7616906a5643e5c309baf7e477c44fae448b",
+    "adapter_sha256": "197237d6918feb402eb8926a8b0ec4dc0860ccfcdbf55384f5d7139a59746e62",
+    "identical_bytes": false,
+    "identical_instructions_and_symbolic_relocations": true,
+    "identical_symbols": true
+  },
+  "inline-float": {
+    "direct_sha256": "97e8a4f29e647e30225503ab6b49a4c74e6be8b39f0ea472917bb8a07297b000",
+    "adapter_sha256": "97e8a4f29e647e30225503ab6b49a4c74e6be8b39f0ea472917bb8a07297b000",
+    "identical_bytes": true,
+    "identical_instructions_and_symbolic_relocations": true,
+    "identical_symbols": true
+  },
+  "inline-loop": {
+    "direct_sha256": "39af2f4f681f0412f8c1b325e89dc18fdf6b2ea3642077eae5b06fa2345d9d8a",
+    "adapter_sha256": "39af2f4f681f0412f8c1b325e89dc18fdf6b2ea3642077eae5b06fa2345d9d8a",
+    "identical_bytes": true,
+    "identical_instructions_and_symbolic_relocations": true,
+    "identical_symbols": true
+  },
+  "inline-nested": {
+    "direct_sha256": "6f68c62b1b8e3c05e0c3c9968e536b532bbbc32a2e4a20d60e94adfeadaf5b8d",
+    "adapter_sha256": "6f68c62b1b8e3c05e0c3c9968e536b532bbbc32a2e4a20d60e94adfeadaf5b8d",
+    "identical_bytes": true,
+    "identical_instructions_and_symbolic_relocations": true,
+    "identical_symbols": true
+  },
+  "inline-noreturn": {
+    "direct_sha256": "50b213f69a0b997cba170c6df59379cfd55383fcc496571184955ff6185dda54",
+    "adapter_sha256": "50b213f69a0b997cba170c6df59379cfd55383fcc496571184955ff6185dda54",
+    "identical_bytes": true,
+    "identical_instructions_and_symbolic_relocations": true,
+    "identical_symbols": true
+  },
+  "inline-object": {
+    "direct_sha256": "e66363b54518d2054a45d9cf156ff6f9506f96c68723442ce61311dd1193434c",
+    "adapter_sha256": "e66363b54518d2054a45d9cf156ff6f9506f96c68723442ce61311dd1193434c",
+    "identical_bytes": true,
+    "identical_instructions_and_symbolic_relocations": true,
+    "identical_symbols": true
+  },
+  "inline-rethrow": {
+    "direct_sha256": "eb797d8a95d6d218add1f48eb0fc281ba8f1bd819534d0b3182e744045eca00e",
+    "adapter_sha256": "8d08ed5647f23a895dbf7bb7be6b46354a9a9b8300ee92bcdceaa4b26239c9e2",
+    "identical_bytes": false,
+    "identical_instructions_and_symbolic_relocations": true,
+    "identical_symbols": true
+  },
+  "inline-throw": {
+    "direct_sha256": "4ebdf588f352d850ab6b4490c2c543cc505cca77677e60531da6573b82cdb032",
+    "adapter_sha256": "287ef81d9581cc734d8c5deba501dff0e1daaaeb64bd99a3f6e8dd8bb4388c35",
+    "identical_bytes": false,
+    "identical_instructions_and_symbolic_relocations": true,
+    "identical_symbols": true
+  },
+  "static-effects": {
+    "direct_sha256": "34783410cebdf2c1c356504642cdcf0d46d4a06a42bbb2089c0a7cd179fcdee8",
+    "adapter_sha256": "34783410cebdf2c1c356504642cdcf0d46d4a06a42bbb2089c0a7cd179fcdee8",
+    "identical_bytes": true,
+    "identical_instructions_and_symbolic_relocations": true,
+    "identical_symbols": true
+  },
+  "static-query": {
+    "direct_sha256": "cfc5a7ac5e4dcdb87ce33da29719aeae1e6a9ce2eb86a0c77c32e165b08a659b",
+    "adapter_sha256": "cfc5a7ac5e4dcdb87ce33da29719aeae1e6a9ce2eb86a0c77c32e165b08a659b",
+    "identical_bytes": true,
+    "identical_instructions_and_symbolic_relocations": true,
+    "identical_symbols": true
+  },
+  "static-template": {
+    "direct_sha256": "47a317ed26bc25100e64d3b61b2dee01c79e2ebfa5eef13fe942e8d1f1ea282d",
+    "adapter_sha256": "47a317ed26bc25100e64d3b61b2dee01c79e2ebfa5eef13fe942e8d1f1ea282d",
+    "identical_bytes": true,
+    "identical_instructions_and_symbolic_relocations": true,
+    "identical_symbols": true
+  }
+}
