@@ -110,3 +110,13 @@ and undemanded constructor boundaries). PA30: 123/153, nine entry failures fixed
 and no regressions. Two previously masked failures now reach class partial
 ordering and dependent base alias lookup; extend into the latter shared
 current-instantiation owner before closing this implementation group.
+
+Increment196b: qualified member queries resolve aliases in the retained source
+scope when the object denotes the current instantiation. This also fixes all
+six hashtable alias failures, including the one exposed by increment196a.
+Current PA30: 129/153 (15 fixed, zero regressions); earlier PAs 4941/4941;
+file audit passes with the same four warnings. Explicit controls: 28 commands.
+Boundary under validation: remaining diagnostics belong to partial ordering,
+callable prerequisites, constant bounds, alias convergence, access, constructor
+selection, exception redeclarations, vector builtins and body reachability.
+Frozen A/B measurements and final coverage/source binding remain to be recorded.

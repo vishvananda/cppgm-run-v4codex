@@ -289,7 +289,10 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             // Retain the typed naming class, including a dependent qualifier.
             auto object = query_fact(children[0]).expression.type;
             if (node.op == OP_ARROW && pointer(object)) object = types[object].child;
-            auto scope = class_value(object) || pattern_class_type(object) ? entities[types[object].entity].scope : s;
+            // A symbolic current specialization has no instantiated members.
+            // Its retained source scope owns definition-time qualifier lookup.
+            auto current = dependent_type(object) ? current_instantiation_scope(object,s) : 0;
+            auto scope = current ? current : class_value(object) || pattern_class_type(object) ? entities[types[object].entity].scope : s;
             auto qualifier = ast[name].first;
             while (ast[qualifier].next != ast[name].last) qualifier = ast[qualifier].next;
             q.type = type_name(name,scope,qualifier);
