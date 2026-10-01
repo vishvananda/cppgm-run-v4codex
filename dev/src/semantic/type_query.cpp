@@ -515,7 +515,17 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     }
     if (q.arguments) {
         auto pack = argument_packs[q.arguments];
-        for (unsigned i = 0; i < pack.count; ++i) r.dependent |= dependent_argument(argument_types[pack.offset+i]);
+        for (unsigned i = 0; i < pack.count; ++i) {
+            auto argument = argument_types[pack.offset+i];
+            // The sequence generator consumes a template identity. A primary
+            // template is not a dependent type operand of this operation.
+            if (!i && q.kind == QueryKind::BuiltinTrait && BuiltinTrait(q.value) == BuiltinTrait::MakeIntegerSeq &&
+                !value_argument(argument) && types[argument].kind == TypeKind::Named &&
+                template_entity(types[argument].entity)) {
+                auto entity = entities[types[argument].entity];
+                r.dependent |= entity.template_parameter || entity.template_member;
+            } else r.dependent |= dependent_argument(argument);
+        }
     }
     auto& x = r.expression;
     if (q.kind == QueryKind::Offsetof || q.kind == QueryKind::IntegerPack || q.kind == QueryKind::Sizeof || q.kind == QueryKind::SizeofPack)
@@ -537,6 +547,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         }
     }
     bool inspect = !r.dependent || q.kind == QueryKind::Parenthesized;
+    if (q.kind == QueryKind::BuiltinTrait && template_type_transform(BuiltinTrait(q.value))) inspect = true;
     if (r.dependent && (q.kind == QueryKind::Name || q.kind == QueryKind::Parameter || q.kind == QueryKind::TemplateValueParameter) && q.type) inspect = true;
     if (r.dependent && q.kind == QueryKind::Member && !children.empty()) {
         auto type = children[0].expression.type;

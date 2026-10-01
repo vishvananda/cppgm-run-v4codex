@@ -90,6 +90,7 @@ TypeQueryFact Analyzer::query_builtin_trait(QueryId id, const TypeQuery& query)
 {
     auto trait = BuiltinTrait(query.value);
     auto args = argument_packs[query.arguments];
+    if (template_type_transform(trait)) return query_template_type_trait(query);
     bool convertible = trait == BuiltinTrait::Convertible || trait == BuiltinTrait::NothrowConvertible;
     bool reference_temporary = trait >= BuiltinTrait::ReferenceBindsTemporary && trait <= BuiltinTrait::ReferenceConvertsTemporary;
     bool binary = convertible || reference_temporary || trait == BuiltinTrait::Same || trait == BuiltinTrait::BaseOf ||

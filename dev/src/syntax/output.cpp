@@ -1,4 +1,5 @@
 #include "syntax/ast.h"
+#include "support/type_traits.h"
 #include <ostream>
 #include <string>
 
@@ -167,9 +168,10 @@ void write_inline(std::ostream& out, const Ast& ast, NodeId id, const Identifier
         if (n.kind == Kind::Sizeof) out << "sizeof";
         else if (n.kind == Kind::Decltype) out << "decltype";
         else spelling(out, ids, n.text);
-        out << '(';
-        children_inline(out, ast, id, ids);
-        out << ')';
+        bool angles = n.kind == Kind::TypeTrait && template_type_transform(BuiltinTrait(n.flags));
+        out << (angles ? '<' : '(');
+        children_inline(out, ast, id, ids, angles ? ", " : "");
+        out << (angles ? '>' : ')');
     } else {
         if (n.flags & 1) out << "typename ";
         if (n.detail) write_inline(out, ast, n.detail, ids);

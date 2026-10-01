@@ -74,7 +74,17 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     case TypeKind::Pointer: result = abi.make(abi_mangle::Kind::Pointer, abi_type(t.child)); break;
     case TypeKind::Decltype: {
         auto query = sem.type_query(t.entity);
-        if (query.kind == semantic::QueryKind::BuiltinTrait && type_transform(BuiltinTrait(query.value))) {
+        if (query.kind == semantic::QueryKind::BuiltinTrait && template_type_transform(BuiltinTrait(query.value))) {
+            auto args = sem.query_arguments(query.arguments);
+            std::vector<abi_mangle::Id> operands;
+            for (unsigned j = 0; j < args.count; ++j) operands.push_back(abi_argument(sem.template_argument(args.offset+j)));
+            if (BuiltinTrait(query.value) == BuiltinTrait::TypePackElement) {
+                std::vector<abi_mangle::Id> tail(operands.begin()+1,operands.end());
+                operands.resize(1);
+                operands.push_back(abi.make(abi_mangle::Kind::ArgumentPack,0,0,0,0,tail));
+            }
+            result = abi.make(abi_mangle::Kind::Template,abi.name(0,spelling(query.name)),0,0,0,operands);
+        } else if (query.kind == semantic::QueryKind::BuiltinTrait && type_transform(BuiltinTrait(query.value))) {
             auto args = sem.query_arguments(query.arguments);
             std::vector<abi_mangle::Id> operands;
             for (unsigned j = 0; j < args.count; ++j) operands.push_back(abi_type(sem.template_argument(args.offset+j)));

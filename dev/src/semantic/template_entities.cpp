@@ -122,7 +122,12 @@ bool Analyzer::template_compatible(EntityId parameter, EntityId argument, Index&
             if (entities[pe].kind != EntityKind::Type) {
                 auto pt = substitute_type(entities[pe].type,bindings,cache);
                 auto at = substitute_type(entities[ae].type,bindings,cache);
-                if (!pt || !at || pt != at) return false;
+                if (!pt || !at) return false;
+                // Hosted GNU matching admits dependent non-type parameter
+                // types on either head. The actual template application still
+                // substitutes that head's type and checks every value against
+                // it; only a fixed, known disagreement rejects the identity.
+                if (pt != at && !dependent_type(pt) && !dependent_type(at)) return false;
             }
             if (entities[ae].parameter_pack && !pack) return false;
             auto canonical = canonical_argument(pe,i,bindings,cache,depth);

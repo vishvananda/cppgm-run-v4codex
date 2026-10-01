@@ -1,0 +1,32 @@
+[
+  {
+    "test": "pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+    "status": 1,
+    "stderr": "ERROR: static assertion is not a true integral constant in pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t:24\n"
+  },
+  {
+    "test": "pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+    "status": 1,
+    "stderr": "ERROR: invalid substituted type access\n"
+  },
+  {
+    "test": "pa29/tests/compile/700-hosted-coroutine-contextual-operators-compile.t",
+    "status": 1,
+    "stderr": "ERROR: expected ';', found 't' in pa29/tests/compile/700-hosted-coroutine-contextual-operators-compile.t:4\n"
+  },
+  {
+    "test": "pa29/tests/compile/500-gnu-ext-vector-scalar-template-deduction.t",
+    "status": 1,
+    "stderr": "ERROR: template expression requires a value name\n"
+  },
+  {
+    "test": "pa29/tests/compile/600-fold-expression-template-arg-trait.t",
+    "status": 1,
+    "stderr": "ERROR: expected expression, found '...'\n"
+  },
+  {
+    "test": "pa29/tests/compile/500-nontemplate-deduction-guide-declaration.t",
+    "status": -6,
+    "stderr": "cppgm++: src/preprocess/identifier_table.cpp:86: cppgm::TextView cppgm::IdentifierTable::spelling(cppgm::IdentifierId) const: Assertion `id && id <= entries_.size()' failed.\n"
+  }
+]

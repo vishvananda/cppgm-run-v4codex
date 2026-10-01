@@ -192,6 +192,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/dynamic_symbols toolchain/dynamic_re
 FRONTEND_OBJ_BASENAMES_lowir2native += support/id_index
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/builtin_traits
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/builtin_template_types
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/builtin_functions
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/function_context

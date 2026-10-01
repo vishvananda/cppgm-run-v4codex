@@ -161,7 +161,14 @@ NodeId Parser::primary()
     if (in.is("::") && builtin_trait(ids.spelling(in.peek(1).text)) == BuiltinTrait::Offsetof && in.is("(",2)) {
         in.take(); return type_trait();
     }
-    if (builtin_trait(ids.spelling(token.text)) != BuiltinTrait::None && in.is("(",1)) return type_trait();
+    auto trait = builtin_trait(ids.spelling(in.peek(in.is("::") ? 1 : 0).text));
+    if (template_type_transform(trait) && in.is("<",in.is("::") ? 2 : 1)) {
+        auto result = make(Kind::IdExpression);
+        ast[result].detail = wrap(Kind::TypeId,specifiers(true));
+        return result;
+    }
+    if (builtin_trait(ids.spelling(token.text)) != BuiltinTrait::None &&
+        !template_type_transform(trait) && in.is("(",1)) return type_trait();
     if (token.kind == PostTokenKind::literal || token.kind == PostTokenKind::user_literal)
         return leaf(Kind::Literal);
     if (in.is("true") || in.is("false") || in.is("nullptr") || in.is("this"))
@@ -253,6 +260,11 @@ NodeId Parser::type_trait()
     auto trait = builtin_trait(ids.spelling(keyword.text));
     if (trait != BuiltinTrait::None) {
         ast[result].flags = unsigned(trait);
+        if (template_type_transform(trait)) {
+            auto arguments = template_arguments();
+            while (ast[arguments].first) ast.append(result,ast.take_first(arguments));
+            return result;
+        }
         in.require("("); unsigned saved = angle_expression; angle_expression = 0;
         if (trait == BuiltinTrait::Offsetof) {
             ast.append(result,type_id()); in.require(",");

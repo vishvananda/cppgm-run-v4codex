@@ -13,8 +13,13 @@ enum class BuiltinTrait : unsigned char {
     TrivialConstructor, TrivialCopy, TrivialAssign, NothrowConstructor, NothrowCopy, NothrowAssign,
     ReferenceBindsTemporary, ReferenceConstructsTemporary, ReferenceConvertsTemporary,
     RemoveCV, RemoveConst, RemoveVolatile, RemoveReference, RemoveCVRef, RemovePointer, RemoveExtent,
-        RemoveAllExtents, AddPointer, AddLRef, AddRRef, MakeSigned, MakeUnsigned
+        RemoveAllExtents, AddPointer, AddLRef, AddRRef, MakeSigned, MakeUnsigned,
+    TypePackElement, MakeIntegerSeq
 };
+inline bool template_type_transform(BuiltinTrait trait)
+{
+    return trait == BuiltinTrait::TypePackElement || trait == BuiltinTrait::MakeIntegerSeq;
+}
 inline bool type_transform(BuiltinTrait trait)
 {
     return trait == BuiltinTrait::Underlying || trait == BuiltinTrait::Decay || trait >= BuiltinTrait::RemoveCV;
@@ -39,8 +44,9 @@ inline BuiltinTrait builtin_trait(TextView text)
         "__reference_binds_to_temporary", "__reference_constructs_from_temporary", "__reference_converts_from_temporary", "__remove_cv",
         "__remove_const", "__remove_volatile", "__remove_reference_t", "__remove_cvref", "__remove_pointer",
         "__remove_extent", "__remove_all_extents", "__add_pointer", "__add_lvalue_reference",
-        "__add_rvalue_reference", "__make_signed", "__make_unsigned"};
-    static_assert(sizeof(names)/sizeof(*names) == unsigned(BuiltinTrait::MakeUnsigned)+1, "trait registry size");
+        "__add_rvalue_reference", "__make_signed", "__make_unsigned",
+        "__type_pack_element", "__make_integer_seq"};
+    static_assert(sizeof(names)/sizeof(*names) == unsigned(BuiltinTrait::MakeIntegerSeq)+1, "trait registry size");
     if (text.equals("__remove_reference")) return BuiltinTrait::RemoveReference;
     if (text.equals("__decay_t")) return BuiltinTrait::Decay;
     if (text.equals("__is_convertible_to")) return BuiltinTrait::Convertible;

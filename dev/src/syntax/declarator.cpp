@@ -14,6 +14,8 @@ NodeId Parser::specifiers(bool type_only, NodeId result)
         ast[result].flags |= attributes(&alignment,&native);
         native_attributes(result,native);
         Kind kind = type_only ? Kind::TypeSpecifier : Kind::DeclSpecifier;
+        auto global_prefix = in.is("::") ? 1u : 0u;
+        auto trait = builtin_trait(ids.spelling(in.peek(global_prefix).text));
         if (!have_type && in.is("_Atomic") && in.is("(",1)) {
             in.take(); in.require("(");
             auto spec = wrap(Kind::AtomicType,type_id());
@@ -24,7 +26,9 @@ NodeId Parser::specifiers(bool type_only, NodeId result)
             in.require(")"); angle_expression = saved;
             auto spec = wrap(type_only ? Kind::Decltype : Kind::DeclSpecifier,operand);
             ast[spec].op = KW_DECLTYPE; ast[spec].flags |= 2; ast.append(result,spec); have_type = true;
-        } else if (!have_type && in.is("(",1) && type_transform(builtin_trait(ids.spelling(in.peek().text)))) {
+        } else if (!have_type && ((!global_prefix && in.is("(",1) && type_transform(trait) && !template_type_transform(trait)) ||
+                (in.is("<",global_prefix+1) && template_type_transform(trait)))) {
+            in.eat("::");
             auto spec = wrap(type_only ? Kind::Decltype : Kind::DeclSpecifier,type_trait());
             ast[spec].op = KW_DECLTYPE; ast.append(result,spec); have_type = true;
         } else if (builtin()) {

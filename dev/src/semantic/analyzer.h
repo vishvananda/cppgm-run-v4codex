@@ -58,6 +58,7 @@ public:
     Index offsetof_layout_index, offsetof_path_queries;
     std::vector<OffsetofStep> offsetof_layouts = std::vector<OffsetofStep>(1);
     TypeQueryFact query_builtin_trait(QueryId id, const TypeQuery& query);
+    TypeQueryFact query_template_type_trait(const TypeQuery& query);
     bool builtin_type_property(unsigned trait, TypeId type);
     bool legacy_type_property(unsigned trait, TypeId type);
     bool legacy_member_trivial(EntityId member);
