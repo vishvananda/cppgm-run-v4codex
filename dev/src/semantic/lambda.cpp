@@ -4,6 +4,11 @@
 namespace cppgm { namespace semantic {
 using syntax::Kind;
 namespace {
+struct TemplateScope {
+    ScopeId& current; ScopeId previous;
+    TemplateScope(ScopeId& active, ScopeId head) : current(active), previous(active) { if (head) current = head; }
+    ~TemplateScope() { current = previous; }
+};
 void check_declarator(const syntax::AstView& ast, NodeId d)
 {
     for (auto q = ast[d].first; q; q = ast[q].next) {
@@ -37,6 +42,7 @@ void Analyzer::bind_lambda_body(NodeId n, ScopeId s)
         check_template_parameters(body,s);
     }
     check_declarator(ast,d);
+    TemplateScope template_scope(active_template_scope,head ? s : 0);
     auto signature = d ? declarator(d,types.fundamental(FT_VOID),s) : types.function(types.fundamental(FT_VOID),{},false);
     if (d) {
         auto source = ast.nodes.occurrences[d].source;
@@ -108,7 +114,11 @@ Expression Analyzer::lambda_expression(NodeId n, ScopeId s)
     }
     if (!head) demand_region(body);
     check_declarator(ast,d);
-    auto signature = d ? declarator(d,types.fundamental(FT_VOID),head ? head_scope : s) : types.function(types.fundamental(FT_VOID),{},false);
+    TypeId signature;
+    {
+        TemplateScope template_scope(active_template_scope,head_scope);
+        signature = d ? declarator(d,types.fundamental(FT_VOID),head ? head_scope : s) : types.function(types.fundamental(FT_VOID),{},false);
+    }
     // Keep raw parameter facts for the body, but publish the adjusted callable
     // signature just as an ordinary function declaration does.
     signature = types.signature(signature);
