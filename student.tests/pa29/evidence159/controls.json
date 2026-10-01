@@ -1,0 +1,612 @@
+{
+  "compiler_sha256": "8ce2c5e6f4c4f5eb45ea49d86667f49f2a4155dd97eeeb32f5cf08cf1491ec33",
+  "checks": [
+    {
+      "name": "ambiguous-reject compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls159/ambiguous-reject.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/ambiguous-reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid implicit conversion\n"
+    },
+    {
+      "name": "conversion-source-lifetime compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls159/conversion-source-lifetime.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/conversion-source-lifetime.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "conversion-source-lifetime link",
+      "args": [
+        "g++",
+        "/tmp/pa29-159/controls/conversion-source-lifetime.o",
+        "-o",
+        "/tmp/pa29-159/controls/conversion-source-lifetime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "conversion-source-lifetime run",
+      "args": [
+        "/tmp/pa29-159/controls/conversion-source-lifetime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "dependent compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls159/dependent.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/dependent.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "dependent link",
+      "args": [
+        "g++",
+        "/tmp/pa29-159/controls/dependent.o",
+        "-o",
+        "/tmp/pa29-159/controls/dependent"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "dependent run",
+      "args": [
+        "/tmp/pa29-159/controls/dependent"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "explicit-copy-reject compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls159/explicit-copy-reject.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/explicit-copy-reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid implicit conversion\n"
+    },
+    {
+      "name": "incomplete-reject compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls159/incomplete-reject.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/incomplete-reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: legacy trait requires a complete class\n"
+    },
+    {
+      "name": "legacy compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls159/legacy.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/legacy.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "legacy link",
+      "args": [
+        "g++",
+        "/tmp/pa29-159/controls/legacy.o",
+        "-o",
+        "/tmp/pa29-159/controls/legacy"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "legacy run",
+      "args": [
+        "/tmp/pa29-159/controls/legacy"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "private-copy-reject compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls159/private-copy-reject.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/private-copy-reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: inaccessible class member: Private declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls159/private-copy-reject.cpp:1\n"
+    },
+    {
+      "name": "reference-runtime compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls159/reference-runtime.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/reference-runtime.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-runtime link",
+      "args": [
+        "g++",
+        "/tmp/pa29-159/controls/reference-runtime.o",
+        "-o",
+        "/tmp/pa29-159/controls/reference-runtime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-runtime run",
+      "args": [
+        "/tmp/pa29-159/controls/reference-runtime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls159/reference.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/reference.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference link",
+      "args": [
+        "g++",
+        "/tmp/pa29-159/controls/reference.o",
+        "-o",
+        "/tmp/pa29-159/controls/reference"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference run",
+      "args": [
+        "/tmp/pa29-159/controls/reference"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "selected-subobject compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls159/selected-subobject.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/selected-subobject.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "selected-subobject link",
+      "args": [
+        "g++",
+        "/tmp/pa29-159/controls/selected-subobject.o",
+        "-o",
+        "/tmp/pa29-159/controls/selected-subobject"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "selected-subobject run",
+      "args": [
+        "/tmp/pa29-159/controls/selected-subobject"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "__has_trivial_constructor arity 0",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__has_trivial_constructor arity 2",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__has_nothrow_copy arity 0",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__has_nothrow_copy arity 2",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__has_trivial_copy arity 0",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__has_trivial_copy arity 2",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__has_trivial_assign arity 0",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__has_trivial_assign arity 2",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__has_nothrow_assign arity 0",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__has_nothrow_assign arity 2",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__has_nothrow_constructor arity 0",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__has_nothrow_constructor arity 2",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__reference_binds_to_temporary arity 1",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__reference_binds_to_temporary arity 3",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__reference_constructs_from_temporary arity 1",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__reference_constructs_from_temporary arity 3",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__reference_converts_from_temporary arity 1",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "__reference_converts_from_temporary arity 3",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-159/controls/arity.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n"
+    },
+    {
+      "name": "typed LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls159/reference-runtime.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/dependent.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "LowIR reader",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-159/controls/dependent.lowir",
+        "-o",
+        "/tmp/pa29-159/controls/roundtrip.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "roundtrip bytes",
+      "passed": true
+    },
+    {
+      "name": "native MIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-159/controls/dependent.mir",
+        "/tmp/pa29-159/controls/roundtrip.lowir",
+        "-o",
+        "/tmp/pa29-159/controls/native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "LowIR execute",
+      "args": [
+        "/tmp/pa29-159/controls/native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "telemetry",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--stats",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls159/reference-runtime.cpp",
+        "-o",
+        "/tmp/pa29-159/controls/stats.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": "{\"tokens\":418,\"max_pending\":29,\"node_growths\":10,\"delimiter_work\":418,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_ms\":1.08673,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":645,\"semantic_fact_records\":281,\"semantic_fact_storage_bytes\":25488,\"semantic_template_declaration_work\":2,\"semantic_declaration_publications\":2,\"semantic_dependence_work\":16,\"semantic_specializations\":1,\"semantic_type_substitution_work\":6,\"semantic_type_substitution_hits\":1,\"semantic_type_substitution_records\":3,\"semantic_substitution_frames\":1,\"semantic_template_type_work\":1,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":2,\"semantic_template_signature_work\":0,\"semantic_template_signature_uses\":0,\"semantic_parameter_publications\":1,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":1,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":1,\"semantic_body_checks\":8,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":8,\"semantic_statement_conversion_work\":1,\"semantic_statement_conversion_uses\":1,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":5,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":4,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":2,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":0,\"semantic_initializer_recipe_uses\":0,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":0,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":0,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":9,\"semantic_type_query_work\":9,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":1,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":26,\"semantic_template_parameter_check_work\":40,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":9,\"semantic_template_fixed_expressions\":1,\"semantic_template_fixed_uses\":1,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":0,\"semantic_template_member_uses\":0,\"parsed_nodes\":605,\"template_occurrences\":40,\"template_deferred_regions\":1,\"template_demanded_regions\":1,\"template_source_regions\":2,\"template_region_nodes\":40,\"template_region_roots\":1,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":1,\"semantic_argument_packs\":13,\"semantic_object_uses\":0,\"semantic_expression_facts\":114,\"semantic_expression_uses\":114,\"semantic_expression_slots\":645,\"semantic_expression_inherited\":1,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":1,\"semantic_constructor_actions\":0,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":0,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":12,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":0,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":0,\"semantic_reference_binding_work\":7,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":0,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":6,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":13,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":13,\"semantic_expression_work\":105,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":33,\"semantic_conversion_work\":127,\"semantic_conversions\":93,\"semantic_entity_bytes\":120,\"semantic_class_facts\":5,\"semantic_constants\":20,\"semantic_value_queries\":7,\"semantic_value_query_work\":7,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":62,\"semantic_entities\":48,\"semantic_scopes\":49,\"semantic_edges\":0,\"semantic_declarations\":33,\"semantic_regions\":37,\"semantic_lookup_work\":183,\"semantic_signature_work\":29,\"semantic_template_signature_shape_work\":5,\"semantic_template_signature_shape_hits\":0,\"semantic_type_probes\":459,\"semantic_constant_work\":6,\"constexpr_validity_work\":0,\"exception_work\":4,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":124,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":2.82139,\"lowering_ms\":0.878918,\"peak_rss_kib\":17428,\"nodes\":645,\"static_requests\":4,\"static_hits\":2,\"control_work\":58,\"discard_work\":0,\"full_expression_work\":109,\"full_expression_regions\":0,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":21,\"abi_bytes\":2142,\"instructions\":129,\"operands\":206,\"ir_pool_growths\":73,\"ir_capacity_bytes\":35040}\n{\"driver_ms\":7.34828,\"peak_rss_kib\":17428,\"text_bytes\":747,\"native_functions\":7,\"native_instructions\":159,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.139029,\"encoding_ms\":0.053812}\n"
+    },
+    {
+      "name": "telemetry bytes",
+      "passed": true
+    }
+  ]
+}

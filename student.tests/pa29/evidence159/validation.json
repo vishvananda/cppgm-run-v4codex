@@ -1,0 +1,57 @@
+{
+  "code_commit": "5d2b1657cfd2efba4b45ac310ab66bf362b0a5f8",
+  "checks": [
+    {
+      "command": "make test-pa29",
+      "exit_status": 2,
+      "summary": "321/403, four resolved, zero new failures",
+      "log_path": "/tmp/pa29-159/stage-final2.log",
+      "log_sha256": "16828fcd2f7e4d9acfc1220d78a07172848c76c300785fbefa5eeec5cfbb23bc"
+    },
+    {
+      "command": "make test-report-through-pa28",
+      "exit_status": 0,
+      "summary": "4538/4538",
+      "log_path": "/tmp/pa29-159/prior-final2.log",
+      "log_sha256": "b1ff9611d30d0da259845968d6ec5a5a9b0ee6da2d9810c505780299a5c67a88"
+    },
+    {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src",
+      "exit_status": 0,
+      "summary": "four inherited warnings",
+      "log_path": "/tmp/pa29-159/file-audit-final2.log",
+      "log_sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f"
+    },
+    {
+      "command": "python3 student.tests/pa29/controls159.py",
+      "exit_status": 0,
+      "summary": "47/47",
+      "log_path": "/tmp/pa29-159/controls4.log",
+      "log_sha256": "21c2e4f294942cd7487477de34cb4471f7474db4570d0c5a34ce532ea371493b"
+    },
+    {
+      "command": "python3 student.tests/pa29/controls158.py /tmp/pa29-159/inherited2",
+      "exit_status": 0,
+      "summary": "34/34",
+      "log_path": "/tmp/pa29-159/inherited2.log",
+      "log_sha256": "3b297eba75966ca1219d3d4539b507ec4bda1ba5e504ca7f19cbd5500c7d22d3"
+    },
+    {
+      "command": "python3 student.tests/pa29/inspection159.py",
+      "exit_status": 0,
+      "summary": "cache and selected native calls; two inherited trait executables",
+      "log_path": "/tmp/pa29-159/inspection2.log",
+      "log_sha256": "c9a2a77f50e861e06e35dba6fe8e4de2ce97e0d208354890c1764feaa4f76d5e"
+    },
+    {
+      "command": "make -C dev -j3 cppgm++",
+      "exit_status": 0,
+      "summary": "final code build",
+      "log_path": "/tmp/pa29-159/build6.log",
+      "log_sha256": "634acba5f1fb3fd424bb438dbfc755554169ff8ada83da65b169d957687a90e6"
+    }
+  ],
+  "fixture_and_harness_tree_unchanged": true,
+  "fixture_and_harness_tree_sha256": "28393eb417396077e8d6cb8a9c6ea28a021436c8c1146abc2ed0fa473c80cce8",
+  "compiler_sha256": "8ce2c5e6f4c4f5eb45ea49d86667f49f2a4155dd97eeeb32f5cf08cf1491ec33"
+}

@@ -1,0 +1,15 @@
+{
+  "entry": "044d9627e7ed4f466426e1f0470c58646dc9b592",
+  "code_tip": "5d2b1657cfd2efba4b45ac310ab66bf362b0a5f8",
+  "total": 403,
+  "before_pass": 317,
+  "after_pass": 321,
+  "resolved": [
+    "pa29/tests/compile/500-builtin-nothrow-copy-user-provided.t",
+    "pa29/tests/compile/700-hosted-has-trivial-constructor-dependent-nontype.t",
+    "pa29/tests/compile/700-nonstl-reference-temporary-builtin-fallback.t",
+    "pa29/tests/preproc/300-has-builtin-supported.t"
+  ],
+  "new_failures": [],
+  "unchanged_failures": 82
+}

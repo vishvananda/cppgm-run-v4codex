@@ -1,104 +1,86 @@
-# PA29 compact plan — implementation159
+# PA29 compact plan — implementation159 handoff
 
-Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **validated implementation handoff; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `1ab3499d7046daf5c298d958a8770b413edb3615`.
-Audit entry: `764305061a4d88a8bb9088216ac31c2ab8395a08`, clean, **316/403**.
-Current: **317/403**, **86 failures**, zero new failures; all 403 sources retained.
-The extra course pass is the [proved reference correction](reference-correction158.md).
+Entry: `044d9627`, clean, **317/403**. Code endpoint: `5d2b1657`.
+Current: **321/403**, **82 failures**, four resolved, zero new failures.
+All 403 fixtures, reference outputs, harnesses and comparison rules are retained.
+Previous goal turn: progress (audit158 changed code, evidence and suite results).
 
-## Reviewed ownership
+## Completed ownership and spec alignment
 
-[Audit158](audit.md) covers every commit from the stage base through the reviewed
-code tip, including all three handoffs and their combined source changes.
-Hosted probes/driver metadata, canonical traits, runtime/scalar builtin signatures,
-exact floating storage, declaration alignment, empty-member layout and member
-paths retain shared compiler ownership. Parser → semantic graph → typed LowIR →
-per-function MIR → direct ELF remains the production path.
+[Implementation159](implementation159.md) traces six legacy member traits and
+three reference-temporary traits from the shared probe/parser registry through
+canonical queries, member/exception facts and selected conversion recipes to
+typed LowIR and native calls. Direct reference initialization now shares ordered
+binding phases with traits, casts and template initialization. Both source and
+result temporary destruction are checked. Structural triviality follows selected
+subobject members and remains separate from access/deletion and callability.
 
-The audit fixes retain GNU `using` alignment operands through alias substitution
-and carry optional storage types through expression facts, queries, casts,
-indirection and selected/indirect/template returns. Language type equality and
-callable ABI signatures stay canonical. Complete query keys retain raw storage
-inputs; shared expression properties and sparse declaration facts own them.
+TU-owned flat caches use operation/type or declaration identity. Completed
+negative and positive facts are reused; unavailable dependencies remain retryable.
+Work visits the required families, candidates and subobjects, without textual
+reconstruction, body replay, whole-program retries or extra phase graphs.
+Telemetry observes actual fact computations. Parser → semantic graph → typed
+LowIR → per-function MIR → direct ELF remains the production path.
 
-## Broad remaining implementation groups
+## Remaining stage work and independent review
 
-[Fixture ledger](../student.tests/pa29/evidence158/remaining.json) enumerates all
-86 failures. Labels guide reducers; they do not prove each root cause.
+[The fixture ledger](../student.tests/pa29/evidence159/remaining.json) retains
+every failure and its disposition; broad owner labels are not root-cause proof.
 
-| Owner / failures | Required work and completion evidence |
+| Owner / retained failures | Remaining work |
 |---|---|
-| Atomic/assembly: 21 | Atomic storage, ordering/effects and assembly constraints → typed LowIR/native operations; layout, noexcept, runtime controls. |
-| Extended syntax/types/layout: 37 | Canonical extended numeric/complex types; designated initialization, folds, lambda and binding syntax; required vector width/layout and unused-wrapper validation. Selected source modes and fixtures define scope. |
-| Legacy traits/lifetimes: 5 | Special-member, binding/materialization and lifetime facts with positive/negative reducers. The forward-declared `std` trait oracle remains unchanged and requires separate resolution. |
-| Template demand/hosted ABI: 19 | Complete specialization/context keys and demand edges; packs/aliases/caches, pretty-function, extern/inline and emitted symbols. |
-| Structured intrinsic operands: 4 | Constant-evaluation context, address-of/fence semantics, invoke receiver/member-pointer recipes and lexical/caller source-location facts. |
+| Atomic/assembly: 21 | Atomic storage/order/effect facts and assembly constraints through typed IR/native execution, layout and noexcept controls. |
+| Extended syntax/types/layout: 37 | Extended numeric/complex types; vector width/layout and unused-wrapper validation; designated initialization, folds, lambdas and bindings. |
+| Template demand/hosted ABI: 19 | Packs/aliases/context keys, demand, pretty-function, extern/inline emission and ABI; includes the contract question below. |
+| Structured intrinsic operands: 4 | Constant-evaluation/address/fence semantics, invoke receiver/member-pointer recipes, source-location facts. |
+| Legacy trait contract: 1 | The forward-declared std-trait oracle question preserved from audit158. |
 
-Unfinished extension paths include code-alignment placement, dependent `offsetof`
-in ABI signatures and class-convertible designator indices. Recognizing extended
-float suffixes with legacy precision is not an implementation of extended types;
-that remains in the numeric owner above. No passing parse is a substitute for
-required layout, semantics, lowering or ABI behavior.
+Known inherited implementation work also includes code-alignment placement,
+dependent offsetof ABI signatures and class-convertible designator indices.
+Extended float suffix recognition does not implement extended precision.
 
-The README excludes runtime vector lowering; an inherited plan must not turn
-that into a PA29 gate. Broad hosted headers belong to PA30, general hosted
-execution to PA31, optimization/allocation to PA32/33 and self-hosting to PA34.
-Required PA29 behavior and current limits remain mandatory.
+Independent contract questions: the undefined `std::is_nothrow_*` specializations
+and the reserved-name nothrow-invocable cache fixture whose primary is explicitly
+false. Neither authorizes library-name shortcuts; both failures remain. Audit
+must resolve their contracts. Review must also assess this handoff's binding
+phase order, cache validity after class completion and structural/usable-member
+separation. Those are review obligations, not implementation waivers.
 
-## Validation, evidence and next checkpoint
+## Validation and performance
 
-- `make test-pa29`: **317/403**, exit 2; failure set strictly shrank by one.
+- `make test-pa29`: **321/403**, exit 2; [exact delta](../student.tests/pa29/evidence159/stage-delta.json) is four existing failures removed, none added.
 - `make test-report-through-pa28`: **4538/4538**, exit 0.
 - File audit: exit 0, four inherited substantial-header warnings.
-- Explicit controls: **34/34** new, **77/77**, **40/40**, **53/53** inherited;
-  inspection **10/10**, exact LowIR roundtrip and telemetry byte equality.
-- [Validation hashes](../student.tests/pa29/evidence158/validation.json) and
-  [performance158](performance158.md) preserve commands and all observations.
-  Cumulative paired compiler medians 1.0107–1.0335, audit-only 1.0075–1.0296;
-  common generated objects/executables are identical. New capability has linear
-  demand counters. Necessary storage-fact costs are disclosed; no speedup claimed.
-- New optional optimization work/growth budgets: **zero**. Historical blanket
-  15%/zero-growth targets are diagnostic under spec §9, not extra exit gates.
-  Measurements, mandated limits, correctness and coverage are preserved.
+- Explicit controls: **47/47** new, **34/34** audit158, two inherited trait
+  executables; native selection inspection, LowIR roundtrip and telemetry byte
+  equality pass. Repeating identical traits 100 → 10,000 times keeps query work
+  at 5, class-property work at 4, member-property work at 3 and body demand at 0.
+- [Validation hashes](../student.tests/pa29/evidence159/validation.json) and
+  [performance159](performance159.md) preserve frozen binaries/inputs, A/A and
+  ABBA observations, latency/RSS, checked runtime/text size, demand scaling and
+  timing spread. No speedup or optional optimization is claimed.
 
-Continue in cohesive owner groups spanning parser, semantics, lowering and
-validation. The earlier scalar and layout groups were sensible, but successive
-small publication/access/metadata fixes and repeated plan/evidence handoffs
-fragmented review unnecessarily. Close each ownership path before handing it off.
-Run `make test-pa29` and the root through report; full PA29 acceptance still
-requires all remaining failures to be resolved. This audit does not advance stages.
+New optional optimization work/growth budgets remain **zero**. Historical
+blanket 15%/zero-growth targets remain diagnostics under spec §9; all historical
+measurements and mandated limits are preserved. PA29 excludes runtime vector
+lowering; broad headers, general hosted execution, optimization/allocation and
+self-hosting retain their PA30–34 owners. Required PA29 behavior is not waived.
 
-## Active implementation159
+## Handoff ledger and boundary
 
-Entry HEAD `044d9627e7ed4f466426e1f0470c58646dc9b592`, clean, 317/403.
-Previous goal turn: progress (audit158 changed authoritative code, evidence and
-required-suite result). Stage/review markers above remain unchanged.
+| Increment | Result |
+|---|---|
+| `46fa99d2` | Registry, legacy/lifetime traits and shared reference binding; four course failures resolved. |
+| `8bc08195` | Selected-member structural caching, deleted-default triviality, inspection and performance workloads. |
+| `5d2b1657` | Source-prvalue destruction validation, with positive existing-glvalue controls; all required checks refreshed. |
 
-Owner group: legacy construction/copy/assignment and reference-temporary traits.
-The shared builtin registry feeds probes and parsing; canonical type queries
-feed existing special-member/exception and conversion recipes; constants flow
-through template substitution and typed lowering. No body demand merely to
-answer a trait. Inspect required member families/selected conversion only, cache
-by operation and canonical operands, TU lifetime; no whole-program search.
-Validate dependent/nondependent, cv/ref, access/deletion, exception and
-materialization cases, runtime constants, LowIR and telemetry; extend related
-trait failures as the same facts support them. Freeze entry/final binaries;
-measure common A/A and ABBA compile/RSS plus runtime/text, and new-demand
-scaling. Optional transform work/growth budget remains zero.
-
-The forward-declared std trait fixture remains an independent contract question
-recorded by audit158, not a reason to inject library-name semantics. All other
-groups above remain unfinished implementation. This is not a handoff boundary.
-
-First increment: shared registry plus six legacy member traits, three lifetime
-traits and ordered direct-reference conversion selection. Course 321/403 (four
-resolved, no new failures); explicit controls 41/41. Before handoff, close the
-identified selected-subobject triviality edge and rerun all required checks.
-
-Second increment: structural triviality is cached per selected special member,
-including cv/mutable subobject selection and deleted-default triviality; modern
-constructibility keeps independent usability checks. Final code controls 44/44,
-audit158 controls 34/34, selected native calls and 100→10,000 repeat-demand
-inspection pass. PA29 remains 321/403, PA1–28 4538/4538; file audit passes.
-Performance measurement and the final handoff ledger remain to be recorded.
+This handoff closes the trait/conversion ownership group, including its known
+correctness edges. Further failure reduction now requires the distinct atomic,
+extended-type/syntax, template/ABI or intrinsic models above, or independent
+resolution of retained contract questions. Those cannot be implemented by
+extending the established trait facts alone. The stage remains unfinished;
+Ralph's independent audit and eventual full through-PA29 report are still required
+before advancement. Stage base and last-reviewed markers are preserved.

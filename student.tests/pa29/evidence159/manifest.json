@@ -1,0 +1,101 @@
+{
+  "entry_commit": "044d9627e7ed4f466426e1f0470c58646dc9b592",
+  "code_commit": "5d2b1657cfd2efba4b45ac310ab66bf362b0a5f8",
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "machine": "x86_64",
+  "cpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           46 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  32\nOn-line CPU(s) list:                     0-31\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) CPU @ 2.20GHz\nCPU family:                              6\nModel:                                   79\nThread(s) per core:                      2\nCore(s) per socket:                      16\nSocket(s):                               1\nStepping:                                0\nBogoMIPS:                                4399.99\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm rdseed adx smap xsaveopt arat md_clear arch_capabilities\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               512 KiB (16 instances)\nL1i cache:                               512 KiB (16 instances)\nL2 cache:                                4 MiB (16 instances)\nL3 cache:                                55 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-31\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Mitigation; PTE Inversion\nVulnerability Mds:                       Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Meltdown:                  Mitigation; PTI\nVulnerability Mmio stale data:           Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Mitigation; IBRS\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; IBRS; IBPB conditional; STIBP conditional; RSB filling; PBRSB-eIBRS Not affected; BHI SW loop, KVM SW loop\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Vmscape:                   Not affected\n",
+  "host_compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "build_command": "make -C dev -j6 cppgm++ (incremental source rebuild -j3)",
+  "build_flags": "-std=gnu++11 -Wall -O3",
+  "measured_flags": [
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "performance_commands": [
+    "PERF_CPU=0 python3 student.tests/pa27/performance147_common.py /tmp/pa29-159/common /tmp/pa29-159/base /tmp/pa29-159/final",
+    "PERF_CPU=0 python3 student.tests/pa27/performance147_common.py /tmp/pa29-159/common-confirm /tmp/pa29-159/base /tmp/pa29-159/final",
+    "PERF_CPU=0 python3 student.tests/pa27/performance147_common.py /tmp/pa29-159/common-final /tmp/pa29-159/base /tmp/pa29-159/final2",
+    "PERF_CPU=0 python3 student.tests/pa27/performance147_common.py /tmp/pa29-159/common-final-confirm /tmp/pa29-159/base /tmp/pa29-159/final2",
+    "PERF_CPU=0 python3 student.tests/pa29/performance159.py /tmp/pa29-159/affected /tmp/pa29-159/base /tmp/pa29-159/final",
+    "PERF_CPU=0 python3 student.tests/pa29/performance159.py /tmp/pa29-159/affected-final /tmp/pa29-159/base /tmp/pa29-159/final2",
+    "PERF_CPU=0 python3 student.tests/pa29/performance159.py /tmp/pa29-159/affected-final-confirm /tmp/pa29-159/base /tmp/pa29-159/final2"
+  ],
+  "binaries": {
+    "A": {
+      "path": "/tmp/pa29-159/base",
+      "bytes": 3935752,
+      "sha256": "9ed4d6c3164faee5c4ba7f4478ca45a0cd318b28f051be5d5c88446b09dc1ff7"
+    },
+    "preliminary_B": {
+      "path": "/tmp/pa29-159/final",
+      "bytes": 3944808,
+      "sha256": "63b34bb8a028dc1bbd1d0b57ef86dc6db9c0ae5024c66072cc89f98e76d187f9"
+    },
+    "B": {
+      "path": "/tmp/pa29-159/final2",
+      "bytes": 3944808,
+      "sha256": "8ce2c5e6f4c4f5eb45ea49d86667f49f2a4155dd97eeeb32f5cf08cf1491ec33"
+    }
+  },
+  "files": {
+    "student.tests/pa29/evidence159/affected-first.json": {
+      "bytes": 315676,
+      "sha256": "ad33ea7c01556ef2cedaf21909ee91d33313dd74bdf91ac202a18dd9d1569a38"
+    },
+    "student.tests/pa29/evidence159/affected-performance.json": {
+      "bytes": 315733,
+      "sha256": "b4b10ba6aab1f697c506324a3c62803fb3b773b72db3aa2d0fa5de2d461bc61a"
+    },
+    "student.tests/pa29/evidence159/common-first.json": {
+      "bytes": 1460273,
+      "sha256": "de5ea630c36e3e612cbadd667387aa3ca8501f5415a6ea71a72de27c1686a7cd"
+    },
+    "student.tests/pa29/evidence159/common-performance.json": {
+      "bytes": 1460376,
+      "sha256": "c44545e5bb02b8736f693f0f3399b416e7ac2ee398ffadc4d779db0721fb383b"
+    },
+    "student.tests/pa29/evidence159/controls.json": {
+      "bytes": 25905,
+      "sha256": "f088449f84b2ff681f8b9f3dd1cd01d1badf08bb5aa599cfe15b79ced4c4dfd3"
+    },
+    "student.tests/pa29/evidence159/inherited-controls.json": {
+      "bytes": 33415,
+      "sha256": "b01d3d5b96e14c4e14e72a2eebe3512cf7d2538d363829a40604d0035805deec"
+    },
+    "student.tests/pa29/evidence159/inspection.json": {
+      "bytes": 25498,
+      "sha256": "4605119db067c1a0c3da33d4ebafc101d291c765a48ff3c1b94944af71463a8f"
+    },
+    "student.tests/pa29/evidence159/preliminary-affected.json": {
+      "bytes": 315679,
+      "sha256": "2500a15db1babbe8402ceb472e844cb129cddade0a75b8ea9d1ea930335beb0e"
+    },
+    "student.tests/pa29/evidence159/preliminary-common-confirm.json": {
+      "bytes": 1460341,
+      "sha256": "db8d9577680ef235bcb29ba42e207baea212aab57a15363f47e096860aa6ae29"
+    },
+    "student.tests/pa29/evidence159/preliminary-common.json": {
+      "bytes": 1460402,
+      "sha256": "052f05f9239f9b54de7366bbf88efc04d5546b173918675b8b25c12e74b4b456"
+    },
+    "student.tests/pa29/evidence159/remaining.json": {
+      "bytes": 35548,
+      "sha256": "ab2429d6e2dbdd8c88495452833f7f45df6048751d5b80033b1dc046815f4b7e"
+    },
+    "student.tests/pa29/evidence159/stage-delta.json": {
+      "bytes": 523,
+      "sha256": "25ba1f8fa0c8b3bc50a49fcdec97f4e8887ef722cb69b741811afdb75c2d7bb4"
+    },
+    "student.tests/pa29/evidence159/validation.json": {
+      "bytes": 2281,
+      "sha256": "aa92b253ed7db365c33377624bada475e0f84e8ffcc27e2fb12bfb24c7e0fa90"
+    }
+  },
+  "scripts": {
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "student.tests/pa29/performance159.py": "10e90f33144bdd840f47909afe27a3fc803013f27c531610915d355d12f7ba34",
+    "student.tests/pa29/controls159.py": "398e19b04d4d8ff26796f3c934bcc5d044da86e75d25f3f198fbcc87bd3184f4",
+    "student.tests/pa29/inspection159.py": "fbc3ac4664d8725a068946ac2fd8bd8e14dedde13558f62b4cebbd7413115d80"
+  }
+}
