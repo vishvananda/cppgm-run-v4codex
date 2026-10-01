@@ -198,8 +198,10 @@ void Selector::call(const lowir_model::Instruction& i)
                 f.scratch_bytes = 48;
                 emit(Op::Fpop,Type::F80,{fragment(dest,0)});
                 emit(Op::Fpop,Type::F80,{fragment(dest,16)});
-            } else if (i.type.vector() && i.type.bytes() >= 8 && i.type.bytes() <= 16) {
-                move(dest,Operand::r(xmm(0)),i.type);
+            } else if (i.type.vector() && i.type.bytes() >= 8 && !indirect_return(i.type)) {
+                auto chunk = i.type.bytes() <= 16 ? i.type : Type::vector(16,16);
+                for (unsigned offset = 0; offset < i.type.bytes(); offset += 16)
+                    move(fragment(dest,offset),Operand::r(xmm(offset/16)),chunk);
             } else if (!indirect_return(i.type)) {
                 move(fragment(dest,0),Operand::r(i.type.complex() ? xmm(0) : XR_RAX),abi_chunk_type(i.type,0));
                 if (i.type.bytes() > 8) move(fragment(dest,8),Operand::r(i.type.complex() ? xmm(1) : XR_RDX),abi_chunk_type(i.type,1));

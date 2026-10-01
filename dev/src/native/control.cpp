@@ -114,8 +114,10 @@ void Selector::control(const lowir_model::Instruction& i)
                 f.scratch_bytes = 48;
                 emit(Op::Fpush,Type::F80,{fragment(from,16)});
                 emit(Op::Fpush,Type::F80,{fragment(from,0)});
-            } else if (i.type.vector() && i.type.bytes() >= 8 && i.type.bytes() <= 16) {
-                move(Operand::r(xmm(0)),from,i.type);
+            } else if (i.type.vector() && i.type.bytes() >= 8 && !indirect_return(i.type)) {
+                auto chunk = i.type.bytes() <= 16 ? i.type : Type::vector(16,16);
+                for (unsigned offset = 0; offset < i.type.bytes(); offset += 16)
+                    move(Operand::r(xmm(offset/16)),fragment(from,offset),chunk);
             } else if (indirect_return(i.type)) {
                 move(Operand::r(XR_R10),indirect_result,Type::Ptr);
                 object_move(Operand::mem(XR_R10),from,i.type);

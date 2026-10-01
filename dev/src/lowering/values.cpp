@@ -7,7 +7,7 @@ IRType Procedural::type(TypeId id)
     const semantic::Type t = sem.types[id];
     switch (t.kind) {
     case TypeKind::BlockPointer: case TypeKind::Pointer: case TypeKind::LRef: case TypeKind::RRef: case TypeKind::Function: return IRType::Ptr;
-    case TypeKind::Vector: case TypeKind::ExtVector: return IRType::vector(sem.object_size(id),sem.object_alignment(id));
+    case TypeKind::Vector: case TypeKind::ExtVector: return IRType::vector(sem.object_size(id),sem.object_alignment(id),t.kind == TypeKind::ExtVector);
     case TypeKind::Array: return IRType::object(sem.object_size(id), sem.object_alignment(id));
     case TypeKind::MemberPointer: return sem.types[t.child].kind == TypeKind::Function ? IRType(IRType::I128) : IRType(IRType::I64);
     case TypeKind::Named:

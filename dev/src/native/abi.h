@@ -5,7 +5,7 @@ namespace native {
 // Ordinary PA24 objects use integer eightbytes; complex primitives retain
 // their floating classification. Failed multiword allocation consumes no registers.
 inline bool aggregate(Type t) { return t == Type::I128 || t.kind() == Type::Object; }
-inline bool indirect_return(Type t) { return t.kind() == Type::Object && !t.complex() && t.bytes() > 16; }
+inline bool indirect_return(Type t) { return t.kind() == Type::Object && !t.complex() && t.bytes() > (t.extended_vector() ? 64 : 16); }
 inline Type abi_chunk_type(Type t, unsigned part) {
     if (t.vector() && t.bytes() >= 8 && t.bytes() <= 16) return t;
     if (t.complex()) return Type::F64; // packed pair of floats, or one double

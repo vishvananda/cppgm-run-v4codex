@@ -55,15 +55,19 @@ Value Procedural::vector_operation(ETokenType op, Value a, Value b, TypeId resul
 Value Procedural::builtin_value(NodeId n)
 {
     auto node = ast[n]; auto fact = sem.expression_fact(n);
-    auto source = converted(node.first,sem.conversion_fact(fact.conversions));
     auto kind = ValueBuiltin(node.flags);
+    auto source = kind == ValueBuiltin::BitCast ? expression(node.first,true) :
+        converted(node.first,sem.conversion_fact(fact.conversions));
     if (kind == ValueBuiltin::BitCast) {
         Value object(Operand::slot(builder->add_slot(0,type(fact.type))),type(fact.type),fact.type,true);
-        auto slot = builder->add_slot(0,type(source.type));
-        Value stored(Operand::slot(slot),type(source.type),source.type,true);
-        store(source,stored);
+        if (type(source.type).scalar()) {
+            auto value = load(source);
+            auto t = sem.types.unqualified(source.type);
+            Value stored(Operand::slot(builder->add_slot(0,type(t))),type(t),t,true);
+            store(value,stored); source = stored;
+        } else source.address = true;
         Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(fact.type); copy.alignment = 1;
-        emit(copy,{address(stored).operand,address(object).operand}); return load(object);
+        emit(copy,{address(source).operand,address(object).operand}); return load(object);
     }
     auto t = sem.types[source.type]; auto count = t.kind == TypeKind::ExtVector ? t.bound : t.bound/sem.object_size(t.child);
     if (kind == ValueBuiltin::ReduceOr) {

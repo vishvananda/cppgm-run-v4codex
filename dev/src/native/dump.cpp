@@ -165,7 +165,11 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
             out << " : " << type_name(param.type.complex() ? Type::F64 : Type::I64) << '\n';
         }
     }
-    const char* result = f.result == Type() ? "void" : f.result == Type::F80 ? "st0" : f.result.floating() ? "xmm0" : "rax";
+    std::string result = f.result == Type() ? "void" : f.result == Type::F80 ? "st0" : f.result.floating() ? "xmm0" : "rax";
+    if (f.result.vector() && f.result.bytes() >= 8 && f.result.bytes() <= (f.result.extended_vector() ? 64u : 16u)) {
+        result = "xmm0";
+        for (unsigned offset = 16; offset < f.result.bytes(); offset += 16) result += ",xmm"+std::to_string(offset/16);
+    }
     if (f.result.complex()) result = f.result.component() == Type::F80 ? "st0,st1" : f.result.component() == Type::F64 ? "xmm0,xmm1" : "xmm0";
     out << "    return " << type_name(f.result) << " -> " << result << '\n';
     out << "  frame\n    stack_size " << f.stack_size << "\n    scratch_bytes " << f.scratch_bytes << "\n    frame_pointer " << (f.frame_pointer ? "keep" : "omit")

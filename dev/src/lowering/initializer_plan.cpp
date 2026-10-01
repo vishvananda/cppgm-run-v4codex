@@ -20,6 +20,16 @@ void Procedural::global_plan(std::uint32_t plan)
     auto action = sem.initializers[plan];
     auto target = sem.types[action.type];
     if (action.kind == InitKind::Constructor) { global_construction(action.source, action.type); return; }
+    if (semantic::vector_kind(target.kind) && sem.types[target.child].fundamental == FT_BOOL && action.kind == InitKind::Group) {
+        std::vector<unsigned char> bytes(sem.object_size(action.type),0);
+        for (auto child = action.first; child; child = sem.initializers[child].next) {
+            auto item = sem.initializers[child]; auto value = sem.static_value(item.source,item.type);
+            if (value.kind != semantic::StaticValue::Integer) throw std::logic_error("missing boolean vector initializer fact");
+            if (value.bits) for (std::uint64_t j = 0; j < item.count; ++j) bytes[(item.index+j)/8] |= 1u<<((item.index+j)%8);
+        }
+        for (auto byte : bytes) { DataItem item; item.kind = DataItem::Scalar; item.type = IRType::U8; item.value = Operand::integer(byte); p.data.push_back(item); }
+        return;
+    }
     if ((action.kind == InitKind::Scalar || action.kind == InitKind::Value) &&
         target.kind == TypeKind::MemberPointer && sem.types[target.child].kind == TypeKind::Function) {
         member_pointer_data(sem.static_value(action.source,action.type)); return;
@@ -103,8 +113,9 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
         zero_object(action.type,address(location));
         for (auto child = action.first; child; child = sem.initializers[child].next) {
             auto item = sem.initializers[child];
+            if (!item.source) continue; // The omitted suffix is already zero.
             for (std::uint64_t j = 0; j < item.count; ++j) {
-                auto value = item.source ? incoming(item.source) : initialization_value(0,item.type);
+                auto value = item.kind == InitKind::Converted ? converted(item.source,sem.conversion_fact(item.conversion)) : incoming(item.source);
                 vector_write(location,item.index+j,value);
             }
         }

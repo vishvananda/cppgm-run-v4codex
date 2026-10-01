@@ -47,9 +47,8 @@ public:
     Type(Kind k = Void) : code_(k) {}
     static Type object(std::uint64_t bytes, std::uint64_t alignment);
     static Type complex(Type component);
-    static Type vector(std::uint64_t bytes, std::uint64_t alignment) {
-        Type t = object(bytes,alignment); t.code_ |= std::uint64_t(1)<<56; return t;
-    }
+    static Type vector(std::uint64_t bytes, std::uint64_t alignment, bool extended = false);
+    bool extended_vector() const { return vector() && ((code_ >> 56) & 2); }
     bool vector() const { return kind() == Object && (code_ >> 56); }
     bool complex() const { return kind() == Object && ((code_ >> 48) & 255); }
     Type component() const { return Type(Kind(code_ >> 48)); }

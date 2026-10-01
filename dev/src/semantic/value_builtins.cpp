@@ -25,7 +25,12 @@ Expression Analyzer::builtin_value_expression(NodeId n, ScopeId s)
     Expression result;
     result.type = builtin_value_type(node.flags,node.detail ? type_id(node.detail,s) : 0,source.type);
     if (!result.type) throw std::runtime_error("invalid typed builtin operand");
-    record_conversion(result,node.first,conversion(node.first,types.unqualified(source.type)));
+    if (ValueBuiltin(node.flags) == ValueBuiltin::BitCast) {
+        // Inspect the representation of the operand itself: no array decay,
+        // converting constructor, or language copy is part of this operation.
+        Conversion c; c.target = source.type; c.rank = 0;
+        record_conversion(result,node.first,c); observe_scalar(node.first);
+    } else record_conversion(result,node.first,conversion(node.first,types.unqualified(source.type)));
     return result;
 }
 TypeId Analyzer::vector_binary_type(ETokenType op, TypeId a, TypeId b)
@@ -36,7 +41,7 @@ TypeId Analyzer::vector_binary_type(ETokenType op, TypeId a, TypeId b)
     if (op == OP_EQ || op == OP_NE || op == OP_LT || op == OP_GT || op == OP_LE || op == OP_GE) {
         if (fundamental(lane,FT_BOOL)) return 0;
         auto bytes = size(lane);
-        auto signed_lane = types.fundamental(bytes == 1 ? FT_SIGNED_CHAR : bytes == 2 ? FT_SHORT_INT : bytes == 4 ? FT_INT : FT_LONG_LONG_INT);
+        auto signed_lane = types.fundamental(bytes == 1 ? FT_SIGNED_CHAR : bytes == 2 ? FT_SHORT_INT : bytes == 4 ? FT_INT : bytes == 8 ? FT_LONG_INT : FT_INT128);
         return types.compound(types[a].kind,signed_lane,types[a].bound);
     }
     bool arithmetic_op = op == OP_PLUS || op == OP_MINUS || op == OP_STAR || op == OP_DIV;
@@ -57,8 +62,8 @@ Constant Analyzer::builtin_value_constant(unsigned operation, TypeId target, Con
         if (integral(source.type)) { auto value = integer_value(source); std::memcpy(bytes,&value,width); }
         else if (floating_type(source.type)) {
             auto value = floating_value(source);
-            if (fundamental(source.type,FT_FLOAT)) { float x = value; std::memcpy(bytes,&x,4); }
-            else if (fundamental(source.type,FT_DOUBLE)) { double x = value; std::memcpy(bytes,&x,8); }
+            if (fundamental(source.type,FT_FLOAT)) { float x = value; std::memcpy(bytes,&x,4); if (floating_signaling(source)) bytes[2] &= 0xbf; }
+            else if (fundamental(source.type,FT_DOUBLE)) { double x = value; std::memcpy(bytes,&x,8); if (floating_signaling(source)) bytes[6] &= 0xf7; }
             else return {};
         } else return {};
         if (integral(target)) {
@@ -66,8 +71,8 @@ Constant Analyzer::builtin_value_constant(unsigned operation, TypeId target, Con
             if (fundamental(target,FT_BOOL) && value > 1) return {};
             return integer_constant(target,value);
         }
-        if (fundamental(target,FT_FLOAT)) { float x; std::memcpy(&x,bytes,4); return floating_constant(target,x,true); }
-        if (fundamental(target,FT_DOUBLE)) { double x; std::memcpy(&x,bytes,8); return floating_constant(target,x,true); }
+        if (fundamental(target,FT_FLOAT)) { float x; std::uint32_t bits; std::memcpy(&x,bytes,4); std::memcpy(&bits,bytes,4); bool snan = (bits & 0x7fc00000u) == 0x7f800000u && (bits & 0x3fffffu); return floating_constant(target,x,true,snan); }
+        if (fundamental(target,FT_DOUBLE)) { double x; std::uint64_t bits; std::memcpy(&x,bytes,8); std::memcpy(&bits,bytes,8); bool snan = (bits & 0x7ff8000000000000ull) == 0x7ff0000000000000ull && (bits & 0x7ffffffffffffull); return floating_constant(target,x,true,snan); }
         return {};
     }
     auto lanes = vector_elements(source.type);

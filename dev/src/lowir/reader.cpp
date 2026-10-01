@@ -93,7 +93,7 @@ Type Reader::type()
     if (s == "c32" || s == "c64" || s == "c80") return Type::complex(s == "c32" ? Type::F32 : s == "c64" ? Type::F64 : Type::F80);
     if (s == "i128a8") return Type::integer128_align8();
     for (unsigned k = 0; k < sizeof(types)/sizeof(*types); ++k) if (s == types[k]) return Type(Type::Kind(k));
-    if (s.size() > 6 && (s.substr(0,4) == "obj<" || s.substr(0,4) == "vec<") && s.back() == '>') {
+    if (s.size() > 6 && (s.substr(0,4) == "obj<" || s.substr(0,4) == "vec<" || s.substr(0,4) == "evc<") && s.back() == '>') {
         auto x = s.find('x', 4);
         require(x != std::string::npos, "missing object alignment");
         auto number = [](const std::string& v) -> std::uint32_t {
@@ -104,9 +104,9 @@ Type Reader::type()
             return n;
         };
         auto bytes = number(s.substr(4,x-4)), alignment = number(s.substr(x+1,s.size()-x-2));
-        if (s[0] == 'v') {
-            require(bytes && !(bytes & (bytes-1)) && alignment == bytes,"invalid vector layout");
-            return Type::vector(bytes,alignment);
+        if (s[0] != 'o') {
+            require(bytes && !(bytes & (bytes-1)),"invalid vector layout");
+            return Type::vector(bytes,alignment,s[0] == 'e');
         }
         return Type::object(bytes,alignment);
     }

@@ -262,7 +262,7 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
         entities[object.backing].type = types.compound(TypeKind::Array,plan.backing_element,plan.call.argument_count);
         register_destruction(object.backing);
     }
-    if (!plan.direct_binding && (c.reference || class_value(t) || types[t].kind == TypeKind::Array)) {
+    if (!plan.direct_binding && (c.reference || class_value(t) || types[t].kind == TypeKind::Array || vector_kind(types[t].kind))) {
         object.temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,n ? facts[n].scope : plan.scope),0,n);
         entities[object.temporary].type = t; register_destruction(object.temporary);
     }

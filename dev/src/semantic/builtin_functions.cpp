@@ -142,7 +142,10 @@ void Analyzer::validate_intrinsic(EntityId e, const std::vector<NodeId>& args, S
 TypeQueryFact Analyzer::query_builtin_operand(const TypeQuery& q, const std::vector<TypeQueryFact>& children)
 {
     TypeQueryFact result;
-    if (q.kind == QueryKind::Typeof) {
+    if (q.kind == QueryKind::ValueBuiltin) {
+        result.expression.type = builtin_value_type(q.value,q.type,children[0].expression.type);
+        if (!result.expression.type) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+    } else if (q.kind == QueryKind::Typeof) {
         result.expression.type = children[0].expression.type;
         if (!result.expression.type && children[0].declared_type)
             result.expression.type = value_type(children[0].declared_type);

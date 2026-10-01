@@ -52,6 +52,9 @@ Value Procedural::expression(NodeId n, bool location)
     if (fact.form == semantic::ExpressionForm::ListValue) {
         auto c = sem.conversion_fact(fact.conversions);
         EntityId e = sem.list_objects[c.materialization].temporary;
+        if (semantic::vector_kind(sem.types[fact.type].kind)) {
+            auto value = list_conversion(c); value.address = location; return value;
+        }
         Value pointer = class_address(e,fact.type);
         list_conversion(c,pointer); activate_temporary(e);
         pointer.type = fact.type; pointer.address = true; return pointer;

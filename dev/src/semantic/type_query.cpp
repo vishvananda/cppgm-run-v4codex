@@ -607,11 +607,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         x.type = entities[x.entity].type; x.category = ValueCategory::Lvalue;
         r.declared_type = x.type; break;
     case QueryKind::IntegerPack: x.type = types.fundamental(FT_UNSIGNED_LONG_INT); break;
-    case QueryKind::ValueBuiltin:
-        x.type = builtin_value_type(q.value,q.type,children[0].expression.type);
-        if (!x.type) r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
-        break;
-    case QueryKind::VaArg: case QueryKind::Typeof: r = query_builtin_operand(q,children); break;
+    case QueryKind::ValueBuiltin: case QueryKind::VaArg: case QueryKind::Typeof: r = query_builtin_operand(q,children); break;
     case QueryKind::BuiltinTrait: r = query_builtin_trait(id,q); break;
     case QueryKind::Offsetof: r = query_offsetof(id,q,children); break;
     case QueryKind::List:

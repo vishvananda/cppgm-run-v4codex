@@ -175,7 +175,7 @@ NodeId Parser::primary()
         in.require("(");
         if (builtin_value == ValueBuiltin::BitCast) {
             auto target = type_id(); ast[result].detail = target; in.require(",");
-            ast.append(result,expression(2));
+            ast.append(result,expression());
         } else {
             ast.append(result,expression(2));
             if (builtin_value == ValueBuiltin::ConvertVector) {

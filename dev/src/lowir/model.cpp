@@ -49,6 +49,11 @@ Type Type::object(std::uint64_t bytes, std::uint64_t alignment)
     t.code_ |= std::uint64_t(bytes) << 8 | std::uint64_t(shift) << 40;
     return t;
 }
+Type Type::vector(std::uint64_t bytes, std::uint64_t alignment, bool extended)
+{
+    require(bytes && !(bytes & (bytes-1)),"invalid vector extent");
+    Type t = object(bytes,alignment); t.code_ |= std::uint64_t(extended ? 3 : 1)<<56; return t;
+}
 Type Type::complex(Type component)
 {
     require(component == F32 || component == F64 || component == F80,"invalid complex component");
