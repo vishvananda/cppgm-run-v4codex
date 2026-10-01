@@ -1,74 +1,59 @@
 # PA29 compact plan — implementation181
 
-Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `667edd800e4e5eb1b1ef92a3108da3bd96c51708`.
 Previous reviewed commit: `7139ceb5769eea12c6e2e00b54932f09d59c79b5`.
 Entry HEAD: `c0efbf2992a9e58dbaa2d1e7300496012eed5988`.
-Code tip: `f613c5549812dd306d6e7a97ead04c944283db22`.
-
-## Active group181
-
-Entry: **387/403**, 16 failures; previous turn made validated progress.
-Owner: canonical array extent and its layout/lifetime consumers. Separate a
-known zero bound from an absent bound in the interned type; propagate the fact
-through cv/signatures, substitution/deduction, initialization, size/alignment,
-ABI and zero-element lifecycle emission. Keep work proportional to type edges
-and actual elements, with no source replay or auxiliary lookup by spelling.
-Validate required member fixture, personal scalar/class/template/ABI controls,
-prior suites, file audit and four-dimensional A/A+ABBA evidence. Extend through
-related defects found along those consumers before handing off.
+Code tip: `0e47335f`.
 
 ## Design and spec alignment
 
-The cumulative pipeline remains streaming source → integrated semantic graph →
-typed LowIR → per-function MIR → direct ELF. This group completes static callable
-selection and mandatory inline preparation, extending through static subscripts,
-mixed member templates, surrogates, constants, receiver/default effects, typed
-ABI boundaries, phi edges, exceptional returns and bounded conservative fallback.
-Selected calls retain an evaluated receiver without an implicit-object parameter.
-The shared LowIR transform uses typed identity maps and per-callee return-region
-facts; it never replays frontend syntax or reconstructs semantics through names.
-[Handoff180](handoff180.md) records owners, data flow, complexity and repairs.
-[Audit178](audit.md) and the preceding [handoff179](handoff179.md) remain intact.
+The completed group is **GNU zero-extent array identity, layout and lifetime**.
+A canonical type distinguishes absent and zero bounds. Existing declaration,
+substitution, initialization, conversion and ABI owners consume that fact;
+production still constructs typed LowIR and direct ELF without text transport.
+Related fixes include immediate-context substitution failure, parenthesized
+parameter packs, static member definition bounds, zero-sized class effects,
+allocation element counts, explicit adapter parity and pre-encoding width limits.
+[Handoff181](handoff181.md) records ownership, data flow, complexity and boundaries.
+[Audit178](audit.md), [handoff180](handoff180.md) and all review markers remain intact.
 
 ## Validation and performance
 
-PA29 **385 → 387/403**: two original failures removed, **16 remain**, no new
-failures. PA1–28 **4538/4538**; through PA29 **4925/4941**. File audit passes
-with four inherited warnings. All 403 stage inputs and 1,707 contract/harness
-paths remain unchanged across entry and review. Personal controls pass **47**;
-inspection commands pass **251**. Exact commands, source binding and coverage
-are in [evidence180](../student.tests/pa29/evidence180/manifest.json).
+PA29 **387 → 388/403**: one original failure removed, **15 remain**, no new
+failures. PA1–28 **4538/4538**; through PA29 **4926/4941**. File audit passes
+with four inherited warnings. All 403 inputs and 1,707 contract/harness paths
+remain unchanged. **43** personal controls and **166** inspection commands pass.
+Final commands, source hashes and coverage are bound in the
+[evidence manifest](../student.tests/pa29/evidence181/manifest.json).
 
-[Performance180](performance180.md) reports all four dimensions at PA29/O0:
-**552 final** observations, **552 preliminary** observations preserved, A/A+ABBA
-for equivalent inputs and final-only scaling for newly accepted static calls.
-Common executable images are identical. Large straight-line and branching
-inline workloads improve runtime; compiler latency/RSS and floating-point text
-costs are disclosed. Optional optimization work/growth remains zero. Mandatory
-expansion reserves at most 262,144 units/caller and 4,194,304/program, depth 64;
-unsafe or over-budget calls remain valid calls. Actual work is bounded by
-reservation. Inherited blanket 15% and zero-growth targets remain diagnostic
-under spec §9; mandated limits, correctness and coverage are unchanged.
+[Performance181](performance181.md) records compiler latency/RSS and runtime/text
+size at PA29/O0: **440 final** observations and **440 preliminary** observations
+preserved, with A/A+ABBA on equivalent inputs and final-only zero-extent scaling.
+No optional optimization is introduced; equivalent benchmark text is unchanged.
+Array emission keeps its existing eight-element expansion bound; larger live
+arrays use counted loops.
+Canonical Type storage remains 40 bytes; each allocation fact adds one eight-byte
+logical element-count multiplier. Existing mandated limits remain enforced,
+including the corrected pre-narrowing object extent check. Inherited blanket
+15%/zero-growth targets remain diagnostic under spec §9.
 
-## Remaining groups and handoff
+## Remaining groups and handoff ledger
 
-The [16-case ledger](../student.tests/pa29/evidence180/remaining.json) distinguishes
-unfinished implementation **13** from independent contract questions **3**, all
-still counted failures: extended syntax/types/layout **12**, template demand/
-hosted ABI **3**, legacy trait **1**. Char-traits conversion remains implementation
-work. There is no reference correction, coverage reduction or waiver.
+The [15-case ledger](../student.tests/pa29/evidence181/remaining.json) separates
+**12 unfinished implementation** cases from **3 independent contract questions**,
+all still failures: extended syntax/types **11**, template demand/hosted ABI **3**,
+legacy trait **1**. No reference correction, coverage reduction or waiver occurs.
 
-The completed callable group is validated across declaration, deduction/query,
-constant/runtime, ABI, exception and budget boundaries. Remaining failures need
-separate extended numeric/vector/complex representations, layout, GNU constants,
-deduction-guide/coroutine syntax, library conversion or ABI policy; they do not
-consume the changed callable facts or inline remapping. That concrete ownership
-boundary makes further related fixes impractical in this group.
+The completed group covers scalar/class, constant/runtime, template, ABI,
+exception, alignment and storage-limit boundaries. The remaining failures need
+extended numeric/complex types, vector intrinsics, GNU expression/syntax forms,
+library conversion or ABI policy; they do not use the repaired zero-bound facts.
+That separate ownership is the concrete boundary for this incomplete handoff.
 
-Commits `639ebd7f`, `a613b21a`, `95d43769`, `f613c554` implement the group;
-`6574d6c8` records entry scope. The final record commit returns control for
-independent review. This handoff does not certify the whole assignment. Full
-stage/through-PA29 success and resolution of whole-stage audit findings remain
-required before advancement; preserved review markers are not advanced here.
+Commits `e0619de9`, `f69601ef`, `0e47335f` implement and validate the group;
+`42a2bac7` records entry scope. The final record commit returns control to Ralph
+for independent review. This handoff ends implementation181, not the assignment
+or its audit; full-stage success and whole-stage review remain prerequisites
+for advancement.

@@ -1,0 +1,30 @@
+{
+  "common/memory": {
+    "object_sha256": true,
+    "executable_sha256": true
+  },
+  "common/floating": {
+    "object_sha256": true,
+    "executable_sha256": true
+  },
+  "common/exceptions": {
+    "object_sha256": true,
+    "executable_sha256": true
+  },
+  "common/pruning": {
+    "object_sha256": true,
+    "executable_sha256": true
+  },
+  "owner/array1-400": {
+    "object_sha256": true,
+    "executable_sha256": true
+  },
+  "owner/array1-800": {
+    "object_sha256": true,
+    "executable_sha256": true
+  },
+  "owner/array1-1600": {
+    "object_sha256": true,
+    "executable_sha256": true
+  }
+}

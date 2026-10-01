@@ -1,0 +1,82 @@
+{
+  "entry": "c0efbf2992a9e58dbaa2d1e7300496012eed5988",
+  "last_reviewed": "667edd800e4e5eb1b1ef92a3108da3bd96c51708",
+  "code_tip": "0e47335f5fb1059fdb529b1a9d32de06dbed51d4",
+  "compiler_sha256": "904c8098efb5c370abfa0af1185b48dd774f539d77d5a697b47b674dd65f32a7",
+  "controls": 43,
+  "inspection_commands": 166,
+  "performance_observations": {
+    "common": 224,
+    "owner": 216
+  },
+  "preliminary_observations": {
+    "common": 224,
+    "owner": 216
+  },
+  "artifacts": {
+    "common-performance.json": "9c208b5a207d6cc0393086d2c798d8c92ee2e81c875422228dedb8b0cfdd999e",
+    "controls.json": "3ab4a22db8ae0869f6c97792a0a2a3c249ce71cb2ae5cc937a90fc3f62b921c7",
+    "coverage.json": "be9762b0a5a77733c22d1943edb3e662ccfb6c7ac7f518fab59b6483a4932921",
+    "entry.json": "674f46090735b8200edef6fb5897f18e2aa6f69398fe851bde8061a663a1ce8e",
+    "host-effects-observations.json": "224e7583fc44215f92d4c0cffae660310b2b224392308800efb61ec260110e27",
+    "image-equivalence.json": "3649c29454968fdb0f3cbef8e9921cdc6a08dee2563a10d3ea1c3fcd222d7320",
+    "inspection.json": "78cd4519b19c3221937ffb328dbebda67f554af9f2849b34edaecc0319e58c82",
+    "launchers.json": "f8dedb4611ba9efce1ee3b1e5b065214a9c366d4489cf2d609c008ec9e23d3d1",
+    "owner-performance.json": "c8c593c40c9cf3f2a565e0c01e979904c741278467272bd7ffe1a6e243619a6b",
+    "performance-summary.json": "ad8604198beabba2cdcb633d65012a2c0d3146752debd2f00161449e7144f93d",
+    "preliminary-common-performance.json": "23d2f660b75fb5ea38a90b06ae76ec4cdecf13ba2d800fbc7da0e46a649769ef",
+    "preliminary-owner-performance.json": "69aaf0c9c994a70fc51477ab7612ed835d20e5ee08a44fc53e738601b15052cd",
+    "record-sizes.json": "5d36a89983189265310ecc769b75f44373fdbdba154054de4bbf6bab77fa055f",
+    "remaining.json": "e93090a76f99b1fab6d1092a99a8130d51a3d0c707fcd993984e413ad4248558",
+    "scaling.json": "b42a7c20185aec490b6476082cc4cebd47fd90c165e4a5c899ff367fab8630ac",
+    "stage-delta.json": "210db1136dfa7f834f22ae7b8fd31d21dc031fbe74109d40690c7c484a568b28",
+    "validated-source.json": "9f047237e367afbd3cd39a28a6f2ec521527411ad12a18a5341aa9dded65f22b",
+    "validation.json": "a02f41dd715270f07a90af8941223d06755dbf303002193063134962c79691f3"
+  },
+  "scripts": {
+    "student.tests/pa29/test181.py": "73392c3d2e5a8ddd3cb064aa900f2dc987357ab725b513fec44fc868c5504be2",
+    "student.tests/pa29/inspect181.py": "3be84943a42256f8819f1d2da54d3ecb850dd10f047fd2462acf5513baeb1089",
+    "student.tests/pa29/performance181.py": "6744495806eb28fa7cc7dda75381fd79bb78c6773b05f17f593da0567c27cf0a",
+    "student.tests/pa29/validate181.py": "67c012fae270886ba0b311c02f863557cb92df8b2f441b68fe1dc244ac29a8ae",
+    "student.tests/pa29/analyze181.py": "4800c9e14940ddb295eb5c606163467e1dd50304eb7a07e38b75d59fb098b585",
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3"
+  },
+  "reproduction": [
+    [
+      "python3",
+      "student.tests/pa29/test181.py",
+      "OUT/controls-final",
+      "B"
+    ],
+    [
+      "python3",
+      "student.tests/pa29/inspect181.py",
+      "OUT/inspection-final"
+    ],
+    [
+      "python3",
+      "student.tests/pa29/validate181.py",
+      "student.tests/pa29/evidence181"
+    ],
+    [
+      "python3",
+      "student.tests/pa27/performance147_common.py",
+      "OUT/common",
+      "A",
+      "B"
+    ],
+    [
+      "python3",
+      "student.tests/pa29/performance181.py",
+      "OUT/owner",
+      "A",
+      "B"
+    ],
+    [
+      "python3",
+      "student.tests/pa29/analyze181.py",
+      "OUT",
+      "student.tests/pa29/evidence181"
+    ]
+  ]
+}

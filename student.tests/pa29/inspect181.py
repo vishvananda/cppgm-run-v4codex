@@ -34,8 +34,10 @@ for library,client in [(cc,'g++'),('g++',cc)]:
 for name,body in [('alignment','slot $x : obj<0x0>'),('copy','slot $x : obj<0x4>\n block ^entry:\n copyobj 0x4 $x, $x'),('zero','slot $x : obj<0x4>\n block ^entry:\n zeroinit 0x4 $x')]:
  if name=='alignment':body+='\n block ^entry:'
  path=out/(name+'.lowir');path.write_text('function @main() -> i32 {\n '+body+'\n return i32 0\n}\n')
- run([root/'dev/lowir',path],ok=False)
+ run([root/'dev/lowir',path,'-o',out/(name+'.invalid-output')],ok=False)
+ assert ('invalid object layout' if name=='alignment' else 'invalid storage span') in rows[-1]['stderr']
 path=out/'untyped-empty.lowir';path.write_text('global @empty = {}\n')
-run([root/'dev/lowir',path],ok=False)
+run([root/'dev/lowir',path,'-o',out/'untyped-empty.invalid-output'],ok=False)
+assert 'empty structured global' in rows[-1]['stderr']
 run([cc,'-c',src/'storage-width.limit.cc','-o',out/'storage-width.o'],ok=False)
 print(len(rows),'inspection commands passed')

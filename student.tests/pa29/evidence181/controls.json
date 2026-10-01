@@ -1,0 +1,3093 @@
+{
+  "compiler_sha256": "904c8098efb5c370abfa0af1185b48dd774f539d77d5a697b47b674dd65f32a7",
+  "cases": [
+    {
+      "name": "alignment",
+      "accepted": true,
+      "source_sha256": "afd03f05dfd5bba18649b5fbe69ac1bfce72bd2158224ddbd53bea9dac587b27",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/alignment.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/alignmentstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/alignmentstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/alignmentstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/alignmentstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/alignment.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/alignmenthost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/alignmenthost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/alignmenthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/alignmenthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/alignment.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/alignment.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "constant-copy",
+      "accepted": true,
+      "source_sha256": "9734d99d29d883a1df04acda55a9a53a1a7a79fe86cf0145f8c24752c2bd2d24",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/constant-copy.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/constant-copystudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/constant-copystudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/constant-copystudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/constant-copystudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/constant-copy.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/constant-copyhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/constant-copyhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/constant-copyhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/constant-copyhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/constant-copy.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/constant-copy.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "constexpr",
+      "accepted": true,
+      "source_sha256": "ba28db1456cb43754a63e4936137a6bc94d4f4052f66014d9952c3ac07c808b4",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/constexpr.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/constexprstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/constexprstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/constexprstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/constexprstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/constexpr.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/constexprhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/constexprhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/constexprhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/constexprhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/constexpr.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/constexpr.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "default-effects",
+      "accepted": true,
+      "source_sha256": "577373e218e43613ed20f94090388c1896f0e849853a1052425c4c85a11cb2ff",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/default-effects.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/default-effectsstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/default-effectsstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/default-effectsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/default-effectsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/default-effects.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/default-effectshost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/default-effectshost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/default-effectshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/default-effectshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/default-effects.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/default-effects.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "deleted-ctor.reject",
+      "accepted": false,
+      "source_sha256": "60495e2030afc94e279798f7f2ae6b428d9391501e53a41b38dabd7673dfdce5",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/deleted-ctor.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/deleted-ctor.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: previously failed semantic fact\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/deleted-ctor.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/deleted-ctor.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/deleted-ctor.reject.cpp:1:62: error: call to implicitly-deleted default constructor of 'S'\n    1 | struct E { E()=delete; }; struct S { E a[0]; }; int main(){S s;}\n      |                                                              ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/deleted-ctor.reject.cpp:1:40: note: default constructor of 'S' is implicitly deleted because field 'a' has a deleted default constructor\n    1 | struct E { E()=delete; }; struct S { E a[0]; }; int main(){S s;}\n      |                                        ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/deleted-ctor.reject.cpp:1:12: note: 'E' has been explicitly marked deleted here\n    1 | struct E { E()=delete; }; struct S { E a[0]; }; int main(){S s;}\n      |            ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "name": "deleted-dtor.reject",
+      "accepted": false,
+      "source_sha256": "b7333beb81407e1143f6aa087de32fb5383283c7b0e0f5ef7503030a0f62d94c",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/deleted-dtor.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/deleted-dtor.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: previously failed semantic fact\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/deleted-dtor.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/deleted-dtor.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/deleted-dtor.reject.cpp:1:63: error: call to implicitly-deleted default constructor of 'S'\n    1 | struct E { ~E()=delete; }; struct S { E a[0]; }; int main(){S s;}\n      |                                                               ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/deleted-dtor.reject.cpp:1:41: note: default constructor of 'S' is implicitly deleted because field 'a' has a deleted destructor\n    1 | struct E { ~E()=delete; }; struct S { E a[0]; }; int main(){S s;}\n      |                                         ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/deleted-dtor.reject.cpp:1:12: note: '~E' has been explicitly marked deleted here\n    1 | struct E { ~E()=delete; }; struct S { E a[0]; }; int main(){S s;}\n      |            ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "name": "dependent-negative.reject",
+      "accepted": false,
+      "source_sha256": "598d9d148ad41d025fe8e61849a08a20478beffff6de886b59308b43dbb5eff9",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/dependent-negative.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/dependent-negative.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid substituted declaration type\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/dependent-negative.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/dependent-negative.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/dependent-negative.reject.cpp:1:32: error: 'a' declared as an array with a negative size\n    1 | template<int N> struct S{int a[N];}; S<-1> s;\n      |                                ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/dependent-negative.reject.cpp:1:44: note: in instantiation of template class 'S<-1>' requested here\n    1 | template<int N> struct S{int a[N];}; S<-1> s;\n      |                                            ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "name": "element-incomplete.reject",
+      "accepted": false,
+      "source_sha256": "1a67dae52c7655c5cf706ee7b0f3a84ddaf03d3c238633455885e2e565ca1efc",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/element-incomplete.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/element-incomplete.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: semantic prerequisite unavailable\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/element-incomplete.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/element-incomplete.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/element-incomplete.reject.cpp:1:22: error: field has incomplete type 'E'\n    1 | struct E; struct S{E a[0];}; S s;\n      |                      ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/element-incomplete.reject.cpp:1:8: note: forward declaration of 'E'\n    1 | struct E; struct S{E a[0];}; S s;\n      |        ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "name": "empty-inner-new",
+      "accepted": true,
+      "source_sha256": "4628396184fa48a847ddd16e4ec0b4a6dc8c2af1494828020d2e026f900af9ce",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/empty-inner-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/empty-inner-newstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/empty-inner-newstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/empty-inner-newstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/empty-inner-newstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/empty-inner-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/empty-inner-newhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/empty-inner-newhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/empty-inner-newhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/empty-inner-newhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/empty-inner-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/empty-inner-new.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "empty-new",
+      "accepted": true,
+      "source_sha256": "4b68e2ec440048ba6fec07c1240f9bb0763ed732de0fc9ffee86818a15e0f042",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/empty-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/empty-newstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/empty-newstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/empty-newstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/empty-newstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/empty-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/empty-newhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/empty-newhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/empty-newhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/empty-newhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/empty-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/empty-new.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "excess.reject",
+      "accepted": false,
+      "source_sha256": "eb2dc237fbbce3a731f189cb901a0f282aa441437819c081e2e87088ddf1329f",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/excess.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/excess.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: excess aggregate initializer\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/excess.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/excess.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/excess.reject.cpp:1:30: error: excess elements in array initializer\n    1 | struct S { int a[0]; }; S s{{1}};\n      |                              ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "name": "fixed-zero-template",
+      "accepted": true,
+      "source_sha256": "c40dc8e1c2eb8340e8a005b8a91e41d7211d824aa27f03dde3e97f15e05eaccc",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/fixed-zero-template.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/fixed-zero-templatestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/fixed-zero-templatestudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/fixed-zero-templatestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/fixed-zero-templatestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/fixed-zero-template.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/fixed-zero-templatehost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/fixed-zero-templatehost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/fixed-zero-templatehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/fixed-zero-templatehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/fixed-zero-template.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/fixed-zero-template.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "identity",
+      "accepted": true,
+      "source_sha256": "01420d3dbcca108bd71009e72bc41ac8649f54d497fcad03f2c5a2d7102bf087",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/identity.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/identitystudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/identitystudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/identitystudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/identitystudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/identity.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/identityhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/identityhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/identityhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/identityhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/identity.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/identity.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "incomplete.reject",
+      "accepted": false,
+      "source_sha256": "0ec45fbaa5bfca80b92cd5063d7ebd324f367379f4d2c50f4680078806c55987",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/incomplete.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/incomplete.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: sizeof incomplete array\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/incomplete.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/incomplete.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/incomplete.reject.cpp:1:37: error: invalid application of 'sizeof' to an incomplete type 'int[]'\n    1 | extern int a[]; static_assert(sizeof(a) == 0, \"incomplete has no size\");\n      |                                     ^~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "name": "layout",
+      "accepted": true,
+      "source_sha256": "fa6ac495c4d82312fc049499bb90bd9cef1b30a0ad3e9717e2616bb6b2e13d27",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/layout.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/layoutstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/layoutstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/layoutstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/layoutstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/layout.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/layouthost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/layouthost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/layouthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/layouthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/layout.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/layout.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "lifetime",
+      "accepted": true,
+      "source_sha256": "1103d477d00aea682bb86021f656d30ef58c2abd2093cc18b81fce5077481126",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/lifetime.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/lifetimestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/lifetimestudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/lifetimestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/lifetimestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/lifetime.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/lifetimehost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/lifetimehost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/lifetimehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/lifetimehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/lifetime.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/lifetime.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "member-nested-pack",
+      "accepted": true,
+      "source_sha256": "85c9569ce08bbee9847afa5666016ef1fcdc8c89cebaf7bdf7a15f6fd71aa2c2",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/member-nested-pack.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/member-nested-packstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/member-nested-packstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/member-nested-packstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/member-nested-packstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/member-nested-pack.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/member-nested-packhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/member-nested-packhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/member-nested-packhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/member-nested-packhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/member-nested-pack.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/member-nested-pack.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "multidimensional-new",
+      "accepted": true,
+      "source_sha256": "93ce82c36e11c123980781f252e9ea8f6e168f1d4279d6ec9de5c6e239134d22",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/multidimensional-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/multidimensional-newstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/multidimensional-newstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/multidimensional-newstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/multidimensional-newstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/multidimensional-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/multidimensional-newhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/multidimensional-newhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/multidimensional-newhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/multidimensional-newhost"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/multidimensional-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/multidimensional-new.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_difference": "GNU host skips destructor effects for arrays of zero-size class; compiler preserves one call per element"
+    },
+    {
+      "name": "negative.reject",
+      "accepted": false,
+      "source_sha256": "472e61cdd57808d920cf2453b07b1ee2ab21a17f9880aced06d85283cd197d76",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/negative.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/negative.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: array bound must be a nonnegative integral constant\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/negative.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/negative.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/negative.reject.cpp:1:7: error: 'a' declared as an array with a negative size\n    1 | int a[-1];\n      |       ^~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "name": "nested-empty",
+      "accepted": true,
+      "source_sha256": "db9445d9944baf9f82511a3e7f45348be490090b426dd0ec2ac8418c609f6cbd",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/nested-empty.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/nested-emptystudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/nested-emptystudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/nested-emptystudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/nested-emptystudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/nested-empty.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/nested-emptyhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/nested-emptyhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/nested-emptyhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/nested-emptyhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/nested-empty.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/nested-empty.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "nested",
+      "accepted": true,
+      "source_sha256": "ca74396b43414cb9be55b4281c89e1285c394b29dff24592ad2526b8d119e9c2",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/nested.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/nestedstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/nestedstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/nestedstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/nestedstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/nested.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/nestedhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/nestedhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/nestedhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/nestedhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/nested.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/nested.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "overaligned",
+      "accepted": true,
+      "source_sha256": "6b93aaf3d21285383089a8b005702982ec18d71239167f67c1557823132d2dfa",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/overaligned.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/overalignedstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/overalignedstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/overalignedstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/overalignedstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/overaligned.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/overalignedhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/overalignedhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/overalignedhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/overalignedhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/overaligned.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/overaligned.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "pack-runtime",
+      "accepted": true,
+      "source_sha256": "1f2a1194c328e2106cfa931e1ed85df918d4fdd42b63a401da0535c1b0d81570",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/pack-runtime.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/pack-runtimestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/pack-runtimestudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/pack-runtimestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/pack-runtimestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/pack-runtime.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/pack-runtimehost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/pack-runtimehost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/pack-runtimehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/pack-runtimehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/pack-runtime.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/pack-runtime.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "query-width",
+      "accepted": true,
+      "source_sha256": "63f206ce8760d799bda2b0e820f431ce90ec9df9dc39aa094193b089512c484d",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/query-width.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/query-widthstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/query-widthstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/query-widthstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/query-widthstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/query-width.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/query-widthhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/query-widthhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/query-widthhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/query-widthhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/query-width.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/query-width.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "query",
+      "accepted": true,
+      "source_sha256": "300269d161730bab717dfb016a623000425c9bf1aa12e2ff3d07eb3f574ea942",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/query.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/querystudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/querystudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/querystudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/querystudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/query.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/queryhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/queryhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/queryhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/queryhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/query.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/query.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "range",
+      "accepted": true,
+      "source_sha256": "6590644ba54618b5480b92a56d233fccd30393471e8b5e815ca5919d9c4b7cc5",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/range.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/rangestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/rangestudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/rangestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/rangestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/range.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/rangehost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/rangehost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/rangehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/rangehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/range.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/range.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "redeclaration.reject",
+      "accepted": false,
+      "source_sha256": "077f549ab59d77c54a6dcfd55ebc4e3a007a7ff3b46d3d9f79fc63f3cdac67bf",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/redeclaration.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/redeclaration.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: incompatible redeclaration\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/redeclaration.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/redeclaration.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/redeclaration.reject.cpp:1:22: error: redefinition of 'a' with a different type: 'int[1]' vs 'int[0]'\n    1 | extern int a[0]; int a[1];\n      |                      ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/redeclaration.reject.cpp:1:12: note: previous declaration is here\n    1 | extern int a[0]; int a[1];\n      |            ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "name": "sfinae-alias",
+      "accepted": true,
+      "source_sha256": "38e99ba11c96c940dcc872b30af00a1e8f74e4d9b300cbdd64917e125928af54",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/sfinae-alias.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinae-aliasstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/sfinae-aliasstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinae-aliasstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/sfinae-aliasstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/sfinae-alias.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinae-aliashost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/sfinae-aliashost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinae-aliashost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/sfinae-aliashost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/sfinae-alias.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinae-alias.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "sfinae-pack",
+      "accepted": true,
+      "source_sha256": "6e59b72b4f44787bcc364524fd71da48233a590fa3b2e510e896228c4f68a3eb",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/sfinae-pack.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinae-packstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/sfinae-packstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinae-packstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/sfinae-packstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/sfinae-pack.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinae-packhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/sfinae-packhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinae-packhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/sfinae-packhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/sfinae-pack.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinae-pack.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "sfinae",
+      "accepted": true,
+      "source_sha256": "0b0ee4b525db5ad9451458a3e9cd12e5eedc12a8f4f9cde4995a17aa09456259",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/sfinae.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinaestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/sfinaestudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinaestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/sfinaestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/sfinae.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinaehost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/sfinaehost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinaehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/sfinaehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/sfinae.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/sfinae.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "static-conflict.reject",
+      "accepted": false,
+      "source_sha256": "0a62c74554858f8bc53a1fd978c6ed573b9041e0868d4080ec67af0c8afa1f57",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/static-conflict.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/static-conflict.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: conflicting static array member bounds\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/static-conflict.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/static-conflict.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/static-conflict.reject.cpp:2:29: error: redefinition of 'a' with a different type: 'int[1]' vs 'int[0]'\n    2 | template<class T> int S<T>::a[1];\n      |                             ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/static-conflict.reject.cpp:1:41: note: previous declaration is here\n    1 | template<class T> struct S { static int a[0]; };\n      |                                         ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "name": "static-template",
+      "accepted": true,
+      "source_sha256": "d86751a4e46b1e2aa33c27446403eda20546fabcac11a4a296ec3307697a7659",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/static-template.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/static-templatestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/static-templatestudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/static-templatestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/static-templatestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/static-template.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/static-templatehost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/static-template.cpp:7:27: warning: comparison between two arrays compare their addresses and will be deprecated in c++20; to compare array addresses, use unary '+' to decay operands to pointers [-Warray-compare]\n    7 | int main(){return A<0>::a != A<0>::a || B<0>::a != B<0>::a;}\n      |                   ~~~~~~~ ^  ~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/static-template.cpp:7:27: warning: self-comparison always evaluates to false [-Wtautological-compare]\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/static-template.cpp:7:49: warning: comparison between two arrays compare their addresses and will be deprecated in c++20; to compare array addresses, use unary '+' to decay operands to pointers [-Warray-compare]\n    7 | int main(){return A<0>::a != A<0>::a || B<0>::a != B<0>::a;}\n      |                                         ~~~~~~~ ^  ~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/static-template.cpp:7:49: warning: self-comparison always evaluates to false [-Wtautological-compare]\n4 warnings generated.\n"
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/static-templatehost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/static-templatehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/static-templatehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/static-template.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/static-template.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "string.reject",
+      "accepted": false,
+      "source_sha256": "50db880a76039bd286fbd8d358c5256b2c51a5ea2b10a559446ed86431667af9",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/string.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/string.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: string exceeds array bound\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/string.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/string.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/string.reject.cpp:1:11: error: initializer-string for char array is too long, array size is 0 but initializer has size 1 (including the null terminating character)\n    1 | char a[0]=\"\";\n      |           ^~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "name": "template",
+      "accepted": true,
+      "source_sha256": "300bc4adf72af7489482b9b41145b99dbbe730612f419eb8534364a863abeeef",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/template.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/templatestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/templatestudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/templatestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/templatestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/template.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/templatehost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/templatehost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/templatehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/templatehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/template.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/template.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "traits",
+      "accepted": true,
+      "source_sha256": "c75ea3fec805a56bb029c70afb1c3a8a9873cc5a7e97c030f9e57f6ed85a0268",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/traits.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/traitsstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/traitsstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/traitsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/traitsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/traits.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/traitshost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/traitshost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/traitshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/traitshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/traits.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/traits.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "undefined",
+      "accepted": true,
+      "source_sha256": "b1b18e371344f9360989e02c1d1fcc80c393d91747e6829c394370696f3543ee",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/undefined.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/undefinedstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/undefinedstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/undefinedstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/undefinedstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/undefined.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/undefinedhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/undefinedhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/undefinedhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/undefinedhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/undefined.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/undefined.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "unknown-reference.reject",
+      "accepted": false,
+      "source_sha256": "8106915bfe9eca1b5ab0dd5c20df58a1592281b14d2be2817c7a8685d2a0480a",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/unknown-reference.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/unknown-reference.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: no viable function\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/unknown-reference.reject.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/unknown-reference.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/unknown-reference.reject.cpp:1:48: error: no matching function for call to 'f'\n    1 | void f(int (&)[0]); extern int a[]; void g() { f(a); }\n      |                                                ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/unknown-reference.reject.cpp:1:6: note: candidate function not viable: cannot convert argument of incomplete type 'int[]' to 'int (&)[0]' for 1st argument\n    1 | void f(int (&)[0]); extern int a[]; void g() { f(a); }\n      |      ^ ~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "name": "zero-ctor-dynamic",
+      "accepted": true,
+      "source_sha256": "36a3d1f50135e285f92b7bc1e7b13ed1a0c069f128d4122d30843d20d36fa34b",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-ctor-dynamic.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-dynamicstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/zero-ctor-dynamicstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-dynamicstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/zero-ctor-dynamicstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-ctor-dynamic.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-dynamichost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/zero-ctor-dynamichost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-dynamichost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/zero-ctor-dynamichost"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-ctor-dynamic.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-dynamic.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_difference": "GNU host skips destructor effects for arrays of zero-size class; compiler preserves one call per element"
+    },
+    {
+      "name": "zero-ctor-new",
+      "accepted": true,
+      "source_sha256": "0d5ddd9370fbf40757c6e99e37007eab28101195e31375c0dd6643d2573ee7d4",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-ctor-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-newstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/zero-ctor-newstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-newstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/zero-ctor-newstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-ctor-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-newhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/zero-ctor-newhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-newhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/zero-ctor-newhost"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-ctor-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-new.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_difference": "GNU host skips destructor effects for arrays of zero-size class; compiler preserves one call per element"
+    },
+    {
+      "name": "zero-ctor-unwind",
+      "accepted": true,
+      "source_sha256": "181be982656222c68d62c74bd7007ab181248356c015ff276760d1730a6146d8",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-ctor-unwind.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-unwindstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/zero-ctor-unwindstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-unwindstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/zero-ctor-unwindstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-ctor-unwind.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-unwindhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/zero-ctor-unwindhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-unwindhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/zero-ctor-unwindhost"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-ctor-unwind.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor-unwind.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_difference": "GNU host skips destructor effects for arrays of zero-size class; compiler preserves one call per element"
+    },
+    {
+      "name": "zero-ctor",
+      "accepted": true,
+      "source_sha256": "1eda10227455a736e2fe69fe6fed7cd988cfa3a034901a26e3aaf1f4ee699e84",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-ctor.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctorstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/zero-ctorstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctorstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/zero-ctorstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-ctor.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctorhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/zero-ctorhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctorhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/zero-ctorhost"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-ctor.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-ctor.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_difference": "GNU host skips destructor effects for arrays of zero-size class; compiler preserves one call per element"
+    },
+    {
+      "name": "zero-new",
+      "accepted": true,
+      "source_sha256": "8c7e7cad036f70407ba151bf345651e5c169497a9400ad5ce95da1e57cd47163",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-newstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/zero-newstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-newstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/zero-newstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-newhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/zero-newhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-newhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/zero-newhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-new.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-new.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "name": "zero-parameter",
+      "accepted": true,
+      "source_sha256": "4c316d05b174ae31f899524e1d6679d2637ee72e38b9e0b91239838f5f7ec2fd",
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-parameter.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-parameterstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/zero-parameterstudent.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-parameterstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/zero-parameterstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=gnu++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-parameter.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-parameterhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-181/controls-final/zero-parameterhost.o",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-parameterhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-181/controls-final/zero-parameterhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source181/zero-parameter.cpp",
+            "-o",
+            "/tmp/pa29-181/controls-final/zero-parameter.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    }
+  ]
+}
