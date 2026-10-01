@@ -51,7 +51,7 @@ for n in [256,1024,4096]:
      r['runs'].append(dict(workload=name,mode=mode,block=block,label=label,**measured(args)));save()
    rows=[v for v in r['runs'] if v['workload']==name and v['mode']==mode];summary={}
    for label in labels:
-    values=[v for v in rows if v['label']==label]
+    values=[v for v in rows if v['label']==label and (family!='repeated' or v['block'])]
     summary[label]=dict(median_s=statistics.median(v['wall_s'] for v in values),range_s=[min(v['wall_s'] for v in values),max(v['wall_s'] for v in values)],peak_rss_kib=max(v['peak_rss_kib'] for v in values))
    if family=='repeated':
     ratios=[statistics.mean(v['wall_s'] for v in rows if v['block']==b and v['label']=='B')/statistics.mean(v['wall_s'] for v in rows if v['block']==b and v['label']=='A') for b in range(1,7)]
