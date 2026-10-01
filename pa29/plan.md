@@ -1,6 +1,6 @@
-# PA29 compact plan — implementation188
+# PA29 compact plan — implementation189 (in progress)
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `52070178897f5894edaf2f35d03a734b781979d4`.
 Last reviewed commit: `2df00585bd10d4e2e068934394dffc8adb0a47ed`.
@@ -8,6 +8,29 @@ Implementation188 entry: `c1caa0fc6b2985a633c4db587097ac5c08c30c75`, clean,
 394/403 (nine failures). These stage-base and review markers are unchanged.
 The preceding goal turn made verified progress: its committed complex owner and
 validation fixed two original failures. Entry inspection found no live work.
+
+## Implementation189 entry and working groups
+
+Entry HEAD: `54ddacb1ced906e692ea94bde5110b0757e1b2af`, clean, **395/403**
+(eight failures). Stage base and Last reviewed commit above remain unchanged.
+Previous goal turn: **progress**, verified by implementation188 source, evidence
+and failure reduction; no compiler/test process remains live at entry.
+
+Current owner: ordinary template definition/member demand and source-defined
+trait results. Resolve three apparent erroneous success references using reduced
+inputs and cited C++11/contract proof; check real primary definitions, explicit
+specializations, unused member bodies, substitution and constant/runtime results.
+Data flow: source declaration identity → specialization environment → member
+lookup/initializer fact → typed LowIR → ELF. Work must follow demanded facts and
+indexed dependencies, with TU-owned identity/cache lifetimes; no library-name
+recognition, synthesized definitions or global retry is acceptable.
+
+Validation: explicit positive/negative controls and source-to-object inspections;
+frozen entry/final compiler evidence under spec §9 if source changes; all PA29
+fixtures, earlier stages and file audit. Float/half and vector representation
+remain separate unfinished owners; nested ABI tag remains independent review.
+This working scope is not a handoff boundary. Extend related fixes as evidence
+requires; preserve all prior review/evidence markers and coverage.
 
 ## Design/spec alignment
 
