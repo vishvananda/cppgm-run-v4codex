@@ -1,0 +1,28 @@
+{
+  "entry_commit": "2b7a513297b2e9719fcd5686d3c1c97ee7565b13",
+  "code_commit": "1b19e9ac",
+  "artifacts": "/home/vishvananda/work/private/v4codex/artifacts/implementation176",
+  "binaries": {
+    "entry": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/implementation176/entry",
+      "bytes": 4205512,
+      "sha256": "3305fd803dccd1ebf63ec54e8ed3f7cf20b97ed1ececebb8e866858b4027bb0f"
+    },
+    "final": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/implementation176/final",
+      "bytes": 4222984,
+      "sha256": "9d012b4a039a5e3eea6a3e355a22a850b613b085791e6a281a7272d33552c73e"
+    }
+  },
+  "scripts": {
+    "student.tests/pa29/test176.py": "b2b415cb66e982a777f3b6ba807d682e023f4b5046e6770ecd37ddbf0146a730",
+    "student.tests/pa29/inspect176.py": "c5ed880af7f214e1c91a4f1ffeb89c1193c5a4db52a2005db464e594ba85518d",
+    "student.tests/pa29/validate176.py": "4d3addd15632e893f400521c6920e83ecdaa674099a3e209951ca22d28245981",
+    "student.tests/pa29/performance176.py": "a600e2370ac2c69ccc23d9c1142c72621b1ebd944aeb246bc6d061fa9513f8b8",
+    "student.tests/pa29/report176.py": "f11b6bd4ad1eb6d88256108461257690ade7059db343d57d6fa2c607e7065f68",
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3"
+  },
+  "controls": "9d012b4a039a5e3eea6a3e355a22a850b613b085791e6a281a7272d33552c73e",
+  "inspection": "9d012b4a039a5e3eea6a3e355a22a850b613b085791e6a281a7272d33552c73e",
+  "preliminary_validation": "/home/vishvananda/work/private/v4codex/artifacts/implementation176/preliminary/validation/validation.json"
+}

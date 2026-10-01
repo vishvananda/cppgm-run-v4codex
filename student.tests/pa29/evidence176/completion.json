@@ -1,0 +1,16 @@
+{
+  "completed_group": "Hosted declaration identity, exclusion, inline storage, demand and lifetime ABI",
+  "group_design": "pa29/implementation176.md",
+  "stage_scoped_performance": "pa29/performance176.md",
+  "prior": "4538/4538",
+  "current": "380/403",
+  "progress": "25 -> 23 failures; no new failure; unchanged 403 tests and 1707 contract paths",
+  "file_audit": "pass; 4 inherited warnings",
+  "controls": "25 pass",
+  "inspection": "48 commands pass",
+  "review_markers": "preserved verbatim",
+  "boundary": "pa29/plan.md; independent review and 23 remaining failures remain open",
+  "references": "unchanged",
+  "source_code_commit": "1b19e9ac",
+  "compiler_sha256": "9d012b4a039a5e3eea6a3e355a22a850b613b085791e6a281a7272d33552c73e"
+}

@@ -1,95 +1,85 @@
-# PA29 compact plan — implementation176 active
+# PA29 compact plan — implementation176 handoff
 
-Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `221d6d0e4930da05db2913bdf5f50d808f89c744`.
 Audit entry: `914e1a0a07e40884c91c0b967b0421eea9ef0d48`.
 Last reviewed commit: `7139ceb5769eea12c6e2e00b54932f09d59c79b5`.
 Implementation176 entry: `2b7a513297b2e9719fcd5686d3c1c97ee7565b13`.
-Implementation175 entry: `235ffa3947d7921a1c34c66198f590df5aa77de2`.
-Implementation code: `3edfe15e`, `393b19cc`, `7bb44553`, `704538c1`.
+Implementation code: `207743ae`, `61756cf8`, `1b19e9ac`.
 
 ## Design/spec alignment and completed group
 
-[Implementation175](implementation175.md) completes source-invocation intrinsics:
-FILE/LINE/FUNCTION/COLUMN, direct and qualified calls, macro locations, constexpr
-and runtime uses, nested/default arguments, constructor/member initializers,
-implicit objects/arrays/statics/new, and query/address diagnostics. Immutable
-source sites and conversion-use markers flow into both evaluators. Complete
-query keys include invocation/evaluation context and per-query revision. Parsed
-regions and checked default recipes remain shared; no grammar replay, semantic
-cloning, textual transport or lowering-time overload resolution was added.
+[Implementation176](implementation176.md) completes hosted declaration identity
+and emission: explicit-instantiation exclusion for functions/static data/nested
+classes, direct-member overrides, late definition attributes, and inline-variable
+identity across TUs. Related work extends through static members, variable
+templates, scalar TLS, dynamic initialization, reference-temporary identity and
+ordered destruction, including mixed host/student objects.
 
-Sites and lexical ancestors use indexed identities. Work follows actual nodes,
-queries and invocation edges; lowering follows emitted operations. Required string
-objects have one emission identity per interned content and are emitted only when
-a runtime address is consumed. Evaluated character reads and line-only calls emit
-none. TU records and per-evaluation scratch retain explicit release boundaries.
+Syntax attributes flow into canonical declaration facts and indexed pattern
+edges. Demand consumes those facts; typed LowIR/ABI records drive weak ELF data,
+guards and support objects. Class completion retains inline member initializer
+recipes. Value/storage/type demand computes each required initializer once,
+including deferred array-bound deduction. Constant-only queries emit no storage.
+No grammar replay, semantic cloning, text transport, global retry or new optimizer
+pass was added. Work follows source declarations, lexical/pattern edges, demanded
+facts and emitted operations; all records retain TU/function release boundaries.
 
 ## Validation and performance
 
-PA29 **378/403**: **26 → 25 failures**, exactly one fixed course fixture and no
-new failures. PA1–28 **4538/4538**; through PA29 **4916/4941**. All **403** inputs
-and **1,707** contract/harness paths remain unchanged. **17** focused controls and
-**37** inspection commands plus assertions pass. File audit passes with four
-inherited header warnings. [Evidence](../student.tests/pa29/evidence175/validation.json)
-includes commands, binary/log hashes, coverage and the exact failure delta.
+PA29 **380/403**: **25 → 23 failures**, two existing course fixtures fixed, no new
+failures. PA1–28 **4538/4538**; through PA29 **4918/4941**. All **403** course inputs
+and **1,707** contract/harness paths are unchanged. **25** focused controls and
+**48** inspection commands plus symbol/demand/telemetry assertions pass. File
+audit passes with the same four inherited header warnings.
+[Evidence](../student.tests/pa29/evidence176/validation.json) records commands,
+statuses, hashes and the exact delta; [coverage](../student.tests/pa29/evidence176/coverage.json)
+checks every tracked contract path against entry.
 
-[Performance175](performance175.md) applies spec §9 to **PA29/O0**. Frozen A/A+ABBA
-compiler latency/RSS and checked runtime/text measurements cover the common
-frontend/loop/memory/floating/exception workloads. Affected 600/1200/2400-call
-inputs provide required-semantics scaling and live runtime checks. Preliminary
-measurements are retained. No optional transform or speedup is claimed; optional
-optimization work/growth budget is zero. Inherited blanket 15%/zero-growth targets
-remain diagnostic rather than extra exit gates. Mandated evaluator/generator,
-native capacity and course timeout limits, correctness and coverage are preserved.
-Higher optimization, heavier hosted runtime and self-hosting remain PA30–34 work.
+[Performance176](performance176.md) applies spec §9 to **PA29/O0**: frozen A/A and
+six ABBA blocks measure compiler latency/RSS and checked runtime/text on four
+inherited workloads (224 samples). Executable text is unchanged; paired median
+compiler ratios are 0.9948–1.0154, runtime ratios 0.9903–1.0117, and peak compiler
+RSS grows at most 1.64%. Affected 600/1200/2400-specialization inputs retain 48
+samples with checked runtime and linear demand/IR/text counters. The 2400-function
+O0 runtime slowdown is disclosed. Entry rejects the affected semantics, so no
+invalid affected speedup ratio is claimed. Optional transform work/growth budgets
+remain zero. Historical blanket 15%/zero-growth targets remain diagnostic;
+mandated capacities/timeouts, correctness and coverage are preserved.
 
 ## Remaining implementation and independent review
 
-The [remaining ledger](../student.tests/pa29/evidence175/remaining.json) retains
-extended syntax/types/layout **17**, template demand/hosted ABI **7**, and legacy
-trait **1**. Examples include numeric representations, structured bindings,
-conditional explicit/control flow, deduction guides, zero-length arrays, static
-receivers and hosted emission. Through-PA29 success is required before PA30.
+The [remaining ledger](../student.tests/pa29/evidence176/remaining.json) retains
+extended syntax/types/layout **17**, template demand/hosted ABI **5**, and legacy
+trait **1**. Numeric/complex representations, decomposition and control-flow
+extensions, deduction guides, zero-length arrays, static receivers, char-traits
+conversion shims and required force-inlining remain unfinished implementation.
+Through-PA29 success is required before PA30.
 
-[Audit174](audit.md) and its [performance evidence](performance174.md) remain the
-last independent review. [Audit170](audit170.md) preserves the char-traits,
-alignment/dependent-offset/convertible-index reducers and two independent
-contract questions: nothrow default-construction shorthand and nothrow-invocable
-cache default. Both remain counted failures; neither is waived. The char-traits
-case remains unfinished implementation. The new code still requires independent
-review; this handoff does not certify the whole stage.
+[Audit174](audit.md) remains the last independent review. [Audit170](audit170.md)
+retains the char-traits/alignment/dependent-offset/convertible-index reducers and
+the unresolved nothrow-default-construction and nothrow-invocable contract
+questions. Implementation176 adds a reduced nested-member ABI-tag question:
+GCC and this compiler retain the tag, Clang drops it, and the unchanged fixture
+expects suppression. C++11 does not settle this extension encoding. All three
+contract questions remain counted failures, without correction or waiver.
+The new implementation also requires independent review; this handoff does not
+certify whole-stage architecture, performance or correctness.
 
 ## Handoff ledger and boundary
 
-The previous goal turn was progress (committed audit174), with no live process to
-resume. Implementation175 extended the initial intrinsic fix through implicit
-construction, invocation-sensitive caches, lazy support-string emission and
-deferred-definition demand. The pending165 source-invocation reducer is resolved.
-No known required defect remains in this completed group. Other failures require
-new numeric/decomposition representations, declaration/template ABI mechanisms,
-or a forced-inline transform; the current pipeline only retains that attribute.
-Those owners cannot be repaired by further extending source-invocation facts.
-This concrete ownership boundary ends the implementation handoff. Stage base and
-Last reviewed commit are preserved; mandatory independent review is outstanding.
+The preceding goal turn was progress: committed and validated implementation175.
+No live process required resuming at entry. This turn completed declaration
+exclusion and inline storage, then extended the same ownership through lazy
+initializers, omitted array bounds, shared lifetime-extended temporaries and host
+interop after focused controls exposed those related defects.
 
-## Implementation176 work ledger
-
-Entry: clean HEAD above, PA29 378/403 (25 failures). Previous goal turn was
-progress: implementation175 committed a validated source-invocation group. No
-live compiler/build process remains. Stage base and Last reviewed are preserved.
-
-Initial related group: hosted declaration identity and emission. Owners are
-syntax native attributes → canonical semantic entities and explicit-instantiation
-demand → typed symbol/lifetime metadata → ELF/COMDAT. Retain inline-variable and
-excluded-member facts at declaration; reuse them by identity during demand and
-emission. Investigate the nested out-of-class member's ABI-tag expectation
-before changing correct inherited naming. Work must follow declaration and
-demand edges (average O(1) indexed facts, linear emitted IR); no grammar replay,
-text keys, global retries or new optimization pass. Validate ordinary/templated
-declarations, two-TU address identity, unused/used excluded members, and symbol
-inspection; freeze entry/final latency/RSS and checked runtime/text evidence.
-
-Remaining implementation and independent review from the preceding ledger remain
-active and unwaived. Final boundary and evidence will replace this active entry.
+No known required PA29 defect remains in this completed group. The remaining
+implementation needs new syntax/numeric representations, overload/trait rules or
+an actual force-inline transform; it cannot be repaired by further extending
+these declaration/storage facts. The nested ABI-tag discrepancy needs independent
+contract resolution, not a source-specific naming exception. General nontrivial
+hosted TLS lifetime work remains later hosted-runtime scope. These ownership and
+contract boundaries end this implementation handoff. Stage base and Last reviewed
+markers are preserved; independent review and whole-stage completion remain open.

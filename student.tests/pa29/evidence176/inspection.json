@@ -1,0 +1,594 @@
+{
+  "compiler_sha256": "9d012b4a039a5e3eea6a3e355a22a850b613b085791e6a281a7272d33552c73e",
+  "rows": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/exclusion.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/exclusion.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "{\"tokens\":208,\"max_pending\":64,\"node_growths\":8,\"delimiter_work\":208,\"asm_source_statements\":0,\"asm_source_instructions\":0,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_capture_patterns\":0,\"semantic_capture_candidates\":0,\"semantic_closure_adapters\":0,\"semantic_ms\":1.02532,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":456,\"semantic_fact_records\":128,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":22592,\"semantic_template_declaration_work\":10,\"semantic_declaration_publications\":15,\"semantic_dependence_work\":14,\"semantic_specializations\":2,\"semantic_type_substitution_work\":9,\"semantic_type_substitution_hits\":0,\"semantic_type_substitution_records\":1,\"semantic_substitution_frames\":6,\"semantic_template_type_work\":9,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":20,\"semantic_template_signature_work\":7,\"semantic_template_signature_uses\":7,\"semantic_parameter_publications\":0,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":1,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":0,\"semantic_body_checks\":4,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":4,\"semantic_statement_conversion_work\":3,\"semantic_statement_conversion_uses\":3,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":0,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":3,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":1,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":1,\"semantic_initializer_recipe_uses\":1,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":2,\"nested_class_declarations\":2,\"nested_class_definitions\":1,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"inline_variable_initializers\":0,\"inline_variable_hits\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":4,\"template_definition_direct_applications\":3,\"template_definition_requests\":19,\"template_definition_hits\":7,\"template_definition_edges\":4,\"template_definition_signature_requests\":4,\"template_definition_signature_work\":4,\"semantic_expression_bytes\":40,\"semantic_type_queries\":1,\"semantic_type_query_work\":1,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":0,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":37,\"semantic_template_parameter_check_work\":118,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":5,\"semantic_template_fixed_expressions\":4,\"semantic_template_fixed_uses\":4,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":4,\"semantic_template_member_uses\":0,\"parsed_nodes\":269,\"template_occurrences\":187,\"template_deferred_regions\":7,\"template_demanded_regions\":4,\"template_source_regions\":9,\"template_region_nodes\":140,\"template_region_roots\":5,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_fold_steps\":0,\"semantic_fold_value_steps\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":6,\"semantic_argument_packs\":14,\"semantic_object_uses\":4,\"semantic_expression_facts\":15,\"semantic_expression_uses\":19,\"semantic_expression_slots\":456,\"semantic_expression_inherited\":4,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":0,\"semantic_constructor_actions\":0,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":0,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":0,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":0,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":0,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":0,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":7,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":7,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":7,\"semantic_expression_work\":15,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":2,\"semantic_conversion_work\":11,\"semantic_conversions\":15,\"semantic_entity_bytes\":128,\"semantic_class_facts\":6,\"semantic_constants\":1,\"source_invocation_sites\":0,\"semantic_value_queries\":0,\"semantic_value_query_work\":0,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":42,\"semantic_entities\":50,\"semantic_scopes\":50,\"semantic_edges\":0,\"semantic_declarations\":44,\"semantic_regions\":25,\"semantic_lookup_work\":52,\"semantic_signature_work\":17,\"semantic_template_signature_shape_work\":2,\"semantic_template_signature_shape_hits\":7,\"semantic_type_probes\":142,\"semantic_constant_work\":1,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":0,\"exception_work\":5,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":108,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":6.84223,\"lowering_ms\":0.229217,\"peak_rss_kib\":17316,\"nodes\":456,\"static_requests\":2,\"static_hits\":1,\"control_work\":10,\"discard_work\":0,\"full_expression_work\":18,\"full_expression_regions\":0,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":15,\"abi_bytes\":1080,\"instructions\":17,\"operands\":25,\"ir_pool_growths\":47,\"ir_capacity_bytes\":5136}\n{\"driver_ms\":12.4115,\"peak_rss_kib\":17316,\"text_bytes\":135,\"native_functions\":4,\"native_instructions\":23,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.06098,\"encoding_ms\":0.027114}\n"
+    },
+    {
+      "command": [
+        "nm",
+        "-C",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/exclusion.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 V Excluded<int>::data\n0000000000000000 W Excluded<int>::used() const\n0000000000000000 W Excluded<int>::Nested::call() const\n0000000000000000 W Excluded<long>::ordinary() const\n0000000000000000 T main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/exclusion.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/exclusion.plain.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/exclusion-late.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/exclusion-late.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "{\"tokens\":109,\"max_pending\":11,\"node_growths\":8,\"delimiter_work\":109,\"asm_source_statements\":0,\"asm_source_instructions\":0,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_capture_patterns\":0,\"semantic_capture_candidates\":0,\"semantic_closure_adapters\":0,\"semantic_ms\":0.689815,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":206,\"semantic_fact_records\":62,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":21312,\"semantic_template_declaration_work\":4,\"semantic_declaration_publications\":5,\"semantic_dependence_work\":12,\"semantic_specializations\":2,\"semantic_type_substitution_work\":4,\"semantic_type_substitution_hits\":0,\"semantic_type_substitution_records\":0,\"semantic_substitution_frames\":3,\"semantic_template_type_work\":4,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":8,\"semantic_template_signature_work\":4,\"semantic_template_signature_uses\":4,\"semantic_parameter_publications\":0,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":0,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":0,\"semantic_body_checks\":2,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":2,\"semantic_statement_conversion_work\":1,\"semantic_statement_conversion_uses\":1,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":0,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":1,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":0,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":0,\"semantic_initializer_recipe_uses\":0,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":2,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"inline_variable_initializers\":0,\"inline_variable_hits\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":1,\"template_definition_direct_applications\":1,\"template_definition_requests\":6,\"template_definition_hits\":1,\"template_definition_edges\":1,\"template_definition_signature_requests\":2,\"template_definition_signature_work\":2,\"semantic_expression_bytes\":40,\"semantic_type_queries\":1,\"semantic_type_query_work\":1,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":0,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":14,\"semantic_template_parameter_check_work\":51,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":3,\"semantic_template_fixed_expressions\":1,\"semantic_template_fixed_uses\":1,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":2,\"semantic_template_member_uses\":0,\"parsed_nodes\":140,\"template_occurrences\":66,\"template_deferred_regions\":1,\"template_demanded_regions\":1,\"template_source_regions\":3,\"template_region_nodes\":42,\"template_region_roots\":1,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_fold_steps\":0,\"semantic_fold_value_steps\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":3,\"semantic_argument_packs\":10,\"semantic_object_uses\":2,\"semantic_expression_facts\":6,\"semantic_expression_uses\":7,\"semantic_expression_slots\":206,\"semantic_expression_inherited\":1,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":0,\"semantic_constructor_actions\":0,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":0,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":0,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":0,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":0,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":0,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":4,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":3,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":3,\"semantic_expression_work\":6,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":1,\"semantic_conversion_work\":4,\"semantic_conversions\":5,\"semantic_entity_bytes\":128,\"semantic_class_facts\":4,\"semantic_constants\":0,\"source_invocation_sites\":0,\"semantic_value_queries\":0,\"semantic_value_query_work\":0,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":23,\"semantic_entities\":29,\"semantic_scopes\":27,\"semantic_edges\":0,\"semantic_declarations\":23,\"semantic_regions\":14,\"semantic_lookup_work\":24,\"semantic_signature_work\":12,\"semantic_template_signature_shape_work\":2,\"semantic_template_signature_shape_hits\":3,\"semantic_type_probes\":63,\"semantic_constant_work\":0,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":0,\"exception_work\":2,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":60,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":3.16582,\"lowering_ms\":0.146336,\"peak_rss_kib\":17600,\"nodes\":206,\"static_requests\":0,\"static_hits\":0,\"control_work\":5,\"discard_work\":0,\"full_expression_work\":8,\"full_expression_regions\":0,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":7,\"abi_bytes\":564,\"instructions\":7,\"operands\":10,\"ir_pool_growths\":28,\"ir_capacity_bytes\":1736}\n{\"driver_ms\":7.44095,\"peak_rss_kib\":17600,\"text_bytes\":59,\"native_functions\":2,\"native_instructions\":9,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.115107,\"encoding_ms\":0.024321}\n"
+    },
+    {
+      "command": [
+        "nm",
+        "-C",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/exclusion-late.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 W Late<int>::used()\n0000000000000000 T main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/exclusion-late.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/exclusion-late.plain.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/exclusion-direct.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/exclusion-direct.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "{\"tokens\":123,\"max_pending\":23,\"node_growths\":7,\"delimiter_work\":123,\"asm_source_statements\":0,\"asm_source_instructions\":0,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_capture_patterns\":0,\"semantic_capture_candidates\":0,\"semantic_closure_adapters\":0,\"semantic_ms\":0.771556,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":228,\"semantic_fact_records\":70,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":22000,\"semantic_template_declaration_work\":4,\"semantic_declaration_publications\":5,\"semantic_dependence_work\":11,\"semantic_specializations\":2,\"semantic_type_substitution_work\":4,\"semantic_type_substitution_hits\":0,\"semantic_type_substitution_records\":0,\"semantic_substitution_frames\":3,\"semantic_template_type_work\":4,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":8,\"semantic_template_signature_work\":4,\"semantic_template_signature_uses\":4,\"semantic_parameter_publications\":0,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":0,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":0,\"semantic_body_checks\":2,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":2,\"semantic_statement_conversion_work\":2,\"semantic_statement_conversion_uses\":1,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":0,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":1,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":0,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":0,\"semantic_initializer_recipe_uses\":0,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":2,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"inline_variable_initializers\":0,\"inline_variable_hits\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":1,\"template_definition_direct_applications\":1,\"template_definition_requests\":7,\"template_definition_hits\":2,\"template_definition_edges\":1,\"template_definition_signature_requests\":2,\"template_definition_signature_work\":2,\"semantic_expression_bytes\":40,\"semantic_type_queries\":0,\"semantic_type_query_work\":0,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":0,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":12,\"semantic_template_parameter_check_work\":48,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":2,\"semantic_template_fixed_expressions\":2,\"semantic_template_fixed_uses\":1,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":2,\"semantic_template_member_uses\":0,\"parsed_nodes\":162,\"template_occurrences\":66,\"template_deferred_regions\":1,\"template_demanded_regions\":1,\"template_source_regions\":3,\"template_region_nodes\":42,\"template_region_roots\":1,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_fold_steps\":0,\"semantic_fold_value_steps\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":3,\"semantic_argument_packs\":10,\"semantic_object_uses\":2,\"semantic_expression_facts\":7,\"semantic_expression_uses\":8,\"semantic_expression_slots\":228,\"semantic_expression_inherited\":1,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":0,\"semantic_constructor_actions\":0,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":0,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":0,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":0,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":0,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":0,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":4,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":3,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":3,\"semantic_expression_work\":7,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":1,\"semantic_conversion_work\":5,\"semantic_conversions\":6,\"semantic_entity_bytes\":128,\"semantic_class_facts\":4,\"semantic_constants\":0,\"source_invocation_sites\":0,\"semantic_value_queries\":0,\"semantic_value_query_work\":0,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":23,\"semantic_entities\":29,\"semantic_scopes\":27,\"semantic_edges\":0,\"semantic_declarations\":23,\"semantic_regions\":15,\"semantic_lookup_work\":20,\"semantic_signature_work\":12,\"semantic_template_signature_shape_work\":2,\"semantic_template_signature_shape_hits\":3,\"semantic_type_probes\":72,\"semantic_constant_work\":0,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":0,\"exception_work\":2,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":60,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":3.15243,\"lowering_ms\":0.13313,\"peak_rss_kib\":17600,\"nodes\":228,\"static_requests\":0,\"static_hits\":0,\"control_work\":5,\"discard_work\":0,\"full_expression_work\":8,\"full_expression_regions\":0,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":7,\"abi_bytes\":566,\"instructions\":7,\"operands\":10,\"ir_pool_growths\":28,\"ir_capacity_bytes\":1736}\n{\"driver_ms\":6.75217,\"peak_rss_kib\":17600,\"text_bytes\":59,\"native_functions\":2,\"native_instructions\":9,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.059242,\"encoding_ms\":0.014965}\n"
+    },
+    {
+      "command": [
+        "nm",
+        "-C",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/exclusion-direct.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 W Owner<int>::used()\n0000000000000000 T main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/exclusion-direct.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/exclusion-direct.plain.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-demand.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-demand.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "{\"tokens\":82,\"max_pending\":28,\"node_growths\":8,\"delimiter_work\":82,\"asm_source_statements\":0,\"asm_source_instructions\":0,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_capture_patterns\":0,\"semantic_capture_candidates\":0,\"semantic_closure_adapters\":0,\"semantic_ms\":0.623231,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":168,\"semantic_fact_records\":54,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":21504,\"semantic_template_declaration_work\":3,\"semantic_declaration_publications\":3,\"semantic_dependence_work\":8,\"semantic_specializations\":1,\"semantic_type_substitution_work\":0,\"semantic_type_substitution_hits\":0,\"semantic_type_substitution_records\":0,\"semantic_substitution_frames\":1,\"semantic_template_type_work\":3,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":6,\"semantic_template_signature_work\":0,\"semantic_template_signature_uses\":0,\"semantic_parameter_publications\":0,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":3,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":0,\"semantic_body_checks\":1,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":1,\"semantic_statement_conversion_work\":0,\"semantic_statement_conversion_uses\":0,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":0,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":1,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":1,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":1,\"semantic_initializer_recipe_uses\":1,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":1,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"inline_variable_initializers\":2,\"inline_variable_hits\":1,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":4,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":2,\"semantic_type_query_work\":2,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":0,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":23,\"semantic_template_parameter_check_work\":52,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":2,\"semantic_template_fixed_expressions\":1,\"semantic_template_fixed_uses\":1,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":0,\"semantic_template_member_uses\":0,\"parsed_nodes\":116,\"template_occurrences\":52,\"template_deferred_regions\":0,\"template_demanded_regions\":0,\"template_source_regions\":1,\"template_region_nodes\":52,\"template_region_roots\":0,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_fold_steps\":0,\"semantic_fold_value_steps\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":1,\"semantic_argument_packs\":2,\"semantic_object_uses\":0,\"semantic_expression_facts\":11,\"semantic_expression_uses\":12,\"semantic_expression_slots\":168,\"semantic_expression_inherited\":1,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":0,\"semantic_constructor_actions\":0,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":0,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":0,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":0,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":0,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":0,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":0,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":2,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":2,\"semantic_expression_work\":11,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":0,\"semantic_conversion_work\":9,\"semantic_conversions\":10,\"semantic_entity_bytes\":128,\"semantic_class_facts\":3,\"semantic_constants\":6,\"source_invocation_sites\":0,\"semantic_value_queries\":0,\"semantic_value_query_work\":0,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":17,\"semantic_entities\":21,\"semantic_scopes\":10,\"semantic_edges\":0,\"semantic_declarations\":15,\"semantic_regions\":9,\"semantic_lookup_work\":28,\"semantic_signature_work\":9,\"semantic_template_signature_shape_work\":0,\"semantic_template_signature_shape_hits\":0,\"semantic_type_probes\":33,\"semantic_constant_work\":3,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":0,\"exception_work\":1,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":28,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":1,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":2.92648,\"lowering_ms\":0.138904,\"peak_rss_kib\":17600,\"nodes\":168,\"static_requests\":2,\"static_hits\":1,\"control_work\":3,\"discard_work\":0,\"full_expression_work\":5,\"full_expression_regions\":0,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":7,\"abi_bytes\":572,\"instructions\":9,\"operands\":11,\"ir_pool_growths\":24,\"ir_capacity_bytes\":2260}\n{\"driver_ms\":9.52872,\"peak_rss_kib\":17600,\"text_bytes\":52,\"native_functions\":1,\"native_instructions\":9,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.040263,\"encoding_ms\":0.059897}\n"
+    },
+    {
+      "command": [
+        "nm",
+        "-C",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-demand.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 V Lazy<int>::selected\n0000000000000000 T main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-demand.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-demand.plain.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-constexpr-demand.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-constexpr-demand.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "{\"tokens\":60,\"max_pending\":22,\"node_growths\":7,\"delimiter_work\":60,\"asm_source_statements\":0,\"asm_source_instructions\":0,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_capture_patterns\":0,\"semantic_capture_candidates\":0,\"semantic_closure_adapters\":0,\"semantic_ms\":4.0188,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":118,\"semantic_fact_records\":41,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":21016,\"semantic_template_declaration_work\":2,\"semantic_declaration_publications\":2,\"semantic_dependence_work\":8,\"semantic_specializations\":1,\"semantic_type_substitution_work\":0,\"semantic_type_substitution_hits\":0,\"semantic_type_substitution_records\":0,\"semantic_substitution_frames\":1,\"semantic_template_type_work\":2,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":4,\"semantic_template_signature_work\":0,\"semantic_template_signature_uses\":0,\"semantic_parameter_publications\":0,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":2,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":0,\"semantic_body_checks\":1,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":1,\"semantic_statement_conversion_work\":0,\"semantic_statement_conversion_uses\":0,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":0,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":0,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":0,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":0,\"semantic_initializer_recipe_uses\":0,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":1,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"inline_variable_initializers\":2,\"inline_variable_hits\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":0,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":4,\"semantic_type_query_work\":4,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":0,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":20,\"semantic_template_parameter_check_work\":41,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":2,\"semantic_template_fixed_expressions\":1,\"semantic_template_fixed_uses\":1,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":0,\"semantic_template_member_uses\":0,\"parsed_nodes\":77,\"template_occurrences\":41,\"template_deferred_regions\":0,\"template_demanded_regions\":0,\"template_source_regions\":1,\"template_region_nodes\":41,\"template_region_roots\":0,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_fold_steps\":0,\"semantic_fold_value_steps\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":1,\"semantic_argument_packs\":2,\"semantic_object_uses\":1,\"semantic_expression_facts\":10,\"semantic_expression_uses\":11,\"semantic_expression_slots\":118,\"semantic_expression_inherited\":1,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":0,\"semantic_constructor_actions\":0,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":0,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":0,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":2,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":0,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":0,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":0,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":0,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":0,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":0,\"semantic_expression_work\":10,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":0,\"semantic_conversion_work\":11,\"semantic_conversions\":11,\"semantic_entity_bytes\":128,\"semantic_class_facts\":3,\"semantic_constants\":9,\"source_invocation_sites\":0,\"semantic_value_queries\":0,\"semantic_value_query_work\":0,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":15,\"semantic_entities\":16,\"semantic_scopes\":8,\"semantic_edges\":0,\"semantic_declarations\":12,\"semantic_regions\":7,\"semantic_lookup_work\":21,\"semantic_signature_work\":9,\"semantic_template_signature_shape_work\":0,\"semantic_template_signature_shape_hits\":0,\"semantic_type_probes\":38,\"semantic_constant_work\":7,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":0,\"exception_work\":1,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":12,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":9.28293,\"lowering_ms\":0.112038,\"peak_rss_kib\":17600,\"nodes\":118,\"static_requests\":0,\"static_hits\":0,\"control_work\":2,\"discard_work\":0,\"full_expression_work\":1,\"full_expression_regions\":0,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":2,\"abi_bytes\":236,\"instructions\":1,\"operands\":1,\"ir_pool_growths\":7,\"ir_capacity_bytes\":256}\n{\"driver_ms\":11.7469,\"peak_rss_kib\":17600,\"text_bytes\":16,\"native_functions\":1,\"native_instructions\":2,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.032993,\"encoding_ms\":0.018488}\n"
+    },
+    {
+      "command": [
+        "nm",
+        "-C",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-constexpr-demand.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 T main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-constexpr-demand.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-constexpr-demand.plain.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-shared.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-shared.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "{\"tokens\":396,\"max_pending\":25,\"node_growths\":10,\"delimiter_work\":396,\"asm_source_statements\":0,\"asm_source_instructions\":0,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":1,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_capture_patterns\":0,\"semantic_capture_candidates\":0,\"semantic_closure_adapters\":0,\"semantic_ms\":1.12275,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":639,\"semantic_fact_records\":242,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":23608,\"semantic_template_declaration_work\":1,\"semantic_declaration_publications\":1,\"semantic_dependence_work\":12,\"semantic_specializations\":2,\"semantic_type_substitution_work\":1,\"semantic_type_substitution_hits\":0,\"semantic_type_substitution_records\":1,\"semantic_substitution_frames\":2,\"semantic_template_type_work\":1,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":2,\"semantic_template_signature_work\":0,\"semantic_template_signature_uses\":0,\"semantic_parameter_publications\":0,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":1,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":0,\"semantic_body_checks\":5,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":4,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":5,\"semantic_statement_conversion_work\":0,\"semantic_statement_conversion_uses\":0,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":0,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":1,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":15,\"semantic_static_plan_work\":5,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":1,\"semantic_initializer_recipe_uses\":1,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":1,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":1,\"inline_variable_initializers\":1,\"inline_variable_hits\":1,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":0,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":2,\"semantic_type_query_work\":2,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":0,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":7,\"semantic_template_parameter_check_work\":39,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":1,\"semantic_template_fixed_expressions\":1,\"semantic_template_fixed_uses\":1,\"semantic_template_fixed_calls\":1,\"semantic_template_fixed_call_uses\":1,\"semantic_template_object_contexts\":0,\"semantic_template_member_uses\":0,\"parsed_nodes\":618,\"template_occurrences\":21,\"template_deferred_regions\":0,\"template_demanded_regions\":0,\"template_source_regions\":1,\"template_region_nodes\":21,\"template_region_roots\":0,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_fold_steps\":0,\"semantic_fold_value_steps\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":2,\"semantic_argument_packs\":4,\"semantic_object_uses\":1,\"semantic_expression_facts\":136,\"semantic_expression_uses\":138,\"semantic_expression_slots\":639,\"semantic_expression_inherited\":2,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":11,\"semantic_constructor_actions\":1,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":0,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":0,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":5,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":0,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":0,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":0,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":3,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":4,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":4,\"semantic_expression_work\":128,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":19,\"semantic_conversion_work\":99,\"semantic_conversions\":102,\"semantic_entity_bytes\":128,\"semantic_class_facts\":6,\"semantic_constants\":15,\"source_invocation_sites\":0,\"semantic_value_queries\":1,\"semantic_value_query_work\":1,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":42,\"semantic_entities\":43,\"semantic_scopes\":34,\"semantic_edges\":0,\"semantic_declarations\":40,\"semantic_regions\":38,\"semantic_lookup_work\":281,\"semantic_signature_work\":23,\"semantic_template_signature_shape_work\":0,\"semantic_template_signature_shape_hits\":0,\"semantic_type_probes\":363,\"semantic_constant_work\":17,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":3,\"exception_work\":3,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":44,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":11,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":7.15653,\"lowering_ms\":0.609864,\"peak_rss_kib\":17600,\"nodes\":639,\"static_requests\":26,\"static_hits\":11,\"control_work\":36,\"discard_work\":0,\"full_expression_work\":143,\"full_expression_regions\":0,\"linkage_requests\":1,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":1,\"finalizer_units\":1,\"abi_nodes\":36,\"abi_bytes\":4392,\"instructions\":221,\"operands\":343,\"ir_pool_growths\":91,\"ir_capacity_bytes\":52304}\n{\"driver_ms\":13.873,\"peak_rss_kib\":17600,\"text_bytes\":1654,\"native_functions\":13,\"native_instructions\":321,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.232035,\"encoding_ms\":0.104743}\n"
+    },
+    {
+      "command": [
+        "nm",
+        "-C",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-shared.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 d .Lcppgm.tls.33\n00000000000003de t @cppgm_call_terminate\n                 U _Exit\n                 U from_other()\n00000000000000c7 T next()\n                 U other(int)\n0000000000000000 V variable<long>\n0000000000000000 V _ZGR9reference_\n0000000000000000 V guard variable for object\n0000000000000000 V guard variable for dynamic\n0000000000000000 V guard variable for reference\n0000000000000000 V _ZGV9reference_\n0000000000000000 V guard variable for TemplateMembers<int>::value\n0000000000000000 V guard variable for Members::value\n0000000000000018 d private_value\n0000000000000000 V TemplateMembers<int>::value\n0000000000000000 T Check::~Check()\n00000000000002e3 T Check::~Check()\n0000000000000000 W Object::Object()\n0000000000000000 W Object::Object()\n0000000000000000 W Object::~Object()\n0000000000000000 W Object::~Object()\n0000000000000000 V Members::value\n0000000000000000 V Members::constant\n                 U std::terminate()\n0000000000000000 W TLS init function for tls\n0000000000000000 W TLS wrapper function for tls\n000000000000058e t __cppgm_fini\n00000000000003fa t __cppgm_init\n                 U __cxa_begin_catch\n                 U __gxx_personality_v0\n00000000000003c4 t __local_destructor_22\n00000000000003aa t __local_destructor_24\n                 U atexit\n0000000000000008 D calls\n0000000000000004 D check\n000000000000000c D destroyed\n0000000000000000 V dynamic\n000000000000001c D failed\n0000000000000000 V letters\n00000000000000ea T main\n0000000000000000 V object\n0000000000000000 V reference\n0000000000000000 V scalar\n0000000000000000 W tls\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-shared.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-shared.plain.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "readelf",
+        "--section-groups",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-shared.o"
+      ],
+      "status": 0,
+      "stdout": "\nCOMDAT group section [   22] `.group' [_ZN6ObjectC1Ev] contains 2 sections:\n   [Index]    Name\n   [   21]   .text._ZN6ObjectC1Ev\n   [   63]   .rela.text._ZN6ObjectC1Ev\n\nCOMDAT group section [   24] `.group' [_ZN6ObjectD1Ev] contains 2 sections:\n   [Index]    Name\n   [   23]   .text._ZN6ObjectD1Ev\n   [   64]   .rela.text._ZN6ObjectD1Ev\n\nCOMDAT group section [   26] `.group' [_ZTH3tls] contains 2 sections:\n   [Index]    Name\n   [   25]   .text._ZTH3tls\n   [   65]   .rela.text._ZTH3tls\n\nCOMDAT group section [   28] `.group' [_ZTW3tls] contains 2 sections:\n   [Index]    Name\n   [   27]   .text._ZTW3tls\n   [   66]   .rela.text._ZTW3tls\n\nCOMDAT group section [   30] `.group' [_ZGR9reference_] contains 1 sections:\n   [Index]    Name\n   [   29]   .data._ZGR9reference_\n\nCOMDAT group section [   32] `.group' [_ZGV9reference_] contains 1 sections:\n   [Index]    Name\n   [   31]   .data._ZGV9reference_\n\nCOMDAT group section [   34] `.group' [letters] contains 1 sections:\n   [Index]    Name\n   [   33]   .data.letters\n\nCOMDAT group section [   36] `.group' [scalar] contains 1 sections:\n   [Index]    Name\n   [   35]   .data.scalar\n\nCOMDAT group section [   38] `.group' [dynamic] contains 1 sections:\n   [Index]    Name\n   [   37]   .data.dynamic\n\nCOMDAT group section [   40] `.group' [_ZGV7dynamic] contains 1 sections:\n   [Index]    Name\n   [   39]   .data._ZGV7dynamic\n\nCOMDAT group section [   42] `.group' [object] contains 1 sections:\n   [Index]    Name\n   [   41]   .data.object\n\nCOMDAT group section [   44] `.group' [_ZGV6object] contains 1 sections:\n   [Index]    Name\n   [   43]   .data._ZGV6object\n\nCOMDAT group section [   46] `.group' [reference] contains 1 sections:\n   [Index]    Name\n   [   45]   .data.reference\n\nCOMDAT group section [   48] `.group' [_ZGV9reference] contains 1 sections:\n   [Index]    Name\n   [   47]   .data._ZGV9reference\n\nCOMDAT group section [   50] `.group' [_ZN7Members5valueE] contains 1 sections:\n   [Index]    Name\n   [   49]   .data._ZN7Members5valueE\n\nCOMDAT group section [   52] `.group' [_ZGVN7Members5valueE] contains 1 sections:\n   [Index]    Name\n   [   51]   .data._ZGVN7Members5valueE\n\nCOMDAT group section [   54] `.group' [_ZN7Members8constantE] contains 1 sections:\n   [Index]    Name\n   [   53]   .data._ZN7Members8constantE\n\nCOMDAT group section [   56] `.group' [_ZN15TemplateMembersIiE5valueE] contains 1 sections:\n   [Index]    Name\n   [   55]   .data._ZN15TemplateMembersIiE5valueE\n\nCOMDAT group section [   58] `.group' [_ZGVN15TemplateMembersIiE5valueE] contains 1 sections:\n   [Index]    Name\n   [   57]   .data._ZGVN15TemplateMembersIiE5valueE\n\nCOMDAT group section [   60] `.group' [_Z8variableIlE] contains 1 sections:\n   [Index]    Name\n   [   59]   .data._Z8variableIlE\n\nCOMDAT group section [   62] `.group' [tls] contains 1 sections:\n   [Index]    Name\n   [   61]   .tdata.tls\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "readelf",
+        "-r",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-shared.o"
+      ],
+      "status": 0,
+      "stdout": "\nRelocation section '.rela.text' at offset 0x8b0 contains 75 entries:\n  Offset          Info           Type           Sym. Value    Sym. Name + Addend\n00000000000e  003500000002 R_X86_64_PC32     000000000000001c failed - 4\n000000000023  002800000002 R_X86_64_PC32     000000000000000c destroyed - 4\n00000000007c  003800000004 R_X86_64_PLT32    0000000000000000 _Exit - 4\n000000000095  002200000004 R_X86_64_PLT32    00000000000003de @cppgm_call_terminate - 4\n0000000000ce  002700000002 R_X86_64_PC32     0000000000000008 calls - 4\n0000000000dc  002700000002 R_X86_64_PC32     0000000000000008 calls - 4\n0000000000ff  003600000004 R_X86_64_PLT32    0000000000000000 _Z5otheri - 4\n000000000109  002c00000009 R_X86_64_GOTPCREL 0000000000000000 letters - 4\n00000000011c  003600000004 R_X86_64_PLT32    0000000000000000 _Z5otheri - 4\n000000000126  002d00000009 R_X86_64_GOTPCREL 0000000000000000 scalar - 4\n000000000139  003600000004 R_X86_64_PLT32    0000000000000000 _Z5otheri - 4\n000000000143  002e00000009 R_X86_64_GOTPCREL 0000000000000000 dynamic - 4\n000000000165  003600000004 R_X86_64_PLT32    0000000000000000 _Z5otheri - 4\n00000000016f  002f00000009 R_X86_64_GOTPCREL 0000000000000000 object - 4\n000000000182  003600000004 R_X86_64_PLT32    0000000000000000 _Z5otheri - 4\n00000000018c  003000000009 R_X86_64_GOTPCREL 0000000000000000 reference - 4\n00000000019f  003600000004 R_X86_64_PLT32    0000000000000000 _Z5otheri - 4\n0000000001a9  003300000009 R_X86_64_GOTPCREL 0000000000000000 _ZN7Members5valueE - 4\n0000000001cb  003600000004 R_X86_64_PLT32    0000000000000000 _Z5otheri - 4\n0000000001d5  003a00000009 R_X86_64_GOTPCREL 0000000000000000 _ZN15TemplateMemb[...] - 4\n0000000001e8  003600000004 R_X86_64_PLT32    0000000000000000 _Z5otheri - 4\n0000000001f2  003b00000009 R_X86_64_GOTPCREL 0000000000000000 _Z8variableIlE - 4\n000000000214  003600000004 R_X86_64_PLT32    0000000000000000 _Z5otheri - 4\n00000000021e  001e00000002 R_X86_64_PC32     0000000000000018 _ZL13private_value - 4\n000000000240  003600000004 R_X86_64_PLT32    0000000000000000 _Z5otheri - 4\n000000000248  004300000004 R_X86_64_PLT32    0000000000000000 _ZTW3tls - 4\n000000000256  004300000004 R_X86_64_PLT32    0000000000000000 _ZTW3tls - 4\n000000000261  003700000004 R_X86_64_PLT32    0000000000000000 _Z10from_otherv - 4\n000000000282  002700000002 R_X86_64_PC32     0000000000000008 calls - 4\n000000000293  002800000002 R_X86_64_PC32     000000000000000c destroyed - 4\n0000000002a3  002c00000009 R_X86_64_GOTPCREL 0000000000000000 letters - 4\n0000000002cb  003500000002 R_X86_64_PC32     000000000000001c failed - 8\n0000000002f1  003500000002 R_X86_64_PC32     000000000000001c failed - 4\n000000000306  002800000002 R_X86_64_PC32     000000000000000c destroyed - 4\n00000000035f  003800000004 R_X86_64_PLT32    0000000000000000 _Exit - 4\n000000000378  002200000004 R_X86_64_PLT32    00000000000003de @cppgm_call_terminate - 4\n0000000003b1  003100000009 R_X86_64_GOTPCREL 0000000000000000 _ZGR9reference_ - 4\n0000000003b9  002b00000004 R_X86_64_PLT32    0000000000000000 _ZN6ObjectD1Ev - 4\n0000000003cb  002f00000009 R_X86_64_GOTPCREL 0000000000000000 object - 4\n0000000003d3  002b00000004 R_X86_64_PLT32    0000000000000000 _ZN6ObjectD1Ev - 4\n0000000003ea  004600000004 R_X86_64_PLT32    0000000000000000 __cxa_begin_catch - 4\n0000000003ef  004700000004 R_X86_64_PLT32    0000000000000000 _ZSt9terminatev - 4\n000000000410  003f00000009 R_X86_64_GOTPCREL 0000000000000000 _ZGV7dynamic - 4\n000000000423  002e00000009 R_X86_64_GOTPCREL 0000000000000000 dynamic - 4\n000000000428  002900000004 R_X86_64_PLT32    00000000000000c7 _Z4nextv - 4\n000000000438  003f00000009 R_X86_64_GOTPCREL 0000000000000000 _ZGV7dynamic - 4\n000000000446  004000000009 R_X86_64_GOTPCREL 0000000000000000 _ZGV6object - 4\n000000000459  002f00000009 R_X86_64_GOTPCREL 0000000000000000 object - 4\n000000000461  002a00000004 R_X86_64_PLT32    0000000000000000 _ZN6ObjectC1Ev - 4\n000000000468  002000000002 R_X86_64_PC32     00000000000003c4 __local_destructor_22 - 4\n00000000046d  003e00000004 R_X86_64_PLT32    0000000000000000 atexit - 4\n000000000474  004000000009 R_X86_64_GOTPCREL 0000000000000000 _ZGV6object - 4\n000000000482  004100000009 R_X86_64_GOTPCREL 0000000000000000 _ZGV9reference - 4\n000000000495  003000000009 R_X86_64_GOTPCREL 0000000000000000 reference - 4\n00000000049c  003100000009 R_X86_64_GOTPCREL 0000000000000000 _ZGR9reference_ - 4\n0000000004a4  002a00000004 R_X86_64_PLT32    0000000000000000 _ZN6ObjectC1Ev - 4\n0000000004ae  003d00000009 R_X86_64_GOTPCREL 0000000000000000 _ZGV9reference_ - 4\n0000000004c1  001f00000002 R_X86_64_PC32     00000000000003aa __local_destructor_24 - 4\n0000000004c6  003e00000004 R_X86_64_PLT32    0000000000000000 atexit - 4\n0000000004cd  003d00000009 R_X86_64_GOTPCREL 0000000000000000 _ZGV9reference_ - 4\n0000000004db  004100000009 R_X86_64_GOTPCREL 0000000000000000 _ZGV9reference - 4\n0000000004e9  003d00000009 R_X86_64_GOTPCREL 0000000000000000 _ZGV9reference_ - 4\n0000000004fc  001f00000002 R_X86_64_PC32     00000000000003aa __local_destructor_24 - 4\n000000000501  003e00000004 R_X86_64_PLT32    0000000000000000 atexit - 4\n000000000508  003d00000009 R_X86_64_GOTPCREL 0000000000000000 _ZGV9reference_ - 4\n000000000516  004400000009 R_X86_64_GOTPCREL 0000000000000000 _ZGVN7Members5valueE - 4\n000000000529  003300000009 R_X86_64_GOTPCREL 0000000000000000 _ZN7Members5valueE - 4\n00000000052e  002900000004 R_X86_64_PLT32    00000000000000c7 _Z4nextv - 4\n00000000053e  004400000009 R_X86_64_GOTPCREL 0000000000000000 _ZGVN7Members5valueE - 4\n00000000054c  004500000009 R_X86_64_GOTPCREL 0000000000000000 _ZGVN15TemplateMe[...] - 4\n00000000055f  003a00000009 R_X86_64_GOTPCREL 0000000000000000 _ZN15TemplateMemb[...] - 4\n000000000564  002900000004 R_X86_64_PLT32    00000000000000c7 _Z4nextv - 4\n000000000574  004500000009 R_X86_64_GOTPCREL 0000000000000000 _ZGVN15TemplateMe[...] - 4\n000000000595  002600000002 R_X86_64_PC32     0000000000000004 check - 4\n00000000059d  002500000004 R_X86_64_PLT32    0000000000000000 _ZN5CheckD1Ev - 4\n\nRelocation section '.rela.eh_frame' at offset 0xfb8 contains 16 entries:\n  Offset          Info           Type           Sym. Value    Sym. Name + Addend\n000000000013  000500000002 R_X86_64_PC32     0000000000000000 .data.rel.local + 0\n000000000028  000100000002 R_X86_64_PC32     0000000000000000 .text + 0\n000000000031  000400000002 R_X86_64_PC32     0000000000000000 .gcc_except_table + 0\n000000000070  000100000002 R_X86_64_PC32     0000000000000000 .text + c7\n000000000098  000900000002 R_X86_64_PC32     0000000000000000 .text._ZN6ObjectC1Ev + 0\n0000000000c0  000a00000002 R_X86_64_PC32     0000000000000000 .text._ZN6ObjectD1Ev + 0\n0000000000e8  000100000002 R_X86_64_PC32     0000000000000000 .text + ea\n000000000118  000100000002 R_X86_64_PC32     0000000000000000 .text + 2e3\n000000000121  000400000002 R_X86_64_PC32     0000000000000000 .gcc_except_table + 10\n000000000148  000100000002 R_X86_64_PC32     0000000000000000 .text + 3aa\n000000000170  000100000002 R_X86_64_PC32     0000000000000000 .text + 3c4\n000000000198  000b00000002 R_X86_64_PC32     0000000000000000 .text._ZTH3tls + 0\n0000000001c0  000c00000002 R_X86_64_PC32     0000000000000000 .text._ZTW3tls + 0\n0000000001e8  000100000002 R_X86_64_PC32     0000000000000000 .text + 3de\n000000000210  000100000002 R_X86_64_PC32     0000000000000000 .text + 3fa\n000000000240  000100000002 R_X86_64_PC32     0000000000000000 .text + 58e\n\nRelocation section '.rela.data.rel.local' at offset 0x1138 contains 1 entry:\n  Offset          Info           Type           Sym. Value    Sym. Name + Addend\n000000000000  004a00000001 R_X86_64_64       0000000000000000 __gxx_personality_v0 + 0\n\nRelocation section '.rela.init_array' at offset 0x1150 contains 1 entry:\n  Offset          Info           Type           Sym. Value    Sym. Name + Addend\n000000000000  002300000001 R_X86_64_64       00000000000003fa __cppgm_init + 0\n\nRelocation section '.rela.fini_array' at offset 0x1168 contains 1 entry:\n  Offset          Info           Type           Sym. Value    Sym. Name + Addend\n000000000000  002400000001 R_X86_64_64       000000000000058e __cppgm_fini + 0\n\nRelocation section '.rela.text._ZN6ObjectC1Ev' at offset 0x2090 contains 1 entry:\n  Offset          Info           Type           Sym. Value    Sym. Name + Addend\n000000000013  002900000004 R_X86_64_PLT32    00000000000000c7 _Z4nextv - 4\n\nRelocation section '.rela.text._ZN6ObjectD1Ev' at offset 0x20a8 contains 2 entries:\n  Offset          Info           Type           Sym. Value    Sym. Name + Addend\n00000000000e  002800000002 R_X86_64_PC32     000000000000000c destroyed - 4\n00000000001c  002800000002 R_X86_64_PC32     000000000000000c destroyed - 4\n\nRelocation section '.rela.text._ZTH3tls' at offset 0x20d8 contains 4 entries:\n  Offset          Info           Type           Sym. Value    Sym. Name + Addend\n000000000010  002100000017 R_X86_64_TPOFF32  0000000000000000 .Lcppgm.tls.33 + 0\n000000000021  002900000004 R_X86_64_PLT32    00000000000000c7 _Z4nextv - 4\n000000000037  003200000017 R_X86_64_TPOFF32  0000000000000000 tls + 0\n00000000004a  002100000017 R_X86_64_TPOFF32  0000000000000000 .Lcppgm.tls.33 + 0\n\nRelocation section '.rela.text._ZTW3tls' at offset 0x2138 contains 2 entries:\n  Offset          Info           Type           Sym. Value    Sym. Name + Addend\n000000000005  004200000004 R_X86_64_PLT32    0000000000000000 _ZTH3tls - 4\n000000000015  003200000017 R_X86_64_TPOFF32  0000000000000000 tls + 0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-exclusion.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-exclusion.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "{\"tokens\":84,\"max_pending\":36,\"node_growths\":8,\"delimiter_work\":84,\"asm_source_statements\":0,\"asm_source_instructions\":0,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_capture_patterns\":0,\"semantic_capture_candidates\":0,\"semantic_closure_adapters\":0,\"semantic_ms\":0.562672,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":193,\"semantic_fact_records\":45,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":21432,\"semantic_template_declaration_work\":3,\"semantic_declaration_publications\":6,\"semantic_dependence_work\":8,\"semantic_specializations\":2,\"semantic_type_substitution_work\":0,\"semantic_type_substitution_hits\":0,\"semantic_type_substitution_records\":0,\"semantic_substitution_frames\":2,\"semantic_template_type_work\":3,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":12,\"semantic_template_signature_work\":0,\"semantic_template_signature_uses\":0,\"semantic_parameter_publications\":0,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":3,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":0,\"semantic_body_checks\":1,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":1,\"semantic_statement_conversion_work\":0,\"semantic_statement_conversion_uses\":0,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":0,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":0,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":2,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":2,\"semantic_initializer_recipe_uses\":2,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":2,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"inline_variable_initializers\":2,\"inline_variable_hits\":2,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":1,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":1,\"semantic_type_query_work\":1,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":0,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":17,\"semantic_template_parameter_check_work\":46,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":1,\"semantic_template_fixed_expressions\":2,\"semantic_template_fixed_uses\":2,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":0,\"semantic_template_member_uses\":0,\"parsed_nodes\":101,\"template_occurrences\":92,\"template_deferred_regions\":0,\"template_demanded_regions\":0,\"template_source_regions\":1,\"template_region_nodes\":46,\"template_region_roots\":0,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_fold_steps\":0,\"semantic_fold_value_steps\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":2,\"semantic_argument_packs\":4,\"semantic_object_uses\":0,\"semantic_expression_facts\":7,\"semantic_expression_uses\":9,\"semantic_expression_slots\":193,\"semantic_expression_inherited\":2,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":0,\"semantic_constructor_actions\":0,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":0,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":0,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":0,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":0,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":0,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":0,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":0,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":0,\"semantic_expression_work\":7,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":0,\"semantic_conversion_work\":7,\"semantic_conversions\":9,\"semantic_entity_bytes\":128,\"semantic_class_facts\":4,\"semantic_constants\":2,\"source_invocation_sites\":0,\"semantic_value_queries\":0,\"semantic_value_query_work\":0,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":14,\"semantic_entities\":23,\"semantic_scopes\":10,\"semantic_edges\":0,\"semantic_declarations\":18,\"semantic_regions\":13,\"semantic_lookup_work\":19,\"semantic_signature_work\":10,\"semantic_template_signature_shape_work\":0,\"semantic_template_signature_shape_hits\":0,\"semantic_type_probes\":17,\"semantic_constant_work\":2,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":0,\"exception_work\":5,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":12,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":2,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":5.66167,\"lowering_ms\":0.152624,\"peak_rss_kib\":17600,\"nodes\":193,\"static_requests\":4,\"static_hits\":2,\"control_work\":2,\"discard_work\":0,\"full_expression_work\":5,\"full_expression_regions\":0,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":12,\"abi_bytes\":966,\"instructions\":5,\"operands\":7,\"ir_pool_growths\":23,\"ir_capacity_bytes\":1544}\n{\"driver_ms\":9.92169,\"peak_rss_kib\":17600,\"text_bytes\":44,\"native_functions\":1,\"native_instructions\":8,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.039311,\"encoding_ms\":0.026476}\n"
+    },
+    {
+      "command": [
+        "nm",
+        "-C",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-exclusion.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 V Members<int>::used\n                 U Members<int>::supplied\n0000000000000000 V Members<long>::supplied\n0000000000000000 T main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-exclusion.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-exclusion.plain.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++17",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-shared.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-sharedstudent-host-a.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O0",
+        "-x",
+        "c++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-shared.peer",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-sharedstudent-host-b.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-sharedstudent-host-a.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-sharedstudent-host-b.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-sharedstudent-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-sharedstudent-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-shared.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-sharedhost-student-a.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++17",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-shared.peer",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-sharedhost-student-b.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-sharedhost-student-a.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-sharedhost-student-b.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-sharedhost-student"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-sharedhost-student"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++17",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-temporaries.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-temporariesstudent-host-a.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O0",
+        "-x",
+        "c++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-temporaries.peer",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-temporariesstudent-host-b.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-temporariesstudent-host-a.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-temporariesstudent-host-b.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-temporariesstudent-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-temporariesstudent-host"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-temporaries.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-temporarieshost-student-a.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++17",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-temporaries.peer",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-temporarieshost-student-b.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-temporarieshost-student-a.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-temporarieshost-student-b.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-temporarieshost-student"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline-temporarieshost-student"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/tag-review.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/student-tag.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/student-tag.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 W _ZN3BoxIiE6Member5valueB4keptEv\n0000000000000000 T main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/tag-review.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/gcc-tag.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/gcc-tag.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 W _ZN3BoxIiE6Member5valueB4keptEv\n0000000000000000 T main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/tag-review.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/clang-tag.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nm",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/clang-tag.o"
+      ],
+      "status": 0,
+      "stdout": "0000000000000000 W _ZN3BoxIiE6Member5valueEv\n0000000000000000 T main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/abimangle",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/support-names.txt",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/support-names.facts"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-redeclarations.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline.lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/implementation176/inspection/inline.roundtrip"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

@@ -11,6 +11,7 @@ def run(args):
  return p.stdout
 for stem in ['exclusion','exclusion-late','exclusion-direct','inline-demand','inline-constexpr-demand','inline-shared','inline-exclusion']:
  obj=out/(stem+'.o');run([cc,'-O0','-std=c++11','--stats','-c',source/(stem+'.cpp'),'-o',obj]);nm=run(['nm','-C',obj])
+ plain=out/(stem+'.plain.o');run([cc,'-O0','-std=c++11','-c',source/(stem+'.cpp'),'-o',plain]);assert obj.read_bytes()==plain.read_bytes()
  if stem=='exclusion':
   assert ' W Excluded<int>::used() const' in nm and ' W Excluded<int>::Nested::call() const' in nm
   assert 'Excluded<long>::used' not in nm and 'Excluded<long>::ordinary() const' in nm

@@ -1,0 +1,302 @@
+{
+  "all_samples_pass": true,
+  "formulas": {
+    "inline_variable_initializers": "N",
+    "inline_variable_hits": "N",
+    "parsed_nodes": "28N+339",
+    "nodes": "103N+339",
+    "instructions": "23N+56",
+    "native_text_bytes": "136N+337",
+    "executable_text_bytes": "136N+577"
+  },
+  "samples": [
+    {
+      "n": 600,
+      "sample": 0,
+      "counters": {
+        "inline_variable_initializers": 600,
+        "inline_variable_hits": 600,
+        "parsed_nodes": 17139,
+        "nodes": 62139,
+        "instructions": 13856,
+        "text_bytes": 81937
+      }
+    },
+    {
+      "n": 600,
+      "sample": 1,
+      "counters": {
+        "inline_variable_initializers": 600,
+        "inline_variable_hits": 600,
+        "parsed_nodes": 17139,
+        "nodes": 62139,
+        "instructions": 13856,
+        "text_bytes": 81937
+      }
+    },
+    {
+      "n": 600,
+      "sample": 2,
+      "counters": {
+        "inline_variable_initializers": 600,
+        "inline_variable_hits": 600,
+        "parsed_nodes": 17139,
+        "nodes": 62139,
+        "instructions": 13856,
+        "text_bytes": 81937
+      }
+    },
+    {
+      "n": 600,
+      "sample": 3,
+      "counters": {
+        "inline_variable_initializers": 600,
+        "inline_variable_hits": 600,
+        "parsed_nodes": 17139,
+        "nodes": 62139,
+        "instructions": 13856,
+        "text_bytes": 81937
+      }
+    },
+    {
+      "n": 600,
+      "sample": 4,
+      "counters": {
+        "inline_variable_initializers": 600,
+        "inline_variable_hits": 600,
+        "parsed_nodes": 17139,
+        "nodes": 62139,
+        "instructions": 13856,
+        "text_bytes": 81937
+      }
+    },
+    {
+      "n": 600,
+      "sample": 5,
+      "counters": {
+        "inline_variable_initializers": 600,
+        "inline_variable_hits": 600,
+        "parsed_nodes": 17139,
+        "nodes": 62139,
+        "instructions": 13856,
+        "text_bytes": 81937
+      }
+    },
+    {
+      "n": 600,
+      "sample": 6,
+      "counters": {
+        "inline_variable_initializers": 600,
+        "inline_variable_hits": 600,
+        "parsed_nodes": 17139,
+        "nodes": 62139,
+        "instructions": 13856,
+        "text_bytes": 81937
+      }
+    },
+    {
+      "n": 600,
+      "sample": 7,
+      "counters": {
+        "inline_variable_initializers": 600,
+        "inline_variable_hits": 600,
+        "parsed_nodes": 17139,
+        "nodes": 62139,
+        "instructions": 13856,
+        "text_bytes": 81937
+      }
+    },
+    {
+      "n": 1200,
+      "sample": 0,
+      "counters": {
+        "inline_variable_initializers": 1200,
+        "inline_variable_hits": 1200,
+        "parsed_nodes": 33939,
+        "nodes": 123939,
+        "instructions": 27656,
+        "text_bytes": 163537
+      }
+    },
+    {
+      "n": 1200,
+      "sample": 1,
+      "counters": {
+        "inline_variable_initializers": 1200,
+        "inline_variable_hits": 1200,
+        "parsed_nodes": 33939,
+        "nodes": 123939,
+        "instructions": 27656,
+        "text_bytes": 163537
+      }
+    },
+    {
+      "n": 1200,
+      "sample": 2,
+      "counters": {
+        "inline_variable_initializers": 1200,
+        "inline_variable_hits": 1200,
+        "parsed_nodes": 33939,
+        "nodes": 123939,
+        "instructions": 27656,
+        "text_bytes": 163537
+      }
+    },
+    {
+      "n": 1200,
+      "sample": 3,
+      "counters": {
+        "inline_variable_initializers": 1200,
+        "inline_variable_hits": 1200,
+        "parsed_nodes": 33939,
+        "nodes": 123939,
+        "instructions": 27656,
+        "text_bytes": 163537
+      }
+    },
+    {
+      "n": 1200,
+      "sample": 4,
+      "counters": {
+        "inline_variable_initializers": 1200,
+        "inline_variable_hits": 1200,
+        "parsed_nodes": 33939,
+        "nodes": 123939,
+        "instructions": 27656,
+        "text_bytes": 163537
+      }
+    },
+    {
+      "n": 1200,
+      "sample": 5,
+      "counters": {
+        "inline_variable_initializers": 1200,
+        "inline_variable_hits": 1200,
+        "parsed_nodes": 33939,
+        "nodes": 123939,
+        "instructions": 27656,
+        "text_bytes": 163537
+      }
+    },
+    {
+      "n": 1200,
+      "sample": 6,
+      "counters": {
+        "inline_variable_initializers": 1200,
+        "inline_variable_hits": 1200,
+        "parsed_nodes": 33939,
+        "nodes": 123939,
+        "instructions": 27656,
+        "text_bytes": 163537
+      }
+    },
+    {
+      "n": 1200,
+      "sample": 7,
+      "counters": {
+        "inline_variable_initializers": 1200,
+        "inline_variable_hits": 1200,
+        "parsed_nodes": 33939,
+        "nodes": 123939,
+        "instructions": 27656,
+        "text_bytes": 163537
+      }
+    },
+    {
+      "n": 2400,
+      "sample": 0,
+      "counters": {
+        "inline_variable_initializers": 2400,
+        "inline_variable_hits": 2400,
+        "parsed_nodes": 67539,
+        "nodes": 247539,
+        "instructions": 55256,
+        "text_bytes": 326737
+      }
+    },
+    {
+      "n": 2400,
+      "sample": 1,
+      "counters": {
+        "inline_variable_initializers": 2400,
+        "inline_variable_hits": 2400,
+        "parsed_nodes": 67539,
+        "nodes": 247539,
+        "instructions": 55256,
+        "text_bytes": 326737
+      }
+    },
+    {
+      "n": 2400,
+      "sample": 2,
+      "counters": {
+        "inline_variable_initializers": 2400,
+        "inline_variable_hits": 2400,
+        "parsed_nodes": 67539,
+        "nodes": 247539,
+        "instructions": 55256,
+        "text_bytes": 326737
+      }
+    },
+    {
+      "n": 2400,
+      "sample": 3,
+      "counters": {
+        "inline_variable_initializers": 2400,
+        "inline_variable_hits": 2400,
+        "parsed_nodes": 67539,
+        "nodes": 247539,
+        "instructions": 55256,
+        "text_bytes": 326737
+      }
+    },
+    {
+      "n": 2400,
+      "sample": 4,
+      "counters": {
+        "inline_variable_initializers": 2400,
+        "inline_variable_hits": 2400,
+        "parsed_nodes": 67539,
+        "nodes": 247539,
+        "instructions": 55256,
+        "text_bytes": 326737
+      }
+    },
+    {
+      "n": 2400,
+      "sample": 5,
+      "counters": {
+        "inline_variable_initializers": 2400,
+        "inline_variable_hits": 2400,
+        "parsed_nodes": 67539,
+        "nodes": 247539,
+        "instructions": 55256,
+        "text_bytes": 326737
+      }
+    },
+    {
+      "n": 2400,
+      "sample": 6,
+      "counters": {
+        "inline_variable_initializers": 2400,
+        "inline_variable_hits": 2400,
+        "parsed_nodes": 67539,
+        "nodes": 247539,
+        "instructions": 55256,
+        "text_bytes": 326737
+      }
+    },
+    {
+      "n": 2400,
+      "sample": 7,
+      "counters": {
+        "inline_variable_initializers": 2400,
+        "inline_variable_hits": 2400,
+        "parsed_nodes": 67539,
+        "nodes": 247539,
+        "instructions": 55256,
+        "text_bytes": 326737
+      }
+    }
+  ]
+}
