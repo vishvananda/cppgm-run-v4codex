@@ -1,0 +1,19 @@
+{
+  "code_tip": "f07f78236eb475648834ed78afbca6c864f64408",
+  "phase": "records-only; implementation unchanged since validated code commit",
+  "reviewed_commits": 12,
+  "doc_links_resolve": true,
+  "previous_ledger_rows_preserved": true,
+  "new_ledger_rows": 1,
+  "final_compiler_and_frozen_binary_hashes_verified": true,
+  "raw_log_hashes_verified": true,
+  "fixture_sidecar_hashes_verified": 1699,
+  "fixture_count": 403,
+  "exact_failure_count": 53,
+  "new_failures": 0,
+  "final_performance_observations": 832,
+  "prior_through_tests": "4538/4538",
+  "file_audit": "pass",
+  "stage_progress_preserved": true,
+  "whole_stage": "unfinished"
+}

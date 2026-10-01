@@ -1,201 +1,221 @@
-# PA29 checkpoint audit162
+# PA29 checkpoint audit166
 
-Target: **PA29 full-stage**; checkpoint audit complete, stage implementation unfinished.
+Target: PA29 full-stage; this is an accumulated checkpoint audit, not stage completion.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
-Previous review: `1ab3499d7046daf5c298d958a8770b413edb3615`.
-Audit entry: `9662716b8a8aa0bef94f5a293d7900b28c42701c`.
-Last reviewed commit: `cce8634c3c835cf6d5e8f4fa5fea0db213959718`.
+Previous review: `cce8634c3c835cf6d5e8f4fa5fea0db213959718`.
+Audit entry: `3036bd4ec4b1f8d315cf826437244de5236955bf`.
+Last reviewed commit: `f07f78236eb475648834ed78afbca6c864f64408`.
 
-The complete range covers nine entry commits, three accepted implementation
-handoffs, and the cohesive audit fix. [Range evidence](../student.tests/pa29/evidence162/range.json)
-records full hashes, every commit's paths/diff hashes and the combined source
-diff. Audit158 remains in history at `044d9627`; its baseline is not reset to
-the latest handoff. This records-only update follows the validated code tip.
+The entire prior-review-to-code-tip range is reviewed, including eleven entry
+commits, three accepted implementation handoffs, and the audit correction.
+[Range evidence](../student.tests/pa29/evidence166/range.json) retains each
+commit's paths and full/source diff hashes. Audits158/162 remain in history;
+this records-only update follows the validated code tip.
+The previous goal turn is classified as progress from the committed
+implementation165 changes/evidence (`db0d0889`, `3036bd4e`). Entry process
+inspection found no inherited live build or test. This turn adds independent
+evidence and fixes. No earlier boundary was narrowed.
 
-## Findings and fixes
+## Findings and disposition
 
-**Atomic compound assignments used increment semantics.** Every bool RMW wrote
-true, including `false += 0` and `true &= false`. `atomic_update` now consumes
-the selected arithmetic operation and computation type, then converts the
-result to bool before CAS. Increment still works; operands evaluate once.
-This preserves the arithmetic/conversion rules of N3485 [expr.ass]/7 and
-[conv.bool]/1 while retaining atomic RMW. The old native code returned the
-wrong result in the [bool reducer](../student.tests/pa29/controls162/atomic-bool.cpp).
+1. **Assembly writes left stale private-local proofs.** `resolve_assembly` did
+   not report output writes or memory exposure to `observe_scalar`. A later
+   conditional involving a class temporary could use the local's original
+   initializer to select the wrong branch. The fix uses the existing semantic
+   observation owner; it neither rescans functions nor invents an IR-only effect.
+   Register, read/write, memory, parenthesized and dependent-template cases are
+   covered by `controls166/assembly-observations.cpp`. The GNU
+   [output-operand contract](https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#OutputOperands)
+   defines these operands as modified by the assembly. N3485 [expr.cond]/1
+   requires the condition's actual value to select the evaluated operand.
 
-**Atomic reference snapshots aliased the source.** Lowering removed atomic
-identity before comparing the source object with a reference's referred-to
-type, bypassing the temporary already selected by semantics. Consequently
-`const int& r = atomic; atomic = 9;` changed the apparent value of `r`.
-`values.cpp` now preserves atomic identity at the reference-storage boundary;
-value conversion performs the atomic load into a separate temporary. Direct
-atomic-reference binding still preserves object identity. Controls cover direct,
-user-conversion, template and pointer-like invocation recipes; the lifetime
-traits and runtime now agree on materialization. The relevant ordinary
-reference/temporary rules are N3485 [dcl.init.ref]/5 and [class.temporary],
-applied to the selected hosted atomic value conversion.
+2. **The first new[] bound used manifest evaluation.** The declaration type
+   builder evaluated an ordinary allocation extent as a required constant. The
+   reducer allocated two elements instead of five. Bound expression checking
+   now retains manifest contexts for template arguments/types, while its value
+   proof uses runtime mode; later array dimensions remain required constants.
+   `PlacementNew::dynamic_extent` carries the accepted decision into finish and
+   lowering. The runtime fact accessor consumes runtime facts even when the TU
+   has not yet encountered the builtin. No phase reconstructs this decision
+   from the mutable availability of another cache. The
+   [GNU builtin contract](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html)
+   distinguishes manifest constant evaluation, while N3485 [expr.new]/6–10
+   distinguishes first expressions, later constant dimensions and allocation
+   sizes. Controls check nested dimensions, template arguments, runtime
+   evaluate-once bounds, constructors/destructors, and a zero bound.
 
-**Canonical signatures erased reduced storage alignment.** An aligned(1) alias
-of a 16-byte type arrived at atomic lowering through a canonical pointer type.
-The old code regained natural alignment and emitted `cmpxchg16b`; three new
-controls crashed. Lowering now consumes the first operand's existing decorated
-storage TypeId, retained through members, aliases, function returns and template
-occurrences. Inline selection requires power-of-two width ≤16 and alignment at
-least that width. Generic layouts use the existing libatomic ABI; scalar/sync
-load/store/exchange/CAS and RMW now use that same conservative fallback when
-native alignment is unproved. No name lookup or new semantic reconstruction
-repairs the fact in lowering. [Declared-field reducers](../student.tests/pa29/controls162/atomic-generic-template.cpp)
-avoid relying on a manufactured object lifetime in a character buffer.
+3. **Value parameters acquired nonexistent storage.** The constant-address
+   evaluator treated a prvalue enumerator/substituted non-type argument as a
+   real object. Context-reference lowering then allocated an uninitialized
+   `$N` slot. A host run could accidentally pass when stack garbage was nonzero;
+   standalone LowIR execution exposed the error. Parsed-expression and query
+   evaluators now materialize prvalues, preserving glvalue object identities.
+   N3485 [expr.prim.general]/8, [temp.param]/6 and [dcl.init.ref]/5 distinguish
+   these values and the required temporary binding. The independent enum/value
+   argument controls and combined string/query/reference/assembly reducer pass
+   with explicit initialized storage in LowIR and both native emission paths.
 
-The [GNU atomic contract](https://gcc.gnu.org/onlinedocs/gcc/_005f_005fatomic-Builtins.html)
-documents generic runtime fallback, memory-order strengthening and strong
-implementation of weak CAS. LowIR atomics retain their [PA8 contract](../pa8/lowir.md).
-The fix preserves atomicity and failure-only expected-value updates, including
-unaligned scalar arithmetic implemented with a bounded emitted CAS recipe.
+4. **Query receiver cache context/lifetime was incomplete.** A materialized
+   receiver derives from a query value but was keyed only by query identity.
+   Its key now includes evaluation mode, cached hits propagate that value's
+   mode dependence, and the existing reverse completion edges retire both mode
+   receivers alongside the query values. This is a code-proven cache-validity
+   defect; it is not represented as a separately observed course-test failure.
+   The cache stays TU-owned, sparse and bounded to two variants per query.
 
-**Atomic identity was treated as const/volatile.** The packed type flag's bit 4
-incorrectly participated in object cv checks. Valid `void*` conversions,
-reinterpret casts and temporary binding to `const _Atomic(int)&` failed.
-The shared conversion/list/query owners now compare cv bits independently of
-atomic type identity. Qualification conversions and template identity still
-distinguish atomic from ordinary types; atomic payload inheritance does not
-create an implicit atomic-to-base pointer conversion. Negative controls preserve
-const protection. N3485 [conv.ptr]/2, [expr.reinterpret.cast]/2,7,11 and
-[dcl.init.ref]/5 support the ordinary pointer/reference rules; `_Atomic` remains
-the hosted extension required by the handout, not a replacement for volatile.
-
-[Entry regressions](../student.tests/pa29/evidence162/entry-regressions.json)
-show seven failed reducer checks on the frozen entry compiler.
-[Final controls](../student.tests/pa29/evidence162/controls.json) pass **49/49**.
-No required fixture, reference, comparison or discovery rule was changed.
-No reference correction was needed or claimed. Clause citations above refer to
-the checked-in [N3485 draft](../doc/n3485.txt).
+No reference, fixture, sidecar, discovery rule or comparison rule changed.
+Compiler agreement is supplementary; the reducers, language/extension rules,
+accepted semantic facts and emitted code establish the corrections. Clause
+references are to the checked-in `doc/n3485.txt`. No reference bundle revision
+was needed. The known std-trait oracle questions remain unresolved failures.
 
 ## Every commit reviewed
 
-| Commit | Reviewed content and interactions |
+| Commit | Reviewed content and interaction |
 |---|---|
-| `044d9627` | Prior audit records and full review boundary; inherited storage facts and performance classification. |
-| `46fa99d2` | Legacy trait registry and structural/member versus expression-usability distinctions; shared reference-binding phases and callers. |
-| `8bc08195` | Structural member cache ownership, complete class prerequisites and selected subobject cv/mutable behavior; superseded uncached traversal also reviewed. |
-| `5d2b1657` | Source-prvalue destruction checked separately from result temporary destruction. |
-| `8bdc6bbf` | Trait controls, preliminary/final performance observations, complete failure/remaining-work handoff. |
-| `2fd6963e` | Invocation receiver recipes, query context/operator family, lane environments, fixed/dependent reuse, constant evaluation, cleanup and exceptions. |
-| `7f0a2c4b` | Invocation validation/scaling evidence and residual contract questions. |
-| `802f28fd` | Atomic registry/types/signatures, substitution/deduction, ABI, constant access, storage, class padding, native/runtime lowering and exception facts. |
-| `9662716b` | Atomic validation/performance and 338/403 checkpoint; all retained failures and inherited obligations reviewed. |
-| `cce8634c` | Four audit fixes above, independent reducers, inspection/benchmark harnesses and reproducible gate recorder. |
+| `3bc61ecb` | Prior audit evidence, complete review marker, preserved coverage and stage-scoped performance classification. |
+| `c3b29a60` | Assembly grammar/recipes, dependent operand binding, semantic constraints, effects/lifetimes, shared LowIR and native encoding. |
+| `a6f3d6a2` | Hint instruction shape validation, external IR/native/debug controls, frozen performance inputs and handoff limits. |
+| `e5690337` | Assembly handoff evidence, seven resolved fixtures, resource bounds and unfinished owner groups. |
+| `22036430` | Function-context work plan and preserved full-stage scope. |
+| `e16108af` | Scope/name query identity, dependent scope substitution, output-only signature rendering, semantic helper moves and telemetry. |
+| `61e023f3` | String/query validation, performance and required source-invocation/evaluation residuals. |
+| `12893184` | Evaluation-context scope and retained earlier review boundary. |
+| `f42ab562` | Intrinsic registry, mode propagation across evaluator/query/static/activation/array owners, initialized storage lowering and controls. |
+| `db0d0889` | Reference plans, actual activation storage, aliases/mutation, frame lifetime retirement and expanded final evidence. |
+| `3036bd4e` | Full 403-fixture checkpoint, 53 failures, final versus preliminary performance evidence, remaining aggregate/source-context work. |
+| `f07f7823` | Shared effect, allocation, materialization and query cache corrections; independent integrated controls and audit evidence tooling. |
 
-## Architecture and ownership audit
+## Architecture trace
 
-| Spec surface | Evidence and conclusion |
-|---|---|
-| §1 parsing/source | `lowering/driver.cpp` creates immutable source/preprocessor buffers, streaming PostTokenCursor/syntax Cursor and integrated Parser/Analyzer per TU. `_Atomic(type-id)` and retained template bodies are parsed once. The new owners add no token replay, duplicate syntax graph or production text phase. |
-| §§2–3 identity/selection | Type/entity/query IDs and flat Index keys remain primary. Atomic signatures use operation/form/result bits plus canonical pointee identity. Storage decoration remains a distinct existing expression fact. Reference phases keep typed ambiguity/failure and selected conversions; lowering consumes those recipes. No library spelling or pretty-printed semantic key was introduced. |
-| §§4–5 demand/caches | Legacy class properties key operation/type after completion; member triviality keys declaration ID. In-progress/success/failure states prevent duplicate structural work and unavailable prerequisites restore not-started state. Bodies cannot alter completed structural facts. Invocation keys include access context, operands and the captured ordinary operator family; lookup merges create immutable overload identities. Expanded operands enter their lane frame. Existing reverse query/completion edges invalidate only dependent consumers. |
-| Fixed/dependent invocation | `RangeOperation` stores selected unary receiver, conversions, result, adjustment and virtual slot by compact IDs. Immutable query/source recipes do not own a runtime temporary. `project_object_use` maps retained source operands into an occurrence; evaluated use creates its own conversion/materialization records and body demands. Constant, exception and lifetime consumers share the same selection. |
-| §§6–7 lowering/native | Procedural builds typed Program directly. Atomic operation/signature, reference materialization, decorated alignment, base adjustment and nonthrowing facts survive into normal LowIR operations/calls. `compile_object` → `native::compile_image` → per-function Selector/encoder → HostElf has no assembly/text transport or host compiler substitution. External LowIR validation/roundtrip is an explicit audit adapter. |
-| §8 allocation/lifetime | TU arenas/slabs, interned pools, flat indexes and amortized vectors own semantic/query/receiver facts. New stored recipes have compact fields, not owning per-node pointers. Candidate/argument scratch releases at query/call exit; lowering slots/blocks have function lifetime. Native Function/MIR temporaries die after each encoding. Linkage owns at most four generic atomic runtime symbol identities per program. No mutable process-global cache is added. |
-| §§9–10 evidence | Telemetry reads existing work; all inspected objects are byte-identical with stats on/off. Cache/scaling counters below observe real demand. Required output is generated by this compiler; host linking and libatomic runtime calls are ordinary authorized ABI boundaries. No test recognition or reference delegation exists in the range. |
+`lowering/driver.cpp` creates immutable preprocessor source buffers, streaming
+post/syntax cursors, and the integrated Parser/Analyzer. Assembly strings are
+explicit source inputs parsed once into typed recipes; they are never emitted
+and reparsed between production phases. The source-owned recipe is shared
+across substitutions. Operand expression edges use the same graph and scope
+indexes as ordinary expressions. Thirty operands bound constraint/name matching;
+instruction work follows source bytes and the recipe's actual instructions.
 
-The nontrivial declaration trace is `Holder::value` in
-[atomic-generic-template.cpp](../student.tests/pa29/controls162/atomic-generic-template.cpp).
-`Packed` retains the aligned(1) operand while canonical language/ABI identity is
-`Pair`. Layout places the field at offset 1. `address()` preserves the decorated
-result type. The selected generic builtin signature remains canonical; lowering
-uses the separate expression storage fact to choose a serialized runtime call.
-The final ELF contains the field-address relocation and `__atomic_*` relocations,
-with no misaligned `cmpxchg16b`.
+The nontrivial declaration trace is `mode` in `integrated-context.cpp`.
+`work<3>` selects the true initialization branch in manifest mode. The prvalue
+argument is materialized with a typed initial value and temporary entity,
+rather than an address for a template parameter. Its context-reference plan
+records real storage; lowering emits the store before binding the reference.
+The assembly consumes that location and records the write to `flag`. The
+conditional therefore retains the actual runtime branch and both appropriate
+cleanup paths. No name lookup, fake AST node or semantic reconstruction repairs
+this in lowering. The array-allocation reducer separately demonstrates the
+recorded runtime extent reaching the allocator's byte count and element loops.
 
-The demanded template trace is `operate<int>`/`operate<char>` in that source,
-plus `invoke<Pointer>` and `snapshot<int>` in
-[atomic-reference-recipes.cpp](../student.tests/pa29/controls162/atomic-reference-recipes.cpp).
-Parsed bodies and fixed recipes are retained. Dependent uses substitute through
-canonical frame/query identities; each demanded function body transitions once.
-Pointer-like invocation selects `Pointer::operator*`, then the member receiver
-and argument conversion. The selected scalar temporary survives the member's
-write to the original atomic object. LowIR/native execution and telemetry agree.
-[Inspection evidence](../student.tests/pa29/evidence162/inspection.json) records
-the complete trace through serialization, object encoding and execution.
+The demanded-template trace is the same `work<N>`, plus inherited query controls.
+One parsed pattern retains `FunctionName` queries keyed by lexical function
+scope and interned name. `substitute_query` projects that scope through the
+canonical specialization frame, visiting dependent nodes only. `length` selects
+its overload and conversions once; concrete string storage has one entity per
+scope/name pair. Pretty text is an output payload, never a semantic lookup key.
+The immutable parent-linked environments and existing completion/demand edges
+remain the owners. No global retries, generation flush or parse replay appears.
 
-The repeated legacy queries still compute five query facts, four class-member
-properties and three structural member facts at both 100 and 10,000 repetitions;
-invocation repeated-query work and body transitions also remain constant.
-[Trait inspection](../student.tests/pa29/evidence162/inspection159.json) and
-[invocation inspection](../student.tests/pa29/evidence162/inspection160.json)
-retain the actual counters. Distinct demanded specializations scale linearly in
-the new combined workload rather than recomputing unrelated facts.
+Expression/runtime values, activation keys and static/array proofs retain their
+mode split. Activations additionally include body, typed arguments, receiver,
+zero-initialization and reachable-storage snapshots. Reference rebasing visits
+its recorded subobject path; mutable scalar writes update the owning frame and
+storage version. Scope/activation exit retires the storage and clears frame
+back-pointers, including exceptional exit. Aggregate-subobject mutation remains
+the documented inherited positive-behavior gap, not an expected rejection.
 
-## Optimization legality, profitability and budgets
+TU arenas, interning pools, flat indexes and geometrically grown recipe/fact
+vectors own retained data. Renderer/operand/activation scratch has bounded local
+lifetime; no per-node owning shared pointer, global mutable cache or duplicate
+syntax graph was introduced. The typed LowIR Program is the source/object
+boundary. `compile_object` calls `native::compile_image`, then per-function
+Selector/encoder and HostElf; native function scratch dies at each iteration.
+External LowIR roundtrips are test adapters only. Required output uses this
+compiler; host linking is the PA27/28 ABI boundary.
 
-No optional optimization was added in the accumulated range or audit fix. The
-new work is required semantic selection/storage and bounded target lowering.
-The new optional work/code-growth budget is **zero**. Correctness fixes are not
-presented as faster programs; an incorrect implementation is not a timing oracle.
+## Legality, profitability and bounds
 
-Alignment is the useful fact traced to encoding: source decoration → expression
-storage identity → width/alignment legality test → native atomic or ordinary
-runtime call. Facts are immutable after completion; no new analysis invalidation
-is needed. Native lowering is selected only for supported, sufficiently aligned
-representations. Missing alignment proof selects the conservative ABI path.
-Each primitive introduces constant compiler work and slots; payload copies scale
-with actual width. CAS-based RMWs emit one fixed loop; native add/exchange retain
-their bounded recipes. Runtime contention is not compiler search, and no
-unrolling, specialization or growth fixed point is added.
+The useful optimization fact is the private local's unmodified initializer.
+Assembly invalidates it at the semantic write/exposure site, before
+`prepare_scalar_consumption` can select a conditional arm. With no valid proof,
+ordinary branching and cleanup remain. Existing profitability policy is
+unchanged; no new transform or search was added. The allocation proof likewise
+uses the appropriate evaluation mode and otherwise preserves conservative
+64-bit extent arithmetic. Mode-sensitive initialized storage is required
+semantics, not an optional speedup. Receiver completion invalidation follows
+only explicit query dependency edges.
 
-Bool updates retain the selected arithmetic and bool conversion before CAS;
-snapshot binding retains an atomic load and a distinct temporary. Operands are
-evaluated once outside retries. Existing seq_cst strengthening, weak-to-strong
-CAS, exception boundaries, ABI and source/debug identities are preserved.
-External LowIR roundtrips reproduce both fallback behavior and expected updates.
-Existing constexpr million-step/depth-512, native frame/data `0x70000000`,
-global alignment 4096 and representable object/branch limits remain unchanged.
+New optional work/growth budgets are zero. Source recipes and emitted operations
+have linear bounds; each supported locked operation emits a fixed primitive or
+one fixed-size CAS loop. Runtime contention is not compiler search. Reference
+plans are constant-sized plus an existing subobject path; mode caches have at
+most two variants. Pipeline work scales with demanded facts and emitted bytes,
+with no new fixed-point pass. The 1,000,000-step/512-depth evaluator bounds,
+native frame/data 0x70000000, 4096 alignment limits and course timeouts remain.
+ABI, nonthrowing intrinsic facts, full-expression cleanup and debug metadata
+transport are checked. PA8 permits the inherited absence of host DWARF; PA29
+adds no contrary requirement. Hint debug locations survive explicit LowIR/MIR.
 
-Actual costs are inspected. The reference reducer has a 32-byte frame: the
-atomic resides at `rbp-8`, the snapshot at `rbp-16`, and its reference home at
-`rbp-24`. The bool reducer retains arithmetic, `setne` and `lock cmpxchg`, with
-an expected-value stack slot. Each generic template has a 96-byte frame and
-runtime-call argument homes. These O0 costs are disclosed rather than inferred
-from a smaller IR. No new allocator/loop optimizer is claimed.
+Actual frame/branch/call and text costs are inspected rather than inferred from
+IR counts. Each integrated `work<N>` has a 96-byte O0 frame, eight call sites
+(including alternative cleanup paths), nine loads and nine stores in its MIR;
+allocation control `main` has a 160-byte frame. The reference now has an explicit
+constant store before its address is bound, with no uninitialized `$N` slot. [Performance evidence](performance166.md)
+reports final compiler latency/RSS and checked runtime/text together: 832 final
+observations, 24 launcher samples, A/A calibration, ABBA paired spreads and all
+preliminary measurements. Equivalent common images are byte-identical; audit-only
+paired compiler ratios are 0.9966–1.0013. The cumulative memory/floating and
+affected assembly timings have substantial scheduling variation, disclosed in
+full. Counters bound required demand growth; no repeatable avoidable regression
+is established and no speedup is claimed.
+Necessary correctness costs are disclosed; invalid entry behavior is never an
+affected performance oracle. Historical blanket 15% and zero-growth targets
+remain diagnostics under spec §9. No mandate or correctness/coverage requirement
+is weakened. Broader hosted runtime, optional optimizer/allocation and
+self-hosting ownership remains PA30–34.
 
-[Performance162](performance162.md) reports latency, compiler RSS, checked runtime
-and text size together, including noise calibration, paired spreads, preliminary
-observations and scaling. Final cumulative common compiler ratios are
-0.9299–1.0133; audit-only ratios are 0.9835–1.0016. All common A/B objects and
-executables are byte-identical. New ownership costs grow with actual demand;
-no repeatable avoidable regression is established. Historical blanket 15% and
-zero-growth goals remain diagnostics under spec §9, not exit gates. Older
-measurements and mandated limits remain intact. PA30–34 retain broad hosted
-runtime, optimization/allocation and self-hosting ownership.
+## Validation and remaining work
 
-## Validation, residual work and handoffs
+[Validation](../student.tests/pa29/evidence166/validation.json) is for code
+`f07f7823` and the final compiler hash, including fresh required checks:
 
-[Validation](../student.tests/pa29/evidence162/validation.json) proves required
-checks on code `cce8634c`: PA29 **338/403**, exit 2; PA1–28 **4538/4538**, exit 0;
-through PA29 **4876/4941**, exit 2, only PA29 fails. File audit passes with the
-same four inherited header-body warnings, no new waiver. New controls pass
-49/49, prior storage controls 34/34, and handoff controls 47/47, 46/46, 45/45.
-The file/coverage recorder verifies all 403 inputs and all checked sidecars are
-byte-identical to the previous review, with no harness/discovery/comparison edit.
-The exact [65-failure set](../student.tests/pa29/evidence162/stage-delta.json)
-is unchanged; extra personal passes do not compensate for a course regression.
+- `make test-pa29`: **350/403**, exit 2, the exact same **53 failures** as entry.
+- `make test-report-through-pa28`: **4538/4538**, exit 0.
+- `make test-report-through-pa29`: **4888/4941**, exit 2; only PA29 fails.
+- File audit: pass, the four inherited substantial-header warnings, no new waiver.
+- Explicit controls162/163/164/165/166: **49/53/52/47/21**, all passing
+  (**222 total**). New controls are **21/21**, versus **17/21** at entry;
+  [entry observations](../student.tests/pa29/evidence166/entry-regressions.json)
+  preserve the four failing runtimes.
+- Inspection161/163/165/166: **7/5/112/98** passing checks/groups. These cover
+  source stats/image equality, validated and byte-roundtripped LowIR, MIR,
+  standalone execution, and the current-source IR-to-host-object adapter.
 
-The [compact plan](plan.md) retains five broad groups: assembly 6; extended
-syntax/types/layout 37; template demand/hosted ABI 19; structured intrinsic
-contexts 2; and one legacy trait contract question. Code alignment, dependent
-offsetof ABI signatures and class-convertible indices remain with their owners;
-extended float suffix parsing still lacks extended precision. The undefined
-std-trait and reserved-name false-primary invocable fixtures remain unresolved
-contract questions. Ordinary-name reducers or compiler agreement alone do not
-prove their reference outputs wrong; references and failures remain intact.
+[Coverage](../student.tests/pa29/evidence166/coverage.json) hashes every one of
+the 403 inputs and checked sidecars against the previous review. The
+[exact failure delta](../student.tests/pa29/evidence166/stage-delta.json)
+proves no new failure and no reduced coverage; personal passes do not compensate
+for a course regression. No harness/discovery/comparison rule changed.
+The [inspection results](../student.tests/pa29/evidence166/inspection166.json)
+preserve the integrated reducer's actual emitted evidence. All required checks
+and performance observations use the final binary; preliminary evidence is
+retained and labelled separately.
 
-Handoff fragmentation was partly avoidable. Traits needed separate structural
-cache and source-destruction followups, and repeated records-only handoffs added
-review overhead. The atomic handoff changed shared identity/storage paths without
-closing reference materialization and reduced-alignment interactions. Future
-handoffs should complete one broad owner group through semantic selection,
-lowering, independent cross-owner controls and evidence, rather than passing each
-small symptom separately. No residual required behavior is waived, and full
-through-PA29 success is still required before advancing.
+Remaining required work stays broadly grouped: extended syntax/types/layout
+(36 failures), template demand/hosted ABI (15), source-invocation context (1),
+and legacy trait contract/implementation (1). Preserve the source-invocation
+and aggregate-mutation positive reducers, code-alignment placement, dependent
+offsetof ABI signatures, class-convertible designator indices and extended
+floating precision in their owning groups. Runtime vector lowering is outside
+PA29; compile-time vector layout remains required. Full through-PA29 success
+is still required before advancing.
+
+The three broad owners justified separate handoffs, but their interactions were
+under-tested. The evaluation alias followup and repeated records-only handoffs
+added avoidable fragmentation. Complete each owner through dependent queries,
+mode-sensitive storage, effect invalidation and both typed-IR/native paths before
+handoff; host execution alone can hide an uninitialized stack read. This audit
+reviews all those increments together and preserves one unambiguous code tip.
 
 ## Audit ledger
 
@@ -203,3 +223,4 @@ through-PA29 success is still required before advancing.
 |---|---|---|---|
 | 158 | `2734e5c6..1ab3499d` (three handoffs) | Alias/expression/template storage fixed; deleted-copy reference corrected with clause proof; historical performance targets classified under spec §9. | PA29 317/403, no new failures; PA1–28 4538/4538; file audit/controls pass; four performance dimensions retained. |
 | 162 | `1ab3499d..cce8634c` (entry `9662716b`, three handoffs) | Fixed atomic bool RMW, reference snapshots, alignment/native fallback and cv/identity conversions; reviewed complete traits/invocation/atomic ownership range; no reference changes. | PA29 338/403, identical 65 failures and 403 inputs; PA1–28 4538/4538; file audit pass; 221/221 explicit controls; native/LowIR/cache checks and 1,088 performance observations retained. |
+| 166 | `cce8634c..f07f7823` (entry `3036bd4e`, three handoffs) | Reviewed all assembly, function-context and evaluation/storage increments; fixed effect invalidation, runtime extents, prvalue materialization and complete query receiver keys/lifetimes; no reference changes. | PA29 350/403, identical 53 failures and 403 inputs; PA1–28 4538/4538; file audit pass; 222 behavioral checks and 222 inspection checks/groups; 832 final performance observations plus 24 launchers, with preliminary evidence retained. |

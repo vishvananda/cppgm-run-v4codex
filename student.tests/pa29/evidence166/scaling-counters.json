@@ -1,0 +1,298 @@
+{
+  "163": {
+    "register600": {
+      "asm_source_statements": 1,
+      "asm_source_instructions": 3,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 600,
+      "semantic_evaluation_mode_observations": 0,
+      "semantic_evaluation_mode_values": 0,
+      "semantic_evaluation_mode_activations": 0,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 14453
+    },
+    "register1200": {
+      "asm_source_statements": 1,
+      "asm_source_instructions": 3,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 1200,
+      "semantic_evaluation_mode_observations": 0,
+      "semantic_evaluation_mode_values": 0,
+      "semantic_evaluation_mode_activations": 0,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 28853
+    },
+    "register2400": {
+      "asm_source_statements": 1,
+      "asm_source_instructions": 3,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 2400,
+      "semantic_evaluation_mode_observations": 0,
+      "semantic_evaluation_mode_values": 0,
+      "semantic_evaluation_mode_activations": 0,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 57653
+    },
+    "locked600": {
+      "asm_source_statements": 1,
+      "asm_source_instructions": 2,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 600,
+      "semantic_evaluation_mode_observations": 0,
+      "semantic_evaluation_mode_values": 0,
+      "semantic_evaluation_mode_activations": 0,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 15653
+    },
+    "locked1200": {
+      "asm_source_statements": 1,
+      "asm_source_instructions": 2,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 1200,
+      "semantic_evaluation_mode_observations": 0,
+      "semantic_evaluation_mode_values": 0,
+      "semantic_evaluation_mode_activations": 0,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 31253
+    },
+    "locked2400": {
+      "asm_source_statements": 1,
+      "asm_source_instructions": 2,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 2400,
+      "semantic_evaluation_mode_observations": 0,
+      "semantic_evaluation_mode_values": 0,
+      "semantic_evaluation_mode_activations": 0,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 62453
+    }
+  },
+  "164": {
+    "strings600": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 600,
+      "template_body_transitions": 600,
+      "semantic_evaluation_mode_observations": 0,
+      "semantic_evaluation_mode_values": 0,
+      "semantic_evaluation_mode_activations": 0,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 10256
+    },
+    "strings1200": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 1200,
+      "template_body_transitions": 1200,
+      "semantic_evaluation_mode_observations": 0,
+      "semantic_evaluation_mode_values": 0,
+      "semantic_evaluation_mode_activations": 0,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 20456
+    },
+    "strings2400": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 2400,
+      "template_body_transitions": 2400,
+      "semantic_evaluation_mode_observations": 0,
+      "semantic_evaluation_mode_values": 0,
+      "semantic_evaluation_mode_activations": 0,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 40856
+    },
+    "queries600": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 600,
+      "template_body_transitions": 603,
+      "semantic_evaluation_mode_observations": 0,
+      "semantic_evaluation_mode_values": 0,
+      "semantic_evaluation_mode_activations": 0,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 10256
+    },
+    "queries1200": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 1200,
+      "template_body_transitions": 1204,
+      "semantic_evaluation_mode_observations": 0,
+      "semantic_evaluation_mode_values": 0,
+      "semantic_evaluation_mode_activations": 0,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 20456
+    },
+    "queries2400": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 2400,
+      "template_body_transitions": 2404,
+      "semantic_evaluation_mode_observations": 0,
+      "semantic_evaluation_mode_values": 0,
+      "semantic_evaluation_mode_activations": 0,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 40856
+    }
+  },
+  "165": {
+    "evaluation600": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 600,
+      "semantic_evaluation_mode_observations": 600,
+      "semantic_evaluation_mode_values": 600,
+      "semantic_evaluation_mode_activations": 601,
+      "semantic_context_initializers": 600,
+      "semantic_context_references": 0,
+      "native_instructions": 20455
+    },
+    "evaluation1200": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 1200,
+      "semantic_evaluation_mode_observations": 1200,
+      "semantic_evaluation_mode_values": 1200,
+      "semantic_evaluation_mode_activations": 1201,
+      "semantic_context_initializers": 1200,
+      "semantic_context_references": 0,
+      "native_instructions": 40855
+    },
+    "evaluation2400": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 2400,
+      "semantic_evaluation_mode_observations": 2400,
+      "semantic_evaluation_mode_values": 2400,
+      "semantic_evaluation_mode_activations": 2401,
+      "semantic_context_initializers": 2400,
+      "semantic_context_references": 0,
+      "native_instructions": 81655
+    },
+    "storage600": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 600,
+      "semantic_evaluation_mode_observations": 2400,
+      "semantic_evaluation_mode_values": 1200,
+      "semantic_evaluation_mode_activations": 1802,
+      "semantic_context_initializers": 1800,
+      "semantic_context_references": 600,
+      "native_instructions": 20453
+    },
+    "storage1200": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 1200,
+      "semantic_evaluation_mode_observations": 4800,
+      "semantic_evaluation_mode_values": 2400,
+      "semantic_evaluation_mode_activations": 3602,
+      "semantic_context_initializers": 3600,
+      "semantic_context_references": 1200,
+      "native_instructions": 40853
+    },
+    "storage2400": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 2400,
+      "semantic_evaluation_mode_observations": 9600,
+      "semantic_evaluation_mode_values": 4800,
+      "semantic_evaluation_mode_activations": 7202,
+      "semantic_context_initializers": 7200,
+      "semantic_context_references": 2400,
+      "native_instructions": 81653
+    }
+  },
+  "166": {
+    "reference600": {
+      "asm_source_statements": 1,
+      "asm_source_instructions": 1,
+      "semantic_function_string_objects": 600,
+      "template_body_transitions": 603,
+      "semantic_evaluation_mode_observations": 600,
+      "semantic_evaluation_mode_values": 600,
+      "semantic_evaluation_mode_activations": 1,
+      "semantic_context_initializers": 600,
+      "semantic_context_references": 600,
+      "native_instructions": 52279
+    },
+    "reference1200": {
+      "asm_source_statements": 1,
+      "asm_source_instructions": 1,
+      "semantic_function_string_objects": 1200,
+      "template_body_transitions": 1204,
+      "semantic_evaluation_mode_observations": 1200,
+      "semantic_evaluation_mode_values": 1200,
+      "semantic_evaluation_mode_activations": 1,
+      "semantic_context_initializers": 1200,
+      "semantic_context_references": 1200,
+      "native_instructions": 104485
+    },
+    "reference2400": {
+      "asm_source_statements": 1,
+      "asm_source_instructions": 1,
+      "semantic_function_string_objects": 2400,
+      "template_body_transitions": 2404,
+      "semantic_evaluation_mode_observations": 2400,
+      "semantic_evaluation_mode_values": 2400,
+      "semantic_evaluation_mode_activations": 1,
+      "semantic_context_initializers": 2400,
+      "semantic_context_references": 2400,
+      "native_instructions": 208885
+    },
+    "allocation600": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 1200,
+      "semantic_evaluation_mode_observations": 600,
+      "semantic_evaluation_mode_values": 600,
+      "semantic_evaluation_mode_activations": 601,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 30657
+    },
+    "allocation1200": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 2400,
+      "semantic_evaluation_mode_observations": 1200,
+      "semantic_evaluation_mode_values": 1200,
+      "semantic_evaluation_mode_activations": 1201,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 61257
+    },
+    "allocation2400": {
+      "asm_source_statements": 0,
+      "asm_source_instructions": 0,
+      "semantic_function_string_objects": 0,
+      "template_body_transitions": 4800,
+      "semantic_evaluation_mode_observations": 2400,
+      "semantic_evaluation_mode_values": 2400,
+      "semantic_evaluation_mode_activations": 2401,
+      "semantic_context_initializers": 0,
+      "semantic_context_references": 0,
+      "native_instructions": 122457
+    }
+  }
+}

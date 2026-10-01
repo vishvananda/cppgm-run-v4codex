@@ -1,0 +1,200 @@
+[
+  {
+    "workload": "allocation1200",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-cppgm++",
+      "-std=c++14",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/preliminary/affected166/allocation1200.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation1200",
+    "args": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation1200",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 1,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation2400",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-cppgm++",
+      "-std=c++14",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/preliminary/affected166/allocation2400.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation2400",
+    "args": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation2400",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 1,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation600",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-cppgm++",
+      "-std=c++14",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/preliminary/affected166/allocation600.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation600",
+    "args": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation600",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 1,
+    "stderr": ""
+  },
+  {
+    "workload": "reference1200",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-cppgm++",
+      "-std=c++14",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/preliminary/affected166/reference1200.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference1200",
+    "args": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference1200",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference2400",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-cppgm++",
+      "-std=c++14",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/preliminary/affected166/reference2400.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference2400",
+    "args": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference2400",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference600",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-cppgm++",
+      "-std=c++14",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/preliminary/affected166/reference600.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference600",
+    "args": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference600",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  }
+]

@@ -1,0 +1,71 @@
+{
+  "code_tip": "f07f78236eb475648834ed78afbca6c864f64408",
+  "compiler_sha256": "580d2142a9f7b5914981ce90f0aa0710b4c84a545b127aa1d24a1cef155f78f5",
+  "commands": {
+    "make test-pa29": 2,
+    "make test-report-through-pa28": 0,
+    "make test-report-through-pa29": 2,
+    "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src": 0
+  },
+  "stage_progress_preserved": true,
+  "checks": {
+    "controls162": 49,
+    "controls163": 53,
+    "controls164": 52,
+    "controls165": 47,
+    "controls166": 21,
+    "inspection161": 7,
+    "inspection163": 5,
+    "inspection165": 112,
+    "inspection166": 98
+  },
+  "logs": {
+    "stage-final.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit166/stage-final.log",
+      "sha256": "5dad7302c24334f94fdecf390fd2095668c1bffdc138ad7daa9c50b4c0441ad8",
+      "tail": [
+        "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got 255)",
+        "pa29/tests/run/800-source-location-builtin-macros-run.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+        "===== TEST SUMMARY: 350 / 403 TESTS PASSED =====",
+        "make[1]: *** [Makefile:292: test-report-nobuild] Error 1",
+        "make: *** [Makefile:483: test-pa29] Error 2"
+      ]
+    },
+    "prior-final.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit166/prior-final.log",
+      "sha256": "62fafee2304dafac1d6eb44703da74008c028ee3cc40be97d2e4ca4702c208ba",
+      "tail": [
+        "===== pa26 =====",
+        "===== pa27 =====",
+        "PA27 global-section properties: PASS (3/3)",
+        "===== pa28 =====",
+        "===== ALL TESTS PASSED SUCCESSFULLY! (4538 / 4538) ====="
+      ]
+    },
+    "through-final.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit166/through-final.log",
+      "sha256": "4bc9afa06f6237afc5fc7fbd4eec07b4324f959d8e636cfde006e8e6e9b3da07",
+      "tail": [
+        "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got 255)",
+        "pa29/tests/run/800-source-location-builtin-macros-run.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+        "===== TEST SUMMARY: 4888 / 4941 TESTS PASSED =====",
+        "make[1]: *** [Makefile:292: test-report-nobuild] Error 1",
+        "make: *** [Makefile:276: test-report-through-pa29] Error 2"
+      ]
+    },
+    "file-audit-final.log": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit166/file-audit-final.log",
+      "sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f",
+      "tail": [
+        "File audit passed for pa29 with 4 warning(s).",
+        "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+      ]
+    }
+  },
+  "coverage": 403,
+  "final_failures": 53,
+  "whole_stage": "unfinished; no advancement"
+}

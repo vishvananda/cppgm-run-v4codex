@@ -1,0 +1,218 @@
+[
+  {
+    "workload": "allocation1200",
+    "input_sha256": "afd41755de981d2d9f96a3bf27a26b3e86f1fdad7752a8a3dd316f2798ff7779",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-cppgm++",
+      "-std=c++14",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/affected166/allocation1200.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation1200",
+    "input_sha256": "afd41755de981d2d9f96a3bf27a26b3e86f1fdad7752a8a3dd316f2798ff7779",
+    "args": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation1200",
+    "input_sha256": "afd41755de981d2d9f96a3bf27a26b3e86f1fdad7752a8a3dd316f2798ff7779",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 1,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation2400",
+    "input_sha256": "b00f67b4df0573a9456ee812c558f2c308134ceb4b4714b7e174672a2e6f1474",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-cppgm++",
+      "-std=c++14",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/affected166/allocation2400.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation2400",
+    "input_sha256": "b00f67b4df0573a9456ee812c558f2c308134ceb4b4714b7e174672a2e6f1474",
+    "args": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation2400",
+    "input_sha256": "b00f67b4df0573a9456ee812c558f2c308134ceb4b4714b7e174672a2e6f1474",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 1,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation600",
+    "input_sha256": "09273030d0d9f186f5e7448a7f18fe1a3187b9297273938e6fe9952990bc6edf",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-cppgm++",
+      "-std=c++14",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/affected166/allocation600.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation600",
+    "input_sha256": "09273030d0d9f186f5e7448a7f18fe1a3187b9297273938e6fe9952990bc6edf",
+    "args": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "allocation600",
+    "input_sha256": "09273030d0d9f186f5e7448a7f18fe1a3187b9297273938e6fe9952990bc6edf",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 1,
+    "stderr": ""
+  },
+  {
+    "workload": "reference1200",
+    "input_sha256": "3b9e839feb34a44907b24182b2bb473581bdfbd42098df4c2fdd8e0cf28b17c4",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-cppgm++",
+      "-std=c++14",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/affected166/reference1200.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference1200",
+    "input_sha256": "3b9e839feb34a44907b24182b2bb473581bdfbd42098df4c2fdd8e0cf28b17c4",
+    "args": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference1200",
+    "input_sha256": "3b9e839feb34a44907b24182b2bb473581bdfbd42098df4c2fdd8e0cf28b17c4",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 1,
+    "stderr": ""
+  },
+  {
+    "workload": "reference2400",
+    "input_sha256": "1f551c415c8803c8dca07cb905e73f082680abab918201e14621d66e200e2768",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-cppgm++",
+      "-std=c++14",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/affected166/reference2400.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference2400",
+    "input_sha256": "1f551c415c8803c8dca07cb905e73f082680abab918201e14621d66e200e2768",
+    "args": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference2400",
+    "input_sha256": "1f551c415c8803c8dca07cb905e73f082680abab918201e14621d66e200e2768",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 1,
+    "stderr": ""
+  },
+  {
+    "workload": "reference600",
+    "input_sha256": "72cb3fa43c0e834fe669f00a107b72576dba9518d9ebb9dea16bc9b8446810ad",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-cppgm++",
+      "-std=c++14",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/affected166/reference600.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference600",
+    "input_sha256": "72cb3fa43c0e834fe669f00a107b72576dba9518d9ebb9dea16bc9b8446810ad",
+    "args": [
+      "g++",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected.o",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "workload": "reference600",
+    "input_sha256": "72cb3fa43c0e834fe669f00a107b72576dba9518d9ebb9dea16bc9b8446810ad",
+    "args": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit166/entry-affected"
+    ],
+    "status": 1,
+    "stderr": ""
+  }
+]

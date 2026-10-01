@@ -1,0 +1,98 @@
+{
+  "163": {
+    "register600": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "register1200": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "register2400": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "locked600": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "locked1200": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "locked2400": {
+      "input": true,
+      "object": true,
+      "executable": true
+    }
+  },
+  "164": {
+    "strings600": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "strings1200": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "strings2400": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "queries600": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "queries1200": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "queries2400": {
+      "input": true,
+      "object": true,
+      "executable": true
+    }
+  },
+  "165": {
+    "evaluation600": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "evaluation1200": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "evaluation2400": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "storage600": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "storage1200": {
+      "input": true,
+      "object": true,
+      "executable": true
+    },
+    "storage2400": {
+      "input": true,
+      "object": true,
+      "executable": true
+    }
+  }
+}
