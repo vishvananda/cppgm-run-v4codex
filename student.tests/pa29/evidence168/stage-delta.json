@@ -1,0 +1,11 @@
+{
+  "base": "0c6df4c1e290c8188e95f07732dad0e7ec271b17",
+  "entry_failures": 49,
+  "current_failures": 46,
+  "fixed": [
+    "pa29/tests/compile/600-designated-aggregate-hole-init.t",
+    "pa29/tests/compile/600-designated-compound-literal-union-member.t",
+    "pa29/tests/compile/600-designated-named-union-init.t"
+  ],
+  "new_failures": []
+}

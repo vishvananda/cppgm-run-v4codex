@@ -1,0 +1,46 @@
+{
+  "code_tip": "5201692da03645d468d5265f93d7a897e1f36f6b",
+  "compiler_sha256": "1d00b0fa87fee76a74e5332bc49e3b44c9c2bb76e5a89676186a91182978d08d",
+  "checks": [
+    {
+      "command": "make test-pa29",
+      "status": 2,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/validation/stage.log",
+      "sha256": "d6fa395943307771e0e60d2a213643968ea411322250fdd092e765ae001610d0",
+      "summary": [
+        "===== TEST SUMMARY: 357 / 403 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": "make test-report-through-pa28",
+      "status": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/validation/prior.log",
+      "sha256": "62fafee2304dafac1d6eb44703da74008c028ee3cc40be97d2e4ca4702c208ba",
+      "summary": [
+        "===== ALL TESTS PASSED SUCCESSFULLY! (4538 / 4538) ====="
+      ]
+    },
+    {
+      "command": "make test-report-through-pa29",
+      "status": 2,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/validation/through.log",
+      "sha256": "1968f54cb909883958cbdbaf23eacb3b62cde288cdc270060cf670b0b0f88560",
+      "summary": [
+        "===== TEST SUMMARY: 4895 / 4941 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src",
+      "status": 1,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/validation/file-audit.log",
+      "sha256": "9866d48477300b315bd09dfa29c847ea110d8fc2e8efbb3a8baabf957278f47f",
+      "summary": [
+        "File audit failed for pa29: 1 fatal issue(s) and 4 warning(s).",
+        "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+      ]
+    }
+  ]
+}

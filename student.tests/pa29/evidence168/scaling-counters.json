@@ -1,0 +1,482 @@
+[
+  {
+    "workload": "designators600",
+    "sample": 0,
+    "expected": {
+      "template_body_transitions": 600
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators600",
+    "sample": 1,
+    "expected": {
+      "template_body_transitions": 600
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators600",
+    "sample": 2,
+    "expected": {
+      "template_body_transitions": 600
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators600",
+    "sample": 3,
+    "expected": {
+      "template_body_transitions": 600
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators600",
+    "sample": 4,
+    "expected": {
+      "template_body_transitions": 600
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators600",
+    "sample": 5,
+    "expected": {
+      "template_body_transitions": 600
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators600",
+    "sample": 6,
+    "expected": {
+      "template_body_transitions": 600
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators600",
+    "sample": 7,
+    "expected": {
+      "template_body_transitions": 600
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators1200",
+    "sample": 0,
+    "expected": {
+      "template_body_transitions": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators1200",
+    "sample": 1,
+    "expected": {
+      "template_body_transitions": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators1200",
+    "sample": 2,
+    "expected": {
+      "template_body_transitions": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators1200",
+    "sample": 3,
+    "expected": {
+      "template_body_transitions": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators1200",
+    "sample": 4,
+    "expected": {
+      "template_body_transitions": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators1200",
+    "sample": 5,
+    "expected": {
+      "template_body_transitions": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators1200",
+    "sample": 6,
+    "expected": {
+      "template_body_transitions": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators1200",
+    "sample": 7,
+    "expected": {
+      "template_body_transitions": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators2400",
+    "sample": 0,
+    "expected": {
+      "template_body_transitions": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators2400",
+    "sample": 1,
+    "expected": {
+      "template_body_transitions": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators2400",
+    "sample": 2,
+    "expected": {
+      "template_body_transitions": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators2400",
+    "sample": 3,
+    "expected": {
+      "template_body_transitions": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators2400",
+    "sample": 4,
+    "expected": {
+      "template_body_transitions": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators2400",
+    "sample": 5,
+    "expected": {
+      "template_body_transitions": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators2400",
+    "sample": 6,
+    "expected": {
+      "template_body_transitions": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "designators2400",
+    "sample": 7,
+    "expected": {
+      "template_body_transitions": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation600",
+    "sample": 0,
+    "expected": {
+      "template_body_transitions": 601,
+      "semantic_constant_execution_steps": 13224,
+      "semantic_constant_object_work": 607,
+      "semantic_constant_address_work": 1207,
+      "semantic_constant_dependency_work": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation600",
+    "sample": 1,
+    "expected": {
+      "template_body_transitions": 601,
+      "semantic_constant_execution_steps": 13224,
+      "semantic_constant_object_work": 607,
+      "semantic_constant_address_work": 1207,
+      "semantic_constant_dependency_work": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation600",
+    "sample": 2,
+    "expected": {
+      "template_body_transitions": 601,
+      "semantic_constant_execution_steps": 13224,
+      "semantic_constant_object_work": 607,
+      "semantic_constant_address_work": 1207,
+      "semantic_constant_dependency_work": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation600",
+    "sample": 3,
+    "expected": {
+      "template_body_transitions": 601,
+      "semantic_constant_execution_steps": 13224,
+      "semantic_constant_object_work": 607,
+      "semantic_constant_address_work": 1207,
+      "semantic_constant_dependency_work": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation600",
+    "sample": 4,
+    "expected": {
+      "template_body_transitions": 601,
+      "semantic_constant_execution_steps": 13224,
+      "semantic_constant_object_work": 607,
+      "semantic_constant_address_work": 1207,
+      "semantic_constant_dependency_work": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation600",
+    "sample": 5,
+    "expected": {
+      "template_body_transitions": 601,
+      "semantic_constant_execution_steps": 13224,
+      "semantic_constant_object_work": 607,
+      "semantic_constant_address_work": 1207,
+      "semantic_constant_dependency_work": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation600",
+    "sample": 6,
+    "expected": {
+      "template_body_transitions": 601,
+      "semantic_constant_execution_steps": 13224,
+      "semantic_constant_object_work": 607,
+      "semantic_constant_address_work": 1207,
+      "semantic_constant_dependency_work": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation600",
+    "sample": 7,
+    "expected": {
+      "template_body_transitions": 601,
+      "semantic_constant_execution_steps": 13224,
+      "semantic_constant_object_work": 607,
+      "semantic_constant_address_work": 1207,
+      "semantic_constant_dependency_work": 1200
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation1200",
+    "sample": 0,
+    "expected": {
+      "template_body_transitions": 1201,
+      "semantic_constant_execution_steps": 26424,
+      "semantic_constant_object_work": 1207,
+      "semantic_constant_address_work": 2407,
+      "semantic_constant_dependency_work": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation1200",
+    "sample": 1,
+    "expected": {
+      "template_body_transitions": 1201,
+      "semantic_constant_execution_steps": 26424,
+      "semantic_constant_object_work": 1207,
+      "semantic_constant_address_work": 2407,
+      "semantic_constant_dependency_work": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation1200",
+    "sample": 2,
+    "expected": {
+      "template_body_transitions": 1201,
+      "semantic_constant_execution_steps": 26424,
+      "semantic_constant_object_work": 1207,
+      "semantic_constant_address_work": 2407,
+      "semantic_constant_dependency_work": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation1200",
+    "sample": 3,
+    "expected": {
+      "template_body_transitions": 1201,
+      "semantic_constant_execution_steps": 26424,
+      "semantic_constant_object_work": 1207,
+      "semantic_constant_address_work": 2407,
+      "semantic_constant_dependency_work": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation1200",
+    "sample": 4,
+    "expected": {
+      "template_body_transitions": 1201,
+      "semantic_constant_execution_steps": 26424,
+      "semantic_constant_object_work": 1207,
+      "semantic_constant_address_work": 2407,
+      "semantic_constant_dependency_work": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation1200",
+    "sample": 5,
+    "expected": {
+      "template_body_transitions": 1201,
+      "semantic_constant_execution_steps": 26424,
+      "semantic_constant_object_work": 1207,
+      "semantic_constant_address_work": 2407,
+      "semantic_constant_dependency_work": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation1200",
+    "sample": 6,
+    "expected": {
+      "template_body_transitions": 1201,
+      "semantic_constant_execution_steps": 26424,
+      "semantic_constant_object_work": 1207,
+      "semantic_constant_address_work": 2407,
+      "semantic_constant_dependency_work": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation1200",
+    "sample": 7,
+    "expected": {
+      "template_body_transitions": 1201,
+      "semantic_constant_execution_steps": 26424,
+      "semantic_constant_object_work": 1207,
+      "semantic_constant_address_work": 2407,
+      "semantic_constant_dependency_work": 2400
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation2400",
+    "sample": 0,
+    "expected": {
+      "template_body_transitions": 2401,
+      "semantic_constant_execution_steps": 52824,
+      "semantic_constant_object_work": 2407,
+      "semantic_constant_address_work": 4807,
+      "semantic_constant_dependency_work": 4800
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation2400",
+    "sample": 1,
+    "expected": {
+      "template_body_transitions": 2401,
+      "semantic_constant_execution_steps": 52824,
+      "semantic_constant_object_work": 2407,
+      "semantic_constant_address_work": 4807,
+      "semantic_constant_dependency_work": 4800
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation2400",
+    "sample": 2,
+    "expected": {
+      "template_body_transitions": 2401,
+      "semantic_constant_execution_steps": 52824,
+      "semantic_constant_object_work": 2407,
+      "semantic_constant_address_work": 4807,
+      "semantic_constant_dependency_work": 4800
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation2400",
+    "sample": 3,
+    "expected": {
+      "template_body_transitions": 2401,
+      "semantic_constant_execution_steps": 52824,
+      "semantic_constant_object_work": 2407,
+      "semantic_constant_address_work": 4807,
+      "semantic_constant_dependency_work": 4800
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation2400",
+    "sample": 4,
+    "expected": {
+      "template_body_transitions": 2401,
+      "semantic_constant_execution_steps": 52824,
+      "semantic_constant_object_work": 2407,
+      "semantic_constant_address_work": 4807,
+      "semantic_constant_dependency_work": 4800
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation2400",
+    "sample": 5,
+    "expected": {
+      "template_body_transitions": 2401,
+      "semantic_constant_execution_steps": 52824,
+      "semantic_constant_object_work": 2407,
+      "semantic_constant_address_work": 4807,
+      "semantic_constant_dependency_work": 4800
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation2400",
+    "sample": 6,
+    "expected": {
+      "template_body_transitions": 2401,
+      "semantic_constant_execution_steps": 52824,
+      "semantic_constant_object_work": 2407,
+      "semantic_constant_address_work": 4807,
+      "semantic_constant_dependency_work": 4800
+    },
+    "passed": true
+  },
+  {
+    "workload": "mutation2400",
+    "sample": 7,
+    "expected": {
+      "template_body_transitions": 2401,
+      "semantic_constant_execution_steps": 52824,
+      "semantic_constant_object_work": 2407,
+      "semantic_constant_address_work": 4807,
+      "semantic_constant_dependency_work": 4800
+    },
+    "passed": true
+  }
+]

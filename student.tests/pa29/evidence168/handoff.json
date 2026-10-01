@@ -1,0 +1,114 @@
+{
+  "stage": "pa29",
+  "scope": "implementation handoff",
+  "stage_complete": false,
+  "independent_review_required": true,
+  "code_tip": "34a8dd1aeb2d4b5f33dd575d5ec0722b37007b28",
+  "binary_sha256": "52127cc1e1c96b82c9a0b9c8ff6a6b79e7be34d36ef65b034df97caf50b846d3",
+  "review_markers": {
+    "Stage base commit": "2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543",
+    "Last reviewed commit": "f07f78236eb475648834ed78afbca6c864f64408",
+    "Previous review": "cce8634c3c835cf6d5e8f4fa5fea0db213959718"
+  },
+  "required_progress": {
+    "base": "0c6df4c1e290c8188e95f07732dad0e7ec271b17",
+    "entry_failures": 49,
+    "current_failures": 46,
+    "fixed": [
+      "pa29/tests/compile/600-designated-aggregate-hole-init.t",
+      "pa29/tests/compile/600-designated-compound-literal-union-member.t",
+      "pa29/tests/compile/600-designated-named-union-init.t"
+    ],
+    "new_failures": []
+  },
+  "requirements": [
+    {
+      "requirement": "earlier stages",
+      "evidence": "validation.json: make test-report-through-pa28, exit 0, 4538/4538"
+    },
+    {
+      "requirement": "stage progress without reduced coverage",
+      "evidence": "stage-delta.json + coverage.json: 354/403 -> 357/403"
+    },
+    {
+      "requirement": "file audit",
+      "evidence": "validation.json: final audit exit 0; same four inherited warnings"
+    },
+    {
+      "requirement": "coherent behavior and semantic validation",
+      "evidence": "controls.json + inspection.json + original-reducer.json; pa29/plan.md owner and boundary"
+    },
+    {
+      "requirement": "stage-scoped performance",
+      "evidence": "performance-manifest.json + common-performance.json + affected-performance.json + scaling-counters.json; pa29/performance168.md"
+    },
+    {
+      "requirement": "unwaived remaining implementation and review",
+      "evidence": "remaining.json + pa29/plan.md, unchanged review markers"
+    }
+  ],
+  "implementation_paths": [
+    "dev/frontend_source_sets.mk",
+    "dev/src/abi/itanium/argument_reader.cpp",
+    "dev/src/abi/itanium/expression_encoder.cpp",
+    "dev/src/abi/itanium/fact_writer.cpp",
+    "dev/src/abi/itanium/graph.h",
+    "dev/src/abi/itanium/graph_validation.cpp",
+    "dev/src/lowering/query_abi.cpp",
+    "dev/src/semantic/analyzer.h",
+    "dev/src/semantic/constant.cpp",
+    "dev/src/semantic/constant_addresses.cpp",
+    "dev/src/semantic/constant_execution.cpp",
+    "dev/src/semantic/constant_overlay.cpp",
+    "dev/src/semantic/constant_statements.cpp",
+    "dev/src/semantic/exception_expression.cpp",
+    "dev/src/semantic/expression.cpp",
+    "dev/src/semantic/initializers.cpp",
+    "dev/src/semantic/list_initialization.cpp",
+    "dev/src/semantic/query_cast.cpp",
+    "dev/src/semantic/query_list.cpp",
+    "dev/src/semantic/template_expression.cpp",
+    "dev/src/semantic/template_initializers.cpp",
+    "dev/src/semantic/template_operator_facts.cpp",
+    "dev/src/semantic/template_value_facts.cpp",
+    "dev/src/semantic/type_query.cpp",
+    "dev/src/semantic/type_query.h",
+    "dev/src/syntax/ast.cpp",
+    "dev/src/syntax/ast.h",
+    "dev/src/syntax/expression.cpp",
+    "dev/src/syntax/output.cpp",
+    "student.tests/pa29/abi-designator168.cpp",
+    "student.tests/pa29/controls168.py",
+    "student.tests/pa29/controls168/aggregate-assignment.cpp",
+    "student.tests/pa29/controls168/anonymous-union.cpp",
+    "student.tests/pa29/controls168/bad-array-member-designator.cpp",
+    "student.tests/pa29/controls168/bad-compound-elision.cpp",
+    "student.tests/pa29/controls168/bad-constructor.cpp",
+    "student.tests/pa29/controls168/bad-duplicate.cpp",
+    "student.tests/pa29/controls168/bad-member-elision.cpp",
+    "student.tests/pa29/controls168/bad-mutation-const.cpp",
+    "student.tests/pa29/controls168/bad-mutation-global.cpp",
+    "student.tests/pa29/controls168/bad-narrowing.cpp",
+    "student.tests/pa29/controls168/bad-order.cpp",
+    "student.tests/pa29/controls168/bad-reference-hole.cpp",
+    "student.tests/pa29/controls168/bad-scalar.cpp",
+    "student.tests/pa29/controls168/bad-static.cpp",
+    "student.tests/pa29/controls168/bad-template-fixed.cpp",
+    "student.tests/pa29/controls168/bad-union-read.cpp",
+    "student.tests/pa29/controls168/bad-union.cpp",
+    "student.tests/pa29/controls168/bad-unknown.cpp",
+    "student.tests/pa29/controls168/bitfields-references.cpp",
+    "student.tests/pa29/controls168/exception-specification.cpp",
+    "student.tests/pa29/controls168/holes.cpp",
+    "student.tests/pa29/controls168/lifetimes.cpp",
+    "student.tests/pa29/controls168/mutation.cpp",
+    "student.tests/pa29/controls168/overloads.cpp",
+    "student.tests/pa29/controls168/queries.cpp",
+    "student.tests/pa29/controls168/scalars-arrays.cpp",
+    "student.tests/pa29/controls168/templates.cpp",
+    "student.tests/pa29/controls168/unions.cpp",
+    "student.tests/pa29/inspection168.py",
+    "student.tests/pa29/performance168.py",
+    "student.tests/pa29/validate168.py"
+  ]
+}

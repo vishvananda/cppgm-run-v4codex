@@ -1,0 +1,287 @@
+{
+  "compiler_sha256": "52127cc1e1c96b82c9a0b9c8ff6a6b79e7be34d36ef65b034df97caf50b846d3",
+  "inputs": {
+    "student.tests/pa29/controls166/allocation-modes.cpp": "5999b3c4021d97b48ba60538885be9fed4b85d83bb2f83344a4d4bc21ca1d49e",
+    "student.tests/pa29/controls166/assembly-observations.cpp": "7651a65e025b9bbf23060bcd84bf18f0a5b020f8188cafef43acc33b3a1fb5dc",
+    "student.tests/pa29/controls166/integrated-context.cpp": "3e104a2be3263341cd41c51dda995c4b9f409be4a488f1dff7a2fae65e6494f9",
+    "student.tests/pa29/controls166/reference-members.cpp": "7aab2a29b14709a9614c56c0a2b41379fb7ff0cc4ac582c2e3ab79565b688f28",
+    "student.tests/pa29/controls166/reference-recursion.cpp": "5e876b96ab2058af7eb2fbb1259d366fc45f7cc5e7f111811bb78c01e6b2bf60",
+    "student.tests/pa29/controls166/reference-values.cpp": "86cd5e0cc4970939a5886f0fd506ea7bf2fbb240c5764bee24f9b27c29be65ff",
+    "student.tests/pa29/controls166/temporary-modes.cpp": "6be495be5d25ef8f8384141c0470d256c1d1ba9c8bf5946ca78fecfb1e5924a9"
+  },
+  "checks": [
+    {
+      "name": "allocation-modes compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/allocation-modes.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/allocation-modes.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "allocation-modes link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/allocation-modes.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/allocation-modes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "allocation-modes runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/allocation-modes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-observations compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/assembly-observations.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/assembly-observations.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-observations link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/assembly-observations.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/assembly-observations"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-observations runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/assembly-observations"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated-context compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/integrated-context.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/integrated-context.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated-context link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/integrated-context.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/integrated-context"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated-context runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/integrated-context"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-members compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/reference-members.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/reference-members.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-members link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/reference-members.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/reference-members"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-members runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/reference-members"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-recursion compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/reference-recursion.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/reference-recursion.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-recursion link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/reference-recursion.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/reference-recursion"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-recursion runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/reference-recursion"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-values compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/reference-values.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/reference-values.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-values link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/reference-values.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/reference-values"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-values runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/reference-values"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "temporary-modes compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/temporary-modes.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/temporary-modes.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "temporary-modes link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/temporary-modes.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/temporary-modes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "temporary-modes runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-168/final-controls166/temporary-modes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}
