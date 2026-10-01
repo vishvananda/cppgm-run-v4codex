@@ -15,6 +15,7 @@ public:
     Analyzer(syntax::Ast& ast, IdentifierTable& ids, bool calls = false, bool definitions = false, bool host_abi = false);
     void consume(NodeId declaration) override;
     void finish();
+    void resolve_assembly(NodeId, ScopeId, bool pattern = false);
     void require_body_facts(EntityId e) const;
     void write(std::ostream& out) const;
     void write_semantics(std::ostream& out, NodeId root) const;

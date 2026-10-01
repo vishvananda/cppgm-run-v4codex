@@ -1,5 +1,6 @@
 #pragma once
 #include "posttoken/token.h"
+#include "syntax/assembly.h"
 #include "support/id_index.h"
 #include <iosfwd>
 #include <vector>
@@ -145,6 +146,8 @@ enum class Kind : unsigned char {
     VaArg,
     FunctionName,
     AtomicType,
+    Assembly,
+    AssemblyOperand,
 };
 
 struct Location {
@@ -284,17 +287,21 @@ public:
     // Class nodes use their kind-discriminated auxiliary index for token ranges.
     std::vector<ClassRegion> class_regions;
     std::vector<char> literal_bytes;
+    std::vector<AsmPlan> assemblies = std::vector<AsmPlan>(1);
+    std::vector<AsmInstruction> assembly_instructions;
 };
 
 class AstView {
     Ast& tree;
 public:
-    explicit AstView(Ast& a) : tree(a), telemetry(a.telemetry), nodes(a.nodes),
+    explicit AstView(Ast& a) : tree(a), assemblies(a.assemblies), assembly_instructions(a.assembly_instructions), telemetry(a.telemetry), nodes(a.nodes),
         literals(a.literals), literal_bytes(a.literal_bytes), class_regions(a.class_regions),
         alignment_owners(a.alignment_owners), class_packing(a.class_packing), alignments(a.alignments),
         native_attribute_owners(a.native_attribute_owners), abi_tags(a.abi_tags), native_attributes(a.native_attributes) {}
     Node operator[](NodeId id) const { return tree.view(id); }
     operator const Ast&() const { return tree; }
+    std::vector<AsmPlan>& assemblies;
+    std::vector<AsmInstruction>& assembly_instructions;
     NodeId instantiate(NodeId root, std::uint32_t context) { return tree.instantiate(root,context); }
     NodeId projected(NodeId source, std::uint32_t context) const { return tree.projected(source,context); }
     bool pending_region(NodeId root) const { return tree.pending_region(root); }

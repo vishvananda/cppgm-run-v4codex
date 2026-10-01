@@ -1,6 +1,6 @@
-# PA29 compact plan — checkpoint audit162
+# PA29 compact plan — implementation163
 
-Target: **PA29 full-stage**. Phase: **checkpointAudit complete; implementation unfinished**.
+Target: **PA29 full-stage**. Phase: **implement**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `cce8634c3c835cf6d5e8f4fa5fea0db213959718`.
 Previous review: `1ab3499d7046daf5c298d958a8770b413edb3615`.
@@ -9,6 +9,20 @@ Current: **338/403**, the identical 65 failures; all 403 fixtures and sidecars,
 references, comparison and discovery rules are unchanged in this reviewed range.
 
 ## Reviewed and corrected
+
+Implementation163 entry: `3bc61ecba6d68eb2821022d7d58ac53ae5305f84`, 338/403.
+Previous goal turn supplied no implementation progress; the failure-set check
+confirms all 65 failures persist. No live build/test handle remains.
+Assembly is the next coherent owner group (six failures): parse GNU statement
+operands once; bind expressions in the ordinary/template semantic graph; retain
+typed instruction/effect recipes; lower through shared LowIR/native operations.
+Statement-local storage and linear work in template bytes/operands/instructions;
+no optional optimization, search or growth budget. Validate named/numbered
+operands, constraints, clobbers, evaluate-once behavior, templates, atomic
+concurrency, exceptions and LowIR/object parity. Freeze entry/final compilers;
+measure equivalent common A/A+ABBA and new affected demand scaling, separately
+reporting compilation/RSS and checked runtime/text. Extend within this owner
+through related correctness defects before choosing a handoff boundary.
 
 [Audit162](audit.md) covers every commit since the previous review, all three
 accepted handoffs (traits159, invocation160, atomics161), and their combined

@@ -127,7 +127,7 @@ void Validator::instruction(const Instruction& i) const
         count(i.type == Type() ? 0 : 1);
         if (i.type != Type() && !(i.type.floating() && !arg(0).literal() && value_type(arg(0)).floating())) value(arg(0), i.type);
         break;
-    case Opcode::EhEnd: case Opcode::Resume: case Opcode::Unreachable: count(0); break;
+    case Opcode::Nop: case Opcode::Pause: case Opcode::EhEnd: case Opcode::Resume: case Opcode::Unreachable: count(0); break;
     }
     if (i.debug.file) require(i.debug.line && i.debug.column, "invalid instruction debug location");
 }

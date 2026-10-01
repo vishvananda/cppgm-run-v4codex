@@ -34,6 +34,8 @@ private:
     unsigned char lexical_hint(IdentifierId id);
 
     NodeId make(Kind kind);
+    NodeId assembly();
+    std::string assembly_string();
     NodeId leaf(Kind kind);
     NodeId wrap(Kind kind, NodeId child);
     NodeId named(Kind kind, NodeId name);

@@ -33,7 +33,7 @@ enum class Op {
     Adc, Sbb, MulWide, Shld, Shrd, CmpxchgWide,
     Fmov, Fadd, Fsub, Fmul, Fdiv, Fneg, Fcompare, Fset,
     Sitofp, Uitofp, Fptosi, Fptoui, Fpext, Fptrunc, Freturn, Fpop,
-    EhPush, EhPop, EhDispatch, Throw, Resume, StackAlloc, TlsAddr, Syscall
+    EhPush, EhPop, EhDispatch, Throw, Resume, StackAlloc, TlsAddr, Syscall, Nop, Pause
 };
 // Image-owned runtime entities have identities after the external symbol range.
 // They are not semantic declarations, nor are their spellings lookup keys.

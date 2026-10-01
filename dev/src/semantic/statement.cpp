@@ -78,6 +78,7 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
     if (!n) return;
     if (definitions) resolve_angle_statement(n,s);
     switch (ast[n].kind) {
+    case Kind::Assembly: resolve_assembly(n,s); return;
     case Kind::Throw: expression(n,s); return;
     case Kind::Try: case Kind::FunctionTry: {
         auto body = child(n,Kind::Compound);

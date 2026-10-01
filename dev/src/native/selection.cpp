@@ -244,6 +244,8 @@ void Selector::select(const lowir_model::Instruction& i)
     case Opcode::Call: call(i); break;
     case Opcode::VaStart: case Opcode::VaArg: variadic(i); break;
     case Opcode::CopyObject: case Opcode::ZeroInit: bulk(i); break;
+    case Opcode::Nop: emit(Op::Nop,Type(),{}); break;
+    case Opcode::Pause: emit(Op::Pause,Type(),{}); break;
     case Opcode::AtomicLoad: case Opcode::AtomicStore: case Opcode::AtomicAddFetch:
     case Opcode::AtomicExchange: case Opcode::AtomicCompareExchange:
     case Opcode::AtomicThreadFence: case Opcode::AtomicSignalFence: atomic(i); break;

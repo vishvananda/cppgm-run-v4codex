@@ -119,7 +119,7 @@ enum class Opcode {
     AtomicLoad, AtomicStore, AtomicAddFetch, AtomicExchange, AtomicCompareExchange,
     AtomicThreadFence, AtomicSignalFence, VaStart, VaArg, StackAlloc, Call,
     CopyObject, ZeroInit, EhTry, EhCleanup, EhCatch, EhFilter, EhCatchAll, EhEnd,
-    Throw, Exception, ExceptionSelector, Resume, Jump, Branch, Switch, Return, Unreachable
+    Throw, Exception, ExceptionSelector, Resume, Jump, Branch, Switch, Return, Nop, Pause, Unreachable
 };
 enum class Operation {
     None, Neg, Not, Bitnot, Bswap, Add, Sub, Mul, Div, Mod, Udiv, Umod, And, Or,

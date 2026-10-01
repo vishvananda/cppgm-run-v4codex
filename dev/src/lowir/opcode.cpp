@@ -5,7 +5,7 @@ static const char* const opcodes[] = {
     "atomic_load", "atomic_store", "atomic_add_fetch", "atomic_exchange", "atomic_compare_exchange",
     "atomic_thread_fence", "atomic_signal_fence", "va_start", "va_arg", "stack_alloc", "call",
     "copyobj", "zeroinit", "eh_try", "eh_cleanup", "eh_catch", "eh_filter", "eh_catch_all", "eh_end",
-    "throw", "exception", "exception_selector", "resume", "jump", "branch", "switch", "return", "unreachable"
+    "throw", "exception", "exception_selector", "resume", "jump", "branch", "switch", "return", "nop", "pause", "unreachable"
 };
 static const char* const operations[] = {
     "", "neg", "not", "bitnot", "bswap", "add", "sub", "mul", "div", "mod", "udiv", "umod", "and", "or",

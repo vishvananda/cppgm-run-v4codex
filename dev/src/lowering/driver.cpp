@@ -37,7 +37,9 @@ void build_program(lowir_model::Program& program, const std::vector<std::string>
         full_expression_work += lower.full_expression_work; full_expression_regions += lower.full_expression_regions;
         if (stats) {
             std::cerr << "{\"tokens\":" << cursor.produced << ",\"max_pending\":" << cursor.max_pending
-                << ",\"node_growths\":" << ast.node_growths << ",\"delimiter_work\":" << cursor.delimiter_work;
+                << ",\"node_growths\":" << ast.node_growths << ",\"delimiter_work\":" << cursor.delimiter_work
+                << ",\"asm_source_statements\":" << ast.assemblies.size()-1
+                << ",\"asm_source_instructions\":" << ast.assembly_instructions.size();
             sem.telemetry(std::cerr);
             std::cerr << ",\"lower_virtual_cache_bytes\":" << lower.virtual_cache_bytes()
                 << ",\"rtti_expressions\":" << sem.rtti_expressions.size()-1

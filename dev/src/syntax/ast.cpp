@@ -196,6 +196,8 @@ const char* kind_name(Kind kind)
         "va-arg-expression",
         "function-name",
         "atomic-type-specifier",
+        "asm-statement",
+        "asm-operand",
     };
     return names[static_cast<unsigned>(kind)];
 }

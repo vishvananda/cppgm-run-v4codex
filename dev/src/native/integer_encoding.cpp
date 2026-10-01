@@ -62,8 +62,8 @@ void Encoder::instruction(const Instruction& i)
 {
     if (i.op == Op::Syscall) { byte(0x0f); byte(0x05); return; }
     if (i.op == Op::TlsAddr) { tls_address(i.args[0],i.args[1]); return; }
-    if (i.op >= Op::EhPush) { runtime(i); return; }
-    if (i.op >= Op::Fmov) { floating(i); return; }
+    if (i.op >= Op::EhPush && i.op <= Op::StackAlloc) { runtime(i); return; }
+    if (i.op >= Op::Fmov && i.op <= Op::Fpop) { floating(i); return; }
     auto a = i.args[0], b = i.args[1];
     unsigned width = std::max(8u,i.type.width());
     switch (i.op) {
@@ -100,6 +100,8 @@ void Encoder::instruction(const Instruction& i)
     case Op::Exit:
         mov(Operand::r(XR_RAX),Operand::imm(60)); byte(0x0f); byte(0x05); break;
     case Op::Trap: byte(0x0f); byte(0x0b); break;
+    case Op::Nop: byte(0x90); break;
+    case Op::Pause: byte(0xf3); byte(0x90); break;
     case Op::Fence: byte(0x0f); byte(0xae); byte(0xf0); break;
     case Op::Xadd: case Op::Cmpxchg:
         form(i.op == Op::Xadd ? (width == 8 ? 0x0fc0 : 0x0fc1) : (width == 8 ? 0x0fb0 : 0x0fb1),width,b.reg,a,0,0,0xf0); break;

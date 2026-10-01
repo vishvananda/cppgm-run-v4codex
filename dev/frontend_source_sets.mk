@@ -211,3 +211,5 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/legacy_traits semantic/reference_trai
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/atomic_builtins lowering/atomic_builtins
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/atomic_storage
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/atomic_runtime
+
+FRONTEND_OBJ_BASENAMES_cppgm++ += syntax/assembly syntax/assembly_template semantic/assembly lowering/assembly

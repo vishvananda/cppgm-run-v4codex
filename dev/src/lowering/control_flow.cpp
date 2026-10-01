@@ -343,6 +343,8 @@ void Procedural::statement(NodeId n)
         start(block());
     }
     switch (k) {
+    case Kind::Assembly:
+        begin_full_expression(n); assembly_statement(n); finish_full_expression(lifetime.entry); return;
     case Kind::Try: case Kind::FunctionTry: try_statement(n); return;
     case Kind::Throw: begin_full_expression(n); throw_expression(n); return;
     case Kind::RangeFor: range_statement(n); return;

@@ -57,7 +57,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         }
         bool recorded = k == Kind::Compound || k == Kind::Then || k == Kind::Else || k == Kind::ForInit || k == Kind::Iteration ||
             k == Kind::If || k == Kind::For || k == Kind::RangeFor || k == Kind::While || k == Kind::Do || k == Kind::Switch || k == Kind::Condition ||
-            k == Kind::SimpleDeclaration || k == Kind::Class || k == Kind::ExpressionStatement || k == Kind::Return || k == Kind::Goto ||
+            k == Kind::SimpleDeclaration || k == Kind::Class || k == Kind::ExpressionStatement || k == Kind::Assembly || k == Kind::Return || k == Kind::Goto ||
             k == Kind::Break || k == Kind::Continue || k == Kind::Label || k == Kind::Case || k == Kind::Default ||
             k == Kind::Throw || k == Kind::Try || k == Kind::FunctionTry || k == Kind::Handler;
         if (!recorded) {
@@ -103,7 +103,10 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             if (target) jump_exception_targets.put(n,target);
             record_use(); return;
         }
-        if (k == Kind::ExpressionStatement || k == Kind::Iteration || k == Kind::Throw) { visit(ast[n].first); record_use(); return; }
+        if (k == Kind::ExpressionStatement || k == Kind::Iteration || k == Kind::Throw || k == Kind::Assembly) {
+            for (auto c = ast[n].first; c; c = ast[c].next) visit(c);
+            record_use(); return;
+        }
         if (k == Kind::Case || k == Kind::Default) cases.push_back({active, switch_entry,0});
         unsigned saved = active, saved_switch = switch_entry;
         auto saved_live = live, saved_break = break_live, saved_continue = continue_live;

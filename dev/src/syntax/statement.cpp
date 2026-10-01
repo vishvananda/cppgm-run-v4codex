@@ -145,6 +145,7 @@ NodeId Parser::statement()
         return result;
     }
     if (in.is("{")) return compound();
+    if (in.is("asm") || in.is("__asm") || in.is("__asm__")) return assembly();
     if (in.is("if") || in.is("switch")) return selection();
     if (in.is("while") || in.is("do") || in.is("for")) return iteration();
     if (in.is("try")) return try_block();

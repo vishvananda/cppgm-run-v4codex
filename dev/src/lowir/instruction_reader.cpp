@@ -118,7 +118,7 @@ void Reader::instruction_body(Instruction& i, FunctionBuilder& b)
         break;
     case Opcode::Return:
         i.type = type(); if (i.type != Type()) add_operand(b); break;
-    case Opcode::EhEnd: case Opcode::Resume: case Opcode::Unreachable: break;
+    case Opcode::Nop: case Opcode::Pause: case Opcode::EhEnd: case Opcode::Resume: case Opcode::Unreachable: break;
     }
 }
 } // namespace lowir_model
