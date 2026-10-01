@@ -1,0 +1,631 @@
+{
+  "compiler_sha256": "095c53a4471753d996ef679d765d3f06fb5fa3c96d512e7ea657fc9c4a098558",
+  "checks": [
+    {
+      "name": "atomic-aligned-generic compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-aligned-generic.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-aligned-generic.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-aligned-generic link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/atomic-aligned-generic.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-aligned-generic"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-aligned-generic run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/atomic-aligned-generic"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-bool-increment compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-bool-increment.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-bool-increment.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-bool-increment link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/atomic-bool-increment.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-bool-increment"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-bool-increment run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/atomic-bool-increment"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-bool compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-bool.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-bool.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-bool link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/atomic-bool.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-bool"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-bool run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/atomic-bool"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-cast-cv-drop-reject compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-cast-cv-drop-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-cast-cv-drop-reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid explicit cast\n"
+    },
+    {
+      "name": "atomic-class-snapshot-reject compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-class-snapshot-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-class-snapshot-reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid implicit conversion\n"
+    },
+    {
+      "name": "atomic-cv-drop-reject compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-cv-drop-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-cv-drop-reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid implicit conversion\n"
+    },
+    {
+      "name": "atomic-cv-traits compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-cv-traits.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-cv-traits.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-cv-traits link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/atomic-cv-traits.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-cv-traits"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-cv-traits run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/atomic-cv-traits"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-derived-reject compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-derived-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-derived-reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid implicit conversion\n"
+    },
+    {
+      "name": "atomic-generic-template compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-generic-template.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-generic-template.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-generic-template link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/atomic-generic-template.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-generic-template"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-generic-template run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/atomic-generic-template"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-padded-align-generic compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-padded-align-generic.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-padded-align-generic.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-padded-align-generic link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/atomic-padded-align-generic.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-padded-align-generic"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-padded-align-generic run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/atomic-padded-align-generic"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-pointer-bits compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-pointer-bits.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-pointer-bits.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-pointer-bits link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/atomic-pointer-bits.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-pointer-bits"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-pointer-bits run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/atomic-pointer-bits"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-qualifiers compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-qualifiers.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-qualifiers.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-qualifiers link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/atomic-qualifiers.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-qualifiers"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-qualifiers run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/atomic-qualifiers"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-reference-lifetime compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-reference-lifetime.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-reference-lifetime.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-reference-lifetime link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/atomic-reference-lifetime.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-reference-lifetime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-reference-lifetime run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/atomic-reference-lifetime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-reference-recipes compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-reference-recipes.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-reference-recipes.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-reference-recipes link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/atomic-reference-recipes.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-reference-recipes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-reference-recipes run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/atomic-reference-recipes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-reference compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-reference.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-reference.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-reference link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/atomic-reference.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-reference"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-reference run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/atomic-reference"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-scalar-alignment compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-scalar-alignment.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-scalar-alignment.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-scalar-alignment link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/atomic-scalar-alignment.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-scalar-alignment"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-scalar-alignment run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/atomic-scalar-alignment"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-small-signed compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/atomic-small-signed.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-small-signed.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-small-signed link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/atomic-small-signed.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/atomic-small-signed"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-small-signed run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/atomic-small-signed"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "invoke-atomic-snapshot compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/invoke-atomic-snapshot.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/invoke-atomic-snapshot.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "invoke-atomic-snapshot link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/invoke-atomic-snapshot.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/invoke-atomic-snapshot"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "invoke-atomic-snapshot run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/invoke-atomic-snapshot"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "legacy-deleted-ordinary compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162/legacy-deleted-ordinary.cpp",
+        "-o",
+        "/tmp/pa29-163/controls162-final/legacy-deleted-ordinary.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "legacy-deleted-ordinary link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls162-final/legacy-deleted-ordinary.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls162-final/legacy-deleted-ordinary"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "legacy-deleted-ordinary run",
+      "args": [
+        "/tmp/pa29-163/controls162-final/legacy-deleted-ordinary"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

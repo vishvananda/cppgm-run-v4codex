@@ -17,6 +17,8 @@ for name in ['assembly','assembly-lifetimes','assembly-thread']:
  host=[src.parent/'thread-host.cpp','-pthread'] if name=='assembly-thread' else []
  run(['g++',ir_obj,*host,'-o',exe]);run([exe])
  native=run(['objdump','-drC',obj]).stdout.decode();(out/(name+'.dis')).write_text(native)
+ roundtrip_native=run(['objdump','-drC',ir_obj]).stdout.decode()
+ assert native.splitlines()[2:]==roundtrip_native.splitlines()[2:]
  if name=='assembly':
   assert 'pause' in native and 'nop' in native and 'mfence' in native and 'bswap' in native
   assert 'lock xadd' in native and 'lock cmpxchg' in native and 'xchg' in native
@@ -26,7 +28,7 @@ for name in ['assembly','assembly-lifetimes','assembly-thread']:
   hint=low.read_text().split('object=_Z4hintv',1)[1].split('\n}',1)[0]
   assert 'eh_' not in hint and 'pause' in hint
  result['checks'].append(name+': parsed LowIR object executes; native opcodes and EH boundary inspected')
- result['images'][name]=dict(object_sha256=sha(obj),roundtrip_object_sha256=sha(ir_obj),lowir_sha256=sha(low),same_object=obj.read_bytes()==ir_obj.read_bytes())
+ result['images'][name]=dict(object_sha256=sha(obj),roundtrip_object_sha256=sha(ir_obj),lowir_sha256=sha(low),same_object=obj.read_bytes()==ir_obj.read_bytes(),identical_native_code_and_relocations=True)
 low=out/'hints.lowir';low.write_text('''function @entry() -> i32 [role=entry] !dbg(hints.cpp, 1, 1) {
 block ^start:
   nop !dbg(hints.cpp, 2, 3)

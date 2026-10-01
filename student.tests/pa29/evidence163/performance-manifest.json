@@ -1,0 +1,47 @@
+{
+  "entry": "3bc61ecba6d68eb2821022d7d58ac53ae5305f84",
+  "code_tip": "a6f3d6a2707bd0b31575bc62b95b13e2db885338",
+  "binaries": {
+    "A": {
+      "path": "/tmp/pa29-163/compiler-A",
+      "sha256": "1eef9991b4b5e054a1f875126423aaee540a93c3fc03f48befbde321a7174eb5",
+      "bytes": 4009912
+    },
+    "B": {
+      "path": "/tmp/pa29-163/compiler-B",
+      "sha256": "095c53a4471753d996ef679d765d3f06fb5fa3c96d512e7ea657fc9c4a098558",
+      "bytes": 4048384
+    }
+  },
+  "scripts": {
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "student.tests/pa29/performance163.py": "28a955c5907e3d78782ce5f6b60aaa6deffae770000e2c214f84d2e05cf95309",
+    "student.tests/pa29/controls163.py": "abc600b430d9325aebb6bc4dcde1d01a01f4e7ad98ff2fe833f4b9ec26d1baf3",
+    "student.tests/pa29/inspection163.py": "ee369d194b05fcf2e1b98c94a905fc5a1eff46417f53069b407fe2384bf0cb4b",
+    "student.tests/pa29/validate163.py": "dc2b628a6090a62a56687860ecc7631914ea0847f6c3e5c48274c8d7d0132ba2",
+    "student.tests/pa29/ir-object161.cpp": "177d81f7f8b4fd34e52170c52aa5788973565551966d24ef916f4e0c8e625620"
+  },
+  "cpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           46 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  32\nOn-line CPU(s) list:                     0-31\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) CPU @ 2.20GHz\nCPU family:                              6\nModel:                                   79\nThread(s) per core:                      2\nCore(s) per socket:                      16\nSocket(s):                               1\nStepping:                                0\nBogoMIPS:                                4399.99\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm rdseed adx smap xsaveopt arat md_clear arch_capabilities\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               512 KiB (16 instances)\nL1i cache:                               512 KiB (16 instances)\nL2 cache:                                4 MiB (16 instances)\nL3 cache:                                55 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-31\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Mitigation; PTE Inversion\nVulnerability Mds:                       Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Meltdown:                  Mitigation; PTI\nVulnerability Mmio stale data:           Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Mitigation; IBRS\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; IBRS; IBPB conditional; STIBP conditional; RSB filling; PBRSB-eIBRS Not affected; BHI SW loop, KVM SW loop\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Vmscape:                   Not affected\n",
+  "affinity": [
+    0
+  ],
+  "flags": [
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "observation_counts": {
+    "common": 224,
+    "affected_final": 96,
+    "affected_preliminary": 96,
+    "launcher_final": 6,
+    "launcher_preliminary": 6
+  },
+  "compiler_validation_overlap": false,
+  "notes": "Frozen binaries/inputs; no compiler builds or executable/correctness suites overlap measurement. Light documentation/evidence inspection and external scheduling were uncontrolled. All observations retained. Final affected runtime uses 20 million iterations after preliminary 2-million-iteration samples showed short runtimes; no speedup claim.",
+  "datasets": {
+    "common-performance.json": "e375fd0dd48bc3a77fd91efc56a0b10af000411d3c33425d5be35fe3f44adaed",
+    "affected-performance.json": "de15f09034417696cd6135f5deb9fa4342a28c5e908fdd760411e7ea2c87aea0",
+    "affected-preliminary-performance.json": "4a32dc39b3959b8112266442d39c7b3c0d38aca6eb49e49d2c38a53b746cfcbe"
+  }
+}

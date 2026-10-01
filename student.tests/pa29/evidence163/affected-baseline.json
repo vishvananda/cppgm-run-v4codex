@@ -1,0 +1,162 @@
+{
+  "preliminary": [
+    {
+      "workload": "register600",
+      "args": [
+        "/tmp/pa29-163/compiler-A",
+        "-O0",
+        "-c",
+        "/tmp/pa29-163/affected/register600.cpp",
+        "-o",
+        "/tmp/pa29-163/baseline-affected.o"
+      ],
+      "status": 1,
+      "diagnostic": "ERROR: expected expression, found 'asm'\n"
+    },
+    {
+      "workload": "register1200",
+      "args": [
+        "/tmp/pa29-163/compiler-A",
+        "-O0",
+        "-c",
+        "/tmp/pa29-163/affected/register1200.cpp",
+        "-o",
+        "/tmp/pa29-163/baseline-affected.o"
+      ],
+      "status": 1,
+      "diagnostic": "ERROR: expected expression, found 'asm'\n"
+    },
+    {
+      "workload": "register2400",
+      "args": [
+        "/tmp/pa29-163/compiler-A",
+        "-O0",
+        "-c",
+        "/tmp/pa29-163/affected/register2400.cpp",
+        "-o",
+        "/tmp/pa29-163/baseline-affected.o"
+      ],
+      "status": 1,
+      "diagnostic": "ERROR: expected expression, found 'asm'\n"
+    },
+    {
+      "workload": "locked600",
+      "args": [
+        "/tmp/pa29-163/compiler-A",
+        "-O0",
+        "-c",
+        "/tmp/pa29-163/affected/locked600.cpp",
+        "-o",
+        "/tmp/pa29-163/baseline-affected.o"
+      ],
+      "status": 1,
+      "diagnostic": "ERROR: expected expression, found 'asm'\n"
+    },
+    {
+      "workload": "locked1200",
+      "args": [
+        "/tmp/pa29-163/compiler-A",
+        "-O0",
+        "-c",
+        "/tmp/pa29-163/affected/locked1200.cpp",
+        "-o",
+        "/tmp/pa29-163/baseline-affected.o"
+      ],
+      "status": 1,
+      "diagnostic": "ERROR: expected expression, found 'asm'\n"
+    },
+    {
+      "workload": "locked2400",
+      "args": [
+        "/tmp/pa29-163/compiler-A",
+        "-O0",
+        "-c",
+        "/tmp/pa29-163/affected/locked2400.cpp",
+        "-o",
+        "/tmp/pa29-163/baseline-affected.o"
+      ],
+      "status": 1,
+      "diagnostic": "ERROR: expected expression, found 'asm'\n"
+    }
+  ],
+  "final": [
+    {
+      "workload": "register600",
+      "args": [
+        "/tmp/pa29-163/compiler-A",
+        "-O0",
+        "-c",
+        "/tmp/pa29-163/affected-long/register600.cpp",
+        "-o",
+        "/tmp/pa29-163/baseline-affected.o"
+      ],
+      "status": 1,
+      "diagnostic": "ERROR: expected expression, found 'asm'\n"
+    },
+    {
+      "workload": "register1200",
+      "args": [
+        "/tmp/pa29-163/compiler-A",
+        "-O0",
+        "-c",
+        "/tmp/pa29-163/affected-long/register1200.cpp",
+        "-o",
+        "/tmp/pa29-163/baseline-affected.o"
+      ],
+      "status": 1,
+      "diagnostic": "ERROR: expected expression, found 'asm'\n"
+    },
+    {
+      "workload": "register2400",
+      "args": [
+        "/tmp/pa29-163/compiler-A",
+        "-O0",
+        "-c",
+        "/tmp/pa29-163/affected-long/register2400.cpp",
+        "-o",
+        "/tmp/pa29-163/baseline-affected.o"
+      ],
+      "status": 1,
+      "diagnostic": "ERROR: expected expression, found 'asm'\n"
+    },
+    {
+      "workload": "locked600",
+      "args": [
+        "/tmp/pa29-163/compiler-A",
+        "-O0",
+        "-c",
+        "/tmp/pa29-163/affected-long/locked600.cpp",
+        "-o",
+        "/tmp/pa29-163/baseline-affected.o"
+      ],
+      "status": 1,
+      "diagnostic": "ERROR: expected expression, found 'asm'\n"
+    },
+    {
+      "workload": "locked1200",
+      "args": [
+        "/tmp/pa29-163/compiler-A",
+        "-O0",
+        "-c",
+        "/tmp/pa29-163/affected-long/locked1200.cpp",
+        "-o",
+        "/tmp/pa29-163/baseline-affected.o"
+      ],
+      "status": 1,
+      "diagnostic": "ERROR: expected expression, found 'asm'\n"
+    },
+    {
+      "workload": "locked2400",
+      "args": [
+        "/tmp/pa29-163/compiler-A",
+        "-O0",
+        "-c",
+        "/tmp/pa29-163/affected-long/locked2400.cpp",
+        "-o",
+        "/tmp/pa29-163/baseline-affected.o"
+      ],
+      "status": 1,
+      "diagnostic": "ERROR: expected expression, found 'asm'\n"
+    }
+  ]
+}

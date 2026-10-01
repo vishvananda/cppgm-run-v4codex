@@ -52,6 +52,10 @@ member-body demand. Per-statement scratch vectors are released on return;
 source recipes live with the TU. Each instruction expands to a fixed number of
 LowIR operations/blocks, independent of operand values. Existing phase telemetry
 is supplemented with source statement/instruction counts, without extra walks.
+For O operand occurrences and I machine recipes, additional lowering is bounded
+by 4O + 16I + 2 LowIR instructions, 2I blocks and I CAS scratch slots, excluding
+the ordinary C++ operand-expression work. These are conservative structural
+bounds, not profitability targets; no search or optional code growth is allowed.
 
 No optional optimization is added: optional work and growth budgets are zero.
 Additive atomics use the existing direct primitive; no CAS search is needed for

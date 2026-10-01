@@ -1,0 +1,605 @@
+{
+  "compiler_sha256": "095c53a4471753d996ef679d765d3f06fb5fa3c96d512e7ea657fc9c4a098558",
+  "checks": [
+    {
+      "name": "atomic-fallback compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls161/atomic-fallback.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-fallback.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-fallback link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls161-final/atomic-fallback.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-fallback"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-fallback run",
+      "args": [
+        "/tmp/pa29-163/controls161-final/atomic-fallback"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-generic compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls161/atomic-generic.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-generic.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-generic link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls161-final/atomic-generic.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-generic"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-generic run",
+      "args": [
+        "/tmp/pa29-163/controls161-final/atomic-generic"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-hosted compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls161/atomic-hosted.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-hosted.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-hosted link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls161-final/atomic-hosted.o",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls161/atomic-host.cpp",
+        "-pthread",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-hosted"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-hosted run",
+      "args": [
+        "/tmp/pa29-163/controls161-final/atomic-hosted"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-identity compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls161/atomic-identity.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-identity.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-identity link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls161-final/atomic-identity.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-identity"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-identity run",
+      "args": [
+        "/tmp/pa29-163/controls161-final/atomic-identity"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-layout compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls161/atomic-layout.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-layout.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-layout link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls161-final/atomic-layout.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-layout"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-layout run",
+      "args": [
+        "/tmp/pa29-163/controls161-final/atomic-layout"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-padding compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls161/atomic-padding.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-padding.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-padding link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls161-final/atomic-padding.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-padding"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-padding run",
+      "args": [
+        "/tmp/pa29-163/controls161-final/atomic-padding"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-query compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls161/atomic-query.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-query.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-query link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls161-final/atomic-query.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-query"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-query run",
+      "args": [
+        "/tmp/pa29-163/controls161-final/atomic-query"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-runtime compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls161/atomic-runtime.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-runtime.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-runtime link",
+      "args": [
+        "g++",
+        "/tmp/pa29-163/controls161-final/atomic-runtime.o",
+        "-latomic",
+        "-o",
+        "/tmp/pa29-163/controls161-final/atomic-runtime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "atomic-runtime run",
+      "args": [
+        "/tmp/pa29-163/controls161-final/atomic-runtime"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "arity",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/arity-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "extra-arity",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/extra-arity-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "store-const",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/store-const-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "c11-plain",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/c11-plain-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "gnu-atomic-object",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/gnu-atomic-object-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "expected-type",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/expected-type-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "generic-output-const",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/generic-output-const-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "boolean-fetch",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/boolean-fetch-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "double-fetch",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/double-fetch-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "function-address",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/function-address-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unresolved overload in value context\n"
+    },
+    {
+      "name": "atomic-const",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/atomic-const-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid atomic type operand\n"
+    },
+    {
+      "name": "atomic-reference",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/atomic-reference-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid atomic type operand\n"
+    },
+    {
+      "name": "atomic-array",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/atomic-array-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid atomic type operand\n"
+    },
+    {
+      "name": "atomic-void",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/atomic-void-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid atomic type operand\n"
+    },
+    {
+      "name": "atomic-nested",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/atomic-nested-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid atomic type operand\n"
+    },
+    {
+      "name": "nontrivial",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/nontrivial-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid atomic type operand\n"
+    },
+    {
+      "name": "dependent-nontrivial",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/dependent-nontrivial-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid substituted declaration type\n"
+    },
+    {
+      "name": "dependent-const",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/dependent-const-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid substituted declaration type\n"
+    },
+    {
+      "name": "atomic-constant-read",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/atomic-constant-read-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: static assertion is not a true integral constant in /tmp/pa29-163/controls161-final/atomic-constant-read-reject.cpp:1\n"
+    },
+    {
+      "name": "atomic-to-plain-pointer",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/atomic-to-plain-pointer-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid implicit conversion\n"
+    },
+    {
+      "name": "plain-to-atomic-pointer",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-163/controls161-final/plain-to-atomic-pointer-reject.cpp",
+        "-o",
+        "/tmp/pa29-163/controls161-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid implicit conversion\n"
+    }
+  ]
+}

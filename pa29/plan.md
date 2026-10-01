@@ -1,84 +1,93 @@
-# PA29 compact plan — implementation163
+# PA29 compact plan — implementation163 handoff
 
-Target: **PA29 full-stage**. Phase: **implement**.
+Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `cce8634c3c835cf6d5e8f4fa5fea0db213959718`.
 Previous review: `1ab3499d7046daf5c298d958a8770b413edb3615`.
-Audit entry: `9662716b8a8aa0bef94f5a293d7900b28c42701c`, **338/403**, 65 failures.
-Current: **338/403**, the identical 65 failures; all 403 fixtures and sidecars,
-references, comparison and discovery rules are unchanged in this reviewed range.
+Implementation163 entry: `3bc61ecba6d68eb2821022d7d58ac53ae5305f84`, **338/403**.
+Code tip: `a6f3d6a2`. Current: **345/403**, **58 failures**; seven removed,
+none added. All 403 fixtures, references, sidecars and comparison rules remain.
 
-## Reviewed and corrected
+## Design and completed group
 
-Implementation163 entry: `3bc61ecba6d68eb2821022d7d58ac53ae5305f84`, 338/403.
-Previous goal turn supplied no implementation progress; the failure-set check
-confirms all 65 failures persist. No live build/test handle remains.
-Assembly is the next coherent owner group (six failures): parse GNU statement
-operands once; bind expressions in the ordinary/template semantic graph; retain
-typed instruction/effect recipes; lower through shared LowIR/native operations.
-Statement-local storage and linear work in template bytes/operands/instructions;
-no optional optimization, search or growth budget. Validate named/numbered
-operands, constraints, clobbers, evaluate-once behavior, templates, atomic
-concurrency, exceptions and LowIR/object parity. Freeze entry/final compilers;
-measure equivalent common A/A+ABBA and new affected demand scaling, separately
-reporting compilation/RSS and checked runtime/text. Extend within this owner
-through related correctness defects before choosing a handoff boundary.
+GNU assembly statements now flow from one parsed source recipe and ordinary
+operand expression nodes through semantic binding, substitution, typed LowIR,
+MIR and direct ELF emission. [Assembly163](assembly163.md) records ownership,
+validation, supported recipes, limits and the handoff boundary. Source recipes
+are shared across demanded instances; operands evaluate once. Statement scratch
+is bounded by 30 operands; compiler work is linear in bytes, operands and emitted
+instructions. Additive/exchange atomics reuse existing IR; other locked updates
+use fixed-size CAS loops. No compiler fixed point, semantic reconstruction,
+external assembler, optional optimization or whole-program search was added.
 
-[Audit162](audit.md) covers every commit since the previous review, all three
-accepted handoffs (traits159, invocation160, atomics161), and their combined
-ownership paths. Code fix `cce8634c` closes four findings: atomic bool compound
-operations, scalar reference snapshots, recorded alignment at atomic builtin
-selection, and atomic identity versus cv-qualification in conversions/casts.
-Native atomics require sufficient recorded alignment; unsupported scalar and
-generic storage uses the existing libatomic ABI. Queries and lowering retain
-selected facts, with no new source parsing, semantic lookup or global retry.
+Work extended beyond the initial six failures to matching inputs, operand
+aliasing, same-register xadd, exchange operand order, widths, volatile/memory
+behavior, template lookup, temporary/exception cleanup, native opcode dispatch,
+and debug/LowIR validation. The attribute/template fixture also now passes.
+
+The prior [audit162](audit.md) made progress through four atomic ownership
+corrections and evidence, while the course failure count stayed at 65. Entry
+reconciliation found no inherited live process. Its review markers and
+[performance162](performance162.md) remain unchanged; this implementation is
+not independently reviewed.
 
 ## Validation and performance
 
-- `make test-pa29`: **338/403**, exit 2; zero new failures, none removed.
+- `make test-pa29`: **345/403**, exit 2; seven fewer existing failures.
 - `make test-report-through-pa28`: **4538/4538**, exit 0.
-- `make test-report-through-pa29`: **4876/4941**, exit 2, only PA29 fails.
-- File audit: pass, the same four inherited substantial-header warnings.
-- Explicit controls: **49/49** new; inherited **34/34, 47/47, 46/46, 45/45**.
-  Native/LowIR roundtrips, ABI, cache sharing and telemetry equality pass.
-- [Validation](../student.tests/pa29/evidence162/validation.json),
-  [coverage](../student.tests/pa29/evidence162/coverage.json) and
-  [performance162](performance162.md) retain the evidence. Frozen cumulative
-  and audit-only A/A+ABBA comparisons have identical common objects/executables;
-  new combined ownership workloads scale with demand. All 1,088 preliminary
-  and final performance observations remain. No speedup claim is made.
+- `make test-report-through-pa29`: **4883/4941**, exit 2; only PA29 fails.
+- File audit: pass; four inherited substantial-header warnings.
+- New controls: **53/53**; inherited atomic controls: **45/45, 49/49**.
+  Inspection validates native opcodes, serialized LowIR/object execution,
+  concurrency, noexcept boundaries, MIR debug locations and telemetry equality.
+- [Validation](../student.tests/pa29/evidence163/validation.json),
+  [coverage](../student.tests/pa29/evidence163/coverage.json),
+  [delta](../student.tests/pa29/evidence163/stage-delta.json) and
+  [performance163](performance163.md) retain the concrete evidence.
 
-No new optional optimization is introduced; new optional work/growth budgets
-are zero. Historical blanket 15%/zero-growth targets remain diagnostics under
-spec §9, with all measurements and mandated limits preserved. PA29 excludes
-runtime vector lowering; broader headers/runtime, optimizer/allocation and
-self-hosting retain PA30–34 owners. Required PA29 behavior is not waived.
+Performance acceptance is PA29/O0. Frozen common A/A+ABBA compares equivalent
+correct implementations; affected measurements record necessary semantic costs
+and demand scaling. No speedup is claimed. New optional work/growth budgets are
+**zero**. Historical blanket 15%/zero-growth gates remain diagnostics under
+spec §9; measurements and mandated limits are preserved. Broad hosted runtime,
+optimizer/allocation and self-hosting remain PA30–34 responsibilities. An initial
+host-DWARF inspection assumption was corrected against PA8's explicit contract;
+required LowIR/MIR debug transport and all course checks remain.
 
-## Broad remaining work
+## Unfinished implementation
 
-The unchanged [fixture ledger](../student.tests/pa29/evidence161/remaining.json)
-and [failure-set check](../student.tests/pa29/evidence162/stage-delta.json) retain
-all unfinished behavior. Owner labels are not root-cause proof.
+The [remaining ledger](../student.tests/pa29/evidence163/remaining.json) retains
+all 58 failures; owner labels are not root-cause proof.
 
 | Owner / failures | Work |
 |---|---|
-| Assembly: 6 | Constraints, operands, clobbers and effect recipes, including locked updates/fences. |
-| Extended syntax/types/layout: 37 | Numeric/complex types, vector width, unused-wrapper validation, designated initialization, folds, lambdas and bindings. |
+| Extended syntax/types/layout: 36 | Numeric/complex types, vector width, unused-wrapper validation, designators, folds, lambdas and bindings. |
 | Template demand/hosted ABI: 19 | Packs/aliases/context keys, pretty-function, extern/inline emission and naming. |
 | Structured intrinsic operands: 2 | Evaluation-mode/address semantics and source-location facts. |
-| Legacy trait contract: 1 | Independent proof for the forward-declared std-trait oracle question. |
+| Legacy trait contract: 1 | Forward-declared std-trait oracle question; required behavior remains unresolved. |
 
-Also retain code-alignment placement, dependent offsetof ABI signatures and
-class-convertible designator indices in their owning groups. Extended-float
-suffix recognition still does not provide extended precision. The reserved-name
-nothrow-invocable fixture with an explicitly false primary remains a contract
-question within the template group. Neither question permits library-name
-shortcuts or an unsupported reference correction.
+Also retain code-alignment placement, dependent offsetof ABI signatures,
+class-convertible designator indices and extended floating precision in their
+owners. Runtime vector lowering is explicitly outside PA29, not a waived
+compile-time layout requirement. Next implementation should finish another
+coherent owner group rather than seek individual fixture symptoms.
 
-Avoid further small handoffs for individual symptoms. The three broad groups
-were useful, but separate trait followups and repeated evidence boundaries
-increased review overhead; atomic identity/storage changes needed cross-owner
-controls at the initial handoff. Complete each next owner group through its
-shared semantic, lowering and validation paths. A full through-PA29 pass remains
-required before advancement. The records commit follows the reviewed code tip
-without further code edits.
+## Independent review and handoff ledger
+
+| Boundary | Implementation | Independent review |
+|---|---|---|
+| audit162 / `cce8634c` | Atomic identity/storage corrections; 338/403. | Reviewed through the preserved marker; whole stage unfinished. |
+| implementation163 / `a6f3d6a2` | Required assembly family complete; 345/403. | Pending recipe/effect/ownership/performance review; not waived. |
+
+Existing forward-declared trait and explicitly-false nothrow-invocable primary
+oracle questions remain unresolved. No library-name shortcut or reference
+correction was made. The remaining fixture failures remain implementation work
+even where their contract interpretation also needs independent proof.
+
+Handoff boundary: no known defect remains in the implemented assembly subset.
+All related required fixtures and cross-owner controls pass. The 58 remaining
+failures require distinct type/layout, template/ABI or intrinsic-context facts;
+extending arbitrary assembler syntax would not resolve them. Continuing within
+this group's understanding therefore has no remaining required failure to own.
+This is an incomplete full-stage handoff, not advancement or an independent
+audit. A full through-PA29 pass and whole-stage audit are still required.

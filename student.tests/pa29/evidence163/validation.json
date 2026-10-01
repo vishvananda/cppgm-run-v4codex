@@ -1,0 +1,66 @@
+{
+  "entry": "3bc61ecba6d68eb2821022d7d58ac53ae5305f84",
+  "code_tip": "a6f3d6a2707bd0b31575bc62b95b13e2db885338",
+  "compiler_sha256": "095c53a4471753d996ef679d765d3f06fb5fa3c96d512e7ea657fc9c4a098558",
+  "checks": {
+    "make test-report-through-pa28": {
+      "exit_status": 0,
+      "expected": 0,
+      "log": "/tmp/pa29-163/prior-final.log",
+      "log_sha256": "b1ff9611d30d0da259845968d6ec5a5a9b0ee6da2d9810c505780299a5c67a88"
+    },
+    "make test-pa29": {
+      "exit_status": 2,
+      "expected": 2,
+      "log": "/tmp/pa29-163/stage-final.log",
+      "log_sha256": "dceba752005a71b8ddecd2c62593db4d2452819965bfd031b729a36191f13a4b"
+    },
+    "make test-report-through-pa29": {
+      "exit_status": 2,
+      "expected": 2,
+      "log": "/tmp/pa29-163/through-final.log",
+      "log_sha256": "e726e750e3192018293dd12024d3ac3a9359fad0f9bc8cc5dec095aeefc26d59"
+    },
+    "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src": {
+      "exit_status": 0,
+      "expected": 0,
+      "log": "/tmp/pa29-163/file-audit-final.log",
+      "log_sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f"
+    },
+    "python3 /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls163.py /tmp/pa29-163/controls-final": {
+      "exit_status": 0,
+      "expected": 0,
+      "log": "/tmp/pa29-163/controls-final.log",
+      "log_sha256": "d62c2a1e83f2b93a48fe494a97fbd35bcc42819425f2766b8d744bd1a265474e"
+    },
+    "python3 /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls161.py /tmp/pa29-163/controls161-final": {
+      "exit_status": 0,
+      "expected": 0,
+      "log": "/tmp/pa29-163/controls161-final.log",
+      "log_sha256": "8f8a08266c09029281d508c2c9bde64c52111a6774dad7b7e41079854584fc0a"
+    },
+    "python3 /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls162.py /tmp/pa29-163/controls162-final": {
+      "exit_status": 0,
+      "expected": 0,
+      "log": "/tmp/pa29-163/controls162-final.log",
+      "log_sha256": "99e00c49dc5c90d7bcffa7f65add5dcd99d6d6797ba7ebfd36e1f0fd15d5dc23"
+    },
+    "python3 /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/inspection163.py /tmp/pa29-163/inspection-final /tmp/pa29-163/ir-object": {
+      "exit_status": 0,
+      "expected": 0,
+      "log": "/tmp/pa29-163/inspection-final.log",
+      "log_sha256": "7f9f8a5284d03a6edbb3e9a1139056250df3bd9fb993cae980f52df020884058"
+    }
+  },
+  "stage_progress": "PASS: seven existing failures removed; no new failures or coverage change",
+  "prior_passed": 4538,
+  "stage_passed": 345,
+  "stage_total": 403,
+  "independent_review": "pending; review markers preserved",
+  "inspection_correction": {
+    "initial_assertion": "host ELF DWARF line table exists",
+    "initial_outcome": "failed: inherited host writer has no .debug_line",
+    "contract": "pa8/lowir.md Debug Locations explicitly permits backends without object-file debug information",
+    "final_checks": "LowIR/MIR debug transport; ELF nop/pause encoding; no required check removed"
+  }
+}

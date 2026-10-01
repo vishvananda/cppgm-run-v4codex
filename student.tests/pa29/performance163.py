@@ -14,7 +14,7 @@ result=dict(binary=dict(path=str(cc),sha256=sha(cc)),flags=['-O0','-c','--stats'
 def save():(out/'performance.json').write_text(json.dumps(result,indent=2)+'\n')
 for i in range(6):
  start=time.perf_counter();run(['/usr/bin/time','-f','%M','-o',out/'rss',*affinity,'/usr/bin/true']);result['launcher'].append(time.perf_counter()-start)
-iterations=2000000
+iterations=20000000
 for kind in ['register','locked']:
  for n in [600,1200,2400]:
   key=kind+str(n);src=out/(key+'.cpp')
@@ -32,7 +32,7 @@ return value;}
    offset=1
   demanded=sum(1+offset+(i&7) for i in range(n));period=[i+8+offset for i in range(128)]
   checksum=sum(period)*(iterations//128)+sum(period[:iterations%128])
-  src.write_text(prefix+'long demanded(long x){long sum=0;\n'+''.join('sum+=work<%d>(x);\n'%i for i in range(n))+'return sum;}\nint main(int argc,char**){if(demanded(argc)!='+str(demanded)+')return 1;\nlong sum=0;for(int i=0;i<argc*2000000;++i)sum+=work<7>((i&127)+argc);\nreturn sum=='+str(checksum)+'LL?0:2;}\n')
+  src.write_text(prefix+'long demanded(long x){long sum=0;\n'+''.join('sum+=work<%d>(x);\n'%i for i in range(n))+'return sum;}\nint main(int argc,char**){if(demanded(argc)!='+str(demanded)+')return 1;\nlong sum=0;for(int i=0;i<argc*20000000;++i)sum+=work<7>((i&127)+argc);\nreturn sum=='+str(checksum)+'LL?0:2;}\n')
   obj=out/(key+'.o');exe=out/key;run([cc,*result['flags'],src,'-o',obj]);run(['g++',obj,'-o',exe]);run([exe])
   result['inputs'][key]=dict(path=str(src),sha256=sha(src));result['images'][key]=dict(object_sha256=sha(obj),executable_sha256=sha(exe),object_bytes=obj.stat().st_size,executable_text_bytes=text_size(exe))
   for mode in ['compile','runtime']:
