@@ -1,0 +1,33 @@
+{
+  "entry": "e5690337",
+  "code_tip": "e16108af",
+  "cpu": 0,
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "cpuinfo": "model name\t: Intel(R) Xeon(R) CPU @ 2.20GHz",
+  "flags": [
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "binaries": {
+    "entry": {
+      "path": "/tmp/pa29-164/entry-cppgm++",
+      "sha256": "095c53a4471753d996ef679d765d3f06fb5fa3c96d512e7ea657fc9c4a098558",
+      "bytes": 4048384
+    },
+    "final": {
+      "path": "/tmp/pa29-164/final-cppgm++",
+      "sha256": "354d6a193ee1646dfc5ac46e13c7f58085417eb160d01fb2f54210996d2f9024",
+      "bytes": 4057576
+    }
+  },
+  "scripts": {
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "student.tests/pa29/performance164.py": "861d24e91794fabd8747fd5d476d7bd86e13e3a85ef1f29fa24f187f59394609"
+  },
+  "common_runs": 224,
+  "affected_runs": 96,
+  "launcher_samples": 6,
+  "interference": "No compiler build or test suite overlapped measurement. Light evidence/documentation work and external scheduling were uncontrolled.",
+  "acceptance": "PA29/O0 required semantic capability. No optimization/speedup claim; optional work/growth budgets zero."
+}

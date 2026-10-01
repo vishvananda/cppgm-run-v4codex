@@ -1,0 +1,41 @@
+{
+  "entry": "e5690337eb69b59468d989a143030bd8dbdc8ee0",
+  "code_tip": "e16108aff95d25034786fa3b9a8bc63cd6693af6",
+  "compiler_sha256": "354d6a193ee1646dfc5ac46e13c7f58085417eb160d01fb2f54210996d2f9024",
+  "checks": {
+    "make test-pa29": {
+      "exit_status": 2,
+      "log": "/tmp/pa29-164/stage-required.log",
+      "log_sha256": "c45b7aef63d10dadbd2a6287a9c9d18178ca41789992679ba5843567ffbcc7b5"
+    },
+    "make test-report-through-pa28": {
+      "exit_status": 0,
+      "log": "/tmp/pa29-164/prior-final.log",
+      "log_sha256": "91255bd87cd2f52bf5fc8868f46c018b8e2318f1d1304ac429f902c90e26c497"
+    },
+    "make test-report-through-pa29": {
+      "exit_status": 2,
+      "log": "/tmp/pa29-164/through-final.log",
+      "log_sha256": "8e14ca7d679e640403220b8c2afbd104796d6dc87d616f70e244b4ce033798fc"
+    },
+    "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src": {
+      "exit_status": 0,
+      "log": "/tmp/pa29-164/file-audit-final.log",
+      "log_sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f"
+    },
+    "python3 student.tests/pa29/controls164.py /tmp/pa29-164/controls-ref": {
+      "exit_status": 0,
+      "checks": 52
+    },
+    "python3 student.tests/pa29/inspection164.py /tmp/pa29-164/inspection-final": {
+      "exit_status": 0,
+      "checks": 5
+    }
+  },
+  "stage_progress": "PASS: four existing failures removed; no new failures or coverage change",
+  "prior_passed": 4538,
+  "stage_passed": 349,
+  "stage_total": 403,
+  "independent_review": "pending; review markers preserved",
+  "whole_stage": "unfinished implementation and independent audit remain"
+}

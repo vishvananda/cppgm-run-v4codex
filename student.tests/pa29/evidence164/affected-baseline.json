@@ -1,0 +1,44 @@
+[
+  {
+    "workload": "strings600",
+    "input_sha256": "9c2f134b5ad343f2924e5cd7dc1e899100229d8b14a400bfec2923dc38e393a0",
+    "compile_status": 0,
+    "diagnostic": "",
+    "runtime_status": 1,
+    "runtime_stdout": ""
+  },
+  {
+    "workload": "strings1200",
+    "input_sha256": "dda7e222b5f8a5b4f0926455c1997ae37fed032e90da9ff72e187167e5993e40",
+    "compile_status": 0,
+    "diagnostic": "",
+    "runtime_status": 1,
+    "runtime_stdout": ""
+  },
+  {
+    "workload": "strings2400",
+    "input_sha256": "4ebb00c83d522014ba18fbe50392902f27a96ced26c8e627bfcc0d341c7f9da0",
+    "compile_status": 0,
+    "diagnostic": "",
+    "runtime_status": 1,
+    "runtime_stdout": ""
+  },
+  {
+    "workload": "queries600",
+    "input_sha256": "80ad651301277c58fbc4660ba40e72ac26e5941f0e954f8ba7293e5c9c126dbb",
+    "compile_status": 1,
+    "diagnostic": "ERROR: missing substituted query declaration\n"
+  },
+  {
+    "workload": "queries1200",
+    "input_sha256": "60b05adf3de7cceccdecf4434062252ef83c29a83250e0796c4519c76ec60fc9",
+    "compile_status": 1,
+    "diagnostic": "ERROR: missing substituted query declaration\n"
+  },
+  {
+    "workload": "queries2400",
+    "input_sha256": "6f65c650c06c80741e29637db1a7aa8104bc542129be5842d5a0146374b2b070",
+    "compile_status": 1,
+    "diagnostic": "ERROR: missing substituted query declaration\n"
+  }
+]

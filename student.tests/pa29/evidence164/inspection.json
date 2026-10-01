@@ -1,0 +1,77 @@
+{
+  "checks": [
+    {
+      "name": "source IR",
+      "args": [
+        "dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "student.tests/pa29/controls164/function-context.cpp",
+        "-o",
+        "/tmp/pa29-164/inspection-final/strings.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "roundtrip",
+      "args": [
+        "dev/lowir",
+        "/tmp/pa29-164/inspection-final/strings.lowir",
+        "-o",
+        "/tmp/pa29-164/inspection-final/strings.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "MIR/native",
+      "args": [
+        "dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-164/inspection-final/strings.mir",
+        "/tmp/pa29-164/inspection-final/strings.roundtrip",
+        "-o",
+        "/tmp/pa29-164/inspection-final/strings-native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "execution",
+      "args": [
+        "/tmp/pa29-164/inspection-final/strings-native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "unfinished evaluation-context reducer",
+      "args": [
+        "dev/cppgm++",
+        "-std=c++14",
+        "-c",
+        "student.tests/pa29/pending164/evaluation-context.cpp",
+        "-o",
+        "/tmp/pa29-164/inspection-final/pending.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: active error directive\n"
+    }
+  ],
+  "internal_string_storage": true,
+  "explicit_ir_debug_transport": true,
+  "lowir_sha256": "e459c7699e7234de35e66486c6744b4e2d69df6215e0f2c7910224ea00e22242",
+  "pending_disposition": "unfinished implementation; rejection is not stage progress"
+}
