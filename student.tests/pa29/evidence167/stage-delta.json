@@ -1,0 +1,15 @@
+{
+  "entry": "7719caea56d56b5c359796e25a08b3f2f659a4c5",
+  "code_tip": "db6b91a050c237b3fedbded03597ed4adc41b15e",
+  "entry_failures": 53,
+  "final_failures": 49,
+  "fixed": [
+    "pa29/tests/compile/500-cxx14-deleted-placeholder-return-overload.t",
+    "pa29/tests/compile/500-gnu-inline-defers-unused-wrapper.t",
+    "pa29/tests/compile/500-gnu-leading-attribute-type-id.t",
+    "pa29/tests/compile/500-gnu-vector-size-typedef-layout.t"
+  ],
+  "new": [],
+  "total": 403,
+  "stage_sha256": "52861a3a4c6736c6e5fd391c25e968655bf4140298df6b15b0973117676dd617"
+}

@@ -1,139 +1,98 @@
-# PA29 compact plan — implementation167
+# PA29 compact plan — implementation167 handoff
 
-Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `f07f78236eb475648834ed78afbca6c864f64408`.
 Previous review: `cce8634c3c835cf6d5e8f4fa5fea0db213959718`.
-Audit entry: `3036bd4ec4b1f8d315cf826437244de5236955bf`.
-Current: **350/403**, exactly the entry's **53 failures**; no added failures,
-removed tests, reference changes or comparison changes. All 403 fixtures remain.
+Entry HEAD: `7719caea56d56b5c359796e25a08b3f2f659a4c5`.
+Implementation code tip: `db6b91a0` (three coherent increments).
+The preceding turn was committed audit progress; entry process inspection found
+no inherited live compiler/test process. Independent review markers remain intact.
 
-## Reviewed ownership and fixes
+## Completed owner and design alignment
 
-[Audit166](audit.md) reviews every commit and the combined source changes from
-the previous review through the code tip, including interactions across all
-three accepted handoffs. Assembly163, function-context164 and evaluation165
-have now received this independent review. The prior turn was committed progress;
-no inherited live process needed reconciliation.
+Hosted vector shape and inline-body validation now share the existing pipeline:
+parsed attribute expressions → canonical lane/width types and dependent queries
+→ substitution/layout/element validation → evaluated function-use edges → typed
+ABI/LowIR → native object. GNU vectors retain byte widths; extended vectors retain
+lane counts, padded storage and packed boolean layout. Shape, cv, alignment,
+traits, partial deduction, packs and SFINAE consume canonical identities.
 
-The cohesive correction commits semantic assembly writes/exposure to the scalar
-observation owner; distinguishes runtime first new[] bounds from required
-constant dimensions and carries that fact into lowering; materializes prvalue
-value parameters/enumerators before reference binding; and keys query receivers
-by evaluation mode, retiring both variants on their existing completion edges.
-The integrated declaration/template trace reaches initialized storage, shared
-LowIR and native ELF without phase text transport or semantic reconstruction.
+Type attributes own ordinary parsed expression nodes. Existing occurrence
+projection/substitution retains those nodes; no token replay, fake semantic nodes,
+name reconstruction, IR text transport or global retry was added. The TU owns
+source nodes, canonical types, query facts and sparse body markers. Specialization
+keys/caches retain their existing complete context and lifetime. PA9's Vector
+node carries either a concrete count or a typed dependent expression edge.
 
-Existing TU arenas, canonical identities, dependent-only substitution, sparse
-mode facts, explicit completion edges and per-function backend lifetimes remain
-the owners. New controls exercise the intersections, including standalone LowIR
-execution, because a host run alone could hide the uninitialized reference slot.
+Hosted namespace inline functions are checked independently of emission. Calls
+between dormant inline functions use the existing deduplicated function-use
+queue; evaluated calls/addresses activate it. Member construction facts retain
+their required semantic demand. A discarded direct unknown reserved builtin can
+leave an explicit unavailable-body marker, while its operands and surrounding
+statements are checked. Using that body fails. No guessed builtin signature or
+result type is introduced. Value-producing unknown builtins remain unsupported.
+The standalone non-host LowIR tool retains its existing export roots.
+
+Work is linear in parsed attributes, explicit initializer elements, demanded
+facts and use edges; canonical lookups are average O(1). Vector layout rounding
+has at most 64 steps. Omitted initializer lanes use one repeated tail action,
+not storage proportional to the numeric width. There is no new optimizer pass.
 
 ## Validation and performance
 
-- `make test-pa29`: **350/403**, exit 2; identical 53-failure set.
+- `make test-pa29`: **354/403**, exit 2; **53 → 49 failures**, four fixes, no new failures.
 - `make test-report-through-pa28`: **4538/4538**, exit 0.
-- `make test-report-through-pa29`: **4888/4941**, exit 2; only PA29 fails.
-- File audit: pass; four inherited substantial-header warnings.
-- Explicit controls162–166: **222 passing behavioral checks**; inherited/new
-  LowIR, MIR, native and telemetry inspection: **222 passing checks/groups**.
-- [Validation](../student.tests/pa29/evidence166/validation.json),
-  [coverage](../student.tests/pa29/evidence166/coverage.json),
-  [failure delta](../student.tests/pa29/evidence166/stage-delta.json),
-  [complete range](../student.tests/pa29/evidence166/range.json) and
-  [performance166](performance166.md) retain the final evidence.
+- `make test-report-through-pa29`: **4892/4941**, exit 2; only PA29 fails.
+- File audit: pass, the same four substantial-header warnings.
+- Explicit controls167: **45/45**; inherited controls166: **21/21**.
+- LowIR validation/roundtrip, standalone execution, MIR, object/ABI and telemetry:
+  **88 passing inspection checks**, including dependent PA9 fact roundtrips.
+- [Validation](../student.tests/pa29/evidence167/validation.json),
+  [unchanged coverage](../student.tests/pa29/evidence167/coverage.json),
+  [exact failure delta](../student.tests/pa29/evidence167/stage-delta.json), and
+  [performance167](performance167.md) retain authoritative evidence.
 
-Performance acceptance is **PA29/O0**. The 832 final observations plus 24 launcher
-samples measure compiler latency/RSS and checked runtime/text. Equivalent common
-images are byte-identical; audit-only paired compiler ratios are 0.9966–1.0013.
-Affected correctness costs and demand scaling are disclosed; all six new final
-workloads fail entry checksums, so they supply no valid entry speedup baseline.
-Scheduling variation limits precise timing claims. Historical observations and
-all preliminary samples remain; no speedup is claimed.
+Performance acceptance is PA29/O0. Frozen A/A+ABBA comparisons measure compiler
+latency/RSS and checked runtime/text together; affected layout/wrapper demand
+scales at 600/1,200/2,400. All observations, including preliminary measurements
+before the dependent ABI correction, are preserved. No speedup is claimed.
+Optional work/growth budgets remain **zero**. Historical blanket 15%/zero-growth
+self-selected targets remain diagnostics under spec §9. Mandated evaluator/native
+limits, timeouts, correctness and coverage are unchanged; broad hosted runtime,
+optimizer/allocation and self-hosting constraints retain PA30–34 ownership.
 
-New optional work/growth budgets are **zero**. Historical blanket 15%/zero-growth
-gates, including inherited plans, remain diagnostics under spec §9. Required
-correctness, coverage, evaluator/native limits and assignment timeouts remain.
-Broad hosted runtime, optimization/allocation and self-hosting are PA30–34 work.
+## Remaining implementation and review boundary
 
-## Remaining implementation
+The [remaining ledger](../student.tests/pa29/evidence167/remaining.json) accounts
+for every required failure. Labels classify ownership, not proven root causes.
 
-The [remaining ledger](../student.tests/pa29/evidence165/remaining.json) still
-accounts for all 53 failures; owner labels do not prove root causes.
-
-| Owner / failures | Work |
+| Owner / failures | Unfinished implementation |
 |---|---|
-| Extended syntax/types/layout: 36 | Numeric/complex types, vector width, unused-wrapper validation, designators, folds, lambdas and bindings. |
-| Template demand/hosted ABI: 15 | Packs/aliases/context keys, extern/inline emission and naming. |
-| Source-invocation intrinsic context: 1 | Caller defaults, nested defaults, constructor/member-initializer source facts. |
-| Legacy trait contract: 1 | Forward-declared std-trait oracle question; required behavior remains unresolved. |
+| Extended syntax/types/layout: 32 | Numeric/complex value representations, block pointers, designators, folds, templated lambdas, bindings and other remaining vendor forms. |
+| Template demand/hosted ABI: 15 | Pack/alias contexts, extern/inline-variable emission and nested ABI ownership. |
+| Source-invocation context: 1 | Invocation/default/member-initializer source coordinates. |
+| Legacy trait contract: 1 | Forward-declared trait oracle/required behavior remains unresolved. |
 
-Retain code-alignment placement, dependent offsetof ABI signatures,
-class-convertible designator indices and extended floating precision in their
-owners. Runtime vector lowering is outside PA29; compile-time layout is required.
-The positive [source-invocation](../student.tests/pa29/pending165/source-invocation.cpp)
-and [aggregate-mutation](../student.tests/pa29/pending165/aggregate-mutation.cpp)
-reducers remain unfinished implementation. Source coordinates need invocation
-identity through call/construction recipes; mutable aggregate state needs its
-own overlay rather than replacing immutable aggregate facts. The historical
-evaluation-context reducer remains a passing explicit control.
+Boundary: vector compile-time layout, unused literal validation and associated
+inline emission/ABI ownership are complete. The combined extended-vector fixture
+still stops at templated-lambda parsing; it also contains vector runtime operations,
+which the README excludes as a general requirement. That fixture remains required
+and unchanged. Further progress requires distinct parser/closure or numeric/value
+lowering work, not another local attribute/layout correction. Runtime vector values
+are explicitly rejected rather than scalarized; their diagnostic control is a
+capability guard, not a C++ invalidity claim.
 
-Forward-declared trait and explicitly-false nothrow-invocable primary oracle
-questions remain unresolved. Compiler agreement alone cannot justify reference
-changes; no library-name shortcut or reference correction was made here.
+Preserve the positive source-invocation and aggregate-mutation reducers, code
+alignment placement, dependent offsetof ABI signatures and class-convertible
+index designators in their owners. The forward-declared trait and explicitly-false
+nothrow-invocable primary oracle questions remain **independent review questions**;
+no reference correction or exemption was made. [Audit166](audit.md) remains the
+last independent review. Handoff completes this behavior group, not PA29 or its audit.
 
-Three broad owners justified separate handoffs, but the alias followup and
-repeated records-only handoffs added avoidable fragmentation. Complete each owner
-through dependent queries, effect invalidation, storage/lifetime semantics and
-both typed-IR/native paths before handoff. This audit closes review of the
-accumulated increments, not implementation of PA29. Full through-PA29 success
-is required before advancing. The audit ledger preserves earlier reviews and
-adds one row for this complete range. The records commit follows the validated
-code tip with no further code edits.
+## Handoff ledger
 
-## Active implementation167
-
-Entry HEAD: `7719caea56d56b5c359796e25a08b3f2f659a4c5`; 350/403, 53 failures.
-The preserved stage base and last-reviewed markers above remain unchanged.
-Previous goal turn: committed audit progress; current process inspection found
-no inherited compiler/test job.
-
-Initial owner: canonical hosted vector types and deferred inline validation.
-Data flow: parsed attribute expressions -> canonical lane/width type facts ->
-layout/initialization validation -> ordinary demand and typed LowIR emission.
-Validate unused wrappers independently of emission; only unsupported reserved
-builtins can defer a body. Attribute expressions are parsed once and evaluated
-in the existing substitution context. Identity lookup is average O(1); width
-and layout work are bounded by the type/initializer actually consumed.
-
-Extend related attribute, dependent layout and wrapper-validation fixes while
-the same ownership supports progress. Keep runtime vector lowering outside the
-explicit PA29 contract. Required suite/earlier suites/file audit, explicit
-positive and rejection controls, typed-IR inspection, and frozen O0 latency/RSS
-plus runtime/text observations will establish the handoff boundary. Optional
-optimization work/growth budgets remain zero; no performance speedup is assumed.
-
-Increment167a: GNU vectors now retain lane/byte identity and template width
-queries; initializer literals validate every element. Hosted namespace inline
-functions use the existing deduplicated use edges and emission roots, while
-member construction facts retain their existing semantic demand. Direct
-discarded unknown reserved builtins have an explicit unavailable-body marker,
-never a guessed signature. Pointer-to-vector ABI consumes PA9's typed Vector.
-Current check: 354/403 (four previous failures fixed, no new failures); 22/22
-explicit controls. Next: complete adjacent extended-vector layout and shape
-validation, then frozen final validation/performance evidence.
-
-Increment167b: extended vector types retain lane counts separately from GNU
-byte widths, including packed boolean layout and dependent partial-specialization
-deduction. Constant shape errors are rejected even in unused template patterns.
-42/42 controls and the final course tests pass their intended expectations:
-PA29 354/403; PA1–28 4538/4538; through PA29 4892/4941. File audit passes
-with the four inherited header warnings. Remaining 49 course failures are
-unchanged; performance and IR inspections are still pending handoff evidence.
-
-The final substitution control exposed dependent-vector ABI emission after
-semantic success. The PA9 Vector graph now retains an optional expression edge;
-source lowering, validation, encoder and explicit fact adapters consume it.
-SFINAE, pack queries and executable signatures now pass 45 controls. Preliminary
-performance is retained separately because this required ABI correction changes
-the final compiler. All final checks and measurements will be refreshed.
+| Turn | Owner / boundary | Required progress | Review status |
+|---|---|---|---|
+| 166 | Accumulated assembly/function/evaluation audit, through `f07f7823` | 350/403; PA1–28 and file audit pass | Independently reviewed; full historical ledger remains in audit.md. |
+| 167 | GNU/extended vector layout, inline validation/demand, dependent vector ABI; `7db8a253`, `039541f3`, `db6b91a0` | 354/403; no new failures or coverage changes; earlier stages/audit pass | Implementation ready for Ralph; independent review pending, markers preserved. |

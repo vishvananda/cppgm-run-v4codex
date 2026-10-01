@@ -13,6 +13,7 @@ int main(){
     if(text.find("vector-expression")==std::string::npos)return 2;
     auto parsed=parse_fact_text(text);
     if(parsed.cases.size()!=1 || mangle(parsed.graph,parsed.cases[0])!="DvT__i")return 3;
-    if(serialize_fact_file(parsed)!=text)return 4;
+    FactWriter roundtrip(parsed.graph);
+    if(roundtrip.write(parsed.cases[0])!=text)return 4;
     std::cout<<text;
 }

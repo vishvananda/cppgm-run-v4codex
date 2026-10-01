@@ -1,0 +1,46 @@
+{
+  "code_tip": "db6b91a050c237b3fedbded03597ed4adc41b15e",
+  "compiler_sha256": "c77409735741995731e3907de682d3558a5c5323ed8f3a588f9370dd23162f11",
+  "checks": [
+    {
+      "command": "make test-pa29",
+      "status": 2,
+      "log": "/tmp/pa29-167/final-validation/stage.log",
+      "sha256": "52861a3a4c6736c6e5fd391c25e968655bf4140298df6b15b0973117676dd617",
+      "summary": [
+        "===== TEST SUMMARY: 354 / 403 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": "make test-report-through-pa28",
+      "status": 0,
+      "log": "/tmp/pa29-167/final-validation/prior.log",
+      "sha256": "62fafee2304dafac1d6eb44703da74008c028ee3cc40be97d2e4ca4702c208ba",
+      "summary": [
+        "===== ALL TESTS PASSED SUCCESSFULLY! (4538 / 4538) ====="
+      ]
+    },
+    {
+      "command": "make test-report-through-pa29",
+      "status": 2,
+      "log": "/tmp/pa29-167/final-validation/through.log",
+      "sha256": "1dfcbb94f68d639f3ea7a1f538030829f19db3c4e099c227080e8253bb00478e",
+      "summary": [
+        "===== TEST SUMMARY: 4892 / 4941 TESTS PASSED ====="
+      ]
+    },
+    {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src",
+      "status": 0,
+      "log": "/tmp/pa29-167/final-validation/file-audit.log",
+      "sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f",
+      "summary": [
+        "File audit passed for pa29 with 4 warning(s).",
+        "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+        "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+      ]
+    }
+  ]
+}

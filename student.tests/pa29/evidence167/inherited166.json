@@ -1,0 +1,287 @@
+{
+  "compiler_sha256": "b5ebe29f976895818cf99bd3cbf2b404594243353de6c8c15d5773f8be091b09",
+  "inputs": {
+    "student.tests/pa29/controls166/allocation-modes.cpp": "5999b3c4021d97b48ba60538885be9fed4b85d83bb2f83344a4d4bc21ca1d49e",
+    "student.tests/pa29/controls166/assembly-observations.cpp": "7651a65e025b9bbf23060bcd84bf18f0a5b020f8188cafef43acc33b3a1fb5dc",
+    "student.tests/pa29/controls166/integrated-context.cpp": "3e104a2be3263341cd41c51dda995c4b9f409be4a488f1dff7a2fae65e6494f9",
+    "student.tests/pa29/controls166/reference-members.cpp": "7aab2a29b14709a9614c56c0a2b41379fb7ff0cc4ac582c2e3ab79565b688f28",
+    "student.tests/pa29/controls166/reference-recursion.cpp": "5e876b96ab2058af7eb2fbb1259d366fc45f7cc5e7f111811bb78c01e6b2bf60",
+    "student.tests/pa29/controls166/reference-values.cpp": "86cd5e0cc4970939a5886f0fd506ea7bf2fbb240c5764bee24f9b27c29be65ff",
+    "student.tests/pa29/controls166/temporary-modes.cpp": "6be495be5d25ef8f8384141c0470d256c1d1ba9c8bf5946ca78fecfb1e5924a9"
+  },
+  "checks": [
+    {
+      "name": "allocation-modes compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/allocation-modes.cpp",
+        "-o",
+        "/tmp/pa29-167/inherited166/allocation-modes.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "allocation-modes link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/inherited166/allocation-modes.o",
+        "-o",
+        "/tmp/pa29-167/inherited166/allocation-modes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "allocation-modes runtime",
+      "args": [
+        "/tmp/pa29-167/inherited166/allocation-modes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-observations compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/assembly-observations.cpp",
+        "-o",
+        "/tmp/pa29-167/inherited166/assembly-observations.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-observations link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/inherited166/assembly-observations.o",
+        "-o",
+        "/tmp/pa29-167/inherited166/assembly-observations"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-observations runtime",
+      "args": [
+        "/tmp/pa29-167/inherited166/assembly-observations"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated-context compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/integrated-context.cpp",
+        "-o",
+        "/tmp/pa29-167/inherited166/integrated-context.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated-context link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/inherited166/integrated-context.o",
+        "-o",
+        "/tmp/pa29-167/inherited166/integrated-context"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated-context runtime",
+      "args": [
+        "/tmp/pa29-167/inherited166/integrated-context"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-members compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/reference-members.cpp",
+        "-o",
+        "/tmp/pa29-167/inherited166/reference-members.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-members link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/inherited166/reference-members.o",
+        "-o",
+        "/tmp/pa29-167/inherited166/reference-members"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-members runtime",
+      "args": [
+        "/tmp/pa29-167/inherited166/reference-members"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-recursion compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/reference-recursion.cpp",
+        "-o",
+        "/tmp/pa29-167/inherited166/reference-recursion.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-recursion link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/inherited166/reference-recursion.o",
+        "-o",
+        "/tmp/pa29-167/inherited166/reference-recursion"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-recursion runtime",
+      "args": [
+        "/tmp/pa29-167/inherited166/reference-recursion"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-values compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/reference-values.cpp",
+        "-o",
+        "/tmp/pa29-167/inherited166/reference-values.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-values link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/inherited166/reference-values.o",
+        "-o",
+        "/tmp/pa29-167/inherited166/reference-values"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reference-values runtime",
+      "args": [
+        "/tmp/pa29-167/inherited166/reference-values"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "temporary-modes compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls166/temporary-modes.cpp",
+        "-o",
+        "/tmp/pa29-167/inherited166/temporary-modes.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "temporary-modes link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/inherited166/temporary-modes.o",
+        "-o",
+        "/tmp/pa29-167/inherited166/temporary-modes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "temporary-modes runtime",
+      "args": [
+        "/tmp/pa29-167/inherited166/temporary-modes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

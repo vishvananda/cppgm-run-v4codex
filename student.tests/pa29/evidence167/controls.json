@@ -1,0 +1,684 @@
+{
+  "compiler_sha256": "c77409735741995731e3907de682d3558a5c5323ed8f3a588f9370dd23162f11",
+  "inputs": {
+    "student.tests/pa29/controls167/bad-dependent-vector-lane.cpp": "f44bd55fc05e8d24eb44a50d8974f16c9cb7bd8ca60a9c9862c387074b224904",
+    "student.tests/pa29/controls167/bad-dependent-vector-zero.cpp": "4722c6f5492915a16723f9fd537033ad98893e08004a90fe61a8a6ce0882049c",
+    "student.tests/pa29/controls167/bad-extended-vector-excess.cpp": "d912de7a189ce897fe9fadf5ca180db7d5d4285b05fa013c11559b542154b610",
+    "student.tests/pa29/controls167/bad-extended-vector-overflow.cpp": "f28b2503d8daddd84fc5eb07f88bb6b99246165f20e0c51927931f68e2ae2709",
+    "student.tests/pa29/controls167/bad-known-builtin.cpp": "4c2fc5aafef456845e3ff349a5d464eab45293cae92f07de42e4d3d5f2960c8a",
+    "student.tests/pa29/controls167/bad-noninline-builtin.cpp": "af74e1dcdca2079c86fb7e3ba15127eeda1dd3234cf513725571fc7803425440",
+    "student.tests/pa29/controls167/bad-qualified-wrapper.cpp": "ba85817a2e0e32f12d031ffb2c03fafb02d13b63b85c70d4fe230d42c73003ed",
+    "student.tests/pa29/controls167/bad-scope-builtin.cpp": "1b4aa2911348dd9adc982e21f69b1fadb384a77dbf815203e1463f40405280b2",
+    "student.tests/pa29/controls167/bad-value-builtin.cpp": "5f2d57bc1d01fe24b8ec845dbce8fd116c8a33333f91050324953fd6d821a47a",
+    "student.tests/pa29/controls167/bad-vector-element.cpp": "9c71495e0b6905b85dfcaa67a1d92bc544862a5a024fc20745dad9472cc778d1",
+    "student.tests/pa29/controls167/bad-vector-excess.cpp": "5b2354fa909c98fdef2f145a8a3c9d36ccc5a17d439b9486d63c692c48fe74b6",
+    "student.tests/pa29/controls167/bad-vector-lane.cpp": "669d1f8006e61fa9920b8ce31481eba520cdb0fb6b0e601cb0f129eb491cab40",
+    "student.tests/pa29/controls167/bad-vector-narrowing.cpp": "59fadd3d4b5b06d5e2f538c229f9597ba500cc8418982bfe752e18384b905a45",
+    "student.tests/pa29/controls167/bad-vector-runtime.cpp": "20791f28c927da119636d6bcb93728014b8faacf973b7bdef874e279bbcde115",
+    "student.tests/pa29/controls167/bad-vector-width.cpp": "63eaa44bac3e9dd8708cdc2e6d576412cb631f37210f97bee8499cb687ccad90",
+    "student.tests/pa29/controls167/bad-wrapper-address.cpp": "8294891988c41d7c600ec7bea69ff452b7cc3824385d22ae6d2ea99697380984",
+    "student.tests/pa29/controls167/bad-wrapper-argument.cpp": "b3b5f1227ea05fb51932626258d8a493c7e43b3c45d0ce02ca0dd0bd9d52915f",
+    "student.tests/pa29/controls167/bad-wrapper-before-definition.cpp": "a414a4235890ee3d892865463cf83b573fb3c4c54a5c5b74c52b6670f6e8e5b4",
+    "student.tests/pa29/controls167/bad-wrapper-name.cpp": "04246f29611f213385e9112f5675d7b99986372399c0bf06a0e389d91f001e8d",
+    "student.tests/pa29/controls167/bad-wrapper-type.cpp": "d6f60b2cfe9db97e3cac3d058dee3f567d5888ddc28d61fe64175e6d6ab974d9",
+    "student.tests/pa29/controls167/bad-wrapper-used.cpp": "332c2533e0361d751233fd78eb8d24fde9297c2411a54028fb9d1876d4e2f2f4",
+    "student.tests/pa29/controls167/dependent.cpp": "6fe60455f1c39d2320411f8369e415c9c69bc2dcda391d26d9ccb5b3e7c15701",
+    "student.tests/pa29/controls167/extended-layout.cpp": "f02774f182c7e7545c8f05c0fcbeed6d89e84e3882adeba7191d87117735cf12",
+    "student.tests/pa29/controls167/inline-declarations.cpp": "a87f8a29a3a7bcf9402dafce14b68ebf2f589d5f7c82abdca7360ac0355e0122",
+    "student.tests/pa29/controls167/inline-demand.cpp": "0cd651c8692af427acf08c6806ba10b94aa3f0a18ce082ce8f97913568a1753a",
+    "student.tests/pa29/controls167/layout.cpp": "e15e54ce6e72af68ca9dbaad883efdacd509480e110b4435da8216e268492665",
+    "student.tests/pa29/controls167/pack-layout.cpp": "5dd113bc69dda4f9d57075736651b660803ad5279889ef1c6e13e4a6e19fd935",
+    "student.tests/pa29/controls167/substitution.cpp": "e96c4b03d2d269c77f614b41a750ddab6679acaacb7601c3fb87b485e69b5eda",
+    "student.tests/pa29/controls167/vector-pointer-abi.cpp": "97ab6072a8220ff661b17b45e9b8a3af2da23e6b73f7e48bcd94c1e6e7c5d6c1"
+  },
+  "checks": [
+    {
+      "name": "bad-dependent-vector-lane compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-dependent-vector-lane.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-dependent-vector-lane.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid vector lane or width\n"
+    },
+    {
+      "name": "bad-dependent-vector-zero compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-dependent-vector-zero.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-dependent-vector-zero.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid vector lane or width\n"
+    },
+    {
+      "name": "bad-extended-vector-excess compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-extended-vector-excess.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-extended-vector-excess.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid operand conversion\n"
+    },
+    {
+      "name": "bad-extended-vector-overflow compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-extended-vector-overflow.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-extended-vector-overflow.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid vector lane or width\n"
+    },
+    {
+      "name": "bad-known-builtin compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-known-builtin.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-known-builtin.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "bad-noninline-builtin compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-noninline-builtin.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-noninline-builtin.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: __builtin_unknown_instruction_167\n"
+    },
+    {
+      "name": "bad-qualified-wrapper compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-qualified-wrapper.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-qualified-wrapper.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: __builtin_unknown_instruction_167\n"
+    },
+    {
+      "name": "bad-scope-builtin compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-scope-builtin.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-scope-builtin.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "bad-value-builtin compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-value-builtin.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-value-builtin.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: __builtin_unknown_instruction_167\n"
+    },
+    {
+      "name": "bad-vector-element compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-vector-element.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-vector-element.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unresolved overload in value context\n"
+    },
+    {
+      "name": "bad-vector-excess compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-vector-excess.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-vector-excess.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unresolved overload in value context\n"
+    },
+    {
+      "name": "bad-vector-lane compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-vector-lane.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-vector-lane.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid vector lane or width\n"
+    },
+    {
+      "name": "bad-vector-narrowing compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-vector-narrowing.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-vector-narrowing.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: narrowing list initialization\n"
+    },
+    {
+      "name": "bad-vector-runtime compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-vector-runtime.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-vector-runtime.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unsupported lowering type\n"
+    },
+    {
+      "name": "bad-vector-width compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-vector-width.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-vector-width.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid vector lane or width\n"
+    },
+    {
+      "name": "bad-wrapper-address compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-wrapper-address.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-wrapper-address.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: used inline body requires an unsupported compiler builtin\n"
+    },
+    {
+      "name": "bad-wrapper-argument compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-wrapper-argument.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-wrapper-argument.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: unknown_name\n"
+    },
+    {
+      "name": "bad-wrapper-before-definition compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-wrapper-before-definition.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-wrapper-before-definition.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: used inline body requires an unsupported compiler builtin\n"
+    },
+    {
+      "name": "bad-wrapper-name compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-wrapper-name.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-wrapper-name.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: unknown_name\n"
+    },
+    {
+      "name": "bad-wrapper-type compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-wrapper-type.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-wrapper-type.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid implicit conversion\n"
+    },
+    {
+      "name": "bad-wrapper-used compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-wrapper-used.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/bad-wrapper-used.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: used inline body requires an unsupported compiler builtin\n"
+    },
+    {
+      "name": "dependent compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/dependent.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/dependent.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "dependent link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/final-controls4/dependent.o",
+        "-o",
+        "/tmp/pa29-167/final-controls4/dependent"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "dependent runtime",
+      "args": [
+        "/tmp/pa29-167/final-controls4/dependent"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "extended-layout compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/extended-layout.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/extended-layout.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "extended-layout link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/final-controls4/extended-layout.o",
+        "-o",
+        "/tmp/pa29-167/final-controls4/extended-layout"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "extended-layout runtime",
+      "args": [
+        "/tmp/pa29-167/final-controls4/extended-layout"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "inline-declarations compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/inline-declarations.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/inline-declarations.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "inline-declarations link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/final-controls4/inline-declarations.o",
+        "-o",
+        "/tmp/pa29-167/final-controls4/inline-declarations"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "inline-declarations runtime",
+      "args": [
+        "/tmp/pa29-167/final-controls4/inline-declarations"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "inline-demand compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/inline-demand.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/inline-demand.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "inline-demand link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/final-controls4/inline-demand.o",
+        "-o",
+        "/tmp/pa29-167/final-controls4/inline-demand"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "inline-demand runtime",
+      "args": [
+        "/tmp/pa29-167/final-controls4/inline-demand"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "layout compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/layout.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/layout.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "layout link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/final-controls4/layout.o",
+        "-o",
+        "/tmp/pa29-167/final-controls4/layout"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "layout runtime",
+      "args": [
+        "/tmp/pa29-167/final-controls4/layout"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "pack-layout compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/pack-layout.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/pack-layout.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "pack-layout link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/final-controls4/pack-layout.o",
+        "-o",
+        "/tmp/pa29-167/final-controls4/pack-layout"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "pack-layout runtime",
+      "args": [
+        "/tmp/pa29-167/final-controls4/pack-layout"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "substitution compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/substitution.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/substitution.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "substitution link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/final-controls4/substitution.o",
+        "-o",
+        "/tmp/pa29-167/final-controls4/substitution"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "substitution runtime",
+      "args": [
+        "/tmp/pa29-167/final-controls4/substitution"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "vector-pointer-abi compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/vector-pointer-abi.cpp",
+        "-o",
+        "/tmp/pa29-167/final-controls4/vector-pointer-abi.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "vector-pointer-abi link",
+      "args": [
+        "g++",
+        "/tmp/pa29-167/final-controls4/vector-pointer-abi.o",
+        "-o",
+        "/tmp/pa29-167/final-controls4/vector-pointer-abi"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "vector-pointer-abi runtime",
+      "args": [
+        "/tmp/pa29-167/final-controls4/vector-pointer-abi"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

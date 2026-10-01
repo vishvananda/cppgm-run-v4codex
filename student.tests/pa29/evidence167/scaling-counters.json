@@ -1,0 +1,314 @@
+{
+  "layout600": {
+    "template_body_transitions": [
+      600,
+      600,
+      600,
+      600,
+      600,
+      600,
+      600,
+      600
+    ],
+    "template_class_completions": [
+      600,
+      600,
+      600,
+      600,
+      600,
+      600,
+      600,
+      600
+    ],
+    "template_source_regions": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "template_occurrences": [
+      78000,
+      78000,
+      78000,
+      78000,
+      78000,
+      78000,
+      78000,
+      78000
+    ],
+    "template_region_nodes": [
+      130,
+      130,
+      130,
+      130,
+      130,
+      130,
+      130,
+      130
+    ]
+  },
+  "layout1200": {
+    "template_body_transitions": [
+      1200,
+      1200,
+      1200,
+      1200,
+      1200,
+      1200,
+      1200,
+      1200
+    ],
+    "template_class_completions": [
+      1200,
+      1200,
+      1200,
+      1200,
+      1200,
+      1200,
+      1200,
+      1200
+    ],
+    "template_source_regions": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "template_occurrences": [
+      156000,
+      156000,
+      156000,
+      156000,
+      156000,
+      156000,
+      156000,
+      156000
+    ],
+    "template_region_nodes": [
+      130,
+      130,
+      130,
+      130,
+      130,
+      130,
+      130,
+      130
+    ]
+  },
+  "layout2400": {
+    "template_body_transitions": [
+      2400,
+      2400,
+      2400,
+      2400,
+      2400,
+      2400,
+      2400,
+      2400
+    ],
+    "template_class_completions": [
+      2400,
+      2400,
+      2400,
+      2400,
+      2400,
+      2400,
+      2400,
+      2400
+    ],
+    "template_source_regions": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "template_occurrences": [
+      312000,
+      312000,
+      312000,
+      312000,
+      312000,
+      312000,
+      312000,
+      312000
+    ],
+    "template_region_nodes": [
+      130,
+      130,
+      130,
+      130,
+      130,
+      130,
+      130,
+      130
+    ]
+  },
+  "wrappers600": {
+    "template_body_transitions": [
+      600,
+      600,
+      600,
+      600,
+      600,
+      600,
+      600,
+      600
+    ],
+    "template_class_completions": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "template_source_regions": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "template_occurrences": [
+      19200,
+      19200,
+      19200,
+      19200,
+      19200,
+      19200,
+      19200,
+      19200
+    ],
+    "template_region_nodes": [
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32
+    ]
+  },
+  "wrappers1200": {
+    "template_body_transitions": [
+      1200,
+      1200,
+      1200,
+      1200,
+      1200,
+      1200,
+      1200,
+      1200
+    ],
+    "template_class_completions": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "template_source_regions": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "template_occurrences": [
+      38400,
+      38400,
+      38400,
+      38400,
+      38400,
+      38400,
+      38400,
+      38400
+    ],
+    "template_region_nodes": [
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32
+    ]
+  },
+  "wrappers2400": {
+    "template_body_transitions": [
+      2400,
+      2400,
+      2400,
+      2400,
+      2400,
+      2400,
+      2400,
+      2400
+    ],
+    "template_class_completions": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "template_source_regions": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "template_occurrences": [
+      76800,
+      76800,
+      76800,
+      76800,
+      76800,
+      76800,
+      76800,
+      76800
+    ],
+    "template_region_nodes": [
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32
+    ]
+  }
+}
