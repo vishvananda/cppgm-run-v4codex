@@ -1,0 +1,1586 @@
+[
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-conversions.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-conversions.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-conversions.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-conversions"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-conversions",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nm",
+      "-C",
+      "/tmp/pa29-189/controls-final/defined-conversions.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "0000000000000000 W probe<character>::to_int(character)\n0000000000000000 W probe<character>::to_char(unsigned int)\n0000000000000000 W probe<int>::to_int(int)\n0000000000000000 W probe<int>::to_char(long)\n0000000000000000 W traits<character>::to_int_type(character)\n0000000000000000 W traits<character>::to_char_type(unsigned int)\n0000000000000000 W traits<int>::to_int_type(int)\n0000000000000000 W traits<int>::to_char_type(long)\n0000000000000000 W character::character(unsigned int)\n0000000000000000 W character::character(unsigned int)\n0000000000000000 W character::operator unsigned int() const\n0000000000000000 D deferred\n0000000000000000 T main\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-conversions.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-conversions.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-conversions.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-conversions"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-conversions",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-conversions.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-conversions.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-conversions.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-conversions"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-conversions",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-conversions.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-conversions.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-189/controls-final/defined-conversions.lowir",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-conversions.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-false-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp:6\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-false-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp:6:15: error: static assertion failed: false\n    6 | static_assert(!invert<property<const callable&, const int&>>::value, \"false\");\n      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-false-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-false-reject.cpp:6:15: error: static assertion failed due to requirement '!invert<property<const callable &, const int &>>::value': false\n    6 | static_assert(!invert<property<const callable&, const int&>>::value, \"false\");\n      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-traits.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-traits.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-traits.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-traits"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-traits",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nm",
+      "-C",
+      "/tmp/pa29-189/controls-final/defined-traits.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "0000000000000000 T main\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-traits.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-traits.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-traits.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-traits"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-traits",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-traits.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-traits.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-traits.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-traits"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-traits",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/defined-traits.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-traits.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-189/controls-final/defined-traits.lowir",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-traits.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-and-substitution.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/demand-and-substitution.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/demand-and-substitution.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/demand-and-substitution"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/demand-and-substitution",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nm",
+      "-C",
+      "/tmp/pa29-189/controls-final/demand-and-substitution.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "0000000000000000 W int choose<absent>(absent*, ...)\n0000000000000000 W int choose<hidden>(hidden*, ...)\n0000000000000000 W present::value_type choose<present>(present*, int)\n0000000000000000 W owner<int>::live(int)\n0000000000000000 T main\n0000000000000000 D p\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-and-substitution.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/demand-and-substitution.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/demand-and-substitution.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/demand-and-substitution"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/demand-and-substitution",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-and-substitution.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/demand-and-substitution.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/demand-and-substitution.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/demand-and-substitution"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/demand-and-substitution",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-and-substitution.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/demand-and-substitution.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-189/controls-final/demand-and-substitution.lowir",
+      "-o",
+      "/tmp/pa29-189/controls-final/demand-and-substitution.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/demand-body-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: unknown expression name: value\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/demand-body-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp: In instantiation of \u2018static int owner<T>::dormant() [with T = int]\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp:5:40:   required from here\n    5 | int main() { return owner<int>::dormant(); }\n      |                     ~~~~~~~~~~~~~~~~~~~^~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp:3:48: error: incomplete type \u2018incomplete<int>\u2019 used in nested name specifier\n    3 |   static int dormant() { return incomplete<T>::value; }\n      |                                                ^~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/demand-body-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp:3:33: error: implicit instantiation of undefined template 'incomplete<int>'\n    3 |   static int dormant() { return incomplete<T>::value; }\n      |                                 ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp:5:33: note: in instantiation of member function 'owner<int>::dormant' requested here\n    5 | int main() { return owner<int>::dormant(); }\n      |                                 ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/demand-body-reject.cpp:1:26: note: template is declared here\n    1 | template<class T> struct incomplete;\n      |                          ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-member-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/forward-member-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: unknown expression name: value\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-member-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/forward-member-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-member-reject.cpp:3:30: error: incomplete type \u2018property<int>\u2019 used in nested name specifier\n    3 | static_assert(property<int>::value, \"a declaration is not a definition\");\n      |                              ^~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-member-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/forward-member-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-member-reject.cpp:3:15: error: implicit instantiation of undefined template 'property<int>'\n    3 | static_assert(property<int>::value, \"a declaration is not a definition\");\n      |               ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-member-reject.cpp:2:26: note: template is declared here\n    2 | template<class T> struct property;\n      |                          ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/forward-nested-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: invalid substituted type access\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/forward-nested-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp: In instantiation of \u2018struct probe<int>\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp:4:11:   required from here\n    4 | probe<int>::type value;\n      |           ^~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp:3:71: error: invalid use of incomplete type \u2018struct traits<int>\u2019\n    3 | template<class T> struct probe { typedef typename traits<T>::int_type type; };\n      |                                                                       ^~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp:2:26: note: declaration of \u2018struct traits<int>\u2019\n    2 | template<class T> struct traits;\n      |                          ^~~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/forward-nested-reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp:3:51: error: implicit instantiation of undefined template 'traits<int>'\n    3 | template<class T> struct probe { typedef typename traits<T>::int_type type; };\n      |                                                   ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp:4:1: note: in instantiation of template class 'probe<int>' requested here\n    4 | probe<int>::type value;\n      | ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/forward-nested-reject.cpp:2:26: note: template is declared here\n    2 | template<class T> struct traits;\n      |                          ^\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/source-trait-identity.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/source-trait-identity.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/source-trait-identity.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/source-trait-identity"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/source-trait-identity",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nm",
+      "-C",
+      "/tmp/pa29-189/controls-final/source-trait-identity.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "0000000000000000 T main\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/source-trait-identity.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/source-trait-identity.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/source-trait-identity.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/source-trait-identity"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/source-trait-identity",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/source-trait-identity.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/source-trait-identity.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/source-trait-identity.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/source-trait-identity"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/source-trait-identity",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "--emit-lowir",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/source-trait-identity.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/source-trait-identity.lowir"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+      "/tmp/pa29-189/controls-final/source-trait-identity.lowir",
+      "-o",
+      "/tmp/pa29-189/controls-final/source-trait-identity.canonical"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: unknown expression name: value\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:21:64: error: incomplete type \u2018std::is_nothrow_default_constructible<selector>\u2019 used in nested name specifier\n   21 | static_assert(std::is_nothrow_default_constructible<selector>::value,\n      |                                                                ^~~~~\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:23:73: error: incomplete type \u2018std::is_nothrow_default_constructible<throwing_default>\u2019 used in nested name specifier\n   23 | static_assert(!std::is_nothrow_default_constructible<throwing_default>::value,\n      |                                                                         ^~~~~\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:25:61: error: incomplete type \u2018std::is_nothrow_copy_constructible<selector>\u2019 used in nested name specifier\n   25 | static_assert(std::is_nothrow_copy_constructible<selector>::value,\n      |                                                             ^~~~~\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:27:61: error: incomplete type \u2018std::is_nothrow_move_constructible<selector>\u2019 used in nested name specifier\n   27 | static_assert(std::is_nothrow_move_constructible<selector>::value,\n      |                                                             ^~~~~\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:29:67: error: incomplete type \u2018std::is_nothrow_copy_constructible<throwing_copy>\u2019 used in nested name specifier\n   29 | static_assert(!std::is_nothrow_copy_constructible<throwing_copy>::value,\n      |                                                                   ^~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:21:20: error: implicit instantiation of undefined template 'std::is_nothrow_default_constructible<selector>'\n   21 | static_assert(std::is_nothrow_default_constructible<selector>::value,\n      |                    ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:2:26: note: template is declared here\n    2 | template<class T> struct is_nothrow_default_constructible;\n      |                          ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:23:21: error: implicit instantiation of undefined template 'std::is_nothrow_default_constructible<throwing_default>'\n   23 | static_assert(!std::is_nothrow_default_constructible<throwing_default>::value,\n      |                     ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:2:26: note: template is declared here\n    2 | template<class T> struct is_nothrow_default_constructible;\n      |                          ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:25:20: error: implicit instantiation of undefined template 'std::is_nothrow_copy_constructible<selector>'\n   25 | static_assert(std::is_nothrow_copy_constructible<selector>::value,\n      |                    ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:3:26: note: template is declared here\n    3 | template<class T> struct is_nothrow_copy_constructible;\n      |                          ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:27:20: error: implicit instantiation of undefined template 'std::is_nothrow_move_constructible<selector>'\n   27 | static_assert(std::is_nothrow_move_constructible<selector>::value,\n      |                    ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:4:26: note: template is declared here\n    4 | template<class T> struct is_nothrow_move_constructible;\n      |                          ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:29:21: error: implicit instantiation of undefined template 'std::is_nothrow_copy_constructible<throwing_copy>'\n   29 | static_assert(!std::is_nothrow_copy_constructible<throwing_copy>::value,\n      |                     ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t:3:26: note: template is declared here\n    3 | template<class T> struct is_nothrow_copy_constructible;\n      |                          ^\n5 errors generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: invalid substituted type access\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t: In instantiation of \u2018struct probe<UChar>\u2019:\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t:41:26:   required from here\n   41 |   UChar ch = probe<UChar>::to_char(7);\n      |                          ^~\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t:26:53: error: invalid use of incomplete type \u2018struct std::char_traits<UChar>\u2019\n   26 |   typedef typename std::char_traits<Char>::int_type int_type;\n      |                                                     ^~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t:8:10: note: declaration of \u2018struct std::char_traits<UChar>\u2019\n    8 |   struct char_traits;\n      |          ^~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t: In function \u2018int main()\u2019:\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t:41:28: error: \u2018to_char\u2019 is not a member of \u2018probe<UChar>\u2019\n   41 |   UChar ch = probe<UChar>::to_char(7);\n      |                            ^~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t:42:24: error: \u2018to_int\u2019 is not a member of \u2018probe<UChar>\u2019\n   42 |   return probe<UChar>::to_int(ch) == 7 ? 0 : 1;\n      |                        ^~~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t:26:25: error: implicit instantiation of undefined template 'std::char_traits<UChar>'\n   26 |   typedef typename std::char_traits<Char>::int_type int_type;\n      |                         ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t:41:14: note: in instantiation of template class 'probe<UChar>' requested here\n   41 |   UChar ch = probe<UChar>::to_char(7);\n      |              ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t:8:10: note: template is declared here\n    8 |   struct char_traits;\n      |          ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t:35:17: error: implicit instantiation of undefined template 'std::char_traits<UChar>'\n   35 |     return std::char_traits<Char>::to_int_type(value);\n      |                 ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t:42:24: note: in instantiation of member function 'probe<UChar>::to_int' requested here\n   42 |   return probe<UChar>::to_int(ch) == 7 ? 0 : 1;\n      |                        ^\n/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t:8:10: note: template is declared here\n    8 |   struct char_traits;\n      |          ^\n2 errors generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t:24\n"
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t:24:15: error: static assertion failed: cache\n   24 | static_assert(!__cache_default<int *, Hash<int *> >::value, \"cache\");\n      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/reject.o"
+    ],
+    "status": 1,
+    "expected_success": false,
+    "stdout": "",
+    "stderr": "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t:24:15: error: static assertion failed due to requirement '!__cache_default<int *, Hash<int *>>::value': cache\n   24 | static_assert(!__cache_default<int *, Hash<int *> >::value, \"cache\");\n      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-include",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/trait-definitions.h",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-original.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "-include",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/trait-definitions.h",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-original.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "-include",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/trait-definitions.h",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-original.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-include",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/character-definitions.h",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-original.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "-include",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/character-definitions.h",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-original.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "-include",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/character-definitions.h",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-original.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-include",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/invocation-definition.h",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-original.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "-include",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/invocation-definition.h",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-original.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "-include",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls189/invocation-definition.h",
+      "-c",
+      "/home/vishvananda/work/private/v4codex/checkout/pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/defined-original.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/defined-original"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/tmp/pa29-189/controls-final/defined-traits-spelling.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/spelling.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/spelling",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/tmp/pa29-189/controls-final/defined-traits-spelling.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/spelling.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/spelling",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/tmp/pa29-189/controls-final/defined-traits-spelling.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/spelling.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/spelling",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/tmp/pa29-189/controls-final/defined-conversions-spelling.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/spelling.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/spelling",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/tmp/pa29-189/controls-final/defined-conversions-spelling.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/spelling.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/spelling",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/tmp/pa29-189/controls-final/defined-conversions-spelling.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/spelling.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/spelling",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/tmp/pa29-189/controls-final/source-trait-identity-spelling.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/spelling.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/spelling",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/tmp/pa29-189/controls-final/source-trait-identity-spelling.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/spelling.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/spelling",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "clang++",
+      "-std=c++11",
+      "-O0",
+      "-c",
+      "/tmp/pa29-189/controls-final/source-trait-identity-spelling.cpp",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling.o"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "g++",
+      "/tmp/pa29-189/controls-final/spelling.o",
+      "-o",
+      "/tmp/pa29-189/controls-final/spelling"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/pa29-189/controls-final/spelling",
+      "runtime-input"
+    ],
+    "status": 0,
+    "expected_success": true,
+    "stdout": "",
+    "stderr": ""
+  }
+]

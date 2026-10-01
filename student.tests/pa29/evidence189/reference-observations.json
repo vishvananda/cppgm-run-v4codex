@@ -1,0 +1,86 @@
+[
+  {
+    "command": [
+      "pa29/cppgm++-ref",
+      "-c",
+      "student.tests/pa29/controls189/demand-body-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/reference.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: unknown expression name: incomplete<T>::value at student.tests/pa29/controls189/demand-body-reject.cpp:3:33\n"
+  },
+  {
+    "command": [
+      "pa29/cppgm++-ref",
+      "-c",
+      "student.tests/pa29/controls189/forward-member-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/reference.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: unknown expression name: property<int>::value at student.tests/pa29/controls189/forward-member-reject.cpp:3:15\n"
+  },
+  {
+    "command": [
+      "pa29/cppgm++-ref",
+      "-c",
+      "student.tests/pa29/controls189/defined-false-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/reference.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: static assertion failed at student.tests/pa29/controls189/defined-false-reject.cpp:6:1\n"
+  },
+  {
+    "command": [
+      "pa29/cppgm++-ref",
+      "-c",
+      "student.tests/pa29/controls189/forward-nested-reject.cpp",
+      "-o",
+      "/tmp/pa29-189/reference.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: structured template type was not found: traits<T>::int_type at student.tests/pa29/controls189/forward-nested-reject.cpp:3:42\n"
+  },
+  {
+    "command": [
+      "pa29/cppgm++-ref",
+      "-c",
+      "pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+      "-o",
+      "/tmp/pa29-189/reference.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "pa29/cppgm++-ref",
+      "-c",
+      "pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+      "-o",
+      "/tmp/pa29-189/reference.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "pa29/cppgm++-ref",
+      "-c",
+      "pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+      "-o",
+      "/tmp/pa29-189/reference.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

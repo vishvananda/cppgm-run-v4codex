@@ -1,0 +1,18 @@
+{
+  "defined-conversions": {
+    "object_sha256": "882a28c53b0e1d36050996729c7410391a03d592a72ffce2f3d3ac8dc2efe18b",
+    "symbols": "0000000000000000 W probe<character>::to_int(character)\n0000000000000000 W probe<character>::to_char(unsigned int)\n0000000000000000 W probe<int>::to_int(int)\n0000000000000000 W probe<int>::to_char(long)\n0000000000000000 W traits<character>::to_int_type(character)\n0000000000000000 W traits<character>::to_char_type(unsigned int)\n0000000000000000 W traits<int>::to_int_type(int)\n0000000000000000 W traits<int>::to_char_type(long)\n0000000000000000 W character::character(unsigned int)\n0000000000000000 W character::character(unsigned int)\n0000000000000000 W character::operator unsigned int() const\n0000000000000000 D deferred\n0000000000000000 T main\n"
+  },
+  "defined-traits": {
+    "object_sha256": "f440c38f80247677f6afee0145dfa974e0bf25afc2b03e79c8ba22adf65cbcbb",
+    "symbols": "0000000000000000 T main\n"
+  },
+  "demand-and-substitution": {
+    "object_sha256": "19152d00fc84b967c1aa71ac0c3d4d407dd766d44d8182e61d1f5f184ec06301",
+    "symbols": "0000000000000000 W int choose<absent>(absent*, ...)\n0000000000000000 W int choose<hidden>(hidden*, ...)\n0000000000000000 W present::value_type choose<present>(present*, int)\n0000000000000000 W owner<int>::live(int)\n0000000000000000 T main\n0000000000000000 D p\n"
+  },
+  "source-trait-identity": {
+    "object_sha256": "fa8bca592d6d463b26b4797bda0da2a9f37f7bb8059bfad1d0d444e3674d2040",
+    "symbols": "0000000000000000 T main\n"
+  }
+}
