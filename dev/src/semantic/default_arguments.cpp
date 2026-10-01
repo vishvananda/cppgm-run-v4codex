@@ -44,6 +44,7 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
         if (entities[parameter].template_parameter) bind(scope,entities[parameter].name,parameter);
     }
     unsigned ordinal = 0;
+    std::vector<NodeId> default_uses;
     for (auto p = ast[parameters].first; p; p = ast[p].next) {
         if (ast[p].kind != Kind::Parameter) continue;
         auto specs = ast[p].first, decl = ast[specs].next;
@@ -60,6 +61,41 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
         // retain their bindings without demanding a concrete default value.
         auto argument = child(p,Kind::DefaultArgument);
         bool dependent = bind_template_expression(argument,scope);
+        // [dcl.fct.default]: prototype parameters are visible for unevaluated
+        // inquiries but cannot supply a default's evaluated value. Consume
+        // the bindings just established above, without another name lookup.
+        default_uses.clear(); if (argument) default_uses.push_back(argument);
+        for (std::size_t j = 0; j < default_uses.size(); ++j) {
+            auto node = ast[default_uses[j]];
+            if (node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack ||
+                (node.kind == Kind::TypeTrait && node.op != KW_TYPEID)) {
+                // Retain the prototype's typed parameter inquiry. A default
+                // can instantiate before runtime parameter objects exist;
+                // substitution consumes this query, never repeats name lookup.
+                bind_template_size(default_uses[j],scope);
+                continue;
+            }
+            if (node.kind == Kind::Noexcept || node.kind == Kind::Decltype || node.kind == Kind::TypeId) continue;
+            if (node.kind == Kind::TypeTrait) {
+                if (node.op != KW_TYPEID || ast[node.first].kind == Kind::TypeId) continue;
+                auto query = expression_query(node.first,scope);
+                auto fact = query_fact(query);
+                // A dependent typeid's evaluation remains a substitution-time
+                // obligation; known nonpolymorphic operands are unevaluated.
+                if (fact.dependent) continue;
+                auto value = fact.expression;
+                if (value.category == ValueCategory::Prvalue || !class_value(value.type)) continue;
+                complete_class(types[value.type].entity);
+                if (!polymorphic(types[value.type].entity)) continue;
+            }
+            if (node.kind == Kind::IdExpression && node.detail) {
+                auto binding = template_bindings[template_binding_index.get(ast.nodes.occurrences[node.detail].source)];
+                auto parameter = binding.entity;
+                if (parameter && entities[parameter].kind == EntityKind::Parameter && entities[parameter].owner == scope)
+                    throw std::runtime_error("parameter used in evaluated default argument");
+            }
+            for (auto c = node.first; c; c = ast[c].next) default_uses.push_back(c);
+        }
         if (argument && !dependent && type && !dependent_type(type))
             check_template_initialization(ast[argument].first,types.adjusted(type),scope,InitializationMode::Copy);
     }

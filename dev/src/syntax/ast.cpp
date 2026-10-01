@@ -204,6 +204,7 @@ const char* kind_name(Kind kind)
         "asm-operand",
         "binding-names",
         "binding-name",
+        "deduction-guide",
     };
     return names[static_cast<unsigned>(kind)];
 }

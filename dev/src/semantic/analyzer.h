@@ -60,6 +60,20 @@ public:
         return id ? constants[id] : Constant();
     }
     Types types;
+    struct DeductionGuide {
+        EntityId primary = 0;
+        TypeId signature = 0;
+        ScopeId environment = 0;
+        NodeId source = 0;
+        std::uint32_t head = 0, next = 0;
+        QueryId explicit_condition = 0, exception_condition = 0;
+        bool explicit_guide = false, nonthrowing = false;
+    };
+    Index deduction_guide_index, deduction_guide_signatures;
+    std::vector<DeductionGuide> deduction_guides = std::vector<DeductionGuide>(1);
+    std::size_t deduction_guide_parameters = 0;
+    void deduction_guide(NodeId n, ScopeId s);
+    Index deducible_parameters(TypeId function);
     struct BindingProjection {
         EntityId object = 0, member = 0;
         std::uint32_t adjustment = 0, element = 0;

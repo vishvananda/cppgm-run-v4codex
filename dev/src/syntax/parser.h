@@ -53,6 +53,8 @@ private:
     std::size_t probe_type(std::size_t ahead);
     bool type_operand(bool function_type = false);
     bool special_ahead();
+    bool deduction_guide_ahead();
+    NodeId deduction_guide();
     void predeclare_class();
     bool declaration_start();
     Binding name_binding(NodeId name);

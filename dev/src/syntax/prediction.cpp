@@ -242,10 +242,18 @@ void Parser::predeclare_class()
             (in.is(";", i + 1) || in.is("[", i + 1) || in.is("=", i + 1) || in.is(",", i + 1)) &&
             (type_start(i - 1) || in.is("*", i - 1) || in.is("&", i - 1)))
             names.bind(scope, in.peek(i).text, Category::Value);
-        if (templated && identifier(i) && in.is("(", i + 1) && in.peek(i).text != current_class &&
+        // A guide reuses a class-template name without introducing a value.
+        // Preserve that category during complete-class lookahead too.
+        bool guide = false;
+        if (identifier(i) && in.is("(",i+1) && names.local(scope,in.peek(i).text).category == Category::TemplateType) {
+            auto after = in.matching(i+1)+1;
+            if (in.is("noexcept",after)) { ++after; if (in.is("(",after)) after = in.matching(after)+1; }
+            guide = in.is("->",after);
+        }
+        if (!guide && templated && identifier(i) && in.is("(", i + 1) && in.peek(i).text != current_class &&
             (!i || (!in.is("operator",i-1) && !in.is("::",i-1))))
             names.bind(scope, in.peek(i).text, Category::TemplateValue);
-        if (!templated && !friend_declaration && i && identifier(i) && in.is("(", i + 1) &&
+        if (!guide && !templated && !friend_declaration && i && identifier(i) && in.is("(", i + 1) &&
             in.peek(i).text != current_class && (type_start(i-1) || in.is("*",i-1) || in.is("&",i-1)))
             names.bind(scope,in.peek(i).text,Category::Value);
         if (in.is(";", i) || in.is("{", i)) { templated = false; friend_declaration = false; }

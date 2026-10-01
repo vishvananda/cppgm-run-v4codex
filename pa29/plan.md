@@ -1,6 +1,6 @@
-# PA29 compact plan — checkpointAudit182
+# PA29 compact plan — implementation183
 
-Target: **PA29 full-stage**. Phase: **checkpointAudit complete; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `667edd800e4e5eb1b1ef92a3108da3bd96c51708`.
 Audit entry: `9211517d1f554f61efa7d6e2e30020dc13171f3f`.
@@ -54,3 +54,35 @@ ABI and adapter-budget interactions before handoff. The three groups made useful
 progress (22 → 15 failures), but array deduction and serialization fallback gaps
 caused avoidable follow-up fragmentation. This audit establishes one reviewed
 code baseline; it does not mark the assignment complete.
+
+## Implementation183 entry and working groups
+
+Entry HEAD: `a2ce2670669e0ef392d61b1e1e4aeb6f2e302467`; review markers above
+are preserved. Entry is clean; 388/403 with the 15 failures in evidence182.
+Previous turn: completed audit evidence (progress); no live work to resume.
+
+First owner: hosted deduction-guide declarations. Parser distinguishes the
+parameter-clause/arrow form; semantics retain target template, canonical
+signature, environment and explicit condition without binding a callable
+function or demanding a body. Extend to templated/explicit guides, defaults,
+parameter packs, same-scope/access validation and duplicate signatures. Work
+tracks source nodes and parameter types; indexed guide identity avoids scans
+of unrelated declarations. Validate acceptance/rejection, no symbol emission,
+ordinary declaration interactions and scaling. Frozen entry compiler:
+`/tmp/pa29-183/entry`; measurements use fixed inputs, A/A and ABBA compiler
+latency/RSS plus checked executable runtime/text. No optional optimizer added.
+
+Remaining owners: extended scalar/vector types, contextual coroutine syntax,
+template demand/ABI and legacy traits. Independent contract questions remain
+explicitly separate in the inherited ledger, with unchanged fixtures. Extend
+related work after the initial fix; stopping requires a coherent owner boundary,
+required checks, evidence, committed changes and a clean worktree.
+
+Implementation183 checkpoint: declaration-only guides now have a distinct source
+node and typed per-primary registry; both ordinary and complete-class parsing
+preserve the class-template binding. Shared default checks reject evaluated
+parameter uses and pack defaults, while retained type queries support sizeof/
+noexcept before body demand. The 52 explicit controls pass, PA1–28 is 4538/4538,
+and preliminary PA29 is 389/403 (guide fixture repaired; 14 unchanged failures).
+File audit retains its four inherited warnings. Inspection and frozen performance
+evidence remain in progress; this checkpoint is not a handoff boundary.

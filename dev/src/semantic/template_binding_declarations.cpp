@@ -112,6 +112,7 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
 {
     resolve_parenthesized_declaration(n,s);
     auto node = ast[n];
+    if (node.kind == Kind::DeductionGuide) { deduction_guide(n,s); return; }
     if (scopes[s].kind == ScopeKind::Class && friend_declaration(n,s)) return;
     if (node.kind == Kind::Template) {
         template_declaration(n,s);

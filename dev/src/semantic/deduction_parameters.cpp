@@ -1,6 +1,63 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+Index Analyzer::deducible_parameters(TypeId function)
+{
+    // Declaration-time deducibility uses only the typed parameter graph. It
+    // must not instantiate classes or trial-call a hypothetical function.
+    Index result, seen;
+    std::vector<ArgumentId> work;
+    auto parameter_list = [&](Type type) {
+        for (unsigned j = 0; j < type.count; ++j) {
+            auto p = types.parameters[type.offset+j];
+            if (types[p].kind == TypeKind::PackExpansion) {
+                if (j+1 != type.count) continue;
+                p = types[p].bound;
+            }
+            work.push_back(p);
+        }
+    };
+    auto argument_list = [&](TypeArguments args) {
+        // A nonfinal expansion makes a template argument list non-deduced.
+        for (unsigned j = 0; j+1 < args.count; ++j) {
+            auto arg = argument_types[args.offset+j];
+            if (!value_argument(arg) && types[arg].kind == TypeKind::PackExpansion) return;
+        }
+        for (unsigned j = 0; j < args.count; ++j) work.push_back(argument_types[args.offset+j]);
+    };
+    parameter_list(types[function]);
+    for (std::size_t i = 0; i < work.size(); ++i) {
+        auto arg = work[i];
+        if (!arg || seen.get(arg)) continue;
+        seen.put(arg,1);
+        if (value_argument(arg)) {
+            auto q = type_queries[argument_query(arg)];
+            while (q.kind == QueryKind::Cast && q.op == TOK_INVALID) q = type_queries[query_edges[q.offset]];
+            if (q.kind == QueryKind::TemplateValueParameter) { result.put(q.entity,1); work.push_back(q.type); }
+            continue;
+        }
+        auto type = types[arg];
+        switch (type.kind) {
+        case TypeKind::Named:
+            if (entities[type.entity].template_parameter) result.put(type.entity,1);
+            else if (entities[type.entity].specialization) {
+                auto primary = specialization_pattern(type.entity);
+                if (entities[primary].template_parameter) result.put(primary,1);
+                argument_list(specialization_arguments(type.entity));
+            }
+            break;
+        case TypeKind::ArgumentPack: argument_list(argument_packs[type.bound]); break;
+        case TypeKind::PackExpansion: work.push_back(type.bound); break;
+        case TypeKind::DependentName: case TypeKind::Decltype: case TypeKind::DependentVector: break;
+        case TypeKind::DependentArray: case TypeKind::DependentExtVector:
+            work.push_back(value_argument_id(type.bound)); work.push_back(type.child); break;
+        case TypeKind::Function: parameter_list(type); work.push_back(type.child); break;
+        case TypeKind::MemberPointer: work.push_back(type.member_owner()); work.push_back(type.child); break;
+        default: if (type.child) work.push_back(type.child); break;
+        }
+    }
+    return result;
+}
 bool Analyzer::deduction_parameters(Type function, std::uint32_t prefix, std::vector<DeductionParameter>& out)
 {
     unsigned first = 0;

@@ -15,6 +15,8 @@ void Analyzer::declare_template_parameters(NodeId params, ScopeId ts, std::uint3
 {
     auto source = templates[source_head]; unsigned ordinal = 0;
     auto bind_parameter = [&](EntityId e) {
+        if (entities[e].parameter_pack && entities[e].initializer)
+            throw std::runtime_error("template parameter pack cannot have a default");
         if (source_head && frame) {
             auto arg = parameter_argument(e);
             if (entities[e].parameter_pack) arg = make_argument_pack({types.compound(TypeKind::PackExpansion,0,arg)});

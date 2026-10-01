@@ -154,6 +154,7 @@ enum class Kind : unsigned char {
     AssemblyOperand,
     BindingNames,
     BindingName,
+    DeductionGuide,
 };
 
 struct Location {

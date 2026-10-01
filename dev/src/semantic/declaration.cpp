@@ -189,6 +189,14 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
     auto saved_explicit = explicit_specialization_source;
     if (explicit_specialization_source == n) explicit_specialization_source = ast[params].next;
     if (definitions) check_template_parameters(ast[params].next,ts);
+    if (ast[ast[params].next].kind == Kind::DeductionGuide) {
+        deduction_guide(ast[params].next,ts);
+        if (!ast.nodes.occurrences[n].context)
+            template_source_heads.put(ast.nodes.occurrences[n].source,deduction_guides.back().head);
+        active_template_scope = saved;
+        explicit_specialization_source = saved_explicit;
+        return;
+    }
     bool friend_template = calls && scopes[s].kind == ScopeKind::Class &&
         friend_declaration(ast[params].next,ts);
     if (!friend_template && (!definitions || !retain_template_definition(ast[params].next,ts))) declaration(ast[params].next, ts);
@@ -326,6 +334,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
     ++analyzed;
     if (calls && scopes[s].kind == ScopeKind::Class && friend_declaration(n, s)) return;
     switch (ast[n].kind) {
+    case Kind::DeductionGuide: deduction_guide(n,s); break;
     case Kind::Access:
         if (calls && scopes[s].kind == ScopeKind::Class)
             class_facts[entities[scopes[s].entity].class_info].current_access = ast[n].op == KW_PRIVATE ? Access::Private : ast[n].op == KW_PROTECTED ? Access::Protected : Access::Public;

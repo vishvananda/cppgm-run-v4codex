@@ -61,6 +61,7 @@ void Analyzer::index_template_members(NodeId n, std::uint32_t path, ScopeId s)
     for (auto entry = ast[n].first; entry; entry = ast[entry].next) {
         auto c = entry;
         while (ast[c].kind == Kind::Template) c = ast[ast[c].first].next;
+        if (ast[c].kind == Kind::DeductionGuide) continue;
         if (spec_has(ast[c].first,KW_FRIEND)) continue;
         if (ast[c].kind == Kind::Class) {
             index_template_members(c,definition_path(path,terminal(ast[c].detail)),s); continue;

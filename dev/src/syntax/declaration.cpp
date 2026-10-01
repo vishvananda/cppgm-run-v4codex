@@ -46,6 +46,7 @@ NodeId Parser::unadorned_declaration()
         if (!in.eat(";")) return simple_declaration(true, wrap(Kind::DeclSpecifiers, node));
         return node;
     }
+    if (deduction_guide_ahead()) return deduction_guide();
     if (special_ahead()) return special_member();
     if (in.is("~") || in.is("operator") ||
         (current_class && in.peek().text == current_class && in.is("(", 1))) return special_member();
@@ -67,6 +68,7 @@ NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
     if (template_declaration && !alias) category = Category::TemplateValue;
     if (!alias && is_function) {
         NodeId name = declarator_name(decl);
+        if (!name) throw std::runtime_error("function declaration requires a name");
         ScopeId binding_owner = qualified_owner(name);
         // An ordinary function adds to a same-scope overload set. Its template
         // members still make '<' a template argument delimiter at a later use.

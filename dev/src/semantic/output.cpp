@@ -160,6 +160,9 @@ void Analyzer::telemetry(std::ostream& out) const
         closure_capture_recipes.size()-1,closure_capture_candidates.size(),closure_adapter_facts.size()-1);
     const auto stats = virtual_telemetry(virtual_classes);
     out << ",\"semantic_ms\":" << analysis_ms
+        << ",\"semantic_deduction_guides\":" << deduction_guides.size()-1
+        << ",\"semantic_deduction_guide_parameters\":" << deduction_guide_parameters
+        << ",\"semantic_deduction_guide_bytes\":" << deduction_guides.capacity()*sizeof(DeductionGuide)
         << ",\"semantic_angle_names\":" << angle_name_work
         << ",\"semantic_angle_parts\":" << angle_part_work
         << ",\"semantic_angle_interpretations\":" << angle_interpretations

@@ -1,0 +1,1 @@
+box(int)->box<int>;
