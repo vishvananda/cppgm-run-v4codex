@@ -23,6 +23,7 @@ private:
     Names names;
     ScopeId scope = 0;
     IdentifierId current_class = 0;
+    IdentifierId await_name = 0, yield_name = 0, coroutine_return_name = 0;
     bool template_declaration = false;
     unsigned retained_template_depth = 0;
     bool member_name = false;
@@ -102,7 +103,7 @@ private:
     NodeId declarator_name(NodeId declarator) const;
 
     NodeId expression(int minimum = 1);
-    bool contextual_coroutine(const char* spelling);
+    bool contextual_coroutine(IdentifierId name);
     NodeId unary();
     NodeId primary();
     NodeId postfix(NodeId base);

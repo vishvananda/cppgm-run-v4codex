@@ -10,6 +10,9 @@ Parser::Parser(Cursor& cursor, Ast& tree, IdentifierTable& identifiers)
     names.bind(0, ids.intern(TextView("__builtin_va_list", 17)), Category::Type);
     names.bind(0, ids.intern(TextView("__type_pack_element", 19)), Category::TemplateType);
     names.bind(0, ids.intern(TextView("__make_integer_seq", 18)), Category::TemplateType);
+    await_name = ids.intern(TextView("co_await",8));
+    yield_name = ids.intern(TextView("co_yield",8));
+    coroutine_return_name = ids.intern(TextView("co_return",9));
 }
 
 NodeId Parser::make(Kind kind)

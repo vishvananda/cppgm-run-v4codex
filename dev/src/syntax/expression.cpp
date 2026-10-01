@@ -26,12 +26,12 @@ int expression_precedence(ETokenType op)
     }
 }
 
-bool Parser::contextual_coroutine(const char* spelling)
+bool Parser::contextual_coroutine(IdentifierId name)
 {
     // In the hosted C++11 extension these are contextual spellings, not
     // keywords. An existing lexical declaration keeps its ordinary meaning.
     // Declarations, qualified names and member names use their own grammar.
-    if (!in.is(spelling) || names.lookup(scope,in.peek().text).category != Category::Unknown) return false;
+    if (in.peek().text != name || names.lookup(scope,name).category != Category::Unknown) return false;
     if (!retained_template_depth)
         throw std::runtime_error("coroutine syntax requires a retained template body");
     return true;
@@ -40,7 +40,7 @@ bool Parser::contextual_coroutine(const char* spelling)
 NodeId Parser::expression(int minimum)
 {
     NodeId left;
-    if (minimum <= 2 && contextual_coroutine("co_yield")) {
+    if (minimum <= 2 && contextual_coroutine(yield_name)) {
         left = leaf(Kind::Yield);
         ast.append(left, in.is("{") ? primary() : expression(2));
     } else if (minimum <= 2 && in.is("throw")) {
@@ -239,7 +239,7 @@ NodeId Parser::primary()
 
 NodeId Parser::unary()
 {
-    if (contextual_coroutine("co_await")) {
+    if (contextual_coroutine(await_name)) {
         NodeId node = leaf(Kind::Await);
         ast.append(node,unary());
         return node;

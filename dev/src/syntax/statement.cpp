@@ -226,7 +226,7 @@ NodeId Parser::statement()
     }
     Kind jump;
     if (in.is("return")) jump = Kind::Return;
-    else if (contextual_coroutine("co_return")) jump = Kind::CoroutineReturn;
+    else if (contextual_coroutine(coroutine_return_name)) jump = Kind::CoroutineReturn;
     else if (in.is("break")) jump = Kind::Break;
     else if (in.is("continue")) jump = Kind::Continue;
     else if (in.is("goto")) jump = Kind::Goto;

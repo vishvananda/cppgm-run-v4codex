@@ -199,6 +199,7 @@ void Parser::predeclare_class()
     bool value_declaration = false, next_value = false, function_declaration = false;
     bool class_header = false, unresolved_template_head = false;
     while (!in.is("}", i) && in.peek(i).kind != PostTokenKind::eof) {
+        bool indexed_value = false;
         if ((in.is("[",i) && in.is("[",i+1)) || in.is("__attribute__",i) || in.is("__attribute",i)) {
             i = in.matching(in.is("[",i) ? i : i+1)+1; continue;
         }
@@ -307,9 +308,9 @@ void Parser::predeclare_class()
             if (in.is("::",name.end) && in.is("*",name.end+1)) { i = name.end+2; continue; }
             names.bind(scope,name.terminal,templated ? Category::TemplateValue : Category::Value);
             function_declaration = in.is("(",name.end);
-            next_value = false;
+            next_value = false; indexed_value = true;
         }
-        if (i && identifier(i) && !in.is("::", i - 1) &&
+        if (!indexed_value && i && identifier(i) && !in.is("::", i - 1) &&
             !in.is("class",i-1) && !in.is("struct",i-1) && !in.is("union",i-1) && !in.is("enum",i-1) &&
             (in.is(";", i + 1) || in.is("[", i + 1) || in.is("=", i + 1) || in.is(",", i + 1)) &&
             (type_start(i - 1) || in.is("*", i - 1) || in.is("&", i - 1))) {
@@ -319,15 +320,15 @@ void Parser::predeclare_class()
         // A guide reuses a class-template name without introducing a value.
         // Preserve that category during complete-class lookahead too.
         bool guide = false;
-        if (identifier(i) && in.is("(",i+1) && names.local(scope,in.peek(i).text).category == Category::TemplateType) {
+        if (!indexed_value && identifier(i) && in.is("(",i+1) && names.local(scope,in.peek(i).text).category == Category::TemplateType) {
             auto after = in.matching(i+1)+1;
             if (in.is("noexcept",after)) { ++after; if (in.is("(",after)) after = in.matching(after)+1; }
             guide = in.is("->",after);
         }
-        if (!guide && templated && identifier(i) && in.is("(", i + 1) && in.peek(i).text != current_class &&
+        if (!indexed_value && !guide && templated && identifier(i) && in.is("(", i + 1) && in.peek(i).text != current_class &&
             (!i || (!in.is("operator",i-1) && !in.is("::",i-1))))
             names.bind(scope, in.peek(i).text, Category::TemplateValue);
-        if (!guide && !templated && !friend_declaration && i && identifier(i) && in.is("(", i + 1) &&
+        if (!indexed_value && !guide && !templated && !friend_declaration && i && identifier(i) && in.is("(", i + 1) &&
             in.peek(i).text != current_class && (type_start(i-1) || in.is("*",i-1) || in.is("&",i-1))) {
             names.bind(scope,in.peek(i).text,Category::Value);
             value_declaration = function_declaration = true;
