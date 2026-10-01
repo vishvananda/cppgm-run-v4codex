@@ -1,0 +1,30 @@
+{
+  "handoff_head": "4a7cf08dfd7df78d7f164ad7d2dd20f238c8d8e7",
+  "source_matches_validated_commit": "8288199b32d10e767f216455c2e7ea5e638d9523",
+  "compiler_sha256": "8e292c04f171459b32f40ef245da1fadba2f093f3a3f2a27858ad1b3033d136a",
+  "prior_tests": "4538/4538",
+  "stage_tests": "381/403",
+  "through_tests": "4919/4941",
+  "stage_progress": "23 -> 22 failures; no regressions",
+  "file_audit": "pass; four inherited warnings",
+  "coverage_files_verified": 1707,
+  "personal_controls": 36,
+  "inspection_commands": 59,
+  "performance_samples": {
+    "common": 224,
+    "affected": 48
+  },
+  "reference_changes": false,
+  "review_markers_preserved": true,
+  "independent_contract_questions": [
+    "pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+    "pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+    "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t"
+  ],
+  "unfinished_implementation_ledger": "remaining.json",
+  "group_boundary": "pa29/plan.md and pa29/implementation177.md",
+  "performance_acceptance": "pa29/performance177.md",
+  "independent_review": "required; not waived",
+  "stage_complete": false,
+  "handoff_complete": true
+}
