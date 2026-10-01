@@ -130,3 +130,10 @@ deduction. Constant shape errors are rejected even in unused template patterns.
 PA29 354/403; PA1–28 4538/4538; through PA29 4892/4941. File audit passes
 with the four inherited header warnings. Remaining 49 course failures are
 unchanged; performance and IR inspections are still pending handoff evidence.
+
+The final substitution control exposed dependent-vector ABI emission after
+semantic success. The PA9 Vector graph now retains an optional expression edge;
+source lowering, validation, encoder and explicit fact adapters consume it.
+SFINAE, pack queries and executable signatures now pass 45 controls. Preliminary
+performance is retained separately because this required ABI correction changes
+the final compiler. All final checks and measurements will be refreshed.

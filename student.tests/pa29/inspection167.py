@@ -27,4 +27,11 @@ for src in sorted((root/'student.tests/pa29/controls167').glob('*.cpp')):
   check('evaluated uses retained',all(s in symbols for s in ['used_leaf','used_branch','address_only']))
  if name=='vector-pointer-abi':check('PA9 vector ABI names',all(s in symbols for s in ['_Z6extentPKDv4_i','_Z6extentPKDv8_i','_Z6extentPKDv4_f']))
  if name=='layout':check('unused vector literal wrappers omitted',all(s not in symbols for s in ['full','partial','leading']))
+adapter=out/'abi-vector'
+objects=[p for p in sorted((root/'obj/dev').rglob('*.o')) if 'entry' not in p.parts and not p.name.startswith('test_runner')]
+run('ABI adapter build',['g++','-std=c++11','-O2','-I'+str(root/'dev/src'),root/'student.tests/pa29/abi-vector167.cpp',*objects,'-o',adapter])
+facts=run('dependent vector graph/fact roundtrip',[adapter]).stdout
+(out/'vector.abi').write_bytes(facts)
+run('standalone PA9 vector ABI',[root/'dev/abimangle',out/'vector.abi','-o',out/'vector.name'])
+check('dependent vector ABI spelling',(out/'vector.name').read_text().strip()=='DvT__i')
 (out/'inspection.json').write_text(json.dumps(result,indent=2)+'\n');print(str(len(result['checks']))+' checks passed')

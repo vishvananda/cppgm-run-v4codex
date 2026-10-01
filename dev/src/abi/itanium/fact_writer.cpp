@@ -97,7 +97,9 @@ std::string FactWriter::type(Id id) {
     case Kind::Array:
         if (n.b) return join_form({"array-expression ", ref('x', n.b), " ", ref('t', n.a)});
         return join_form({"array ", std::to_string(n.value), " ", ref('t', n.a)});
-    case Kind::Vector: return join_form({"vector ", std::to_string(n.value), " ", ref('t', n.a)});
+    case Kind::Vector:
+        if (n.b) return join_form({"vector-expression ", ref('x',n.b), " ", ref('t',n.a)});
+        return join_form({"vector ", std::to_string(n.value), " ", ref('t',n.a)});
     case Kind::Transform: return join_form({"builtin-transform ", g.spelling(n.b), list(n, 't')});
     case Kind::FunctionType:
         if (n.b) return join_form({"function-type-qualified ", std::to_string(n.b),

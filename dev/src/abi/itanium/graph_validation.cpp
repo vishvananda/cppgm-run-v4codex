@@ -46,7 +46,7 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
         return;
     case Kind::Cv: require(b <= 3); edge(a, Role::Type); break;
     case Kind::Pointer: case Kind::Reference: case Kind::RvalueReference:
-    case Kind::Pack: case Kind::Vector: case Kind::TypeArgument: case Kind::Value:
+    case Kind::Pack: case Kind::TypeArgument: case Kind::Value:
     case Kind::TemplateEntity: case Kind::SizeofType: case Kind::AlignofType: case Kind::TypeidType: edge(a, Role::Type); break;
     case Kind::WideValue: case Kind::NegativeWideValue:
         edge(a, Role::Type);
@@ -59,7 +59,7 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
         break;
     case Kind::TypeidExpression: edge(a, Role::Expression); break;
     case Kind::Vendor: edge(a, Role::Type); text(b); break;
-    case Kind::Array: edge(a, Role::Type); if (b) edge(b, Role::Expression); break;
+    case Kind::Vector: case Kind::Array: edge(a, Role::Type); if (b) edge(b, Role::Expression); break;
     case Kind::Transform: text(b); sequence(Role::Type); return;
     case Kind::FunctionType:
         edge(a, Role::Type); qualifiers(b); require(c <= 1); sequence(Role::Type); return;

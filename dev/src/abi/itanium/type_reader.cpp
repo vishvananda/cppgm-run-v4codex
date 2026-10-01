@@ -131,9 +131,9 @@ Id FactReader::type(const Words& w, std::size_t& p) {
         while (p < w.size()) params.push_back(type(w, p));
         return g.make(Kind::FunctionType, result, qualifiers, variadic, 0, params);
     }
-    if (op == "array-expression") {
+    if (op == "array-expression" || op == "vector-expression") {
         Id bound = reference(take(w, p), BindingKind::Expression); Id element = type(w, p);
-        return g.make(Kind::Array, element, bound);
+        return g.make(op == "array-expression" ? Kind::Array : Kind::Vector, element, bound);
     }
     if (op == "array" || op == "vector") {
         auto bound = index_value(take(w, p)); Id element = type(w, p);
