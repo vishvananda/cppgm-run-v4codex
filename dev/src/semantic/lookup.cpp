@@ -211,15 +211,14 @@ EntityId Analyzer::merge_lookup(EntityId a, EntityId b)
         return e;
     }
     // [dcl.typedef] aliases name their associated type, not a new entity.
-    // Namespace directives can therefore converge on the same canonical type.
-    // Class-base lookup still merges declaration sets ([class.member.lookup]);
-    // distinct member typedef declarations must not become interchangeable.
-    auto namespace_type = [&](EntityId e) {
-        return scopes[entities[e].owner].kind == ScopeKind::Namespace &&
-            !entities[e].template_info &&
+    // [class.member.lookup]/3 likewise replaces type declarations by their
+    // types before merging base lookup sets. Keep a declaration representative
+    // for the subsequent access check; alias templates are distinct entities.
+    auto type_name = [&](EntityId e) {
+        return !entities[e].template_info &&
             (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias);
     };
-    if (namespace_type(a) && namespace_type(b) && entities[a].type == entities[b].type) return a;
+    if (type_name(a) && type_name(b) && entities[a].type && entities[a].type == entities[b].type) return a;
     return ambiguous;
 }
 EntityId Analyzer::imported(ScopeId s, IdentifierId n, Lookup mode, std::uint64_t visit)
