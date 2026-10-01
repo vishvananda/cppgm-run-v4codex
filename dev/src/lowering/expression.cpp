@@ -152,7 +152,8 @@ Value Procedural::expression(NodeId n, bool location)
                 auto value = captured_address(capture); value.type = fact.type; value.address = true; return value;
             }
         }
-        if (sem.entities[fact.entity].constant.valid && reference(sem.entities[fact.entity].constant.type))
+        if (sem.entities[fact.entity].constant.valid && reference(sem.entities[fact.entity].constant.type) &&
+            sem.constant_static_value(sem.entities[fact.entity].constant).kind != semantic::StaticValue::Invalid)
             return constant_operand(sem.entities[fact.entity].constant,fact.type);
         if (!location && sem.constant_fact(n).valid && sem.entities[fact.entity].constant.valid) {
             auto c = sem.constant_fact(n);

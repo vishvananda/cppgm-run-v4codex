@@ -27,7 +27,7 @@ bool item_equal(const lowir_model::DataItem& a, const lowir_model::DataItem& b)
     return a.value.kind == Operand::Floating ? !std::memcmp(&a.value.data.floating,&b.value.data.floating,10) : a.value.data.integer == b.value.data.integer;
 }
 }
-void Procedural::initialize_constant_array(EntityId e, Value location)
+void Procedural::initialize_constant_array(EntityId e, Value location, semantic::Constant value)
 {
     auto target = sem.entities[e].type;
     semantic::Analyzer::EvaluationScope mode(sem,sem.required_constant_object(e));
@@ -35,7 +35,7 @@ void Procedural::initialize_constant_array(EntityId e, Value location)
     auto bytes = sem.object_size(target), alignment = sem.object_alignment(target);
     if (!source.index) {
         lowir_model::Range data; data.begin = p.data.size();
-        if (sem.class_value(target)) global_constant_fields(sem.constant_value_data(sem.entities[e].constant),target);
+        if (sem.class_value(target)) global_constant_fields(sem.constant_value_data(value.valid ? value : sem.entities[e].constant),target);
         else global_plan(sem.constant_array_plan(e));
         data.count = p.data.size()-data.begin;
         auto hash = mix(mix(1469598103934665603ULL,bytes),alignment);

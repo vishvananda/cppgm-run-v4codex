@@ -24,7 +24,7 @@ retains that initialization even inside a runtime-folded enclosing activation.
 
 The work expanded beyond the required call to automatic/static scalars,
 constexpr arrays and class objects, volatile reads, reference temporaries,
-references selecting existing local/global subobjects, inherited fields, unions,
+references selecting existing local/global subobjects, activation rebasing, inherited fields, unions,
 bit-fields, pointer/function-pointer constants, defaults, templates, recursive
 memoization and failed constant-initialization trials. Defaulted constructor
 arguments now reach constant execution even when the declaration has no explicit
@@ -42,7 +42,7 @@ mode for their bodies and arguments.
 | Static scalar value | Source occurrence, destination type, evaluation mode | Separate flat mode indexes share the typed result arena. |
 | Array proof | Initializer-plan ID, evaluation mode | Emission uses the owning declaration's required/runtime mode. |
 | Mode dependence | Constant/activation IDs, then initialized entity ID | Cached hits propagate dependence. Only affected stored values require the new materialization path. |
-| Reference initialization | Initialized entity -> storage entity, byte offset, whether storage needs initialization | Lowering consumes the selected object and offset without lookup, source reconstruction or reevaluation. |
+| Reference initialization | Initialized entity -> storage entity, canonical address path, byte offset, typed initial value, whether storage needs initialization | Lowering consumes the selected object and offset without lookup, source reconstruction or reevaluation. |
 
 Trace: `work<N>` in `controls165/evaluation-templates.cpp` retains one parsed
 pattern. Its demanded function specialization selects `active` by entity.
@@ -57,7 +57,16 @@ its proof. Ordinary unaffected class construction stays on its inherited path.
 This is required observable initialization, not a new optional optimization.
 The existing typed constant-data sharing handles class images. Local reference
 plans retain actual semantic storage identities, including selected subobjects;
-they do not invent global symbols for automatic objects.
+they do not invent global symbols for automatic objects. Constant execution rebases
+that same recorded path onto each activation's storage. It does not reuse the
+source declaration's evaluator address for a local reference. Reference-bound
+temporaries have distinct typed initial-value facts and storage identities.
+Mutable temporaries never acquire a permanent constant-value fact just because
+initialization succeeded. Aliases see writes to the same object. Scalar writes
+through references update the owning activation (including caller parameters),
+its storage snapshot/version and the bound scalar; they never replace the
+reference itself. Hidden temporary bindings retire at their reference's scope
+exit, and frame back-pointers are cleared on normal and exceptional exit.
 
 ## Complexity, lifetime and bounds
 
@@ -65,7 +74,8 @@ The new registry entry is bounded compiler metadata. Mode selection, dependence
 propagation and completed-fact lookup are O(1) average operations on compact
 IDs. Mode-dependent caches admit at most two variants of each existing key;
 there is no global generation counter or unrelated invalidation. Each affected
-reference has one small record. Automatic reference trial evaluation is skipped
+reference has one small record. Rebasing visits only its recorded subobject path
+in O(path depth), using stack traversal without per-visit heap allocation. Automatic reference trial evaluation is skipped
 entirely in translation units without this intrinsic.
 
 All new indexes and records belong to the Analyzer/TU, with no process-global
@@ -78,8 +88,8 @@ replay, serialized-phase transport, optional transform or new growth budget was
 introduced. Optional work/growth budgets for this change are zero.
 
 Telemetry reads existing mode-use counts and sparse index sizes; it performs no
-additional analysis. Performance evidence is PA29/O0 and will be recorded in
-`performance165.md`, with compiler latency/RSS and checked runtime/text size.
+additional analysis. Performance evidence is PA29/O0 in
+[performance165](performance165.md), with compiler latency/RSS and checked runtime/text size.
 
 ## Boundary and review
 
@@ -92,6 +102,12 @@ lexical constants for that family would leave incorrect default behavior;
 implementing it needs a separate invocation-fact owner and propagation through
 call/default/construction recipes. It cannot reuse the evaluation-mode bit or
 immutable function-name string facts as its context key.
+
+The inherited constexpr interpreter still conservatively rejects mutation of
+aggregate subobjects; ordinary runtime mutation uses existing lowering. Adding a
+mutable aggregate overlay is separate unfinished interpreter work, not a claimed
+extension of this mode/storage change. Scalar reference writes and aliases have
+explicit successful controls; no rejection was substituted for those cases.
 
 Independent review must examine complete mode keys, dependence propagation,
 reference lifetime/storage identity, and the performance evidence. This document

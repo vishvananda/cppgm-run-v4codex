@@ -26,7 +26,7 @@ public:
     std::size_t evaluation_mode_uses = 0;
     Index mode_sensitive_values, mode_sensitive_activations, mode_sensitive_objects;
     bool context_initialized(EntityId e) const { return mode_sensitive_objects.get(e); }
-    struct ContextReference { EntityId storage = 0; std::uint64_t offset = 0; bool initialize = false; };
+    struct ContextReference { EntityId storage = 0; std::uint32_t address = 0; std::uint64_t offset = 0; Constant initializer; bool initialize = false; };
     Index context_reference_index;
     std::vector<ContextReference> context_references = std::vector<ContextReference>(1);
     const ContextReference& context_reference(EntityId e) const { return context_references[context_reference_index.get(e)]; }
@@ -782,7 +782,7 @@ private:
     std::uint32_t constant_construction_receiver(ConstantBuilder&, std::uint32_t receiver, unsigned path);
     std::uint32_t constant_field_address(std::uint32_t parent, EntityId field);
     std::uint32_t constant_destination = 0;
-    struct ConstantStorage { TypeId type = 0; EntityId entity = 0; NodeId literal = 0; Constant value; ConstantBuilder* builder = 0; std::uint32_t version = 0; bool live = true, readable = false; };
+    struct ConstantStorage { TypeId type = 0; EntityId entity = 0; NodeId literal = 0; Constant value; ConstantBuilder* builder = 0; ConstantFrame* frame = 0; std::uint32_t binding = 0, version = 0; bool live = true, readable = false; };
     struct ConstantAddress { std::uint32_t storage = 0, parent = 0, next = 0; TypeId type = 0; std::uint64_t selector = 0, offset = 0; bool located = false; };
     std::vector<EvaluatedObject> evaluated_objects = std::vector<EvaluatedObject>(1);
     std::vector<EvaluatedPart> evaluated_parts;

@@ -23,11 +23,11 @@ for kind in ['evaluation','storage']:
   else:
    prefix+='''constexpr long choose(long x){return active()?x+3:x-2;}
 template<int N>struct Box{long n;constexpr Box():n(active()?N:0){}};
-template<int N>long work(long x){constexpr Box<N> box;const long& r=choose(N);
+template<int N>constexpr long work(long x){constexpr Box<N> box;const long& r=choose(N);
 bool a[]={active()};return x+box.n+r+(a[0]?1000000:0);}
 '''
-   body=''.join('sum+=work<%d>(x);\n'%i for i in range(n))
-   demanded=n*n+3*n;period=[i+18 for i in range(128)]
+   body=''.join('constexpr long k%d=work<%d>(1);sum+=k%d+work<%d>(x);\n'%(i,i,i,i) for i in range(n))
+   demanded=1000000*n+2*n*n+6*n;period=[i+18 for i in range(128)]
   checksum=sum(period)*(iterations//128)+sum(period[:iterations%128])
   src.write_text(prefix+'long demanded(long x){long sum=0;\n'+body+'return sum;}\nint main(int argc,char**){if(demanded(argc)!='+str(demanded)+')return 1;\nlong sum=0;for(int i=0;i<argc*20000000;++i)sum+=work<7>((i&127)+argc);\nreturn sum=='+str(checksum)+'LL?0:2;}\n')
   obj=out/(key+'.o');exe=out/key;run([cc,*result['flags'],src,'-o',obj]);run(['g++',obj,'-o',exe]);run([exe])

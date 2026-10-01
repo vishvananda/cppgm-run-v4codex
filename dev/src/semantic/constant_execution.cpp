@@ -158,10 +158,15 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
             if (result.flow == ConstantFlow::Return) value = result.value;
         }
     } catch (...) {
+        for (auto storage : frame.storage) {
+            constant_storage[storage].live = false; constant_storage[storage].frame = 0;
+        }
         constant_activations[id].state = FactState::Failure;
         active_constant = saved; constant_frame = saved_frame; --constant_depth; throw;
     }
-    for (auto storage : frame.storage) constant_storage[storage].live = false;
+    for (auto storage : frame.storage) {
+        constant_storage[storage].live = false; constant_storage[storage].frame = 0;
+    }
     constant_activations[id].result = value;
     if (evaluation_mode_uses != mode_uses) mode_sensitive_activations.put(id,1);
     // Exhaustion and not-yet-defined constants are unavailable prerequisites,

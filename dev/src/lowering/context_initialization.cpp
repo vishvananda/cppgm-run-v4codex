@@ -6,8 +6,8 @@ void Procedural::initialize_context_reference(const semantic::Analyzer::ContextR
     if (!objects[plan.storage]) objects[plan.storage] = source_slot(plan.storage);
     Value storage(Operand::slot(objects[plan.storage]),type(t),t,true);
     if (plan.initialize) {
-        if (sem.class_value(t)) initialize_constant_array(plan.storage,storage);
-        else store(constant_operand(sem.entities[plan.storage].constant,t),storage);
+        if (sem.class_value(t)) initialize_constant_array(plan.storage,storage,plan.initializer);
+        else store(constant_operand(plan.initializer,t),storage);
     }
     auto pointer = address(storage);
     if (plan.offset) pointer = emit(Opcode::Index,IRType::I8,{pointer.operand,Operand::integer(plan.offset)});

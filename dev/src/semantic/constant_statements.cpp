@@ -22,6 +22,7 @@ bool Analyzer::constant_local(EntityId e, ScopeId s)
     constant_frame->values[slot] = Constant();
     if (auto address = constant_frame->addresses.get(e)) {
         constant_storage[constant_addresses[address].storage].live = false;
+        constant_storage[constant_addresses[address].storage].frame = 0;
         constant_frame->addresses.put(e,0);
     }
     auto saved_destination = constant_destination;
@@ -33,7 +34,41 @@ bool Analyzer::constant_local(EntityId e, ScopeId s)
     }
     Constant value;
     try {
-        value = entities[e].constant.valid ? entities[e].constant : constant_initialize(init,type,s,object_constructor(e));
+        auto kind = types[type].kind;
+        auto plan = context_reference(e);
+        if (plan.storage) {
+            std::uint32_t target = 0;
+            if (plan.initialize) {
+                target = constant_storage_address(entities[plan.storage].type,plan.initializer);
+                auto storage = constant_addresses[target].storage;
+                if (auto prior = constant_frame->addresses.get(plan.storage)) {
+                    constant_storage[constant_addresses[prior].storage].live = false;
+                    constant_storage[constant_addresses[prior].storage].frame = 0;
+                }
+                auto binding = constant_frame->values.size();
+                constant_frame->values.push_back(plan.initializer);
+                constant_frame->bindings.put(plan.storage,binding);
+                constant_frame->addresses.put(plan.storage,target);
+                constant_frame->locals.push_back(plan.storage);
+                constant_storage[storage].frame = constant_frame; constant_storage[storage].binding = binding;
+                constant_frame->storage.push_back(storage);
+            } else {
+                target = constant_entity_address(plan.storage);
+                // Rebase the recorded semantic path on this activation's
+                // storage. Byte offsets are a lowering fact, not a lookup key.
+                struct Rebase {
+                    Analyzer& sem; std::uint32_t root;
+                    std::uint32_t operator()(std::uint32_t at) {
+                        auto part = sem.constant_addresses[at];
+                        return part.parent ? sem.constant_subobject((*this)(part.parent),part.type,part.selector) : root;
+                    }
+                } rebase{*this,target};
+                if (target) target = rebase(plan.address);
+            }
+            if (target) value = Constant(type,target);
+        } else if (kind != TypeKind::LRef && kind != TypeKind::RRef && entities[e].constant.valid)
+            value = entities[e].constant;
+        else value = constant_initialize(init,type,s,object_constructor(e));
     }
     catch (...) { constant_destination = saved_destination; throw; }
     constant_destination = saved_destination;
@@ -70,7 +105,10 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
             ~Scope(){
                 for (auto i = begin; i < frame.locals.size(); ++i) {
                     auto e = frame.locals[i];
-                    if (auto address = frame.addresses.get(e)) sem.constant_storage[sem.constant_addresses[address].storage].live = false;
+                    if (auto address = frame.addresses.get(e)) {
+                        auto storage = sem.constant_addresses[address].storage;
+                        sem.constant_storage[storage].live = false; sem.constant_storage[storage].frame = 0;
+                    }
                     frame.bindings.put(e,0); frame.addresses.put(e,0);
                 }
                 frame.locals.resize(begin);
@@ -158,8 +196,22 @@ Constant Analyzer::constant_mutation(NodeId n, ScopeId s)
     auto e = expressions[target].entity;
     auto slot = constant_frame->bindings.get(e);
     if (!slot || (types[entities[e].type].cv & 3)) return Constant();
+    auto destination = constant_frame;
+    auto stored_type = entities[e].type;
+    auto address = constant_frame->addresses.get(e);
+    auto kind = types[stored_type].kind;
+    if (kind == TypeKind::LRef || kind == TypeKind::RRef) {
+        auto reference = constant_frame->values[slot];
+        if (!reference.valid || !reference.bits) return Constant();
+        address = reference.bits; auto target = constant_addresses[address];
+        auto storage = constant_storage[target.storage];
+        // Aggregate writes remain conservative until the evaluator owns a
+        // mutable aggregate overlay. Never overwrite a reference binding.
+        if (target.parent || !storage.live || !storage.readable || !storage.frame || (types[target.type].cv & 7)) return Constant();
+        destination = storage.frame; slot = storage.binding; stored_type = target.type;
+    }
     auto op = ast[n].op;
-    auto old = constant_frame->values[slot];
+    auto old = destination->values[slot];
     auto x = expressions[n];
     Constant value;
     if (op == OP_ASS) value = constant_node_conversion(source,conversions[x.conversions+1],s);
@@ -181,11 +233,11 @@ Constant Analyzer::constant_mutation(NodeId n, ScopeId s)
         auto left = convert(old,conversions[x.conversions].target,true);
         auto right = source ? constant_node_conversion(source,conversions[x.conversions+1],s) :
             Constant(types.fundamental(FT_INT),1);
-        value = convert(binary(binary_op,left,right,true),entities[e].type,true);
+        value = convert(binary(binary_op,left,right,true),stored_type,true);
     }
     if (!value.valid) return value;
-    constant_frame->values[slot] = value;
-    if (auto address = constant_frame->addresses.get(e)) {
+    destination->values[slot] = value;
+    if (address) {
         auto storage = constant_addresses[address].storage; constant_storage[storage].value = value; ++constant_storage[storage].version;
     }
     return ast[n].kind == Kind::Postfix ? old : value;

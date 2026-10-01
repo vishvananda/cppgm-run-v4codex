@@ -19,7 +19,7 @@ void Analyzer::prepare_context_reference(EntityId e)
     if (value.bits) {
         auto storage = constant_storage[constant_addresses[value.bits].storage].entity;
         if (storage) {
-            plan.storage = storage; plan.offset = constant_offset(value.bits);
+            plan.storage = storage; plan.address = value.bits; plan.offset = constant_offset(value.bits);
             context_reference_index.put(e,context_references.size()); context_references.push_back(plan); return;
         }
     }
@@ -35,9 +35,12 @@ void Analyzer::prepare_context_reference(EntityId e)
         temporary = make_entity(EntityKind::Variable,entity.owner,0,n);
         entities[temporary].type = type.child; entities[temporary].definition = n;
     }
-    entities[temporary].constant = scalar;
+    // Initialization is a value fact, not a promise that mutable storage keeps
+    // that value. Reference aliases retain the actual temporary's identity.
+    if (types[entities[temporary].type].cv == 1) entities[temporary].constant = scalar;
+    entities[e].constant = Constant(entity.type,constant_entity_address(temporary));
     mode_sensitive_objects.put(temporary,1);
-    plan.storage = temporary; plan.initialize = true;
+    plan.storage = temporary; plan.initializer = scalar; plan.initialize = true;
     context_reference_index.put(e,context_references.size()); context_references.push_back(plan);
 }
 } }

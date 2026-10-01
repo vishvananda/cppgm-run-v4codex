@@ -70,6 +70,8 @@ std::uint32_t Analyzer::constant_entity_address(EntityId e)
             auto known = constant_frame->addresses.get(e);
             if (known) return known;
             auto id = constant_storage_address(entities[e].type,v);
+            auto storage = constant_addresses[id].storage;
+            constant_storage[storage].frame = constant_frame; constant_storage[storage].binding = slot;
             constant_frame->addresses.put(e,id); constant_frame->storage.push_back(constant_addresses[id].storage);
             return id;
         }
