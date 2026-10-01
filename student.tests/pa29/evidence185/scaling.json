@@ -1,0 +1,487 @@
+{
+  "observations": 24,
+  "checks": [
+    {
+      "N": 600,
+      "trial": 0,
+      "facts": {
+        "semantic_specializations": 600,
+        "template_body_transitions": 600,
+        "semantic_constant_execution_hits": 600,
+        "semantic_constant_execution_steps": 4800,
+        "semantic_type_substitution_work": 1202,
+        "semantic_type_substitution_records": 1200,
+        "semantic_substitution_frames": 600,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 12846,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 600,
+      "trial": 1,
+      "facts": {
+        "semantic_specializations": 600,
+        "template_body_transitions": 600,
+        "semantic_constant_execution_hits": 600,
+        "semantic_constant_execution_steps": 4800,
+        "semantic_type_substitution_work": 1202,
+        "semantic_type_substitution_records": 1200,
+        "semantic_substitution_frames": 600,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 12846,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 600,
+      "trial": 2,
+      "facts": {
+        "semantic_specializations": 600,
+        "template_body_transitions": 600,
+        "semantic_constant_execution_hits": 600,
+        "semantic_constant_execution_steps": 4800,
+        "semantic_type_substitution_work": 1202,
+        "semantic_type_substitution_records": 1200,
+        "semantic_substitution_frames": 600,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 12846,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 600,
+      "trial": 3,
+      "facts": {
+        "semantic_specializations": 600,
+        "template_body_transitions": 600,
+        "semantic_constant_execution_hits": 600,
+        "semantic_constant_execution_steps": 4800,
+        "semantic_type_substitution_work": 1202,
+        "semantic_type_substitution_records": 1200,
+        "semantic_substitution_frames": 600,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 12846,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 600,
+      "trial": 4,
+      "facts": {
+        "semantic_specializations": 600,
+        "template_body_transitions": 600,
+        "semantic_constant_execution_hits": 600,
+        "semantic_constant_execution_steps": 4800,
+        "semantic_type_substitution_work": 1202,
+        "semantic_type_substitution_records": 1200,
+        "semantic_substitution_frames": 600,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 12846,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 600,
+      "trial": 5,
+      "facts": {
+        "semantic_specializations": 600,
+        "template_body_transitions": 600,
+        "semantic_constant_execution_hits": 600,
+        "semantic_constant_execution_steps": 4800,
+        "semantic_type_substitution_work": 1202,
+        "semantic_type_substitution_records": 1200,
+        "semantic_substitution_frames": 600,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 12846,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 600,
+      "trial": 6,
+      "facts": {
+        "semantic_specializations": 600,
+        "template_body_transitions": 600,
+        "semantic_constant_execution_hits": 600,
+        "semantic_constant_execution_steps": 4800,
+        "semantic_type_substitution_work": 1202,
+        "semantic_type_substitution_records": 1200,
+        "semantic_substitution_frames": 600,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 12846,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 600,
+      "trial": 7,
+      "facts": {
+        "semantic_specializations": 600,
+        "template_body_transitions": 600,
+        "semantic_constant_execution_hits": 600,
+        "semantic_constant_execution_steps": 4800,
+        "semantic_type_substitution_work": 1202,
+        "semantic_type_substitution_records": 1200,
+        "semantic_substitution_frames": 600,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 12846,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 1200,
+      "trial": 0,
+      "facts": {
+        "semantic_specializations": 1200,
+        "template_body_transitions": 1200,
+        "semantic_constant_execution_hits": 1200,
+        "semantic_constant_execution_steps": 9600,
+        "semantic_type_substitution_work": 2402,
+        "semantic_type_substitution_records": 2400,
+        "semantic_substitution_frames": 1200,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 25446,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 1200,
+      "trial": 1,
+      "facts": {
+        "semantic_specializations": 1200,
+        "template_body_transitions": 1200,
+        "semantic_constant_execution_hits": 1200,
+        "semantic_constant_execution_steps": 9600,
+        "semantic_type_substitution_work": 2402,
+        "semantic_type_substitution_records": 2400,
+        "semantic_substitution_frames": 1200,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 25446,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 1200,
+      "trial": 2,
+      "facts": {
+        "semantic_specializations": 1200,
+        "template_body_transitions": 1200,
+        "semantic_constant_execution_hits": 1200,
+        "semantic_constant_execution_steps": 9600,
+        "semantic_type_substitution_work": 2402,
+        "semantic_type_substitution_records": 2400,
+        "semantic_substitution_frames": 1200,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 25446,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 1200,
+      "trial": 3,
+      "facts": {
+        "semantic_specializations": 1200,
+        "template_body_transitions": 1200,
+        "semantic_constant_execution_hits": 1200,
+        "semantic_constant_execution_steps": 9600,
+        "semantic_type_substitution_work": 2402,
+        "semantic_type_substitution_records": 2400,
+        "semantic_substitution_frames": 1200,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 25446,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 1200,
+      "trial": 4,
+      "facts": {
+        "semantic_specializations": 1200,
+        "template_body_transitions": 1200,
+        "semantic_constant_execution_hits": 1200,
+        "semantic_constant_execution_steps": 9600,
+        "semantic_type_substitution_work": 2402,
+        "semantic_type_substitution_records": 2400,
+        "semantic_substitution_frames": 1200,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 25446,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 1200,
+      "trial": 5,
+      "facts": {
+        "semantic_specializations": 1200,
+        "template_body_transitions": 1200,
+        "semantic_constant_execution_hits": 1200,
+        "semantic_constant_execution_steps": 9600,
+        "semantic_type_substitution_work": 2402,
+        "semantic_type_substitution_records": 2400,
+        "semantic_substitution_frames": 1200,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 25446,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 1200,
+      "trial": 6,
+      "facts": {
+        "semantic_specializations": 1200,
+        "template_body_transitions": 1200,
+        "semantic_constant_execution_hits": 1200,
+        "semantic_constant_execution_steps": 9600,
+        "semantic_type_substitution_work": 2402,
+        "semantic_type_substitution_records": 2400,
+        "semantic_substitution_frames": 1200,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 25446,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 1200,
+      "trial": 7,
+      "facts": {
+        "semantic_specializations": 1200,
+        "template_body_transitions": 1200,
+        "semantic_constant_execution_hits": 1200,
+        "semantic_constant_execution_steps": 9600,
+        "semantic_type_substitution_work": 2402,
+        "semantic_type_substitution_records": 2400,
+        "semantic_substitution_frames": 1200,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 25446,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 2400,
+      "trial": 0,
+      "facts": {
+        "semantic_specializations": 2400,
+        "template_body_transitions": 2400,
+        "semantic_constant_execution_hits": 2400,
+        "semantic_constant_execution_steps": 19200,
+        "semantic_type_substitution_work": 4802,
+        "semantic_type_substitution_records": 4800,
+        "semantic_substitution_frames": 2400,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 50646,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 2400,
+      "trial": 1,
+      "facts": {
+        "semantic_specializations": 2400,
+        "template_body_transitions": 2400,
+        "semantic_constant_execution_hits": 2400,
+        "semantic_constant_execution_steps": 19200,
+        "semantic_type_substitution_work": 4802,
+        "semantic_type_substitution_records": 4800,
+        "semantic_substitution_frames": 2400,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 50646,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 2400,
+      "trial": 2,
+      "facts": {
+        "semantic_specializations": 2400,
+        "template_body_transitions": 2400,
+        "semantic_constant_execution_hits": 2400,
+        "semantic_constant_execution_steps": 19200,
+        "semantic_type_substitution_work": 4802,
+        "semantic_type_substitution_records": 4800,
+        "semantic_substitution_frames": 2400,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 50646,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 2400,
+      "trial": 3,
+      "facts": {
+        "semantic_specializations": 2400,
+        "template_body_transitions": 2400,
+        "semantic_constant_execution_hits": 2400,
+        "semantic_constant_execution_steps": 19200,
+        "semantic_type_substitution_work": 4802,
+        "semantic_type_substitution_records": 4800,
+        "semantic_substitution_frames": 2400,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 50646,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 2400,
+      "trial": 4,
+      "facts": {
+        "semantic_specializations": 2400,
+        "template_body_transitions": 2400,
+        "semantic_constant_execution_hits": 2400,
+        "semantic_constant_execution_steps": 19200,
+        "semantic_type_substitution_work": 4802,
+        "semantic_type_substitution_records": 4800,
+        "semantic_substitution_frames": 2400,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 50646,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 2400,
+      "trial": 5,
+      "facts": {
+        "semantic_specializations": 2400,
+        "template_body_transitions": 2400,
+        "semantic_constant_execution_hits": 2400,
+        "semantic_constant_execution_steps": 19200,
+        "semantic_type_substitution_work": 4802,
+        "semantic_type_substitution_records": 4800,
+        "semantic_substitution_frames": 2400,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 50646,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 2400,
+      "trial": 6,
+      "facts": {
+        "semantic_specializations": 2400,
+        "template_body_transitions": 2400,
+        "semantic_constant_execution_hits": 2400,
+        "semantic_constant_execution_steps": 19200,
+        "semantic_type_substitution_work": 4802,
+        "semantic_type_substitution_records": 4800,
+        "semantic_substitution_frames": 2400,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 50646,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    },
+    {
+      "N": 2400,
+      "trial": 7,
+      "facts": {
+        "semantic_specializations": 2400,
+        "template_body_transitions": 2400,
+        "semantic_constant_execution_hits": 2400,
+        "semantic_constant_execution_steps": 19200,
+        "semantic_type_substitution_work": 4802,
+        "semantic_type_substitution_records": 4800,
+        "semantic_substitution_frames": 2400,
+        "semantic_signature_work": 266,
+        "parsed_nodes": 50646,
+        "instructions": 83,
+        "operands": 139,
+        "prepared_instructions": 83,
+        "prepared_operands": 139,
+        "native_instructions": 272
+      }
+    }
+  ],
+  "object_identity": true,
+  "text_bytes": 1698
+}

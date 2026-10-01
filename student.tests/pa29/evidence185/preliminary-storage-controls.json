@@ -1,0 +1,1459 @@
+{
+  "compiler_sha256": "b113db3fa1c98383dab986035c87f7614d1453173b51c65e26bf9b463431e163",
+  "cases": [
+    {
+      "source": "student.tests/pa29/source185/abi-template.cpp",
+      "sha256": "57bc6c3adaf2794bce65ccdbf552e55370c65af9c3bc7a81408b91b9da90cd70",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/abi-template.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/abi-templatestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/abi-templatestudent.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/abi-templatestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/abi-templatestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/abi-template.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/abi-templateclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/abi-templateclang.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/abi-templateclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/abi-templateclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/abi-template.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/abi-template.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/abi.cpp",
+      "sha256": "156bda4e0a7db16ba974702da1d03b1ac50aadb71f9e0940cd5955339b99c847",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/abi.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/abistudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/support185/abi.host.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/abi.host.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/abistudent.o",
+            "/tmp/pa29-185/controls-extended/abi.host.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/abistudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/abistudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/abi.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/abiclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/support185/abi.host.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/abi.host.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/abiclang.o",
+            "/tmp/pa29-185/controls-extended/abi.host.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/abiclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/abiclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/abi.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/abi.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/bitfields.cpp",
+      "sha256": "4b0c715f976b96ef986ded62bedf2eb882cf1fc22b99a0842ceb35fb06998272",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitfields.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitfieldsstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitfields.cpp:3\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitfields.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitfieldsclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/bitfieldsclang.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitfieldsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/bitfieldsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitfields.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitfields.lowir"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitfields.cpp:3\n"
+        }
+      ],
+      "failure": "LowIR validation"
+    },
+    {
+      "source": "student.tests/pa29/source185/bitint-core.cpp",
+      "sha256": "1893347aca3b7898e010d17d90aee31dfde95528b9e8d3aa8b4a0034601f3af2",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitint-core.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-corestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/bitint-corestudent.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-corestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/bitint-corestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitint-core.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-coreclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/bitint-coreclang.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-coreclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/bitint-coreclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitint-core.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-core.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/bitint-limits.cpp",
+      "sha256": "d7078d51820bd568cefcdf6a9166781ef07830dbc20ecbf0688ac09e58c7f68c",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitint-limits.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-limitsstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/bitint-limitsstudent.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-limitsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/bitint-limitsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitint-limits.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-limitsclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/bitint-limitsclang.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-limitsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/bitint-limitsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitint-limits.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-limits.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/bitint-template.cpp",
+      "sha256": "70e58608151ce4b7f2a010546f97eb7bcbdc01a2453b30915229ef69dd3ff059",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitint-template.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-templatestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/bitint-templatestudent.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-templatestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/bitint-templatestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitint-template.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-templateclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/bitint-templateclang.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-templateclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/bitint-templateclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitint-template.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-template.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/bitint-wide.cpp",
+      "sha256": "28440022cf4a96ea5f9d20ec4c05f15b067e63a0f32be7f641e66ce312a95ed7",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitint-wide.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-widestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/bitint-widestudent.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-widestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/bitint-widestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitint-wide.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-wideclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/bitint-wideclang.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-wideclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/bitint-wideclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/bitint-wide.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/bitint-wide.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/constexpr-divide.reject.cpp",
+      "sha256": "fde74a5374a0bcc3f497d389a2ec190870df5f3d6189c3f232f81a2899e3108f",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/constexpr-divide.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/constexpr-divide.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: nonconstant constexpr initializer\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/constexpr-divide.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/constexpr-divide.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/constexpr-divide.reject.cpp:1:35: error: constexpr variable 'x' must be initialized by a constant expression\n    1 | using S = _BitInt(7); constexpr S x=S(-64)/S(-1);\n      |                                   ^ ~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/constexpr-divide.reject.cpp:1:43: note: value 64 is outside the range of representable values of type 'S' (aka '_BitInt(7)')\n    1 | using S = _BitInt(7); constexpr S x=S(-64)/S(-1);\n      |                                           ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/constexpr-shift.reject.cpp",
+      "sha256": "1b6b47014d82367e4d335fc93b98a3d4b5a9045f7fffaeac56b16e0861c1c0bf",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/constexpr-shift.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/constexpr-shift.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: nonconstant constexpr initializer\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/constexpr-shift.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/constexpr-shift.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/constexpr-shift.reject.cpp:1:44: error: constexpr variable 'x' must be initialized by a constant expression\n    1 | using U = unsigned _BitInt(7); constexpr U x=U(1)<<7;\n      |                                            ^ ~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/constexpr-shift.reject.cpp:1:50: note: shift count 7 >= width of type 'U' (aka 'unsigned _BitInt(7)') (7 bits)\n    1 | using U = unsigned _BitInt(7); constexpr U x=U(1)<<7;\n      |                                                  ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/dependent-bad-width.reject.cpp",
+      "sha256": "f6f7e1aadcdfb57e5c54c252315181309439e5b8783d712a6b48c61e7abf0e73",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/dependent-bad-width.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/dependent-bad-width.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid substituted declaration type\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/dependent-bad-width.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/dependent-bad-width.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/dependent-bad-width.reject.cpp:1:32: error: signed _BitInt must have a bit size of at least 2\n    1 | template<int N> struct Width { _BitInt(N) value; }; Width<1> x;\n      |                                ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/dependent-bad-width.reject.cpp:1:62: note: in instantiation of template class 'Width<1>' requested here\n    1 | template<int N> struct Width { _BitInt(N) value; }; Width<1> x;\n      |                                                              ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/exceptions.cpp",
+      "sha256": "e0592a9f87b6600b92f0dcd240f6adf983a001226677cf82ed84e44696f338a5",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/exceptions.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/exceptionsstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/exceptionsstudent.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/exceptionsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/exceptionsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/exceptions.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/exceptionsclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/exceptionsclang.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/exceptionsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/exceptionsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/exceptions.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/exceptions.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/overflow.reject.cpp",
+      "sha256": "b4f827b3e16fc4585ee71f0701efeaa285af8daa20cc824a0f2ce0504259031d",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/overflow.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/overflow.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: nonconstant constexpr initializer\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/overflow.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/overflow.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/overflow.reject.cpp:2:13: error: constexpr variable 'x' must be initialized by a constant expression\n    2 | constexpr S x = S(63)+S(1);\n      |             ^   ~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/overflow.reject.cpp:2:22: note: value 64 is outside the range of representable values of type 'S' (aka '_BitInt(7)')\n    2 | constexpr S x = S(63)+S(1);\n      |                      ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/padding.cpp",
+      "sha256": "d264d39e5f2982980b4076389d9b04b6badf959f0d511f7faa0fc0f15a848a1e",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/padding.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/paddingstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/paddingstudent.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/paddingstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/paddingstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/padding.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/paddingclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/paddingclang.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/paddingclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/paddingclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/padding.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/padding.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/signed-one.reject.cpp",
+      "sha256": "c00d87e9ec64fd14dbcd468c64a2eeb225ee16cb3d8f1807bdac5135e3b5a4d7",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/signed-one.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/signed-one.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid bit-integer width (supported range: signed 2..128, unsigned 1..128)\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/signed-one.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/signed-one.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/signed-one.reject.cpp:1:1: error: signed _BitInt must have a bit size of at least 2\n    1 | signed _BitInt(1) x;\n      | ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-deduction-expression.reject.cpp",
+      "sha256": "042dc17e86dfa133924b50ed6120390f31553e5d9d3f3f0cd3981ed9340f6211",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-deduction-expression.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-deduction-expression.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: no viable function\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-deduction-expression.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-deduction-expression.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-deduction-expression.reject.cpp:2:21: error: no matching function for call to 'f'\n    2 | int main() { return f((_BitInt(7))0); }\n      |                     ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-deduction-expression.reject.cpp:1:21: note: candidate template ignored: couldn't infer template argument 'N'\n    1 | template<int N> int f(_BitInt(N+1));\n      |                     ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-deduction-sign.reject.cpp",
+      "sha256": "50d58128d19a34e3540719f032765781d31d925c6672bde09d87c7ccf55cd193",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-deduction-sign.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-deduction-sign.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: no viable function\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-deduction-sign.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-deduction-sign.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-deduction-sign.reject.cpp:2:21: error: no matching function for call to 'f'\n    2 | int main() { return f((unsigned _BitInt(7))0); }\n      |                     ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-deduction-sign.reject.cpp:1:21: note: candidate template ignored: could not match '_BitInt(N)' against 'unsigned _BitInt(7)'\n    1 | template<int N> int f(_BitInt(N));\n      |                     ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-deduction.cpp",
+      "sha256": "3c1ba9c099cdae6b36bf8cbddee97e6d23e2149bdd8d9b82ff1f1d8380bc8e40",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-deduction.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-deductionstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/width-deductionstudent.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-deductionstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/width-deductionstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-deduction.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-deductionclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/tmp/pa29-185/controls-extended/width-deductionclang.o",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-deductionclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/tmp/pa29-185/controls-extended/width-deductionclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-deduction.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-deduction.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-duplicate.reject.cpp",
+      "sha256": "1c95542ec5b2b802a923c8ff048b8e944eb3a55c210b51a7bf9dad41454a74b6",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-duplicate.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-duplicate.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: duplicate bit-integer specifier\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-duplicate.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-duplicate.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-duplicate.reject.cpp:1:12: error: cannot combine with previous '_BitInt' declaration specifier\n    1 | _BitInt(3) _BitInt(5) x;\n      |            ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-enum.reject.cpp",
+      "sha256": "48ebafd08dad8baa28963ff9560298a769a0911db038b581cfae33076ad65660",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-enum.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-enum.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid bit-integer width (supported range: signed 2..128, unsigned 1..128)\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-enum.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-enum.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-enum.reject.cpp:1:39: error: integral constant expression must have integral or unscoped enumeration type, not 'Width'\n    1 | enum class Width { seven=7 }; _BitInt(Width::seven) x;\n      |                                       ^~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-float.reject.cpp",
+      "sha256": "33ab50d1c03420082fd778eca571910819f6c97b8d47d569fe78a4005b0818d1",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-float.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-float.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid bit-integer type specifiers\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-float.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-float.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-float.reject.cpp:1:7: error: cannot combine with previous 'float' declaration specifier\n    1 | float _BitInt(3) x;\n      |       ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-floating.reject.cpp",
+      "sha256": "f4378141774e81900f791e8774e3e399cde458f193e5a75277e18bb0ad088760",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-floating.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-floating.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid bit-integer width (supported range: signed 2..128, unsigned 1..128)\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-floating.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-floating.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-floating.reject.cpp:1:9: error: integral constant expression must have integral or unscoped enumeration type, not 'double'\n    1 | _BitInt(3.5) x;\n      |         ^~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-int.reject.cpp",
+      "sha256": "8c4266c0d96d92a0396233cddeec2c85a868ceae503170a02d3b643a3858a2f1",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-int.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-int.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid bit-integer type specifiers\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-int.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-int.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-int.reject.cpp:1:5: error: cannot combine with previous 'int' declaration specifier\n    1 | int _BitInt(3) x;\n      |     ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-long.reject.cpp",
+      "sha256": "8a32be6199ac89560f521c88c0e751545def3bcaff08706e246642d678cd0d81",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-long.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-long.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid bit-integer type specifiers\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-long.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-long.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-long.reject.cpp:1:1: error: 'long _BitInt' is invalid\n    1 | long _BitInt(3) x;\n      | ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-negative.reject.cpp",
+      "sha256": "fe6d6bb9141b845f716887d0567ddd73dd7d502dfa20ab88a7ae423486777053",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-negative.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-negative.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid bit-integer width (supported range: signed 2..128, unsigned 1..128)\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-negative.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-negative.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-negative.reject.cpp:1:1: error: signed _BitInt of bit sizes greater than 8388608 not supported\n    1 | _BitInt(-1) x;\n      | ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-nonconstant.reject.cpp",
+      "sha256": "588862ae8e99258e88086b09265bc054d33fb39bef257614e172e1cfe9d02c8d",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-nonconstant.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-nonconstant.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid bit-integer width (supported range: signed 2..128, unsigned 1..128)\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-nonconstant.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-nonconstant.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-nonconstant.reject.cpp:1:18: error: expression is not an integral constant expression\n    1 | int n=5; _BitInt(n) x;\n      |                  ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-nonconstant.reject.cpp:1:18: note: read of non-const variable 'n' is not allowed in a constant expression\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-nonconstant.reject.cpp:1:5: note: declared here\n    1 | int n=5; _BitInt(n) x;\n      |     ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-signs.reject.cpp",
+      "sha256": "7eaabffbb80f50d4dd603085a6c225e800dd5a11f3a4c8c75b08a1ae03c07d0d",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-signs.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-signs.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid bit-integer type specifiers\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-signs.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-signs.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-signs.reject.cpp:1:8: error: cannot combine with previous 'signed' declaration specifier\n    1 | signed unsigned _BitInt(3) x;\n      |        ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-unequal-reference.reject.cpp",
+      "sha256": "bba48b2f5b0fb2f1f57c18df621a103a6cf38fb12fdbf558ab90328be3926a4c",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-unequal-reference.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-unequal-reference.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: no viable function\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-unequal-reference.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-unequal-reference.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-unequal-reference.reject.cpp:2:30: error: no matching function for call to 'f'\n    2 | int main() { _BitInt(8) x=0; f(x); }\n      |                              ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-unequal-reference.reject.cpp:1:6: note: candidate function not viable: no known conversion from '_BitInt(8)' to '_BitInt(7) &' for 1st argument\n    1 | void f(_BitInt(7)&);\n      |      ^ ~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source185/width-zero.reject.cpp",
+      "sha256": "396e7891e452548361b34f0b66304395b1fca0c88411d9bc7b2bb8bb68740d67",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-zero.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-zero.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid bit-integer width (supported range: signed 2..128, unsigned 1..128)\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-zero.reject.cpp",
+            "-o",
+            "/tmp/pa29-185/controls-extended/width-zero.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source185/width-zero.reject.cpp:1:1: error: signed _BitInt must have a bit size of at least 2\n    1 | _BitInt(0) x;\n      | ^\n1 error generated.\n"
+        }
+      ]
+    }
+  ]
+}
