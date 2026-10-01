@@ -1,11 +1,23 @@
-# PA29 compact plan — implementation180
+# PA29 compact plan — implementation181
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `667edd800e4e5eb1b1ef92a3108da3bd96c51708`.
 Previous reviewed commit: `7139ceb5769eea12c6e2e00b54932f09d59c79b5`.
-Entry HEAD: `259329eec6b08718a059b5198cb32b4f5b5ac17f`.
+Entry HEAD: `c0efbf2992a9e58dbaa2d1e7300496012eed5988`.
 Code tip: `f613c5549812dd306d6e7a97ead04c944283db22`.
+
+## Active group181
+
+Entry: **387/403**, 16 failures; previous turn made validated progress.
+Owner: canonical array extent and its layout/lifetime consumers. Separate a
+known zero bound from an absent bound in the interned type; propagate the fact
+through cv/signatures, substitution/deduction, initialization, size/alignment,
+ABI and zero-element lifecycle emission. Keep work proportional to type edges
+and actual elements, with no source replay or auxiliary lookup by spelling.
+Validate required member fixture, personal scalar/class/template/ABI controls,
+prior suites, file audit and four-dimensional A/A+ABBA evidence. Extend through
+related defects found along those consumers before handing off.
 
 ## Design and spec alignment
 
