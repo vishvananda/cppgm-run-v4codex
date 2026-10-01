@@ -1,0 +1,7 @@
+{
+  "note": "Preliminary audit control had an incorrect hand-calculated expected sum; corrected before the final frozen entry/final comparison. No course test was changed.",
+  "original_overlay_retirement_source": "struct P {int* a;int* b;};\nconstexpr int read(const P& p){return *p.a+*p.b;}\nconstexpr int work(){int a=1,b=2,c=3;P p={&a,&b};int sum=0;\nfor(int i=0;i<20;++i){p.b=&c;sum+=read(p);p={&b,&a};p.a=&c;sum+=read(p);c+=1;}\nreturn sum;}\nstatic_assert(work()==540,\"retired overlays do not leave stale dependencies\");\nint main(){return work()!=540;}\n",
+  "correct_original_sum": 559,
+  "final_control_change": "Reset p at each loop start, so the existing expected 540 is correct.",
+  "final_comparison": "entry-controls-final.json versus controls170.json; identical input hashes"
+}

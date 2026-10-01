@@ -1,0 +1,60 @@
+{
+  "code_tip": "221d6d0e4930da05db2913bdf5f50d808f89c744",
+  "previous_review": "f07f78236eb475648834ed78afbca6c864f64408",
+  "entry": "ecb69d94227d60653a7874f9daea63be8a202840",
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "affinity": [
+    0
+  ],
+  "binaries": {
+    "reviewed": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/implementation167/entry-cppgm++",
+      "sha256": "580d2142a9f7b5914981ce90f0aa0710b4c84a545b127aa1d24a1cef155f78f5",
+      "bytes": 4078728
+    },
+    "entry": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit170/entry-cppgm++",
+      "sha256": "c32d9d5fd263397d87c23171ee73ec80250d8869967b9456c40d2baa9990e63a",
+      "bytes": 4109760
+    },
+    "final": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit170/final-cppgm++",
+      "sha256": "903311489c421c043e4c1c4e998b660d9d76de23e52d69eca7b025944606e50b",
+      "bytes": 4109848
+    }
+  },
+  "flags": {
+    "common": [
+      "-O0",
+      "-c",
+      "--stats"
+    ],
+    "affected": [
+      "-std=c++14",
+      "-O0",
+      "-c",
+      "--stats"
+    ]
+  },
+  "scripts": {
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "student.tests/pa29/performance170.py": "1a601a8df947897ceb81f33f799e311dc3ade4e83a07982b86a90e8949d5e1f5"
+  },
+  "series": {
+    "cumulative-performance": {
+      "observations": 224,
+      "sha256": "7470292f85b8ad8f130e0477e31a3cffe8ff887b35d5d74e88cd2b7bd3f0ebf2"
+    },
+    "audit-performance": {
+      "observations": 224,
+      "sha256": "8721a59848be21e78a367d3b5e124eb41a8a1297eade00e8657e46931127fef5"
+    },
+    "affected-performance": {
+      "observations": 936,
+      "sha256": "3c5337a4e1210713aa50e46519f4e459e8411232b32b7ee3aa12260a154cd868"
+    }
+  },
+  "optional_work_budget": 0,
+  "optional_growth_budget": 0,
+  "protocol": "Four A/A observations then six ABBA blocks per equivalent workload/mode. Audit-only capabilities use eight samples per size/mode and six launchers. No builds or correctness suites overlap timing; documentation/evidence collection and external scheduling are uncontrolled. All observations retained."
+}

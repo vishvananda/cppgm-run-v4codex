@@ -1,0 +1,24 @@
+{
+  "code_tip": "221d6d0e4930da05db2913bdf5f50d808f89c744",
+  "reviewed_commit_count": 13,
+  "implementation_path_count": 72,
+  "required_exit_statuses": {
+    "stage": 2,
+    "prior": 0,
+    "through": 2,
+    "file_audit": 0
+  },
+  "stageProgressPreserved": true,
+  "stage_failures_before": 42,
+  "stage_failures_after": 42,
+  "stage_total": 403,
+  "prior_passing": 4538,
+  "reference_changes": [],
+  "harness_changes": [],
+  "source_and_binary_match_validated_manifest": true,
+  "review_markers_match_code_tip": true,
+  "local_links_resolve": true,
+  "source_edits_after_code_commit": false,
+  "performance_observations": 1384,
+  "performance_launcher_observations": 6
+}

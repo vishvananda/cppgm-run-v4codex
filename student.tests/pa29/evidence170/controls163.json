@@ -1,0 +1,678 @@
+{
+  "compiler_sha256": "903311489c421c043e4c1c4e998b660d9d76de23e52d69eca7b025944606e50b",
+  "checks": [
+    {
+      "name": "assembly compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls163/assembly.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly stats",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls163/assembly.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/stats.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": "{\"tokens\":638,\"max_pending\":5,\"node_growths\":10,\"delimiter_work\":638,\"asm_source_statements\":23,\"asm_source_instructions\":29,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_ms\":0.507515,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":704,\"semantic_fact_records\":270,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":25464,\"semantic_template_declaration_work\":2,\"semantic_declaration_publications\":3,\"semantic_dependence_work\":15,\"semantic_specializations\":3,\"semantic_type_substitution_work\":12,\"semantic_type_substitution_hits\":5,\"semantic_type_substitution_records\":7,\"semantic_substitution_frames\":3,\"semantic_template_type_work\":0,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":0,\"semantic_template_signature_work\":0,\"semantic_template_signature_uses\":0,\"semantic_parameter_publications\":3,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":0,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":3,\"semantic_body_checks\":6,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":6,\"semantic_statement_conversion_work\":0,\"semantic_statement_conversion_uses\":0,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":0,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":0,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":1,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":0,\"semantic_initializer_recipe_uses\":0,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":0,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":0,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":0,\"semantic_type_query_work\":0,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":3,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":24,\"semantic_template_parameter_check_work\":53,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":5,\"semantic_template_fixed_expressions\":0,\"semantic_template_fixed_uses\":0,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":0,\"semantic_template_member_uses\":0,\"parsed_nodes\":622,\"template_occurrences\":82,\"template_deferred_regions\":3,\"template_demanded_regions\":3,\"template_source_regions\":4,\"template_region_nodes\":53,\"template_region_roots\":2,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":3,\"semantic_argument_packs\":13,\"semantic_object_uses\":0,\"semantic_expression_facts\":181,\"semantic_expression_uses\":178,\"semantic_expression_slots\":704,\"semantic_expression_inherited\":0,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":5,\"semantic_constructor_actions\":0,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":0,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":0,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":10,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":0,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":0,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":0,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":0,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":0,\"semantic_expression_work\":159,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":5,\"semantic_conversion_work\":117,\"semantic_conversions\":120,\"semantic_entity_bytes\":120,\"semantic_class_facts\":1,\"semantic_constants\":11,\"semantic_value_queries\":0,\"semantic_value_query_work\":0,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":30,\"semantic_entities\":41,\"semantic_scopes\":63,\"semantic_edges\":0,\"semantic_declarations\":29,\"semantic_regions\":17,\"semantic_lookup_work\":157,\"semantic_signature_work\":24,\"semantic_template_signature_shape_work\":5,\"semantic_template_signature_shape_hits\":4,\"semantic_type_probes\":206,\"semantic_constant_work\":11,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":0,\"exception_work\":0,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":12,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":2.61946,\"lowering_ms\":0.32313,\"peak_rss_kib\":17668,\"nodes\":704,\"static_requests\":0,\"static_hits\":0,\"control_work\":124,\"discard_work\":0,\"full_expression_work\":229,\"full_expression_regions\":0,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":17,\"abi_bytes\":1736,\"instructions\":274,\"operands\":419,\"ir_pool_growths\":74,\"ir_capacity_bytes\":62704}\n{\"driver_ms\":5.17333,\"peak_rss_kib\":17668,\"text_bytes\":1443,\"native_functions\":6,\"native_instructions\":326,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.246398,\"encoding_ms\":0.046116}\n"
+    },
+    {
+      "name": "assembly telemetry equality",
+      "passed": true
+    },
+    {
+      "name": "assembly IR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls163/assembly.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly.lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly IR equality",
+      "passed": true
+    },
+    {
+      "name": "assembly MIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly.mir",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly.lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly native runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/native"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly disassembly",
+      "args": [
+        "objdump",
+        "-drC",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "\n/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly.o:     file format elf64-x86-64\n\n\nDisassembly of section .text:\n\n0000000000000000 <locate(int&)>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t4c 63 05 00 00 00 00 \tmovslq 0x0(%rip),%r8        # b <locate(int&)+0xb>\n\t\t\t7: R_X86_64_PC32\tevaluations-0x4\n   b:\t41 83 c0 01          \tadd    $0x1,%r8d\n   f:\t4d 63 c0             \tmovslq %r8d,%r8\n  12:\t44 89 05 00 00 00 00 \tmov    %r8d,0x0(%rip)        # 19 <locate(int&)+0x19>\n\t\t\t15: R_X86_64_PC32\tevaluations-0x4\n  19:\t48 89 f8             \tmov    %rdi,%rax\n  1c:\te9 00 00 00 00       \tjmp    21 <locate(int&)+0x21>\n  21:\tc9                   \tleave\n  22:\tc3                   \tret\n\n0000000000000023 <input(int)>:\n  23:\t55                   \tpush   %rbp\n  24:\t48 89 e5             \tmov    %rsp,%rbp\n  27:\t48 63 ff             \tmovslq %edi,%rdi\n  2a:\t4c 63 05 00 00 00 00 \tmovslq 0x0(%rip),%r8        # 31 <input(int)+0xe>\n\t\t\t2d: R_X86_64_PC32\tevaluations-0x4\n  31:\t41 83 c0 01          \tadd    $0x1,%r8d\n  35:\t4d 63 c0             \tmovslq %r8d,%r8\n  38:\t44 89 05 00 00 00 00 \tmov    %r8d,0x0(%rip)        # 3f <input(int)+0x1c>\n\t\t\t3b: R_X86_64_PC32\tevaluations-0x4\n  3f:\t48 89 f8             \tmov    %rdi,%rax\n  42:\te9 00 00 00 00       \tjmp    47 <input(int)+0x24>\n  47:\tc9                   \tleave\n  48:\tc3                   \tret\n\n0000000000000049 <main>:\n  49:\t55                   \tpush   %rbp\n  4a:\t48 89 e5             \tmov    %rsp,%rbp\n  4d:\t48 81 ec 70 00 00 00 \tsub    $0x70,%rsp\n  54:\t48 89 5d 98          \tmov    %rbx,-0x68(%rbp)\n  58:\t4c 89 65 90          \tmov    %r12,-0x70(%rbp)\n  5c:\t90                   \tnop\n  5d:\tf3 90                \tpause\n  5f:\tf3 90                \tpause\n  61:\t0f ae f0             \tmfence\n  64:\tbf 78 56 34 12       \tmov    $0x12345678,%edi\n  69:\te8 00 00 00 00       \tcall   6e <main+0x25>\n\t\t\t6a: R_X86_64_PLT32\tunsigned int swap_bytes<unsigned int>(unsigned int)-0x4\n  6e:\t8b c0                \tmov    %eax,%eax\n  70:\t81 f8 12 34 56 78    \tcmp    $0x78563412,%eax\n  76:\t0f 85 05 00 00 00    \tjne    81 <main+0x38>\n  7c:\te9 0a 00 00 00       \tjmp    8b <main+0x42>\n  81:\tb8 01 00 00 00       \tmov    $0x1,%eax\n  86:\te9 9a 04 00 00       \tjmp    525 <main+0x4dc>\n  8b:\t48 bf ef cd ab 89 67 \tmovabs $0x123456789abcdef,%rdi\n  92:\t45 23 01 \n  95:\te8 00 00 00 00       \tcall   9a <main+0x51>\n\t\t\t96: R_X86_64_PLT32\tunsigned long swap_bytes<unsigned long>(unsigned long)-0x4\n  9a:\t49 bb 01 23 45 67 89 \tmovabs $0xefcdab8967452301,%r11\n  a1:\tab cd ef \n  a4:\t4c 39 d8             \tcmp    %r11,%rax\n  a7:\t0f 85 05 00 00 00    \tjne    b2 <main+0x69>\n  ad:\te9 0a 00 00 00       \tjmp    bc <main+0x73>\n  b2:\tb8 02 00 00 00       \tmov    $0x2,%eax\n  b7:\te9 69 04 00 00       \tjmp    525 <main+0x4dc>\n  bc:\tc7 45 f8 07 00 00 00 \tmovl   $0x7,-0x8(%rbp)\n  c3:\t48 8d 7d f8          \tlea    -0x8(%rbp),%rdi\n  c7:\te8 00 00 00 00       \tcall   cc <main+0x83>\n\t\t\tc8: R_X86_64_PLT32\tlocate(int&)-0x4\n  cc:\t48 89 c3             \tmov    %rax,%rbx\n  cf:\t4c 63 23             \tmovslq (%rbx),%r12\n  d2:\tbf 04 00 00 00       \tmov    $0x4,%edi\n  d7:\te8 00 00 00 00       \tcall   dc <main+0x93>\n\t\t\td8: R_X86_64_PLT32\tinput(int)-0x4\n  dc:\t48 63 c0             \tmovslq %eax,%rax\n  df:\t49 89 c0             \tmov    %rax,%r8\n  e2:\t45 01 c4             \tadd    %r8d,%r12d\n  e5:\t4d 63 e4             \tmovslq %r12d,%r12\n  e8:\t41 f7 dc             \tneg    %r12d\n  eb:\t4d 63 e4             \tmovslq %r12d,%r12\n  ee:\t41 f7 d4             \tnot    %r12d\n  f1:\t4d 63 e4             \tmovslq %r12d,%r12\n  f4:\t44 89 23             \tmov    %r12d,(%rbx)\n  f7:\t4c 63 45 f8          \tmovslq -0x8(%rbp),%r8\n  fb:\t41 83 f8 0a          \tcmp    $0xa,%r8d\n  ff:\t0f 85 16 00 00 00    \tjne    11b <main+0xd2>\n 105:\t4c 63 05 00 00 00 00 \tmovslq 0x0(%rip),%r8        # 10c <main+0xc3>\n\t\t\t108: R_X86_64_PC32\tevaluations-0x4\n 10c:\t41 83 f8 02          \tcmp    $0x2,%r8d\n 110:\t0f 85 05 00 00 00    \tjne    11b <main+0xd2>\n 116:\te9 0a 00 00 00       \tjmp    125 <main+0xdc>\n 11b:\tb8 03 00 00 00       \tmov    $0x3,%eax\n 120:\te9 00 04 00 00       \tjmp    525 <main+0x4dc>\n 125:\tc7 45 f0 00 00 00 00 \tmovl   $0x0,-0x10(%rbp)\n 12c:\t4c 63 45 f8          \tmovslq -0x8(%rbp),%r8\n 130:\t41 83 e8 03          \tsub    $0x3,%r8d\n 134:\t4d 63 c0             \tmovslq %r8d,%r8\n 137:\t44 89 45 f0          \tmov    %r8d,-0x10(%rbp)\n 13b:\t4c 63 45 f0          \tmovslq -0x10(%rbp),%r8\n 13f:\t41 83 f8 07          \tcmp    $0x7,%r8d\n 143:\t0f 85 05 00 00 00    \tjne    14e <main+0x105>\n 149:\te9 0a 00 00 00       \tjmp    158 <main+0x10f>\n 14e:\tb8 04 00 00 00       \tmov    $0x4,%eax\n 153:\te9 cd 03 00 00       \tjmp    525 <main+0x4dc>\n 158:\t4c 63 45 f8          \tmovslq -0x8(%rbp),%r8\n 15c:\t41 83 c0 01          \tadd    $0x1,%r8d\n 160:\t4d 63 c0             \tmovslq %r8d,%r8\n 163:\t44 89 45 f0          \tmov    %r8d,-0x10(%rbp)\n 167:\t4c 63 45 f0          \tmovslq -0x10(%rbp),%r8\n 16b:\t41 83 f8 0b          \tcmp    $0xb,%r8d\n 16f:\t0f 85 05 00 00 00    \tjne    17a <main+0x131>\n 175:\te9 0a 00 00 00       \tjmp    184 <main+0x13b>\n 17a:\tb8 05 00 00 00       \tmov    $0x5,%eax\n 17f:\te9 a1 03 00 00       \tjmp    525 <main+0x4dc>\n 184:\t48 8d 7d f8          \tlea    -0x8(%rbp),%rdi\n 188:\te8 00 00 00 00       \tcall   18d <main+0x144>\n\t\t\t189: R_X86_64_PLT32\tvoid increment<int>(int&)-0x4\n 18d:\t4c 63 45 f8          \tmovslq -0x8(%rbp),%r8\n 191:\t41 83 f8 0b          \tcmp    $0xb,%r8d\n 195:\t0f 85 05 00 00 00    \tjne    1a0 <main+0x157>\n 19b:\te9 0a 00 00 00       \tjmp    1aa <main+0x161>\n 1a0:\tb8 06 00 00 00       \tmov    $0x6,%eax\n 1a5:\te9 7b 03 00 00       \tjmp    525 <main+0x4dc>\n 1aa:\tc6 45 e8 55          \tmovb   $0x55,-0x18(%rbp)\n 1ae:\t4c 0f b6 45 e8       \tmovzbq -0x18(%rbp),%r8\n 1b3:\t44 88 45 e0          \tmov    %r8b,-0x20(%rbp)\n 1b7:\t4c 0f b6 45 e0       \tmovzbq -0x20(%rbp),%r8\n 1bc:\t41 f6 d0             \tnot    %r8b\n 1bf:\t4d 0f b6 c0          \tmovzbq %r8b,%r8\n 1c3:\t48 8d 4d e8          \tlea    -0x18(%rbp),%rcx\n 1c7:\t4c 8d 5d e0          \tlea    -0x20(%rbp),%r11\n 1cb:\t49 0f b6 03          \tmovzbq (%r11),%rax\n 1cf:\t4d 89 c2             \tmov    %r8,%r10\n 1d2:\tf0 44 0f b0 11       \tlock cmpxchg %r10b,(%rcx)\n 1d7:\t41 0f 94 c2          \tsete   %r10b\n 1db:\t4d 0f b6 d2          \tmovzbq %r10b,%r10\n 1df:\t0f 84 03 00 00 00    \tje     1e8 <main+0x19f>\n 1e5:\t41 88 03             \tmov    %al,(%r11)\n 1e8:\t4d 89 d1             \tmov    %r10,%r9\n 1eb:\t4d 85 c9             \ttest   %r9,%r9\n 1ee:\t0f 85 05 00 00 00    \tjne    1f9 <main+0x1b0>\n 1f4:\te9 be ff ff ff       \tjmp    1b7 <main+0x16e>\n 1f9:\t4c 0f b6 45 e8       \tmovzbq -0x18(%rbp),%r8\n 1fe:\t4d 0f b6 c8          \tmovzbq %r8b,%r9\n 202:\t41 81 f9 aa 00 00 00 \tcmp    $0xaa,%r9d\n 209:\t0f 85 05 00 00 00    \tjne    214 <main+0x1cb>\n 20f:\te9 0a 00 00 00       \tjmp    21e <main+0x1d5>\n 214:\tb8 07 00 00 00       \tmov    $0x7,%eax\n 219:\te9 07 03 00 00       \tjmp    525 <main+0x4dc>\n 21e:\t66 c7 45 d8 7b 00    \tmovw   $0x7b,-0x28(%rbp)\n 224:\t41 b8 01 00 00 00    \tmov    $0x1,%r8d\n 22a:\t66 41 f7 d8          \tneg    %r8w\n 22e:\t4d 0f bf c0          \tmovswq %r8w,%r8\n 232:\t4d 89 c2             \tmov    %r8,%r10\n 235:\tf0 66 44 0f c1 55 d8 \tlock xadd %r10w,-0x28(%rbp)\n 23c:\t66 45 01 c2          \tadd    %r8w,%r10w\n 240:\t4d 0f bf d2          \tmovswq %r10w,%r10\n 244:\t4d 89 d1             \tmov    %r10,%r9\n 247:\t4c 0f bf 45 d8       \tmovswq -0x28(%rbp),%r8\n 24c:\t4d 0f bf c8          \tmovswq %r8w,%r9\n 250:\t41 83 f9 7a          \tcmp    $0x7a,%r9d\n 254:\t0f 85 05 00 00 00    \tjne    25f <main+0x216>\n 25a:\te9 0a 00 00 00       \tjmp    269 <main+0x220>\n 25f:\tb8 08 00 00 00       \tmov    $0x8,%eax\n 264:\te9 bc 02 00 00       \tjmp    525 <main+0x4dc>\n 269:\t48 c7 45 d0 64 00 00 \tmovq   $0x64,-0x30(%rbp)\n 270:\t00 \n 271:\t41 ba 11 00 00 00    \tmov    $0x11,%r10d\n 277:\tf0 4c 0f c1 55 d0    \tlock xadd %r10,-0x30(%rbp)\n 27d:\t49 83 c2 11          \tadd    $0x11,%r10\n 281:\t4d 89 d0             \tmov    %r10,%r8\n 284:\t4c 8b 45 d0          \tmov    -0x30(%rbp),%r8\n 288:\t4c 89 45 c8          \tmov    %r8,-0x38(%rbp)\n 28c:\t4c 8b 45 c8          \tmov    -0x38(%rbp),%r8\n 290:\t49 83 f0 0f          \txor    $0xf,%r8\n 294:\t48 8d 4d d0          \tlea    -0x30(%rbp),%rcx\n 298:\t4c 8d 5d c8          \tlea    -0x38(%rbp),%r11\n 29c:\t49 8b 03             \tmov    (%r11),%rax\n 29f:\t4d 89 c2             \tmov    %r8,%r10\n 2a2:\tf0 4c 0f b1 11       \tlock cmpxchg %r10,(%rcx)\n 2a7:\t41 0f 94 c2          \tsete   %r10b\n 2ab:\t4d 0f b6 d2          \tmovzbq %r10b,%r10\n 2af:\t0f 84 03 00 00 00    \tje     2b8 <main+0x26f>\n 2b5:\t49 89 03             \tmov    %rax,(%r11)\n 2b8:\t4d 89 d1             \tmov    %r10,%r9\n 2bb:\t4d 85 c9             \ttest   %r9,%r9\n 2be:\t0f 85 05 00 00 00    \tjne    2c9 <main+0x280>\n 2c4:\te9 c3 ff ff ff       \tjmp    28c <main+0x243>\n 2c9:\t4c 8b 45 d0          \tmov    -0x30(%rbp),%r8\n 2cd:\t41 b9 75 00 00 00    \tmov    $0x75,%r9d\n 2d3:\t49 83 f1 0f          \txor    $0xf,%r9\n 2d7:\t4d 39 c8             \tcmp    %r9,%r8\n 2da:\t0f 85 05 00 00 00    \tjne    2e5 <main+0x29c>\n 2e0:\te9 0a 00 00 00       \tjmp    2ef <main+0x2a6>\n 2e5:\tb8 09 00 00 00       \tmov    $0x9,%eax\n 2ea:\te9 36 02 00 00       \tjmp    525 <main+0x4dc>\n 2ef:\tc7 45 c0 15 00 00 00 \tmovl   $0x15,-0x40(%rbp)\n 2f6:\t4c 63 45 c0          \tmovslq -0x40(%rbp),%r8\n 2fa:\t4d 89 c2             \tmov    %r8,%r10\n 2fd:\t44 87 55 f8          \txchg   %r10d,-0x8(%rbp)\n 301:\t4d 63 d2             \tmovslq %r10d,%r10\n 304:\t4d 89 d1             \tmov    %r10,%r9\n 307:\t44 89 4d c0          \tmov    %r9d,-0x40(%rbp)\n 30b:\t4c 63 45 f8          \tmovslq -0x8(%rbp),%r8\n 30f:\t41 83 f8 15          \tcmp    $0x15,%r8d\n 313:\t0f 85 13 00 00 00    \tjne    32c <main+0x2e3>\n 319:\t4c 63 45 c0          \tmovslq -0x40(%rbp),%r8\n 31d:\t41 83 f8 0b          \tcmp    $0xb,%r8d\n 321:\t0f 85 05 00 00 00    \tjne    32c <main+0x2e3>\n 327:\te9 0a 00 00 00       \tjmp    336 <main+0x2ed>\n 32c:\tb8 0a 00 00 00       \tmov    $0xa,%eax\n 331:\te9 ef 01 00 00       \tjmp    525 <main+0x4dc>\n 336:\tc7 45 c0 05 00 00 00 \tmovl   $0x5,-0x40(%rbp)\n 33d:\t4c 63 45 c0          \tmovslq -0x40(%rbp),%r8\n 341:\t4d 89 c2             \tmov    %r8,%r10\n 344:\tf0 44 0f c1 55 f8    \tlock xadd %r10d,-0x8(%rbp)\n 34a:\t45 01 c2             \tadd    %r8d,%r10d\n 34d:\t4d 63 d2             \tmovslq %r10d,%r10\n 350:\t4d 89 d1             \tmov    %r10,%r9\n 353:\t45 29 c1             \tsub    %r8d,%r9d\n 356:\t4d 63 c9             \tmovslq %r9d,%r9\n 359:\t44 89 4d c0          \tmov    %r9d,-0x40(%rbp)\n 35d:\t4c 63 45 f8          \tmovslq -0x8(%rbp),%r8\n 361:\t41 83 f8 1a          \tcmp    $0x1a,%r8d\n 365:\t0f 85 13 00 00 00    \tjne    37e <main+0x335>\n 36b:\t4c 63 45 c0          \tmovslq -0x40(%rbp),%r8\n 36f:\t41 83 f8 15          \tcmp    $0x15,%r8d\n 373:\t0f 85 05 00 00 00    \tjne    37e <main+0x335>\n 379:\te9 0a 00 00 00       \tjmp    388 <main+0x33f>\n 37e:\tb8 0b 00 00 00       \tmov    $0xb,%eax\n 383:\te9 9d 01 00 00       \tjmp    525 <main+0x4dc>\n 388:\t4c 63 45 f8          \tmovslq -0x8(%rbp),%r8\n 38c:\t41 83 e0 0f          \tand    $0xf,%r8d\n 390:\t4d 63 c0             \tmovslq %r8d,%r8\n 393:\t41 83 c8 20          \tor     $0x20,%r8d\n 397:\t4d 63 c0             \tmovslq %r8d,%r8\n 39a:\t41 83 f0 02          \txor    $0x2,%r8d\n 39e:\t4d 63 c0             \tmovslq %r8d,%r8\n 3a1:\t44 89 45 f8          \tmov    %r8d,-0x8(%rbp)\n 3a5:\t4c 63 45 f8          \tmovslq -0x8(%rbp),%r8\n 3a9:\t41 83 f8 28          \tcmp    $0x28,%r8d\n 3ad:\t0f 85 05 00 00 00    \tjne    3b8 <main+0x36f>\n 3b3:\te9 0a 00 00 00       \tjmp    3c2 <main+0x379>\n 3b8:\tb8 0c 00 00 00       \tmov    $0xc,%eax\n 3bd:\te9 63 01 00 00       \tjmp    525 <main+0x4dc>\n 3c2:\tc7 45 b8 05 00 00 00 \tmovl   $0x5,-0x48(%rbp)\n 3c9:\t4c 63 45 b8          \tmovslq -0x48(%rbp),%r8\n 3cd:\t4c 63 45 b8          \tmovslq -0x48(%rbp),%r8\n 3d1:\t41 b9 0c 00 00 00    \tmov    $0xc,%r9d\n 3d7:\t45 01 c1             \tadd    %r8d,%r9d\n 3da:\t4d 63 c9             \tmovslq %r9d,%r9\n 3dd:\t44 89 4d b8          \tmov    %r9d,-0x48(%rbp)\n 3e1:\t4c 63 45 b8          \tmovslq -0x48(%rbp),%r8\n 3e5:\t41 83 f8 11          \tcmp    $0x11,%r8d\n 3e9:\t0f 85 05 00 00 00    \tjne    3f4 <main+0x3ab>\n 3ef:\te9 0a 00 00 00       \tjmp    3fe <main+0x3b5>\n 3f4:\tb8 0d 00 00 00       \tmov    $0xd,%eax\n 3f9:\te9 27 01 00 00       \tjmp    525 <main+0x4dc>\n 3fe:\tc7 45 b0 03 00 00 00 \tmovl   $0x3,-0x50(%rbp)\n 405:\tc7 45 a8 00 00 00 00 \tmovl   $0x0,-0x58(%rbp)\n 40c:\t4c 63 45 b0          \tmovslq -0x50(%rbp),%r8\n 410:\t44 89 45 a8          \tmov    %r8d,-0x58(%rbp)\n 414:\t4c 63 45 a8          \tmovslq -0x58(%rbp),%r8\n 418:\t41 83 f8 03          \tcmp    $0x3,%r8d\n 41c:\t0f 85 05 00 00 00    \tjne    427 <main+0x3de>\n 422:\te9 0a 00 00 00       \tjmp    431 <main+0x3e8>\n 427:\tb8 0e 00 00 00       \tmov    $0xe,%eax\n 42c:\te9 f4 00 00 00       \tjmp    525 <main+0x4dc>\n 431:\t4c 63 45 a8          \tmovslq -0x58(%rbp),%r8\n 435:\t44 89 45 b0          \tmov    %r8d,-0x50(%rbp)\n 439:\t4c 63 45 b0          \tmovslq -0x50(%rbp),%r8\n 43d:\t41 83 f8 03          \tcmp    $0x3,%r8d\n 441:\t0f 85 05 00 00 00    \tjne    44c <main+0x403>\n 447:\te9 0a 00 00 00       \tjmp    456 <main+0x40d>\n 44c:\tb8 0f 00 00 00       \tmov    $0xf,%eax\n 451:\te9 cf 00 00 00       \tjmp    525 <main+0x4dc>\n 456:\t4c 63 45 a8          \tmovslq -0x58(%rbp),%r8\n 45a:\t41 83 c0 01          \tadd    $0x1,%r8d\n 45e:\t4d 63 c0             \tmovslq %r8d,%r8\n 461:\t44 89 45 f0          \tmov    %r8d,-0x10(%rbp)\n 465:\t4c 63 45 f0          \tmovslq -0x10(%rbp),%r8\n 469:\t41 83 f8 04          \tcmp    $0x4,%r8d\n 46d:\t0f 85 05 00 00 00    \tjne    478 <main+0x42f>\n 473:\te9 0a 00 00 00       \tjmp    482 <main+0x439>\n 478:\tb8 10 00 00 00       \tmov    $0x10,%eax\n 47d:\te9 a3 00 00 00       \tjmp    525 <main+0x4dc>\n 482:\t4c 63 45 f0          \tmovslq -0x10(%rbp),%r8\n 486:\t45 01 c0             \tadd    %r8d,%r8d\n 489:\t4d 63 c0             \tmovslq %r8d,%r8\n 48c:\t44 89 45 f0          \tmov    %r8d,-0x10(%rbp)\n 490:\t4c 63 45 f0          \tmovslq -0x10(%rbp),%r8\n 494:\t41 83 f8 08          \tcmp    $0x8,%r8d\n 498:\t0f 85 05 00 00 00    \tjne    4a3 <main+0x45a>\n 49e:\te9 0a 00 00 00       \tjmp    4ad <main+0x464>\n 4a3:\tb8 11 00 00 00       \tmov    $0x11,%eax\n 4a8:\te9 78 00 00 00       \tjmp    525 <main+0x4dc>\n 4ad:\t4c 63 45 f0          \tmovslq -0x10(%rbp),%r8\n 4b1:\t4d 89 c2             \tmov    %r8,%r10\n 4b4:\t44 87 55 b0          \txchg   %r10d,-0x50(%rbp)\n 4b8:\t4d 63 d2             \tmovslq %r10d,%r10\n 4bb:\t4d 89 d1             \tmov    %r10,%r9\n 4be:\t44 89 4d f0          \tmov    %r9d,-0x10(%rbp)\n 4c2:\t4c 63 45 b0          \tmovslq -0x50(%rbp),%r8\n 4c6:\t41 83 f8 08          \tcmp    $0x8,%r8d\n 4ca:\t0f 85 13 00 00 00    \tjne    4e3 <main+0x49a>\n 4d0:\t4c 63 45 f0          \tmovslq -0x10(%rbp),%r8\n 4d4:\t41 83 f8 03          \tcmp    $0x3,%r8d\n 4d8:\t0f 85 05 00 00 00    \tjne    4e3 <main+0x49a>\n 4de:\te9 0a 00 00 00       \tjmp    4ed <main+0x4a4>\n 4e3:\tb8 12 00 00 00       \tmov    $0x12,%eax\n 4e8:\te9 38 00 00 00       \tjmp    525 <main+0x4dc>\n 4ed:\tc7 45 a0 00 00 00 00 \tmovl   $0x0,-0x60(%rbp)\n 4f4:\tc7 45 a0 ff ef cd ab \tmovl   $0xabcdefff,-0x60(%rbp)\n 4fb:\t44 8b 45 a0          \tmov    -0x60(%rbp),%r8d\n 4ff:\t41 81 f8 ff ef cd ab \tcmp    $0xabcdefff,%r8d\n 506:\t0f 85 05 00 00 00    \tjne    511 <main+0x4c8>\n 50c:\te9 0a 00 00 00       \tjmp    51b <main+0x4d2>\n 511:\tb8 13 00 00 00       \tmov    $0x13,%eax\n 516:\te9 0a 00 00 00       \tjmp    525 <main+0x4dc>\n 51b:\tb8 00 00 00 00       \tmov    $0x0,%eax\n 520:\te9 00 00 00 00       \tjmp    525 <main+0x4dc>\n 525:\t48 8b 5d 98          \tmov    -0x68(%rbp),%rbx\n 529:\t4c 8b 65 90          \tmov    -0x70(%rbp),%r12\n 52d:\tc9                   \tleave\n 52e:\tc3                   \tret\n\nDisassembly of section .text._Z10swap_bytesIjET_S0_:\n\n0000000000000000 <unsigned int swap_bytes<unsigned int>(unsigned int)>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 10 00 00 00 \tsub    $0x10,%rsp\n   b:\t8b ff                \tmov    %edi,%edi\n   d:\t89 7d f8             \tmov    %edi,-0x8(%rbp)\n  10:\t44 8b 45 f8          \tmov    -0x8(%rbp),%r8d\n  14:\t41 0f c8             \tbswap  %r8d\n  17:\t45 8b c0             \tmov    %r8d,%r8d\n  1a:\t44 89 45 f8          \tmov    %r8d,-0x8(%rbp)\n  1e:\t8b 45 f8             \tmov    -0x8(%rbp),%eax\n  21:\te9 00 00 00 00       \tjmp    26 <unsigned int swap_bytes<unsigned int>(unsigned int)+0x26>\n  26:\tc9                   \tleave\n  27:\tc3                   \tret\n\nDisassembly of section .text._Z10swap_bytesImET_S0_:\n\n0000000000000000 <unsigned long swap_bytes<unsigned long>(unsigned long)>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 10 00 00 00 \tsub    $0x10,%rsp\n   b:\t48 89 7d f8          \tmov    %rdi,-0x8(%rbp)\n   f:\t4c 8b 45 f8          \tmov    -0x8(%rbp),%r8\n  13:\t49 0f c8             \tbswap  %r8\n  16:\t4c 89 45 f8          \tmov    %r8,-0x8(%rbp)\n  1a:\t48 8b 45 f8          \tmov    -0x8(%rbp),%rax\n  1e:\te9 00 00 00 00       \tjmp    23 <unsigned long swap_bytes<unsigned long>(unsigned long)+0x23>\n  23:\tc9                   \tleave\n  24:\tc3                   \tret\n\nDisassembly of section .text._Z9incrementIiEvRT_:\n\n0000000000000000 <void increment<int>(int&)>:\n   0:\t55                   \tpush   %rbp\n   1:\t48 89 e5             \tmov    %rsp,%rbp\n   4:\t48 81 ec 10 00 00 00 \tsub    $0x10,%rsp\n   b:\t41 ba 01 00 00 00    \tmov    $0x1,%r10d\n  11:\tf0 44 0f c1 17       \tlock xadd %r10d,(%rdi)\n  16:\t41 83 c2 01          \tadd    $0x1,%r10d\n  1a:\t4d 63 d2             \tmovslq %r10d,%r10\n  1d:\t4d 89 d0             \tmov    %r10,%r8\n  20:\te9 00 00 00 00       \tjmp    25 <void increment<int>(int&)+0x25>\n  25:\tc9                   \tleave\n  26:\tc3                   \tret\n",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-lifetimes compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls163/assembly-lifetimes.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-lifetimes.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-lifetimes link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-lifetimes.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-lifetimes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-lifetimes runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-lifetimes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-lifetimes stats",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls163/assembly-lifetimes.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/stats.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": "{\"tokens\":179,\"max_pending\":25,\"node_growths\":8,\"delimiter_work\":179,\"asm_source_statements\":3,\"asm_source_instructions\":3,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_ms\":0.353264,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":229,\"semantic_fact_records\":101,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":21404,\"semantic_template_declaration_work\":0,\"semantic_declaration_publications\":0,\"semantic_dependence_work\":4,\"semantic_specializations\":0,\"semantic_type_substitution_work\":0,\"semantic_type_substitution_hits\":0,\"semantic_type_substitution_records\":0,\"semantic_substitution_frames\":0,\"semantic_template_type_work\":0,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":0,\"semantic_template_signature_work\":0,\"semantic_template_signature_uses\":0,\"semantic_parameter_publications\":0,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":0,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":0,\"semantic_body_checks\":5,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":5,\"semantic_statement_conversion_work\":0,\"semantic_statement_conversion_uses\":0,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":0,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":0,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":1,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":0,\"semantic_initializer_recipe_uses\":0,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":0,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":0,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":0,\"semantic_type_query_work\":0,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":0,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":0,\"semantic_template_parameter_check_work\":0,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":0,\"semantic_template_fixed_expressions\":0,\"semantic_template_fixed_uses\":0,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":0,\"semantic_template_member_uses\":0,\"parsed_nodes\":229,\"template_occurrences\":0,\"template_deferred_regions\":0,\"template_demanded_regions\":0,\"template_source_regions\":0,\"template_region_nodes\":0,\"template_region_roots\":0,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":0,\"semantic_argument_packs\":0,\"semantic_object_uses\":2,\"semantic_expression_facts\":48,\"semantic_expression_uses\":48,\"semantic_expression_slots\":229,\"semantic_expression_inherited\":0,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":3,\"semantic_constructor_actions\":1,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":1,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":0,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":1,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":2,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":12,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":1,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":2,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":2,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":2,\"semantic_expression_work\":43,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":5,\"semantic_conversion_work\":33,\"semantic_conversions\":34,\"semantic_entity_bytes\":120,\"semantic_class_facts\":2,\"semantic_constants\":1,\"semantic_value_queries\":0,\"semantic_value_query_work\":0,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":19,\"semantic_entities\":21,\"semantic_scopes\":24,\"semantic_edges\":0,\"semantic_declarations\":16,\"semantic_regions\":12,\"semantic_lookup_work\":74,\"semantic_signature_work\":8,\"semantic_template_signature_shape_work\":0,\"semantic_template_signature_shape_hits\":0,\"semantic_type_probes\":142,\"semantic_constant_work\":1,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":0,\"exception_work\":0,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":28,\"rtti_expressions\":0,\"rtti_records\":1,\"rtti_cache_hits\":2,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":2.3155,\"lowering_ms\":0.281907,\"peak_rss_kib\":17668,\"nodes\":229,\"static_requests\":0,\"static_hits\":0,\"control_work\":34,\"discard_work\":0,\"full_expression_work\":106,\"full_expression_regions\":3,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":9,\"abi_bytes\":1016,\"instructions\":123,\"operands\":162,\"ir_pool_growths\":70,\"ir_capacity_bytes\":23136}\n{\"driver_ms\":4.7502,\"peak_rss_kib\":17668,\"text_bytes\":761,\"native_functions\":5,\"native_instructions\":142,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.137743,\"encoding_ms\":0.05133}\n"
+    },
+    {
+      "name": "assembly-lifetimes telemetry equality",
+      "passed": true
+    },
+    {
+      "name": "assembly-lifetimes IR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls163/assembly-lifetimes.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-lifetimes.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-lifetimes roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-lifetimes.lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-lifetimes.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-lifetimes IR equality",
+      "passed": true
+    },
+    {
+      "name": "assembly-thread compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls163/assembly-thread.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-thread.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-thread link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-thread.o",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls163/thread-host.cpp",
+        "-pthread",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-thread"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-thread runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-thread"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-thread stats",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls163/assembly-thread.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/stats.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": "{\"tokens\":46,\"max_pending\":5,\"node_growths\":6,\"delimiter_work\":46,\"asm_source_statements\":1,\"asm_source_instructions\":1,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_ms\":0.231443,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":53,\"semantic_fact_records\":20,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":20792,\"semantic_template_declaration_work\":0,\"semantic_declaration_publications\":0,\"semantic_dependence_work\":4,\"semantic_specializations\":0,\"semantic_type_substitution_work\":0,\"semantic_type_substitution_hits\":0,\"semantic_type_substitution_records\":0,\"semantic_substitution_frames\":0,\"semantic_template_type_work\":0,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":0,\"semantic_template_signature_work\":0,\"semantic_template_signature_uses\":0,\"semantic_parameter_publications\":0,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":0,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":0,\"semantic_body_checks\":2,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":2,\"semantic_statement_conversion_work\":0,\"semantic_statement_conversion_uses\":0,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":0,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":0,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":0,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":0,\"semantic_initializer_recipe_uses\":0,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":0,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":0,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":0,\"semantic_type_query_work\":0,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":0,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":0,\"semantic_template_parameter_check_work\":0,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":0,\"semantic_template_fixed_expressions\":0,\"semantic_template_fixed_uses\":0,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":0,\"semantic_template_member_uses\":0,\"parsed_nodes\":53,\"template_occurrences\":0,\"template_deferred_regions\":0,\"template_demanded_regions\":0,\"template_source_regions\":0,\"template_region_nodes\":0,\"template_region_roots\":0,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":0,\"semantic_argument_packs\":0,\"semantic_object_uses\":0,\"semantic_expression_facts\":4,\"semantic_expression_uses\":4,\"semantic_expression_slots\":53,\"semantic_expression_inherited\":0,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":0,\"semantic_constructor_actions\":0,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":0,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":0,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":0,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":0,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":0,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":0,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":0,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":0,\"semantic_expression_work\":4,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":1,\"semantic_conversion_work\":2,\"semantic_conversions\":2,\"semantic_entity_bytes\":120,\"semantic_class_facts\":1,\"semantic_constants\":0,\"semantic_value_queries\":0,\"semantic_value_query_work\":0,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":11,\"semantic_entities\":11,\"semantic_scopes\":6,\"semantic_edges\":0,\"semantic_declarations\":8,\"semantic_regions\":5,\"semantic_lookup_work\":11,\"semantic_signature_work\":7,\"semantic_template_signature_shape_work\":0,\"semantic_template_signature_shape_hits\":0,\"semantic_type_probes\":15,\"semantic_constant_work\":0,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":0,\"exception_work\":3,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":12,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":1.8331,\"lowering_ms\":0.065449,\"peak_rss_kib\":17668,\"nodes\":53,\"static_requests\":0,\"static_hits\":0,\"control_work\":4,\"discard_work\":0,\"full_expression_work\":7,\"full_expression_regions\":0,\"linkage_requests\":2,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":6,\"abi_bytes\":576,\"instructions\":8,\"operands\":10,\"ir_pool_growths\":28,\"ir_capacity_bytes\":1836}\n{\"driver_ms\":3.71958,\"peak_rss_kib\":17668,\"text_bytes\":58,\"native_functions\":2,\"native_instructions\":9,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.01987,\"encoding_ms\":0.010177}\n"
+    },
+    {
+      "name": "assembly-thread telemetry equality",
+      "passed": true
+    },
+    {
+      "name": "assembly-thread IR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls163/assembly-thread.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-thread.lowir"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-thread roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-thread.lowir",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/assembly-thread.roundtrip"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "assembly-thread IR equality",
+      "passed": true
+    },
+    {
+      "name": "unknown-operand",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/unknown-operand.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown asm operand\n"
+    },
+    {
+      "name": "duplicate-name",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/duplicate-name.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: duplicate asm operand name\n"
+    },
+    {
+      "name": "write-input",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/write-input.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: asm instruction writes an input\n"
+    },
+    {
+      "name": "const-output",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/const-output.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: asm output is const\n"
+    },
+    {
+      "name": "rvalue-output",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/rvalue-output.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: asm operand requires an lvalue\n"
+    },
+    {
+      "name": "rvalue-memory",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/rvalue-memory.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: asm operand requires an lvalue\n"
+    },
+    {
+      "name": "uninitialized",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/uninitialized.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: asm reads an uninitialized output\n"
+    },
+    {
+      "name": "missing-constraint",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/missing-constraint.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid asm constraint\n"
+    },
+    {
+      "name": "bad-match",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/bad-match.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid asm matching constraint\n"
+    },
+    {
+      "name": "bad-width",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/bad-width.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: asm instruction width disagrees with operand\n"
+    },
+    {
+      "name": "bad-lock",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/bad-lock.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid asm lock prefix\n"
+    },
+    {
+      "name": "lock-move",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/lock-move.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid asm lock prefix\n"
+    },
+    {
+      "name": "lock-hint",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/lock-hint.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid asm lock prefix\n"
+    },
+    {
+      "name": "immediate-nonconstant",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/immediate-nonconstant.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: asm immediate is not constant\n"
+    },
+    {
+      "name": "memory-pair",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/memory-pair.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: asm has two memory operands\n"
+    },
+    {
+      "name": "unwritten-exchange",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/unwritten-exchange.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: asm exchange requires a read/write register source\n"
+    },
+    {
+      "name": "narrow-bswap",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/narrow-bswap.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: bswap requires 32 or 64 bits\n"
+    },
+    {
+      "name": "float",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/float.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: asm operand requires an integer machine word\n"
+    },
+    {
+      "name": "trailing",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/trailing.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: trailing asm operands\n"
+    },
+    {
+      "name": "unknown-op",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/unknown-op.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unsupported asm instruction: unsupported_instruction\n"
+    },
+    {
+      "name": "bad-clobber",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/bad-clobber.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unsupported asm register clobber\n"
+    },
+    {
+      "name": "ordinary-lookup",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/ordinary-lookup.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: missing\n"
+    },
+    {
+      "name": "embedded-null",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/embedded-null.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: null in asm string\n"
+    },
+    {
+      "name": "template-lookup",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/template-lookup.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unbound template value name: missing at /home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/template-lookup.cpp:1\n"
+    },
+    {
+      "name": "template-const",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/template-const.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: asm output is const\n"
+    },
+    {
+      "name": "constant-evaluation",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/constant-evaluation.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/artifacts/audit170/controls163/constant-evaluation.cpp:1\n"
+    }
+  ]
+}

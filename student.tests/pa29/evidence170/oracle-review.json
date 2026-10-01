@@ -1,0 +1,25 @@
+{
+  "bundle_manifest_sha256": "d7dc0333fdf0999f77399bbd655dbfc296a199f7408c50e95169c71a5fc18f8c",
+  "bundle_source": "c2f713cd70d06170632bfde3e75dd6fe1aa44d98",
+  "bundle_sha256": "c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7",
+  "reference_changes": [],
+  "questions": [
+    {
+      "fixture": "600-hosted-nothrow-default-constructible-shorthand",
+      "ordinary_rule": "N3485 [temp.inst]/7: undefined required class template specialization is ill-formed",
+      "proof_limit": "Original adds declarations in std; [namespace.std] 17.6.4.2.1/1 makes behavior undefined. No strict original-case proof."
+    },
+    {
+      "fixture": "700-hosted-nothrow-invocable-cache-default",
+      "ordinary_rule": "Declared Trait::value=false makes Negate<Trait>::value=true, and negating it makes the static assertion false; [dcl.dcl] 7/4.",
+      "proof_limit": "Original declares double-underscore global names reserved by [global.names] 17.6.4.3.2/1; [reserved.names] 17.6.4.3/2 prevents a strict original-case rejection proof."
+    }
+  ],
+  "controls": [
+    "student.tests/pa29/controls158/forward-trait-reject.cpp",
+    "student.tests/pa29/controls158/defined-trait.cpp",
+    "student.tests/pa29/controls170/bad-explicit-false-trait.cpp",
+    "student.tests/pa29/controls170/trait-controls.cpp"
+  ],
+  "disposition": "Preserve references, 403-fixture coverage and comparison rules. Questions remain in required failure groups; no invented library spelling behavior."
+}

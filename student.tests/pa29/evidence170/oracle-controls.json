@@ -1,0 +1,30 @@
+[
+  {
+    "command": [
+      "dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "student.tests/pa29/controls158/forward-trait-reject.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit170/forward-trait-reject.o"
+    ],
+    "status": 1,
+    "expected_rejection": true,
+    "passed": true,
+    "stderr": "ERROR: unknown expression name: value\n"
+  },
+  {
+    "command": [
+      "dev/cppgm++",
+      "-std=c++11",
+      "-c",
+      "student.tests/pa29/controls158/defined-trait.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit170/defined-trait.o"
+    ],
+    "status": 0,
+    "expected_rejection": false,
+    "passed": true,
+    "stderr": ""
+  }
+]

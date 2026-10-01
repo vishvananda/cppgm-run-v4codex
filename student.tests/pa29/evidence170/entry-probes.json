@@ -1,0 +1,22 @@
+[
+  {
+    "test": "student.tests/pa29/controls170/block-query.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "test": "student.tests/pa29/controls170/constructor-writes.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "test": "student.tests/pa29/controls170/pointer-dependencies.cpp",
+    "status": 1,
+    "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/controls170/pointer-dependencies.cpp:4\n"
+  },
+  {
+    "test": "student.tests/pa29/controls170/vector-queries.cpp",
+    "status": 1,
+    "stderr": "ERROR: invalid explicit function template arguments\n"
+  }
+]
