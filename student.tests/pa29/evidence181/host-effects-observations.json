@@ -1,0 +1,146 @@
+[
+  {
+    "compiler": "g++",
+    "source_sha256": "6802b453379590fe1c6f71785cdfb0c5e52261c4e9a056a087feea61e9155f92",
+    "commands": [
+      {
+        "command": [
+          "g++",
+          "--version"
+        ],
+        "status": 0,
+        "stdout": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "-std=gnu++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/zero-effects-observation181.cpp",
+          "-o",
+          "/tmp/pa29-181/observation.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-181/observation.o",
+          "-o",
+          "/tmp/pa29-181/observation"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-181/observation"
+        ],
+        "status": 0,
+        "stdout": "3 0\n3 0\n",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "compiler": "clang++",
+    "source_sha256": "6802b453379590fe1c6f71785cdfb0c5e52261c4e9a056a087feea61e9155f92",
+    "commands": [
+      {
+        "command": [
+          "clang++",
+          "--version"
+        ],
+        "status": 0,
+        "stdout": "Ubuntu clang version 21.1.8 (6ubuntu1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: /usr/lib/llvm-21/bin\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "clang++",
+          "-std=gnu++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/zero-effects-observation181.cpp",
+          "-o",
+          "/tmp/pa29-181/observation.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-181/observation.o",
+          "-o",
+          "/tmp/pa29-181/observation"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-181/observation"
+        ],
+        "status": 0,
+        "stdout": "1 1\n1 0\n",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "compiler": "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+    "source_sha256": "6802b453379590fe1c6f71785cdfb0c5e52261c4e9a056a087feea61e9155f92",
+    "commands": [
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "--version"
+        ],
+        "status": 0,
+        "stdout": "cppgm++ C++11 compiler\nTarget: x86_64-linux-gnu\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=gnu++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/zero-effects-observation181.cpp",
+          "-o",
+          "/tmp/pa29-181/observation.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "g++",
+          "/tmp/pa29-181/observation.o",
+          "-o",
+          "/tmp/pa29-181/observation"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "/tmp/pa29-181/observation"
+        ],
+        "status": 0,
+        "stdout": "3 3\n3 3\n",
+        "stderr": ""
+      }
+    ]
+  }
+]

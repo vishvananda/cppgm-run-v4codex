@@ -45,7 +45,7 @@ class Type {
 public:
     enum Kind { Void, I1, I8, U8, I16, U16, I32, U32, I64, I128, F32, F64, F80, Ptr, Object };
     Type(Kind k = Void) : code_(k) {}
-    static Type object(std::uint32_t bytes, std::uint32_t alignment);
+    static Type object(std::uint64_t bytes, std::uint64_t alignment);
     Kind kind() const { return Kind(code_ & 255); }
     bool integer() const { return kind() >= I1 && kind() <= I128; }
     bool floating() const { return kind() >= F32 && kind() <= F80; }

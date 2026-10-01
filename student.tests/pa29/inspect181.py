@@ -37,4 +37,5 @@ for name,body in [('alignment','slot $x : obj<0x0>'),('copy','slot $x : obj<0x4>
  run([root/'dev/lowir',path],ok=False)
 path=out/'untyped-empty.lowir';path.write_text('global @empty = {}\n')
 run([root/'dev/lowir',path],ok=False)
+run([cc,'-c',src/'storage-width.limit.cc','-o',out/'storage-width.o'],ok=False)
 print(len(rows),'inspection commands passed')
