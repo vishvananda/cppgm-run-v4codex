@@ -27,7 +27,7 @@ bool token_label(Kind kind)
 {
     switch (kind) {
     case Kind::DeclSpecifier: case Kind::TypeSpecifier: case Kind::Pointer:
-    case Kind::KeywordLiteral: case Kind::Binary: case Kind::Assignment:
+    case Kind::KeywordLiteral: case Kind::Binary: case Kind::Fold: case Kind::Assignment:
     case Kind::Unary: case Kind::Postfix: case Kind::Member: case Kind::Cast:
     case Kind::TypeTrait: case Kind::ClassKey: case Kind::EnumKey:
     case Kind::Access: case Kind::CvQualifier: case Kind::ParameterKey:
@@ -105,6 +105,15 @@ void write_inline(std::ostream& out, const Ast& ast, NodeId id, const Identifier
         out << '<';
         children_inline(out, ast, id, ids, ",");
         out << '>';
+    } else if (n.kind == Kind::Fold) {
+        out << '(';
+        if (n.flags) { out << "... "; spelling(out,ids,n.text); out << ' '; }
+        write_inline(out,ast,n.first,ids);
+        if (!n.flags) {
+            out << ' '; spelling(out,ids,n.text); out << " ...";
+            if (n.first != n.last) { out << ' '; spelling(out,ids,n.text); out << ' '; write_inline(out,ast,n.last,ids); }
+        }
+        out << ')';
     } else if (n.kind == Kind::Binary || n.kind == Kind::Assignment) {
         write_inline(out, ast, n.first, ids);
         spelling(out, ids, n.text);

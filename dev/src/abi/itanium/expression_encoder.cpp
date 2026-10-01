@@ -9,7 +9,7 @@ const char* const operations[] = {
     "an", "or", "eo", "ls", "rs", "eq", "ne", "lt", "gt", "le", "ge",
     "aa", "oo", "cm", "pm", "pt", "ix", "sc", "dc", "cc", "rc", "dt", "sz", "az",
     "pp", "mm", "pp_", "mm_", "aS", "pL", "mI", "mL", "dV", "rM", "aN", "oR", "eO", "lS", "rS", "nx",
-    "dl", "da", "gsdl", "gsda"
+    "dl", "da", "gsdl", "gsda", "ds"
 };
 }
 Id operation(const std::string& code) {
@@ -92,6 +92,9 @@ void Encoder::expression(Id id) {
     case Kind::Unary: output += operation_code(n.b); expression(n.a); break;
     case Kind::Binary:
         output += operation_code(n.c); expression(n.a); expression(n.b); break;
+    case Kind::Fold:
+        output += n.b ? (n.value ? "fL" : "fR") : (n.value ? "fl" : "fr");
+        output += operation_code(n.c); expression(n.a); if (n.b) expression(n.b); break;
     case Kind::Conditional:
         output += "qu"; expression(n.a); expression(n.b); expression(n.c); break;
     case Kind::ExprPack: output += "sp"; expression(n.a); break;

@@ -12,6 +12,9 @@ namespace cppgm { namespace semantic {
 // The parser calls this boundary before proceeding to the next source region.
 class Analyzer : public syntax::DeclarationConsumer {
 public:
+    ETokenType compound_operation(ETokenType op) const;
+    const FoldStep& fold_step(std::uint32_t id) const { return fold_steps[id]; }
+    std::uint32_t fold_root(NodeId node) const { return fold_roots.get(node); }
     Analyzer(syntax::Ast& ast, IdentifierTable& ids, bool calls = false, bool definitions = false, bool host_abi = false);
     void consume(NodeId declaration) override;
     void finish();
@@ -952,6 +955,14 @@ private:
     bool decltype_call_result(NodeId node) const;
     std::size_t query_value_work = 0, template_value_work = 0, template_value_uses = 0;
     std::uint32_t query_value(QueryId id);
+    QueryId fold_query(NodeId node, ScopeId scope);
+    Index fold_source_queries;
+    Index fold_roots;
+    std::vector<FoldStep> fold_steps = std::vector<FoldStep>(1);
+    Expression fold_expression(NodeId node, ScopeId scope);
+    Constant constant_fold(NodeId node, ScopeId scope);
+    Constant constant_fold_conversion(Constant value, const Conversion& conversion);
+    QueryId reduce_fold_query(TypeQuery query, const std::vector<QueryId>& operands);
     bool bind_template_size(NodeId node, ScopeId scope);
     bool reuse_template_value(NodeId node, ScopeId scope, Expression& result);
     bool fixed_layout_operand(NodeId node) const;
@@ -1012,7 +1023,7 @@ private:
     bool deduce_expansion(ArgumentId pattern, const std::vector<TypeId>& actual, Index& bindings, std::uint32_t prefix_frame = 0, DeductionKind kind = DeductionKind::Call);
     std::uint32_t expansion_frame(std::uint32_t parent, std::uint32_t parameters, unsigned lane);
     int expansion_count(std::uint32_t parameters, const Index& bindings, std::uint32_t frame);
-    void substitute_arguments(ArgumentId arg, const Index& bindings, Index& cache, std::uint32_t frame, std::vector<ArgumentId>& out);
+    void substitute_arguments(ArgumentId arg, const Index& bindings, Index& cache, std::uint32_t frame, std::vector<ArgumentId>& out, bool query_operands = false);
     Index expansion_parameter_index, expansion_frame_index, entity_pack_arguments;
     std::size_t expansion_work = 0, expansion_lanes = 0;
     void attach_template_context(std::uint32_t context, std::uint32_t frame);
@@ -1149,7 +1160,6 @@ private:
     FunctionQualifiers function_qualifiers(NodeId parameters);
     bool prototype_scope_needed(NodeId parameters);
     void check_pointer_arithmetic(ETokenType op, TypeId left, TypeId right);
-    ETokenType compound_operation(ETokenType op) const;
     void builtin_assignment_values(ETokenType op, const std::vector<Expression>& arguments, std::vector<BuiltinOperator>& results);
     void template_facts(EntityId e, ScopeId environment = 0);
     std::uint32_t retain_template_head(ScopeId environment);

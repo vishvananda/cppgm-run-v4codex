@@ -135,6 +135,7 @@ std::string FactWriter::expression(Id id) {
     const Node& n = g[id];
     switch (n.kind) {
     case Kind::ExprThis: return "this";
+    case Kind::Fold: return join_form({n.value ? "fold-left " : "fold-right ",operation_code(n.c)," ",ref('x',n.a)," ",n.b ? ref('x',n.b) : "-"});
     case Kind::ExprParameter: return join_form({"template-param ", std::to_string(n.value)});
     case Kind::ExprFunctionParameter: return join_form({"function-param ", std::to_string(n.value)});
     case Kind::WideValue: case Kind::NegativeWideValue: return join_form({"value ", ref('t', n.a), " ", g.wide_value_text(n)});

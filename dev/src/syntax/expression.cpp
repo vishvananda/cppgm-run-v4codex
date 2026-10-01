@@ -39,6 +39,7 @@ NodeId Parser::expression(int minimum)
         Token op = in.peek();
         int p = expression_precedence(op.op);
         if (p < minimum || (angle_expression && (op.op == OP_GT || op.op == OP_RSHIFT))) break;
+        if (in.is("...",1)) break; // The enclosing primary owns a fold operator.
         in.take();
         NodeId node = ast.make(p == 2 ? Kind::Assignment : Kind::Binary, op);
         ast.append(node, left);
@@ -176,7 +177,29 @@ NodeId Parser::primary()
     if (in.eat("(")) {
         unsigned saved = angle_expression;
         angle_expression = 0;
-        NodeId result = in.is("{") ? wrap(Kind::StatementExpression, compound()) : wrap(Kind::Parenthesized, expression());
+        NodeId result;
+        if (in.eat("...")) {
+            auto op = in.take();
+            if (!expression_precedence(op.op) || op.op == OP_QMARK)
+                throw std::runtime_error("expected fold operator");
+            result = ast.make(Kind::Fold,op); ast[result].flags = 1;
+            ast.append(result,unary());
+        } else if (in.is("{")) result = wrap(Kind::StatementExpression,compound());
+        else {
+            auto operand = expression();
+            if (expression_precedence(in.peek().op) && in.is("...",1)) {
+                auto kind = ast[operand].kind;
+                if (kind == Kind::Binary || kind == Kind::Assignment || kind == Kind::Conditional || kind == Kind::Throw)
+                    throw std::runtime_error("fold operand must be a cast-expression");
+                auto op = in.take(); in.require("...");
+                if (op.op == OP_QMARK) throw std::runtime_error("invalid fold operator");
+                result = ast.make(Kind::Fold,op); ast.append(result,operand);
+                if (!in.is(")")) {
+                    if (in.take().op != op.op) throw std::runtime_error("fold operators must match");
+                    ast.append(result,unary());
+                }
+            } else result = wrap(Kind::Parenthesized,operand);
+        }
         in.require(")");
         angle_expression = saved;
         return result;

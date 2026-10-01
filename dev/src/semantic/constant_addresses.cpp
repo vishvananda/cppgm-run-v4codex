@@ -163,6 +163,10 @@ std::uint32_t Analyzer::constant_base_projection(std::uint32_t address, unsigned
 }
 std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
 {
+    if (fold_root(n)) {
+        auto value = constant_fold(n,s);
+        return value.valid && (types[value.type].kind == TypeKind::LRef || types[value.type].kind == TypeKind::RRef) ? value.bits : 0;
+    }
     auto x = expressions[n]; auto first = ast[n].first;
     if (ast[n].kind == Kind::Parenthesized) return constant_address(first,s);
     if (ast[n].kind == Kind::Binary && ast[n].op == OP_COMMA && x.form != ExpressionForm::OperatorCall) {

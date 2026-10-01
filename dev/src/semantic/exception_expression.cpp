@@ -106,6 +106,22 @@ bool Analyzer::expression_nonthrowing(NodeId n)
 {
     if (!n) return true;
     if (auto known = expression_exception_facts.get(n)) return known == 2;
+    if (auto root = fold_root(n)) {
+        bool result = true; std::vector<unsigned> work{root};
+        while (!work.empty()) {
+            auto step = fold_steps[work.back()]; work.pop_back();
+            if (step.source) { result &= expression_nonthrowing(step.source); continue; }
+            auto op = step.operation;
+            if (op.function) result &= function_nonthrowing(op.function);
+            if (op.temporary) result &= type_destructor_nonthrowing(op.result.type);
+            for (unsigned i = 0; i < op.result.count; ++i)
+                result &= conversion_nonthrowing(conversions[op.result.conversions+i]);
+            work.push_back(step.left); work.push_back(step.right);
+        }
+        expression_exception_facts.put(n,result ? 2 : 1); return result;
+    }
+    if (!n) return true;
+    if (auto known = expression_exception_facts.get(n)) return known == 2;
     ++exception_work;
     auto node = ast[n]; auto x = expressions[n];
     if (node.kind == Kind::TypeTrait && BuiltinTrait(node.flags) == BuiltinTrait::Offsetof) {

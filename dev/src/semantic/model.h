@@ -506,6 +506,11 @@ struct RangeOperation {
     unsigned supplied = 0;
     bool receiver = false;
 };
+struct FoldStep {
+    NodeId source = 0;
+    std::uint32_t left = 0, right = 0;
+    RangeOperation operation;
+};
 struct RangePlan {
     NodeId source = 0, body = 0;
     EntityId range = 0, begin = 0, end = 0, variable = 0;

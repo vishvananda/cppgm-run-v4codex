@@ -101,6 +101,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     ++expression_work;
     NodeId first = ast[n].first;
     switch (ast[n].kind) {
+    case Kind::Fold: return fold_expression(n,s);
     case Kind::FunctionName:
         r.entity = predefined_function_name(n,s); facts.edit(n).entity = r.entity;
         r.type = entities[r.entity].type; r.category = ValueCategory::Lvalue; return r;

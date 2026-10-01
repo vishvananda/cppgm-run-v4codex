@@ -109,6 +109,7 @@ Value Procedural::expression(NodeId n, bool location)
     }
     if (node.kind == Kind::TypeTrait && BuiltinTrait(node.flags) == BuiltinTrait::Offsetof && !sem.constant_fact(n).valid) return offsetof_expression(n);
     if (fact.form == semantic::ExpressionForm::ConstantQuery || node.kind == Kind::Sizeof || node.kind == Kind::SizeofPack || node.kind == Kind::TypeTrait) {
+        if (type(fact.type) == IRType::Void) return Value();
         auto c = sem.constant_fact(n);
         if (!c.valid) throw std::logic_error("missing semantic constant");
         if (node.op == KW_NOEXCEPT) return Value(integer_operand(c),type(c.type),c.type);
@@ -176,6 +177,7 @@ Value Procedural::expression(NodeId n, bool location)
         }
         return binding(fact.entity);
     case Kind::Parenthesized: return expression(a, location);
+    case Kind::Fold: return fold(n,location);
     case Kind::Unary: case Kind::Postfix: return unary(n);
     case Kind::Binary: case Kind::Assignment: return binary(n, location);
     case Kind::Conditional: return conditional(n, location);

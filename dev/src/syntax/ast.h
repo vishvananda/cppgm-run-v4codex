@@ -36,6 +36,7 @@ enum class Kind : unsigned char {
     Literal,
     KeywordLiteral,
     Binary,
+    Fold,
     Assignment,
     Conditional,
     Unary,

@@ -41,6 +41,13 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     for (unsigned j = 0; j < pack.count; ++j)
         args.push_back(abi_argument(sem.template_argument(pack.offset+j)));
     switch (q.kind) {
+    case QueryKind::Fold: {
+        unsigned pattern = q.count == 2 && q.value ? 1 : 0;
+        auto expansion = sem.type_query_child(id,pattern);
+        auto operand = abi_query(sem.type_query_child(expansion,0));
+        auto init = q.count == 2 ? child(!pattern) : 0;
+        result = abi.make(Kind::Fold,operand,init,abi_mangle::operation(query_operation(q.op,false)),q.value); break;
+    }
     case QueryKind::IntegerPack:
         result = abi.make(Kind::TypeTrait,abi.string("__integer_pack"),0,0,0,{child(0)}); break;
     case QueryKind::Offsetof: throw std::runtime_error("dependent offsetof ABI expression is unsupported");

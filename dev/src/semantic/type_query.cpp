@@ -82,6 +82,9 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     TypeQuery q; std::vector<QueryId> children;
     auto node = ast[n]; auto first = node.first;
     switch (node.kind) {
+    case Kind::Fold: {
+        auto id = fold_query(n,s); source_index.put(key(s,n),id); return id;
+    }
     case Kind::StatementExpression: case Kind::Lambda: {
         auto id = statement_result_query(n,s); source_index.put(key(s,n),id); return id;
     }
@@ -410,6 +413,12 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
             if (!q.entity) return 0;
         } else q.entity = substitution_binding(owner,q.entity);
     }
+    // A function-pack lane names its concrete parameter object. Its declared
+    // type is already substituted; the source type pack need not also occur
+    // syntactically in this expansion (for example sizeof(args)...).
+    if (q.kind == QueryKind::Name && entities[original.entity].parameter_pack &&
+        q.entity != original.entity && entities[q.entity].kind == EntityKind::Parameter &&
+        !entities[q.entity].template_pattern) q.type = entities[q.entity].type;
     if (q.type) {
         q.type = substitute_type(q.type,bindings,cache,owner);
         if (!q.type) return 0;
@@ -433,7 +442,7 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
             auto recipe = child_query.arguments ? argument_types[argument_packs[child_query.arguments].offset] :
                 types.pack_expansion(0x80000000U|pattern,0);
             std::vector<ArgumentId> expanded;
-            substitute_arguments(recipe,bindings,cache,owner,expanded);
+            substitute_arguments(recipe,bindings,cache,owner,expanded,true);
             for (auto arg : expanded) {
                 if (!arg) return 0;
                 if (value_argument(arg)) children.push_back(argument_query(arg));
@@ -462,7 +471,8 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
         if (!arg) return 0;
         auto result = argument_query(arg); results.put(cache_key,result); return result;
     }
-    auto result = intern_query(q,children); results.put(cache_key,result); return result;
+    auto result = q.kind == QueryKind::Fold ? reduce_fold_query(q,children) : intern_query(q,children);
+    results.put(cache_key,result); return result;
 }
 TypeQueryFact Analyzer::query_fact(QueryId id)
 {
@@ -497,6 +507,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     }
     r.dependent |= q.type && dependent_type(q.type);
     r.dependent |= q.kind == QueryKind::TemplateValueParameter || q.kind == QueryKind::SizeofPack || q.kind == QueryKind::Expansion;
+    r.dependent |= q.kind == QueryKind::Fold && q.count;
     r.dependent |= q.kind == QueryKind::StatementResult && q.dependent_name;
     r.dependent |= q.kind == QueryKind::FunctionName && pattern_scope(q.context);
     // A template access context belongs to the key, but does not alone make
@@ -575,6 +586,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         }
     }
     if (inspect) switch (q.kind) {
+    case QueryKind::Fold: r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break;
     case QueryKind::FunctionName:
         x.entity = function_name_string(q.context,q.name);
         x.type = entities[x.entity].type; x.category = ValueCategory::Lvalue;

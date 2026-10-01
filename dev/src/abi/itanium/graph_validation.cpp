@@ -10,7 +10,7 @@ bool accepts(Kind kind, Role role) {
     case Role::Type: return kind <= Kind::Lambda;
     case Role::Argument: return kind == Kind::WideValue || kind == Kind::NegativeWideValue || (kind >= Kind::TypeArgument && kind <= Kind::EntityArgument);
     case Role::Expression:
-        return kind == Kind::Value || kind == Kind::WideValue || kind == Kind::NegativeWideValue || kind == Kind::AlignofType || kind == Kind::DestructorName || kind == Kind::ExprThis || kind == Kind::InitList || kind == Kind::DesignatedInit || kind == Kind::TypeidType || kind == Kind::TypeidExpression || kind == Kind::NewExpression || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
+        return kind == Kind::Fold || kind == Kind::Value || kind == Kind::WideValue || kind == Kind::NegativeWideValue || kind == Kind::AlignofType || kind == Kind::DestructorName || kind == Kind::ExprThis || kind == Kind::InitList || kind == Kind::DesignatedInit || kind == Kind::TypeidType || kind == Kind::TypeidExpression || kind == Kind::NewExpression || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
     case Role::Context: return kind == Kind::RawContext || kind == Kind::FunctionEntity;
     case Role::Entity: return kind >= Kind::FunctionEntity && kind <= Kind::SymbolEntity;
     }
@@ -84,6 +84,7 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
         require((*this)[a].kind == Kind::ExprParameter || (*this)[a].kind == Kind::ExprFunctionParameter); break;
     case Kind::Unary: edge(a, Role::Expression); operation_code(b); break;
     case Kind::Binary: edge(a, Role::Expression); edge(b, Role::Expression); operation_code(c); break;
+    case Kind::Fold: edge(a,Role::Expression); if (b) edge(b,Role::Expression); operation_code(c); break;
     case Kind::Conditional:
         edge(a, Role::Expression); edge(b, Role::Expression); edge(c, Role::Expression); break;
     case Kind::Call: edge(a, Role::Expression); sequence(Role::Expression); return;

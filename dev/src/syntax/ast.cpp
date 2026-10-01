@@ -86,6 +86,7 @@ const char* kind_name(Kind kind)
         "literal",
         "keyword-literal",
         "binary-expression",
+        "fold-expression",
         "assignment-expression",
         "conditional-expression",
         "unary-expression",

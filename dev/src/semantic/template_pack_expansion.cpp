@@ -23,11 +23,20 @@ std::uint32_t Analyzer::source_expansion_parameters(NodeId root)
         if (!n || seen.get(n)) continue;
         seen.put(n,1); ++expansion_work;
         auto node = ast[n];
-        if (node.kind == Kind::PackExpression || node.kind == Kind::SizeofPack) continue;
+        if (node.kind == Kind::PackExpression || node.kind == Kind::SizeofPack || node.kind == Kind::Fold) continue;
         if (node.kind == Kind::Name) {
             auto binding = template_bindings[template_binding_index.get(ast.nodes.occurrences[n].source)];
             auto e = binding.qualifier_pack ? binding.qualifier_pack : binding.entity;
             if (e && entities[e].parameter_pack && !parameters.get(e)) { parameters.put(e,1); params.push_back(e); }
+            if (e && entities[e].parameter_pack && !entities[e].template_parameter) {
+                // Retained parameter type queries (sizeof(args), decltype)
+                // consume the packs in the parameter's declared type too.
+                auto types_in_pattern = argument_packs[expansion_parameters(entities[e].type)];
+                for (unsigned k = 0; k < types_in_pattern.count; ++k) {
+                    auto p = argument_types[types_in_pattern.offset+k];
+                    if (!parameters.get(p)) { parameters.put(p,1); params.push_back(p); }
+                }
+            }
         }
         if (node.detail) work.push_back(node.detail);
         for (auto c = node.first; c; c = ast[c].next) work.push_back(c);

@@ -43,10 +43,11 @@ std::uint32_t Analyzer::expansion_parameters(ArgumentId pattern)
         EntityId parameter = 0;
         if (value_argument(arg)) {
             auto q = type_queries[argument_query(arg)];
-            if (q.kind == QueryKind::SizeofPack || q.kind == QueryKind::Expansion) continue;
+            if (q.kind == QueryKind::SizeofPack || q.kind == QueryKind::Expansion || q.kind == QueryKind::Fold) continue;
             auto args = argument_packs[q.arguments];
             for (unsigned j = 0; j < args.count; ++j) work.push_back(argument_types[args.offset+j]);
             if (q.kind == QueryKind::TemplateValueParameter) parameter = q.entity;
+            if (q.kind == QueryKind::Name && entities[q.entity].parameter_pack) parameter = q.entity;
             if (q.type) work.push_back(q.type);
             for (unsigned j = 0; j < q.count; ++j) work.push_back(0x80000000U|query_edges[q.offset+j]);
         } else {

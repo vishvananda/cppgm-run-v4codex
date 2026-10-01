@@ -247,6 +247,9 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         if (ast[literal].kind != Kind::Literal) return Constant();
         return literal_element(ast[literal].literal,evaluate(index,s));
     }
+    case Kind::Fold:
+        if (fold_root(n)) return constant_indirect(constant_fold(n,s));
+        return constants[query_value(expression_query(n,s))];
     case Kind::SizeofPack: return constants[query_value(expression_query(n,s))];
     case Kind::Sizeof: case Kind::TypeTrait: {
         if (ast[n].kind == Kind::TypeTrait && BuiltinTrait(ast[n].flags) == BuiltinTrait::Offsetof && active_constant) {

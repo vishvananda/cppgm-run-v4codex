@@ -2,10 +2,19 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 void Analyzer::substitute_arguments(ArgumentId arg, const Index& bindings, Index& cache,
-    std::uint32_t frame, std::vector<ArgumentId>& out)
+    std::uint32_t frame, std::vector<ArgumentId>& out, bool query_operands)
 {
+    // Expression expansion retains runtime prvalues. Only template argument
+    // formation requires their integral constant value and canonicalizes it.
+    auto substitute = [&](ArgumentId value, std::uint32_t owner) {
+        if (query_operands && value_argument(value)) {
+            auto query = substitute_query(argument_query(value),bindings,cache,owner);
+            return query ? 0x80000000U | query : 0;
+        }
+        return substitute_argument(value,bindings,cache,owner);
+    };
     if (value_argument(arg) || types[arg].kind != TypeKind::PackExpansion) {
-        out.push_back(substitute_argument(arg,bindings,cache,frame)); return;
+        out.push_back(substitute(arg,frame)); return;
     }
     auto recipe = types[arg];
     auto pattern = ArgumentId(recipe.bound);
@@ -38,7 +47,7 @@ void Analyzer::substitute_arguments(ArgumentId arg, const Index& bindings, Index
     if (count >= 0 && frame) {
         for (int j = 0; j < count; ++j) {
             auto lane = expansion_frame(frame,params,j);
-            auto value = substitute_argument(pattern,bindings,cache,lane);
+            auto value = substitute(pattern,lane);
             out.push_back(value && substitution_frames[lane].symbolic ? types.pack_expansion(value,0) : value);
         }
         return;
@@ -54,11 +63,11 @@ void Analyzer::substitute_arguments(ArgumentId arg, const Index& bindings, Index
             retained.push_back(p); retained.push_back(unexpanded_argument(frame,p));
             shield = argument_frame(shield,p,parameter_argument(p));
         }
-        auto value = substitute_argument(pattern,bindings,cache,shield);
+        auto value = substitute(pattern,shield);
         out.push_back(value ? types.pack_expansion(value,intern_arguments(retained)) : 0);
         return;
     }
-    auto value = substitute_argument(pattern,bindings,cache,frame);
+    auto value = substitute(pattern,frame);
     out.push_back(value ? types.pack_expansion(value,0) : 0);
 }
 } }

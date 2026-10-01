@@ -356,6 +356,8 @@ class Procedural {
     Value intrinsic_call(NodeId n, semantic::Intrinsic intrinsic);
     Value conditional(NodeId n, bool location, Value destination = Value(), std::uint32_t branches = 0, bool terminal = false, const semantic::ScalarConsumption* consumption = nullptr);
     Value logical(NodeId n);
+    Value fold(NodeId n, bool location);
+    Value fold_operation(const semantic::RangeOperation& op, Value left, Value right);
     Value arrow_object(NodeId n, std::uint32_t chain);
     Value call(NodeId n, Value destination = Value());
     Value floating_builtin(NodeId n);

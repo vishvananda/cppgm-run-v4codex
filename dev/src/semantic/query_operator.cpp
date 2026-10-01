@@ -119,7 +119,9 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         }
         if ((q.op == OP_INC || q.op == OP_DEC) && pointer(decay(args[0].type)))
             return incomplete_query(types[decay(args[0].type)].child);
-        if (q.op == OP_COMMA) { r.expression = args[1]; return r; }
+        if (q.op == OP_COMMA) {
+            r.expression = args[1]; r.expression.conversions = r.expression.count = 0; return r;
+        }
         if (q.op == OP_AMP && args.size() == 1 && args[0].category != ValueCategory::Prvalue && !field_fact(args[0].entity).bit_field) {
             auto member = args[0].entity;
             if (q.value && member && nonstatic_field(member)) {

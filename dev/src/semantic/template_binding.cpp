@@ -148,6 +148,10 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
     if (!n) return false;
     ++template_binding_work;
     auto node = ast[n];
+    if (node.kind == Kind::Fold) {
+        for (auto c = node.first; c; c = ast[c].next) bind_template_expression(c,s);
+        fold_query(n,s); return true;
+    }
     if (node.kind == Kind::FunctionName) return true;
     if (node.kind == Kind::StatementExpression) { bind_template_statement(node.first,s); return true; }
     if (node.kind == Kind::Lambda) { bind_lambda_body(n,s); return true; }

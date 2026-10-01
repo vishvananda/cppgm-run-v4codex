@@ -68,6 +68,11 @@ Id FactReader::argument(const Words& w, std::size_t& p) {
 Id FactReader::expression(const Words& w, std::size_t& p) {
     std::string op = take(w, p);
     if (op == "this") return g.make(Kind::ExprThis);
+    if (op == "fold-left" || op == "fold-right") {
+        auto code = operation(take(w,p)); auto pattern = reference(take(w,p),BindingKind::Expression);
+        auto init = take(w,p); auto value = init == "-" ? 0 : reference(init,BindingKind::Expression);
+        return g.make(Kind::Fold,pattern,value,code,op == "fold-left");
+    }
     if (op == "template-param" || op == "function-param") {
         auto index = index_value(take(w, p));
         return g.make(op == "template-param" ? Kind::ExprParameter : Kind::ExprFunctionParameter, 0, 0, 0, index);
