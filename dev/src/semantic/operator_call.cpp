@@ -104,8 +104,9 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
         auto x = sequences.data()+viable[a].offset, y = sequences.data()+viable[b].offset;
         // A static member's contrived receiver conversion is neither better nor
         // worse. The receiver is still evaluated, but is not an argument.
-        auto skip = (viable[a].member && entities[viable[a].entity].is_static) ||
-            (viable[b].member && entities[viable[b].entity].is_static) ? 1u : 0u;
+        auto skip = ((viable[a].member && entities[viable[a].entity].is_static) ||
+            (viable[b].member && entities[viable[b].entity].is_static)) &&
+            x[0].rank < 5 && y[0].rank < 5 ? 1u : 0u;
         if (better(x+skip,y+skip,args.size()-skip)) return true;
         for (unsigned i = skip; i < args.size(); ++i)
             if (better(y+i,x+i,1)) return false;

@@ -5,7 +5,11 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
     if (!a || !b || !entities[a].specialization || !entities[b].specialization) return false;
     const bool call = arguments != ~0u;
     auto nonstatic = [&](EntityId e) { return entities[e].member_info && !entities[e].is_static; };
-    bool object_parameter = operator_call && nonstatic(a) != nonstatic(b);
+    // A static call/index operator has a receiver expression, but no
+    // deduced object parameter. Member/non-member operator ordering still
+    // nominates the nonstatic object when the other candidate is free.
+    bool object_parameter = operator_call && nonstatic(a) != nonstatic(b) &&
+        !(entities[a].member_info && entities[b].member_info);
     auto original_a = entities[specialization_pattern(a)].type, original_b = entities[specialization_pattern(b)].type;
     auto owner = [&](EntityId e) { return operator_call && nonstatic(e) ? scopes[entities[e].owner].entity : 0; };
     // All inputs are stable identities. Probe before constructing nominated

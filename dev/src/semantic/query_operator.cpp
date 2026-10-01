@@ -152,7 +152,7 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         auto x = sequences.data()+viable[a].offset, y = sequences.data()+viable[b].offset;
         auto static_receiver = [&](unsigned i) { auto e = viable[i].entity;
             return e && !viable[i].surrogate && entities[e].member_info && entities[e].is_static; };
-        auto skip = static_receiver(a) || static_receiver(b) ? 1u : 0u;
+        auto skip = (static_receiver(a) || static_receiver(b)) && x[0].rank < 5 && y[0].rank < 5 ? 1u : 0u;
         if (better(x+skip,y+skip,args.size()-skip)) return true;
         for (unsigned i = skip; i < args.size(); ++i)
             if (better(y+i,x+i,1)) return false;
