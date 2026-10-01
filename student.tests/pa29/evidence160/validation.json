@@ -1,0 +1,51 @@
+{
+  "code_commit": "2fd6963ecb35c5f0bfe5870a72149378c441a7c5",
+  "checks": [
+    {
+      "command": "make test-pa29",
+      "exit_status": 2,
+      "summary": "323/403; two existing failures removed; zero new failures",
+      "log_path": "/tmp/pa29-160/stage-serial.log",
+      "log_sha256": "de3c51cbf76974d7182e9de431c8d48100b3d450707e6d7bfc77f04e46096038"
+    },
+    {
+      "command": "make test-report-through-pa28",
+      "exit_status": 0,
+      "summary": "4538/4538",
+      "log_path": "/tmp/pa29-160/prior-through-serial.log",
+      "log_sha256": "b1ff9611d30d0da259845968d6ec5a5a9b0ee6da2d9810c505780299a5c67a88"
+    },
+    {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src",
+      "exit_status": 0,
+      "summary": "Pass with four inherited header warnings",
+      "log_path": "/tmp/pa29-160/file-audit.log",
+      "log_sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f"
+    },
+    {
+      "command": "python3 student.tests/pa29/controls160.py /tmp/pa29-160/controls-final",
+      "exit_status": 0,
+      "summary": "46/46 explicit controls",
+      "log_path": "/tmp/pa29-160/controls-final.log",
+      "log_sha256": "c8604ddb8e181e0de41a7dde98fe82f6763ac33de1217b57382ec386b42a2c89"
+    },
+    {
+      "command": "python3 student.tests/pa29/inspection160.py /tmp/pa29-160/inspection-final",
+      "exit_status": 0,
+      "summary": "Query sharing; fixed-template counters; LowIR roundtrip/native; telemetry/object byte equality",
+      "log_path": "/tmp/pa29-160/inspection-final.log",
+      "log_sha256": "9fa4ae5ef1b2c67058894272a64a6f183b9bc037ea1901290fb1dfe34221784c"
+    },
+    {
+      "command": "make -C dev -j6 cppgm++",
+      "exit_status": 0,
+      "summary": "Final implementation build",
+      "log_path": "/tmp/pa29-160/build6.log",
+      "log_sha256": "72cd9496705d03fc4cd7a64a0039cd9fec871827c0bdaba7fb932802f0c44363"
+    }
+  ],
+  "fixture_and_harness_tree_unchanged": true,
+  "fixture_and_harness_tree_sha256": "ed15d733a85829c964e724cd3f2b3bdedcb3d8504d9b49549b71b343e2d6c88b",
+  "compiler_sha256": "90163dc53f791fe5fe10b52cb69ac8b77c5afa1bee77dfdf1b2c4e80803bb3cc",
+  "discarded_validation": "The first concurrent through/stage reports shared aggregate counters (3743 and 1198 totals). Their counts are not evidence. The serial reports above prove the complete 4538 and 403 scopes."
+}

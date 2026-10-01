@@ -1,0 +1,13 @@
+{
+  "entry": "8bdc6bbf28980810ae1bc33895243d4de7c15149",
+  "code_tip": "2fd6963ecb35c5f0bfe5870a72149378c441a7c5",
+  "total": 403,
+  "before_pass": 321,
+  "after_pass": 323,
+  "resolved": [
+    "pa29/tests/run/800-builtin-invoke-pointer-like-member-run.t",
+    "pa29/tests/run/800-builtin-invoke-run.t"
+  ],
+  "new_failures": [],
+  "unchanged_failures": 80
+}
