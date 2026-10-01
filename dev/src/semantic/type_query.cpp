@@ -142,6 +142,10 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             bool applied_alias = entity.kind == EntityKind::Alias && entity.template_info &&
                 child(ast[name].last,Kind::TemplateArguments);
             q.kind = QueryKind::TypeValue; q.type = applied_alias ? facts[ast[name].last].type : entity.type;
+            // A primary's declaration identity is not its injected-class-name
+            // type. Construction in its own definition denotes the current
+            // specialization, including its dependent template arguments.
+            if (auto injected = injected_template_type(e,s)) q.type = injected;
             if (!q.type) throw std::logic_error("alias query has no applied type");
         } else if (entity.template_parameter) {
             q.kind = QueryKind::TemplateValueParameter; q.entity = e; q.type = entity.type;

@@ -1,9 +1,10 @@
-# PA30 compact implementation plan — handoff195
+# PA30 compact implementation plan — implementation196
 
 Stage base commit: `27029f978e65b78331233123922d342033d5d1f7`.
 Last reviewed commit: `27029f978e65b78331233123922d342033d5d1f7`.
 Target: **PA30 full-stage**. Phase: **implementation handoff, incomplete stage**.
-Previous goal turn: progress (PA29 audit completed); entry was clean.
+Previous goal turn: progress (parser handoff195 validated and committed); entry196 is clean.
+Entry196 commit: `c67da7c829f78708b84ef36261a33e81a4896f5f`.
 The markers above remain the PA29 boundary; PA30 implementation awaits review.
 
 ## Completed group and spec alignment
@@ -89,3 +90,23 @@ current-suite deltas and earlier-stage validation, not retry-all or name recover
 - This handoff ends implementation195 only. Ralph must schedule further work
   and independent audit before advancing PA30. Final evidence/docs commit leaves
   the tested implementation unchanged; clean status is checked after committing.
+
+## Active implementation196
+
+Initial group: dependent construction/member type queries (11 hosted failures).
+Owner: `semantic/type_query`, `query_call` and retained template body facts.
+Trace parsed dependent construction → interned query → substitution / completed
+type/category → recorded member selection → typed LowIR and ELF. Preserve
+definition-time checks for fixed operands. Use per-query identity/state and
+indexed member lookup; no token replay, global retry, or library-name rules.
+Validate header-free reducers, related hosted cases, full PA30 delta, earlier
+PAs, file audit and frozen A/B compiler/runtime measurements. Extend into
+related exposed demand defects while the same data flow supports progress.
+
+Increment196a: construction queries now normalize resolved class declarations
+to the cached injected current-instantiation type. `check196.py` passes 20
+commands (primary/partial/nested, evaluated and LowIR adapter execution, deleted
+and undemanded constructor boundaries). PA30: 123/153, nine entry failures fixed
+and no regressions. Two previously masked failures now reach class partial
+ordering and dependent base alias lookup; extend into the latter shared
+current-instantiation owner before closing this implementation group.
