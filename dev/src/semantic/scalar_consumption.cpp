@@ -24,7 +24,7 @@ void Analyzer::observe_scalar(NodeId n, bool write)
         object_uses[value.object_use].capture = capture;
         expressions.set(n,value);
     }
-    if (unevaluated_depth) return;
+    if (unevaluated_depth || discarded_statement()) return;
     if (!write && e && types[entities[e].type].kind == TypeKind::MemberPointer) member_pointer_exposed.put(e,1);
     if (e && entities[e].kind == EntityKind::Variable && entities[e].specialization) entities[e].emission |= Entity::Used;
     if (private_scalar(e)) { scalar_observations.put(e,1); ++scalar_observation_count; }

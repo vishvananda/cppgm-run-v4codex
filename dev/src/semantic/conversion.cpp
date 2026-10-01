@@ -322,6 +322,7 @@ void Analyzer::use_selected_function(EntityId e, bool direct)
     if ((intrinsic == Intrinsic::Atomic || intrinsic == Intrinsic::IsConstantEvaluated ||
         (intrinsic >= Intrinsic::SourceFile && intrinsic <= Intrinsic::SourceColumn)) && !direct)
         throw std::runtime_error("compiler intrinsic requires a direct call");
+    if (discarded_statement()) return;
     if (destructor_member(e)) members[entities[e].member_info].retained_root = true;
     if (direct && entities[e].member_info) members[entities[e].member_info].emission_reference = true;
     demand_member(e);

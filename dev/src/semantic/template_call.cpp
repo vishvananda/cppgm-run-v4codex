@@ -643,6 +643,7 @@ EntityId Analyzer::explicit_template(NodeId name, EntityId binding, ScopeId s)
 }
 void Analyzer::demand_specialization(EntityId e)
 {
+    if (discarded_statement()) return;
     if (entities[e].kind != EntityKind::Function) return;
     if (entities[e].specialization) record_default_dependency(DefaultDependencyKind::Specialization,e);
     if (unevaluated_depth || (deferred_inline_function(e) && deferred_inline_function(current_function) &&

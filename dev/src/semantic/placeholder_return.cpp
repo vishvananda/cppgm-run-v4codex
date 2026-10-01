@@ -39,6 +39,11 @@ void Analyzer::require_deduced_return(EntityId e)
         throw std::runtime_error("function used before return deduction");
     if (entities[e].body_state == FactState::Failure)
         throw FailedSemanticFact(SemanticFact::FunctionDefinition,e,entities[e].source);
+    struct DeclarationOnly {
+        unsigned& depth; bool active;
+        DeclarationOnly(unsigned& d, bool a):depth(d),active(a) { if (active) ++depth; }
+        ~DeclarationOnly() { if (active) --depth; }
+    } declaration_only(unevaluated_depth,discarded_statement());
     // Return deduction is a semantic demand even in an unevaluated context.
     // The ordinary body state owns recursion/failure, and dormant use edges
     // preserve the distinction between checking a body and emitting it.

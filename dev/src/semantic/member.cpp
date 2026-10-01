@@ -147,6 +147,7 @@ void Analyzer::member_facts(EntityId e)
 }
 void Analyzer::demand_member(EntityId e, MemberDemandReason reason)
 {
+    if (discarded_statement()) return;
     record_default_dependency(DefaultDependencyKind::Member,e);
     if (unevaluated_depth || (deferred_inline_function(e) && deferred_inline_function(current_function) &&
         !(entities[current_function].emission & Entity::Used))) { record_deferred_function_use(e); return; }

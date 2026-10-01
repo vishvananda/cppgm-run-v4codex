@@ -337,6 +337,7 @@ bool Analyzer::instantiate_member_definition(EntityId e)
 }
 void Analyzer::demand_template_storage(EntityId e)
 {
+    if (discarded_statement()) return;
     if (e && entities[e].kind == EntityKind::Variable && entities[e].is_static && scopes[entities[e].owner].kind == ScopeKind::Class)
         record_default_dependency(DefaultDependencyKind::Storage,e);
     if (unevaluated_depth) return;

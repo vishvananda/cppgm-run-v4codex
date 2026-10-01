@@ -2,6 +2,7 @@
 namespace cppgm { namespace semantic {
 void Analyzer::record_deferred_function_use(EntityId target)
 {
+    if (discarded_statement()) return;
     // A constexpr-demanded body is checked under the caller's unevaluated
     // depth. Its potentially evaluated uses belong to the body, while deeper
     // sizeof/decltype operands remain unevaluated even if that body is emitted.

@@ -3,6 +3,8 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+bool Analyzer::discarded_statement() const
+{ return current_function && discarded_statement_function == current_function; }
 TypeId Analyzer::condition_target(Expression value, bool is_switch)
 {
     auto t = value.type;
@@ -113,11 +115,11 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
             auto selected = constant_truth(value) ? Kind::Then : Kind::Else;
             for (auto c = ast[cond].next; c; c = ast[c].next) {
                 if (ast.nodes.occurrences[n].context && ast[c].kind != selected) continue;
-                struct DiscardedReturn {
+                struct DiscardedStatement {
                     EntityId& owner; EntityId saved;
-                    DiscardedReturn(EntityId& o, EntityId f, bool discarded):owner(o),saved(o) { if (discarded) owner = f; }
-                    ~DiscardedReturn() { owner = saved; }
-                } discarded(discarded_return_function,current_function,ast[c].kind != selected);
+                    DiscardedStatement(EntityId& o, EntityId f, bool discarded):owner(o),saved(o) { if (discarded) owner = f; }
+                    ~DiscardedStatement() { owner = saved; }
+                } discarded(discarded_statement_function,current_function,ast[c].kind != selected);
                 resolve_statement(c,control);
             }
             return;
@@ -149,7 +151,7 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
     case Kind::Return:
         for (auto scope=s; scope && scopes[scope].kind != ScopeKind::Function; scope=scopes[scope].parent)
             if (constructor_handler_scopes.get(scope)) throw std::runtime_error("return in constructor function-try handler");
-        if (current_function && discarded_return_function == current_function && placeholder_returns.get(current_function)) {
+        if (discarded_statement() && placeholder_returns.get(current_function)) {
             auto value = ast[n].first;
             if (ast[value].kind == Kind::BracedInit) {
                 for (auto c = ast[value].first; c; c = ast[c].next) expression(c,s);
