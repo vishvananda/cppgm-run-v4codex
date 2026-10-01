@@ -1,0 +1,191 @@
+[
+  {
+    "source": "student.tests/pa29/source178/inline-context.cpp",
+    "entry": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+        "-std=c++17",
+        "-c",
+        "student.tests/pa29/source178/inline-context.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/inline-contextentry.o"
+      ],
+      "status": 0,
+      "stderr": "",
+      "link_status": 0,
+      "link_stderr": "",
+      "runtime_status": 0
+    },
+    "gcc": {
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-c",
+        "student.tests/pa29/source178/inline-context.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/inline-contextgcc.o"
+      ],
+      "status": 0,
+      "stderr": "",
+      "link_status": 0,
+      "link_stderr": "",
+      "runtime_status": 0
+    }
+  },
+  {
+    "source": "student.tests/pa29/source178/inline-demand.cpp",
+    "entry": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+        "-std=c++17",
+        "-c",
+        "student.tests/pa29/source178/inline-demand.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/inline-demandentry.o"
+      ],
+      "status": 0,
+      "stderr": "",
+      "link_status": 0,
+      "link_stderr": "",
+      "runtime_status": 0
+    },
+    "gcc": {
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-c",
+        "student.tests/pa29/source178/inline-demand.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/inline-demandgcc.o"
+      ],
+      "status": 0,
+      "stderr": "",
+      "link_status": 0,
+      "link_stderr": "",
+      "runtime_status": 0
+    }
+  },
+  {
+    "source": "student.tests/pa29/source178/inline-discarded.cpp",
+    "entry": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+        "-std=c++17",
+        "-c",
+        "student.tests/pa29/source178/inline-discarded.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/inline-discardedentry.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: name qualifier has no scope\n"
+    },
+    "gcc": {
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-c",
+        "student.tests/pa29/source178/inline-discarded.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/inline-discardedgcc.o"
+      ],
+      "status": 1,
+      "stderr": "student.tests/pa29/source178/inline-discarded.cpp: In instantiation of \u2018int Box<int>::values []\u2019:\nstudent.tests/pa29/source178/inline-discarded.cpp:2:58:   required from here\n    2 | int main() { if constexpr(false) return sizeof(Box<int>::values); }\n      |                                                          ^~~~~~\nstudent.tests/pa29/source178/inline-discarded.cpp:1:63: error: \u2018missing\u2019 is not a member of \u2018int\u2019\n    1 | template<class T> struct Box { inline static int values[]={T::missing}; };\n      |                                                               ^~~~~~~\n"
+    }
+  },
+  {
+    "source": "student.tests/pa29/source178/inline-unevaluated.cpp",
+    "entry": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+        "-std=c++17",
+        "-c",
+        "student.tests/pa29/source178/inline-unevaluated.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/inline-unevaluatedentry.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: call lacks a published function fact: @init\n"
+    },
+    "gcc": {
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-c",
+        "student.tests/pa29/source178/inline-unevaluated.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/inline-unevaluatedgcc.o"
+      ],
+      "status": 0,
+      "stderr": "",
+      "link_status": 0,
+      "link_stderr": "",
+      "runtime_status": 0
+    }
+  },
+  {
+    "source": "student.tests/pa29/source178/selection-source.cpp",
+    "entry": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+        "-std=c++17",
+        "-c",
+        "student.tests/pa29/source178/selection-source.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/selection-sourceentry.o"
+      ],
+      "status": 0,
+      "stderr": "",
+      "link_status": 0,
+      "link_stderr": "",
+      "runtime_status": 0
+    },
+    "gcc": {
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-c",
+        "student.tests/pa29/source178/selection-source.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/selection-sourcegcc.o"
+      ],
+      "status": 0,
+      "stderr": "",
+      "link_status": 0,
+      "link_stderr": "",
+      "runtime_status": 0
+    }
+  },
+  {
+    "source": "student.tests/pa29/source178/source-storage.cpp",
+    "entry": {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+        "-std=c++17",
+        "-c",
+        "student.tests/pa29/source178/source-storage.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/source-storageentry.o"
+      ],
+      "status": 0,
+      "stderr": "",
+      "link_status": 0,
+      "link_stderr": "",
+      "runtime_status": 0
+    },
+    "gcc": {
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-c",
+        "student.tests/pa29/source178/source-storage.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit178/source-storagegcc.o"
+      ],
+      "status": 0,
+      "stderr": "",
+      "link_status": 0,
+      "link_stderr": "",
+      "runtime_status": 0
+    }
+  }
+]

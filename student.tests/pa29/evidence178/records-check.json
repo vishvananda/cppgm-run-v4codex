@@ -1,0 +1,44 @@
+{
+  "code_tip": "667edd800e4e5eb1b1ef92a3108da3bd96c51708",
+  "last_reviewed_commit": "667edd800e4e5eb1b1ef92a3108da3bd96c51708",
+  "reviewed_commits": 16,
+  "combined_dev_paths": 72,
+  "stage": {
+    "passed": 381,
+    "total": 403,
+    "failed": 22,
+    "new_failures": 0
+  },
+  "prior": {
+    "passed": 4538,
+    "total": 4538,
+    "status": 0
+  },
+  "through": {
+    "passed": 4919,
+    "total": 4941,
+    "status": 2
+  },
+  "file_audit": {
+    "status": 0,
+    "inherited_warnings": 4
+  },
+  "stageProgressPreserved": true,
+  "contract_paths_unchanged": 1707,
+  "source_files_bound": 467,
+  "final_performance_samples": 776,
+  "launcher_samples": 8,
+  "historical_performance_samples": 816,
+  "archived_audit174_sha256": "1dd27324d2cde150b852ee2f5563195bc17b1f46930c228272f1afbf7982be71",
+  "record_links_resolve": true,
+  "code_and_scripts_unchanged_since_commit": true,
+  "records_only_paths": [
+    "pa29/audit.md",
+    "pa29/plan.md",
+    "pa29/audit174.md",
+    "pa29/performance178.md",
+    "student.tests/pa29/evidence178/"
+  ],
+  "stage_complete": false,
+  "audit_complete": true
+}

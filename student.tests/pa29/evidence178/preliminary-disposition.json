@@ -1,0 +1,7 @@
+{
+  "preliminary_controls": "Naive definition context reset fixed bound-demand missing emission but did not yet attach default frames; failures are preserved in preliminary-controls.json.",
+  "constant_only": "Inherited inspection176 rejected emitting inline objects used only for a constant query. Final implementation checks recipes without emitting their dependencies, then traverses deduplicated typed edges on actual demand. The preliminary inspection assertion was observed in the session; its separate raw transcript was not retained.",
+  "inspection_assertion": "Initial personal inspect178 assertion forbade the __builtin_LINE declaration as well as calls. The contract permits a declaration. The final assertion forbids emitted calls; all 91 commands and LowIR roundtrip/runtime checks pass. No course input/comparison changed.",
+  "binding": "Final validation includes the newly registered inline_variable.cpp, unlike the earlier source-binding snapshot. Full gates were rerun to bind all 467 source files.",
+  "reference_change": false
+}

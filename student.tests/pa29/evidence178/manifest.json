@@ -1,0 +1,54 @@
+{
+  "code_tip": "667edd800e4e5eb1b1ef92a3108da3bd96c51708",
+  "range": "7139ceb5769eea12c6e2e00b54932f09d59c79b5..667edd800e4e5eb1b1ef92a3108da3bd96c51708",
+  "entry": "e59dcaa11e9f674526962ea1fa28f864469fb081",
+  "binaries": {
+    "range-base": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit178/range-base",
+      "sha256": "21589b947593a5fb156d6bc2379f3278d7c178bc53875e11b399e40a43176019"
+    },
+    "entry": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+      "sha256": "8e292c04f171459b32f40ef245da1fadba2f093f3a3f2a27858ad1b3033d136a"
+    },
+    "final": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/audit178/final",
+      "sha256": "022c1bc2829a1ecea8717405fe8252dfd90b0607e7379b1c6b7169eb71efda67"
+    }
+  },
+  "source_binding": "validated-source.json",
+  "validation_provenance": "Run on the working source immediately before this code commit; all source hashes, including the new file, match code_tip. validation.json code_tip is the parent observed before commit.",
+  "scripts": {
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "student.tests/pa29/analyze178.py": "4a92ab3c04e5d4b6219bfae07a010c0d02c78219aa3eba7a6f09ca0e55647f68",
+    "student.tests/pa29/bounds178.py": "f5725d6cc36a57c566261ecede1d505f6bf2f6717cb12272604cf170be5939f6",
+    "student.tests/pa29/inspect178.py": "ac4d6b468a60b5cde75330d1b721d12edfdeb645f63691dd8306c37e329a882e",
+    "student.tests/pa29/performance178.py": "2804866712bd4ec03c108d14c63a1b69d15fa455e1065e68fe95e4f31e5a9cac",
+    "student.tests/pa29/test178.py": "82ed812f33f2929c965e1a90951f1c5cfff70b8e8f86cf1f8bb82f82b4e654e4",
+    "student.tests/pa29/validate178.py": "86dc59eb7fc73e746a0f95221ee6bf0e59b869ada4f1d210ac1b725f5f157ea1"
+  },
+  "personal_sources": {
+    "student.tests/pa29/source178/default-frames.cpp": "205ae9d9ed6e30f8b0a22185636bd9e6060d424717ee22ad016e3b858beec105",
+    "student.tests/pa29/source178/default-late.cpp": "de010886d713550ef805d557c9504d5c23fb7efd183cc3f8cb165c85b193b1e5",
+    "student.tests/pa29/source178/default-packs.cpp": "8b4bc6d9da6d3e690343ade7fe9f010fbfeb9f504b72e69fa5b3d0332e0c590c",
+    "student.tests/pa29/source178/inline-bound-body.reject.cpp": "3f816b5d8729013ef4c48c00e2af10f5b65d71b36bd110f6d26a9b5aae84f4b2",
+    "student.tests/pa29/source178/inline-bound-default.cpp": "47da2b7323fde85fbf58818984f04a7fa8e99baeac7cf7d234333409ba4e768e",
+    "student.tests/pa29/source178/inline-bound-effects.cpp": "cf411410cb42552637387d27c338352f96f9b174bea529ef34f6f40a9ae514b1",
+    "student.tests/pa29/source178/inline-bound-inner.cpp": "330c622d94a9cc2151baa16300b8a5751bd348ca58519c8b4083928a62583e02",
+    "student.tests/pa29/source178/inline-context.cpp": "d6775da1c535fd6400b87b2ae01ced72829f5ccccd0e3a8e34e9b6c7f075040f",
+    "student.tests/pa29/source178/inline-demand.cpp": "0a3109f0eb4988f2e8c79176e994507e5bea2ba5313c2f376f6e026b0c43257b",
+    "student.tests/pa29/source178/inline-discard-first.cpp": "8637ae26233f63e564880e18d7c9d9a940f2250ca582ce9f53c74443ed29166d",
+    "student.tests/pa29/source178/inline-discarded.reject.cpp": "ff274997638c805bb02febba02ae0a75b54bcdc412dc3bd82e2ec591931e9956",
+    "student.tests/pa29/source178/inline-unevaluated.cpp": "a3b4d97dd9aa99aa00b8df727f0a29d4ef743153f936c6ed4dab2231e46f6571",
+    "student.tests/pa29/source178/integrated.cpp": "34d7cf11c2bfda10998db0364ec5668f86ac27fada944bfcdccd2466f8bed9f9",
+    "student.tests/pa29/source178/selection-source.cpp": "d0b7acfc0b0f9086dc92579a10b1d0fb6904fa6765ab70d6e6c3e8c7698a4c24",
+    "student.tests/pa29/source178/source-storage.cpp": "048edf7913bffb8c9f08b3f454916b34dcd41f7a42081cbd1fe613bf7a055750"
+  },
+  "performance_samples": 776,
+  "launcher_samples": 8,
+  "historical_samples_reviewed": 816,
+  "contract_paths": 1707,
+  "stage_inputs": 403,
+  "contract_unchanged": true,
+  "reference_manifest_sha256": "d7dc0333fdf0999f77399bbd655dbfc296a199f7408c50e95169c71a5fc18f8c"
+}

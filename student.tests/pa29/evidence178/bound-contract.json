@@ -1,0 +1,56 @@
+[
+  {
+    "name": "bound-dormant",
+    "source": "template<class T> int init(){return T::missing;} template<class T> struct Box{inline static int values[]={init<T>()};}; static_assert(sizeof(Box<int>::values)==sizeof(int),\"\"); int main(){}",
+    "entry": {
+      "status": 0,
+      "stderr": "",
+      "runtime": 0
+    },
+    "gcc": {
+      "status": 1,
+      "stderr": "/home/vishvananda/work/private/v4codex/artifacts/audit178/bound-dormant.cpp: In instantiation of \u2018int init() [with T = int]\u2019:\n/home/vishvananda/work/private/v4codex/artifacts/audit178/bound-dormant.cpp:1:114:   required from \u2018int Box<int>::values [1]\u2019\n    1 | template<class T> int init(){return T::missing;} template<class T> struct Box{inline static int values[]={init<T>()};}; static_assert(sizeof(Box<int>::values)==sizeof(int),\"\"); int main(){}\n      |                                                                                                           ~~~~~~~^~\n/home/vishvananda/work/private/v4codex/artifacts/audit178/bound-dormant.cpp:1:152:   required from here\n    1 | template<class T> int init(){return T::missing;} template<class T> struct Box{inline static int values[]={init<T>()};}; static_assert(sizeof(Box<int>::values)==sizeof(int),\"\"); int main(){}\n      |                                                                                                                                                        ^~~~~~\n/home/vishvananda/work/private/v4codex/artifacts/audit178/bound-dormant.cpp:1:40: error: \u2018missing\u2019 is not a member of \u2018int\u2019\n    1 | template<class T> int init(){return T::missing;} template<class T> struct Box{inline static int values[]={init<T>()};}; static_assert(sizeof(Box<int>::values)==sizeof(int),\"\"); int main(){}\n      |                                        ^~~~~~~\n"
+    },
+    "clang": {
+      "status": 1,
+      "stderr": "/home/vishvananda/work/private/v4codex/artifacts/audit178/bound-dormant.cpp:1:37: error: type 'int' cannot be used prior to '::' because it has no members\n    1 | template<class T> int init(){return T::missing;} template<class T> struct Box{inline static int values[]={init<T>()};}; static_assert(sizeof(Box<int>::values)==sizeof(int),\"\"); int main(){}\n      |                                     ^\n/home/vishvananda/work/private/v4codex/artifacts/audit178/bound-dormant.cpp:1:107: note: in instantiation of function template specialization 'init<int>' requested here\n    1 | template<class T> int init(){return T::missing;} template<class T> struct Box{inline static int values[]={init<T>()};}; static_assert(sizeof(Box<int>::values)==sizeof(int),\"\"); int main(){}\n      |                                                                                                           ^\n1 error generated.\n"
+    }
+  },
+  {
+    "name": "bound-effects",
+    "source": "int calls; template<class T> int init(){++calls;return 17;} template<class T> struct Box{inline static int values[]={init<T>()};}; static_assert(sizeof(Box<int>::values)==sizeof(int),\"\"); int main(){return calls;}",
+    "entry": {
+      "status": 0,
+      "stderr": "",
+      "runtime": 0
+    },
+    "gcc": {
+      "status": 0,
+      "stderr": "",
+      "runtime": 1
+    },
+    "clang": {
+      "status": 0,
+      "stderr": "",
+      "runtime": 1
+    }
+  },
+  {
+    "name": "discard-first",
+    "source": "int calls; template<class T> int init(){++calls;return 17;} template<class T> struct Box{inline static int values[]={init<T>()};}; int main(){if constexpr(false) return sizeof(Box<int>::values);return Box<int>::values[0]==17 && calls==1?0:1;}",
+    "entry": {
+      "status": 1,
+      "stderr": "ERROR: call lacks a published function fact: @init\n"
+    },
+    "gcc": {
+      "status": 0,
+      "stderr": "",
+      "runtime": 0
+    },
+    "clang": {
+      "status": 0,
+      "stderr": "",
+      "runtime": 0
+    }
+  }
+]

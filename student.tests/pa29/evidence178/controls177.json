@@ -1,0 +1,1124 @@
+{
+  "compiler_sha256": "022c1bc2829a1ecea8717405fe8252dfd90b0607e7379b1c6b7169eb71efda67",
+  "rows": [
+    {
+      "source": "student.tests/pa29/source177/array-condition.reject.cpp",
+      "sha256": "57c7312db147726b82b2b32f01ba4901bbf31990347d1fc4464e97f9a374d37b",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/array-condition.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/array-condition.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: condition declares an array or function\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/condition-declaration.cpp",
+      "sha256": "9ad7f6207f1c4ec6fab1a1e534fc2d0c5843a6c34deae81cad7ddd5bb28fb2cd",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/condition-declaration.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/condition-declaration.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/condition-declaration.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W int select<0>()\n0000000000000000 W int select<7>()\n0000000000000000 W Flag::Flag(int)\n0000000000000000 W Flag::Flag(int)\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/condition-declaration.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/condition-declaration"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/condition-declaration"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/constant-mode.cpp",
+      "sha256": "8f98ffcaf0e62209ade7312df23fad4d44be716ccdebeba82b93ec465e5ca5ac",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constant-mode.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constant-mode.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constant-mode.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constant-mode.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constant-mode"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constant-mode"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/constexpr-case.reject.cpp",
+      "sha256": "5cf5e6b38fc9c5fe41e22b6d84e991b276f43c811f1977b5de70551a12bf7557",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-case.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-case.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: switch bypasses initialization\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/constexpr-cross-branch.reject.cpp",
+      "sha256": "dcf7137c2df116c90aea0149f06dbbe5440e13aaa2970d8ad80574602985c8bc",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-cross-branch.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-cross-branch.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: goto bypasses initialization\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/constexpr-discarded-jump.reject.cpp",
+      "sha256": "fa59e1c58493d5407d2d64a717ab389e28fa2cd59e22b668d0429e481a897c1b",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-discarded-jump.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-discarded-jump.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: undefined goto label\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/constexpr-discarded-return.reject.cpp",
+      "sha256": "7971bb43faf29080fb4bb71b3f358c19a6005074c4954965ec31f1def1f631e0",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-discarded-return.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-discarded-return.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: invalid implicit conversion\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/constexpr-goto.reject.cpp",
+      "sha256": "a8905aae6aa2927c139ca50182754b091146ee2e3b518eebbc7f98205e87786e",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-goto.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-goto.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: goto bypasses initialization\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/constexpr-lifetime.reject.cpp",
+      "sha256": "2d15d5cb3ae6248eedbbdfe638155d73a6e3831c8d21d2744636eedda3cdb7f8",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-lifetime.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-lifetime.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-lifetime.reject.cpp:2\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/constexpr-local-goto.cpp",
+      "sha256": "56512c28bdd57d401fbe906d36e8c5142504398434224af5f173361aaad29a00",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-local-goto.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-local-goto.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-local-goto.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-local-goto.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-local-goto"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-local-goto"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/constexpr-nested.cpp",
+      "sha256": "0959cb152f3e8d5f4958b2e507e94c7973f471f334644bff0bfe571c97726fb2",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-nested.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-nested.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-nested.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W int run<int>(int)\n0000000000000000 W Guard::Guard()\n0000000000000000 W Guard::Guard()\n0000000000000000 W Guard::~Guard()\n0000000000000000 W Guard::~Guard()\n0000000000000000 D count\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-nested.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-nested"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-nested"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/constexpr-return.cpp",
+      "sha256": "5f190dc3d98f1ff283e117a412a2f1a46ca5f691cb1c992a9fad1f7a3bed6d19",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-return.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-return.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-return.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W auto select<int>(int)\n0000000000000000 T select()\n0000000000000000 d __string_4\n0000000000000010 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-return.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-return"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr-return"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/constexpr.cpp",
+      "sha256": "02655c8c92cdbb7cb39f1764a10b497ba4ca04b04913c7063b94c61e162307a7",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr.o"
+        ],
+        "status": 0,
+        "stdout": "                 U _Unwind_Resume\n0000000000000000 W int initialized<int>(int)\n0000000000000000 W int choose<int>(int)\n0000000000000000 W Guard::Guard()\n0000000000000000 W Guard::Guard()\n0000000000000000 W Guard::~Guard()\n0000000000000000 W Guard::~Guard()\n                 U __gxx_personality_v0\n0000000000000000 D live\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/constexpr"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/discarded-deleted.reject.cpp",
+      "sha256": "149959fec101c224c0e0b0450ea615b094b9b05c93ca7979b02d6b49a97b4821",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/discarded-deleted.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-deleted.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: selected deleted member function\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/discarded-demand.cpp",
+      "sha256": "5887d33c583d9ffa7c1b88629e11cb928767ef05c9c2597214046a3bbeca05f8",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/discarded-demand.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-demand.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-demand.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-demand.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-demand"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-demand"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/discarded-lambda.cpp",
+      "sha256": "7ab775d2039de99175910f36eee6b77629566ae4190a07683f8771dfa5e8289e",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/discarded-lambda.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-lambda.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-lambda.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 T f()\n0000000000000010 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-lambda.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-lambda"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-lambda"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/discarded-members.cpp",
+      "sha256": "df430d7fa1a99a3d58371fb5d3d8ecfe258e1231c1a024832fb3fb0e0197cb11",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/discarded-members.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-members.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-members.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-members.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-members"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-members"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/discarded-return-demand.cpp",
+      "sha256": "96c18c262141bcee195506d0355af1f3d7c267643cdad601785ab6a0073cfa85",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/discarded-return-demand.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-return-demand.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-return-demand.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-return-demand.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-return-demand"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-return-demand"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/discarded-return-demand.reject.cpp",
+      "sha256": "3de0dc2a842eb6951429433a9fe9f815e80949514e1f3b54182233777c53d8a6",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/discarded-return-demand.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-return-demand.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: name qualifier has no scope\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/discarded-static.cpp",
+      "sha256": "54a42d6a25ec4ed937f826d40e4af21e5aabb5f3d5a5375fc2c3ef19204b3055",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/discarded-static.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-static.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-static.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 d __local_static_13\n0000000000000008 d __local_static_13__guard\n0000000000000010 d __local_static_14\n0000000000000018 d __local_static_14__guard\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-static.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-static"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/discarded-static"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/entry-jump.reject.cpp",
+      "sha256": "990f4312e376fec8d8a36b38e444f197fdaec2c5f850c51bd0048e13b4517006",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/entry-jump.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/entry-jump.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: goto bypasses initialization\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/enum-condition.reject.cpp",
+      "sha256": "06b925a027fbe33205a2907e94490ba508b9657728c0b11800e3661c364c5a94",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/enum-condition.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/enum-condition.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: class or enum definition in condition\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/initialization-forms.cpp",
+      "sha256": "f64002e5678abbc33bb7d7c1d83f645d61b4ff5dc300c86d227abd99c56bdf09",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/initialization-forms.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/initialization-forms.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/initialization-forms.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000004 d __constant_array_12\n0000000000000000 d __local_static_13\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/initialization-forms.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/initialization-forms"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/initialization-forms"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/invalid-discarded.reject.cpp",
+      "sha256": "03a7e54bda7656dec4dceb0487ed3add6a10f80fef0c7ab168ab6f08c3a56e87",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/invalid-discarded.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/invalid-discarded.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: unknown expression name: absent\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/multiple-condition.reject.cpp",
+      "sha256": "7f875b5e700418a3d7aaf74a808a358957d90fc9db642df92df8a0a0855a524f",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/multiple-condition.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/multiple-condition.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: invalid condition declaration\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/nonconstant-condition.reject.cpp",
+      "sha256": "914142b46bea9d71e557546c3e1254f9b4bb92905f713bf1919ff82724e79a31",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/nonconstant-condition.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/nonconstant-condition.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: constexpr if condition is not constant\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/outside-scope.reject.cpp",
+      "sha256": "478c920c3568685ca386f6d6648b7e26c9cafe64ced9fc514e5d26b7fa695bba",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/outside-scope.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/outside-scope.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: unknown expression name: x\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/paren-condition.reject.cpp",
+      "sha256": "7b3859defe7040c215fe716f92ba20145c8e5d4f15beca0c052ff6c49187a450",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/paren-condition.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/paren-condition.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: condition requires brace or equal initializer\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/redecl-body.reject.cpp",
+      "sha256": "52935c6b8695e3577acfc46f398b7d2384ac437a871bf8e19b431f6e784c16cc",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/redecl-body.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/redecl-body.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: redeclaration in outermost statement block\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/redecl-condition.reject.cpp",
+      "sha256": "97f6ee74c9ff83e1848a96cff7e9939b3e89f7c0724f0435497e4b5de7157f71",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/redecl-condition.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/redecl-condition.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: duplicate local variable\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/redecl-template.reject.cpp",
+      "sha256": "e480d5c0a6896b8b679ce4b0bc59f43752b6a310a010aa1501ab992fc5e219a8",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/redecl-template.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/redecl-template.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: redeclaration in outermost statement block\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/selection.cpp",
+      "sha256": "120b4613dbf8e98e4273d7f06afa4f7c99bfd0d1054e1c1c634fd51d87153f9a",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/selection.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/selection.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/selection.o"
+        ],
+        "status": 0,
+        "stdout": "                 U _Unwind_Resume\n0000000000000023 T exit_return(int&)\n0000000000000000 T step()\n0000000000000000 W Guard::Guard(int&)\n0000000000000000 W Guard::Guard(int&)\n0000000000000000 W Guard::~Guard()\n0000000000000000 W Guard::~Guard()\n0000000000000000 W Guard::operator bool() const\n                 U typeinfo for int\n                 U __cxa_allocate_exception\n                 U __cxa_begin_catch\n                 U __cxa_end_catch\n                 U __cxa_throw\n                 U __gxx_personality_v0\n0000000000000000 D calls\n00000000000000e2 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/selection.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/selection"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/selection"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/static-condition.reject.cpp",
+      "sha256": "81e266104213e0af64a3157c64e9234bb142448f336b996f7a010fdc482dad64",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/static-condition.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/static-condition.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: invalid condition declaration specifier\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/switch.cpp",
+      "sha256": "6858754f19511844a7a81f3ae4601baa4203a7da05450c3fa6e965d670637398",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/switch.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/switch.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/switch.o"
+        ],
+        "status": 0,
+        "stdout": "                 U _Unwind_Resume\n0000000000000000 T go(int)\n0000000000000000 W int run<int>(int)\n0000000000000000 W Guard::Guard(int)\n0000000000000000 W Guard::Guard(int)\n0000000000000000 W Guard::~Guard()\n0000000000000000 W Guard::~Guard()\n0000000000000000 W Guard::operator int() const\n                 U typeinfo for int\n                 U __cxa_allocate_exception\n                 U __cxa_begin_catch\n                 U __cxa_end_catch\n                 U __cxa_throw\n                 U __gxx_personality_v0\n0000000000000000 D live\n00000000000002b2 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/switch.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/switch"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/switch"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/template-runtime.cpp",
+      "sha256": "f264c6e50eb673d3b64c904426d427514ea7f5d325e16781817735c2c9f9da4a",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/template-runtime.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/template-runtime.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/template-runtime.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W int choose<int>(int)\n0000000000000000 W int discard<int>()\n0000000000000000 W Holder<int>::operator bool() const\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/template-runtime.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/template-runtime"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/template-runtime"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source177/typedef-condition.reject.cpp",
+      "sha256": "b2db889aadc736a5f9f308778eba5441a95dc2b93f366012eec0dbab32ecce56",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/typedef-condition.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls177/typedef-condition.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: invalid condition declaration specifier\n"
+      },
+      "passed": true
+    }
+  ]
+}

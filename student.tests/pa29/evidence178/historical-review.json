@@ -1,0 +1,143 @@
+{
+  "records": [
+    {
+      "stage": 175,
+      "file": "student.tests/pa29/evidence175/common-performance.json",
+      "sha256": "260e2bc9384636f699001c6c0ef6a0d3f031c257cf42bb71b57f3281b08d4d58",
+      "samples": 224,
+      "compiler_identities": {
+        "A": {
+          "path": "/tmp/pa29-175/entry",
+          "sha256": "21589b947593a5fb156d6bc2379f3278d7c178bc53875e11b399e40a43176019"
+        },
+        "B": {
+          "path": "/tmp/pa29-175/final-checked",
+          "sha256": "3305fd803dccd1ebf63ec54e8ed3f7cf20b97ed1ececebb8e866858b4027bb0f"
+        }
+      },
+      "dimensions": [
+        "compiler latency",
+        "peak RSS",
+        "checked runtime",
+        "text bytes"
+      ],
+      "disposition": "Preserved; paired common workloads and capability/scaling evidence; PA29/O0 acceptance, no new percentage gate."
+    },
+    {
+      "stage": 175,
+      "file": "student.tests/pa29/evidence175/source-performance.json",
+      "sha256": "c004a962ba79628a4516ac44c9c845e69a258295432fb98d6c0360b8a23ed07c",
+      "samples": 48,
+      "compiler_identities": {
+        "A": {
+          "path": "/tmp/pa29-175/entry",
+          "sha256": "21589b947593a5fb156d6bc2379f3278d7c178bc53875e11b399e40a43176019"
+        },
+        "B": {
+          "path": "/tmp/pa29-175/final-checked",
+          "sha256": "3305fd803dccd1ebf63ec54e8ed3f7cf20b97ed1ececebb8e866858b4027bb0f"
+        }
+      },
+      "dimensions": [
+        "compiler latency",
+        "peak RSS",
+        "checked runtime",
+        "text bytes"
+      ],
+      "disposition": "Preserved; paired common workloads and capability/scaling evidence; PA29/O0 acceptance, no new percentage gate."
+    },
+    {
+      "stage": 176,
+      "file": "student.tests/pa29/evidence176/common-performance.json",
+      "sha256": "196dc6ef37402093ff439f292d0e36641a12666ef7cd06cf4df689baf7240f15",
+      "samples": 224,
+      "compiler_identities": {
+        "A": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/implementation176/entry",
+          "sha256": "3305fd803dccd1ebf63ec54e8ed3f7cf20b97ed1ececebb8e866858b4027bb0f"
+        },
+        "B": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/implementation176/final",
+          "sha256": "9d012b4a039a5e3eea6a3e355a22a850b613b085791e6a281a7272d33552c73e"
+        }
+      },
+      "dimensions": [
+        "compiler latency",
+        "peak RSS",
+        "checked runtime",
+        "text bytes"
+      ],
+      "disposition": "Preserved; paired common workloads and capability/scaling evidence; PA29/O0 acceptance, no new percentage gate."
+    },
+    {
+      "stage": 176,
+      "file": "student.tests/pa29/evidence176/declaration-performance.json",
+      "sha256": "a6b74e56c6aa841ed5e368503b99f10436ea4c7430b37adc3d16781471b24ae8",
+      "samples": 48,
+      "compiler_identities": {
+        "A": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/implementation176/entry",
+          "sha256": "3305fd803dccd1ebf63ec54e8ed3f7cf20b97ed1ececebb8e866858b4027bb0f"
+        },
+        "B": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/implementation176/final",
+          "sha256": "9d012b4a039a5e3eea6a3e355a22a850b613b085791e6a281a7272d33552c73e"
+        }
+      },
+      "dimensions": [
+        "compiler latency",
+        "peak RSS",
+        "checked runtime",
+        "text bytes"
+      ],
+      "disposition": "Preserved; paired common workloads and capability/scaling evidence; PA29/O0 acceptance, no new percentage gate."
+    },
+    {
+      "stage": 177,
+      "file": "student.tests/pa29/evidence177/common-performance.json",
+      "sha256": "873ad302ee3ce7957d1ada11925c9470cde824abc551711f5e9e6754d3d44d88",
+      "samples": 224,
+      "compiler_identities": {
+        "A": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/implementation177/entry",
+          "sha256": "9d012b4a039a5e3eea6a3e355a22a850b613b085791e6a281a7272d33552c73e"
+        },
+        "B": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/implementation177/final",
+          "sha256": "8e292c04f171459b32f40ef245da1fadba2f093f3a3f2a27858ad1b3033d136a"
+        }
+      },
+      "dimensions": [
+        "compiler latency",
+        "peak RSS",
+        "checked runtime",
+        "text bytes"
+      ],
+      "disposition": "Preserved; paired common workloads and capability/scaling evidence; PA29/O0 acceptance, no new percentage gate."
+    },
+    {
+      "stage": 177,
+      "file": "student.tests/pa29/evidence177/selection-performance.json",
+      "sha256": "9eaf0f1af5d067ae119496f2ecf935d995ac30a4cf930c614737f95176abcf2b",
+      "samples": 48,
+      "compiler_identities": {
+        "A": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/implementation177/entry",
+          "sha256": "9d012b4a039a5e3eea6a3e355a22a850b613b085791e6a281a7272d33552c73e"
+        },
+        "B": {
+          "path": "/home/vishvananda/work/private/v4codex/artifacts/implementation177/final",
+          "sha256": "8e292c04f171459b32f40ef245da1fadba2f093f3a3f2a27858ad1b3033d136a"
+        }
+      },
+      "dimensions": [
+        "compiler latency",
+        "peak RSS",
+        "checked runtime",
+        "text bytes"
+      ],
+      "disposition": "Preserved; paired common workloads and capability/scaling evidence; PA29/O0 acceptance, no new percentage gate."
+    }
+  ],
+  "scope": "PA29/O0; blanket 15% latency/RSS and zero-growth targets remain diagnostic under spec section 9. All mandated capacities, behavior and comparison rules preserved."
+}

@@ -1,0 +1,989 @@
+{
+  "compiler_sha256": "022c1bc2829a1ecea8717405fe8252dfd90b0607e7379b1c6b7169eb71efda67",
+  "rows": [
+    {
+      "source": "student.tests/pa29/source176/exclusion-args.reject.cpp",
+      "sha256": "bddaff65fde609714ffa668c843b88eef058c7c6f85a696d982d768b5b103de9",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/exclusion-args.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-args.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: exclude_from_explicit_instantiation takes no arguments\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/exclusion-direct-use.reject.cpp",
+      "sha256": "3b144da6e53aef5ab786d6420a8210fa0b0c3ce1ca19f5a6309bbbdb4ca4a47e",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/exclusion-direct-use.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-direct-use.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: name qualifier has no scope\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/exclusion-direct.cpp",
+      "sha256": "9f0eff7a40dbfd634d81729fe8a48a45962512b205b41711f2b3d0ffb1091862",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/exclusion-direct.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-direct.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-direct.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W Owner<int>::used()\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-direct.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-direct"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-direct"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/exclusion-late.cpp",
+      "sha256": "93c5d617ca4452a7ba4eb448ff8c25de07bb315e3a09885da8aaf548ce30146b",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/exclusion-late.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-late.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-late.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W Late<int>::used()\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-late.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-late"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-late"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/exclusion-ordinary.reject.cpp",
+      "sha256": "99e69143765b5ed39193abe1dc3a36b1f7f06ea7c3d8f42266451574727bb7d1",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/exclusion-ordinary.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-ordinary.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: name qualifier has no scope\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/exclusion-scoped.cpp",
+      "sha256": "4d9eda2f62d8115791ec841e89f6c6c6ab9cf08cd9cb5cf1874526b26ba41854",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/exclusion-scoped.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-scoped.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-scoped.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W Scoped<int>::used()\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-scoped.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-scoped"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion-scoped"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/exclusion.cpp",
+      "sha256": "baf5c154c1f3bf53ae1ae78daaab9d3944436e06cbce8d2ddd4a414a8b6ee9d8",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/exclusion.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 V Excluded<int>::data\n0000000000000000 W Excluded<int>::used() const\n0000000000000000 W Excluded<int>::Nested::call() const\n0000000000000000 W Excluded<long>::ordinary() const\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/exclusion"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-array.cpp",
+      "sha256": "d692d01da278cfd5b3d213db111d48fef074a90287f96a55d88c92c6ee78940f",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-array.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-array.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-array.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 V Arrays<int>::data\n0000000000000000 V Arrays<int>::empty\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-array.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-array"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-array"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-constexpr-demand.cpp",
+      "sha256": "6b87fbcc3cfda4aca24b0ab512a9ecb5e5c34430b6ec2ca190e728f7e7ad5d48",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-constexpr-demand.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-constexpr-demand.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-constexpr-demand.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-constexpr-demand.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-constexpr-demand"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-constexpr-demand"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-context.cpp",
+      "sha256": "23272bddd6c48e4dd1bd6bda524fb9ed123c36569ad11d5fcd51583d03e4df7e",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-context.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-context.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-context.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 V guard variable for Context<int>::value\n0000000000000000 V Context<int>::source_line\n0000000000000000 V Context<int>::value\n0000000000000000 W Context<int>::hidden()\n0000000000000000 V Context<int>::function\n00000000000000d1 t __cppgm_init\n0000000000000000 d __source_string_8\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-context.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-context"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-context"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-demand-array-use.reject.cpp",
+      "sha256": "089cc9b0f8e5c0f2dab7d2e4e29984b579a01e1ecfd0a900dfc4fd22f99f8656",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-demand-array-use.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-demand-array-use.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: name qualifier has no scope\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-demand-array.cpp",
+      "sha256": "d1afd1fcb6d959a73ba440882ab9ba63e2cae11bea0b6c0325b247012fe2da2b",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-demand-array.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-demand-array.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-demand-array.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 V LazyArray<int>::selected\n0000000000000000 V LazyArray<int>::constants\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-demand-array.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-demand-array"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-demand-array"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-demand-explicit.reject.cpp",
+      "sha256": "a79d7a3ce806e82841f28837815f9cd13aeb8462a8e683541c7634bc37a993b8",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-demand-explicit.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-demand-explicit.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: name qualifier has no scope\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-demand-use.reject.cpp",
+      "sha256": "87fa8995896701938391fd47c5a9f9688a5d1658cfb9e7ae5aaa2242a5f6010e",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-demand-use.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-demand-use.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: name qualifier has no scope\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-demand.cpp",
+      "sha256": "e6ad3affea646f345b41fb84cbec0de3ebf125ab2007b23e674168d9285c4ab9",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-demand.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-demand.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-demand.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 V Lazy<int>::selected\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-demand.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-demand"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-demand"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-duplicate.reject.cpp",
+      "sha256": "13187d718ddf773f0e102990141b843c49e76cd114e2457846a147a19bd4c161",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-duplicate.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-duplicate.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: inline variable defined twice in one translation unit\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-exclusion.cpp",
+      "sha256": "9531807ed0734c4e922e0895ad6bba2335ec61d96f5e9aa429d43e480539725a",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-exclusion.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-exclusion.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-exclusion.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 V Members<int>::used\n                 U Members<int>::supplied\n0000000000000000 V Members<long>::supplied\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "peer_compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-exclusion.peer",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-exclusion-peer.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-exclusion.o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-exclusion-peer.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-exclusion"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-exclusion"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-local.reject.cpp",
+      "sha256": "0d555a13e7962fc36d13fab55dba443f459f6c69c2995fcfa66b2284cabebdb7",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-local.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-local.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: inline variable requires namespace scope or static member\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-member.reject.cpp",
+      "sha256": "b8f57d64a3a104550428e295544793777fd34f874d916dad2689c35799ecb6e7",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-member.reject.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-member.reject.o"
+        ],
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: inline variable requires namespace scope or static member\n"
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-order.cpp",
+      "sha256": "85312ba4b70deede555ad227cf15e979d4b47a623f0c00fe7a6fa810d90aa5b0",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-order.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-order.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-order.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 T next()\n0000000000000000 V guard variable for Nodes<int>::first\n0000000000000000 V guard variable for Nodes<int>::second\n0000000000000000 V Nodes<int>::first\n0000000000000000 V Nodes<int>::second\n00000000000000a6 t __cppgm_init\n0000000000000000 D count\n0000000000000023 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-order.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-order"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-order"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-recursive.cpp",
+      "sha256": "2b0f094f4af8b2e1edf747e9eaa210a8408fcf4d118dbd56690637649300d719",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-recursive.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-recursive.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-recursive.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 V guard variable for Self<int>::value\n0000000000000000 V Self<int>::value\n000000000000001f t __cppgm_init\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-recursive.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-recursive"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-recursive"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-redeclarations.cpp",
+      "sha256": "1a921c0781cdc61d46862229df491d9e2c720f34f9ca5226ff087ea0db624369",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-redeclarations.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-redeclarations.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-redeclarations.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 T main\n0000000000000000 V reference\n0000000000000000 V value\n0000000000000000 V zero\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-redeclarations.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-redeclarations"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-redeclarations"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-shared.cpp",
+      "sha256": "b767c6b5479918ccd431392046fea47899af5b3db8a5a6fd36ef00cc8dd10b80",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-shared.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-shared.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-shared.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 d .Lcppgm.tls.33\n00000000000003de t @cppgm_call_terminate\n                 U _Exit\n                 U from_other()\n00000000000000c7 T next()\n                 U other(int)\n0000000000000000 V variable<long>\n0000000000000000 V _ZGR9reference_\n0000000000000000 V guard variable for object\n0000000000000000 V guard variable for dynamic\n0000000000000000 V guard variable for reference\n0000000000000000 V _ZGV9reference_\n0000000000000000 V guard variable for TemplateMembers<int>::value\n0000000000000000 V guard variable for Members::value\n0000000000000018 d private_value\n0000000000000000 V TemplateMembers<int>::value\n0000000000000000 T Check::~Check()\n00000000000002e3 T Check::~Check()\n0000000000000000 W Object::Object()\n0000000000000000 W Object::Object()\n0000000000000000 W Object::~Object()\n0000000000000000 W Object::~Object()\n0000000000000000 V Members::value\n0000000000000000 V Members::constant\n                 U std::terminate()\n0000000000000000 W TLS init function for tls\n0000000000000000 W TLS wrapper function for tls\n000000000000058e t __cppgm_fini\n00000000000003fa t __cppgm_init\n                 U __cxa_begin_catch\n                 U __gxx_personality_v0\n00000000000003c4 t __local_destructor_22\n00000000000003aa t __local_destructor_24\n                 U atexit\n0000000000000008 D calls\n0000000000000004 D check\n000000000000000c D destroyed\n0000000000000000 V dynamic\n000000000000001c D failed\n0000000000000000 V letters\n00000000000000ea T main\n0000000000000000 V object\n0000000000000000 V reference\n0000000000000000 V scalar\n0000000000000000 W tls\n",
+        "stderr": ""
+      },
+      "peer_compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-shared.peer",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-shared-peer.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-shared.o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-shared-peer.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-shared"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-shared"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/inline-temporaries.cpp",
+      "sha256": "76a608c05275692ecee766ccd96aacffd7400a85834708dbdb9a69e0959a8271",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-temporaries.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-temporaries.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-temporaries.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000274 t @cppgm_call_terminate\n                 U _Exit\n                 U _Unwind_Resume\n                 U address(int)\n0000000000000000 V _ZGR4pair0_\n0000000000000000 V _ZGR4pair_\n0000000000000000 V guard variable for pair\n0000000000000000 V _ZGV4pair0_\n0000000000000000 V _ZGV4pair_\n0000000000000000 W Item::Item(int)\n0000000000000000 W Item::Item(int)\n0000000000000000 W Item::~Item()\n0000000000000000 W Item::~Item()\n0000000000000000 W Pair::~Pair()\n0000000000000000 W Pair::~Pair()\n0000000000000000 T Check::~Check()\n000000000000015c T Check::~Check()\n                 U std::terminate()\n00000000000003f2 t __cppgm_fini\n0000000000000290 t __cppgm_init\n                 U __cxa_begin_catch\n                 U __gxx_personality_v0\n000000000000025a t __local_destructor_23\n0000000000000226 t __local_destructor_24\n0000000000000240 t __local_destructor_25\n                 U atexit\n0000000000000008 D check\n0000000000000018 D failed\n0000000000000010 D made\n00000000000000ca T main\n0000000000000000 V pair\n000000000000000c D trace\n",
+        "stderr": ""
+      },
+      "peer_compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/inline-temporaries.peer",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-temporaries-peer.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-temporaries.o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-temporaries-peer.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-temporaries"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/inline-temporaries"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "source": "student.tests/pa29/source176/tag-review.cpp",
+      "sha256": "f85a879e14c21c89668c60caaefc97c350215df1691e681e2bff42c240189dce",
+      "compile": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+          "-std=c++11",
+          "-O0",
+          "-c",
+          "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source176/tag-review.cpp",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/tag-review.o"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "symbols": {
+        "command": [
+          "nm",
+          "-C",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/tag-review.o"
+        ],
+        "status": 0,
+        "stdout": "0000000000000000 W Box<int>::Member::value[abi:kept]()\n0000000000000000 T main\n",
+        "stderr": ""
+      },
+      "link": {
+        "command": [
+          "g++",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/tag-review.o",
+          "-o",
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/tag-review"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "/home/vishvananda/work/private/v4codex/artifacts/audit178/controls176/tag-review"
+        ],
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "passed": true
+    }
+  ]
+}

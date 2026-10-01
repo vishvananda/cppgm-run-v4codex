@@ -1,0 +1,450 @@
+{
+  "source": {
+    "values": {
+      "600": {
+        "samples": 12,
+        "counters": {
+          "parsed_nodes": 9253,
+          "nodes": 36253,
+          "template_body_transitions": 600,
+          "semantic_specializations": 600,
+          "semantic_substitution_frames": 600,
+          "inline_variable_initializers": 0,
+          "inline_variable_hits": 0,
+          "inline_variable_demands": 0,
+          "inline_variable_dependencies": 0,
+          "instructions": 9043,
+          "native_functions": 602,
+          "native_instructions": 10860,
+          "text_bytes": 46120
+        }
+      },
+      "1200": {
+        "samples": 12,
+        "counters": {
+          "parsed_nodes": 18253,
+          "nodes": 72253,
+          "template_body_transitions": 1200,
+          "semantic_specializations": 1200,
+          "semantic_substitution_frames": 1200,
+          "inline_variable_initializers": 0,
+          "inline_variable_hits": 0,
+          "inline_variable_demands": 0,
+          "inline_variable_dependencies": 0,
+          "instructions": 18043,
+          "native_functions": 1202,
+          "native_instructions": 21660,
+          "text_bytes": 92320
+        }
+      },
+      "2400": {
+        "samples": 12,
+        "counters": {
+          "parsed_nodes": 36253,
+          "nodes": 144253,
+          "template_body_transitions": 2400,
+          "semantic_specializations": 2400,
+          "semantic_substitution_frames": 2400,
+          "inline_variable_initializers": 0,
+          "inline_variable_hits": 0,
+          "inline_variable_demands": 0,
+          "inline_variable_dependencies": 0,
+          "instructions": 36043,
+          "native_functions": 2402,
+          "native_instructions": 43260,
+          "text_bytes": 184720
+        }
+      }
+    },
+    "exact_linear": {
+      "parsed_nodes": {
+        "slope": "15",
+        "intercept": "253"
+      },
+      "nodes": {
+        "slope": "60",
+        "intercept": "253"
+      },
+      "template_body_transitions": {
+        "slope": "1",
+        "intercept": "0"
+      },
+      "semantic_specializations": {
+        "slope": "1",
+        "intercept": "0"
+      },
+      "semantic_substitution_frames": {
+        "slope": "1",
+        "intercept": "0"
+      },
+      "inline_variable_initializers": {
+        "slope": "0",
+        "intercept": "0"
+      },
+      "inline_variable_hits": {
+        "slope": "0",
+        "intercept": "0"
+      },
+      "inline_variable_demands": {
+        "slope": "0",
+        "intercept": "0"
+      },
+      "inline_variable_dependencies": {
+        "slope": "0",
+        "intercept": "0"
+      },
+      "instructions": {
+        "slope": "15",
+        "intercept": "43"
+      },
+      "native_functions": {
+        "slope": "1",
+        "intercept": "2"
+      },
+      "native_instructions": {
+        "slope": "18",
+        "intercept": "60"
+      },
+      "text_bytes": {
+        "slope": "77",
+        "intercept": "-80"
+      }
+    }
+  },
+  "declaration": {
+    "values": {
+      "600": {
+        "samples": 12,
+        "counters": {
+          "parsed_nodes": 17139,
+          "nodes": 62139,
+          "template_body_transitions": 0,
+          "semantic_specializations": 600,
+          "semantic_substitution_frames": 1200,
+          "inline_variable_initializers": 600,
+          "inline_variable_hits": 600,
+          "inline_variable_demands": 600,
+          "inline_variable_dependencies": 600,
+          "instructions": 13856,
+          "native_functions": 604,
+          "native_instructions": 18076,
+          "text_bytes": 81937
+        }
+      },
+      "1200": {
+        "samples": 12,
+        "counters": {
+          "parsed_nodes": 33939,
+          "nodes": 123939,
+          "template_body_transitions": 0,
+          "semantic_specializations": 1200,
+          "semantic_substitution_frames": 2400,
+          "inline_variable_initializers": 1200,
+          "inline_variable_hits": 1200,
+          "inline_variable_demands": 1200,
+          "inline_variable_dependencies": 1200,
+          "instructions": 27656,
+          "native_functions": 1204,
+          "native_instructions": 36076,
+          "text_bytes": 163537
+        }
+      },
+      "2400": {
+        "samples": 12,
+        "counters": {
+          "parsed_nodes": 67539,
+          "nodes": 247539,
+          "template_body_transitions": 0,
+          "semantic_specializations": 2400,
+          "semantic_substitution_frames": 4800,
+          "inline_variable_initializers": 2400,
+          "inline_variable_hits": 2400,
+          "inline_variable_demands": 2400,
+          "inline_variable_dependencies": 2400,
+          "instructions": 55256,
+          "native_functions": 2404,
+          "native_instructions": 72076,
+          "text_bytes": 326737
+        }
+      }
+    },
+    "exact_linear": {
+      "parsed_nodes": {
+        "slope": "28",
+        "intercept": "339"
+      },
+      "nodes": {
+        "slope": "103",
+        "intercept": "339"
+      },
+      "template_body_transitions": {
+        "slope": "0",
+        "intercept": "0"
+      },
+      "semantic_specializations": {
+        "slope": "1",
+        "intercept": "0"
+      },
+      "semantic_substitution_frames": {
+        "slope": "2",
+        "intercept": "0"
+      },
+      "inline_variable_initializers": {
+        "slope": "1",
+        "intercept": "0"
+      },
+      "inline_variable_hits": {
+        "slope": "1",
+        "intercept": "0"
+      },
+      "inline_variable_demands": {
+        "slope": "1",
+        "intercept": "0"
+      },
+      "inline_variable_dependencies": {
+        "slope": "1",
+        "intercept": "0"
+      },
+      "instructions": {
+        "slope": "23",
+        "intercept": "56"
+      },
+      "native_functions": {
+        "slope": "1",
+        "intercept": "4"
+      },
+      "native_instructions": {
+        "slope": "30",
+        "intercept": "76"
+      },
+      "text_bytes": {
+        "slope": "136",
+        "intercept": "337"
+      }
+    }
+  },
+  "selection": {
+    "values": {
+      "600": {
+        "samples": 12,
+        "counters": {
+          "parsed_nodes": 9370,
+          "nodes": 100570,
+          "template_body_transitions": 600,
+          "semantic_specializations": 1201,
+          "semantic_substitution_frames": 1200,
+          "inline_variable_initializers": 0,
+          "inline_variable_hits": 0,
+          "inline_variable_demands": 0,
+          "inline_variable_dependencies": 0,
+          "instructions": 13543,
+          "native_functions": 602,
+          "native_instructions": 18360,
+          "text_bytes": 84520
+        }
+      },
+      "1200": {
+        "samples": 12,
+        "counters": {
+          "parsed_nodes": 18370,
+          "nodes": 200770,
+          "template_body_transitions": 1200,
+          "semantic_specializations": 2401,
+          "semantic_substitution_frames": 2400,
+          "inline_variable_initializers": 0,
+          "inline_variable_hits": 0,
+          "inline_variable_demands": 0,
+          "inline_variable_dependencies": 0,
+          "instructions": 27043,
+          "native_functions": 1202,
+          "native_instructions": 36660,
+          "text_bytes": 169120
+        }
+      },
+      "2400": {
+        "samples": 12,
+        "counters": {
+          "parsed_nodes": 36370,
+          "nodes": 401170,
+          "template_body_transitions": 2400,
+          "semantic_specializations": 4801,
+          "semantic_substitution_frames": 4800,
+          "inline_variable_initializers": 0,
+          "inline_variable_hits": 0,
+          "inline_variable_demands": 0,
+          "inline_variable_dependencies": 0,
+          "instructions": 54043,
+          "native_functions": 2402,
+          "native_instructions": 73260,
+          "text_bytes": 338320
+        }
+      }
+    },
+    "exact_linear": {
+      "parsed_nodes": {
+        "slope": "15",
+        "intercept": "370"
+      },
+      "nodes": {
+        "slope": "167",
+        "intercept": "370"
+      },
+      "template_body_transitions": {
+        "slope": "1",
+        "intercept": "0"
+      },
+      "semantic_specializations": {
+        "slope": "2",
+        "intercept": "1"
+      },
+      "semantic_substitution_frames": {
+        "slope": "2",
+        "intercept": "0"
+      },
+      "inline_variable_initializers": {
+        "slope": "0",
+        "intercept": "0"
+      },
+      "inline_variable_hits": {
+        "slope": "0",
+        "intercept": "0"
+      },
+      "inline_variable_demands": {
+        "slope": "0",
+        "intercept": "0"
+      },
+      "inline_variable_dependencies": {
+        "slope": "0",
+        "intercept": "0"
+      },
+      "instructions": {
+        "slope": "45/2",
+        "intercept": "43"
+      },
+      "native_functions": {
+        "slope": "1",
+        "intercept": "2"
+      },
+      "native_instructions": {
+        "slope": "61/2",
+        "intercept": "60"
+      },
+      "text_bytes": {
+        "slope": "141",
+        "intercept": "-80"
+      }
+    }
+  },
+  "bound": {
+    "values": {
+      "600": {
+        "samples": 8,
+        "counters": {
+          "parsed_nodes": 20683,
+          "nodes": 47683,
+          "template_body_transitions": 600,
+          "semantic_specializations": 1200,
+          "semantic_substitution_frames": 1200,
+          "inline_variable_initializers": 600,
+          "inline_variable_hits": 1200,
+          "inline_variable_demands": 600,
+          "inline_variable_dependencies": 1200,
+          "instructions": 13249,
+          "native_functions": 603,
+          "native_instructions": 18068,
+          "text_bytes": 79558
+        }
+      },
+      "1200": {
+        "samples": 8,
+        "counters": {
+          "parsed_nodes": 41083,
+          "nodes": 95083,
+          "template_body_transitions": 1200,
+          "semantic_specializations": 2400,
+          "semantic_substitution_frames": 2400,
+          "inline_variable_initializers": 1200,
+          "inline_variable_hits": 2400,
+          "inline_variable_demands": 1200,
+          "inline_variable_dependencies": 2400,
+          "instructions": 26449,
+          "native_functions": 1203,
+          "native_instructions": 36068,
+          "text_bytes": 158758
+        }
+      },
+      "2400": {
+        "samples": 8,
+        "counters": {
+          "parsed_nodes": 81883,
+          "nodes": 189883,
+          "template_body_transitions": 2400,
+          "semantic_specializations": 4800,
+          "semantic_substitution_frames": 4800,
+          "inline_variable_initializers": 2400,
+          "inline_variable_hits": 4800,
+          "inline_variable_demands": 2400,
+          "inline_variable_dependencies": 4800,
+          "instructions": 52849,
+          "native_functions": 2403,
+          "native_instructions": 72068,
+          "text_bytes": 317158
+        }
+      }
+    },
+    "exact_linear": {
+      "parsed_nodes": {
+        "slope": "34",
+        "intercept": "283"
+      },
+      "nodes": {
+        "slope": "79",
+        "intercept": "283"
+      },
+      "template_body_transitions": {
+        "slope": "1",
+        "intercept": "0"
+      },
+      "semantic_specializations": {
+        "slope": "2",
+        "intercept": "0"
+      },
+      "semantic_substitution_frames": {
+        "slope": "2",
+        "intercept": "0"
+      },
+      "inline_variable_initializers": {
+        "slope": "1",
+        "intercept": "0"
+      },
+      "inline_variable_hits": {
+        "slope": "2",
+        "intercept": "0"
+      },
+      "inline_variable_demands": {
+        "slope": "1",
+        "intercept": "0"
+      },
+      "inline_variable_dependencies": {
+        "slope": "2",
+        "intercept": "0"
+      },
+      "instructions": {
+        "slope": "22",
+        "intercept": "49"
+      },
+      "native_functions": {
+        "slope": "1",
+        "intercept": "3"
+      },
+      "native_instructions": {
+        "slope": "30",
+        "intercept": "68"
+      },
+      "text_bytes": {
+        "slope": "132",
+        "intercept": "358"
+      }
+    }
+  }
+}

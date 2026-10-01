@@ -1,0 +1,24 @@
+{
+  "source": "student.tests/pa29/source178/source-storage.cpp",
+  "entry_compiler_sha256": "8e292c04f171459b32f40ef245da1fadba2f093f3a3f2a27858ad1b3033d136a",
+  "entry_result": {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-bounds",
+      "-c",
+      "student.tests/pa29/source178/source-storage.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/audit178/checked.o"
+    ],
+    "status": -6,
+    "stderr": "/usr/include/c++/15/bits/stl_vector.h:1263: std::vector<_Tp, _Alloc>::reference std::vector<_Tp, _Alloc>::operator[](size_type) [with _Tp = lowir_model::Id<lowir_model::SymbolTag>; _Alloc = std::allocator<lowir_model::Id<lowir_model::SymbolTag> >; reference = lowir_model::Id<lowir_model::SymbolTag>&; size_type = long unsigned int]: Assertion '__n < this->size()' failed.\n"
+  },
+  "stack_artifact": "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-bounds-stack.txt",
+  "stack_sha256": "ed8dd0da7d97d97c88fc593d07d575f67cc4c99ec6692da46e84f9479994625e",
+  "relevant_stack": [
+    "/usr/include/c++/15/bits/stl_vector.h:1263: std::vector<_Tp, _Alloc>::reference std::vector<_Tp, _Alloc>::operator[](size_type) [with _Tp = lowir_model::Id<lowir_model::SymbolTag>; _Alloc = std::allocator<lowir_model::Id<lowir_model::SymbolTag> >; reference = lowir_model::Id<lowir_model::SymbolTag>&; size_type = long unsigned int]: Assertion '__n < this->size()' failed.",
+    "#5  0x00007ffff7caea7c in std::__glibcxx_assert_fail(char const*, int, char const*, char const*) () from /usr/lib/x86_64-linux-gnu/libstdc++.so.6",
+    "#6  0x00005555555819b0 in cppgm::lowering::Procedural::global_finalization() [clone .cold] ()",
+    "#7  0x0000555555655f52 in cppgm::lowering::Procedural::run() ()"
+  ],
+  "scope": "ABI-compatible _GLIBCXX_ASSERTIONS in lowering/symbols.cpp and lowering/destruction.cpp; not a full sanitizer build. Final assertions and runtimes pass (bounds178.json)."
+}

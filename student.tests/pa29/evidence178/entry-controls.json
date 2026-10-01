@@ -1,0 +1,955 @@
+{
+  "compiler_sha256": "8e292c04f171459b32f40ef245da1fadba2f093f3a3f2a27858ad1b3033d136a",
+  "rows": [
+    {
+      "source": "student.tests/pa29/source178/default-frames.cpp",
+      "sha256": "205ae9d9ed6e30f8b0a22185636bd9e6060d424717ee22ad016e3b858beec105",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/default-frames.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-framesstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid substituted body value query\n"
+        }
+      ],
+      "student_passed": false,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/default-frames.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-frameshost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-frameshost.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-frameshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-frameshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/default-late.cpp",
+      "sha256": "de010886d713550ef805d557c9504d5c23fb7efd183cc3f8cb165c85b193b1e5",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/default-late.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-latestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-latestudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-latestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-latestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "student_passed": true,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/default-late.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-latehost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-latehost.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-latehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-latehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/default-packs.cpp",
+      "sha256": "8b4bc6d9da6d3e690343ade7fe9f010fbfeb9f504b72e69fa5b3d0332e0c590c",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/default-packs.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-packsstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: missing semantic constant\n"
+        }
+      ],
+      "student_passed": false,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/default-packs.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-packshost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-packshost.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-packshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/default-packshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/inline-bound-body.reject.cpp",
+      "sha256": "3f816b5d8729013ef4c48c00e2af10f5b65d71b36bd110f6d26a9b5aae84f4b2",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-bound-body.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-body.rejectstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "student_passed": false,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-bound-body.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-body.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-bound-body.reject.cpp: In instantiation of \u2018int init() [with T = int]\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-bound-body.reject.cpp:2:67:   required from \u2018int Box<int>::values [1]\u2019\n    2 | template<class T> struct Box { inline static int values[]={init<T>()}; };\n      |                                                            ~~~~~~~^~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-bound-body.reject.cpp:3:32:   required from here\n    3 | static_assert(sizeof(Box<int>::values)==sizeof(int), \"definition demand\");\n      |                                ^~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-bound-body.reject.cpp:1:42: error: \u2018missing\u2019 is not a member of \u2018int\u2019\n    1 | template<class T> int init() { return T::missing; }\n      |                                          ^~~~~~~\n"
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/inline-bound-default.cpp",
+      "sha256": "47da2b7323fde85fbf58818984f04a7fa8e99baeac7cf7d234333409ba4e768e",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-bound-default.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-defaultstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid substituted body value query\n"
+        }
+      ],
+      "student_passed": false,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-bound-default.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-defaulthost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-defaulthost.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-defaulthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-defaulthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/inline-bound-effects.cpp",
+      "sha256": "cf411410cb42552637387d27c338352f96f9b174bea529ef34f6f40a9ae514b1",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-bound-effects.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-effectsstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-effectsstudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-effectsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-effectsstudent"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "student_passed": false,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-bound-effects.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-effectshost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-effectshost.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-effectshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-effectshost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/inline-bound-inner.cpp",
+      "sha256": "330c622d94a9cc2151baa16300b8a5751bd348ca58519c8b4083928a62583e02",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-bound-inner.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-innerstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-innerstudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-innerstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-innerstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "student_passed": true,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-bound-inner.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-innerhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-innerhost.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-innerhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-bound-innerhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/inline-context.cpp",
+      "sha256": "d6775da1c535fd6400b87b2ae01ced72829f5ccccd0e3a8e34e9b6c7f075040f",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-context.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-contextstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-contextstudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-contextstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-contextstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "student_passed": true,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-context.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-contexthost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-contexthost.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-contexthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-contexthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/inline-demand.cpp",
+      "sha256": "0a3109f0eb4988f2e8c79176e994507e5bea2ba5313c2f376f6e026b0c43257b",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-demand.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-demandstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-demandstudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-demandstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-demandstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "student_passed": true,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-demand.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-demandhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-demandhost.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-demandhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-demandhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/inline-discard-first.cpp",
+      "sha256": "8637ae26233f63e564880e18d7c9d9a940f2250ca582ce9f53c74443ed29166d",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-discard-first.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-discard-firststudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: call lacks a published function fact: @init\n"
+        }
+      ],
+      "student_passed": false,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-discard-first.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-discard-firsthost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-discard-firsthost.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-discard-firsthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-discard-firsthost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/inline-discarded.reject.cpp",
+      "sha256": "ff274997638c805bb02febba02ae0a75b54bcdc412dc3bd82e2ec591931e9956",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-discarded.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-discarded.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: name qualifier has no scope\n"
+        }
+      ],
+      "student_passed": true,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-discarded.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-discarded.rejecthost.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-discarded.reject.cpp: In instantiation of \u2018int Box<int>::values []\u2019:\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-discarded.reject.cpp:2:58:   required from here\n    2 | int main() { if constexpr(false) return sizeof(Box<int>::values); }\n      |                                                          ^~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-discarded.reject.cpp:1:63: error: \u2018missing\u2019 is not a member of \u2018int\u2019\n    1 | template<class T> struct Box { inline static int values[]={T::missing}; };\n      |                                                               ^~~~~~~\n"
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/inline-unevaluated.cpp",
+      "sha256": "a3b4d97dd9aa99aa00b8df727f0a29d4ef743153f936c6ed4dab2231e46f6571",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-unevaluated.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-unevaluatedstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: call lacks a published function fact: @init\n"
+        }
+      ],
+      "student_passed": false,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/inline-unevaluated.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-unevaluatedhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-unevaluatedhost.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-unevaluatedhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/inline-unevaluatedhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/integrated.cpp",
+      "sha256": "34d7cf11c2bfda10998db0364ec5668f86ac27fada944bfcdccd2466f8bed9f9",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/integrated.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/integratedstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: call lacks a published function fact: @initialize\n"
+        }
+      ],
+      "student_passed": false,
+      "host": [
+        {
+          "command": [
+            "clang++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/integrated.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/integratedhost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/integratedhost.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/integratedhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/integratedhost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/selection-source.cpp",
+      "sha256": "d0b7acfc0b0f9086dc92579a10b1d0fb6904fa6765ab70d6e6c3e8c7698a4c24",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/selection-source.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/selection-sourcestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/selection-sourcestudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/selection-sourcestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/selection-sourcestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "student_passed": true,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/selection-source.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/selection-sourcehost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/selection-sourcehost.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/selection-sourcehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/selection-sourcehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_passed": true
+    },
+    {
+      "source": "student.tests/pa29/source178/source-storage.cpp",
+      "sha256": "048edf7913bffb8c9f08b3f454916b34dcd41f7a42081cbd1fe613bf7a055750",
+      "student": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry",
+            "-std=c++11",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/source-storage.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/source-storagestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/source-storagestudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/source-storagestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/source-storagestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "student_passed": true,
+      "host": [
+        {
+          "command": [
+            "g++",
+            "-std=c++17",
+            "-O0",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source178/source-storage.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/source-storagehost.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/source-storagehost.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/source-storagehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/audit178/entry-controls/source-storagehost"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "host_passed": true
+    }
+  ]
+}

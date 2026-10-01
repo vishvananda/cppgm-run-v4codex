@@ -1,0 +1,30 @@
+{
+  "entry": "e59dcaa11e9f674526962ea1fa28f864469fb081",
+  "previous_review": "7139ceb5769eea12c6e2e00b54932f09d59c79b5",
+  "entry_sha256": "8e292c04f171459b32f40ef245da1fadba2f093f3a3f2a27858ad1b3033d136a",
+  "failed": [
+    "pa29/tests/compile/200-hosted-type-specifier-functional-cast.t",
+    "pa29/tests/compile/500-bitint-signed-static-cast-template-body.t",
+    "pa29/tests/compile/500-bitint-static-cast-template-body.t",
+    "pa29/tests/compile/500-builtin-types-and-extern-vars.t",
+    "pa29/tests/compile/500-darwin-wait-status-constant-expression.t",
+    "pa29/tests/compile/500-gnu-ext-vector-scalar-template-deduction.t",
+    "pa29/tests/compile/500-nontemplate-deduction-guide-declaration.t",
+    "pa29/tests/compile/600-builtin-complex-return.t",
+    "pa29/tests/compile/600-gnu-complex-template-constructor.t",
+    "pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+    "pa29/tests/compile/600-structured-binding-class-decomposition.t",
+    "pa29/tests/compile/600-structured-binding-function-template-body.t",
+    "pa29/tests/compile/600-structured-binding-gnu-attr-class-template-method.t",
+    "pa29/tests/compile/600-structured-binding-range-for-template-body.t",
+    "pa29/tests/compile/700-gnu-zero-length-array-member-compile.t",
+    "pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+    "pa29/tests/compile/700-hosted-coroutine-contextual-operators-compile.t",
+    "pa29/tests/compile/700-hosted-gnu-float-builtin-spellings.t",
+    "pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+    "pa29/tests/compile/700-static-call-operator-extension.t",
+    "pa29/tests/run/800-always-inline-codegen-run.t",
+    "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t"
+  ],
+  "total": 403
+}
