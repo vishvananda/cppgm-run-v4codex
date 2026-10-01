@@ -143,6 +143,12 @@ Constant Analyzer::constant_entity_value(EntityId e)
 {
     EvaluationScope initializer(*this,true);
     if (!e) return Constant();
+    if (binding_projection(e).object) {
+        auto address = constant_entity_address(e);
+        auto type = entities[e].type;
+        if (types[type].kind == TypeKind::LRef || types[type].kind == TypeKind::RRef) return Constant(type,address);
+        return constant_read(address);
+    }
     initialize_inline_variable(e);
     if (auto recipe = inline_variable_definitions.get(e))
         if (inline_variable_recipes[recipe].state == FactState::Active) return Constant();

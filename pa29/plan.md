@@ -1,6 +1,6 @@
-# PA29 compact plan — checkpoint audit178
+# PA29 compact plan — implementation179
 
-Target: **PA29 full-stage**. Phase: **checkpointAudit complete; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `7139ceb5769eea12c6e2e00b54932f09d59c79b5`.
 Audit entry: `e59dcaa11e9f674526962ea1fa28f864469fb081`.
@@ -60,3 +60,28 @@ Avoid splitting followups at shared definition/default/discard/lifetime boundari
 The three owner handoffs were distinct, but the missed interactions caused
 avoidable fragmentation. Complete those interactions and integrated host linkage
 within each broad owner group before the next handoff.
+
+## Active implementation179
+
+Entry HEAD: `cd283a59949c9d56236f6022d018bd3f2057105c`; baseline 381/403 (22 failures).
+Previous turn classification: progress — audit178 committed correctness repairs
+and validation evidence; it did not reduce the current failure count.
+
+Owner group: structured declarations, including class/array decomposition,
+reference/cv identity, template patterns, range-for and object lifetime. Parse
+one source node; establish hidden object and typed projections once in semantics;
+lowering consumes object/member/element identities without synthetic syntax.
+Work/storage must track actual bindings and required class members, with no
+whole-program retries. Preserve dependent-only substitution and existing arenas.
+Validate all four course cases plus explicit instantiated/runtime/rejection,
+LowIR/object and lifetime controls. Record O0 compiler latency/RSS and checked
+runtime/text size with frozen A/A+ABBA comparisons for equivalent inputs;
+newly correct cases use final-only measurements. Optional transform budget zero.
+Remaining broad owners and independent contract questions above remain open.
+
+Increment 1: parsed binding names, class/reference projections, fixed/dependent
+patterns and range-for now pass all four course cases and 14 explicit controls,
+including cv/reference decltype, mutable bit-fields, self-use rejection, jumps,
+constant evaluation and return/unwind cleanup. File audit passes (four inherited
+warnings). Continue array-copy initialization and broader owner interactions;
+this commit is not a handoff boundary.

@@ -202,6 +202,8 @@ const char* kind_name(Kind kind)
         "vector-type-attribute",
         "asm-statement",
         "asm-operand",
+        "binding-names",
+        "binding-name",
     };
     return names[static_cast<unsigned>(kind)];
 }

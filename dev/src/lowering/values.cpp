@@ -286,6 +286,15 @@ Value Procedural::field(Value base, EntityId e, unsigned steps, TypeId object)
 Value Procedural::binding(EntityId e)
 {
     if (!e) throw std::logic_error("missing resolved declaration");
+    auto projection = sem.binding_projection(e);
+    if (projection.object) {
+        auto base = address(binding(projection.object));
+        if (projection.member) return field(base,projection.member,projection.adjustment);
+        auto t = sem.entities[e].type;
+        Instruction index(Opcode::Index,IRType::I8); index.projection = ir_model::IPK_ARRAY_ELEMENT;
+        auto value = emit(index,{base.operand,Operand::integer(projection.element*sem.object_size(t))});
+        value.type = t; value.address = true; return value;
+    }
     const auto& entity = sem.entities[e];
     TypeId t = entity.type;
     if (sem.static_temporary(e).object) return Value(Operand::symbol(symbols[e]),type(t),t,true);

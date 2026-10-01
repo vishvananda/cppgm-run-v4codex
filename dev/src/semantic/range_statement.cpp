@@ -121,7 +121,9 @@ void Analyzer::resolve_range(NodeId n, ScopeId s)
     }
     element = plan.element.result;
     TypeId t;
-    if (spec_has(specs,KW_AUTO)) {
+    bool decomposition = child(d,Kind::BindingNames);
+    if (decomposition) t = binding_object_type(specs,d,element);
+    else if (spec_has(specs,KW_AUTO)) {
         unsigned cv = (spec_has(specs,KW_CONST) ? 1 : 0) | (spec_has(specs,KW_VOLATILE) ? 2 : 0);
         auto saved = deducing_placeholder; deducing_placeholder = true;
         TypeId pattern;
@@ -136,9 +138,11 @@ void Analyzer::resolve_range(NodeId n, ScopeId s)
     auto id = terminal(decl_name(d));
     plan.variable = make_entity(EntityKind::Variable,control,id,d);
     entities[plan.variable].type = t;
-    bind(control,id,plan.variable); record(control,plan.variable,d,t,EntityKind::Variable);
+    if (!decomposition) bind(control,id,plan.variable);
+    record(control,plan.variable,d,t,EntityKind::Variable);
     facts.edit(d).type = t; facts.edit(d).entity = plan.variable;
     register_destruction(plan.variable);
+    if (decomposition) declare_bindings(d,control,plan.variable,false);
     if (types[t].kind == TypeKind::LRef || types[t].kind == TypeKind::RRef) {
         auto temporary = converted_temporary(c);
         if (!temporary && c.kind == Conversion::Kind::Standard && !c.temporary) temporary = plan.element.temporary;
@@ -167,7 +171,9 @@ void Analyzer::bind_template_range(NodeId n, ScopeId s)
     }
     bool placeholder = spec_has(specs,KW_AUTO);
     auto t = placeholder ? 0 : bind_template_type(specs,d,control);
-    if (placeholder && fixed) {
+    bool decomposition = child(d,Kind::BindingNames);
+    if (decomposition) t = binding_object_type(specs,d,fixed ? shape.element.result : Expression());
+    else if (placeholder && fixed) {
         unsigned cv = (spec_has(specs,KW_CONST) ? 1 : 0) | (spec_has(specs,KW_VOLATILE) ? 2 : 0);
         auto saved = deducing_placeholder; deducing_placeholder = true;
         try {
@@ -187,6 +193,7 @@ void Analyzer::bind_template_range(NodeId n, ScopeId s)
     }
     auto e = pattern_declaration(EntityKind::Variable,control,terminal(decl_name(d)),d,!t || dependent_type(t));
     entities[e].type = t; facts.edit(d).type = t; facts.edit(d).entity = e;
+    if (decomposition) declare_bindings(d,control,e,true);
     ++loop_depth;
     bind_template_statement(ast[n].last,control);
     --loop_depth;

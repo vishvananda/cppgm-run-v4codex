@@ -261,6 +261,10 @@ void Analyzer::simple(NodeId n, ScopeId s)
     if (definitions) resolve_parenthesized_declaration(n,s);
     NodeId specs = ast[n].first;
     NodeId list = child(n, Kind::InitDeclarators);
+    if (list && child(ast[ast[list].first].first,Kind::BindingNames)) {
+        if (ast[ast[list].first].next) throw std::runtime_error("structured binding requires one declaration");
+        resolve_bindings(specs,ast[ast[list].first].first,s); return;
+    }
     IdentifierId anonymous_name = list ? terminal(decl_name(ast[ast[list].first].first)) : 0;
     ScopeId saved_access = access_override;
     NodeId named = ast[n].kind == Kind::Function ? ast[specs].next : ast[ast[list].first].first;

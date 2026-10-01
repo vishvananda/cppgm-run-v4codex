@@ -152,6 +152,18 @@ NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts, 
     if (in.eat("...")) ast.append(result, make(Kind::ParameterPack));
     ScopeId saved_scope = scope;
     NodeId declared_name = parsed.name;
+    if (!abstract && !declared_name && in.is("[") && identifier(1)) {
+        in.take();
+        auto bindings = make(Kind::BindingNames);
+        do {
+            if (!identifier()) throw std::runtime_error("expected structured binding name");
+            ast.append(bindings,leaf(Kind::BindingName));
+        } while (in.eat(","));
+        in.require("]");
+        ast.append(result,bindings);
+        ast[result].flags |= attributes(&alignment);
+        return result;
+    }
     if (declared_name && ast[declared_name].first != ast[declared_name].last) {
         ScopeId qualified = qualified_owner(declared_name);
         if (qualified != unknown_scope) {
@@ -325,6 +337,9 @@ NodeId Parser::declarator_name(NodeId decl) const
 void Parser::bind_declarator(NodeId decl, Category category, ScopeId owner, ScopeId type)
 {
     if (!decl) return;
+    for (auto c = ast[decl].first; c; c = ast[c].next)
+        if (ast[c].kind == Kind::BindingNames)
+            for (auto b = ast[c].first; b; b = ast[b].next) names.bind(owner,ast[b].text,Category::Value);
     NodeId n = declarator_name(decl);
     if (n) names.bind(ast[n].first != ast[n].last || ast[n].op == OP_COLON2 ? qualified_owner(n) : owner,
                       final_name(n), category, type);

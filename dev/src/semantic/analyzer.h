@@ -60,6 +60,19 @@ public:
         return id ? constants[id] : Constant();
     }
     Types types;
+    struct BindingProjection {
+        EntityId object = 0, member = 0;
+        std::uint32_t adjustment = 0, element = 0;
+    };
+    Index binding_projection_index, binding_shape_index;
+    std::vector<BindingProjection> binding_projections = std::vector<BindingProjection>(1);
+    struct BindingShape { TypeId type = 0; std::uint32_t first = 0, count = 0; };
+    std::vector<BindingShape> binding_shapes = std::vector<BindingShape>(1);
+    std::vector<EntityId> binding_members;
+    const BindingProjection& binding_projection(EntityId e) const { return binding_projections[binding_projection_index.get(e)]; }
+    TypeId binding_object_type(NodeId specs, NodeId d, Expression value);
+    void resolve_bindings(NodeId specs, NodeId d, ScopeId s, bool pattern = false);
+    void declare_bindings(NodeId d, ScopeId s, EntityId object, bool pattern);
     const RangePlan& range_plan(NodeId n) const { return ranges[range_index.get(n)]; }
     std::vector<Entity> entities;
     std::vector<Scope> scopes;

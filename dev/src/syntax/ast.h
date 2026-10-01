@@ -152,6 +152,8 @@ enum class Kind : unsigned char {
     VectorAttribute,
     Assembly,
     AssemblyOperand,
+    BindingNames,
+    BindingName,
 };
 
 struct Location {

@@ -213,6 +213,9 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
             else dependent |= bind_template_expression(c,s);
         }
         auto bind_decl = [&](NodeId d, NodeId init, NodeId body) {
+            if (child(d,Kind::BindingNames)) {
+                resolve_bindings(specs,d,s,true); return facts[d].entity;
+            }
             auto name = decl_name(d);
             bool function = child(d,Kind::Parameters) || body || special;
             bool dep = dependent;

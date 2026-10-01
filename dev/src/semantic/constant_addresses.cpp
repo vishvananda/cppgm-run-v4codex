@@ -61,6 +61,20 @@ std::uint64_t Analyzer::constant_offset(std::uint32_t id)
 std::uint32_t Analyzer::constant_entity_address(EntityId e)
 {
     if (!e) return 0;
+    auto projection = binding_projection(e);
+    if (projection.object) {
+        auto base = constant_entity_address(projection.object);
+        if (projection.member) {
+            base = constant_base_address(base,entities[scopes[entities[projection.member].owner].entity].type);
+            auto field = constant_field_address(base,projection.member);
+            auto kind = types[entities[e].type].kind;
+            if (kind == TypeKind::LRef || kind == TypeKind::RRef) {
+                auto value = constant_read(field); return value.valid ? value.bits : 0;
+            }
+            return field;
+        }
+        return constant_subobject(base,entities[e].type,projection.element);
+    }
     if (constant_frame) {
         auto slot = constant_frame->bindings.get(e);
         if (slot) {
