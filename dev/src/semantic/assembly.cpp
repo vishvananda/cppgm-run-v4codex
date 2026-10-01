@@ -21,6 +21,10 @@ void Analyzer::resolve_assembly(NodeId n, ScopeId s, bool pattern)
             if (x.entity && field_fact(x.entity).bit_field)
                 throw std::runtime_error("asm bit-field operand is unsupported");
             if ((flags & AsmImmediate) && !evaluate(source,s).valid) throw std::runtime_error("asm immediate is not constant");
+            // Outputs modify their source storage even when no C++ assignment
+            // node exists. Memory operands expose that storage to the recipe.
+            // Retire the same private-local proof as ordinary writes/addresses.
+            if (flags & (AsmOutput|AsmMemory)) observe_scalar(source,flags & AsmOutput);
         } else x.type = 0;
         nodes.push_back(c); operands.push_back(x);
     }

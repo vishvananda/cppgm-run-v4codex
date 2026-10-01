@@ -60,8 +60,10 @@ void Analyzer::complete_query_class(EntityId entity)
         // consumer recomputes the query before it next probes its own cache.
         query_revisions.put(query,query_revisions.get(query)+1);
         ++query_invalidations;
-        for (unsigned mode = 0; mode != 2; ++mode)
+        for (unsigned mode = 0; mode != 2; ++mode) {
             if (auto value = query_value_index.get(key(query,mode))) query_values[value] = QueryValue();
+            if (constant_query_receivers.get(key(query,mode))) constant_query_receivers.put(key(query,mode),0);
+        }
         for (auto edge = query_dependency_heads.get(query); edge; edge = query_dependencies[edge].next)
             work.push_back(query_dependencies[edge].consumer);
     }

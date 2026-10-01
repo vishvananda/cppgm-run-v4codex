@@ -235,10 +235,16 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                     base = types.compound(TypeKind::DependentArray,base,query);
                     continue;
                 }
-                Constant v = evaluate(ast[c].first, s);
+                // Only the first new[] extent is an ordinary evaluated
+                // expression. Other array dimensions require constant values.
                 if (c == dynamic_array) {
+                    EvaluationScope checking(*this,true);
                     auto x = expression(ast[c].first,s);
                     if (!integral(x.type) || scoped_enum(x.type)) throw std::runtime_error("array allocation bound must be integral");
+                }
+                EvaluationScope mode(*this,c != dynamic_array);
+                Constant v = evaluate(ast[c].first, s);
+                if (c == dynamic_array) {
                     if (v.valid && negative_constant(v)) throw std::runtime_error("negative array allocation bound");
                 } else if (!v.valid || !integral(v.type) || scoped_enum(v.type) || !v.bits ||
                     (negative_constant(v) || integer_value(v) > ~std::uint64_t(0)))

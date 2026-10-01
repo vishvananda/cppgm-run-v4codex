@@ -574,7 +574,7 @@ struct PlacementNew {
     EntityId allocation = 0, constructor = 0, deallocation = 0, destructor = 0;
     TypeId type = 0, leaf = 0; NodeId initializer = 0, bound = 0;
     std::uint64_t fixed_count = 0, stride = 0, cookie = 0;
-    Expression call; bool array = false, zero = false, construct = false, narrow_extent = false;
+    Expression call; bool array = false, zero = false, construct = false, narrow_extent = false, dynamic_extent = false;
     std::uint32_t zero_plan = 0;
 };
 struct DeleteExpression {

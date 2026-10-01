@@ -15,6 +15,7 @@ Expression Analyzer::placement_new(NodeId n, ScopeId s)
     { auto& published = facts.edit(type_node); published.type = use.type; published.scope = s; }
     if (types[use.type].kind == TypeKind::Array) {
         use.array = true; use.bound = suffix ? ast[suffix].first : 0;
+        use.dynamic_extent = use.bound && !runtime_constant_fact(use.bound).valid;
         use.fixed_count = types[use.type].bound; use.type = types[use.type].child;
         if (suffix && !use.bound) throw std::runtime_error("missing array allocation extent");
     }

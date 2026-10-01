@@ -38,7 +38,8 @@ public:
     };
     bool required_constant_object(EntityId e) const { return constexpr_declarations.get(e) == 2; }
     Constant runtime_constant_fact(NodeId n) const {
-        auto id = evaluation_context_present ? runtime_constants.get(n) : facts[n].value;
+        auto id = runtime_constants.get(n);
+        if (!id && !evaluation_context_present) id = facts[n].value;
         return id ? constants[id] : Constant();
     }
     Types types;

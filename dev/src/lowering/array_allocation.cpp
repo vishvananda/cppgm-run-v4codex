@@ -27,7 +27,7 @@ void Procedural::heap_array_destroy(EntityId destructor, TypeId leaf, Value data
 Value Procedural::array_new(NodeId n, const semantic::PlacementNew& use)
 {
     // Keep the extent across the allocator call; it is evaluated only once.
-    bool dynamic = use.bound && !sem.constant_fact(use.bound).valid;
+    bool dynamic = use.dynamic_extent;
     Operand bytes;
     SlotId extent;
     if (dynamic) {

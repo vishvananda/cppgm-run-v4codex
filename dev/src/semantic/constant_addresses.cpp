@@ -184,7 +184,15 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         auto id = constant_storage_address(x.type,Constant(),0,n,true);
         constant_literal_storage.put(ast[n].literal,id); return id;
     }
-    if ((ast[n].kind == Kind::FunctionName || ast[n].kind == Kind::IdExpression) && !nonstatic_field(x.entity)) return constant_entity_address(x.entity);
+    if ((ast[n].kind == Kind::FunctionName || ast[n].kind == Kind::IdExpression) && !nonstatic_field(x.entity)) {
+        // Enumerators and substituted value parameters name values, not
+        // storage. A reference use materializes that value in a temporary.
+        if (x.category == ValueCategory::Prvalue) {
+            auto value = evaluate(n,s);
+            return value.valid ? constant_storage_address(x.type,value) : 0;
+        }
+        return constant_entity_address(x.entity);
+    }
     if ((ast[n].kind == Kind::IdExpression || ast[n].kind == Kind::Member) && nonstatic_field(x.entity)) {
         auto use = object_fact(n);
         auto base = use.node ? constant_arrow(use.node,use.arrow) : active_constant ? constant_activations[active_constant].object : 0;

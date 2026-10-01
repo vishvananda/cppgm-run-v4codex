@@ -29,14 +29,14 @@ void Analyzer::finish_allocations()
             if (leaf_nonthrowing(ctor)) use.deallocation = 0;
             continue;
         }
-        if (use.bound && !constant_fact(use.bound).valid) {
+        if (use.dynamic_extent) {
             // Retain the source-width O0 extent arithmetic only with a
             // completed, constant-return bound proof. Otherwise widen before
             // multiplying, so valid size_t extents cannot wrap at 32 bits.
             TypeId t = expression_fact(use.bound).type;
             EntityId callee = ast[use.bound].kind == Kind::Call ? facts[use.bound].entity : 0;
             NodeId body = entities[callee].body, ret = ast[body].first;
-            Constant bound = ast[ret].kind == Kind::Return && !ast[ret].next ? constant_fact(ast[ret].first) : Constant();
+            Constant bound = ast[ret].kind == Kind::Return && !ast[ret].next ? runtime_constant_fact(ast[ret].first) : Constant();
             if (!bound.valid && ast[ret].kind == Kind::Return && !ast[ret].next &&
                 ast[ast[ret].first].kind == Kind::Literal && !ast.literals[ast[ast[ret].first].literal].suffix)
                 bound = evaluate(ast[ret].first,facts[ast[ret].first].scope);

@@ -11,7 +11,11 @@ std::uint32_t Analyzer::constant_query_arrow(QueryId id, std::uint32_t chain)
 }
 std::uint32_t Analyzer::constant_query_object(QueryId id)
 {
-    if (auto known = constant_query_receivers.get(id)) return known;
+    auto cache_key = key(id,manifest_evaluation);
+    if (auto known = constant_query_receivers.get(cache_key)) {
+        query_value(id); // Propagate mode dependence from the cached value.
+        return known;
+    }
     auto q = type_queries[id]; auto fact = query_fact(id);
     if (q.kind == QueryKind::Value && types[q.type].kind == TypeKind::LRef) return q.value;
     if (q.kind == QueryKind::Parenthesized) return constant_query_object(query_edges[q.offset]);
@@ -22,7 +26,8 @@ std::uint32_t Analyzer::constant_query_object(QueryId id)
         auto result = constant_storage_address(fact.expression.type,Constant(),0,source,true);
         constant_literal_storage.put(literal,result); return result;
     }
-    if (q.kind == QueryKind::Name || q.kind == QueryKind::QualifiedValue || q.kind == QueryKind::FunctionName) return constant_entity_address(fact.expression.entity);
+    if ((q.kind == QueryKind::Name || q.kind == QueryKind::QualifiedValue || q.kind == QueryKind::FunctionName) &&
+        fact.expression.category != ValueCategory::Prvalue) return constant_entity_address(fact.expression.entity);
     if (q.kind == QueryKind::Member) {
         auto operand = query_edges[q.offset];
         auto parent = q.op == OP_ARROW ? constant_query_arrow(operand,fact.arrow) : constant_query_object(operand);
@@ -54,7 +59,7 @@ std::uint32_t Analyzer::constant_query_object(QueryId id)
     if (!v.valid) return 0;
     if (types[v.type].kind == TypeKind::LRef || types[v.type].kind == TypeKind::RRef) return v.bits;
     auto result = constant_storage_address(v.type,v);
-    constant_query_receivers.put(id,result); return result;
+    constant_query_receivers.put(cache_key,result); return result;
 }
 Constant Analyzer::constant_query_conversion(QueryId source, Conversion c)
 {
