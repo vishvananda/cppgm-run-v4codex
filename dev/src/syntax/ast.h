@@ -146,7 +146,7 @@ enum class Kind : unsigned char {
     NamePart,
     TemplateArguments,
     Capture,
-    VaArg,
+    VaArg, ValueBuiltin,
     FunctionName,
     AtomicType, BitIntType,
     VectorAttribute,

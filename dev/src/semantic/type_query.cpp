@@ -310,6 +310,10 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
     }
     case Kind::FunctionName:
         q.kind = QueryKind::FunctionName; q.context = function_context(s); q.name = node.text; break;
+    case Kind::ValueBuiltin:
+        q.kind = QueryKind::ValueBuiltin; q.value = node.flags;
+        q.type = node.detail ? type_id(node.detail,s) : 0;
+        children.push_back(expression_query(first,s)); break;
     case Kind::VaArg:
         q.kind = QueryKind::VaArg; q.type = type_id(ast[first].next,s);
         children.push_back(expression_query(first,s)); break;
@@ -603,6 +607,10 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         x.type = entities[x.entity].type; x.category = ValueCategory::Lvalue;
         r.declared_type = x.type; break;
     case QueryKind::IntegerPack: x.type = types.fundamental(FT_UNSIGNED_LONG_INT); break;
+    case QueryKind::ValueBuiltin:
+        x.type = builtin_value_type(q.value,q.type,children[0].expression.type);
+        if (!x.type) r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+        break;
     case QueryKind::VaArg: case QueryKind::Typeof: r = query_builtin_operand(q,children); break;
     case QueryKind::BuiltinTrait: r = query_builtin_trait(id,q); break;
     case QueryKind::Offsetof: r = query_offsetof(id,q,children); break;

@@ -13,6 +13,10 @@ IRType access_type(IRType t) { return t == IRType::U32 ? IRType(IRType::I32) : t
 Value Procedural::initialization_value(NodeId n, TypeId t)
 {
     if (!n) {
+        if (semantic::vector_kind(sem.types[t].kind)) {
+            Value value(Operand::slot(builder->add_slot(0,type(t))),type(t),t,true);
+            zero_object(t,address(value)); value.address = false; return value;
+        }
         if (sem.complex_type(t)) { auto component = sem.complex_component(t);
             Value zero(Operand::floating(0),type(component),component); return complex_construct(t,zero,zero); }
         if (sem.types[t].kind == TypeKind::MemberPointer) return member_pointer_value(0,t);

@@ -1,5 +1,6 @@
 #include "syntax/ast.h"
 #include "support/type_traits.h"
+#include "support/builtin_registry.h"
 #include <ostream>
 #include <string>
 
@@ -176,6 +177,12 @@ void write_inline(std::ostream& out, const Ast& ast, NodeId id, const Identifier
     else if (n.kind == Kind::PackExpression) {
         children_inline(out, ast, id, ids);
         out << "...";
+    } else if (n.kind == Kind::ValueBuiltin) {
+        out << value_builtin_spelling(ValueBuiltin(n.flags)) << '(';
+        if (ValueBuiltin(n.flags) == ValueBuiltin::BitCast) { write_inline(out,ast,n.detail,ids); out << ", "; }
+        children_inline(out,ast,id,ids);
+        if (ValueBuiltin(n.flags) == ValueBuiltin::ConvertVector) { out << ", "; write_inline(out,ast,n.detail,ids); }
+        out << ')';
     } else if (n.kind == Kind::VaArg || n.kind == Kind::Sizeof || n.kind == Kind::TypeTrait || n.kind == Kind::Decltype) {
         if (n.kind == Kind::Sizeof) out << "sizeof";
         else if (n.kind == Kind::Decltype) out << "decltype";

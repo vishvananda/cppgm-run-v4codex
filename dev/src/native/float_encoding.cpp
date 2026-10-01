@@ -15,6 +15,14 @@ void Encoder::sse(unsigned opcode, Type type, int reg, Operand rm)
 void Encoder::fmove(Operand to, Operand from, Type t)
 {
     if (to.kind == Operand::Reg && from.kind == Operand::Reg && to.reg == from.reg) return;
+    if (t.vector()) {
+        require(t.bytes() == 8 || t.bytes() == 16,"unsupported vector register width");
+        auto reg = to.kind == Operand::Reg ? to.reg : from.reg;
+        auto memory = to.kind == Operand::Reg ? from : to;
+        if (memory.kind == Operand::Reg) memory.reg -= 16;
+        form(to.kind == Operand::Reg ? 0x0f10 : 0x0f11,32,reg-16,memory,0,0,t.bytes() == 8 ? 0xf2 : 0);
+        return;
+    }
     if (t == Type::F80) { x87_load(from,t); x87_store(to,t); return; }
     if (from.kind == Operand::Floating) {
         mov(Operand::r(XR_RAX),Operand::imm(from.bits));

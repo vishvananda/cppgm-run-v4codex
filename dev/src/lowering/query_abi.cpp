@@ -1,4 +1,5 @@
 #include "lowering/procedural.h"
+#include "support/builtin_registry.h"
 #include "abi/itanium/operations.h"
 #include <stdexcept>
 namespace cppgm { namespace lowering {
@@ -50,6 +51,13 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
         };
         auto first = operand(0), second = q.count == 2 ? operand(1) : 0;
         result = abi.make(Kind::Fold,first,second,abi_mangle::operation(query_operation(q.op,false)),q.value); break;
+    }
+    case QueryKind::ValueBuiltin: {
+        args.clear(); auto kind = ValueBuiltin(q.value);
+        if (kind == ValueBuiltin::BitCast) args.push_back(abi.make(Kind::TypeArgument,abi_type(q.type)));
+        args.push_back(abi.make(Kind::ExpressionArgument,child(0)));
+        if (kind == ValueBuiltin::ConvertVector) args.push_back(abi.make(Kind::TypeArgument,abi_type(q.type)));
+        result = abi.make(Kind::VendorExpression,abi.string(value_builtin_spelling(kind)),0,0,0,args); break;
     }
     case QueryKind::IntegerPack:
         result = abi.make(Kind::TypeTrait,abi.string("__integer_pack"),0,0,0,{child(0)}); break;

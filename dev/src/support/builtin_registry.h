@@ -2,6 +2,18 @@
 #include "preprocess/source.h"
 namespace cppgm {
 inline bool integer_pack_builtin(TextView name) { return name.equals("__integer_pack"); }
+enum class ValueBuiltin : unsigned char { None, BitCast, ConvertVector, ReduceOr };
+inline const char* value_builtin_spelling(ValueBuiltin kind)
+{
+    static const char* const names[] = {"", "__builtin_bit_cast", "__builtin_convertvector", "__builtin_reduce_or"};
+    return names[unsigned(kind)];
+}
+inline ValueBuiltin value_builtin(TextView name)
+{
+    return name.equals("__builtin_bit_cast") ? ValueBuiltin::BitCast :
+        name.equals("__builtin_convertvector") ? ValueBuiltin::ConvertVector :
+        name.equals("__builtin_reduce_or") ? ValueBuiltin::ReduceOr : ValueBuiltin::None;
+}
 // Bounded immutable vocabulary shared by builtin construction and probes.
 enum class FunctionBuiltin : unsigned char {
     None, Strcmp, Strncmp, VaStart, VaEnd, VaCopy,

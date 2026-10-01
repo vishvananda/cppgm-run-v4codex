@@ -36,7 +36,7 @@ Constant Analyzer::evaluated_object(TypeId t, const std::vector<EvaluatedPart>& 
     auto id = evaluated_objects.size(); evaluated_objects.push_back(v);
     evaluated_parts.insert(evaluated_parts.end(),parts.begin(),parts.end());
     evaluated_object_index.put(h,id);
-    if (types[t].kind != TypeKind::Array)
+    if (types[t].kind != TypeKind::Array && !vector_kind(types[t].kind))
         for (unsigned i = 0; i < parts.size(); ++i) evaluated_part_index.put(key(id,parts[i].selector),v.first+i+1);
     constant_object_work += parts.size()+1;
     return Constant(t,id);
@@ -44,13 +44,13 @@ Constant Analyzer::evaluated_object(TypeId t, const std::vector<EvaluatedPart>& 
 Constant Analyzer::evaluated_part(Constant v, std::uint64_t selector)
 {
     if (v.valid && complex_type(v.type)) return selector < 2 ? complex_part(v,selector) : Constant();
-    if (!v.valid || (!class_value(v.type) && types[v.type].kind != TypeKind::Array)) return Constant();
+    if (!v.valid || (!class_value(v.type) && (types[v.type].kind != TypeKind::Array && !vector_kind(types[v.type].kind)))) return Constant();
     auto o = evaluated_objects[v.bits];
-    if (types[v.type].kind != TypeKind::Array) {
+    if ((types[v.type].kind != TypeKind::Array && !vector_kind(types[v.type].kind))) {
         auto p = evaluated_part_index.get(key(v.bits,selector));
         return p ? evaluated_parts[p-1].value : Constant();
     }
-    if (selector >= types[v.type].bound) return Constant();
+    if (selector >= (vector_kind(types[v.type].kind) ? vector_elements(v.type) : types[v.type].bound)) return Constant();
     auto begin = evaluated_parts.begin()+o.first, end = begin+o.count;
     auto found = std::upper_bound(begin,end,selector,[](std::uint64_t i,const EvaluatedPart& p){return i < p.selector;});
     if (found == begin) return Constant();
@@ -61,12 +61,12 @@ Constant Analyzer::constant_zero(TypeId t)
 {
     if (complex_type(t)) { auto zero = floating_constant(complex_component(t),0); return complex_constant(t,zero,zero); }
     auto type = types[t];
-    if (!class_value(t) && type.kind != TypeKind::Array) return convert(Constant(types.fundamental(FT_INT),0),t,true);
+    if (!class_value(t) && type.kind != TypeKind::Array && !vector_kind(type.kind)) return convert(Constant(types.fundamental(FT_INT),0),t,true);
     std::vector<EvaluatedPart> parts;
     auto add = [&](std::uint64_t selector, TypeId child, std::uint64_t count) {
         EvaluatedPart p; p.selector = selector; p.count = count; p.value = constant_zero(child); parts.push_back(p);
     };
-    if (type.kind == TypeKind::Array) add(0,type.child,type.bound);
+    if (type.kind == TypeKind::Array || vector_kind(type.kind)) add(0,type.child,vector_kind(type.kind) ? vector_elements(t) : type.bound);
     else {
         auto cls = type.entity;
         for (auto b = class_facts[entities[cls].class_info].first_base; b; b = bases[b].next)
@@ -217,7 +217,19 @@ Constant Analyzer::constant_entity_value(EntityId e)
 bool Analyzer::constant_object_fields(Constant v, std::uint64_t offset, EntityId field, bool base)
 {
     if (!v.valid) return false;
-    if (class_value(v.type) || types[v.type].kind == TypeKind::Array) {
+    if (vector_kind(types[v.type].kind) && fundamental(types[v.type].child,FT_BOOL)) {
+        auto count = vector_elements(v.type);
+        for (std::uint64_t byte = 0; byte < size(v.type); ++byte) {
+            StaticValue scalar; scalar.kind = StaticValue::Integer;
+            for (unsigned bit = 0; bit < 8 && byte*8+bit < count; ++bit) {
+                auto lane = evaluated_part(v,byte*8+bit); if (!lane.valid) return false;
+                scalar.bits |= std::uint64_t(constant_truth(lane))<<bit;
+            }
+            constant_fields.push_back({0,types.fundamental(FT_UNSIGNED_CHAR),scalar,offset+byte});
+        }
+        return true;
+    }
+    if (class_value(v.type) || (types[v.type].kind == TypeKind::Array || vector_kind(types[v.type].kind))) {
         auto object = evaluated_objects[v.bits];
         if (!base && class_value(v.type) && dynamic_class(types[v.type].entity)) {
             auto cls = types[v.type].entity;
@@ -232,13 +244,13 @@ bool Analyzer::constant_object_fields(Constant v, std::uint64_t offset, EntityId
         for (unsigned i = 0; i < object.count; ++i) {
             auto part = evaluated_parts[object.first+i];
             auto at = offset;
-            if (types[v.type].kind == TypeKind::Array) at += part.selector * size(part.value.type);
+            if ((types[v.type].kind == TypeKind::Array || vector_kind(types[v.type].kind))) at += part.selector * size(part.value.type);
             else if (part.selector & 0x80000000U) at += base_offset(v.type,part.value.type);
             else at += entities[part.selector].member_offset;
-            auto member = types[v.type].kind != TypeKind::Array && !(part.selector & 0x80000000U) ? EntityId(part.selector) : 0;
+            auto member = (types[v.type].kind != TypeKind::Array && !vector_kind(types[v.type].kind)) && !(part.selector & 0x80000000U) ? EntityId(part.selector) : 0;
             if (member && field_fact(member).bit_field && !field_fact(member).width) continue;
             for (std::uint64_t j = 0; j < part.count; ++j)
-                if (!constant_object_fields(part.value,at+j*size(part.value.type),member,types[v.type].kind != TypeKind::Array && (part.selector & 0x80000000U))) return false;
+                if (!constant_object_fields(part.value,at+j*size(part.value.type),member,(types[v.type].kind != TypeKind::Array && !vector_kind(types[v.type].kind)) && (part.selector & 0x80000000U))) return false;
         }
         return true;
     }

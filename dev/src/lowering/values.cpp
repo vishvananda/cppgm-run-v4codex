@@ -7,6 +7,7 @@ IRType Procedural::type(TypeId id)
     const semantic::Type t = sem.types[id];
     switch (t.kind) {
     case TypeKind::BlockPointer: case TypeKind::Pointer: case TypeKind::LRef: case TypeKind::RRef: case TypeKind::Function: return IRType::Ptr;
+    case TypeKind::Vector: case TypeKind::ExtVector: return IRType::vector(sem.object_size(id),sem.object_alignment(id));
     case TypeKind::Array: return IRType::object(sem.object_size(id), sem.object_alignment(id));
     case TypeKind::MemberPointer: return sem.types[t.child].kind == TypeKind::Function ? IRType(IRType::I128) : IRType(IRType::I64);
     case TypeKind::Named:
@@ -76,7 +77,7 @@ Value Procedural::load(Value v)
         auto raw = atomic_representation(v.type);
         return atomic_value(emit(Opcode::AtomicLoad,raw,{address(v).operand,Operand::integer(5)}),sem.types.non_atomic(sem.types.unqualified(v.type)));
     }
-    if (sem.class_value(v.type)) { v.address = false; v.ir = type(v.type); return v; }
+    if (sem.class_value(v.type) || semantic::vector_kind(sem.types[v.type].kind)) { v.address = false; v.ir = type(v.type); return v; }
     if (sem.types[v.type].kind == TypeKind::Array || sem.types[v.type].kind == TypeKind::Function) return address(v);
     if (v.cached && !(sem.types[v.type].cv & 2)) return Value(v.stored, type(v.type), v.type);
     Instruction i(Opcode::Load, type(v.type)); i.is_volatile = sem.types[v.type].cv & 2;

@@ -93,7 +93,7 @@ Type Reader::type()
     if (s == "c32" || s == "c64" || s == "c80") return Type::complex(s == "c32" ? Type::F32 : s == "c64" ? Type::F64 : Type::F80);
     if (s == "i128a8") return Type::integer128_align8();
     for (unsigned k = 0; k < sizeof(types)/sizeof(*types); ++k) if (s == types[k]) return Type(Type::Kind(k));
-    if (s.size() > 6 && s.substr(0,4) == "obj<" && s.back() == '>') {
+    if (s.size() > 6 && (s.substr(0,4) == "obj<" || s.substr(0,4) == "vec<") && s.back() == '>') {
         auto x = s.find('x', 4);
         require(x != std::string::npos, "missing object alignment");
         auto number = [](const std::string& v) -> std::uint32_t {
@@ -103,7 +103,12 @@ Type Reader::type()
             require(!v.empty() && v[0] >= '0' && v[0] <= '9' && !errno && end == v.c_str()+v.size() && n <= UINT32_MAX, "invalid object layout");
             return n;
         };
-        return Type::object(number(s.substr(4, x-4)), number(s.substr(x+1, s.size()-x-2)));
+        auto bytes = number(s.substr(4,x-4)), alignment = number(s.substr(x+1,s.size()-x-2));
+        if (s[0] == 'v') {
+            require(bytes && !(bytes & (bytes-1)) && alignment == bytes,"invalid vector layout");
+            return Type::vector(bytes,alignment);
+        }
+        return Type::object(bytes,alignment);
     }
     throw ParseError("invalid LowIR type " + s);
 }

@@ -10,7 +10,7 @@ bool accepts(Kind kind, Role role) {
     case Role::Type: return kind == Kind::BitInt || kind <= Kind::Lambda;
     case Role::Argument: return kind == Kind::WideValue || kind == Kind::NegativeWideValue || (kind >= Kind::TypeArgument && kind <= Kind::EntityArgument);
     case Role::Expression:
-        return kind == Kind::Fold || kind == Kind::Value || kind == Kind::WideValue || kind == Kind::NegativeWideValue || kind == Kind::AlignofType || kind == Kind::DestructorName || kind == Kind::ExprThis || kind == Kind::InitList || kind == Kind::DesignatedInit || kind == Kind::TypeidType || kind == Kind::TypeidExpression || kind == Kind::NewExpression || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
+        return kind == Kind::VendorExpression || kind == Kind::Fold || kind == Kind::Value || kind == Kind::WideValue || kind == Kind::NegativeWideValue || kind == Kind::AlignofType || kind == Kind::DestructorName || kind == Kind::ExprThis || kind == Kind::InitList || kind == Kind::DesignatedInit || kind == Kind::TypeidType || kind == Kind::TypeidExpression || kind == Kind::NewExpression || (kind >= Kind::ExprParameter && kind <= Kind::EntityExpression);
     case Role::Context: return kind == Kind::RawContext || kind == Kind::FunctionEntity;
     case Role::Entity: return kind >= Kind::FunctionEntity && kind <= Kind::SymbolEntity;
     }
@@ -122,6 +122,7 @@ void Graph::validate(Kind kind, Id a, Id b, Id c, const std::vector<Id>& childre
             require((*this)[parent].kind == Kind::Name || (*this)[parent].kind == Kind::Template);
         sequence(Role::Argument); return;
     case Kind::TypeTrait: text(a); sequence(Role::Type); return;
+    case Kind::VendorExpression: text(a); sequence(Role::Argument); return;
     case Kind::Member: edge(a, Role::Type); text(b); require(c <= 1); sequence(Role::Argument); return;
     case Kind::ObjectMember:
         edge(a, Role::Expression); text(b); operation_code(c); sequence(Role::Argument); return;

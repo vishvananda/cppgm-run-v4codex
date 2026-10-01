@@ -64,6 +64,10 @@ void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Express
         if (args.size() == 2) candidate.arguments[1] = contextual ? boolean_conversion_value(args[1],node(1)) : convert_argument(1,b);
         if (candidate.arguments[0].valid() && (args.size() == 1 || candidate.arguments[1].valid())) results.push_back(candidate);
     };
+    if (args.size() == 2 && (vector_kind(types[args[0].type].kind) || vector_kind(types[args[1].type].kind))) {
+        auto a = types.unqualified(args[0].type), b = types.unqualified(args[1].type);
+        add(a,b,vector_binary_type(op,a,b)); return;
+    }
     if (op == OP_LNOT || op == OP_LAND || op == OP_LOR) {
         TypeId boolean = types.fundamental(FT_BOOL); add(boolean,boolean,boolean); return;
     }

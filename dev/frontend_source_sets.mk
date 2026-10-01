@@ -226,7 +226,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/evaluation_context lowering/context_i
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/bit_integer lowering/bit_integer
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/complex lowering/complex
-FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/vector_types
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/vector_types semantic/value_builtins lowering/vector_values
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/inline_validation
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/source_builtins lowering/source_strings

@@ -109,6 +109,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         r.entity = predefined_function_name(n,s); facts.edit(n).entity = r.entity;
         r.type = entities[r.entity].type; r.category = ValueCategory::Lvalue; return r;
     case Kind::VaArg: return va_arg_expression(n,s);
+    case Kind::ValueBuiltin: return builtin_value_expression(n,s);
     case Kind::StatementExpression: return statement_expression(n,s);
     case Kind::Throw: return throw_expression(n,s);
     case Kind::Await: case Kind::Yield:

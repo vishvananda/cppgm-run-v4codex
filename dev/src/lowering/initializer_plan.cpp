@@ -99,6 +99,17 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
         else store(initialization_value(0, action.type), location);
         return;
     }
+    if (semantic::vector_kind(target.kind)) {
+        zero_object(action.type,address(location));
+        for (auto child = action.first; child; child = sem.initializers[child].next) {
+            auto item = sem.initializers[child];
+            for (std::uint64_t j = 0; j < item.count; ++j) {
+                auto value = item.source ? incoming(item.source) : initialization_value(0,item.type);
+                vector_write(location,item.index+j,value);
+            }
+        }
+        return;
+    }
     Value base = address(location);
     if (action.kind == InitKind::String) {
         std::uint64_t length = ast.literals[ast[action.source].literal].elements;

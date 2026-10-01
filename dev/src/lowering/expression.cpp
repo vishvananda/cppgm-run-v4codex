@@ -14,6 +14,7 @@ Value Procedural::expression(NodeId n, bool location)
     if (node.kind == Kind::StatementExpression) return statement_expression(n);
     NodeId a = node.first;
     if (node.kind == Kind::FunctionName) return Value(Operand::symbol(symbol(fact.entity)),IRType::Ptr,fact.type,true);
+    if (node.kind == Kind::ValueBuiltin) return builtin_value(n);
     if (node.kind == Kind::VaArg) {
         auto list = converted(a,sem.conversion_fact(fact.conversions));
         auto value = emit(Opcode::VaArg,type(fact.type),{list.operand});
@@ -347,6 +348,7 @@ Value Procedural::binary(NodeId n, bool location)
 }
 Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
 {
+    if (semantic::vector_kind(sem.types[a.type].kind)) return vector_operation(op,a,b,result);
     if (sem.complex_type(a.type)) return complex_operation(op,a,b,result);
     Value v;
     if ((op == OP_PLUS || op == OP_MINUS) && (a.ir == IRType::Ptr || b.ir == IRType::Ptr)) {

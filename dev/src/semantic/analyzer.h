@@ -821,6 +821,10 @@ private:
     Constant atomic_constant(NodeId n, ScopeId scope);
     void validate_intrinsic(EntityId selected, const std::vector<NodeId>& args, ScopeId s);
     Expression va_arg_expression(NodeId n, ScopeId s);
+    TypeId builtin_value_type(unsigned operation, TypeId target, TypeId source);
+    Expression builtin_value_expression(NodeId n, ScopeId s);
+    Constant builtin_value_constant(unsigned operation, TypeId target, Constant source);
+    TypeId vector_binary_type(ETokenType op, TypeId left, TypeId right);
     bool floating_builtin(NodeId n, ScopeId scope, IdentifierId name, const std::vector<NodeId>& args, Expression& result);
     Constant floating_conversion(Constant value, TypeId target);
     Constant floating_binary(ETokenType op, Constant left, Constant right, bool converted);

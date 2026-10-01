@@ -47,7 +47,11 @@ public:
     Type(Kind k = Void) : code_(k) {}
     static Type object(std::uint64_t bytes, std::uint64_t alignment);
     static Type complex(Type component);
-    bool complex() const { return kind() == Object && (code_ >> 48); }
+    static Type vector(std::uint64_t bytes, std::uint64_t alignment) {
+        Type t = object(bytes,alignment); t.code_ |= std::uint64_t(1)<<56; return t;
+    }
+    bool vector() const { return kind() == Object && (code_ >> 56); }
+    bool complex() const { return kind() == Object && ((code_ >> 48) & 255); }
     Type component() const { return Type(Kind(code_ >> 48)); }
     // Same 128-bit operations, distinct SysV stack alignment for bit-precise
     // scalars. The decoration travels in signatures, values and the IR view.

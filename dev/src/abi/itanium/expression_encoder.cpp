@@ -175,6 +175,10 @@ void Encoder::expression(Id id) {
         }
         source(name.b); if (n.b) args(n); break;
     }
+    case Kind::VendorExpression:
+        output += 'u'; source(n.a);
+        for (Id i = 0; i < n.count; ++i) argument(g.child(n,i));
+        output += 'E'; break;
     case Kind::TypeTrait:
         output += 'u'; source(n.a);
         for (Id i = 0; i < n.count; ++i) type(g.child(n, i));

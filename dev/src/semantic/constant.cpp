@@ -250,6 +250,8 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         if (ast[literal].kind != Kind::Literal) return Constant();
         return literal_element(ast[literal].literal,evaluate(index,s));
     }
+    case Kind::ValueBuiltin:
+        return builtin_value_constant(ast[n].flags,expressions[n].type,evaluate(ast[n].first,s));
     case Kind::Fold:
         if (fold_root(n)) return constant_indirect(constant_fold(n,s));
         return constants[query_value(expression_query(n,s))];
@@ -350,6 +352,23 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
 Constant Analyzer::binary(ETokenType op, Constant a, Constant b, bool converted)
 {
     if (!a.valid || !b.valid) return Constant();
+    if (vector_kind(types[a.type].kind) || vector_kind(types[b.type].kind)) {
+        auto target = vector_binary_type(op,a.type,b.type);
+        if (!target) return {};
+        auto count = vector_elements(a.type);
+        if (count > 1000000) return {};
+        bool compare = op == OP_EQ || op == OP_NE || op == OP_LT || op == OP_GT || op == OP_LE || op == OP_GE;
+        std::vector<EvaluatedPart> parts;
+        for (std::uint64_t i = 0; i < count; ++i) {
+            if (constant_depth && !constant_step()) return {};
+            auto value = binary(op,evaluated_part(a,i),evaluated_part(b,i),true);
+            if (!value.valid) return {};
+            EvaluatedPart part; part.selector = i;
+            part.value = compare ? integer_constant(types[target].child,value.bits ? ~static_cast<unsigned __int128>(0) : 0) : convert(value,types[target].child,true);
+            parts.push_back(part);
+        }
+        return evaluated_object(target,parts);
+    }
     if (types[a.type].kind == TypeKind::MemberPointer && types[b.type].kind == TypeKind::MemberPointer) {
         if (op != OP_EQ && op != OP_NE) return Constant();
         // Members of the same union compare equal; virtual function equality

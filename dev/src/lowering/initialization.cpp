@@ -97,7 +97,7 @@ void Procedural::global(EntityId e)
             throw std::runtime_error("multiple global definitions");
         }
     }
-    g.structured = sem.complex_type(t) || (sem.types[t].kind == TypeKind::MemberPointer && sem.types[sem.types[t].child].kind == TypeKind::Function) || sem.types[t].kind == TypeKind::Array || (sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info);
+    g.structured = semantic::vector_kind(sem.types[t].kind) || sem.complex_type(t) || (sem.types[t].kind == TypeKind::MemberPointer && sem.types[sem.types[t].child].kind == TypeKind::Function) || sem.types[t].kind == TypeKind::Array || (sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info);
     if (!g.structured) g.type = type(t);
     if (!g.declaration) {
         bool local = sem.local_static(e);

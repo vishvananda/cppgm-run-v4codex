@@ -196,7 +196,7 @@ const char* kind_name(Kind kind)
         "name-part",
         "template-arguments",
         "capture",
-        "va-arg-expression",
+        "va-arg-expression", "builtin-value-expression",
         "function-name",
         "atomic-type-specifier", "bit-integer-type-specifier",
         "vector-type-attribute",

@@ -1,4 +1,5 @@
 #include "syntax/parser.h"
+#include "support/builtin_registry.h"
 #include "support/type_traits.h"
 #include <stdexcept>
 
@@ -166,6 +167,22 @@ NodeId Parser::primary()
     if (in.is("__builtin_addressof")) {
         auto result = leaf(Kind::Unary); ast[result].op = OP_AMP; ast[result].flags = 1;
         in.require("("); ast.append(result,expression(2)); in.require(")"); return result;
+    }
+    auto builtin_value = value_builtin(ids.spelling(in.peek(in.is("::") ? 1 : 0).text));
+    if (builtin_value != ValueBuiltin::None && in.is("(",in.is("::") ? 2 : 1)) {
+        if (in.is("::")) in.take();
+        auto result = leaf(Kind::ValueBuiltin); ast[result].flags = unsigned(builtin_value);
+        in.require("(");
+        if (builtin_value == ValueBuiltin::BitCast) {
+            auto target = type_id(); ast[result].detail = target; in.require(",");
+            ast.append(result,expression(2));
+        } else {
+            ast.append(result,expression(2));
+            if (builtin_value == ValueBuiltin::ConvertVector) {
+                in.require(","); auto target = type_id(); ast[result].detail = target;
+            }
+        }
+        in.require(")"); return result;
     }
     if (in.is("__builtin_va_arg")) {
         auto result = leaf(Kind::VaArg); in.require("(");

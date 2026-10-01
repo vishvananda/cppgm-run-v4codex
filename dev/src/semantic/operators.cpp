@@ -101,6 +101,13 @@ TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression&
         return candidates[best].type;
     }
     TypeId a = decay(expressions[an].type), b = decay(expressions[bn].type);
+    if (vector_kind(types[a].kind) || vector_kind(types[b].kind)) {
+        auto target = vector_binary_type(op,a,b);
+        if (!target) throw std::runtime_error("invalid vector operands");
+        record_conversion(r,an,conversion(an,types.unqualified(a)));
+        record_conversion(r,bn,conversion(bn,types.unqualified(b)));
+        return target;
+    }
     bool compare = op == OP_EQ || op == OP_NE || op == OP_LT || op == OP_GT || op == OP_LE || op == OP_GE;
     if (op == OP_LAND || op == OP_LOR) {
         record_conversion(r, an, boolean_conversion(an)); record_conversion(r, bn, boolean_conversion(bn));

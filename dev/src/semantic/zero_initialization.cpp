@@ -10,7 +10,9 @@ std::uint32_t Analyzer::prepare_zero_initialization(TypeId t)
         plan.kind = ZeroInitialization::Reference; plan.bytes = plan.alignment = 8; plan.bulk = false;
     } else {
         plan.bytes = size(t); plan.alignment = size(t,true);
-        if (complex_type(t)) {
+        if (vector_kind(type.kind)) {
+            plan.kind = ZeroInitialization::Representation;
+        } else if (complex_type(t)) {
             plan.kind = ZeroInitialization::Composite;
             auto component = types.qualify(complex_component(t),type.cv);
             auto child = prepare_zero_initialization(component);

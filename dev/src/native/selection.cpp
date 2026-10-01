@@ -81,6 +81,9 @@ Operand Selector::in_register(Operand o, Type t, int reg)
 void Selector::move(Operand to, Operand from, Type t)
 {
     if (to.kind == Operand::Reg && from.kind == Operand::Reg && to.reg == from.reg) return;
+    if (t.vector() && (to.kind == Operand::Reg || from.kind == Operand::Reg)) {
+        emit(Op::Fmov,t,{to,from}); return;
+    }
     if (t.kind() == Type::Object) { object_move(to,from,t); return; }
     if (t == Type::I128) {
         move(fragment(to,0),fragment(from,0),Type::I64);

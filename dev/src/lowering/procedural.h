@@ -369,6 +369,31 @@ class Procedural {
     Value intrinsic_call(NodeId n, semantic::Intrinsic intrinsic);
     Value complex_construct(TypeId type, Value real, Value imag);
     Value complex_component(Value value, unsigned part);
+    Value vector_lane(Value value, Value lane);
+    Value vector_read(Value value, Value lane);
+    void vector_write(Value value, Value lane, Value source);
+    void vector_write(Value value, std::uint64_t lane, Value source) {
+        vector_write(value,Value(Operand::integer(lane),IRType::I64),source);
+    }
+    template<class EmitLane> void vector_each(std::uint64_t count, EmitLane lane) {
+        // Small fixed vectors need no control flow. Wider source vectors use
+        // one generated loop, bounding compiler work and code independently of N.
+        if (count <= 8) {
+            for (std::uint64_t i = 0; i < count; ++i) lane(Value(Operand::integer(i),IRType::I64));
+            return;
+        }
+        auto counter = builder->add_slot(0,IRType::I64);
+        emit(Opcode::Store,IRType::I64,{Operand::integer(0),Operand::slot(counter)});
+        auto test = block(), body = block(), done = block(); jump(test); start(test);
+        auto index = emit(Opcode::Load,IRType::I64,{Operand::slot(counter)});
+        auto more = emit(Opcode::Compare,IRType::I64,{index.operand,Operand::integer(count)},Operation::Ult);
+        emit(Opcode::Branch,IRType(),{more.operand,Operand::label(body),Operand::label(done)});
+        start(body); lane(index);
+        auto next = emit(Opcode::Binary,IRType::I64,{index.operand,Operand::integer(1)},Operation::Add);
+        emit(Opcode::Store,IRType::I64,{next.operand,Operand::slot(counter)}); jump(test); start(done);
+    }
+    Value vector_operation(ETokenType op, Value left, Value right, TypeId result);
+    Value builtin_value(NodeId node);
     Value complex_projection(NodeId n);
     Value complex_convert(Value value, TypeId type);
     Value complex_operation(ETokenType op, Value a, Value b, TypeId result);

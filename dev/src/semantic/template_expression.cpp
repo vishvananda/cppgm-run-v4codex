@@ -71,6 +71,10 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
                 if (class_facts[entities[e].class_info].first_conversion) return;
         break;
     }
+    case Kind::ValueBuiltin:
+        if (node.detail && dependent_type(type_id(node.detail,s))) return;
+        if (!fixed(first)) return;
+        break;
     case Kind::Sizeof: case Kind::TypeTrait:
         if (node.kind == Kind::TypeTrait && node.flags) {
             if (query_fact(expression_query(n,s)).dependent) return;

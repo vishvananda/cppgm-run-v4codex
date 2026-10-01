@@ -55,7 +55,9 @@ std::uint32_t Analyzer::query_value(QueryId id)
         }
         if (fact.dependent) throw std::logic_error("dependent query demanded as a concrete value");
         auto query = type_queries[id]; Constant value;
-        if (query.kind == QueryKind::BuiltinTrait) {
+        if (query.kind == QueryKind::ValueBuiltin) {
+            value = builtin_value_constant(query.value,fact.expression.type,constants[query_value(query_edges[query.offset])]);
+        } else if (query.kind == QueryKind::BuiltinTrait) {
             value = constants[builtin_trait_values.get(id)];
         } else if (query.kind == QueryKind::Offsetof) {
             auto step = offsetof_layouts[offsetof_layout_index.get(id)];
