@@ -1,0 +1,40 @@
+{
+  "entry_commit": "0bad8c207712b2077afc78f209a469c55b07847b",
+  "implementation_commit": "a33d1086585db6a01b9639ef53bf384007c3479c",
+  "binaries": {
+    "A": {
+      "path": "/tmp/pa29-157/base",
+      "sha256": "5631b69d1adb2c54a8b13120e5dd073ef705b34a3df462690dfdce357b8a0052",
+      "bytes": 3900504
+    },
+    "B": {
+      "path": "/tmp/pa29-157/final",
+      "sha256": "84642180af8de176d1f8496122bf786e1b87935aeb1c37b233f74accfbfc36c3",
+      "bytes": 3930992
+    }
+  },
+  "build_flags": "-std=gnu++11 -Wall -O3; system GCC default target/hardening options",
+  "measured_flags": [
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "machine": "Linux instance-20260513-022623 7.0.0-1005-gcp #5-Ubuntu SMP PREEMPT Tue May 26 15:11:20 UTC 2026 x86_64 GNU/Linux",
+  "host_compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+  "cpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           46 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  32\nOn-line CPU(s) list:                     0-31\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) CPU @ 2.20GHz\nCPU family:                              6\nModel:                                   79\nThread(s) per core:                      2\nCore(s) per socket:                      16\nSocket(s):                               1\nStepping:                                0\nBogoMIPS:                                4399.99\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm rdseed adx smap xsaveopt arat md_clear arch_capabilities\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               512 KiB (16 instances)\nL1i cache:                               512 KiB (16 instances)\nL2 cache:                                4 MiB (16 instances)\nL3 cache:                                55 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-31\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Mitigation; PTE Inversion\nVulnerability Mds:                       Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Meltdown:                  Mitigation; PTI\nVulnerability Mmio stale data:           Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Mitigation; IBRS\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; IBRS; IBPB conditional; STIBP conditional; RSB filling; PBRSB-eIBRS Not affected; BHI SW loop, KVM SW loop\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Vmscape:                   Not affected",
+  "affinity": [
+    "taskset",
+    "-c",
+    "0"
+  ],
+  "timing_context": "No build or course/explicit test overlaps timing; light evidence bookkeeping during common timings; external scheduling uncontrolled.",
+  "commands": [
+    "PERF_CPU=0 python3 student.tests/pa27/performance147_common.py /tmp/pa29-157/common /tmp/pa29-157/base /tmp/pa29-157/final",
+    "PERF_CPU=0 python3 student.tests/pa29/performance157.py /tmp/pa29-157/affected /tmp/pa29-157/base /tmp/pa29-157/final"
+  ],
+  "source_hashes": {
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "student.tests/pa29/performance157.py": "86b3a2e2ce676c2957ff1ca4b560330988179486256dc575d4086b887a534a2e"
+  },
+  "all_common_objects_and_executables_identical": true
+}

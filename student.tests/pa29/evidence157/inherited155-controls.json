@@ -1,0 +1,1011 @@
+{
+  "compiler_sha256": "84642180af8de176d1f8496122bf786e1b87935aeb1c37b233f74accfbfc36c3",
+  "checks": [
+    {
+      "name": "literals compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/literals.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/literals.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "literals host link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/inherited155/literals.o",
+        "-o",
+        "/tmp/pa29-157/inherited155/literals"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "literals runtime",
+      "args": [
+        "/tmp/pa29-157/inherited155/literals"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/operations.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/operations.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations host link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/inherited155/operations.o",
+        "-o",
+        "/tmp/pa29-157/inherited155/operations"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations runtime",
+      "args": [
+        "/tmp/pa29-157/inherited155/operations"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "probes compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/probes.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/probes.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "probes host link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/inherited155/probes.o",
+        "-o",
+        "/tmp/pa29-157/inherited155/probes"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "probes runtime",
+      "args": [
+        "/tmp/pa29-157/inherited155/probes"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/shape-extension.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/shape-extension.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension host link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/inherited155/shape-extension.o",
+        "-o",
+        "/tmp/pa29-157/inherited155/shape-extension"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension runtime",
+      "args": [
+        "/tmp/pa29-157/inherited155/shape-extension"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/traits.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/traits.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits host link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/inherited155/traits.o",
+        "-o",
+        "/tmp/pa29-157/inherited155/traits"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits runtime",
+      "args": [
+        "/tmp/pa29-157/inherited155/traits"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "--version",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--version"
+      ],
+      "status": 0,
+      "stdout": "cppgm++ C++11 compiler\nTarget: x86_64-linux-gnu\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "-v",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-v"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "cppgm++ C++11 compiler\nTarget: x86_64-linux-gnu\n",
+      "passed": true
+    },
+    {
+      "name": "-dumpmachine",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-dumpmachine"
+      ],
+      "status": 0,
+      "stdout": "x86_64-linux-gnu\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "-dumpversion",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-dumpversion"
+      ],
+      "status": 0,
+      "stdout": "15\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "-print-search-dirs",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-print-search-dirs"
+      ],
+      "status": 0,
+      "stdout": "install: /usr/lib/gcc/x86_64-linux-gnu/15/\nprograms: =/usr/libexec/gcc/x86_64-linux-gnu/15/:/usr/libexec/gcc/x86_64-linux-gnu/15/:/usr/libexec/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/15/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/bin/x86_64-linux-gnu/15/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/bin/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/bin/\nlibraries: =/usr/lib/gcc/x86_64-linux-gnu/15/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/15/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../x86_64-linux-gnu/15/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../lib/:/lib/x86_64-linux-gnu/15/:/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/15/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../../x86_64-linux-gnu/lib/:/usr/lib/gcc/x86_64-linux-gnu/15/../../../:/lib/:/usr/lib/\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "ordered macro controls",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-DVALUE=2",
+        "-UVALUE",
+        "-D",
+        "VALUE=9",
+        "-DGONE",
+        "-U",
+        "GONE",
+        "-std=c++14",
+        "/tmp/pa29-157/inherited155/macros.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/macros.cpp\nidentifier macro_ok\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "disabled exception metadata",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-fexceptions",
+        "-fno-exceptions",
+        "/tmp/pa29-157/inherited155/exception-flags.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/exception-flags.cpp\nidentifier exception_mode_ok\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "enabled exception metadata",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-fno-exceptions",
+        "-fexceptions",
+        "/tmp/pa29-157/inherited155/exception-probe-config.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/exception-probe-config.cpp\nidentifier exception_mode_ok\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "independent preprocessing units",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/first.cpp",
+        "/tmp/pa29-157/inherited155/second.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 2\nsof /tmp/pa29-157/inherited155/first.cpp\nidentifier first\neof\nsof /tmp/pa29-157/inherited155/second.cpp\nidentifier second\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "multiple outputs rejected",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/first.cpp",
+        "/tmp/pa29-157/inherited155/second.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/bad"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: cannot specify -o when generating multiple output files\n",
+      "passed": true
+    },
+    {
+      "name": "conflicting modes",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-c",
+        "/tmp/pa29-157/inherited155/first.cpp"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: cannot combine -c and -E\n",
+      "passed": true
+    },
+    {
+      "name": "output failure",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/first.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/missing/out"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: cannot create preprocessing output\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -D",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/first.cpp",
+        "-D"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing macro definition after -D\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -U",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/first.cpp",
+        "-U"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing macro name after -U\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -include",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/first.cpp",
+        "-include"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing file after -include\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -isystem",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/first.cpp",
+        "-isystem"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing path after -isystem\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -o",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/first.cpp",
+        "-o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing output file after -o\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -stdlib",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/first.cpp",
+        "-stdlib"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing standard library name after -stdlib\n",
+      "passed": true
+    },
+    {
+      "name": "missing argument -std",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/first.cpp",
+        "-std"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: missing language standard after -std\n",
+      "passed": true
+    },
+    {
+      "name": "frozen standard library refusal",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-stdlib=definitely-not-a-library",
+        "/tmp/pa29-157/inherited155/first.cpp"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: stdlib differs from the build-time selection\n",
+      "passed": true
+    },
+    {
+      "name": "frozen standard library match",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-stdlib=libstdc++",
+        "/tmp/pa29-157/inherited155/first.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/first.cpp\nidentifier first\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "forced include output",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-include",
+        "/tmp/pa29-157/inherited155/forced1.cpp",
+        "-include",
+        "/tmp/pa29-157/inherited155/forced2.cpp",
+        "/tmp/pa29-157/inherited155/forced-use.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/forced-use.cpp\nsimple int KW_INT\nidentifier main\nsimple ( OP_LPAREN\nsimple ) OP_RPAREN\nsimple { OP_LBRACE\nsimple return KW_RETURN\nliteral 0 int 00000000\nsimple ; OP_SEMICOLON\nsimple } OP_RBRACE\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "forced include object",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "-include",
+        "/tmp/pa29-157/inherited155/forced1.cpp",
+        "-include",
+        "/tmp/pa29-157/inherited155/forced2.cpp",
+        "/tmp/pa29-157/inherited155/forced-use.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/forced.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "include ordering and macro angle",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "-nostdinc",
+        "-isystem",
+        "/tmp/pa29-157/inherited155/system",
+        "-I",
+        "/tmp/pa29-157/inherited155/user",
+        "-I",
+        "/tmp/pa29-157/inherited155/user",
+        "/tmp/pa29-157/inherited155/include-search.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/include-search.cpp\nidentifier user_header\nidentifier system_header\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "malformed __has_cpp_attribute(123)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-probe.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-probe.cpp\n",
+      "stderr": "ERROR: probe requires an identifier\n",
+      "passed": true
+    },
+    {
+      "name": "malformed __has_cpp_attribute(a::b::c)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-probe.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-probe.cpp\n",
+      "stderr": "ERROR: invalid preprocessor probe\n",
+      "passed": true
+    },
+    {
+      "name": "malformed __has_builtin(a,b)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-probe.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-probe.cpp\n",
+      "stderr": "ERROR: invalid preprocessor probe\n",
+      "passed": true
+    },
+    {
+      "name": "malformed __has_feature(a::b)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-probe.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-probe.cpp\n",
+      "stderr": "ERROR: invalid preprocessor probe\n",
+      "passed": true
+    },
+    {
+      "name": "malformed __has_warning(name)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-probe.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-probe.cpp\n",
+      "stderr": "ERROR: expected string literal\n",
+      "passed": true
+    },
+    {
+      "name": "malformed __has_declspec_attribute(\"name\")",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-probe.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-probe.cpp\n",
+      "stderr": "ERROR: probe requires an identifier\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0b",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0b102",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0x.p1",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0x1.p",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0x1p+",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0x1.0",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 0x1p3z",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "invalid literal 1.0F128junk",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/bad-literal.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/bad-literal.cpp\n",
+      "stderr": "ERROR: invalid phase-7 token\n",
+      "passed": true
+    },
+    {
+      "name": "discarded comment bytes",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/comment.cpp"
+      ],
+      "status": 0,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/comment.cpp\nsimple int KW_INT\nidentifier ok\nsimple ; OP_SEMICOLON\neof\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "invalid source bytes",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-E",
+        "/tmp/pa29-157/inherited155/comment.cpp"
+      ],
+      "status": 1,
+      "stdout": "preproc 1\nsof /tmp/pa29-157/inherited155/comment.cpp\nsimple int KW_INT\n",
+      "stderr": "ERROR: invalid UTF-8 leading byte\n",
+      "passed": true
+    },
+    {
+      "name": "invalid trait __is_const(int,int)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/inherited155/bad-trait.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/bad.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n",
+      "passed": true
+    },
+    {
+      "name": "invalid trait __remove_cv()",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/inherited155/bad-trait.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/bad.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid type trait arity\n",
+      "passed": true
+    },
+    {
+      "name": "invalid trait __make_signed(bool)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/inherited155/bad-trait.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/bad.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __make_signed\n",
+      "passed": true
+    },
+    {
+      "name": "invalid trait __make_unsigned(float)",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/inherited155/bad-trait.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/bad.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __make_unsigned\n",
+      "passed": true
+    },
+    {
+      "name": "constexpr literal categories",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/inherited155/constexpr-udl.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/udl.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "multiple compile inputs",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/inherited155/multi-a.cpp",
+        "/tmp/pa29-157/inherited155/multi-b.cpp"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "literals hosted LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/literals.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/literals.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "literals LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "-o",
+        "/tmp/pa29-157/inherited155/literals-roundtrip.lowir",
+        "/tmp/pa29-157/inherited155/literals.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "literals native inspection",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-157/inherited155/literals.mir",
+        "-o",
+        "/tmp/pa29-157/inherited155/literals-lowir",
+        "/tmp/pa29-157/inherited155/literals-roundtrip.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "literals LowIR runtime",
+      "args": [
+        "/tmp/pa29-157/inherited155/literals-lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits hosted LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/traits.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/traits.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "-o",
+        "/tmp/pa29-157/inherited155/traits-roundtrip.lowir",
+        "/tmp/pa29-157/inherited155/traits.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits native inspection",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-157/inherited155/traits.mir",
+        "-o",
+        "/tmp/pa29-157/inherited155/traits-lowir",
+        "/tmp/pa29-157/inherited155/traits-roundtrip.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "traits LowIR runtime",
+      "args": [
+        "/tmp/pa29-157/inherited155/traits-lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations hosted LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/operations.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/operations.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "-o",
+        "/tmp/pa29-157/inherited155/operations-roundtrip.lowir",
+        "/tmp/pa29-157/inherited155/operations.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations native inspection",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-157/inherited155/operations.mir",
+        "-o",
+        "/tmp/pa29-157/inherited155/operations-lowir",
+        "/tmp/pa29-157/inherited155/operations-roundtrip.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "operations LowIR runtime",
+      "args": [
+        "/tmp/pa29-157/inherited155/operations-lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension hosted LowIR",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls155/shape-extension.cpp",
+        "-o",
+        "/tmp/pa29-157/inherited155/shape-extension.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension LowIR roundtrip",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "-o",
+        "/tmp/pa29-157/inherited155/shape-extension-roundtrip.lowir",
+        "/tmp/pa29-157/inherited155/shape-extension.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension native inspection",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-157/inherited155/shape-extension.mir",
+        "-o",
+        "/tmp/pa29-157/inherited155/shape-extension-lowir",
+        "/tmp/pa29-157/inherited155/shape-extension-roundtrip.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "name": "shape-extension LowIR runtime",
+      "args": [
+        "/tmp/pa29-157/inherited155/shape-extension-lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    }
+  ],
+  "passed": 77,
+  "total": 77
+}

@@ -1,0 +1,684 @@
+{
+  "status": "Unfinished implementation; owner labels are not waivers or audit approval",
+  "counts": {
+    "atomic-and-assembly": 21,
+    "extended-syntax-types-and-layout": 37,
+    "legacy-traits-and-lifetime-proofs": 6,
+    "template-demand-and-hosted-abi": 19,
+    "structured-intrinsic-operands": 4
+  },
+  "failures": [
+    {
+      "test": "pa29/tests/compile/200-atomic-member-is-a-literal-subobject.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: expected type specifier in tests/compile/200-atomic-member-is-a-literal-subobject.t:11 near '_Atomic'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/200-hosted-type-specifier-functional-cast.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected ';', found 'quad' in tests/compile/200-hosted-type-specifier-functional-cast.t:11\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-bitint-signed-static-cast-template-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: type name '_BitInt' is not visible\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-bitint-static-cast-template-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected '>', found '_BitInt' in tests/compile/500-bitint-static-cast-template-body.t:8\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-block-pointer-call-expression.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected expression, found '^'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-block-pointer-parameter-attribute.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected expression, found 'const'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-block-pointer-parameter.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected expression, found '^'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-builtin-nothrow-copy-user-provided.t",
+      "owner": "legacy-traits-and-lifetime-proofs",
+      "diagnostic": [
+        "ERROR: expression requires value name\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-builtin-trivial-deleted-copy.t",
+      "owner": "legacy-traits-and-lifetime-proofs",
+      "diagnostic": [
+        "ERROR: static assertion is not a true integral constant in tests/compile/500-builtin-trivial-deleted-copy.t:8\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-builtin-types-and-extern-vars.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected type specifier in tests/compile/500-builtin-types-and-extern-vars.t:5 near '_Float16'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-c11-atomic-builtins.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: expected type specifier in tests/compile/500-c11-atomic-builtins.t:3 near '_Atomic'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-c11-atomic-template-member.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: expected type specifier in tests/compile/500-c11-atomic-template-member.t:3 near '_Atomic'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-c11-atomic-type-specifier.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: expected type specifier in tests/compile/500-c11-atomic-type-specifier.t:1 near '_Atomic'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-c11-class-atomic-builtins.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: expected type specifier in tests/compile/500-c11-class-atomic-builtins.t:8 near '_Atomic'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-cxx14-deleted-placeholder-return-overload.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "ERROR: sizeof unsupported or incomplete type\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-darwin-wait-status-constant-expression.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: static assertion is not a true integral constant in tests/compile/500-darwin-wait-status-constant-expression.t:4\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-asm-keyword-statement.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: expected expression, found 'asm'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-asm-locked-notb-fence.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: expected ';', found 'volatile' in tests/compile/500-gnu-asm-locked-notb-fence.t:4\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-asm-output-operand-statement.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: expected ')', found ':' in tests/compile/500-gnu-asm-output-operand-statement.t:3\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-asm-volatile-memory-clobber-called.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: expected ';', found 'volatile' in tests/compile/500-gnu-asm-volatile-memory-clobber-called.t:3\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-asm-volatile-statement.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: expected ';', found 'volatile' in tests/compile/500-gnu-asm-volatile-statement.t:3\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-atomic-fetch-builtins.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: unknown expression name: __atomic_always_lock_free\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-atomic-load-store-builtins.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: unknown expression name: __atomic_store\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-atomic-n-builtins.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: unknown expression name: __atomic_store_n\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-attribute-declarations.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected '{', found '(' in tests/compile/500-gnu-attribute-declarations.t:1\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-ext-vector-scalar-template-deduction.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: partial specialization has nondeducible parameters\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-inline-defers-unused-wrapper.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "ERROR: unknown expression name: __builtin_ia32_emms\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-leading-attribute-type-id.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected ')', found 'int' in tests/compile/500-gnu-leading-attribute-type-id.t:2\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-gnu-vector-size-typedef-layout.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: unresolved overload in value context\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-hosted-special-members-and-control-flow.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "ERROR: expected expression, found 'using'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-instantiated-templated-lambda-default-ref-capture.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected '{', found '<' in tests/compile/500-instantiated-templated-lambda-default-ref-capture.t:3\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-instantiated-templated-lambda-no-capture.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected '{', found '<' in tests/compile/500-instantiated-templated-lambda-no-capture.t:3\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-make-integer-seq-cstyle-cast-count.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "ERROR: expected type specifier in tests/compile/500-make-integer-seq-cstyle-cast-count.t:11 near '__make_integer_seq'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-named-block-pointer-parameter.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected expression, found '^'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-nontemplate-deduction-guide-declaration.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "cppgm++: src/preprocess/identifier_table.cpp:86: cppgm::TextView cppgm::IdentifierTable::spelling(cppgm::IdentifierId) const: Assertion `id && id <= entries_.size()' failed.\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-templated-lambda-class-template-method-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected '{', found '<' in tests/compile/500-templated-lambda-class-template-method-body.t:21\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-templated-lambda-gnu-attribute-before-noexcept.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected '{', found '<' in tests/compile/500-templated-lambda-gnu-attribute-before-noexcept.t:3\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-templated-lambda-no-parameter-clause.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected '{', found '<' in tests/compile/500-templated-lambda-no-parameter-clause.t:3\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/500-templated-lambda-parameter-clause.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected '{', found '<' in tests/compile/500-templated-lambda-parameter-clause.t:8\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-builtin-complex-return.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected type specifier in tests/compile/600-builtin-complex-return.t:1 near '__complex__'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-c11-atomic-member-initialization.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: expected type specifier in tests/compile/600-c11-atomic-member-initialization.t:3 near '_Atomic'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-designated-aggregate-hole-init.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected expression, found '.'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-designated-compound-literal-union-member.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected expression, found '.'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-designated-named-union-init.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected expression, found '.'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-extension-atomic-template-member.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: expected type specifier in tests/compile/600-extension-atomic-template-member.t:5 near '_Atomic'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-fold-expression-alias-decltype-result.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected expression, found '...'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-fold-expression-static-assert.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected expression, found '...'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-fold-expression-template-arg-trait.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected expression, found '...'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-gnu-complex-template-constructor.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected ')', found 'v' in tests/compile/600-gnu-complex-template-constructor.t:7\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-gnu-sync-interprocess-builtins.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: active error directive\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-gnu-sync-lock-builtins.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: active error directive\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-hosted-nothrow-default-constructible-shorthand.t",
+      "owner": "legacy-traits-and-lifetime-proofs",
+      "diagnostic": [
+        "ERROR: unknown expression name: value\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-instantiated-templated-lambda-default-arg.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected '{', found '<' in tests/compile/600-instantiated-templated-lambda-default-arg.t:2\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-structured-binding-class-decomposition.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: unknown expression name: a\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-structured-binding-function-template-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: unbound template value name: x at tests/compile/600-structured-binding-function-template-body.t:9\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-structured-binding-gnu-attr-class-template-method.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: unbound template value name: x at tests/compile/600-structured-binding-gnu-attr-class-template-method.t:12\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/600-structured-binding-range-for-template-body.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: unbound template value name: x at tests/compile/600-structured-binding-range-for-template-body.t:10\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-c11-atomic-sixteen-byte-alignment.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [
+        "ERROR: expected type specifier in tests/compile/700-c11-atomic-sixteen-byte-alignment.t:2 near '_Atomic'\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-gnu-zero-length-array-member-compile.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: array bound must be a positive integral constant\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-char-traits-primary-conversion-shims.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "ERROR: invalid substituted type access\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-coroutine-contextual-operators-compile.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: expected ';', found 't' in tests/compile/700-hosted-coroutine-contextual-operators-compile.t:4\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-gnu-float-builtin-spellings.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: object of void type\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-has-trivial-constructor-dependent-nontype.t",
+      "owner": "legacy-traits-and-lifetime-proofs",
+      "diagnostic": [
+        "ERROR: template expression requires a value name\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-integer-pack-tuple-defer-compile.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "ERROR: invalid alias template arguments\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-nothrow-invocable-cache-default.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "ERROR: static assertion is not a true integral constant in tests/compile/700-hosted-nothrow-invocable-cache-default.t:24\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-hosted-pretty-function-constexpr-array-bound.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "ERROR: missing substituted query declaration\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-nonstl-empty-value-pack-nested-alias.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "ERROR: expected ';', found '...' in tests/compile/700-nonstl-empty-value-pack-nested-alias.t:27\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-nonstl-reference-temporary-builtin-fallback.t",
+      "owner": "legacy-traits-and-lifetime-proofs",
+      "diagnostic": [
+        "ERROR: type template parameter used as a value\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-nonstl-type-pack-element-nested-alias.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "ERROR: expected ';', found '...' in tests/compile/700-nonstl-type-pack-element-nested-alias.t:22\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-static-call-operator-extension.t",
+      "owner": "extended-syntax-types-and-layout",
+      "diagnostic": [
+        "ERROR: operator cannot be static\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-type-pack-element-inherited-partial-member-alias-call.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "ERROR: expected ';', found '<' in tests/compile/700-type-pack-element-inherited-partial-member-alias-call.t:17\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/compile/700-type-pack-element-partial-member-alias-pack-call.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "ERROR: expected ';', found '<' in tests/compile/700-type-pack-element-partial-member-alias-pack-call.t:12\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/preproc/300-has-builtin-supported.t",
+      "owner": "legacy-traits-and-lifetime-proofs",
+      "diagnostic": [],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/preproc/300-has-feature-atomic.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/run/800-always-inline-codegen-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/run/800-builtin-functions-and-offsetof.t",
+      "owner": "structured-intrinsic-operands",
+      "diagnostic": [],
+      "diagnostic_provenance": "Fixture also requires caller-sensitive constant context, address-of and atomic fence builtins; member-path offsetof implemented here."
+    },
+    {
+      "test": "pa29/tests/run/800-builtin-invoke-pointer-like-member-run.t",
+      "owner": "structured-intrinsic-operands",
+      "diagnostic": [],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/run/800-builtin-invoke-run.t",
+      "owner": "structured-intrinsic-operands",
+      "diagnostic": [],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/run/800-excluded-member-escapes-explicit-instantiation-declaration-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "/usr/bin/x86_64-linux-gnu-ld.bfd: tests/run/800-excluded-member-escapes-explicit-instantiation-declaration-run.my.1.o: in function `main':\n(.text+0x14): undefined reference to `S<char>::hidden() const'\ncollect2: error: ld returned 1 exit status\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/run/800-gnu-asm-atomic-update-run.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/run/800-inline-variable-merges-across-translation-units-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "/usr/bin/x86_64-linux-gnu-ld.bfd: tests/run/800-inline-variable-merges-across-translation-units-run.my.2.o:(.data+0x0): multiple definition of `digits'; tests/run/800-inline-variable-merges-across-translation-units-run.my.1.o:(.data+0x0): first defined here\ncollect2: error: ld returned 1 exit status\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [
+        "Expected at least 1 canonical defined symbol matches for '_ZN5outerIiE5inner6detachEPS0_' in object 1; got 0\n"
+      ],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/run/800-pretty-function-inline-elaborated-template-argument-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/run/800-pretty-function-inline-namespace-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/run/800-pretty-function-owner-template-arguments-run.t",
+      "owner": "template-demand-and-hosted-abi",
+      "diagnostic": [],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/run/800-source-location-builtin-macros-run.t",
+      "owner": "structured-intrinsic-operands",
+      "diagnostic": [],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    },
+    {
+      "test": "pa29/tests/run/900-atomic-noexcept-has-no-terminate-boundary.t",
+      "owner": "atomic-and-assembly",
+      "diagnostic": [],
+      "diagnostic_provenance": "Inherited first diagnostic; still failing final required suite. Owner grouping is not root-cause proof."
+    }
+  ]
+}

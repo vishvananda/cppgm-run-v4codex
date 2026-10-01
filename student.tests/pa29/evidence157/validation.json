@@ -1,0 +1,100 @@
+{
+  "entry_commit": "0bad8c207712b2077afc78f209a469c55b07847b",
+  "implementation_commit": "a33d1086585db6a01b9639ef53bf384007c3479c",
+  "compiler_sha256": "84642180af8de176d1f8496122bf786e1b87935aeb1c37b233f74accfbfc36c3",
+  "baseline": {
+    "passed": 301,
+    "total": 403,
+    "failed": 102,
+    "log": "/tmp/pa29-157/entry.log",
+    "log_sha256": "e6e526d7f2646614597830c646322e284dbcfb656a428c375c7cdeee598cc950"
+  },
+  "current": {
+    "command": "make test-pa29",
+    "exit_code": 2,
+    "passed": 316,
+    "total": 403,
+    "log": "/tmp/pa29-157/stage-required.log",
+    "log_sha256": "dcc65b854afe2a093403e1a85c1e7aa443080d61956057b3cbffedd5701e60e5",
+    "summary": [
+      "pa29/tests/run/800-pretty-function-owner-template-arguments-run.t: ERROR: linked program exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+      "pa29/tests/run/800-source-location-builtin-macros-run.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+      "pa29/tests/run/900-atomic-noexcept-has-no-terminate-boundary.t: ERROR: implementation exit status mismatch (expected EXIT_SUCCESS (0), got EXIT_FAILURE (1))",
+      "===== TEST SUMMARY: 316 / 403 TESTS PASSED =====",
+      "make[1]: *** [Makefile:292: test-report-nobuild] Error 1",
+      "make: *** [Makefile:483: test-pa29] Error 2"
+    ]
+  },
+  "prior": {
+    "command": "make test-report-through-pa28",
+    "exit_code": 0,
+    "passed": 4538,
+    "total": 4538,
+    "log": "/tmp/pa29-157/prior-required.log",
+    "log_sha256": "b1ff9611d30d0da259845968d6ec5a5a9b0ee6da2d9810c505780299a5c67a88",
+    "summary": [
+      "===== pa25 =====",
+      "===== pa26 =====",
+      "===== pa27 =====",
+      "PA27 global-section properties: PASS (3/3)",
+      "===== pa28 =====",
+      "===== ALL TESTS PASSED SUCCESSFULLY! (4538 / 4538) ====="
+    ]
+  },
+  "file_audit": {
+    "command": "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src",
+    "exit_code": 0,
+    "passed": 1,
+    "total": 1,
+    "log": "/tmp/pa29-157/audit-required.log",
+    "log_sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f",
+    "summary": [
+      "File audit passed for pa29 with 4 warning(s).",
+      "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+      "  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership",
+      "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+      "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+    ]
+  },
+  "resolved": [
+    "pa29/tests/compile/500-attributed-condition-declaration.t",
+    "pa29/tests/compile/500-attributed-for-init-declaration.t",
+    "pa29/tests/compile/500-attributed-range-declaration.t",
+    "pa29/tests/compile/500-gnu-aligned-dependent-argument.t",
+    "pa29/tests/compile/500-gnu-inline-and-thread-aliases.t",
+    "pa29/tests/compile/500-namespace-prefix-and-suffix-attribute.t",
+    "pa29/tests/compile/500-nullability-function-pointer-parameter.t",
+    "pa29/tests/compile/500-nullability-pointer-parameter.t",
+    "pa29/tests/compile/500-nullability-pointer-return.t",
+    "pa29/tests/compile/600-anonymous-helper-followed-by-nested-type-no-unique-address.t",
+    "pa29/tests/compile/600-builtin-offsetof-direct-expression.t",
+    "pa29/tests/compile/600-gnu-aligned-class-attribute.t",
+    "pa29/tests/compile/600-no-unique-address-empty-member-size.t",
+    "pa29/tests/compile/600-recursive-no-unique-address-empty-holder.t",
+    "pa29/tests/compile/600-template-anonymous-packed-bitfield-layout.t"
+  ],
+  "new_failures": [],
+  "fixtures": {
+    "count": 24985,
+    "changed": [],
+    "content_sha256": "925e96a0e92fa51dc761e0c20a0009b0ba1563c710609dfe634bdcae619280cb"
+  },
+  "explicit_controls": {
+    "current": "53/53",
+    "inherited155": "77/77",
+    "inherited156": "40/40",
+    "inspection_commands": 10
+  },
+  "preliminary_checks": [
+    {
+      "log": "/tmp/pa29-157/prior.log",
+      "status": "Superseded: PA27 system-header aligned typedef regression, fixed and final prior passes all 4538",
+      "sha256": "c38c96f52675ca8e289e95d5d620fa1c8465bdc7a53d6749e689c8ec91fcc164"
+    },
+    {
+      "log": "/tmp/pa29-157/prior-final.log",
+      "status": "Superseded: PA27 system-header aligned typedef regression, fixed and final prior passes all 4538",
+      "sha256": "c38c96f52675ca8e289e95d5d620fa1c8465bdc7a53d6749e689c8ec91fcc164"
+    }
+  ]
+}

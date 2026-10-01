@@ -1,87 +1,80 @@
-# PA29 implementation / handoff157 (in progress)
+# PA29 implementation / handoff157
 
-Target: **PA29 full-stage**. Phase: implementation handoff; stage unfinished.
+Target: **PA29 full-stage**. Implementation handoff complete; stage unfinished.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
-Turn entry: `0bad8c207712b2077afc78f209a469c55b07847b`, clean, **301/403**, 102 failing.
-Previous handoff: 29 original failures resolved, no new failures.
-Prior turn was verified progress; review markers remain unchanged.
-
-## Active work
-
-Complete declaration attributes and empty-member layout, then extend related
-parser/declaration fixes while the same semantic owners apply. No fixture edits.
-
-| Owner | Data flow / complexity | Validation |
-|---|---|---|
-| Attribute parser / declaration prediction | Parse alignment operands once into source graph; bounded token lookahead recognizes attributed declarations and pointer annotations. O(tokens + attribute operands). | Condition/for/range, namespace/parameter placement, dependent alignment and negative constants |
-| Layout / object facts | Canonical member identity owns overlap permission; class layout consumes alignment and empty-subobject summaries once. Preserve bounded conflict work and nonoverlap of equal types. | Empty/repeated/nested objects, generated copies and constructors, source LowIR/native execution |
-| Performance | Freeze turn-entry binary; measure common equivalent A/B plus new layout costs under spec §9. No optional optimization budget. | Latency/RSS, runtime/text, A/A and ABBA with checked outputs |
-
-Implementation gaps and independent review questions below remain open; the
-existing Stage base / Last reviewed markers are unchanged.
+Turn entry: `0bad8c207712b2077afc78f209a469c55b07847b`, clean, **301/403**.
+Result: **316/403**; 15 original failures resolved, zero new failures, 87 remain.
+Review markers stay unchanged; this is progress, not whole-stage approval.
 
 ## Design/spec alignment
 
-Prior hosted driver, numeric decoding, canonical type queries and shared
-access/exception/inspection work remain in place; their evidence is preserved in
-[handoff155 performance](performance155.md) and `student.tests/pa29/evidence155/`.
+Prior hosted driver, numeric/type queries, runtime signatures, scalar operations
+and exact floating storage remain in place; their evidence is preserved in
+[handoff155](performance155.md) and [handoff156](performance156.md).
 
 | Completed owner | Data flow / complexity | Validation |
 |---|---|---|
-| Runtime signature registry | Immutable builtin vocabulary → canonical declarations/conversions → ordinary C ABI calls. Includes libm mixed signatures, memory/string families, explicit builtin redeclarations and operator allocation aliases. Bounded vocabulary; O(operands) per call. Probes use the same registry. | Hosted cmath/cstring, arity/type/qualification negatives, link/runtime controls |
-| Integer operation facts | Selected intrinsic + canonical signature → constexpr evaluation or direct LowIR. Fixed-width conversions and generic unpromoted widths stay distinct. TU-owned integer/overflow signature caches have complete typed keys and independent lifetimes. | Exhaustive small inputs, every 64/128-bit position, constexpr activation, zero fallback, promotion and side effects |
-| Overflow/hint/FP operations | Checked argument facts → modular LowIR and representability check, including a bounded 256-bit pair for 128-bit products. Hints evaluate arguments once without inventing optimizer promises. Fenv rounding queries use the target C ABI. | 1,944 Python-integer oracle cases, volatile result stores, fenv modes, default/optional hint operands |
-| Floating constants/effects | Sign/NaN classification and comparison use typed operand facts; static and runtime signaling/payload NaNs retain exact bits. Ordinary LowIR integer storage represents payloads that nan/snan words cannot express. Inline operations consume no-unwind facts while operand exceptions remain visible. | Negative zero, quiet/signaling payloads, globals/class fields, source→LowIR→reader→native/MIR execution |
+| Attribute parser / prediction | Balanced token lookahead recognizes attributed declarations; alignment operands parse once into the source graph. Namespace/pointer annotations and `__thread` spelling use existing declaration semantics. O(tokens + operands). | Condition/for/range, namespace placement, nullability, unknown attribute arguments, hosted system headers |
+| Alignment / raw type storage | GNU minimum alignment and strict `alignas` remain distinct. Typedef storage decorations and dependent query operands survive substitution; canonical identity/ABI signatures erase decorations. Sparse field facts carry alignment to layout and object emission. Work follows attributes and demanded type/frame keys. | Dependent classes/typedefs, increased/decreased alignment, stack/global/member/array storage, identity and host ABI, invalid constants/arrays |
+| Empty subobject layout / initialization | Exact `(type, offset)` summaries cap at 64 positions; larger shapes use address-directed graph queries. Arrays stay compact; repeated placements use monotone frontiers. Recorded overlap permissions reach zero initialization, generated transfers and typed lowering without erasing constructor/destructor effects. | Same-type/nested/repeated objects, nonzero nested addresses, large footprint fallback, million-element arrays, aggregate/copy/lifetime execution |
+| Member-designator queries | Parsed type/member/index path → canonical query/access/layout facts → constant evaluation or typed offset/stride operations. Work tracks path length, actual lookup and demanded layout. | Nested/anonymous/dependent members, runtime indices and exceptions, constexpr activations, negative operands, source→LowIR→native |
 
-No production text roundtrip, source replay, fake semantic node, host compiler
-implementation, process-global cache or optional optimizer was added. Constant
-bit counts consume at most 128 bits; runtime sequences are O(log width), with
-width ≤128. Overflow uses at most four 64×64 partial products. Registry/signature
-work, operand checking and lowering track demanded calls, not unrelated entities.
+No production text roundtrip, source replay, host compiler delegation, fake
+semantic node, process-global cache or optional optimizer was added. Per-class
+placement indexes are temporary; raw type/query/field facts have TU ownership.
 
 ## Remaining implementation
 
-[Owner ledger](../student.tests/pa29/evidence156/remaining.json) retains all 102
-failing fixtures. Owner assignments guide reducers; they do not prove root causes.
+[Owner ledger](../student.tests/pa29/evidence157/remaining.json) lists every
+remaining fixture. Group labels guide reducers; they are not root-cause proof.
 
 | Owner / failures | Required facts and next validation |
 |---|---|
-| Atomic/assembly: 21 | Atomic-qualified storage, ordering/effects and assembly constraints → serializable LowIR/native operations. Atomic layout, runtime and noexcept checks. |
-| Extended syntax/types/layout: 51 | Retained attributes/dependent widths, vector/complex/float storage, designated initializers, folds/lambdas/bindings and no-unique-address copies. Parser/layout/execution controls. |
-| Legacy traits/lifetime proofs: 6 | All relevant special-member properties and binding/materialization/lifetime facts; not ordinary overload viability aliases. Trait and reference-temporary reducers. |
-| Template demand/hosted ABI: 19 | Complete specialization/context keys, demand edges and typed ABI entries. Pack/alias/cache, pretty-function, extern/inline and symbol controls. |
-| Structured intrinsic operands: 5 | Two offsetof-containing fixtures need member-path/layout and constant-context facts; two invoke fixtures need receiver/member-pointer/dereference recipes shared with query substitution; source-location needs lexical/caller context. These remain implementation, not runtime signature-table entries. |
+| Atomic/assembly: 21 | Atomic-qualified storage, ordering/effects and assembly constraints → serializable LowIR/native operations; atomic layout, runtime and noexcept checks. |
+| Extended syntax/types: 37 | Vector/complex/extended-float types and operations; designated initializers, folds, lambda forms and structured bindings. Canonical type/grammar/lowering owners and execution controls. |
+| Legacy traits/lifetime proofs: 6 | Relevant special-member properties and binding/materialization/lifetime facts; trait and reference-temporary reducers. |
+| Template demand/hosted ABI: 19 | Complete specialization/context keys, demand edges and typed ABI entries; packs/aliases/caches, pretty-function, extern/inline and symbols. |
+| Structured intrinsic operands: 4 | The composite builtin/offsetof fixture still needs constant-evaluation context, address-of and fence semantics; two invoke fixtures need receiver/member-pointer recipes; source-location needs lexical/caller context. |
 
-## Performance acceptance
+Known extension boundaries outside the completed storage/path behavior remain
+implementation work, not audit questions: function code-alignment attributes
+need code-placement facts; dependent `offsetof` expressions used in mangled ABI
+signatures are explicitly unsupported; class-convertible designator indices need
+the corresponding integral-conversion facts. These are not accepted substitutes
+for required behavior. The owning remaining groups must establish their facts
+before those forms can be claimed supported.
 
-[Protocol, costs and budgets](performance156.md) retain all four dimensions,
-A/A calibration, six ABBA blocks and standalone new-capability measurements.
-Common A/B objects and executables are byte-identical; median paired compilation
-ratios are 1.0016–1.0088. No speedup is claimed. New optional optimization work
-and growth budgets are **zero**. Necessary semantic costs and later PA32/33
-optimization remain distinct. Historical blanket 15%/zero-growth diagnostics
-remain diagnostics under spec §9, not additional mandated exit gates.
+## Performance evidence
+
+[Protocol, costs and budgets](performance157.md) and its frozen raw evidence
+cover latency, peak RSS, runtime and text size, with A/A and six ABBA blocks.
+All common A/B objects/executables are byte-identical. Paired compiler medians
+span 0.9411–1.0117 amid substantial noise; no speedup is claimed. New layout
+workloads take 0.1081/0.2134/0.4351 seconds and 20,948/34,632/62,480 KiB at
+600/1200/2400 demanded classes. Compiler growth is 30,488 bytes. Empty-layout
+work stays constant across the separate 100-to-one-million array-bound control.
+Optional optimizer work/growth budgets are **zero**. Historical blanket 15% and
+zero-growth diagnostics remain diagnostics under spec §9; measurements,
+mandated limits, correctness and coverage are preserved.
 
 ## Handoff ledger
 
-- Commits: plan `5716fcfd`; signature/integer/FP group `3611c078`;
-  redeclaration, hint/overflow and exact-bit LowIR extension `81a9f67f`.
-- Final required checks: PA1–28 **4538/4538**; PA29 **301/403** (exit 2);
-  file audit passes with four inherited header-body warnings. Explicit controls
-  **40/40**, including 1,944 overflow cases, and inherited controls **77/77**.
-  [Validation](../student.tests/pa29/evidence156/validation.json) records hashes,
-  unchanged fixture coverage, original failures resolved and sequential reruns
-  after concurrent course reports contaminated their shared counter totals.
-- Boundary: completed runtime signatures and scalar operation semantics, then
-  extended through hosted wrapper acceptance, implicit declarations, constexpr
-  predicates, allocation aliases and lossless NaN storage. The five residual
-  intrinsic fixtures require different language facts: parsed layout paths,
-  caller-sensitive constant/source context, or member-pointer receiver recipes
-  valid during both substitution and concrete lowering. More signature entries
-  or scalar expansion cannot establish those facts; each needs its own coherent
-  semantic owner work. The other 97 failures also remain unfinished implementation.
-- Independent review questions: whole-stage source-to-ELF/spec audit; review
-  shorthand `std::is_nothrow_*` forward-declared-only classes and the deleted-copy
-  triviality oracle against C++11. No proof bundle/reference correction is claimed.
-  These questions and review markers are preserved; this handoff is not stage approval.
+- Commits: ownership plan `076139b6`; implementation and behavior controls
+  `a33d1086`; final evidence/plan committed with this handoff.
+- Required checks: PA1–28 **4538/4538**; PA29 **316/403** (exit 2); file audit
+  passes with the same four inherited header-body warnings. Explicit controls
+  **53/53**, inherited controls **77/77** and **40/40**, inspection **10/10**.
+  [Validation](../student.tests/pa29/evidence157/validation.json) retains hashes,
+  resolved original failures, unchanged fixtures and final sequential reports.
+  Preliminary PA27 typedef-alignment regressions were fixed, not waived.
+- Boundary: declaration placement/alignment and empty-member behavior are complete
+  through dependent storage, generated initialization/copy and host interoperability;
+  member-designator layout extends the same facts into constant/runtime queries.
+  The 87 residual fixtures require new grammar/type-operation, atomic/assembly,
+  lifetime-proof, template-demand or caller/receiver-context owners. Further
+  attribute parsing or layout arithmetic cannot supply those missing facts.
+- Independent review questions remain whole-stage source-to-ELF/spec auditing,
+  forward-declared-only `std::is_nothrow_*` shorthand classes and the deleted-copy
+  triviality oracle against C++11. No reference correction or proof bundle is
+  claimed. These questions do not waive the implementation ledger above.

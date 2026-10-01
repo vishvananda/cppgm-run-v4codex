@@ -1,0 +1,695 @@
+{
+  "compiler_sha256": "84642180af8de176d1f8496122bf786e1b87935aeb1c37b233f74accfbfc36c3",
+  "checks": [
+    {
+      "name": "address-sensitive-empty compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls157/address-sensitive-empty.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/address-sensitive-empty.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "address-sensitive-empty link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/controls/address-sensitive-empty.o",
+        "-o",
+        "/tmp/pa29-157/controls/address-sensitive-empty"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "address-sensitive-empty execute",
+      "args": [
+        "/tmp/pa29-157/controls/address-sensitive-empty"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "attributes compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls157/attributes.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/attributes.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "attributes link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/controls/attributes.o",
+        "-o",
+        "/tmp/pa29-157/controls/attributes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "attributes execute",
+      "args": [
+        "/tmp/pa29-157/controls/attributes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "empty-effects compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls157/empty-effects.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/empty-effects.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "empty-effects link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/controls/empty-effects.o",
+        "-o",
+        "/tmp/pa29-157/controls/empty-effects"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "empty-effects execute",
+      "args": [
+        "/tmp/pa29-157/controls/empty-effects"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "empty compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls157/empty.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/empty.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "empty link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/controls/empty.o",
+        "-o",
+        "/tmp/pa29-157/controls/empty"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "empty execute",
+      "args": [
+        "/tmp/pa29-157/controls/empty"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "inspection compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls157/inspection.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/inspection.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "inspection link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/controls/inspection.o",
+        "-o",
+        "/tmp/pa29-157/controls/inspection"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "inspection execute",
+      "args": [
+        "/tmp/pa29-157/controls/inspection"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "large-empty compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls157/large-empty.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/large-empty.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "large-empty link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/controls/large-empty.o",
+        "-o",
+        "/tmp/pa29-157/controls/large-empty"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "large-empty execute",
+      "args": [
+        "/tmp/pa29-157/controls/large-empty"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "offsetof-constexpr-loop compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls157/offsetof-constexpr-loop.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/offsetof-constexpr-loop.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "offsetof-constexpr-loop link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/controls/offsetof-constexpr-loop.o",
+        "-o",
+        "/tmp/pa29-157/controls/offsetof-constexpr-loop"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "offsetof-constexpr-loop execute",
+      "args": [
+        "/tmp/pa29-157/controls/offsetof-constexpr-loop"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "offsetof-effects compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls157/offsetof-effects.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/offsetof-effects.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "offsetof-effects link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/controls/offsetof-effects.o",
+        "-o",
+        "/tmp/pa29-157/controls/offsetof-effects"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "offsetof-effects execute",
+      "args": [
+        "/tmp/pa29-157/controls/offsetof-effects"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "offsetof compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls157/offsetof.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/offsetof.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "offsetof link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/controls/offsetof.o",
+        "-o",
+        "/tmp/pa29-157/controls/offsetof"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "offsetof execute",
+      "args": [
+        "/tmp/pa29-157/controls/offsetof"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "typedef-alignment compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls157/typedef-alignment.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/typedef-alignment.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "typedef-alignment link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/controls/typedef-alignment.o",
+        "-o",
+        "/tmp/pa29-157/controls/typedef-alignment"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "typedef-alignment execute",
+      "args": [
+        "/tmp/pa29-157/controls/typedef-alignment"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "host ABI student compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/host157/student.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/abi-student.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "host ABI host compile",
+      "args": [
+        "g++",
+        "-std=c++11",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/host157/host.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/abi-host.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "host ABI link",
+      "args": [
+        "g++",
+        "/tmp/pa29-157/controls/abi-student.o",
+        "/tmp/pa29-157/controls/abi-host.o",
+        "-o",
+        "/tmp/pa29-157/controls/abi"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "host ABI execute",
+      "args": [
+        "/tmp/pa29-157/controls/abi"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "reject template<int N> struct A{typedef int T __attribute__((aligned(N))); T a[2];}; A<32> a;",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad0.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid substituted declaration type\n"
+    },
+    {
+      "name": "reject template<int N> struct A{typedef int T __attribute__((aligned(N))); T a;}; A<3> a;",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad1.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: GNU alignment must be a nonzero power of two\n"
+    },
+    {
+      "name": "reject typedef int Over __attribute__((aligned(32))); Over x[2];",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad2.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: array element size is not a multiple of its alignment\n"
+    },
+    {
+      "name": "reject typedef int Bad alignas(8);",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad3.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid typedef alignment\n"
+    },
+    {
+      "name": "reject enum class Index{a}; struct A{int x[3];}; int f(){return __builtin_offsetof(A,x[Index::a]);}",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad4.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression in /tmp/pa29-157/controls/bad4.cpp:1\n"
+    },
+    {
+      "name": "reject struct __attribute__((aligned(3))) A {}; A a;",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad5.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: alignment is not a power of two\n"
+    },
+    {
+      "name": "reject template<int N> struct __attribute__((aligned(N))) A {}; A<3> a;",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad6.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: alignment is not a power of two\n"
+    },
+    {
+      "name": "reject struct __attribute__((aligned(0))) A {}; A a;",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad7.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: GNU alignment must be nonzero\n"
+    },
+    {
+      "name": "reject struct alignas(1) A {long x;}; A a;",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad8.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: weakened class alignment\n"
+    },
+    {
+      "name": "reject int x __attribute__((aligned(-8)));",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad9.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid alignment constant\n"
+    },
+    {
+      "name": "reject int n=8; struct __attribute__((aligned(n))) A {}; A a;",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad10.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid alignment constant\n"
+    },
+    {
+      "name": "reject struct A{int x:3;}; int f(){return __builtin_offsetof(A,x);}",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad11.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: x in /tmp/pa29-157/controls/bad11.cpp:1\n"
+    },
+    {
+      "name": "reject struct A{static int x;}; int f(){return __builtin_offsetof(A,x);}",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad12.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: x in /tmp/pa29-157/controls/bad12.cpp:1\n"
+    },
+    {
+      "name": "reject struct A{int x;}; int f(){return __builtin_offsetof(A,missing);}",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad13.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: missing in /tmp/pa29-157/controls/bad13.cpp:1\n"
+    },
+    {
+      "name": "reject class A{int x;}; int f(){return __builtin_offsetof(A,x);}",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad14.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: x in /tmp/pa29-157/controls/bad14.cpp:1\n"
+    },
+    {
+      "name": "reject struct A{int *x;}; int f(){return __builtin_offsetof(A,x[2]);}",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad15.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression in /tmp/pa29-157/controls/bad15.cpp:1\n"
+    },
+    {
+      "name": "reject struct A{int x[3];}; int f(){return __builtin_offsetof(A,x[1.0]);}",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad16.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression in /tmp/pa29-157/controls/bad16.cpp:1\n"
+    },
+    {
+      "name": "reject int f(){return __builtin_offsetof(int,x);}",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad17.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression\n"
+    },
+    {
+      "name": "reject struct A{int &x;}; int f(){return __builtin_offsetof(A,x);}",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-157/controls/bad18.cpp",
+        "-o",
+        "/tmp/pa29-157/controls/bad.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: x in /tmp/pa29-157/controls/bad18.cpp:1\n"
+    }
+  ]
+}
