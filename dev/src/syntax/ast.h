@@ -173,6 +173,7 @@ struct Token {
     ETokenType op = TOK_INVALID;
     PostTokenKind kind = PostTokenKind::eof;
     unsigned char packing = 0;
+    bool split_angle_end = false; // The first '>' of a closing '>>'.
 };
 
 // One compact node array belongs to the TU. Indices remain stable on growth.

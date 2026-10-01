@@ -168,13 +168,16 @@ NodeId Parser::template_arguments()
         do {
             bool type = type_start();
             if (type) {
-                auto end = probe_type(0);
+                bool split_end = false;
+                auto end = probe_type(0, &split_end);
                 // Functional casts and braced construction are expressions.
                 // A decltype-qualified name is retained as a name until the
                 // semantic owner can distinguish its type/value member.
-                if (!(end && in.is(">>",end-1)) && (in.is("{",end) || (in.is("(",end) && !in.is("*",end+1) && !in.is("^",end+1) && !in.is("&",end+1) &&
+                // A suffix belongs to this type only when its final angle
+                // consumed the entire token, not half of the enclosing '>>'.
+                if (!split_end && (in.is("{",end) || (in.is("(",end) && !in.is("*",end+1) && !in.is("^",end+1) && !in.is("&",end+1) &&
                     !in.is("&&",end+1) && !type_start(end+1) && !in.is(")",end+1) && !in.is("...",end+1)))) type = false;
-                if (in.is("(",end) && type_start(end+1) && in.is("{",probe_type(end+1))) type = false;
+                if (!split_end && in.is("(",end) && type_start(end+1) && in.is("{",probe_type(end+1))) type = false;
                 if (in.is("decltype") && in.is("::",in.matching(1)+1)) type = false;
             }
             NodeId arg = type ? type_id() : expression(2);

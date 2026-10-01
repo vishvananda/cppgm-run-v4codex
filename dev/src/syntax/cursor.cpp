@@ -129,9 +129,11 @@ std::size_t Cursor::angle_end(std::size_t ahead)
     return token.angle_end ? token.angle_end - consumed : ahead;
 }
 
-void Cursor::remember_angle(std::size_t open, std::size_t end)
+void Cursor::remember_angle(std::size_t open, std::size_t end, bool split)
 {
-    pending_[(head_ + open) % pending_.size()].angle_end = end == std::size_t(-1) ? end : consumed + end;
+    auto& token = pending_[(head_ + open) % pending_.size()];
+    token.angle_end = end == std::size_t(-1) ? end : consumed + end;
+    token.split_angle_end = split;
 }
 
 void Cursor::close_angle()

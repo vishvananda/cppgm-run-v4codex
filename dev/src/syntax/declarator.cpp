@@ -7,6 +7,7 @@ namespace cppgm { namespace syntax {
 NodeId Parser::specifiers(bool type_only, NodeId result)
 {
     bool have_type = result != 0;
+    bool friend_declaration = false;
     if (!result) result = make(type_only ? Kind::TypeSpecifiers : Kind::DeclSpecifiers);
     std::uint32_t alignment = 0;
     for (;;) {
@@ -43,8 +44,10 @@ NodeId Parser::specifiers(bool type_only, NodeId result)
         } else if (in.is("const") || in.is("volatile")) ast.append(result, leaf(type_only ? Kind::CvQualifier : kind));
         else if (!type_only && (in.is("typedef") || in.is("extern") || in.is("static") ||
                  in.is("inline") || in.is("virtual") || in.is("constexpr") ||
-                 in.is("thread_local") || in.is("friend") || in.is("explicit") || in.is("mutable")))
+                 in.is("thread_local") || in.is("friend") || in.is("explicit") || in.is("mutable"))) {
+            friend_declaration |= in.is("friend");
             ast.append(result, leaf(kind));
+        }
         else if (!have_type && in.is("decltype")) {
             in.take();
             in.require("(");
@@ -63,7 +66,7 @@ NodeId Parser::specifiers(bool type_only, NodeId result)
             } else ast.append(result, decltype_node);
             have_type = true;
         } else if (!have_type && (in.is("class") || in.is("struct") || in.is("union"))) {
-            ast.append(result, class_specifier());
+            ast.append(result, class_specifier(friend_declaration));
             have_type = true;
         } else if (!have_type && in.is("enum")) {
             ast.append(result, enum_specifier());

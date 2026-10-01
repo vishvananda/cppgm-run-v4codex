@@ -3,7 +3,7 @@
 
 namespace cppgm { namespace syntax {
 
-NodeId Parser::class_specifier()
+NodeId Parser::class_specifier(bool friend_declaration)
 {
     std::size_t region_begin = in.consumed;
     unsigned packing = in.peek().packing;
@@ -18,6 +18,13 @@ NodeId Parser::class_specifier()
     if (packing) ast.class_packing.put(result, packing);
     ast[result].flags |= attributes_flags;
     ast.append(result, key);
+    // An elaborated friend declaration names a class; it does not introduce a
+    // nested class scope. Semantic friend lookup owns any namespace declaration.
+    // In particular, do not hide a visible class behind an empty local scope.
+    if (friend_declaration && !in.is("{") && !in.is(":") && !in.is("final")) {
+        ast[result].kind = Kind::ClassForward;
+        return result;
+    }
     ScopeId saved_scope = scope;
     ScopeId owner = n ? qualified_owner(n) : scope;
     if (owner == unknown_scope) owner = scope;

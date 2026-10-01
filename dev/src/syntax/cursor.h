@@ -18,7 +18,7 @@ public:
     void close_angle();
     std::size_t matching(std::size_t ahead);
     std::size_t angle_end(std::size_t ahead);
-    void remember_angle(std::size_t open, std::size_t end);
+    void remember_angle(std::size_t open, std::size_t end, bool split = false);
     std::size_t delimiter_work = 0;
     std::size_t consumed = 0, produced = 0, max_pending = 0;
 private:

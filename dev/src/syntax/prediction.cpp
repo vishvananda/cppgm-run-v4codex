@@ -62,7 +62,7 @@ std::size_t Parser::probe_angles(std::size_t ahead)
         else if (in.is(">", i) || in.is(">>", i)) {
             unsigned pieces = in.is(">>", i) ? 2 : 1;
             while (pieces-- && !angle_stack.empty()) {
-                in.remember_angle(angle_stack.back(), i + 1);
+                in.remember_angle(angle_stack.back(), i + 1, pieces != 0);
                 angle_stack.pop_back();
                 head = angle_heads.back(); angle_heads.pop_back(); qualified = false;
             }
@@ -114,10 +114,12 @@ Parser::NameProbe Parser::probe_name(std::size_t ahead)
             std::size_t end = probe_angles(ahead);
             if (end != ahead) {
                 result.templated = true;
+                result.split_end = in.peek(ahead).split_angle_end;
                 ahead = end;
             }
         }
         result.end = ahead;
+        if (result.split_end) return result;
         if (!in.is("::", ahead) || in.is("*", ahead + 1)) return result;
         Binding qualifier = names.qualifier(owner, token.text, qualified);
         owner = qualifier.target ? qualifier.target : unknown_scope;
@@ -128,8 +130,9 @@ Parser::NameProbe Parser::probe_name(std::size_t ahead)
     return result;
 }
 
-std::size_t Parser::probe_type(std::size_t ahead)
+std::size_t Parser::probe_type(std::size_t ahead, bool* split_end)
 {
+    if (split_end) *split_end = false;
     bool base = false;
     for (;;) {
         if ((in.is("[",ahead) && in.is("[",ahead+1)) || in.is("__attribute__",ahead) || in.is("__attribute",ahead)) {
@@ -149,6 +152,10 @@ std::size_t Parser::probe_type(std::size_t ahead)
             NameProbe probe = probe_name(ahead);
             if (!probe.valid || (!dependent && !type_start(ahead))) return ahead;
             ahead = probe.end;
+            if (probe.split_end) {
+                if (split_end) *split_end = true;
+                return ahead;
+            }
             base = true;
         } else return ahead;
     }
@@ -263,7 +270,10 @@ void Parser::predeclare_class()
             }
             i = p;
         }
-        if (templated && in.is("=",i)) {
+        if (templated && !function_declaration && in.is("=",i)) {
+            // An operator= token belongs to its function declarator, not an
+            // initializer. Skipping it to a semicolon can cross the class
+            // boundary after a function body without a trailing semicolon.
             // A variable-template initializer has expressions, not member
             // declarations. In particular X(...) must not hide the class X
             // with a spurious function-template category during lookahead.

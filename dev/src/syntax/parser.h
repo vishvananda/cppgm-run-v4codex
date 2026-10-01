@@ -50,10 +50,11 @@ private:
         Binding binding;
         IdentifierId terminal = 0, previous = 0;
         bool valid = false, qualified = false, templated = false, special = false;
+        bool split_end = false;
     };
     NameProbe probe_name(std::size_t ahead = 0);
     std::size_t probe_angles(std::size_t ahead);
-    std::size_t probe_type(std::size_t ahead);
+    std::size_t probe_type(std::size_t ahead, bool* split_end = 0);
     bool type_operand(bool function_type = false);
     bool special_ahead();
     bool deduction_guide_ahead();
@@ -76,7 +77,7 @@ private:
     NodeId using_declaration();
     NodeId template_decl();
     NodeId template_parameters();
-    NodeId class_specifier();
+    NodeId class_specifier(bool friend_declaration = false);
     NodeId enum_specifier();
     NodeId static_assertion();
     NodeId simple_declaration(bool require_semicolon = true, NodeId specs = 0);

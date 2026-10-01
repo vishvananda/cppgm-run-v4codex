@@ -251,7 +251,7 @@ NodeId Parser::primary()
     if (identifier() || in.is("::") || in.is("operator") || in.is("decltype"))
         return named(Kind::IdExpression, name());
     TextView text = ids.spelling(token.text);
-    throw std::runtime_error("expected expression, found '" + std::string(text.data, text.size) + "'");
+    throw std::runtime_error("expected expression, found '" + std::string(text.data, text.size) + "' in " + in.position());
 }
 
 NodeId Parser::unary()
