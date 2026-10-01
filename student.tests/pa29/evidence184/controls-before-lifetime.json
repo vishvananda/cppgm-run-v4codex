@@ -1,0 +1,1897 @@
+{
+  "compiler_sha256": "7cb0fefbc4e09af9dc5c7dabb0d28f81028a475809e3d4db5f652f99828f4f4a",
+  "cases": [
+    {
+      "source": "student.tests/pa29/source184/base-adjustments.cpp",
+      "sha256": "ae3624c67be10d60dfab929e71b5305a1f3ffe6f385ae70d446666008da3f6a4",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/base-adjustments.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/base-adjustmentsstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/base-adjustmentsstudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/base-adjustmentsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/base-adjustmentsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/base-adjustments.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/base-adjustmentsclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/base-adjustmentsclang.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/base-adjustmentsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/base-adjustmentsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/base-adjustments.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/base-adjustments.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/const-bitfield.reject.cpp",
+      "sha256": "66d1cd779bf09d71577f9815630456ad4001b10dae3cbeddaa92a5950385e4a6",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-bitfield.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-bitfield.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-bitfield.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-bitfield.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-bitfield.reject.cpp:1:46: error: const_cast from bit-field lvalue to reference type 'int &'\n    1 | struct A{int x:3;}; int main(){A a={}; (void)const_cast<int&>(a.x);}\n      |                                              ^~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/const-function.reject.cpp",
+      "sha256": "8ae736b5377984fac0dde8b8d70560ea3aa333f356453997d9887082d1f8d0c4",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-function.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-function.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-function.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-function.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-function.reject.cpp:1:29: error: const_cast to 'void (*)()', which is not a reference, pointer-to-object, or pointer-to-data-member\n    1 | void f(){} int main(){(void)const_cast<void(*)()>(f);}\n      |                             ^~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/const-member-function.reject.cpp",
+      "sha256": "41c1a3be94fc71591ce7b1d77087b8a8f78fec2c5e8a8d1080b7da97adfa3f2d",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-member-function.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-member-function.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-member-function.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-member-function.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-member-function.reject.cpp:1:39: error: const_cast to 'void (A::*)()', which is not a reference, pointer-to-object, or pointer-to-data-member\n    1 | struct A{void f();}; int main(){(void)const_cast<void(A::*)()>(&A::f);}\n      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/const-rvalue-array-lref.reject.cpp",
+      "sha256": "21673bce516572e243ee6ee2ff016ca5471710a74311363229f9c12a9b99a884",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-rvalue-array-lref.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-rvalue-array-lref.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-rvalue-array-lref.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-rvalue-array-lref.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-rvalue-array-lref.reject.cpp:1:31: error: const_cast from rvalue to reference type 'int (&)[1]'\n    1 | int main(){int a[1]={}; (void)const_cast<int(&)[1]>(static_cast<int(&&)[1]>(a));}\n      |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/const-rvalue-lref.reject.cpp",
+      "sha256": "cac57012cf831ab9ad4d0c242e827f8b7173c4bf7f05929848e1a634615f59ad",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-rvalue-lref.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-rvalue-lref.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-rvalue-lref.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-rvalue-lref.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-rvalue-lref.reject.cpp:1:18: error: const_cast from rvalue to reference type 'const int &'\n    1 | int main(){(void)const_cast<const int&>(1);}\n      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/const-scalar-rref.reject.cpp",
+      "sha256": "117f67aafd8b514c27a4c353d7ea882a9955d6a9c999f6627ed10c950c6fe005",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-scalar-rref.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-scalar-rref.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-scalar-rref.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-scalar-rref.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-scalar-rref.reject.cpp:1:18: error: const_cast from rvalue to reference type 'int &&'\n    1 | int main(){(void)const_cast<int&&>(1);}\n      |                  ^~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/const-scalar.reject.cpp",
+      "sha256": "3534ff7f7c45caafe2103de206b106a9fe1d4d51489fe2defc8f567ac4323593",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-scalar.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-scalar.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-scalar.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-scalar.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-scalar.reject.cpp:1:18: error: const_cast to 'int', which is not a reference, pointer-to-object, or pointer-to-data-member\n    1 | int main(){(void)const_cast<int>(1);}\n      |                  ^~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/const-unrelated-member.reject.cpp",
+      "sha256": "4896e3c7ceaea6b6fd7ee20f57286c1669be5da691ece72f6919da79798b0139",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-unrelated-member.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-unrelated-member.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-unrelated-member.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-unrelated-member.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-unrelated-member.reject.cpp:1:54: error: const_cast from 'int A::*' to 'int B::*' is not allowed\n    1 | struct A{int x;}; struct B{int x;}; int main(){(void)const_cast<int B::*>(&A::x);}\n      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/const-unrelated-ref.reject.cpp",
+      "sha256": "9787d780450adf0ed6708374a85f9b718d1de5ad719fbfe146a0889cf00ae50d",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-unrelated-ref.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-unrelated-ref.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-unrelated-ref.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-unrelated-ref.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-unrelated-ref.reject.cpp:1:27: error: const_cast from 'int' to 'float &' is not allowed\n    1 | int main(){int i=0; (void)const_cast<float&>(i);}\n      |                           ^~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/const-write.reject.cpp",
+      "sha256": "198131c23f0af0f381abcdeef6f497725d622ddd722632ff32202cfc7c389c9a",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-write.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-write.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-write.reject.cpp:1\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-write.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-write.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-write.reject.cpp:1:34: error: constexpr function never produces a constant expression [-Winvalid-constexpr]\n    1 | constexpr int n=1; constexpr int change(){return ++*(int*)&n;} static_assert(change()==2,\"write\");\n      |                                  ^~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-write.reject.cpp:1:50: note: subexpression not valid in a constant expression\n    1 | constexpr int n=1; constexpr int change(){return ++*(int*)&n;} static_assert(change()==2,\"write\");\n      |                                                  ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-write.reject.cpp:1:78: error: static assertion expression is not an integral constant expression\n    1 | constexpr int n=1; constexpr int change(){return ++*(int*)&n;} static_assert(change()==2,\"write\");\n      |                                                                              ^~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-write.reject.cpp:1:50: note: subexpression not valid in a constant expression\n    1 | constexpr int n=1; constexpr int change(){return ++*(int*)&n;} static_assert(change()==2,\"write\");\n      |                                                  ^~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-write.reject.cpp:1:78: note: in call to 'change()'\n    1 | constexpr int n=1; constexpr int change(){return ++*(int*)&n;} static_assert(change()==2,\"write\");\n      |                                                                              ^~~~~~~~\n2 errors generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/const-xvalue-lref.reject.cpp",
+      "sha256": "ce97c6b3ef7d4db62d891729fe3bd0619d391785985e31816edb3a16b090296c",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-xvalue-lref.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-xvalue-lref.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-xvalue-lref.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/const-xvalue-lref.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/const-xvalue-lref.reject.cpp:1:27: error: const_cast from rvalue to reference type 'const int &'\n    1 | int main(){int n=1; (void)const_cast<const int&>(static_cast<int&&>(n));}\n      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/constant-modes.cpp",
+      "sha256": "cb5f493aa7eecbedde74ebaa76e0d42c4be5b1ebedce775986cfa3c025af2649",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/constant-modes.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/constant-modesstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/constant-modesstudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/constant-modesstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/constant-modesstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/constant-modes.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/constant-modesclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/constant-modesclang.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/constant-modesclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/constant-modesclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/constant-modes.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/constant-modes.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/cstyle-reinterpret-constant.reject.cpp",
+      "sha256": "86fcebde044f84f8ce7d6440df1b0c41582025337028e5e421a20e28284caadd",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/cstyle-reinterpret-constant.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/cstyle-reinterpret-constant.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/cstyle-reinterpret-constant.reject.cpp:1\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/cstyle-reinterpret-constant.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/cstyle-reinterpret-constant.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/cstyle-reinterpret-constant.reject.cpp:1:34: error: static assertion expression is not an integral constant expression\n    1 | constexpr int n=1; static_assert(*(const unsigned*)&n==1,\"forbidden\");\n      |                                  ^~~~~~~~~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/cstyle-reinterpret-constant.reject.cpp:1:35: note: cast that performs the conversions of a reinterpret_cast is not allowed in a constant expression\n    1 | constexpr int n=1; static_assert(*(const unsigned*)&n==1,\"forbidden\");\n      |                                   ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/dependent.cpp",
+      "sha256": "0357c87c21c792cd8de601a44c3731c9ea13bafce1b5a313eccb59cb7b69b787",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/dependent.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/dependentstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/dependentstudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/dependentstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/dependentstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/dependent.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/dependentclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/dependentclang.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/dependentclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/dependentclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/dependent.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/dependent.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/nested-member.cpp",
+      "sha256": "f1aca0a3ed4e0b7e7b553f7f8a1718f5e2d2c7e90e3b59c31dd9a8b4a9f58993",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/nested-member.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/nested-memberstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/nested-memberstudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/nested-memberstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/nested-memberstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/nested-member.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/nested-memberclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/nested-memberclang.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/nested-memberclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/nested-memberclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/nested-member.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/nested-member.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/nonconstant-storage.reject.cpp",
+      "sha256": "672ecf2698234a2b11d711453726283f529d4cb1540d47fe12c42f1e81ecdb8e",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/nonconstant-storage.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/nonconstant-storage.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/nonconstant-storage.reject.cpp:1\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/nonconstant-storage.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/nonconstant-storage.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/nonconstant-storage.reject.cpp:1:24: error: static assertion expression is not an integral constant expression\n    1 | int n=1; static_assert(*(int*)(const int*)&n==1,\"nonconstant\");\n      |                        ^~~~~~~~~~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/nonconstant-storage.reject.cpp:1:24: note: read of non-const variable 'n' is not allowed in a constant expression\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/nonconstant-storage.reject.cpp:1:5: note: declared here\n    1 | int n=1; static_assert(*(int*)(const int*)&n==1,\"nonconstant\");\n      |     ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/null-adjustments.cpp",
+      "sha256": "ac269e7b5efdce0121130d437e75b663d69e4750328f871629ffc38a8fa1823a",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/null-adjustments.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/null-adjustmentsstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/null-adjustmentsstudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/null-adjustmentsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/null-adjustmentsstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/null-adjustments.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/null-adjustmentsclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/null-adjustmentsclang.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/null-adjustmentsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/null-adjustmentsclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/null-adjustments.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/null-adjustments.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/onepast-constant.reject.cpp",
+      "sha256": "5a0520dde88cdb2a6fc2b16537ffc1de39a3a3e25935ee06c40231bc68308152",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/onepast-constant.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/onepast-constant.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/onepast-constant.reject.cpp:1\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/onepast-constant.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/onepast-constant.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/onepast-constant.reject.cpp:1:34: error: static assertion expression is not an integral constant expression\n    1 | constexpr int n=1; static_assert(*((int*)&n+1)==1,\"past end\");\n      |                                  ^~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/onepast-constant.reject.cpp:1:34: note: read of dereferenced one-past-the-end pointer is not allowed in a constant expression\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/private-base.cpp",
+      "sha256": "6b7554522fc6b7ae05db79647e3083f245fecd5e651174f90c0ecaedf4647e6e",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/private-base.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/private-basestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/private-basestudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/private-basestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/private-basestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/private-base.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/private-baseclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/private-baseclang.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/private-baseclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/private-baseclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/private-base.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/private-base.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/qualification.cpp",
+      "sha256": "f5a9b92a5fa447de7b191afafeb65da051678475e3e2514a5c4b18558820491f",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/qualification.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/qualificationstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/qualificationstudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/qualificationstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/qualificationstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/qualification.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/qualificationclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/qualificationclang.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/qualificationclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/qualificationclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/qualification.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/qualification.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/reference-arrays.cpp",
+      "sha256": "06a4dd05d8ba57eea05baceb75b492a3a767ca0d25e97576a3ebafb74a986b60",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reference-arrays.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-arraysstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-arraysstudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-arraysstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-arraysstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reference-arrays.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-arraysclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-arraysclang.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-arraysclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-arraysclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reference-arrays.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-arrays.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/reference-temporaries.cpp",
+      "sha256": "e4aa80ff891178f16779f73c74fd78834e0b67ea4357fbcbf4f47e0cb1d92824",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reference-temporaries.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-temporariesstudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-temporariesstudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-temporariesstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-temporariesstudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reference-temporaries.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-temporariesclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-temporariesclang.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-temporariesclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-temporariesclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reference-temporaries.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reference-temporaries.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/reinterpret-add-deep-const.reject.cpp",
+      "sha256": "899ccd9f557a6dc992e2193b2224166eda1d450ebcf376f82f909bf2adf0b08c",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-add-deep-const.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-add-deep-const.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-add-deep-const.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-add-deep-const.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-add-deep-const.reject.cpp:1:29: error: reinterpret_cast from 'int **' to 'const int **' casts away qualifiers\n    1 | int main(){int **p=0; (void)reinterpret_cast<const int**>(p);}\n      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/reinterpret-constant.reject.cpp",
+      "sha256": "1e8238f5fb70745b75d0fdea80a9ceee70efd192f5aa3f211421503fe38e8cb1",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-constant.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-constant.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-constant.reject.cpp:1\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-constant.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-constant.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-constant.reject.cpp:1:34: error: static assertion expression is not an integral constant expression\n    1 | constexpr int n=1; static_assert(*reinterpret_cast<const int*>(&n)==1,\"forbidden\");\n      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-constant.reject.cpp:1:35: note: reinterpret_cast is not allowed in a constant expression\n    1 | constexpr int n=1; static_assert(*reinterpret_cast<const int*>(&n)==1,\"forbidden\");\n      |                                   ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/reinterpret-deep-const.reject.cpp",
+      "sha256": "74aa217ac9d2b97a439f9e2ae28b71638dc9a2ddb6c52b44aa56b68a1f8aa1b6",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-deep-const.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-deep-const.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-deep-const.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-deep-const.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-deep-const.reject.cpp:1:35: error: reinterpret_cast from 'const int **' to 'int **' casts away qualifiers\n    1 | int main(){const int **p=0; (void)reinterpret_cast<int**>(p);}\n      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/reinterpret-deep-volatile.reject.cpp",
+      "sha256": "2e4e99d6f714baf318f594985c68c6bd55debc22ce4036bf7ed67dae5f9dd40a",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-deep-volatile.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-deep-volatile.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-deep-volatile.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-deep-volatile.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-deep-volatile.reject.cpp:1:38: error: reinterpret_cast from 'volatile int **' to 'int **' casts away qualifiers\n    1 | int main(){volatile int **p=0; (void)reinterpret_cast<int**>(p);}\n      |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/reinterpret-ref-constant.reject.cpp",
+      "sha256": "5a361633fe294a46d03027fc0309b54c6b6da9c3be328170570e14f2bf2c01a7",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-ref-constant.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-ref-constant.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-ref-constant.reject.cpp:1\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-ref-constant.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-ref-constant.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-ref-constant.reject.cpp:1:34: error: static assertion expression is not an integral constant expression\n    1 | constexpr int n=1; static_assert(reinterpret_cast<const int&>(n)==1,\"forbidden\");\n      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-ref-constant.reject.cpp:1:34: note: reinterpret_cast is not allowed in a constant expression\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/reinterpret-ref-deep-const.reject.cpp",
+      "sha256": "162a0aa485591a5972bfb4af3fce9864903c75606d109c6e915ae6f64590ce47",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-ref-deep-const.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-ref-deep-const.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-ref-deep-const.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-ref-deep-const.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-ref-deep-const.reject.cpp:1:34: error: reinterpret_cast from 'const int *' to 'int *&' casts away qualifiers\n    1 | int main(){const int *p=0; (void)reinterpret_cast<int*&>(p);}\n      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/reinterpret-runtime.cpp",
+      "sha256": "f539c9e9a74c41a06bdb071b2c4bff0b3ff2ecbb1f80f8e190d3774ba0a2e676",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-runtime.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-runtimestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-runtimestudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-runtimestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-runtimestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-runtime.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-runtimeclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-runtimeclang.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-runtimeclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-runtimeclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/reinterpret-runtime.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/reinterpret-runtime.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/static-ambiguous-base.reject.cpp",
+      "sha256": "b17919363d71f87fd26eae61f2ae326a9436f02397e2e71add9d71e88d88d9ee",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/static-ambiguous-base.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/static-ambiguous-base.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/static-ambiguous-base.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/static-ambiguous-base.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/static-ambiguous-base.reject.cpp:1:81: error: ambiguous conversion from derived class 'D' to base class 'A':\n    struct D -> B -> A\n    struct D -> C -> A\n    1 | struct A{}; struct B:A{};struct C:A{};struct D:B,C{}; int main(){D d; (void)(A*)&d;}\n      |                                                                                 ^~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/static-private-base.reject.cpp",
+      "sha256": "1a70f293b02c7e51a1022f48b63ec3905bddfd4ba5e2970d2353f3608e4cc2cf",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/static-private-base.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/static-private-base.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: inaccessible base conversion\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/static-private-base.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/static-private-base.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/static-private-base.reject.cpp:1:74: error: cannot cast 'B' to its private base class 'A'\n    1 | struct A{};struct B:private A{}; int main(){B*p=0; (void)static_cast<A*>(p);}\n      |                                                                          ^\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/static-private-base.reject.cpp:1:21: note: declared private here\n    1 | struct A{};struct B:private A{}; int main(){B*p=0; (void)static_cast<A*>(p);}\n      |                     ^~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/static-removes-const.reject.cpp",
+      "sha256": "2e8c9b9be55d6757beab46bdc1804208c0f8734e7ba38b426d0be87a1b893b12",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/static-removes-const.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/static-removes-const.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/static-removes-const.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/static-removes-const.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/static-removes-const.reject.cpp:1:33: error: static_cast from 'const int *' to 'int *' is not allowed\n    1 | int main(){const int n=1; (void)static_cast<int*>(&n);}\n      |                                 ^~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/unrelated-pointer.reject.cpp",
+      "sha256": "2cc3ee7c6e29a929dbf470044fab26cc020cea7f2941553b3f2be8584ddb5773",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/unrelated-pointer.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/unrelated-pointer.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/unrelated-pointer.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/unrelated-pointer.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/unrelated-pointer.reject.cpp:1:28: error: const_cast from 'int *' to 'float *' is not allowed\n    1 | int main(){int *p=0; (void)const_cast<float*>(p);}\n      |                            ^~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/virtual-base.cpp",
+      "sha256": "903279bec2c2aa742d65a4e7788f930b029fb94aff189ea69cc42e91aa9042d2",
+      "accept": true,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/virtual-base.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/virtual-basestudent.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/virtual-basestudent.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/virtual-basestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/virtual-basestudent"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/virtual-base.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/virtual-baseclang.o"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "g++",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/virtual-baseclang.o",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/virtual-baseclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/virtual-baseclang"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-c",
+            "--emit-lowir",
+            "--validate-lowir",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/virtual-base.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/virtual-base.lowir"
+          ],
+          "status": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/virtual-downcast.reject.cpp",
+      "sha256": "539b42650b2899ee97887ee56f0f1026a9c3591773f9928a50d953653eabcf67",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/virtual-downcast.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/virtual-downcast.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/virtual-downcast.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/virtual-downcast.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/virtual-downcast.reject.cpp:1:58: error: cannot cast 'A *' to 'B *' via virtual base 'A'\n    1 | struct A{};struct B:virtual A{}; int main(){A*p=0; (void)(B*)p;}\n      |                                                          ^~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/virtual-member.reject.cpp",
+      "sha256": "c788349c9ab6a30ea5e9ac3a8c3ee0f718f9ca07f0d0ba807129af4298197d50",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/virtual-member.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/virtual-member.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: invalid explicit cast\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/virtual-member.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/virtual-member.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/virtual-member.reject.cpp:1:67: error: conversion from pointer to member of class 'A' to pointer to member of class 'B' via virtual base 'A' is not allowed\n    1 | struct A{int x;};struct B:virtual A{}; int main(){(void)(int B::*)&A::x;}\n      |                                                                   ^~~~~\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/void-constant.reject.cpp",
+      "sha256": "673323f39d8eca893bbf175d3a97a01be0ca22a518641f9076f8fbde7683a639",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/void-constant.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/void-constant.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/void-constant.reject.cpp:1\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/void-constant.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/void-constant.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/void-constant.reject.cpp:1:62: error: static assertion expression is not an integral constant expression\n    1 | constexpr int n=1; constexpr const void *p=&n; static_assert(*static_cast<const int*>(p)==1,\"forbidden\");\n      |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/void-constant.reject.cpp:1:63: note: cast from 'const void *' is not allowed in a constant expression in C++ standards before C++2c\n    1 | constexpr int n=1; constexpr const void *p=&n; static_assert(*static_cast<const int*>(p)==1,\"forbidden\");\n      |                                                               ^\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/volatile-access.reject.cpp",
+      "sha256": "aa5ea9befd70c8d3af819be834f3a1f43a734c4ec7a6e99822a2fc3cd99f3bbf",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/volatile-access.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/volatile-access.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/volatile-access.reject.cpp:1\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/volatile-access.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/volatile-access.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/volatile-access.reject.cpp:1:34: error: static assertion expression is not an integral constant expression\n    1 | constexpr int n=1; static_assert(*(volatile int*)&n==1,\"volatile access\");\n      |                                  ^~~~~~~~~~~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/volatile-access.reject.cpp:1:34: note: read of volatile-qualified type 'volatile int' is not allowed in a constant expression\n1 error generated.\n"
+        }
+      ]
+    },
+    {
+      "source": "student.tests/pa29/source184/volatile-storage.reject.cpp",
+      "sha256": "1461270e718eef50307800f8f28f5607dc93a44205cb06739dbfb19681a57edb",
+      "accept": false,
+      "checks": [
+        {
+          "command": [
+            "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/volatile-storage.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/volatile-storage.rejectstudent.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/volatile-storage.reject.cpp:1\n"
+        },
+        {
+          "command": [
+            "clang++",
+            "-std=c++11",
+            "-c",
+            "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/volatile-storage.reject.cpp",
+            "-o",
+            "/home/vishvananda/work/private/v4codex/artifacts/implementation184/controls-second/volatile-storage.rejectclang.o"
+          ],
+          "status": 1,
+          "stdout": "",
+          "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/volatile-storage.reject.cpp:1:43: error: static assertion expression is not an integral constant expression\n    1 | constexpr volatile int n=1; static_assert(*(int*)&n==1,\"volatile\");\n      |                                           ^~~~~~~~~~~~\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/volatile-storage.reject.cpp:1:43: note: read of volatile object 'n' is not allowed in a constant expression\n/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source184/volatile-storage.reject.cpp:1:24: note: volatile object declared here\n    1 | constexpr volatile int n=1; static_assert(*(int*)&n==1,\"volatile\");\n      |                        ^\n1 error generated.\n"
+        }
+      ]
+    }
+  ]
+}

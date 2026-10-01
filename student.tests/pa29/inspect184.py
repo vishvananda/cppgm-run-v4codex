@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Cast fact ownership and source/serialized LowIR/native inspection."""
-import pathlib,subprocess,sys,json,hashlib
+import pathlib,subprocess,sys,json,hashlib,re
 root=pathlib.Path(__file__).resolve().parents[2];out=pathlib.Path(sys.argv[1]).resolve();out.mkdir(parents=True,exist_ok=True)
 cc=root/'dev/cppgm++';rows=[];cases=[]
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -28,7 +28,11 @@ for src in sorted((root/'student.tests/pa29/source184').glob('*.cpp')):
  for line in rows[-1]['stderr'].splitlines():
   if line.startswith('{'):metrics.update(json.loads(line))
  run([cc,'-O0','-c',src,'-o',out/(name+'.plain.o')]);assert obj.read_bytes()==(out/(name+'.plain.o')).read_bytes()
- direct=run(['objdump','-dr',obj]).splitlines()[3:];adapter=run(['objdump','-dr',ao]).splitlines()[3:];assert direct==adapter
+ # Serialized symbol order may differ; compare every complete named section.
+ def sections(path):
+  chunks=re.split(r'Disassembly of section ',run(['objdump','-dr',path]))[1:]
+  return sorted(c.strip() for c in chunks)
+ assert sections(obj)==sections(ao)
  assert sorted(run(['nm',obj]).splitlines())==sorted(run(['nm',ao]).splitlines())
  run(['g++',ao,'-o',out/(name+'.exe')]);run([out/(name+'.exe')])
  run([root/'dev/lowir2native','--dump-machine-ir',out/(name+'.mir'),ir]);run(['readelf','-rSW',obj]);run(['readelf','--debug-dump=frames',obj])
