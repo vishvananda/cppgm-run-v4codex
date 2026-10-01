@@ -159,12 +159,15 @@ void dump_function(const lowir_model::Program& p, const Function& f, std::ostrea
     out << "\n  abi\n";
     for (const auto& param : f.params) {
         out << "    param " << (param.name ? p.name(param.name) : "%native_arg") << " -> "; operand(p,param.location,out);
-        out << " : " << type_name(param.second.kind != Operand::None ? Type::I64 : param.type) << '\n';
+        out << " : " << type_name(param.second.kind != Operand::None ? (param.type.complex() ? Type::F64 : Type::I64) : param.type) << '\n';
         if (param.second.kind != Operand::None) {
-            out << "    param " << p.name(param.name) << ".1 -> "; operand(p,param.second,out); out << " : i64\n";
+            out << "    param " << p.name(param.name) << ".1 -> "; operand(p,param.second,out);
+            out << " : " << type_name(param.type.complex() ? Type::F64 : Type::I64) << '\n';
         }
     }
-    out << "    return " << type_name(f.result) << " -> " << (f.result == Type() ? "void" : f.result == Type::F80 ? "st0" : f.result.floating() ? "xmm0" : "rax") << '\n';
+    const char* result = f.result == Type() ? "void" : f.result == Type::F80 ? "st0" : f.result.floating() ? "xmm0" : "rax";
+    if (f.result.complex()) result = f.result.component() == Type::F80 ? "st0,st1" : f.result.component() == Type::F64 ? "xmm0,xmm1" : "xmm0";
+    out << "    return " << type_name(f.result) << " -> " << result << '\n';
     out << "  frame\n    stack_size " << f.stack_size << "\n    scratch_bytes " << f.scratch_bytes << "\n    frame_pointer " << (f.frame_pointer ? "keep" : "omit")
         << "\n    epilogues " << (f.shared_epilogue ? "shared" : "direct") << '\n';
     if (f.host_exception.kind != Operand::None) {

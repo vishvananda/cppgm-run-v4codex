@@ -31,6 +31,9 @@ run([root/'dev/lowir',lir,'-o',canonical]);run([root/'dev/lowir',canonical,'-o',
 assert canonical.read_bytes()==again.read_bytes()
 for src in [lir,canonical]:
  run([root/'dev/lowir2native','--dump-machine-ir',out/(src.name+'.mir'),src,'-o',exe]);run([exe])
+ mir=(out/(src.name+'.mir')).read_text()
+ for expected in ['return c32 -> xmm0\n','return c64 -> xmm0,xmm1\n','return c80 -> st0,st1\n','-> xmm1 : f64\n','fld.f80']:
+  assert expected in mir,expected
 rejects={
  'arity0':'void f(){__builtin_complex();}',
  'arity1':'void f(){__builtin_complex(1.0);}',
