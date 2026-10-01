@@ -155,6 +155,7 @@ enum class Kind : unsigned char {
     BindingNames,
     BindingName,
     DeductionGuide,
+    Await, Yield, CoroutineReturn,
 };
 
 struct Location {

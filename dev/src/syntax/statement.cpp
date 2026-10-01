@@ -215,9 +215,18 @@ NodeId Parser::statement()
         ast.append(node, statement());
         return node;
     }
+    if (in.is("throw")) {
+        auto value = expression();
+        in.require(";");
+        if (ast[value].kind != Kind::Throw) return wrap(Kind::ExpressionStatement,value);
+        // Keep the established standalone-statement view. A comma belongs to
+        // the surrounding expression, not to the throw's assignment operand.
+        ast[value].text = 0; ast[value].op = TOK_INVALID;
+        return value;
+    }
     Kind jump;
     if (in.is("return")) jump = Kind::Return;
-    else if (in.is("throw")) jump = Kind::Throw;
+    else if (contextual_coroutine("co_return")) jump = Kind::CoroutineReturn;
     else if (in.is("break")) jump = Kind::Break;
     else if (in.is("continue")) jump = Kind::Continue;
     else if (in.is("goto")) jump = Kind::Goto;
@@ -228,11 +237,11 @@ NodeId Parser::statement()
         in.require(";");
         return node;
     }
-    in.take();
-    NodeId node = make(jump);
+    auto token = in.take();
+    NodeId node = jump == Kind::CoroutineReturn ? ast.make(jump,token) : make(jump);
     if (jump == Kind::Goto) ast[node].text = in.take().text;
-    else if ((jump == Kind::Return || jump == Kind::Throw) && !in.is(";"))
-        ast.append(node, expression(jump == Kind::Throw ? 2 : 1));
+    else if ((jump == Kind::Return || jump == Kind::CoroutineReturn) && !in.is(";"))
+        ast.append(node, expression());
     in.require(";");
     return node;
 }

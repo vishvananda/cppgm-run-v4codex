@@ -111,6 +111,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     case Kind::VaArg: return va_arg_expression(n,s);
     case Kind::StatementExpression: return statement_expression(n,s);
     case Kind::Throw: return throw_expression(n,s);
+    case Kind::Await: case Kind::Yield:
+        throw std::runtime_error("coroutine promise and frame lowering is not implemented");
     case Kind::Lambda: return lambda_expression(n,s);
     case Kind::SizeofPack: {
         auto query = expression_query(n,s);

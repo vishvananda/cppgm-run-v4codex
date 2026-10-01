@@ -205,6 +205,7 @@ const char* kind_name(Kind kind)
         "binding-names",
         "binding-name",
         "deduction-guide",
+        "await-expression", "yield-expression", "coroutine-return-statement",
     };
     return names[static_cast<unsigned>(kind)];
 }

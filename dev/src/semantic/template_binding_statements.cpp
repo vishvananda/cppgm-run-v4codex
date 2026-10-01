@@ -10,6 +10,10 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
     auto node = ast[n];
     switch (node.kind) {
     case Kind::Assembly: resolve_assembly(n,s,true); return;
+    case Kind::CoroutineReturn:
+        check_coroutine_context(s);
+        if (node.first) bind_template_expression(node.first,s);
+        return;
     case Kind::Throw:
         if (node.first) bind_template_expression(node.first,s);
         return;

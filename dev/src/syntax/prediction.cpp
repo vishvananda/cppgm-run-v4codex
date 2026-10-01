@@ -196,22 +196,52 @@ void Parser::predeclare_class()
     std::size_t i = 0;
     bool templated = false;
     bool friend_declaration = false;
+    bool value_declaration = false, next_value = false, function_declaration = false;
+    bool class_header = false, unresolved_template_head = false;
     while (!in.is("}", i) && in.peek(i).kind != PostTokenKind::eof) {
+        if ((in.is("[",i) && in.is("[",i+1)) || in.is("__attribute__",i) || in.is("__attribute",i)) {
+            i = in.matching(in.is("[",i) ? i : i+1)+1; continue;
+        }
         friend_declaration |= in.is("friend",i);
         if (in.is("template", i) && in.is("<", i + 1)) {
             std::size_t end = probe_angles(i + 1);
             if (end > i + 1) {
                 i = end;
                 templated = true;
-            }
+                continue;
+            } else unresolved_template_head = true;
         }
         if (!friend_declaration && (in.is("class", i) || in.is("struct", i) || in.is("union", i) || in.is("enum", i)) && identifier(i + 1))
             names.bind(scope, in.peek(i + 1).text, templated ? Category::TemplateType : Category::Type);
-        if (in.is("using", i) && identifier(i + 1) && in.is("=", i + 2)) {
-            names.bind(scope, in.peek(i + 1).text, templated ? Category::TemplateType : Category::Type);
+        if (in.is("class",i) || in.is("struct",i) || in.is("union",i) || in.is("enum",i)) class_header = true;
+        if (in.is("enum",i) && !in.is("class",i+1) && !in.is("struct",i+1)) {
+            auto p = i+1;
+            while (!in.is("{",p) && !in.is(";",p) && in.peek(p).kind != PostTokenKind::eof) {
+                if (in.is("(",p) || in.is("[",p)) p = in.matching(p);
+                ++p;
+            }
+            if (in.is("{",p)) {
+                auto end = in.matching(p); bool enumerator = true;
+                for (++p; p < end; ++p) {
+                    if (enumerator && identifier(p)) {
+                        names.bind(scope,in.peek(p).text,Category::Value); enumerator = false;
+                    } else if (in.is(",",p)) enumerator = true;
+                    else if (identifier(p) && in.is("<",p+1)) {
+                        auto name = probe_name(p);
+                        if (name.templated) p = name.end-1;
+                    }
+                    if (in.is("(",p) || in.is("[",p) || in.is("{",p)) p = in.matching(p);
+                }
+            }
+        }
+        if (in.is("using", i)) {
+            if (identifier(i + 1) && in.is("=", i + 2))
+                names.bind(scope, in.peek(i + 1).text, templated ? Category::TemplateType : Category::Type);
             // An alias's type-id cannot declare further class members. In
             // particular R(Args...) here is a function type, not a member R.
-            for (i += 3; !in.is(";",i) && in.peek(i).kind != PostTokenKind::eof; ++i)
+            // Qualified using-declarations likewise introduce no declarator
+            // for names inside their template arguments or operator spelling.
+            for (++i; !in.is(";",i) && in.peek(i).kind != PostTokenKind::eof; ++i)
                 if (in.is("(",i) || in.is("[",i) || in.is("{",i)) i = in.matching(i);
         }
         if (in.is("typedef", i)) {
@@ -239,11 +269,53 @@ void Parser::predeclare_class()
             for (++i; !in.is(";",i) && in.peek(i).kind != PostTokenKind::eof; ++i)
                 if (in.is("(",i) || in.is("[",i) || in.is("{",i)) i = in.matching(i);
         }
+        if (in.is("operator",i)) {
+            value_declaration = function_declaration = true; next_value = false;
+        }
+        if (identifier(i) && in.peek(i).text == current_class && in.is("(",i+1)) {
+            value_declaration = function_declaration = true; next_value = false;
+        }
+        if (!class_header && function_declaration && in.is(":",i)) {
+            // Constructor initializers are expressions, not subsequent member
+            // declarators. Skip each balanced initializer up to the body.
+            auto p = i+1;
+            for (;;) {
+                auto name = probe_name(p);
+                if (!name.valid || (!in.is("(",name.end) && !in.is("{",name.end))) break;
+                p = in.matching(name.end)+1;
+                if (in.is("...",p)) ++p;
+                if (!in.is(",",p)) break;
+                ++p;
+            }
+            i = p;
+        }
+        if (!unresolved_template_head && !class_header && !value_declaration && !friend_declaration && type_start(i)) {
+            auto end = probe_type(i);
+            // A class-template name immediately followed by its parameter
+            // clause can introduce a guide rather than a return type.
+            bool guide_prefix = identifier(i) && in.is("(",i+1) &&
+                names.local(scope,in.peek(i).text).category == Category::TemplateType;
+            if (end > i && !guide_prefix) {
+                value_declaration = next_value = true;
+                i = end; continue;
+            }
+        }
+        // Subsequent declarators share the first declarator's type prefix.
+        // Index their names too, including parenthesized pointer declarators.
+        if (next_value && identifier(i)) {
+            auto name = probe_name(i);
+            if (in.is("::",name.end) && in.is("*",name.end+1)) { i = name.end+2; continue; }
+            names.bind(scope,name.terminal,templated ? Category::TemplateValue : Category::Value);
+            function_declaration = in.is("(",name.end);
+            next_value = false;
+        }
         if (i && identifier(i) && !in.is("::", i - 1) &&
             !in.is("class",i-1) && !in.is("struct",i-1) && !in.is("union",i-1) && !in.is("enum",i-1) &&
             (in.is(";", i + 1) || in.is("[", i + 1) || in.is("=", i + 1) || in.is(",", i + 1)) &&
-            (type_start(i - 1) || in.is("*", i - 1) || in.is("&", i - 1)))
-            names.bind(scope, in.peek(i).text, Category::Value);
+            (type_start(i - 1) || in.is("*", i - 1) || in.is("&", i - 1))) {
+            names.bind(scope, in.peek(i).text, templated ? Category::TemplateValue : Category::Value);
+            value_declaration = true;
+        }
         // A guide reuses a class-template name without introducing a value.
         // Preserve that category during complete-class lookahead too.
         bool guide = false;
@@ -256,10 +328,23 @@ void Parser::predeclare_class()
             (!i || (!in.is("operator",i-1) && !in.is("::",i-1))))
             names.bind(scope, in.peek(i).text, Category::TemplateValue);
         if (!guide && !templated && !friend_declaration && i && identifier(i) && in.is("(", i + 1) &&
-            in.peek(i).text != current_class && (type_start(i-1) || in.is("*",i-1) || in.is("&",i-1)))
+            in.peek(i).text != current_class && (type_start(i-1) || in.is("*",i-1) || in.is("&",i-1))) {
             names.bind(scope,in.peek(i).text,Category::Value);
+            value_declaration = function_declaration = true;
+        }
+        if (!unresolved_template_head && in.is(",",i) && !in.is("operator",i-1) && value_declaration) next_value = true;
+        if (value_declaration && !next_value && identifier(i) && in.is("<",i+1)) {
+            auto name = probe_name(i);
+            if (name.templated) i = name.end-1;
+        }
+        if (in.is(";",i) || (in.is("{",i) && function_declaration))
+            value_declaration = next_value = function_declaration = false;
+        if (in.is(";",i) || in.is("{",i)) class_header = unresolved_template_head = false;
         if (in.is(";", i) || in.is("{", i)) { templated = false; friend_declaration = false; }
-        if (in.is("(", i) || in.is("[", i) || in.is("{", i)) i = in.matching(i);
+        bool pointer_declarator = next_value && in.is("(",i) &&
+            (identifier(i+1) || in.is("::",i+1) || in.is("*",i+1) || in.is("&",i+1) ||
+                in.is("&&",i+1) || in.is("(",i+1));
+        if ((!pointer_declarator && in.is("(", i)) || in.is("[", i) || in.is("{", i)) i = in.matching(i);
         ++i;
     }
 }

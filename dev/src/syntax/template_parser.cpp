@@ -11,6 +11,7 @@ NodeId Parser::template_decl()
     scope = names.enter(scope);
     NodeId params = template_parameters();
     template_declaration = true;
+    ++retained_template_depth;
     NodeId result = wrap(Kind::Template, params);
     NodeId declaration_node = declaration();
     ast.append(result, declaration_node);
@@ -26,6 +27,7 @@ NodeId Parser::template_decl()
     if (binding.category != Category::Unknown) names.bind(saved, id, binding.category, binding.target);
     scope = saved;
     template_declaration = saved_template;
+    --retained_template_depth;
     return result;
 }
 

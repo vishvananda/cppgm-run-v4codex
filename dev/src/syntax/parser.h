@@ -24,6 +24,7 @@ private:
     ScopeId scope = 0;
     IdentifierId current_class = 0;
     bool template_declaration = false;
+    unsigned retained_template_depth = 0;
     bool member_name = false;
     unsigned angle_expression = 0;
     std::size_t qualified_angles = 0;
@@ -101,6 +102,7 @@ private:
     NodeId declarator_name(NodeId declarator) const;
 
     NodeId expression(int minimum = 1);
+    bool contextual_coroutine(const char* spelling);
     NodeId unary();
     NodeId primary();
     NodeId postfix(NodeId base);

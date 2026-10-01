@@ -1027,6 +1027,8 @@ private:
     Index query_value_index, template_value_queries, template_value_dependence;
     std::vector<QueryValue> query_values = std::vector<QueryValue>(1);
     bool template_body_values = false;
+    bool template_coroutine_context = false;
+    void check_coroutine_context(ScopeId) const;
     NodeId template_decltype_operand = 0;
     bool decltype_call_result(NodeId node) const;
     std::size_t query_value_work = 0, template_value_work = 0, template_value_uses = 0;

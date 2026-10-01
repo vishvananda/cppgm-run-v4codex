@@ -124,6 +124,9 @@ void write_inline(std::ostream& out, const Ast& ast, NodeId id, const Identifier
         write_inline(out, ast, ast[n.first].next, ids);
         out << ':';
         write_inline(out, ast, n.last, ids);
+    } else if (n.kind == Kind::Await || n.kind == Kind::Yield || n.kind == Kind::CoroutineReturn) {
+        out << (n.kind == Kind::Await ? "co_await " : n.kind == Kind::Yield ? "co_yield " : "co_return ");
+        children_inline(out,ast,id,ids);
     } else if (n.kind == Kind::Unary) {
         spelling(out, ids, n.text);
         children_inline(out, ast, id, ids);

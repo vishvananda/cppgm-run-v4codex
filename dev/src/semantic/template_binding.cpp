@@ -126,6 +126,13 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
 }
 bool Analyzer::bind_template_expression(NodeId n, ScopeId s, bool callee)
 {
+    struct Context {
+        bool& active; bool prior;
+        Context(bool& a, bool excluded) : active(a), prior(a) { if (excluded) active = false; }
+        ~Context() { active = prior; }
+    } context(template_coroutine_context,n && (ast[n].kind == Kind::DefaultArgument ||
+        ast[n].kind == Kind::Decltype || ast[n].kind == Kind::Sizeof ||
+        ast[n].kind == Kind::TypeTrait || ast[n].kind == Kind::Noexcept));
     bool dependent = bind_template_expression_impl(n,s,callee);
     if (n && !ast.nodes.occurrences[n].context) {
         auto kind = ast[n].kind;
@@ -143,11 +150,27 @@ bool Analyzer::bind_template_expression(NodeId n, ScopeId s, bool callee)
     }
     return dependent;
 }
+void Analyzer::check_coroutine_context(ScopeId s) const
+{
+    // A local class/default/unevaluated operand is not the enclosing
+    // coroutine body. Nested function bodies establish their own context.
+    while (s && (scopes[s].kind == ScopeKind::Block || scopes[s].kind == ScopeKind::Control ||
+        scopes[s].kind == ScopeKind::Template)) s = scopes[s].parent;
+    if (!template_coroutine_context || !s || scopes[s].kind != ScopeKind::Function)
+        throw std::runtime_error("coroutine operation outside an evaluated function body");
+}
 bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
 {
     if (!n) return false;
     ++template_binding_work;
     auto node = ast[n];
+    if (node.kind == Kind::Await || node.kind == Kind::Yield) {
+        check_coroutine_context(s);
+        for (auto c = node.first; c; c = ast[c].next) bind_template_expression(c,s);
+        // The promise/awaiter protocol is an obligation of the demanded
+        // coroutine, even when an operand itself has a nondependent type.
+        return true;
+    }
     if (node.kind == Kind::Fold) {
         for (auto c = node.first; c; c = ast[c].next) bind_template_expression(c,s);
         fold_query(n,s); return true;
@@ -334,10 +357,12 @@ void Analyzer::bind_template_body(const Body& body)
         }
     }
     struct ValueBinding {
-        bool& mode; bool prior;
-        ValueBinding(bool& value) : mode(value), prior(value) { mode = true; }
-        ~ValueBinding() { mode = prior; }
-    } value_binding(template_body_values);
+        bool& mode; bool prior; bool& coroutine; bool prior_coroutine;
+        ValueBinding(bool& value, bool& c) : mode(value), prior(value), coroutine(c), prior_coroutine(c) {
+            mode = coroutine = true;
+        }
+        ~ValueBinding() { mode = prior; coroutine = prior_coroutine; }
+    } value_binding(template_body_values,template_coroutine_context);
     // A lambda's declarator sees its parameter names. Retain fixed lookup
     // here, before later declarations can affect an enclosing instantiation.
     if (ast[body.declarator].kind == Kind::LambdaDeclarator)

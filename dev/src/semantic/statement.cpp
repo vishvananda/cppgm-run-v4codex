@@ -84,6 +84,8 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
     switch (ast[n].kind) {
     case Kind::Assembly: resolve_assembly(n,s); return;
     case Kind::Throw: expression(n,s); return;
+    case Kind::CoroutineReturn:
+        throw std::runtime_error("coroutine promise and frame lowering is not implemented");
     case Kind::Try: case Kind::FunctionTry: {
         auto body = child(n,Kind::Compound);
         auto scope = make_scope(ScopeKind::Block,s);

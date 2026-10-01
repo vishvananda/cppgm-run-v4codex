@@ -26,15 +26,28 @@ int expression_precedence(ETokenType op)
     }
 }
 
+bool Parser::contextual_coroutine(const char* spelling)
+{
+    // In the hosted C++11 extension these are contextual spellings, not
+    // keywords. An existing lexical declaration keeps its ordinary meaning.
+    // Declarations, qualified names and member names use their own grammar.
+    if (!in.is(spelling) || names.lookup(scope,in.peek().text).category != Category::Unknown) return false;
+    if (!retained_template_depth)
+        throw std::runtime_error("coroutine syntax requires a retained template body");
+    return true;
+}
+
 NodeId Parser::expression(int minimum)
 {
-    if (in.is("throw")) {
-        NodeId node = leaf(Kind::Throw);
+    NodeId left;
+    if (minimum <= 2 && contextual_coroutine("co_yield")) {
+        left = leaf(Kind::Yield);
+        ast.append(left, in.is("{") ? primary() : expression(2));
+    } else if (minimum <= 2 && in.is("throw")) {
+        left = leaf(Kind::Throw);
         if (!in.is(";") && !in.is(")") && !in.is(":") && !in.is(",") && !in.is("}"))
-            ast.append(node, expression(2));
-        return node;
-    }
-    NodeId left = unary();
+            ast.append(left, expression(2));
+    } else left = unary();
     for (;;) {
         Token op = in.peek();
         int p = expression_precedence(op.op);
@@ -226,6 +239,11 @@ NodeId Parser::primary()
 
 NodeId Parser::unary()
 {
+    if (contextual_coroutine("co_await")) {
+        NodeId node = leaf(Kind::Await);
+        ast.append(node,unary());
+        return node;
+    }
     if (in.is("++") || in.is("--") || in.is("*") || in.is("&") ||
         in.is("+") || in.is("-") || in.is("!") || in.is("~") || in.peek().op == KW_REAL || in.peek().op == KW_IMAG) {
         NodeId node = leaf(Kind::Unary);
@@ -378,7 +396,8 @@ NodeId Parser::lambda()
     ast.append(result, captures);
     ScopeId saved = scope;
     scope = names.enter(scope);
-    if (in.is("<")) ast.append(result, template_parameters());
+    bool templated = in.is("<");
+    if (templated) { ++retained_template_depth; ast.append(result, template_parameters()); }
     if (in.is("(")) {
         ScopeId parameter_scope;
         NodeId decl = wrap(Kind::LambdaDeclarator, parameters(parameter_scope));
@@ -388,6 +407,7 @@ NodeId Parser::lambda()
         ast.append(result, decl);
     }
     ast.append(result, compound());
+    if (templated) --retained_template_depth;
     scope = saved;
     return result;
 }
