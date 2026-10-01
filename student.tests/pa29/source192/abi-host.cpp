@@ -15,7 +15,10 @@ template<class T> int cmp(T a,T b){return (a==b)|((a!=b)<<1)|((a<b)<<2)|((a<=b)<
 bool same(__float128 a,__float128 b){return a==b||(isnanq(a)&&isnanq(b));}
 bool same(_Float16 a,_Float16 b){return a==b||(std::isnan((float)a)&&std::isnan((float)b));}
 _Float32 n32(_Float32); _Float64 n64(_Float64); _Float32x n32x(_Float32x); _Float64x n64x(_Float64x); _Float128 n128(_Float128);
+struct Mixed { char before; _Float16 h; __float128 q; char after; };
+void mixed(Mixed*);
 int main(){
+ Mixed m{7,1.5F16,1.0Q,0};mixed(&m);CHECK(m.h==2 && m.q==0x1.0000000000000000000000000001p0Q && m.after==8);
  CHECK(n32(2)==3); CHECK(n64(2)==3); CHECK(n32x(2)==3); CHECK(n64x(2)==3); CHECK(n128(2)==3);
  __float128 q[]={0.0Q,-0.0Q,1.0Q,-1.0Q,0x1.0000000000000000000000000001p0Q,0x1p-16494Q,0x1p-16382Q,HUGE_VALQ,-HUGE_VALQ,nanq("")};
  _Float16 h[]={(_Float16)0,(_Float16)-0.0,(_Float16)1,(_Float16)-1,(_Float16)0x1p-24,(_Float16)0x1p-14,(_Float16)INFINITY,(_Float16)-INFINITY,(_Float16)NAN};

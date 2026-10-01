@@ -178,7 +178,7 @@ void decode_number(PostToken& token, IdentifierTable& identifiers, NumberDomain 
         if (suffix.equals("f32x") || suffix.equals("F32x")) extended_type=FT_FLOAT32X;
         if (suffix.equals("f64x") || suffix.equals("F64x")) extended_type=FT_FLOAT64X;
         if (suffix.equals("f128") || suffix.equals("F128")) extended_type=FT_STDFLOAT128;
-        
+
         if (suffix.equals("F64x") || suffix.equals("f64x") || suffix.equals("w") || suffix.equals("W")) suffix = TextView("L",1);
         else if (suffix.equals("F32") || suffix.equals("f32")) suffix = TextView("F",1);
         else if (suffix.equals("F64") || suffix.equals("f64") || suffix.equals("F32x") || suffix.equals("f32x")) suffix = TextView();

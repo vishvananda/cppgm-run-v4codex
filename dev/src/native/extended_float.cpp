@@ -151,10 +151,15 @@ void legalize_extended_floats(lowir_model::Program& p, Statistics& stats) {
     // No work buffer or helper declarations for the ordinary formats. This is
     // target legalization, once before selection: each input emits at most six
     // operations, no fixed point, speculative optimization or semantic lookup.
-    for (const auto& i:p.instructions) if (extended(i.type)||extended(i.source_type)) {
+    bool needed=false;
+    for (const auto& i:p.instructions) if (extended(i.type)||extended(i.source_type)) { needed=true; break; }
+    // A raw LowIR branch can consume a floating parameter without any other
+    // floating instruction. Parameter values carry that type in the value pool.
+    if (!needed) for (const auto& v:p.values) if (extended(v.type)) { needed=true; break; }
+    if (needed) {
         auto input=p.instructions.size(), functions=p.functions.size();
         Legalizer(p).run(); stats.extended_work+=input; stats.extended_added+=p.instructions.size()-input;
-        stats.extended_helpers+=p.functions.size()-functions; break;
+        stats.extended_helpers+=p.functions.size()-functions;
     }
     stats.preparation_ms+=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-begin).count();
 }

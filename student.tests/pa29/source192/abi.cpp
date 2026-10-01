@@ -28,3 +28,6 @@ _Float64 n64(_Float64 x){return x+1.0F64;}
 _Float32x n32x(_Float32x x){return x+1.0F32x;}
 _Float64x n64x(_Float64x x){return x+1.0F64x;}
 _Float128 n128(_Float128 x){return x+1.0F128;}
+struct Mixed { char before; _Float16 h; __float128 q; char after; };
+static_assert(sizeof(Mixed)==48 && alignof(Mixed)==16,"mixed layout");
+void mixed(Mixed* x){x->h+=0.5F16;x->q+=0x1p-112Q;x->after=x->before+1;}

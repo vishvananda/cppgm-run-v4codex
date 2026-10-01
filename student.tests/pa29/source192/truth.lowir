@@ -1,0 +1,16 @@
+function @quad_truth(%x : f128) -> i32 [linkage=c, binding=strong] {
+  block ^entry:
+    branch %x, ^yes, ^no
+  block ^yes:
+    return i32 1
+  block ^no:
+    return i32 0
+}
+function @half_truth(%x : f16) -> i32 [linkage=c, binding=strong] {
+  block ^entry:
+    branch %x, ^yes, ^no
+  block ^yes:
+    return i32 1
+  block ^no:
+    return i32 0
+}

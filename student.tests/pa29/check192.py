@@ -33,6 +33,8 @@ for p in sorted(src.glob('*.reject.cpp')):
  run([cc,'-std=gnu++11','-c',p,'-o',out/'reject.o'],False)
  if not p.name.startswith('narrow-'):run(['g++','-std=gnu++11','-c',p,'-o',out/'reject.o'],False)
 run([cc,'-E',src/'quad-token.t'])
+if run([out/'lowir-host',src/'truth.lowir',out/'truth.o']):
+ if run(['g++','-std=gnu++11',src/'truth-host.cpp',out/'truth.o','-o',out/'truth']):run([out/'truth'])
 print(len(rows),'commands,',len(failed),'failures')
 for r in failed:print(' '.join(r['command']),r['status'],r['stderr'])
 sys.exit(bool(failed))
