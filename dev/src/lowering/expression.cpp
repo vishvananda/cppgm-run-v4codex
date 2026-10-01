@@ -234,6 +234,11 @@ Value Procedural::unary(NodeId n)
         auto conversion = sem.conversion_fact(fact.conversions);
         Value dest = conversion.reference ? converted(a,conversion) : expression(a, true);
         if (conversion.reference) { dest.type = sem.types[conversion.target].child; dest.address = true; }
+        if (sem.types[dest.type].cv & 4) {
+            auto computation = sem.conversion_fact(fact.conversions+(conversion.reference ? fact.count-1 : 0)).target;
+            return atomic_update(dest,Value(Operand::integer(1),IRType::I32,sem.types.fundamental(FT_INT)),
+                op == OP_INC ? OP_PLUS : OP_MINUS,computation,node.kind == Kind::Postfix);
+        }
         Value old = load(dest);
         TypeId promoted = sem.conversion_fact(fact.conversions+(conversion.reference ? fact.count-1 : 0)).target;
         Value value;
@@ -293,9 +298,9 @@ Value Procedural::binary(NodeId n, bool location)
                 auto value = converted(a,destination);
                 value.type = fact.type; value.address = true; return value;
             };
-            if (direct) { dest = address(); lhs = load(dest); }
+            if (direct) { dest = address(); if (!(sem.types[dest.type].cv & 4)) lhs = load(dest); }
             rhs = converted(b, sem.conversion_fact(fact.conversions+1));
-            if (!direct) { dest = address(); lhs = load(dest); }
+            if (!direct) { dest = address(); if (!(sem.types[dest.type].cv & 4)) lhs = load(dest); }
         }
         if (op != OP_ASS) {
             ETokenType binary = OP_PLUS;
@@ -314,6 +319,7 @@ Value Procedural::binary(NodeId n, bool location)
             }
             TypeId common = sem.conversion_fact(fact.conversions+
                 (sem.conversion_fact(fact.conversions).reference ? 2 : 0)).target;
+            if (sem.types[dest.type].cv & 4) return atomic_update(dest,rhs,binary,common,false);
             lhs = convert(lhs, common);
             if (binary != OP_LSHIFT && binary != OP_RSHIFT && lhs.ir != IRType::Ptr && rhs.ir != IRType::Ptr)
                 rhs = convert(rhs,common);
@@ -409,6 +415,7 @@ Value Procedural::call(NodeId n, Value destination)
         return value;
     }
     auto intrinsic = sem.intrinsic_function(sem.facts[n].entity);
+    if (intrinsic == semantic::Intrinsic::Atomic) return atomic_call(n,destination);
     if (intrinsic != semantic::Intrinsic::None) return intrinsic_call(n,intrinsic);
     bool class_result = sem.class_value(sem.facts[n].type);
     SlotId result_slot = !class_result && type(sem.facts[n].type) != IRType::Void && full_expression.enabled && (unwind_expression(n) || cleanup_expression(n,false,true)) ? builder->add_slot(0,type(sem.facts[n].type)) : SlotId();

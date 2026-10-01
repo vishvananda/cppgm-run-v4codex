@@ -9,7 +9,7 @@ bool Analyzer::constant_step()
 }
 bool Analyzer::constant_local(EntityId e, ScopeId s)
 {
-    if (!e || !constant_frame || entities[e].is_static || entities[e].external_decl || (types[entities[e].type].cv & 2)) return false;
+    if (!e || !constant_frame || entities[e].is_static || entities[e].external_decl || (types[entities[e].type].cv & 6)) return false;
     auto init = entities[e].initializer;
     constant_frame->locals.push_back(e);
     auto slot = constant_frame->bindings.get(e);

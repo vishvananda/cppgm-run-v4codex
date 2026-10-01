@@ -56,7 +56,7 @@ bool Analyzer::constant_array_plan_valid(std::uint32_t plan)
     ++constant_array_work;
     auto action = initializers[plan];
     bool valid = false;
-    bool copyable = !(types[action.type].cv & 2);
+    bool copyable = !(types[action.type].cv & 6);
     if (action.kind == InitKind::Constructor) {
         auto value = constant_initialize(action.source,action.type,facts[action.source].scope);
         valid = value.valid && constant_persistent(value);
@@ -101,7 +101,7 @@ void Analyzer::prepare_constant_array(EntityId e, bool required)
         while (types[leaf].kind == TypeKind::Array) leaf = types[leaf].child;
         // The automatic-data rule covers trivial scalar arrays. Class arrays
         // keep their selected construction and lifetime actions.
-        if (class_value(leaf) || (types[leaf].cv & 2)) return;
+        if (class_value(leaf) || (types[leaf].cv & 6)) return;
 
     }
     auto plan = initializer_plan(entities[e].initializer,entities[e].type);

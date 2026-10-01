@@ -112,11 +112,18 @@ TypeId Types::unqualified(TypeId id)
         return aligned(compound(t.kind,unqualified(t.child),t.bound),t.alignment ? std::uint64_t(1) << (t.alignment-1) : 0,t.alignment_queries);
     // Member-function cv is part of its signature, not top-level object cv.
     if (t.kind == TypeKind::Function) return id;
-    if (!t.cv) return id;
-    t.cv = 0;
+    if (!(t.cv & 3)) return id;
+    t.cv &= 4;
     if (t.kind == TypeKind::DependentName)
         return intern(t,std::vector<TypeId>(parameters.begin()+t.offset,parameters.begin()+t.offset+t.count));
     return intern(t, {});
+}
+TypeId Types::non_atomic(TypeId id)
+{
+    auto t = records[id];
+    if (!(t.cv & 4)) return id;
+    t.cv &= ~4u;
+    return intern(t,std::vector<TypeId>(parameters.begin()+t.offset,parameters.begin()+t.offset+t.count));
 }
 TypeId Types::function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv, RefQualifier ref)
 {

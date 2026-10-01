@@ -207,3 +207,7 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/offsetof lowering/offsetof
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/storage_types
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/legacy_traits semantic/reference_traits
+
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/atomic_builtins lowering/atomic_builtins
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/atomic_storage
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/atomic_runtime

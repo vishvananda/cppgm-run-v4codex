@@ -14,9 +14,10 @@ CallSelection Analyzer::select_call(EntityId family, const std::vector<Expressio
     for (auto e : declarations) {
         ++candidate_work;
         auto intrinsic = intrinsic_function(e);
-        if (intrinsic == Intrinsic::AtomicFetchAdd || intrinsic == Intrinsic::AtomicAddFetch) {
-            if (explicit_arguments || count != 3) continue;
-            e = atomic_signature(e,nodes ? expressions[(*nodes)[0]].type : values[0].type);
+        if (intrinsic == Intrinsic::Atomic) {
+            auto kind = atomic_kind(e);
+            if (explicit_arguments || count < kind.arity() || (!kind.sync() && count != kind.arity())) continue;
+            e = atomic_signature(e,count ? (nodes ? expressions[(*nodes)[0]].type : values[0].type) : 0);
             if (!e) continue;
         }
         if (intrinsic >= Intrinsic::Clzg && intrinsic <= Intrinsic::Popcountg) {

@@ -57,6 +57,16 @@ Value Procedural::load(Value v)
 {
     if (!v.address) return v;
     if (v.bit_field) return load_bit_field(v);
+    if (sem.types[v.type].cv & 4) {
+        if (!inline_atomic(v.type)) {
+            auto target = sem.types.non_atomic(sem.types.unqualified(v.type));
+            auto slot = Operand::slot(builder->add_slot(0,type(target)));
+            atomic_runtime(AtomicOp::Load,sem.object_size(target),v.operand,slot);
+            return Value(slot,type(target),target);
+        }
+        auto raw = atomic_representation(v.type);
+        return atomic_value(emit(Opcode::AtomicLoad,raw,{address(v).operand,Operand::integer(5)}),sem.types.non_atomic(sem.types.unqualified(v.type)));
+    }
     if (sem.class_value(v.type)) { v.address = false; v.ir = type(v.type); return v; }
     if (sem.types[v.type].kind == TypeKind::Array || sem.types[v.type].kind == TypeKind::Function) return address(v);
     if (v.cached && !(sem.types[v.type].cv & 2)) return Value(v.stored, type(v.type), v.type);
@@ -75,6 +85,14 @@ Value Procedural::address(Value v)
 Value Procedural::store(Value v, Value location)
 {
     if (location.bit_field) return store_bit_field(v, location);
+    if (sem.types[location.type].cv & 4) {
+        if (!inline_atomic(location.type)) {
+            atomic_runtime(AtomicOp::Store,sem.object_size(location.type),location.operand,atomic_buffer(v)); return v;
+        }
+        auto raw = atomic_representation(location.type);
+        auto bits = atomic_bits(v,raw);
+        emit(Opcode::AtomicStore,raw,{bits.operand,address(location).operand,Operand::integer(5)}); return v;
+    }
     if (type(location.type).kind() == IRType::Object) {
         Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(location.type); copy.alignment = sem.object_alignment(location.type);
         emit(copy,{v.operand,address(location).operand}); return v;
@@ -116,8 +134,8 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen, bool preserve_wid
 {
     if (reference(to)) {
         TypeId referred = sem.types[to].child;
-        if (!v.address || v.bit_field || sem.types.unqualified(v.type) != sem.types.unqualified(referred)) {
-            SlotId existing = sem.types.unqualified(v.type) == sem.types.unqualified(referred) ? v.materialized : SlotId();
+        if (!v.address || v.bit_field || sem.types.non_atomic(sem.types.unqualified(v.type)) != sem.types.unqualified(referred)) {
+            SlotId existing = sem.types.non_atomic(sem.types.unqualified(v.type)) == sem.types.unqualified(referred) ? v.materialized : SlotId();
             bool pointer_conversion = sem.types[referred].kind == TypeKind::Pointer &&
                 sem.types[v.type].kind != TypeKind::Pointer;
             v = convert(v, referred);

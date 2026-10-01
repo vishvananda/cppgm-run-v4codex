@@ -1,0 +1,44 @@
+struct Pair { int a,b; };
+struct Wide { unsigned long a,b; };
+template<class T> struct Box { _Atomic(T) value; constexpr explicit Box(T v):value(v) {} };
+static_assert(alignof(Box<Wide>)==16,"atomic alignment");
+static_assert(__is_literal_type(Box<int>),"literal storage");
+static_assert(!__is_volatile(_Atomic(int)),"not volatile");
+static_assert(!__is_same(_Atomic(int),int),"distinct atomic identity");
+static_assert(__atomic_always_lock_free(8,0),"lock free scalar");
+static_assert(__c11_atomic_is_lock_free(4),"lock free C11");
+static_assert(noexcept(__atomic_load_n((int*)0,0)),"noexcept");
+int order_calls=0;
+int order(){++order_calls;return 0;}
+int main(){
+ int x=7;
+ if(__atomic_fetch_and(&x,3,order())!=7 || x!=3)return 1;
+ if(__atomic_or_fetch(&x,8,0)!=11 || x!=11)return 2;
+ if(__atomic_fetch_xor(&x,1,0)!=11 || x!=10)return 3;
+ if(__atomic_nand_fetch(&x,3,0)!=~2 || x!=~2)return 4;
+ int expected=42;
+ if(__atomic_compare_exchange_n(&x,&expected,8,true,5,2) || expected!=~2)return 5;
+ if(!__atomic_compare_exchange_n(&x,&expected,8,false,5,2) || x!=8)return 6;
+ if(__sync_val_compare_and_swap(&x,0,9)!=8 || __sync_val_compare_and_swap(&x,8,10)!=8)return 7;
+ if(!__sync_bool_compare_and_swap(&x,10,11) || __sync_bool_compare_and_swap(&x,10,0))return 8;
+ if(__sync_lock_test_and_set(&x,1)!=11)return 9;
+ __sync_lock_release(&x); if(x!=0)return 10;
+ unsigned char flag=0; if(__atomic_test_and_set(&flag,2) || flag!=1)return 11;
+ if(!__atomic_test_and_set(&flag,2))return 12;__atomic_clear(&flag,3);if(flag)return 13;
+ Box<int> c(10);if(c.value++!=10 || ++c.value!=12)return 14;
+ c.value+=5;c.value^=3;if(c.value!=18)return 15;
+ c.value=20;if(__c11_atomic_fetch_sub(&c.value,2,order())!=20 || c.value!=18)return 16;
+ expected=18;if(!__c11_atomic_compare_exchange_weak(&c.value,&expected,23,5,2) || c.value!=23)return 17;
+ Box<Pair> p(Pair{3,4});Pair e={3,4};
+ if(!__c11_atomic_compare_exchange_strong(&p.value,&e,Pair{5,6},5,2))return 18;
+ Pair r=__c11_atomic_load(&p.value,2);if(r.a!=5 || r.b!=6)return 19;
+ __c11_atomic_store(&p.value,Pair{7,8},3);r=__c11_atomic_exchange(&p.value,Pair{9,10},4);
+ if(r.a!=7 || r.b!=8)return 20;
+ Box<Wide> w(Wide{10,20});Wide wr=__c11_atomic_load(&w.value,2);if(wr.a!=10 || wr.b!=20)return 21;
+ Wide we={10,20};if(!__c11_atomic_compare_exchange_strong(&w.value,&we,Wide{30,40},5,2))return 22;
+ Box<double> d(1.25);if(__c11_atomic_exchange(&d.value,2.5,4)!=1.25 || d.value!=2.5)return 23;
+ int array[8];Box<int*> ptr(array);if(__c11_atomic_fetch_add(&ptr.value,2,0)!=array || ptr.value!=array+2)return 24;
+ int* gp=array;if(__atomic_add_fetch(&gp,1,0)!=(int*)((char*)array+1))return 25;
+ __atomic_thread_fence(order());__atomic_signal_fence(order());__sync_synchronize();
+ return order_calls==4?0:26;
+}

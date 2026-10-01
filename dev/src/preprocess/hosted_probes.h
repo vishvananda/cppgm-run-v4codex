@@ -1,10 +1,11 @@
 #pragma once
 #include "support/type_traits.h"
+#include "support/atomic_builtins.h"
 #include "support/builtin_registry.h"
 namespace cppgm {
 inline bool hosted_builtin(TextView name)
 {
-    return builtin_trait(name) != BuiltinTrait::None || function_builtin(name) != FunctionBuiltin::None ||
+    return atomic_builtin(name).op != AtomicOp::None || builtin_trait(name) != BuiltinTrait::None || function_builtin(name) != FunctionBuiltin::None ||
         integer_builtin(name).operation != IntegerBuiltin::None || libm_builtin(name).shape != LibmShape::None || floating_builtin_kind(name) != FloatingBuiltin::None || name.equals("__builtin_va_arg") || integer_pack_builtin(name) || invoke_builtin_name(name);
 }
 inline bool hosted_feature(TextView name, bool exceptions)
@@ -13,6 +14,7 @@ inline bool hosted_feature(TextView name, bool exceptions)
         name.data[name.size-2] == '_' && name.data[name.size-1] == '_')
         name = TextView(name.data+2,name.size-4);
     if (name.equals("cxx_exceptions")) return exceptions;
+    if (name.equals("cxx_atomic") || name.equals("c_atomic")) return true;
     if (name.equals("cxx_rtti")) return true;
     static const char* const features[] = {"cxx_alignas", "cxx_alignof", "cxx_auto_type",
         "cxx_binary_literals", "cxx_constexpr", "cxx_alias_templates", "cxx_default_function_template_args",

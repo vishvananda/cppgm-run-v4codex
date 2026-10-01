@@ -83,7 +83,11 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
     Type p = types[pattern];
     TypeId result = pattern;
     bool complete_failure = false;
-    if (p.kind == TypeKind::AliasApplication) {
+    if (p.cv & 4) {
+        auto base = substitute_type(types.non_atomic(types.unqualified(pattern)),bindings,cache,owner);
+        if (!base || !atomic_operand(base)) return 0;
+        result = types.qualify(base,p.cv);
+    } else if (p.kind == TypeKind::AliasApplication) {
         auto pack = argument_packs[p.bound]; std::vector<ArgumentId> args;
         for (unsigned j = 0; j < pack.count; ++j) {
             auto arg = argument_types[pack.offset+j];

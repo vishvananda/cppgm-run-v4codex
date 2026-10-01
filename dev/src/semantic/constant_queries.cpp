@@ -117,6 +117,15 @@ Constant Analyzer::constant_query_call(QueryId id)
             e = constant_storage[constant_addresses[value.bits].storage].entity;
         else return Constant();
     }
+    if (atomic_kind(e).op == AtomicOp::LockFree) {
+        auto kind = atomic_kind(e);
+        auto size = constant_query_conversion(query_edges[q.offset+1],conversions[fact.expression.conversions]);
+        if (!size.valid) return {};
+        if (kind.form != AtomicForm::Always && q.count > 2 &&
+            !constant_query_conversion(query_edges[q.offset+2],conversions[fact.expression.conversions+1]).valid) return {};
+        auto bytes = integer_value(size);
+        return Constant(fact.expression.type,bytes && bytes <= (kind.form == AtomicForm::C11 ? 16 : 8) && !(bytes & (bytes-1)));
+    }
     if (!e || (!entities[e].constexpr_function && !synthetic_member(e))) return Constant();
     std::uint32_t object = 0;
     unsigned first_argument = q.kind == QueryKind::Call ? 1 : 0;

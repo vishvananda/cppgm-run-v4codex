@@ -195,6 +195,7 @@ const char* kind_name(Kind kind)
         "capture",
         "va-arg-expression",
         "function-name",
+        "atomic-type-specifier",
     };
     return names[static_cast<unsigned>(kind)];
 }

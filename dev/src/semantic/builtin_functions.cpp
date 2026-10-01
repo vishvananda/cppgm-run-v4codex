@@ -28,13 +28,12 @@ EntityId Analyzer::builtin_function(IdentifierId name)
     if (auto hint = hint_builtin(name)) return hint;
     if (auto runtime = runtime_builtin(name)) return runtime;
     if (auto integer = integer_builtin_function(name)) return integer;
-    if ((builtin == FunctionBuiltin::AtomicFetchAdd) || (builtin == FunctionBuiltin::AtomicAddFetch)) {
-        // A builtin family has no source template body. Call selection asks
-        // its typed signature owner for the first operand's pointee type.
+    auto atomic = atomic_builtin(text);
+    if (atomic.op != AtomicOp::None) {
         auto e = declare_function(global,name,0,types.function(types.fundamental(FT_VOID),{},false));
         entities[e].exception_spec = 129;
-        intrinsic_functions.put(e,unsigned((builtin == FunctionBuiltin::AtomicFetchAdd) ? Intrinsic::AtomicFetchAdd : Intrinsic::AtomicAddFetch));
-        return e;
+        intrinsic_functions.put(e,unsigned(Intrinsic::Atomic));
+        atomic_kinds.put(e,atomic.code()); return e;
     }
     if ((builtin == FunctionBuiltin::Strcmp) || (builtin == FunctionBuiltin::Strncmp)) {
         auto cp = types.compound(TypeKind::Pointer,types.qualify(types.fundamental(FT_CHAR),1));
@@ -84,26 +83,6 @@ EntityId Analyzer::builtin_function(IdentifierId name)
     entities[e].c_linkage = true; entities[e].exception_spec = 129;
     if (kind != Intrinsic::None) intrinsic_functions.put(e,unsigned(kind));
     else assembler_names.put(e,ids.intern(bounded ? TextView("vsnprintf",9) : TextView("vsprintf",8)));
-    return e;
-}
-EntityId Analyzer::atomic_signature(EntityId family, TypeId operand)
-{
-    operand = decay(operand);
-    if (!pointer(operand)) return 0;
-    auto target = types[operand].child;
-    if (types[target].cv & 1) return 0;
-    target = types.unqualified(target);
-    if ((!pointer(target) && (types[target].kind != TypeKind::Fundamental || !integral(target))) ||
-        fundamental(target,FT_BOOL)) return 0;
-    auto identity = key(unsigned(intrinsic_function(family)),target);
-    if (auto old = atomic_signatures.get(identity)) return old;
-    auto p = types.compound(TypeKind::Pointer,types.qualify(target,2));
-    auto delta = pointer(target) ? types.fundamental(FT_LONG_INT) : target;
-    auto e = make_entity(EntityKind::Function,global,entities[family].name,0);
-    entities[e].type = types.function(target,{p,delta,types.fundamental(FT_INT)},false);
-    entities[e].exception_spec = 129;
-    intrinsic_functions.put(e,unsigned(intrinsic_function(family)));
-    atomic_signatures.put(identity,e);
     return e;
 }
 void Analyzer::validate_intrinsic(EntityId e, const std::vector<NodeId>& args, ScopeId s)

@@ -4,14 +4,14 @@ namespace cppgm {
 inline bool integer_pack_builtin(TextView name) { return name.equals("__integer_pack"); }
 // Bounded immutable vocabulary shared by builtin construction and probes.
 enum class FunctionBuiltin : unsigned char {
-    None, AtomicFetchAdd, AtomicAddFetch, Strcmp, Strncmp, VaStart, VaEnd, VaCopy,
+    None, Strcmp, Strncmp, VaStart, VaEnd, VaCopy,
     Alloca, Expect, Abort, Unreachable, Vsnprintf, Vsprintf,
     Fabs, Fabsf, Fabsl, Abs, Labs, Llabs, Memcpy, Memmove, Memset, Memcmp, Memchr, Strlen, Strchr, Strrchr, Bzero, Strstr, Strpbrk, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, OperatorNew, OperatorDelete
 };
 inline bool invoke_builtin_name(TextView name) { return name.equals("__builtin_invoke"); }
 inline FunctionBuiltin function_builtin(TextView name)
 {
-    static const char* const names[] = {"", "__atomic_fetch_add", "__atomic_add_fetch",
+    static const char* const names[] = {"",
         "__builtin_strcmp", "__builtin_strncmp", "__builtin_va_start", "__builtin_va_end",
         "__builtin_va_copy", "__builtin_alloca", "__builtin_expect", "__builtin_abort",
         "__builtin_unreachable", "__builtin_vsnprintf", "__builtin_vsprintf",

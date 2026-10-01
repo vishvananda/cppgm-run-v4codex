@@ -105,7 +105,7 @@ Constant Analyzer::constant_read(std::uint32_t id)
         if (a.parent && a.selector <= text.size && !constant_addresses[a.parent].parent)
             return Constant(a.type,a.selector < text.size ? (unsigned char)text.data[a.selector] : 0);
     }
-    if (!storage.live || !storage.readable || (types[a.type].cv & 2)) return Constant();
+    if (!storage.live || !storage.readable || (types[a.type].cv & 6)) return Constant();
     if (!a.parent) return storage.value;
     if (a.selector == ~std::uint64_t(0)) return Constant();
     if (types[constant_addresses[a.parent].type].kind == TypeKind::Array && storage.literal && !constant_addresses[a.parent].parent)

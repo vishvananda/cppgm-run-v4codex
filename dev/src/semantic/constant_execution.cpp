@@ -188,6 +188,7 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
         return floating_builtin_constant(call,s);
     if (intrinsic_function(e) >= Intrinsic::Clz && intrinsic_function(e) <= Intrinsic::Popcountg)
         return integer_builtin_constant(n,s);
+    if (intrinsic_function(e) == Intrinsic::Atomic) return atomic_constant(n,s);
     if (call.form == ExpressionForm::Expect) {
         auto first = constant_node_conversion(call_argument(call,0),conversions[call.conversions],s);
         auto second = constant_node_conversion(call_argument(call,1),conversions[call.conversions+1],s);

@@ -148,7 +148,7 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
     ++constant_work;
     // A scalar value request performs lvalue-to-rvalue conversion. Invocation
     // substitution must not erase the parameter's volatile access semantics.
-    if (calls && expressions[n].category != ValueCategory::Prvalue && (types[expressions[n].type].cv & 2))
+    if (calls && expressions[n].category != ValueCategory::Prvalue && (types[expressions[n].type].cv & 6))
         return Constant();
     NodeId first = ast[n].first;
     if (calls && expressions[n].ready && (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::BracedInit || ast[n].kind == Kind::ParenInitializer) &&

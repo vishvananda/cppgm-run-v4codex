@@ -14,7 +14,11 @@ NodeId Parser::specifiers(bool type_only, NodeId result)
         ast[result].flags |= attributes(&alignment,&native);
         native_attributes(result,native);
         Kind kind = type_only ? Kind::TypeSpecifier : Kind::DeclSpecifier;
-        if (!have_type && (in.is("typeof") || in.is("__typeof") || in.is("__typeof__"))) {
+        if (!have_type && in.is("_Atomic") && in.is("(",1)) {
+            in.take(); in.require("(");
+            auto spec = wrap(Kind::AtomicType,type_id());
+            in.require(")"); ast.append(result,spec); have_type = true;
+        } else if (!have_type && (in.is("typeof") || in.is("__typeof") || in.is("__typeof__"))) {
             in.take(); in.require("("); unsigned saved = angle_expression; angle_expression = 0;
             auto operand = type_operand(true) ? type_id() : expression();
             in.require(")"); angle_expression = saved;

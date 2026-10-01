@@ -25,6 +25,7 @@ Value Procedural::class_address(EntityId object, TypeId t)
 void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value destination, bool terminal, bool base, bool entry)
 {
     if (!terminal) guard_expression(n);
+    atomic_padding(reference(c.target) ? sem.types[c.target].child : c.target,destination);
     if (c.kind == semantic::Conversion::Kind::List) { list_conversion(c,destination); return; }
     if (c.kind == semantic::Conversion::Kind::User) { user_conversion(n,c,destination); return; }
     while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;

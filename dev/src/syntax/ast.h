@@ -144,6 +144,7 @@ enum class Kind : unsigned char {
     Capture,
     VaArg,
     FunctionName,
+    AtomicType,
 };
 
 struct Location {

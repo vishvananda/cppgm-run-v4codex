@@ -27,7 +27,7 @@ TypeId Analyzer::decay(TypeId t)
     t = value_type(t);
     if (types[t].kind == TypeKind::Array) return types.compound(TypeKind::Pointer, types[t].child);
     if (types[t].kind == TypeKind::Function) return types.compound(TypeKind::Pointer, t);
-    return types.unqualified(t);
+    return types.non_atomic(types.unqualified(t));
 }
 bool Analyzer::arithmetic(TypeId t) const
 {
@@ -39,7 +39,7 @@ TypeId Analyzer::promote(TypeId t)
     if (types[t].kind == TypeKind::Named && integral(t) && !scoped_enum(t)) t = entities[types[t].entity].underlying;
     if (fundamental(t, FT_WCHAR_T)) return types.fundamental(FT_INT);
     if (fundamental(t, FT_CHAR32_T)) return types.fundamental(FT_UNSIGNED_INT);
-    return integral(t) && width(t) < 32 ? types.fundamental(FT_INT) : types.unqualified(t);
+    return integral(t) && width(t) < 32 ? types.fundamental(FT_INT) : types.non_atomic(types.unqualified(t));
 }
 TypeId Analyzer::promote_expression(NodeId n)
 {
@@ -138,7 +138,7 @@ bool Analyzer::qualification(TypeId from, TypeId to, unsigned& added, bool inter
 {
     Type a = types[from], b = types[to];
     if (a.kind == TypeKind::Function || b.kind == TypeKind::Function) return from == to;
-    if (a.kind != b.kind || (a.cv & ~b.cv)) return false;
+    if (a.kind != b.kind || ((a.cv ^ b.cv) & 4) || (a.cv & ~b.cv)) return false;
     if (a.cv != b.cv) {
         if (!intermediate_const) return false;
         added |= b.cv & ~a.cv;
@@ -153,7 +153,7 @@ bool Analyzer::qualification(TypeId from, TypeId to, unsigned& added, bool inter
 }
 bool Analyzer::similar_type(TypeId a, TypeId b)
 {
-    if (types[a].kind != types[b].kind) return false;
+    if (types[a].kind != types[b].kind || ((types[a].cv ^ types[b].cv) & 4)) return false;
     if (types[a].kind == TypeKind::Array)
         return types[a].bound == types[b].bound && similar_type(types[a].child,types[b].child);
     if (pointer(a) || types[a].kind == TypeKind::MemberPointer)
@@ -310,7 +310,7 @@ void Analyzer::select_function(NodeId n, EntityId e, bool direct)
 void Analyzer::use_selected_function(EntityId e, bool direct)
 {
     auto intrinsic = intrinsic_function(e);
-    if ((intrinsic == Intrinsic::AtomicFetchAdd || intrinsic == Intrinsic::AtomicAddFetch) && !types[entities[e].type].count)
+    if (intrinsic == Intrinsic::Atomic && !direct)
         throw std::runtime_error("atomic builtin requires a direct call");
     if (destructor_member(e)) members[entities[e].member_info].retained_root = true;
     if (direct && entities[e].member_info) members[entities[e].member_info].emission_reference = true;

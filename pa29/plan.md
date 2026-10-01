@@ -1,9 +1,26 @@
-# PA29 compact plan — implementation160 handoff
+# PA29 compact plan — implementation161 in progress
 
-Target: **PA29 full-stage**. Phase: **validated implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `1ab3499d7046daf5c298d958a8770b413edb3615`.
-Entry: `8bdc6bbf28980810ae1bc33895243d4de7c15149`, clean, **321/403**.
+Entry161: `7f0a2c4b06f7b81442c41c8f5bbdb6ed423977e4`, clean, **323/403** (80 failures).
+Previous goal turn: progress (implementation160 completed and validated invocation ownership).
+No surviving build/test process was found at entry.
+
+## Active ownership group
+
+Implement the C11/GNU atomic frontend over existing typed LowIR/native atomic
+operations. Owners: syntax/type interning for atomic storage; semantic builtin
+registry/signature selection for pointee, order, effects and result facts;
+lowering for direct atomic operations and bounded CAS loops. Preserve literal
+type/cv distinctions and 16-byte alignment. Probe answers derive from implemented
+registries; intrinsic exception facts feed noexcept analysis. Work scales with
+source operands and emitted operations, with no whole-program search or optional
+optimization. Validate runtime/concurrency, rejection, layout, LowIR roundtrips,
+all existing fixtures and earlier stages. Freeze entry binary before edits;
+measure A/A+ABBA common workloads and new capability costs, runtime/text/RSS.
+
+Prior handoff evidence below remains authoritative until refreshed.
 Code endpoint: `2fd6963e`. Current: **323/403**, **80 failures**, two resolved,
 zero new failures. All 403 fixtures, references and comparison rules are retained.
 Previous goal turn: progress (handoff159 changed code and validated 321/403).

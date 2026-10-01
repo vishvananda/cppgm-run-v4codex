@@ -25,7 +25,11 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     if (abi_types[id]) return abi_types[id];
     auto t = sem.types[id];
     abi_mangle::Id result = 0;
-    if (t.cv && t.kind != TypeKind::Function) result = abi.cv(abi_type(sem.types.unqualified(id)), t.cv);
+    if (t.cv && t.kind != TypeKind::Function) {
+        result = abi_type(sem.types.non_atomic(sem.types.unqualified(id)));
+        if (t.cv & 4) result = abi.make(Kind::Vendor,result,abi.string("_Atomic"));
+        if (t.cv & 3) result = abi.cv(result,t.cv & 3);
+    }
     else switch (t.kind) {
     case TypeKind::Fundamental: {
         static const AbiBuiltinTypeKind kinds[] = {ABI_BUILTIN_TYPE_SIGNED_CHAR, ABI_BUILTIN_TYPE_SHORT,

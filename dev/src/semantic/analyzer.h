@@ -1,4 +1,5 @@
 #pragma once
+#include "support/atomic_builtins.h"
 #include "semantic/type_query.h"
 #include "semantic/expression_store.h"
 #include "semantic/fact_store.h"
@@ -116,6 +117,7 @@ public:
     bool same_integer_value(Constant a, Constant b) const;
     std::string integer_text(Constant value) const;
     Constant constant_fact(NodeId n) const { return facts[n].value ? constants[facts[n].value] : Constant(); }
+    AtomicBuiltin atomic_kind(EntityId e) const { return AtomicBuiltin(atomic_kinds.get(e)); }
     std::uint64_t object_size(TypeId t) { return size(t); }
     std::uint64_t storage_alignment(EntityId e);
     Index declared_storage_types;
@@ -683,6 +685,7 @@ private:
     bool floating_type(TypeId type) const;
     Constant floating_constant(TypeId type, long double value, bool special = false, bool signaling = false);
     TypeId variadic_list_type = 0;
+    Index atomic_kinds;
     Index intrinsic_functions, predefined_strings, atomic_signatures, integer_signatures, overflow_signatures;
     EntityId predefined_function_name(NodeId n, ScopeId s);
     TypeQueryFact query_builtin_operand(const TypeQuery& q, const std::vector<TypeQueryFact>& children);
@@ -694,7 +697,9 @@ private:
     EntityId integer_builtin_function(IdentifierId name);
     EntityId integer_signature(EntityId family, TypeId operand, unsigned count);
     Constant integer_builtin_constant(NodeId n, ScopeId s);
+    bool atomic_operand(TypeId type);
     EntityId atomic_signature(EntityId family, TypeId operand);
+    Constant atomic_constant(NodeId n, ScopeId scope);
     void validate_intrinsic(EntityId selected, const std::vector<NodeId>& args, ScopeId s);
     Expression va_arg_expression(NodeId n, ScopeId s);
     bool floating_builtin(NodeId n, ScopeId scope, IdentifierId name, const std::vector<NodeId>& args, Expression& result);

@@ -51,6 +51,7 @@ struct Linkage {
     bool host = false;
     SymbolId allocation_roles[2], rtti_roles[9], rtti_functions[3];
     SymbolId exception_functions[8];
+    SymbolId atomic_runtime_symbols[4];
     SymbolId terminate_adapter;
     SymbolId abort_runtime;
     std::vector<FunctionId> initializers, finalizers;
@@ -339,6 +340,16 @@ class Procedural {
     void discard(NodeId n, bool access = true);
     Value unary(NodeId n);
     Value binary(NodeId n, bool location);
+    bool inline_atomic(TypeId type);
+    Value atomic_runtime(AtomicOp op, std::uint64_t bytes, Operand object, Operand value, Operand result = Operand());
+    Operand atomic_buffer(Value value);
+    IRType atomic_representation(TypeId type);
+    Value atomic_bits(Value value, IRType raw);
+    Value atomic_value(Value bits, TypeId type);
+    void atomic_extract(Value bits, Operand destination, TypeId type);
+    void atomic_padding(TypeId type, Value destination);
+    Value atomic_update(Value location, Value rhs, ETokenType op, TypeId computation, bool postfix);
+    Value atomic_call(NodeId n, Value destination = Value());
     Value intrinsic_call(NodeId n, semantic::Intrinsic intrinsic);
     Value conditional(NodeId n, bool location, Value destination = Value(), std::uint32_t branches = 0, bool terminal = false, const semantic::ScalarConsumption* consumption = nullptr);
     Value logical(NodeId n);

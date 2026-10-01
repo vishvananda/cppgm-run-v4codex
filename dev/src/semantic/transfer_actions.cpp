@@ -70,12 +70,12 @@ void Analyzer::prepare_transfer(EntityId e)
             }
             action.kind = TransferAction::Subobject;
         } else if (assignment && (types[element].cv & 1)) deleted = true;
-        if (types[element].cv & 2) trivial = representation_copy = false;
+        if (types[element].cv & 6) trivial = representation_copy = false;
         const FieldFacts layout = field_fact(field);
         if (layout.bit_field) {
             if (!layout.declared_width) { prior_unit = false; return; }
             std::uint64_t bytes = size(layout.storage_type);
-            bool safe = !(types[type].cv & 2) && layout.declared_width <= bytes*8 && (bytes == 1 || bytes == 2 || bytes == 4 || bytes == 8);
+            bool safe = !(types[type].cv & 6) && layout.declared_width <= bytes*8 && (bytes == 1 || bytes == 2 || bytes == 4 || bytes == 8);
             if (safe) {
                 auto& prepared = field_metadata(field);
                 if (!prepared.unit_transfer) { prepared.unit_transfer = true; ++unit_transfer_fields; }
@@ -121,7 +121,7 @@ void Analyzer::prepare_transfer(EntityId e)
         for (const auto& action : actions) {
             TypeId element = action.type;
             while (types[element].kind == TypeKind::Array) element = types[element].child;
-            if (action.kind == TransferAction::Empty || action.kind == TransferAction::Reference || action.kind == TransferAction::Unit || field_fact(action.field).bit_field || (types[element].cv & 2)) break;
+            if (action.kind == TransferAction::Empty || action.kind == TransferAction::Reference || action.kind == TransferAction::Unit || field_fact(action.field).bit_field || (types[element].cv & 6)) break;
             if (action.function && (!trivial_transfer(action.function) || !copy_storage_type(element))) break;
             // A bulk prefix has one storage action and no subobject lifetime
             // identities. Keep effectful destructor boundaries when a later

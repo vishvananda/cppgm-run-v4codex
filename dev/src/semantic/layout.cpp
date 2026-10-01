@@ -20,6 +20,17 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment, bool probe)
 {
     Type t = types[id];
     if (definitions && t.kind == TypeKind::Named && entities[t.entity].class_info) complete_class(t.entity);
+    if (t.cv & 4) {
+        auto underlying = types.non_atomic(types.unqualified(id));
+        auto bytes = size(underlying,false,probe);
+        // x86 lock-free atomic objects require their width as alignment.
+        auto natural = size(underlying,true,probe);
+        if (bytes && bytes <= 16) {
+            std::uint64_t width = 1; while (width < bytes) width *= 2;
+            bytes = width; natural = std::max(natural,bytes);
+        }
+        return alignment ? natural : bytes;
+    }
     if (alignment && t.alignment) return std::uint64_t(1) << (t.alignment-1);
     if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return size(t.child, alignment,probe);
     if (t.kind == TypeKind::Pointer) return 8;

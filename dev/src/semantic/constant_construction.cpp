@@ -83,7 +83,7 @@ std::uint32_t Analyzer::constant_constructor(EntityId ctor)
     for (unsigned j = 0; j < member.action_count; ++j) {
         auto action = subobject_actions[member.action_begin+j];
         auto t = types[action.type];
-        if (!action.field || !action.initializer || (t.cv & 2) || field_fact(action.field).bit_field ||
+        if (!action.field || !action.initializer || (t.cv & 6) || field_fact(action.field).bit_field ||
             t.kind == TypeKind::Array || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef ||
             (t.kind == TypeKind::Named && entities[t.entity].class_info)) {
             constructor_constant_actions.resize(summary.first); return index;

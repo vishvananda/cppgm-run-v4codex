@@ -85,6 +85,12 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     result.ready = true; result.evaluated = !unevaluated_depth;
     expressions.set(n,result);
     if (!facts[n].type) facts.edit(n).type = result.type;
+    if (ast[n].kind == Kind::Call && atomic_kind(facts[n].entity).form == AtomicForm::Always) {
+        auto value = atomic_constant(n,s);
+        if (!value.valid) throw std::runtime_error("always_lock_free requires a constant size");
+        facts.edit(n).value = constants.size(); constants.push_back(value);
+        auto checked = expressions[n]; checked.form = ExpressionForm::ConstantQuery; expressions.set(n,checked);
+    }
     prepare_expression_discard(n);
     return expressions[n];
 }
@@ -143,8 +149,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         if (placeholder_objects.get(e)) throw std::runtime_error("use before auto type deduction");
         r.entity = e; facts.edit(n).entity = e;
         auto intrinsic = intrinsic_function(e);
-        bool atomic_family = (intrinsic == Intrinsic::AtomicFetchAdd || intrinsic == Intrinsic::AtomicAddFetch) &&
-            !types[entities[e].type].count;
+        bool atomic_family = intrinsic == Intrinsic::Atomic;
         if (entities[e].kind == EntityKind::Overload || (definitions && entities[e].template_info) || atomic_family || (intrinsic >= Intrinsic::AddOverflow && intrinsic <= Intrinsic::MulOverflow) || (intrinsic >= Intrinsic::Clzg && intrinsic <= Intrinsic::Popcountg)) {
             r.form = ExpressionForm::Overload; r.category = ValueCategory::Lvalue;
             ScopeId naming = naming_class(name_owner(ast[n].detail, s));

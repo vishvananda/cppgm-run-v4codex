@@ -56,7 +56,7 @@ enum class RefQualifier : unsigned char { None, Lvalue, Rvalue };
 struct FunctionQualifiers { unsigned char cv = 0; RefQualifier ref = RefQualifier::None; };
 struct Type {
     TypeKind kind = TypeKind::Fundamental;
-    unsigned char cv = 0;
+    unsigned char cv = 0; // const=1, volatile=2, independent atomic storage=4.
     RefQualifier ref = RefQualifier::None;
     EFundamentalType fundamental = FT_INT;
     bool variadic = false;
@@ -90,6 +90,7 @@ public:
     unsigned storage_alignment(TypeId t) const;
     TypeId qualify(TypeId t, unsigned cv);
     TypeId unqualified(TypeId t);
+    TypeId non_atomic(TypeId t);
     TypeId function(TypeId result, const std::vector<TypeId>& params, bool variadic, unsigned cv = 0, RefQualifier ref = RefQualifier::None);
     TypeId member_pointer(EntityId owner, TypeId child);
     TypeId member_pointer_type(TypeId owner, TypeId child);
@@ -409,7 +410,7 @@ struct Declaration {
 struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool inline_namespace = false, injected_member = false; };
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
 enum class Intrinsic : unsigned char {
-    None, VaStart, VaEnd, VaCopy, StackAlloc, Expect, Abort, Unreachable, AtomicFetchAdd, AtomicAddFetch,
+    None, VaStart, VaEnd, VaCopy, StackAlloc, Expect, Abort, Unreachable, Atomic,
     Clz, Ctz, Popcount, Parity, Ffs, Bswap, Clzg, Ctzg, Popcountg, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow
 };
 enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatNaN, FloatInfinite, FloatNormal, FloatSignbit, FloatGreater, FloatGreaterEqual, FloatLess, FloatLessEqual, FloatLessGreater, FloatUnordered, FloatClassify, InitializerList, ListValue, BoundMember, Expect, Typeid, DynamicCast, TypeinfoEqual, TypeinfoUnequal, InvokeMemberData };

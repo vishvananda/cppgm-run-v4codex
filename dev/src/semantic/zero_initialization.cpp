@@ -4,7 +4,7 @@ std::uint32_t Analyzer::prepare_zero_initialization(TypeId t)
 {
     if (auto known = zero_initialization_index.get(t)) return known;
     auto type = types[t];
-    ZeroInitialization plan; plan.type = t; plan.bulk = !(type.cv & 2);
+    ZeroInitialization plan; plan.type = t; plan.bulk = !(type.cv & 6);
     std::vector<ZeroPart> parts;
     if (type.kind == TypeKind::LRef || type.kind == TypeKind::RRef) {
         plan.kind = ZeroInitialization::Reference; plan.bytes = plan.alignment = 8; plan.bulk = false;
@@ -42,7 +42,7 @@ std::uint32_t Analyzer::prepare_zero_initialization(TypeId t)
                 auto bits = field_fact(field);
                 if (bits.no_unique_address && empty_class(child)) continue;
                 if (bits.bit_field) {
-                    plan.bulk &= !(types[child].cv & 2);
+                    plan.bulk &= !(types[child].cv & 6);
                     if (!bits.declared_width) { unit = false; continue; }
                     child = types.qualify(bits.storage_type,types[child].cv);
                     if (unit && unit_offset == offset && unit_bytes == size(child)) continue;

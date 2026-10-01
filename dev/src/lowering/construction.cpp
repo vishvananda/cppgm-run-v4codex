@@ -5,6 +5,7 @@ using syntax::Kind;
 void Procedural::construct(EntityId ctor, NodeId init, Value object, bool base, bool entry)
 {
     guard_expression(init,true);
+    if (object.type) atomic_padding(object.type,object);
     if (init && sem.object_fact(init).value_initialize) {
         auto cls = sem.scopes[sem.entities[ctor].owner].entity;
         zero_object(sem.entities[cls].type,object);

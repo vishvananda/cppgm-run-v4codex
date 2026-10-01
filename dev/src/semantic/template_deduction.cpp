@@ -66,11 +66,14 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         auto element = actual;
         while (types[element].kind == TypeKind::Array || types[element].kind == TypeKind::DependentArray) element = types[element].child;
         auto cv = types[element].cv;
+        if ((p.cv & 4) && !(cv & 4)) return false;
         if (kind != DeductionKind::Call && ((p.cv & cv) != p.cv ||
             (p.cv && (a.kind == TypeKind::Function || a.kind == TypeKind::LRef || a.kind == TypeKind::RRef)))) return false;
         TypeId value = actual;
         if (p.cv && a.kind != TypeKind::Function) {
-            value = types.qualify(types.unqualified(element),cv & ~p.cv);
+            auto base = types.unqualified(element);
+            if (p.cv & 4) base = types.non_atomic(base);
+            value = types.qualify(base,cv & ~p.cv);
             std::vector<Type> arrays;
             for (auto t = actual; t != element; t = types[t].child) arrays.push_back(types[t]);
             for (auto t = arrays.rbegin(); t != arrays.rend(); ++t) value = types.compound(t->kind,value,t->bound);

@@ -54,6 +54,11 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
             result = class_type(c, s, anonymous_name, node.kind == Kind::Class, spec_has(n, KW_STATIC));
             continue;
         }
+        if (node.kind == Kind::AtomicType) {
+            result = type_id(node.first,s);
+            if (!atomic_operand(result)) throw std::runtime_error("invalid atomic type operand");
+            result = types.qualify(result,4); continue;
+        }
         if (node.kind == Kind::Enum) { result = enum_type(c, s, anonymous_name, node.flags & 1); continue; }
         if (node.op == KW_DECLTYPE) {
             if (node.flags & 2) {
