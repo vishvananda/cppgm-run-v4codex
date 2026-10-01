@@ -1,6 +1,6 @@
-# PA29 compact plan — checkpoint audit170
+# PA29 compact plan — implementation171
 
-Target: **PA29 full-stage**. Phase: **checkpoint audited; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implement; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous review: `f07f78236eb475648834ed78afbca6c864f64408`.
 Audit entry: `ecb69d94227d60653a7874f9daea63be8a202840`.
@@ -65,3 +65,26 @@ Complete each broad owner through direct/fixed/dependent/query use, ABI emission
 and mutable storage dependencies before handoff. Independent review through the
 recorded code tip is complete; full through-PA29 success is still required before
 advancing. Earlier audits and the single audit170 ledger row remain in audit.md.
+
+## Active implementation171
+
+Entry HEAD: `6525c1af86e05edcf558186adec96a8c72521500`; baseline 361/403,
+42 failures. Prior turn classification: progress (audit170 corrected storage/query
+facts and recorded verified evidence). Stage base and last-reviewed markers above
+remain unchanged.
+
+Initial owner: builtin template type operations and argument-pack generation.
+Parser retains argument nodes once; semantic builtin queries own canonical typed
+argument tuples; substitution composes immutable frames and resolves selection or
+generation; existing alias, deduction, class demand and typed lowering consume the
+result. Work is linear in consumed/emitted arguments, with O(1) indexed selection
+after substitution; generation keeps the existing 1,048,576 element limit.
+No optional optimization or growth is introduced. Validate direct/dependent,
+empty/nested packs, aliases, SFINAE, ABI and executable uses; extend to related
+pack substitution defects while this owner is understood.
+
+Freeze entry/final binaries, inputs and flags; collect A/A and ABBA common-path
+latency/RSS/runtime/text evidence plus capability scaling for newly accepted
+inputs (entry rejection is not an equivalent timing baseline). Required stage,
+prior-through and file-audit gates remain unchanged. New implementation remains
+unreviewed; independent audit is separate from unfinished language groups.
