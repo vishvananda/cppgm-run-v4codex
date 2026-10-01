@@ -1,10 +1,12 @@
-# PA29 compact plan — implementation191 handoff
+# PA29 compact plan — implementation192 in progress
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `2df00585bd10d4e2e068934394dffc8adb0a47ed`.
 Last reviewed commit: `5aaf16d15f8e50925c0b75a5485893a958501b85`.
-Entry HEAD: `32c1f5f43cde4e09f623f0e5d606a51d170e8203`, clean, **398/403**.
+Entry HEAD: `4becf437ada14c36b01baae1d608428a621a5317`, clean, **399/403**.
+Current work: [implementation192](implementation192.md). The prior handoff evidence
+below remains historical until the current validation replaces it.
 Implementation tip: `f542b3768ea22d35a2a2e18b87f5169472dbdf20`.
 The record commit follows this tip without implementation changes. Review markers
 are preserved; this handoff returns control to Ralph, not stage certification.
