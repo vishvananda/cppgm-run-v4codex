@@ -1,74 +1,73 @@
-# PA29 compact plan — audit186
+# PA29 compact plan — implementation187
 
-Target: **PA29 full-stage**. Phase: **implementation187; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `52070178897f5894edaf2f35d03a734b781979d4`.
-Audit entry: `152396e2` (392/403; 11 failures).
 Last reviewed commit: `2df00585bd10d4e2e068934394dffc8adb0a47ed`.
-Reviewed range: **`52070178..2df00585`**, all three accepted handoffs and fixes.
+Implementation187 entry: `5ef7f89a3bd6be203c6a845432b417bcf518eb07`, clean,
+392/403 (11 failures). The stage-base and review markers remain unchanged.
+The prior reviewed range was `52070178..2df00585`; see [audit186](audit.md).
 
-Implementation187 entry: `5ef7f89a3bd6be203c6a845432b417bcf518eb07`,
-392/403 (11 failures), clean tree. Previous audit turn supplied new validation
-evidence (progress). Existing stage-base and review markers above are preserved.
-The first owner is GNU complex types: syntax → canonical component type →
-component/value facts → typed LowIR storage/signatures → native SysV placement.
-Complete component access, construction, conversions, storage and call/return
-boundaries together; work is bounded per component, with no optional optimizer.
-Validate both failing complex fixtures, explicit scalar/template/ABI and adapter
-controls, prior PAs and file audit. Freeze entry/final binaries for latency/RSS,
-runtime/text evidence. Binary128 needs separate precision/arithmetic machinery;
-the remaining vector/contextual, hosted demand and contract questions stay open.
+## Design/spec alignment and completed owner
 
-## Reviewed ownership and repairs
+[Handoff187](handoff187.md) covers GNU **floating complex** types together:
+syntax → canonical component type → typed expression/query/constant facts →
+initializer/storage plans → LowIR signatures → native SysV fixed/variadic ABI.
+Construction, cv/value-category component access, conversions, arithmetic,
+constexpr execution/addresses, storage, template use and runtime calls share
+that representation. `c32/c64/c80` preserve ABI identity through serialization.
+The intrinsic registry owns probe answers and typed signature selection.
 
-[Audit186](audit.md) reviews every commit, the accumulated source and cross-handoff
-interactions. Guide declarations use canonical signature/query identities and
-separate declaration facts. Explicit casts retain cv/object/member identity and
-base adjustments. Bit-integer widths remain typed through dependent substitution,
-constants, exact precision, storage and serialized `i128a8` ABI alignment.
-The scalar capacity remains signed 2–128 / unsigned 1–128; larger widths diagnose.
+Work is fixed per pair, with at most three builtin signatures/TU and six runtime
+helper declarations/program. Existing interned component constants fit the
+ordinary value payload. Shared fixes retain `va_arg` result types and address
+object-valued SSA bases correctly. MIR reports actual complex return carriers.
+No source-name recovery, hosted-only lowering, optional optimizer or new budget
+is introduced. Inherited guide/default, explicit-cast and bit-integer design
+from audit186 remains intact.
 
-Audit fixes retain prototype `decltype`/`typeid` inquiry facts under complete
-default frames, preserve nested unevaluated/evaluated boundaries, and normalize
-bit-integer overflow results before representability checks. No repeated name
-recovery, fake runtime parameter or production text transport is added. Query
-work follows required typed edges; normalization adds at most two shifts.
-[The combined control](../student.tests/pa29/source186/integrated.cpp) traces guide,
-default/template, cast, RTTI, storage and native emission together.
+## Validation and performance
 
-## Validation and stage-scoped performance
+`make test-pa29`: **394/403**, nine failures, exit 2. PA1–28: **4538/4538**.
+Root through PA29: **4932/4941**, exactly those nine failures. File audit passes
+with four inherited header-division warnings. **99** explicit commands include
+18 rejection inputs, GCC/Clang interop, typed LowIR roundtrips and native MIR.
+All **403** inputs and **1,707** contract/harness paths remain unchanged.
+The original complex failures are fixed; no previous pass or coverage is lost.
 
-PA29 **392/403**, exactly the entry's **11 failures**; PA1–28 **4538/4538**;
-through PA29 **4930/4941**. File audit passes with four inherited warnings.
-All **141** explicit controls and **836** inspection commands pass. All **403**
-inputs and **1,707** contract/harness paths are unchanged against entry and prior
-review. No reference or comparison rule changed. See the audit and
-[evidence manifest](../student.tests/pa29/evidence186/manifest.json).
+[Performance187](performance187.md) retains **544 observations plus 16 launchers**
+across the preliminary and final frozen comparisons. Four common object and
+executable pairs are byte-identical; the final inspection-only repair preserves
+all measured program bytes. Complex demand scaling checks all 24 final compiler
+samples; emitted code/text stay fixed while demanded frontend work grows with N.
+Compiler latency/RSS, runtime/text, paired spread and noise are reported together.
+No speedup is claimed. Existing mandatory constexpr/inline/storage limits remain;
+inherited blanket 15%/zero-growth targets remain diagnostic under spec §9.
+All historical performance evidence is preserved.
 
-[Performance186](performance186.md): **496** frozen observations plus eight
-launchers; eight equivalent object/executable pairs are byte-identical. Compiler
-paired medians **0.9953–1.0189**, all paired compiler ranges crossing unity; RSS
-increases and noise remain disclosed. Twenty-four scaling checks confirm one
-source default binding and one formation/body transition per demanded
-specialization; corrected-only runtime/text remain fixed. **1,144** inherited
-observations plus 24 launchers are verified and preserved. No speedup is claimed.
-Mandatory limits remain enforced; inherited blanket 15%/zero-growth targets are
-diagnostic under spec §9, not extra exit gates. Necessary semantic costs and
-later-stage optimizer/self-hosting work do not change PA29 acceptance.
+## Remaining groups and handoff ledger
 
-## Broad remaining groups and handoff quality
+The [nine-case ledger](../student.tests/pa29/evidence187/remaining.json) distinguishes
+six unfinished implementation cases from three independent contract questions:
 
-The [11-case ledger](../student.tests/pa29/evidence186/remaining.json) groups numeric
-representation/vendor syntax **7**, hosted template/demand and ABI **3**, and
-legacy trait contract **1**. Eight need implementation; three independent contract
-questions remain counted (nothrow shorthand, invocability and nested ABI tags).
-Continue floating/complex representation and ABI, vector/contextual syntax and
-hosted template behavior as broad owners. No failure is waived.
+| Owner | Cases | Disposition |
+|---|---:|---|
+| Binary128/half representation and ABI | 3 | Unfinished implementation; need genuine new formats and arithmetic. |
+| Extended-vector deduction/contextual operators | 2 | Unfinished parser/template semantics. |
+| Hosted primary `char_traits` demand | 1 | Unfinished implementation; inherited contract discussion retained. |
+| Nothrow shorthand/invocability/nested ABI tags | 3 | Independent contract review; all requirements and failures still counted. |
 
-Avoid the observed fragmentation: retaining only `sizeof` inquiries and omitting
-overflow consumers from scalar integration left shared-owner gaps for this audit.
-Complete source/query/default, conversions, constant/runtime, storage/ABI and
-adapter boundaries together before handoff. [Audit182](audit182.md), handoffs183–185
-and all historical evidence remain retained. Full PA29/root-through success is
-required before PA30. The records commit makes no code changes after the reviewed
-tip above.
+`5c93ddef` implements the complex owner; `f714397c` repairs its MIR reporting.
+The records commit binds final source, results and measurements in the
+[evidence manifest](../student.tests/pa29/evidence187/manifest.json).
+The owner was extended through every discovered constant/storage/ABI/adapter
+consumer, including variadic calls. Further numerical work needs real precision
+and arithmetic primitives absent from the existing component store; the completed
+pair model cannot supply them. The other groups have different semantic owners.
+This is the concrete handoff boundary, not assignment completion. GNU dependent
+component mangling differs between GCC and Clang; the typed GCC vendor encoding
+is retained and recorded for independent audit. Nothing is waived.
+
+Ralph resumes implementation or schedules review. Full PA29/root-through success
+and the whole-stage audit remain required before PA30. [Audit182](audit182.md),
+audit186 and every historical handoff/measurement remain retained.

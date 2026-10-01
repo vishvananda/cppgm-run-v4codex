@@ -1,0 +1,43 @@
+{
+  "checks": [
+    {
+      "command": "make test-report-through-pa28",
+      "status": 0,
+      "passed": 4538,
+      "total": 4538,
+      "path": "/tmp/pa29-187/prior-final.log",
+      "sha256": "b1ff9611d30d0da259845968d6ec5a5a9b0ee6da2d9810c505780299a5c67a88"
+    },
+    {
+      "command": "make test-pa29",
+      "status": 2,
+      "passed": 394,
+      "total": 403,
+      "path": "/tmp/pa29-187/stage-final.log",
+      "sha256": "6002be9ab8c7bd63dec883ebdad1eeda31215144b673a8b27fb85fcaae277ed1"
+    },
+    {
+      "command": "make test-report-through-pa29",
+      "status": 2,
+      "passed": 4932,
+      "total": 4941,
+      "path": "/tmp/pa29-187/through-final.log",
+      "sha256": "5eb60d32fd1004b0d10817136114cf3db10cf5f9c1c136fde21c970df28ce4d4"
+    },
+    {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src",
+      "status": 0,
+      "passed": null,
+      "total": null,
+      "path": "/tmp/pa29-187/file-audit-final.log",
+      "sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f"
+    }
+  ],
+  "stageProgress": "pass: two original failures fixed; all previous passes preserved; coverage unchanged",
+  "file_audit_warnings": [
+    "  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership",
+    "  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership",
+    "  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership",
+    "  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership"
+  ]
+}

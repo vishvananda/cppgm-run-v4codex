@@ -1,0 +1,34 @@
+{
+  "entry": "5ef7f89a3bd6be203c6a845432b417bcf518eb07",
+  "implementation": "f714397ca9d1db6e1834bc3f8ab2139b9cb3da1b",
+  "stage_base": "2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543",
+  "last_reviewed": "2df00585bd10d4e2e068934394dffc8adb0a47ed",
+  "checks": {
+    "priorThroughTests": "pass",
+    "fileAudit": "pass",
+    "stageProgress": "pass",
+    "stageTests": "394/403; exit 2; nine original failures remain"
+  },
+  "observations": 544,
+  "launchers": 16,
+  "files": {
+    "student.tests/pa29/evidence187/common-performance.json": "25f77a9f283f191ecb9026d486ac95af44fb5553d897053cc0b96a3262db279a",
+    "student.tests/pa29/evidence187/controls.json": "1bbb16f9cb109022dd951a6c6e08f89d9438f46bc5511d5795e654d3396b3670",
+    "student.tests/pa29/evidence187/coverage.json": "7ad6ebb62ac3c3446013bdce57fa2028ed0444fdfd496aeb4a3899ef4ea0b03c",
+    "student.tests/pa29/evidence187/inspection.json": "21046ebbfb3421e8da97a36c02e574bb68efc218f2a8f3c958e3fbdf2e8e4146",
+    "student.tests/pa29/evidence187/owner-performance.json": "192be8b706ed306fc89666d0649f30cc63583d0f2126e0d512f53aeee96778d4",
+    "student.tests/pa29/evidence187/preliminary-common-performance.json": "622981679202f7f34436ced6af8145c8d5277c4fa5c6f28dcfaf07b53767e9c5",
+    "student.tests/pa29/evidence187/preliminary-owner-performance.json": "71f940b43228aa21935c293480651ee26dffe586a033afe2210dee7b3848ce97",
+    "student.tests/pa29/evidence187/preliminary-source-binding.json": "08ec360861aed66e8b61661bb01c373ba5155e7a832affd945372baf11aeaa6f",
+    "student.tests/pa29/evidence187/remaining.json": "ffb025b9c9955148fac8f2c831e1d9ed84fd6835d747ebe64302616cf2c894f8",
+    "student.tests/pa29/evidence187/scaling.json": "27109f929c759468919c4f52c855c2b3c47659c5700e85426abaad3052710854",
+    "student.tests/pa29/evidence187/source-binding.json": "4403a16cc405c7e76aea5deafe238909c346a4c15801beaf2f1d5b8c3ce4aaba",
+    "student.tests/pa29/evidence187/validation.json": "e334cf343cc78c2b1d244059e22cdbf59be8efc4b685e8f880960e8c6d298c33",
+    "pa29/plan.md": "d5d8d5c1681e29ee8d8302d35f5f52b1360e473c8070f4a7e5127ae9595d5793",
+    "pa29/handoff187.md": "53d490f31d6a70ee0b6ba90f121b9e50ab6f062603effa3c27a32980b1d87f34",
+    "pa29/performance187.md": "766dcbd212129bd697d1174aff462b470ec0cdd88745752fbff21941b8a217ce",
+    "student.tests/pa29/analyze187.py": "11a488907ee532d575f68691b1b1cd2077f8a20b3d548ef1a51d746351045789",
+    "student.tests/pa29/check187.py": "e064cab4b37a2060e9265fd2ff2376da7b00e5d417bb0d9fae75874d1a8b38c0",
+    "student.tests/pa29/performance187.py": "198a414d013d29e04f113c7ec2806219d74775496642604b90fce4e0ecff1e5f"
+  }
+}

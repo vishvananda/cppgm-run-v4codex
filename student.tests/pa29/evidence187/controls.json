@@ -1,0 +1,1220 @@
+{
+  "commands": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/complex.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/complex.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa29-187/checks/complex.o",
+        "-o",
+        "/tmp/pa29-187/checks/complex"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/complex"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-O0",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/complex.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/complex-host"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/complex-host"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "readelf",
+        "-Ws",
+        "/tmp/pa29-187/checks/complex.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "14373e7d18f06cdb23572292a9b29f967c1f2a60d34bc86b3ec2d329687921c4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "objdump",
+        "-dr",
+        "/tmp/pa29-187/checks/complex.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "1eadd88e107ead17e11011db5a0391bcf8b68483d09d3d1ff813ec0c1f12fe13",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/complex.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/complex.lowir"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/constants.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/constants.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa29-187/checks/constants.o",
+        "-o",
+        "/tmp/pa29-187/checks/constants"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/constants"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-O0",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/constants.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/constants-host"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/constants-host"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "readelf",
+        "-Ws",
+        "/tmp/pa29-187/checks/constants.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "b0e464e7e131947ef50415ca2830b3e83dd3cff80b76905f853bace7dc262b55",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "objdump",
+        "-dr",
+        "/tmp/pa29-187/checks/constants.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "5a058e358b8c03a7c240d9f6713866fe44cd1994f56229e5e5683bf20a8a3fdf",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/constants.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/constants.lowir"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/operations.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/operations.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa29-187/checks/operations.o",
+        "-o",
+        "/tmp/pa29-187/checks/operations"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/operations"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-O0",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/operations.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/operations-host"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/operations-host"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "readelf",
+        "-Ws",
+        "/tmp/pa29-187/checks/operations.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "d5b1d734777d925afb4cebe58200323f0e5792dd07d755a42b2fb51abfcedec5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "objdump",
+        "-dr",
+        "/tmp/pa29-187/checks/operations.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "1ab6b076bb35d3ae9eaefc2dfb564b6dbb1a281f1279b82fa4a3e0a7e1f90882",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/operations.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/operations.lowir"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/arithmetic.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/arithmetic.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa29-187/checks/arithmetic.o",
+        "-o",
+        "/tmp/pa29-187/checks/arithmetic"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/arithmetic"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-O0",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/arithmetic.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/arithmetic-host"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/arithmetic-host"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "readelf",
+        "-Ws",
+        "/tmp/pa29-187/checks/arithmetic.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "8074eb24aa96841c3ca2d169aa61061c7c4fcbaefe3e286c01f2a142c315e034",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "objdump",
+        "-dr",
+        "/tmp/pa29-187/checks/arithmetic.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "4493eaffc23c820b4dcab0c869da5137f2e7b3cf5c9007f33e7639197c77be42",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/arithmetic.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/arithmetic.lowir"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/adapter.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/adapter.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa29-187/checks/adapter.o",
+        "-o",
+        "/tmp/pa29-187/checks/adapter"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/adapter"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-O0",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/adapter.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/adapter-host"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/adapter-host"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "readelf",
+        "-Ws",
+        "/tmp/pa29-187/checks/adapter.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "c3492cb0ecd7ccc3c2c9fa6ec390b9dab45885ac86046a00fa42c315bc8d1e36",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "objdump",
+        "-dr",
+        "/tmp/pa29-187/checks/adapter.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "03f730f66d2676a2b2a603d7bb1af430343cb8194fe0a95c2b1b9454b5e75477",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/adapter.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/adapter.lowir"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/abi-source.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/abi.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/abi-source.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/abi.lowir"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/abi-host.cpp",
+        "/tmp/pa29-187/checks/abi.o",
+        "-o",
+        "/tmp/pa29-187/checks/abi"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/abi"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/abi-host.cpp",
+        "/tmp/pa29-187/checks/abi.o",
+        "-o",
+        "/tmp/pa29-187/checks/abi"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/abi"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "readelf",
+        "-Ws",
+        "/tmp/pa29-187/checks/abi.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "c305b402cbd3e81894a25a63a15373e90422436efa2637071936cf45001788ea",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "objdump",
+        "-dr",
+        "/tmp/pa29-187/checks/abi.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "9bc71406e070fec6eaddeba996e70108fd7dd1590351b0e00b24807887c4ac5e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/variadic-source.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/variadic.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/variadic-source.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/variadic.lowir"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/variadic-host.cpp",
+        "/tmp/pa29-187/checks/variadic.o",
+        "-o",
+        "/tmp/pa29-187/checks/variadic"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/variadic"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/variadic-host.cpp",
+        "/tmp/pa29-187/checks/variadic.o",
+        "-o",
+        "/tmp/pa29-187/checks/variadic"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/variadic"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "readelf",
+        "-Ws",
+        "/tmp/pa29-187/checks/variadic.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "c0a2407a899df04b3b1b8eaebe3d887e619b7bc1ff02ac332e26015b404d73ca",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "objdump",
+        "-dr",
+        "/tmp/pa29-187/checks/variadic.o"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "96800b440ec3f0cd3c036ba8a1d3e11c7dd7fe3243031ca47db03883e26b66db",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls187/adapter.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/adapter.lowir"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-187/checks/adapter.lowir",
+        "-o",
+        "/tmp/pa29-187/checks/adapter.canonical"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-187/checks/adapter.canonical",
+        "-o",
+        "/tmp/pa29-187/checks/adapter.again"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-187/checks/adapter.lowir.mir",
+        "/tmp/pa29-187/checks/adapter.lowir",
+        "-o",
+        "/tmp/pa29-187/checks/variadic"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/variadic"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "--dump-machine-ir",
+        "/tmp/pa29-187/checks/adapter.canonical.mir",
+        "/tmp/pa29-187/checks/adapter.canonical",
+        "-o",
+        "/tmp/pa29-187/checks/variadic"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/pa29-187/checks/variadic"
+      ],
+      "status": 0,
+      "expected_success": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/arity0.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "6db68ffaeadf7dac5d2de335af55ae8c77a4611bc9293778bdcea6ea91b3c6a9"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/arity0.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "1dc9a68aea6c17704a4a30c016894a80ea500db259069e887cc3139a2383721a"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/arity1.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "6db68ffaeadf7dac5d2de335af55ae8c77a4611bc9293778bdcea6ea91b3c6a9"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/arity1.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d4e6ffa603a9141065782a0bd2d87e81d688f060bfa5f38700c7099ac2e5ccef"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/arity3.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "6db68ffaeadf7dac5d2de335af55ae8c77a4611bc9293778bdcea6ea91b3c6a9"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/arity3.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "760243d621cb54b34ab794a1649fb72c968b98536f3c5f0b41d26183192e73d9"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/mismatch.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "6db68ffaeadf7dac5d2de335af55ae8c77a4611bc9293778bdcea6ea91b3c6a9"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/mismatch.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "b37a9517c3236f3f2fde3ea5ec1f849d511e5fb2986c2f5d64e811c342a33776"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/integer.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "6db68ffaeadf7dac5d2de335af55ae8c77a4611bc9293778bdcea6ea91b3c6a9"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/integer.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "fe26bf0e375af74c272e97563cf6ecf718d27d58035da2fb94fcfeded0ef3a69"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/complex.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "6db68ffaeadf7dac5d2de335af55ae8c77a4611bc9293778bdcea6ea91b3c6a9"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/complex.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "efcb67becae94fefbeafc96c63392a1b58d5ce9b78fabad0a8500b2f4e2ce581"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/const.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "1869668c8bc5a2db135651ab7c05cfc4968a31bd23a14648517c419c457bb3d2"
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/const.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "555334b188d6e64d537f726511fba7c5477f9ad4c1f1fa12f0c4d3fbc45357b2"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/ordering.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "1954291d6a0e9fef416beef3c6e83cc646647ea569d5ff7ae30dac53c1e5be80"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/ordering.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "2bcd596a32ccbfe9572bae2277df6b166bc45be2e7dcff2d567c576e4da35777"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/modulus.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "0d5c000b68cb087c3c069994dee28cd7e2ca746ad18d7e0de19bbf6e552a13c3"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/modulus.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "81e219da70eeddcd0398759c5d329fe88e6ae6f08fa8e463ff6bf23007fbeb09"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/bitwise.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "0d5c000b68cb087c3c069994dee28cd7e2ca746ad18d7e0de19bbf6e552a13c3"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/bitwise.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "c835a949baedd709d377f3f01124d9696b6350921da22d70b718cd32d1ebe168"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/implicit.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "a4f6469f4ad72924e7d565a2f160607072b64d30abcd87134b0b83416e88e7e4"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/implicit.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5047319caf810a51ea6d35696f7d5a6fa1c2fc990d6810485876a4d74c05336c"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/void.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "c5ab5fb74ebec4c50a90964d12e2dfe6b2c9fcfddb2061d8933af078b95ef286"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/void.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "908e827d167cfd121d887218f2e4c600c1e69a1f3df4a23740ff83b7bb493be3"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/unsigned.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "c5ab5fb74ebec4c50a90964d12e2dfe6b2c9fcfddb2061d8933af078b95ef286"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/unsigned.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "a5dbf86a6f7d6a9e6a18f7730ba4ddbe45da567d620e160a8d39e168f71203c8"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/pointer.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "f8f666b72f12bd22093f0ba8fb251fbd0189882a4a2d5dd2992e1d8e906dd2fb"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/pointer.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "7ddc369b46ac0b4bf51c91cb609b978140f04a9eeb3b0b66724387b0b7dbaf86"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/imag_address.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d5478bacc21d38b1aef8ed0b91face86cd90ab6e58084c245723937d8b750457"
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/imag_address.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "960c4f6d8291f42fd4f2de0910ff15a5cf57891185a2962e1b731df498a37bf4"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/dangling.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "0c83bb55416c5bc9d9107cd867c760199fc326017a1e7c4a0567e40d3edff69e"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/dangling.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "f38d38d82dbcb277dbd5666fdb2e4d47a1cdea1c6fd6fc2f1cdf729ee5a516d3"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/builtin_address.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "a4f6469f4ad72924e7d565a2f160607072b64d30abcd87134b0b83416e88e7e4"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/builtin_address.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "acde7167d1416d96119b1b003ed8e8938b2787e6714165348751d60554fee071"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-187/checks/vector.cpp",
+        "-o",
+        "/tmp/pa29-187/checks/rejected.o"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "5d3ac3de7806978cd118e0d8d1c45a85cde9c9936ce95cd648c5a41baeb76041"
+    },
+    {
+      "command": [
+        "clang++",
+        "-std=c++11",
+        "-fsyntax-only",
+        "/tmp/pa29-187/checks/vector.cpp"
+      ],
+      "status": 1,
+      "expected_success": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "228a9671bdee60ec336ea8a2c07a22197cf287ab9d7e44398aca02b7ba10d3be"
+    }
+  ],
+  "raw_inspection_path": "/tmp/pa29-187/checks/checks.json",
+  "raw_inspection_sha256": "2eab89cb9b96dd66c3f88ee654d87f6edc9ca8be55afa0c62560ab5f6385e923",
+  "files": {
+    "student.tests/pa29/controls187/abi-host.cpp": "0c9714044d5e149cd51a72168e38bad889b3140721b00fe701c8ba7f99044569",
+    "student.tests/pa29/controls187/abi-source.cpp": "6170b3d2d9dbe7ccb5228bad20d3bcbc3c3d02abd6dac12d279f51c8f104e5ef",
+    "student.tests/pa29/controls187/abi.h": "aac21830fd39cf0a2b2bbee1970b4f29fe065cce75cdb4e8f6becb67d1e89a4c",
+    "student.tests/pa29/controls187/adapter.cpp": "ddaf7df0979f153d3bc6076490e92207389428d5ff1cdd1b8f0f287cb2561896",
+    "student.tests/pa29/controls187/arithmetic.cpp": "1e067d3459c444e4d338f7c99930d8870e73eb87fcdfcc80ed36a51a6b53a796",
+    "student.tests/pa29/controls187/complex.cpp": "637416f71496d264585f873dd6db2184c4829fd9c8355f8bf005e4ff844fa9df",
+    "student.tests/pa29/controls187/constants.cpp": "4ee4f22a6509271419446aaf3d7a7094605295bd98b232a7870c3dda85911f26",
+    "student.tests/pa29/controls187/operations.cpp": "ec64a6407b2413bda70acb403fe1bb7806cd011bb500ca922c1bfc4512d11780",
+    "student.tests/pa29/controls187/variadic-host.cpp": "c19ee21da22b827b7fba779e47f8c0753564013e8a0cbce719244eed595ab22d",
+    "student.tests/pa29/controls187/variadic-source.cpp": "4c9b32fff38665f6c8561bcc93af8de1dcfdaaf9d9cf1d6daffc6408a12cdb38"
+  }
+}

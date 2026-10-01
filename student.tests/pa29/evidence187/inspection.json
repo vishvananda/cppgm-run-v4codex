@@ -1,0 +1,108 @@
+{
+  "artifacts": {
+    "checks/abi.lowir": {
+      "bytes": 5146,
+      "sha256": "e3c5db5d231f9ee586ac68f13a5878892abcbfe4bf6aa5d4fa3c2e8a494b069b"
+    },
+    "checks/adapter.again": {
+      "bytes": 4369,
+      "sha256": "9892280c81011ab6391029606555baa86cc7a7f5446853bf5956f307b2710fbd"
+    },
+    "checks/adapter.canonical": {
+      "bytes": 4369,
+      "sha256": "9892280c81011ab6391029606555baa86cc7a7f5446853bf5956f307b2710fbd"
+    },
+    "checks/adapter.canonical.mir": {
+      "bytes": 5255,
+      "sha256": "a5b48bbd579e83bc7023e2e7d8b8dae1b28db4b33141be36665a79a5329406fa"
+    },
+    "checks/adapter.lowir": {
+      "bytes": 4373,
+      "sha256": "58af993f5ba3ff1cfd555d204a42a1f27f86cd490745c8ef1f784816cce0232f"
+    },
+    "checks/adapter.lowir.mir": {
+      "bytes": 5255,
+      "sha256": "a5b48bbd579e83bc7023e2e7d8b8dae1b28db4b33141be36665a79a5329406fa"
+    },
+    "checks/arithmetic.lowir": {
+      "bytes": 13867,
+      "sha256": "0c746fe20b92c18092324ec2d452a161303278a7de66ca7f9cd11ab09c3f6eaa"
+    },
+    "checks/complex.lowir": {
+      "bytes": 12818,
+      "sha256": "1a74737c3a3352ce52021e1c21ebcd408ca3b5b1029aacef4dace1558545b7ca"
+    },
+    "checks/constants.lowir": {
+      "bytes": 2225,
+      "sha256": "709e180b9c87ff614694bd2d40d9721e029504bb4e36ce642fb3c32c1d5b85e9"
+    },
+    "checks/operations.lowir": {
+      "bytes": 16308,
+      "sha256": "d01d56d0ffffc7c1efd0775b4dbd459e17be05967e3256ef2aae920283bc55be"
+    },
+    "checks/variadic.lowir": {
+      "bytes": 7159,
+      "sha256": "cfec968ac7d7a02b1f132d7655920fe202e3e1168f388f3ccb1f414bfbb29c4f"
+    }
+  },
+  "adapter_functions": [
+    {
+      "name": "@f",
+      "abi": [
+        "abi",
+        "    param %v1 -> xmm0 : c32",
+        "    return c32 -> xmm0"
+      ],
+      "stack_bytes": 80,
+      "scratch_bytes": 48
+    },
+    {
+      "name": "@d",
+      "abi": [
+        "abi",
+        "    param %v2 -> xmm0 : f64",
+        "    param %v2.1 -> xmm1 : f64",
+        "    return c64 -> xmm0,xmm1"
+      ],
+      "stack_bytes": 96,
+      "scratch_bytes": 48
+    },
+    {
+      "name": "@l",
+      "abi": [
+        "abi",
+        "    param %v3 -> [rbp+16] : c80",
+        "    return c80 -> st0,st1"
+      ],
+      "stack_bytes": 112,
+      "scratch_bytes": 48
+    },
+    {
+      "name": "@main",
+      "abi": [
+        "abi",
+        "    return i32 -> rax"
+      ],
+      "stack_bytes": 400,
+      "scratch_bytes": 48
+    }
+  ],
+  "complex_symbols": [
+    ".text._ZN6HolderICfEC1ECf",
+    ".text._ZNK6HolderICfE3getEv",
+    ".text._Z4realICdEDTv18__real__fp_ERT_",
+    ".text._Z4imagICdEDTv18__imag__fp_ERT_",
+    "_ZL1c",
+    "_Z1fCf",
+    "_Z1dCd",
+    "_Z1lCe",
+    "_Z3addCdCd",
+    "_Z3mulCdCd",
+    "_Z3divCdCd",
+    "_ZN6HolderICfEC1ECf",
+    "_ZNK6HolderICfE3getEv",
+    "_Z4realICdEDTv18__real__fp_ERT_",
+    "_Z4imagICdEDTv18__imag__fp_ERT_",
+    "_ZN6HolderICfEC2ECf"
+  ]
+}
