@@ -1,0 +1,25 @@
+template<class...> using discard = void;
+template<class...> struct pack {};
+template<class A,class B,class C=void> struct fold;
+template<class A,class... Bs> struct fold<A,pack<Bs...>,discard<typename A::type>> { static const int value = 1; };
+template<class A,class B> struct fold<A,B,void> { static const int value = 2; };
+struct yes { typedef int type; };
+struct no {};
+static_assert(fold<yes,pack<int,char>>::value == 1,"erased alias target participates in ordering");
+static_assert(fold<yes,pack<>>::value == 1,"empty pack");
+static_assert(fold<no,pack<int>>::value == 2,"alias substitution must still fail");
+static_assert(fold<yes,int>::value == 2,"fallback");
+int main() { return fold<yes,pack<int>>::value != 1; }
+template<class> struct wrapped {};
+template<class A,class B> struct nested { static const int value=3; };
+template<class A> struct nested<A,wrapped<discard<typename A::type>>> { static const int value=4; };
+static_assert(nested<yes,wrapped<void>>::value==4,"nested alias substitution");
+static_assert(nested<no,wrapped<void>>::value==3,"nested substitution failure");
+template<class T,class U=void> struct qualified { static const int value=5; };
+template<class T> struct qualified<T*,discard<T>> { static const int value=6; };
+template<class T> struct qualified<const T*,void> { static const int value=7; };
+static_assert(qualified<int*>::value==6,"pointer alias shape");
+static_assert(qualified<const int*>::value==7,"qualification retained");
+template<int N,class T=void> struct number { static const int value=8; };
+template<class T> struct number<3,T*> { static const int value=9; };
+static_assert(number<3,int*>::value==9 && number<4,int*>::value==8,"values retained");

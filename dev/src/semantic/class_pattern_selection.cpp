@@ -92,9 +92,18 @@ bool Analyzer::match_partial_pattern(EntityId pattern, std::uint32_t arguments, 
         Probe(bool& v, bool& q) : value(v), prior(v), immediate(q), saved(q) { value = true; immediate = true; }
         ~Probe() { value = prior; immediate = saved; }
     } probe(template_type_probe,immediate_query_probe);
-    for (unsigned j = 0; j < source.count; ++j)
-        if (argument_types[source.offset+j] != argument_types[actual.offset+j] &&
-            substitute_argument(argument_types[source.offset+j],bindings,cache,frame) != argument_types[actual.offset+j]) return false;
+    // Alias applications retain substitution/access obligations but are not
+    // distinct types. Compare the memoized semantic shapes after substitution,
+    // including inside packs and template arguments. Raw IDs would distinguish
+    // a dependent void_t application from void during partial ordering.
+    for (unsigned j = 0; j < source.count; ++j) {
+        auto expected = argument_types[actual.offset+j];
+        auto pattern_arg = argument_types[source.offset+j];
+        if (pattern_arg == expected) continue;
+        auto substituted = substitute_argument(pattern_arg,bindings,cache,frame);
+        if (!substituted || (substituted != expected &&
+            template_signature_shape(substituted) != template_signature_shape(expected))) return false;
+    }
     // An alias may erase an argument's type from its result. Its source access
     // obligation still belongs to this candidate, never to the selected body.
     if (access && !substituted_type_access(argument_source,frame)) return false;

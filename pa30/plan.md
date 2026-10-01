@@ -1,8 +1,8 @@
-# PA30 compact implementation plan — handoff196
+# PA30 compact implementation plan — implementation197
 
 Stage base commit: `27029f978e65b78331233123922d342033d5d1f7`.
 Last reviewed commit: `27029f978e65b78331233123922d342033d5d1f7`.
-Target: **PA30 full-stage**. Phase: **implementation handoff, incomplete stage**.
+Target: **PA30 full-stage**. Phase: **implementation**.
 Previous goal turn: progress (validated parser handoff195); entry196 was clean.
 Entry196: `c67da7c829f78708b84ef36261a33e81a4896f5f`.
 Review markers retain the PA29 boundary; neither implementation handoff is audited.
@@ -88,3 +88,15 @@ fact keys, indexed lookup, precise demand and bounded candidate/IR work.
 - This handoff ends implementation196 only. Ralph schedules more implementation
   and independent audit before advancement. Final evidence/docs commit leaves
   tested implementation unchanged; check clean status after committing.
+
+## Active implementation197
+
+Entry: `407fcdc0fceea44331958d1f0dd312432773fd35`, clean; previous goal turn
+classified progress (validated handoff196). No live compiler/build process.
+Frozen entry binary and 153-case coverage/status binding retained in evidence197.
+Initial investigation: namespace lookup convergence and partial-specialization
+ordering. Owners consume canonical entity/type/argument identities; retain indexed
+namespace edges and candidate-local matching with TU-lifetime shape caches.
+Measure equivalent A/A and ABBA compiler/RSS/runtime/text workloads and corrected
+owner scaling; preserve 45-second mandatory compile limit. Expand through shared
+owners as reducers expose related failures. Review markers above are unchanged.
