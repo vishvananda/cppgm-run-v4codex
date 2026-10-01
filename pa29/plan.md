@@ -1,9 +1,24 @@
-# PA29 compact plan — implementation164 handoff
+# PA29 compact plan — implementation165 in progress
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `cce8634c3c835cf6d5e8f4fa5fea0db213959718`.
 Previous review: `1ab3499d7046daf5c298d958a8770b413edb3615`.
+Implementation165 entry: `61e023f39a4c1bafdccc484257ab51df98f87088`, **349/403**.
+Previous turn classification: progress (committed group and validation evidence);
+no live build/test process inherited. Baseline compiler and log frozen under
+`/tmp/pa29-165/`. Review markers above remain unchanged.
+
+Active group: evaluation and source-invocation intrinsics. Owners are the builtin
+registry, semantic invocation/default facts, constant execution/initialization,
+and typed lowering. Keep lexical source identity separate from invocation and
+evaluation mode; cache keys include context inputs. Each intrinsic performs O(1)
+context lookup; strings are interned once per value. Extend controls through
+templates, required/trial/runtime evaluation, stored initializers, caller defaults,
+and source remapping. Validate full course coverage, earlier stages, file audit,
+explicit personal controls, and frozen O0 compiler/runtime/RSS/text evidence.
+No optional optimization or growth budget is added. This active work is unfinished
+implementation; the review questions in the ledger below remain independent.
 Implementation164 entry: `e5690337eb69b59468d989a143030bd8dbdc8ee0`, **345/403**.
 Code tip: `e16108af`. Current: **349/403**, **54 failures**; four removed,
 none added. All 403 fixtures, references, sidecars and comparison rules remain.
