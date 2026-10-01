@@ -32,7 +32,7 @@ enum class Op {
     CopyBytes, ZeroBytes, Fence, Xadd, Exchange, Cmpxchg,
     Adc, Sbb, MulWide, Shld, Shrd, CmpxchgWide,
     Fmov, Fadd, Fsub, Fmul, Fdiv, Fneg, Fcompare, Fset,
-    Sitofp, Uitofp, Fptosi, Fptoui, Fpext, Fptrunc, Freturn, Fpop,
+    Sitofp, Uitofp, Fptosi, Fptoui, Fpext, Fptrunc, Fpush, Freturn, Fpop,
     EhPush, EhPop, EhDispatch, Throw, Resume, StackAlloc, TlsAddr, Syscall, Nop, Pause
 };
 // Image-owned runtime entities have identities after the external symbol range.

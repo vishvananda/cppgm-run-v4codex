@@ -142,7 +142,7 @@ void Selector::index(const lowir_model::Instruction& i)
 {
     if (!state(i.destination.index).uses) return;
     Operand base = value(arg(i,0),Type::Ptr), offset = value(arg(i,1),Type::I64);
-    if (arg(i,0).kind == lowir_model::Operand::Slot) base.address = true;
+    if (arg(i,0).kind == lowir_model::Operand::Slot || value_type(arg(i,0),Type::Ptr).kind() == Type::Object) base.address = true;
     std::uint64_t scale = i.type.bytes();
     if (offset.kind == Operand::Immediate && base.address) {
         base.displacement += offset.bits*scale;

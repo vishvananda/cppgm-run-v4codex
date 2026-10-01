@@ -40,7 +40,7 @@ void validate_instruction_shape(const Instruction& i)
     case Opcode::EhEnd: case Opcode::Resume: case Opcode::Unreachable: break;
     }
     require(variable || i.operands.count == arity, "invalid instruction arity");
-    if (scalar) require(i.type.scalar() || (i.type.kind() == Type::Object &&
+    if (scalar) require(i.type.scalar() || (i.type.complex() && i.opcode == Opcode::VaArg) || (i.type.kind() == Type::Object &&
         (i.opcode == Opcode::Load || i.opcode == Opcode::Store)), "invalid scalar instruction type");
     require(!i.is_volatile || i.opcode == Opcode::Load || i.opcode == Opcode::Store, "misplaced volatile flag");
     require(unsigned(i.catch_binding) <= unsigned(CatchBinding::ConstReference) &&

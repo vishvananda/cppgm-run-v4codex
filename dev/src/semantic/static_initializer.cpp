@@ -43,7 +43,7 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
 {
     StaticValue r;
     if (!n) {
-        if (types[target].kind == TypeKind::MemberPointer || floating_type(target))
+        if (types[target].kind == TypeKind::MemberPointer || floating_type(target) || complex_type(target))
             return constant_static_value(constant_zero(target));
         r.kind = StaticValue::Integer; return r;
     }
@@ -78,6 +78,8 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     if (incoming.kind == Conversion::Kind::User) return constant_static_value(constant_node_conversion(n,incoming,facts[n].scope));
     if (incoming.kind == Conversion::Kind::Construction) return r;
     if (kind == Kind::Literal && ast.literals[ast[n].literal].suffix) return r;
+    if (!reference_target && (complex_type(target) || complex_type(x.type)))
+        return constant_static_value(convert(evaluate(n,facts[n].scope),target,true));
     if (!reference_target && (integral(target) || floating_type(target)) &&
         (integral(x.type) || floating_type(x.type))) {
         auto value = convert(evaluate(n,facts[n].scope),target,true);

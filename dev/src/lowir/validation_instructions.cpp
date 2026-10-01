@@ -77,7 +77,7 @@ void Validator::instruction(const Instruction& i) const
     case Opcode::AtomicCompareExchange: count(5); atomic(i); break;
     case Opcode::AtomicThreadFence: case Opcode::AtomicSignalFence: count(1); atomic(i); break;
     case Opcode::VaStart: count(1); pointer(arg(0)); break;
-    case Opcode::VaArg: count(1); scalar(); pointer(arg(0)); break;
+    case Opcode::VaArg: count(1); require(i.type.scalar() || i.type.complex(),"invalid variadic type"); pointer(arg(0)); break;
     case Opcode::StackAlloc: count(1); integer(arg(0)); break;
     case Opcode::Call: require(i.operands.count != 0, "call without callee"); call(i); break;
     case Opcode::CopyObject: case Opcode::ZeroInit:

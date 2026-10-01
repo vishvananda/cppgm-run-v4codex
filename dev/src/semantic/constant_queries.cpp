@@ -43,6 +43,12 @@ std::uint32_t Analyzer::constant_query_object(QueryId id)
         }
         return address;
     }
+    if (!fact.selected && q.kind == QueryKind::Unary && (q.op == KW_REAL || q.op == KW_IMAG)) {
+        auto operand = query_edges[q.offset];
+        auto parent = constant_query_object(operand);
+        if (complex_type(query_fact(operand).expression.type)) return constant_subobject(parent,fact.expression.type,q.op == KW_IMAG);
+        return q.op == KW_REAL ? parent : 0;
+    }
     if (!fact.selected && q.kind == QueryKind::Unary && q.op == OP_STAR) {
         auto value = constants[query_value(query_edges[q.offset])];
         return value.valid && pointer(value.type) ? value.bits : 0;
@@ -129,6 +135,11 @@ Constant Analyzer::constant_query_call(QueryId id)
     if (intrinsic_function(e) == Intrinsic::IsConstantEvaluated) {
         ++evaluation_mode_uses;
         return Constant(types.fundamental(FT_BOOL),manifest_evaluation);
+    }
+    if (intrinsic_function(e) == Intrinsic::Complex) {
+        auto real = constant_query_conversion(query_edges[q.offset+1],conversions[fact.expression.conversions]);
+        auto imag = constant_query_conversion(query_edges[q.offset+2],conversions[fact.expression.conversions+1]);
+        return complex_constant(fact.expression.type,real,imag);
     }
     if (atomic_kind(e).op == AtomicOp::LockFree) {
         auto kind = atomic_kind(e);

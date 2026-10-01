@@ -52,7 +52,7 @@ std::uint64_t Analyzer::constant_offset(std::uint32_t id)
     if (!a.parent || a.located) return a.offset;
     auto parent = constant_addresses[a.parent];
     auto offset = constant_offset(a.parent);
-    if (types[parent.type].kind == TypeKind::Array) offset += a.selector * size(a.type);
+    if (types[parent.type].kind == TypeKind::Array || complex_type(parent.type)) offset += a.selector * size(a.type);
     else if (a.selector == ~std::uint64_t(0)) offset += size(a.type);
     else if (a.selector & 0x80000000U) offset += base_offset(parent.type,a.type);
     else { size(parent.type); offset += entities[a.selector].member_offset; }
@@ -136,6 +136,7 @@ Constant Analyzer::constant_base_read(std::uint32_t id)
     if (a.selector == ~std::uint64_t(0)) return Constant();
     if (types[constant_addresses[a.parent].type].kind == TypeKind::Array && storage.literal && !constant_addresses[a.parent].parent)
         return literal_element(ast[storage.literal].literal,Constant(types.fundamental(FT_UNSIGNED_LONG_INT),a.selector));
+    if (complex_type(constant_addresses[a.parent].type)) return evaluated_part(constant_base_read(a.parent),a.selector);
     if (!storage.frame && !(a.selector & 0x80000000U) && types[constant_addresses[a.parent].type].kind != TypeKind::Array && entities[a.selector].mutable_field)
         return Constant();
     auto v = evaluated_part(constant_base_read(a.parent),a.selector);
@@ -234,6 +235,11 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
     if (ast[n].kind == Kind::Member && x.entity && entities[x.entity].is_static) {
         if (!constant_arrow(first,object_uses[x.object_use].arrow)) return 0;
         return constant_entity_address(x.entity);
+    }
+    if (ast[n].kind == Kind::Unary && (ast[n].op == KW_REAL || ast[n].op == KW_IMAG)) {
+        auto parent = constant_address(first,s);
+        if (complex_type(expressions[first].type)) return constant_subobject(parent,x.type,ast[n].op == KW_IMAG);
+        return ast[n].op == KW_REAL ? parent : 0;
     }
     if (ast[n].kind == Kind::Unary && ast[n].op == OP_STAR) {
         auto v = constant_indirect(evaluate(first,s)); return v.valid && pointer(v.type) ? v.bits : 0;
@@ -379,7 +385,8 @@ StaticValue Analyzer::constant_static_value(Constant v)
         } else {
             r.kind = StaticValue::Integer; r.bits = v.bits ? entities[value.member].member_offset + 1 + r.addend : 0;
         }
-    } else if (floating_type(v.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(v); r.signaling = floating_signaling(v); }
+    } else if (complex_type(v.type)) { r.kind = StaticValue::Complex; r.bits = v.bits; }
+    else if (floating_type(v.type)) { r.kind = StaticValue::Floating; r.floating = floating_value(v); r.signaling = floating_signaling(v); }
     else if (integral(v.type) || fundamental(v.type,FT_NULLPTR_T)) { r.kind = StaticValue::Integer; r.bits = v.bits; }
     return r;
 }

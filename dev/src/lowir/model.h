@@ -46,6 +46,9 @@ public:
     enum Kind { Void, I1, I8, U8, I16, U16, I32, U32, I64, I128, F32, F64, F80, Ptr, Object };
     Type(Kind k = Void) : code_(k) {}
     static Type object(std::uint64_t bytes, std::uint64_t alignment);
+    static Type complex(Type component);
+    bool complex() const { return kind() == Object && (code_ >> 48); }
+    Type component() const { return Type(Kind(code_ >> 48)); }
     // Same 128-bit operations, distinct SysV stack alignment for bit-precise
     // scalars. The decoration travels in signatures, values and the IR view.
     static Type integer128_align8() { Type t(I128); t.code_ |= std::uint64_t(1)<<8; return t; }

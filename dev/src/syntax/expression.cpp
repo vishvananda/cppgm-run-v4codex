@@ -227,7 +227,7 @@ NodeId Parser::primary()
 NodeId Parser::unary()
 {
     if (in.is("++") || in.is("--") || in.is("*") || in.is("&") ||
-        in.is("+") || in.is("-") || in.is("!") || in.is("~")) {
+        in.is("+") || in.is("-") || in.is("!") || in.is("~") || in.peek().op == KW_REAL || in.peek().op == KW_IMAG) {
         NodeId node = leaf(Kind::Unary);
         ast.append(node, unary());
         return node;

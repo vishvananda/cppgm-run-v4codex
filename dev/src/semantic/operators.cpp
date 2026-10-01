@@ -55,6 +55,11 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         } else r.type = types.compound(TypeKind::Pointer, a.type);
         return r;
     }
+    if (op == KW_REAL || op == KW_IMAG) {
+        r = complex_projection(a,op);
+        if (!r.type) throw std::runtime_error("invalid complex component operand");
+        return r;
+    }
     TypeId t = decay(a.type);
     if (op == OP_STAR) {
         if (!pointer(t) || fundamental(types[t].child, FT_VOID)) throw std::runtime_error("invalid dereference");
@@ -76,7 +81,7 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         return r;
     }
     if (op == OP_LNOT) { record_conversion(r, operand, boolean_conversion(operand)); r.type = types.fundamental(FT_BOOL); return r; }
-    if (!(op == OP_PLUS && pointer(t)) && (!arithmetic(t) || (op == OP_COMPL && !integral(t))))
+    if (!(op == OP_PLUS && pointer(t)) && (!arithmetic(t) || (op == OP_COMPL && !integral(t) && !complex_type(t))))
         throw std::runtime_error("invalid unary arithmetic");
     r.type = promote_expression(operand);
     record_conversion(r, operand, conversion(operand, r.type));
@@ -101,6 +106,8 @@ TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression&
         record_conversion(r, an, boolean_conversion(an)); record_conversion(r, bn, boolean_conversion(bn));
         return types.fundamental(FT_BOOL);
     }
+    if (compare && op != OP_EQ && op != OP_NE && (complex_type(a) || complex_type(b)))
+        throw std::runtime_error("complex values have no ordering");
     if (compare) {
         bool equality = op == OP_EQ || op == OP_NE;
         TypeId common = 0;

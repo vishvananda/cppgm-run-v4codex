@@ -49,6 +49,12 @@ Type Type::object(std::uint64_t bytes, std::uint64_t alignment)
     t.code_ |= std::uint64_t(bytes) << 8 | std::uint64_t(shift) << 40;
     return t;
 }
+Type Type::complex(Type component)
+{
+    require(component == F32 || component == F64 || component == F80,"invalid complex component");
+    Type t = object(component.bytes()*2,component.alignment());
+    t.code_ |= std::uint64_t(component.kind()) << 48; return t;
+}
 std::uint32_t Type::bytes() const
 {
     static const unsigned sizes[] = {0,1,1,1,2,2,4,4,8,16,4,8,16,8};
@@ -56,7 +62,7 @@ std::uint32_t Type::bytes() const
 }
 std::uint32_t Type::alignment() const
 {
-    return kind() == Object ? std::uint32_t(1) << (code_ >> 40) : kind() == I128 ? 8 : bytes();
+    return kind() == Object ? std::uint32_t(1) << ((code_ >> 40) & 255) : kind() == I128 ? 8 : bytes();
 }
 unsigned Type::width() const
 {

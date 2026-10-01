@@ -153,7 +153,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         if (placeholder_objects.get(e)) throw std::runtime_error("use before auto type deduction");
         r.entity = e; facts.edit(n).entity = e;
         auto intrinsic = intrinsic_function(e);
-        bool atomic_family = intrinsic == Intrinsic::Atomic;
+        bool atomic_family = intrinsic == Intrinsic::Atomic || intrinsic == Intrinsic::Complex;
         if (entities[e].kind == EntityKind::Overload || (definitions && entities[e].template_info) || atomic_family || (intrinsic >= Intrinsic::AddOverflow && intrinsic <= Intrinsic::MulOverflow) || (intrinsic >= Intrinsic::Clzg && intrinsic <= Intrinsic::Popcountg)) {
             r.form = ExpressionForm::Overload; r.category = ValueCategory::Lvalue;
             ScopeId naming = naming_class(name_owner(ast[n].detail, s));

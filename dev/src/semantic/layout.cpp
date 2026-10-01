@@ -49,6 +49,7 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment, bool probe, bool* comple
         std::uint64_t rounded = 1; while (rounded < bytes) rounded *= 2;
         return rounded;
     }
+    if (complex_type(id)) return size(complex_component(id),alignment) * (alignment ? 1 : 2);
     if (t.kind == TypeKind::MemberPointer) return !alignment && types[t.child].kind == TypeKind::Function ? 16 : 8;
     if (t.kind == TypeKind::Array) {
         if (t.unknown_bound) { if (probe) return absent(); throw std::runtime_error("sizeof incomplete array"); }

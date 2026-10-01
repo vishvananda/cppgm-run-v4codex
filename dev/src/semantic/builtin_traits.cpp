@@ -244,7 +244,7 @@ bool Analyzer::builtin_type_property(unsigned operation, TypeId t)
     bool ref = type.kind == TypeKind::LRef || type.kind == TypeKind::RRef;
     bool integer = type.kind == TypeKind::Fundamental && integral(t);
     bool floating = type.kind == TypeKind::Fundamental && floating_type(t);
-    bool number = integer || floating;
+    bool number = integer || floating || complex_type(t);
     bool function = type.kind == TypeKind::Function;
     bool ptr = type.kind == TypeKind::Pointer, member = type.kind == TypeKind::MemberPointer;
     switch (trait) {

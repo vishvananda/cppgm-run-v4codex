@@ -13,6 +13,10 @@ Value Procedural::intrinsic_call(NodeId n, semantic::Intrinsic intrinsic)
     auto argument = [&](unsigned i) {
         return converted(sem.call_argument(fact,i),sem.conversion_fact(fact.conversions+i));
     };
+    if (intrinsic == semantic::Intrinsic::Complex) {
+        auto real = argument(0); auto imag = argument(1);
+        return complex_construct(fact.type,real,imag);
+    }
     if (intrinsic == semantic::Intrinsic::FltRounds) {
         auto target = symbol(sem.facts[n].entity);
         auto mode = emit(Opcode::Call,IRType::I32,{Operand::symbol(target)});

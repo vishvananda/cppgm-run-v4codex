@@ -10,7 +10,12 @@ std::uint32_t Analyzer::prepare_zero_initialization(TypeId t)
         plan.kind = ZeroInitialization::Reference; plan.bytes = plan.alignment = 8; plan.bulk = false;
     } else {
         plan.bytes = size(t); plan.alignment = size(t,true);
-        if (type.kind == TypeKind::MemberPointer) {
+        if (complex_type(t)) {
+            plan.kind = ZeroInitialization::Composite;
+            auto component = types.qualify(complex_component(t),type.cv);
+            auto child = prepare_zero_initialization(component);
+            parts.push_back({child,0}); parts.push_back({child,size(component)});
+        } else if (type.kind == TypeKind::MemberPointer) {
             plan.kind = ZeroInitialization::MemberPointer;
             plan.bulk &= types[type.child].kind == TypeKind::Function;
         } else if (type.kind == TypeKind::Array) {

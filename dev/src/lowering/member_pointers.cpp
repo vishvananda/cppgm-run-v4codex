@@ -21,6 +21,7 @@ Value Procedural::member_pointer_value(EntityId member, TypeId target, std::int6
 }
 Value Procedural::truth_operand(Value value)
 {
+    if (sem.complex_type(value.type)) return convert(value,sem.types.fundamental(FT_BOOL));
     if (sem.types[value.type].kind == TypeKind::MemberPointer && value.ir == IRType::I128 && !value.member_zero_adjustment)
         return coerce(value,IRType::I64,true,true);
     return value;

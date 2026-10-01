@@ -57,7 +57,10 @@ ETokenType classify_simple(TextView spelling)
         {"]", OP_RSQUARE},
         {"^", OP_XOR},
         {"^=", OP_XORASS},
+        {"_Complex", KW_COMPLEX}, {"__complex", KW_COMPLEX}, {"__complex__", KW_COMPLEX},
+        {"__imag", KW_IMAG}, {"__imag__", KW_IMAG},
         {"__int128", KW_INT128}, {"__int128_t", KW_INT128},
+        {"__real", KW_REAL}, {"__real__", KW_REAL},
         {"__uint128", KW_UINT128}, {"__uint128_t", KW_UINT128},
         {"alignas", KW_ALIGNAS},
         {"alignof", KW_ALIGNOF},
@@ -187,6 +190,9 @@ const char* simple_name(ETokenType type)
     case KW_DELETE: return "KW_DELETE";
     case KW_DO: return "KW_DO";
     case KW_DOUBLE: return "KW_DOUBLE";
+    case KW_COMPLEX: return "KW_COMPLEX";
+    case KW_REAL: return "KW_REAL";
+    case KW_IMAG: return "KW_IMAG";
     case KW_INT128: return "KW_INT128";
     case KW_UINT128: return "KW_UINT128";
     case KW_DYNAMIC_CAST: return "KW_DYNAMIC_CAST";
@@ -316,14 +322,14 @@ const char* fundamental_name(EFundamentalType type)
         "double",
         "long double",
         "void",
-        "nullptr_t", "__int128", "unsigned __int128", "_BitInt", "unsigned _BitInt",
+        "nullptr_t", "__int128", "unsigned __int128", "_BitInt", "unsigned _BitInt", "_Complex float", "_Complex double", "_Complex long double",
     };
     return names[type];
 }
 
 unsigned fundamental_width(EFundamentalType type)
 {
-    static const unsigned char widths[] = {1, 2, 4, 8, 8, 1, 2, 4, 8, 8, 4, 1, 2, 4, 1, 4, 8, 16, 0, 8, 16, 16, 0, 0};
+    static const unsigned char widths[] = {1, 2, 4, 8, 8, 1, 2, 4, 8, 8, 4, 1, 2, 4, 1, 4, 8, 16, 0, 8, 16, 16, 0, 0, 8, 16, 32};
     return widths[type];
 }
 

@@ -2,10 +2,15 @@
 #include "native/model.h"
 #include <algorithm>
 namespace native {
-// PA24's object boundary has integer eightbytes only. Classification is shared
-// by both sides of every call. Failed multiword allocation consumes no GPRs.
+// Ordinary PA24 objects use integer eightbytes; complex primitives retain
+// their floating classification. Failed multiword allocation consumes no registers.
 inline bool aggregate(Type t) { return t == Type::I128 || t.kind() == Type::Object; }
-inline bool indirect_return(Type t) { return t.kind() == Type::Object && t.bytes() > 16; }
+inline bool indirect_return(Type t) { return t.kind() == Type::Object && !t.complex() && t.bytes() > 16; }
+inline Type abi_chunk_type(Type t, unsigned part) {
+    if (t.complex()) return Type::F64; // packed pair of floats, or one double
+    unsigned bytes = std::min(8u,t.bytes()-part*8);
+    return bytes > 4 ? Type::I64 : bytes > 2 ? Type::U32 : bytes > 1 ? Type::U16 : Type::U8;
+}
 inline Type chunk_type(unsigned bytes) {
     return bytes > 4 ? Type::I64 : bytes > 2 ? Type::U32 : bytes > 1 ? Type::U16 : Type::U8;
 }
@@ -22,8 +27,12 @@ struct AbiCursor {
         static const int regs[] = {XR_RDI,XR_RSI,XR_RDX,XR_RCX,XR_R8,XR_R9};
         AbiLocation r;
         unsigned chunks = aggregate(t) ? (t.bytes()+7)/8 : 1;
-        if ((t == Type::F32 || t == Type::F64) && fp < 8) r.parts[0] = Operand::r(xmm(fp++));
-        else if (!t.floating() && chunks <= 2 && gp+chunks <= 6) {
+        if (t.complex() && t.component() != Type::F80 && fp+chunks <= 8) {
+            r.count = chunks;
+            for (unsigned k = 0; k < chunks; ++k) r.parts[k] = Operand::r(xmm(fp++));
+        }
+        else if ((t == Type::F32 || t == Type::F64) && fp < 8) r.parts[0] = Operand::r(xmm(fp++));
+        else if (!t.complex() && !t.floating() && chunks <= 2 && gp+chunks <= 6) {
             r.count = chunks;
             for (unsigned k = 0; k < chunks; ++k) r.parts[k] = Operand::r(regs[gp++]);
         } else {

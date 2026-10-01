@@ -10,6 +10,10 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         named |= types[c.expression.type].kind == TypeKind::Named;
         class_operand |= class_value(c.expression.type) || pattern_class_type(c.expression.type);
     }
+    if ((q.op == KW_REAL || q.op == KW_IMAG) && args.size() == 1) {
+        TypeQueryFact r; r.expression = complex_projection(args[0],q.op);
+        return r.expression.type ? r : TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+    }
     if (q.op == OP_AMP && args.size() == 1 && args[0].form == ExpressionForm::Overload) {
         // An address initializer may supply the target function type later.
         // Do not form pointer-to-unknown from an unqualified overload family.

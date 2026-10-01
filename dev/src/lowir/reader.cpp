@@ -90,6 +90,7 @@ Type Reader::type()
 {
     static const char* const types[] = {"void","i1","i8","u8","i16","u16","i32","u32","i64","i128","f32","f64","f80","ptr"};
     std::string s = word();
+    if (s == "c32" || s == "c64" || s == "c80") return Type::complex(s == "c32" ? Type::F32 : s == "c64" ? Type::F64 : Type::F80);
     if (s == "i128a8") return Type::integer128_align8();
     for (unsigned k = 0; k < sizeof(types)/sizeof(*types); ++k) if (s == types[k]) return Type(Type::Kind(k));
     if (s.size() > 6 && s.substr(0,4) == "obj<" && s.back() == '>') {

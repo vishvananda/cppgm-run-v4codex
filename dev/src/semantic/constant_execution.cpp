@@ -200,6 +200,11 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
         ++evaluation_mode_uses;
         return Constant(types.fundamental(FT_BOOL),manifest_evaluation);
     }
+    if (intrinsic_function(e) == Intrinsic::Complex) {
+        auto real = constant_node_conversion(call_argument(call,0),conversions[call.conversions],s);
+        auto imag = constant_node_conversion(call_argument(call,1),conversions[call.conversions+1],s);
+        return complex_constant(call.type,real,imag);
+    }
     if (call.form == ExpressionForm::InvokeMemberData) return constant_read(constant_address(n,s));
     if (call.form >= ExpressionForm::FloatFinite && call.form <= ExpressionForm::FloatClassify)
         return floating_builtin_constant(call,s);

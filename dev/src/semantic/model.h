@@ -417,7 +417,7 @@ struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool 
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
 enum class Intrinsic : unsigned char {
     None, VaStart, VaEnd, VaCopy, StackAlloc, Expect, Abort, Unreachable, Atomic,
-    Clz, Ctz, Popcount, Parity, Ffs, Bswap, Clzg, Ctzg, Popcountg, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, IsConstantEvaluated, SourceFile, SourceLine, SourceFunction, SourceColumn
+    Clz, Ctz, Popcount, Parity, Ffs, Bswap, Clzg, Ctzg, Popcountg, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, IsConstantEvaluated, SourceFile, SourceLine, SourceFunction, SourceColumn, Complex
 };
 enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatNaN, FloatInfinite, FloatNormal, FloatSignbit, FloatGreater, FloatGreaterEqual, FloatLess, FloatLessEqual, FloatLessGreater, FloatUnordered, FloatClassify, InitializerList, ListValue, BoundMember, Expect, Typeid, DynamicCast, TypeinfoEqual, TypeinfoUnequal, InvokeMemberData };
 struct RttiExpression {
@@ -600,7 +600,7 @@ struct DeleteExpression {
     bool global_deallocation = false;
 };
 struct StaticValue {
-    enum Kind : unsigned char { Invalid, Integer, Floating, Address, String, MemberFunction, Vtable } kind = Invalid;
+    enum Kind : unsigned char { Invalid, Integer, Floating, Complex, Address, String, MemberFunction, Vtable } kind = Invalid;
     std::uint64_t bits = 0;
     long double floating = 0;
     bool signaling = false;

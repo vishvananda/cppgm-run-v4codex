@@ -75,6 +75,7 @@ void Encoder::floating(const Instruction& i)
         if (dst.kind == Operand::Reg) mov(dst,Operand::r(XR_R10)); else store(dst,Operand::r(XR_R10),Type::I64);
         return;
     }
+    case Op::Fpush: x87_load(dst,i.type); return;
     case Op::Freturn:
         x87_load(dst,i.type);
         if (function->shared_epilogue) branch(epilogue); else epilogue_code(); return;

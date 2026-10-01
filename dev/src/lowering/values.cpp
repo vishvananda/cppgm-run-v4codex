@@ -13,6 +13,7 @@ IRType Procedural::type(TypeId id)
         if (sem.entities[t.entity].underlying) return type(sem.entities[t.entity].underlying);
         return IRType::object(sem.object_size(id), sem.object_alignment(id));
     case TypeKind::Fundamental: {
+        if (sem.complex_type(id)) return IRType::complex(type(sem.complex_component(id)));
         if (semantic::bit_integer_kind(t.fundamental)) {
             auto bits = t.bound; bool unsign = t.fundamental == FT_UBITINT;
             return bits <= 8 ? (unsign ? IRType::U8 : IRType::I8) : bits <= 16 ? (unsign ? IRType::U16 : IRType::I16) :
@@ -101,6 +102,10 @@ Value Procedural::store(Value v, Value location)
         auto bits = atomic_bits(v,raw);
         emit(Opcode::AtomicStore,raw,{bits.operand,address(location).operand,Operand::integer(5)}); return v;
     }
+    if (sem.complex_type(location.type)) {
+        auto real = load(complex_component(v,0)); auto imag = load(complex_component(v,1));
+        store(real,complex_component(location,0)); store(imag,complex_component(location,1)); return v;
+    }
     if (type(location.type).kind() == IRType::Object) {
         Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(location.type); copy.alignment = sem.object_alignment(location.type);
         emit(copy,{v.operand,address(location).operand}); return v;
@@ -157,6 +162,7 @@ Value Procedural::convert(Value v, TypeId to, bool fold_widen, bool preserve_wid
         return address(v);
     }
     TypeId from = v.type;
+    if (sem.complex_type(from) || sem.complex_type(to)) return complex_convert(v,to);
     if (sem.types[to].kind == TypeKind::MemberPointer && (!from || sem.types[from].kind != TypeKind::MemberPointer))
         return member_pointer_value(0,to);
     v = normalize_bit_integer(load(v));

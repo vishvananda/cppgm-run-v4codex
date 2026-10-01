@@ -1,11 +1,23 @@
 # PA29 compact plan — audit186
 
-Target: **PA29 full-stage**. Phase: **checkpoint audit complete; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation187; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `52070178897f5894edaf2f35d03a734b781979d4`.
 Audit entry: `152396e2` (392/403; 11 failures).
 Last reviewed commit: `2df00585bd10d4e2e068934394dffc8adb0a47ed`.
 Reviewed range: **`52070178..2df00585`**, all three accepted handoffs and fixes.
+
+Implementation187 entry: `5ef7f89a3bd6be203c6a845432b417bcf518eb07`,
+392/403 (11 failures), clean tree. Previous audit turn supplied new validation
+evidence (progress). Existing stage-base and review markers above are preserved.
+The first owner is GNU complex types: syntax → canonical component type →
+component/value facts → typed LowIR storage/signatures → native SysV placement.
+Complete component access, construction, conversions, storage and call/return
+boundaries together; work is bounded per component, with no optional optimizer.
+Validate both failing complex fixtures, explicit scalar/template/ABI and adapter
+controls, prior PAs and file audit. Freeze entry/final binaries for latency/RSS,
+runtime/text evidence. Binary128 needs separate precision/arithmetic machinery;
+the remaining vector/contextual, hosted demand and contract questions stay open.
 
 ## Reviewed ownership and repairs
 

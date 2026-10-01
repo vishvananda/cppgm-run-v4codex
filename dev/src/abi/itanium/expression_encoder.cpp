@@ -9,7 +9,7 @@ const char* const operations[] = {
     "an", "or", "eo", "ls", "rs", "eq", "ne", "lt", "gt", "le", "ge",
     "aa", "oo", "cm", "pm", "pt", "ix", "sc", "dc", "cc", "rc", "dt", "sz", "az",
     "pp", "mm", "pp_", "mm_", "aS", "pL", "mI", "mL", "dV", "rM", "aN", "oR", "eO", "lS", "rS", "nx",
-    "dl", "da", "gsdl", "gsda", "ds"
+    "dl", "da", "gsdl", "gsda", "ds", "v18__real__", "v18__imag__"
 };
 }
 Id operation(const std::string& code) {

@@ -110,13 +110,17 @@ void Selector::control(const lowir_model::Instruction& i)
         if (i.type == Type()) emit(Op::Return,i.type,{});
         else if (aggregate(i.type)) {
             Operand from = value(arg(i,0),i.type);
-            if (indirect_return(i.type)) {
+            if (i.type.complex() && i.type.component() == Type::F80) {
+                f.scratch_bytes = 48;
+                emit(Op::Fpush,Type::F80,{fragment(from,16)});
+                emit(Op::Fpush,Type::F80,{fragment(from,0)});
+            } else if (indirect_return(i.type)) {
                 move(Operand::r(XR_R10),indirect_result,Type::Ptr);
                 object_move(Operand::mem(XR_R10),from,i.type);
                 move(Operand::r(XR_RAX),indirect_result,Type::Ptr);
             } else {
-                move(Operand::r(XR_RAX),fragment(from,0),chunk_type(std::min(8u,i.type.bytes())));
-                if (i.type.bytes() > 8) move(Operand::r(XR_RDX),fragment(from,8),chunk_type(i.type.bytes()-8));
+                move(Operand::r(i.type.complex() ? xmm(0) : XR_RAX),fragment(from,0),abi_chunk_type(i.type,0));
+                if (i.type.bytes() > 8) move(Operand::r(i.type.complex() ? xmm(1) : XR_RDX),fragment(from,8),abi_chunk_type(i.type,1));
             }
             emit(Op::Return,Type(),{});
         }

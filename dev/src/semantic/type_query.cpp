@@ -221,7 +221,7 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
             q.value = ast[ast[first].detail].first != ast[ast[first].detail].last;
         if (node.kind == Kind::Unary && node.flags) q.value = 2;
         if (node.kind == Kind::Subscript) q.op = OP_LSQUARE;
-        q.name = q.op == OP_DOTSTAR ? 0 : operator_name(q.op); q.context = s;
+        q.name = q.op == OP_DOTSTAR || q.op == KW_REAL || q.op == KW_IMAG ? 0 : operator_name(q.op); q.context = s;
         while (!template_object_context_index.get(q.context) &&
             (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
             q.context = scopes[q.context].parent;

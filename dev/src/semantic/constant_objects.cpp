@@ -43,6 +43,7 @@ Constant Analyzer::evaluated_object(TypeId t, const std::vector<EvaluatedPart>& 
 }
 Constant Analyzer::evaluated_part(Constant v, std::uint64_t selector)
 {
+    if (v.valid && complex_type(v.type)) return selector < 2 ? complex_part(v,selector) : Constant();
     if (!v.valid || (!class_value(v.type) && types[v.type].kind != TypeKind::Array)) return Constant();
     auto o = evaluated_objects[v.bits];
     if (types[v.type].kind != TypeKind::Array) {
@@ -58,6 +59,7 @@ Constant Analyzer::evaluated_part(Constant v, std::uint64_t selector)
 }
 Constant Analyzer::constant_zero(TypeId t)
 {
+    if (complex_type(t)) { auto zero = floating_constant(complex_component(t),0); return complex_constant(t,zero,zero); }
     auto type = types[t];
     if (!class_value(t) && type.kind != TypeKind::Array) return convert(Constant(types.fundamental(FT_INT),0),t,true);
     std::vector<EvaluatedPart> parts;

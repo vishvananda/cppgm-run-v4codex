@@ -83,7 +83,7 @@ void Selector::call(const lowir_model::Instruction& i)
                 stack_moves.push_back(m);
             } else for (unsigned part = 0; part < placement.count; ++part) {
                 Assignment m; m.from = fragment(from,part*8); m.to = placement.parts[part];
-                m.type = chunk_type(std::min(8u,t.bytes()-part*8)); moves.push_back(m);
+                m.type = abi_chunk_type(t,part); moves.push_back(m);
             }
             continue;
         }
@@ -194,9 +194,13 @@ void Selector::call(const lowir_model::Instruction& i)
         }
         auto dest = allocate(i.destination.index,i.type);
         if (aggregate(i.type)) {
-            if (!indirect_return(i.type)) {
-                move(fragment(dest,0),Operand::r(XR_RAX),chunk_type(std::min(8u,i.type.bytes())));
-                if (i.type.bytes() > 8) move(fragment(dest,8),Operand::r(XR_RDX),chunk_type(i.type.bytes()-8));
+            if (i.type.complex() && i.type.component() == Type::F80) {
+                f.scratch_bytes = 48;
+                emit(Op::Fpop,Type::F80,{fragment(dest,0)});
+                emit(Op::Fpop,Type::F80,{fragment(dest,16)});
+            } else if (!indirect_return(i.type)) {
+                move(fragment(dest,0),Operand::r(i.type.complex() ? xmm(0) : XR_RAX),abi_chunk_type(i.type,0));
+                if (i.type.bytes() > 8) move(fragment(dest,8),Operand::r(i.type.complex() ? xmm(1) : XR_RDX),abi_chunk_type(i.type,1));
             }
         }
         else if (i.type == Type::F80) { f.scratch_bytes = 48; emit(Op::Fpop,i.type,{dest}); }
@@ -204,6 +208,9 @@ void Selector::call(const lowir_model::Instruction& i)
             normalize_register(Operand::r(XR_RAX),i.type);
             move(dest,Operand::r(i.type.floating() ? xmm(0) : XR_RAX),i.type);
         }
+    } else if (i.type.complex() && i.type.component() == Type::F80) {
+        f.scratch_bytes = 48; auto discard = home(0,Type::F80,true);
+        emit(Op::Fpop,Type::F80,{discard}); emit(Op::Fpop,Type::F80,{discard});
     } else if (i.type == Type::F80) {
         f.scratch_bytes = 48; emit(Op::Fpop,i.type,{home(0,i.type,true)});
     }

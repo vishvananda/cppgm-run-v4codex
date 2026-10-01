@@ -76,6 +76,7 @@ const char* register_name(int reg) {
 std::string type_name(Type t) {
     if (t == Type::I128 && t.abi_alignment() == 8) return "i128a8";
     static const char* const names[] = {"void","i1","i8","u8","i16","u16","i32","u32","i64","i128","f32","f64","f80","ptr"};
+    if (t.complex()) return t.component() == Type::F32 ? "c32" : t.component() == Type::F64 ? "c64" : "c80";
     if (t.kind() != Type::Object) return names[t.kind()];
     std::ostringstream s; s << "obj<" << t.bytes() << 'x' << t.alignment() << '>'; return s.str();
 }

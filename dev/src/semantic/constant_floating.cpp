@@ -16,6 +16,7 @@ long double Analyzer::floating_value(Constant v) const
 }
 bool Analyzer::constant_truth(Constant v) const
 {
+    if (complex_type(v.type)) return floating_constants[std::uint32_t(v.bits)].value != 0 || floating_constants[v.bits >> 32].value != 0;
     return floating_type(v.type) ? floating_value(v) != 0 : v.bits != 0;
 }
 Constant Analyzer::floating_constant(TypeId t, long double v, bool special, bool signaling)

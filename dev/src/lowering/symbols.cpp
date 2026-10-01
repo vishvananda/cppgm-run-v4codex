@@ -34,6 +34,9 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     case TypeKind::DependentBitInt:
         result = abi.make(Kind::BitInt,abi_query(t.bound),sem.unsigned_type(t.child)); break;
     case TypeKind::Fundamental: {
+        if (sem.complex_type(id)) {
+            result = abi.builtin(AbiBuiltinTypeKind(ABI_BUILTIN_TYPE_COMPLEX_FLOAT + t.fundamental - FT_COMPLEX_FLOAT)); break;
+        }
         if (semantic::bit_integer_kind(t.fundamental)) {
             result = abi.make(Kind::BitInt,0,sem.unsigned_type(id),0,t.bound); break;
         }

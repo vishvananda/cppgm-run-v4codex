@@ -13,6 +13,12 @@ namespace cppgm { namespace semantic {
 // The parser calls this boundary before proceeding to the next source region.
 class Analyzer : public syntax::DeclarationConsumer {
 public:
+    bool complex_type(TypeId t) const;
+    TypeId complex_component(TypeId t);
+    Constant complex_constant(TypeId t, Constant real, Constant imag);
+    Constant complex_part(Constant value, unsigned part);
+    Constant complex_conversion(Constant value, TypeId target);
+    Constant complex_binary(ETokenType op, Constant left, Constant right);
     ETokenType compound_operation(ETokenType op) const;
     const FoldStep& fold_step(std::uint32_t id) const { return fold_steps[id]; }
     std::uint32_t fold_root(NodeId node) const { return fold_roots.get(node); }
@@ -1473,6 +1479,9 @@ private:
     TypeId arithmetic_type(TypeId a, TypeId b);
     TypeId composite_pointer(TypeId a, TypeId b);
     bool object_pointer(TypeId t);
+    Expression complex_projection(Expression source, ETokenType op);
+    EntityId complex_signature(EntityId family, TypeId first, TypeId second);
+    Index complex_signatures;
     bool arithmetic(TypeId t) const;
     bool fundamental(TypeId t, EFundamentalType f) const;
     bool pointer(TypeId t) const;

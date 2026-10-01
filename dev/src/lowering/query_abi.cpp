@@ -6,6 +6,7 @@ namespace {
 const char* query_operation(ETokenType op, bool unary)
 {
     switch (op) {
+    case KW_REAL: return "v18__real__"; case KW_IMAG: return "v18__imag__";
     case OP_PLUS: return unary ? "ps" : "pl";
     case OP_MINUS: return unary ? "ng" : "mi";
     case OP_STAR: return unary ? "de" : "ml";

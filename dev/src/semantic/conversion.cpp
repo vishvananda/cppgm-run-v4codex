@@ -32,7 +32,7 @@ TypeId Analyzer::decay(TypeId t)
 }
 bool Analyzer::arithmetic(TypeId t) const
 {
-    return (integral(t) && !scoped_enum(t)) || (types[t].kind == TypeKind::Fundamental &&
+    return complex_type(t) || (integral(t) && !scoped_enum(t)) || (types[t].kind == TypeKind::Fundamental &&
         types[t].fundamental >= FT_FLOAT && types[t].fundamental <= FT_LONG_DOUBLE);
 }
 TypeId Analyzer::promote(TypeId t)
@@ -58,6 +58,10 @@ TypeId Analyzer::arithmetic_type(TypeId a, TypeId b)
 {
     if (!arithmetic(a) || !arithmetic(b)) throw std::runtime_error("arithmetic operands required");
     a = promote(a); b = promote(b);
+    if (complex_type(a) || complex_type(b)) {
+        auto component = arithmetic_type(complex_type(a) ? complex_component(a) : a,complex_type(b) ? complex_component(b) : b);
+        return types.fundamental(EFundamentalType(FT_COMPLEX_FLOAT + types[component].fundamental - FT_FLOAT));
+    }
     if (!integral(a) || !integral(b)) {
         if (fundamental(a, FT_LONG_DOUBLE) || fundamental(b, FT_LONG_DOUBLE)) return types.fundamental(FT_LONG_DOUBLE);
         if (fundamental(a, FT_DOUBLE) || fundamental(b, FT_DOUBLE)) return types.fundamental(FT_DOUBLE);
@@ -183,6 +187,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
         std::vector<EntityId> matching;
         for (EntityId e : candidates(x.entity)) {
             ++candidate_work;
+            if (intrinsic_function(e) == Intrinsic::Complex) continue;
             if (definitions && entities[e].template_info) e = deduce_target(e,ft);
             if (e) require_deduced_return(e);
             if (!e || entities[e].type != ft) continue;
@@ -201,7 +206,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
     }
     TypeId from = x.type;
     if (!from) return c;
-    if (types[from].kind == TypeKind::Function && intrinsic_function(x.entity) == Intrinsic::IsConstantEvaluated) return c;
+    if (types[from].kind == TypeKind::Function && (intrinsic_function(x.entity) == Intrinsic::IsConstantEvaluated || intrinsic_function(x.entity) == Intrinsic::Complex)) return c;
     // A function-to-pointer/reference conversion selects the declaration even
     // without an overload set. This owns demand for static member addresses.
     if (types[from].kind == TypeKind::Function && x.entity && entities[x.entity].kind == EntityKind::Function &&
@@ -289,6 +294,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
             c.rank = 2; c.qualification = b.cv & ~a.cv; return c;
         }
     }
+    if (complex_type(from) && !complex_type(to) && !fundamental(to,FT_BOOL)) return c;
     if (arithmetic(from) && arithmetic(to) && types[to].kind != TypeKind::Named) {
         c.rank = (n ? promote_expression(n) : promote(from)) == to ? 1 : 2;
         return c;
@@ -325,7 +331,7 @@ void Analyzer::select_function(NodeId n, EntityId e, bool direct)
 void Analyzer::use_selected_function(EntityId e, bool direct)
 {
     auto intrinsic = intrinsic_function(e);
-    if ((intrinsic == Intrinsic::Atomic || intrinsic == Intrinsic::IsConstantEvaluated ||
+    if ((intrinsic == Intrinsic::Atomic || intrinsic == Intrinsic::Complex || intrinsic == Intrinsic::IsConstantEvaluated ||
         (intrinsic >= Intrinsic::SourceFile && intrinsic <= Intrinsic::SourceColumn)) && !direct)
         throw std::runtime_error("compiler intrinsic requires a direct call");
     if (discarded_statement()) return;

@@ -115,6 +115,7 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
         c.kind = Conversion::Kind::Discarded; return c;
     }
     if (!cv_cast && op != KW_REINTERPET_CAST) {
+        if (complex_type(x.type) && arithmetic(to) && types[to].kind != TypeKind::Named) return c;
         Conversion standard = fundamental(to, FT_BOOL) ? (operand ? boolean_conversion(operand) : boolean_conversion_value(x)) : (operand ? conversion(operand,to) : conversion_value(x,to));
         if (standard.valid()) {
             if ((cstyle && standard.derived) || (arithmetic(x.type) && arithmetic(to))) standard.kind = Conversion::Kind::Explicit;

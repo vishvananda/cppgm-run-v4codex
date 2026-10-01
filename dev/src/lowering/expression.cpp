@@ -16,7 +16,8 @@ Value Procedural::expression(NodeId n, bool location)
     if (node.kind == Kind::FunctionName) return Value(Operand::symbol(symbol(fact.entity)),IRType::Ptr,fact.type,true);
     if (node.kind == Kind::VaArg) {
         auto list = converted(a,sem.conversion_fact(fact.conversions));
-        return emit(Opcode::VaArg,type(fact.type),{list.operand});
+        auto value = emit(Opcode::VaArg,type(fact.type),{list.operand});
+        value.type = fact.type; return value;
     }
     if (fact.form == semantic::ExpressionForm::Typeid || fact.form == semantic::ExpressionForm::DynamicCast)
         return rtti_expression(n);
@@ -216,7 +217,7 @@ Value Procedural::expression(NodeId n, bool location)
     }
     case Kind::BracedInit: case Kind::ParenInitializer: case Kind::Initializer:
         if (a) return expression(a, location);
-        return Value(type(fact.type).floating() ? Operand::floating(0) : Operand::integer(0), type(fact.type), fact.type);
+        return initialization_value(0,fact.type);
     default: throw std::runtime_error(std::string("unsupported lowering expression: ") + syntax::kind_name(node.kind));
     }
 }
@@ -226,6 +227,7 @@ Value Procedural::unary(NodeId n)
     NodeId a = node.first;
     auto fact = sem.expression_fact(n);
     ETokenType op = node.op;
+    if (op == KW_REAL || op == KW_IMAG) return complex_projection(n);
     if (op == OP_AMP) {
         if (sem.types[fact.type].kind == TypeKind::MemberPointer) return member_pointer_value(sem.expression_fact(a).entity,fact.type);
         Value v = address(expression(a, true)); v.type = fact.type; return v;
@@ -266,6 +268,10 @@ Value Procedural::unary(NodeId n)
         dest.cached = true; dest.stored = value.operand; return dest;
     }
     Value v = op == OP_LNOT && sem.conversion_fact(fact.conversions).kind != semantic::Conversion::Kind::User ? load(expression(a)) : converted(a, sem.conversion_fact(fact.conversions));
+    if (sem.complex_type(v.type)) {
+        if (op != OP_LNOT) return complex_operation(op,v,Value(),fact.type);
+        v = convert(v,fact.type);
+    }
     if (op == OP_LNOT) v = truth_operand(v);
     if (op == OP_LNOT) v = emit(Opcode::Compare, v.ir, {v.operand, v.ir.floating() ? Operand::floating(0) : Operand::integer(0)}, Operation::Eq);
     else if (op != OP_PLUS) v = emit(Opcode::Unary, v.ir, {v.operand}, op == OP_MINUS ? Operation::Neg : Operation::Bitnot);
@@ -341,6 +347,7 @@ Value Procedural::binary(NodeId n, bool location)
 }
 Value Procedural::operation(ETokenType op, Value a, Value b, TypeId result)
 {
+    if (sem.complex_type(a.type)) return complex_operation(op,a,b,result);
     Value v;
     if ((op == OP_PLUS || op == OP_MINUS) && (a.ir == IRType::Ptr || b.ir == IRType::Ptr)) {
         if (a.ir != IRType::Ptr) std::swap(a, b);

@@ -30,6 +30,9 @@ void Procedural::global_constant_fields(const semantic::ConstantObject& plan, Ty
         if (value.kind == semantic::StaticValue::MemberFunction) {
             member_pointer_data(value); end = offset+16; continue;
         }
+        if (value.kind == semantic::StaticValue::Complex) {
+            complex_data(field.type,semantic::Constant(field.type,value.bits)); end = offset+type(field.type).bytes(); continue;
+        }
         lowir_model::DataItem item; item.type = type(field.type);
         if (value.kind == semantic::StaticValue::Address) { item.kind = lowir_model::DataItem::Address; item.symbol = symbol(value.entity); item.addend = value.addend; }
         else if (value.kind == semantic::StaticValue::String) { string_literal(value.string); item.kind = lowir_model::DataItem::Address; item.symbol = strings[value.string]; item.addend = value.addend; }
@@ -66,6 +69,10 @@ Value Procedural::constant_operand(semantic::Constant c, TypeId t)
         result.type = t; result.address = reference(c.type); return result;
     }
     if (v.kind == semantic::StaticValue::Invalid) throw std::logic_error("missing lowered scalar constant fact");
+    if (v.kind == semantic::StaticValue::Complex) {
+        auto real = sem.complex_part(c,0), imag = sem.complex_part(c,1);
+        return complex_construct(t,floating_literal(real.type,sem.floating_value(real),sem.floating_signaling(real)),floating_literal(imag.type,sem.floating_value(imag),sem.floating_signaling(imag)));
+    }
     if (v.kind == semantic::StaticValue::Floating) return floating_literal(t,v.floating,v.signaling);
     return Value(integer_operand(semantic::Constant(c.type,v.bits)),type(t),t);
 }

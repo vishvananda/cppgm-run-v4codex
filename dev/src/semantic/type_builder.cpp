@@ -52,7 +52,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
     if (definitions) if (auto type = reuse_template_type(n,s)) return type;
     TypeId result = 0;
     unsigned cv = 0, longs = 0;
-    bool unsign = false, sign = false, short_int = false;
+    bool unsign = false, sign = false, short_int = false, complex = false;
     NodeId bit_width = 0;
     EFundamentalType fundamental = FT_INT;
     for (NodeId c = ast[n].first; c; c = ast[c].next) {
@@ -98,6 +98,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
             continue;
         }
         switch (node.op) {
+        case KW_COMPLEX: if (complex) throw std::runtime_error("duplicate complex specifier"); complex = true; break;
         case KW_CONST: cv |= 1; break;
         case KW_VOLATILE: cv |= 2; break;
         case KW_LONG: ++longs; break;
@@ -140,6 +141,11 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
             else if (sign) fundamental = FT_SIGNED_CHAR;
         } else if (fundamental == FT_DOUBLE && longs) fundamental = FT_LONG_DOUBLE;
         result = types.fundamental(fundamental);
+    }
+    if (complex) {
+        if (!floating_type(result) || unsign || sign || short_int || bit_width)
+            throw std::runtime_error("complex requires a real floating component type");
+        result = types.fundamental(EFundamentalType(FT_COMPLEX_FLOAT + types[result].fundamental - FT_FLOAT));
     }
     result = types.qualify(vector_attributes(result,n,s), cv);
     { auto& published = facts.edit(n); published.type = result; published.scope = s; }

@@ -1,6 +1,7 @@
 #include "lowering/procedural.h"
 #include <cstring>
 #include <algorithm>
+#include <stdexcept>
 namespace cppgm { namespace lowering {
 using semantic::InitKind;
 using lowir_model::DataItem;
@@ -22,6 +23,11 @@ void Procedural::global_plan(std::uint32_t plan)
     if ((action.kind == InitKind::Scalar || action.kind == InitKind::Value) &&
         target.kind == TypeKind::MemberPointer && sem.types[target.child].kind == TypeKind::Function) {
         member_pointer_data(sem.static_value(action.source,action.type)); return;
+    }
+    if ((action.kind == InitKind::Scalar || action.kind == InitKind::Value) && sem.complex_type(action.type)) {
+        auto value = sem.static_value(action.source,action.type);
+        if (value.kind != semantic::StaticValue::Complex) throw std::logic_error("missing static complex initializer fact");
+        complex_data(action.type,semantic::Constant(action.type,value.bits)); return;
     }
     if (action.kind == InitKind::Scalar) {
         auto item = constant_data(action.source, action.type);

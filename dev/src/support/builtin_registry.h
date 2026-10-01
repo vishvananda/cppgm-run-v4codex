@@ -6,11 +6,12 @@ inline bool integer_pack_builtin(TextView name) { return name.equals("__integer_
 enum class FunctionBuiltin : unsigned char {
     None, Strcmp, Strncmp, VaStart, VaEnd, VaCopy,
     Alloca, Expect, Abort, Unreachable, Vsnprintf, Vsprintf,
-    Fabs, Fabsf, Fabsl, Abs, Labs, Llabs, Memcpy, Memmove, Memset, Memcmp, Memchr, Strlen, Strchr, Strrchr, Bzero, Strstr, Strpbrk, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, OperatorNew, OperatorDelete, IsConstantEvaluated, SourceFile, SourceLine, SourceFunction, SourceColumn
+    Fabs, Fabsf, Fabsl, Abs, Labs, Llabs, Memcpy, Memmove, Memset, Memcmp, Memchr, Strlen, Strchr, Strrchr, Bzero, Strstr, Strpbrk, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, OperatorNew, OperatorDelete, IsConstantEvaluated, SourceFile, SourceLine, SourceFunction, SourceColumn, Complex
 };
 inline bool invoke_builtin_name(TextView name) { return name.equals("__builtin_invoke"); }
 inline FunctionBuiltin function_builtin(TextView name)
 {
+    if (name.equals("__builtin_complex")) return FunctionBuiltin::Complex;
     if (name.equals("__builtin_FILE")) return FunctionBuiltin::SourceFile;
     if (name.equals("__builtin_LINE")) return FunctionBuiltin::SourceLine;
     if (name.equals("__builtin_FUNCTION")) return FunctionBuiltin::SourceFunction;

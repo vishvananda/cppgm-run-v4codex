@@ -114,7 +114,15 @@ std::uint32_t Analyzer::query_value(QueryId id)
             else {
             value = constants[query_value(query_edges[query.offset])];
             if (value.valid && !scoped_enum(value.type)) {
-                if (query.op == OP_LNOT) value = Constant(types.fundamental(FT_BOOL),!constant_truth(value));
+                if (query.op == KW_REAL || query.op == KW_IMAG)
+                    value = complex_type(value.type) ? complex_part(value,query.op == KW_IMAG) : query.op == KW_REAL ? value : constant_zero(value.type);
+                else if (complex_type(value.type) && (query.op == OP_MINUS || query.op == OP_COMPL)) {
+                    auto real = complex_part(value,0), imag = complex_part(value,1);
+                    if (query.op == OP_MINUS) real = floating_constant(real.type,-floating_value(real),true);
+                    imag = floating_constant(imag.type,-floating_value(imag),true);
+                    value = complex_constant(value.type,real,imag);
+                }
+                else if (query.op == OP_LNOT) value = Constant(types.fundamental(FT_BOOL),!constant_truth(value));
                 else {
                     value = convert(value,fact.expression.type,true);
                     if (query.op == OP_MINUS) value = floating_type(value.type) ? floating_constant(value.type,-floating_value(value),true) : binary(OP_MINUS,Constant(value.type,0),value,true);

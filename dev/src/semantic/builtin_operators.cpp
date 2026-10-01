@@ -89,7 +89,7 @@ void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Express
         for (TypeId t : left) {
             if (op == OP_STAR && pointer(t) && !fundamental(types[t].child,FT_VOID)) add(t,0,types[t].child,ValueCategory::Lvalue);
             else if (op == OP_PLUS && pointer(t)) add(t,0,t);
-            else if ((op == OP_PLUS || op == OP_MINUS || op == OP_COMPL) && arithmetic(t) && (op != OP_COMPL || integral(t)))
+            else if ((op == OP_PLUS || op == OP_MINUS || op == OP_COMPL) && arithmetic(t) && (op != OP_COMPL || integral(t) || complex_type(t)))
                 add(promote(t),0,promote(t));
         }
         return;
@@ -98,6 +98,7 @@ void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Express
     bool equality = op == OP_EQ || op == OP_NE;
     bool comparison = equality || op == OP_LT || op == OP_GT || op == OP_LE || op == OP_GE;
     for (TypeId a : left) for (TypeId b : right) {
+        if (comparison && !equality && (complex_type(a) || complex_type(b))) continue;
         if (op == OP_QMARK) {
             TypeId common = arithmetic(a) && arithmetic(b) ? arithmetic_type(a,b) :
                 address_value(a) && address_value(b) ? composite_pointer(a,b) :

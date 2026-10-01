@@ -41,7 +41,7 @@ enum EFundamentalType : unsigned char {
 
 	// 3.9.1.10
 	FT_NULLPTR_T,
-    FT_INT128, FT_UINT128, FT_BITINT, FT_UBITINT
+    FT_INT128, FT_UINT128, FT_BITINT, FT_UBITINT, FT_COMPLEX_FLOAT, FT_COMPLEX_DOUBLE, FT_COMPLEX_LONG_DOUBLE
 
 };
 
@@ -122,7 +122,7 @@ enum ETokenType : unsigned char {
 	KW_VOLATILE,
 	KW_WCHAR_T,
 	KW_WHILE,
-    KW_INT128, KW_UINT128,
+    KW_INT128, KW_UINT128, KW_COMPLEX, KW_REAL, KW_IMAG,
 
 	// operators/punctuation
 	OP_LBRACE,

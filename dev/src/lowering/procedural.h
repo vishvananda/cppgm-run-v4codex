@@ -53,6 +53,7 @@ struct Linkage {
     SymbolId allocation_roles[2], rtti_roles[9], rtti_functions[3];
     SymbolId exception_functions[8];
     SymbolId atomic_runtime_symbols[4];
+    SymbolId complex_runtime_symbols[6];
     SymbolId terminate_adapter;
     SymbolId abort_runtime;
     std::vector<FunctionId> initializers, finalizers;
@@ -366,6 +367,12 @@ class Procedural {
     Value atomic_update(Value location, Value rhs, ETokenType op, TypeId computation, bool postfix);
     Value atomic_call(NodeId n, Value destination = Value());
     Value intrinsic_call(NodeId n, semantic::Intrinsic intrinsic);
+    Value complex_construct(TypeId type, Value real, Value imag);
+    Value complex_component(Value value, unsigned part);
+    Value complex_projection(NodeId n);
+    Value complex_convert(Value value, TypeId type);
+    Value complex_operation(ETokenType op, Value a, Value b, TypeId result);
+    void complex_data(TypeId type, semantic::Constant value);
     Value conditional(NodeId n, bool location, Value destination = Value(), std::uint32_t branches = 0, bool terminal = false, const semantic::ScalarConsumption* consumption = nullptr);
     Value logical(NodeId n);
     Value fold(NodeId n, bool location, Value* callable = nullptr);

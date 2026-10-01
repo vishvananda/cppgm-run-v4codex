@@ -61,6 +61,11 @@ void Procedural::global_data(NodeId n, TypeId t)
     // The constant classifier admitted a no-effect empty construction.
     if (sem.class_initialization(n,t).source && sem.empty_value(t)) n = 0;
     if (auto plan = sem.initializer_plan(n, t)) { global_plan(plan); return; }
+    if (sem.complex_type(t)) {
+        auto value = sem.static_value(n,t);
+        if (value.kind != semantic::StaticValue::Complex) throw std::logic_error("missing complex constant");
+        complex_data(t,semantic::Constant(t,value.bits)); return;
+    }
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;
     auto array = sem.types[t];
     if (array.kind == TypeKind::MemberPointer && sem.types[array.child].kind == TypeKind::Function) {
@@ -92,7 +97,7 @@ void Procedural::global(EntityId e)
             throw std::runtime_error("multiple global definitions");
         }
     }
-    g.structured = (sem.types[t].kind == TypeKind::MemberPointer && sem.types[sem.types[t].child].kind == TypeKind::Function) || sem.types[t].kind == TypeKind::Array || (sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info);
+    g.structured = sem.complex_type(t) || (sem.types[t].kind == TypeKind::MemberPointer && sem.types[sem.types[t].child].kind == TypeKind::Function) || sem.types[t].kind == TypeKind::Array || (sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info);
     if (!g.structured) g.type = type(t);
     if (!g.declaration) {
         bool local = sem.local_static(e);

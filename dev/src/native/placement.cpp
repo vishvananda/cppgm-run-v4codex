@@ -189,7 +189,7 @@ void Selector::parameters()
                 v.location = home(p.values[param.value.index-1].name,param.type,true);
                 f.frame.back().parameter = true;
                 for (unsigned part = 0; part < placement.count; ++part)
-                    move(fragment(v.location,part*8),placement.parts[part],chunk_type(std::min(8u,param.type.bytes()-part*8)));
+                    move(fragment(v.location,part*8),placement.parts[part],abi_chunk_type(param.type,part));
             }
             continue;
         }

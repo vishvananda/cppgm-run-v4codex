@@ -77,6 +77,14 @@ Constant Analyzer::constant_snapshot(std::uint32_t address, Constant value)
     std::sort(children.begin(),children.end(),[&](std::uint32_t x,std::uint32_t y) {
         return constant_addresses[x].selector < constant_addresses[y].selector;
     });
+    if (complex_type(value.type)) {
+        auto real = complex_part(value,0), imag = complex_part(value,1);
+        for (auto child : children) {
+            if (constant_addresses[child].selector) imag = constant_read(child); else real = constant_read(child);
+        }
+        value = complex_constant(value.type,real,imag);
+        frame.overlays[id].value = value; frame.overlays[id].dirty = false; return value;
+    }
     auto object = evaluated_objects[value.bits];
     std::vector<EvaluatedPart> parts;
     if (types[value.type].kind == TypeKind::Array) {

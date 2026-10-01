@@ -113,7 +113,7 @@ void Validator::call(const Instruction& i) const
                 require(value_type(a).scalar() || value_type(a).kind() == Type::Object, "invalid by-address actual");
             } else value(a,param.type);
         }
-        else require(value_type(a).scalar(), "invalid variadic value");
+        else require(value_type(a).scalar() || value_type(a).complex(), "invalid variadic value");
     }
     if (i.copy_elision) require(direct && i.type == Type() && count >= 2, "invalid copy elision permission");
     if (direct && i.signature) {
