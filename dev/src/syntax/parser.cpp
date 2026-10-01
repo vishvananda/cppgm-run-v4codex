@@ -53,6 +53,7 @@ bool Parser::builtin(std::size_t ahead)
 
 bool Parser::type_start(std::size_t ahead)
 {
+    if (in.is("__func__",ahead) || in.is("__FUNCTION__",ahead) || in.is("__PRETTY_FUNCTION__",ahead)) return false;
     while ((in.is("[",ahead) && in.is("[",ahead+1)) || in.is("__attribute__",ahead) || in.is("__attribute",ahead))
         ahead = in.matching(in.is("[",ahead) ? ahead : ahead+1)+1;
     if (in.is("_Atomic",ahead) || builtin(ahead) || (in.is("(",ahead+1) && type_transform(builtin_trait(ids.spelling(in.peek(ahead).text)))) || in.is("typeof",ahead) || in.is("__typeof",ahead) || in.is("__typeof__",ahead)) return true;

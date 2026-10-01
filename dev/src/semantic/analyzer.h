@@ -689,6 +689,16 @@ private:
     Index atomic_kinds;
     Index intrinsic_functions, predefined_strings, atomic_signatures, integer_signatures, overflow_signatures;
     EntityId predefined_function_name(NodeId n, ScopeId s);
+    EntityId function_name_string(ScopeId, IdentifierId, NodeId = 0);
+    ScopeId function_context(ScopeId) const;
+    void pretty_entity(std::ostream&, EntityId);
+    void pretty_type(std::ostream&, TypeId);
+    void pretty_type_prefix(std::ostream&, TypeId);
+    void pretty_type_suffix(std::ostream&, TypeId);
+    void pretty_parameters(std::ostream&, const Type&);
+    void query_member(const TypeQuery&, const std::vector<TypeQueryFact>&, TypeQueryFact&);
+    void pretty_argument(std::ostream&, ArgumentId);
+    void pretty_bindings(std::ostream&, EntityId, bool&);
     TypeQueryFact query_builtin_operand(const TypeQuery& q, const std::vector<TypeQueryFact>& children);
     EntityId builtin_function(IdentifierId name);
     Constant floating_builtin_constant(const Expression& call, ScopeId scope);

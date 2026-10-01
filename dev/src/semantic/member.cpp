@@ -332,3 +332,40 @@ void Analyzer::record_object(Expression& owner, NodeId node, TypeId type, unsign
     owner.object_use = object_uses.size(); object_uses.push_back(use);
 }
 } }
+
+namespace cppgm { namespace semantic {
+void Analyzer::query_member(const TypeQuery& q, const std::vector<TypeQueryFact>& children, TypeQueryFact& r)
+{
+    auto& x = r.expression;
+    auto object = children[0].expression; auto type = object.type;
+    if (q.op == OP_ARROW) {
+        r.arrow = prepare_arrow(object,q.context,0,false);
+        if (r.arrow) type = arrow_chains[r.arrow].type;
+        if (!pointer(type)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); return; }
+        type = types[type].child;
+    }
+    if (!class_value(type) && !pattern_class_type(type)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); return; }
+    auto cls = types[type].entity;
+    if (class_value(type)) complete_class(cls);
+    if (q.type) {
+        if (!class_value(q.type) && !pattern_class_type(q.type)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); return; }
+        cls = types[q.type].entity;
+        if (class_value(q.type)) complete_class(cls);
+    }
+    auto e = imported(entities[cls].scope,q.name,Lookup::Ordinary,++walk);
+    if (e == ~EntityId(0)) { r = TypeQueryFact::failed(TypeQueryFact::Failure::Ambiguous); return; }
+    if (!e) {
+        if (pattern_class_type(type) && template_pattern_open_bases.get(cls)) { r.dependent = true; return; }
+        r = incomplete_query(type); return;
+    }
+    x = member_value(e,types[type].cv,q.op == OP_ARROW ? ValueCategory::Lvalue : object.category);
+    if (function_binding(e)) {
+        x.form = ExpressionForm::Overload; x.type = 0;
+        record_object(x,0,0,0); object_uses[x.object_use].naming_scope = entities[cls].scope;
+    }
+    else {
+        check_access(e,q.context,entities[cls].scope,type); r.declared_type = entities[e].type;
+        if (nonstatic_field(e)) record_member_receiver(x,0,type,e,entities[cls].scope,q.type!=0,q.context,false);
+    }
+}
+} }

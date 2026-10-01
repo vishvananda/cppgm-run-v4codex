@@ -22,7 +22,7 @@ std::uint32_t Analyzer::constant_query_object(QueryId id)
         auto result = constant_storage_address(fact.expression.type,Constant(),0,source,true);
         constant_literal_storage.put(literal,result); return result;
     }
-    if (q.kind == QueryKind::Name || q.kind == QueryKind::QualifiedValue) return constant_entity_address(fact.expression.entity);
+    if (q.kind == QueryKind::Name || q.kind == QueryKind::QualifiedValue || q.kind == QueryKind::FunctionName) return constant_entity_address(fact.expression.entity);
     if (q.kind == QueryKind::Member) {
         auto operand = query_edges[q.offset];
         auto parent = q.op == OP_ARROW ? constant_query_arrow(operand,fact.arrow) : constant_query_object(operand);

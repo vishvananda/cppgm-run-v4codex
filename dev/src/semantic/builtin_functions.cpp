@@ -136,19 +136,7 @@ TypeQueryFact Analyzer::query_builtin_operand(const TypeQuery& q, const std::vec
 }
 EntityId Analyzer::predefined_function_name(NodeId n, ScopeId s)
 {
-    while (s && scopes[s].kind != ScopeKind::Function) s = scopes[s].parent;
-    if (!s) throw std::runtime_error("predefined function name outside function");
-    auto name = ast[n].text;
-    if (auto old = local(s,name)) return old;
-    auto fn = scopes[s].entity;
-    auto content = entities[fn].name;
-    auto text = ids.spelling(content);
-    auto e = make_entity(EntityKind::Variable,s,name,n);
-    entities[e].type = types.compound(TypeKind::Array,types.qualify(types.fundamental(FT_CHAR),1),text.size+1);
-    entities[e].is_static = true; entities[e].definition = n;
-    entities[e].template_pattern = pattern_scope(s);
-    predefined_strings.put(e,content); bind(s,name,e);
-    return e;
+    return function_name_string(function_context(s),ast[n].text,n);
 }
 Expression Analyzer::va_arg_expression(NodeId n, ScopeId s)
 {

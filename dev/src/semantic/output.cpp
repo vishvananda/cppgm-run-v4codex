@@ -4,6 +4,25 @@
 
 namespace cppgm { namespace semantic {
 namespace {
+struct VirtualTelemetry {
+    std::size_t virtual_views = 0, virtual_slots = 0, virtual_storage = 0;
+    std::size_t vtable_definitions = 0, external_vtables = 0;
+};
+VirtualTelemetry virtual_telemetry(const std::vector<VirtualClass>& virtual_classes)
+{
+    VirtualTelemetry result;
+    result.virtual_storage = virtual_classes.capacity()*sizeof(VirtualClass);
+    for (const auto& cls : virtual_classes) {
+        result.virtual_views += cls.views.size(); result.virtual_slots += cls.slots.size();
+        result.virtual_storage += cls.views.capacity()*sizeof(VirtualView)+cls.slots.capacity()*sizeof(VirtualSlot);
+        result.virtual_storage += (cls.prefix.capacity()+cls.virtual_prefix.capacity()+cls.view_prefix.capacity())*sizeof(VirtualPrefixRow);
+        result.virtual_storage += cls.base_order.capacity()*sizeof(EntityId);
+        result.virtual_storage += (cls.store_order.capacity()+cls.vtt_order.capacity())*sizeof(unsigned);
+        result.vtable_definitions += cls.demand == FactState::Success;
+        result.external_vtables += cls.referenced && cls.demand != FactState::Success;
+    }
+    return result;
+}
 const char* binding_name(EntityKind k) {
     switch (k) {
     case EntityKind::Type: return "type";
@@ -121,23 +140,14 @@ void Analyzer::write(std::ostream& out) const { out << "translation-unit\n"; wri
 void Analyzer::telemetry(std::ostream& out) const
 {
     constant_telemetry(out);
-    std::size_t virtual_views = 0, virtual_slots = 0, virtual_storage = virtual_classes.capacity()*sizeof(VirtualClass);
-    std::size_t vtable_definitions = 0, external_vtables = 0;
-    for (const auto& cls : virtual_classes) {
-        virtual_views += cls.views.size(); virtual_slots += cls.slots.size();
-        virtual_storage += cls.views.capacity()*sizeof(VirtualView)+cls.slots.capacity()*sizeof(VirtualSlot);
-        virtual_storage += (cls.prefix.capacity()+cls.virtual_prefix.capacity()+cls.view_prefix.capacity())*sizeof(VirtualPrefixRow);
-        virtual_storage += cls.base_order.capacity()*sizeof(EntityId);
-        virtual_storage += (cls.store_order.capacity()+cls.vtt_order.capacity())*sizeof(unsigned);
-        vtable_definitions += cls.demand == FactState::Success;
-        external_vtables += cls.referenced && cls.demand != FactState::Success;
-    }
+    const auto stats = virtual_telemetry(virtual_classes);
     out << ",\"semantic_ms\":" << analysis_ms
         << ",\"semantic_angle_names\":" << angle_name_work
         << ",\"semantic_angle_parts\":" << angle_part_work
         << ",\"semantic_angle_interpretations\":" << angle_interpretations
         << ",\"semantic_fact_slots\":" << facts.slot_count()
         << ",\"semantic_fact_records\":" << facts.fact_count()
+        << ",\"semantic_function_string_objects\":" << predefined_strings.size()
         << ",\"semantic_fact_storage_bytes\":" << facts.storage_bytes()
         << ",\"semantic_template_declaration_work\":" << template_declaration_work
         << ",\"semantic_declaration_publications\":" << declaration_publications
@@ -299,9 +309,9 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_rtti_type_demands\":" << rtti_type_demands.size()
         << ",\"semantic_rtti_class_work\":" << rtti_class_work
         << ",\"semantic_rtti_base_work\":" << rtti_base_work
-        << ",\"semantic_virtual_views\":" << virtual_views
-        << ",\"semantic_virtual_slots\":" << virtual_slots
-        << ",\"semantic_virtual_storage_bytes\":" << virtual_storage
+        << ",\"semantic_virtual_views\":" << stats.virtual_views
+        << ",\"semantic_virtual_slots\":" << stats.virtual_slots
+        << ",\"semantic_virtual_storage_bytes\":" << stats.virtual_storage
         << ",\"semantic_subobject_storage_bytes\":" << subobjects.capacity()*sizeof(SubobjectIdentity)+subobject_paths.capacity()*sizeof(SubobjectPath)+virtual_bases.capacity()*sizeof(EntityId)+(virtual_base_offsets.capacity()+virtual_base_rows.capacity())*sizeof(std::uint64_t)
         << ",\"semantic_lifecycle_base_entries\":" << lifecycle_bases.size()
         << ",\"semantic_lifecycle_storage_bytes\":" << lifecycle_bases.capacity()*sizeof(LifecycleBase)
@@ -317,8 +327,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_virtual_demands\":" << virtual_demands
         << ",\"semantic_key_vtable_notifications\":" << key_vtable_demand.size()
         << ",\"semantic_key_vtable_processed\":" << key_vtable_cursor
-        << ",\"semantic_vtable_emissions\":" << vtable_definitions
-        << ",\"semantic_external_vtable_references\":" << external_vtables
+        << ",\"semantic_vtable_emissions\":" << stats.vtable_definitions
+        << ",\"semantic_external_vtable_references\":" << stats.external_vtables
         << ",\"semantic_vtable_queue_bytes\":" << (key_vtable_demand.capacity()+vtable_emission.capacity())*sizeof(EntityId)
         << ",\"semantic_member_demands\":" << demand_queue.size()
         << ",\"semantic_friend_definitions\":" << friend_definitions.size()
