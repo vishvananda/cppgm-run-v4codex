@@ -1,0 +1,167 @@
+{
+  "selection600": {
+    "semantic_type_query_work": 1212,
+    "semantic_type_substitution_work": 3000,
+    "semantic_substitution_frames": 3604,
+    "template_body_transitions": 600,
+    "template_class_completions": 600,
+    "semantic_pack_expansion_work": 1,
+    "semantic_pack_expansion_lanes": 1200,
+    "parsed_nodes": 12267,
+    "semantic_static_plan_work": 0
+  },
+  "selection1200": {
+    "semantic_type_query_work": 2412,
+    "semantic_type_substitution_work": 6000,
+    "semantic_substitution_frames": 7204,
+    "template_body_transitions": 1200,
+    "template_class_completions": 1200,
+    "semantic_pack_expansion_work": 1,
+    "semantic_pack_expansion_lanes": 2400,
+    "parsed_nodes": 24267,
+    "semantic_static_plan_work": 0
+  },
+  "selection2400": {
+    "semantic_type_query_work": 4812,
+    "semantic_type_substitution_work": 12000,
+    "semantic_substitution_frames": 14404,
+    "template_body_transitions": 2400,
+    "template_class_completions": 2400,
+    "semantic_pack_expansion_work": 1,
+    "semantic_pack_expansion_lanes": 4800,
+    "parsed_nodes": 48267,
+    "semantic_static_plan_work": 0
+  },
+  "sequence600": {
+    "semantic_type_query_work": 611,
+    "semantic_type_substitution_work": 610,
+    "semantic_substitution_frames": 610,
+    "template_body_transitions": 1,
+    "template_class_completions": 1,
+    "semantic_pack_expansion_work": 5,
+    "semantic_pack_expansion_lanes": 600,
+    "parsed_nodes": 210,
+    "semantic_static_plan_work": 601
+  },
+  "sequence1200": {
+    "semantic_type_query_work": 1211,
+    "semantic_type_substitution_work": 1210,
+    "semantic_substitution_frames": 1210,
+    "template_body_transitions": 1,
+    "template_class_completions": 1,
+    "semantic_pack_expansion_work": 5,
+    "semantic_pack_expansion_lanes": 1200,
+    "parsed_nodes": 210,
+    "semantic_static_plan_work": 1201
+  },
+  "sequence2400": {
+    "semantic_type_query_work": 2411,
+    "semantic_type_substitution_work": 2410,
+    "semantic_substitution_frames": 2410,
+    "template_body_transitions": 1,
+    "template_class_completions": 1,
+    "semantic_pack_expansion_work": 5,
+    "semantic_pack_expansion_lanes": 2400,
+    "parsed_nodes": 210,
+    "semantic_static_plan_work": 2401
+  },
+  "integer-pack600": {
+    "semantic_type_query_work": 1212,
+    "semantic_type_substitution_work": 612,
+    "semantic_substitution_frames": 614,
+    "template_body_transitions": 1,
+    "template_class_completions": 1,
+    "semantic_pack_expansion_work": 5,
+    "semantic_pack_expansion_lanes": 600,
+    "parsed_nodes": 250,
+    "semantic_static_plan_work": 601
+  },
+  "integer-pack1200": {
+    "semantic_type_query_work": 2412,
+    "semantic_type_substitution_work": 1212,
+    "semantic_substitution_frames": 1214,
+    "template_body_transitions": 1,
+    "template_class_completions": 1,
+    "semantic_pack_expansion_work": 5,
+    "semantic_pack_expansion_lanes": 1200,
+    "parsed_nodes": 250,
+    "semantic_static_plan_work": 1201
+  },
+  "integer-pack2400": {
+    "semantic_type_query_work": 4812,
+    "semantic_type_substitution_work": 2412,
+    "semantic_substitution_frames": 2414,
+    "template_body_transitions": 1,
+    "template_class_completions": 1,
+    "semantic_pack_expansion_work": 5,
+    "semantic_pack_expansion_lanes": 2400,
+    "parsed_nodes": 250,
+    "semantic_static_plan_work": 2401
+  },
+  "sequence6000": {
+    "semantic_type_query_work": 6011,
+    "semantic_type_substitution_work": 6010,
+    "semantic_substitution_frames": 6010,
+    "template_body_transitions": 1,
+    "template_class_completions": 1,
+    "semantic_pack_expansion_work": 5,
+    "semantic_pack_expansion_lanes": 6000,
+    "parsed_nodes": 210,
+    "semantic_static_plan_work": 6001
+  },
+  "sequence12000": {
+    "semantic_type_query_work": 12011,
+    "semantic_type_substitution_work": 12010,
+    "semantic_substitution_frames": 12010,
+    "template_body_transitions": 1,
+    "template_class_completions": 1,
+    "semantic_pack_expansion_work": 5,
+    "semantic_pack_expansion_lanes": 12000,
+    "parsed_nodes": 210,
+    "semantic_static_plan_work": 12001
+  },
+  "sequence24000": {
+    "semantic_type_query_work": 24011,
+    "semantic_type_substitution_work": 24010,
+    "semantic_substitution_frames": 24010,
+    "template_body_transitions": 1,
+    "template_class_completions": 1,
+    "semantic_pack_expansion_work": 5,
+    "semantic_pack_expansion_lanes": 24000,
+    "parsed_nodes": 210,
+    "semantic_static_plan_work": 24001
+  },
+  "integer-pack6000": {
+    "semantic_type_query_work": 12012,
+    "semantic_type_substitution_work": 6012,
+    "semantic_substitution_frames": 6014,
+    "template_body_transitions": 1,
+    "template_class_completions": 1,
+    "semantic_pack_expansion_work": 5,
+    "semantic_pack_expansion_lanes": 6000,
+    "parsed_nodes": 250,
+    "semantic_static_plan_work": 6001
+  },
+  "integer-pack12000": {
+    "semantic_type_query_work": 24012,
+    "semantic_type_substitution_work": 12012,
+    "semantic_substitution_frames": 12014,
+    "template_body_transitions": 1,
+    "template_class_completions": 1,
+    "semantic_pack_expansion_work": 5,
+    "semantic_pack_expansion_lanes": 12000,
+    "parsed_nodes": 250,
+    "semantic_static_plan_work": 12001
+  },
+  "integer-pack24000": {
+    "semantic_type_query_work": 48012,
+    "semantic_type_substitution_work": 24012,
+    "semantic_substitution_frames": 24014,
+    "template_body_transitions": 1,
+    "template_class_completions": 1,
+    "semantic_pack_expansion_work": 5,
+    "semantic_pack_expansion_lanes": 24000,
+    "parsed_nodes": 250,
+    "semantic_static_plan_work": 24001
+  }
+}

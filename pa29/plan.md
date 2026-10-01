@@ -1,90 +1,77 @@
-# PA29 compact plan — implementation171
+# PA29 compact plan — implementation171 handoff
 
-Target: **PA29 full-stage**. Phase: **implement; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
-Previous review: `f07f78236eb475648834ed78afbca6c864f64408`.
-Audit entry: `ecb69d94227d60653a7874f9daea63be8a202840`.
 Last reviewed commit: `221d6d0e4930da05db2913bdf5f50d808f89c744`.
+Entry HEAD: `6525c1af86e05edcf558186adec96a8c72521500`.
+Validated implementation: `846ef3fb` (records-only handoff follows).
 
-## Reviewed ownership and fixes
+## Design and completed owner
 
-The [accumulated audit](audit.md) reviews every commit and combined source change
-across implementation167–169: canonical vector layout and deferred inline demand,
-aggregate/designated/compound initialization and mutable constant storage, and
-block-pointer types/calls/ABI/RTTI. It includes shared query/template/lifetime
-interactions and the registered implementation sources. The [range record](../student.tests/pa29/evidence170/range.json)
-contains twelve entry commits plus the audit fix.
+Builtin template aliases now retain canonical typed argument queries for
+`__type_pack_element` and `__make_integer_seq`. Argument syntax is parsed once;
+selection and generation consume retained arguments and immutable substitution
+frames. First-class uses lazily create real typed template heads, with no fake
+syntax or body. Existing alias specialization facts memoize success/failure;
+query facts resolve direct, dependent, nested/empty and indirect applications.
+Lowering receives the selected type and uses typed template arguments for ABI
+names. The [extension signatures](https://clang.llvm.org/docs/LanguageExtensions.html#builtin-type-aliases)
+define selection and sequence generation; references are unchanged.
 
-Audit170 fixes two shared owners: aggregate constant-call keys now include every
-changed address-bearing value on the storage owner, and dependent vector-list
-queries use canonical lane counts and existing initialization checks. Neither
-adds source replay, semantic reconstruction, global retries or textual transport.
-Integrated source→typed LowIR→MIR→ELF controls cover the handoff interactions.
-The tested code was committed before this records-only update.
+GNU hosted head matching defers dependent non-type parameter types. Application
+checks actual values, and deduction preserves a concrete integral argument's
+type. The latter fixes the PA17 regression discovered during this handoff.
+No declaration scans, source replay, textual transport, global invalidation,
+unrelated body demand or optional optimization was added.
 
-## Validation and stage-scoped performance
+Selection validates consumed arguments in O(n), then chooses the indexed type;
+generation is O(n) in produced elements and retains the existing 1,048,576-element
+ceiling. Alias heads have bounded fixed size and TU lifetime; queries/argument
+slices live in the existing canonical arenas, temporaries die at operation exit.
+Existing evaluator/backend limits remain unchanged. Optional optimizer work and
+code-growth budgets are zero; required semantic/code costs are measured below.
 
-- PA29 **361/403**; exactly the same **42 failures**, no new failures.
-- PA1–28 **4538/4538**; through PA29 **4899/4941**, with PA29 alone unfinished.
-- File audit passes with the same four inherited header warnings.
-- **376** explicit behavioral checks and **377** inspection checks pass.
-- [Validation](../student.tests/pa29/evidence170/validation.json),
-  [coverage](../student.tests/pa29/evidence170/coverage.json) and
-  [failure delta](../student.tests/pa29/evidence170/stage-delta.json) preserve all
-  403 inputs and 1,707 contract paths against entry and the previous review.
+## Validation and performance
 
-[Performance170](performance170.md) reports latency/RSS and runtime/text together:
-**1,384** final observations plus six launchers, with A/A calibration and ABBA
-pairs. Common and inherited affected A/B images and work counts are identical.
-The pointer correction retains linear scalar-array work and adds complete keys
-without whole-array snapshots. Audit-only capability costs use N=600/1200/2400;
-entry rejects those inputs. Compiler growth is **88 bytes**. All historical
-measurements remain; no speedup is claimed. Additional optional optimizer work
-and growth budgets are zero. Historical blanket 15%/zero-growth targets remain
-diagnostic under spec §9; mandated limits, correctness and coverage are unchanged.
-Broader hosted runtime, optimizer/allocation and self-hosting retain PA30–34 scope.
+- PA29 **367/403**, six original failures fixed, **36** remain, no new failures.
+- PA1–28 **4538/4538**; through PA29 **4905/4941**, PA29 alone unfinished.
+- File audit passes with four unchanged inherited header warnings.
+- **45** focused checks, **28** inherited integration checks and **13** inspection
+  checks pass, including a Clang ABI peer, typed IR roundtrip and telemetry
+  equivalence. Results are in [evidence171](../student.tests/pa29/evidence171/validation.json).
+- [Failure delta](../student.tests/pa29/evidence171/stage-delta.json) and
+  [coverage](../student.tests/pa29/evidence171/coverage.json) preserve all 403 inputs
+  and all 1,707 tracked contract/harness paths against entry.
 
-## Remaining broad work
+[Performance171](performance171.md) records frozen A/A+ABBA common workloads and
+new-capability scaling, compiler latency/RSS and executable runtime/text together.
+An entry rejection is never treated as a speed baseline. No speedup is claimed.
+Historical measurements, including [performance170](performance170.md), remain
+unchanged. Historical blanket 15%/zero-growth targets remain diagnostic under
+spec §9; no mandated limit, correctness rule or coverage was relaxed. Larger
+hosted runtime, optimization/allocation and self-hosting keep PA30–34 ownership.
 
-The [remaining ledger](../student.tests/pa29/evidence170/remaining.json) preserves:
-extended syntax/types/layout **27**, template demand/hosted ABI **13**, legacy
-trait/contract **1**, and source-invocation intrinsic operands **1**. This includes
-numeric representations, templated lambdas/folds/bindings, conditional explicit,
-zero-length arrays, packs/aliases, hosted emission and source coordinates.
-Retain alignment, dependent offsetof ABI and class-convertible-index reducers.
-Aggregate mutation, including this audit's pointer alias gap, is resolved.
+## Remaining work and handoff ledger
 
-Both trait oracle questions were reviewed. Ordinary reducers demonstrate the
-language behavior, but reserved-name/`std` rules prevent a strict proof for the
-original fixtures; references and counted failures remain unchanged. The optional
-external Clang block value-catch observation remains documented. No reference
-correction, implementation waiver or coverage reduction occurred.
+The [remaining ledger](../student.tests/pa29/evidence171/remaining.json) retains
+extended syntax/types/layout **27**, hosted template/emission **7**, legacy trait
+**1**, and source-invocation intrinsic operands **1**. Numeric representations,
+templated lambdas, folds, bindings, conditional explicit/control flow, zero-length
+arrays, source coordinates and hosted emission remain implementation work.
+Retain the existing alignment, dependent offsetof ABI and convertible-index
+reducers, and audit170's contract questions; none is waived or silently corrected.
 
-Separate vector ABI and aggregate-query followups added avoidable fragmentation.
-Complete each broad owner through direct/fixed/dependent/query use, ABI emission
-and mutable storage dependencies before handoff. Independent review through the
-recorded code tip is complete; full through-PA29 success is still required before
-advancing. Earlier audits and the single audit170 ledger row remain in audit.md.
+| Range | Implementation result | Independent review |
+|---|---|---|
+| audit170 through `221d6d0e` | Previously reviewed owner corrections; historical ledger in [audit.md](audit.md) | Completed for that recorded range; stage unfinished |
+| entry `6525c1af` → `846ef3fb` | Pack selection, sequence generation, nested/empty/indirect aliases, dependent head matching and exact integral deduction; 42 → 36 failures | New range awaits Ralph's independent audit; passing checks do not certify the whole stage |
 
-## Active implementation171
-
-Entry HEAD: `6525c1af86e05edcf558186adec96a8c72521500`; baseline 361/403,
-42 failures. Prior turn classification: progress (audit170 corrected storage/query
-facts and recorded verified evidence). Stage base and last-reviewed markers above
-remain unchanged.
-
-Initial owner: builtin template type operations and argument-pack generation.
-Parser retains argument nodes once; semantic builtin queries own canonical typed
-argument tuples; substitution composes immutable frames and resolves selection or
-generation; existing alias, deduction, class demand and typed lowering consume the
-result. Work is linear in consumed/emitted arguments, with O(1) indexed selection
-after substitution; generation keeps the existing 1,048,576 element limit.
-No optional optimization or growth is introduced. Validate direct/dependent,
-empty/nested packs, aliases, SFINAE, ABI and executable uses; extend to related
-pack substitution defects while this owner is understood.
-
-Freeze entry/final binaries, inputs and flags; collect A/A and ABBA common-path
-latency/RSS/runtime/text evidence plus capability scaling for newly accepted
-inputs (entry rejection is not an equivalent timing baseline). Required stage,
-prior-through and file-audit gates remain unchanged. New implementation remains
-unreviewed; independent audit is separate from unfinished language groups.
+Boundary: all six failing fixtures owned by these builtin template/pack operations
+are resolved, including first-class identity and emitted ABI/runtime use. Nearby
+[probes](../student.tests/pa29/evidence171/boundary-probes.json) reach distinct
+vector-expression/closure, syntax or contract owners. Further stage work requires
+new closure/fold/binding representations, numeric/ABI machinery, emission state
+or source-origin handling; it cannot extend this completed argument-query owner
+without starting another broad semantic group. The two inherited oracle concerns
+remain separate review questions with failures still counted. Full through-PA29
+success and independent whole-stage review remain necessary before advancement.

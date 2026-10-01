@@ -1,0 +1,66 @@
+{
+  "code_commit": "846ef3fb2bde489edac88757bce9da9c4f40ea11",
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "cpu": "model name\t: Intel(R) Xeon(R) CPU @ 2.20GHz",
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+  ],
+  "binaries": {
+    "A": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/entry-cppgm++",
+      "sha256": "903311489c421c043e4c1c4e998b660d9d76de23e52d69eca7b025944606e50b",
+      "bytes": 4109848
+    },
+    "B": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/final-cppgm++",
+      "sha256": "6ec65e33acebc670a0f27cf9f61f917b181da2437906102891ebf568025c0b8d",
+      "bytes": 4126688
+    }
+  },
+  "observations": {
+    "common-performance": 224,
+    "affected-performance": 144,
+    "large-generators": 96
+  },
+  "scripts": {
+    "student.tests/pa29/performance171.py": "b22787f6b6e3f8cefba531ec2a6ca00b9fcd91e979d27dff72eeac161226048f",
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/performance171-initial.py": "f04f0219f7abc0539a3c6122243ab705dc4fbed800ba9197808e5dd29bdd2ca3"
+  },
+  "series": {
+    "common-performance": "44bfa472dc2b85954b9385699ec29bc6d90c4a76def6889cf6ce0fe2c0b646fd",
+    "affected-performance": "1f403134791fc2adc7a64091501ae56f8a05b74c0f39edea27c7ceb0973b56c4",
+    "large-generators": "d39379ab8d079de15c7ac6e74bd11b5678e9672f5909658259aee636f4eae922"
+  }
+}

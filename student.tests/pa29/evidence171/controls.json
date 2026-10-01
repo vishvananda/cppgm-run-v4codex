@@ -1,0 +1,662 @@
+{
+  "compiler_sha256": "6ec65e33acebc670a0f27cf9f61f917b181da2437906102891ebf568025c0b8d",
+  "inputs": {
+    "student.tests/pa29/controls171/abi.cpp": "10e4de58995f0f28ed8e7dcd86d9a36f7b28b29266680b1024be5795ceaccec2",
+    "student.tests/pa29/controls171/bad-deep-builtin.cpp": "7f64359cb91fc248e088c7b8a3544a39ffa555eee21cb3f4982790ff96d461fb",
+    "student.tests/pa29/controls171/bad-dependent-head-application.cpp": "39539ce5d544ba0068bf01741eeeb53628da3c7446b6531c7f59493838bc2107",
+    "student.tests/pa29/controls171/bad-fixed-head.cpp": "3dec08adee77e7e45068d6a93b09dd163105ae17da959555c8acbeb7e250dffb",
+    "student.tests/pa29/controls171/bad-index.cpp": "7d1893e26ade5c5c988d247eb103aeba26e3c1d719364e87aba1903101034adf",
+    "student.tests/pa29/controls171/bad-negative-index.cpp": "ca90e158b98b12a6891deda011cb29d0916c88403375bd0c09d4324460f00be3",
+    "student.tests/pa29/controls171/bad-scoped-index.cpp": "89eae9d586565f4be46652af108f4e1d473413de862aad5fe3d19f1947a74a6e",
+    "student.tests/pa29/controls171/bad-selected-deduction.cpp": "3627d8c105c0866232298cfea6b67207d87c32e14acbcb89333554987ec97ead",
+    "student.tests/pa29/controls171/bad-selection-arity.cpp": "98b23ee7cb259804b265e9e8e380750c87d52581b4033b0ba06212075ba0f330",
+    "student.tests/pa29/controls171/bad-sequence-arity.cpp": "bc2cfd42b5a6a0a30752886cfee2b6fa4cd317ab4a6da90bc6bc52d7d24ffe6e",
+    "student.tests/pa29/controls171/bad-sequence-bound.cpp": "607b882c57f71b89aaf9d3be7d51a01658bc6ef1484e0e74db687a2748fba8dd",
+    "student.tests/pa29/controls171/bad-sequence-enum.cpp": "2b71632c9c779e23cdf4f1a3f543b6f31064e3b46cff2dbc6bc145bb03b64aca",
+    "student.tests/pa29/controls171/bad-sequence-narrowing.cpp": "c2a138e2b40bfc3895c5ec5f4efc9c0fc33c28a0017154eb7b4ff3cde4ef59e6",
+    "student.tests/pa29/controls171/bad-sequence-target.cpp": "c3ae0888cb5fa3df59d02a6fded36adc8bb97313a3c550e4cfbdc58b90075ef3",
+    "student.tests/pa29/controls171/bad-sequence-type.cpp": "e7f934b812e18fba0a02d2c7081ab4377c5a5d4ab6378350d0295b62defa61ba",
+    "student.tests/pa29/controls171/bad-value-element.cpp": "fb6e11a5ddfe433be3d3cbb35520efe2e1d61a784f7ac9f3dba8323531aca325",
+    "student.tests/pa29/controls171/dependent-head.cpp": "790b2298ddac69262ca82c25fe2e0265d0a2636de615025f9356619e00b0dcb0",
+    "student.tests/pa29/controls171/expanded-bound.cpp": "f712ee27c9d79db72866b4c2932cb3333392593acff05b2bf10df4ca87a69618",
+    "student.tests/pa29/controls171/integer-pack.cpp": "4c2ef9b84979051bdc9b95c33f9b733bdcda60acb8377c76ec484d54d5492529",
+    "student.tests/pa29/controls171/matching-probe.cpp": "cb48e1c921f11b8a43ac1e34999f0ac064f521a43f2e6f1f06d2ad69c20e3f2d",
+    "student.tests/pa29/controls171/nested.cpp": "cf82a0f94062c4d842e4094631b511d19ad145651bb2b3fe66b065f11c2133f7",
+    "student.tests/pa29/controls171/selection.cpp": "5b7ac12ea1e73c606210b02da4b2da4fac7a7417af0b11cfc0ff9b50c888a595",
+    "student.tests/pa29/controls171/sequences.cpp": "d679e2e0345c6f795bf3da0fd568dae53c4da18434eec34dcdac5560e80794a5",
+    "student.tests/pa29/controls171/template-head.cpp": "b4f4729611975ce43f6bee8843d5f580b7de34600625e3e087a009d23c1f3574",
+    "student.tests/pa29/controls171/template-identity.cpp": "3e045b96734a7996d3578f53bd9f71f9234f4a3ee80fc935054a8a4826723dc9"
+  },
+  "checks": [
+    {
+      "name": "abi compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/abi.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/abi.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "abi link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/abi.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/abi"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "abi runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/abi"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bad-deep-builtin compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-deep-builtin.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-deep-builtin.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: expected ';', found '<' in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-deep-builtin.cpp:2\n"
+    },
+    {
+      "name": "bad-dependent-head-application compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-dependent-head-application.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-dependent-head-application.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid class template arguments\n"
+    },
+    {
+      "name": "bad-fixed-head compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-fixed-head.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-fixed-head.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid class template arguments\n"
+    },
+    {
+      "name": "bad-index compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-index.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-index.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __type_pack_element\n"
+    },
+    {
+      "name": "bad-negative-index compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-negative-index.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-negative-index.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __type_pack_element\n"
+    },
+    {
+      "name": "bad-scoped-index compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-scoped-index.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-scoped-index.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __type_pack_element\n"
+    },
+    {
+      "name": "bad-selected-deduction compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-selected-deduction.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-selected-deduction.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "bad-selection-arity compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-selection-arity.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-selection-arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __type_pack_element\n"
+    },
+    {
+      "name": "bad-sequence-arity compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-sequence-arity.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-sequence-arity.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __make_integer_seq\n"
+    },
+    {
+      "name": "bad-sequence-bound compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-sequence-bound.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-sequence-bound.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __make_integer_seq\n"
+    },
+    {
+      "name": "bad-sequence-enum compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-sequence-enum.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-sequence-enum.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __make_integer_seq\n"
+    },
+    {
+      "name": "bad-sequence-narrowing compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-sequence-narrowing.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-sequence-narrowing.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __make_integer_seq\n"
+    },
+    {
+      "name": "bad-sequence-target compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-sequence-target.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-sequence-target.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __make_integer_seq\n"
+    },
+    {
+      "name": "bad-sequence-type compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-sequence-type.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-sequence-type.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __make_integer_seq\n"
+    },
+    {
+      "name": "bad-value-element compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/bad-value-element.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/bad-value-element.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __type_pack_element\n"
+    },
+    {
+      "name": "dependent-head compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/dependent-head.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/dependent-head.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "dependent-head link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/dependent-head.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/dependent-head"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "dependent-head runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/dependent-head"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "expanded-bound compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/expanded-bound.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/expanded-bound.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "expanded-bound link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/expanded-bound.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/expanded-bound"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "expanded-bound runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/expanded-bound"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integer-pack compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/integer-pack.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/integer-pack.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integer-pack link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/integer-pack.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/integer-pack"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integer-pack runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/integer-pack"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "matching-probe compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/matching-probe.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/matching-probe.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "matching-probe link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/matching-probe.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/matching-probe"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "matching-probe runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/matching-probe"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "nested compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/nested.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/nested.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "nested link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/nested.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/nested"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "nested runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/nested"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "selection compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/selection.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/selection.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "selection link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/selection.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/selection"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "selection runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/selection"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "sequences compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/sequences.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/sequences.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "sequences link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/sequences.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/sequences"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "sequences runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/sequences"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "template-head compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/template-head.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/template-head.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "template-head link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/template-head.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/template-head"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "template-head runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/template-head"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "template-identity compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls171/template-identity.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/template-identity.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "template-identity link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/template-identity.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/template-identity"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "template-identity runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/controls-final/template-identity"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

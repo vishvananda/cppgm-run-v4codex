@@ -1,0 +1,395 @@
+{
+  "compiler_sha256": "6ec65e33acebc670a0f27cf9f61f917b181da2437906102891ebf568025c0b8d",
+  "inputs": {
+    "student.tests/pa29/controls170/bad-explicit-false-trait.cpp": "612d92595d1af123d5086a9b7afe2349294b66ae04ed271d18ba52baf90e6b23",
+    "student.tests/pa29/controls170/bad-vector-query-designator.cpp": "456824040ff2ed28f0dc81a9b6b0c289c511f4bef8345d23b390ad7bff8fc4ff",
+    "student.tests/pa29/controls170/bad-vector-query-excess.cpp": "dd8b52bce21a593c190f64973c4abd67fc3f3bd16bf5a76a5432592328d1c4da",
+    "student.tests/pa29/controls170/bad-vector-query-narrowing.cpp": "d1248b33f15a803889ffe4607699b6e14e8d3efc86e8a56c5f2c3ede68f59e0e",
+    "student.tests/pa29/controls170/block-query.cpp": "e05f512ea309c51c381ddf57cb36b1a1d291dcf40579a834372ad22e1e0b1479",
+    "student.tests/pa29/controls170/constructor-writes.cpp": "e3dac921305992a059b47f375af01b09c18fd3c394c1fb50fb48e5ceb267a70a",
+    "student.tests/pa29/controls170/integrated.cpp": "72b3315b223dc457d84878f7c86f9c64758199ae0c78f0dd01dd7bd0c6157323",
+    "student.tests/pa29/controls170/overlay-retirement.cpp": "34bec625946efe5261667efd83070fc1fd38af113ceed17dedf981f61c0cdf56",
+    "student.tests/pa29/controls170/pointer-arithmetic-dependencies.cpp": "c140758c770cc12990c03431d59f7da73bdf155e7746242b5ff6a476ee4bd17d",
+    "student.tests/pa29/controls170/pointer-dependencies.cpp": "e7a4dc4b3562bb02ae287865d07c051c6d1e8914105eb10d4894b198b3ff1cad",
+    "student.tests/pa29/controls170/trait-controls.cpp": "1a04d169640a4b8168fbd4bc3c80bd155f2ab47d9efd666e51468e1adbcb037b",
+    "student.tests/pa29/controls170/vector-queries.cpp": "8e1868f45683c324d3ae086a834909863dcbdec2a33ab9570eaf73814d4b1dab"
+  },
+  "checks": [
+    {
+      "name": "bad-explicit-false-trait compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls170/bad-explicit-false-trait.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/bad-explicit-false-trait.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls170/bad-explicit-false-trait.cpp:3\n"
+    },
+    {
+      "name": "bad-vector-query-designator compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls170/bad-vector-query-designator.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/bad-vector-query-designator.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid explicit function template arguments\n"
+    },
+    {
+      "name": "bad-vector-query-excess compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls170/bad-vector-query-excess.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/bad-vector-query-excess.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid explicit function template arguments\n"
+    },
+    {
+      "name": "bad-vector-query-narrowing compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls170/bad-vector-query-narrowing.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/bad-vector-query-narrowing.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid explicit function template arguments\n"
+    },
+    {
+      "name": "block-query compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls170/block-query.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/block-query.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "block-query link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/block-query.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/block-query"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "block-query runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/block-query"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "constructor-writes compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls170/constructor-writes.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/constructor-writes.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "constructor-writes link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/constructor-writes.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/constructor-writes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "constructor-writes runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/constructor-writes"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls170/integrated.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/integrated.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/integrated.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/integrated"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "integrated runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/integrated"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "overlay-retirement compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls170/overlay-retirement.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/overlay-retirement.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "overlay-retirement link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/overlay-retirement.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/overlay-retirement"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "overlay-retirement runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/overlay-retirement"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "pointer-arithmetic-dependencies compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls170/pointer-arithmetic-dependencies.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/pointer-arithmetic-dependencies.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "pointer-arithmetic-dependencies link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/pointer-arithmetic-dependencies.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/pointer-arithmetic-dependencies"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "pointer-arithmetic-dependencies runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/pointer-arithmetic-dependencies"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "pointer-dependencies compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls170/pointer-dependencies.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/pointer-dependencies.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "pointer-dependencies link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/pointer-dependencies.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/pointer-dependencies"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "pointer-dependencies runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/pointer-dependencies"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "trait-controls compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls170/trait-controls.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/trait-controls.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "trait-controls link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/trait-controls.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/trait-controls"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "trait-controls runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/trait-controls"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "vector-queries compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls170/vector-queries.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/vector-queries.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "vector-queries link",
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/vector-queries.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/vector-queries"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "vector-queries runtime",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa29-171/inherited170-final/vector-queries"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

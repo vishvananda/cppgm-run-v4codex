@@ -1,0 +1,29 @@
+{
+  "compiler_sha256": "6ec65e33acebc670a0f27cf9f61f917b181da2437906102891ebf568025c0b8d",
+  "code_commit": "846ef3fb2bde489edac88757bce9da9c4f40ea11",
+  "stage_progress": {
+    "entry": 361,
+    "final": 367,
+    "total": 403,
+    "fixed": [
+      "pa29/tests/compile/500-make-integer-seq-cstyle-cast-count.t",
+      "pa29/tests/compile/700-hosted-integer-pack-tuple-defer-compile.t",
+      "pa29/tests/compile/700-nonstl-empty-value-pack-nested-alias.t",
+      "pa29/tests/compile/700-nonstl-type-pack-element-nested-alias.t",
+      "pa29/tests/compile/700-type-pack-element-inherited-partial-member-alias-call.t",
+      "pa29/tests/compile/700-type-pack-element-partial-member-alias-pack-call.t"
+    ],
+    "new_failures": []
+  },
+  "prior_tests": 4538,
+  "unchanged_contract_paths": 1707,
+  "focused_checks": 45,
+  "inherited_checks": 28,
+  "inspection_checks": 13,
+  "performance_observations": 464,
+  "common_images_identical": true,
+  "all_common_work_counters_identical": true,
+  "reference_corrections": false,
+  "review": "New code range awaits independent review; 36 stage failures remain counted.",
+  "source_unchanged_since_validation": true
+}

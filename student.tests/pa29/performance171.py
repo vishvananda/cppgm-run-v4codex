@@ -16,8 +16,9 @@ def save():(out/'performance.json').write_text(json.dumps(r,separators=(',',':')
 for i in range(6):
  start=time.perf_counter();run(['/usr/bin/time','-f','%M','-o',out/'rss',*affinity,'/usr/bin/true']);r['launcher'].append(time.perf_counter()-start)
 iterations=20000000
-for kind in ['selection','sequence','integer-pack']:
- for n in [600,1200,2400]:
+scale=int(sys.argv[4]) if len(sys.argv)>4 else 1
+for kind in (['sequence','integer-pack'] if scale!=1 else ['selection','sequence','integer-pack']):
+ for n in [600*scale,1200*scale,2400*scale]:
   name=kind+str(n);src=out/(name+'.cpp')
   if kind=='selection':
    prefix='''template<int N> struct Cell {long value;};

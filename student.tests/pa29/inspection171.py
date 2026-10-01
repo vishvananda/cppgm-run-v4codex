@@ -23,5 +23,7 @@ run('LowIR roundtrip',[root/'dev/lowir',out/'lowir.txt','-o',out/'roundtrip.lowi
 assert (out/'lowir.txt').read_bytes()==(out/'roundtrip.lowir').read_bytes()
 run('MIR and native',[root/'dev/lowir2native','--dump-machine-ir',out/'selection.mir',out/'roundtrip.lowir','-o',out/'native'])
 run('native runtime',[out/'native'])
-(out/'results.json').write_text(json.dumps(dict(compiler_sha256=hashlib.sha256(cc.read_bytes()).hexdigest(),checks=rows),indent=2)+'\n')
+run('telemetry object',[cc,'-std=c++11','-DABI_PEER','--stats','-c',source,'-o',out/'stats.o'])
+assert (out/'stats.o').read_bytes()==(out/'student.o').read_bytes()
+(out/'results.json').write_text(json.dumps(dict(compiler_sha256=hashlib.sha256(cc.read_bytes()).hexdigest(),telemetry_object_equal=True,symbols_equal=True,source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),checks=rows),indent=2)+'\n')
 print(str(len(rows))+' inspection checks passed')
