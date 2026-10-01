@@ -400,7 +400,7 @@ void Procedural::run()
         local_static_references.put(storage.reference,local_static_reference_objects.size());
         local_static_reference_objects.push_back({storage.object,next});
     }
-    for (EntityId e = 1; e < sem.entities.size(); ++e) {
+    for (EntityId e = 1; e < symbols.size(); ++e) {
         auto entity = sem.entities[e];
         if (sem.predefined_string(e) && !entity.name) continue; // Demand support bytes only through a consumed address.
         if (entity.template_pattern) continue;
@@ -436,7 +436,7 @@ void Procedural::run()
     }
     // Inherited forwarding constructors retain a distinct rooted base entry.
     // Both entries consume the same semantic actions, with independent IR IDs.
-    for (EntityId e = 1; e < sem.entities.size(); ++e) {
+    for (EntityId e = 1; e < symbols.size(); ++e) {
         if (!symbols[e] || !separate_base(e)) continue;
         bool external = sem.emission_suppressed(e) || (!sem.entities[e].body && !sem.synthetic_member(e));
         Function f; f.symbol = symbol(e, true);
@@ -465,8 +465,8 @@ void Procedural::run()
     // All relocation identities exist before any temporary data is emitted.
     // Preserve the established temporary-before-declaration presentation order.
     for (auto e : reference_objects) reference_global(e);
-    for (EntityId e = 1; e < sem.entities.size(); ++e)
-        if (e < symbols.size() && symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable && !sem.static_temporary(e).object) global(e);
+    for (EntityId e = 1; e < symbols.size(); ++e)
+        if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable && !sem.static_temporary(e).object) global(e);
     emit_vtables();
     for (EntityId e : definitions) {
         function_body(e);

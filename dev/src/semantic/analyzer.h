@@ -658,7 +658,7 @@ private:
     void capture_default_conversion(const Conversion& c);
     void demand_default_fact(std::uint32_t id);
     std::size_t default_dependency_work = 0, default_demand_work = 0;
-    Index default_environments;
+    Index default_environments, default_contexts;
     std::size_t default_environment_work = 0, default_argument_work = 0;
     ScopeId default_environment(EntityId e, ScopeId head);
     void demand_region(NodeId root);
@@ -1258,15 +1258,20 @@ private:
     bool instantiate_member_definition(EntityId e);
     void demand_template_storage(EntityId e);
     void initialize_inline_variable(EntityId e);
+    void demand_inline_initializer(EntityId e);
     TypeId variable_expression_type(EntityId e);
     Index inline_variable_definitions;
     struct InlineVariableDefinition {
         NodeId declarator = 0, specifiers = 0;
         ScopeId scope = 0;
-        FactState state = FactState::NotStarted;
+        std::uint32_t dependencies = 0;
+        FactState state = FactState::NotStarted, demand = FactState::NotStarted;
     };
     std::vector<InlineVariableDefinition> inline_variable_recipes = std::vector<InlineVariableDefinition>(1);
-    std::size_t inline_variable_initializers = 0, inline_variable_hits = 0;
+    unsigned active_inline_initializer = 0;
+    Index inline_dependency_index[4];
+    std::vector<DefaultDependency> inline_dependencies;
+    std::size_t inline_variable_initializers = 0, inline_variable_hits = 0, inline_variable_demands = 0;
     void demand_class_constant_storage(TypeId type);
     Index class_constant_storage;
     Index definition_roots, definition_paths, definition_index, definition_owner_index, definition_applications, storage_requested;

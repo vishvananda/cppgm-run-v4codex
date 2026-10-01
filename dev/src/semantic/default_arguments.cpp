@@ -219,13 +219,26 @@ NodeId Analyzer::default_argument(EntityId e, unsigned parameter, Conversion* co
         }
         active_default_fact = saved_default; unevaluated_depth = saved_unevaluated;
     }
-    if (reason == DefaultReason::Argument && !active_default_fact) demand_default_fact(id);
+    if (reason == DefaultReason::Argument && !active_default_fact && !active_inline_initializer) demand_default_fact(id);
     auto fact = default_argument_facts[id];
     if (converted) { *converted = copy_conversion_recipe(conversions[fact.conversion]); converted->default_argument = true; }
     return fact.value;
 }
 void Analyzer::record_default_dependency(DefaultDependencyKind kind, std::uint32_t target)
 {
+    // These typed dependency kinds also describe a deferred member initializer.
+    // Its uses belong to that definition, never to the requesting function.
+    if (active_inline_initializer && !active_default_fact && !current_function && target &&
+        (kind == DefaultDependencyKind::Argument || unevaluated_depth == 1)) {
+        auto identity = key(active_inline_initializer,target);
+        auto& index = inline_dependency_index[unsigned(kind)];
+        if (!index.get(identity)) {
+            index.put(identity,1);
+            auto next = inline_variable_recipes[active_inline_initializer].dependencies;
+            inline_dependencies.emplace_back(target,next,kind);
+            inline_variable_recipes[active_inline_initializer].dependencies = inline_dependencies.size();
+        }
+    }
     if (!active_default_fact || !target || (kind != DefaultDependencyKind::Argument && unevaluated_depth != 1)) return;
     auto next = default_argument_facts[active_default_fact].dependencies;
     default_dependencies.emplace_back(target,next,kind);

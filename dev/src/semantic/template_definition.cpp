@@ -345,6 +345,7 @@ void Analyzer::demand_template_storage(EntityId e)
         entities[e].emission |= Entity::Used;
         if (instantiation_suppressed(e)) return;
         initialize_inline_variable(e);
+        demand_inline_initializer(e);
         demand_constant_relocations(constant_entity_value(e));
         return;
     }

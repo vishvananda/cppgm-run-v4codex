@@ -153,7 +153,10 @@ void Procedural::destructor_finish(EntityId e, bool returning)
 void Procedural::global_finalization()
 {
     std::vector<EntityId> work;
-    for (EntityId e = 1; e < sem.entities.size(); ++e)
+    // Declaration lifetimes end at the snapshot consumed by this lowerer.
+    // Constant evaluation can append source-string support entities later;
+    // those have a separate byte-emission queue and no lifecycle table slot.
+    for (EntityId e = 1; e < symbols.size(); ++e)
         if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable &&
             sem.entities[e].definition && !sem.local_static(e) && !sem.entities[e].inline_variable &&
             !(sem.static_temporary(e).reference && (sem.local_static(sem.static_temporary(e).reference) || sem.entities[sem.static_temporary(e).reference].inline_variable)) && sem.destructor_needed(sem.object_destructor(e))) work.push_back(e);

@@ -21,7 +21,11 @@ void Analyzer::instantiate_function(EntityId e)
     if (!pattern.body) return;
     specializations[index].body = FactState::Active; ++template_bodies;
     try {
-    auto context = spec.context ? spec.context : ast.new_context();
+    auto parent = pattern.parent_frame;
+    if (pattern.source_count)
+        parent = substitution_frame(index,pattern.source_parameters,pattern.source_count,parent);
+    auto frame = substitution_frame(index,pattern.offset,pattern.count,parent);
+    auto context = spec.context ? spec.context : expansion_context(frame);
     auto source = ast.instantiate(pattern.source,context);
     auto declarator = ast.projected(pattern.declarator,context);
     auto body = ast.projected(pattern.body,context);
@@ -29,10 +33,6 @@ void Analyzer::instantiate_function(EntityId e)
     ScopeId environment = specialization_environment(e);
     specializations[index].context = context;
     specializations[index].environment = environment;
-    auto parent = pattern.parent_frame;
-    if (pattern.source_count)
-        parent = substitution_frame(index,pattern.source_parameters,pattern.source_count,parent);
-    auto frame = substitution_frame(index,pattern.offset,pattern.count,parent);
     attach_template_context(context,frame);
     if (closure_functions.get(e)) {
         auto source_function = template_declaration_sources.get(ast.nodes.occurrences[pattern.source].source);
@@ -136,8 +136,31 @@ ScopeId Analyzer::default_environment(EntityId e, ScopeId head)
 NodeId Analyzer::instantiate_default(EntityId e, NodeId source)
 {
     auto index = entities[e].specialization;
-    auto context = specializations[index].context;
-    if (!context) specializations[index].context = context = ast.new_context();
+    auto head = facts[source].scope;
+    auto identity = key(index,head);
+    auto context = default_contexts.get(identity);
+    if (!context) {
+        // A default can be demanded before the function body. Publish its
+        // complete substitution frame now; source argument/type queries must
+        // never substitute against an unattached occurrence context.
+        auto spec = specializations[index];
+        auto pattern = templates[entities[spec.pattern].template_info];
+        auto parent = pattern.parent_frame;
+        if (pattern.source_count)
+            parent = substitution_frame(index,pattern.source_parameters,pattern.source_count,parent);
+        auto frame = substitution_frame(index,pattern.offset,pattern.count,parent);
+        if (head != pattern.environment) {
+            auto pack = argument_packs[spec.arguments]; unsigned ordinal = 0;
+            for (auto d = scopes[head].first_decl; d; d = declarations[d].next) {
+                auto parameter = declarations[d].entity;
+                if (!entities[parameter].template_parameter) continue;
+                if (ordinal == pack.count) throw std::logic_error("default frame argument count mismatch");
+                frame = argument_frame(frame,parameter,argument_types[pack.offset+ordinal++]);
+            }
+            if (ordinal != pack.count) throw std::logic_error("incomplete default argument frame");
+        }
+        context = expansion_context(frame); default_contexts.put(identity,context);
+    }
     auto root = ast.instantiate(source,context);
     facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
     facts.edit(root).scope = default_environment(e,facts[source].scope);

@@ -223,6 +223,8 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"variable_template_initializers\":" << variable_initializers
         << ",\"inline_variable_initializers\":" << inline_variable_initializers
         << ",\"inline_variable_hits\":" << inline_variable_hits
+        << ",\"inline_variable_demands\":" << inline_variable_demands
+        << ",\"inline_variable_dependencies\":" << inline_dependencies.size()
         << ",\"variable_template_reuses\":" << variable_reuses
         << ",\"variable_template_candidates\":" << variable_candidates
         << ",\"function_ordering_work\":" << function_ordering_work

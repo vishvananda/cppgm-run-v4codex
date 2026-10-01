@@ -38,7 +38,7 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     if (expressions[n].ready) {
         if (source_builtins_present && ast[n].kind == Kind::Call) remember_source_site(n,s);
         if (!unevaluated_depth) expressions.evaluated(n,true);
-        if ((!unevaluated_depth || active_default_fact) && definitions) demand_template_storage(expressions[n].entity);
+        if ((!unevaluated_depth || active_default_fact || active_inline_initializer) && definitions) demand_template_storage(expressions[n].entity);
         demand_function_expression(expressions[n]);
         prepare_expression_discard(n);
         return expressions[n];
@@ -70,7 +70,7 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
         if (closure_captures[capture].object) result.type = capture_type(capture);
     }
     demand_function_expression(result);
-    bool storage = (!unevaluated_depth || active_default_fact) && definitions;
+    bool storage = (!unevaluated_depth || active_default_fact || active_inline_initializer) && definitions;
     bool substituted = ast.nodes.occurrences[n].context != 0;
     if (storage && substituted) demand_template_storage(result.entity);
     // A substituted use establishes its value at instantiation. Ordinary O0
