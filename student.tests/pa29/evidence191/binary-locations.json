@@ -1,0 +1,26 @@
+{
+  "records": [
+    {
+      "label": "entry",
+      "code_commit": "32c1f5f43cde4e09f623f0e5d606a51d170e8203",
+      "path": "/tmp/pa29-191/entry",
+      "sha256": "98bbbe6a9acc9f606c564a19c1cba5efae7b52d356f6692439fe62b7980b12b5",
+      "bytes": 4431936
+    },
+    {
+      "label": "preliminary",
+      "code_commit": "37d03290",
+      "path": "/tmp/pa29-191/initial-final",
+      "sha256": "59d277b7f4329df728afe2ab7ebe9df2360bfaf373371033c6715f3b13101d8e",
+      "bytes": 4465952
+    },
+    {
+      "label": "final",
+      "code_commit": "f542b3768ea22d35a2a2e18b87f5169472dbdf20",
+      "path": "/tmp/pa29-191/final",
+      "sha256": "697a1cf4f6dcd402d60d756528aaffc7d15aaae3ed55c4287e71b62420e64eb3",
+      "bytes": 4465952
+    }
+  ],
+  "note": "The preliminary binary was copied to initial-final before final was replaced. Raw datasets retain original capture paths and hashes; these retained locations identify the matching frozen content."
+}

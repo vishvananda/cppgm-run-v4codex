@@ -1,0 +1,162 @@
+{
+  "affinity": [
+    "taskset",
+    "-c",
+    "0"
+  ],
+  "binaries": {
+    "A": {
+      "path": "/tmp/pa29-191/entry",
+      "sha256": "98bbbe6a9acc9f606c564a19c1cba5efae7b52d356f6692439fe62b7980b12b5"
+    },
+    "B": {
+      "path": "/tmp/pa29-191/final",
+      "sha256": "59d277b7f4329df728afe2ab7ebe9df2360bfaf373371033c6715f3b13101d8e"
+    }
+  },
+  "flags": [
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "runtime_args": [
+    "3"
+  ],
+  "inputs": {},
+  "entry_failures": {},
+  "images": {},
+  "launchers": [
+    {
+      "mode": "compile",
+      "index": 0,
+      "wall_s": 0.006852705031633377,
+      "peak_rss_kib": 3912,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "compile",
+      "index": 1,
+      "wall_s": 0.006309546530246735,
+      "peak_rss_kib": 3872,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "compile",
+      "index": 2,
+      "wall_s": 0.00590883381664753,
+      "peak_rss_kib": 3876,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "compile",
+      "index": 3,
+      "wall_s": 0.006189566105604172,
+      "peak_rss_kib": 3956,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "compile",
+      "index": 4,
+      "wall_s": 0.0076763201504945755,
+      "peak_rss_kib": 3956,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "compile",
+      "index": 5,
+      "wall_s": 0.006147176027297974,
+      "peak_rss_kib": 3900,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "compile",
+      "index": 6,
+      "wall_s": 0.006784943863749504,
+      "peak_rss_kib": 3920,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "compile",
+      "index": 7,
+      "wall_s": 0.0057815071195364,
+      "peak_rss_kib": 3788,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "runtime",
+      "index": 0,
+      "wall_s": 0.006508396938443184,
+      "peak_rss_kib": 1744,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "runtime",
+      "index": 1,
+      "wall_s": 0.004620479419827461,
+      "peak_rss_kib": 1748,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "runtime",
+      "index": 2,
+      "wall_s": 0.004178004339337349,
+      "peak_rss_kib": 1740,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "runtime",
+      "index": 3,
+      "wall_s": 0.0045923274010419846,
+      "peak_rss_kib": 1752,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "runtime",
+      "index": 4,
+      "wall_s": 0.007126610726118088,
+      "peak_rss_kib": 1732,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "runtime",
+      "index": 5,
+      "wall_s": 0.004649927839636803,
+      "peak_rss_kib": 1748,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "runtime",
+      "index": 6,
+      "wall_s": 0.004557812586426735,
+      "peak_rss_kib": 1756,
+      "status": 0,
+      "phase_counters": []
+    },
+    {
+      "mode": "runtime",
+      "index": 7,
+      "wall_s": 0.004654821008443832,
+      "peak_rss_kib": 1744,
+      "status": 0,
+      "phase_counters": []
+    }
+  ],
+  "runs": [],
+  "summary": {},
+  "host_compiler": "Ubuntu clang version 21.1.8 (6ubuntu1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: /usr/lib/llvm-21/bin\n",
+  "host_linker": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+}

@@ -1,0 +1,19 @@
+{
+  "total": 403,
+  "entry_failures": 5,
+  "final_failures": 4,
+  "fixed": [
+    "pa29/tests/compile/500-gnu-ext-vector-scalar-template-deduction.t"
+  ],
+  "new_failures": [],
+  "remaining": [
+    "pa29/tests/compile/200-hosted-type-specifier-functional-cast.t",
+    "pa29/tests/compile/500-builtin-types-and-extern-vars.t",
+    "pa29/tests/compile/700-hosted-gnu-float-builtin-spellings.t",
+    "pa29/tests/run/800-out-of-class-nested-template-abi-tag-suppression-run.t"
+  ],
+  "prior_passed": 4538,
+  "prior_total": 4538,
+  "coverage_preserved": true,
+  "progress_criterion_satisfied": true
+}

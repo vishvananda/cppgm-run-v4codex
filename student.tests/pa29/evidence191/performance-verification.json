@@ -1,0 +1,29 @@
+[
+  {
+    "dataset": "preliminary-common-performance.json",
+    "observations": 224,
+    "launchers": 0,
+    "input_hashes_match": true,
+    "binaries_match": true,
+    "paired_ratios_match": true,
+    "images_match": true
+  },
+  {
+    "dataset": "common-performance.json",
+    "observations": 224,
+    "launchers": 0,
+    "input_hashes_match": true,
+    "binaries_match": true,
+    "paired_ratios_match": true,
+    "images_match": true
+  },
+  {
+    "dataset": "owner-performance.json",
+    "observations": 96,
+    "launchers": 16,
+    "input_hashes_match": true,
+    "binaries_match": true,
+    "paired_ratios_match": true,
+    "images_match": true
+  }
+]

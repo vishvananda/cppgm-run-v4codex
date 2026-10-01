@@ -1,0 +1,50 @@
+{
+  "records": [
+    {
+      "command": [
+        "uname",
+        "-a"
+      ],
+      "status": 0,
+      "stdout": "Linux instance-20260513-022623 7.0.0-1005-gcp #5-Ubuntu SMP PREEMPT Tue May 26 15:11:20 UTC 2026 x86_64 GNU/Linux\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "lscpu"
+      ],
+      "status": 0,
+      "stdout": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           46 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  32\nOn-line CPU(s) list:                     0-31\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) CPU @ 2.20GHz\nCPU family:                              6\nModel:                                   79\nThread(s) per core:                      2\nCore(s) per socket:                      16\nSocket(s):                               1\nStepping:                                0\nBogoMIPS:                                4399.99\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch pti ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm rdseed adx smap xsaveopt arat md_clear arch_capabilities\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               512 KiB (16 instances)\nL1i cache:                               512 KiB (16 instances)\nL2 cache:                                4 MiB (16 instances)\nL3 cache:                                55 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-31\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Mitigation; PTE Inversion\nVulnerability Mds:                       Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Meltdown:                  Mitigation; PTI\nVulnerability Mmio stale data:           Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Mitigation; IBRS\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; IBRS; IBPB conditional; STIBP conditional; RSB filling; PBRSB-eIBRS Not affected; BHI SW loop, KVM SW loop\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Mitigation; Clear CPU buffers; SMT Host state unknown\nVulnerability Vmscape:                   Not affected\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "--version"
+      ],
+      "status": 0,
+      "stdout": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "clang++",
+        "--version"
+      ],
+      "status": 0,
+      "stdout": "Ubuntu clang version 21.1.8 (6ubuntu1)\nTarget: x86_64-pc-linux-gnu\nThread model: posix\nInstalledDir: /usr/lib/llvm-21/bin\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "df",
+        "-B1",
+        "/home/vishvananda/work/private/v4codex/checkout"
+      ],
+      "status": 0,
+      "stdout": "Filesystem       1B-blocks        Used  Available Use% Mounted on\n/dev/loop5     20957446144 18707177472 2233491456  90% /home/vishvananda/work/private/v4codex\n",
+      "stderr": ""
+    }
+  ],
+  "note": "CPU 0 affinity; no compiler build or course/personal test job overlapped timings. Shared host was not isolated. All measurements including outliers and pre-repair data retained."
+}

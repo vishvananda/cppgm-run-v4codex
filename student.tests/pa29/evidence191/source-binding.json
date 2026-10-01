@@ -1,0 +1,12 @@
+{
+  "entry_commit": "32c1f5f43cde4e09f623f0e5d606a51d170e8203",
+  "code_commit": "f542b3768ea22d35a2a2e18b87f5169472dbdf20",
+  "dev_tree": "10162605226f6357a6b3f101fb677be2a66388d4",
+  "compiler_sha256": "697a1cf4f6dcd402d60d756528aaffc7d15aaae3ed55c4287e71b62420e64eb3",
+  "entry_compiler_sha256": "98bbbe6a9acc9f606c564a19c1cba5efae7b52d356f6692439fe62b7980b12b5",
+  "frozen_compiler_matches": true,
+  "tracked_dev_paths": 479,
+  "validated_source_sha256": "8086bee4d855be6ea7928a39e8d2efb4833e78d4fc90cf461fa3232906376547",
+  "worktree_dev_matches_committed_tree": true,
+  "following_record_commit_changes_implementation": false
+}
