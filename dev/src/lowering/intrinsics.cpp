@@ -21,6 +21,8 @@ Value Procedural::intrinsic_call(NodeId n, semantic::Intrinsic intrinsic)
         auto result = emit(Opcode::Binary,IRType::I32,{mapped.operand,Operand::integer(3)},Operation::And);
         result.type = fact.type; return result;
     }
+    if (intrinsic == semantic::Intrinsic::IsConstantEvaluated)
+        return Value(Operand::integer(0),IRType::I8,fact.type);
     auto first = argument(0);
     if (intrinsic == semantic::Intrinsic::Prefetch || intrinsic == semantic::Intrinsic::AssumeAligned) {
         for (unsigned j = 1; j < fact.argument_count; ++j) argument(j);

@@ -206,7 +206,13 @@ void Procedural::object(EntityId e)
         location = address(location); location.type = t; location.address = true;
     }
     begin_full_expression(scalar.expression ? scalar.expression : init,omit);
-    if (sem.constant_array_plan(e)) initialize_constant_array(e,location);
+    if (sem.context_reference(e).storage) initialize_context_reference(sem.context_reference(e),location);
+    else if (sem.context_initialized(e) && sem.entities[e].constant.valid && !sem.class_value(t) && sem.types[t].kind != TypeKind::Array) {
+        auto value = constant_operand(sem.entities[e].constant,t);
+        store(reference(t) ? address(value) : value,location);
+    }
+    else if (sem.constant_array_plan(e) || (sem.context_initialized(e) && sem.class_value(t) && sem.entities[e].constant.valid))
+        initialize_constant_array(e,location);
     else if (scalar.expression && full_expression.enabled) initialize_scalar(scalar,location);
     else if (init && sem.class_initialization(init,t).source) initialize(init,t,location);
     else if (init && sem.types[t].kind == TypeKind::Named && sem.entities[sem.types[t].entity].class_info && !sem.facts[init].entity) {

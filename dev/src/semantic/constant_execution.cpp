@@ -5,6 +5,7 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 std::uint32_t Analyzer::constant_body(EntityId e)
 {
+    EvaluationScope checking(*this,true);
     if (!e || (!entities[e].constexpr_function && !synthetic_member(e))) return 0;
     if (auto known = constant_body_index.get(e)) return known;
     if (entities[e].body_state == FactState::Active) return 0;
@@ -50,8 +51,8 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
     if (entities[e].member_info && !entities[e].is_static && !object && !constructor_member(e)) return Constant();
     // The activation key contains typed values and the receiver path, plus
     // snapshots of mutable or retired storage reachable through addresses.
-    std::vector<ArgumentId> key_args; key_args.reserve(args.size()+2); key_args.push_back(object);
-    key_args.push_back(zero);
+    std::vector<ArgumentId> key_args; key_args.reserve(args.size()+3); key_args.push_back(object);
+    key_args.push_back(zero); key_args.push_back(manifest_evaluation);
     Index dependencies;
     if (object) constant_dependencies(Constant(types.compound(TypeKind::LRef,constant_addresses[object].type),object),key_args,dependencies);
     for (unsigned i = 0; i < args.size(); ++i) {
@@ -66,6 +67,7 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
     auto id = constant_activation_index.get(key_value);
     if (id && constant_activations[id].state != FactState::NotStarted) {
         ++constant_hits;
+        if (mode_sensitive_activations.get(id)) ++evaluation_mode_uses;
         // Recursive demand of the same immutable frame has no constant value.
         return constant_activations[id].state == FactState::Success ? constant_activations[id].result : Constant();
     }
@@ -81,7 +83,7 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
     }
     auto saved = active_constant; auto saved_frame = constant_frame;
     active_constant = id; constant_frame = &frame; ++constant_depth;
-    Constant value;
+    Constant value; auto mode_uses = evaluation_mode_uses;
     try {
         if (constructor_member(e)) {
             auto member = members[entities[e].member_info];
@@ -161,6 +163,7 @@ Constant Analyzer::execute_constant(EntityId e, const std::vector<Constant>& arg
     }
     for (auto storage : frame.storage) constant_storage[storage].live = false;
     constant_activations[id].result = value;
+    if (evaluation_mode_uses != mode_uses) mode_sensitive_activations.put(id,1);
     // Exhaustion and not-yet-defined constants are unavailable prerequisites,
     // not semantic failures of this immutable key. A later shallower request
     // or definition may succeed; completed independent values remain reusable.
@@ -183,6 +186,10 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
 {
     auto e = facts[n].entity;
     auto call = expressions[n];
+    if (intrinsic_function(e) == Intrinsic::IsConstantEvaluated) {
+        ++evaluation_mode_uses;
+        return Constant(types.fundamental(FT_BOOL),manifest_evaluation);
+    }
     if (call.form == ExpressionForm::InvokeMemberData) return constant_read(constant_address(n,s));
     if (call.form >= ExpressionForm::FloatFinite && call.form <= ExpressionForm::FloatClassify)
         return floating_builtin_constant(call,s);

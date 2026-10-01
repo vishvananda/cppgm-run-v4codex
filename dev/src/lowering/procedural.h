@@ -79,6 +79,7 @@ class Procedural {
     struct ConstantDataRecord { lowir_model::Range data; std::uint64_t bytes, alignment; SymbolId symbol; std::uint32_t next; };
     std::vector<ConstantDataRecord> constant_data_records = std::vector<ConstantDataRecord>(1);
     void initialize_constant_array(EntityId e, Value location);
+    void initialize_context_reference(const semantic::Analyzer::ContextReference& plan, Value location);
     struct StringRecord { NodeId node; std::uint32_t next; };
     std::vector<StringRecord> string_records = std::vector<StringRecord>(1);
     std::vector<BlockId> labels;

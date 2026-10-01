@@ -53,7 +53,7 @@ unsigned char Analyzer::scalar_truth(NodeId n)
 {
     if (types[expressions[n].type].cv & 2) return 0;
     auto literal = [&](NodeId source) {
-        Constant value = constant_fact(source);
+        Constant value = runtime_constant_fact(source);
         bool boolean = ast[source].kind == Kind::KeywordLiteral && (ast[source].op == KW_TRUE || ast[source].op == KW_FALSE);
         if (!value.valid && (ast[source].kind == Kind::Literal || boolean)) value = evaluate(source,facts[source].scope);
         return value;

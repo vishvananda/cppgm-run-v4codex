@@ -25,15 +25,21 @@ bool Analyzer::bind_template_size(NodeId node, ScopeId scope)
 }
 std::uint32_t Analyzer::query_value(QueryId id)
 {
-    auto slot = query_value_index.get(id);
+    auto cache_key = key(id,manifest_evaluation);
+    auto slot = query_value_index.get(cache_key);
     if (!slot) {
-        slot = query_values.size(); query_values.push_back(QueryValue()); query_value_index.put(id,slot);
+        slot = query_values.size(); query_values.push_back(QueryValue()); query_value_index.put(cache_key,slot);
     }
     auto state = query_values[slot].state;
-    if (state == FactState::Success) return query_values[slot].constant;
+    if (state == FactState::Success) {
+        auto value = query_values[slot].constant;
+        if (mode_sensitive_values.get(value)) ++evaluation_mode_uses;
+        return value;
+    }
     if (state == FactState::Active) throw std::runtime_error("recursive constant query");
     if (state == FactState::Failure) throw std::runtime_error("failed constant query");
     query_values[slot].state = FactState::Active; ++query_value_work;
+    auto mode_uses = evaluation_mode_uses;
     try {
         auto fact = query_fact(id);
         if (fact.state == FactState::Failure) {
@@ -157,6 +163,7 @@ std::uint32_t Analyzer::query_value(QueryId id)
             } else value = constant_query_call(id);
         }
         auto constant = value.valid ? constants.size() : 1;
+        if (value.valid && evaluation_mode_uses != mode_uses) mode_sensitive_values.put(constant,1);
         if (value.valid) constants.push_back(value);
         query_values[slot].constant = constant; query_values[slot].state = FactState::Success;
         return constant;

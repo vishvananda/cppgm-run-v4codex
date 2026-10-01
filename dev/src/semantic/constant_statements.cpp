@@ -32,7 +32,9 @@ bool Analyzer::constant_local(EntityId e, ScopeId s)
         constant_destination = address;
     }
     Constant value;
-    try { value = constant_initialize(init,type,s,object_constructor(e)); }
+    try {
+        value = entities[e].constant.valid ? entities[e].constant : constant_initialize(init,type,s,object_constructor(e));
+    }
     catch (...) { constant_destination = saved_destination; throw; }
     constant_destination = saved_destination;
     if (address) {

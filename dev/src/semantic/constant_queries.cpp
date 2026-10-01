@@ -117,6 +117,10 @@ Constant Analyzer::constant_query_call(QueryId id)
             e = constant_storage[constant_addresses[value.bits].storage].entity;
         else return Constant();
     }
+    if (intrinsic_function(e) == Intrinsic::IsConstantEvaluated) {
+        ++evaluation_mode_uses;
+        return Constant(types.fundamental(FT_BOOL),manifest_evaluation);
+    }
     if (atomic_kind(e).op == AtomicOp::LockFree) {
         auto kind = atomic_kind(e);
         auto size = constant_query_conversion(query_edges[q.offset+1],conversions[fact.expression.conversions]);

@@ -116,6 +116,13 @@ Constant Analyzer::constant_initialize(NodeId n, TypeId t, ScopeId s, EntityId c
             if (!v.valid) return Constant();
             args.push_back(v);
         }
+        const auto signature = types[entities[ctor].type];
+        for (unsigned i = args.size(); i < signature.count; ++i) {
+            Conversion c; auto source = default_argument(ctor,i,&c,DefaultReason::Recipe);
+            auto value = constant_node_conversion(source,c,facts[source].scope);
+            if (!value.valid) return Constant();
+            args.push_back(value);
+        }
         return constant_construct(ctor,args,object_uses[x.object_use].value_initialize);
     }
     while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer ||
@@ -133,6 +140,7 @@ Constant Analyzer::constant_initialize(NodeId n, TypeId t, ScopeId s, EntityId c
 }
 Constant Analyzer::constant_entity_value(EntityId e)
 {
+    EvaluationScope initializer(*this,true);
     if (!e) return Constant();
     if (entities[e].constant.valid) return entities[e].constant;
     if (entities[e].kind == EntityKind::Variable && entities[e].specialization && !entities[e].explicit_specialization) {
@@ -156,7 +164,7 @@ Constant Analyzer::constant_entity_value(EntityId e)
         if (!address) { address = constant_storage_address(t,Constant(),e,0,true); constant_entity_storage.put(e,address); }
         constant_destination = address;
     }
-    Constant value;
+    Constant value; auto mode_uses = evaluation_mode_uses;
     auto source = entity.initializer;
     while (ast[source].kind == Kind::Initializer || ast[source].kind == Kind::Parenthesized ||
         ast[source].kind == Kind::ParenInitializer || ast[source].kind == Kind::ParenArguments) source = ast[source].first;
@@ -184,7 +192,10 @@ Constant Analyzer::constant_entity_value(EntityId e)
     constant_destination = saved_destination;
     if (address) { auto storage = constant_addresses[address].storage; constant_storage[storage].value = value; constant_storage[storage].readable = value.valid; }
     constant_declaration_state.put(e,value.valid ? 2 : constant_unavailable ? 0 : 3);
-    if (value.valid) entities[e].constant = value;
+    if (value.valid) {
+        entities[e].constant = value;
+        if (evaluation_mode_uses != mode_uses) mode_sensitive_objects.put(e,1);
+    }
     return value;
 }
 bool Analyzer::constant_object_fields(Constant v, std::uint64_t offset, EntityId field, bool base)

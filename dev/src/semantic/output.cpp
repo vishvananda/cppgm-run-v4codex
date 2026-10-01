@@ -363,6 +363,11 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_template_signature_shape_hits\":" << template_signature_shape_hits
         << ",\"semantic_type_probes\":" << types.probes
         << ",\"semantic_constant_work\":" << constant_work
+        << ",\"semantic_evaluation_mode_observations\":" << evaluation_mode_uses
+        << ",\"semantic_evaluation_mode_values\":" << mode_sensitive_values.size()
+        << ",\"semantic_evaluation_mode_activations\":" << mode_sensitive_activations.size()
+        << ",\"semantic_context_initializers\":" << mode_sensitive_objects.size()
+        << ",\"semantic_context_references\":" << context_references.size()-1
         << ",\"constexpr_validity_work\":" << constexpr_validity_work
         << ",\"exception_work\":" << exception_work
         << ",\"exception_match_work\":" << exception_match_work

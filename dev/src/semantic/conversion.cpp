@@ -191,6 +191,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
     }
     TypeId from = x.type;
     if (!from) return c;
+    if (types[from].kind == TypeKind::Function && intrinsic_function(x.entity) == Intrinsic::IsConstantEvaluated) return c;
     // A function-to-pointer/reference conversion selects the declaration even
     // without an overload set. This owns demand for static member addresses.
     if (types[from].kind == TypeKind::Function && x.entity && entities[x.entity].kind == EntityKind::Function &&
@@ -311,8 +312,8 @@ void Analyzer::select_function(NodeId n, EntityId e, bool direct)
 void Analyzer::use_selected_function(EntityId e, bool direct)
 {
     auto intrinsic = intrinsic_function(e);
-    if (intrinsic == Intrinsic::Atomic && !direct)
-        throw std::runtime_error("atomic builtin requires a direct call");
+    if ((intrinsic == Intrinsic::Atomic || intrinsic == Intrinsic::IsConstantEvaluated) && !direct)
+        throw std::runtime_error("compiler intrinsic requires a direct call");
     if (destructor_member(e)) members[entities[e].member_info].retained_root = true;
     if (direct && entities[e].member_info) members[entities[e].member_info].emission_reference = true;
     demand_member(e);

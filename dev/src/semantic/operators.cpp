@@ -31,6 +31,8 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         if (operator_expression(n, s, op, args, r)) return r;
     }
     if (op == OP_AMP) {
+        if (intrinsic_function(a.entity) == Intrinsic::IsConstantEvaluated)
+            throw std::runtime_error("compiler intrinsic requires a direct call");
         observe_scalar(operand);
         if (field_fact(a.entity).bit_field) throw std::runtime_error("address of bit-field");
         if (a.form == ExpressionForm::Overload) return a;

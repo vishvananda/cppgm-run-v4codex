@@ -25,6 +25,12 @@ EntityId Analyzer::builtin_function(IdentifierId name)
             builtin == FunctionBuiltin::SubOverflow ? Intrinsic::SubOverflow : Intrinsic::MulOverflow;
         entities[e].exception_spec = 129; intrinsic_functions.put(e,unsigned(kind)); return e;
     }
+    if (builtin == FunctionBuiltin::IsConstantEvaluated) {
+        evaluation_context_present = true;
+        auto e = declare_function(global,name,0,types.function(types.fundamental(FT_BOOL),{},false));
+        entities[e].exception_spec = 129;
+        intrinsic_functions.put(e,unsigned(Intrinsic::IsConstantEvaluated)); return e;
+    }
     if (auto hint = hint_builtin(name)) return hint;
     if (auto runtime = runtime_builtin(name)) return runtime;
     if (auto integer = integer_builtin_function(name)) return integer;

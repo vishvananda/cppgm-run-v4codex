@@ -6,7 +6,7 @@ inline bool integer_pack_builtin(TextView name) { return name.equals("__integer_
 enum class FunctionBuiltin : unsigned char {
     None, Strcmp, Strncmp, VaStart, VaEnd, VaCopy,
     Alloca, Expect, Abort, Unreachable, Vsnprintf, Vsprintf,
-    Fabs, Fabsf, Fabsl, Abs, Labs, Llabs, Memcpy, Memmove, Memset, Memcmp, Memchr, Strlen, Strchr, Strrchr, Bzero, Strstr, Strpbrk, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, OperatorNew, OperatorDelete
+    Fabs, Fabsf, Fabsl, Abs, Labs, Llabs, Memcpy, Memmove, Memset, Memcmp, Memchr, Strlen, Strchr, Strrchr, Bzero, Strstr, Strpbrk, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, OperatorNew, OperatorDelete, IsConstantEvaluated
 };
 inline bool invoke_builtin_name(TextView name) { return name.equals("__builtin_invoke"); }
 inline FunctionBuiltin function_builtin(TextView name)
@@ -18,7 +18,7 @@ inline FunctionBuiltin function_builtin(TextView name)
         "__builtin_fabs", "__builtin_fabsf", "__builtin_fabsl", "__builtin_abs",
         "__builtin_labs", "__builtin_llabs", "__builtin_memcpy", "__builtin_memmove",
         "__builtin_memset", "__builtin_memcmp", "__builtin_memchr", "__builtin_strlen",
-        "__builtin_strchr", "__builtin_strrchr", "__builtin_bzero", "__builtin_strstr", "__builtin_strpbrk", "__builtin_prefetch", "__builtin_assume_aligned", "__builtin_flt_rounds", "__builtin_add_overflow", "__builtin_sub_overflow", "__builtin_mul_overflow", "__builtin_operator_new", "__builtin_operator_delete"};
+        "__builtin_strchr", "__builtin_strrchr", "__builtin_bzero", "__builtin_strstr", "__builtin_strpbrk", "__builtin_prefetch", "__builtin_assume_aligned", "__builtin_flt_rounds", "__builtin_add_overflow", "__builtin_sub_overflow", "__builtin_mul_overflow", "__builtin_operator_new", "__builtin_operator_delete", "__builtin_is_constant_evaluated"};
     for (unsigned i = 1; i < sizeof(names)/sizeof(*names); ++i)
         if (name.equals(names[i])) return FunctionBuiltin(i);
     return FunctionBuiltin::None;

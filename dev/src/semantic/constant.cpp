@@ -132,10 +132,21 @@ Constant Analyzer::evaluate(NodeId n, ScopeId s)
         default: break;
         }
     }
-    if (facts[n].value) return constants[facts[n].value];
+    auto cached = manifest_evaluation || expressions[n].form == ExpressionForm::ConstantQuery ? facts[n].value : runtime_constants.get(n);
+    if (cached) {
+        if (mode_sensitive_values.get(cached)) ++evaluation_mode_uses;
+        return constants[cached];
+    }
+    auto mode_uses = evaluation_mode_uses;
     if (calls && expressions[n].form == ExpressionForm::OperatorCall) return constant_indirect(constant_call(n,s));
     Constant result = evaluate_value(n, s);
     facts.edit(n).scope = s;
+    if (result.valid && evaluation_mode_uses != mode_uses) mode_sensitive_values.put(constants.size(),1);
+    if (!manifest_evaluation) {
+        runtime_constants.put(n,result.valid ? constants.size() : 1);
+        if (result.valid) constants.push_back(result);
+        return result;
+    }
     if (result.valid) {
         facts.edit(n).value = constants.size();
         if (!calls || !expressions[n].ready) facts.edit(n).type = result.type;

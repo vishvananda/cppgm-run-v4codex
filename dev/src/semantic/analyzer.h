@@ -20,6 +20,27 @@ public:
     void write(std::ostream& out) const;
     void write_semantics(std::ostream& out, NodeId root) const;
     void telemetry(std::ostream& out) const;
+    // Constant-expression inquiries and optional runtime folding have separate
+    // result keys. The scope never changes the published expression/type facts.
+    bool manifest_evaluation = true, evaluation_context_present = false;
+    std::size_t evaluation_mode_uses = 0;
+    Index mode_sensitive_values, mode_sensitive_activations, mode_sensitive_objects;
+    bool context_initialized(EntityId e) const { return mode_sensitive_objects.get(e); }
+    struct ContextReference { EntityId storage = 0; std::uint64_t offset = 0; bool initialize = false; };
+    Index context_reference_index;
+    std::vector<ContextReference> context_references = std::vector<ContextReference>(1);
+    const ContextReference& context_reference(EntityId e) const { return context_references[context_reference_index.get(e)]; }
+    void prepare_context_reference(EntityId e);
+    struct EvaluationScope {
+        Analyzer& sem; bool saved;
+        EvaluationScope(Analyzer& s, bool mode) : sem(s), saved(s.manifest_evaluation) { sem.manifest_evaluation = mode; }
+        ~EvaluationScope() { sem.manifest_evaluation = saved; }
+    };
+    bool required_constant_object(EntityId e) const { return constexpr_declarations.get(e) == 2; }
+    Constant runtime_constant_fact(NodeId n) const {
+        auto id = evaluation_context_present ? runtime_constants.get(n) : facts[n].value;
+        return id ? constants[id] : Constant();
+    }
     Types types;
     const RangePlan& range_plan(NodeId n) const { return ranges[range_index.get(n)]; }
     std::vector<Entity> entities;
@@ -540,7 +561,7 @@ private:
     bool c_linkage = false;
     Index linkage_extern_declarations;
     struct StaticFact { FactState state = FactState::NotStarted; StaticValue value; };
-    Index static_index;
+    Index static_index, runtime_static_index, runtime_constants;
     std::vector<StaticFact> static_facts;
     StaticValue static_value_impl(NodeId n, TypeId target);
     void function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source);

@@ -52,7 +52,8 @@ Constant Analyzer::constant_array_element(std::uint32_t plan, Constant index)
 bool Analyzer::constant_array_plan_valid(std::uint32_t plan)
 {
     if (!plan) return false;
-    if (auto known = constant_array_plans.get(plan)) return known >= 2;
+    auto cache_key = key(plan,manifest_evaluation);
+    if (auto known = constant_array_plans.get(cache_key)) return known >= 2;
     ++constant_array_work;
     auto action = initializers[plan];
     bool valid = false;
@@ -84,11 +85,11 @@ bool Analyzer::constant_array_plan_valid(std::uint32_t plan)
         valid = true;
         for (auto c = action.first; valid && c; c = initializers[c].next) {
             valid = constant_array_plan_valid(c);
-            copyable &= constant_array_plans.get(c) == 3;
+            copyable &= constant_array_plans.get(key(c,manifest_evaluation)) == 3;
         }
     }
     if (valid && class_value(action.type)) valid = trivial_destructor(action.type);
-    constant_array_plans.put(plan,valid ? (copyable ? 3 : 2) : 1); return valid;
+    constant_array_plans.put(cache_key,valid ? (copyable ? 3 : 2) : 1); return valid;
 }
 void Analyzer::prepare_constant_array(EntityId e, bool required)
 {
@@ -104,6 +105,7 @@ void Analyzer::prepare_constant_array(EntityId e, bool required)
         if (class_value(leaf) || (types[leaf].cv & 6)) return;
 
     }
+    EvaluationScope mode(*this,required);
     auto plan = initializer_plan(entities[e].initializer,entities[e].type);
     if (!entities[e].initializer || !constant_array_plan_valid(plan)) {
         if (required) throw std::runtime_error("nonconstant constexpr array initializer");
@@ -114,7 +116,7 @@ void Analyzer::prepare_constant_array(EntityId e, bool required)
     // Required constexpr arrays use the same semantic value check as classes.
     if (required && !constant_expression_plan(plan)) throw std::runtime_error("nonconstant constexpr array initializer");
     // Volatile subobjects still need their ordinary observable stores.
-    if (constant_array_plans.get(plan) == 3) constant_arrays.put(e,plan);
+    if (constant_array_plans.get(key(plan,manifest_evaluation)) == 3) constant_arrays.put(e,plan);
 }
 bool Analyzer::constant_expression_plan(std::uint32_t plan)
 {

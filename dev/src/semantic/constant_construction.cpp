@@ -60,6 +60,7 @@ void Analyzer::prepare_static_vptrs()
 }
 std::uint32_t Analyzer::constant_constructor(EntityId ctor)
 {
+    EvaluationScope runtime(*this,false);
     if (auto known = constant_constructors.get(ctor)) return known;
     auto index = constructor_constants.size(); constructor_constants.push_back(ConstantObject());
     constant_constructors.put(ctor, index);
@@ -111,6 +112,9 @@ const ConstantObject& Analyzer::constant_construction(NodeId n, TypeId t)
         auto value = constant_initialize(n,t,facts[n].scope);
         result.valid = constant_object_fields(value);
     } else if (constructor_member(ctor)) {
+        // Early static initialization of a non-constexpr constructor must
+        // preserve the value its dynamic execution would have produced.
+        EvaluationScope runtime(*this,false);
         auto summary = constructor_constants[constant_constructor(ctor)];
         auto call = expressions[n]; result.valid = summary.valid;
         // Even unused constructor arguments must be evaluated. The early
