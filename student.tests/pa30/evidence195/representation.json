@@ -1,0 +1,8 @@
+{
+  "entry_token_bytes": 40,
+  "final_token_bytes": 40,
+  "command": "g++ -std=c++11 -Idev/src student.tests/pa30/token-size195.cpp -o /tmp/pa30-195/token-size && /tmp/pa30-195/token-size",
+  "source_sha256": "9dd0650a397af1ec6782fb1acbfa2e2e08266a20af2e142704a4321708638dcd",
+  "stdout": "40 40\n",
+  "status": 0
+}

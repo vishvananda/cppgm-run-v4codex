@@ -1,0 +1,47 @@
+{
+  "boundary": "Completed hosted declaration parser group; PA30 remains incomplete with 39 semantic/lowering failures.",
+  "stage_base_commit": "27029f978e65b78331233123922d342033d5d1f7",
+  "last_reviewed_commit": "27029f978e65b78331233123922d342033d5d1f7",
+  "implementation_commit": "32727741",
+  "review_pending": true,
+  "prior_stages": {
+    "passed": 4941,
+    "total": 4941,
+    "status": 0
+  },
+  "current_stage": {
+    "baseline_passed": 105,
+    "passed": 114,
+    "total": 153,
+    "failures_reduced": 9,
+    "regressions": 0
+  },
+  "file_audit_status": 0,
+  "personal_controls": 28,
+  "performance_observations": 404,
+  "launcher_calibrations": 16,
+  "evidence_checks": 89,
+  "reference_corrections": [],
+  "remaining_implementation": "pa30/plan.md",
+  "evidence": [
+    "validation.json",
+    "stage-delta.json",
+    "source-binding.json",
+    "controls.json",
+    "common-performance.json",
+    "owner-performance.json",
+    "hosted-performance.json",
+    "evidence-verification.json"
+  ],
+  "controls_sources": {
+    "student.tests/pa30/source195/angle-function-type.reject.cpp": "c880b46a49ca87f604102e8a697f58707614eca28846ba7aafe65da04e2d2e34",
+    "student.tests/pa30/source195/angle-type.reject.cpp": "b29c6ae1b810a2eac34a958fa9b908c4faba0992a88868c77d4b6ec6bfe05d93",
+    "student.tests/pa30/source195/class-assignment-lookahead.cpp": "dbc2fd0b75863901984141f67481742513fd039dfb2320a716180a221cf52e6d",
+    "student.tests/pa30/source195/hidden-friend.reject.cpp": "2ea234d0ccc056c5362969cdca1cfd07062fa7c0838786754d8f88942c2b2431",
+    "student.tests/pa30/source195/nested-angle-construction.cpp": "5a811e3b4343ea09f2ea2255586c752028fbf2f367793c753f19546ecbae0787",
+    "student.tests/pa30/source195/nonfriend-shadow.reject.cpp": "627866fcad157b98b9f32bb115a0aa01a8ff1a2a3130e24c5048913f412996fc",
+    "student.tests/pa30/source195/parser-boundaries.cpp": "48d4f266c90bdd5af03c757693714fd447532679ac7cb33c9dced6216f766690",
+    "student.tests/pa30/source195/qualified-parameter.cpp": "e728a143284f4e93f5819031f4b5c63b7c9bb636fc1cf35c11a9e221823dc506"
+  },
+  "clean_worktree_verification": "Performed after final evidence commit; documentation does not change tested dev files."
+}
