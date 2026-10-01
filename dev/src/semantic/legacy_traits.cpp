@@ -28,6 +28,7 @@ bool Analyzer::legacy_type_property(unsigned operation, TypeId t)
     if (state == BooleanFact::Active || state == BooleanFact::Failure)
         throw std::runtime_error("recursive/failed legacy type property");
     builtin_type_properties.put(identity,unsigned(BooleanFact::Active));
+    ++legacy_trait_work;
     DefinitionAccess access(explicit_instantiation_naming,access_override);
     try {
         bool value = false;
@@ -37,37 +38,17 @@ bool Analyzer::legacy_type_property(unsigned operation, TypeId t)
             auto cls = type.entity;
             auto scope = entities[cls].scope;
             auto info = entities[cls].class_info;
-            std::vector<EntityId> family;
             if (constructor) {
-                if (auto ctor = default_constructor(t,scope,false)) family.push_back(ctor);
+                auto ctor = default_constructor(t,scope,false);
+                value = ctor && (nothrow ? function_nonthrowing(ctor) : legacy_member_trivial(ctor));
             } else {
                 ensure_transfers(t,assignment);
                 auto binding = assignment ? local(scope,operator_name(OP_ASS)) : class_facts[info].constructor;
                 auto kind = assignment ? TransferKind::CopyAssignment : TransferKind::CopyConstructor;
-                for (auto e : candidates(binding))
-                    if (entities[e].owner == scope && members[entities[e].member_info].transfer == kind) family.push_back(e);
-            }
-            value = !family.empty();
-            for (auto e : family) {
-                if (nothrow) value &= function_nonthrowing(e);
-                else {
-                    auto member = members[entities[e].member_info];
-                    value &= (member.synthetic || member.deleted) && !member.defaulted_late && !member.inherited_constructor;
-                }
-            }
-            if (value && !nothrow) {
-                value = !dynamic_class(cls);
-                for (auto b = class_facts[info].first_base; value && b; b = bases[b].next)
-                    value = !bases[b].virtual_base && legacy_type_property(operation,entities[bases[b].base].type);
-                for (auto d = scopes[scope].first_decl; value && d; d = declarations[d].next) {
-                    auto field = declarations[d].entity;
-                    if (!nonstatic_field(field) || entities[field].owner != scope) continue;
-                    auto element = entities[field].type;
-                    while (types[element].kind == TypeKind::Array) element = types[element].child;
-                    if (constructor && entities[field].initializer) value = false;
-                    // Deletion due to a reference/const field is separate from
-                    // triviality. Only class subobjects select special members.
-                    if (class_value(element)) value &= legacy_type_property(operation,types.unqualified(element));
+                for (auto e : candidates(binding)) {
+                    if (entities[e].owner != scope || members[entities[e].member_info].transfer != kind) continue;
+                    value = nothrow ? function_nonthrowing(e) : legacy_member_trivial(e);
+                    if (!value) break;
                 }
             }
         }
@@ -76,5 +57,49 @@ bool Analyzer::legacy_type_property(unsigned operation, TypeId t)
     } catch (const UnavailableSemanticFact&) {
         builtin_type_properties.put(identity,unsigned(BooleanFact::NotStarted)); throw;
     } catch (...) { builtin_type_properties.put(identity,unsigned(BooleanFact::Failure)); throw; }
+}
+bool Analyzer::legacy_member_trivial(EntityId e)
+{
+    auto state = BooleanFact(legacy_member_properties.get(e));
+    if (state == BooleanFact::True || state == BooleanFact::False) return state == BooleanFact::True;
+    if (state == BooleanFact::Active || state == BooleanFact::Failure)
+        throw std::runtime_error("recursive/failed special-member triviality");
+    legacy_member_properties.put(e,unsigned(BooleanFact::Active));
+    ++legacy_member_work;
+    try {
+        auto member = members[entities[e].member_info];
+        auto cls = scopes[entities[e].owner].entity;
+        auto info = entities[cls].class_info;
+        bool value = (member.synthetic || member.deleted) && !member.defaulted_late &&
+            !member.inherited_constructor && !dynamic_class(cls);
+        bool constructor = member.constructor && member.transfer == TransferKind::None;
+        bool assignment = member.transfer == TransferKind::CopyAssignment;
+        auto signature = types[entities[e].type];
+        auto source = constructor ? 0 : value_type(types.parameters[signature.offset]);
+        auto subobject = [&](TypeId type, bool initialized, bool mutable_field) {
+            if (constructor && initialized) return false;
+            while (types[type].kind == TypeKind::Array) type = types[type].child;
+            if (!class_value(type)) return true;
+            auto cv = types[source].cv & (mutable_field ? 2 : 3);
+            // Follow the member selected by this function's actual parameter
+            // cv/category. A different overload in the subobject's family
+            // does not determine the enclosing function's triviality.
+            auto selected = constructor ? default_constructor(type,entities[cls].scope,false) :
+                select_transfer(type,types.qualify(type,cv),ValueCategory::Lvalue,assignment);
+            return selected && legacy_member_trivial(selected);
+        };
+        for (auto b = class_facts[info].first_base; value && b; b = bases[b].next)
+            value = !bases[b].virtual_base && subobject(entities[bases[b].base].type,false,false);
+        auto scope = entities[cls].scope;
+        for (auto d = scopes[scope].first_decl; value && d; d = declarations[d].next) {
+            auto field = declarations[d].entity;
+            if (!nonstatic_field(field) || entities[field].owner != scope) continue;
+            value = subobject(entities[field].type,entities[field].initializer != 0,entities[field].mutable_field);
+        }
+        legacy_member_properties.put(e,unsigned(value ? BooleanFact::True : BooleanFact::False));
+        return value;
+    } catch (const UnavailableSemanticFact&) {
+        legacy_member_properties.put(e,unsigned(BooleanFact::NotStarted)); throw;
+    } catch (...) { legacy_member_properties.put(e,unsigned(BooleanFact::Failure)); throw; }
 }
 } }

@@ -33,6 +33,9 @@ public:
     TypeQueryFact query_builtin_trait(QueryId id, const TypeQuery& query);
     bool builtin_type_property(unsigned trait, TypeId type);
     bool legacy_type_property(unsigned trait, TypeId type);
+    bool legacy_member_trivial(EntityId member);
+    Index legacy_member_properties;
+    std::size_t legacy_trait_work = 0, legacy_member_work = 0;
     bool reference_temporary_property(unsigned trait, TypeId target, TypeId source);
     Index builtin_trait_values, builtin_type_properties;
     Index assembler_names; // EntityId -> interned explicit object name.

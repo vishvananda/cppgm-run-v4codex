@@ -95,3 +95,10 @@ First increment: shared registry plus six legacy member traits, three lifetime
 traits and ordered direct-reference conversion selection. Course 321/403 (four
 resolved, no new failures); explicit controls 41/41. Before handoff, close the
 identified selected-subobject triviality edge and rerun all required checks.
+
+Second increment: structural triviality is cached per selected special member,
+including cv/mutable subobject selection and deleted-default triviality; modern
+constructibility keeps independent usability checks. Final code controls 44/44,
+audit158 controls 34/34, selected native calls and 100→10,000 repeat-demand
+inspection pass. PA29 remains 321/403, PA1–28 4538/4538; file audit passes.
+Performance measurement and the final handoff ledger remain to be recorded.

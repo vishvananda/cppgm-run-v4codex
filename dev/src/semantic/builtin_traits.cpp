@@ -329,9 +329,7 @@ bool Analyzer::builtin_type_property(unsigned operation, TypeId t)
         }
     } else if (trait == BuiltinTrait::Trivial) {
         value = builtin_type_property(unsigned(BuiltinTrait::TriviallyCopyable),t);
-        auto ctor = default_constructor(t,scope,false);
-        value &= ctor && default_constructor_valid(ctor) &&
-            members[entities[ctor].member_info].default_properties == BooleanFact::True;
+        value &= legacy_type_property(unsigned(BuiltinTrait::TrivialConstructor),t);
     } else if (trait == BuiltinTrait::Pod) {
         value = builtin_type_property(unsigned(BuiltinTrait::Trivial),t) &&
             builtin_type_property(unsigned(BuiltinTrait::StandardLayout),t);
