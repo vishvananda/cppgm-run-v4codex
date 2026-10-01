@@ -81,6 +81,8 @@ Constant Analyzer::constant_zero(TypeId t)
 Constant Analyzer::constant_init_plan(std::uint32_t id, ScopeId s)
 {
     auto a = initializers[id];
+    if (a.kind == InitKind::ArrayCopy)
+        return constant_array_copy(a.type,constant_address(a.source,s),constant_destination,conversions[a.conversion],s);
     if (a.kind == InitKind::Value) return value_constructor(a.type) ? constant_construct(value_constructor(a.type),{},true) : constant_zero(a.type);
     if (a.kind == InitKind::Constructor) return constant_initialize(a.source,a.type,s);
     if (a.kind == InitKind::Converted) return constant_node_conversion(a.source,conversions[a.conversion],s);
@@ -106,9 +108,11 @@ Constant Analyzer::constant_init_plan(std::uint32_t id, ScopeId s)
 Constant Analyzer::constant_initialize(NodeId n, TypeId t, ScopeId s, EntityId ctor)
 {
     SourceInvocationScope invocation(source_invocation,source_site(n));
-    auto init = class_initialization(n,t);
-    if (init.source) return constant_node_conversion(init.source,conversions[init.conversion],s);
-    if (auto plan = initializer_plan(n,t)) return constant_init_plan(plan,s);
+    if (!ctor) {
+        auto init = class_initialization(n,t);
+        if (init.source) return constant_node_conversion(init.source,conversions[init.conversion],s);
+        if (auto plan = initializer_plan(n,t)) return constant_init_plan(plan,s);
+    }
     if (!ctor && n && constructor_member(facts[n].entity)) ctor = facts[n].entity;
     if (ctor) {
         auto x = expressions[n]; std::vector<Constant> args;

@@ -392,7 +392,10 @@ Constant Analyzer::constant_call_result(NodeId n, ScopeId s)
     // is classified for static data. Named object initialization remains a
     // separate operation and may still use a constexpr constructor.
     if (x.category == ValueCategory::Prvalue && class_value(x.type) && !literal_type(x.type)) return Constant();
-    if (x.form == ExpressionForm::Construction) return constant_initialize(n,x.type,s);
+    // The source constructor and a destination's copy conversion can share a
+    // source node. Evaluate the selected source call directly; looking up the
+    // destination initializer here would recursively re-enter its copy.
+    if (x.form == ExpressionForm::Construction) return constant_initialize(n,x.type,s,facts[n].entity);
     if (x.form == ExpressionForm::ListValue) {
         auto args = ast[ast[n].first].next;
         return constant_node_conversion(args,conversions[x.conversions],s);

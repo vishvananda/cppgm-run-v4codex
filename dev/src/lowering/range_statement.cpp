@@ -62,8 +62,17 @@ void Procedural::range_statement(NodeId n)
         Value location(Operand::slot(objects[plan.variable]),type(target),target,true);
         auto c = sem.conversion_fact(plan.element_conversion);
         full_expression.enabled = full_expression.lexical = live != 0;
-        if (sem.class_value(target)) typed_conversion(value,c,address(location));
+        if (plan.element_copy) initialize_array_copy(plan.element_copy,location,value);
+        else if (sem.class_value(target)) typed_conversion(value,c,address(location));
         else store(typed_conversion(value,c),location);
+        finish_full_expression(plan.loop_live);
+    } else if (plan.element_copy) {
+        if (!objects[plan.variable] || p.slots[objects[plan.variable].index-1].owner.index != function.index)
+            objects[plan.variable] = source_slot(plan.variable);
+        auto t = sem.entities[plan.variable].type;
+        Value location(Operand::slot(objects[plan.variable]),type(t),t,true);
+        auto value = range_operation(plan.element,{binding(plan.begin)});
+        initialize_array_copy(plan.element_copy,location,value);
         finish_full_expression(plan.loop_live);
     } else range_initialize(plan.variable,plan.element,{plan.begin},plan.element_conversion);
     live = plan.body_live; statement(plan.body);

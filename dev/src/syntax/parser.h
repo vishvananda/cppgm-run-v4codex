@@ -84,7 +84,7 @@ private:
         ETokenType first_operator = TOK_INVALID;
         ScopeId function_scope = 0;
     };
-    NodeId declarator(bool abstract = false, bool new_type = false, DeclaratorFacts* facts = 0, bool typedef_name = false);
+    NodeId declarator(bool abstract = false, bool new_type = false, DeclaratorFacts* facts = 0, bool typedef_name = false, bool binding = false);
     NodeId parameters(ScopeId& parameter_scope);
     NodeId parameter(Kind kind = Kind::Parameter);
     void function_suffix(NodeId owner);

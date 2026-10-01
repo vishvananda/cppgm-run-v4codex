@@ -73,6 +73,8 @@ public:
     TypeId binding_object_type(NodeId specs, NodeId d, Expression value);
     void resolve_bindings(NodeId specs, NodeId d, ScopeId s, bool pattern = false);
     void declare_bindings(NodeId d, ScopeId s, EntityId object, bool pattern);
+    std::uint32_t binding_array_plan(NodeId source, TypeId target, Expression value, ScopeId scope, bool pattern, std::uint32_t recipe = 0, InitializationMode mode = InitializationMode::Copy);
+    Constant constant_array_copy(TypeId target, std::uint32_t source, std::uint32_t destination, const Conversion& conversion, ScopeId scope);
     const RangePlan& range_plan(NodeId n) const { return ranges[range_index.get(n)]; }
     std::vector<Entity> entities;
     std::vector<Scope> scopes;

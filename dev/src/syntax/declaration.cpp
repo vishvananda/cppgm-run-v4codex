@@ -57,9 +57,11 @@ NodeId Parser::simple_declaration(bool require_semicolon, NodeId specs)
     specs = specifiers(false,specs);
     ScopeId owner = scope;
     DeclaratorFacts facts;
-    bool alias = false;
-    for (NodeId s = ast[specs].first; s; s = ast[s].next) alias |= ast[s].op == KW_TYPEDEF;
-    NodeId decl = declarator(false, false, &facts, alias);
+    bool alias = false, placeholder = false;
+    for (NodeId s = ast[specs].first; s; s = ast[s].next) {
+        alias |= ast[s].op == KW_TYPEDEF; placeholder |= ast[s].op == KW_AUTO;
+    }
+    NodeId decl = declarator(false, false, &facts, alias, placeholder && !alias);
     Category category = alias ? Category::Type : Category::Value;
     bool is_function = facts.first_operator == OP_LPAREN;
     if (template_declaration && !alias) category = Category::TemplateValue;

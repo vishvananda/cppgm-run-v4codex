@@ -65,6 +65,9 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
     auto action = sem.initializers[plan];
     auto target = sem.types[action.type];
     if (target.cv & 4) atomic_padding(action.type,address(location));
+    if (action.kind == InitKind::ArrayCopy) {
+        initialize_array_copy(plan,location,expression(action.source)); return;
+    }
     if (action.kind == InitKind::Converted) {
         auto c = sem.conversion_fact(action.conversion);
         if (sem.class_value(action.type)) construct_value(action.source,c,address(location));

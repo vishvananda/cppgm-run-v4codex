@@ -193,6 +193,10 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_range_storage_bytes\":" << ranges.capacity()*sizeof(RangePlan)
         << ",\"semantic_range_patterns\":" << range_patterns.size()-1
         << ",\"semantic_range_pattern_uses\":" << range_pattern_uses
+        << ",\"semantic_binding_shapes\":" << binding_shapes.size()-1
+        << ",\"semantic_binding_members\":" << binding_members.size()
+        << ",\"semantic_binding_projections\":" << binding_projections.size()-1
+        << ",\"semantic_binding_storage_bytes\":" << binding_shapes.capacity()*sizeof(BindingShape) + binding_members.capacity()*sizeof(EntityId) + binding_projections.capacity()*sizeof(BindingProjection)
         << ",\"semantic_return_deductions\":" << return_deductions
         << ",\"semantic_return_deduction_uses\":" << return_deduction_uses
         << ",\"semantic_placeholder_type_work\":" << placeholder_type_work

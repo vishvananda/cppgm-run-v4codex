@@ -85,3 +85,12 @@ including cv/reference decltype, mutable bit-fields, self-use rejection, jumps,
 constant evaluation and return/unwind cleanup. File audit passes (four inherited
 warnings). Continue array-copy initialization and broader owner interactions;
 this commit is not a handoff boundary.
+
+Increment 2: shared typed array-copy plans now cover scalar/class/multidimensional
+arrays, moves, direct versus copy initialization, constants and partial cleanup.
+Native copies unroll at most eight leaves and otherwise use a counted loop.
+Base/member shapes cache by canonical object type; access remains use-scoped.
+The source-constructor constexpr recursion and unnamed-array parser ambiguity
+found during integration are repaired. Full stage reached 385/403, removing the
+four original binding failures with no new failures. Final validation/performance
+runs are pending; other owner groups and independent review questions remain open.

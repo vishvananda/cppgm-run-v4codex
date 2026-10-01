@@ -165,7 +165,7 @@ struct FieldFacts {
     bool no_unique_address = false, strict_alignment = false;
     bool bit_field = false, may_clear_unit = true, unit_transfer = false;
 };
-enum class InitKind : unsigned char { Scalar, Group, String, Constructor, Value, Converted };
+enum class InitKind : unsigned char { Scalar, Group, String, Constructor, Value, Converted, ArrayCopy };
 struct ZeroInitialization {
     enum Kind : unsigned char { Scalar, Representation, Composite, Array, Reference, MemberPointer } kind = Scalar;
     TypeId type = 0;
@@ -521,6 +521,7 @@ struct RangePlan {
     RangeOperation first, last, test, next, element;
     std::uint32_t begin_conversion = 0, end_conversion = 0, element_conversion = 0, condition_conversion = 0;
     std::uint32_t loop_live = 0, body_live = 0;
+    std::uint32_t element_copy = 0;
     bool initialize_range = false;
 };
 // Declaration slots identify defaults; a function specialization supplies the

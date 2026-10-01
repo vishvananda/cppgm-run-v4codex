@@ -114,7 +114,7 @@ bool Parser::parameter_clause_ahead(std::size_t ahead)
     return true;
 }
 
-NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts, bool typedef_name)
+NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts, bool typedef_name, bool binding)
 {
     NodeId result = make(abstract ? Kind::AbstractDeclarator : Kind::Declarator);
     DeclaratorFacts parsed;
@@ -152,7 +152,7 @@ NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts, 
     if (in.eat("...")) ast.append(result, make(Kind::ParameterPack));
     ScopeId saved_scope = scope;
     NodeId declared_name = parsed.name;
-    if (!abstract && !declared_name && in.is("[") && identifier(1)) {
+    if (binding && !abstract && !declared_name && in.is("[") && identifier(1)) {
         in.take();
         auto bindings = make(Kind::BindingNames);
         do {

@@ -1,0 +1,1 @@
+N3485 [temp.res]/8: no valid specialization exists for the nondependent invalid copy initialization in this uninstantiated template. A diagnostic is not required; the student must retain its definition-time check, and a host may defer it.

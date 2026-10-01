@@ -98,7 +98,9 @@ void Analyzer::declare_bindings(NodeId d, ScopeId s, EntityId object, bool patte
         placeholder_objects.put(e,fixed ? 0 : d);
         if (projection.member && field_fact(projection.member).bit_field)
             field_index.put(e,field_index.get(projection.member));
-        binding_projection_index.put(e,binding_projections.size()); binding_projections.push_back(projection);
+        if (fixed) {
+            binding_projection_index.put(e,binding_projections.size()); binding_projections.push_back(projection);
+        }
     }
     if (fixed && index != shape.count) throw std::runtime_error("too few structured binding names");
 }
@@ -107,6 +109,8 @@ void Analyzer::resolve_bindings(NodeId specs, NodeId d, ScopeId s, bool pattern)
     if (scopes[s].kind != ScopeKind::Block && scopes[s].kind != ScopeKind::Control)
         throw std::runtime_error("structured binding requires block scope");
     auto init = ast[d].next, source = init;
+    auto list = ast[init].kind == Kind::Initializer ? ast[init].first : init;
+    bool copy_list = ast[init].kind == Kind::Initializer && (ast[init].flags & 1) && ast[list].kind == Kind::BracedInit;
     while (ast[source].kind == Kind::Initializer || ast[source].kind == Kind::ParenInitializer || ast[source].kind == Kind::BracedInit) {
         auto first = ast[source].first;
         if (!first || ast[first].next) throw std::runtime_error("structured binding requires one initializer");
@@ -115,13 +119,29 @@ void Analyzer::resolve_bindings(NodeId specs, NodeId d, ScopeId s, bool pattern)
     if (!source) throw std::runtime_error("structured binding requires initializer");
     auto object = pattern ? pattern_declaration(EntityKind::Variable,s,0,d,true) : make_entity(EntityKind::Variable,s,0,d);
     entities[object].initializer = init;
+    entities[object].definition = d;
     facts.edit(d).entity = object;
     // Publish pending names before checking the initializer (including shadowing).
     declare_bindings(d,s,object,pattern);
     if (pattern) bind_template_expression(init,s);
     auto value = pattern ? template_statement_value(source,s) : expression(source,s);
+    if (copy_list && (!pattern || value.type)) value.type = deduce_initializer_list(list,s);
     auto t = binding_object_type(specs,d,value);
     entities[object].type = t; facts.edit(d).type = t;
+    if (t && types[t].kind == TypeKind::Array) {
+        auto plan_source = init;
+        while (ast[plan_source].kind == Kind::Initializer) plan_source = ast[plan_source].first;
+        auto occurrence = ast.nodes.occurrences[plan_source];
+        auto recipe = occurrence.context ? initializer_plan(occurrence.source,t) : 0;
+        auto mode = ast[init].kind == Kind::Initializer && (ast[init].flags & 1) ? InitializationMode::Copy : InitializationMode::Direct;
+        auto plan = binding_array_plan(source,t,value,s,pattern,recipe,mode);
+        initializer_index.put(key(plan_source,t),plan);
+        if (!pattern) {
+            record(s,object,d,t,EntityKind::Variable);
+            register_destruction(object);
+        }
+        declare_bindings(d,s,object,pattern); return;
+    }
     if (pattern) {
         if (t) check_template_initialization(init,t,s,InitializationMode::Direct);
     } else {
@@ -130,5 +150,19 @@ void Analyzer::resolve_bindings(NodeId specs, NodeId d, ScopeId s, bool pattern)
         finish_object_initializer(object,init,d,specs,s,s,t,false);
     }
     declare_bindings(d,s,object,pattern);
+}
+std::uint32_t Analyzer::binding_array_plan(NodeId source, TypeId t, Expression value, ScopeId s, bool pattern, std::uint32_t recipe, InitializationMode mode)
+{
+    auto leaf = t;
+    while (types[leaf].kind == TypeKind::Array) {
+        leaf = types[leaf].child; value.type = types[value.type].child;
+    }
+    auto c = recipe ? conversions[initializers[recipe].conversion] :
+        class_value(leaf) ? transfer_initialization(value,leaf,mode) : conversion_value(value,leaf);
+    if (pattern) check_fixed_conversion(value,0,c,s);
+    else c = prepare_typed_conversion(value,c,s,true);
+    InitAction action; action.kind = InitKind::ArrayCopy; action.source = source; action.type = t;
+    action.conversion = conversions.size(); conversions.push_back(c);
+    auto id = initializers.size(); initializers.push_back(action); return id;
 }
 } }

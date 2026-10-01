@@ -132,9 +132,13 @@ void Analyzer::resolve_range(NodeId n, ScopeId s)
         deducing_placeholder = saved; TypeId deduced = 0;
         t = deduce_placeholder(pattern,element,deduced);
     } else t = declarator(d,specifiers(specs,control),control);
-    auto selected = retained && shape.element_conversion ? conversions[shape.element_conversion] : conversion_value(element,t);
-    auto c = prepare_typed_conversion(element,selected,control,true);
-    plan.element_conversion = save(c);
+    Conversion c;
+    if (decomposition && types[t].kind == TypeKind::Array) plan.element_copy = binding_array_plan(0,t,element,control,false,retained ? shape.element_copy : 0);
+    else {
+        auto selected = retained && shape.element_conversion ? conversions[shape.element_conversion] : conversion_value(element,t);
+        c = prepare_typed_conversion(element,selected,control,true);
+        plan.element_conversion = save(c);
+    }
     auto id = terminal(decl_name(d));
     plan.variable = make_entity(EntityKind::Variable,control,id,d);
     entities[plan.variable].type = t;
@@ -183,9 +187,13 @@ void Analyzer::bind_template_range(NodeId n, ScopeId s)
         deducing_placeholder = saved;
     }
     if (fixed && t && !dependent_type(t)) {
-        auto c = conversion_value(shape.element.result,t);
-        check_fixed_conversion(shape.element.result,0,c,control);
-        shape.element_conversion = conversions.size(); conversions.push_back(c);
+        if (decomposition && types[t].kind == TypeKind::Array)
+            shape.element_copy = binding_array_plan(0,t,shape.element.result,control,true);
+        else {
+            auto c = conversion_value(shape.element.result,t);
+            check_fixed_conversion(shape.element.result,0,c,control);
+            shape.element_conversion = conversions.size(); conversions.push_back(c);
+        }
     }
     if (fixed) {
         range_pattern_index.put(ast.nodes.occurrences[n].source,range_patterns.size());

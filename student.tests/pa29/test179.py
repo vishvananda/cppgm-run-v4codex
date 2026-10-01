@@ -25,6 +25,15 @@ for source in sorted((root/'student.tests/pa29/source179').glob('*.cpp')):
   if not row['link']['status']:row['run']=run([exe])
   row['passed']=all(v['status']==0 for v in row.values() if isinstance(v,dict))
  else:row['passed']=False
+ host=out/(source.stem+'-host')
+ row['host_compile']=run(['g++','-std=c++17','-O0',source,'-o',host])
+ if reject:
+  permitted=source.with_suffix('.ifndr')
+  row['host_passed']=row['host_compile']['status']!=0 or permitted.exists()
+  if permitted.exists():row['host_diagnostic_rule']=permitted.read_text()
+ else:
+  if not row['host_compile']['status']:row['host_run']=run([host])
+  row['host_passed']=not row['host_compile']['status'] and row['host_run']['status']==0
  rows.append(row);print(source.name,row['passed'],row['compile']['stderr'],flush=True)
 (out/'controls.json').write_text(json.dumps(dict(compiler_sha256=hashlib.sha256(cc.read_bytes()).hexdigest(),rows=rows),indent=2)+'\n')
-sys.exit(not all(r['passed'] for r in rows))
+sys.exit(not all(r['passed'] and r['host_passed'] for r in rows))
