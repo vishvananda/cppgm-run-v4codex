@@ -15,6 +15,10 @@ bool Analyzer::reference_temporary_property(unsigned operation, TypeId target, T
     if (x.category == ValueCategory::Prvalue && !class_value(x.type) && types[x.type].kind != TypeKind::Array)
         x.type = types.unqualified(x.type);
     if (class_value(x.type)) complete_class(types[x.type].entity);
+    // VAL<U> itself can own a temporary, independently of the conversion's
+    // result object. Binding from U&& does not create that source temporary.
+    if (x.category == ValueCategory::Prvalue && class_value(x.type) &&
+        !default_destruction_valid(x.type,global)) return false;
     if (class_value(types[target].child)) complete_class(types[types[target].child].entity);
     auto c = trait == BuiltinTrait::ReferenceConvertsTemporary ? conversion_value(x,target) :
         direct_initialization_conversion(x,target);
