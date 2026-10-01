@@ -31,6 +31,14 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
         auto q = type_queries[argument_query(pattern)];
         while (q.kind == QueryKind::Cast && q.op == TOK_INVALID) q = type_queries[query_edges[q.offset]];
         if (q.kind == QueryKind::TemplateValueParameter) {
+            // Template identity matching may defer a dependent non-type head,
+            // but deduction from an actual integral argument cannot convert
+            // its type. Array/vector-bound deduction performs its specified
+            // conversion before reaching this common value-parameter owner.
+            Index cache;
+            auto expected = dependent_type(q.type) ? substitute_type(q.type,bindings,cache,prefix) : q.type;
+            if (expected && !dependent_type(expected) && types[expected].kind != TypeKind::LRef &&
+                integral(expected) && types.unqualified(expected) != types.unqualified(argument_type(actual))) return false;
             auto previous = bindings.get(q.entity);
             if (previous && previous != actual) return false;
             bindings.put(q.entity,actual); return true;
