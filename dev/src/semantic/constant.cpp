@@ -50,7 +50,8 @@ Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
             if (target.kind == TypeKind::MemberPointer) {
                 unsigned added = 0;
                 auto owner = entities[types[v.type].entity].type, destination = entities[target.entity].type;
-                if (qualification(types[v.type].child,target.child,added)) {
+                if (qualification(types[v.type].child,target.child,added) ||
+                    (explicit_cast && similar_type(types[v.type].child,target.child))) {
                     std::uint64_t adjustment = 0;
                     if (owner != destination) {
                         if (derived_from(destination,owner)) adjustment = base_adjustments[base_steps(destination,types[v.type].entity)].total;

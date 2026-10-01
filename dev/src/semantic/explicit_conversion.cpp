@@ -1,6 +1,26 @@
 #include "semantic/analyzer.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+bool Analyzer::casts_away_qualifiers(TypeId from, TypeId to)
+{
+    // Compare qualification decompositions, ignoring the terminal type and
+    // the member aspect of pointers ([expr.const.cast]/8-11). Adding a deep
+    // qualifier also requires const on each intervening destination pointer.
+    bool intermediate_const = true;
+    for (;;) {
+        auto a = types[from], b = types[to];
+        if ((a.cv & ~b.cv & 3) || ((a.cv ^ b.cv) & 4) ||
+            ((a.cv ^ b.cv) & 3 && !intermediate_const)) return true;
+        bool ap = a.kind == TypeKind::Pointer || a.kind == TypeKind::MemberPointer;
+        bool bp = b.kind == TypeKind::Pointer || b.kind == TypeKind::MemberPointer;
+        if (a.kind == TypeKind::Array && b.kind == TypeKind::Array) {
+            from = a.child; to = b.child; continue;
+        }
+        if (!ap || !bp) return false;
+        intermediate_const = intermediate_const && (b.cv & 1);
+        from = a.child; to = b.child;
+    }
+}
 Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, ETokenType op, ScopeId s, NodeId operand)
 {
     to = types.signature(to);
@@ -32,6 +52,17 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
     bool ref = target.kind == TypeKind::LRef || target.kind == TypeKind::RRef;
     bool bit_field = field_fact(x.entity).bit_field;
     if (ref && bit_field && (cv_cast || op == KW_REINTERPET_CAST)) return invalid();
+    // [expr.cast]/4 selects const_cast before static_cast/reinterpret_cast.
+    // This is an identity-preserving conversion, including nested pointers
+    // and pointers to data members, and remains usable in constant evaluation.
+    if (!ref && (cv_cast || cstyle)) {
+        auto from = decay(x.type);
+        bool cv_pointer = pointer(from) && pointer(to) && types[target.child].kind != TypeKind::Function;
+        bool cv_member = types[from].kind == TypeKind::MemberPointer && target.kind == TypeKind::MemberPointer &&
+            types[target.child].kind != TypeKind::Function;
+        if ((cv_pointer || cv_member) && similar_type(from,to)) return c;
+        if (cv_cast) return invalid();
+    }
     if ((ref || class_value(x.type)) && !cv_cast && op != KW_REINTERPET_CAST && !fundamental(to,FT_VOID)) {
         Expression value = x;
         if (ref && bit_field && target.kind == TypeKind::RRef) {
@@ -54,7 +85,7 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
     if (target.kind == TypeKind::LRef || target.kind == TypeKind::RRef) {
         unsigned added = 0;
         bool compatible = (cv_cast || cstyle) ? similar_type(x.type, target.child) : qualification(x.type, target.child, added);
-        if (!cv_cast && op != KW_REINTERPET_CAST && !(types[x.type].cv & ~types[target.child].cv)) {
+        if (!cv_cast && op != KW_REINTERPET_CAST && (cstyle || !casts_away_qualifiers(x.type,target.child))) {
             if (derived_from(x.type, target.child)) {
                 auto path = base_path(x.type,types[target.child].entity);
                 if (!path || base_adjustments[path].ambiguous) return invalid();
@@ -67,13 +98,16 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
                 if (!cstyle && !base_accessible(types[target.child].entity,types[x.type].entity,s)) return invalid();
             }
         }
-        if (op == KW_REINTERPET_CAST && x.category != ValueCategory::Prvalue &&
-            !(types[x.type].cv & ~types[target.child].cv & 3)) compatible = true;
+        if (reinterpret && (!compatible || op == KW_REINTERPET_CAST) && x.category != ValueCategory::Prvalue &&
+            (cstyle || !casts_away_qualifiers(x.type,target.child))) {
+            compatible = true; c.constant_forbidden = true;
+        }
         if (!compatible) return invalid();
         if (target.kind == TypeKind::LRef && x.category != ValueCategory::Lvalue && !(types[target.child].cv & 1))
             return invalid();
-        if (cv_cast && (x.category == ValueCategory::Prvalue || types[x.type].kind == TypeKind::Function))
-            return invalid();
+        if (cv_cast && (types[x.type].kind == TypeKind::Function ||
+            (target.kind == TypeKind::LRef && x.category != ValueCategory::Lvalue) ||
+            (x.category == ValueCategory::Prvalue && !class_value(x.type)))) return invalid();
         c.reference = true; return c;
     }
     if (fundamental(to, FT_VOID) && !cv_cast && op != KW_REINTERPET_CAST) {
@@ -90,20 +124,19 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
     TypeId from = decay(x.type);
     if (types[from].kind == TypeKind::MemberPointer && target.kind == TypeKind::MemberPointer) {
         unsigned added = 0;
-        bool member_types = qualification(types[from].child,target.child,added);
-        if (cv_cast) return similar_type(from,to) && types[target.child].kind != TypeKind::Function ? c : invalid();
+        bool member_types = qualification(types[from].child,target.child,added) ||
+            (cstyle && similar_type(types[from].child,target.child));
         auto derived = entities[types[from].entity].type, base = entities[target.entity].type;
+        if (member_types && op != KW_REINTERPET_CAST && downcast(base,derived)) {
+            if (!cstyle && !base_accessible(target.entity,types[from].entity,s)) return invalid();
+            c.derived = true; c.adjustment = base_steps(base,types[from].entity); return c;
+        }
         if (member_types && op != KW_REINTERPET_CAST && downcast(derived,base)) {
             if (!cstyle && !base_accessible(types[from].entity,target.entity,s)) return invalid();
             c.derived = true; c.adjustment = inverse(derived,base); return c;
         }
         if (op == KW_REINTERPET_CAST && member_types) return c;
         return invalid();
-    }
-    if (cv_cast) {
-        if (!pointer(from) || !pointer(to) || types[types[from].child].kind == TypeKind::Function || !similar_type(from, to))
-            return invalid();
-        return c;
     }
     bool enum_cast = (integral(from) && integral(to)) || (arithmetic(from) && integral(to));
     bool pointer_cast = false;
@@ -113,9 +146,13 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
             auto path = base_path(a,types[b].entity);
             if (!path || base_adjustments[path].ambiguous) return invalid();
         }
-        bool preserves_cv = !(types[a].cv & ~types[b].cv & 3);
+        bool preserves_cv = !casts_away_qualifiers(a,b);
         pointer_cast = (cstyle || preserves_cv) && (reinterpret ||
             (fundamental(a, FT_VOID) && types[b].kind != TypeKind::Function) || derived_from(b, a));
+        if (pointer_cast && op != KW_REINTERPET_CAST && derived_from(a,b)) {
+            c.derived = true; c.adjustment = base_steps(a,types[b].entity);
+            if (!cstyle && !base_accessible(types[a].entity,types[b].entity,s)) return invalid();
+        }
         if (pointer_cast && op != KW_REINTERPET_CAST && derived_from(b, a)) {
             if (!downcast(b,a)) return invalid();
             c.derived = true; c.adjustment = inverse(b,a);

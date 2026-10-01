@@ -1,0 +1,21 @@
+struct Left {int left; constexpr Left():left(3){}};
+struct Base {int value; constexpr Base():value(11){}};
+struct Derived : Left, Base {constexpr Derived():Left(),Base(){}};
+constexpr Derived object;
+constexpr Base *base = (Base*)&object;
+static_assert(base->value == 11, "upcast with cv removal");
+constexpr Derived *derived = (Derived*)(const Base*)&object;
+static_assert(derived->left == 3, "downcast with cv removal");
+static_assert(((Base&)object).value == 11, "reference upcast");
+static_assert(((Derived&)(const Base&)object).left == 3, "reference downcast");
+constexpr const int Base::*bp = &Base::value;
+constexpr int Derived::*dp = (int Derived::*)bp;
+static_assert(object.*dp == 11, "member upcast with cv removal");
+constexpr const int Derived::*cp = &Base::value;
+constexpr int Base::*ep = (int Base::*)cp;
+static_assert(object.*ep == 11, "member downcast with cv removal");
+int main() {Derived d; const Derived *p=&d; Base *b=(Base*)p;
+ b->value=31; Derived *q=(Derived*)(const Base*)b;
+ ((Base&)(const Derived&)d).value+=2;
+ d.*(int Derived::*)bp+=4;
+ return q==&d && d.left==3 && d.value==37 ? 0:1;}

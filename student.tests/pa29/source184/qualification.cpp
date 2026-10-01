@@ -1,0 +1,32 @@
+constexpr int status = 0x17f;
+constexpr int values[] = {3, 7, 11};
+constexpr const int *p = &status;
+constexpr const int *const *pp = &p;
+constexpr int *mutable_status = (int*)p;
+constexpr int *const *mutable_pp = (int *const*)pp;
+static_assert(*mutable_status == status, "same object");
+static_assert(**mutable_pp == status, "nested pointer");
+static_assert((int*)values + 2 == &values[2], "array identity");
+static_assert(*(int*)(&values[1]) == 7, "array read");
+static_assert((int&)status == status, "reference");
+static_assert(const_cast<int&>(status) == status, "named reference");
+static_assert(const_cast<int&&>(status) == status, "rvalue reference");
+struct Item { int n; constexpr Item(int x):n(x){} };
+constexpr Item item(19);
+constexpr const int Item::*member = &Item::n;
+constexpr int Item::*nonconst_member = (int Item::*)member;
+constexpr int Item::*named_member = const_cast<int Item::*>(member);
+static_assert(item.*nonconst_member == 19, "data member");
+static_assert(item.*named_member == 19, "named member");
+constexpr const int Item::*null_member = nullptr;
+static_assert((int Item::*)null_member == nullptr, "null member");
+constexpr const int *null_pointer = nullptr;
+static_assert((int*)null_pointer == nullptr, "null pointer");
+int main() {
+  int value = 5;
+  const int *q = &value;
+  *(int*)q = 13;
+  Item v(4);
+  v.*(int Item::*)member = 9;
+  return value == 13 && v.n == 9 ? 0 : 1;
+}

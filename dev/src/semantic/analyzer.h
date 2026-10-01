@@ -1479,6 +1479,7 @@ private:
     bool null_constant(NodeId n);
     bool qualification(TypeId from, TypeId to, unsigned& added, bool intermediate_const = true);
     bool similar_type(TypeId a, TypeId b);
+    bool casts_away_qualifiers(TypeId from, TypeId to);
     Conversion conversion(NodeId n, TypeId target, bool user = true);
     Conversion conversion_value(Expression source, TypeId target, bool user = true, NodeId node = 0);
     Conversion standard_conversion(Expression source, TypeId target, NodeId node = 0);
