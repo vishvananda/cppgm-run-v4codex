@@ -1,0 +1,41 @@
+{
+  "all_samples_pass": true,
+  "formulas": {
+    "parsed_nodes": {
+      "slope": 15.0,
+      "intercept": 370.0
+    },
+    "nodes": {
+      "slope": 167.0,
+      "intercept": 370.0
+    },
+    "instructions": {
+      "slope": 22.5,
+      "intercept": 43.0
+    },
+    "text_bytes": {
+      "slope": 141.0,
+      "intercept": -80.0
+    }
+  },
+  "observations": {
+    "600": {
+      "parsed_nodes": 9370,
+      "nodes": 100570,
+      "instructions": 13543,
+      "text_bytes": 84520
+    },
+    "1200": {
+      "parsed_nodes": 18370,
+      "nodes": 200770,
+      "instructions": 27043,
+      "text_bytes": 169120
+    },
+    "2400": {
+      "parsed_nodes": 36370,
+      "nodes": 401170,
+      "instructions": 54043,
+      "text_bytes": 338320
+    }
+  }
+}

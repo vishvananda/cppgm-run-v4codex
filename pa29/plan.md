@@ -1,99 +1,85 @@
-# PA29 compact plan — implementation177 in progress
+# PA29 compact plan — implementation177 handoff
 
-Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Previous reviewed commit: `221d6d0e4930da05db2913bdf5f50d808f89c744`.
 Audit entry: `914e1a0a07e40884c91c0b967b0421eea9ef0d48`.
 Last reviewed commit: `7139ceb5769eea12c6e2e00b54932f09d59c79b5`.
-Implementation176 entry: `2b7a513297b2e9719fcd5686d3c1c97ee7565b13`.
-Implementation code: `207743ae`, `61756cf8`, `1b19e9ac`.
-Implementation177 entry: `d69d57fc28bfc308f8223e3090fb9e9ab37c4823` (380/403).
-
-## Active behavior group
-
-Selection initialization and constexpr branch demand. The parser owns a single
-parsed initializer in the selection scope; semantic/template binding owns the
-declarations, condition conversion and selected branch. Constant evaluation,
-lifetime/jump analysis and lowering consume those typed facts. Work is linear
-in the parsed/selected statements with existing constexpr budgets. Validate
-ordinary/template if and switch initializers, aliases, discarded dependent
-branches, scope, destruction and exceptional/control exits. Freeze entry/final
-binaries for compiler latency/RSS and checked runtime/text evidence at PA29/O0.
-Prior goal turn was validated implementation176 progress; entry has no live job.
-Stage base and review markers above are preserved.
+Implementation177 entry: `d69d57fc28bfc308f8223e3090fb9e9ab37c4823`.
+Implementation code: `eaa24678`, `8288199b`.
 
 ## Design/spec alignment and completed group
 
-[Implementation176](implementation176.md) completes hosted declaration identity
-and emission: explicit-instantiation exclusion for functions/static data/nested
-classes, direct-member overrides, late definition attributes, and inline-variable
-identity across TUs. Related work extends through static members, variable
-templates, scalar TLS, dynamic initialization, reference-temporary identity and
-ordered destruction, including mixed host/student objects.
+[Implementation177](implementation177.md) completes selection initializer scope,
+condition conversion, constexpr branch selection and runtime demand. Ordinary
+and template if/switch forms accept declaration, alias and expression initializers.
+The group extends through condition declaration restrictions, class conversion,
+constant-evaluation mode, inferred returns, control-flow-limited branches,
+discarded-source diagnostics, template/member/storage demand and cleanup on
+normal, exceptional and jumping exits.
 
-Syntax attributes flow into canonical declaration facts and indexed pattern
-edges. Demand consumes those facts; typed LowIR/ABI records drive weak ELF data,
-guards and support objects. Class completion retains inline member initializer
-recipes. Value/storage/type demand computes each required initializer once,
-including deferred array-bound deduction. Constant-only queries emit no storage.
-No grammar replay, semantic cloning, text transport, global retry or new optimizer
-pass was added. Work follows source declarations, lexical/pattern edges, demanded
-facts and emitted operations; all records retain TU/function release boundaries.
+Parsed source nodes flow into canonical declarations, conversion/selection facts
+and lifetime prefixes. Lowering consumes those facts into typed LowIR and the
+existing MIR/ELF path. No grammar replay, semantic cloning, textual transport,
+global retry or optional optimization was added. New state has TU/function
+ownership; work follows actual statements, demanded facts and emitted operations.
 
 ## Validation and performance
 
-PA29 **380/403**: **25 → 23 failures**, two existing course fixtures fixed, no new
-failures. PA1–28 **4538/4538**; through PA29 **4918/4941**. All **403** course inputs
-and **1,707** contract/harness paths are unchanged. **25** focused controls and
-**48** inspection commands plus symbol/demand/telemetry assertions pass. File
-audit passes with the same four inherited header warnings.
-[Evidence](../student.tests/pa29/evidence176/validation.json) records commands,
-statuses, hashes and the exact delta; [coverage](../student.tests/pa29/evidence176/coverage.json)
-checks every tracked contract path against entry.
+PA29 **381/403**, **23 → 22 failures**; the existing hosted special-members and
+control-flow fixture is fixed, with no new failures or coverage reduction.
+PA1–28 **4538/4538**; through PA29 **4919/4941**. All **403** course inputs and
+**1,707** tracked contract/harness paths are unchanged. **36** explicit controls
+and **59** inspection commands pass, including external LowIR validation,
+telemetry equivalence and unwind inspection. File audit passes with the same four
+inherited header warnings. [Validation](../student.tests/pa29/evidence177/validation.json),
+[coverage](../student.tests/pa29/evidence177/coverage.json), and
+[delta](../student.tests/pa29/evidence177/stage-delta.json) retain the exact evidence.
 
-[Performance176](performance176.md) applies spec §9 to **PA29/O0**: frozen A/A and
-six ABBA blocks measure compiler latency/RSS and checked runtime/text on four
-inherited workloads (224 samples). Executable text is unchanged; paired median
-compiler ratios are 0.9948–1.0154, runtime ratios 0.9903–1.0117, and peak compiler
-RSS grows at most 1.64%. Affected 600/1200/2400-specialization inputs retain 48
-samples with checked runtime and linear demand/IR/text counters. The 2400-function
-O0 runtime slowdown is disclosed. Entry rejects the affected semantics, so no
-invalid affected speedup ratio is claimed. Optional transform work/growth budgets
-remain zero. Historical blanket 15%/zero-growth targets remain diagnostic;
-mandated capacities/timeouts, correctness and coverage are preserved.
+[Performance177](performance177.md) applies spec §9 to **PA29/O0**. Frozen A/A
+and six ABBA blocks measure common-input compiler latency/RSS and checked
+runtime/text; 600/1200/2400-specialization controls measure the affected syntax.
+All samples and work counters are retained. No speedup is claimed for syntax
+entry rejects. Optional transform budgets remain zero; historical blanket
+15%/zero-growth gates remain diagnostic, with mandated limits preserved.
+Common objects/executables are byte-identical. Paired compiler medians are
+0.9325–1.0360 and peak RSS grows at most 0.22%; timing noise and the affected
+2,400-function runtime increase are disclosed in the report. All affected work
+and IR/text counters scale linearly at the three measured sizes.
 
 ## Remaining implementation and independent review
 
-The [remaining ledger](../student.tests/pa29/evidence176/remaining.json) retains
-extended syntax/types/layout **17**, template demand/hosted ABI **5**, and legacy
-trait **1**. Numeric/complex representations, decomposition and control-flow
-extensions, deduction guides, zero-length arrays, static receivers, char-traits
+The [remaining ledger](../student.tests/pa29/evidence177/remaining.json) retains
+extended syntax/types/layout **17**, template demand/hosted ABI **4**, and legacy
+trait **1**. Numeric/complex representations, decomposition, coroutine contextual
+syntax, deduction guides, zero-length arrays, static receivers, char-traits
 conversion shims and required force-inlining remain unfinished implementation.
-Through-PA29 success is required before PA30.
+A successful through-PA29 report remains necessary before PA30.
 
 [Audit174](audit.md) remains the last independent review. [Audit170](audit170.md)
-retains the char-traits/alignment/dependent-offset/convertible-index reducers and
-the unresolved nothrow-default-construction and nothrow-invocable contract
-questions. Implementation176 adds a reduced nested-member ABI-tag question:
-GCC and this compiler retain the tag, Clang drops it, and the unchanged fixture
-expects suppression. C++11 does not settle this extension encoding. All three
-contract questions remain counted failures, without correction or waiver.
-The new implementation also requires independent review; this handoff does not
-certify whole-stage architecture, performance or correctness.
+retains char-traits/alignment/dependent-offset/convertible-index reducers and the
+nothrow-default-construction and nothrow-invocable contract questions.
+[Implementation176](implementation176.md) retains the nested-member ABI-tag
+question and reducer. These three contract questions remain counted failures;
+no fixture, oracle or comparison rule was corrected or waived. This implementation
+requires independent review of correctness, architecture and performance.
 
 ## Handoff ledger and boundary
 
-The preceding goal turn was progress: committed and validated implementation175.
-No live process required resuming at entry. This turn completed declaration
-exclusion and inline storage, then extended the same ownership through lazy
-initializers, omitted array bounds, shared lifetime-extended temporaries and host
-interop after focused controls exposed those related defects.
+The preceding goal turn was validated implementation176 progress. No live job
+required resuming at entry. This turn completed selection initialization, then
+extended its shared semantic ownership through lifetime cleanup, constexpr
+conditions, inferred returns, jump restrictions and dormant definition demand
+when focused controls exposed related defects.
 
-No known required PA29 defect remains in this completed group. The remaining
-implementation needs new syntax/numeric representations, overload/trait rules or
-an actual force-inline transform; it cannot be repaired by further extending
-these declaration/storage facts. The nested ABI-tag discrepancy needs independent
-contract resolution, not a source-specific naming exception. General nontrivial
-hosted TLS lifetime work remains later hosted-runtime scope. These ownership and
-contract boundaries end this implementation handoff. Stage base and Last reviewed
-markers are preserved; independent review and whole-stage completion remain open.
+No known required PA29 defect remains in this completed selection-scope group.
+Structured bindings need a new decomposition entity/access representation;
+coroutine parsing needs its own contextual grammar and eventual coroutine facts.
+Numeric layouts, static call receivers and force-inlining likewise have different
+owners and representations. Extending selection wrappers or branch-demand state
+cannot implement those remaining failures. The existing trait/ABI discrepancies
+need independent contract resolution. General C++14 constexpr switch execution
+and source-object DWARF support are not claimed by this group or required by its
+PA29 fixture. These concrete ownership and contract boundaries end this handoff.
+Stage base and Last reviewed markers are preserved; whole-stage completion and
+independent review remain open.

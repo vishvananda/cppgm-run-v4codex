@@ -1,0 +1,683 @@
+{
+  "compiler_sha256": "8e292c04f171459b32f40ef245da1fadba2f093f3a3f2a27858ad1b3033d136a",
+  "rows": [
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-ast",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/selection.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/selection.ast"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-types",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/selection.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/selection.types"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-semantics",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/selection.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/selection.semantics"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/selection.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/selection.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-177/inspection/selection.lowir",
+        "-o",
+        "/tmp/pa29-177/inspection/selection.roundtrip"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/selection.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/selection.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "{\"tokens\":334,\"max_pending\":44,\"node_growths\":10,\"delimiter_work\":334,\"asm_source_statements\":0,\"asm_source_instructions\":0,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_capture_patterns\":0,\"semantic_capture_candidates\":0,\"semantic_closure_adapters\":0,\"semantic_ms\":0.368077,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":524,\"semantic_fact_records\":233,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":22584,\"semantic_template_declaration_work\":0,\"semantic_declaration_publications\":0,\"semantic_dependence_work\":4,\"semantic_specializations\":0,\"semantic_type_substitution_work\":0,\"semantic_type_substitution_hits\":0,\"semantic_type_substitution_records\":0,\"semantic_substitution_frames\":0,\"semantic_template_type_work\":0,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":0,\"semantic_template_signature_work\":0,\"semantic_template_signature_uses\":0,\"semantic_parameter_publications\":0,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":0,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":0,\"semantic_body_checks\":6,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":6,\"semantic_statement_conversion_work\":0,\"semantic_statement_conversion_uses\":0,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":1,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":0,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":1,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":0,\"semantic_initializer_recipe_uses\":0,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":0,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"inline_variable_initializers\":0,\"inline_variable_hits\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":0,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":0,\"semantic_type_query_work\":0,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":0,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":0,\"semantic_template_parameter_check_work\":0,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":0,\"semantic_template_fixed_expressions\":0,\"semantic_template_fixed_uses\":0,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":0,\"semantic_template_member_uses\":0,\"parsed_nodes\":524,\"template_occurrences\":0,\"template_deferred_regions\":0,\"template_demanded_regions\":0,\"template_source_regions\":0,\"template_region_nodes\":0,\"template_region_roots\":0,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_fold_steps\":0,\"semantic_fold_value_steps\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":0,\"semantic_argument_packs\":0,\"semantic_object_uses\":2,\"semantic_expression_facts\":124,\"semantic_expression_uses\":124,\"semantic_expression_slots\":524,\"semantic_expression_inherited\":0,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":8,\"semantic_constructor_actions\":1,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":1,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":2,\"semantic_list_plans\":1,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":1,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":3,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":6,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":41,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":1,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":3,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":3,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":3,\"semantic_expression_work\":100,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":12,\"semantic_conversion_work\":90,\"semantic_conversions\":96,\"semantic_entity_bytes\":128,\"semantic_class_facts\":2,\"semantic_constants\":4,\"source_invocation_sites\":0,\"semantic_value_queries\":0,\"semantic_value_query_work\":0,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":28,\"semantic_entities\":33,\"semantic_scopes\":57,\"semantic_edges\":0,\"semantic_declarations\":28,\"semantic_regions\":19,\"semantic_lookup_work\":177,\"semantic_signature_work\":13,\"semantic_template_signature_shape_work\":0,\"semantic_template_signature_shape_hits\":0,\"semantic_type_probes\":169,\"semantic_constant_work\":6,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":0,\"exception_work\":3,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":36,\"rtti_expressions\":0,\"rtti_records\":1,\"rtti_cache_hits\":2,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":1,\"list_objects\":1,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":2.0246,\"lowering_ms\":0.349924,\"peak_rss_kib\":17336,\"nodes\":524,\"static_requests\":0,\"static_hits\":0,\"control_work\":112,\"discard_work\":0,\"full_expression_work\":148,\"full_expression_regions\":5,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":12,\"abi_bytes\":1080,\"instructions\":268,\"operands\":371,\"ir_pool_growths\":81,\"ir_capacity_bytes\":64032}\n{\"driver_ms\":4.41007,\"peak_rss_kib\":17336,\"text_bytes\":1527,\"native_functions\":6,\"native_instructions\":319,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.262558,\"encoding_ms\":0.070494}\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/selection.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/selection.plain.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa29-177/inspection/selection.o",
+        "-o",
+        "/tmp/pa29-177/inspection/selection"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa29-177/inspection/selection"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "readelf",
+        "--debug-dump=frames",
+        "/tmp/pa29-177/inspection/selection.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..0000000000000023\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 29 to 0000000000000021\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000022\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000023\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000040 0000000000000024 00000044 FDE cie=00000000 pc=0000000000000000..0000000000000025\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 31 to 0000000000000023\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000024\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000025\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000068 0000000000000024 0000006c FDE cie=00000000 pc=0000000000000000..0000000000000022\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 28 to 0000000000000020\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000021\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000022\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000090 0000000000000024 00000094 FDE cie=00000000 pc=0000000000000000..0000000000000010\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 10 to 000000000000000e\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 000000000000000f\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000010\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000b8 000000000000001c 00000000 CIE\n  Version:               1\n  Augmentation:          \"zPLR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     9b 3d ff ff ff 1b 1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000d8 0000000000000034 00000024 FDE cie=000000b8 pc=0000000000000023..00000000000000e2\n  Augmentation data:     17 ff ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000024\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000027\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 0000000000000032\n  DW_CFA_offset: r3 (rbx) at cfa-64\n  DW_CFA_advance_loc: 4 to 0000000000000036\n  DW_CFA_offset: r12 (r12) at cfa-72\n  DW_CFA_advance_loc4: 131 to 00000000000000b9\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 00000000000000bd\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 4 to 00000000000000c1\n  DW_CFA_restore: r12 (r12)\n  DW_CFA_advance_loc: 1 to 00000000000000c2\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000000c3\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000110 000000000000002c 0000005c FDE cie=000000b8 pc=00000000000000e2..00000000000005a0\n  Augmentation data:     f1 fe ff ff\n  DW_CFA_advance_loc: 1 to 00000000000000e3\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 00000000000000e6\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 1041 to 00000000000004f7\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 00000000000004f8\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000004f9\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-ast",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/switch.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/switch.ast"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-types",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/switch.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/switch.types"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-semantics",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/switch.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/switch.semantics"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/switch.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/switch.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-177/inspection/switch.lowir",
+        "-o",
+        "/tmp/pa29-177/inspection/switch.roundtrip"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/switch.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/switch.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "{\"tokens\":290,\"max_pending\":38,\"node_growths\":9,\"delimiter_work\":290,\"asm_source_statements\":0,\"asm_source_instructions\":0,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_capture_patterns\":0,\"semantic_capture_candidates\":0,\"semantic_closure_adapters\":0,\"semantic_ms\":0.488908,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":469,\"semantic_fact_records\":207,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":22464,\"semantic_template_declaration_work\":3,\"semantic_declaration_publications\":3,\"semantic_dependence_work\":6,\"semantic_specializations\":1,\"semantic_type_substitution_work\":4,\"semantic_type_substitution_hits\":4,\"semantic_type_substitution_records\":2,\"semantic_substitution_frames\":1,\"semantic_template_type_work\":2,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":3,\"semantic_template_signature_work\":0,\"semantic_template_signature_uses\":0,\"semantic_parameter_publications\":1,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":1,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":1,\"semantic_body_checks\":6,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":6,\"semantic_statement_conversion_work\":1,\"semantic_statement_conversion_uses\":1,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":1,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":0,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":1,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":0,\"semantic_initializer_recipe_uses\":0,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":0,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"inline_variable_initializers\":0,\"inline_variable_hits\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":0,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":1,\"semantic_type_query_work\":1,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":1,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":30,\"semantic_template_parameter_check_work\":50,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":5,\"semantic_template_fixed_expressions\":2,\"semantic_template_fixed_uses\":2,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":0,\"semantic_template_member_uses\":0,\"parsed_nodes\":419,\"template_occurrences\":50,\"template_deferred_regions\":1,\"template_demanded_regions\":1,\"template_source_regions\":2,\"template_region_nodes\":50,\"template_region_roots\":1,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_fold_steps\":0,\"semantic_fold_value_steps\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":1,\"semantic_argument_packs\":6,\"semantic_object_uses\":1,\"semantic_expression_facts\":89,\"semantic_expression_uses\":90,\"semantic_expression_slots\":469,\"semantic_expression_inherited\":2,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":9,\"semantic_constructor_actions\":1,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":1,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":2,\"semantic_list_plans\":2,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":2,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":1,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":5,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":44,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":1,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":3,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":3,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":3,\"semantic_expression_work\":68,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":9,\"semantic_conversion_work\":62,\"semantic_conversions\":69,\"semantic_entity_bytes\":128,\"semantic_class_facts\":2,\"semantic_constants\":8,\"source_invocation_sites\":0,\"semantic_value_queries\":0,\"semantic_value_query_work\":0,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":31,\"semantic_entities\":39,\"semantic_scopes\":57,\"semantic_edges\":0,\"semantic_declarations\":29,\"semantic_regions\":17,\"semantic_lookup_work\":160,\"semantic_signature_work\":14,\"semantic_template_signature_shape_work\":3,\"semantic_template_signature_shape_hits\":1,\"semantic_type_probes\":219,\"semantic_constant_work\":10,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":0,\"exception_work\":1,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":36,\"rtti_expressions\":0,\"rtti_records\":1,\"rtti_cache_hits\":2,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":2,\"list_objects\":2,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":2.0597,\"lowering_ms\":0.323359,\"peak_rss_kib\":17592,\"nodes\":469,\"static_requests\":0,\"static_hits\":0,\"control_work\":102,\"discard_work\":0,\"full_expression_work\":118,\"full_expression_regions\":5,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":12,\"abi_bytes\":1082,\"instructions\":224,\"operands\":314,\"ir_pool_growths\":80,\"ir_capacity_bytes\":45600}\n{\"driver_ms\":4.2867,\"peak_rss_kib\":17592,\"text_bytes\":1357,\"native_functions\":6,\"native_instructions\":277,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.184319,\"encoding_ms\":0.055004}\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/switch.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/switch.plain.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa29-177/inspection/switch.o",
+        "-o",
+        "/tmp/pa29-177/inspection/switch"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa29-177/inspection/switch"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "readelf",
+        "--debug-dump=frames",
+        "/tmp/pa29-177/inspection/switch.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..000000000000002c\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 38 to 000000000000002a\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 000000000000002b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 000000000000002c\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000040 0000000000000024 00000044 FDE cie=00000000 pc=0000000000000000..0000000000000027\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 33 to 0000000000000025\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000026\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000027\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000068 0000000000000024 0000006c FDE cie=00000000 pc=0000000000000000..000000000000000e\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 8 to 000000000000000c\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 000000000000000d\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 000000000000000e\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000090 000000000000001c 00000000 CIE\n  Version:               1\n  Augmentation:          \"zPLR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     9b 65 ff ff ff 1b 1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000b0 000000000000002c 00000024 FDE cie=00000090 pc=0000000000000000..00000000000002b2\n  Augmentation data:     3f ff ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000000f\n  DW_CFA_offset: r3 (rbx) at cfa-112\n  DW_CFA_advance_loc4: 598 to 0000000000000265\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 0000000000000269\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 000000000000026a\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 000000000000026b\n  DW_CFA_restore_state\n  DW_CFA_nop\n\n000000e0 000000000000002c 00000054 FDE cie=00000090 pc=00000000000002b2..00000000000004a9\n  Augmentation data:     34 ff ff ff\n  DW_CFA_advance_loc: 1 to 00000000000002b3\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 00000000000002b6\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 385 to 0000000000000437\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000438\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000439\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000110 0000000000000024 00000114 FDE cie=00000000 pc=0000000000000000..0000000000000043\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 61 to 0000000000000041\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000042\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000043\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-ast",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr.ast"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-semantics",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr.semantics"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-177/inspection/constexpr.lowir",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr.roundtrip"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "{\"tokens\":264,\"max_pending\":18,\"node_growths\":9,\"delimiter_work\":264,\"asm_source_statements\":0,\"asm_source_instructions\":0,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":1,\"semantic_constant_activations\":1,\"semantic_constant_execution_steps\":109,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":2,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_capture_patterns\":0,\"semantic_capture_candidates\":0,\"semantic_closure_adapters\":0,\"semantic_ms\":0.610405,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":514,\"semantic_fact_records\":198,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":23552,\"semantic_template_declaration_work\":5,\"semantic_declaration_publications\":4,\"semantic_dependence_work\":17,\"semantic_specializations\":3,\"semantic_type_substitution_work\":8,\"semantic_type_substitution_hits\":5,\"semantic_type_substitution_records\":4,\"semantic_substitution_frames\":2,\"semantic_template_type_work\":3,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":3,\"semantic_template_signature_work\":0,\"semantic_template_signature_uses\":0,\"semantic_parameter_publications\":2,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":1,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":2,\"semantic_body_checks\":6,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":6,\"semantic_statement_conversion_work\":2,\"semantic_statement_conversion_uses\":2,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":0,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":1,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":1,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":0,\"semantic_initializer_recipe_uses\":0,\"semantic_default_initialization_work\":1,\"semantic_default_initialization_uses\":1,\"template_class_completions\":0,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"inline_variable_initializers\":0,\"inline_variable_hits\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":0,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":13,\"semantic_type_query_work\":12,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":2,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":87,\"semantic_template_parameter_check_work\":129,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":14,\"semantic_template_fixed_expressions\":7,\"semantic_template_fixed_uses\":7,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":0,\"semantic_template_member_uses\":0,\"parsed_nodes\":383,\"template_occurrences\":131,\"template_deferred_regions\":2,\"template_demanded_regions\":2,\"template_source_regions\":4,\"template_region_nodes\":131,\"template_region_roots\":2,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_fold_steps\":0,\"semantic_fold_value_steps\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":2,\"semantic_argument_packs\":9,\"semantic_object_uses\":0,\"semantic_expression_facts\":72,\"semantic_expression_uses\":77,\"semantic_expression_slots\":514,\"semantic_expression_inherited\":7,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":3,\"semantic_constructor_actions\":0,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":0,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":0,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":6,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":2,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":1,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":6,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":2,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":2,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":2,\"semantic_expression_work\":60,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":4,\"semantic_conversion_work\":55,\"semantic_conversions\":60,\"semantic_entity_bytes\":128,\"semantic_class_facts\":4,\"semantic_constants\":22,\"source_invocation_sites\":0,\"semantic_value_queries\":1,\"semantic_value_query_work\":1,\"semantic_template_value_sources\":2,\"semantic_template_value_uses\":2,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":27,\"semantic_entities\":42,\"semantic_scopes\":51,\"semantic_edges\":0,\"semantic_declarations\":31,\"semantic_regions\":21,\"semantic_lookup_work\":205,\"semantic_signature_work\":19,\"semantic_template_signature_shape_work\":3,\"semantic_template_signature_shape_hits\":3,\"semantic_type_probes\":153,\"semantic_constant_work\":77,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":1,\"exception_work\":0,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":28,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":2.15009,\"lowering_ms\":0.164255,\"peak_rss_kib\":17592,\"nodes\":514,\"static_requests\":0,\"static_hits\":0,\"control_work\":36,\"discard_work\":0,\"full_expression_work\":35,\"full_expression_regions\":1,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":11,\"abi_bytes\":1084,\"instructions\":46,\"operands\":66,\"ir_pool_growths\":58,\"ir_capacity_bytes\":11616}\n{\"driver_ms\":4.0598,\"peak_rss_kib\":17592,\"text_bytes\":351,\"native_functions\":5,\"native_instructions\":59,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.058319,\"encoding_ms\":0.026089}\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr.plain.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa29-177/inspection/constexpr.o",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa29-177/inspection/constexpr"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "readelf",
+        "--debug-dump=frames",
+        "/tmp/pa29-177/inspection/constexpr.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..0000000000000027\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 33 to 0000000000000025\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000026\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000027\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000040 0000000000000024 00000044 FDE cie=00000000 pc=0000000000000000..0000000000000027\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 33 to 0000000000000025\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000026\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000027\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000068 0000000000000024 0000006c FDE cie=00000000 pc=0000000000000000..0000000000000070\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 106 to 000000000000006e\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 000000000000006f\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000070\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000090 000000000000001c 00000000 CIE\n  Version:               1\n  Augmentation:          \"zPLR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     9b 5d ff ff ff 1b 1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n000000b0 000000000000002c 00000024 FDE cie=00000090 pc=0000000000000000..0000000000000087\n  Augmentation data:     3f ff ff ff\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000000f\n  DW_CFA_offset: r3 (rbx) at cfa-64\n  DW_CFA_advance_loc4: 83 to 0000000000000062\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 4 to 0000000000000066\n  DW_CFA_restore: r3 (rbx)\n  DW_CFA_advance_loc: 1 to 0000000000000067\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000068\n  DW_CFA_restore_state\n  DW_CFA_nop\n\n000000e0 0000000000000024 000000e4 FDE cie=00000000 pc=0000000000000000..000000000000001a\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 20 to 0000000000000018\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000019\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 000000000000001a\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-ast",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/condition-declaration.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/condition-declaration.ast"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-types",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/condition-declaration.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/condition-declaration.types"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-semantics",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/condition-declaration.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/condition-declaration.semantics"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/condition-declaration.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/condition-declaration.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-177/inspection/condition-declaration.lowir",
+        "-o",
+        "/tmp/pa29-177/inspection/condition-declaration.roundtrip"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/condition-declaration.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/condition-declaration.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "{\"tokens\":135,\"max_pending\":31,\"node_growths\":8,\"delimiter_work\":135,\"asm_source_statements\":0,\"asm_source_instructions\":0,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":2,\"semantic_constant_activations\":4,\"semantic_constant_execution_steps\":14,\"semantic_constant_object_work\":4,\"semantic_constant_address_work\":4,\"semantic_constant_dependency_work\":6,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_capture_patterns\":0,\"semantic_capture_candidates\":0,\"semantic_closure_adapters\":0,\"semantic_ms\":0.491725,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":271,\"semantic_fact_records\":99,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":22120,\"semantic_template_declaration_work\":1,\"semantic_declaration_publications\":2,\"semantic_dependence_work\":9,\"semantic_specializations\":2,\"semantic_type_substitution_work\":0,\"semantic_type_substitution_hits\":0,\"semantic_type_substitution_records\":0,\"semantic_substitution_frames\":2,\"semantic_template_type_work\":1,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":4,\"semantic_template_signature_work\":0,\"semantic_template_signature_uses\":0,\"semantic_parameter_publications\":0,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":1,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":2,\"semantic_body_checks\":5,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":5,\"semantic_statement_conversion_work\":3,\"semantic_statement_conversion_uses\":4,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":1,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":0,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":0,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":0,\"semantic_initializer_recipe_uses\":0,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":0,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"inline_variable_initializers\":0,\"inline_variable_hits\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":0,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":4,\"semantic_type_query_work\":4,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":0,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":18,\"semantic_template_parameter_check_work\":38,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":3,\"semantic_template_fixed_expressions\":3,\"semantic_template_fixed_uses\":3,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":0,\"semantic_template_member_uses\":0,\"parsed_nodes\":195,\"template_occurrences\":76,\"template_deferred_regions\":2,\"template_demanded_regions\":2,\"template_source_regions\":2,\"template_region_nodes\":38,\"template_region_roots\":1,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_fold_steps\":0,\"semantic_fold_value_steps\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":2,\"semantic_argument_packs\":13,\"semantic_object_uses\":2,\"semantic_expression_facts\":42,\"semantic_expression_uses\":45,\"semantic_expression_slots\":271,\"semantic_expression_inherited\":3,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":4,\"semantic_constructor_actions\":1,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":1,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":3,\"semantic_list_plans\":2,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":2,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":0,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":0,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":0,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":2,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":3,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":3,\"semantic_expression_work\":34,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":5,\"semantic_conversion_work\":28,\"semantic_conversions\":36,\"semantic_entity_bytes\":128,\"semantic_class_facts\":2,\"semantic_constants\":15,\"source_invocation_sites\":0,\"semantic_value_queries\":3,\"semantic_value_query_work\":3,\"semantic_template_value_sources\":0,\"semantic_template_value_uses\":0,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":24,\"semantic_entities\":29,\"semantic_scopes\":38,\"semantic_edges\":0,\"semantic_declarations\":17,\"semantic_regions\":8,\"semantic_lookup_work\":59,\"semantic_signature_work\":12,\"semantic_template_signature_shape_work\":3,\"semantic_template_signature_shape_hits\":2,\"semantic_type_probes\":113,\"semantic_constant_work\":14,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":6,\"exception_work\":3,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":36,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":2,\"list_objects\":2,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":1.88746,\"lowering_ms\":0.196221,\"peak_rss_kib\":17592,\"nodes\":271,\"static_requests\":0,\"static_hits\":0,\"control_work\":26,\"discard_work\":0,\"full_expression_work\":39,\"full_expression_regions\":0,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":10,\"abi_bytes\":952,\"instructions\":52,\"operands\":81,\"ir_pool_growths\":59,\"ir_capacity_bytes\":12104}\n{\"driver_ms\":3.7998,\"peak_rss_kib\":17592,\"text_bytes\":293,\"native_functions\":4,\"native_instructions\":56,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.060169,\"encoding_ms\":0.042154}\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/condition-declaration.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/condition-declaration.plain.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa29-177/inspection/condition-declaration.o",
+        "-o",
+        "/tmp/pa29-177/inspection/condition-declaration"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa29-177/inspection/condition-declaration"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "readelf",
+        "--debug-dump=frames",
+        "/tmp/pa29-177/inspection/condition-declaration.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..0000000000000017\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 17 to 0000000000000015\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000016\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000017\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000040 0000000000000024 00000044 FDE cie=00000000 pc=0000000000000000..00000000000000c5\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 191 to 00000000000000c3\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 00000000000000c4\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000000c5\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000068 0000000000000024 0000006c FDE cie=00000000 pc=0000000000000000..0000000000000024\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 30 to 0000000000000022\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000023\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000024\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000090 0000000000000024 00000094 FDE cie=00000000 pc=0000000000000000..0000000000000025\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 31 to 0000000000000023\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000024\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000025\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-ast",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/template-runtime.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/template-runtime.ast"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-types",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/template-runtime.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/template-runtime.types"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-semantics",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/template-runtime.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/template-runtime.semantics"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/template-runtime.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/template-runtime.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-177/inspection/template-runtime.lowir",
+        "-o",
+        "/tmp/pa29-177/inspection/template-runtime.roundtrip"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/template-runtime.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/template-runtime.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "{\"tokens\":136,\"max_pending\":17,\"node_growths\":8,\"delimiter_work\":136,\"asm_source_statements\":0,\"asm_source_instructions\":0,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_capture_patterns\":0,\"semantic_capture_candidates\":0,\"semantic_closure_adapters\":0,\"semantic_ms\":0.578173,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":326,\"semantic_fact_records\":122,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":22192,\"semantic_template_declaration_work\":5,\"semantic_declaration_publications\":5,\"semantic_dependence_work\":17,\"semantic_specializations\":5,\"semantic_type_substitution_work\":7,\"semantic_type_substitution_hits\":5,\"semantic_type_substitution_records\":5,\"semantic_substitution_frames\":3,\"semantic_template_type_work\":3,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":6,\"semantic_template_signature_work\":1,\"semantic_template_signature_uses\":1,\"semantic_parameter_publications\":1,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":1,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":2,\"semantic_body_checks\":4,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":1,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":0,\"semantic_return_deduction_uses\":0,\"semantic_placeholder_type_work\":0,\"semantic_body_lifetime_checks\":4,\"semantic_statement_conversion_work\":3,\"semantic_statement_conversion_uses\":3,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":1,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":0,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":0,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":0,\"semantic_initializer_recipe_uses\":0,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":1,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"inline_variable_initializers\":0,\"inline_variable_hits\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":4,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":8,\"semantic_type_query_work\":8,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":2,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":71,\"semantic_template_parameter_check_work\":125,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":11,\"semantic_template_fixed_expressions\":7,\"semantic_template_fixed_uses\":7,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":1,\"semantic_template_member_uses\":0,\"parsed_nodes\":195,\"template_occurrences\":131,\"template_deferred_regions\":3,\"template_demanded_regions\":3,\"template_source_regions\":6,\"template_region_nodes\":131,\"template_region_roots\":3,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_fold_steps\":0,\"semantic_fold_value_steps\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":3,\"semantic_argument_packs\":12,\"semantic_object_uses\":3,\"semantic_expression_facts\":38,\"semantic_expression_uses\":43,\"semantic_expression_slots\":326,\"semantic_expression_inherited\":7,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":2,\"semantic_constructor_actions\":0,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":1,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":1,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":3,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":2,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":0,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":0,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":0,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":1,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":2,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":2,\"semantic_expression_work\":32,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":4,\"semantic_conversion_work\":29,\"semantic_conversions\":32,\"semantic_entity_bytes\":128,\"semantic_class_facts\":5,\"semantic_constants\":7,\"source_invocation_sites\":0,\"semantic_value_queries\":1,\"semantic_value_query_work\":1,\"semantic_template_value_sources\":1,\"semantic_template_value_uses\":1,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":37,\"semantic_entities\":35,\"semantic_scopes\":41,\"semantic_edges\":0,\"semantic_declarations\":22,\"semantic_regions\":12,\"semantic_lookup_work\":106,\"semantic_signature_work\":17,\"semantic_template_signature_shape_work\":4,\"semantic_template_signature_shape_hits\":3,\"semantic_type_probes\":91,\"semantic_constant_work\":4,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":0,\"exception_work\":26,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":36,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":1.96518,\"lowering_ms\":0.146994,\"peak_rss_kib\":17592,\"nodes\":326,\"static_requests\":0,\"static_hits\":0,\"control_work\":19,\"discard_work\":0,\"full_expression_work\":36,\"full_expression_regions\":0,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":11,\"abi_bytes\":1062,\"instructions\":51,\"operands\":80,\"ir_pool_growths\":50,\"ir_capacity_bytes\":10912}\n{\"driver_ms\":3.85982,\"peak_rss_kib\":17592,\"text_bytes\":345,\"native_functions\":4,\"native_instructions\":73,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.06364,\"encoding_ms\":0.019719}\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/template-runtime.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/template-runtime.plain.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa29-177/inspection/template-runtime.o",
+        "-o",
+        "/tmp/pa29-177/inspection/template-runtime"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa29-177/inspection/template-runtime"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "readelf",
+        "--debug-dump=frames",
+        "/tmp/pa29-177/inspection/template-runtime.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..00000000000000da\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 212 to 00000000000000d8\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 00000000000000d9\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 00000000000000da\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000040 0000000000000024 00000044 FDE cie=00000000 pc=0000000000000000..0000000000000049\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 67 to 0000000000000047\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000048\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000049\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000068 0000000000000024 0000006c FDE cie=00000000 pc=0000000000000000..0000000000000010\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 10 to 000000000000000e\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 000000000000000f\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000010\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000090 0000000000000024 00000094 FDE cie=00000000 pc=0000000000000000..0000000000000026\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 32 to 0000000000000024\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000025\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000026\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-ast",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-return.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr-return.ast"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-types",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-return.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr-return.types"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-semantics",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-return.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr-return.semantics"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-return.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr-return.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir",
+        "/tmp/pa29-177/inspection/constexpr-return.lowir",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr-return.roundtrip"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "--stats",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-return.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr-return.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "{\"tokens\":80,\"max_pending\":4,\"node_growths\":7,\"delimiter_work\":80,\"asm_source_statements\":0,\"asm_source_instructions\":0,\"semantic_floating_constants\":0,\"semantic_wide_constants\":0,\"semantic_wide_constant_bytes\":32,\"semantic_constant_bodies\":0,\"semantic_constant_activations\":0,\"semantic_constant_execution_steps\":0,\"semantic_constant_object_work\":0,\"semantic_constant_address_work\":0,\"semantic_constant_dependency_work\":0,\"semantic_constant_persistence_work\":0,\"semantic_constant_execution_hits\":0,\"semantic_closures\":0,\"semantic_capture_edges\":0,\"semantic_capture_patterns\":0,\"semantic_capture_candidates\":0,\"semantic_closure_adapters\":0,\"semantic_ms\":0.294279,\"semantic_angle_names\":0,\"semantic_angle_parts\":0,\"semantic_angle_interpretations\":0,\"semantic_fact_slots\":149,\"semantic_fact_records\":59,\"semantic_function_string_objects\":0,\"semantic_fact_storage_bytes\":21448,\"semantic_template_declaration_work\":1,\"semantic_declaration_publications\":1,\"semantic_dependence_work\":9,\"semantic_specializations\":1,\"semantic_type_substitution_work\":6,\"semantic_type_substitution_hits\":2,\"semantic_type_substitution_records\":2,\"semantic_substitution_frames\":1,\"semantic_template_type_work\":0,\"semantic_template_type_access_work\":0,\"semantic_template_type_uses\":0,\"semantic_template_signature_work\":0,\"semantic_template_signature_uses\":0,\"semantic_parameter_publications\":1,\"semantic_template_default_binding_work\":0,\"semantic_template_default_binding_queued\":0,\"semantic_template_initializer_binding_work\":0,\"semantic_template_initializer_binding_queued\":0,\"template_body_transitions\":1,\"semantic_body_checks\":3,\"semantic_range_plans\":0,\"semantic_initializer_independence_work\":0,\"semantic_initializer_independence_hits\":0,\"semantic_range_storage_bytes\":432,\"semantic_range_patterns\":0,\"semantic_range_pattern_uses\":0,\"semantic_return_deductions\":2,\"semantic_return_deduction_uses\":1,\"semantic_placeholder_type_work\":2,\"semantic_body_lifetime_checks\":3,\"semantic_statement_conversion_work\":1,\"semantic_statement_conversion_uses\":1,\"semantic_constant_array_work\":0,\"semantic_conversion_result_work\":0,\"semantic_layout_empty_work\":0,\"semantic_layout_empty_types\":0,\"semantic_layout_empty_fallbacks\":0,\"semantic_conversion_receiver_work\":0,\"semantic_conversion_receivers_omitted\":0,\"semantic_base_adjustment_paths\":0,\"semantic_base_adjustment_work\":0,\"semantic_base_adjustment_hits\":0,\"semantic_static_initialization_work\":0,\"semantic_static_plan_work\":0,\"semantic_constant_array_index_entries\":0,\"semantic_initializer_recipe_work\":0,\"semantic_initializer_recipe_uses\":0,\"semantic_default_initialization_work\":0,\"semantic_default_initialization_uses\":0,\"template_class_completions\":0,\"nested_class_declarations\":0,\"nested_class_definitions\":0,\"explicit_specialization_selections\":0,\"variable_template_initializers\":0,\"inline_variable_initializers\":0,\"inline_variable_hits\":0,\"variable_template_reuses\":0,\"variable_template_candidates\":0,\"function_ordering_work\":0,\"function_ordering_hits\":0,\"class_pattern_ordering_work\":0,\"class_pattern_ordering_hits\":0,\"template_definition_applications\":0,\"template_definition_direct_applications\":0,\"template_definition_requests\":0,\"template_definition_hits\":0,\"template_definition_edges\":0,\"template_definition_signature_requests\":0,\"template_definition_signature_work\":0,\"semantic_expression_bytes\":40,\"semantic_type_queries\":2,\"semantic_type_query_work\":2,\"semantic_legacy_trait_work\":0,\"semantic_legacy_member_work\":0,\"semantic_candidate_substitutions\":1,\"semantic_candidate_cycles\":0,\"query_completion_edges\":0,\"query_completion_invalidations\":0,\"semantic_deferred_function_uses\":0,\"semantic_deferred_function_use_work\":0,\"semantic_template_binding_work\":29,\"semantic_template_parameter_check_work\":47,\"semantic_template_parameter_check_reuses\":0,\"semantic_template_bindings\":4,\"semantic_template_fixed_expressions\":3,\"semantic_template_fixed_uses\":3,\"semantic_template_fixed_calls\":0,\"semantic_template_fixed_call_uses\":0,\"semantic_template_object_contexts\":0,\"semantic_template_member_uses\":0,\"parsed_nodes\":102,\"template_occurrences\":47,\"template_deferred_regions\":1,\"template_demanded_regions\":1,\"template_source_regions\":2,\"template_region_nodes\":47,\"template_region_roots\":1,\"template_default_environment_work\":0,\"template_default_argument_work\":0,\"template_default_facts\":0,\"template_default_dependencies\":0,\"template_default_dependency_work\":0,\"template_default_demands\":0,\"semantic_pack_expansion_work\":0,\"semantic_fold_steps\":0,\"semantic_fold_value_steps\":0,\"semantic_pack_expansion_lanes\":0,\"semantic_substitution_frames\":1,\"semantic_argument_packs\":6,\"semantic_object_uses\":0,\"semantic_expression_facts\":24,\"semantic_expression_uses\":25,\"semantic_expression_slots\":149,\"semantic_expression_inherited\":3,\"semantic_expression_variants\":0,\"semantic_call_argument_edges\":1,\"semantic_constructor_actions\":0,\"semantic_constructor_storage_paths\":0,\"semantic_field_projections\":0,\"semantic_inherited_arguments\":0,\"semantic_conversion_objects\":0,\"semantic_user_conversions\":0,\"semantic_list_plans\":0,\"semantic_list_fields\":0,\"semantic_query_edges\":0,\"semantic_list_objects\":0,\"semantic_value_initializations\":0,\"semantic_value_returns\":0,\"semantic_function_returns\":0,\"semantic_placement_objects\":0,\"semantic_constant_constructor_actions\":0,\"semantic_constant_fields\":0,\"semantic_initializer_actions\":0,\"semantic_zero_plans\":0,\"semantic_zero_parts\":0,\"semantic_field_descriptors\":0,\"semantic_transfer_unit_fields\":0,\"member_pointer_proof_work\":0,\"member_pointer_proof_hits\":0,\"member_pointer_flow_work\":0,\"member_pointer_flow_reads\":0,\"semantic_member_constant_values\":0,\"semantic_member_constant_bytes\":16,\"semantic_member_receiver_work\":0,\"semantic_scalar_observations\":0,\"semantic_scalar_consumptions\":0,\"semantic_scalar_consumption_work\":0,\"semantic_parameter_queries\":0,\"semantic_parameter_query_work\":0,\"semantic_delegation_entry_work\":0,\"semantic_destruction_actions\":0,\"semantic_transfer_actions\":0,\"semantic_scalar_transfer_work\":0,\"semantic_scalar_transfer_cache_bytes\":0,\"semantic_lifetime_states\":0,\"semantic_reference_binding_work\":0,\"semantic_reference_alternatives\":0,\"semantic_lifetime_uses\":0,\"semantic_virtual_classes\":0,\"semantic_rtti_type_demands\":0,\"semantic_rtti_class_work\":0,\"semantic_rtti_base_work\":0,\"semantic_virtual_views\":0,\"semantic_virtual_slots\":0,\"semantic_virtual_storage_bytes\":256,\"semantic_subobject_storage_bytes\":16,\"semantic_lifecycle_base_entries\":1,\"semantic_lifecycle_storage_bytes\":24,\"semantic_virtual_base_entries\":0,\"semantic_virtual_base_work\":0,\"semantic_final_overrider_work\":0,\"semantic_subobject_work\":0,\"semantic_base_layout_work\":0,\"semantic_subobject_identities\":0,\"semantic_subobject_paths\":0,\"semantic_virtual_slot_work\":0,\"semantic_virtual_declaration_work\":0,\"semantic_virtual_demands\":0,\"semantic_key_vtable_notifications\":0,\"semantic_key_vtable_processed\":0,\"semantic_vtable_emissions\":0,\"semantic_external_vtable_references\":0,\"semantic_vtable_queue_bytes\":0,\"semantic_member_demands\":0,\"semantic_friend_definitions\":0,\"semantic_friend_demands\":0,\"semantic_friend_processed\":0,\"semantic_demand_processed\":0,\"semantic_expression_work\":19,\"semantic_discard_selections\":0,\"semantic_discard_recipe_uses\":0,\"semantic_discard_materializations\":0,\"semantic_candidate_work\":4,\"semantic_conversion_work\":17,\"semantic_conversions\":18,\"semantic_entity_bytes\":128,\"semantic_class_facts\":1,\"semantic_constants\":8,\"source_invocation_sites\":0,\"semantic_value_queries\":1,\"semantic_value_query_work\":1,\"semantic_template_value_sources\":1,\"semantic_template_value_uses\":1,\"semantic_value_conversion_variants\":0,\"semantic_value_conversion_records\":0,\"semantic_types\":22,\"semantic_entities\":20,\"semantic_scopes\":21,\"semantic_edges\":0,\"semantic_declarations\":10,\"semantic_regions\":4,\"semantic_lookup_work\":42,\"semantic_signature_work\":12,\"semantic_template_signature_shape_work\":3,\"semantic_template_signature_shape_hits\":1,\"semantic_type_probes\":39,\"semantic_constant_work\":4,\"semantic_evaluation_mode_observations\":0,\"semantic_evaluation_mode_values\":0,\"semantic_evaluation_mode_activations\":0,\"semantic_context_initializers\":0,\"semantic_context_references\":0,\"constexpr_validity_work\":0,\"exception_work\":15,\"exception_match_work\":0,\"exception_match_hits\":0,\"closures\":0,\"lower_virtual_cache_bytes\":12,\"rtti_expressions\":0,\"rtti_records\":0,\"rtti_cache_hits\":0,\"statement_regions\":0,\"lifetime_mapping_work\":0,\"lifetime_mapping_hits\":0,\"list_plans\":0,\"list_objects\":0,\"initializer_list_types\":0,\"lower_deleting_entries\":0,\"lower_local_statics\":0,\"lower_constant_data_records\":0,\"lower_constant_data_work\":0,\"lower_constant_data_hits\":0,\"lower_aggregate_array_work\":0,\"lower_aggregate_array_hits\":0}\n{\"frontend_ms\":1.52698,\"lowering_ms\":0.088671,\"peak_rss_kib\":17592,\"nodes\":149,\"static_requests\":0,\"static_hits\":0,\"control_work\":10,\"discard_work\":0,\"full_expression_work\":17,\"full_expression_regions\":0,\"linkage_requests\":0,\"linkage_hits\":0,\"value_base_argument_facts\":0,\"value_parameter_abi_facts\":0,\"initializer_units\":0,\"finalizer_units\":0,\"abi_nodes\":7,\"abi_bytes\":508,\"instructions\":22,\"operands\":35,\"ir_pool_growths\":49,\"ir_capacity_bytes\":6576}\n{\"driver_ms\":3.23525,\"peak_rss_kib\":17592,\"text_bytes\":166,\"native_functions\":3,\"native_instructions\":32,\"link_definition_work\":0,\"link_relocation_work\":0,\"runtime_functions\":0,\"runtime_instructions\":0,\"runtime_text_bytes\":0,\"selection_ms\":0.044043,\"encoding_ms\":0.016677}\n"
+    },
+    {
+      "command": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/source177/constexpr-return.cpp",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr-return.plain.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "g++",
+        "/tmp/pa29-177/inspection/constexpr-return.o",
+        "-o",
+        "/tmp/pa29-177/inspection/constexpr-return"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/tmp/pa29-177/inspection/constexpr-return"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "readelf",
+        "--debug-dump=frames",
+        "/tmp/pa29-177/inspection/constexpr-return.o"
+      ],
+      "status": 0,
+      "stdout": "Contents of the .eh_frame section:\n\n\n00000000 0000000000000014 00000000 CIE\n  Version:               1\n  Augmentation:          \"zR\"\n  Code alignment factor: 1\n  Data alignment factor: -8\n  Return address column: 16\n  Augmentation data:     1b\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_offset: r16 (rip) at cfa-8\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000018 0000000000000024 0000001c FDE cie=00000000 pc=0000000000000000..0000000000000010\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 10 to 000000000000000e\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 000000000000000f\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000010\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000040 0000000000000024 00000044 FDE cie=00000000 pc=0000000000000010..0000000000000095\n  DW_CFA_advance_loc: 1 to 0000000000000011\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000014\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc4: 127 to 0000000000000093\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000094\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000095\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n\n00000068 0000000000000024 0000006c FDE cie=00000000 pc=0000000000000000..0000000000000011\n  DW_CFA_advance_loc: 1 to 0000000000000001\n  DW_CFA_def_cfa_offset: 16\n  DW_CFA_offset: r6 (rbp) at cfa-16\n  DW_CFA_advance_loc: 3 to 0000000000000004\n  DW_CFA_def_cfa_register: r6 (rbp)\n  DW_CFA_advance_loc: 11 to 000000000000000f\n  DW_CFA_remember_state\n  DW_CFA_advance_loc: 1 to 0000000000000010\n  DW_CFA_def_cfa: r7 (rsp) ofs 8\n  DW_CFA_restore: r6 (rbp)\n  DW_CFA_advance_loc: 1 to 0000000000000011\n  DW_CFA_restore_state\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n  DW_CFA_nop\n\n",
+      "stderr": ""
+    }
+  ]
+}
