@@ -1,0 +1,358 @@
+{
+  "compiler": "/tmp/pa30-196/cppgm-B",
+  "sha256": "2b616f0fc25448146e047e79b008a647b3218189d30ad12b4194502acc23cd2e",
+  "commands": [
+    {
+      "args": [
+        "/tmp/pa30-196/cppgm-B",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/dependent-construction.cpp",
+        "-o",
+        "/tmp/pa30-196/controls/dependent-construction.o"
+      ],
+      "status": 0,
+      "wall_s": 0.008069843053817749,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-196/controls/dependent-construction.o",
+        "-o",
+        "/tmp/pa30-196/controls/dependent-construction"
+      ],
+      "status": 0,
+      "wall_s": 0.06833277828991413,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/controls/dependent-construction"
+      ],
+      "status": 0,
+      "wall_s": 0.0017549358308315277,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/cppgm-B",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/dependent-construction.cpp",
+        "-o",
+        "/tmp/pa30-196/controls/dependent-construction.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.007188277319073677,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-196/controls/dependent-construction.native",
+        "/tmp/pa30-196/controls/dependent-construction.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0037177279591560364,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/controls/dependent-construction.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0008069183677434921,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/cppgm-B",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/dependent-qualified-member.cpp",
+        "-o",
+        "/tmp/pa30-196/controls/dependent-qualified-member.o"
+      ],
+      "status": 0,
+      "wall_s": 0.008646130561828613,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-196/controls/dependent-qualified-member.o",
+        "-o",
+        "/tmp/pa30-196/controls/dependent-qualified-member"
+      ],
+      "status": 0,
+      "wall_s": 0.052913347259163857,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/controls/dependent-qualified-member"
+      ],
+      "status": 0,
+      "wall_s": 0.0015785004943609238,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/cppgm-B",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/dependent-qualified-member.cpp",
+        "-o",
+        "/tmp/pa30-196/controls/dependent-qualified-member.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005455847829580307,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-196/controls/dependent-qualified-member.native",
+        "/tmp/pa30-196/controls/dependent-qualified-member.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0033299624919891357,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/controls/dependent-qualified-member.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0007078051567077637,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/cppgm-B",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/fixed-deleted.reject.cpp",
+        "-o",
+        "/tmp/pa30-196/controls/fixed-deleted.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.004976259544491768,
+      "stdout": "",
+      "stderr": "ERROR: invalid fixed initializer constructor\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/cppgm-B",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/injected-deleted.reject.cpp",
+        "-o",
+        "/tmp/pa30-196/controls/injected-deleted.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.005183229222893715,
+      "stdout": "",
+      "stderr": "ERROR: deleted constructor\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/cppgm-B",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/injected-query-boundaries.cpp",
+        "-o",
+        "/tmp/pa30-196/controls/injected-query-boundaries.o"
+      ],
+      "status": 0,
+      "wall_s": 0.006943434476852417,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-196/controls/injected-query-boundaries.o",
+        "-o",
+        "/tmp/pa30-196/controls/injected-query-boundaries"
+      ],
+      "status": 0,
+      "wall_s": 0.0625554770231247,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/controls/injected-query-boundaries"
+      ],
+      "status": 0,
+      "wall_s": 0.0015090033411979675,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/cppgm-B",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/injected-query-boundaries.cpp",
+        "-o",
+        "/tmp/pa30-196/controls/injected-query-boundaries.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0060296207666397095,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-196/controls/injected-query-boundaries.native",
+        "/tmp/pa30-196/controls/injected-query-boundaries.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0038861073553562164,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/controls/injected-query-boundaries.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0007876791059970856,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/cppgm-B",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/qualified-private.reject.cpp",
+        "-o",
+        "/tmp/pa30-196/controls/qualified-private.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.00559765100479126,
+      "stdout": "",
+      "stderr": "ERROR: inaccessible class member: value declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/qualified-private.reject.cpp:1\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/cppgm-B",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/qualified-unrelated.reject.cpp",
+        "-o",
+        "/tmp/pa30-196/controls/qualified-unrelated.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.00511951744556427,
+      "stdout": "",
+      "stderr": "ERROR: missing selected base path\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/cppgm-B",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/undemanded-deleted.cpp",
+        "-o",
+        "/tmp/pa30-196/controls/undemanded-deleted.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005378624424338341,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-196/controls/undemanded-deleted.o",
+        "-o",
+        "/tmp/pa30-196/controls/undemanded-deleted"
+      ],
+      "status": 0,
+      "wall_s": 0.055178333073854446,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/controls/undemanded-deleted"
+      ],
+      "status": 0,
+      "wall_s": 0.00165565125644207,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/cppgm-B",
+        "--emit-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/undemanded-deleted.cpp",
+        "-o",
+        "/tmp/pa30-196/controls/undemanded-deleted.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.003940783441066742,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-196/controls/undemanded-deleted.native",
+        "/tmp/pa30-196/controls/undemanded-deleted.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.003148043528199196,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-196/controls/undemanded-deleted.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0007618218660354614,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    }
+  ]
+}

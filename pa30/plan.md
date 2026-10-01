@@ -1,122 +1,90 @@
-# PA30 compact implementation plan — implementation196
+# PA30 compact implementation plan — handoff196
 
 Stage base commit: `27029f978e65b78331233123922d342033d5d1f7`.
 Last reviewed commit: `27029f978e65b78331233123922d342033d5d1f7`.
 Target: **PA30 full-stage**. Phase: **implementation handoff, incomplete stage**.
-Previous goal turn: progress (parser handoff195 validated and committed); entry196 is clean.
-Entry196 commit: `c67da7c829f78708b84ef36261a33e81a4896f5f`.
-The markers above remain the PA29 boundary; PA30 implementation awaits review.
+Previous goal turn: progress (validated parser handoff195); entry196 was clean.
+Entry196: `c67da7c829f78708b84ef36261a33e81a4896f5f`.
+Review markers retain the PA29 boundary; neither implementation handoff is audited.
 
 ## Completed group and spec alignment
 
-Implementation `32727741` closes the hosted declaration-parser group, extending
-from tuple constructor lookahead into nested angle construction and friend tags:
+Handoff195 repaired declaration prediction, split-angle lookahead and elaborated
+friend tags (`32727741`); its controls and performance evidence remain preserved.
+Implementation196 closes the related **current-instantiation query** group:
 
-| Owner | Repaired data flow | Work and lifetime |
+| Owner / commit | Data flow and fix | Complexity / lifetime |
 |---|---|---|
-| `syntax/prediction.cpp` | Member-template `operator=` stays a function declarator; class lookahead stops at its class instead of treating the operator as a variable initializer. | Existing indexed category traversal; constant added decision per token, no grammar replay. |
-| `syntax/cursor`, `prediction`, `name_parser` | Cached angle endings distinguish the first half of `>>` from the whole token, preserving type arguments, outer qualifiers and nested braced construction. | One bit in existing token padding; O(1) cache access, released when the cursor consumes the token. |
-| `syntax/declarator`, `class_parser` | Elaborated friend tags preserve visible class lookup instead of creating an empty shadowing class scope. | Constant specifier state; semantic friend ownership remains unchanged. |
+| `semantic/type_query`, injected type owner / `b7b1436a` | Resolved construction declaration → canonical injected current-instantiation type → dependent query and substitution. Avoid treating the primary declaration as a fixed construction target. | Existing class/source-head cache: O(parameters) first construction, O(1) average reuse; TU Analyzer ownership. |
+| `semantic/type_query`, current-instantiation scope / `2f1595b2` | Dependent receiver type → retained current-class scope → indexed qualifier alias → typed member query. Fixes empty symbolic-scope lookup in dot/arrow expressions. | O(lexical depth), cached canonical type comparisons and indexed lookup; query stores type/context once. |
 
-Tokens still feed one retained graph and the shared semantic → typed LowIR →
-native ELF path. No source registry additions, new backend route, optimization,
-reference correction, harness change or fixture change. Source-position
-information was added to the existing lazy parser rejection diagnostic.
+Primary/partial/nested construction, explicit specialization, deleted constructor,
+undemanded body, qualified field/function, const receiver, private access and
+unrelated qualifier boundaries are covered. No new source registration, container,
+backend path, optimization, reference correction or harness/fixture change.
+Existing retained graph → semantic facts → typed LowIR → native ELF is preserved.
 
 ## Validation and performance
 
-[Validation](../student.tests/pa30/evidence195/validation.json): earlier PAs
+[Validation](../student.tests/pa30/evidence196/validation.json): earlier PAs
 **4941/4941 pass**; file audit passes with four inherited substantial-header
-warnings. PA30 improves **105/153 → 114/153**, **48 → 39 failures**, nine fixed
-existing cases and zero regressions. The supplied 105/154 summary disagreed with
-its own raw log; fresh entry cases and unchanged hashes establish the baseline.
-[Delta](../student.tests/pa30/evidence195/stage-delta.json) retains every case.
-The required through-PA30 report still fails at PA30; no advancement is claimed.
+warnings. Required PA30 improves **114/153 → 129/153**, **39 → 24 failures**:
+**15 fixed existing cases, zero regressions**. All fixture/reference/harness
+hashes and expected statuses are preserved in the [delta](../student.tests/pa30/evidence196/stage-delta.json).
+Ralph's entry summary reports 114/154; its raw log and a fresh entry run both
+show 114/153. The evidence retains every real case. Stage progress is satisfied;
+the through-PA30 report still fails at PA30. No advancement is claimed.
 
-[Controls](../student.tests/pa30/evidence195/controls.json): **28 commands pass**,
-including three header-free reducers, positive/negative scope/angle boundaries,
-checked execution, and explicit LowIR/native adapter execution. Personal inputs
-and scripts are in `student.tests/pa30/` and were run explicitly.
+[Controls](../student.tests/pa30/evidence196/controls.json): **28 commands pass**,
+including negative controls and checked execution through native objects and
+explicit LowIR/native adapters. Personal tests were run explicitly.
 
-[Performance195](performance195.md): **404 observations + 16 launchers**,
-frozen binaries/flags/inputs, A/A plus six ABBA blocks for four equivalent fixed
-workloads, corrected-owner scaling, and all nine newly passing hosted fixtures.
-Equivalent A/B objects/executables are identical; no repeatable regression or
-speedup is established. Largest repaired hosted compile: **1.151 s / 58,688 KiB**.
-Mandated **45 s** timeout unchanged. Token size **40 → 40 bytes**; lookahead
-stays 35/12/25 tokens across 128–2048 repeated owner inputs. No optional transform
-or generated-code growth. Inherited blanket percentage/no-growth targets remain
-diagnostic under spec §9; mandated budgets and correctness are preserved.
+[Performance196](performance196.md): **332 observations + 16 launchers**,
+frozen binaries/flags/inputs, A/A plus six ABBA blocks on four equivalent fixed
+workloads, corrected-owner scaling and all 15 newly passing hosted fixtures.
+Equivalent A/B objects/executables are byte-identical; no repeatable regression
+or speedup is established. Largest repaired hosted compile: **1.379 s / 83,096
+KiB**. Corrected 128/512/2048-family query work = **29N+4**, class completions =
+**2N**. Mandated **45 s** timeout unchanged. No optional transform or added
+growth budget. Inherited blanket percentage/no-growth targets remain diagnostic
+under spec §9; historical data, mandated limits and correctness are preserved.
 
 ## Remaining implementation groups
 
-Counts below group current diagnostics; deeper root causes remain implementation
-work. Exact affected fixtures and messages are preserved in the delta ledger.
-
-| Failures | Owner / next data-flow investigation |
+| Failures | Owner / required data flow |
 |---:|---|
-| 11 | `semantic/type_query`, `query_call`: shared-pointer construction/member queries → completed type/category facts. |
+| 2 | `semantic/class_pattern_selection`: chrono/shared-pointer prerequisite patterns → unique partial specialization. |
 | 5 | `semantic/callable`, template demand: dependent callable uses → prerequisite facts and demanded bodies. |
-| 5 | `semantic/dependent_type`: hashtable base/member alias lookup → canonical applied type. |
 | 6 | `semantic/type_builder`, constant evaluation: hosted array expressions → checked integral bounds. |
 | 2 | `semantic/lookup`: convergent aliases/using edges → one declaration/type result. |
 | 2 | `semantic/access`: random-library nested member use → retained access context. |
-| 1 | `semantic/class_pattern_selection`: chrono patterns → unique partial specialization. |
 | 2 | `semantic/construction`: piecewise tuple arguments → viable constructor and conversions. |
 | 1 | `semantic/template_call`: bind member callable → viable overload. |
 | 1 | `semantic/exception_specification`: replaceable new redeclaration → compatible exception fact. |
 | 1 | Builtin registry / vector semantics/lowering: target vector intrinsic → typed operation. |
-| 2 | Semantic body checks / lowering reachability: cross-function local reference and reachable missing return → required rejection. |
+| 2 | Body checks / lowering reachability: cross-function local reference and reachable missing return → required rejection. |
 
-These owners must retain indexed lookup, complete canonical fact keys,
-per-demand computation and bounded candidate/IR work; new fixes require reducers,
-current-suite deltas and earlier-stage validation, not retry-all or name recovery.
+These are unfinished implementation, not review questions. Retain canonical
+fact keys, indexed lookup, precise demand and bounded candidate/IR work.
 
 ## Handoff ledger and review boundary
 
-- Entry/baseline commit: `e7fd16e3`; implementation: `32727741`.
-- Completed: parser group above, source/coverage binding, correctness controls,
-  required checks and stage-scoped performance evidence (89 consistency checks).
-- Boundary: every current hosted parser diagnostic in the entry failure set is
-  resolved. The 39 remaining failures reach different semantic/lowering owners.
-  Further progress requires their declaration/demand/access/conversion facts;
-  the parser's category and delimiter changes cannot establish those facts.
-  Shared-pointer query demand is the largest next implementation group.
-- Independent review remains pending for this implementation and whole PA30:
-  review cursor split-cache reuse, class/friend scope fidelity, and the full
-  demanded-template-to-ELF architecture/performance requirements. These are
-  review tasks, separate from the known implementation failures above; neither
-  is waived and the Last reviewed commit marker is deliberately unchanged.
-- This handoff ends implementation195 only. Ralph must schedule further work
-  and independent audit before advancing PA30. Final evidence/docs commit leaves
-  the tested implementation unchanged; clean status is checked after committing.
-
-## Active implementation196
-
-Initial group: dependent construction/member type queries (11 hosted failures).
-Owner: `semantic/type_query`, `query_call` and retained template body facts.
-Trace parsed dependent construction → interned query → substitution / completed
-type/category → recorded member selection → typed LowIR and ELF. Preserve
-definition-time checks for fixed operands. Use per-query identity/state and
-indexed member lookup; no token replay, global retry, or library-name rules.
-Validate header-free reducers, related hosted cases, full PA30 delta, earlier
-PAs, file audit and frozen A/B compiler/runtime measurements. Extend into
-related exposed demand defects while the same data flow supports progress.
-
-Increment196a: construction queries now normalize resolved class declarations
-to the cached injected current-instantiation type. `check196.py` passes 20
-commands (primary/partial/nested, evaluated and LowIR adapter execution, deleted
-and undemanded constructor boundaries). PA30: 123/153, nine entry failures fixed
-and no regressions. Two previously masked failures now reach class partial
-ordering and dependent base alias lookup; extend into the latter shared
-current-instantiation owner before closing this implementation group.
-
-Increment196b: qualified member queries resolve aliases in the retained source
-scope when the object denotes the current instantiation. This also fixes all
-six hashtable alias failures, including the one exposed by increment196a.
-Current PA30: 129/153 (15 fixed, zero regressions); earlier PAs 4941/4941;
-file audit passes with the same four warnings. Explicit controls: 28 commands.
-Boundary under validation: remaining diagnostics belong to partial ordering,
-callable prerequisites, constant bounds, alias convergence, access, constructor
-selection, exception redeclarations, vector builtins and body reachability.
-Frozen A/B measurements and final coverage/source binding remain to be recorded.
+- Initial scope: 11 construction-query failures. Extended through the shared
+  current-instantiation owner to all six qualified-member alias failures,
+  including one exposed by the construction repair. Fifteen tests now pass;
+  the remaining initially masked shared-pointer failure reaches partial ordering.
+- Coherent boundary: no current failure retains either repaired diagnostic.
+  The remaining partial-ordering, callable prerequisite, constant-expression,
+  access, overload and lowering decisions require facts these query mappings
+  cannot establish. Further related query correction lacks a remaining reducer;
+  continuing requires a separate owner investigation and implementation group.
+- Completed: owner fixes, controls, unchanged coverage/source binding, required
+  checks, compiler/runtime/text evidence and **105 evidence consistency checks**.
+- Independent review pending: prior split-cache/class-friend scope changes;
+  injected type identity for source heads, retained qualifier scope and concrete
+  access/substitution; whole-stage demanded-template-to-ELF architecture and
+  performance. These review tasks remain separate from the 24 known failures.
+  Neither is waived; Last reviewed commit is deliberately unchanged.
+- This handoff ends implementation196 only. Ralph schedules more implementation
+  and independent audit before advancement. Final evidence/docs commit leaves
+  tested implementation unchanged; check clean status after committing.
