@@ -72,7 +72,7 @@ void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Express
         for (TypeId t : left) {
             if (types[t].kind != TypeKind::Named && (arithmetic(t) || object_pointer(t)) &&
                 !(op == OP_DEC && fundamental(t,FT_BOOL))) {
-                if (object_pointer(t) && !size(types[t].child,false,true)) continue;
+                if (object_pointer(t) && !complete_object_type(types[t].child)) continue;
                 auto target = class_value(args[0].type) ? t : args[0].type;
                 if (!(types[target].cv & 1)) {
                     auto before = results.size();

@@ -47,7 +47,7 @@ bool Analyzer::template_more_specialized(EntityId a, EntityId b, unsigned argume
             arrays.push_back(types[type]); type = types[type].child;
         }
         type = types.unqualified(type);
-        for (auto i = arrays.rbegin(); i != arrays.rend(); ++i) type = types.compound(i->kind,type,i->bound);
+        for (auto i = arrays.rbegin(); i != arrays.rend(); ++i) type = types.compound(i->kind,type,i->bound,i->unknown_bound);
         return type;
     };
     auto transformed = [&](TypeId signature) {

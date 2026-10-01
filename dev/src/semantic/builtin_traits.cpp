@@ -18,7 +18,7 @@ bool referenceable(const Type& t)
 TypeId remove_cv(Types& types, TypeId t, unsigned removed)
 {
     auto type = types[t];
-    if (type.kind == TypeKind::Array) return types.compound(TypeKind::Array,remove_cv(types,type.child,removed),type.bound);
+    if (type.kind == TypeKind::Array) return types.compound(TypeKind::Array,remove_cv(types,type.child,removed),type.bound,type.unknown_bound);
     return types.qualify(types.unqualified(t),type.cv & ~removed);
 }
 TypeId transform_type(Analyzer& sem, BuiltinTrait trait, TypeId t)
@@ -179,7 +179,7 @@ TypeQueryFact Analyzer::query_builtin_trait(QueryId id, const TypeQuery& query)
                 assignment.name = operator_name(OP_ASS); assignment.context = global;
                 operation = intern_query(assignment,operands);
             } else if (type.kind == TypeKind::Array) {
-                if (args.count == 1 && type.bound) {
+                if (args.count == 1 && !type.unknown_bound) {
                     TypeQuery element = query; element.arguments = intern_arguments({type.child});
                     auto child = intern_query(element,{}); query_fact(child);
                     value = constants[builtin_trait_values.get(child)].bits != 0;
@@ -247,9 +247,9 @@ bool Analyzer::builtin_type_property(unsigned operation, TypeId t)
         while (type.kind == TypeKind::Array) type = types[type.child];
         return !ref && !function && (type.cv & (trait == BuiltinTrait::Const ? 1 : 2));
     case BuiltinTrait::Void: return fundamental(t,FT_VOID);
-    case BuiltinTrait::Array: return type.kind == TypeKind::Array;
+    case BuiltinTrait::Array: return type.kind == TypeKind::Array && (type.unknown_bound || type.bound);
     case BuiltinTrait::BoundedArray: return type.kind == TypeKind::Array && type.bound;
-    case BuiltinTrait::UnboundedArray: return type.kind == TypeKind::Array && !type.bound;
+    case BuiltinTrait::UnboundedArray: return type.kind == TypeKind::Array && type.unknown_bound;
     case BuiltinTrait::LvalueReference: return type.kind == TypeKind::LRef;
     case BuiltinTrait::RvalueReference: return type.kind == TypeKind::RRef;
     case BuiltinTrait::Reference: return ref;
@@ -275,7 +275,7 @@ bool Analyzer::builtin_type_property(unsigned operation, TypeId t)
     }
     if (trait == BuiltinTrait::Destructible || trait == BuiltinTrait::TriviallyDestructible || trait == BuiltinTrait::NothrowDestructible) {
         if (ref) return true;
-        if (type.kind == TypeKind::Array) return type.bound && builtin_type_property(operation,type.child);
+        if (type.kind == TypeKind::Array) return !type.unknown_bound && builtin_type_property(operation,type.child);
         if (function || fundamental(t,FT_VOID)) return false;
         if (!cls) return true;
         TraitProbe probe(immediate_query_probe,explicit_instantiation_naming,access_override,global);

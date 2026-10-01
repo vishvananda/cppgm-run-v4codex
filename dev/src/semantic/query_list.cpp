@@ -67,8 +67,8 @@ std::uint32_t Analyzer::query_list_aggregate(const std::vector<QueryId>& args, u
     if (vector_kind(target.kind)) target.bound = vector_elements(to);
     if (target.kind == TypeKind::Array || vector_kind(target.kind)) {
         std::uint64_t index = 0;
-        while (valid && cursor < args.size() && (!target.bound || index < target.bound)) valid = add(target.child,0,index++,1);
-        if (!target.bound) {
+        while (valid && cursor < args.size() && (target.unknown_bound || index < target.bound)) valid = add(target.child,0,index++,1);
+        if (target.unknown_bound) {
             if (!index) valid = false;
             else plan.target = types.compound(TypeKind::Array,target.child,index);
         }
@@ -126,7 +126,7 @@ TypeQueryFact Analyzer::query_list_initialization(QueryId id)
             // Preserve ordinary candidate failure, including constructors.
         } else if (literal.kind == QueryKind::String && string_array_type(ast.literals[literal.value].type,t)) {
             plan.literal = literal.value; plan.aggregate = true;
-            if (!ref && !types[t].bound) t = q.type = types.compound(TypeKind::Array,types[t].child,ast.literals[plan.literal].elements);
+            if (!ref && types[t].unknown_bound) t = q.type = types.compound(TypeKind::Array,types[t].child,ast.literals[plan.literal].elements);
             plan.target = q.type;
             if (types[t].bound && ast.literals[literal.value].elements <= types[t].bound) plan.rank = 0;
         } else if (auto element = initializer_list_element(t)) {

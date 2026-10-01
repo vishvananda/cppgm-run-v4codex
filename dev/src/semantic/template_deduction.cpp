@@ -67,7 +67,7 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
     }
     if (p.kind == TypeKind::DependentVector) return true; // vendor dependent vector shapes are non-deduced
     if (p.kind == TypeKind::DependentArray) {
-        if (a.kind != TypeKind::Array && a.kind != TypeKind::DependentArray) return false;
+        if ((a.kind != TypeKind::Array && a.kind != TypeKind::DependentArray) || a.unknown_bound || (a.kind == TypeKind::Array && !a.bound)) return false;
         ArgumentId bound;
         if (a.kind == TypeKind::DependentArray) bound = value_argument_id(a.bound);
         else {
@@ -98,14 +98,14 @@ bool Analyzer::deduce_type(TypeId pattern, TypeId actual, Index& bindings, Deduc
             value = types.qualify(base,cv & ~p.cv);
             std::vector<Type> arrays;
             for (auto t = actual; t != element; t = types[t].child) arrays.push_back(types[t]);
-            for (auto t = arrays.rbegin(); t != arrays.rend(); ++t) value = types.compound(t->kind,value,t->bound);
+            for (auto t = arrays.rbegin(); t != arrays.rend(); ++t) value = types.compound(t->kind,value,t->bound,t->unknown_bound);
         }
         if (old && old != value) return false;
         bindings.put(p.entity, value); return true;
     }
     if (p.kind != a.kind) return false;
     if (kind != DeductionKind::Call && p.cv != a.cv) return false;
-    if ((p.kind == TypeKind::Array || vector_kind(p.kind)) && p.bound != a.bound) return false;
+    if ((p.kind == TypeKind::Array || vector_kind(p.kind)) && (p.bound != a.bound || p.unknown_bound != a.unknown_bound)) return false;
     if (p.kind == TypeKind::MemberPointer && !deduce_type(p.member_owner(),a.member_owner(),bindings,kind,prefix)) return false;
     if (p.kind == TypeKind::Named && entities[p.entity].specialization && entities[a.entity].specialization &&
         entities[specialization_pattern(p.entity)].template_parameter) {

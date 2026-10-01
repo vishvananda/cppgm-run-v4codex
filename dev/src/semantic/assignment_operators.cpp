@@ -52,13 +52,13 @@ void Analyzer::builtin_assignment_values(ETokenType op, const std::vector<Expres
             // usual arithmetic result is a separate computation fact.
             add(target,promote(b),shift ? promote(a) : arithmetic_type(a,b));
         if ((binary == OP_PLUS || binary == OP_MINUS) && object_pointer(a) && integral(b) && !scoped_enum(b)) {
-            if (size(types[a].child,false,true)) add(target,types.fundamental(FT_LONG_INT),a);
+            if (complete_object_type(types[a].child)) add(target,types.fundamental(FT_LONG_INT),a);
         }
         // Ordinary E1 op= E2 permits a pointer sum converted back to bool.
         // [over.built] provides no such candidate when a class operand
         // requires overload resolution; do not invent an extra overload.
         if (!class_value(args[0].type) && !class_value(args[1].type) &&
-            binary == OP_PLUS && fundamental(a,FT_BOOL) && object_pointer(b) && size(types[b].child,false,true))
+            binary == OP_PLUS && fundamental(a,FT_BOOL) && object_pointer(b) && complete_object_type(types[b].child))
             add(target,b,promote(a));
     }
 }

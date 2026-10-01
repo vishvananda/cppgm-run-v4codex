@@ -39,7 +39,7 @@ bool NameIndex::insert(Name name, std::uint32_t value)
 }
 Type Type::object(std::uint32_t bytes, std::uint32_t alignment)
 {
-    require(bytes && alignment && !(alignment & (alignment - 1)), "invalid object layout");
+    require(alignment && !(alignment & (alignment - 1)), "invalid object layout");
     unsigned shift = 0;
     while ((std::uint32_t(1) << shift) != alignment) ++shift;
     Type t(Object);

@@ -9,6 +9,7 @@ void Procedural::initialize_array_copy(std::uint32_t plan, Value location, Value
     while (sem.types[leaf].kind == TypeKind::Array) {
         count *= sem.types[leaf].bound; leaf = sem.types[leaf].child; from = sem.types[from].child;
     }
+    if (!count) return;
     auto target = address(location), origin = address(source);
     auto initial = live;
     semantic::Index retired;

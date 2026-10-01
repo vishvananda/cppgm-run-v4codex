@@ -13,6 +13,7 @@ void Procedural::array_construct(EntityId ctor, TypeId t, Value root, bool indir
     if (!sem.constructor_needed(ctor)) return;
     std::uint64_t count = 1;
     while (sem.types[t].kind == TypeKind::Array) { count *= sem.types[t].bound; t = sem.types[t].child; }
+    if (!count) return;
     auto stride = sem.object_size(t);
     EntityId dtor = sem.type_destructor(t);
     bool may_throw = !sem.default_construction_nonthrowing(ctor);
@@ -117,6 +118,7 @@ void Procedural::array_destroy(EntityId dtor, TypeId t, Value root, bool indirec
     auto target = sem.types[t];
     TypeId leaf = t; std::uint64_t elements = 1;
     while (sem.types[leaf].kind == TypeKind::Array) { elements *= sem.types[leaf].bound; leaf = sem.types[leaf].child; }
+    if (!elements) return;
     if (!indirect && path.empty() && root.operand.kind == Operand::Temporary &&
         sem.function_nonthrowing(dtor)) {
         if (auto first = list_backing_addresses.get(root.operand.ref)) {

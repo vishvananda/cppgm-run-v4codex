@@ -138,7 +138,7 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         if (query_fact(query).dependent) result = types.compound(TypeKind::DependentArray,child,query);
         else {
             auto value = constants[query_value(query)];
-            if (!value.valid || !integral(value.type) || scoped_enum(value.type) || !value.bits ||
+            if (!value.valid || !integral(value.type) || scoped_enum(value.type) || (!value.bits && !host_abi) ||
                 (negative_constant(value) || integer_value(value) > ~std::uint64_t(0)))
                 return 0;
             if (fundamental(child,FT_VOID) || types[child].kind == TypeKind::Function ||
@@ -269,7 +269,7 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         if ((p.kind == TypeKind::LRef || p.kind == TypeKind::RRef) && fundamental(child, FT_VOID)) return 0;
         if (p.kind == TypeKind::Array && (fundamental(child, FT_VOID) || types[child].kind == TypeKind::Function || abstract_value(child))) return 0;
         if (p.kind == TypeKind::Array && types.storage_alignment(child) && !dependent_type(child) && size(child)%size(child,true)) return 0;
-        result = types.compound(p.kind, child, p.bound);
+        result = types.compound(p.kind,child,p.bound,p.unknown_bound);
         result = types.qualify(result, p.cv);
     }
     if (result && (p.alignment || p.alignment_queries)) {

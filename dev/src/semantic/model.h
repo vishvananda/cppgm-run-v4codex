@@ -62,6 +62,7 @@ struct Type {
     RefQualifier ref = RefQualifier::None;
     EFundamentalType fundamental = FT_INT;
     bool variadic = false;
+    bool unknown_bound = false; // Array only: [] is distinct from GNU [0].
     unsigned char alignment = 0; // Source storage alignment: log2(bytes)+1; absent in signatures.
     TypeId child = 0;
     EntityId entity = 0;
@@ -87,7 +88,7 @@ public:
     TypeId alias_application(EntityId alias, TypeId result, std::uint32_t arguments);
     TypeId alias_target(TypeId type);
     TypeId pack_expansion(ArgumentId pattern, std::uint32_t captures);
-    TypeId compound(TypeKind k, TypeId child, std::uint64_t bound = 0);
+    TypeId compound(TypeKind k, TypeId child, std::uint64_t bound = 0, bool unknown_bound = false);
     TypeId aligned(TypeId t, std::uint64_t bytes, std::uint32_t queries = 0);
     unsigned storage_alignment(TypeId t) const;
     TypeId qualify(TypeId t, unsigned cv);
@@ -584,7 +585,7 @@ struct FunctionReturn { EntityId object = 0; std::uint32_t first = 0, last = 0; 
 struct PlacementNew {
     EntityId allocation = 0, constructor = 0, deallocation = 0, destructor = 0;
     TypeId type = 0, leaf = 0; NodeId initializer = 0, bound = 0;
-    std::uint64_t fixed_count = 0, stride = 0, cookie = 0;
+    std::uint64_t fixed_count = 0, stride = 0, cookie = 0, inner_count = 1;
     Expression call; bool array = false, zero = false, construct = false, narrow_extent = false, dynamic_extent = false;
     std::uint32_t zero_plan = 0;
 };

@@ -13,7 +13,7 @@ Types::Types() { records.push_back(Type()); hashes.push_back(0); }
 TypeId Types::intern(Type t, const std::vector<TypeId>& params)
 {
     std::uint64_t hash = mix(unsigned(t.kind) | (t.cv << 8) | (unsigned(t.fundamental) << 16) |
-                             (unsigned(t.variadic) << 24) | (unsigned(t.ref) << 25));
+                             (unsigned(t.variadic) << 24) | (unsigned(t.ref) << 25) | (unsigned(t.unknown_bound) << 27));
     hash ^= mix(std::uint64_t(t.alignment_queries) << 32) ^ mix(t.alignment) ^ mix(t.child) ^ mix(std::uint64_t(t.entity) << 32) ^ mix(t.bound);
     for (TypeId p : params) hash = mix(hash ^ p);
     if (slots.empty() || records.size() * 2 >= slots.size()) {
@@ -30,7 +30,7 @@ TypeId Types::intern(Type t, const std::vector<TypeId>& params)
         const Type& a = records[slots[p]];
         bool same = hashes[slots[p]] == hash && a.kind == t.kind && a.cv == t.cv &&
             a.fundamental == t.fundamental && a.child == t.child && a.entity == t.entity &&
-            a.alignment == t.alignment && a.alignment_queries == t.alignment_queries && a.bound == t.bound && a.variadic == t.variadic && a.ref == t.ref && a.count == params.size();
+            a.alignment == t.alignment && a.alignment_queries == t.alignment_queries && a.bound == t.bound && a.unknown_bound == t.unknown_bound && a.variadic == t.variadic && a.ref == t.ref && a.count == params.size();
         for (std::size_t i = 0; same && i < params.size(); ++i) same = parameters[a.offset + i] == params[i];
         if (same) return slots[p];
         p = (p + 1) & (slots.size() - 1);
@@ -71,7 +71,7 @@ TypeId Types::dependent_name(TypeId owner, IdentifierId name, const std::vector<
     Type t; t.kind = TypeKind::DependentName; t.child = owner; t.entity = name; t.bound = unsigned(kind);
     return intern(t,args);
 }
-TypeId Types::compound(TypeKind k, TypeId child, std::uint64_t bound)
+TypeId Types::compound(TypeKind k, TypeId child, std::uint64_t bound, bool unknown_bound)
 {
     Type base = records[child];
     bool ref = base.kind == TypeKind::LRef || base.kind == TypeKind::RRef;
@@ -84,7 +84,7 @@ TypeId Types::compound(TypeKind k, TypeId child, std::uint64_t bound)
         if (k == TypeKind::LRef || base.kind == TypeKind::LRef) k = TypeKind::LRef;
         child = base.child;
     }
-    Type t; t.kind = k; t.child = child; t.bound = bound;
+    Type t; t.kind = k; t.child = child; t.bound = bound; t.unknown_bound = unknown_bound;
     if (k == TypeKind::Array || k == TypeKind::DependentArray) { t.alignment = base.alignment; t.alignment_queries = base.alignment_queries; }
     return intern(t, {});
 }
@@ -99,7 +99,7 @@ TypeId Types::qualify(TypeId id, unsigned cv)
 {
     Type t = records[id];
     if (!cv || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || t.kind == TypeKind::Function) return id;
-    if (t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray) return aligned(compound(t.kind, qualify(t.child, cv), t.bound),t.alignment ? std::uint64_t(1) << (t.alignment-1) : 0,t.alignment_queries);
+    if (t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray) return aligned(compound(t.kind, qualify(t.child, cv), t.bound,t.unknown_bound),t.alignment ? std::uint64_t(1) << (t.alignment-1) : 0,t.alignment_queries);
     t.cv |= cv;
     if (t.kind == TypeKind::DependentName)
         return intern(t,std::vector<TypeId>(parameters.begin()+t.offset,parameters.begin()+t.offset+t.count));
@@ -109,7 +109,7 @@ TypeId Types::unqualified(TypeId id)
 {
     Type t = records[id];
     if (t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray)
-        return aligned(compound(t.kind,unqualified(t.child),t.bound),t.alignment ? std::uint64_t(1) << (t.alignment-1) : 0,t.alignment_queries);
+        return aligned(compound(t.kind,unqualified(t.child),t.bound,t.unknown_bound),t.alignment ? std::uint64_t(1) << (t.alignment-1) : 0,t.alignment_queries);
     // Member-function cv is part of its signature, not top-level object cv.
     if (t.kind == TypeKind::Function) return id;
     if (!(t.cv & 3)) return id;
@@ -174,7 +174,7 @@ TypeId Types::signature(TypeId id)
     }
     TypeId result = id;
     if (t.kind == TypeKind::Pointer || t.kind == TypeKind::BlockPointer || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray || vector_kind(t.kind) || dependent_vector_kind(t.kind))
-        result = qualify(compound(t.kind, signature(t.child), t.bound), t.cv);
+        result = qualify(compound(t.kind, signature(t.child), t.bound,t.unknown_bound), t.cv);
     if (t.kind == TypeKind::MemberPointer) result = qualify(member_pointer_type(t.member_owner(), signature(t.child)), t.cv);
     signatures[id] = result;
     return result;
@@ -183,8 +183,8 @@ TypeId Types::composite(TypeId a, TypeId b)
 {
     if (a == b) return a;
     Type x = records[a], y = records[b];
-    if (x.kind == TypeKind::Array && y.kind == TypeKind::Array && (!x.bound || !y.bound || x.bound == y.bound))
-        return compound(TypeKind::Array, composite(x.child, y.child), x.bound ? x.bound : y.bound);
+    if (x.kind == TypeKind::Array && y.kind == TypeKind::Array && (x.unknown_bound || y.unknown_bound || x.bound == y.bound))
+        return compound(TypeKind::Array, composite(x.child, y.child), x.unknown_bound ? y.bound : x.bound,x.unknown_bound && y.unknown_bound);
     throw std::runtime_error("incompatible redeclaration");
 }
 } }

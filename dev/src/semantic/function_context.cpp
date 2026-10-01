@@ -91,7 +91,7 @@ void Analyzer::pretty_type_suffix(std::ostream& out, TypeId id)
         if (types[t.child].kind == TypeKind::Array || types[t.child].kind == TypeKind::Function) out << ')';
         pretty_type_suffix(out,t.child); break;
     case TypeKind::Array:
-        out << '['; if (t.bound) out << t.bound; out << ']'; pretty_type_suffix(out,t.child); break;
+        out << '['; if (!t.unknown_bound) out << t.bound; out << ']'; pretty_type_suffix(out,t.child); break;
     case TypeKind::Function:
         pretty_parameters(out,t);
         pretty_type_suffix(out,t.child); break;

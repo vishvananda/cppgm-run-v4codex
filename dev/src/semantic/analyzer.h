@@ -1518,7 +1518,8 @@ private:
     Constant binary(ETokenType op, Constant a, Constant b, bool converted = false);
     Constant convert(Constant value, TypeId to, bool explicit_cast = false);
     TypeId expression_type(NodeId n, ScopeId s, bool decltype_form = false);
-    std::uint64_t size(TypeId t, bool alignment = false, bool probe = false);
+    std::uint64_t size(TypeId t, bool alignment = false, bool probe = false, bool* complete = nullptr);
+    bool complete_object_type(TypeId t);
     bool integral(TypeId t) const;
     bool is_unsigned(TypeId t) const;
     bool scoped_enum(TypeId t) const;

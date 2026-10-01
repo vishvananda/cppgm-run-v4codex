@@ -98,7 +98,7 @@ Type Reader::type()
             char* end = 0;
             errno = 0;
             auto n = std::strtoull(v.c_str(), &end, 10);
-            require(!errno && end == v.c_str()+v.size() && n && n <= UINT32_MAX, "invalid object layout");
+            require(!v.empty() && v[0] >= '0' && v[0] <= '9' && !errno && end == v.c_str()+v.size() && n <= UINT32_MAX, "invalid object layout");
             return n;
         };
         return Type::object(number(s.substr(4, x-4)), number(s.substr(x+1, s.size()-x-2)));

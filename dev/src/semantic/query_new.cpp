@@ -6,7 +6,7 @@ TypeQueryFact Analyzer::query_delete(const TypeQuery& q, const std::vector<TypeQ
 {
     auto operand = children[0].expression;
     auto pointer = delete_operand_type(operand), target = types[pointer].child;
-    if (!size(target,false,true)) return incomplete_query(target);
+    if (!complete_object_type(target)) return incomplete_query(target);
     TypeQueryFact fact;
     fact.selected = default_destructor(target,q.context,false);
     auto leaf = target;
@@ -55,7 +55,7 @@ TypeQueryFact Analyzer::query_new(const TypeQuery& q, const std::vector<TypeQuer
     // This unevaluated owner checks allocation and construction declarations;
     // it creates no runtime object, initializer occurrence or body demand.
     auto allocated = q.type;
-    if (!size(allocated,false,true) || types[allocated].kind == TypeKind::LRef || types[allocated].kind == TypeKind::RRef)
+    if (!complete_object_type(allocated) || types[allocated].kind == TypeKind::LRef || types[allocated].kind == TypeKind::RRef)
         return incomplete_query(allocated);
     bool array = types[allocated].kind == TypeKind::Array;
     auto leaf = allocated;

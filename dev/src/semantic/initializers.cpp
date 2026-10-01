@@ -134,7 +134,7 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s, bo
     if (string_initialization(string, t)) {
         if (braced && ast[ast[source].first].next) throw std::runtime_error("excess string initializer");
         auto lit = ast.literals[ast[string].literal];
-        if (types[t].bound && lit.elements > types[t].bound) throw std::runtime_error("string exceeds array bound");
+        if (!types[t].unknown_bound && lit.elements > types[t].bound) throw std::runtime_error("string exceeds array bound");
         expression(string, s);
         expressions.evaluated(string,false); // Direct character initialization has no backing-array address use.
         initializers[id].source = string; initializers[id].kind = InitKind::String;
@@ -166,7 +166,7 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s, bo
     if (vector_kind(target.kind)) target.bound = vector_elements(t);
     if (target.kind == TypeKind::Array || vector_kind(target.kind)) {
         std::uint64_t index = 0;
-        while (inner && (!target.bound || index < target.bound)) {
+        while (inner && (target.unknown_bound || index < target.bound)) {
             if (ast[inner].kind == Kind::DesignatedInit) throw std::runtime_error("member designator requires a class aggregate");
             auto clause = inner;
             auto item = initializer_item(inner, target.child, s);
@@ -253,7 +253,7 @@ void Analyzer::check_array_initializer(NodeId n, TypeId t) const
 TypeId Analyzer::complete_array_initializer(NodeId n, TypeId t, ScopeId s, bool pattern)
 {
     check_array_initializer(n,t);
-    if (types[t].bound) return t; // A prior declaration may supply the bound.
+    if (!types[t].unknown_bound) return t; // A prior declaration may supply the bound.
     while (ast[n].kind == Kind::Initializer) n = ast[n].first;
     if (pattern) {
         // Source checking records a fixed bound without demanding runtime

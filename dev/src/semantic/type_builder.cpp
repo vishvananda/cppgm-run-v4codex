@@ -261,12 +261,12 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                 Constant v = evaluate(ast[c].first, s);
                 if (c == dynamic_array) {
                     if (v.valid && negative_constant(v)) throw std::runtime_error("negative array allocation bound");
-                } else if (!v.valid || !integral(v.type) || scoped_enum(v.type) || !v.bits ||
+                } else if (!v.valid || !integral(v.type) || scoped_enum(v.type) || (!v.bits && !host_abi) ||
                     (negative_constant(v) || integer_value(v) > ~std::uint64_t(0)))
-                    throw std::runtime_error("array bound must be a positive integral constant");
+                    throw std::runtime_error("array bound must be a nonnegative integral constant");
                 bound = v.valid ? std::uint64_t(integer_value(v)) : 0;
             }
-            base = types.compound(TypeKind::Array, base, bound);
+            base = types.compound(TypeKind::Array, base, bound,!ast[c].first);
         } else {
             std::vector<TypeId> params;
             bool variadic = false;
@@ -524,7 +524,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         if (constructor && !special && !source_constructor) class_facts[entities[cls].class_info].aggregate = false;
     }
     if (calls) virtual_declaration(e, d, init, specs, source, s);
-    if (calls && init && !function && !defer_inline && types[t].kind == TypeKind::Array && !types[t].bound) {
+    if (calls && init && !function && !defer_inline && types[t].kind == TypeKind::Array && types[t].unknown_bound) {
         // The entity is visible during its initializer, but its bound is not
         // guessed from source clauses: brace elision may consume several per
         // element. Reuse the checked plan when publishing the completed type.

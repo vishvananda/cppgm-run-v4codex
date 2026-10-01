@@ -29,6 +29,9 @@ NodeId Procedural::child(NodeId n, Kind k) const
 }
 Value Procedural::emit_raw(Instruction i, const Operand* args, std::size_t count)
 {
+    // GNU zero-extent objects have an address but no representation to copy
+    // or clear. Operands have already been evaluated; emit no empty bulk span.
+    if ((i.opcode == Opcode::CopyObject || i.opcode == Opcode::ZeroInit) && !i.bytes) return Value();
     // An expression can leave its containing statement (GNU statement body).
     // Its remaining consumers have no reachable instruction stream.
     if (ended) return Value(Operand::integer(0),i.result_type());

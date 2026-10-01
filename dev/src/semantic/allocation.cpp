@@ -42,7 +42,7 @@ void Analyzer::finish_allocations()
                 bound = evaluate(ast[ret].first,facts[ast[ret].first].scope);
             if (width(t) == 32 && bound.valid && (is_unsigned(bound.type) || static_cast<std::int64_t>(bound.bits) >= 0)) {
                 std::uint64_t max = is_unsigned(t) ? 4294967295ull : 2147483647ull;
-                use.narrow_extent = use.cookie <= max && bound.bits <= (max-use.cookie)/use.stride;
+                use.narrow_extent = use.cookie <= max && (!use.stride || bound.bits <= (max-use.cookie)/use.stride);
             }
         }
         if (!use.constructor) continue;

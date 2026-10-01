@@ -96,7 +96,7 @@ bool Analyzer::apply_template_signature(NodeId original, NodeId current, TypeId 
         if (body.kind == TypeKind::Array || body.kind == TypeKind::DependentArray || body.kind == TypeKind::Function) {
             auto pointer = types[types.alias_target(adjusted)];
             if (pointer.kind != TypeKind::Pointer) throw std::logic_error("inconsistent adjusted parameter");
-            raw = body.kind == TypeKind::Function ? pointer.child : types.compound(body.kind,pointer.child,body.bound);
+            raw = body.kind == TypeKind::Function ? pointer.child : types.compound(body.kind,pointer.child,body.bound,body.unknown_bound);
         } else raw = types.qualify(types.unqualified(adjusted),body.cv);
         facts.edit(q).type = raw;
     }

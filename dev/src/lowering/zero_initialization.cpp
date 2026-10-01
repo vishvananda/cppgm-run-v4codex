@@ -40,6 +40,7 @@ void Procedural::zero_plan(std::uint32_t id, Value object, bool scalar_access)
 {
     using semantic::ZeroInitialization;
     auto plan = sem.zero_initializations[id];
+    if (!plan.bytes) return;
     switch (plan.kind) {
     case ZeroInitialization::Reference: return;
     case ZeroInitialization::Representation: {

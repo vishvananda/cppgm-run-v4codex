@@ -240,7 +240,7 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
         if (!owner) return 0;
         result = types.qualify(types.member_pointer_type(owner,child),t.cv);
     } else if (t.child) {
-        result = types.compound(t.kind,child,t.bound);
+        result = types.compound(t.kind,child,t.bound,t.unknown_bound);
         result = types.qualify(result,t.cv);
     }
     cache.put(type,result); return result;
@@ -334,7 +334,7 @@ std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t
         // and check any two supplied bounds after selecting that declaration.
         if (entities[e].kind == EntityKind::Variable &&
             (types[type].kind == TypeKind::Array || types[type].kind == TypeKind::DependentArray))
-            type = types.compound(TypeKind::Array,types[type].child,0);
+            type = types.compound(TypeKind::Array,types[type].child,0,true);
         std::uint32_t shape = 0;
         if (entities[e].template_info) {
             Index bindings, cache;
@@ -384,7 +384,7 @@ std::uint32_t Analyzer::check_template_member_definition(NodeId d, std::uint32_t
                 throw std::runtime_error("out-of-class data definition requires a static member");
             auto previous = template_member_signature(entities[member].type,prototype.environment,primary,facts[prototype.declarator].scope);
             auto current = template_member_signature(declared,head,primary,facts[d].scope);
-            if (types[previous].bound && types[current].bound &&
+            if (!types[previous].unknown_bound && !types[current].unknown_bound &&
                 (types[previous].kind == TypeKind::Array || types[previous].kind == TypeKind::DependentArray) &&
                 template_signature_shape(previous) != template_signature_shape(current))
                 throw std::runtime_error("conflicting static array member bounds");

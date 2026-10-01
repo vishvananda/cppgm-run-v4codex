@@ -425,7 +425,7 @@ QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cac
     }
     if (q.kind == QueryKind::Name && q.entity && !entities[q.entity].template_pattern &&
         (entities[q.entity].kind == EntityKind::Variable || entities[q.entity].kind == EntityKind::Parameter) &&
-        (!q.type || (types[q.type].kind == TypeKind::Array && !types[q.type].bound)))
+        (!q.type || (types[q.type].kind == TypeKind::Array && types[q.type].unknown_bound)))
         q.type = entities[q.entity].type; // Deduced type/bound owned by the instantiated declaration.
     if (q.arguments) {
         auto pack = argument_packs[q.arguments]; std::vector<TypeId> args;
@@ -520,7 +520,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         bool value_dependent = template_pattern_entities.get(q.entity) == 2 &&
             (field_fact(q.entity).bit_field || (types[q.type].cv & 1 && integral(q.type)));
         value_dependent |= entity.kind == EntityKind::Variable && entity.initializer &&
-            types[q.type].kind == TypeKind::Array && !types[q.type].bound;
+            types[q.type].kind == TypeKind::Array && types[q.type].unknown_bound;
         value_dependent |= entity.kind == EntityKind::Variable && entity.is_static;
         r.dependent |= !q.type || (entity.kind != EntityKind::Variable && entity.kind != EntityKind::Parameter) || value_dependent;
     }
@@ -576,7 +576,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             auto type = children[i].expression.type;
             // An initialized source array may await an expansion's bound even
             // when its element type is fixed. Deduction needs that bound.
-            bool incomplete_array = types[type].kind == TypeKind::Array && !types[type].bound;
+            bool incomplete_array = types[type].kind == TypeKind::Array && types[type].unknown_bound;
             inspect &= !children[i].dependent || (type && !dependent_type(type) && !incomplete_array);
         }
         for (auto e : candidates(fixed_name ? 0 : family)) {
@@ -657,7 +657,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             if (!q.entity) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
             q.type = entities[q.entity].type;
         }
-        if (q.entity && types[q.type].kind == TypeKind::Array && !types[q.type].bound) q.type = variable_expression_type(q.entity);
+        if (q.entity && types[q.type].kind == TypeKind::Array && types[q.type].unknown_bound) q.type = variable_expression_type(q.entity);
         x.type = value_type(types.signature(q.type)); r.declared_type = q.type;
         x.category = ValueCategory::Lvalue; x.entity = q.entity;
         if (q.entity && nonstatic_field(q.entity))
@@ -717,7 +717,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         break;
     }
     case QueryKind::Sizeof:
-        if (q.op != KW_NOEXCEPT && !size(q.type ? q.type : children[0].expression.type,q.op == KW_ALIGNOF,true)) {
+        if (q.op != KW_NOEXCEPT && !complete_object_type(q.type ? q.type : children[0].expression.type)) {
             r = incomplete_query(q.type ? q.type : children[0].expression.type); break;
         }
         x.type = types.fundamental(q.op == KW_NOEXCEPT ? FT_BOOL : FT_UNSIGNED_LONG_INT); break;

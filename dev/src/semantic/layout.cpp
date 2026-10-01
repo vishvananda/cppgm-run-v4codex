@@ -16,15 +16,24 @@ std::uint64_t layout_align(std::uint64_t bytes, std::uint64_t alignment)
     return remainder ? layout_add(bytes, alignment - remainder) : bytes;
 }
 }
-std::uint64_t Analyzer::size(TypeId id, bool alignment, bool probe)
+bool Analyzer::complete_object_type(TypeId t)
 {
+    bool complete;
+    size(t,false,true,&complete);
+    return complete;
+}
+std::uint64_t Analyzer::size(TypeId id, bool alignment, bool probe, bool* complete)
+{
+    if (complete) *complete = true;
+    auto absent = [&]() { if (complete) *complete = false; return std::uint64_t(0); };
     Type t = types[id];
     if (definitions && t.kind == TypeKind::Named && entities[t.entity].class_info) complete_class(t.entity);
     if (t.cv & 4) {
         auto underlying = types.non_atomic(types.unqualified(id));
-        auto bytes = size(underlying,false,probe);
+        auto bytes = size(underlying,false,probe,complete);
+        if (complete && !*complete) return 0;
         // x86 lock-free atomic objects require their width as alignment.
-        auto natural = size(underlying,true,probe);
+        auto natural = size(underlying,true,probe,complete);
         if (bytes && bytes <= 16) {
             std::uint64_t width = 1; while (width < bytes) width *= 2;
             bytes = width; natural = std::max(natural,bytes);
@@ -32,7 +41,7 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment, bool probe)
         return alignment ? natural : bytes;
     }
     if (alignment && t.alignment) return std::uint64_t(1) << (t.alignment-1);
-    if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return size(t.child, alignment,probe);
+    if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return size(t.child, alignment,probe,complete);
     if (t.kind == TypeKind::Pointer || t.kind == TypeKind::BlockPointer) return 8;
     if (t.kind == TypeKind::Vector) return t.bound;
     if (t.kind == TypeKind::ExtVector) {
@@ -42,25 +51,25 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment, bool probe)
     }
     if (t.kind == TypeKind::MemberPointer) return !alignment && types[t.child].kind == TypeKind::Function ? 16 : 8;
     if (t.kind == TypeKind::Array) {
-        if (!t.bound) { if (probe) return 0; throw std::runtime_error("sizeof incomplete array"); }
-        if (alignment) return size(t.child, true,probe);
-        std::uint64_t element = size(t.child,false,probe);
+        if (t.unknown_bound) { if (probe) return absent(); throw std::runtime_error("sizeof incomplete array"); }
+        if (alignment) return size(t.child, true,probe,complete);
+        std::uint64_t element = size(t.child,false,probe,complete);
         if (!element) return 0;
         if (t.bound > std::numeric_limits<std::uint64_t>::max() / element) {
-            if (probe) return 0;
+            if (probe) return absent();
             throw std::runtime_error("array size overflow");
         }
         return t.bound * element;
     }
     if (t.kind == TypeKind::Fundamental && t.fundamental != FT_VOID) return fundamental_width(t.fundamental);
-    if (t.kind == TypeKind::Named && entities[t.entity].key == KW_ENUM) return size(entities[t.entity].underlying, alignment,probe);
+    if (t.kind == TypeKind::Named && entities[t.entity].key == KW_ENUM) return size(entities[t.entity].underlying, alignment,probe,complete);
     if (t.kind == TypeKind::Named && entities[t.entity].complete) {
         EntityId e = t.entity;
         std::uint32_t layout = entities[e].class_info;
         class_layout(e);
         return alignment ? class_facts[layout].alignment : class_facts[layout].size;
     }
-    if (probe) return 0;
+    if (probe) return absent();
     throw std::runtime_error("sizeof unsupported or incomplete type");
 }
 void Analyzer::class_layout(EntityId e)
@@ -163,7 +172,7 @@ void Analyzer::class_layout(EntityId e)
     if (class_facts[info].strict_alignment && requested && requested < align) throw std::runtime_error("weakened class alignment");
     align = std::max(align, requested);
     class_facts[info].nonvirtual_alignment = align;
-    auto data_size = std::max<std::uint64_t>(std::max<std::uint64_t>(1,extent),layout_add(cursor,7)/8);
+    auto data_size = std::max<std::uint64_t>(std::max<std::uint64_t>(class_facts[info].empty ? 1 : 0,extent),layout_add(cursor,7)/8);
     // Dynamic non-POD bases permit derived members to reuse their tail padding.
     class_facts[info].nonvirtual_size = host_abi && dynamic_class(e) ? data_size : layout_align(data_size,align);
     cursor = class_facts[info].nonvirtual_size;

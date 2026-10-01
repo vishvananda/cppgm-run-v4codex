@@ -80,7 +80,7 @@ bool Analyzer::object_pointer(TypeId t)
     if (!pointer(t)) return false;
     Type child = types[types[t].child];
     if (fundamental(types[t].child, FT_VOID) || child.kind == TypeKind::Function) return false;
-    if (child.kind == TypeKind::Array && !child.bound) return false;
+    if (child.kind == TypeKind::Array && child.unknown_bound) return false;
     if (child.kind == TypeKind::Named && !entities[child.entity].complete) return false;
     return true;
 }
@@ -148,7 +148,7 @@ bool Analyzer::qualification(TypeId from, TypeId to, unsigned& added, bool inter
     }
     if (a.kind == TypeKind::Pointer || a.kind == TypeKind::Array || a.kind == TypeKind::MemberPointer) {
         if (a.kind == TypeKind::MemberPointer && a.entity != b.entity) return false;
-        if (a.kind == TypeKind::Array && a.bound != b.bound) return false;
+        if (a.kind == TypeKind::Array && (a.bound != b.bound || a.unknown_bound != b.unknown_bound)) return false;
         return qualification(a.child, b.child, added,
             intermediate_const && (a.kind == TypeKind::Array || (b.cv & 1)));
     }
@@ -158,7 +158,7 @@ bool Analyzer::similar_type(TypeId a, TypeId b)
 {
     if (types[a].kind != types[b].kind || ((types[a].cv ^ types[b].cv) & 4)) return false;
     if (types[a].kind == TypeKind::Array)
-        return types[a].bound == types[b].bound && similar_type(types[a].child,types[b].child);
+        return types[a].bound == types[b].bound && types[a].unknown_bound == types[b].unknown_bound && similar_type(types[a].child,types[b].child);
     if (pointer(a) || types[a].kind == TypeKind::MemberPointer)
         return (pointer(a) || types[a].entity == types[b].entity) && similar_type(types[a].child, types[b].child);
     return types.unqualified(a) == types.unqualified(b);
@@ -228,7 +228,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
         // A const, nonvolatile lvalue reference may bind a converted temporary.
         auto source_object = from, target_object = target.child;
         while (types[source_object].kind == TypeKind::Array && types[target_object].kind == TypeKind::Array &&
-            types[source_object].bound == types[target_object].bound) {
+            types[source_object].bound == types[target_object].bound && types[source_object].unknown_bound == types[target_object].unknown_bound) {
             source_object = types[source_object].child; target_object = types[target_object].child;
         }
         bool related = types.unqualified(source_object) == types.unqualified(target_object) || derived_from(from,target.child);

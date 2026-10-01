@@ -7,6 +7,7 @@ void Procedural::transfer_array(const semantic::TransferAction& action, Value so
     std::uint64_t elements = 1;
     TypeId leaf = action.type;
     while (sem.types[leaf].kind == TypeKind::Array) { elements *= sem.types[leaf].bound; leaf = sem.types[leaf].child; }
+    if (!elements) return;
     std::vector<InitProjection> path;
     if (member_root) path.push_back({action.field ? sem.entities[action.field].member_offset : sem.lifecycle_bases[action.base].offset, action.field != 0, action.field});
     auto dtor = sem.type_destructor(leaf);

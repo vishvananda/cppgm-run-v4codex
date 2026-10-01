@@ -136,7 +136,7 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
     while (ast[string].kind == Kind::Parenthesized) string = ast[string].first;
     if (string_initialization(string,target)) {
         if (grouped && ast[ast[source].first].next) throw std::runtime_error("excess fixed string initializer");
-        if (types[target].bound && ast.literals[ast[string].literal].elements > types[target].bound)
+        if (!types[target].unknown_bound && ast.literals[ast[string].literal].elements > types[target].bound)
             throw std::runtime_error("fixed string initializer exceeds array");
         if (bound) *bound = ast.literals[ast[string].literal].elements;
         cursor = ast[source].next; return true;
@@ -166,7 +166,7 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
     if (type.kind == TypeKind::Array) {
         std::uint64_t i = 0;
         bool complete = true;
-        while (inner && (!type.bound || i < type.bound)) {
+        while (inner && (type.unknown_bound || i < type.bound)) {
             if (ast[inner].kind == Kind::DesignatedInit) throw std::runtime_error("member designator requires a class aggregate");
             if (ast[inner].kind == Kind::PackExpression) {
                 // Expansion length is unknown, but scalar element conversions

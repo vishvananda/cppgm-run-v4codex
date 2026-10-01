@@ -44,7 +44,7 @@ std::uint32_t Analyzer::template_signature_shape(ArgumentId argument)
         }
     } else {
         auto t = types[argument];
-        shape = {2,unsigned(t.kind),t.cv,unsigned(t.ref),unsigned(t.fundamental),unsigned(t.variadic)};
+        shape = {2,unsigned(t.kind),t.cv,unsigned(t.ref),unsigned(t.fundamental),unsigned(t.variadic) | (unsigned(t.unknown_bound) << 1)};
         add(t.child);
         if (t.kind == TypeKind::Named && entities[t.entity].specialization) {
             auto spec = specializations[entities[t.entity].specialization];

@@ -5,7 +5,13 @@ using syntax::Kind;
 TypeId Analyzer::variable_expression_type(EntityId e)
 {
     auto type = types[entities[e].type];
-    if (type.kind == TypeKind::Array && !type.bound && inline_variable_definitions.get(e)) {
+    if (type.kind == TypeKind::Array && type.unknown_bound && !inline_variable_definitions.get(e)) {
+        // A supplied out-of-class bound is a definition fact even in sizeof.
+        // Select only this member's indexed definition; do not demand emission.
+        instantiate_member_definition(e);
+        type = types[entities[e].type];
+    }
+    if (type.kind == TypeKind::Array && type.unknown_bound && inline_variable_definitions.get(e)) {
         // Completing this type requires the member definition, including its
         // initialization effects, even when the requesting operand is sizeof.
         entities[e].emission |= Entity::Used;
@@ -51,7 +57,7 @@ void Analyzer::initialize_inline_variable(EntityId e)
             expand_expression_list(source,def.scope);
         }
         auto type = entities[e].type;
-        if (init && types[type].kind == TypeKind::Array && !types[type].bound) {
+        if (init && types[type].kind == TypeKind::Array && types[type].unknown_bound) {
             type = complete_array_initializer(init,type,def.scope);
             entities[e].type = types.signature(type); facts.edit(def.declarator).type = type;
         }

@@ -20,10 +20,17 @@ Expression Analyzer::placement_new(NodeId n, ScopeId s)
         if (suffix && !use.bound) throw std::runtime_error("missing array allocation extent");
     }
     use.leaf = use.type;
-    while (types[use.leaf].kind == TypeKind::Array) use.leaf = types[use.leaf].child;
+    while (types[use.leaf].kind == TypeKind::Array) {
+        auto bound = types[use.leaf].bound;
+        if (bound && use.inner_count > std::numeric_limits<std::uint64_t>::max()/bound)
+            throw std::runtime_error("array element count overflow");
+        use.inner_count *= bound; use.leaf = types[use.leaf].child;
+    }
+    if (use.array && use.inner_count && use.fixed_count > std::numeric_limits<std::uint64_t>::max()/use.inner_count)
+        throw std::runtime_error("array element count overflow");
     size(use.type); use.stride = size(use.type);
     if (use.array && class_value(use.leaf)) use.cookie = std::max<std::uint64_t>(8,size(use.type,true));
-    if (use.array && use.fixed_count > (std::numeric_limits<std::uint64_t>::max()-use.cookie)/use.stride)
+    if (use.array && use.stride && use.fixed_count > (std::numeric_limits<std::uint64_t>::max()-use.cookie)/use.stride)
         throw std::runtime_error("array allocation size exceeds size_t");
     use.initializer = child(n, Kind::Initializer);
     std::vector<NodeId> args;

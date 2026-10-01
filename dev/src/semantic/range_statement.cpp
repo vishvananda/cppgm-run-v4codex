@@ -28,7 +28,7 @@ RangePlan Analyzer::range_shape(Expression range, ScopeId s)
         auto id = conversions.size(); conversions.push_back(c); return id;
     };
     if (types[range.type].kind == TypeKind::Array) {
-        if (!types[range.type].bound) throw std::runtime_error("range requires bounded array");
+        if (types[range.type].unknown_bound) throw std::runtime_error("range requires bounded array");
         plan.array = range.type;
         plan.index_type = types.fundamental(types[range.type].bound <= 0x7fffffffULL ? FT_INT : FT_UNSIGNED_LONG_INT);
         plan.element.result.type = types[range.type].child; plan.element.result.category = ValueCategory::Lvalue;

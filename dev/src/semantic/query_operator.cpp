@@ -168,7 +168,7 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         if (q.op == OP_PLUS || q.op == OP_MINUS || q.op == OP_LSQUARE) {
             for (unsigned i = 0; i < args.size(); ++i) {
                 auto type = sequences[selected.offset+i].target;
-                if (pointer(type) && !size(types[type].child,false,true))
+                if (pointer(type) && !complete_object_type(types[type].child))
                     return incomplete_query(types[type].child);
             }
         }

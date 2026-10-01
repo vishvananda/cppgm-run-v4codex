@@ -59,11 +59,11 @@ std::uint32_t Analyzer::list_aggregate(NodeId& cursor, TypeId to, ScopeId s)
     if (vector_kind(target.kind)) target.bound = vector_elements(to);
     if (target.kind == TypeKind::Array || vector_kind(target.kind)) {
         std::uint64_t index = 0;
-        while (valid && cursor && (!target.bound || index < target.bound)) {
+        while (valid && cursor && (target.unknown_bound || index < target.bound)) {
             auto before = cursor;
             valid = add(target.child,0,index++,1) && cursor != before;
         }
-        if (!target.bound) {
+        if (target.unknown_bound) {
             if (!index) valid = false;
             else plan.target = types.compound(TypeKind::Array,target.child,index);
         }
@@ -134,7 +134,7 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
                 // expression error that can prevent another aggregate match.
             } else if (first && first == ast[n].last && string_initialization(first,t)) {
                 plan.source = first; plan.literal = ast[first].literal; plan.aggregate = true;
-                if (!ref && !types[t].bound) t = to = types.compound(TypeKind::Array,types[t].child,ast.literals[plan.literal].elements);
+                if (!ref && types[t].unknown_bound) t = to = types.compound(TypeKind::Array,types[t].child,ast.literals[plan.literal].elements);
                 plan.target = to;
                 if (types[t].bound && ast.literals[plan.literal].elements <= types[t].bound) plan.rank = 0;
             } else if (auto element = initializer_list_element(t)) {

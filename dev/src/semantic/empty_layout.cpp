@@ -18,7 +18,10 @@ void Analyzer::EmptyLayout::insert(EntityId e, std::uint64_t offset)
 }
 bool Analyzer::EmptyLayout::has(TypeId t)
 {
-    while (sem.types[t].kind == TypeKind::Array) t = sem.types[t].child;
+    while (sem.types[t].kind == TypeKind::Array) {
+        if (!sem.types[t].bound) return false;
+        t = sem.types[t].child;
+    }
     return sem.class_value(t) && sem.class_facts[sem.entities[sem.types[t].entity].class_info].empty_types_count;
 }
 bool Analyzer::EmptyLayout::contains(TypeId t, EntityId empty, std::uint64_t offset)

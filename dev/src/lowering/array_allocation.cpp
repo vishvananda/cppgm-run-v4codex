@@ -29,10 +29,15 @@ Value Procedural::array_new(NodeId n, const semantic::PlacementNew& use)
     // Keep the extent across the allocator call; it is evaluated only once.
     bool dynamic = use.dynamic_extent;
     Operand bytes;
-    SlotId extent;
+    SlotId extent, zero_stride_count;
     if (dynamic) {
         Value count = incoming(use.bound);
         if (!use.narrow_extent) count = coerce(count,IRType::I64,sem.unsigned_type(sem.expression_fact(use.bound).type),true);
+        if (!use.stride) {
+            zero_stride_count = builder->add_slot(0,IRType::I64);
+            auto wide = coerce(count,IRType::I64,sem.unsigned_type(sem.expression_fact(use.bound).type),true);
+            emit(Opcode::Store,IRType::I64,{wide.operand,Operand::slot(zero_stride_count)});
+        }
         if (use.stride != 1) count = emit(Opcode::Binary,count.ir,{count.operand,Operand::integer(use.stride)},Operation::Mul);
         if (use.cookie) count = emit(Opcode::Binary,count.ir,{count.operand,Operand::integer(use.cookie)},Operation::Add);
         count = coerce(count,IRType::I64,sem.unsigned_type(sem.expression_fact(use.bound).type),true);
@@ -77,7 +82,12 @@ Value Procedural::array_new(NodeId n, const semantic::PlacementNew& use)
     Value data = allocation;
     auto count = [&]() {
         auto leaf_stride = sem.object_size(use.leaf);
-        if (!dynamic) return emit(Opcode::Const,IRType::I64,{Operand::integer(use.fixed_count*(use.stride/leaf_stride))}).operand;
+        if (!dynamic) return emit(Opcode::Const,IRType::I64,{Operand::integer(use.fixed_count*use.inner_count)}).operand;
+        if (zero_stride_count) {
+            auto elements = emit(Opcode::Load,IRType::I64,{Operand::slot(zero_stride_count)}).operand;
+            if (use.inner_count != 1) elements = emit(Opcode::Binary,IRType::I64,{elements,Operand::integer(use.inner_count)},Operation::Mul).operand;
+            return elements;
+        }
         Operand elements = bytes;
         if (use.cookie) elements = emit(Opcode::Binary,IRType::I64,{elements,Operand::integer(use.cookie)},Operation::Sub).operand;
         if (leaf_stride != 1) elements = emit(Opcode::Binary,IRType::I64,{elements,Operand::integer(leaf_stride)},Operation::Udiv).operand;
