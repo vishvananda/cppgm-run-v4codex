@@ -1,0 +1,54 @@
+function @f16_snan() -> f16 [linkage=c, binding=strong] {
+  block ^entry:
+    return f16 snan
+}
+function @f16_nan() -> f16 [linkage=c, binding=strong] {
+  block ^entry:
+    return f16 nan
+}
+function @f32_snan() -> f32 [linkage=c, binding=strong] {
+  block ^entry:
+    return f32 snan
+}
+function @f32_nan() -> f32 [linkage=c, binding=strong] {
+  block ^entry:
+    return f32 nan
+}
+function @f64_snan() -> f64 [linkage=c, binding=strong] {
+  block ^entry:
+    return f64 snan
+}
+function @f64_nan() -> f64 [linkage=c, binding=strong] {
+  block ^entry:
+    return f64 nan
+}
+function @f80_snan() -> f80 [linkage=c, binding=strong] {
+  block ^entry:
+    return f80 snan
+}
+function @f80_nan() -> f80 [linkage=c, binding=strong] {
+  block ^entry:
+    return f80 nan
+}
+function @f128_snan() -> f128 [linkage=c, binding=strong] {
+  block ^entry:
+    return f128 snan
+}
+function @f128_nan() -> f128 [linkage=c, binding=strong] {
+  block ^entry:
+    return f128 nan
+}
+function @quad_suffixed() -> f128 [linkage=c, binding=strong] {
+ block ^entry:
+ return f128 -snanQ
+}
+global @global_f16_snan : f16 [linkage=c, binding=strong] = snan
+global @global_f16_nan : f16 [linkage=c, binding=strong] = nan
+global @global_f32_snan : f32 [linkage=c, binding=strong] = snan
+global @global_f32_nan : f32 [linkage=c, binding=strong] = nan
+global @global_f64_snan : f64 [linkage=c, binding=strong] = snan
+global @global_f64_nan : f64 [linkage=c, binding=strong] = nan
+global @global_f80_snan : f80 [linkage=c, binding=strong] = snan
+global @global_f80_nan : f80 [linkage=c, binding=strong] = nan
+global @global_f128_snan : f128 [linkage=c, binding=strong] = snan
+global @global_f128_nan : f128 [linkage=c, binding=strong] = nan

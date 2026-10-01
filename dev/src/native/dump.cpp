@@ -11,7 +11,14 @@ static void operand(const lowir_model::Program& p, Operand o, std::ostream& out)
     switch (o.kind) {
     case Operand::Reg: out << register_name(o.reg); break;
     case Operand::Floating: {
-        if (o.id==Type::F128) { cppgm::ExtendedFloat x; std::memcpy(&x,&o.bits,8); std::memcpy(reinterpret_cast<char*>(&x)+8,&o.displacement,8); out << cppgm::extended_float_text(x); break; }
+        if (o.id==Type::F128) {
+            cppgm::ExtendedFloat x;
+            std::memcpy(&x,&o.bits,8); std::memcpy(reinterpret_cast<char*>(&x)+8,&o.displacement,8);
+            if (cppgm::nan_float(x) && !(std::uint64_t(o.displacement)&(std::uint64_t(1)<<47)))
+                out << (cppgm::sign_float(x) ? "-snan" : "snan");
+            else out << cppgm::extended_float_text(x);
+            break;
+        }
         long double value = o.floating_value();
         unsigned quiet_bit = o.id == Type::F16 ? 9 : o.id == Type::F32 ? 22 : o.id == Type::F64 ? 51 : 62;
         if (std::isnan(value) && !(o.bits & (std::uint64_t(1)<<quiet_bit)))

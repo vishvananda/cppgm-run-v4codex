@@ -44,8 +44,24 @@ Operand Operand::floating(lowir_model::Operand value, Type type, const lowir_mod
     if (value.kind == lowir_model::Operand::Integer && value.negative_integer)
         extended=cppgm::ExtendedFloat(static_cast<__int128>((static_cast<unsigned __int128>(value.integer_high())<<64)|value.data.integer));
     if (p && value.kind == lowir_model::Operand::Floating && value.ref) extended=p->floating_literals[value.ref-1].f128;
-    if (type == Type::F128) { std::memcpy(&o.bits,&extended,8); std::memcpy(&o.displacement,reinterpret_cast<char*>(&extended)+8,8); return o; }
-    if (type == Type::F16) { o.bits=cppgm::half_bits(extended); if (p && value.ref) o.bits=p->floating_literals[value.ref-1].f16; return o; }
+    if (type == Type::F128) {
+        std::uint64_t high;
+        std::memcpy(&o.bits,&extended,8); std::memcpy(&high,reinterpret_cast<char*>(&extended)+8,8);
+        if (value.signaling_nan && cppgm::nan_float(extended)) {
+            high &= ~(std::uint64_t(1)<<47);
+            if (!o.bits && !(high & 0xffffffffffffULL)) o.bits = 1;
+        }
+        std::memcpy(&o.displacement,&high,8); return o;
+    }
+    if (type == Type::F16) {
+        o.bits=cppgm::half_bits(extended);
+        if (p && value.kind == lowir_model::Operand::Floating && value.ref) o.bits=p->floating_literals[value.ref-1].f16;
+        if (value.signaling_nan && cppgm::nan_float(extended)) {
+            o.bits &= ~std::uint64_t(512);
+            if (!(o.bits & 1023)) o.bits |= 1;
+        }
+        return o;
+    }
     }
     long double n = value.kind == lowir_model::Operand::Floating ? (value.extended_floating ? static_cast<long double>(value.data.extended) : value.data.floating) :
         integer_floating(value,type == Type::F32 ? 24 : type == Type::F64 ? 53 : 64);

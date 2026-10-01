@@ -28,7 +28,15 @@ void Writer::operand(const Operand& v, Type context)
     case Operand::Null: out_ << "nullptr"; break;
     case Operand::Floating: {
         if (v.ref) { out_ << p_.name(p_.floating_literals.at(v.ref-1).spelling); break; }
-        if (v.extended_floating) { out_ << cppgm::extended_float_text(v.data.extended) << "Q"; break; }
+        if (v.extended_floating || context == Type::F128) {
+            // A legacy x87 carrier in a quad operation is an exact value,
+            // not a decimal literal to round again at the wider precision.
+            auto value = v.extended_floating ? v.data.extended : cppgm::ExtendedFloat(v.data.floating);
+            if (v.signaling_nan && cppgm::nan_float(value))
+                out_ << (cppgm::sign_float(value) ? "-snanQ" : "snanQ");
+            else out_ << cppgm::extended_float_text(value) << "Q";
+            break;
+        }
         long double n = v.data.floating;
         if (std::isnan(n)) {
             if (std::signbit(n)) out_ << '-';
