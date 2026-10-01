@@ -366,6 +366,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
     }
     case Kind::Alias: {
         TypeId t = type_id(ast[n].first, s);
+        if (calls) t = aligned_typedef(t,n,0,0,s);
         EntityId e = declare_alias(s, ast[n].text, n, t);
         record(s, e, n, t, EntityKind::Alias);
         if (definitions && s == active_template_scope) {

@@ -1,0 +1,33 @@
+{
+  "compiler_sha256": "84642180af8de176d1f8496122bf786e1b87935aeb1c37b233f74accfbfc36c3",
+  "controls": {
+    "align-alias": [
+      {
+        "compiler": "dev/cppgm++",
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/controls158/align-alias.cpp:1\n"
+      },
+      {
+        "compiler": "g++",
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    "align-ref": [
+      {
+        "compiler": "dev/cppgm++",
+        "status": 1,
+        "stdout": "",
+        "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/controls158/align-ref.cpp:1\n"
+      },
+      {
+        "compiler": "g++",
+        "status": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  }
+}

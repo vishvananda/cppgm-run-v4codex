@@ -172,7 +172,7 @@ TypeId Analyzer::specialize_alias(EntityId e, const std::vector<ArgumentId>& inp
     Index bindings, cache;
     auto parent = head.parent_frame ? head.parent_frame : template_lexical_frame(scopes[head.environment].parent);
     auto frame = substitution_frame(0,head.offset,head.count,parent,intern_arguments(args));
-    auto type = substitute_type(entities[e].type,bindings,cache,frame);
+    auto type = substitute_type(source_type(e),bindings,cache,frame);
     if (!type) {
         alias_facts[id].state = FactState::Failure;
         if (incomplete_substitution) retain_query_prerequisite(incomplete_aliases,id);

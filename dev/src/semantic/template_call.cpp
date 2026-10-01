@@ -367,7 +367,8 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     }
     Index bindings, cache;
     auto condition = members[entities[pattern].member_info].explicit_condition;
-    auto frame = dependent_type(entities[pattern].type) || condition || t.parent_frame ?
+    auto raw = declared_storage_types.get(pattern);
+    auto frame = dependent_type(raw ? raw : entities[pattern].type) || condition || t.parent_frame ?
         substitution_frame(index,t.offset,t.count,t.parent_frame) : 0;
     if (partial && !pack_prefix) {
         // Partial explicit arguments retain every unbound parameter as a typed
@@ -385,7 +386,8 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
         }
     }
     TypeId type = substitute_type(entities[pattern].type, bindings, cache,frame);
-    if (!type) {
+    auto returned = raw ? substitute_type(types[raw].child,bindings,cache,frame) : 0;
+    if (!type || (raw && !returned)) {
         specializations[index].declaration = FactState::Failure;
         if (incomplete_substitution) retain_query_prerequisite(incomplete_specializations,index);
         return 0;
@@ -400,6 +402,12 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
     inherit_native_attributes(e,pattern);
     entities[e].template_pattern = false;
     entities[e].type = type; entities[e].specialization = index;
+    if (returned && returned != types[type].child) {
+        auto f = types[type];
+        auto storage = types.function(returned,std::vector<TypeId>(types.parameters.begin()+f.offset,types.parameters.begin()+f.offset+f.count),f.variadic,f.cv,f.ref);
+        if (types.signature(storage) != type) throw std::logic_error("specialized storage type changed callable identity");
+        declared_storage_types.put(e,storage);
+    }
     entities[e].constexpr_function = entities[pattern].constexpr_function;
     entities[e].deleted_function = entities[pattern].deleted_function;
     entities[e].inline_function = entities[pattern].inline_function;

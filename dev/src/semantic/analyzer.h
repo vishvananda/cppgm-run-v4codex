@@ -113,6 +113,12 @@ public:
     Constant constant_fact(NodeId n) const { return facts[n].value ? constants[facts[n].value] : Constant(); }
     std::uint64_t object_size(TypeId t) { return size(t); }
     std::uint64_t storage_alignment(EntityId e);
+    Index declared_storage_types;
+    void storage_value(Expression& value);
+    void storage_expression(NodeId, Expression&);
+    void storage_query(const TypeQuery&, const std::vector<TypeQueryFact>&, TypeQueryFact&);
+    void storage_operation(Expression& value, ETokenType op, const Expression& a, const Expression& b = Expression());
+    std::uint64_t expression_alignment(const Expression& value);
     std::uint64_t object_alignment(TypeId t) { return size(t, true); }
     bool unsigned_type(TypeId t) const { return is_unsigned(t); }
     TypeId call_type(EntityId e) const;

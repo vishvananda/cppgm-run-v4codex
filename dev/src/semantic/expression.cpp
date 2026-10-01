@@ -6,7 +6,7 @@ using syntax::Kind;
 Expression Analyzer::value_fact(const Expression& source) const
 {
     Expression result;
-    result.type = source.type; result.entity = source.entity;
+    result.type = source.type; result.storage_type = source.storage_type; result.entity = source.entity;
     result.category = source.category;
     // Overload sets need target context through parentheses. Cast/builtin forms
     // describe only their original syntax node, never a surrounding comma or
@@ -48,6 +48,7 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     }
     facts.edit(n).scope = s;
     Expression result = resolve_expression(n, s);
+    storage_expression(n,result);
     // Reused fixed template facts share type/conversions, but capture storage
     // belongs to this checked occurrence and enclosing closure specialization.
     unsigned capture = 0;
@@ -225,8 +226,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         // Layout can instantiate a class whose bounds/enumerators publish
         // other constants. Reserve this query's identity only after that
         // dependency completes, so it cannot point at a nested query's value.
-        auto entity = ast[first].kind == Kind::TypeId ? 0 : expressions[first].entity;
-        auto bytes = ast[n].op == KW_ALIGNOF && entity && entities[entity].kind == EntityKind::Variable ? storage_alignment(entity) : size(t,ast[n].op == KW_ALIGNOF);
+        auto bytes = ast[n].op == KW_ALIGNOF && ast[first].kind != Kind::TypeId ? expression_alignment(expressions[first]) : size(t,ast[n].op == KW_ALIGNOF);
         Constant value(r.type,bytes);
         facts.edit(n).value = constants.size(); constants.push_back(value);
         return r;
@@ -307,9 +307,15 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
 }
 Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId operand, bool recipe)
 {
-    if (ast[n].op == KW_DYNAMIC_CAST) return dynamic_cast_expression(n,s,to,operand);
+    auto storage = to; to = types.signature(to);
+    if (ast[n].op == KW_DYNAMIC_CAST) {
+        auto result = dynamic_cast_expression(n,s,to,operand);
+        if (storage != to) result.storage_type = value_type(storage);
+        return result;
+    }
     Expression r;
     r.type = value_type(to); r.form = ExpressionForm::Cast;
+    if (storage != to) r.storage_type = value_type(storage);
     facts.edit(n).type = to;
     if (!operand) {
         if (types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef) throw std::runtime_error("value-initialized reference");

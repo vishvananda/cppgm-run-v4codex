@@ -422,6 +422,7 @@ enum class CallInputs : unsigned char { Concrete, Source, Context, Query };
 struct Expression {
     std::uint32_t object_use = 0; // Rare field/member-call facts in the TU arena.
     TypeId type = 0; // Reference-free language expression type.
+    TypeId storage_type = 0; // Optional decorated type; never a semantic equality key.
     EntityId entity = 0; // Known identity of this value, never a producing call.
     // Calls record their selected declaration in Fact::entity. Conversion ranges
     // belong only to this node (including operators), not to transparent wrappers.

@@ -150,6 +150,7 @@ void Analyzer::bind(ScopeId s, IdentifierId n, EntityId id)
 }
 std::uint32_t Analyzer::record(ScopeId s, EntityId e, NodeId source, TypeId type, EntityKind kind)
 {
+    if (type && type != types.signature(type)) declared_storage_types.put(e,type);
     Declaration d; d.entity = e; d.source = source; d.type = type; d.kind = kind;
     std::uint32_t id = declarations.size(); declarations.push_back(d);
     if (scopes[s].last_decl) declarations[scopes[s].last_decl].next = id;

@@ -3,6 +3,7 @@
 namespace cppgm { namespace semantic {
 Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, ETokenType op, ScopeId s, NodeId operand)
 {
+    to = types.signature(to);
     auto target = types[to];
     auto invalid = [&]() { Conversion c; c.target = to; return c; };
     auto inverse = [&](TypeId derived, TypeId base) {

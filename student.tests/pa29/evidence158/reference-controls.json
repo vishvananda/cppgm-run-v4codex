@@ -1,0 +1,58 @@
+[
+  {
+    "source": "student.tests/pa29/controls158/deleted-copy.cpp",
+    "compiler": "/tmp/pa29-158/entry",
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls158/deleted-copy.cpp",
+    "compiler": "g++",
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls158/deleted-copy-reject.cpp",
+    "compiler": "/tmp/pa29-158/entry",
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/controls158/deleted-copy-reject.cpp:2\n"
+  },
+  {
+    "source": "student.tests/pa29/controls158/deleted-copy-reject.cpp",
+    "compiler": "g++",
+    "status": 1,
+    "stdout": "",
+    "stderr": "student.tests/pa29/controls158/deleted-copy-reject.cpp:2:15: error: static assertion failed: false assertion must be rejected\n    2 | static_assert(!__is_trivially_copyable(DeletedCopy),\"false assertion must be rejected\");\n      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
+  },
+  {
+    "source": "student.tests/pa29/controls158/forward-trait-reject.cpp",
+    "compiler": "/tmp/pa29-158/entry",
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: unknown expression name: value\n"
+  },
+  {
+    "source": "student.tests/pa29/controls158/forward-trait-reject.cpp",
+    "compiler": "g++",
+    "status": 1,
+    "stdout": "",
+    "stderr": "student.tests/pa29/controls158/forward-trait-reject.cpp:2:64: error: incomplete type \u2018ordinary::is_nothrow_default_constructible<int>\u2019 used in nested name specifier\n    2 | static_assert(ordinary::is_nothrow_default_constructible<int>::value,\"undefined class\");\n      |                                                                ^~~~~\n"
+  },
+  {
+    "source": "student.tests/pa29/controls158/defined-trait.cpp",
+    "compiler": "/tmp/pa29-158/entry",
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "student.tests/pa29/controls158/defined-trait.cpp",
+    "compiler": "g++",
+    "status": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

@@ -5,7 +5,7 @@ namespace cppgm { namespace semantic {
 // receiver, incoming-conversion and evaluation state belong to individual uses.
 class ExpressionStore {
     struct Properties {
-        TypeId type = 0;
+        TypeId type = 0, storage_type = 0;
         std::uint32_t conversions = 0, count = 0, arguments = 0, argument_count = 0;
         ValueCategory category = ValueCategory::Prvalue;
         ExpressionForm form = ExpressionForm::Ordinary;
@@ -28,7 +28,7 @@ public:
     Expression operator[](NodeId n) const {
         const auto& use = uses[use_index[n]]; const auto& facts = values[use.fact];
         Expression value;
-        value.type = facts.type; value.conversions = facts.conversions; value.count = facts.count;
+        value.type = facts.type; value.storage_type = facts.storage_type; value.conversions = facts.conversions; value.count = facts.count;
         value.arguments = facts.arguments; value.argument_count = facts.argument_count;
         value.category = facts.category; value.form = facts.form; value.inputs = facts.inputs;
         value.null_pointer_constant = facts.null_pointer_constant; value.discarded_form = facts.discarded_form;

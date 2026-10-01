@@ -64,8 +64,7 @@ std::uint32_t Analyzer::query_value(QueryId id)
             value = query.op == KW_NOEXCEPT ? Constant(types.fundamental(FT_BOOL),query_nonthrowing(query_edges[query.offset])) :
                 Constant(types.fundamental(FT_UNSIGNED_LONG_INT),size(type,query.op == KW_ALIGNOF));
             if (query.op == KW_ALIGNOF && !query.type) {
-                auto entity = query_fact(query_edges[query.offset]).expression.entity;
-                if (entity && entities[entity].kind == EntityKind::Variable) value.bits = storage_alignment(entity);
+                value.bits = expression_alignment(query_fact(query_edges[query.offset]).expression);
             }
         } else if (query.kind == QueryKind::Value) {
             value = convert(Constant(query.type,query.value),query.type);

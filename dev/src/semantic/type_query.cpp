@@ -315,6 +315,10 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         if (q.kind == QueryKind::TypeValue && !q.type) return 0;
         for (auto child : children) if (!child) return 0;
     }
+    // Snapshot source storage types in the complete query key. A later
+    // declaration must not change an already published alignof expression.
+    if (q.kind == QueryKind::Name || q.kind == QueryKind::Parameter)
+        if (auto raw = declared_storage_types.get(q.entity)) q.type = raw;
     auto id = intern_query(q,children); source_index.put(key(s,n),id); return id;
 }
 QueryId Analyzer::substitute_query(QueryId id, const Index& bindings, Index& cache, std::uint32_t owner)
@@ -626,7 +630,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             if (!q.entity) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
             q.type = entities[q.entity].type;
         }
-        x.type = value_type(q.type); r.declared_type = q.type;
+        x.type = value_type(types.signature(q.type)); r.declared_type = q.type;
         x.category = ValueCategory::Lvalue; x.entity = q.entity;
         if (q.entity && nonstatic_field(q.entity))
             x = member_value(q.entity,unsigned(q.value),ValueCategory::Lvalue);
@@ -657,7 +661,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
             if (c.reference) x.category = types[q.type].kind == TypeKind::LRef ? ValueCategory::Lvalue : ValueCategory::Xvalue;
         } else if (!arithmetic(q.type) || !arithmetic(children[0].expression.type))
             { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }
-        x.type = value_type(q.type); break;
+        x.type = value_type(types.signature(q.type)); break;
     case QueryKind::Member: {
         auto object = children[0].expression; auto type = object.type;
         if (q.op == OP_ARROW) {
@@ -712,6 +716,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
         }
         x.type = types.fundamental(q.op == KW_NOEXCEPT ? FT_BOOL : FT_UNSIGNED_LONG_INT); break;
     }
+    storage_query(q,children,r);
     query_discarded(id,q,children,r);
     if (incomplete_substitution) { r.incomplete = 1; incomplete_substitution = id; }
     if (r.state == FactState::Failure) {

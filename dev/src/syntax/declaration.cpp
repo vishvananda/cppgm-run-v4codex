@@ -158,7 +158,9 @@ NodeId Parser::using_declaration()
     if (identifier() && (in.is("=", 1) || (in.is("[",1) && in.is("[",2)) ||
         in.is("__attribute__",1) || in.is("__attribute",1))) {
         NodeId result = leaf(Kind::Alias);
-        NativeAttributes native; attributes(nullptr,&native); native_attributes(result,native);
+        NativeAttributes native; std::uint32_t alignment = 0;
+        attributes(&alignment,&native); native_attributes(result,native);
+        if (alignment) ast.alignment_owners.put(result,alignment);
         in.require("=");
         NodeId type = type_id();
         ast.append(result, type);

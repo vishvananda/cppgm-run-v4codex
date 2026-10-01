@@ -177,6 +177,7 @@ void Analyzer::bind_template_declaration(NodeId n, ScopeId s, std::vector<Body>*
         auto dep = bind_template_expression(node.first,s);
         auto specs = ast[node.first].first;
         auto type = bind_template_type(specs,ast[specs].next,s);
+        if (type) { type = aligned_typedef(type,n,0,0,s); dep |= dependent_type(type); }
         auto e = pattern_declaration(EntityKind::Alias,s,node.text,n,dep);
         if (type) {
             entities[e].type = types.signature(type); facts.edit(n).type = type;
