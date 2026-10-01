@@ -82,7 +82,8 @@ std::uint32_t Analyzer::query_value(QueryId id)
             value = constants[query_value(query_edges[query.offset])];
         } else if (query.kind == QueryKind::Cast) {
             auto operand = query_edges[query.offset];
-            if (fact.expression.count) {
+            if (fact.initialization) value = constant_query_list(fact.initialization);
+            else if (fact.expression.count) {
                 auto result = constant_query_conversion(operand,conversions[fact.expression.conversions]);
                 value = convert(result,query.type,true);
                 if (value.valid && query.op == TOK_INVALID) {

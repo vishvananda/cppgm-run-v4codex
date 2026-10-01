@@ -126,6 +126,8 @@ void Encoder::expression(Id id) {
         if (n.a) type(n.a);
         for (Id i = 0; i < n.count; ++i) expression(g.child(n,i));
         output += 'E'; break;
+    case Kind::DesignatedInit:
+        output += "di"; source(n.b); expression(n.a); break;
     case Kind::Cast: output += operation_code(n.c); type(n.a); expression(n.b); break;
     case Kind::DestructorName:
         if (n.c) {

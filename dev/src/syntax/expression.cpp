@@ -63,7 +63,14 @@ NodeId Parser::arguments(Kind kind, const char* close)
     if (!in.is(close)) {
         do {
             if (in.is(close)) break;
-            NodeId arg = expression(2);
+            NodeId arg;
+            if (kind == Kind::BracedInit && in.eat(".")) {
+                if (!identifier()) throw std::runtime_error("expected designated member name");
+                arg = leaf(Kind::DesignatedInit);
+                if (in.eat("=")) ast.append(arg,expression(2));
+                else if (in.is("{")) ast.append(arg,primary());
+                else throw std::runtime_error("expected designated member initializer");
+            } else arg = expression(2);
             if (in.eat("...")) arg = wrap(Kind::PackExpression, arg);
             ast.append(result, arg);
         } while (in.eat(","));
@@ -223,6 +230,13 @@ NodeId Parser::unary()
         ast[node].op = OP_LPAREN;
         ast.append(node, type_id());
         in.require(")");
+        if (in.is("{")) {
+            // GNU C++ compound literals are list-initialized temporaries.
+            // Keep the actual type and list on the cast node, including its
+            // postfix suffixes; no synthetic functional-cast name is needed.
+            ast.append(node,primary());
+            return postfix(node);
+        }
         ast.append(node, unary());
         return node;
     }

@@ -91,6 +91,9 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         break;
     case Kind::PackExpression:
         q.kind = QueryKind::Expansion; children.push_back(expression_query(first,s)); break;
+    case Kind::DesignatedInit:
+        q.kind = QueryKind::Designated; q.name = node.text; q.context = s;
+        children.push_back(expression_query(first,s)); break;
     case Kind::New: case Kind::Delete: {
         auto id = allocation_query(n,s);
         if (id) source_index.put(key(s,n),id);
@@ -203,6 +206,10 @@ QueryId Analyzer::expression_query(NodeId n, ScopeId s, bool callee)
         }
         q.kind = QueryKind::Cast; q.op = node.op; q.type = type_id(first,s); q.context = s;
         auto child = expression_query(ast[first].next,s);
+        if (node.op == OP_LPAREN && ast[ast[first].next].kind == Kind::BracedInit) {
+            q.value = 1; // Source compound literal, distinct from semantic list formation.
+            children.push_back(child); break;
+        }
         if (template_type_probe) {
             if (!q.type || !child) return 0;
             auto type = query_fact(child).expression.type;
@@ -584,6 +591,10 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::List:
         x.form = ExpressionForm::InitializerList; x.inputs = CallInputs::Query;
         x.arguments = id; x.argument_count = q.count; break;
+    case QueryKind::Designated:
+        // This wrapper has no expression type. Only aggregate list formation
+        // consumes its member identity and its child conversion.
+        break;
     case QueryKind::ListInitialization: r = query_list_initialization(id); break;
     case QueryKind::Destructor: r = query_destructor(q,children); break;
     case QueryKind::New: r = query_new(q,children); break;
@@ -651,7 +662,17 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
     case QueryKind::Parenthesized: r = children[0]; r.declared_type = 0; break;
     case QueryKind::Conditional: r = query_conditional(q,children); break;
     case QueryKind::Cast:
-        if (q.op == KW_DYNAMIC_CAST) {
+        if (q.op == OP_LPAREN && q.value == 1) {
+            if (types[q.type].kind == TypeKind::LRef || types[q.type].kind == TypeKind::RRef) {
+                r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break;
+            }
+            auto c = query_list_conversion(query_edges[q.offset],q.type,true);
+            if (!c.valid() || !validate_query_list(c.materialization)) {
+                r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break;
+            }
+            r.initialization = c.materialization;
+            x.type = c.target; break;
+        } else if (q.op == KW_DYNAMIC_CAST) {
             RttiExpression use;
             auto c = dynamic_cast_conversion(children[0].expression,q.type,q.context,use);
             if (!c.valid()) { r = TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands); break; }

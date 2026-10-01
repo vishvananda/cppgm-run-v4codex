@@ -105,6 +105,10 @@ Id FactReader::expression(const Words& w, std::size_t& p) {
         if (p < w.size() && w[p] == "-") ++p; else t = type(w,p);
         return g.make(Kind::InitList,t,0,0,0,refs(w,p,BindingKind::Expression));
     }
+    if (op == "designated-init") {
+        auto name = g.string(take(w,p));
+        return g.make(Kind::DesignatedInit,reference(take(w,p),BindingKind::Expression),name);
+    }
     if (op == "conversion") {
         Id t = type(w, p);
         return g.make(Kind::Conversion, t, 0, 0, 0, refs(w, p, BindingKind::Expression));

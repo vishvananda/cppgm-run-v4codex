@@ -169,6 +169,13 @@ bool Analyzer::check_fixed_construction(NodeId n, ScopeId s)
 bool Analyzer::check_fixed_cast(NodeId n, ScopeId s, TypeId type, NodeId operand)
 {
     if (dependent_type(type)) return false;
+    if (ast[n].op == OP_LPAREN && ast[operand].kind == Kind::BracedInit) {
+        if (!fixed_initializer_operands(operand)) return false;
+        RecipeScope guard(unevaluated_depth);
+        auto result = cast_expression(n,s,type,operand,true);
+        result.ready = true; record_discard_form(n,result); expressions.set(n,result); facts.edit(n).scope = s;
+        template_operator_expressions.put(ast.nodes.occurrences[n].source,n); ++template_fixed_call_work; return true;
+    }
     if (operand && !template_fixed_expressions.get(ast.nodes.occurrences[operand].source)) return false;
     RecipeScope guard(unevaluated_depth);
     if (class_value(type)) {

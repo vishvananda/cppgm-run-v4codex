@@ -90,9 +90,19 @@ std::uint32_t Analyzer::constant_entity_address(EntityId e)
 }
 Constant Analyzer::constant_read(std::uint32_t id)
 {
+    auto value = constant_base_read(id);
+    return value.valid ? constant_snapshot(id,value) : value;
+}
+Constant Analyzer::constant_base_read(std::uint32_t id)
+{
     if (!id) return Constant();
     auto a = constant_addresses[id]; refresh_constant_storage(a.storage);
     auto storage = constant_storage[a.storage];
+    if (storage.frame && storage.live && storage.readable && !(types[a.type].cv & 6)) {
+        auto overlay = storage.frame->overlay_index.get(id);
+        if (overlay && storage.frame->overlays[overlay].value.valid)
+            return storage.frame->overlays[overlay].value;
+    }
     if (storage.live && types[a.type].kind == TypeKind::Function) return Constant(types.compound(TypeKind::Pointer,a.type),id);
     if (storage.builder) {
         auto slot = storage.builder->values_by_address.get(id);
@@ -112,9 +122,9 @@ Constant Analyzer::constant_read(std::uint32_t id)
     if (a.selector == ~std::uint64_t(0)) return Constant();
     if (types[constant_addresses[a.parent].type].kind == TypeKind::Array && storage.literal && !constant_addresses[a.parent].parent)
         return literal_element(ast[storage.literal].literal,Constant(types.fundamental(FT_UNSIGNED_LONG_INT),a.selector));
-    if (!(a.selector & 0x80000000U) && types[constant_addresses[a.parent].type].kind != TypeKind::Array && entities[a.selector].mutable_field)
+    if (!storage.frame && !(a.selector & 0x80000000U) && types[constant_addresses[a.parent].type].kind != TypeKind::Array && entities[a.selector].mutable_field)
         return Constant();
-    auto v = evaluated_part(constant_read(a.parent),a.selector);
+    auto v = evaluated_part(constant_base_read(a.parent),a.selector);
     if (v.valid && pointer(v.type) && v.bits && !constant_storage[constant_addresses[v.bits].storage].live) return Constant();
     return v;
 }
@@ -366,10 +376,15 @@ void Analyzer::constant_dependencies(Constant value, std::vector<ArgumentId>& ar
         auto storage_id = constant_addresses[value.bits].storage;
         if (seen.get(storage_id)) return;
         seen.put(storage_id,1); ++constant_dependency_work; refresh_constant_storage(storage_id);
+        // A pointer to one scalar must not freeze its entire enclosing array.
+        // The storage version covers sibling writes; follow new pointer values
+        // only within the addressed subobject, alongside the original payload.
+        auto current = constant_storage[storage_id].frame ? constant_read(value.bits) : Constant();
         auto storage = constant_storage[storage_id];
         args.push_back(storage_id); args.push_back(storage.version);
         args.push_back(unsigned(storage.live) | (unsigned(storage.readable)<<1));
         constant_dependencies(storage.value,args,seen);
+        if (current.valid) constant_dependencies(current,args,seen);
         if (storage.builder) {
             for (auto part : storage.builder->parts) constant_dependencies(part.value,args,seen);
             for (auto projected : storage.builder->projected_parts) constant_dependencies(projected.part.value,args,seen);

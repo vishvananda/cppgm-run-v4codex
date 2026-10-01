@@ -220,7 +220,9 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
         if (!v.valid || !v.bits || !pointer(v.type)) return Constant();
         e = constant_storage[constant_addresses[v.bits].storage].entity;
     }
-    if (!e || entities[e].kind != EntityKind::Function || !entities[e].constexpr_function) return Constant();
+    auto transfer = members[entities[e].member_info].transfer;
+    bool assignment = (transfer == TransferKind::CopyAssignment || transfer == TransferKind::MoveAssignment) && trivial_transfer(e);
+    if (!e || entities[e].kind != EntityKind::Function || (!entities[e].constexpr_function && !assignment)) return Constant();
     if (entities[e].is_static && use.node && !constant_arrow(use.node,use.arrow)) return Constant();
     std::uint32_t object = 0;
     if (entities[e].member_info && !entities[e].is_static) {
@@ -240,6 +242,17 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
         auto value = constant_node_conversion(call_argument(call,i),conversion,s);
         if (!value.valid) return Constant();
         args.push_back(value);
+    }
+    if (assignment) {
+        if (!object || args.size() != 1 || !literal_type(constant_addresses[object].type)) return Constant();
+        auto storage = constant_storage[constant_addresses[object].storage];
+        if (!storage.live || !storage.readable || !storage.frame) return Constant();
+        for (auto p = object; p; p = constant_addresses[p].parent)
+            if (types[constant_addresses[p].type].cv & 7) return Constant();
+        auto value = constant_indirect(args[0]);
+        if (!value.valid) return value;
+        constant_write(object,value);
+        return Constant(types[entities[e].type].child,object);
     }
     return execute_constant(e,args,object);
 }

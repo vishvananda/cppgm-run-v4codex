@@ -214,7 +214,12 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         EntityId e = calls ? expressions[n].entity : resolve(ast[n].detail, s);
         if (!e) return Constant();
         if (active_constant && constant_frame) {
-            if (auto slot = constant_frame->bindings.get(e)) return constant_indirect(constant_frame->values[slot]);
+            if (auto slot = constant_frame->bindings.get(e)) {
+                auto type = types[entities[e].type].kind;
+                auto address = constant_frame->addresses.get(e);
+                if (address && type != TypeKind::LRef && type != TypeKind::RRef) return constant_read(address);
+                return constant_indirect(constant_frame->values[slot]);
+            }
             if (entities[e].kind == EntityKind::Parameter) return Constant();
         }
         if (active_constant && entities[e].kind == EntityKind::Variable && !entities[e].constant.valid &&
@@ -266,6 +271,7 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         return Constant(types.fundamental(FT_UNSIGNED_LONG_INT), size(t, ast[n].op == KW_ALIGNOF));
     }
     case Kind::Cast:
+        if (calls && expressions[n].form == ExpressionForm::ListValue) return constant_call_result(n,s);
         if (calls && expressions[n].count) return constant_node_conversion(ast[first].next,conversions[expressions[n].conversions],s);
         return convert(evaluate(ast[first].next, s), type_id(first, s), true);
     case Kind::Call: {

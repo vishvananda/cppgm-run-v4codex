@@ -97,6 +97,7 @@ const char* kind_name(Kind kind)
         "subscript-expression",
         "member-expression",
         "braced-init-list",
+        "designated-initializer",
         "cast-expression",
         "sizeof-expression",
         "sizeof-pack-expression",

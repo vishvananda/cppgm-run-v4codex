@@ -133,6 +133,9 @@ void write_inline(std::ostream& out, const Ast& ast, NodeId id, const Identifier
         out << '{';
         children_inline(out, ast, id, ids, ",");
         out << '}';
+    } else if (n.kind == Kind::DesignatedInit) {
+        out << '.'; spelling(out,ids,n.text); out << '=';
+        write_inline(out,ast,n.first,ids);
     } else if (n.kind == Kind::Member || n.kind == Kind::Subscript) {
         write_inline(out, ast, n.first, ids);
         if (n.kind == Kind::Member) spelling(out, ids, n.text);

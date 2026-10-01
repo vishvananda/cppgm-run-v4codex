@@ -46,6 +46,12 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         if (dependent_type(target)) return;
         first = ast[first].next;
         if (!first) return;
+        if (node.op == OP_LPAREN && ast[first].kind == Kind::BracedInit) {
+            if (check_fixed_cast(n,s,target,first)) {
+                template_fixed_expressions.put(source,n); ++template_fixed_work;
+            }
+            return;
+        }
         if (!fixed(first)) return;
         if (node.op == KW_DYNAMIC_CAST) break;
         auto source_type = expressions[fixed(first)].type;

@@ -29,6 +29,8 @@ bool Analyzer::constant_local(EntityId e, ScopeId s)
     auto type = entities[e].type; std::uint32_t address = 0;
     if (class_value(type) || types[type].kind == TypeKind::Array) {
         address = constant_storage_address(type,Constant());
+        auto storage = constant_addresses[address].storage;
+        constant_storage[storage].frame = constant_frame; constant_storage[storage].binding = slot;
         constant_frame->addresses.put(e,address); constant_frame->storage.push_back(constant_addresses[address].storage);
         constant_destination = address;
     }
@@ -191,27 +193,17 @@ Constant Analyzer::constant_mutation(NodeId n, ScopeId s)
     if (!active_constant || !constant_frame) return Constant();
     auto target = ast[n].first;
     auto source = ast[target].next;
-    while (ast[target].kind == Kind::Parenthesized) target = ast[target].first;
-    if (ast[target].kind != Kind::IdExpression) return Constant();
-    auto e = expressions[target].entity;
-    auto slot = constant_frame->bindings.get(e);
-    if (!slot || (types[entities[e].type].cv & 3)) return Constant();
-    auto destination = constant_frame;
-    auto stored_type = entities[e].type;
-    auto address = constant_frame->addresses.get(e);
-    auto kind = types[stored_type].kind;
-    if (kind == TypeKind::LRef || kind == TypeKind::RRef) {
-        auto reference = constant_frame->values[slot];
-        if (!reference.valid || !reference.bits) return Constant();
-        address = reference.bits; auto target = constant_addresses[address];
-        auto storage = constant_storage[target.storage];
-        // Aggregate writes remain conservative until the evaluator owns a
-        // mutable aggregate overlay. Never overwrite a reference binding.
-        if (target.parent || !storage.live || !storage.readable || !storage.frame || (types[target.type].cv & 7)) return Constant();
-        destination = storage.frame; slot = storage.binding; stored_type = target.type;
-    }
+    auto address = constant_address(target,s);
+    if (!address) return Constant();
+    auto destination = constant_addresses[address];
+    auto storage = constant_storage[destination.storage];
+    if (!storage.live || !storage.readable || !storage.frame) return Constant();
+    for (auto p = address; p; p = constant_addresses[p].parent)
+        if (types[constant_addresses[p].type].cv & 7) return Constant();
+    auto stored_type = destination.type;
     auto op = ast[n].op;
-    auto old = destination->values[slot];
+    auto old = constant_read(address);
+    if (!old.valid) return old;
     auto x = expressions[n];
     Constant value;
     if (op == OP_ASS) value = constant_node_conversion(source,conversions[x.conversions+1],s);
@@ -236,10 +228,9 @@ Constant Analyzer::constant_mutation(NodeId n, ScopeId s)
         value = convert(binary(binary_op,left,right,true),stored_type,true);
     }
     if (!value.valid) return value;
-    destination->values[slot] = value;
-    if (address) {
-        auto storage = constant_addresses[address].storage; constant_storage[storage].value = value; ++constant_storage[storage].version;
-    }
+    if (destination.parent && types[constant_addresses[destination.parent].type].kind != TypeKind::Array &&
+        !(destination.selector & 0x80000000U)) value = constant_field_value(destination.selector,value);
+    constant_write(address,value);
     return ast[n].kind == Kind::Postfix ? old : value;
 }
 } }

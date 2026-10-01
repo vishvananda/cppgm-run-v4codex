@@ -196,7 +196,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         return r;
     }
     case Kind::BracedInit:
-        for (NodeId c = first; c; c = ast[c].next) expression(c,s);
+        for (NodeId c = first; c; c = ast[c].next)
+            expression(ast[c].kind == Kind::DesignatedInit ? ast[c].first : c,s);
         r.form = ExpressionForm::InitializerList; r.arguments = n; return r;
     case Kind::Parenthesized: return value_fact(expression(first, s));
     case Kind::Call: return call_expression(n, s);
@@ -322,6 +323,25 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
     r.type = value_type(to); r.form = ExpressionForm::Cast;
     if (storage != to) r.storage_type = value_type(storage);
     facts.edit(n).type = to;
+    if (ast[n].kind == Kind::Cast && ast[n].op == OP_LPAREN && ast[operand].kind == Kind::BracedInit) {
+        if (types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef)
+            throw std::runtime_error("compound literal requires an object type");
+        expression(operand,s);
+        auto c = list_initialization(operand,to,s,true);
+        r.type = c.target;
+        r.form = class_value(to) || types[to].kind == TypeKind::Array ? ExpressionForm::ListValue : ExpressionForm::Cast;
+        if (recipe) {
+            check_fixed_conversion(Expression(),operand,c,s);
+            store_call(r,{operand},{c}); r.inputs = CallInputs::Source;
+        } else {
+            record_conversion(r,operand,c);
+            if (r.form == ExpressionForm::ListValue) {
+                record_object(r,0,0,0);
+                object_uses[r.object_use].temporary = converted_temporary(conversions[r.conversions]);
+            }
+        }
+        facts.edit(n).type = c.target; return r;
+    }
     if (!operand) {
         if (types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef) throw std::runtime_error("value-initialized reference");
         return r;

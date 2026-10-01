@@ -472,7 +472,8 @@ private:
     void aggregate_initialization(NodeId n, TypeId t, ScopeId s);
     TypeId complete_array_initializer(NodeId n, TypeId t, ScopeId s, bool pattern = false);
     void check_array_initializer(NodeId n, TypeId t) const;
-    std::uint32_t initializer_item(NodeId& cursor, TypeId t, ScopeId s);
+    bool designated_storage(EntityId field, IdentifierId name) const;
+    std::uint32_t initializer_item(NodeId& cursor, TypeId t, ScopeId s, bool elide = true);
     bool aggregate_type(TypeId t) const;
     bool string_initialization(NodeId n, TypeId t) const;
     bool string_array_type(EFundamentalType from, TypeId t) const;
@@ -759,9 +760,16 @@ private:
     };
     // Mutable execution storage lives only as long as one call. Completed
     // activations retain values, never their local environments.
+    struct ConstantOverlay {
+        Constant value;
+        std::uint32_t address = 0, first = 0, next = 0;
+        bool dirty = false;
+    };
     struct ConstantFrame {
         Index bindings;
         Index addresses;
+        Index overlay_index;
+        std::vector<ConstantOverlay> overlays = std::vector<ConstantOverlay>(1);
         std::vector<std::uint32_t> storage;
         std::vector<EntityId> locals;
         std::vector<Constant> values = std::vector<Constant>(1);
@@ -823,6 +831,9 @@ private:
     std::uint32_t constant_base_address(std::uint32_t address, TypeId type);
     std::uint32_t constant_base_projection(std::uint32_t address, unsigned path);
     Constant constant_read(std::uint32_t address);
+    Constant constant_base_read(std::uint32_t address);
+    Constant constant_snapshot(std::uint32_t address, Constant value);
+    void constant_write(std::uint32_t address, Constant value);
     Constant constant_indirect(Constant value);
     void constant_dependencies(Constant value, std::vector<ArgumentId>& arguments, Index& seen);
     Constant constant_pointer_binary(ETokenType op, Constant left, Constant right);

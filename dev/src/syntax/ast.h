@@ -47,6 +47,7 @@ enum class Kind : unsigned char {
     Subscript,
     Member,
     BracedInit,
+    DesignatedInit,
     Cast,
     Sizeof,
     SizeofPack,

@@ -12,7 +12,7 @@ bool Analyzer::fixed_initializer_operands(NodeId n) const
     if (!n) return true;
     auto kind = ast[n].kind;
     if (kind == Kind::Initializer || kind == Kind::BracedInit || kind == Kind::ParenInitializer ||
-        kind == Kind::ParenArguments || kind == Kind::Arguments) {
+        kind == Kind::ParenArguments || kind == Kind::Arguments || kind == Kind::DesignatedInit) {
         for (auto c = ast[n].first; c; c = ast[c].next)
             if (!fixed_initializer_operands(c)) return false;
         return true;
@@ -167,6 +167,7 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
         std::uint64_t i = 0;
         bool complete = true;
         while (inner && (!type.bound || i < type.bound)) {
+            if (ast[inner].kind == Kind::DesignatedInit) throw std::runtime_error("member designator requires a class aggregate");
             if (ast[inner].kind == Kind::PackExpression) {
                 // Expansion length is unknown, but scalar element conversions
                 // and following fixed clauses still have definition-time rules.
@@ -188,7 +189,18 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
         for (auto d = scopes[entities[type.entity].scope].first_decl; d; d = declarations[d].next) {
             auto field = declarations[d].entity;
             if (!nonstatic_field(field)) continue;
-            if (!check_template_initializer_item(inner,initialized_field_type(target,field),s)) return false;
+            if (ast[inner].kind == Kind::DesignatedInit) {
+                if (designated_storage(field,ast[inner].text)) {
+                    if (!check_template_initializer_item(inner,initialized_field_type(target,field),s)) return false;
+                    if (entities[type.entity].key == KW_UNION) break;
+                    continue;
+                }
+                bool match = ast[inner].text == entities[field].name;
+                if (!match && entities[type.entity].key == KW_UNION) continue;
+                auto clause = match ? ast[inner].first : 0;
+                check_template_initialization(clause,initialized_field_type(target,field),s,InitializationMode::Copy);
+                if (match) inner = ast[inner].next;
+            } else if (!check_template_initializer_item(inner,initialized_field_type(target,field),s)) return false;
             if (entities[type.entity].key == KW_UNION) break;
         }
     }

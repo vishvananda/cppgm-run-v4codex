@@ -34,13 +34,25 @@ std::uint32_t Analyzer::query_list_aggregate(const std::vector<QueryId>& args, u
     auto omitted = intern_query(empty,{});
     auto add = [&](TypeId type, EntityId field, std::uint64_t index, std::uint64_t count) {
         auto source = cursor < args.size() ? args[cursor] : omitted;
+        bool designated = type_queries[source].kind == QueryKind::Designated;
+        bool projected = designated && designated_storage(field,type_queries[source].name);
+        if (projected) designated = false;
+        bool consume = !designated || type_queries[source].name == entities[field].name;
+        if (designated) {
+            if (!field) return false;
+            source = consume ? query_edges[type_queries[source].offset] : omitted;
+        }
         auto value = query_fact(source).expression;
-        auto c = conversion_value(value,type);
+        Conversion c;
+        if (projected) {
+            c.kind = Conversion::Kind::QueryList; c.target = type;
+            c.materialization = query_list_aggregate(args,cursor,type,scope); c.rank = list_plans[c.materialization].rank;
+        } else c = conversion_value(value,type);
         auto literal = type_queries[source];
         if (literal.kind == QueryKind::String && string_array_type(ast.literals[literal.value].type,type))
             c = query_list_conversion(intern_query(empty,{source}),type);
-        if (c.valid()) { if (cursor < args.size()) ++cursor; }
-        else if (type_queries[source].kind != QueryKind::List && aggregate_type(type)) {
+        if (c.valid()) { if (!projected && consume && cursor < args.size()) ++cursor; }
+        else if (!designated && type_queries[source].kind != QueryKind::List && aggregate_type(type)) {
             auto begin = cursor;
             c.kind = Conversion::Kind::QueryList; c.target = type;
             c.materialization = query_list_aggregate(args,cursor,type,scope);
@@ -65,6 +77,10 @@ std::uint32_t Analyzer::query_list_aggregate(const std::vector<QueryId>& args, u
         for (auto d = scopes[entities[target.entity].scope].first_decl; valid && d; d = declarations[d].next) {
             auto field = declarations[d].entity;
             if (!nonstatic_field(field)) continue;
+            if (entities[target.entity].key == KW_UNION && cursor < args.size() &&
+                type_queries[args[cursor]].kind == QueryKind::Designated &&
+                type_queries[args[cursor]].name != entities[field].name &&
+                !designated_storage(field,type_queries[args[cursor]].name)) continue;
             valid = add(initialized_field_type(to,field),field,0,1);
             if (entities[target.entity].key == KW_UNION) break;
         }
@@ -103,7 +119,11 @@ TypeQueryFact Analyzer::query_list_initialization(QueryId id)
             if (!entities[types[t].entity].complete) return incomplete_query(t);
         }
         auto literal = args.size() == 1 ? type_queries[args[0]] : TypeQuery();
-        if (literal.kind == QueryKind::String && string_array_type(ast.literals[literal.value].type,t)) {
+        bool designated = false;
+        for (auto a : args) designated |= type_queries[a].kind == QueryKind::Designated;
+        if (designated && !aggregate_type(t)) {
+            // Preserve ordinary candidate failure, including constructors.
+        } else if (literal.kind == QueryKind::String && string_array_type(ast.literals[literal.value].type,t)) {
             plan.literal = literal.value; plan.aggregate = true;
             if (!ref && !types[t].bound) t = q.type = types.compound(TypeKind::Array,types[t].child,ast.literals[plan.literal].elements);
             plan.target = q.type;

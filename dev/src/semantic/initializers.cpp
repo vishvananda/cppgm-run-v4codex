@@ -96,7 +96,13 @@ void Analyzer::list_conversion_from(NodeId n, TypeId from, TypeId target, const 
     }
     if (narrowing_conversion(from,target,value)) throw std::runtime_error("narrowing list initialization");
 }
-std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
+bool Analyzer::designated_storage(EntityId field, IdentifierId name) const
+{
+    if (!field || !class_value(entities[field].type)) return false;
+    auto cls = types[entities[field].type].entity;
+    return class_facts[entities[cls].class_info].storage == field && nonstatic_field(local(entities[cls].scope,name));
+}
+std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s, bool elide)
 {
     std::uint32_t id = initializers.size(); initializers.push_back(InitAction());
     initializers[id].type = t; initializers[id].source = cursor;
@@ -110,7 +116,7 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
     bool aggregate = aggregate_type(t) || vector_kind(types[t].kind);
     bool braced = ast[source].kind == Kind::BracedInit || ast[source].kind == Kind::ParenArguments || ast[source].kind == Kind::ParenInitializer;
     NodeId inner = braced ? ast[source].first : source;
-    if (aggregate && class_value(t) && !braced) {
+    if (aggregate && class_value(t) && !braced && ast[source].kind != Kind::DesignatedInit) {
         expression(source,s);
         Conversion c = conversion(source,t);
         if (c.valid()) {
@@ -119,6 +125,7 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
             initializers[id].helper_safe = false;
             cursor = ast[source].next; return id;
         }
+        if (!elide) throw std::runtime_error("invalid designated aggregate conversion");
     }
     auto string = inner;
     while (ast[string].kind == Kind::Parenthesized) string = ast[string].first;
@@ -131,6 +138,7 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
         initializers[id].source = string; initializers[id].kind = InitKind::String;
         cursor = ast[source].next; return id;
     }
+    if (aggregate && !braced && !elide) throw std::runtime_error("designated aggregate requires braces or a matching value");
     if (!aggregate) {
         if (types[t].kind == TypeKind::Named && entities[types[t].entity].class_info) {
             initialize(source, t, s, InitializationMode::Copy); initializers[id].kind = InitKind::Constructor;
@@ -157,6 +165,7 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
     if (target.kind == TypeKind::Array || vector_kind(target.kind)) {
         std::uint64_t index = 0;
         while (inner && (!target.bound || index < target.bound)) {
+            if (ast[inner].kind == Kind::DesignatedInit) throw std::runtime_error("member designator requires a class aggregate");
             auto clause = inner;
             auto item = initializer_item(inner, target.child, s);
             if (inner == clause) throw std::runtime_error("array element consumed no initializer");
@@ -172,7 +181,21 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
         for (auto d = scopes[entities[target.entity].scope].first_decl; d; d = declarations[d].next) {
             EntityId field = declarations[d].entity;
             if (!nonstatic_field(field)) continue;
-            auto item = initializer_item(inner, initialized_field_type(t, field), s);
+            bool designated = ast[inner].kind == Kind::DesignatedInit;
+            if (designated && designated_storage(field,ast[inner].text)) {
+                auto item = initializer_item(inner,initialized_field_type(t,field),s);
+                initializers[item].field = field; append(item);
+                if (entities[target.entity].key == KW_UNION) break;
+                continue;
+            }
+            auto clause = designated && ast[inner].text == entities[field].name ? ast[inner].first : designated ? 0 : inner;
+            if (designated && !clause && entities[target.entity].key == KW_UNION) continue;
+            auto item = initializer_item(clause, initialized_field_type(t, field), s, !designated);
+            if (!designated) inner = clause;
+            else if (ast[inner].text == entities[field].name) {
+                if (clause) throw std::runtime_error("excess designated member initializer");
+                inner = ast[inner].next;
+            }
             initializers[item].field = field; append(item);
             if (entities[target.entity].key == KW_UNION) break;
         }

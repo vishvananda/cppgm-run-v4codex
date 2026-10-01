@@ -56,6 +56,8 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
         for (unsigned i = 0; i < q.count; ++i) args.push_back(child(i));
         result = abi.make(Kind::InitList,0,0,0,0,args); break;
     case QueryKind::ListInitialization: throw std::logic_error("semantic initialization used as source ABI expression");
+    case QueryKind::Designated:
+        result = abi.make(Kind::DesignatedInit,child(0),abi.string(spelling(q.name))); break;
     case QueryKind::This: result = abi.make(Kind::ExprThis); break;
     case QueryKind::Value:
         if (sem.integral_type(q.type) && (sem.type_width(q.type) == 128 || sem.types[q.type].kind == TypeKind::Named)) {
@@ -84,6 +86,11 @@ abi_mangle::Id Procedural::abi_query(semantic::QueryId id)
     case QueryKind::Parenthesized: result = child(0); break;
     case QueryKind::Conditional: result = abi.make(Kind::Conditional,child(0),child(1),child(2)); break;
     case QueryKind::Cast:
+        if (q.op == OP_LPAREN && q.value == 1) {
+            auto list = sem.type_query_child(id,0); args.clear();
+            for (unsigned i = 0; i < sem.type_query(list).count; ++i) args.push_back(abi_query(sem.type_query_child(list,i)));
+            result = abi.make(Kind::InitList,abi_type(q.type),0,0,0,args); break;
+        }
         result = q.op == KW_STATIC_CAST || q.op == KW_DYNAMIC_CAST ? abi.make(Kind::Cast,abi_type(q.type),child(0),abi_mangle::operation(q.op == KW_DYNAMIC_CAST ? "dc" : "sc")) :
             abi.make(Kind::Conversion,abi_type(q.type),0,0,0,{child(0)}); break;
     case QueryKind::Unary: {
