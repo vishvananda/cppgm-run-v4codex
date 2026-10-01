@@ -1,0 +1,621 @@
+{
+  "compiler_sha256": "e3945b403aef4e91d8ff553d0eb2ffb6631256a99dd83e2ab4852943b6757b7d",
+  "checks": [
+    {
+      "name": "evaluation-cache compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-cache.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-cache.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-cache link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-cache.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-cache"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-cache runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-cache"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-context compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-context.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-context.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-context link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-context.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-context"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-context runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-context"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-defaults compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-defaults.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-defaults.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-defaults link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-defaults.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-defaults"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-defaults runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-defaults"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-dynamic-construction compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-dynamic-construction.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-dynamic-construction.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-dynamic-construction link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-dynamic-construction.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-dynamic-construction"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-dynamic-construction runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-dynamic-construction"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-nested-references compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-nested-references.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-nested-references.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-nested-references link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-nested-references.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-nested-references"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-nested-references runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-nested-references"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-nested compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-nested.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-nested.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-nested link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-nested.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-nested"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-nested runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-nested"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-pointers compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-pointers.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-pointers.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-pointers link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-pointers.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-pointers"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-pointers runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-pointers"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-reference-aliases compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-reference-aliases.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-reference-aliases.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-reference-aliases link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-reference-aliases.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-reference-aliases"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-reference-aliases runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-reference-aliases"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-reference-choice compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-reference-choice.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-reference-choice.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-reference-choice link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-reference-choice.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-reference-choice"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-reference-choice runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-reference-choice"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-reference-parameters compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-reference-parameters.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-reference-parameters.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-reference-parameters link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-reference-parameters.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-reference-parameters"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-reference-parameters runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-reference-parameters"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-reference-subobjects compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-reference-subobjects.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-reference-subobjects.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-reference-subobjects link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-reference-subobjects.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-reference-subobjects"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-reference-subobjects runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-reference-subobjects"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-references compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-references.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-references.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-references link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-references.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-references"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-references runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-references"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-storage compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-storage.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-storage.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-storage link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-storage.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-storage"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-storage runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-storage"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-templates compile",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls165/evaluation-templates.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-templates.o"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-templates link",
+      "args": [
+        "g++",
+        "/tmp/pa29-165/controls-final/evaluation-templates.o",
+        "-o",
+        "/tmp/pa29-165/controls-final/evaluation-templates"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "evaluation-templates runtime",
+      "args": [
+        "/tmp/pa29-165/controls-final/evaluation-templates"
+      ],
+      "status": 0,
+      "passed": true,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "required-false",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-165/controls-final/required-false.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: static assertion is not a true integral constant in /tmp/pa29-165/controls-final/required-false.cpp:2\n"
+    },
+    {
+      "name": "address",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-165/controls-final/address.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: compiler intrinsic requires a direct call\n"
+    },
+    {
+      "name": "decay",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-165/controls-final/decay.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: invalid explicit cast\n"
+    },
+    {
+      "name": "arity",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-165/controls-final/arity.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "qualification",
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/tmp/pa29-165/controls-final/qualification.cpp",
+        "-o",
+        "/tmp/pa29-165/controls-final/reject.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: __builtin_is_constant_evaluated\n"
+    }
+  ]
+}

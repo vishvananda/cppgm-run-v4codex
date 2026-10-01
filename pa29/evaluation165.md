@@ -108,6 +108,8 @@ aggregate subobjects; ordinary runtime mutation uses existing lowering. Adding a
 mutable aggregate overlay is separate unfinished interpreter work, not a claimed
 extension of this mode/storage change. Scalar reference writes and aliases have
 explicit successful controls; no rejection was substituted for those cases.
+`pending165/aggregate-mutation.cpp` is an explicit positive reducer rejected by
+both entry and final compilers; evidence165 retains both diagnostics.
 
 Independent review must examine complete mode keys, dependence propagation,
 reference lifetime/storage identity, and the performance evidence. This document

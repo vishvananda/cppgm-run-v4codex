@@ -1,0 +1,46 @@
+{
+  "entry": "61e023f39a4c1bafdccc484257ab51df98f87088",
+  "code_tip": "db0d088961f5f637892c833d0fb8079a8a583892",
+  "compiler_sha256": "e3945b403aef4e91d8ff553d0eb2ffb6631256a99dd83e2ab4852943b6757b7d",
+  "checks": {
+    "make test-pa29": {
+      "exit_status": 2,
+      "log": "/tmp/pa29-165/stage-required.log",
+      "log_sha256": "5dad7302c24334f94fdecf390fd2095668c1bffdc138ad7daa9c50b4c0441ad8"
+    },
+    "make test-report-through-pa28": {
+      "exit_status": 0,
+      "log": "/tmp/pa29-165/prior-final.log",
+      "log_sha256": "62fafee2304dafac1d6eb44703da74008c028ee3cc40be97d2e4ca4702c208ba"
+    },
+    "make test-report-through-pa29": {
+      "exit_status": 2,
+      "log": "/tmp/pa29-165/through-final.log",
+      "log_sha256": "4bc9afa06f6237afc5fc7fbd4eec07b4324f959d8e636cfde006e8e6e9b3da07"
+    },
+    "perl scripts/cppgm_file_audit.pl --stage pa29 --paths dev/src": {
+      "exit_status": 0,
+      "log": "/tmp/pa29-165/file-audit-final.log",
+      "log_sha256": "c6b6c45d5cf6a3bedbd7a9ae178a2ade40ed96e75d7d20baca65cc1da0ba661f"
+    },
+    "python3 student.tests/pa29/controls165.py /tmp/pa29-165/controls-final": {
+      "exit_status": 0,
+      "checks": 47
+    },
+    "python3 student.tests/pa29/inspection165.py /tmp/pa29-165/inspection-final": {
+      "exit_status": 0,
+      "checks": 112
+    },
+    "python3 student.tests/pa29/controls164.py /tmp/pa29-165/inherited164": {
+      "exit_status": 0,
+      "checks": 52
+    }
+  },
+  "stage_progress": "PASS: one existing failure removed; no new failures or coverage change",
+  "prior_passed": 4538,
+  "stage_passed": 350,
+  "stage_total": 403,
+  "independent_review": "pending; review markers preserved",
+  "whole_stage": "unfinished implementation and independent audit remain",
+  "discarded_interim_reports": "Concurrent first reports shared root .test_counts; authoritative reports were rerun serially. No final coverage or count is derived from those interim logs."
+}

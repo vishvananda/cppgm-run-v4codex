@@ -1,0 +1,39 @@
+{
+  "entry": "61e023f39a4c1bafdccc484257ab51df98f87088",
+  "code_tip": "f42ab562dfe976fb4602f8ee9e15986885bf6ca7",
+  "binaries": {
+    "A": {
+      "path": "/tmp/pa29-165/compiler-A",
+      "sha256": "354d6a193ee1646dfc5ac46e13c7f58085417eb160d01fb2f54210996d2f9024",
+      "bytes": 4057576
+    },
+    "B": {
+      "path": "/tmp/pa29-165/compiler-B",
+      "sha256": "0950dc0f61f5e8f9f55ac065c5e36d5769d8d37cb74d06fc9f11c87810eb852e",
+      "bytes": 4074496
+    }
+  },
+  "scripts": {
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "student.tests/pa29/performance165.py": "a24f61b534fc9a66e7f204f579f1a2c8be206df636af7c2915d9f8ca06d0dbe8"
+  },
+  "cpu_affinity": [
+    0
+  ],
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "common_flags": [
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "affected_flags": [
+    "-std=c++14",
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "level": "PA29/O0",
+  "scope": "Correct common A/A+ABBA; affected necessary semantic cost/scaling only",
+  "optional_work_budget": 0,
+  "optional_growth_budget": 0
+}

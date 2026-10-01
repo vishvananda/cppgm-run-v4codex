@@ -1,0 +1,96 @@
+{
+  "binary_sha256": "354d6a193ee1646dfc5ac46e13c7f58085417eb160d01fb2f54210996d2f9024",
+  "reason": "Entry compiler lacks the required intrinsic; affected comparisons are correctness/scaling costs, not equivalent A/B speedups",
+  "checks": [
+    {
+      "input": "/tmp/pa29-165/affected/evaluation1200.cpp",
+      "sha256": "f2dafeae7c372d46f8b44e5a046ebc62152fd3b3e61fc2c31539ac6c8d052b36",
+      "args": [
+        "/tmp/pa29-165/compiler-A",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/tmp/pa29-165/affected/evaluation1200.cpp",
+        "-o",
+        "/tmp/pa29-165/entry-affected.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: unknown expression name: __builtin_is_constant_evaluated\n"
+    },
+    {
+      "input": "/tmp/pa29-165/affected/evaluation2400.cpp",
+      "sha256": "8790d7949094aa5573a1092728a2bedbdba4393a87e61076d0a1fc61cd007807",
+      "args": [
+        "/tmp/pa29-165/compiler-A",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/tmp/pa29-165/affected/evaluation2400.cpp",
+        "-o",
+        "/tmp/pa29-165/entry-affected.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: unknown expression name: __builtin_is_constant_evaluated\n"
+    },
+    {
+      "input": "/tmp/pa29-165/affected/evaluation600.cpp",
+      "sha256": "1db7adada3a7d15404c7e84aee39dccbf682d99216dc27e9e981fcb8a3c1d598",
+      "args": [
+        "/tmp/pa29-165/compiler-A",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/tmp/pa29-165/affected/evaluation600.cpp",
+        "-o",
+        "/tmp/pa29-165/entry-affected.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: unknown expression name: __builtin_is_constant_evaluated\n"
+    },
+    {
+      "input": "/tmp/pa29-165/affected/storage1200.cpp",
+      "sha256": "d6d9f8f56861ff1aab1949d2abd2e418f2c2d479d0356d7465959a22946e0cd0",
+      "args": [
+        "/tmp/pa29-165/compiler-A",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/tmp/pa29-165/affected/storage1200.cpp",
+        "-o",
+        "/tmp/pa29-165/entry-affected.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: unknown expression name: __builtin_is_constant_evaluated\n"
+    },
+    {
+      "input": "/tmp/pa29-165/affected/storage2400.cpp",
+      "sha256": "2b1f5912d5193fb804ad400b2a57253881b54f2635a5996fe977e7fe7cf7257e",
+      "args": [
+        "/tmp/pa29-165/compiler-A",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/tmp/pa29-165/affected/storage2400.cpp",
+        "-o",
+        "/tmp/pa29-165/entry-affected.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: unknown expression name: __builtin_is_constant_evaluated\n"
+    },
+    {
+      "input": "/tmp/pa29-165/affected/storage600.cpp",
+      "sha256": "6acf919c1b2b53212caece621cbc659382c3ac8f91ffa2b8a9197df60e18b88d",
+      "args": [
+        "/tmp/pa29-165/compiler-A",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/tmp/pa29-165/affected/storage600.cpp",
+        "-o",
+        "/tmp/pa29-165/entry-affected.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: unknown expression name: __builtin_is_constant_evaluated\n"
+    }
+  ]
+}

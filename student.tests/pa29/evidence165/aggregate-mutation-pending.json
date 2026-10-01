@@ -1,0 +1,36 @@
+{
+  "source": "student.tests/pa29/pending165/aggregate-mutation.cpp",
+  "source_sha256": "c1bb9addad126fc3db11eef5ab94fd2142009fe2ea1c81e93665c2a133841bac",
+  "required": "Valid C++14 source; acceptance remains unfinished, not an expected-rejection contract",
+  "owner": "constexpr aggregate mutation overlay",
+  "entry_and_final": [
+    {
+      "args": [
+        "/tmp/pa29-165/compiler-A",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "student.tests/pa29/pending165/aggregate-mutation.cpp",
+        "-o",
+        "/tmp/pa29-165/pending-aggregate.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/pending165/aggregate-mutation.cpp:8\n",
+      "binary_sha256": "354d6a193ee1646dfc5ac46e13c7f58085417eb160d01fb2f54210996d2f9024"
+    },
+    {
+      "args": [
+        "/tmp/pa29-165/compiler-C",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "student.tests/pa29/pending165/aggregate-mutation.cpp",
+        "-o",
+        "/tmp/pa29-165/pending-aggregate.o"
+      ],
+      "status": 1,
+      "stderr": "ERROR: static assertion is not a true integral constant in student.tests/pa29/pending165/aggregate-mutation.cpp:8\n",
+      "binary_sha256": "e3945b403aef4e91d8ff553d0eb2ffb6631256a99dd83e2ab4852943b6757b7d"
+    }
+  ]
+}

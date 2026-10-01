@@ -1,0 +1,40 @@
+{
+  "entry": "61e023f39a4c1bafdccc484257ab51df98f87088",
+  "code_tip": "db0d088961f5f637892c833d0fb8079a8a583892",
+  "binaries": {
+    "A": {
+      "path": "/tmp/pa29-165/compiler-A",
+      "sha256": "354d6a193ee1646dfc5ac46e13c7f58085417eb160d01fb2f54210996d2f9024",
+      "bytes": 4057576
+    },
+    "B": {
+      "path": "/tmp/pa29-165/compiler-C",
+      "sha256": "e3945b403aef4e91d8ff553d0eb2ffb6631256a99dd83e2ab4852943b6757b7d",
+      "bytes": 4074632
+    }
+  },
+  "scripts": {
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "student.tests/pa29/performance165.py": "00d1471bed95297a81b937445037303f83d6201103e920d8dbdecb333f9b296a"
+  },
+  "cpu_affinity": [
+    0
+  ],
+  "platform": "Linux-7.0.0-1005-gcp-x86_64-with-glibc2.43",
+  "common_flags": [
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "affected_flags": [
+    "-std=c++14",
+    "-O0",
+    "-c",
+    "--stats"
+  ],
+  "level": "PA29/O0",
+  "scope": "Correct common A/A+ABBA; affected necessary semantic cost/scaling only",
+  "optional_work_budget": 0,
+  "optional_growth_budget": 0,
+  "preliminary": "preliminary-manifest.json preserves the earlier implementation and original affected input hashes; final storage scaling also demands nested constant activations"
+}
