@@ -100,8 +100,8 @@ void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Express
     for (TypeId a : left) for (TypeId b : right) {
         if (op == OP_QMARK) {
             TypeId common = arithmetic(a) && arithmetic(b) ? arithmetic_type(a,b) :
-                pointer(a) && pointer(b) ? composite_pointer(a,b) :
-                pointer(a) && null(1) ? a : pointer(b) && null(0) ? b : 0;
+                address_value(a) && address_value(b) ? composite_pointer(a,b) :
+                address_value(a) && null(1) ? a : address_value(b) && null(0) ? b : 0;
             if (common) add(common,common,common);
             continue;
         }
@@ -119,9 +119,9 @@ void Analyzer::builtin_operators_values(ETokenType op, const std::vector<Express
             }
         }
         if (comparison) {
-            TypeId common = pointer(a) && pointer(b) ? composite_pointer(a,b) : 0;
-            if (equality && pointer(a) && null(1)) common = a;
-            if (equality && pointer(b) && null(0)) common = b;
+            TypeId common = address_value(a) && address_value(b) ? composite_pointer(a,b) : 0;
+            if (equality && address_value(a) && null(1)) common = a;
+            if (equality && address_value(b) && null(0)) common = b;
             if (common && (equality || types[types[common].child].kind != TypeKind::Function)) add(common,common,types.fundamental(FT_BOOL));
         }
         bool shift = op == OP_LSHIFT || op == OP_RSHIFT;

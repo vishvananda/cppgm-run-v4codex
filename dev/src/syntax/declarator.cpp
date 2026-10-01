@@ -77,7 +77,7 @@ NodeId Parser::specifiers(bool type_only, NodeId result)
 bool Parser::nested_declarator_ahead()
 {
     if (!in.is("(")) return false;
-    return in.is("*", 1) || in.is("&", 1) || in.is("&&", 1) || in.is("[", 1) || in.is("(", 1) ||
+    return in.is("*", 1) || in.is("^", 1) || in.is("&", 1) || in.is("&&", 1) || in.is("[", 1) || in.is("(", 1) ||
            (identifier(1) && (!type_start(1) || (in.is("::",probe_name(1).end) && in.is("*",probe_name(1).end+1))));
 }
 
@@ -97,7 +97,7 @@ bool Parser::parameter_clause_ahead(std::size_t ahead)
         // direct initialization, as in object(T(5)). No grammar is replayed.
         if (in.is("{",i)) return false;
         if (in.is("(",i) && !in.is(")",i+1) && !in.is("...",i+1) &&
-            !in.is("*",i+1) && !in.is("&",i+1) && !in.is("&&",i+1) &&
+            !in.is("*",i+1) && !in.is("^",i+1) && !in.is("&",i+1) && !in.is("&&",i+1) &&
             !in.is("(",i+1) && !in.is("[",i+1) && !in.is("::",i+1) &&
             !identifier(i+1) && !type_start(i+1)) return false;
         // Inspect each parameter prefix; nested suffixes and default arguments
@@ -116,7 +116,7 @@ NodeId Parser::declarator(bool abstract, bool new_type, DeclaratorFacts* facts, 
     DeclaratorFacts parsed;
     std::uint32_t alignment = 0;
     bool has_pointer = false;
-    while (in.is("*") || in.is("&") || in.is("&&") ||
+    while (in.is("*") || in.is("^") || in.is("&") || in.is("&&") ||
            (identifier() && in.is("::", probe_name().end) && in.is("*", probe_name().end + 1))) {
         NodeId pointer;
         if (identifier()) {
@@ -197,7 +197,7 @@ NodeId Parser::type_id(bool new_type)
 {
     NodeId result = make(Kind::TypeId);
     ast.append(result, specifiers(true));
-    if (in.is("*") || in.is("&") || in.is("&&") || in.is("[") ||
+    if (in.is("*") || in.is("^") || in.is("&") || in.is("&&") || in.is("[") ||
         (identifier() && in.is("::",probe_name().end) && in.is("*",probe_name().end+1)) ||
         (!new_type && (nested_declarator_ahead() || parameter_clause_ahead())))
         ast.append(result, declarator(true, new_type));

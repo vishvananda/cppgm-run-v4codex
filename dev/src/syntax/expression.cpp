@@ -224,7 +224,7 @@ NodeId Parser::unary()
     // A brace after the type starts a functional construction inside the
     // parentheses; it cannot continue the type-id of a C-style cast.
     if (cast_type_end && !in.is("{",cast_type_end) && (!in.is("(", cast_type_end) ||
-        in.is("*",cast_type_end+1) || in.is("&",cast_type_end+1) || in.is("&&",cast_type_end+1))) {
+        in.is("*",cast_type_end+1) || in.is("^",cast_type_end+1) || in.is("&",cast_type_end+1) || in.is("&&",cast_type_end+1))) {
         in.take();
         NodeId node = make(Kind::Cast);
         ast[node].op = OP_LPAREN;

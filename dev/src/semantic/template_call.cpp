@@ -256,6 +256,11 @@ TypeId Analyzer::substitute_type(TypeId pattern, const Index& bindings, Index& c
         result = form_member_pointer(cls,member);
         if (result) result = types.qualify(result,p.cv);
         else complete_failure = cls && member;
+    } else if (p.kind == TypeKind::BlockPointer) {
+        auto child = substitute_type(p.child,bindings,cache,owner);
+        result = form_block_pointer(child);
+        if (result) result = types.qualify(result,p.cv);
+        complete_failure = child != 0;
     } else if (p.child) {
         TypeId child = substitute_type(p.child, bindings, cache,owner);
         if (!child) return 0;

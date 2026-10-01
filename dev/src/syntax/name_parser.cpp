@@ -172,7 +172,7 @@ NodeId Parser::template_arguments()
                 // Functional casts and braced construction are expressions.
                 // A decltype-qualified name is retained as a name until the
                 // semantic owner can distinguish its type/value member.
-                if (!(end && in.is(">>",end-1)) && (in.is("{",end) || (in.is("(",end) && !in.is("*",end+1) && !in.is("&",end+1) &&
+                if (!(end && in.is(">>",end-1)) && (in.is("{",end) || (in.is("(",end) && !in.is("*",end+1) && !in.is("^",end+1) && !in.is("&",end+1) &&
                     !in.is("&&",end+1) && !type_start(end+1) && !in.is(")",end+1) && !in.is("...",end+1)))) type = false;
                 if (in.is("(",end) && type_start(end+1) && in.is("{",probe_type(end+1))) type = false;
                 if (in.is("decltype") && in.is("::",in.matching(1)+1)) type = false;

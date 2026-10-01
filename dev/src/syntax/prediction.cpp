@@ -158,7 +158,7 @@ bool Parser::type_operand(bool function_type)
     std::size_t end = probe_type(0);
     if (in.is("{",end)) return false;
     // Function-style construction is an expression in unary/trait contexts.
-    if (in.is("(", end) && !in.is("*", end + 1) && !in.is("&", end + 1)) {
+    if (in.is("(", end) && !in.is("*", end + 1) && !in.is("^", end + 1) && !in.is("&", end + 1)) {
         if (!function_type || !parameter_clause_ahead(end)) return false;
         auto after = in.matching(end)+1;
         while (in.is("const",after) || in.is("volatile",after) || in.is("&",after) || in.is("&&",after)) ++after;

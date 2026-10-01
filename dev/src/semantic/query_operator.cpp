@@ -267,10 +267,10 @@ Expression Analyzer::conditional_value(Expression b, Expression c, std::vector<C
     } else {
         auto left = decay(b.type), right = decay(c.type);
         if (left == right) result.type = left;
-        else if ((pointer(left) && pointer(right)) || (types[left].kind == TypeKind::MemberPointer && types[right].kind == TypeKind::MemberPointer))
+        else if ((address_value(left) && address_value(right)) || (types[left].kind == TypeKind::MemberPointer && types[right].kind == TypeKind::MemberPointer))
             result.type = composite_pointer(left,right);
-        else if ((pointer(left) || types[left].kind == TypeKind::MemberPointer) && c.null_pointer_constant) result.type = left;
-        else if ((pointer(right) || types[right].kind == TypeKind::MemberPointer) && b.null_pointer_constant) result.type = right;
+        else if ((address_value(left) || types[left].kind == TypeKind::MemberPointer) && c.null_pointer_constant) result.type = left;
+        else if ((address_value(right) || types[right].kind == TypeKind::MemberPointer) && b.null_pointer_constant) result.type = right;
         else result.type = arithmetic_type(left,right);
     }
     if (!result.type) throw std::runtime_error("incompatible conditional operands");

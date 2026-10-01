@@ -106,6 +106,8 @@ TypeId Analyzer::composite_pointer(TypeId a, TypeId b)
             derived_from(entities[be].type,entities[ae].type) ? be : 0;
         return owner ? types.member_pointer(owner,child) : 0;
     }
+    if (block_pointer(a) || block_pointer(b))
+        return block_pointer(a) && block_pointer(b) && types[a].child == types[b].child ? types.unqualified(a) : 0;
     if (!pointer(a) || !pointer(b)) return 0;
     TypeId ac = types[a].child, bc = types[b].child, result = 0;
     unsigned cv = object_cv(types,ac) | object_cv(types,bc);
@@ -244,7 +246,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
         return c;
     }
     if (to == from) { c.rank = 0; return c; }
-    if ((pointer(to) || types[to].kind == TypeKind::MemberPointer || fundamental(to, FT_NULLPTR_T)) && (fundamental(x.type,FT_NULLPTR_T) || x.null_pointer_constant || (n && null_constant(n)))) { c.rank = 2; return c; }
+    if ((address_value(to) || types[to].kind == TypeKind::MemberPointer || fundamental(to, FT_NULLPTR_T)) && (fundamental(x.type,FT_NULLPTR_T) || x.null_pointer_constant || (n && null_constant(n)))) { c.rank = 2; return c; }
     if (types[from].kind == TypeKind::MemberPointer && types[to].kind == TypeKind::MemberPointer) {
         unsigned added = 0;
         if (!qualification(types[from].child,types[to].child,added)) return c;
@@ -258,7 +260,10 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
         c.adjustment = base_steps(derived,types[from].entity);
         c.rank = 2; c.derived = true; c.qualification = added; return c;
     }
-    if (fundamental(to, FT_BOOL) && (pointer(from) || types[from].kind == TypeKind::MemberPointer)) { c.rank = 3; return c; }
+    if (fundamental(to, FT_BOOL) && (address_value(from) || types[from].kind == TypeKind::MemberPointer)) { c.rank = 3; return c; }
+    if (block_pointer(from) && pointer(to) && fundamental(types[to].child,FT_VOID) && !(types[types[to].child].cv & 4)) {
+        c.rank = 2; return c;
+    }
     if (pointer(from) && pointer(to)) {
         unsigned added = 0;
         if (qualification(types[from].child, types[to].child, added)) {

@@ -1,10 +1,23 @@
-# PA29 compact plan — implementation168 handoff
+# PA29 compact plan — implementation169 in progress
 
-Target: **PA29 full-stage**. Phase: **implementation handoff; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `f07f78236eb475648834ed78afbca6c864f64408`.
 Previous review: `cce8634c3c835cf6d5e8f4fa5fea0db213959718`.
 Entry HEAD: `0c6df4c1e290c8188e95f07732dad0e7ec271b17`.
+Implementation169 entry HEAD: `217dc69ff3f741114d2614688b1e4e2eec335980`.
+Entry evidence: 357/403, 46 failures; clean checkout and no live build/test.
+Previous goal turn: committed progress (implementation168), revalidated at entry.
+Current group: Clang block-pointer declarations and indirect invocation (four
+required failures). Owner/data flow: retained pointer declarator → canonical
+distinct block-pointer type → shared conversions/call facts and template queries
+→ typed invocation signature with hidden block argument → LowIR/MIR/ELF. ABI
+naming consumes the same type identity. Type and signature interning are O(1)
+average; parsing/substitution and call lowering track actual nodes/arguments.
+Validation will cover required fixtures, negative types/conversions, templates,
+host ABI invocation, serialized LowIR, and A/A+ABBA latency/RSS/runtime/text.
+Optional optimization work/growth budgets remain zero. Review markers above
+are unchanged; neither this work nor the previous handoff is independently audited.
 Implementation code tip: `34a8dd1a` (implementation `344b9c70`, inspection and
 benchmark harness `5201692d`, cast-query ownership `34a8dd1a`).
 The preceding handoff was verified committed progress. Entry process inspection

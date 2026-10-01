@@ -65,7 +65,7 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     if (reference_target && x.category == ValueCategory::Prvalue && !class_value(x.type) &&
         (incoming.kind == Conversion::Kind::Standard || incoming.kind == Conversion::Kind::Explicit))
         return constant_static_value(convert(evaluate(n,facts[n].scope),types[target].child,true));
-    if ((reference_target || pointer(target)) && !(x.form == ExpressionForm::Cast && ast[n].op == KW_REINTERPET_CAST)) {
+    if ((reference_target || address_value(target)) && !(x.form == ExpressionForm::Cast && ast[n].op == KW_REINTERPET_CAST)) {
         Conversion c; c.target = target; c.reference = reference_target;
         if (incoming.target == target) c = incoming;
         return constant_static_value(constant_node_conversion(n,c,facts[n].scope));

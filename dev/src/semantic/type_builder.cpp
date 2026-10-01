@@ -3,6 +3,13 @@
 
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+TypeId Analyzer::form_block_pointer(TypeId child)
+{
+    if (!child) return 0;
+    auto type = types[child];
+    if (type.kind != TypeKind::Function || type.cv || type.ref != RefQualifier::None) return 0;
+    return types.compound(TypeKind::BlockPointer,child);
+}
 TypeId Analyzer::parameter_body_type(TypeId source)
 {
     return types[source].kind == TypeKind::Array || types[source].kind == TypeKind::DependentArray ? types.compound(TypeKind::Pointer,types.signature(types[source].child)) :
@@ -210,7 +217,13 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                 }
                 break;
             }
-            base = types.compound(ast[c].op == OP_AMP ? TypeKind::LRef :
+            if (ast[c].op == OP_XOR) {
+                base = form_block_pointer(base);
+                if (!base) {
+                    if (template_type_probe) return 0;
+                    throw std::runtime_error("block pointer requires an unqualified function type");
+                }
+            } else base = types.compound(ast[c].op == OP_AMP ? TypeKind::LRef :
                 ast[c].op == OP_LAND ? TypeKind::RRef : TypeKind::Pointer, base);
             break;
         case Kind::CvQualifier:
@@ -314,25 +327,35 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
     { auto& published = facts.edit(n); published.type = base; published.scope = s; }
     return base;
 }
+namespace {
+IdentifierId destructor_identifier(IdentifierTable& ids, IdentifierId class_name)
+{
+    auto text = ids.spelling(class_name);
+    auto label = "~" + std::string(text.data,text.size);
+    return ids.intern(TextView(label.data(),label.size()));
+}
+}
+ScopeId Analyzer::object_declaration_owner(NodeId name, ScopeId s)
+{
+    ScopeId owner = name_owner(name, s, true);
+    if (definitions && owner == active_template_scope && scopes[scopes[owner].parent].kind == ScopeKind::Class)
+        owner = scopes[owner].parent;
+    ScopeId enclosing = definitions && scopes[s].kind == ScopeKind::Template ? scopes[s].parent : s;
+    bool retained_member = member_definition_environment && encloses(member_definition_environment,s) &&
+        scopes[member_definition_environment].parent == owner;
+    if (!encloses(enclosing, owner) && !retained_member) throw std::runtime_error("qualified definition outside enclosing scope");
+    return owner;
+}
 EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs, ScopeId s, NodeId source)
 {
     bool external = spec_has(specs,KW_EXTERN) || linkage_extern_declarations.get(source);
     NodeId name = decl_name(d);
     IdentifierId id = terminal(name);
     bool destructor = ast[ast[name].last].op == OP_COMPL;
-    ScopeId owner = name_owner(name, s, true);
-    if (definitions && owner == active_template_scope && scopes[scopes[owner].parent].kind == ScopeKind::Class)
-        owner = scopes[owner].parent;
+    ScopeId owner = object_declaration_owner(name,s);
     ScopeId definition_scope = member_definition_environment == s ? s : owner;
-    ScopeId enclosing = definitions && scopes[s].kind == ScopeKind::Template ? scopes[s].parent : s;
-    bool retained_member = member_definition_environment && encloses(member_definition_environment,s) &&
-        scopes[member_definition_environment].parent == owner;
-    if (!encloses(enclosing, owner) && !retained_member) throw std::runtime_error("qualified definition outside enclosing scope");
-    if (destructor && scopes[owner].kind == ScopeKind::Class) {
-        TextView text = ids.spelling(scopes[owner].name);
-        std::string label = "~" + std::string(text.data, text.size);
-        id = ids.intern(TextView(label.data(), label.size()));
-    }
+    if (destructor && scopes[owner].kind == ScopeKind::Class)
+        id = destructor_identifier(ids,scopes[owner].name);
     bool alias = spec_has(specs, KW_TYPEDEF);
     bool function = types[t].kind == TypeKind::Function;
     if (calls && spec_has(specs,KW_CONSTEXPR) && (alias || (!function && owner == s && scopes[owner].kind == ScopeKind::Class && !spec_has(specs,KW_STATIC))))

@@ -115,7 +115,12 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
             if (ast[c].kind != Kind::Parenthesized) break;
         }
     } else {
-        ft = decay(fn.type); if (pointer(ft)) ft = types[ft].child;
+        ft = decay(fn.type);
+        if (block_pointer(ft)) {
+            record_object(result,0,0,0);
+            object_uses[result.object_use].block_signature = ft;
+        }
+        if (address_value(ft)) ft = types[ft].child;
         auto f = types[ft];
         if (f.kind != TypeKind::Function || args.size() < f.count || (!f.variadic && args.size() != f.count))
             throw std::runtime_error("invalid fixed indirect call");

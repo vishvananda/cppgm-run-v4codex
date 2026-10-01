@@ -122,7 +122,8 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
             if (!cstyle && !base_accessible(types[b].entity,types[a].entity,s)) return invalid();
         }
     }
-    bool integer_pointer = reinterpret && ((pointer(from) && integral(to) && width(to) >= 64) || (integral(from) && pointer(to)));
+    if (reinterpret && address_value(from) && address_value(to) && (block_pointer(from) || block_pointer(to))) pointer_cast = true;
+    bool integer_pointer = reinterpret && ((address_value(from) && integral(to) && width(to) >= 64) || (integral(from) && address_value(to)));
     if ((enum_cast && op != KW_REINTERPET_CAST) || pointer_cast || integer_pointer ||
         (op == KW_REINTERPET_CAST && integral(from) && from == types.unqualified(to))) {
         c.constant_forbidden |= integer_pointer || (pointer_cast && !c.derived);

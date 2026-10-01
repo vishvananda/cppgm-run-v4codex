@@ -104,11 +104,12 @@ TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression&
         TypeId common = 0;
         if (a == b && (scoped_enum(a) || (equality && fundamental(a, FT_NULLPTR_T)))) common = a;
         if (pointer(a) && pointer(b)) common = composite_pointer(a, b);
+        if (equality && block_pointer(a) && block_pointer(b)) common = composite_pointer(a,b);
         if (equality && types[a].kind == TypeKind::MemberPointer && types[b].kind == TypeKind::MemberPointer) common = composite_pointer(a,b);
         if (equality && types[a].kind == TypeKind::MemberPointer && null_constant(bn)) common = a;
         if (equality && types[b].kind == TypeKind::MemberPointer && null_constant(an)) common = b;
-        if (equality && pointer(a) && null_constant(bn)) common = a;
-        if (equality && pointer(b) && null_constant(an)) common = b;
+        if (equality && address_value(a) && null_constant(bn)) common = a;
+        if (equality && address_value(b) && null_constant(an)) common = b;
         if (common) {
             if (!equality && pointer(common) && types[types[common].child].kind == TypeKind::Function)
                 throw std::runtime_error("ordered function pointer comparison");

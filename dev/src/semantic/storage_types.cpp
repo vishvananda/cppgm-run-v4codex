@@ -19,7 +19,7 @@ void Analyzer::storage_operation(Expression& value, ETokenType op, const Express
     TypeId result = 0;
     if (!b.type) {
         if (op == OP_LPAREN) {
-            if (types[raw].kind == TypeKind::Pointer) raw = types[raw].child;
+            if (address_value(raw)) raw = types[raw].child;
             if (types[raw].kind == TypeKind::Function) result = value_type(types[raw].child);
         } else if (op == OP_AMP && types[value.type].kind == TypeKind::Pointer)
             result = types.compound(TypeKind::Pointer,raw);

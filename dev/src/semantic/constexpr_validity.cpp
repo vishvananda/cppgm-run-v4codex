@@ -23,7 +23,7 @@ bool Analyzer::literal_type(TypeId t)
     if (!t) return false;
     if (dependent_type(t)) return true; // Source declaration obligation, checked before substitution.
     if (type.kind == TypeKind::Array || vector_kind(type.kind)) return literal_type(type.child);
-    if (type.kind == TypeKind::Pointer || type.kind == TypeKind::MemberPointer ||
+    if (type.kind == TypeKind::Pointer || type.kind == TypeKind::BlockPointer || type.kind == TypeKind::MemberPointer ||
         type.kind == TypeKind::LRef || type.kind == TypeKind::RRef) return true;
     if (type.kind == TypeKind::Fundamental) return type.fundamental != FT_VOID;
     if (type.kind != TypeKind::Named) return false;

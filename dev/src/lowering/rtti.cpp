@@ -100,7 +100,7 @@ SymbolId Procedural::rtti_type(TypeId id)
         }
     } else if (t.kind == TypeKind::Array) role = 5;
     else if (t.kind == TypeKind::Function) role = 6;
-    else if (t.kind != TypeKind::Fundamental) throw std::runtime_error("unsupported RTTI type category");
+    else if (t.kind != TypeKind::Fundamental && t.kind != TypeKind::BlockPointer) throw std::runtime_error("unsupported RTTI type category");
     auto name = abi_type_global(id,abi_mangle::TargetKind::TypeinfoName);
     std::vector<DataItem> data;
     if (p.symbols[name.index-1].kind == Symbol::Unknown) {

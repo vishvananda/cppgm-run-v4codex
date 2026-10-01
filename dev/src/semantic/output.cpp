@@ -88,6 +88,7 @@ void Analyzer::write_type(std::ostream& out, TypeId id, NodeId display_name, ETo
     }
     case TypeKind::MemberPointer:
         out << "member-pointer of "; write_type(out, t.member_owner()); out << " to "; write_type(out, t.child); break;
+    case TypeKind::BlockPointer: out << "block pointer to "; write_type(out,t.child); break;
     case TypeKind::Pointer: out << "pointer to "; write_type(out, t.child); break;
     case TypeKind::LRef: out << "lvalue-reference to "; write_type(out, t.child); break;
     case TypeKind::RRef: out << "rvalue-reference to "; write_type(out, t.child); break;

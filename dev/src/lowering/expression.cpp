@@ -487,10 +487,18 @@ Value Procedural::call(NodeId n, Value destination)
     } else if (selected) call_work[begin] = Operand::symbol(symbol(selected));
     else {
         auto c = sem.conversion_fact(object_use.callee_conversion);
-        Value fn = object_use.callee_conversion ? converted(callee,c) : load(expression(callee)); call_work[begin] = fn.operand;
+        Value fn = object_use.callee_conversion ? converted(callee,c) : load(expression(callee));
+        if (object_use.block_signature) {
+            // The source callable is evaluated once. ABI.2010.3.16 places the
+            // invocation entry after isa, flags and reserved on Linux x86-64.
+            call_work.insert(call_work.begin()+begin+1+indirect_result,fn.operand);
+            auto entry = emit(Opcode::Index,IRType::I8,{fn.operand,Operand::integer(16)});
+            call_work[begin] = emit(Opcode::Load,IRType::Ptr,{entry.operand}).operand;
+            i.signature = signature(object_use.block_signature);
+        } else call_work[begin] = fn.operand;
         TypeId ft = object_use.callee_conversion ? c.target : sem.expression_fact(callee).type;
         if (sem.types[ft].kind == TypeKind::Pointer) ft = sem.types[ft].child;
-        i.signature = signature(ft);
+        if (!object_use.block_signature) i.signature = signature(ft);
     }
     Value v = guarded_call(i, call_work.data()+begin, call_work.size()-begin); call_work.resize(begin); v.type = fact.type;
     if (result_slot) {

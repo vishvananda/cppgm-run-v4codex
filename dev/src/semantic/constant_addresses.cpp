@@ -291,7 +291,7 @@ Constant Analyzer::constant_pointer_binary(ETokenType op, Constant a, Constant b
         // address has a distinct path and cannot be read as a subobject.
         return Constant(a.type,constant_subobject(a.bits,types[a.type].child,~std::uint64_t(0)));
     }
-    bool ap = pointer(a.type) || fundamental(a.type,FT_NULLPTR_T), bp = pointer(b.type) || fundamental(b.type,FT_NULLPTR_T);
+    bool ap = address_value(a.type) || fundamental(a.type,FT_NULLPTR_T), bp = address_value(b.type) || fundamental(b.type,FT_NULLPTR_T);
     if (!ap || !bp) return Constant();
     if (op == OP_EQ || op == OP_NE) {
         bool same = a.bits == b.bits;

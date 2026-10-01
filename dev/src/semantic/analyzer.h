@@ -1369,6 +1369,9 @@ private:
     bool arithmetic(TypeId t) const;
     bool fundamental(TypeId t, EFundamentalType f) const;
     bool pointer(TypeId t) const;
+    TypeId form_block_pointer(TypeId child);
+    bool block_pointer(TypeId t) const { return types[t].kind == TypeKind::BlockPointer; }
+    bool address_value(TypeId t) const { return pointer(t) || block_pointer(t); }
     bool null_constant(NodeId n);
     bool qualification(TypeId from, TypeId to, unsigned& added, bool intermediate_const = true);
     bool similar_type(TypeId a, TypeId b);
@@ -1418,6 +1421,7 @@ private:
     TypeId type_id(NodeId n, ScopeId s);
     TypeId declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array = 0, bool name_resolved = false, NodeId specs = 0);
     TypeId parameter(NodeId n, ScopeId s);
+    ScopeId object_declaration_owner(NodeId name, ScopeId scope);
     EntityId declare_object(NodeId d, NodeId init, TypeId t, NodeId specs, ScopeId s, NodeId source);
     void declaration_attributes(EntityId e, NodeId specs, NodeId source, NodeId declarator = 0);
     Constant evaluate(NodeId n, ScopeId s);

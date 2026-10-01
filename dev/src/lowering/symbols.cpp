@@ -69,6 +69,8 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     }
     case TypeKind::AliasApplication: result = abi_type(t.child); break;
     case TypeKind::PackExpansion: result = abi.make(abi_mangle::Kind::Pack,abi_type(t.bound)); break;
+    case TypeKind::BlockPointer:
+        result = abi.make(abi_mangle::Kind::Vendor,abi_type(t.child),abi.string("block_pointer")); break;
     case TypeKind::Pointer: result = abi.make(abi_mangle::Kind::Pointer, abi_type(t.child)); break;
     case TypeKind::Decltype: {
         auto query = sem.type_query(t.entity);
@@ -287,13 +289,14 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
     }
     auto t = sem.types[id];
     EntityId member_owner = t.kind == TypeKind::MemberPointer ? t.entity : 0;
-    if (member_owner) t = sem.types[t.child];
+    bool block_receiver = t.kind == TypeKind::BlockPointer;
+    if (member_owner || block_receiver) t = sem.types[t.child];
     auto return_type = sem.types[t.child];
     bool incomplete_result = return_type.kind == TypeKind::Named && sem.entities[return_type.entity].class_info && !sem.entities[return_type.entity].complete;
     bool incomplete_signature = incomplete_result;
     bool indirect_result = sem.indirect_value(t.child);
     Signature sig; sig.result = incomplete_result || indirect_result ? IRType(IRType::Void) : type(t.child); sig.parameters.begin = p.parameters.size();
-    sig.parameters.count = t.count + indirect_result + bool(member_owner);
+    sig.parameters.count = t.count + indirect_result + bool(member_owner || block_receiver);
     if (t.variadic) sig.boundary.arity = CAM_VARIADIC;
     if (indirect_result) {
         Parameter param; param.type = IRType::Ptr; param.passing = PPM_INDIRECT_RESULT; param.object_bytes = sem.object_size(t.child);
@@ -301,8 +304,9 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
         if (!owner) v.name = p.intern("%ret");
         p.values.push_back(v); param.value = ValueId(p.values.size()); p.parameters.push_back(param);
     }
-    if (member_owner) {
-        Parameter param; param.type = IRType::Ptr; param.object_bytes = sem.object_size(sem.entities[member_owner].type);
+    if (member_owner || block_receiver) {
+        Parameter param; param.type = IRType::Ptr;
+        if (member_owner) param.object_bytes = sem.object_size(sem.entities[member_owner].type);
         lowir_model::Value v; v.type = param.type; v.owner = owner; v.defined = true; v.name = p.intern("%arg0");
         p.values.push_back(v); param.value = ValueId(p.values.size()); p.parameters.push_back(param);
     }
@@ -315,7 +319,7 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
         // every actual call/definition requires completeness in semantics.
         Parameter param; param.type = incomplete || sem.indirect_parameter(pt) ? IRType(IRType::Ptr) : type(pt);
         lowir_model::Value v; v.type = param.type; v.owner = owner; v.defined = true;
-        if (!owner) v.name = p.intern("%arg" + std::to_string(j + bool(member_owner)));
+        if (!owner) v.name = p.intern("%arg" + std::to_string(j + bool(member_owner || block_receiver)));
         p.values.push_back(v); param.value = ValueId(p.values.size());
         if (incomplete) param.passing = PPM_BY_ADDRESS;
         else if (sem.indirect_parameter(pt)) { param.passing = PPM_BY_ADDRESS; param.object_bytes = sem.object_size(pt); }
@@ -336,7 +340,7 @@ SignatureId Procedural::signature(TypeId id, FunctionId owner)
         auto cls = sem.types[pt].entity;
         if (!sem.entities[cls].complete) continue;
         for (unsigned k = 0; k < sem.virtual_base_count(cls); ++k) {
-            linkage.value_base_arguments.push_back({j+unsigned(indirect_result)+unsigned(bool(member_owner)),
+            linkage.value_base_arguments.push_back({j+unsigned(indirect_result)+unsigned(bool(member_owner || block_receiver)),
                 sem.virtual_base_offset(cls,sem.virtual_base_type(cls,k))});
             Parameter param; param.type = IRType::Ptr;
             lowir_model::Value value; value.type = IRType::Ptr; value.owner = owner; value.defined = true;

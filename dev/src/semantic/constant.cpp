@@ -65,15 +65,15 @@ Constant Analyzer::convert(Constant v, TypeId to, bool explicit_cast)
         }
         if (target.kind == TypeKind::MemberPointer)
             return (integral(v.type) || fundamental(v.type,FT_NULLPTR_T)) && !v.bits ? Constant(to,0) : Constant();
-        if (pointer(v.type) || fundamental(v.type,FT_NULLPTR_T)) {
+        if (address_value(v.type) || fundamental(v.type,FT_NULLPTR_T)) {
             if (fundamental(to,FT_BOOL)) return Constant(to,v.bits != 0);
-            if (target.kind == TypeKind::Pointer) {
+            if (address_value(to)) {
                 if (v.bits && class_value(target.child)) v.bits = constant_base_address(v.bits,target.child);
                 return Constant(to,v.bits);
             }
             return Constant();
         }
-        if (target.kind == TypeKind::Pointer) return integral(v.type) && !v.bits ? Constant(to,0) : Constant();
+        if (address_value(to)) return integral(v.type) && !v.bits ? Constant(to,0) : Constant();
     }
     if (floating_type(v.type) || floating_type(to)) return floating_conversion(v,to);
     if (!integral(v.type) || !integral(to)) return Constant();
@@ -276,7 +276,7 @@ Constant Analyzer::evaluate_value(NodeId n, ScopeId s)
         return convert(evaluate(ast[first].next, s), type_id(first, s), true);
     case Kind::Call: {
         if (calls && expressions[n].form != ExpressionForm::Cast) return constant_indirect(constant_call_result(n,s));
-        if (!calls || expressions[n].form != ExpressionForm::Cast || (!integral(expressions[n].type) && !floating_type(expressions[n].type) && types[expressions[n].type].kind != TypeKind::MemberPointer)) return Constant();
+        if (!calls || expressions[n].form != ExpressionForm::Cast || (!integral(expressions[n].type) && !floating_type(expressions[n].type) && !address_value(expressions[n].type) && types[expressions[n].type].kind != TypeKind::MemberPointer)) return Constant();
         auto argument = ast[ast[first].next].first;
         if (argument && expressions[n].count) return constant_node_conversion(argument,conversions[expressions[n].conversions],s);
         return argument ? convert(evaluate(argument,s),expressions[n].type,true) : convert(Constant(types.fundamental(FT_INT),0),expressions[n].type,true);
@@ -349,7 +349,7 @@ Constant Analyzer::binary(ETokenType op, Constant a, Constant b, bool converted)
         return Constant(types.fundamental(FT_BOOL),op == OP_EQ ? same : !same);
     }
     if (floating_type(a.type) || floating_type(b.type)) return floating_binary(op,a,b,converted);
-    if (pointer(a.type) || pointer(b.type) || fundamental(a.type,FT_NULLPTR_T) || fundamental(b.type,FT_NULLPTR_T)) return constant_pointer_binary(op,a,b);
+    if (address_value(a.type) || address_value(b.type) || fundamental(a.type,FT_NULLPTR_T) || fundamental(b.type,FT_NULLPTR_T)) return constant_pointer_binary(op,a,b);
     if (!integral(a.type) || !integral(b.type)) return Constant();
     bool compare = op == OP_EQ || op == OP_NE || op == OP_LT || op == OP_GT || op == OP_LE || op == OP_GE;
     if (scoped_enum(a.type) || scoped_enum(b.type)) {

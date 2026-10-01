@@ -47,7 +47,7 @@ struct UnavailableSemanticFact : std::exception {
     const char* what() const noexcept override { return "semantic prerequisite unavailable"; }
 };
 
-enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray, ArgumentPack, PackExpansion, AliasApplication, Vector, DependentVector, ExtVector, DependentExtVector };
+enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray, ArgumentPack, PackExpansion, AliasApplication, Vector, DependentVector, ExtVector, DependentExtVector, BlockPointer };
 inline bool vector_kind(TypeKind k) { return k == TypeKind::Vector || k == TypeKind::ExtVector; }
 inline bool dependent_vector_kind(TypeKind k) { return k == TypeKind::DependentVector || k == TypeKind::DependentExtVector; }
 // The lookup obligation is part of a dependent name's canonical identity.
@@ -455,6 +455,7 @@ struct SubobjectIdentity { EntityId anchor = 0; std::uint32_t path = 0; };
 struct SubobjectPath { std::uint32_t edge = 0, next = 0; };
 struct ObjectUse {
     unsigned capture = 0; // Checked closure field containing an object address or source this.
+    TypeId block_signature = 0; // Canonical block pointer; invocation owns one hidden receiver.
     EntityId callable_entry = 0; // Receiver-free closure ABI; selected declaration stays on the call.
     ScopeId naming_scope = 0; EntityId temporary = 0; NodeId node = 0; TypeId type = 0;
     NodeId member_pointer = 0, callee = 0; // Actual callable of an intrinsic invocation.

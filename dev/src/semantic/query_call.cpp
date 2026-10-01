@@ -222,7 +222,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         conversions.insert(conversions.end(),chosen.begin(),chosen.end());
     } else {
         function_type = fn.type;
-        if (pointer(function_type)) function_type = types[function_type].child;
+        if (address_value(function_type)) function_type = types[function_type].child;
         auto f = types[function_type];
         if (f.kind != TypeKind::Function || args.size() < f.count || (!f.variadic && args.size() != f.count))
             return TypeQueryFact::failed(TypeQueryFact::Failure::NoViable);
@@ -233,6 +233,7 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
             auto decay_conversion = standard_conversion(fn,decay(fn.type));
             if (!decay_conversion.valid()) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
             record_object(r.expression,0,0,0);
+            object_uses[r.expression.object_use].block_signature = block_pointer(fn.type) ? types.unqualified(fn.type) : 0;
             object_uses[r.expression.object_use].callee_conversion = conversions.size();
             conversions.push_back(decay_conversion);
         }

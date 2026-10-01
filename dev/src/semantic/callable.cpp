@@ -80,7 +80,11 @@ Expression Analyzer::callable_expression(NodeId n, ScopeId s, NodeId callee,
         } else select_function(callee, selected, !result.object_use || !object_uses[result.object_use].virtual_slot);
     } else {
         ft = fn.type;
-        if (pointer(ft)) ft = types[ft].child;
+        if (block_pointer(ft)) {
+            record_object(result,0,0,0);
+            object_uses[result.object_use].block_signature = types.unqualified(ft);
+        }
+        if (address_value(ft)) ft = types[ft].child;
         if (types[ft].kind != TypeKind::Function) throw std::runtime_error("called object is not a function");
         Type f = types[ft];
         if (args.size() < f.count || (!f.variadic && args.size() != f.count)) throw std::runtime_error("indirect call arity");

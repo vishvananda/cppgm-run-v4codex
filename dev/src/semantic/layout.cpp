@@ -33,7 +33,7 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment, bool probe)
     }
     if (alignment && t.alignment) return std::uint64_t(1) << (t.alignment-1);
     if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return size(t.child, alignment,probe);
-    if (t.kind == TypeKind::Pointer) return 8;
+    if (t.kind == TypeKind::Pointer || t.kind == TypeKind::BlockPointer) return 8;
     if (t.kind == TypeKind::Vector) return t.bound;
     if (t.kind == TypeKind::ExtVector) {
         auto bytes = fundamental(t.child,FT_BOOL) ? (t.bound+7)/8 : t.bound*size(t.child);
