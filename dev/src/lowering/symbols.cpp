@@ -147,16 +147,15 @@ bool Procedural::separate_base(EntityId id) const
 SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
 {
     auto e = sem.entities[id];
+    // Source-string support has its own emission identity and never grows the
+    // declaration-indexed lifecycle/frame tables after semantic completion.
+    if (sem.predefined_string(id) && !e.name) return source_string_symbol(sem.predefined_string(id));
     bool external = sem.emission_suppressed(id) ||
         (e.kind == semantic::EntityKind::Function ? !e.body && !sem.synthetic_member(id) : !e.definition);
     bool separate = separate_base(id);
     bool base_only = base_only_entry(id);
     base = base && separate;
     if (deleting) return deleting_symbol(id);
-    if (sem.predefined_string(id) && !e.name) {
-        if (symbols.size() <= id) symbols.resize(id+1);
-        return symbols[id] = source_string_symbol(sem.predefined_string(id));
-    }
     if ((base ? base_symbols[id] : symbols[id])) return base ? base_symbols[id] : symbols[id];
     if (sem.local_static(id)) {
         // A local declaration has no namespace variable ABI name. Distinct
@@ -484,8 +483,8 @@ void Procedural::run()
     emit_terminate_adapter();
     // The adapter can introduce runtime declarations. Publish the presentation
     // schedule only after every emission queue has finished.
-    order_lifecycle_entries();
     emit_source_strings();
+    order_lifecycle_entries();
 }
 void Procedural::function_body(EntityId e, bool base)
 {
