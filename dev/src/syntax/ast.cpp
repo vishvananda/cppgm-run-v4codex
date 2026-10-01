@@ -196,6 +196,7 @@ const char* kind_name(Kind kind)
         "va-arg-expression",
         "function-name",
         "atomic-type-specifier",
+        "vector-type-attribute",
         "asm-statement",
         "asm-operand",
     };

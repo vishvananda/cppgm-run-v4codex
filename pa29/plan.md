@@ -1,6 +1,6 @@
-# PA29 compact plan — checkpoint audit166
+# PA29 compact plan — implementation167
 
-Target: **PA29 full-stage**. Phase: **checkpoint audit complete; stage unfinished**.
+Target: **PA29 full-stage**. Phase: **implementation; stage unfinished**.
 Stage base commit: `2734e5c67eaa7c0cf4bbbd510dba8d60f36d6543`.
 Last reviewed commit: `f07f78236eb475648834ed78afbca6c864f64408`.
 Previous review: `cce8634c3c835cf6d5e8f4fa5fea0db213959718`.
@@ -90,3 +90,35 @@ accumulated increments, not implementation of PA29. Full through-PA29 success
 is required before advancing. The audit ledger preserves earlier reviews and
 adds one row for this complete range. The records commit follows the validated
 code tip with no further code edits.
+
+## Active implementation167
+
+Entry HEAD: `7719caea56d56b5c359796e25a08b3f2f659a4c5`; 350/403, 53 failures.
+The preserved stage base and last-reviewed markers above remain unchanged.
+Previous goal turn: committed audit progress; current process inspection found
+no inherited compiler/test job.
+
+Initial owner: canonical hosted vector types and deferred inline validation.
+Data flow: parsed attribute expressions -> canonical lane/width type facts ->
+layout/initialization validation -> ordinary demand and typed LowIR emission.
+Validate unused wrappers independently of emission; only unsupported reserved
+builtins can defer a body. Attribute expressions are parsed once and evaluated
+in the existing substitution context. Identity lookup is average O(1); width
+and layout work are bounded by the type/initializer actually consumed.
+
+Extend related attribute, dependent layout and wrapper-validation fixes while
+the same ownership supports progress. Keep runtime vector lowering outside the
+explicit PA29 contract. Required suite/earlier suites/file audit, explicit
+positive and rejection controls, typed-IR inspection, and frozen O0 latency/RSS
+plus runtime/text observations will establish the handoff boundary. Optional
+optimization work/growth budgets remain zero; no performance speedup is assumed.
+
+Increment167a: GNU vectors now retain lane/byte identity and template width
+queries; initializer literals validate every element. Hosted namespace inline
+functions use the existing deduplicated use edges and emission roots, while
+member construction facts retain their existing semantic demand. Direct
+discarded unknown reserved builtins have an explicit unavailable-body marker,
+never a guessed signature. Pointer-to-vector ABI consumes PA9's typed Vector.
+Current check: 354/403 (four previous failures fixed, no new failures); 22/22
+explicit controls. Next: complete adjacent extended-vector layout and shape
+validation, then frozen final validation/performance evidence.

@@ -3,11 +3,6 @@
 #include "support/atomic_builtins.h"
 #include "support/builtin_registry.h"
 namespace cppgm {
-inline bool hosted_builtin(TextView name)
-{
-    return atomic_builtin(name).op != AtomicOp::None || builtin_trait(name) != BuiltinTrait::None || function_builtin(name) != FunctionBuiltin::None ||
-        integer_builtin(name).operation != IntegerBuiltin::None || libm_builtin(name).shape != LibmShape::None || floating_builtin_kind(name) != FloatingBuiltin::None || name.equals("__builtin_va_arg") || integer_pack_builtin(name) || invoke_builtin_name(name);
-}
 inline bool hosted_feature(TextView name, bool exceptions)
 {
     if (name.size > 4 && name.data[0] == '_' && name.data[1] == '_' &&

@@ -34,6 +34,7 @@ std::uint64_t Analyzer::size(TypeId id, bool alignment, bool probe)
     if (alignment && t.alignment) return std::uint64_t(1) << (t.alignment-1);
     if (t.kind == TypeKind::LRef || t.kind == TypeKind::RRef) return size(t.child, alignment,probe);
     if (t.kind == TypeKind::Pointer) return 8;
+    if (t.kind == TypeKind::Vector) return t.bound;
     if (t.kind == TypeKind::MemberPointer) return !alignment && types[t.child].kind == TypeKind::Function ? 16 : 8;
     if (t.kind == TypeKind::Array) {
         if (!t.bound) { if (probe) return 0; throw std::runtime_error("sizeof incomplete array"); }

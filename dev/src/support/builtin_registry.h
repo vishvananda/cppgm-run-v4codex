@@ -25,6 +25,7 @@ inline FunctionBuiltin function_builtin(TextView name)
 }
 enum class LibmShape : unsigned char { None, Unary, Binary, Ternary, IntOut, IntIn, LongIn, FloatOut, Quotient, Toward, IntResult, LongResult, LongLongResult };
 struct LibmBuiltin { LibmShape shape = LibmShape::None; unsigned suffix = 0; };
+bool hosted_builtin(TextView name);
 LibmBuiltin libm_builtin(TextView name);
 enum class IntegerBuiltin : unsigned char { None, Clz, Ctz, Popcount, Parity, Ffs, Bswap };
 struct IntegerBuiltinSignature {

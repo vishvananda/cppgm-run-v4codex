@@ -46,7 +46,8 @@ std::uint32_t Analyzer::list_aggregate(NodeId& cursor, TypeId to, ScopeId s)
     };
     bool valid = true; Type target = types[to];
     unsigned rank = class_value(to) ? 5 : 0;
-    if (target.kind == TypeKind::Array) {
+    if (target.kind == TypeKind::Vector) target.bound /= size(target.child);
+    if (target.kind == TypeKind::Array || target.kind == TypeKind::Vector) {
         std::uint64_t index = 0;
         while (valid && cursor && (!target.bound || index < target.bound)) {
             auto before = cursor;
@@ -119,7 +120,7 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
                     args.push_back(a); selected.push_back(c);
                 }
                 store_call(plan.call,args,selected); plan.explicit_count = args.size();
-            } else if (aggregate_type(t)) {
+            } else if (aggregate_type(t) || types[t].kind == TypeKind::Vector) {
                 NodeId cursor = first;
                 auto group = list_aggregate(cursor,t,s);
                 if (!ref) t = to = list_plans[group].target;

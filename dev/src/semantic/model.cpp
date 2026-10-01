@@ -173,7 +173,7 @@ TypeId Types::signature(TypeId id)
         return result;
     }
     TypeId result = id;
-    if (t.kind == TypeKind::Pointer || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray)
+    if (t.kind == TypeKind::Pointer || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray || t.kind == TypeKind::Vector || t.kind == TypeKind::DependentVector)
         result = qualify(compound(t.kind, signature(t.child), t.bound), t.cv);
     if (t.kind == TypeKind::MemberPointer) result = qualify(member_pointer_type(t.member_owner(), signature(t.child)), t.cv);
     signatures[id] = result;

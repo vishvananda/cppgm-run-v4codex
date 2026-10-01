@@ -54,6 +54,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
             result = class_type(c, s, anonymous_name, node.kind == Kind::Class, spec_has(n, KW_STATIC));
             continue;
         }
+        if (node.kind == Kind::VectorAttribute) continue;
         if (node.kind == Kind::AtomicType) {
             result = type_id(node.first,s);
             if (!atomic_operand(result)) throw std::runtime_error("invalid atomic type operand");
@@ -118,7 +119,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         } else if (fundamental == FT_DOUBLE && longs) fundamental = FT_LONG_DOUBLE;
         result = types.fundamental(fundamental);
     }
-    result = types.qualify(result, cv);
+    result = types.qualify(vector_attributes(result,n,s), cv);
     { auto& published = facts.edit(n); published.type = result; published.scope = s; }
     return result;
 }
@@ -193,6 +194,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
         else if (!(definitions && scopes[s].kind == ScopeKind::Template &&
             (scopes[owner].kind == ScopeKind::Namespace || scopes[s].parent == owner))) s = owner;
     }
+    base = vector_attributes(base,n,s);
     NodeId nested = 0;
     std::vector<NodeId> suffixes;
     bool after_direct = false;

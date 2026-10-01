@@ -216,3 +216,6 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/atomic_runtime
 FRONTEND_OBJ_BASENAMES_cppgm++ += syntax/assembly syntax/assembly_template semantic/assembly lowering/assembly
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/evaluation_context lowering/context_initialization
+
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/vector_types
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/inline_validation

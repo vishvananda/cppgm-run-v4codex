@@ -47,7 +47,7 @@ struct UnavailableSemanticFact : std::exception {
     const char* what() const noexcept override { return "semantic prerequisite unavailable"; }
 };
 
-enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray, ArgumentPack, PackExpansion, AliasApplication };
+enum class TypeKind : unsigned char { Fundamental, Named, Pointer, LRef, RRef, Array, Function, MemberPointer, DependentName, Decltype, DependentArray, ArgumentPack, PackExpansion, AliasApplication, Vector, DependentVector };
 // The lookup obligation is part of a dependent name's canonical identity.
 enum class DependentNameKind : unsigned char { Type, Application, Template };
 enum class DeductionKind : unsigned char { Call, ClassPattern, PartialOrdering };

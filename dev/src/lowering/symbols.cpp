@@ -92,6 +92,7 @@ abi_mangle::Id Procedural::abi_type(TypeId id)
     }
     case TypeKind::LRef: result = abi.make(abi_mangle::Kind::Reference, abi_type(t.child)); break;
     case TypeKind::RRef: result = abi.make(abi_mangle::Kind::RvalueReference, abi_type(t.child)); break;
+    case TypeKind::Vector: result = abi.make(abi_mangle::Kind::Vector,abi_type(t.child),0,0,t.bound/sem.object_size(t.child)); break;
     case TypeKind::Array: result = abi.make(abi_mangle::Kind::Array, abi_type(t.child), 0, !t.bound, t.bound); break;
     case TypeKind::DependentArray: result = abi.make(abi_mangle::Kind::Array,abi_type(t.child),abi_query(t.bound)); break;
     case TypeKind::MemberPointer: result = abi.make(abi_mangle::Kind::MemberPointer, abi_type(t.member_owner()), abi_type(t.child)); break;
@@ -373,6 +374,8 @@ void Procedural::run()
     for (EntityId e = 1; e < sem.entities.size(); ++e) {
         auto entity = sem.entities[e];
         if (entity.template_pattern) continue;
+        if (sem.deferred_inline_function(e) && !(entity.emission & semantic::Entity::Used) &&
+            !entity.instantiation_definition) continue;
         if (entity.kind == semantic::EntityKind::Function && entity.specialization && !entity.explicit_specialization && !(entity.emission & semantic::Entity::Used)) continue;
         if (entity.kind == semantic::EntityKind::Variable && (entity.template_info ||
             (entity.specialization && !(entity.emission & semantic::Entity::Used)))) continue;

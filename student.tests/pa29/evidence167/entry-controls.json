@@ -1,0 +1,228 @@
+{
+  "compiler_sha256": "580d2142a9f7b5914981ce90f0aa0710b4c84a545b127aa1d24a1cef155f78f5",
+  "inputs": {
+    "student.tests/pa29/controls167/bad-known-builtin.cpp": "4c2fc5aafef456845e3ff349a5d464eab45293cae92f07de42e4d3d5f2960c8a",
+    "student.tests/pa29/controls167/bad-qualified-wrapper.cpp": "ba85817a2e0e32f12d031ffb2c03fafb02d13b63b85c70d4fe230d42c73003ed",
+    "student.tests/pa29/controls167/bad-vector-element.cpp": "9c71495e0b6905b85dfcaa67a1d92bc544862a5a024fc20745dad9472cc778d1",
+    "student.tests/pa29/controls167/bad-vector-excess.cpp": "5b2354fa909c98fdef2f145a8a3c9d36ccc5a17d439b9486d63c692c48fe74b6",
+    "student.tests/pa29/controls167/bad-vector-lane.cpp": "669d1f8006e61fa9920b8ce31481eba520cdb0fb6b0e601cb0f129eb491cab40",
+    "student.tests/pa29/controls167/bad-vector-width.cpp": "63eaa44bac3e9dd8708cdc2e6d576412cb631f37210f97bee8499cb687ccad90",
+    "student.tests/pa29/controls167/bad-wrapper-argument.cpp": "b3b5f1227ea05fb51932626258d8a493c7e43b3c45d0ce02ca0dd0bd9d52915f",
+    "student.tests/pa29/controls167/bad-wrapper-name.cpp": "04246f29611f213385e9112f5675d7b99986372399c0bf06a0e389d91f001e8d",
+    "student.tests/pa29/controls167/bad-wrapper-type.cpp": "d6f60b2cfe9db97e3cac3d058dee3f567d5888ddc28d61fe64175e6d6ab974d9",
+    "student.tests/pa29/controls167/bad-wrapper-used.cpp": "332c2533e0361d751233fd78eb8d24fde9297c2411a54028fb9d1876d4e2f2f4",
+    "student.tests/pa29/controls167/dependent.cpp": "6fe60455f1c39d2320411f8369e415c9c69bc2dcda391d26d9ccb5b3e7c15701",
+    "student.tests/pa29/controls167/inline-demand.cpp": "0cd651c8692af427acf08c6806ba10b94aa3f0a18ce082ce8f97913568a1753a",
+    "student.tests/pa29/controls167/layout.cpp": "e15e54ce6e72af68ca9dbaad883efdacd509480e110b4435da8216e268492665"
+  },
+  "checks": [
+    {
+      "name": "bad-known-builtin compile",
+      "args": [
+        "/tmp/pa29-167/entry-cppgm",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-known-builtin.cpp",
+        "-o",
+        "/tmp/pa29-167/entry-controls/bad-known-builtin.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "name": "bad-qualified-wrapper compile",
+      "args": [
+        "/tmp/pa29-167/entry-cppgm",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-qualified-wrapper.cpp",
+        "-o",
+        "/tmp/pa29-167/entry-controls/bad-qualified-wrapper.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: __builtin_unknown_instruction_167\n"
+    },
+    {
+      "name": "bad-vector-element compile",
+      "args": [
+        "/tmp/pa29-167/entry-cppgm",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-vector-element.cpp",
+        "-o",
+        "/tmp/pa29-167/entry-controls/bad-vector-element.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unresolved overload in value context\n"
+    },
+    {
+      "name": "bad-vector-excess compile",
+      "args": [
+        "/tmp/pa29-167/entry-cppgm",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-vector-excess.cpp",
+        "-o",
+        "/tmp/pa29-167/entry-controls/bad-vector-excess.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unresolved overload in value context\n"
+    },
+    {
+      "name": "bad-vector-lane compile",
+      "args": [
+        "/tmp/pa29-167/entry-cppgm",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-vector-lane.cpp",
+        "-o",
+        "/tmp/pa29-167/entry-controls/bad-vector-lane.o"
+      ],
+      "status": 0,
+      "passed": false,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bad-vector-width compile",
+      "args": [
+        "/tmp/pa29-167/entry-cppgm",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-vector-width.cpp",
+        "-o",
+        "/tmp/pa29-167/entry-controls/bad-vector-width.o"
+      ],
+      "status": 0,
+      "passed": false,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bad-wrapper-argument compile",
+      "args": [
+        "/tmp/pa29-167/entry-cppgm",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-wrapper-argument.cpp",
+        "-o",
+        "/tmp/pa29-167/entry-controls/bad-wrapper-argument.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: unknown_name\n"
+    },
+    {
+      "name": "bad-wrapper-name compile",
+      "args": [
+        "/tmp/pa29-167/entry-cppgm",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-wrapper-name.cpp",
+        "-o",
+        "/tmp/pa29-167/entry-controls/bad-wrapper-name.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: __builtin_unknown_instruction_167\n"
+    },
+    {
+      "name": "bad-wrapper-type compile",
+      "args": [
+        "/tmp/pa29-167/entry-cppgm",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-wrapper-type.cpp",
+        "-o",
+        "/tmp/pa29-167/entry-controls/bad-wrapper-type.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: __builtin_unknown_instruction_167\n"
+    },
+    {
+      "name": "bad-wrapper-used compile",
+      "args": [
+        "/tmp/pa29-167/entry-cppgm",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/bad-wrapper-used.cpp",
+        "-o",
+        "/tmp/pa29-167/entry-controls/bad-wrapper-used.o"
+      ],
+      "status": 1,
+      "passed": true,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: __builtin_unknown_instruction_167\n"
+    },
+    {
+      "name": "dependent compile",
+      "args": [
+        "/tmp/pa29-167/entry-cppgm",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/dependent.cpp",
+        "-o",
+        "/tmp/pa29-167/entry-controls/dependent.o"
+      ],
+      "status": 1,
+      "passed": false,
+      "stdout": "",
+      "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/dependent.cpp:7\n"
+    },
+    {
+      "name": "inline-demand compile",
+      "args": [
+        "/tmp/pa29-167/entry-cppgm",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/inline-demand.cpp",
+        "-o",
+        "/tmp/pa29-167/entry-controls/inline-demand.o"
+      ],
+      "status": 1,
+      "passed": false,
+      "stdout": "",
+      "stderr": "ERROR: unknown expression name: __builtin_unknown_instruction_167\n"
+    },
+    {
+      "name": "layout compile",
+      "args": [
+        "/tmp/pa29-167/entry-cppgm",
+        "-std=c++14",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/layout.cpp",
+        "-o",
+        "/tmp/pa29-167/entry-controls/layout.o"
+      ],
+      "status": 1,
+      "passed": false,
+      "stdout": "",
+      "stderr": "ERROR: static assertion is not a true integral constant in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa29/controls167/layout.cpp:4\n"
+    }
+  ]
+}

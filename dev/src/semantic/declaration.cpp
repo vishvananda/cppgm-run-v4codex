@@ -121,6 +121,8 @@ void Analyzer::finish()
     std::sort(vtable_emission.begin(), vtable_emission.end());
     for (EntityId e : jump_bodies) finish_body(e);
     if (calls) finish_rtti_facts();
+    for (auto e : jump_bodies) if (deferred_builtin_bodies.get(e) && (entities[e].emission & Entity::Used))
+        throw std::runtime_error("used inline body requires an unsupported compiler builtin");
     if (ast.telemetry) analysis_ms += std::chrono::duration<double,std::milli>(Clock::now()-started).count();
     completion_state = FactState::Success;
     } catch (...) {
@@ -586,6 +588,7 @@ void Analyzer::finish_body(EntityId e)
 }
 void Analyzer::require_body_facts(EntityId e) const
 {
+    if (deferred_builtin_bodies.get(e)) throw std::runtime_error("unsupported compiler builtin in emitted body");
     auto entity = entities[e];
     if (entity.body_state == FactState::Failure || entity.lifetime_state == FactState::Failure)
         throw FailedSemanticFact(SemanticFact::FunctionDefinition,e,entity.definition);

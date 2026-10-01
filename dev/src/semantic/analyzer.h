@@ -17,6 +17,9 @@ public:
     void finish();
     void resolve_assembly(NodeId, ScopeId, bool pattern = false);
     void require_body_facts(EntityId e) const;
+    bool deferred_inline_function(EntityId e) const;
+    bool defer_reserved_statement(NodeId n, ScopeId s);
+    Index deferred_builtin_bodies;
     void write(std::ostream& out) const;
     void write_semantics(std::ostream& out, NodeId root) const;
     void telemetry(std::ostream& out) const;
@@ -524,6 +527,8 @@ private:
     Index field_projection_index;
     std::vector<FieldProjection> field_projections = std::vector<FieldProjection>(1);
     std::uint64_t gnu_alignment_constant(Constant value);
+    TypeId vector_attributes(TypeId type, NodeId owner, ScopeId scope);
+    TypeId vector_type(TypeId lane, std::uint32_t width_query);
     TypeId aligned_typedef(TypeId type, NodeId source, NodeId specs, NodeId declarator, ScopeId scope);
     std::uint64_t alignment_attributes(NodeId n, ScopeId s, bool* strict = 0);
     FieldFacts& field_metadata(EntityId e);

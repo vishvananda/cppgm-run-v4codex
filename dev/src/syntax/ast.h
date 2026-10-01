@@ -146,6 +146,7 @@ enum class Kind : unsigned char {
     VaArg,
     FunctionName,
     AtomicType,
+    VectorAttribute,
     Assembly,
     AssemblyOperand,
 };
@@ -188,6 +189,7 @@ struct AlignmentAttribute {
 enum class FunctionEffects : unsigned char { Unknown, ReadOnly, ReadNone };
 struct AbiTag { IdentifierId name; std::uint32_t next; };
 struct NativeAttributes {
+    NodeId vector_attributes = 0;
     IdentifierId section = 0;
     std::uint32_t tags = 0;
     FunctionEffects effects = FunctionEffects::Unknown;

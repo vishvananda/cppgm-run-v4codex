@@ -159,11 +159,12 @@ NodeId Parser::using_declaration()
         in.is("__attribute__",1) || in.is("__attribute",1))) {
         NodeId result = leaf(Kind::Alias);
         NativeAttributes native; std::uint32_t alignment = 0;
-        attributes(&alignment,&native); native_attributes(result,native);
+        attributes(&alignment,&native);
         if (alignment) ast.alignment_owners.put(result,alignment);
         in.require("=");
         NodeId type = type_id();
         ast.append(result, type);
+        native_attributes(result,native);
         names.bind(scope, ast[result].text, template_declaration ? Category::TemplateType : Category::Type,
                    type_scope(ast[type].first));
         in.require(";");

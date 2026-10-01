@@ -22,7 +22,7 @@ bool Analyzer::literal_type(TypeId t)
     auto type = types[t];
     if (!t) return false;
     if (dependent_type(t)) return true; // Source declaration obligation, checked before substitution.
-    if (type.kind == TypeKind::Array) return literal_type(type.child);
+    if (type.kind == TypeKind::Array || type.kind == TypeKind::Vector) return literal_type(type.child);
     if (type.kind == TypeKind::Pointer || type.kind == TypeKind::MemberPointer ||
         type.kind == TypeKind::LRef || type.kind == TypeKind::RRef) return true;
     if (type.kind == TypeKind::Fundamental) return type.fundamental != FT_VOID;

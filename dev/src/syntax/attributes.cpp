@@ -5,6 +5,13 @@
 namespace cppgm { namespace syntax {
 void Parser::native_attributes(NodeId owner, NativeAttributes value)
 {
+    // Type attributes own ordinary parsed expression children, so template
+    // occurrence projection retains their operands without reparsing metadata.
+    auto type_owner = ast[owner].kind == Kind::SimpleDeclaration || ast[owner].kind == Kind::Function ? ast[owner].first : owner;
+    for (auto a = value.vector_attributes; a;) {
+        auto next = ast[a].next; ast[a].next = 0; ast.append(type_owner,a); a = next;
+    }
+    value.vector_attributes = 0;
     if (!value.section && !value.weak && !value.tags && !value.no_unique_address && value.effects == FunctionEffects::Unknown) return;
     owner = ast.nodes.occurrences[owner].source;
     auto prior = ast.native_attribute_owners.get(owner);
@@ -83,6 +90,14 @@ unsigned Parser::balanced(const char* open, const char* close, NativeAttributes*
             auto name = ids.intern(TextView(data,value.bytes-1));
             if (native->section && native->section != name) throw std::runtime_error("conflicting section attributes");
             native->section = name;
+        }
+        else if (in.is("vector_size") || in.is("__vector_size__")) {
+            in.take(); in.require("(");
+            auto operand = expression(2); in.require(")");
+            if (!native) throw std::runtime_error("vector_size requires a type owner");
+            auto attribute = wrap(Kind::VectorAttribute,operand);
+            ast[attribute].next = native->vector_attributes;
+            native->vector_attributes = attribute;
         }
         else if (in.is("aligned") || in.is("__aligned__")) {
             in.take();

@@ -148,7 +148,8 @@ void Analyzer::member_facts(EntityId e)
 void Analyzer::demand_member(EntityId e, MemberDemandReason reason)
 {
     record_default_dependency(DefaultDependencyKind::Member,e);
-    if (unevaluated_depth) { record_deferred_function_use(e); return; }
+    if (unevaluated_depth || (deferred_inline_function(e) && deferred_inline_function(current_function) &&
+        !(entities[current_function].emission & Entity::Used))) { record_deferred_function_use(e); return; }
     bool first_use = !(entities[e].emission & Entity::Used);
     entities[e].emission |= Entity::Used;
     if (first_use && calls) function_exception_demand.push_back(e);

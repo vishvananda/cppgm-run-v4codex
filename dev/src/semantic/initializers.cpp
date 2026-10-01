@@ -107,7 +107,7 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
     }
     NodeId source = cursor;
     expand_expression_list(source,s);
-    bool aggregate = aggregate_type(t);
+    bool aggregate = aggregate_type(t) || types[t].kind == TypeKind::Vector;
     bool braced = ast[source].kind == Kind::BracedInit || ast[source].kind == Kind::ParenArguments || ast[source].kind == Kind::ParenInitializer;
     NodeId inner = braced ? ast[source].first : source;
     if (aggregate && class_value(t) && !braced) {
@@ -153,7 +153,8 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s)
         tail = item;
     };
     Type target = types[t];
-    if (target.kind == TypeKind::Array) {
+    if (target.kind == TypeKind::Vector) target.bound /= size(target.child);
+    if (target.kind == TypeKind::Array || target.kind == TypeKind::Vector) {
         std::uint64_t index = 0;
         while (inner && (!target.bound || index < target.bound)) {
             auto clause = inner;

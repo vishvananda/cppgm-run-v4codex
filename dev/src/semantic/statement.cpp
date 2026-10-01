@@ -180,6 +180,7 @@ void Analyzer::resolve_statement(NodeId n, ScopeId s)
         for (NodeId c = ast[n].first; c; c = ast[c].next) {
             if (ast[c].kind == Kind::SimpleDeclaration) resolve_statement(c, s);
             else {
+                if (defer_reserved_statement(c,s)) continue;
                 if (expression(c, s).form == ExpressionForm::Overload) throw std::runtime_error("unresolved discarded overload");
                 prepare_discarded(c);
             }

@@ -49,6 +49,7 @@ std::uint64_t Analyzer::gnu_alignment_constant(Constant c)
 }
 TypeId Analyzer::aligned_typedef(TypeId type, NodeId source, NodeId specs, NodeId declarator, ScopeId scope)
 {
+    type = vector_attributes(type,source,scope);
     std::uint64_t alignment = 0; bool present = false;
     std::vector<ArgumentId> pending;
     for (auto n : {source,specs,declarator})
