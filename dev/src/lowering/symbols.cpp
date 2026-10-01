@@ -272,6 +272,12 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     // collision allocator still own identity; native ABI names remain separate.
     std::string display = "@" + name;
     for (char& c : display) if (c != '@' && c != '_' && !(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z') && !(c >= '0' && c <= '9')) c = '_';
+    // These spellings imply singleton roles in the explicit LowIR adapter.
+    // A namespace/member function named main still has no entry role. Keep
+    // its presentation unambiguous without changing its typed identity or ABI.
+    if (e.kind == semantic::EntityKind::Function && metadata.role == SR_NONE &&
+        (display == "@main" || display == "@__cppgm_init" || display == "@__cppgm_fini"))
+        display += "__ordinary";
     if (metadata.object && p.name(metadata.object) != display.substr(1)) linkage.native_names.put(metadata.object, 1);
     SymbolId sid = fresh_symbol(display); (base ? base_symbols[id] : symbols[id]) = sid;
     if (allocation_role < 2) {
