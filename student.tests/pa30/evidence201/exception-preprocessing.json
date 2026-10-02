@@ -1,0 +1,29 @@
+{
+  "preprocessed_sha256": "234075b42114fe2a63e0ef8a5ea1606c087599591924dd3be375d1d5015af5fd",
+  "declarations": [],
+  "headers": {
+    "/usr/include/c++/15/new": {
+      "sha256": "cc066fae2bf521a4d5751470a4710bda4a46506c8af0c3a03dd9c988380ec206",
+      "relevant_lines": [
+        "137: _GLIBCXX_NODISCARD void* operator new(std::size_t)",
+        "140: _GLIBCXX_NODISCARD void* operator new[](std::size_t)",
+        "155: _GLIBCXX_NODISCARD void* operator new(std::size_t, const std::nothrow_t&)",
+        "158: _GLIBCXX_NODISCARD void* operator new[](std::size_t, const std::nothrow_t&)",
+        "168: _GLIBCXX_NODISCARD void* operator new(std::size_t, std::align_val_t)",
+        "171: _GLIBCXX_NODISCARD void* operator new(std::size_t, std::align_val_t, const std::nothrow_t&)",
+        "179: _GLIBCXX_NODISCARD void* operator new[](std::size_t, std::align_val_t)",
+        "182: _GLIBCXX_NODISCARD void* operator new[](std::size_t, std::align_val_t, const std::nothrow_t&)",
+        "204: // Default placement versions of operator new.",
+        "206: void* operator new(std::size_t, void* __p)",
+        "210: void* operator new[](std::size_t, void* __p)"
+      ]
+    },
+    "/usr/include/x86_64-linux-gnu/c++/15/bits/c++config.h": {
+      "sha256": "2bb380bf9cd3f24109331230e8d94daad63fb39fa6b6969c4a06b066d469177f",
+      "relevant_lines": [
+        "247: #  define _GLIBCXX_THROW(_EXC)",
+        "252: #  define _GLIBCXX_THROW(_EXC) throw(_EXC)"
+      ]
+    }
+  }
+}

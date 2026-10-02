@@ -1,0 +1,154 @@
+[
+  {
+    "args": [
+      "dev/cppgm++",
+      "-c",
+      "student.tests/pa30/source201/new-spec-reduced.reject.cpp",
+      "-o",
+      "/tmp/pa30-201/spec.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: dynamic exception specification added on redeclaration\n",
+    "source_sha256": "0916ac14631f8cd18f342bd172d38d0f78496580b3b7123bb6166b2e8f435a16"
+  },
+  {
+    "args": [
+      "dev/cppgm++",
+      "-c",
+      "pa30/tests/compile/700-hosted-replaceable-operator-new-dynamic-exception-spec.t",
+      "-o",
+      "/tmp/pa30-201/spec.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: dynamic exception specification added on redeclaration\n",
+    "source_sha256": "08df4df17fb9700e5a26f7eb343db321f11203eb565bc659514c081999b895d9"
+  },
+  {
+    "args": [
+      "dev/cppgm++",
+      "-c",
+      "pa30/tests/compile/700-hosted-replaceable-operator-new-wrong-dynamic-exception-spec-bad.t",
+      "-o",
+      "/tmp/pa30-201/spec.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: dynamic exception specification added on redeclaration\n",
+    "source_sha256": "1cb47fd8abe083c20f2bcf0106ccc79ea6c38affde1fe894d11a11e5d36d2875"
+  },
+  {
+    "args": [
+      "dev/cppgm++-ref",
+      "-c",
+      "student.tests/pa30/source201/new-spec-reduced.reject.cpp",
+      "-o",
+      "/tmp/pa30-201/spec.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: conflicting function exception specification\n",
+    "source_sha256": "0916ac14631f8cd18f342bd172d38d0f78496580b3b7123bb6166b2e8f435a16"
+  },
+  {
+    "args": [
+      "dev/cppgm++-ref",
+      "-c",
+      "pa30/tests/compile/700-hosted-replaceable-operator-new-dynamic-exception-spec.t",
+      "-o",
+      "/tmp/pa30-201/spec.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": "",
+    "source_sha256": "08df4df17fb9700e5a26f7eb343db321f11203eb565bc659514c081999b895d9"
+  },
+  {
+    "args": [
+      "dev/cppgm++-ref",
+      "-c",
+      "pa30/tests/compile/700-hosted-replaceable-operator-new-wrong-dynamic-exception-spec-bad.t",
+      "-o",
+      "/tmp/pa30-201/spec.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: conflicting function exception specification\n",
+    "source_sha256": "1cb47fd8abe083c20f2bcf0106ccc79ea6c38affde1fe894d11a11e5d36d2875"
+  },
+  {
+    "args": [
+      "g++",
+      "-c",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "student.tests/pa30/source201/new-spec-reduced.reject.cpp",
+      "-o",
+      "/tmp/pa30-201/spec.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": "student.tests/pa30/source201/new-spec-reduced.reject.cpp:3:35: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]\n    3 | void* operator new(__SIZE_TYPE__) throw(Failure) { for(;;){} }\n      |                                   ^~~~~\nstudent.tests/pa30/source201/new-spec-reduced.reject.cpp:3:7: warning: declaration of \u2018void* operator new(long unsigned int) throw (Failure)\u2019 has a different exception specifier\n    3 | void* operator new(__SIZE_TYPE__) throw(Failure) { for(;;){} }\n      |       ^~~~~~~~\nstudent.tests/pa30/source201/new-spec-reduced.reject.cpp:2:7: note: from previous declaration \u2018void* operator new(long unsigned int)\u2019\n    2 | void* operator new(__SIZE_TYPE__);\n      |       ^~~~~~~~\n",
+    "source_sha256": "0916ac14631f8cd18f342bd172d38d0f78496580b3b7123bb6166b2e8f435a16"
+  },
+  {
+    "args": [
+      "g++",
+      "-c",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "pa30/tests/compile/700-hosted-replaceable-operator-new-dynamic-exception-spec.t",
+      "-o",
+      "/tmp/pa30-201/spec.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": "pa30/tests/compile/700-hosted-replaceable-operator-new-dynamic-exception-spec.t:7:35: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]\n    7 | void* operator new(__SIZE_TYPE__) throw(std::bad_alloc)\n      |                                   ^~~~~\n",
+    "source_sha256": "08df4df17fb9700e5a26f7eb343db321f11203eb565bc659514c081999b895d9"
+  },
+  {
+    "args": [
+      "g++",
+      "-c",
+      "-std=c++11",
+      "-x",
+      "c++",
+      "pa30/tests/compile/700-hosted-replaceable-operator-new-wrong-dynamic-exception-spec-bad.t",
+      "-o",
+      "/tmp/pa30-201/spec.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": "pa30/tests/compile/700-hosted-replaceable-operator-new-wrong-dynamic-exception-spec-bad.t:7:35: warning: dynamic exception specifications are deprecated in C++11 [-Wdeprecated]\n    7 | void* operator new(__SIZE_TYPE__) throw(int)\n      |                                   ^~~~~\n",
+    "source_sha256": "1cb47fd8abe083c20f2bcf0106ccc79ea6c38affde1fe894d11a11e5d36d2875"
+  },
+  {
+    "args": [
+      "dev/cppgm++",
+      "-c",
+      "student.tests/pa30/source201/new-hosted-reduced.reject.cpp",
+      "-o",
+      "/tmp/pa30-201/new-reduced.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: dynamic exception specification added on redeclaration\n",
+    "source_sha256": "f1fd2ca871e9e88ffafe860cc065e7b4b2339ee434eed68beec81dca633d448a"
+  },
+  {
+    "args": [
+      "dev/cppgm++-ref",
+      "-c",
+      "student.tests/pa30/source201/new-hosted-reduced.reject.cpp",
+      "-o",
+      "/tmp/pa30-201/new-reduced.o"
+    ],
+    "status": 0,
+    "stdout": "",
+    "stderr": "",
+    "source_sha256": "f1fd2ca871e9e88ffafe860cc065e7b4b2339ee434eed68beec81dca633d448a"
+  }
+]
