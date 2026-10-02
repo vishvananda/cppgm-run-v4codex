@@ -1,0 +1,51 @@
+[
+  {
+    "name": "prior",
+    "command": "n=33; if [ \"$n\" -le 1 ]; then echo \"===== ALL TESTS PASSED SUCCESSFULLY! (0/0) =====\"; else make test-report-through-pa$((n - 1)); fi",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/prior-final.log",
+    "sha256": "71b009e4c7b4d25f544d1609799d9539666d4a9ed8cdb12ec3034cfa54856564"
+  },
+  {
+    "name": "stage",
+    "command": "make test-pa33",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/stage-final.log",
+    "sha256": "057ab3e7687cabce2c4ffbd2e69966d06c3db735a5f62fdedd6ea114056f5ee0"
+  },
+  {
+    "name": "debug",
+    "command": "make -C pa33 test-debuginfo",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/debug-final.log",
+    "sha256": "d2fd0e38191e9eb05a8cc64cb54263e5d11b824e4ca893e253b37d2b3ca63153"
+  },
+  {
+    "name": "file",
+    "command": "perl scripts/cppgm_file_audit.pl --stage pa33 --paths dev/src",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/file-final.log",
+    "sha256": "5b5d2e2a47194726e23018fda7d815fbbc0ed524e538c60c222fd93331d3bd03"
+  },
+  {
+    "name": "through",
+    "command": "make test-report-through-pa33",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/through-final.log",
+    "sha256": "a6f83a6afb7e49ee87fde0d72918a1ba82a7bbea1cebd07ef67242c6d4ef1714"
+  },
+  {
+    "name": "personal",
+    "command": "python3 student.tests/pa33/check_native.py",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/personal-final.log",
+    "sha256": "ba0b46a777d2718795559d85062d98b3a7d9decf447f2d7683d434ff2acd5a6e"
+  },
+  {
+    "name": "budgets",
+    "command": "python3 student.tests/pa33/check_budgets.py",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/budgets-final.log",
+    "sha256": "051ef4c4d40dbdb7872c263e9ee30eda594f65940c66fa0b05eaf0a2a5c8fa11"
+  }
+]

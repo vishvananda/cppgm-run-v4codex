@@ -83,6 +83,7 @@ workloads['dynamic-copy']=(header+''.join(body.format(n=n) for n in range(2000))
 r=dict(binaries={k:dict(path=str(v),sha256=sha(v)) for k,v in bins.items()},flags=['-O2','-c'],affinity=affinity,runs=[],images={},inputs={},summary={})
 def save():(out/'performance.json').write_text(json.dumps(r,indent=2)+'\n')
 for name,(text,main,args) in workloads.items():
+    if os.environ.get('PA33_WORKLOADS') and name not in os.environ['PA33_WORKLOADS'].split(','): continue
     src=out/(name+'.lowir');src.write_text(text)
     driver=out/(name+'.cpp');driver.write_text(main)
     r['inputs'][name]=dict(source_sha256=sha(src),driver_sha256=sha(driver),arguments=args)

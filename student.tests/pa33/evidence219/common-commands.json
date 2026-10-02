@@ -1,0 +1,48 @@
+[
+  {
+    "lane": "common-o0",
+    "command": [
+      "python3",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa32/common_levels.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/common-o0",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/entry/cppgm++",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/final/cppgm++"
+    ],
+    "status": 0,
+    "environment": {
+      "PERF_CPU": "2",
+      "PA32_BASE_LEVEL": "0",
+      "PA32_FINAL_LEVEL": "0"
+    }
+  },
+  {
+    "lane": "common-o2",
+    "command": [
+      "python3",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa32/common_levels.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/common-o2",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/entry/cppgm++",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/final/cppgm++"
+    ],
+    "status": 0,
+    "environment": {
+      "PERF_CPU": "2",
+      "PA32_BASE_LEVEL": "2",
+      "PA32_FINAL_LEVEL": "2"
+    }
+  },
+  {
+    "lane": "selfhost",
+    "command": [
+      "python3",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa32/selfhost_performance.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/selfhost",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/entry/cppgm++",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa33-219/final/cppgm++"
+    ],
+    "status": 0,
+    "environment": {
+      "PERF_CPU": "2"
+    }
+  }
+]
