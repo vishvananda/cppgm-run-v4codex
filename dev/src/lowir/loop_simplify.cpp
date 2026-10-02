@@ -264,6 +264,10 @@ class Loops {
             values[map.get(phi.destination.index)] = Operand::value(i.destination);
         };
         for (auto n : l.phis) snapshot(n,incoming(p.instructions[n],l.entry));
+        // The header comparison also produces an i64 value. Every executed
+        // body observes the continuing arm's truth, including backedge phi
+        // inputs. Its final exit value is installed only after those snapshots.
+        values[map.get(p.instructions[l.compare].destination.index)] = Operand::integer(l.body_true);
         std::vector<Operand> args;
         for (std::uint64_t trip = 0; trip < l.trips; ++trip) {
             for (auto n : l.body) {

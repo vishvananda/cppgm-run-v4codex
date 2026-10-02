@@ -1,0 +1,106 @@
+[
+  {
+    "name": "objects",
+    "command": [
+      "python3",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa32/objects_performance.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/objects",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/before-cppgm",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/final-cppgm++"
+    ],
+    "env": {
+      "PERF_CPU": "2"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "loops",
+    "command": [
+      "python3",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa32/loops_performance.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/loops",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-212/A",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/final-cppgm++"
+    ],
+    "env": {
+      "PERF_CPU": "2"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "memory",
+    "command": [
+      "python3",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa32/memory_performance.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/memory",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-213/A",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/final-cppgm++"
+    ],
+    "env": {
+      "PERF_CPU": "2"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "common-o0",
+    "command": [
+      "python3",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa32/common_levels.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/common-o0",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/entry-cppgm++",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/final-cppgm++"
+    ],
+    "env": {
+      "PERF_CPU": "2",
+      "PA32_BASE_LEVEL": "0",
+      "PA32_FINAL_LEVEL": "0"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "common-o1",
+    "command": [
+      "python3",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa32/common_levels.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/common-o1",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/entry-cppgm++",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/final-cppgm++"
+    ],
+    "env": {
+      "PERF_CPU": "2",
+      "PA32_BASE_LEVEL": "1",
+      "PA32_FINAL_LEVEL": "1"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "common-o3",
+    "command": [
+      "python3",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa32/common_levels.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/common-o3",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/entry-cppgm++",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/final-cppgm++"
+    ],
+    "env": {
+      "PERF_CPU": "2",
+      "PA32_BASE_LEVEL": "3",
+      "PA32_FINAL_LEVEL": "3"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "selfhost",
+    "command": [
+      "python3",
+      "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa32/selfhost_performance.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/selfhost",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/entry-cppgm++",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-214/final-cppgm++"
+    ],
+    "env": {
+      "PERF_CPU": "2"
+    },
+    "exit_code": 0
+  }
+]

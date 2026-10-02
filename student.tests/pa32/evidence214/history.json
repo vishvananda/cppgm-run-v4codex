@@ -1,0 +1,56 @@
+[
+  {
+    "stage": 211,
+    "commit": "a7fe2af07e6d1a80942a10df46750830af021a2d",
+    "sources": 537,
+    "artifacts": 124,
+    "samples": 588,
+    "lanes": [
+      "affected.json",
+      "common-o0.json",
+      "common-o1.json",
+      "selfhost.json"
+    ]
+  },
+  {
+    "stage": 212,
+    "commit": "cec5b40ae0de687d217cc787e1cca342591a7c56",
+    "sources": 535,
+    "artifacts": 210,
+    "samples": 924,
+    "lanes": [
+      "affected.json",
+      "common-o0.json",
+      "common-o1.json",
+      "common-o3.json",
+      "exploratory.json",
+      "selfhost.json"
+    ]
+  },
+  {
+    "stage": 213,
+    "commit": "86d08255ca50fec798f6b0fa209eb8d2bd21a04b",
+    "sources": 571,
+    "artifacts": 770,
+    "samples": 3024,
+    "lanes": [
+      "affected.json",
+      "common-o0.json",
+      "common-o1.json",
+      "common-o3.json",
+      "copies-handoff-long.json",
+      "copies-long.json",
+      "exploratory.json",
+      "intermediate.json",
+      "policy.json",
+      "pre-cost-common-o0.json",
+      "pre-cost-common-o1.json",
+      "pre-cost-common-o3.json",
+      "pre-cost-selfhost.json",
+      "pre-cost.json",
+      "private-handoff-long.json",
+      "private-long.json",
+      "selfhost.json"
+    ]
+  }
+]
