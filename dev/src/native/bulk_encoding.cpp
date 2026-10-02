@@ -1,23 +1,28 @@
 #include "native/encoding.h"
+#include "native/bulk_policy.h"
 namespace native {
 void Encoder::bulk(const Instruction& i)
 {
     Operand dst = i.args[0], src = i.args[1];
     // Vector scratch xmm15 is permanently reserved, outside ordinary placement.
     // Direct forms never alter GPR address carriers or condition flags.
-    bool direct = i.bytes <= 32 || (i.bytes <= 64 && i.alignment >= 8);
+    bool direct = direct_copy_bytes(i.bytes,i.alignment);
     if (i.op == Op::ZeroBytes && i.bytes == 16) {
         form(0x0fef,32,15,Operand::r(15),0,0,0x66);
         form(0x0f7f,32,15,dst,0,0,0xf3); return;
     }
     if (i.op == Op::CopyBytes && direct) {
         unsigned offset = 0;
-        while (offset+16 <= i.bytes) {
+        // Unaligned small copies commonly combine recently written scalar
+        // fields. Widening those reads to 16 bytes defeats scalar store
+        // forwarding on x86. Keep bounded scalar chunks without alignment
+        // evidence; aligned aggregates retain the vector form.
+        while (i.alignment >= 8 && offset+16 <= i.bytes) {
             auto from = src, to = dst; from.displacement += offset; to.displacement += offset;
             form(0x0f6f,32,15,from,0,0,0xf3); form(0x0f7f,32,15,to,0,0,0xf3);
             offset += 16;
         }
-        for (unsigned bytes : {8u,4u,2u,1u}) if (offset+bytes <= i.bytes) {
+        for (unsigned bytes : {8u,4u,2u,1u}) while (offset+bytes <= i.bytes) {
             auto from = src, to = dst; from.displacement += offset; to.displacement += offset;
             Type t = bytes == 8 ? Type::I64 : bytes == 4 ? Type::U32 : bytes == 2 ? Type::U16 : Type::U8;
             load(Operand::r(XR_RAX),from,t,false); store(to,Operand::r(XR_RAX),t);

@@ -1,10 +1,12 @@
 #include "native/selection.h"
+#include "native/bulk_policy.h"
 #include <algorithm>
 namespace native {
 using namespace lowir_model;
 bool Selector::call_effect(const lowir_model::Instruction& i) const
 {
-    return i.opcode == Opcode::EhCatch || i.opcode == Opcode::EhCatchAll || i.opcode == Opcode::Call || i.opcode == Opcode::CopyObject || i.opcode == Opcode::ZeroInit ||
+    return i.opcode == Opcode::EhCatch || i.opcode == Opcode::EhCatchAll || i.opcode == Opcode::Call ||
+        (i.opcode == Opcode::CopyObject && !direct_copy_bytes(i.bytes,i.alignment)) || i.opcode == Opcode::ZeroInit ||
         (i.type.kind() == Type::Object && (i.opcode == Opcode::Load || i.opcode == Opcode::Store || i.opcode == Opcode::Copy));
 }
 unsigned Selector::clobbers(const lowir_model::Instruction& i) const

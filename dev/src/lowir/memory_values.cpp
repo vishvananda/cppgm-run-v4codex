@@ -11,7 +11,7 @@ struct Address {
     Operand::Kind kind = Operand::Integer;
     unsigned root = 0;
     std::uint64_t offset = 0;
-    bool within = false, noalias = false, readonly = false;
+    bool within = false, noalias = false, readonly = false, unique_global = false;
 };
 bool equal(Address a, Address b) { return a.root && a.kind == b.kind && a.root == b.root && a.offset == b.offset; }
 bool disjoint(Address a, std::uint64_t an, Address b, std::uint64_t bn) {
@@ -22,7 +22,7 @@ bool disjoint(Address a, std::uint64_t an, Address b, std::uint64_t bn) {
     if (a.kind == Operand::Slot && b.kind == Operand::Slot) return true;
     if ((a.kind == Operand::Slot && b.kind == Operand::Symbol) ||
         (b.kind == Operand::Slot && a.kind == Operand::Symbol)) return true;
-    if (a.kind == Operand::Symbol && b.kind == Operand::Symbol) return true;
+    if (a.kind == Operand::Symbol && b.kind == Operand::Symbol) return a.unique_global && b.unique_global;
     return a.noalias && b.noalias;
 }
 struct ValueFact { unsigned definitions = 0, producer = 0, uses = 0, epoch = 0; Address address; };
@@ -56,6 +56,12 @@ class Memory {
         if (a.kind == Operand::Slot || (a.kind == Operand::Symbol && p.symbols[a.ref-1].kind == Symbol::GlobalSymbol)) {
             result.kind = a.kind; result.root = a.ref; result.within = true;
             result.readonly = a.kind == Operand::Symbol && p.symbols[a.ref-1].metadata.storage == GSM_READONLY;
+            if (a.kind == Operand::Symbol) {
+                const auto& s = p.symbols[a.ref-1];
+                // Imported or explicitly object-named symbols can denote the
+                // same ELF storage under different LowIR declaration IDs.
+                result.unique_global = !p.globals[s.entity-1].declaration && !s.metadata.object && s.metadata.binding != SBM_WEAK;
+            }
         }
         return result;
     }
@@ -206,8 +212,20 @@ class Memory {
             unsigned from = flow.local.get(p.operands[k].ref);
             if (!states[from].done) return;
             auto s = states[from];
-            unsigned found = find(saved,s.cells,address(p.operands[k+1]),load.type);
+            auto origin = address(p.operands[k+1]);
+            // Replacing a private-home choice also removes its materialized
+            // addresses and stores. For external fields the value phi instead
+            // lengthens loaded-value live ranges; current native placement
+            // spills them. Keep the late external load until a cheaper lowering
+            // exists (measured policy, separate from the legality proof).
+            if (origin.kind != Operand::Slot) return;
+            unsigned found = find(saved,s.cells,origin,load.type);
             if (!found || !available(saved[found-1].value,load)) return;
+            auto value = saved[found-1].value;
+            // Incoming scalars/literals already have stable ABI carriers.
+            // Extending an instruction result across the arms creates new
+            // spill traffic in the current backend, even for private homes.
+            if (value.kind == Operand::Temporary && values[ids.get(value.ref)].producer) return;
             incoming.push_back(saved[found-1].value);
         }
         // Change the address phi into a value phi in place: no inserted loads,

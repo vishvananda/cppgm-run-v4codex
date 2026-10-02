@@ -68,6 +68,22 @@ block ^entry: %a = load i64 %p %b = load i64 %p %c = binary add i64 %a, %b retur
  stats,text=check('guard-facts',guards)
  assert 'copyobj' not in text
  assert text.split('function @plain_readonly')[1].split('function @volatile_copy')[0].count('load i64')==2
+ # Two IR declarations may name one linker object. Distinct textual names
+ # are not disjoint-storage evidence; validate and execute the ELF case.
+ source.write_text("""global @primary : i64 [object=shared_memory] = 7
+ declare global @alias : i64 [object=shared_memory]
+ function @main() -> i64 [role=entry] {
+ block ^entry:
+ %before = load i64 @primary
+ store i64 19, @alias
+ %after = load i64 @primary
+ %sum = binary add i64 %before, %after
+ %bad = cmp ne i64 %sum, 26
+ return i64 %bad }
+ """)
+ for level in range(4):
+  run(root/'dev/cppgm++',f'-O{level}','-o',tmp/'alias',source);run(tmp/'alias')
+ records.append(dict(case='ELF-storage-alias',levels=4))
  # All finite unsigned decrement comparisons, both operand orders, including
  # noncanonical and truncated wider conditions. Expected values are Python's
  # modular arithmetic, never the reference optimizer.
