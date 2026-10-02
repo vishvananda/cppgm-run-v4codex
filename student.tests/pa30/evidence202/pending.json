@@ -1,0 +1,13 @@
+{
+  "source_sha256": "2506e9ee4aad6cec040722969f2c2a398eba4e5aece3e4852888ddf9ae7db318",
+  "args": [
+    "dev/cppgm++",
+    "-c",
+    "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/pending199/vector-subscript.cpp",
+    "-o",
+    "/home/vishvananda/work/private/v4codex/artifacts/audit202/pending.o"
+  ],
+  "status": 1,
+  "stdout": "",
+  "stderr": "ERROR: invalid subscript\n"
+}

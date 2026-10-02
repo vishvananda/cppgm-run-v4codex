@@ -1,0 +1,161 @@
+{
+  "compiler_sha256": "5a790b4cfae064f4f8ad4772eb6897d37af1b6329f3b6b81a20350180032317b",
+  "commands": [
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional-effects.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source_sha256": "7f3a33a0a75c3c616339c411a08f5853b3ea1633f67fa054142d80cf3f1ec79c",
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional-false.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source_sha256": "ef7a2a299fb85fe2395366fee28e7af2ee1d2c8505030df8769431f30f74f043",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional-runtime.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source_sha256": "69dedd72e6c1989e0b88b84297b0907fef86d427c9da2263974128475e0330bd",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source_sha256": "5ca15670fa3ecfc9072251565b90cea0698b97bb5c2eafd8ff93f36818d2d511",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-ambiguous.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source_sha256": "e338e4dc6c2150f4209dbc815fef724324ca0508e1e10f3190587ef371b55187",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-converted.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source_sha256": "1b065886986976b8d75970abf933c42a302115568ffe549172d211ca5ea91c1b",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-deleted.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source_sha256": "a8a194f33911afd9a2ac4124ad11b47bee702d5030306f8e7bd944bd5306236e",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-explicit.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source_sha256": "1a300381f2b18eecf34bb7bbd9049b88fae6e06628e976a1de9ca82269d036e4",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-float.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source_sha256": "ebd967b49bcaaa5292c0e61ec60ed5c91ca467210564eb19336dc409d617f326",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-private.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source_sha256": "b29c937f68526ce59e8b231dbd0497463157b92d422a3a18fe5fbf7cece4b826",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-query-converted.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source_sha256": "3d12a199f9762de216d4b5a714db7b21fe43b615475a0fc17c69b337c5be2861",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-scoped.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source_sha256": "eb23182525e7254abbb8cb3d29720e73a5a9b63a8e273de9253c2f4612d4d9c2",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    }
+  ]
+}

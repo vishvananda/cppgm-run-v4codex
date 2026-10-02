@@ -1,69 +1,60 @@
-# PA30 compact implementation plan — implementation201
+# PA30 compact implementation plan — audit202
 
 Stage base commit: `27029f978e65b78331233123922d342033d5d1f7`.
-Last reviewed commit: `4a081cb05b25638be7a759882f67d4d8ae97eb6a`.
-Target: **PA30 full-stage**. Phase: **implementation handoff; stage incomplete**.
-Implementation entry HEAD: `b0790726de6c67722826833b395b76853e051e2d`.
-Code tip: `fc8ea8d6`. Both review markers are preserved.
+Last reviewed commit: `378d1bd83df4dd3f7a9c1693c18afa7e7c7bd61f`.
+Target: **PA30 full-stage**. Phase: **checkpointAudit complete; stage incomplete**.
+Reviewed range: `4a081cb0..56ecc31c`, extended through audit fix `378d1bd8`.
+All implementations199–201 and their interactions are covered by [audit202](audit.md).
 
-## Design/spec alignment
+## Reviewed implementation
 
-[Design201](design201.md) records owner, data flow, complexity and validation.
-Automatic object use follows selected declaration/function/capture identities,
-including dormant default arguments and nested lambdas. Noreturn attributes
-survive parsing and specialization as typed call-boundary facts. Non-void
-completion checks the actual LowIR CFG, preserving main, constant loops,
-labels, switches, noreturn normal exits and distinct exceptional exits.
-Function-local worklists, bounded integer proofs and parent-linked EH regions
-run in O(instructions + edges), with no IR rewrite, repeated semantic resolution,
-parse replay, global retry or optional optimization. New sources are registered.
-[Reference correction](reference-correction201.md) proves the one incompatible
-replacement-new expectation; all source fixtures and comparison rules remain.
+Canonical array queries retain the runtime first extent separately from the
+allocated element type. Their shared conversion owner now permits C++11's
+unique non-explicit integral conversion; evaluated bounds record the selected
+call and signedness, while unevaluated queries do not demand bodies.
+
+Typed constant-join reachability repairs the new non-void checker without
+changing emitted IR or earlier structural oracles. Its function-local worklist
+tracks integer values and unescaped scalar slots, preserves exceptional edges,
+and has at most two monotonic transitions per fact. Volatility, escape and
+unknown inputs remain conservative. The new source is registered in the shared
+frontend source set. The accumulated access, deferred-body, member-alias,
+destruction, capture, vector and noreturn paths were reviewed together.
 
 ## Validation and performance
 
-[Reports](../student.tests/pa30/evidence201/validation.json): earlier PAs
-**4941/4941**, file audit passes (four inherited warnings), PA30 **151/153**,
-through30 **5092/5094**. [Delta](../student.tests/pa30/evidence201/stage-delta.json):
-**five → two existing failures**, comprising two implementation fixes and one
-proven reference correction; no new failure, removed case or narrowed check.
-Ralph's entry summary 148/154 (six failures) disagrees with the primary log and
-153-case inventory. Both are preserved; progress also holds against that count.
-Explicit validation: **111** current controls, **245** inherited controls,
-and **101** source/LowIR/object trace commands pass.
-[Verifier](../student.tests/pa30/verify201.py): **1283** checks bind current
-sources, binaries, fixtures, outcomes and performance. The previous turn is
-classified as verified progress; no inherited process was live at entry.
+[Required reports](../student.tests/pa30/evidence202/validation.json): earlier
+PAs **4941/4941**, file audit passes with four inherited warnings, PA30
+**151/153**, through30 **5092/5094**. The exact same two failures remain;
+coverage and comparison rules are unchanged. The supplied 154 count disagrees
+with the preserved primary log and 153-case inventory. The previous replacement-
+new [reference correction](reference-correction201.md) has a valid standard proof;
+this audit makes no additional reference changes.
 
-[Performance201](performance201.md): frozen A/B binaries, A/A calibration,
-six ABBA blocks, all 420 observations and 16 launcher calibrations; compiler
-latency/RSS and checked runtime/text together. Common and owner A/B images are
-byte-identical; owner work scales as 3N functions, 274N instruction visits and
-35N edge visits. Maximum hosted sample: **2.503 s / 177048 KiB**.
-The **45-second per-compile limit** is mandatory.
-Historical blanket percentage/zero-growth diagnostic targets remain non-gates
-under spec §9; all earlier measurements are preserved. No optimization speedup
-is claimed. Later-stage runtime/optimization/self-hosting work remains scoped
-to PA31–34, without waiving PA30 correctness or architecture requirements.
+Explicit controls: **391** passing commands, **71** trace/inspection commands,
+and **1506** [evidence checks](../student.tests/pa30/evidence202/verification.json).
+All 27 historical traced objects match current rebuilds. The code is committed
+before these records; `Last reviewed commit` names that validated code tip.
+
+[Performance202](performance202.md) retains 576 observations and 32 launchers,
+frozen A/B images, A/A calibration, six ABBA blocks, runtime/text, compiler
+latency/RSS and all outliers. Common and conditional A/B images match exactly;
+flow work scales as N functions, 119N instruction visits and 58N edge/operand
+visits. Final hosted samples peak at **5.390 s / 177028 KiB**.
+The **45-second compile limit** remains mandatory. Historical 15% latency and
+zero-growth targets are diagnostic, not gates under spec §9; all measurements
+remain. No optional optimization or speedup is claimed. PA31–34 requirements
+remain stage-scoped without waiving PA30 correctness or architecture.
 
 ## Remaining implementation
 
 | Group | Required work |
 |---|---|
-| Packed SIMD (two failing fixtures) | Both random inputs stop at `__builtin_ia32_packsswb`. Implement typed builtin signatures, saturation and lane semantics, then subsequent header operations. No stubs or unused-result invention. |
-| General vector expressions | Inherited `pending199/vector-subscript.cpp` still fails. Recorded again in evidence201/pending.json; this is unfinished implementation. |
+| SIMD and vector completion | Finish typed packed operations, saturation/lane behavior and subsequent random-header operations; both failing fixtures currently stop at `__builtin_ia32_packsswb`. Complete general vector subscripting/lvalue/storage lowering, including `pending199/vector-subscript.cpp`. No stubs, name-based library shortcuts or invented unused results. |
+| Full-stage closure | Run all personal interaction controls and the required PA30 and root through30 reports after those fixes. Advance only when the full root through30 report passes. |
 
-Do not advance until the full root through30 report passes.
-
-## Handoff ledger
-
-| Work | State and evidence |
-|---|---|
-| Checkpoints195–197 | Reviewed/repaired by [audit198](audit.md); historical measurements and proofs retained. |
-| Implementation199/200 | Committed prior repairs; independent delta review remains pending on Ralph's schedule. |
-| `acffe94c`, `fc8ea8d6` | Complete automatic-object/default/capture and control-flow groups, extended through inherited noreturn, constant-loop, handler and default-lambda defects. |
-| `3d02099c` | Reference exit-status correction, reduced reproducers, preprocessing and C++11 proof; the runtime and matching-declaration positive controls remain. |
-| Handoff boundary | Validated group complete. Remaining packed arithmetic/vector lvalues have separate typed intrinsic, saturation, lane, storage and native lowering owners. Further changes to function ownership or control reachability cannot implement them. No known defect in this completed group is deferred as a review question. |
-| Independent review | Implementation199–201 deltas await Ralph's audit schedule. Whole-stage architecture/correctness review is separate from the explicit implementation work above; neither is waived. |
-
-This implementation handoff does not certify the whole assignment.
+The three reviewed handoffs separated bound legality and conditional-join
+interactions from their initial owner fixes, leaving avoidable follow-up work
+for audit. Finish the remaining vector operations, conversions, volatility and
+storage interactions as one broad group before the next handoff. This checkpoint
+audit does not certify PA30 completion.

@@ -1,0 +1,30 @@
+{
+  "priorThroughTests": {
+    "command": "n=30; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi",
+    "status": 2,
+    "wall_s": 42.66898552514613,
+    "sha256": "a63cdefb73611b97d2494fb2ad93159f373d41e095b8d2bcc9de40e52750b75f",
+    "output": "  LINK    posttoken\n  LINK    ppexpr\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\npa14/tests/general/100-for-init-local-name-conditional-template-body.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/100-for-init-local-name-conditional-template-body.my.lowir.compare.diff\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== pa21 =====\n===== pa22 =====\n===== pa23 =====\n===== pa24 =====\nPA24 native contract properties: PASS (14/14)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\n===== pa25 =====\n===== pa26 =====\n===== pa27 =====\nPA27 global-section properties: PASS (3/3)\n===== pa28 =====\n===== pa29 =====\n===== TEST SUMMARY: 4940 / 4941 TESTS PASSED =====\nmake[1]: *** [Makefile:292: test-report-nobuild] Error 1\nmake: *** [Makefile:276: test-report-through-pa29] Error 2\n"
+  },
+  "fileAudit": {
+    "command": "perl scripts/cppgm_file_audit.pl --stage pa30 --paths dev/src",
+    "status": 0,
+    "wall_s": 13.568606240674853,
+    "sha256": "b56a753559ed637a1ec940f6c1bce77f183ee8b9cdff918bd24aec75cc99ba01",
+    "output": "File audit passed for pa30 with 4 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n"
+  },
+  "stageTests": {
+    "command": "make test-pa30",
+    "status": 2,
+    "wall_s": 17.657854495570064,
+    "sha256": "ab7f8b30a0ac3ab6d2fded61d64c61ffc60929c57b5e7595f1bf7ac48dbb04be",
+    "output": "  LINK    posttoken\n  LINK    ppexpr\n===== pa30 =====\npa30/tests/compile/600-random-to-address-qualified-call.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa30/tests/compile/700-hosted-random-mersenne-rshift-compile.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\n===== TEST SUMMARY: 151 / 153 TESTS PASSED =====\nmake[1]: *** [Makefile:292: test-report-nobuild] Error 1\nmake: *** [Makefile:483: test-pa30] Error 2\n"
+  },
+  "through30": {
+    "command": "make test-report-through-pa30",
+    "status": 2,
+    "wall_s": 68.45817791298032,
+    "sha256": "87d041f6c2bfdf6a4f53ac44f083cc3b57cb34647934cf665589447f2f59c9df",
+    "output": "  LINK    posttoken\n  LINK    ppexpr\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\npa14/tests/general/100-for-init-local-name-conditional-template-body.t: ERROR: generated LowIR does not match reference after relaxed metadata, local-name, and order canonicalization; canonical diff written to tests/general/100-for-init-local-name-conditional-template-body.my.lowir.compare.diff\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== pa21 =====\n===== pa22 =====\n===== pa23 =====\n===== pa24 =====\nPA24 native contract properties: PASS (14/14)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\n===== pa25 =====\n===== pa26 =====\n===== pa27 =====\nPA27 global-section properties: PASS (3/3)\n===== pa28 =====\n===== pa29 =====\n===== pa30 =====\npa30/tests/compile/600-random-to-address-qualified-call.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa30/tests/compile/700-hosted-random-mersenne-rshift-compile.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\n===== TEST SUMMARY: 5091 / 5094 TESTS PASSED =====\nmake[1]: *** [Makefile:292: test-report-nobuild] Error 1\nmake: *** [Makefile:276: test-report-through-pa30] Error 2\n"
+  }
+}

@@ -1,0 +1,243 @@
+{
+  "compiler_sha256": "5a790b4cfae064f4f8ad4772eb6897d37af1b6329f3b6b81a20350180032317b",
+  "commands": [
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional-effects.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "int live,tests,arms;\nstruct Test{Test(){++live;} ~Test(){--live;} operator bool()const{++tests;return true;}};\nint arm(){++arms;return live;}\nint run(){if(Test() ? arm() : 0)return live==0?7:8;return 9;}\nstruct Choice{operator int()const{++arms;return 3;}};\nint convert(int n){if(n ? Choice() : 0)return 4;return 5;}\nint main(){return run()==7 && tests==1 && arms==1 && live==0 && convert(1)==4 && convert(0)==5 && arms==2?0:1;}\n",
+      "source_sha256": "7f3a33a0a75c3c616339c411a08f5853b3ea1633f67fa054142d80cf3f1ec79c",
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional-false.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "int f(){while(1==1 ? (0 ? 4 : 0) : 7){}}\n",
+      "source_sha256": "ef7a2a299fb85fe2395366fee28e7af2ee1d2c8505030df8769431f30f74f043",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional-runtime.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "int f(int x){while(x ? 1 : 0){}}\n",
+      "source_sha256": "69dedd72e6c1989e0b88b84297b0907fef86d427c9da2263974128475e0330bd",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "int a(){while(1 ? 2 : 0){}}\nint b(){while(1==1 ? (0 ? 0 : 3) : 0){}}\ntemplate<class T> int loop(){for(;sizeof(T)==4 ? 2 : 0;){}}\nint demanded(){return loop<int>();}\nint calls;\nint tick(int x){++calls;return x;}\nstruct Flag{operator bool()const{return true;}};\nint f(int x){if(x ? tick(7) : tick(0))return 11;return 13;}\nint g(){if(Flag() ? 5 : 0)return 17;return 18;}\nint main(){return f(1)==11 && f(0)==13 && calls==2 && g()==17 ? 0:1;}\n",
+      "source_sha256": "598eb03250c7c817394a89cccfadfb7e8fdb0a594d3aa7ab31304ea72a1c506f",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-slot-escape.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "int f(int x){int n=1;int*p=&n;if(x)*p=0;while(n){}}\n",
+      "source_sha256": "cc5e74320f9fef47be71d1986f656c2dad3c60c72bafed73c1c6e48eb4d2d3c3",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-slot-joins.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "int f(int x){int n;if(x)n=2;else n=2;while(n){}} int g(){while((unsigned char)257 ? 4 : 0){}} int main(){return 0;}\n",
+      "source_sha256": "e35772c4d5711d1f3e31eac706e089a28ab734bf7da92e745a4e9d00a0b4362e",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-slot-mutation.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "int f(){int n=1;while(n){n=0;}}\n",
+      "source_sha256": "da3a646ca46f6e605da59110fb0e219ecf95fc8fc6da300b0ed3ae1d23b01783",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-slot-volatile.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "int f(){volatile int n=1;while(n){}}\n",
+      "source_sha256": "9222b043d27c06d5d72dd4b87d8e2af55af397ba623de16117ad8db3c796d55d",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/interactions.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "template<int... I>struct Seq{};\ntemplate<int N>struct Build{template<class,int... I>using Map=Seq<I...>;using type=__make_integer_seq<Map,int,N>;};\nstruct Pair{int value;template<int...I,int...J>Pair(Seq<I...>,Seq<J...>):value(sizeof...(I)+sizeof...(J)){} Pair():Pair(Build<2>::type(),Build<3>::type()) {}};\nstruct Base{protected:static int value(){return 29;}};\ntemplate<class T>struct Mid:Base{};\ntemplate<class T>struct Child:Mid<T>{int f(){return Base::value();}};\ntemplate<class T>struct Outer{private:static int secret(){return 7;} public: struct Inner{friend class Outer<T>;private:int run(){return Outer<T>::secret();}}; int run(){return Inner().run();}};\nstruct Complete{template<class T>struct Inner{int get(){return Complete().value;}};int value;Complete():value(3){}};\nint destroyed;\nstruct Guard{Guard(int){} ~Guard(){++destroyed;}};\nstruct Later{Later(int){throw 13;}};\nstruct Parts{Guard guard;Later later;};\nunion Variant{Parts parts;int unused;~Variant(){}};\nstruct Aggregate{Variant variant;};\nint cleanup(){try{Aggregate a={{{7,13}}};}catch(int n){return n;}return 0;}\ntypedef int Vector __attribute__((vector_size(8)));\nvolatile Vector stored;\nstruct Count{int n;operator int()const{return n;}};\ntemplate<class T>auto allocate(Count n)->decltype(new T[n]){return new T[n];}\n[[noreturn]] void stop(){throw 5;}\nint select(int n){if(n ? 2 : 0)return 17;stop();}\nint default_lambda(int n=[](){int x=11;return [=](){return x;}();}()){return n;}\nint main(){Pair p;Child<int>child;Outer<int>outer;Complete::Inner<int>inner;\nint* a=allocate<int>(Count{2});a[1]=default_lambda();auto capture=[&]{return a[1]+p.value;};\nVector v=__builtin_ia32_vec_init_v2si(19,23);stored=v;\nint sum=capture()+child.f()+outer.run()+inner.get()+__builtin_ia32_vec_ext_v2si(stored,1)+select(1);\ndelete[]a;int before=destroyed;int c=cleanup();return sum==95 && c==13 && destroyed==before+1?0:1;}\n",
+      "source_sha256": "358670157ed75c30528892b44597dbd5b7e128a6795cee233a73f76ad422f096",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid explicit function template arguments\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-ambiguous.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "struct Count{operator int()const;operator unsigned long()const;};using P=decltype(new int[Count()]);\n",
+      "source_sha256": "e338e4dc6c2150f4209dbc815fef724324ca0508e1e10f3190587ef371b55187",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-converted.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "int conversions;\nstruct Count{unsigned n;operator unsigned()const{++conversions;return n;}};\nstruct Signed{short n;operator short()const{return n;}};\nstruct Reference{int n;operator int&(){++conversions;return n;}};\nstruct Derived:Count{};\ntemplate<class T,class N>auto allocate(N n)->decltype(new T[n]){return new T[n];}\nint main(){int*p=allocate<int>(Count{4});p[3]=17;int*q=new int[Signed{3}];q[2]=19;\nReference r{2};int*s=new int[r];s[1]=23;Derived d;d.n=2;int*t=new int[d];t[1]=29;\nint result=p[3]+q[2]+s[1]+t[1]-88;delete[]p;delete[]q;delete[]s;delete[]t;return result || conversions!=3;}\n",
+      "source_sha256": "1b065886986976b8d75970abf933c42a302115568ffe549172d211ca5ea91c1b",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: no viable function\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-deleted.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "struct Count{operator int()const=delete;};void f(){new int[Count()];}\n",
+      "source_sha256": "a8a194f33911afd9a2ac4124ad11b47bee702d5030306f8e7bd944bd5306236e",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-explicit.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "struct Count{explicit operator int()const{return 3;}};void f(){new int[Count()];}\n",
+      "source_sha256": "1a300381f2b18eecf34bb7bbd9049b88fae6e06628e976a1de9ca82269d036e4",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-float.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "struct Count{operator double()const;};using P=decltype(new int[Count()]);\n",
+      "source_sha256": "ebd967b49bcaaa5292c0e61ec60ed5c91ca467210564eb19336dc409d617f326",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-private.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "class Count{operator int()const;};using P=decltype(new int[Count()]);\n",
+      "source_sha256": "b29c937f68526ce59e8b231dbd0497463157b92d422a3a18fe5fbf7cece4b826",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-query-converted.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "template<class T>struct Count{operator int()const{typename T::missing bad;return 3;}};\nusing P=decltype(new int[Count<int>()]);\nstatic_assert(__is_same(P,int*),\"unevaluated conversion does not demand a body\");\nstruct Signed{operator int()const;};\ntemplate<class T>auto form(T n)->decltype(new int[n]);\nstatic_assert(__is_same(decltype(form(Signed())),int*),\"substituted bound\");\nint main(){return 0;}\n",
+      "source_sha256": "3d12a199f9762de216d4b5a714db7b21fe43b615475a0fc17c69b337c5be2861",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-scoped.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/audit202/entry-probe.o"
+      ],
+      "source": "enum class E{a=3};struct Count{operator E()const;};using P=decltype(new int[Count()]);\n",
+      "source_sha256": "eb23182525e7254abbb8cb3d29720e73a5a9b63a8e273de9253c2f4612d4d9c2",
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must be integral\n"
+    }
+  ]
+}
