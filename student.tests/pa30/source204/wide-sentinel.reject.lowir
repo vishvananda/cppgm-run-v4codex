@@ -1,0 +1,7 @@
+function @main() -> i32 [role=entry] {
+  slot $record : obj<64x16>
+  block ^entry:
+  %p = addr $record
+  x86 183, %p, 36893488147419103231
+  return i32 0
+}
