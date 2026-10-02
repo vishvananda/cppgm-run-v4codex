@@ -1,0 +1,38 @@
+[
+  {
+    "command": "make build",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa33-220/build.log",
+    "sha256": "603e8ac9cc69e1467c155bb42f6d8ac310d44238fedfab56ea2fe9bd6c6174ad"
+  },
+  {
+    "command": "make test-pa33",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa33-220/stage.log",
+    "sha256": "057ab3e7687cabce2c4ffbd2e69966d06c3db735a5f62fdedd6ea114056f5ee0"
+  },
+  {
+    "command": "make -C pa33 test-debuginfo",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa33-220/debug.log",
+    "sha256": "d2fd0e38191e9eb05a8cc64cb54263e5d11b824e4ca893e253b37d2b3ca63153"
+  },
+  {
+    "command": "perl scripts/cppgm_file_audit.pl --stage pa33 --paths dev/src",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa33-220/file.log",
+    "sha256": "5b5d2e2a47194726e23018fda7d815fbbc0ed524e538c60c222fd93331d3bd03"
+  },
+  {
+    "command": "make test-report-through-pa33",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa33-220/through.log",
+    "sha256": "a6f83a6afb7e49ee87fde0d72918a1ba82a7bbea1cebd07ef67242c6d4ef1714"
+  },
+  {
+    "command": "python3 student.tests/pa33/audit220.py $RALPH_ARTIFACT_DIR/pa33-220/trace",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa33-220/trace.log",
+    "sha256": "f919a7fc662bf4112e12c920cfea8c4cb343c9632c6f1348b4316eddce5e2ead"
+  }
+]

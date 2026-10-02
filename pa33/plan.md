@@ -1,77 +1,79 @@
-# PA33 implementation handoff 219
+# PA33 final plan and audit 220
 
 Stage base commit: 676b6e328c7a05334b15f1c9ee1ec30c783e9aff
-Last reviewed commit: 676b6e328c7a05334b15f1c9ee1ec30c783e9aff
+Last reviewed commit: d7b7c9cf
 
-Target: **PA33 full-stage**. Phase: **implementation complete; independent audit
-pending**. Entry: 47/73 reported passing, ten MIR failures, controls stopped at
-strlen and debug not completed. Final: all 57 MIR/behavior fixtures, five native
-controls, 18 driver modes and 11 debug fixtures pass. No coverage, reference or
-comparison changes. Review markers above are deliberately unchanged.
+Target: **PA33 full-stage**. Phase: **final audit complete**. The independent
+[audit](audit.md) reconstructs the architecture, traces source/template/builtin
+facts through ELF, closes every handoff and records legality, profitability,
+invalidation, work/growth, ABI/debug and lifetime evidence. No open PA33 finding
+or unaudited handoff remains. Course fixtures/references/comparisons are unchanged.
 
-## Design/spec alignment
+## Final Spec Alignment
 
-Both adapters pass the requested native level through typed LowIR → function
-Selector → consumed MIR → direct ELF. Source/object paths retain PA32 optimization
-before selection. O1–O3 share the policy below; O0 retains placement and gains the
-required unused-result memcpy control. There is no production text roundtrip.
-[Owner proofs and reproduction](../student.tests/pa33/evidence219/README.md) and
-[bound records](../student.tests/pa33/evidence219/binding.json) carry details.
+Both tools consume shared typed LowIR → per-function Selector/MIR → direct ELF.
+Source/object paths apply PA32 first. Frontend interned identities, retained
+parsed template regions, precise fact demands and immutable substitution frames
+feed typed lowering; the frontend dies before native emission. MIR is the actual
+encoder input. O0 retains placement; O1–O3 share the bounded native policy.
 
-| Owner | Data flow, legality and fallback | Work/growth limit |
+| Owner | Final policy and conservative fallback | Work/growth bound |
 | --- | --- | --- |
-| `native/global_placement` | Typed uses/definitions + fixed effects → unique whole-function registers; covers backedges and parallel phi transfers; EH/multiple definitions remain conservative | O(I+V log V), O(V) temporary storage; <=7 retained values, <=5 saved registers; no clones/retries; ordinary bounded selection handles spills |
-| Control/frame/bulk | Single MIR compaction preserves labels/debug/effects; direct register bulk addresses feed encoding; optimized integer Boolean comparisons need no FP scratch | O(MIR), zero cleanup growth; unused scratch removed |
-| `native/calls`, `call_policy`, `prefix_call` | Complete canonical builtin + ABI/effect gates → MIR call fact or dynamic copy; page-safe prefix with original call fallback; parallel argument setup retained | O(1)/site; <=8 prefixes/function, <=128/unit; +53 encoded bytes/site, <=64 reserved (512/function, 8192/unit); REP adds no call expansion loop |
-| LowIR metadata adapter | Explicit `builtin=` preserves hosted identity independently of object spelling; rejects conflicting/invalid identities; source lowering records typed provenance | Constant fields/entity, linear read/write; no production reconstruction |
+| Global placement | Unique scalar definitions reserve whole-function GPRs, including backedges and staged phi edges; effects/parameters/frame base excluded; EH/multiple definitions keep ordinary storage | O(I+V log V), O(V) scratch; ≤7 retained GPRs/5 preserved registers; no retries/clones |
+| Control/frame/carry | Single branch compaction; exact frame/save facts; private complete-use reload windows; bulk addresses stay typed | O(MIR) with fixed ≤3×64 carry windows/home; zero cleanup growth |
+| Builtin calls | Exact canonical identity, ABI/effect/noalias gates; page-safe strlen prefix with original-call fallback; unused-result memcpy REP after parallel argument capture | ≤8 prefixes/function, ≤128/unit; +53 bytes/site, ≤64 reservation; ≤512/8192 byte growth; linear argument work |
+| Call scratch correction | Function-owned vectors reset logical state per call; bounded stable rotation preserves GPR/XMM order without per-call allocation | ≤14 register assignments; O(max stack arguments) retained scratch; dies with Selector; identical output |
+| Explicit LowIR metadata | Hosted builtin identity persists independently of ELF spelling; malformed/conflicting metadata rejects | Constant fields/entity, linear adapters; no production text reconstruction |
 
-Each function's transient placement/MIR dies after encoding. New telemetry counts
-candidates, retained values, removed controls and selected builtin operations
-without extra reporting analyses. Remaining whole-stage ownership/ABI/debug
-questions belong to independent review; no known implementation defect is waived.
+PA32 fixed pass composition and finite inline/object/loop budgets remain in
+force; native selection does not restart those passes. Analyses die at their
+natural owner. No host/reference compiler, assembly transport, global mutable
+cache or fixture recognition implements required output.
 
-## Validation and performance
+## Performance and acceptance
 
-Required checks pass: `make test-pa33` **57/57** plus controls/driver modes;
-`make -C pa33 test-debuginfo` **11/11**; `make test-report-through-pa32`
-**5397/5397**; `make test-report-through-pa33` **5454/5454**; PA33 file audit
-passes with four inherited header warnings. Explicit personal checks cover
-cyclic phis, six-parameter pressure, copy ABI ordering, protected-page strings,
-all native levels and prefix work/growth caps. Exact commands/log hashes are in
-[checks](../student.tests/pa33/evidence219/checks.json).
+[Final frozen evidence](../student.tests/pa33/evidence220/performance.md) contains
+**812 observations**: A/A plus six ABBA pairs per compiler/runtime lane, latency,
+peak RSS, checked runtime and text size. All 14 fixed final benchmark objects
+equal their accepted 219 outputs; the new scratch workload also has identical
+A/B objects. [Historical verification](../student.tests/pa33/evidence220/history.json)
+recomputes all **924** handoff observations, including rejected experiments.
 
-[Frozen measurements](../student.tests/pa33/evidence219/performance.md) retain
-A/A calibration, six ABBA pairs, every compiler wall/RSS and checked runtime
-sample, text sizes and all rejected observations. Final binaries equal candidate2.
-Affected runtime B/A medians: loop **0.348**, calls **0.786**, short strings
-**0.558**, dynamic copy **0.032**; compile ratios **0.996–1.033**, peak RSS grows
-by at most **5.6%** on these inputs. Loop/call text shrinks; bounded prefix growth
-is **6784 bytes/unit**, below 8192. A 127-byte hosted string pays **1.122x** runtime
-for the required prefix probe, with compiler 1.016x and the same bounded text
-cost. An attempted suffix continuation is rejected: controlled candidate2/3
-ABBA gives **1.389x** runtime and more bytes; its source diff/data remain archived.
-This required probe's long-string overhead is disclosed, not a claimed benefit.
+Affected runtime B/A medians: loop **0.335**, calls **0.635**, short string
+**0.595**, dynamic copy **0.029**; compile **1.007–1.015**, maximum peak RSS
+increase **480 KiB**. Loop/call text shrinks; prefix growth is **6784 bytes/unit**,
+below 8192. The 127-byte string retains a disclosed **1.140x** prefix-miss cost;
+the rejected suffix alternative and its worse measurements remain archived.
+Disassembly confirms removal of four loop loads/two stores per iteration.
 
-Common O0 outputs are byte-identical; O2 common text shrinks 10–25 bytes, and
-floating runtime is **0.888x**. The compiler-component object is byte-identical
-(34466 text bytes); peak compiler RSS is 77624/77888 KiB. No compiler speedup is claimed from noisy near-one
-ratios. Fixed template/memory/FP/EH and compiler-component inputs supplement the
-affected cases. Mandated predicates and implemented work/growth budgets remain
-gates. Inherited ad hoc timing ratios are diagnostics under spec.md's stage rule;
-no extra profiler, allocator statistic or unsupported zero-regression gate is added.
+Common O0 objects are unchanged; O2 text shrinks 10–25 bytes. Current common
+timings are noisy and establish no additional runtime/compiler speed claim.
+The fixed compiler component has unchanged 34466-byte text and peak RSS
+77592/77820 KiB. The many-call scratch compiler ratio is 0.831 [0.719–1.065],
+peak RSS 39848/39668 KiB, runtime 0.985 [0.847–1.082] with identical generated
+code; no repeatable timing gain is claimed for the required lifetime correction.
 
-## Handoff ledger
+Mandated MIR bounds, correctness, debug and finite work/growth policies remain
+gates. Inherited self-imposed timing/RSS/zero-growth targets are diagnostics
+under spec.md's stage-scoped rule; none adds a PA33 exit gate or excuses an
+avoidable regression. Full self-hosting remains PA34; its applicable fixed
+compiler-component benchmark is included here.
 
-- `441d5ec9`: clean entry, baseline and owner groups recorded before stage edits.
-- `f9df1b5b`: level propagation, bounded placement, frame/control/bulk facts and
-  builtin selection; all PA33 course controls pass. Earlier object replay found
-  two missing hosted builtin identities; these were unfinished implementation.
-- `cbf6f115`: explicit builtin fact serialization and incompatible declaration
-  fallback close both replay failures; final full checks pass. One restricted-CPU
-  PA3 timeout is preserved; normal-setting required reports subsequently pass.
-- Boundary 219: all identified related groups complete, no unfinished
-  implementation. Independent whole-stage architecture/performance/ABI/debug
-  audit remains required before advancement; this handoff does not certify it.
-  Evidence/plan records preserve the base/review markers and rejected experiments.
+## Validation and ledger
 
-Verify the committed handoff with `python3 student.tests/pa33/records.py verify --clean`.
+- `make test-pa33`: **57/57**, plus **5** native controls and **18** driver modes.
+- `make -C pa33 test-debuginfo`: **11/11**.
+- `perl scripts/cppgm_file_audit.pl --stage pa33 --paths dev/src`: **pass**, four
+  inherited header warnings.
+- `make test-report-through-pa33`: **5454/5454**, **33/33 stages**. The actual
+  primary log and independent reports agree; the prompt's 5840 census differs.
+- Explicit source/template/ABI/builtin/replay, protected-page, cyclic-phi,
+  budget and negative CLI controls pass. No new timeout occurred.
+- `441d5ec9`, `f9df1b5b`, `cbf6f115`, `c1328ca0`: all stage handoffs reviewed;
+  the 219 pending independent review is closed by this audit.
+- `d7b7c9cf`: call scratch ownership and bounded stable ordering corrected;
+  source traces, frozen benchmarks and final checks pass.
+
+The final binding records source/artifact hashes, unchanged fixture trees,
+reviewed code and all results. Verify the clean committed state with:
+`python3 student.tests/pa33/audit220_records.py verify --clean`.
