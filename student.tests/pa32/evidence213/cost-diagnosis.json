@@ -1,0 +1,290 @@
+[
+  {
+    "name": "loads",
+    "block": 0,
+    "label": "A",
+    "wall_s": 0.14250409789383411
+  },
+  {
+    "name": "loads",
+    "block": 0,
+    "label": "B",
+    "wall_s": 0.07292059622704983
+  },
+  {
+    "name": "loads",
+    "block": 0,
+    "label": "B",
+    "wall_s": 0.07367425225675106
+  },
+  {
+    "name": "loads",
+    "block": 0,
+    "label": "A",
+    "wall_s": 0.14323594607412815
+  },
+  {
+    "name": "loads",
+    "block": 1,
+    "label": "A",
+    "wall_s": 0.14356201514601707
+  },
+  {
+    "name": "loads",
+    "block": 1,
+    "label": "B",
+    "wall_s": 0.07378607429563999
+  },
+  {
+    "name": "loads",
+    "block": 1,
+    "label": "B",
+    "wall_s": 0.07409203611314297
+  },
+  {
+    "name": "loads",
+    "block": 1,
+    "label": "A",
+    "wall_s": 0.14327013678848743
+  },
+  {
+    "name": "loads",
+    "block": 2,
+    "label": "A",
+    "wall_s": 0.14358007349073887
+  },
+  {
+    "name": "loads",
+    "block": 2,
+    "label": "B",
+    "wall_s": 0.074963403865695
+  },
+  {
+    "name": "loads",
+    "block": 2,
+    "label": "B",
+    "wall_s": 0.07428772374987602
+  },
+  {
+    "name": "loads",
+    "block": 2,
+    "label": "A",
+    "wall_s": 0.14346939884126186
+  },
+  {
+    "name": "loads",
+    "block": 3,
+    "label": "A",
+    "wall_s": 0.14323082379996777
+  },
+  {
+    "name": "loads",
+    "block": 3,
+    "label": "B",
+    "wall_s": 0.07506493851542473
+  },
+  {
+    "name": "loads",
+    "block": 3,
+    "label": "B",
+    "wall_s": 0.07417796365916729
+  },
+  {
+    "name": "loads",
+    "block": 3,
+    "label": "A",
+    "wall_s": 0.14338712580502033
+  },
+  {
+    "name": "loads",
+    "block": 4,
+    "label": "A",
+    "wall_s": 0.14312325417995453
+  },
+  {
+    "name": "loads",
+    "block": 4,
+    "label": "B",
+    "wall_s": 0.0752838496118784
+  },
+  {
+    "name": "loads",
+    "block": 4,
+    "label": "B",
+    "wall_s": 0.07406140863895416
+  },
+  {
+    "name": "loads",
+    "block": 4,
+    "label": "A",
+    "wall_s": 0.14317317493259907
+  },
+  {
+    "name": "loads",
+    "block": 5,
+    "label": "A",
+    "wall_s": 0.14266075007617474
+  },
+  {
+    "name": "loads",
+    "block": 5,
+    "label": "B",
+    "wall_s": 0.07388953305780888
+  },
+  {
+    "name": "loads",
+    "block": 5,
+    "label": "B",
+    "wall_s": 0.07410119473934174
+  },
+  {
+    "name": "loads",
+    "block": 5,
+    "label": "A",
+    "wall_s": 0.14286845736205578
+  },
+  {
+    "name": "memory",
+    "block": 0,
+    "label": "A",
+    "wall_s": 0.04731530137360096
+  },
+  {
+    "name": "memory",
+    "block": 0,
+    "label": "B",
+    "wall_s": 0.05223803594708443
+  },
+  {
+    "name": "memory",
+    "block": 0,
+    "label": "B",
+    "wall_s": 0.0529318880289793
+  },
+  {
+    "name": "memory",
+    "block": 0,
+    "label": "A",
+    "wall_s": 0.04753035679459572
+  },
+  {
+    "name": "memory",
+    "block": 1,
+    "label": "A",
+    "wall_s": 0.04755142331123352
+  },
+  {
+    "name": "memory",
+    "block": 1,
+    "label": "B",
+    "wall_s": 0.05326445773243904
+  },
+  {
+    "name": "memory",
+    "block": 1,
+    "label": "B",
+    "wall_s": 0.052673716098070145
+  },
+  {
+    "name": "memory",
+    "block": 1,
+    "label": "A",
+    "wall_s": 0.04730629175901413
+  },
+  {
+    "name": "memory",
+    "block": 2,
+    "label": "A",
+    "wall_s": 0.047249019145965576
+  },
+  {
+    "name": "memory",
+    "block": 2,
+    "label": "B",
+    "wall_s": 0.05276474170386791
+  },
+  {
+    "name": "memory",
+    "block": 2,
+    "label": "B",
+    "wall_s": 0.05227127857506275
+  },
+  {
+    "name": "memory",
+    "block": 2,
+    "label": "A",
+    "wall_s": 0.04718117043375969
+  },
+  {
+    "name": "memory",
+    "block": 3,
+    "label": "A",
+    "wall_s": 0.04733080416917801
+  },
+  {
+    "name": "memory",
+    "block": 3,
+    "label": "B",
+    "wall_s": 0.052897822111845016
+  },
+  {
+    "name": "memory",
+    "block": 3,
+    "label": "B",
+    "wall_s": 0.05231934040784836
+  },
+  {
+    "name": "memory",
+    "block": 3,
+    "label": "A",
+    "wall_s": 0.04730886407196522
+  },
+  {
+    "name": "memory",
+    "block": 4,
+    "label": "A",
+    "wall_s": 0.047334371134638786
+  },
+  {
+    "name": "memory",
+    "block": 4,
+    "label": "B",
+    "wall_s": 0.05258896388113499
+  },
+  {
+    "name": "memory",
+    "block": 4,
+    "label": "B",
+    "wall_s": 0.052893100306391716
+  },
+  {
+    "name": "memory",
+    "block": 4,
+    "label": "A",
+    "wall_s": 0.04735996574163437
+  },
+  {
+    "name": "memory",
+    "block": 5,
+    "label": "A",
+    "wall_s": 0.04766536131501198
+  },
+  {
+    "name": "memory",
+    "block": 5,
+    "label": "B",
+    "wall_s": 0.052490875124931335
+  },
+  {
+    "name": "memory",
+    "block": 5,
+    "label": "B",
+    "wall_s": 0.05287570878863335
+  },
+  {
+    "name": "memory",
+    "block": 5,
+    "label": "A",
+    "wall_s": 0.04726211354136467
+  }
+]
