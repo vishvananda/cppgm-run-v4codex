@@ -1,0 +1,1556 @@
+{
+  "compiler_sha256": "d597bc936ea90c47c6179f481a6832579fbb55579ffe9eaf44505eed4ce1c2e6",
+  "commands": [
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/attribute-arguments.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/attribute-arguments.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.04962530918419361,
+      "stdout": "",
+      "stderr": "ERROR: noreturn takes no arguments\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/attribute-variable.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/attribute-variable.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.009327884763479233,
+      "stdout": "",
+      "stderr": "ERROR: noreturn requires a function\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/exception-changed.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/exception-changed.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.008105695247650146,
+      "stdout": "",
+      "stderr": "ERROR: conflicting allowed exception types\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/exception-repeat.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/exception-repeat.o"
+      ],
+      "status": 0,
+      "wall_s": 0.009309535846114159,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/exception-repeat.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/exception-repeat"
+      ],
+      "status": 0,
+      "wall_s": 0.07181638106703758,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/exception-repeat"
+      ],
+      "status": 0,
+      "wall_s": 0.0033184997737407684,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/exception-repeat.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/exception-repeat.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.023091420531272888,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/exception-unrestricted.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/exception-unrestricted.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.015394551679491997,
+      "stdout": "",
+      "stderr": "ERROR: dynamic exception specification added on redeclaration\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-branch.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-branch.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.007462991401553154,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-catch.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-catch.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.008643699809908867,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-constant-loops.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-constant-loops.o"
+      ],
+      "status": 0,
+      "wall_s": 0.008902309462428093,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/flow-constant-loops.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-constant-loops"
+      ],
+      "status": 0,
+      "wall_s": 0.07562346942722797,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/flow-constant-loops"
+      ],
+      "status": 0,
+      "wall_s": 0.004259839653968811,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-constant-loops.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-constant-loops.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.01754840649664402,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-dead-handler.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-dead-handler.o"
+      ],
+      "status": 0,
+      "wall_s": 0.0127803273499012,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/flow-dead-handler.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-dead-handler"
+      ],
+      "status": 0,
+      "wall_s": 0.1958814077079296,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/flow-dead-handler"
+      ],
+      "status": 0,
+      "wall_s": 0.007518261671066284,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-dead-handler.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-dead-handler.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.00803411565721035,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-do.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-do.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.008565763011574745,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-function-try.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-function-try.o"
+      ],
+      "status": 0,
+      "wall_s": 0.008523562923073769,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/flow-function-try.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-function-try"
+      ],
+      "status": 0,
+      "wall_s": 0.14140639454126358,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/flow-function-try"
+      ],
+      "status": 0,
+      "wall_s": 0.0032085105776786804,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-function-try.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-function-try.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.006755204871296883,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-goto.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-goto.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.00764559768140316,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-loop-break.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-loop-break.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.0067648012191057205,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-main.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-main.o"
+      ],
+      "status": 0,
+      "wall_s": 0.006827855482697487,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/flow-main.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-main"
+      ],
+      "status": 0,
+      "wall_s": 0.05586609058082104,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/flow-main"
+      ],
+      "status": 0,
+      "wall_s": 0.001674136146903038,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-main.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-main.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.004972316324710846,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-noreturn-handler.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-noreturn-handler.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.00704680010676384,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-noreturn-noexcept.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-noreturn-noexcept.o"
+      ],
+      "status": 0,
+      "wall_s": 0.00739416666328907,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/flow-noreturn-noexcept.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-noreturn-noexcept"
+      ],
+      "status": 0,
+      "wall_s": 0.10642741434276104,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/flow-noreturn-noexcept"
+      ],
+      "status": 0,
+      "wall_s": 0.003077160567045212,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-noreturn-noexcept.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-noreturn-noexcept.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005505392327904701,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-noreturn.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-noreturn.o"
+      ],
+      "status": 0,
+      "wall_s": 0.010451726615428925,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/flow-noreturn.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-noreturn"
+      ],
+      "status": 0,
+      "wall_s": 0.11905970424413681,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/flow-noreturn"
+      ],
+      "status": 0,
+      "wall_s": 0.00348498672246933,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-noreturn.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-noreturn.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.006995316594839096,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-switch.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-switch.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.006744710728526115,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-template.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-template.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.006827682256698608,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-try-cleanup.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-try-cleanup.o"
+      ],
+      "status": 0,
+      "wall_s": 0.032654594630002975,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/flow-try-cleanup.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-try-cleanup"
+      ],
+      "status": 0,
+      "wall_s": 0.14090634509921074,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/flow-try-cleanup"
+      ],
+      "status": 0,
+      "wall_s": 0.0034119654446840286,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-try-cleanup.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-try-cleanup.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.007450655102729797,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-unknown-attribute.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-unknown-attribute.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.031444013118743896,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-unreachable-break.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-unreachable-break.o"
+      ],
+      "status": 0,
+      "wall_s": 0.008293289691209793,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/flow-unreachable-break.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-unreachable-break"
+      ],
+      "status": 0,
+      "wall_s": 0.05221722647547722,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/flow-unreachable-break"
+      ],
+      "status": 0,
+      "wall_s": 0.0017583183944225311,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-unreachable-break.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-unreachable-break.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005303055047988892,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-unreachable.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-unreachable.o"
+      ],
+      "status": 0,
+      "wall_s": 0.0067313965409994125,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/flow-unreachable.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-unreachable"
+      ],
+      "status": 0,
+      "wall_s": 0.054411452263593674,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/flow-unreachable"
+      ],
+      "status": 0,
+      "wall_s": 0.0017068590968847275,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-unreachable.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-unreachable.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.008754253387451172,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-valid.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-valid.o"
+      ],
+      "status": 0,
+      "wall_s": 0.009173788130283356,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/flow-valid.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-valid"
+      ],
+      "status": 0,
+      "wall_s": 0.12163778766989708,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/flow-valid"
+      ],
+      "status": 0,
+      "wall_s": 0.0029260925948619843,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/flow-valid.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/flow-valid.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.006064875051379204,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/hosted-new-valid.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/hosted-new-valid.o"
+      ],
+      "status": 0,
+      "wall_s": 0.03421150520443916,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/hosted-new-valid.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/hosted-new-valid"
+      ],
+      "status": 0,
+      "wall_s": 0.09816545248031616,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/hosted-new-valid"
+      ],
+      "status": 0,
+      "wall_s": 0.0033221542835235596,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/hosted-new-valid.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/hosted-new-valid.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.03372926078736782,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-array.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-array.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.05415663123130798,
+      "stdout": "",
+      "stderr": "ERROR: automatic object used across function boundary\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-constant-address.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-constant-address.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.014711640775203705,
+      "stdout": "",
+      "stderr": "ERROR: automatic object used across function boundary\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-constant-reference.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-constant-reference.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.024816028773784637,
+      "stdout": "",
+      "stderr": "ERROR: automatic object used across function boundary\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-capture.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-capture.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.012497879564762115,
+      "stdout": "",
+      "stderr": "ERROR: default argument cannot capture an automatic object\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-constant.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-constant.o"
+      ],
+      "status": 0,
+      "wall_s": 0.020550193265080452,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/local-default-constant.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-constant"
+      ],
+      "status": 0,
+      "wall_s": 0.07620969787240028,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/local-default-constant"
+      ],
+      "status": 0,
+      "wall_s": 0.010186461731791496,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-constant.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-constant.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.010104134678840637,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-implicit-capture.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-implicit-capture.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.013652801513671875,
+      "stdout": "",
+      "stderr": "ERROR: default argument cannot capture an automatic object\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-lambda.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-lambda.o"
+      ],
+      "status": 0,
+      "wall_s": 0.01177356019616127,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/local-default-lambda.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-lambda"
+      ],
+      "status": 0,
+      "wall_s": 0.10876458883285522,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/local-default-lambda"
+      ],
+      "status": 0,
+      "wall_s": 0.005182087421417236,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-lambda.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-lambda.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.010436678305268288,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-nested-lambda.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-nested-lambda.o"
+      ],
+      "status": 0,
+      "wall_s": 0.010668018832802773,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/local-default-nested-lambda.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-nested-lambda"
+      ],
+      "status": 0,
+      "wall_s": 0.08226784132421017,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/local-default-nested-lambda"
+      ],
+      "status": 0,
+      "wall_s": 0.004283897578716278,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-nested-lambda.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-nested-lambda.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.008786609396338463,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-prototype.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-prototype.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.02176860347390175,
+      "stdout": "",
+      "stderr": "ERROR: automatic object used in default argument\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-sizeof.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-sizeof.o"
+      ],
+      "status": 0,
+      "wall_s": 0.010926883667707443,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/local-default-sizeof.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-sizeof"
+      ],
+      "status": 0,
+      "wall_s": 0.09147020801901817,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/local-default-sizeof"
+      ],
+      "status": 0,
+      "wall_s": 0.002741679549217224,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-sizeof.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-sizeof.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.01642402447760105,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-template.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-template.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.013403715565800667,
+      "stdout": "",
+      "stderr": "ERROR: automatic object used in default argument\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-this.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-this.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.013086145743727684,
+      "stdout": "",
+      "stderr": "ERROR: this outside nonstatic member\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default-unevaluated-lambda.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default-unevaluated-lambda.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.010243799537420273,
+      "stdout": "",
+      "stderr": "ERROR: lambda in unevaluated operand\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-default.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-default.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.010931937023997307,
+      "stdout": "",
+      "stderr": "ERROR: automatic object used in default argument\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-discard.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-discard.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.009991928935050964,
+      "stdout": "",
+      "stderr": "ERROR: automatic object used across function boundary\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-initializer.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-initializer.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.010939504951238632,
+      "stdout": "",
+      "stderr": "ERROR: automatic object used across function boundary\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-lambda-default.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-lambda-default.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.016519561409950256,
+      "stdout": "",
+      "stderr": "ERROR: capture crosses an ordinary function boundary\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-lambda-explicit.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-lambda-explicit.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.009222034364938736,
+      "stdout": "",
+      "stderr": "ERROR: capture crosses an ordinary function boundary\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-lambda-reference.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-lambda-reference.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.012085691094398499,
+      "stdout": "",
+      "stderr": "ERROR: capture crosses an ordinary function boundary\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-parameter.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-parameter.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.02991628460586071,
+      "stdout": "",
+      "stderr": "ERROR: automatic object used across function boundary\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-template-valid.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-template-valid.o"
+      ],
+      "status": 0,
+      "wall_s": 0.01029757596552372,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/local-template-valid.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-template-valid"
+      ],
+      "status": 0,
+      "wall_s": 0.1253354512155056,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/local-template-valid"
+      ],
+      "status": 0,
+      "wall_s": 0.006014920771121979,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-template-valid.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-template-valid.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.01945190317928791,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-template.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-template.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.01422189548611641,
+      "stdout": "",
+      "stderr": "ERROR: automatic object used across function boundary\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-unevaluated.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-unevaluated.o"
+      ],
+      "status": 0,
+      "wall_s": 0.010416816920042038,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/local-unevaluated.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-unevaluated"
+      ],
+      "status": 0,
+      "wall_s": 0.08885039202868938,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/local-unevaluated"
+      ],
+      "status": 0,
+      "wall_s": 0.003167053684592247,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-unevaluated.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-unevaluated.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.018613044172525406,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-use.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-use.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.010508442297577858,
+      "stdout": "",
+      "stderr": "ERROR: automatic object used across function boundary\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-valid.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-valid.o"
+      ],
+      "status": 0,
+      "wall_s": 0.012808935716748238,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete201/local-valid.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-valid"
+      ],
+      "status": 0,
+      "wall_s": 0.08218931593000889,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete201/local-valid"
+      ],
+      "status": 0,
+      "wall_s": 0.003939980641007423,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-valid.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-valid.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.01958547532558441,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/local-volatile.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/local-volatile.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.01209159567952156,
+      "stdout": "",
+      "stderr": "ERROR: automatic object used across function boundary\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/member-default-this.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/member-default-this.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.010950665920972824,
+      "stdout": "",
+      "stderr": "ERROR: capture requires block scope\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/new-hosted-reduced.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/new-hosted-reduced.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.010880706831812859,
+      "stdout": "",
+      "stderr": "ERROR: dynamic exception specification added on redeclaration\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source201/new-spec-reduced.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete201/new-spec-reduced.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.011073321104049683,
+      "stdout": "",
+      "stderr": "ERROR: dynamic exception specification added on redeclaration\n",
+      "expected_rejection": true
+    }
+  ]
+}

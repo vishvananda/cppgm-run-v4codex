@@ -1,0 +1,637 @@
+{
+  "compiler_sha256": "d597bc936ea90c47c6179f481a6832579fbb55579ffe9eaf44505eed4ce1c2e6",
+  "commands": [
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/packed-boundaries.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/packed-boundaries.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.009939735755324364
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/controls-final/packed-boundaries.o",
+        "-o",
+        "/tmp/pa30-203/controls-final/packed-boundaries"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.07751885615289211
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/controls-final/packed-boundaries"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.001566154882311821
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/packed-boundaries.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/packed-boundaries.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.010128762573003769
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/sse-address.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/sse-address.reject.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: compiler intrinsic requires a direct call\n",
+      "expected_rejection": true,
+      "wall_s": 0.006496669724583626
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/sse-immediate.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/sse-immediate.reject.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid intrinsic immediate operand\n",
+      "expected_rejection": true,
+      "wall_s": 0.005165880545973778
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/sse-lane.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/sse-lane.reject.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid intrinsic immediate operand\n",
+      "expected_rejection": true,
+      "wall_s": 0.004962440580129623
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/sse-memory.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/sse-memory.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.006695624440908432
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/controls-final/sse-memory.o",
+        "-o",
+        "/tmp/pa30-203/controls-final/sse-memory"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.05001330189406872
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/controls-final/sse-memory"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.001845305785536766
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/sse-memory.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/sse-memory.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.005435269325971603
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/sse-query-lane.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/sse-query-lane.reject.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid intrinsic immediate operand\n",
+      "expected_rejection": true,
+      "wall_s": 0.005091492086648941
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/sse-query-mask.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/sse-query-mask.reject.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __builtin_ia32_shufps in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/sse-query-mask.reject.cpp:2\n",
+      "expected_rejection": true,
+      "wall_s": 0.005421262234449387
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/sse-state.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/sse-state.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.008009243756532669
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/controls-final/sse-state.o",
+        "-o",
+        "/tmp/pa30-203/controls-final/sse-state"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.04920385591685772
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/controls-final/sse-state"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.0016735326498746872
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/sse-state.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/sse-state.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.0066094305366277695
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-const.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-const.reject.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: modifiable lvalue required\n",
+      "expected_rejection": true,
+      "wall_s": 0.005193945020437241
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-constant.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-constant.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.005579249933362007
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/controls-final/vector-constant.o",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-constant"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.04940757527947426
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/controls-final/vector-constant"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.001719532534480095
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-constant.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-constant.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.00441330298781395
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-dependent.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-dependent.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.005763718858361244
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/controls-final/vector-dependent.o",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-dependent"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.05009162798523903
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/controls-final/vector-dependent"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.0016946028918027878
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-dependent.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-dependent.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.004650941118597984
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-index.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-index.reject.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: invalid vector subscript\n",
+      "expected_rejection": true,
+      "wall_s": 0.004868142306804657
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-shuffle-type.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-shuffle-type.reject.o"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "ERROR: no viable function: __builtin_shuffle\n",
+      "expected_rejection": true,
+      "wall_s": 0.005051951855421066
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-shuffle.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-shuffle.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.006193963810801506
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/controls-final/vector-shuffle.o",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-shuffle"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.04927035979926586
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/controls-final/vector-shuffle"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.0016519520431756973
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-shuffle.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-shuffle.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.004826424643397331
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-storage.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-storage.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.006810646504163742
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/controls-final/vector-storage.o",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-storage"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.06311200745403767
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/controls-final/vector-storage"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.0015862565487623215
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-storage.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-storage.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.0057612694799900055
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-template-assignment.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-template-assignment.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.006082916632294655
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/controls-final/vector-template-assignment.o",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-template-assignment"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.05135965161025524
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/controls-final/vector-template-assignment"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.001643851399421692
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-template-assignment.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-template-assignment.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.004957543686032295
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-volatile-bitcast.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-volatile-bitcast.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.00576716847717762
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/controls-final/vector-volatile-bitcast.o",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-volatile-bitcast"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.0491461344063282
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/controls-final/vector-volatile-bitcast"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.0016909539699554443
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source203/vector-volatile-bitcast.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-volatile-bitcast.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.004247106611728668
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/pending199/vector-subscript.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-subscript.o"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.005327627062797546
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/controls-final/vector-subscript.o",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-subscript"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.050188543274998665
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/controls-final/vector-subscript"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.001634448766708374
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/pending199/vector-subscript.cpp",
+        "-o",
+        "/tmp/pa30-203/controls-final/vector-subscript.lowir"
+      ],
+      "status": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false,
+      "wall_s": 0.003926338627934456
+    }
+  ]
+}

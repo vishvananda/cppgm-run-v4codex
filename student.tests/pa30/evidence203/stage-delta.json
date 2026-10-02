@@ -1,0 +1,932 @@
+{
+  "entry_failures": [
+    "pa30/tests/compile/600-random-to-address-qualified-call.t",
+    "pa30/tests/compile/700-hosted-random-mersenne-rshift-compile.t"
+  ],
+  "final_failures": [],
+  "cases": [
+    {
+      "path": "pa30/tests/compile/200-dependent-composite-template-shape.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/200-local-callable-cross-function-reference-negative.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: automatic object used across function boundary\n"
+    },
+    {
+      "path": "pa30/tests/compile/200-local-callable-lifetime-boundary.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/200-static-data-member-addressability.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/200-zero-initialized-bulk-member.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/300-qualified-owner-identity.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/400-base-same-type-alias-ambiguous-bad.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/400-constant-left-shift-width-bad.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: static assertion is not a true constant boolean in tests/compile/400-constant-left-shift-width-bad.t:1: a shift count equal to the promoted width is invalid\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-evaluated-retained-call-demand-bad.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: static assertion is not a true constant boolean in tests/compile/400-evaluated-retained-call-demand-bad.t:6: evaluated source must demand its body\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-explicit-id-pack-index-out-of-range.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: static assertion is not a true constant boolean in tests/compile/400-explicit-id-pack-index-out-of-range.t:4: index must be in range\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-hosted-fixed-vector-builtin-arity-bad.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: no viable function: __builtin_ia32_vec_init_v2si\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-hosted-fixed-vector-builtin-type-bad.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: no viable function: __builtin_ia32_vec_init_v2si\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-hosted-using-function-distinct-entity-bad.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: function conflicts with namespace using-declaration\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-namespace-distinct-type-alias-ambiguous-bad.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: ambiguous unqualified lookup\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-reachable-missing-return-bad.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: reachable non-void function fallthrough\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-retained-special-member-exception-identity.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/400-retained-special-member-exception-mismatch-bad.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: conflicting template member exception specifications\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-retained-type-as-value-stays-invalid.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: type template parameter used as a value\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-static-member-retained-no-viable-bad.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: no viable function: select\n"
+    },
+    {
+      "path": "pa30/tests/compile/500-compressed-pair-padding-instantiation.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/500-parameter-owned-noexcept-scope.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/500-reference-wrapper-smoke.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-aggregate-class-reference-member.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-allocator-deallocate-included-class-layout.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-anonymous-allocator-traits-pointer.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-basic-string-implicit-destructor-noexcept.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-braced-deferred-specialization.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-catch-type-id-identifier.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-chrono-duration-convert-owner.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-class-conditional-enclosing-cleanup.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-const-unordered-map-find.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-direct-member-call-pack-expansion.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-distinct-float128-specializations.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-empty-variadic-tail.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-explicit-id-deduces-trailing-pack.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-explicit-instantiation-nontype-argument.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-extended-call-result-pressure.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-fixed-reference-beats-forwarding-pack.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-forward-array-string-pair.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-forward-list-dependent-size-type-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-function-template-reentrant-result-sfinae.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-getline-friend-lambda-access.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-algorithm-copy-n-using-directive.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-dependent-nothrow-destructible-noexcept.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-deque-member-template-include.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-fixed-vector-builtins.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-forward-as-tuple-rvalue-ref-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-forward-as-tuple-string-include-order.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-fstream-stream-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-local-lambda-vector-abi-prefix.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-max-mixed-arithmetic-deduction.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-nothrow-destructible-bool-alias.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-nothrow-destructible-template-specialization.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-ostream-insertion-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-ostringstream-unsigned-int.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-pointer-traits-pair-pointer-to.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-recursive-std-function-string-substr.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-set-key-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-string-by-value-parameter-lifecycle-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-string-rvalue-plus-char-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-stringbuf-istringstream-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-unordered-set-key-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-using-function-same-entity-roundtrip.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-vector-bool-storage-allocator-static-cast.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-vector-composite-input-iterator.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-incomplete-vector-signature.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-initializer-list-alias-reentry.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-initializer-list-shell-copy.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-istream-static-member-mask-access.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-namespace-same-type-alias-convergence.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-native-object-value-transport.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-nested-class-constructor-reentry.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-nested-lambda-cleanup-boundary.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-noreturn-control-convergence.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-random-to-address-qualified-call.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-reference-trait-conversion-boundaries.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-regex-iterator-difference-alias.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-retained-injected-friend-tag.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-shared-ptr-allocator-shadowing.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-specialization-owned-retained-call.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-static-cast-base-ref-to-derived-ref.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-static-downcast-completes-specialization.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-static-member-retained-replay.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-std-exception-construction-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-string-compare-prefix-substr.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-system-static-member-object-detector.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-template-argument-function-type.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-transitive-anonymous-member-array-init.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-unevaluated-retained-call-demand.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-unnamed-nested-enum-allocator-pointer.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-unsigned-constant-left-shift-modulo.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-adl-std-get-hidden-friend-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-allocator-destroy-body-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-anonymous-namespace-const-iterator-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-basic-stringbuf-template-rtti-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-codecvt-wstring-convert-char16-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-constructible-private-special-members.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-enum-operator-using-namespace-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-function-capturing-lambda-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-function-nullary-base-reentry-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-function-pointer-typeid-rtti.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-function-template-default-allocator-local-lambda-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-function-typeid-compare-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-imported-base-of-constructor-sfinae.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-inherited-member-template-unevaluated-lookup.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-initializer-list-pair-layout-sync.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-iomanip-setprecision-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-istream-getline-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-local-class-distinct-member-symbols-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-local-wide-string-return-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-locale-facet-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-map-find-iterator-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-map-iterator-operator-lookup-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-map-subscript-piecewise-construct-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-namespace-alias-pointer-template-arg.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-operator-new-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-ostreambuf-iterator-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-ostringstream-str-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-ostringstream-tellp-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-pair-default-constructor.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-pair-local-pointer-constructor.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-piecewise-pair-index-sequence-alias.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-prev-pointer-iterator-category.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-random-mersenne-rshift-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-range-for-member-map-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-replaceable-operator-new-dynamic-exception-spec.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: dynamic exception specification added on redeclaration\n"
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-replaceable-operator-new-wrong-dynamic-exception-spec-bad.t",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: dynamic exception specification added on redeclaration\n"
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-result-of-bind-member-template-callable-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-shared-call-unwind-cleanup-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-shared-ptr-rvalue-assignment-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-shmid-ds-namespace-mode-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-split-buffer-move-ctor-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-std-bind-member-pointer-invocable-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-std-invocable-r-function-reference-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-std-invocable-r-variable-template-base-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-std-result-of-nested-callable-pack-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-stdexcept-logic-error-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-system-header-nan-redefinition.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-template-lambda-rtti-options-lifetime.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-template-vector-braced-nondeduced-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-tuple-rref-disabled-copy-ctor.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-typeid-decltype-member.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-typeinfo-hash-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-unevaluated-member-probe-named-demand.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-unreachable-inline-callee-export-closure.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-utility-swap-union-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-vector-range-insert-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-vector-reverse-iterator-range-assign-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-vector-size-constructor-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-libstdcxx-regex-compiler-member-alias-call.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-unordered-map-reference-wrapper-hash-invocable.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-unordered-set-const-range-insert-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/800-hosted-utility-move-xvalue-compile.t",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    }
+  ],
+  "fixed": [
+    "pa30/tests/compile/600-random-to-address-qualified-call.t",
+    "pa30/tests/compile/700-hosted-random-mersenne-rshift-compile.t"
+  ],
+  "regressions": []
+}

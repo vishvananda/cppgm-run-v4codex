@@ -1,0 +1,494 @@
+{
+  "compiler_sha256": "d597bc936ea90c47c6179f481a6832579fbb55579ffe9eaf44505eed4ce1c2e6",
+  "commands": [
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional-effects.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-conditional-effects.o"
+      ],
+      "status": 0,
+      "wall_s": 0.01466531865298748,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete202/flow-conditional-effects.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-conditional-effects"
+      ],
+      "status": 0,
+      "wall_s": 0.1615827064961195,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete202/flow-conditional-effects"
+      ],
+      "status": 0,
+      "wall_s": 0.0040476880967617035,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional-effects.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-conditional-effects.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.008632009848952293,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional-false.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-conditional-false.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.010973749682307243,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional-runtime.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-conditional-runtime.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.019446739926934242,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-conditional.o"
+      ],
+      "status": 0,
+      "wall_s": 0.012393064796924591,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete202/flow-conditional.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-conditional"
+      ],
+      "status": 0,
+      "wall_s": 0.10541417263448238,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete202/flow-conditional"
+      ],
+      "status": 0,
+      "wall_s": 0.006850104779005051,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-conditional.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-conditional.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.009523477405309677,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-slot-escape.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-slot-escape.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.01578199304640293,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-slot-joins.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-slot-joins.o"
+      ],
+      "status": 0,
+      "wall_s": 0.02573210559785366,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete202/flow-slot-joins.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-slot-joins"
+      ],
+      "status": 0,
+      "wall_s": 0.12440687976777554,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete202/flow-slot-joins"
+      ],
+      "status": 0,
+      "wall_s": 0.005472635850310326,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-slot-joins.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-slot-joins.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.009259866550564766,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-slot-mutation.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-slot-mutation.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.010507728904485703,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/flow-slot-volatile.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/flow-slot-volatile.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.012080952525138855,
+      "stdout": "",
+      "stderr": "ERROR: reachable non-void function fallthrough\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/interactions.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/interactions.o"
+      ],
+      "status": 0,
+      "wall_s": 0.03188618645071983,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete202/interactions.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/interactions"
+      ],
+      "status": 0,
+      "wall_s": 0.16344576701521873,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete202/interactions"
+      ],
+      "status": 0,
+      "wall_s": 0.009725667536258698,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/interactions.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/interactions.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.028814170509576797,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-ambiguous.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/new-ambiguous.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.009416643530130386,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must convert uniquely to integral\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-converted.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/new-converted.o"
+      ],
+      "status": 0,
+      "wall_s": 0.010819165036082268,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete202/new-converted.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/new-converted"
+      ],
+      "status": 0,
+      "wall_s": 0.14682339690625668,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete202/new-converted"
+      ],
+      "status": 0,
+      "wall_s": 0.007071606814861298,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-converted.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/new-converted.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.010253246873617172,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-deleted.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/new-deleted.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.022452373057603836,
+      "stdout": "",
+      "stderr": "ERROR: selected deleted conversion function\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-explicit.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/new-explicit.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.01041695848107338,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must convert uniquely to integral\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-float.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/new-float.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.009436225518584251,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must convert uniquely to integral\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-private.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/new-private.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.017536219209432602,
+      "stdout": "",
+      "stderr": "ERROR: inaccessible class member: operator declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-private.reject.cpp:1\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-query-converted.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/new-query-converted.o"
+      ],
+      "status": 0,
+      "wall_s": 0.01008942723274231,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete202/new-query-converted.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/new-query-converted"
+      ],
+      "status": 0,
+      "wall_s": 0.0801907442510128,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete202/new-query-converted"
+      ],
+      "status": 0,
+      "wall_s": 0.004042737185955048,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-query-converted.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/new-query-converted.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.014320600777864456,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source202/new-scoped.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete202/new-scoped.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.010037444531917572,
+      "stdout": "",
+      "stderr": "ERROR: array allocation bound must convert uniquely to integral\n",
+      "expected_rejection": true
+    }
+  ]
+}

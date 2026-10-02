@@ -7,7 +7,7 @@ def run(cmd,reject=False):
  cmd=list(map(str,cmd));start=time.perf_counter();p=subprocess.run(cmd,capture_output=True,text=True,timeout=45)
  r['commands'].append(dict(args=cmd,status=p.returncode,stdout=p.stdout,stderr=p.stderr,expected_rejection=reject,wall_s=time.perf_counter()-start))
  (out/'controls.json').write_text(json.dumps(r,indent=2)+'\n');assert (p.returncode!=0)==reject,r['commands'][-1]
-for src in sorted((root/'student.tests/pa30/source203').glob('*.cpp')):
+for src in sorted((root/'student.tests/pa30/source203').glob('*.cpp'))+[root/'student.tests/pa30/pending199/vector-subscript.cpp']:
  obj=out/(src.stem+'.o');exe=out/src.stem;ir=out/(src.stem+'.lowir');reject='.reject.' in src.name
  run([root/'dev/cppgm++','-c',src,'-o',obj],reject)
  if reject:continue

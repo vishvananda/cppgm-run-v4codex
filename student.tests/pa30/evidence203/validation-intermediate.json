@@ -1,0 +1,30 @@
+{
+  "priorThroughTests": {
+    "command": "n=30; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi",
+    "status": 2,
+    "wall_s": 1.8988688997924328,
+    "sha256": "43b6ea4fd7becfc616b6569b221d9553a6413708dd3a30cd1e22b32c4d37d1d0",
+    "output": "  LINK    posttoken\n  LINK    ppexpr\n  LINK    preproc\n  LINK    lowiropt\n  CXX     ../obj/dev/entry/lowir.o\n  CXX     ../obj/dev/lowir/reader.o\n  CXX     ../obj/dev/lowir/metadata.o\n  CXX     ../obj/dev/lowir/top_level.o\n  CXX     ../obj/dev/lowir/instruction_reader.o\n  CXX     ../obj/dev/lowir/exercises.o\n  CXX     ../obj/dev/entry/lowir2native.o\n/usr/bin/x86_64-linux-gnu-ld.bfd: ../obj/dev/support/x86_builtins.o: in function `cppgm::x86_builtin(cppgm::TextView)':\nx86_builtins.cpp:(.text+0x98): undefined reference to `cppgm::TextView::equals(char const*) const'\ncollect2: error: ld returned 1 exit status\nmake[1]: *** [Makefile:74: lowiropt] Error 1\nmake[1]: *** Waiting for unfinished jobs....\nmake: *** [Makefile:79: build] Error 2\n"
+  },
+  "fileAudit": {
+    "command": "perl scripts/cppgm_file_audit.pl --stage pa30 --paths dev/src",
+    "status": 0,
+    "wall_s": 7.226602910086513,
+    "sha256": "b56a753559ed637a1ec940f6c1bce77f183ee8b9cdff918bd24aec75cc99ba01",
+    "output": "File audit passed for pa30 with 4 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n"
+  },
+  "stageTests": {
+    "command": "make test-pa30",
+    "status": 2,
+    "wall_s": 0.262377729639411,
+    "sha256": "446acf99d918dfc46a3035a0b1b490a1e04efe9130d4273eb110ec99152e3e74",
+    "output": "  LINK    posttoken\n  LINK    ppexpr\n  LINK    lowir\n  LINK    lowiropt\n  LINK    lowir2native\n/usr/bin/x86_64-linux-gnu-ld.bfd: ../obj/dev/support/x86_builtins.o: in function `cppgm::x86_builtin(cppgm::TextView)':\nx86_builtins.cpp:(.text+0x98): undefined reference to `cppgm::TextView::equals(char const*) const'\ncollect2: error: ld returned 1 exit status\nmake[2]: *** [Makefile:74: lowiropt] Error 1\nmake[2]: *** Waiting for unfinished jobs....\nmake[1]: *** [Makefile:79: build] Error 2\nmake: *** [Makefile:482: test-pa30] Error 2\n"
+  },
+  "through30": {
+    "command": "make test-report-through-pa30",
+    "status": 2,
+    "wall_s": 0.18736328929662704,
+    "sha256": "5ba69eb638a5dde2a029f69db056cb08d512885c565124147a570b7490444e7f",
+    "output": "  LINK    posttoken\n  LINK    ppexpr\n  LINK    lowiropt\n/usr/bin/x86_64-linux-gnu-ld.bfd: ../obj/dev/support/x86_builtins.o: in function `cppgm::x86_builtin(cppgm::TextView)':\nx86_builtins.cpp:(.text+0x98): undefined reference to `cppgm::TextView::equals(char const*) const'\ncollect2: error: ld returned 1 exit status\nmake[1]: *** [Makefile:74: lowiropt] Error 1\nmake[1]: *** Waiting for unfinished jobs....\nmake: *** [Makefile:79: build] Error 2\n"
+  }
+}

@@ -1,0 +1,1400 @@
+{
+  "compiler_sha256": "d597bc936ea90c47c6179f481a6832579fbb55579ffe9eaf44505eed4ce1c2e6",
+  "commands": [
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source195/angle-function-type.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-angle-function-type.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.022457147017121315,
+      "stdout": "",
+      "stderr": "ERROR: invalid class template arguments\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source195/angle-type.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-angle-type.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.011319728568196297,
+      "stdout": "",
+      "stderr": "ERROR: invalid class template arguments\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source195/class-assignment-lookahead.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-class-assignment-lookahead.o"
+      ],
+      "status": 0,
+      "wall_s": 0.031076332554221153,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/195-class-assignment-lookahead.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-class-assignment-lookahead"
+      ],
+      "status": 0,
+      "wall_s": 0.049967607483267784,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/195-class-assignment-lookahead"
+      ],
+      "status": 0,
+      "wall_s": 0.0014748629182577133,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source195/class-assignment-lookahead.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-class-assignment-lookahead.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.00484115444123745,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-class-assignment-lookahead.native",
+        "/tmp/pa30-203/inherited-complete198/195-class-assignment-lookahead.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.003146115690469742,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/195-class-assignment-lookahead.native"
+      ],
+      "status": 0,
+      "wall_s": 0.000587141141295433,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source195/hidden-friend.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-hidden-friend.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.00576319545507431,
+      "stdout": "",
+      "stderr": "ERROR: expected type specifier in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source195/hidden-friend.reject.cpp:2 near 'invisible'\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source195/nested-angle-construction.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-nested-angle-construction.o"
+      ],
+      "status": 0,
+      "wall_s": 0.0330889280885458,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/195-nested-angle-construction.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-nested-angle-construction"
+      ],
+      "status": 0,
+      "wall_s": 0.052250005304813385,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/195-nested-angle-construction"
+      ],
+      "status": 0,
+      "wall_s": 0.0016188807785511017,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source195/nested-angle-construction.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-nested-angle-construction.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.004822073504328728,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-nested-angle-construction.native",
+        "/tmp/pa30-203/inherited-complete198/195-nested-angle-construction.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.003162318840622902,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/195-nested-angle-construction.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0006081722676753998,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source195/nonfriend-shadow.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-nonfriend-shadow.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.007263556122779846,
+      "stdout": "",
+      "stderr": "ERROR: type name 'type' is not visible\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source195/parser-boundaries.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-parser-boundaries.o"
+      ],
+      "status": 0,
+      "wall_s": 0.013722224161028862,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/195-parser-boundaries.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-parser-boundaries"
+      ],
+      "status": 0,
+      "wall_s": 0.051858024671673775,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/195-parser-boundaries"
+      ],
+      "status": 0,
+      "wall_s": 0.001661660149693489,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source195/parser-boundaries.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-parser-boundaries.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.007553659379482269,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-parser-boundaries.native",
+        "/tmp/pa30-203/inherited-complete198/195-parser-boundaries.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.003981452435255051,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/195-parser-boundaries.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0007707551121711731,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source195/qualified-parameter.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-qualified-parameter.o"
+      ],
+      "status": 0,
+      "wall_s": 0.04873067885637283,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/195-qualified-parameter.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-qualified-parameter"
+      ],
+      "status": 0,
+      "wall_s": 0.053401459008455276,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/195-qualified-parameter"
+      ],
+      "status": 0,
+      "wall_s": 0.005179964005947113,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source195/qualified-parameter.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-qualified-parameter.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.004847820848226547,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/195-qualified-parameter.native",
+        "/tmp/pa30-203/inherited-complete198/195-qualified-parameter.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0037580300122499466,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/195-qualified-parameter.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0007196813821792603,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/dependent-construction.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-dependent-construction.o"
+      ],
+      "status": 0,
+      "wall_s": 0.00812511332333088,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/196-dependent-construction.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-dependent-construction"
+      ],
+      "status": 0,
+      "wall_s": 0.054230231791734695,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/196-dependent-construction"
+      ],
+      "status": 0,
+      "wall_s": 0.00170104019343853,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/dependent-construction.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-dependent-construction.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.007426982745528221,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-dependent-construction.native",
+        "/tmp/pa30-203/inherited-complete198/196-dependent-construction.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.003860263153910637,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/196-dependent-construction.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0008840505033731461,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/dependent-qualified-member.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-dependent-qualified-member.o"
+      ],
+      "status": 0,
+      "wall_s": 0.024548782035708427,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/196-dependent-qualified-member.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-dependent-qualified-member"
+      ],
+      "status": 0,
+      "wall_s": 0.05456162989139557,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/196-dependent-qualified-member"
+      ],
+      "status": 0,
+      "wall_s": 0.001438245177268982,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/dependent-qualified-member.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-dependent-qualified-member.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.006090195849537849,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-dependent-qualified-member.native",
+        "/tmp/pa30-203/inherited-complete198/196-dependent-qualified-member.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0032643619924783707,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/196-dependent-qualified-member.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0005681775510311127,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/fixed-deleted.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-fixed-deleted.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.005796847864985466,
+      "stdout": "",
+      "stderr": "ERROR: invalid fixed initializer constructor\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/injected-deleted.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-injected-deleted.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.0065893009305000305,
+      "stdout": "",
+      "stderr": "ERROR: deleted constructor\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/injected-query-boundaries.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-injected-query-boundaries.o"
+      ],
+      "status": 0,
+      "wall_s": 0.07996402680873871,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/196-injected-query-boundaries.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-injected-query-boundaries"
+      ],
+      "status": 0,
+      "wall_s": 0.059062350541353226,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/196-injected-query-boundaries"
+      ],
+      "status": 0,
+      "wall_s": 0.0016441959887742996,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/injected-query-boundaries.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-injected-query-boundaries.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005887256935238838,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-injected-query-boundaries.native",
+        "/tmp/pa30-203/inherited-complete198/196-injected-query-boundaries.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.004279399290680885,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/196-injected-query-boundaries.native"
+      ],
+      "status": 0,
+      "wall_s": 0.000794755294919014,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/qualified-private.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-qualified-private.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.006525309756398201,
+      "stdout": "",
+      "stderr": "ERROR: inaccessible class member: value declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/qualified-private.reject.cpp:1\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/qualified-unrelated.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-qualified-unrelated.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.007587498053908348,
+      "stdout": "",
+      "stderr": "ERROR: missing selected base path\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/undemanded-deleted.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-undemanded-deleted.o"
+      ],
+      "status": 0,
+      "wall_s": 0.006914597004652023,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/196-undemanded-deleted.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-undemanded-deleted"
+      ],
+      "status": 0,
+      "wall_s": 0.051113443449139595,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/196-undemanded-deleted"
+      ],
+      "status": 0,
+      "wall_s": 0.0015268884599208832,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source196/undemanded-deleted.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-undemanded-deleted.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.004101211205124855,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/196-undemanded-deleted.native",
+        "/tmp/pa30-203/inherited-complete198/196-undemanded-deleted.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0031019244343042374,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/196-undemanded-deleted.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0007129311561584473,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/base-alias.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-base-alias.reject.o"
+      ],
+      "status": 0,
+      "wall_s": 0.021379560232162476,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/namespace-convergence.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-namespace-convergence.o"
+      ],
+      "status": 0,
+      "wall_s": 0.007898874580860138,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/197-namespace-convergence.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-namespace-convergence"
+      ],
+      "status": 0,
+      "wall_s": 0.053137077018618584,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/197-namespace-convergence"
+      ],
+      "status": 0,
+      "wall_s": 0.0015447791665792465,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/namespace-convergence.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-namespace-convergence.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.004407575353980064,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-namespace-convergence.native",
+        "/tmp/pa30-203/inherited-complete198/197-namespace-convergence.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0031589679419994354,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/197-namespace-convergence.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0005803089588880539,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/namespace-distinct.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-namespace-distinct.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.005724884569644928,
+      "stdout": "",
+      "stderr": "ERROR: ambiguous unqualified lookup\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/namespace-entity.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-namespace-entity.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.02416534349322319,
+      "stdout": "",
+      "stderr": "ERROR: ambiguous unqualified lookup\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/namespace-target.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-namespace-target.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.006640600040555,
+      "stdout": "",
+      "stderr": "ERROR: ambiguous unqualified lookup\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/partial-alias-order.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-partial-alias-order.o"
+      ],
+      "status": 0,
+      "wall_s": 0.00811084732413292,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/197-partial-alias-order.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-partial-alias-order"
+      ],
+      "status": 0,
+      "wall_s": 0.053273407742381096,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/197-partial-alias-order"
+      ],
+      "status": 0,
+      "wall_s": 0.001733299344778061,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/partial-alias-order.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-partial-alias-order.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.006972195580601692,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-partial-alias-order.native",
+        "/tmp/pa30-203/inherited-complete198/197-partial-alias-order.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0032942015677690506,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/197-partial-alias-order.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0007469318807125092,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/partial-ambiguous.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-partial-ambiguous.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.018432412296533585,
+      "stdout": "",
+      "stderr": "ERROR: ambiguous partial specialization\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/partial-private.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-partial-private.o"
+      ],
+      "status": 0,
+      "wall_s": 0.011858118698000908,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/197-partial-private.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-partial-private"
+      ],
+      "status": 0,
+      "wall_s": 0.05359621159732342,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/197-partial-private"
+      ],
+      "status": 0,
+      "wall_s": 0.0015037469565868378,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source197/partial-private.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-partial-private.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.004934679716825485,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/197-partial-private.native",
+        "/tmp/pa30-203/inherited-complete198/197-partial-private.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0034373924136161804,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/197-partial-private.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0007664058357477188,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source198/base-alias.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-base-alias.o"
+      ],
+      "status": 0,
+      "wall_s": 0.00673447921872139,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/198-base-alias.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-base-alias"
+      ],
+      "status": 0,
+      "wall_s": 0.05000607669353485,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/198-base-alias"
+      ],
+      "status": 0,
+      "wall_s": 0.00152692012488842,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source198/base-alias.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-base-alias.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.006159283220767975,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-base-alias.native",
+        "/tmp/pa30-203/inherited-complete198/198-base-alias.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0032285302877426147,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/198-base-alias.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0007014535367488861,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source198/base-distinct.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-base-distinct.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.00725783035159111,
+      "stdout": "",
+      "stderr": "ERROR: ambiguous lookup\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source198/base-entity.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-base-entity.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.028133217245340347,
+      "stdout": "",
+      "stderr": "ERROR: ambiguous lookup\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source198/base-private.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-base-private.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.03825896792113781,
+      "stdout": "",
+      "stderr": "ERROR: inaccessible class member: name declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source198/base-private.reject.cpp:1\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source198/base-template.reject.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-base-template.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.02086515538394451,
+      "stdout": "",
+      "stderr": "ERROR: ambiguous lookup\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source198/interactions.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-interactions.o"
+      ],
+      "status": 0,
+      "wall_s": 0.032055364921689034,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/198-interactions.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-interactions"
+      ],
+      "status": 0,
+      "wall_s": 0.04977793991565704,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/198-interactions"
+      ],
+      "status": 0,
+      "wall_s": 0.0014354921877384186,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source198/interactions.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-interactions.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.013728052377700806,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-interactions.native",
+        "/tmp/pa30-203/inherited-complete198/198-interactions.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.004965988919138908,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/198-interactions.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0008324682712554932,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source198/namespace-entry.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-namespace-entry.o"
+      ],
+      "status": 0,
+      "wall_s": 0.03735192306339741,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/198-namespace-entry.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-namespace-entry"
+      ],
+      "status": 0,
+      "wall_s": 0.0719673428684473,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/198-namespace-entry"
+      ],
+      "status": 0,
+      "wall_s": 0.0016840007156133652,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source198/namespace-entry.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-namespace-entry.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.004351992160081863,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-namespace-entry.native",
+        "/tmp/pa30-203/inherited-complete198/198-namespace-entry.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.003102373331785202,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/198-namespace-entry.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0006372891366481781,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source198/optimization.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-optimization.o"
+      ],
+      "status": 0,
+      "wall_s": 0.008100312203168869,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-203/inherited-complete198/198-optimization.o",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-optimization"
+      ],
+      "status": 0,
+      "wall_s": 0.04992912523448467,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/198-optimization"
+      ],
+      "status": 0,
+      "wall_s": 0.001448294147849083,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source198/optimization.cpp",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-optimization.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.00506024993956089,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native",
+        "-o",
+        "/tmp/pa30-203/inherited-complete198/198-optimization.native",
+        "/tmp/pa30-203/inherited-complete198/198-optimization.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0036725979298353195,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/inherited-complete198/198-optimization.native"
+      ],
+      "status": 0,
+      "wall_s": 0.0007901787757873535,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    }
+  ]
+}

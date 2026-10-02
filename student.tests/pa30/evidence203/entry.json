@@ -1,0 +1,1077 @@
+{
+  "head": "404e468e829c6b76642678b991a09067306c1efb",
+  "compiler_sha256": "67beb7d1e042382462a5fa09a5b64557d2c334db500cddd9b990da0dc97aa14f",
+  "cases": [
+    {
+      "path": "pa30/tests/compile/200-dependent-composite-template-shape.t",
+      "source_sha256": "e7f7b96a6090b6772e66eb78b9525ce88e0cecd741299170875f63a72cc192e1",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/200-local-callable-cross-function-reference-negative.t",
+      "source_sha256": "11741de5d944816aec782342473bea0d5449fac730c4d27f8047a0af9ab22c36",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: automatic object used across function boundary\n"
+    },
+    {
+      "path": "pa30/tests/compile/200-local-callable-lifetime-boundary.t",
+      "source_sha256": "674f3c644a64c92a233eed352ecc5d65bf1107dad4bd9b3b03cb036753c6b8fd",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/200-static-data-member-addressability.t",
+      "source_sha256": "3c424701686178ded68f3caff4e49bdb4ce90513ce447415aa63c72f9a153d41",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/200-zero-initialized-bulk-member.t",
+      "source_sha256": "d3ee36835d9eb4bc3c218a55e675ea99106f0ded4d3f52da916d5882511df1a6",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/300-qualified-owner-identity.t",
+      "source_sha256": "26d4a5d6c223f933a13d237f7c1bef5c7fe2cbc03d7f85c1d22de4afa4fcd88c",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/400-base-same-type-alias-ambiguous-bad.t",
+      "source_sha256": "6ccf991c0cb3c143d9ebc60fccabb664509b4c82a20319f1a2e056535be6c1e0",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/400-constant-left-shift-width-bad.t",
+      "source_sha256": "44577c57bd74d24e6198da259037fc103680cb8face96d8bb0dc2b0f2774f0f0",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: static assertion is not a true constant boolean in tests/compile/400-constant-left-shift-width-bad.t:1: a shift count equal to the promoted width is invalid\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-evaluated-retained-call-demand-bad.t",
+      "source_sha256": "ab5b7c3040e108ebfa49800020be677e759636d8a2e8313dcc2cee073bd081c1",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: static assertion is not a true constant boolean in tests/compile/400-evaluated-retained-call-demand-bad.t:6: evaluated source must demand its body\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-explicit-id-pack-index-out-of-range.t",
+      "source_sha256": "7540b76ec4d6c076c0591ad90927e2e5fbcd8866b151f07b0bcad7c80fae4ab7",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: static assertion is not a true constant boolean in tests/compile/400-explicit-id-pack-index-out-of-range.t:4: index must be in range\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-hosted-fixed-vector-builtin-arity-bad.t",
+      "source_sha256": "4ebded7fc8249292979eb3fcecbc4b12c33edfad7b4262f250e7358273e81595",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: no viable function\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-hosted-fixed-vector-builtin-type-bad.t",
+      "source_sha256": "7966be3aeadee8cf71d6317c10e8a3f716c8ad52c4b3a33b18f80e3c032a1571",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: no viable function\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-hosted-using-function-distinct-entity-bad.t",
+      "source_sha256": "ffbd3ee0efebf446a319228f807ab1bae4e5e706b1bc39a920622961195eafc3",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: function conflicts with namespace using-declaration\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-namespace-distinct-type-alias-ambiguous-bad.t",
+      "source_sha256": "617e062e27ffc582e6964a1a6141dac0fbd17c8235fcd1b0403cb376394d4988",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: ambiguous unqualified lookup\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-reachable-missing-return-bad.t",
+      "source_sha256": "a0fc3f2b91839825802321446067786f057f62c903e3af3045f4c3860ad9bfa7",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: reachable non-void function fallthrough\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-retained-special-member-exception-identity.t",
+      "source_sha256": "e505007872ec4d646fd7f384ff7546cccb50ef07300126a516f121391d35d39e",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/400-retained-special-member-exception-mismatch-bad.t",
+      "source_sha256": "8337121af388acc3f7662a2a58b8a2ee548d5a787eed0032d25cdef7b199c118",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: conflicting template member exception specifications\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-retained-type-as-value-stays-invalid.t",
+      "source_sha256": "3eca952f257ac36ea448b6fcdb699cf4f6a1144a00fbe37d16ad471384e978fe",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: type template parameter used as a value\n"
+    },
+    {
+      "path": "pa30/tests/compile/400-static-member-retained-no-viable-bad.t",
+      "source_sha256": "83b3ad93affe906afc78bb0c04cb9e13b7e5a60da1e7caa88539c2f3ae4e3660",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: no viable function\n"
+    },
+    {
+      "path": "pa30/tests/compile/500-compressed-pair-padding-instantiation.t",
+      "source_sha256": "db8a3c8b7892adea5ece90bd84f75fd1e285927c44b7beb4cf57b7920e9a7886",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/500-parameter-owned-noexcept-scope.t",
+      "source_sha256": "2b58bfdd82f8de9df445527f94779fbbf42a2acd051432869befeaa639dbfa46",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/500-reference-wrapper-smoke.t",
+      "source_sha256": "5ec06b758ce5458e12c2cccb0c2c90f7fd1f51dcf6941552ccc41318501f3509",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-aggregate-class-reference-member.t",
+      "source_sha256": "bc37b3b7fbaf8ef8932447806c8f23e5a7abdfea610e96e242ea4c63d5e3fe33",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-allocator-deallocate-included-class-layout.t",
+      "source_sha256": "9c17f07a1d7668a0c024514c9a7c3005a83174560f1bc5b943af8ae195a92073",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-anonymous-allocator-traits-pointer.t",
+      "source_sha256": "4335ac9c3adaeaab5e1b173aa1cbd2e06ac648ae48f701495c63447642a1aa66",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-basic-string-implicit-destructor-noexcept.t",
+      "source_sha256": "6c62b903ca4716885fe804baa47709aca6a61945c3faa5ac9a5e5da9ac913901",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-braced-deferred-specialization.t",
+      "source_sha256": "e9a3c05766057bec8953680350fbd1654ac36a56f181609324c44bddf4cc8b44",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-catch-type-id-identifier.t",
+      "source_sha256": "554a187659a4a9554614049b29873c7da9178531670554b0c6617f097c1b6407",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-chrono-duration-convert-owner.t",
+      "source_sha256": "e63224c1ed7ef01e9fd1b223bbd4f8e587993ab4c85e25abd3c81df6ca33901e",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-class-conditional-enclosing-cleanup.t",
+      "source_sha256": "e34d542766d3589052e0945c821669870621461d83298ff432d25803859f56b1",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-const-unordered-map-find.t",
+      "source_sha256": "86b746f9c075f63084c6b678fb801c1332e5e99b2ad317435bd79eb21cbcad97",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-direct-member-call-pack-expansion.t",
+      "source_sha256": "d6a9d6ff004ad83537fa36af417a6c8127684a9fe4f92d5e4c5963643d843c77",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-distinct-float128-specializations.t",
+      "source_sha256": "5f63559492bd2b0cf6000a69979b0544ba48becec67db68b96b6c3ca2f7d01b1",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-empty-variadic-tail.t",
+      "source_sha256": "64c4a367744fa7988fb9a875dc12306540eb8ed90510e90dee393722de79ba4c",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-explicit-id-deduces-trailing-pack.t",
+      "source_sha256": "ec349af8a18a1f6024f4271093c311eedb6ffa2145829e86139d722d43cc9c04",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-explicit-instantiation-nontype-argument.t",
+      "source_sha256": "837e6b902325bf40a44c265f2e13552cfad16f0c2ed7999698a4204fc29122c6",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-extended-call-result-pressure.t",
+      "source_sha256": "d6d94031603c56bbb5ea69f8d462e7241e06ce17f7a681efc1972e9f9514c332",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-fixed-reference-beats-forwarding-pack.t",
+      "source_sha256": "c780583dd34b7e98f355c374381a552cd9291e1b5dc7129cbdf244af92e495be",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-forward-array-string-pair.t",
+      "source_sha256": "979021014c8457d93a736149feb4334e52f375452da20b6f5c9fac3036414d89",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-forward-list-dependent-size-type-compile.t",
+      "source_sha256": "e6400ea91241532af9b32650b6fd0b2ba57e69479bbd62bf5a5d6b1515e0c35e",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-function-template-reentrant-result-sfinae.t",
+      "source_sha256": "a1ce351035bb46727b074886eda3ee7b65361293a85526631806b3251b75e52d",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-getline-friend-lambda-access.t",
+      "source_sha256": "92ff3e372c461a6cf55ed0b68c9549b09eba8c796062f926308e4257c2d92e18",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-algorithm-copy-n-using-directive.t",
+      "source_sha256": "7c0c639c02ad2e838f2d620226566fe07eb9416705db8a50e4e3d110e06d855a",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-dependent-nothrow-destructible-noexcept.t",
+      "source_sha256": "8b1c70cbf3a8426946013dc09a7d528dcf28755da65a8ecd44dacd71cb43b8e7",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-deque-member-template-include.t",
+      "source_sha256": "122826fb72f10b2800c2a0cea9df0454153eabe504f9348eec1a178997eb85bb",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-fixed-vector-builtins.t",
+      "source_sha256": "22a6e4c224109d3639557d4c58f6c19a3a6fe41a2c6869c7ba9d345b1bfda118",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-forward-as-tuple-rvalue-ref-compile.t",
+      "source_sha256": "5c5aa1d7a2f0e602eebb5da29ab50305dc30714d4d5fe2f967e30495382ac06f",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-forward-as-tuple-string-include-order.t",
+      "source_sha256": "dd246f2557731a7554fa698f6f7e9bf19ece6ca752af30836b132b2c33beac2c",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-fstream-stream-compile.t",
+      "source_sha256": "b2921cec525e6902bd2cf22d84305b3da8a09e4335c2de8969cfb7d3dbd97879",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-local-lambda-vector-abi-prefix.t",
+      "source_sha256": "6a70d557271f30cff028e5262c2e7cf1f9c29e508fdeab2d31e66fc795b83e42",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-max-mixed-arithmetic-deduction.t",
+      "source_sha256": "19aac71aa5dad553705eea2fc1986ddcbc1ad12e6dc64f2634376a2ba96f4c43",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-nothrow-destructible-bool-alias.t",
+      "source_sha256": "f09a723646c4bd14ce5a6cee4aa8ebadde7c3ab72866993f4d1f4373ccdae020",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-nothrow-destructible-template-specialization.t",
+      "source_sha256": "e3247bf1bd26a57d30658ec63151da1c219af0bab33bb7330cc0d7f87d096c1c",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-ostream-insertion-compile.t",
+      "source_sha256": "87340e789531cf4275dafd9cbbb0248f5af8835684ee478d71cda7d46da4ac8b",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-ostringstream-unsigned-int.t",
+      "source_sha256": "7777d7aaae81f44ab8f94279fabd357be0eec9259f5d83671c288cffac429894",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-pointer-traits-pair-pointer-to.t",
+      "source_sha256": "656480dba403f18ca812363f29e5a07e602b73c1c8d35cbd9574e4e37220d8a2",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-recursive-std-function-string-substr.t",
+      "source_sha256": "f926eb7f8948480c35a33754c5b9345e868973c53ccb8e7f0bc1379b92d935d0",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-set-key-compile.t",
+      "source_sha256": "f8237d6a18649886402b839eb119dade4c6a92a04229502141a93aa729602061",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-string-by-value-parameter-lifecycle-compile.t",
+      "source_sha256": "6c98f7dbfc80e1fe7b1d578f097042248f9b7a69e19279e336f800f55d322287",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-string-rvalue-plus-char-compile.t",
+      "source_sha256": "6883af21487e414d9cbce9ee90edfe9e1c05189835b116b418993f218ca582dd",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-stringbuf-istringstream-compile.t",
+      "source_sha256": "c1a5658e818d1c4b2ae986450b557c8fe8316c694ece9e37f73fded5f5d54a51",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-unordered-set-key-compile.t",
+      "source_sha256": "57542485a2cf1e7de7772e9409a158098170b3a3262c946962c5441606a9183e",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-using-function-same-entity-roundtrip.t",
+      "source_sha256": "9a12d2a967a7305303eb55612952ad1f31e792012d2ccf4b0fb542019a9ac123",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-vector-bool-storage-allocator-static-cast.t",
+      "source_sha256": "59bf7b6f854fa86b35115741b34cb1463df58ccd6e90b2567fadd8b96ffe7f9a",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-hosted-vector-composite-input-iterator.t",
+      "source_sha256": "bb09bb1a3a40e8352db2534c7a710bb03bf6a8504c3acc6a31b6583c2d1eaacf",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-incomplete-vector-signature.t",
+      "source_sha256": "30c1acf1f0aa5bd8075f6d2923a9db08da85a2c829d2df2b8a61cdfb20c42c29",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-initializer-list-alias-reentry.t",
+      "source_sha256": "5dccbdcd2e21e310a12c1105f84d65942255ddafa0c9122669cfb7ef2141b5cf",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-initializer-list-shell-copy.t",
+      "source_sha256": "36f91fe116b79c1a73d9de3c2f27e09decfe7856971e643b621b5a1c2365db7b",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-istream-static-member-mask-access.t",
+      "source_sha256": "f6ece69b5ee36226e011dca0b4da7e0b6b53968e409c43bd150726afa3add701",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-namespace-same-type-alias-convergence.t",
+      "source_sha256": "b03b08450811b41c39c385ca33a10071a1eee0fb6d10a5b5207226701ee76002",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-native-object-value-transport.t",
+      "source_sha256": "c5185e34a68297b29fd03b0cd610761e8bf629a373b9991193806019093cb5b4",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-nested-class-constructor-reentry.t",
+      "source_sha256": "aac8ff6ad46c80384c37660d3bb52c23e85819ce8a0e8b37d3fd36e576e81aa5",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-nested-lambda-cleanup-boundary.t",
+      "source_sha256": "00d34a02011404c907bda4f5bd0d17f03fe191b8521037c94c3cfbb3d1a6b1e3",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-noreturn-control-convergence.t",
+      "source_sha256": "74a169034f9b5106c17e5f2750a2763862ddd7c0b3761225d9b8959b1432167f",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-random-to-address-qualified-call.t",
+      "source_sha256": "5961616750a03aec317d0a9f1d23bc0be54d8c2b51c1f7ab32408f0812f51cc6",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: unknown expression name: __builtin_ia32_packsswb\n"
+    },
+    {
+      "path": "pa30/tests/compile/600-reference-trait-conversion-boundaries.t",
+      "source_sha256": "c8aeac47f4b07e7a310257e419a62899f969e5c57c9e916e0ff2f0fd20e0b77d",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-regex-iterator-difference-alias.t",
+      "source_sha256": "3373625f76538008a2623c6a8077e69c480f95467a74408d6c2eed48db7669b9",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-retained-injected-friend-tag.t",
+      "source_sha256": "337ad5663646fdea57428316a831790a9a54ec8cb8d014e93159718e960cd390",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-shared-ptr-allocator-shadowing.t",
+      "source_sha256": "d9a2740bb6ea15ee7e67d5842f32780d09f3027b5a46e985dda2b1890fdd9ae1",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-specialization-owned-retained-call.t",
+      "source_sha256": "f3be53eeb7b66fb9327e7318bdf2660424ad42ab05f3fd822d2f455a64bf3680",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-static-cast-base-ref-to-derived-ref.t",
+      "source_sha256": "5b91c3be2d73c54eeaae792692ff6ad2f897f6cd6514dce78970cb1d1ebb7367",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-static-downcast-completes-specialization.t",
+      "source_sha256": "aca018659eca485aca8dc01dae9d06dd119743db6a33796d7e3fcd501b077eb6",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-static-member-retained-replay.t",
+      "source_sha256": "7536022822f005d742ba59d3f48b70b283a6d1574caf2a32375825268ab89aba",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-std-exception-construction-compile.t",
+      "source_sha256": "773684d2937cd379284fdc56d7c3b83da7fd8aa64ab3035eec9faf623a485693",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-string-compare-prefix-substr.t",
+      "source_sha256": "4d30c559ab250e493b370185057db0c4557453c978ad995b9ad331251bd763fa",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-system-static-member-object-detector.t",
+      "source_sha256": "63fc3563f78db2ab0c1169ad970561b47ea40cf1cb1b9fe000e90642b4f7fb50",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-template-argument-function-type.t",
+      "source_sha256": "652cf6e0831e22e620715c566dbcc936c395cd1d7a67a1d8e1cfeb2dc92a6cf2",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-transitive-anonymous-member-array-init.t",
+      "source_sha256": "04c455df2948a21ae10a662162c32359b8047748e1b152c2c746e3a1eda7d6ac",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-unevaluated-retained-call-demand.t",
+      "source_sha256": "593ce93f66605017af0f53ead5c5254b3f9276d8ba0c1513774f4c4ce7922e30",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-unnamed-nested-enum-allocator-pointer.t",
+      "source_sha256": "23edaab8d7b546e2e5425d045cd344cf63b277788d09e841f9bf3d23f9541ed5",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/600-unsigned-constant-left-shift-modulo.t",
+      "source_sha256": "1ac343781fe55ffeb1df50f1fd7dd7a3e87feed9fb69742b4292a9e04be1a09b",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-adl-std-get-hidden-friend-compile.t",
+      "source_sha256": "f88382bedf66da25eec8c97d75f0b8340494f28a29b351864166db74ec074323",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-allocator-destroy-body-compile.t",
+      "source_sha256": "e7f7f21facaa3e50e5956fc76c2d607f81577e4e0778fd5a9167446e957deb5b",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-anonymous-namespace-const-iterator-compile.t",
+      "source_sha256": "cef672c3cb39e29f65977fbf4b6aecd452ebf72723b87b11c424e12c86d205f9",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-basic-stringbuf-template-rtti-compile.t",
+      "source_sha256": "48f28166a0e3361f9e68a0121ed0c48c3a86e08895498b43e15050e9101860d4",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-codecvt-wstring-convert-char16-compile.t",
+      "source_sha256": "ee3d9bbe1e2a6d7f6e2e20d751c349a956997ade16da89a58c852e2889f86696",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-constructible-private-special-members.t",
+      "source_sha256": "3feca4a4314ceb208ea0b9576af0c44597f02488cea39feaa86feeb29ced6db4",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-enum-operator-using-namespace-compile.t",
+      "source_sha256": "112f43f881bfb79e46ace0abcbe44e81185850b80396252d4ac3f6d70d44bbff",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-function-capturing-lambda-compile.t",
+      "source_sha256": "f59d9726c9b2eb542e8a6b458b2cd256a821c6e4651d1be416ff76a4d55ef909",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-function-nullary-base-reentry-compile.t",
+      "source_sha256": "a6dae0c32369bfecb4eb995faa8cba6fedb4aa24ab17cd1c2060244a7724a935",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-function-pointer-typeid-rtti.t",
+      "source_sha256": "7ae02bfc70056ecba8eedf2a75c938a764d160d599092d3a0b4bd41556435ccd",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-function-template-default-allocator-local-lambda-compile.t",
+      "source_sha256": "837531da364d9d730f5b29f217f45554989cd57d7cd0658128e403c458aec92b",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-function-typeid-compare-compile.t",
+      "source_sha256": "def8fc84536a6bb5713ddb9e5e07abd99f927c423adbc0c3843d8add971b78c6",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-imported-base-of-constructor-sfinae.t",
+      "source_sha256": "36d31cc2529890efcc48c098e92eaad249a3ea70738d9973eb2dcc79244faf48",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-inherited-member-template-unevaluated-lookup.t",
+      "source_sha256": "1e7d34c132dc1cbd3ec38f8c47219afa811e6876356e30f93503edc84c11277d",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-initializer-list-pair-layout-sync.t",
+      "source_sha256": "d934d1f087070705164478e397e8b4f17e75847ec6cf428f6f9d012dcd22c99c",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-iomanip-setprecision-compile.t",
+      "source_sha256": "eea3b93d579c94e19bfb801ce66d52fe388241018fe83ababb304f2705b79847",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-istream-getline-compile.t",
+      "source_sha256": "e63ee9e958fae8ae9f7a057cc7faf279a8b42e1d152fc78a57dc6d03af6a4df8",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-local-class-distinct-member-symbols-compile.t",
+      "source_sha256": "6973ad6ea5838648e9769322dc5c29eb94a626ecd58f9a671a6374c243e1a8af",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-local-wide-string-return-compile.t",
+      "source_sha256": "026918d6bb868f417d0a4541f0bec9a34c44706e2df82284c3f9e18663e501c6",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-locale-facet-compile.t",
+      "source_sha256": "2e8dfc4b0cb6261c3a11e8b0cb235cab5cdbbaaca066596513098bde74743336",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-map-find-iterator-compile.t",
+      "source_sha256": "3f61ec39d673558c068bc8ed7159e9815383d0d160d790c62f063d1c4e60518d",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-map-iterator-operator-lookup-compile.t",
+      "source_sha256": "2885ab3e3586c1287662c848df9540c20b2439b5a299aff7fe27eaaabb48f728",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-map-subscript-piecewise-construct-compile.t",
+      "source_sha256": "7caee9115881886a08303a78f9cc82f5c6b28f82f0c7fdf75af457a305715b85",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-namespace-alias-pointer-template-arg.t",
+      "source_sha256": "9fd8c6618da9b2857756cefe400d63abf55e32256ffe2f276ade1f4e6505c3cd",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-operator-new-compile.t",
+      "source_sha256": "983294dd29972bb3ec3a4504ca57d0090fd6d583b941672a0dff6f452846c16b",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-ostreambuf-iterator-compile.t",
+      "source_sha256": "27998ce9d8a8fddcfa5fe1c91d3c00517bb93498fd817fdbad76354a5af67007",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-ostringstream-str-compile.t",
+      "source_sha256": "d0a4ff1c98899876795af2525cc9a96b0169136ca05f0abc0740bbff23142d1a",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-ostringstream-tellp-compile.t",
+      "source_sha256": "a553190fcef55c4e072fd4ceab86652b0b6d16834fe66d25b7549c3b35e460b1",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-pair-default-constructor.t",
+      "source_sha256": "5e576bf4cb8c13a389d7149c6561e4e9a815c4be27ab657a40a8168f315c0357",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-pair-local-pointer-constructor.t",
+      "source_sha256": "42fe7f34797ad8a59fcedcb009bb8ee8b269b05a6ca13f03ff648edb14ce08a1",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-piecewise-pair-index-sequence-alias.t",
+      "source_sha256": "373be91ad138c866b3b7a60b487ab673c36098ab05c08f99daeff1acf9b90f00",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-prev-pointer-iterator-category.t",
+      "source_sha256": "0afe1a2484cc09c62e49cf53ec70a4b9af32f9aa93e1b914c3a50ca900653fc0",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-random-mersenne-rshift-compile.t",
+      "source_sha256": "f60ba77c046deaa6148b5671b58c72f498c195ddb832004a7b735de0705a195a",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: unknown expression name: __builtin_ia32_packsswb\n"
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-range-for-member-map-compile.t",
+      "source_sha256": "d97fa4efa8aa82e78794b1f20db5571bbf99506ce6fe03d03c7e46963eb08b60",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-replaceable-operator-new-dynamic-exception-spec.t",
+      "source_sha256": "08df4df17fb9700e5a26f7eb343db321f11203eb565bc659514c081999b895d9",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: dynamic exception specification added on redeclaration\n"
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-replaceable-operator-new-wrong-dynamic-exception-spec-bad.t",
+      "source_sha256": "1cb47fd8abe083c20f2bcf0106ccc79ea6c38affde1fe894d11a11e5d36d2875",
+      "expected": "EXIT_FAILURE",
+      "actual": "EXIT_FAILURE",
+      "diagnostic": "ERROR: dynamic exception specification added on redeclaration\n"
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-result-of-bind-member-template-callable-compile.t",
+      "source_sha256": "9f8cb593d412acbc6eafa283dd217b228b6bc7634d17c787303b57486c99cdc8",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-shared-call-unwind-cleanup-compile.t",
+      "source_sha256": "4ad057035b87ea5c570b75f30e1f30a1627462265440ed766cb1048624acba1d",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-shared-ptr-rvalue-assignment-compile.t",
+      "source_sha256": "f9a7c5ea14bcabe3b1f35d53b9d3c1c995c7338710a6f2daf3ff18b7211f4e97",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-shmid-ds-namespace-mode-compile.t",
+      "source_sha256": "f58a961976ffb9da1596b60051d9825412adda51ea759d5b03bbb26f48aac876",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-split-buffer-move-ctor-compile.t",
+      "source_sha256": "b9a2fbb7ce2daac2d99525cf9e748c18f77086af7c0a378a528605d04002c4a9",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-std-bind-member-pointer-invocable-compile.t",
+      "source_sha256": "70858d40beb757f59c260e00019d647d49f1729ab4ac9148f165bd67a6a0eb4a",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-std-invocable-r-function-reference-compile.t",
+      "source_sha256": "28f90f973fefbdc8ace64eaa0e56c3188bf9f0b0bba52c4b42c22a62769e7d86",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-std-invocable-r-variable-template-base-compile.t",
+      "source_sha256": "46ea9b834f4e081647bedb2e762888c61f97b4e0f9d6855a5c8e94f2850a4d06",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-std-result-of-nested-callable-pack-compile.t",
+      "source_sha256": "1f0fb6925fa50eb3e50a40567b3f7a369fbb28793a5b53c5eb11cff4e3761f37",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-stdexcept-logic-error-compile.t",
+      "source_sha256": "62db94c646c6b7dd90e79d22b6e64b46069de80a8276beb00a0ad812480e1263",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-system-header-nan-redefinition.t",
+      "source_sha256": "919328f87cf22d7a4e9bc938e9ff623d3e6e7ce6b52af712210d228275a77f06",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-template-lambda-rtti-options-lifetime.t",
+      "source_sha256": "4ac50ed36832d6d940cf5da0b7945593a292b65ab7d495091d751472c8fffe41",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-template-vector-braced-nondeduced-compile.t",
+      "source_sha256": "9acbd2fda0ce3d75bb226a512e0ac9ed328b261f795d200a2981d0ecc8330d9a",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-tuple-rref-disabled-copy-ctor.t",
+      "source_sha256": "1f5ffd993721511581db9611bb930c417284b244f22e80bab9d68e0f29d137d8",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-typeid-decltype-member.t",
+      "source_sha256": "e7d6824c42daa8b5ceef33f88f92a25cf44ec13c355ef6e9557e528b3cecddb2",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-typeinfo-hash-compile.t",
+      "source_sha256": "d55c73ea1889033d0b2d57ccfa35b6f2d55c35de19b64fe1381deefe3e3add1f",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-unevaluated-member-probe-named-demand.t",
+      "source_sha256": "e4151089528454eef168aed7b8b953ce8d5e9d13a6758fb076626398473b92bb",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-unreachable-inline-callee-export-closure.t",
+      "source_sha256": "9031ab337f0e148c11261df5b1aa5fdc5add278aec4f98386cde6306a2c0fad5",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-utility-swap-union-compile.t",
+      "source_sha256": "bedfe1acd9de730e933236cdad74189f692fcdf482ed25970f4da06ca0a8d16b",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-vector-range-insert-compile.t",
+      "source_sha256": "04b7e3a7d9c3f4bf59d9a66087b338747fac0c353c6cb77e02106ac36f2a352e",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-vector-reverse-iterator-range-assign-compile.t",
+      "source_sha256": "5d95a2ebaa3e8e93d4c04b015cd0290e856cd1a517c4ef72d92d6a3b31810963",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-hosted-vector-size-constructor-compile.t",
+      "source_sha256": "0d9c4c150fd679a284bc4f3a80b5b9223c118ccd37dd75dd93e089ef3955a493",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-libstdcxx-regex-compiler-member-alias-call.t",
+      "source_sha256": "bebe766ac225d97d5cb50626a7b465540179e869da9938a79a00cb1aa5faebe0",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-unordered-map-reference-wrapper-hash-invocable.t",
+      "source_sha256": "0edaacf68fd472c249bf39a0f7b0c9c982fef2478341fed87d6871734988a05a",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/700-unordered-set-const-range-insert-compile.t",
+      "source_sha256": "18713ef9d1dbbdc08c808b38b080a7f3ee0f95b4adc2ea324729ebd27124bf47",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    },
+    {
+      "path": "pa30/tests/compile/800-hosted-utility-move-xvalue-compile.t",
+      "source_sha256": "34eb9a3ac11d79557bc7ca56d73ea2745c093a1554bd369c2e5923c4acd991a0",
+      "expected": "EXIT_SUCCESS",
+      "actual": "EXIT_SUCCESS",
+      "diagnostic": ""
+    }
+  ]
+}
