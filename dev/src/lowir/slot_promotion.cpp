@@ -207,7 +207,7 @@ bool promote_scalar_slots(Program& p, const std::vector<bool>& call_cycles, std:
     unsigned serial = p.values.size()+1;
     for (unsigned fn = 0; fn < p.functions.size(); ++fn) {
         const auto& f = p.functions[fn];
-        if (!f.declaration && f.slots.count && !call_cycles[fn]) changed |= Promotion(p,f,work).run(additions,names,serial);
+        if (!f.declaration && f.slots.count && f.blocks.count > 1 && !call_cycles[fn]) changed |= Promotion(p,f,work).run(additions,names,serial);
     }
     if (!changed) return false;
     // Rebuild block slices once, preserving block identity/source order. All

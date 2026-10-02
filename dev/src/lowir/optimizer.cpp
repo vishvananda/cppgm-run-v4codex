@@ -17,19 +17,22 @@ void optimize(Program& p, unsigned level, bool telemetry)
     std::vector<bool> call_cycles(p.functions.size());
     for (unsigned fn = 0; fn < p.functions.size(); ++fn)
         if (!p.functions[fn].declaration) call_cycles[fn] = has_call_cycle(p,p.functions[fn],work);
+    std::vector<bool> dataflow(p.functions.size());
+    for (unsigned fn = 0; fn < p.functions.size(); ++fn)
+        dataflow[fn] = p.functions[fn].blocks.count > 1 && !call_cycles[fn];
     forward_local_slots(p,work);
     simplify_scalars(p,work);
-    if (promote_scalar_slots(p,call_cycles,work)) simplify_scalars(p,work);
+    if (promote_scalar_slots(p,call_cycles,work)) simplify_scalars(p,work,&dataflow);
     eliminate_local_expressions(p,call_cycles,work);
     simplify_control(p,work);
     forward_local_slots(p,work);
     simplify_scalars(p,work);
-    eliminate_local_expressions(p,call_cycles,work,true);
-    simplify_scalars(p,work);
+    eliminate_local_expressions(p,call_cycles,work,true,&dataflow);
+    simplify_scalars(p,work,&dataflow);
     simplify_diamond_values(p,work);
     bypass_empty_jumps(p,work);
     simplify_control(p,work);
-    simplify_scalars(p,work);
+    simplify_scalars(p,work,&dataflow);
     // Phi repair above can expose constant terminators. This last structural
     // sweep closes those edges; it does not restart the optimization pipeline.
     simplify_control(p,work);

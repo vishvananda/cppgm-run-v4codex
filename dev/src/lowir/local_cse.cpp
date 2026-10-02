@@ -118,13 +118,15 @@ void order_definitions(Program& p, Function& f, const OrdinaryFlow& flow,
     }
 }
 }
-void eliminate_local_expressions(Program& p, const std::vector<bool>& call_cycles, std::uint64_t& work, bool edges)
+void eliminate_local_expressions(Program& p, const std::vector<bool>& call_cycles, std::uint64_t& work,
+    bool edges, const std::vector<bool>* selected)
 {
     std::vector<unsigned> definitions(p.values.size()+1);
     for (const auto& a : p.parameters) ++definitions[a.value.index];
     for (const auto& i : p.instructions) if (i.destination) ++definitions[i.destination.index];
     for (unsigned fn = 0; fn < p.functions.size(); ++fn) {
         auto& f = p.functions[fn]; if (f.declaration) continue;
+        if (selected && !(*selected)[fn]) continue;
         bool call_cycle = call_cycles[fn];
         if (edges && call_cycle) continue;
         if (f.blocks.count == 1) {

@@ -213,7 +213,7 @@ function @empty_cycle() -> void {
   %more = cmp lt i64 %i, %limit
   branch %more, ^body, ^exit
  block ^body:
-  {'call i64 @id(%i)' if in_loop else 'nop'}
+  {'%ignored = call i64 @id(%i)' if in_loop else 'nop'}
   %next = binary add i64 %i, 1
   store i64 %next, $i
   jump ^head

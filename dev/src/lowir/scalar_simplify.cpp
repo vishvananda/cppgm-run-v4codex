@@ -185,10 +185,13 @@ public:
     void run() { index(); propagate(); dead_code(); }
 };
 }
-void simplify_scalars(Program& p, std::uint64_t& work)
+void simplify_scalars(Program& p, std::uint64_t& work, const std::vector<bool>* selected)
 {
     std::vector<bool> removed(p.instructions.size());
-    for (const auto& f : p.functions) if (!f.declaration) Scalars(p,f,removed,work).run();
+    for (unsigned fn = 0; fn < p.functions.size(); ++fn) {
+        const auto& f = p.functions[fn];
+        if (!f.declaration && (!selected || (*selected)[fn])) Scalars(p,f,removed,work).run();
+    }
     Pool<Instruction> instructions; Pool<Operand> operands;
     instructions.reserve(p.instructions.size()); operands.reserve(p.operands.size());
     for (auto& v : p.values) { v.definition = 0; v.defined = false; }
