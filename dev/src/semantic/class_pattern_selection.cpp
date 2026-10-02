@@ -146,7 +146,7 @@ void Analyzer::select_partial_pattern(std::uint32_t index)
             for (unsigned j = 0; j < y.size(); ++j) {
                 auto position = path(parent,j+1);
                 if (j < fixed) work.push_back({x[j],y[j],position});
-                else if (pack) work.push_back({types[x.back()].bound,y[j],position});
+                else if (pack) work.push_back({ArgumentId(types[x.back()].bound),y[j],position});
                 else result.omissions.push_back(position);
             }
         };

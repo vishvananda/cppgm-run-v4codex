@@ -31,6 +31,10 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
   semantic/template_call.cpp (TypeId versus Type). The PA14 rejection reducer
   and [dcl.spec.auto]/7 proof document GCC's acceptance gap; no language rule
   or valid compiler construct was weakened.
+- PA34 source correction: explicit TypeId/ArgumentId recovery from the wide
+  PackExpansion bound slot in deduction_parameters/class_pattern_selection.
+  Their aggregate-list conversions were ill-formed under [dcl.init.list]/3,7;
+  GCC -Werror=narrowing confirms. PA11 id-narrowing.reject.cpp preserves rejection.
 - Fixed PA29 extended-float native legalization: appended helper declarations
   now extend an existing function emission order. The seed's native crash was
   an out-of-bounds schedule read, exposed by constant.cpp/resolved_output.cpp.
@@ -52,7 +56,7 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
 Current evidence (`$RALPH_ARTIFACT_DIR/pa34-221`): file audit passes (four
 inherited warnings); host through PA33 5454/5454 and native debug 11/11 after
 the helper schedule fix. Canonical self PA1–PA4 pass (54/26/20/105 tests).
-PA5 build next exposed the now-fixed cleanup.cpp parser ambiguity. Fresh host
-regression and canonical self ladder follow that fix. Inception remains
+PA5 build passed cleanup.cpp, then exposed the now-corrected ID narrowing in
+two compiler sources. Fresh host regression and canonical ladder follow. Inception remains
 unverified. Historical generated IR was gzip-compressed to reclaim 840 MiB;
 its contents and measurement records are preserved.

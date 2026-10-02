@@ -77,7 +77,7 @@ bool Analyzer::deduction_parameters(Type function, std::uint32_t prefix, std::ve
         auto count = prefix ? expansion_count(expansion_parameters(types[type].bound),empty,prefix) : UnboundPack;
         if (count == UnboundPack) count = 0;
         if (count < 0) return false;
-        for (int j = 0; j < count; ++j) out.push_back({types[type].bound,i,true});
+        for (int j = 0; j < count; ++j) out.push_back({TypeId(types[type].bound),i,true});
     }
     return true;
 }
