@@ -33,7 +33,11 @@ with tempfile.TemporaryDirectory(prefix='pa32-range-bounds-') as temp:
  run(root/'dev/lowiropt','-O1','-o',ir,src)
  assert 'call void @existing' not in ir.read_text()
  assert 'call void @opt_fill_' in ir.read_text()
- rows.append(dict(case='helper-identity',compatible_reused=True,stronger_promise_declined=True))
+ src.write_text('global @tls : i64 [storage=thread_local] = 0\n'+declaration.replace('object=cppgm_opt_fill_bytes','object=cppgm_opt_fill_bytes, tls_for=@tls')+fill)
+ run(root/'dev/lowiropt','-O1','-o',ir,src)
+ assert 'call void @existing' not in ir.read_text()
+ run(root/'dev/cppgm++','-c','-O0','-o',d/'distinct-runtime.o',ir)
+ rows.append(dict(case='helper-identity',compatible_reused=True,stronger_promise_declined=True,distinct_runtime_declined=True))
  # Every exit phi needs the new body edge, with the same final pointer value.
  count=64
  s=['function @join(%first : ptr, %n : i64, %take : i64) -> i64 [no_inline=yes] {block ^entry:']

@@ -11,7 +11,8 @@ SymbolId fill_runtime(Program& p, SymbolId& cached, std::uint64_t& work)
         ++work;
         const auto& symbol = p.symbols[f.symbol.index-1];
         if (!f.declaration || symbol.metadata.builtin != Builtin::FillBytes ||
-            symbol.metadata.binding != SBM_INTERNAL || symbol.metadata.role != SR_NONE || symbol.metadata.force_inline) continue;
+            symbol.metadata.binding != SBM_INTERNAL || symbol.metadata.role != SR_NONE ||
+            symbol.metadata.tls_for || symbol.metadata.force_inline) continue;
         const auto& sig = p.signatures[f.signature.index-1];
         if (sig.result != Type::Void || sig.parameters.count != 3 ||
             sig.boundary.arity != CAM_FIXED || sig.boundary.effects != CFXM_DEFAULT ||
