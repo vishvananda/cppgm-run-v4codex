@@ -1,0 +1,60 @@
+[
+  {
+    "command": [
+      "python3",
+      "student.tests/pa32/common_levels.py",
+      "/tmp/pa32-215/common-o0",
+      "/tmp/pa32-215/cppgm-A",
+      "/tmp/pa32-215/cppgm-E"
+    ],
+    "environment": {
+      "PERF_CPU": "2",
+      "PA32_BASE_LEVEL": "0",
+      "PA32_FINAL_LEVEL": "0"
+    },
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "python3",
+      "student.tests/pa32/common_levels.py",
+      "/tmp/pa32-215/common-o1",
+      "/tmp/pa32-215/cppgm-A",
+      "/tmp/pa32-215/cppgm-E"
+    ],
+    "environment": {
+      "PERF_CPU": "2",
+      "PA32_BASE_LEVEL": "1",
+      "PA32_FINAL_LEVEL": "1"
+    },
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "python3",
+      "student.tests/pa32/common_levels.py",
+      "/tmp/pa32-215/common-o3",
+      "/tmp/pa32-215/cppgm-A",
+      "/tmp/pa32-215/cppgm-E"
+    ],
+    "environment": {
+      "PERF_CPU": "2",
+      "PA32_BASE_LEVEL": "3",
+      "PA32_FINAL_LEVEL": "3"
+    },
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "python3",
+      "student.tests/pa32/selfhost_performance.py",
+      "/tmp/pa32-215/selfhost",
+      "/tmp/pa32-215/cppgm-A",
+      "/tmp/pa32-215/cppgm-E"
+    ],
+    "exit_code": 0,
+    "environment": {
+      "PERF_CPU": "2"
+    }
+  }
+]
