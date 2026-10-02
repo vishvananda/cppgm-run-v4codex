@@ -1,173 +1,131 @@
 # PA32 implementation plan
 
 Stage base commit: e82bf4152fe8d6d68b9cd966655db0d8142cf81b
-Last reviewed commit: 76d3fcb24059d1557b6dd0e398cf3896931fcca9
+Last reviewed commit: 401519044a2c28130d4085b3bc7c3d0411b5dc8f
 
-Target: PA32 full-stage; implementation remains incomplete. [Audit 210](audit.md)
-retains the accumulated review inventory. Implementation 213 entered at
-`cec5b40ae0de687d217cc787e1cca342591a7c56`, clean, with 196/219 course cases.
-Previous turn: progress (validated integer-loop handoff); no live process on
-entry. Neither review marker advances during implementation.
+Target: **PA32 full-stage**, still incomplete. [Audit 214](audit.md) closes the
+complete `76d3fcb2..40151904` review, including all three implementation handoffs
+and their interactions. Entry was clean at `86d08255`, with **202/219** course
+cases and **17 failures**; the audited code preserves that exact failure set.
+Previous implementation turn: progress; no live process remained on entry.
 
-## Design/spec alignment
+## Architecture and operative limits
 
-Source -> canonical semantic facts -> shared typed LowIR -> optimization ->
-text view or native MIR/direct ELF. O0 returns before optimizer analysis. O1
-owns bounded scalar/CFG/storage/memory/call cleanup and proven effect-free loop
-deletion. O2/O3 also propagate closed-world constants; O3 permits bounded full
-unrolling. Text never transports facts between production phases.
+Source -> canonical typed semantic facts -> shared typed LowIR -> bounded
+optimization -> text adapter or native MIR/direct ELF. Production never uses a
+text roundtrip. O0 returns before optimizer analysis. O1 owns inexpensive
+scalar/CFG/storage/memory/call cleanup and proven effect-free loop deletion;
+O2/O3 add closed-world constant propagation; O3 allows bounded full unrolling.
 
-| Owner | Legality/fallback | Work and growth limits |
+| Owner | Legality and conservative fallback | Work and growth limits |
 | --- | --- | --- |
-| Scalar/slots | Typed constants, same-type aliases, mutable snapshots; traps/volatile/effects retained | Each dirty propagation/rewrite <=16*(I+uses+1); no growth |
-| Ordinary CFG | Sparse slot entry facts, completed dominance, scoped edge facts, phi-safe bypass | Promotion <=16*(I+O+B), phis <=I, phi operands <=2O; dominance <=32*(I+O+E+B); CSE/bypass <=16*(I+O+B), bypass operands <=2x |
-| Calls | Direct graph/escape census, recursion and typed homes, admission/cold-body costs | Depth <=64, work <=32768/caller and <=32*(I+O+P+S+F+1)/unit; growth <=1536/caller (2048 single-use). Mandatory expansion retains 4194304/unit and 262144/caller |
-| Private objects (211) | Single-definition origins; union/find byte partitions; exact fields and snapshots; escapes/volatile/unknown overlays retain homes | <=64 bytes/home, <=16 fields; two fixed invocations, O((I+O+S) alpha(S)); each reserves added IR <=8*(I+1), homes <=16S |
-| Integer loops (212) | Closed linear loops, widened exact trip/overflow proof; unknown counts/EH/mutable carriers decline | One invocation; candidate work <=16*(I+O+E+1); O3 <=4 trips, <=64 body clones/loop, unsimplified reservations <=256/function and min(4096,2*(I+1))/unit |
-| Memory values (213) | Canonical addresses/byte ranges, immutable snapshots, intersected ordinary predecessor facts; unknown predecessors/handlers reset; explicit effects invalidate | One invocation; 32 cells/state; shared <=128*(I+O+E+1) allowance plus linear census and bounded dominance; <=16 recent diamonds, <=64 comparisons/proof; <=16 copy pieces and <=128 bytes; no IR/operand growth |
-| Regions/roots/transport | Persistent handler stacks, monotonic no-unwind facts, complete root/escape census; durable debug/section/extent/ABI facts | Retirement <=32*(I+O+B+1); exhaustion retains input; root census linear; one function-local MIR at a time |
+| Scalar/slots | Typed constants, same-type aliases, actual store conversion and mutable snapshots; preserve traps/volatile/effects | Dirty propagation/rewrite <=16*(I+uses+1); no growth |
+| Ordinary CFG | Sparse slot facts, completed dominance, scoped width-correct edge facts, phi-safe bypass | Promotion <=16*(I+O+B), phis <=I, phi operands <=2O; dominance <=32*(I+O+E+B); CSE/bypass <=16*(I+O+B), bypass operands <=2x |
+| Calls/regions | Direct graph/escape census, recursive and typed-home guards; contextual effects and no-unwind facts | Depth <=64; work <=32768/caller, <=32*(I+O+P+S+F+1)/unit; growth <=1536/caller (2048 single-use). Forced expansion remains <=4194304/unit, <=262144/caller; region retirement <=32*(I+O+B+1) |
+| Private objects | Single-definition origins, complete byte partitions and snapshots; escape/volatile/unknown overlays retain homes | <=64 bytes/home, <=16 fields; two fixed invocations, O((I+O+S) alpha(S)); reserve added IR <=8*(I+1), homes <=16S |
+| Integer loops | Closed linear loops; exact widened trip/endpoints including final update; unknown/EH/mutable carriers decline | One invocation; candidate work <=16*(I+O+E+1); O3 <=4 trips, <=64 body clones/loop; unsimplified reservations <=256/function and min(4096,2*(I+1))/unit |
+| Memory values | Exact address/byte identities, immutable snapshots, ordinary predecessor intersections and effect epochs; backedges/handlers/unknown writes reset | One invocation; <=32 cells/state; shared <=128*(I+O+E+1) plus linear census/bounded dominance; <=16 recent diamonds, <=64 comparisons/proof; <=16 copy pieces/128 bytes; no IR/operand growth |
+| Roots/native transport | Complete root/escape census; durable debug/section/extent/ABI facts; actual copy clobbers | Linear root census; one function-local MIR through immediate encoding; direct ELF |
 
 I/O/B/E/P/S/F mean instructions/operands/blocks/edges/parameters/slots/functions.
-Indexes, address records, state slices and proof buffers have invocation or
-function owners and release there. No global cache or rendered-name key.
+All analysis tables, address/state slices and proof overlays have function or
+invocation owners and release there. A fixed schedule composes the individual
+reservations; no local rewrite restarts global inlining or a whole-program
+fixed point. Exhaustion preserves valid input.
 
-Memory data flow: typed SSA definition/use census -> address identity and
-within-object provenance -> bounded RPO memory states -> reuse, conditional
-value phi or adjacent object copy -> one conditional scalar/storage cleanup.
-Backedges reset facts; no fixed point or speculative load is introduced.
-Functions with calls in cycles reuse the pipeline's existing conservative
-admission: new memory analysis is skipped there, retaining ordinary local slot
-forwarding. Measured local as well as cross-block reuse prolonged hot values.
-CSE numbers commutative operands without forcing a live invariant ahead of a
-dying accumulator. One use census preserves that profitable operand order.
-Byte-overlap checks use modular target addresses. Plain pointer arithmetic
-carries equality, not disjoint-object or readonly-region evidence. Only pairs
-of annotated noalias parameters are disjoint. Imported, weak and explicitly
-object-named globals conservatively may share ELF storage. Mutable operands,
-width conversion, volatile/atomic accesses and unknown effects retain snapshots.
-EH registrations, calls that may unwind and handler roots delimit memory states.
+Plain `index` supplies equality, not object bounds or disjointness. Paired
+noalias parameters and actual local/global identities supply stronger proofs;
+imported, weak and object-named globals may share ELF storage. Memory epochs
+invalidate across writes, volatile/atomic operations and exceptional state.
+Repeated diamonds require a completed dominating result and exclusive use paths
+before retiring matched loads. Small unaligned copies preserve scalar store
+forwarding; selection and encoding share direct-copy limits/clobbers.
 
-Repeated pure diamonds require a dominating completed result, equivalent
-conditions/arms and identical memory epochs. Retiring a matched load requires
-an exclusive def/use path; shared expressions remain live. Conditional-address
-forwarding admits private homes of incoming scalars/literals: external or
-instruction-produced values otherwise prolong spill lifetimes. Declined choices
-keep their loads. Adjacent integer/pointer transfers require disjoint complete
-spans; no floating/I1 representation assumptions. Bulk selection and encoding
-share the direct-copy size policy, so only actual clobbers affect carriers.
-Small copies without alignment evidence keep scalar chunks to avoid widening
-reads across recent scalar stores; aligned aggregates retain vector encoding.
+Profitability remains explicit: external/loaded-value conditional phis and new
+memory reuse in call cycles decline; their measured policies prolonged spills.
+CSE preserves a dying accumulator's operand order. Private scalar choices and
+bounded memory reuse remain enabled with measured benefit. General allocation
+quality remains PA33 work, without excusing avoidable PA32 regressions.
 
-A reused load identity also feeds the scoped unsigned-decrement proof:
-`(x-1) >=u x` iff x is zero in the same width. Calls/stores that kill memory
-facts prevent transferring the earlier nonzero fact to a new load identity.
-Pipeline growth reservations from 211/212 are unchanged; 213 adds no IR. PA33
-still owns general allocation quality, including remaining value-phi spills.
+Audit 214 fixed the loop overlay: body and backedge uses of a header comparison
+observe its continuing truth, while exports observe the later exiting truth.
+Both are canonical `i64` values. No new analysis or growth allowance was needed.
 
-## Remaining implementation and handoff boundary
+## Remaining implementation: three broad owner groups
 
-The **17 remaining course failures** belong to these owners:
-
-1. **Pointer loops (6):** empty backward ranges and byte/word fills, twin phis,
-   final pointer publication and exit phis. They require dynamic termination,
-   range/alias proofs and dynamic fill lowering. Plain `index` supplies no range
-   promise (PA8 Memory and Addressing). Integer trip proofs do not establish
-   these facts. All outcomes remain required implementation.
-2. **Calls (5):** exception-bearing contextual candidates, builtin facts,
+1. **Control/dataflow closure (7 course failures):** six pointer-loop/range/fill
+   cases, including backward ranges, twin phis and published final pointers;
+   one conditional-phi/partial cross-slot-promotion case. Dynamic termination,
+   range/alias proofs and dynamic fill lowering are still required. Plain
+   pointer arithmetic and existing integer trip proofs do not supply them.
+2. **Contextual calls and EH (5):** exception-bearing candidates, builtin facts,
    landing cleanup and parent admission after initializer-list accessor cleanup.
-3. **Source identity (5):** lifecycle/declaration names, constructor/move and
-   lambda facts. Copy/move bulk transfer improves in 213; their naming/lifecycle
-   failures remain. Three source debug fixtures and the inherited O0 nested-try
-   reducer `call-nested-cleanup.cpp` also remain.
-4. **Phi closure (1):** conditional phi threading and partial cross-slot
-   promotion in the presence of an unresolved initial load.
+3. **Source/ABI/debug identity (5):** lifecycle and declaration names,
+   constructor/move and lambda facts. Three source-debug failures and the
+   inherited O0 `call-nested-cleanup.cpp` reducer also remain required work,
+   coordinated with the EH owner.
 
-213 completes all five external-memory course failures and the memory-backed
-nonzero predicate, with conservative profitability, alias and effect guards.
-Related source copy/move transfers now use the same bounded copy owner. The
-remaining cases need pointer range/termination proofs, exception-aware call
-admission, semantic declaration/debug identity, or partial SSA/CFG threading.
-Those facts cannot be obtained by extending available-memory intersections or
-raising their caps. This is the concrete incomplete implementation boundary;
-PA32 itself is not complete.
+These are unfinished stage requirements, not deferred audit findings. Close
+snapshot/ABI/debug, unit budget and native-profitability interactions within each
+owner group before publishing its handoff. Repeatedly splitting those followups
+across small handoffs was avoidable fragmentation; the unroll comparison bug
+shows why phi-only snapshot checks were insufficient.
 
-## Validation and performance evidence
+## Validated checkpoint and performance acceptance
 
-Course: **202/219**, **17 failures**, from 196/219 and 23 failures: six
-existing failures removed, none added, unchanged fixtures/comparison rules.
-Earlier PAs: **5178/5178**. Through PA32: **5380/5397**, failing only PA32.
-File audit passes with four inherited header warnings. Direct debug **5/5**;
-source debug remains **0/3**; normal/debug object replay **25/25** each. Ralph's
-425 denominator is a different census; the root course count remains 219.
+- Earlier PAs **5178/5178**; PA32 **202/219**, exact same **17 failures**;
+  through PA32 **5380/5397**. Coverage, references and comparisons unchanged.
+- File audit passes with the same four inherited substantial-header warnings.
+- Direct debug **5/5**, source debug **0/3**; normal/debug replay **25/25** each.
+- All inherited object/loop/memory/local/dataflow/call/audit reducers pass,
+  including alias/EH/escape, modular arithmetic, scaling and budget exhaustion.
+  New checks cover **48 cases x four levels x three paths**, plus an undefined
+  comparison reducer. Three source/template traces validate LowIR, checked
+  execution, debug MIR and identical direct/replayed ELF at O0–O3.
 
-Explicit checks include 90 checked memory cases x four levels x three execution
-paths; 32 bulk-size/alignment/carrier cases x four levels x three paths; 2136
-unsigned-domain comparisons x four levels; 100/500/1000-function exact work
-scaling; dense-CFG budget exhaustion; ELF storage aliases; inherited local,
-dataflow, object, call, loop and audit reducers. Source/template memory, loop
-and declaration traces pass LowIR validation, two runtime inputs, debug MIR,
-and identical direct/replayed ELF at every level. No contract/reference changes.
+[Evidence 214](../student.tests/pa32/evidence214/binding.json) binds the reviewed
+code, commands, binaries and inputs: **1,260 new A/A + six-ABBA observations**
+and **4,536 verified historical observations**. CPU 2; compile and execution are
+separate; all samples/spreads retained. The audit reports wall time, RSS,
+runtime and text size together. Current affected objects equal their accepted
+211/212/213 objects byte for byte. Paired current B/A medians:
 
-[Evidence 213](../student.tests/pa32/evidence213/binding.json) binds final code
-`5b5512b4`, inputs/flags/binaries, all **3024** A/A + six-ABBA observations
-(**1092 final**, 1932 earlier), and **48** short diagnostic observations.
-Compilation and checked execution were measured separately, pinned to CPU 2.
-Each affected compile contains 1800 kernels; runtime repeatedly calls one with
-runtime-varying data. Median paired B/A, final O1:
-
-| Workload | Compiler | Peak RSS A/B KiB | Runtime | Object text A/B bytes |
+| Workload / level | Compiler | Peak RSS KiB A/B | Runtime | Object text bytes A/B |
 | --- | ---: | ---: | ---: | ---: |
-| Repeated loads | 1.016x | 32904/28428 | 0.581x | 111600/117000 |
-| Private scalar choice | 0.938x | 18796/15092 | 0.980x | 122400/127800 |
-| Adjacent copies | 0.877x | 17648/15748 | 0.999x | 66600/66600 |
-| Repeated diamonds | 0.836x | 29432/25800 | 0.930x | 340200/207000 |
+| Private copies O1 | 1.034x | 17880/20896 | 0.512x | 192000/144000 |
+| Exported copies O1 | 1.131x | 18072/19380 | 0.599x | 188428/159628 |
+| Finite loops O1 | 0.866x | 13092/11764 | 0.122x | 128000/28800 |
+| Full unroll O3 | 1.155x | 16648/17800 | 0.452x | 153600/151481 |
+| Repeated loads O1 | 1.020x | 32748/28424 | 0.581x | 111600/117000 |
+| Private scalar choice O1 | 0.933x | 18928/15052 | 0.988x | 122400/127800 |
+| Adjacent copies O1 | 0.878x | 17644/15680 | 0.995x | 66600/66600 |
+| Repeated diamonds O1 | 0.873x | 29272/26040 | 0.936x | 340200/207000 |
 
-All final load/diamond runtime pairs improve (0.577–0.587x; 0.775–0.946x).
-One checked load execution repays compilation of all 1800 kernels. Longer
-private-choice pairs improve 0.972–0.987x; copies remain at parity
-(0.995–1.003x) while compilation improves. Declined external and loaded-value
-choices produce byte-identical objects, runtime medians 0.999/1.001x, compiler
-1.042/1.031x. Their attempted bounded analysis is the disclosed cost.
+Declined external/loaded-value choices retain identical objects; attempted
+analysis costs 1.044/1.032x compiler time. All 12 common template-heavy
+memory/floating/EH/pruning objects remain identical at O0/O1/O3; compiler
+medians are 0.991–1.007x. The O0 compiler-component control is 1.005x,
+77456/77452 KiB, identical 34275-byte text; it has no executable entry.
 
-All twelve common template-heavy memory/floating/EH/pruning objects are
-byte-identical at O0/O1/O3; compiler medians 0.988–1.006x, runtime
-0.993–1.004x. Compiler-component O0 control: paired 1.009x, peak RSS
-77584/77524 KiB, text 34322->34275 bytes; no executable entry. All spreads and
-outliers remain, including common O0 compiler 0.534x and O1 memory runtime
-0.767x pairs; unchanged object hashes prevent treating noise as code gains.
-
-Exploratory loaded-value phis regressed 1.25–1.29x and widened copies 1.71x;
-those policies were corrected. Call-cycle reuse regressed the common memory
-kernel 1.053x (a partial fix 1.112x); final admission restores the exact original
-object. Canonical operand reordering initially grew the load kernel 62->104
-bytes; preserving the dying accumulator reduces it to 65 bytes and improves
-runtime further. The initial zero-text-growth diagnostic is replaced by an
-explicit <=1.05x target: the 3-byte load/private-choice growth buys measured
-runtime improvement within the stage's bounded policy. Both original misses
-and all revised measurements remain; this is not a fixture or coverage waiver.
-
-Historical evidence remains preserved: [211](../student.tests/pa32/evidence211/binding.json),
-[212](../student.tests/pa32/evidence212/binding.json), and audit 210's scalar
-2.337x compiler/0.876x runtime measurement. Inherited 2x/1.75x/zero-growth/
-10%-runtime targets and 213's compiler/RSS <=1.5x, text <=1.05x are self-selected
-diagnostic targets, not extra exit gates. Mandated fixture bounds, correctness,
-coverage, bounded work/growth and measured benefit remain required. Historical
-misses and exploratory regressions remain in the evidence, not erased.
+Inherited 2x compiler, 1.75x RSS, zero-growth, 10%-runtime and later
+1.5x/1.05x/1.25x ratio targets are **diagnostics, not extra exit gates** under
+spec.md. Audit 210's 2.337x scalar compile/0.876x runtime and the original
+rejected-policy measurements remain preserved. The 3-byte load/choice growth
+buys measured benefit. Current repeatable gains and bounded costs support
+acceptance; no mandated fixture envelope, correctness, coverage or work/growth
+limit is weakened. Later allocator/DWARF/self-hosting work adds no PA32 gate.
 
 ## Handoff ledger
 
-| Boundary | Completed implementation/evidence | Still required |
+| Boundary | Completed work | Still required |
 | --- | --- | --- |
-| Audit 210, `76d3fcb2` | Accumulated audit and four corrections; markers retained | Then 41 course failures/debug closure |
-| Implementation 211, `d666b628` | Private aggregate owner; 12 existing failures fixed; measured benefit | Then 29 course failures and four debug failures |
-| Implementation 212, `a58a3a97` | Integer-loop owner; six course + one direct debug failures fixed; bounded cloning and measured benefit | Then 23 course + three source debug failures |
-| Implementation 213, `5b5512b4` | Memory owner, six existing failures fixed; exact byte/alias/epoch proofs and measured profitability | 17 course + three source debug failures; remaining owners above |
+| Audit 210, `76d3fcb2` | Accumulated review and four ownership corrections | Then 41 course failures |
+| Implementation 211, `d666b628` | Private aggregate owner and measured benefit; 12 failures removed | Then 29 failures |
+| Implementation 212, `a58a3a97` | Integer-loop owner, unit budgets and typed snapshots; six failures removed | Then 23 failures |
+| Implementation 213, `5b5512b4` | Bounded memory owner, actual clobbers and profitable admission; six failures removed | 17 failures |
+| Audit 214, `40151904` | Full accumulated architecture/performance review; comparison-value correction; unchanged progress and clean code/records boundary | Same 17 failures plus source/debug/EH closure in the three groups above |
 
-Independent review questions: accumulated private-object partition/escape and
-snapshot proofs; affine endpoint/overflow proof and loop reservations; new
-memory intersections, byte/provenance/ELF alias exclusions, diamond exclusive
-use paths, carrier clobbers and pipeline budgets. These review obligations are
-separate from unfinished implementation; neither is waived. Historical verifiers
-remain bound to their own code. The 213 verifier checks current bindings,
-raw-summary arithmetic, unchanged contracts, reduced failures, review markers
-and the committed clean handoff.
+The code/evidence commit precedes the records-only plan/audit commit. Run
+`python3 student.tests/pa32/audit214_verify.py --records` at that boundary.
+Historical verifiers remain bound to their own handoffs; the new historical
+verifier uses those source commits instead of imposing stale worktree bindings.

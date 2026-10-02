@@ -1,258 +1,291 @@
-# PA32 checkpoint audit 210
+# PA32 checkpoint audit 214
 
 Stage base commit: e82bf4152fe8d6d68b9cd966655db0d8142cf81b
-Last reviewed commit: 76d3fcb24059d1557b6dd0e398cf3896931fcca9
+Last reviewed commit: 401519044a2c28130d4085b3bc7c3d0411b5dc8f
 
-Reviewed range: `e82bf415..76d3fcb2`, including the entire accumulated
-`e82bf415..e409c2d8` entry range and audit corrections. Both entry markers named
-the PA31 consolidation `e82bf415`, so no boundary recovery or narrowing was
-needed. The prior turn was progress (committed call-group implementation and
-evidence); process inspection at entry found no live build to resume.
+Reviewed range: `76d3fcb2..40151904`, including the complete accumulated entry
+range `76d3fcb2..86d08255` and the audit correction. Both entry markers named
+`76d3fcb2`; no boundary recovery or narrowing was necessary. The prior
+implementation turn was progress: 213 committed memory ownership and evidence.
+Process inspection found no live build/test process to resume on entry.
 
-This is a completed **checkpoint audit**, not a claim that PA32 is finished.
-All 41 outstanding course failures remain required implementation work.
+This completes the checkpoint audit. PA32 full-stage implementation remains
+incomplete: **17/219 course failures** and **three source-debug failures** remain
+required work. The entry report's status **2** is make's exit status, not a count
+of failing tests; its **202/425** is a different census. The authoritative root
+course run is **202/219**, and its exact failure set is preserved.
 
-## Commit inventory and combined review
+## Complete range and ownership review
 
-| Checkpoint | Every accumulated commit reviewed | Combined ownership inspected |
+| Boundary | Every accumulated commit reviewed | Combined implementation and interactions |
 | --- | --- | --- |
-| 207 | `33cce2ae`, `8c01abc9`, `5f8be172`, `0e0d29f4`, `399faac3` | Baseline plan; CLI/source/object shared optimizer; local folding/CSE/slots; mutable native values and phi transfers; debug parser/location transport; snapshot reassociation; raw performance/validation evidence |
-| 208 | `1aecbd03`, `f36657ff`, `a1bbf8e7`, `d2e412d6` | Sparse promotion, ordinary CFG/dominance, edge/diamond/bypass facts, independent growth guards, measured call-cycle admission, selected-function analyses, handoff evidence |
-| 209 | `acf38fc7`, `410c67bf`, `e409c2d8` | Typed optional cloning, roots/constants, handler retirement and call effects; expensive-arithmetic caller admission; source/native/EH interactions and evidence |
-| 210 | `76d3fcb2` | Shared type-carrier legality, width-scoped facts, floating snapshots, retired debug ownership, executable reducers and full accumulated evidence verification |
+| Previous audit records | `2e1238dc` | Prior review boundary, accepted policies and inherited obligations |
+| Private objects, 211 | `d666b628`, `a7fe2af0` | Object address/use census, union/find byte partitions, escape and representation guards, scalar snapshots, call-admission interaction, slot retirement |
+| Integer loops, 212 | `22b4956c`, `a58a3a97`, `cec5b40a` | Ordinary-flow shape/dominance, widened trip proof, analytic deletion, parallel phi snapshots, source ordering, unit/function reservations and debug/ABI cloning |
+| Memory, 213 | `96005658`, `d4ae8856`, `5b5512b4`, `86d08255` | Address provenance, joins and effect epochs, copies/diamonds, unsigned decrement facts, CSE operand costs, shared selection/encoding clobber policy and measured admissions |
+| Audit correction | `40151904` | Continuing versus exiting comparison values in the loop substitution owner; executable reducers and complete evidence verification |
 
-The review covered all 43 changed implementation paths from entry, the final
-combined source, registrations in `frontend_source_sets.mk`, and the history's
-correctness/performance followups. Historical evidence sources were checked at
-their actual handoffs (including dereferenced tracked symlinks), rather than
-pretending old verifiers' current-worktree assumptions survive later edits.
-The 208 personal call-cycle guard's later `no_inline` addition preserves its
-original admission property now that ordinary calls can disappear.
+All **15 changed implementation paths** were inspected in final combined form:
+`frontend_source_sets.mk`; LowIR `object_splitting`, `loop_simplify`, `loop_trip`,
+`memory_values`, `edge_facts`, `local_cse`, `optimizer`, `folding.h`, `model.h`
+and the loop/memory headers; native `bulk_encoding`, `bulk_policy.h` and
+`parameter_flow`. New translation units are registered for both optimizer and
+source-driver consumers. The intervening commits' source and evidence changes
+were reviewed, including the later profitability and budget corrections, not
+just their latest snapshots. Personal tests only gained coverage. No course
+fixture, reference, contract, harness or comparison rule changed.
 
-## Findings fixed at their owners
+## Finding and correction
 
-1. **Comparison facts lost their width domain.** An `i8` comparison of an `i64`
-   value 256 against zero is true, while branching on the original value is
-   nonzero. Edge propagation previously transferred zero/nonzero facts in both
-   directions without checking truncation; diamond equality also discarded
-   higher bits when proving a wider phi replacement. The edge owner now checks
-   representable width, and the diamond owner requires the comparison/phi
-   domain to agree. No speculation or stronger range promise was introduced.
-2. **Constant propagation discarded implicit operand types.** A `u8` switch
-   selector 255 compared with case -1, an `i128` selector with high bits, and an
-   `i128` variadic argument all changed behavior after literal replacement.
-   Scalar, edge and closed-world call propagation now share one typed legality
-   guard for switch, variadic and by-address carriers. Existing typed values
-   remain when a literal would change width, argument placement or object home.
-   The direct and explicit indirect signatures use the same rule.
-3. **Promotion lost floating store conversion.** `store f32 %f64, $slot` became
-   an invalid cross-format `copy f32`. Promotion now emits the matching explicit
-   `fptrunc`/`fpext` at the original store snapshot. The tests include subsequent
-   source mutation, both branch outcomes, f32/f64/f80 inputs, signed-zero
-   inherited controls and the 16777217 -> 16777216 f32 rounding boundary.
-4. **Retirement retained definition-only debug metadata.** Pruning an inlined
-   template/support body into a declaration kept its function location, causing
-   `--validate-lowir` to fail. The root owner now clears the retired definition's
-   location; surviving cloned instructions retain their original locations.
+**Full unrolling deleted a comparison still used as a value.** The overlay
+mapped the loop header's comparison to its original temporary during cloned
+body execution. Only afterward did it install the exit result. If the result
+was not exported, serialized output contained an undefined temporary. If it
+was exported, later propagation could make every body use the final exit truth.
+A three-trip loop storing its comparison to a volatile global therefore either
+failed object validation or produced the wrong result.
 
-Reduced execution failures were observed on the frozen entry implementation;
-the floating case also failed the external structural validator. The final
-`audit.py` runs **119 cases x four levels x two native paths**. The separate
-source/template trace validates in-memory output and object replay at all four
-levels. These are general proofs and reducers, with no fixture-name handling.
+The loop owner now installs the continuing arm's canonical `i64` truth before
+cloning bodies and taking backedge snapshots, and installs the exiting truth
+afterward. The proof follows [LowIR comparisons](../pa8/lowir.md#unary-and-binary-operations)
+(`cmp` produces `i64` 0/1), [parallel phi edges](../pa8/lowir.md#control-flow-value-merges),
+and [observable volatile accesses](../pa8/lowir.md#memory-and-addressing).
+This is one bounded overlay assignment, with no added IR, growth allowance,
+analysis or stronger arithmetic promise. Existing instruction debug locations
+and side-effect order remain attached to their clones.
 
-The applicable contract is [LowIR constants/copies, merges, conversions, calls,
-parameter passing and terminators](../pa8/lowir.md), together with PA32's valid
-output/behavior requirement. No reference was corrected, and no C++11 oracle
-exception or bundle revision was needed. Identity integer conversions remain
-accepted because `tests/o1/200-identity-convert-cleanup.t` explicitly requires
-that input surface; this inherited validator extension is deliberate.
+[audit214.py](../student.tests/pa32/audit214.py) checks 48 cases: zero through
+five trips, both continuing branch directions, stores, backedge phis,
+accumulation, calls and exported exit comparisons. Every case runs at O0–O3
+through direct source-IR object compilation, optimized-text replay and the native
+executable path. A separate unexported reducer checks the undefined-temporary
+failure. Frozen entry binaries fail all three O3 execution paths and reject the
+unexported output; the reviewed binaries pass. Debug MIR also retains the
+cloned locations. No reference correction or bundle revision was necessary.
 
 ## Architecture and fact traces
 
-The nontrivial trace is [audit-trace.cpp](../student.tests/pa32/audit-trace.cpp):
-`use(long)` calls demanded `demand<long>` twice, and `main` also demands
-`demand<int>`. `Pair<T>` construction, member calls and a volatile destructor
-counter make layout, overload, lifetime, ABI and emission facts observable.
-Two different runtime inputs check both results and exactly three destructions.
+The source traces are [audit-trace.cpp](../student.tests/pa32/audit-trace.cpp),
+[loop-trace.cpp](../student.tests/pa32/loop-trace.cpp) and
+[memory-trace.cpp](../student.tests/pa32/memory-trace.cpp). Their current commands,
+telemetry, validated LowIR, consumed MIR, ELF views and executions are frozen
+under the binding's `checks/{trace,loop-trace,memory-trace}` directories.
 
-- `lowering/driver.cpp` owns each TU's immutable preprocessing storage,
-  identifier interner, `PostTokenCursor`, ring `syntax::Cursor`, shared `Ast`
-  and semantic analyzer. `translation_unit(&sem)` constructs/checks the graph
-  cooperatively; no complete token or second semantic-tree transport intervenes.
-- `semantic/template_call.cpp::specialize` keys canonical pattern entity and
-  interned argument pack; enclosing substitution is owned by the selected
-  pattern/immutable parent frame. Active/success/failure records distinguish
-  declaration and body work. Query prerequisites use their own revisions and
-  indexed dependents, not a global cache flush/retry.
-- `syntax/occurrence.cpp` retains immutable parsed source topology and compact
-  context/source occurrence IDs. `instantiate_function` demands the body once;
-  `template_expression.cpp` reuses fixed expression facts, and dependent facts
-  are rechecked in the substitution environment. There is no parser/token
-  replay, deep tree copy, per-node owning pointer or recursive destruction.
-  The trace records 180 tokens, maximum pending 47, 637 source/occurrence IDs,
-  five specialization records, **two** template body transitions, 14 type
-  substitution operations and 20 hits, unchanged across all optimization levels.
-- `lowering/symbols.cpp` maps entity/ABI entries to stable symbol/function IDs;
-  `function_body` consumes checked body facts, recorded conversions/lifetimes
-  and layouts. `DebugScope` temporarily owns the source position. TU source and
-  semantic storage die after lowering; the shared typed `Program` survives.
-- `toolchain/driver.cpp` passes that Program directly to `optimize` and
-  `compile_object`. Text reading/writing is only an explicit adapter. The same
-  source plus flags and O0-text replay produce byte-identical objects at O0–O3.
-  `native/driver.cpp` owns one Selector/MIR function through immediate encoding
-  and releases it before the next. `host_elf.cpp` orders final symbol views and
-  directly emits sections/relocations/COMDAT; no assembler or compiler delegate.
+- `lowering/driver.cpp` owns immutable preprocessing buffers, identifier
+  interning, streaming `PostTokenCursor`, the bounded syntax cursor, shared
+  `Ast` and semantic analyzer. Parser and semantics cooperate on that graph.
+  No complete token/syntax/semantic copy was introduced by these handoffs.
+- `semantic/template_call.cpp::specialize` uses canonical pattern and interned
+  argument-pack IDs; the selected pattern supplies its immutable parent
+  substitution frame. Declaration/body fact states distinguish active, failed
+  and completed demand. Incomplete dependencies use their own query revisions.
+  `template_instantiation.cpp` demands a parsed body once; occurrence overlays
+  and fixed-expression facts reuse source topology and nondependent work.
+  The nontrivial `Pair<T>`/`demand<T>` trace has 180 tokens, maximum pending 47,
+  637 node/occurrence IDs, five specialization records and **two** template body
+  transitions, with 14 type-substitution operations and 20 hits at every level.
+- `lowering/symbols.cpp` maps selected entities and distinct ABI entries to
+  symbol/function IDs. `function_body` requires recorded body facts and consumes
+  conversions, layouts and lifetime actions; `DebugScope` owns temporary source
+  context. TU preprocessing/semantic storage dies after direct typed lowering.
+  The optimizer consumes the same `Program` passed to `compile_object`.
+- Function-local optimizer ID tables, use chains, state slices, partition
+  arrays, dominator scopes and substitution overlays release at their natural
+  function/invocation boundary. Names are presentation identities, not keys for
+  rediscovering semantics. Changes rebuild the next scheduled local analysis;
+  no process-global cache, semantic reconstruction, text roundtrip, global retry
+  or per-local-change full-program fixed point was added.
+- Native selection owns one compact MIR function, encodes it immediately and
+  releases it before the next. The host ELF writer directly emits sections,
+  symbols, relocations and unwind records. Text and MIR are explicit inspection
+  adapters. All three traces produce byte-identical direct/replayed objects at
+  all four levels and pass two independently checked runtime inputs per level.
+  Required LowIR/MIR locations survive; inherited absence of DWARF line sections
+  is recorded, not turned into a new PA32 gate.
 
-The trace's 144 LowIR instructions become 78 at O1–O3; selected ABI definitions,
-volatile effects, unwind records and MIR debug locations survive. ELF symbol,
-section and disassembly views are retained. The inherited object writer does
-not emit DWARF line sections; the trace records that absence instead of
-inventing a new PA32 exit gate. Required LowIR/debug/replay checks remain intact.
+The object trace falls from 144 to **58** LowIR instructions at O1–O3, splitting
+three objects into six fields while preserving three destructor effects. The
+loop trace falls from 76 to **31** at O3, with one unroll reserving **28**
+instructions; its repeated template demand has one body transition. The memory
+trace falls from 132 to **71** with three reused reads. `twice<Pair>`'s two
+field reads become one load and one addition, while `capture` retains the
+pre-try snapshot and the post-handler reload across possible writes/unwind.
 
-A useful optimization fact was followed through final encoding on the scalar
-benchmark: repeated typed integer multiplication of the same loop-phi snapshot
-is pure, nontrapping and equal under the integer operation's width. Local/CSE
-facts require stable single definitions; the dominator scope undo log prevents
-facts leaking to siblings. Unwind registrations reject ordinary dominance;
-mutable reads and floating operations retain conservative handling. The CSE
-lookup budget is charged before reuse, later compaction repairs definition
-ordinals, and each subsequent analysis rebuilds its own changed facts.
-The actual kernel MIR changes **12 multiplies to one**, frame **96 to 32 bytes**,
-and preserved registers **five to one**. This is supported by checked runtime
-improvement, not just smaller LowIR. Native non-SSA homes, snapshot copies,
-parallel phi staging, call clobbers and debug transport were reviewed with the
-inherited local/dataflow/call reducers and the new boundary cases.
+The repeated-load benchmark follows the full fact path: typed single-definition
+pointer -> exact address/width cell -> unchanged memory epoch -> reusable stable
+value -> scalar cleanup -> canonical CSE numbering that preserves the dying
+accumulator -> native registers. Disassembly confirms **16 memory reads become
+one**, with no spills, and text changes **62 to 65 bytes** per kernel. Its
+runtime measurement below pays for that growth. Unknown writes, calls, volatile
+and atomic operations reset or invalidate the corresponding facts. Native bulk
+encoding and parameter availability now share exactly the same direct-copy
+size policy; the 32 boundary reducers check live GP/FP carriers across it.
 
-## Legality, profitability, bounds and fallback
+## Legality, profitability, budgets and conservative outcomes
 
-The [compact plan](plan.md) records current pass limits. Scalar propagation and
-DCE use indexed users/dirty instructions; dominance uses dirty successors with
-a monotonic parent fact; call summaries enqueue only reverse callers after a
-new no-unwind fact. Promotion/bypass commit only complete proofs within work
-and growth budgets. Exceptional states, recursion, unsupported stack/varargs
-frames, mutation, escape, conflicting joins and exhausted budgets preserve
-valid conservative IR. No transform relies on tests' spellings or references.
+The [plan](plan.md) retains operative bounds. Object splitting admits only
+single-definition local address chains and complete compatible byte partitions;
+unknown uses escape their home. Complete copies join layout constraints without
+joining storage identity. Padding is retained, and floating/I1/I128 bulk
+representations decline splitting. A transaction reserves growth before mutation.
+Two fixed invocations surround call admission; they do not restart inlining.
 
-The complete schedule is finite: initial/root/constant/scalar/region preparation,
-one optional cloning invocation and bounded scalar/CFG cleanup. There is no
-per-local-change full-program rescan or global fixed point. Immutable callee
-costs reserve nested work separately; output additions are charged before
-mutation. Original pools plus optional clones are bounded by the 32-times-input
-work allowance; promotion adds <=I instructions and <=2O operands, and bypass
-separately caps phi operand expansion. The fixed number of subsequent sweeps
-preserves linear whole-pipeline bounds. Transient per-function maps/vectors,
-cloner input pools and MIR have explicit release boundaries. The previous
-loose `2^24` accounting envelope was not a mandated or measured memory limit;
-the operative reservations and measured RSS above replace it in the plan.
+Loop proofs require a closed linear body, completed ordinary dominance,
+single-definition carriers and exact widened endpoints, including the last
+update. Unknown counts, overflow, exceptional CFGs, mutable carriers and unsafe
+source ordering retain input. Analytic deletion requires nontrapping pure work
+and available exports; O3 cloning separately applies trip/body/function/unit
+profitability and growth limits. The comparison-value correction completes the
+same overlay's value semantics; it changes none of these admission rules.
 
-Ordinary/hinted/single-use/cold call size limits (40; 6 callful single-block;
-32/128 hinted; 512 single-use; 128 actual cold body), caller growth 1536/2048,
-work 32768/caller, unit work 32*(I+O+P+S+F+1), and depth 64 remain unchanged.
-Expensive arithmetic expansion still declines cyclic or >128-instruction
-callers. The prior rejected divider-loop and common-memory policies remain
-disabled; their diagnostic measurements are preserved, not excused by PA33.
+Memory states use exact identities plus modular byte ranges. Plain `index`
+conveys equality, not disjointness or readonly provenance. Only paired noalias
+parameters or proven distinct homes/globals justify disjointness; imported,
+weak and object-named globals may share ELF storage. Joins intersect completed
+ordinary predecessors; unvisited backedges/handler entries reset facts. Stores
+normalize to their actual width, floating conversion and mutable values retain
+snapshots, and effect epochs delimit repeated-diamond equivalence. Removing a
+matched load requires an exclusive def/use path. Adjacent copies require
+complete nonoverlapping integer/pointer spans. No load is speculated.
+
+Admission remains separate from legality: external/loaded-value phis and new
+memory reuse in call cycles decline because their measured spill/lifetime costs
+were unprofitable. Local slot forwarding remains available. Unaligned small
+copies use scalar chunks to preserve store forwarding; aligned copies retain
+vector forms. The earlier 1.25–1.29x loaded-value-phi, 1.71x widened-copy and
+1.053x/1.112x call-cycle regressions remain recorded, with their policies removed.
+
+Work remains linear or capped: function-local use lists/union-find, one loop
+invocation, one bounded RPO memory sweep and a 16-diamond window; dirty
+instruction/block worklists in inherited scalar/CFG cleanup. All invocations
+form a fixed schedule. Object growth is reserved against consumed input before
+each of two invocations, optional inlining has unit reservations, loop growth
+is shared across the unit, and memory adds no IR/operands. Their composition is
+bounded without repeated expansion. Exhaustion retains valid conservative IR.
+Current 100/500/1000-function memory work is exactly 3100/15500/31000;
+dense-CFG exhaustion is exercised. Loop tests exercise the 256/function and
+4096/unit ceilings, body refusal, variadic type snapshots and debug cloning.
 
 ## Performance evidence and stage-scoped acceptance
 
-[Binding, commands and all raw observations](../student.tests/pa32/evidence210/binding.json)
-freeze binaries, input hashes, flags and outputs. Artifacts are retained under
-`/home/vishvananda/work/private/v4codex/artifacts/pa32-210`. Each measured axis
-uses an A/A block and six wall-time ABBA blocks, CPU 14, with all samples and
-spread retained. Compile and execution are measured separately; runtime inputs
-and independently checked results keep work live. Host g++ only links the
-compiler-produced objects. Telemetry is collected separately on affected
-workloads; common telemetry has equal flags on both sides and triggers no
-extra optimizer analyses.
+[Binding](../student.tests/pa32/evidence214/binding.json) freezes **573 source
+bindings**, **315 artifacts**, commands, binary/input/output hashes and all
+**1,260 new observations**. Artifacts are retained in
+`/home/vishvananda/work/private/v4codex/artifacts/pa32-214`.
+Each axis has A/A calibration followed by six wall-time ABBA blocks, CPU 2.
+Compilation and checked execution are separate. Runtime input and independently
+checked results keep the workloads live; host g++ only links compiler-produced
+objects. Affected telemetry is measured separately; common telemetry flags are
+identical on A and B. All observations, spread and outliers are retained.
 
-A/B baselines: scalar is current O0/O1; slots/dominance are 207/current O1;
-calls/regions/cheap are 208/current O1; constants are 208/current O2.
+Affected A baselines are pre-211 for objects, pre-212 for loops, and pre-213 for
+memory; B is the reviewed compiler. Every B affected object is byte-identical
+to that owner's accepted handoff, verifying interactions across all later passes.
+O1 is used except O3 for full unrolling. Ratios below are paired B/A medians
+and ranges; times are separate sample medians.
 
 | Workload | Compile ratio [range] | Compile ms A/B | Peak RSS KiB A/B | Runtime ratio [range] | Runtime ms A/B | Object text bytes A/B |
 | --- | --- | --- | --- | --- | --- | --- |
-| Scalar | 2.337 [2.310–2.419] | 52.36/123.20 | 10332/15388 | 0.876 [0.869–0.894] | 74.86/65.44 | 170400/109800 |
-| Slots | 1.836 [1.794–2.116] | 70.67/128.54 | 14536/16728 | 0.864 [0.863–0.866] | 91.53/79.07 | 148800/144000 |
-| Dominance | 1.568 [1.551–1.598] | 93.74/146.68 | 16820/18160 | 0.811 [0.809–0.821] | 116.16/94.27 | 219600/147600 |
-| Division call control | 1.201 [1.005–1.211] | 65.62/78.69 | 12380/13820 | 0.997 [0.992–1.004] | 76.71/76.65 | 128438/128438 |
-| Regions | 1.262 [1.231–1.293] | 65.84/83.12 | 12544/13676 | 0.806 [0.803–0.893] | 95.46/76.85 | 128503/128438 |
-| Cheap calls | 1.579 [1.534–1.650] | 65.16/103.15 | 12420/16664 | 0.972 [0.938–1.003] | 36.91/35.94 | 128427/132000 |
-| Constant arguments | 1.156 [1.041–1.240] | 64.92/78.66 | 11968/12720 | 0.921 [0.856–0.930] | 40.30/37.18 | 134487/134427 |
+| Private copies | 1.034 [1.026–1.090] | 149.02/154.98 | 17880/20896 | 0.512 [0.511–0.514] | 357.83/183.40 | 192000/144000 |
+| Exported copies | 1.131 [0.899–1.253] | 126.61/143.85 | 18072/19380 | 0.599 [0.597–0.602] | 355.88/212.86 | 188428/159628 |
+| Finite loop deletion | 0.866 [0.837–0.873] | 89.12/77.09 | 13092/11764 | 0.122 [0.122–0.124] | 1146.54/140.30 | 128000/28800 |
+| Full unroll | 1.155 [1.146–1.163] | 123.71/143.27 | 16648/17800 | 0.452 [0.442–0.469] | 377.79/171.10 | 153600/151481 |
+| Repeated loads | 1.020 [1.001–1.075] | 242.08/247.93 | 32748/28424 | 0.581 [0.577–0.608] | 145.11/84.16 | 111600/117000 |
+| External choice control | 1.044 [1.034–1.067] | 115.99/121.29 | 15948/15976 | 0.997 [0.956–1.026] | 81.97/81.81 | 147600/147600 |
+| Private scalar choice | 0.933 [0.930–0.956] | 127.79/119.82 | 18928/15052 | 0.988 [0.949–0.996] | 84.60/83.71 | 122400/127800 |
+| Loaded-value choice control | 1.032 [0.931–1.043] | 145.42/150.80 | 17480/17576 | 1.000 [0.973–1.003] | 84.49/84.52 | 135000/135000 |
+| Adjacent copies | 0.878 [0.863–0.894] | 100.92/88.50 | 17644/15680 | 0.995 [0.978–1.018] | 82.30/82.32 | 66600/66600 |
+| Repeated diamonds | 0.873 [0.830–0.896] | 301.34/263.22 | 29272/26040 | 0.936 [0.921–0.942] | 105.10/97.24 | 340200/207000 |
 
-Every affected workload except cheap calls improves in all six new pairs.
-Cheap calls improve in five; the remaining +0.27% pair is within the A/A spread
-(36.64–37.17 ms). Its object is byte-identical to the accepted 209 output, whose
-six pairs all improved. Repeated benefit is supported across both runs; no
-single-pair/all-pairs numerical rule is added to the spec. The divider control
-is unchanged and has no runtime claim. Regions and constants also retain the
-exact accepted 209 objects.
+Objects, loops, repeated loads, private scalar choices and diamonds improve in
+all six runtime pairs. Copy coalescing improves compilation with runtime at
+parity and unchanged text size. Declined choice controls keep byte-identical
+A/B objects; their 3.2–4.4% compile cost is bounded attempted analysis, with no
+runtime claim. The added compile work for each profitable expensive transform
+is repaid by one checked representative execution in these workloads. These
+measurements do not imply a universal speedup.
 
-The fixed template-heavy common suite compares the PA31 stage-base O0 binary
-with the reviewed O1 binary:
+Common controls compare frozen entry/current compilers at the same level:
 
-| Workload | Compile ratio | Compile ms A/B | Peak RSS KiB A/B | Runtime ratio | Runtime ms A/B | Object text bytes A/B |
+| Level / workload | Compile ratio | Compile ms A/B | Peak RSS KiB A/B | Runtime ratio | Runtime ms A/B | Identical object text bytes |
 | --- | --- | --- | --- | --- | --- | --- |
-| Memory/calls | 1.162 | 167.27/195.04 | 29676/30528 | 0.934 | 52.74/49.34 | 151393/124959 |
-| Floating | 1.198 | 168.81/201.65 | 29888/30668 | 0.982 | 49.16/48.44 | 151234/124867 |
-| Exceptions | 1.203 | 168.89/202.91 | 29676/30576 | 0.997 | 251.56/251.30 | 151541/125067 |
-| Pruning | 1.124 | 208.00/235.11 | 35728/36420 | 0.935 | 52.51/49.06 | 151393/124959 |
+| O0 memory | 1.004 | 168.93/169.22 | 30080/29952 | 1.002 | 52.25/52.28 | 151393 |
+| O0 floating | 0.991 | 168.71/167.57 | 30756/30688 | 1.001 | 48.85/48.92 | 151234 |
+| O0 exceptions | 0.993 | 169.61/168.21 | 30716/30628 | 1.011 | 249.22/251.81 | 151541 |
+| O0 pruning | 0.997 | 209.19/208.96 | 36432/36396 | 0.998 | 52.35/52.33 | 151393 |
+| O1 memory | 1.001 | 193.33/194.48 | 30024/29960 | 0.999 | 48.84/48.92 | 124959 |
+| O1 floating | 0.995 | 203.71/203.55 | 30840/30636 | 1.005 | 48.10/48.31 | 124867 |
+| O1 exceptions | 1.003 | 202.84/203.75 | 30648/30520 | 1.002 | 250.31/250.41 | 125067 |
+| O1 pruning | 1.007 | 236.43/237.90 | 36236/36304 | 1.001 | 48.97/48.73 | 124959 |
+| O3 memory | 0.999 | 192.20/193.43 | 29992/29968 | 0.990 | 48.70/48.75 | 124959 |
+| O3 floating | 0.995 | 203.86/204.11 | 30720/30688 | 1.001 | 48.19/48.16 | 124867 |
+| O3 exceptions | 0.994 | 201.92/201.93 | 30648/30648 | 1.007 | 250.43/251.39 | 125067 |
+| O3 pruning | 1.000 | 236.59/236.05 | 36364/36364 | 1.001 | 48.93/48.99 | 124959 |
 
-Same-level entry/current O1 compiler medians are 0.999/1.004/0.995/0.994;
-O0 medians 1.001/0.986/0.998/0.993. All eight common objects are byte-identical.
-RSS increases are at most 520 KiB; no runtime regression/benefit is attributed
-to identical code. The retained O0 pruning runtime outlier (pair 6.373) and O0
-memory compile outlier (2.475) are visible in raw spreads, not censored.
-The compiler-owned folding.cpp component at O0: compiler 1.003 [0.989–1.009],
-1084.39/1084.01 ms, RSS 77256/77704 KiB, identical 34322-byte text. Runtime is
-inapplicable to that object with no main; no full self-hosting claim is made.
+All 12 A/B objects are byte-identical; runtime variation is not attributed to
+code changes. The largest positive RSS difference is 68 KiB. Raw common compile
+outliers, including 0.598 and 1.467 pairs, remain disclosed in the JSON spreads.
+The compiler-owned `folding.cpp` O0 control is 1.005 [0.999–1.024],
+1075.56/1088.60 ms, 77456/77452 KiB, with identical **34275-byte** text.
+It has no executable entry, so runtime is inapplicable; full compiler self-hosting
+remains PA34 work. The correctness reducer's broken entry output is never used
+as a performance baseline.
 
-**Reclassification:** inherited 2x compiler, 1.75x RSS, zero/1.5x text-growth and
-historical 10% runtime targets are self-selected diagnostic thresholds, not
-mandated course/spec exit gates. The accumulated scalar compile ratio 2.337
-misses 2x; the whole current pipeline pays about 70.84 ms to save about 9.42 ms
-per checked three-million-iteration execution, amortizing in about eight runs,
-with 35.6% smaller text and 1.49x RSS. The complete progression's other affected
-profits, unchanged audit controls, bounded analyses and retained rejected-policy
-evidence support this tradeoff. No universal speedup is claimed and no new
-unprofitable optional transform was introduced by the audit. This changes no
-mandated IR envelope, semantic obligation, coverage, actual work reservation
-or growth cap. Historical misses and raw measurements stay intact. Later
-allocator quality, DWARF generation and whole-compiler self-hosting add no
-current-stage gate. Future regressions still require investigation and removal
-of unprofitable optional policies; the reclassification is not a blanket waiver.
+[Historical verification](../student.tests/pa32/evidence214/history.json) checks
+211/212/213 at their actual committed handoffs, including dereferenced source
+symlinks, binary/artifact bindings and recomputed A/A/ABBA arithmetic: **4,536
+observations**, 1,643 source bindings and 1,104 artifact bindings. Original failed
+policies and 48 short diagnostic observations in 213 remain in their original
+files; no sample was discarded. Earlier audit 210's 2.337x scalar compile cost,
+0.876x runtime and 35.6% text reduction remain accepted evidence.
 
-## Validation, remaining work and ledger
+**Stage-scoped interpretation:** inherited 2x compiler, 1.75x RSS, zero-growth,
+10% runtime and later 1.5x/1.05x/1.25x ratio targets are self-selected diagnostics,
+not additional exit gates. The historical object verifier's ratio assertions
+check its frozen experiment; they do not impose those gates on this audit.
+Current measured benefits, exact work/growth limits and removal of unprofitable
+optional policies support acceptance. The three-byte load/choice growth is
+measured and justified; a historical miss does not permanently fail a corrected
+policy. No mandated fixture envelope, correctness condition, comparison rule or
+coverage requirement is weakened. Later allocator/DWARF/self-hosting constraints
+create no extra PA32 gate, and do not excuse avoidable regressions.
+
+## Validation and remaining work
 
 - `make test-report-through-pa31`: **5178/5178**, exit 0.
-- `perl scripts/cppgm_file_audit.pl --stage pa32 --paths dev/src`: exit 0;
-  four inherited substantial-header warnings, no new warning.
-- `make test-pa32`: **178/219**, exit 2; exact **41/219 failure set unchanged**
-  from the primary entry log. The supplied 178/425 census is preserved as a
-  different accounting denominator; status 2 is a make exit code.
-- Required `make -C pa32 test-debuginfo`: direct **4/5**, exit 2. Source lanes
-  separately completed **0/3**; debug replay **25/25**, exit 0. The O3 debug
-  loop's emitted LowIR is structurally valid to the compiler validator; the
-  harness additionally reports unsupported debug branch/phi syntax before its
-  still-unmet unrolling expectation. No harness or comparison was changed.
-- Explicit inherited reducers: **506 local**, **134 dataflow**, **63 call**
-  cases, including four levels, native paths, traps/CLI/EH/escape/mutation and
-  bounded stress controls. New **119** cases and full source/template trace pass.
-- `verify_audit.py` verifies **538** current source bindings, **276** frozen
-  artifacts, **4,844** inherited and **1,148** new observations, paired medians/
-  spreads, historical sources, contracts, failure-set equality and clean review
-  boundary. Log/binary/input hashes are in the binding; generated objects/logs
-  remain outside git. No course fixture, reference, harness or comparison rule
-  was changed or dropped.
+- `perl scripts/cppgm_file_audit.pl --stage pa32 --paths dev/src`: exit 0,
+  the same four substantial-header warnings.
+- `make test-pa32`: **202/219**, exit 2, exact **17-failure set unchanged**.
+- `make test-report-through-pa32`: **5380/5397**, only those PA32 failures.
+- Required debug: direct **5/5**; source **0/3**, each source lane run explicitly
+  despite the aggregate target stopping at its first failure. Normal and debug
+  object replay each pass **25/25**.
+- Explicit personal checks: 43 object, 78 loop, 90 memory, 32 bulk-carrier,
+  506 local, 134 dataflow, 63 call and 119 earlier-audit execution cases across
+  four levels and their native/replay paths; 346 finite-domain loop executions,
+  154 long/infinite loop guards and 2,136 modular comparison cases; scaling,
+  exhaustion, alias/EH/escape/debug/ABI guards; the new 48 cases plus reducer.
+- `audit214_verify.py --records` verifies current source/evidence/artifact
+  bindings, exact progress preservation, measurements, bounds and the final
+  records-only commit/clean worktree boundary.
 
-Remaining work is grouped in the plan: memory/aggregate/exceptional-state
-proofs; context-sensitive calls and loop transformations; source/debug/flow
-closure. These are unfinished stage requirements, not deferred audit questions.
-The three owner groups were useful, but repeated snapshot/debug/policy closures
-across small handoffs were avoidable fragmentation. Future groups should close
-those interactions before publishing their validation/evidence boundary.
+Remaining work is grouped broadly in the plan: control/dataflow closure
+(pointer loops, fills and partial phi/storage promotion); contextual calls and
+EH/builtin admission; source declaration/lifecycle/ABI/debug identity. The
+inherited O0 nested-cleanup reducer also remains in that source/EH work.
+These are incomplete stage requirements, not unresolved audit findings or waivers.
+
+The owner groups were useful, but repeatedly publishing a transform before its
+unit budget, value snapshot, debug and native profitability interactions closed
+caused avoidable handoff fragmentation. The unroll comparison defect is another
+example: phi snapshots alone did not cover all header-produced values. Future
+handoffs should close those interactions as one owner group before publishing.
 
 | Audit | Reviewed range and code tip | Findings/evidence | Result and remaining owners |
 | --- | --- | --- | --- |
-| 210 | `e82bf415..76d3fcb2`; Last reviewed commit above | Four ownership corrections; complete accumulated architecture/fact/native review; 5,992 verified raw observations; required prior/file/progress checks | Checkpoint audit complete; 178/219 and identical 41 failures; remaining memory/aggregate, contextual calls/loops, source/debug closure |
+| 210 | `e82bf415..76d3fcb2` | Four typed/snapshot/debug corrections; accumulated evidence; full narrative retained in `2e1238dc` | 178/219, 41 failures; memory/aggregate, calls/loops, source/debug closure |
+| 214 | `76d3fcb2..40151904`; Last reviewed commit above | Comparison-value overlay corrected; all three handoffs and 15 implementation paths reviewed; 5,796 verified A/A/ABBA observations; prior/file/progress checks | Checkpoint audit complete; 202/219, identical 17 failures; control/dataflow, calls/EH, source/ABI/debug closure |
 
-The records commit changes only this audit and the compact plan. The code tip
-above was validated and committed first; no implementation edit follows it.
+The code and evidence tip was validated and committed first. The following
+records commit changes only this audit and the compact plan; no code edit follows
+that reviewed tip.
