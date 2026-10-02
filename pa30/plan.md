@@ -1,88 +1,72 @@
-# PA30 compact implementation plan — handoff197
+# PA30 compact implementation plan — audit198
 
 Stage base commit: `27029f978e65b78331233123922d342033d5d1f7`.
-Last reviewed commit: `27029f978e65b78331233123922d342033d5d1f7`.
-Target: **PA30 full-stage**. Phase: **implementation handoff, incomplete stage**.
-Entry197: `407fcdc0fceea44331958d1f0dd312432773fd35`, clean. Previous goal turn:
-progress (validated handoff196); no live work needed resumption. Review markers
-retain the PA29 boundary; implementation checkpoints are not independent audits.
+Last reviewed commit: `4a081cb05b25638be7a759882f67d4d8ae97eb6a`.
+Target: **PA30 full-stage**. Phase: **checkpoint audit complete; stage incomplete**.
+Reviewed all three accumulated checkpoints, `27029f9..c0b26910`, and the audit
+repairs through the code tip above. This record adds no implementation changes.
+Previous goal turn: progress (committed implementation197); no live job at entry.
 
-## Completed group and spec alignment
+## Reviewed and repaired
 
-Earlier parser/current-instantiation groups and their evidence remain in
-[performance195](performance195.md), [performance196](performance196.md) and
-`student.tests/pa30/evidence195/`, `evidence196/`.
-Implementation197 completes **alias identity in lookup and pattern matching**:
+[Audit198](audit.md) records every commit, combined ownership paths, interactions,
+architecture/optimization traces and the ledger. The parser's class/friend/angle
+boundaries, injected construction types, current-instantiation qualifier scope,
+substituted alias shapes and namespace canonical identity have been reviewed
+as one accumulated implementation. No pending independent-review item remains.
 
-| Owner / commit | Data flow | Complexity / lifetime |
-|---|---|---|
-| `semantic/class_pattern_selection` / `6bf7812b` | Candidate arguments → deduction/substitution → memoized semantic signature shape → unique partial specialization. Retained alias obligations no longer create false type inequality. | Exact-ID fast paths; shape work once per distinct immutable argument graph, O(1) average reuse; existing TU Analyzer cache. Substitution/access checks remain candidate-local. |
-| `semantic/lookup` / `94faedf1` | Indexed using edges → declaration pair → canonical type/namespace identity → merged result. Same-type namespace typedefs and namespace aliases converge. | O(1) pair comparison, no new storage, scans, retries or invalidations; existing visited edge traversal and TU entities. Class-base contract unchanged. |
-
-Extended beyond the initial namespace/ordering reducers through qualified,
-transitive/cyclic lookup, namespace aliases, nested alias patterns, packs, cv,
-non-type values, ambiguous patterns, private access and failed substitution.
-Shared typed semantic graph → typed LowIR → native ELF path remains in use;
-no new source registration, backend, optimization or production text adapter.
+- `88c25337`: extend canonical type identity to base typedef lookup. The old
+  negative oracle contradicts C++11 [class.member.lookup]/3,6–7. The unchanged
+  reducer, standard proof and bundle binding are in
+  [reference-correction198](reference-correction198.md). Distinct types/entities,
+  alias templates and inaccessible aliases remain rejected.
+- `4a081cb0`: reserve implicit LowIR role spellings when displaying ordinary
+  namespace/member functions. A combined checkpoint control exposed a valid
+  namespace `main` receiving an entry role only after serialization. Typed
+  roles, ABI names and the external LowIR comparison contract are preserved.
 
 ## Validation and performance
 
-[Required checks](../student.tests/pa30/evidence197/validation.json): prior PAs
-**4941/4941 pass**, file audit passes (four inherited header warnings), PA30
-**129/153 → 132/153**, **24 → 21 failures**, zero regressions. The through-PA30
-report is **5073/5094**; the stage remains incomplete and cannot advance.
-Ralph's entry summary count is 129/154; the raw entry log and every isolated
-course run contain 153 fixtures. The [delta](../student.tests/pa30/evidence197/stage-delta.json)
-binds all existing cases and unchanged PA30 inputs/oracles/harnesses. Initial
-concurrent reports shared counters; only later isolated reports are acceptance
-evidence. No reduced coverage or newly added passing fixture supplies progress.
+[Required checks](../student.tests/pa30/evidence198/validation.json): PA1–PA29
+**4941/4941 pass**; file audit passes with four inherited header-division warnings;
+PA30 **132/153**, the **same 21 failing cases** as entry; through-PA30
+**5073/5094**. No earlier regression, new failure or reduced coverage.
+The supplied 154 total disagrees with the authoritative primary log, fixture
+inventory and isolated reports: all contain 153 cases. The standard-backed base
+reference correction changes one expectation, preserving its input and coverage.
+[Coverage delta](../student.tests/pa30/evidence198/stage-delta.json) binds every case.
 
-[Controls](../student.tests/pa30/evidence197/controls.json): **23 commands pass**,
-including direct object execution, explicit LowIR/native adapter execution,
-failed substitution/access and required ambiguity rejections. Personal controls
-were run explicitly. One PA6 reference correction has a reduced reproducer,
-C++11/CWG14 proof and bundle binding in [reference-correction197](reference-correction197.md).
-No PA30 reference changed; comparison rules and fixture discovery are intact.
+[Controls](../student.tests/pa30/evidence198/controls.json): **107 commands pass**,
+rechecking all checkpoint reducers plus combined and new boundaries through
+objects and validated LowIR/native execution. [Trace](../student.tests/pa30/evidence198/trace.json):
+**34 commands pass**, including the old adapter failure, current MIR/ELF/CFI,
+telemetry invariance, access, dormant demand and token size.
 
-[Performance197](performance197.md) retains frozen A/B flags, inputs and binaries,
-404 observations + 16 launchers, A/A + six ABBA blocks, corrected-owner scaling,
-compiler latency/RSS and checked
-runtime/text measurements. No optional transform or speedup claim. Mandatory
-45-second compile limit is preserved (largest repaired fixture: 2.715 s /
-88,636 KiB). Lookup work = `102N+49`; ordering shape work = `2N+1`. Inherited blanket percentage/no-growth
-targets remain diagnostic under spec §9, with historical measurements preserved.
+[Performance198](performance198.md) records frozen stage-base/final and
+checkpoint/final comparisons, A/A calibration, six ABBA blocks, all observations,
+compiler latency/RSS, checked executable runtime and text size. The 45-second
+limit and inherited optimization budgets are unchanged. Blanket 15%/zero-growth
+targets remain diagnostic under spec §9, with all historical measurements kept.
+No optional optimization or runtime-profit claim is introduced. PA31 hosted
+execution, PA32/33 optimization levels and PA34 inception remain later-stage work.
 
 ## Remaining implementation groups
 
-| Failures | Owner / required data flow |
+| Existing failures | Broad owner and required work |
 |---:|---|
-| 6 | `semantic/callable`, template demand: callable/shared-pointer uses → available prerequisite facts and demanded bodies. Shared-pointer now passes partial ordering and reaches this owner. |
-| 6 | `semantic/type_builder`, constant evaluation: hosted array expressions → checked integral bounds. |
-| 2 | `semantic/access`: random-library nested member use → retained access context. |
-| 2 | `semantic/construction`: piecewise tuple arguments → viable constructor and conversions. |
-| 1 | `semantic/template_call`: bind member callable → viable overload. |
-| 1 | `semantic/exception_specification`: replaceable new redeclaration → compatible exception fact. |
-| 1 | Builtin registry / vector lowering: target vector intrinsic → typed operation. |
-| 2 | Body checks / lowering reachability: cross-function local reference and reachable missing return → required rejection. |
+| 9 | Template/callable prerequisite scheduling and overload/construction facts: six callable/shared-pointer cases, bind-member call selection, and two piecewise tuple/pair constructor cases. |
+| 8 | Dependent constant/access facts: six array-bound constant-evaluation cases and two random-library nested-member access-context cases. |
+| 4 | Required emitted-code and declaration behavior: one target-vector builtin, one replaceable-new exception specification, cross-function local-reference rejection, and reachable missing-return rejection. |
 
-## Handoff ledger and review boundary
+The 27 accumulated fixes remain passing (105 → 114 → 129 → 132), with no
+additional stage pass claimed for correcting an already-passing erroneous oracle.
+Do not advance until the complete root through-PA30 report passes.
 
-- Fixed existing chrono, same-type namespace and inline-callee closure fixtures.
-  Related shared-pointer ordering also resolves, exposing a prerequisite failure.
-  No remaining failing fixture diagnoses ambiguous namespace lookup or partial
-  specialization. Type identity is established before the remaining decisions.
-- Coherent boundary: further fixes require separate prerequisite scheduling,
-  constant evaluation, access, conversion, intrinsic or lowering facts. The
-  completed identity owners cannot supply those facts; further related identity
-  work lacks a failing reducer. The remaining groups above are implementation,
-  not questions deferred to review, and remain required.
-- Independent review pending: earlier split-cache/class-friend and injected-type
-  scope changes; signature-shape comparison versus substitution/access obligations;
-  namespace merge identity and canonical representatives; whole-stage demanded
-  template-to-ELF architecture and performance. Also reconcile the retained base
-  alias rejection contract with [class.member.lookup]/3,6–7 wording, separately
-  from the namespace proof. No base-reference correction is asserted or waived.
-- Evidence binding: **725 consistency checks pass** via `student.tests/pa30/verify197.py`.
-- This ends implementation197 only. Ralph audits the accumulated checkpoints
-  and schedules further implementation before advancement. Evidence/docs do not
-  change the tested implementation; finish with committed, clean status.
+Earlier handoffs split related parser/semantic and identity work too narrowly;
+in particular the base-lookup contradiction was unnecessarily deferred. Work
+through the three broad groups above, including their parser-to-ELF and negative
+controls, rather than handing off after individual header/fixture improvements.
+Historical performance195–197 and their evidence remain unchanged. The audit's
+source/binary bindings and reproducible verification (**1,218 checks pass**) are
+in `evidence198/` and `student.tests/pa30/verify198.py`; the single audit ledger
+row is in `audit.md`.

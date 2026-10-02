@@ -1,0 +1,9 @@
+{
+  "observations": true,
+  "final_binary": true,
+  "entry_binary": true,
+  "equivalent_images": true,
+  "required_limits": true,
+  "ABBA": true,
+  "inputs": true
+}
