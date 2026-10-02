@@ -1,0 +1,27 @@
+{
+  "entry_commit": "d9a625844ca9a182f74152abfb08e2e67b0057b9",
+  "implementation_commit": "d64084292b4fac6bd0e444231af509c74cd74c5f",
+  "dev_tree": "cf2be70a27334fdc93e7278cab40e68e37686441",
+  "compiler_sha256": "f341518e1eec26528c2ecca6aace5fcc73510b612108316e2ba9b927a79a0fcd",
+  "entry_compiler_sha256": "358aa75138c32a6d086e517417da63c82a2c0c47dde2e24a2f43ea8766f2d0de",
+  "files": {
+    "dev/src/lowering/initialization.cpp": "3cf66601b6001879e485c13207045bed75593533c96bfbfec6c34075e834dd4a",
+    "dev/src/lowering/initializer_plan.cpp": "aef282741ef43889b27a3d771b2cd2239bb3b7c85a571b7135135cb7e47085c9",
+    "dev/src/lowering/intrinsics.cpp": "d456cf5b0b4de38064ae5be0d5a6e4f20b11c507afbee8dfe650edd077a85703",
+    "dev/src/lowering/values.cpp": "b1b16e9aa20b4f9621971b103e1f25dffe447d7f9cf8b6c1e2d6b485d0a1a801",
+    "dev/src/semantic/access.cpp": "79eec73fc1552f893dfeed03b241f8b39c7aa9b50de41bbc0db6fe1d718bd127",
+    "dev/src/semantic/analyzer.h": "4ed5cf3f48dcb57c3b8cc6fc18c99960684f3cd1f2cb0c24bfbd32b626b6df78",
+    "dev/src/semantic/builtin_functions.cpp": "9c7222c9dda89b6d4b3fa3f9745795ed4bdf51394e3ad6e93c3aa59099e8cbb4",
+    "dev/src/semantic/explicit_conversion.cpp": "a9c93e1a50ed9e654694a4dfb2d87f1a9e33516295a6ffe971b5d8bce4b24ca7",
+    "dev/src/semantic/friends.cpp": "c4cc6648056705e951285a461db0a01353fd1d32f3bc52d57d12e46f6f8d99b2",
+    "dev/src/semantic/model.h": "335498434038c41fc73fb7643529031e2105a2e364d4af13ae99755997c570a4",
+    "dev/src/semantic/query_call.cpp": "4c24bf796aaa6374664df6236bf053b6dbb07f894f3ff879a5e1bc8fa7fda509",
+    "dev/src/semantic/query_new.cpp": "689a7e07aa241eb1651b29db298c9ee74a60f1ea4f560cf7adb0cf77803edd8d",
+    "dev/src/semantic/template_call_facts.cpp": "6445cd9fa9f943b35462e9da70bd5c85665bb6d3f5a93bd7c4ade233d21013ed",
+    "dev/src/semantic/template_checks.cpp": "8aeaa1d9044046dc17aac72da25af0d3fd13f2ad4d2196ac29616a64c0124877",
+    "dev/src/semantic/type_builder.cpp": "8cbbd6b58ba0ba6039b10d2bf4fcb69d9878c9ee358f735baa594fb71cdf8667",
+    "dev/src/support/builtin_registry.cpp": "1697b44f7f9462a65dceda3c9ce2ac9ef69a8bb53f42dd1d4412800965d8d582",
+    "dev/src/support/builtin_registry.h": "f8f04c05c73a976b7287280503f6c5f0f57a0e7c4c4e8cbd3fb47dd6ca9f0c60",
+    "dev/src/syntax/prediction.cpp": "04fb743194862c1e0bc96bc456454f69be1d2d58dc23486849b96ab289c48178"
+  }
+}

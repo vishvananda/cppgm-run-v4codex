@@ -1,5 +1,5 @@
 {
-  "compiler_sha256": "10e89382e282c09654e8629f7e70abc6083d701cfcfc875ddaffbdd152ee6216",
+  "compiler_sha256": "f341518e1eec26528c2ecca6aace5fcc73510b612108316e2ba9b927a79a0fcd",
   "commands": [
     {
       "args": [
@@ -394,10 +394,10 @@
         "/home/vishvananda/work/private/v4codex/checkout/obj/dev/toolchain/runtime_exception.o",
         "/home/vishvananda/work/private/v4codex/checkout/obj/dev/toolchain/runtime_failure.o",
         "-o",
-        "/tmp/pa30-199/controls/ir-object"
+        "/tmp/pa30-199/controls-zero/ir-object"
       ],
       "status": 0,
-      "wall_s": 1.0797474775463343,
+      "wall_s": 3.1693756841123104,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -409,10 +409,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/dependent-access-specialization.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-dependent-access-specialization.reject.o"
+        "/tmp/pa30-199/controls-zero/199-dependent-access-specialization.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.005748584866523743,
+      "wall_s": 0.019951993599534035,
       "stdout": "",
       "stderr": "ERROR: inaccessible class member: value declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/dependent-access-specialization.reject.cpp:1\n",
       "expected_rejection": true
@@ -424,10 +424,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/dependent-access.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-dependent-access.o"
+        "/tmp/pa30-199/controls-zero/199-dependent-access.o"
       ],
       "status": 0,
-      "wall_s": 0.00559750571846962,
+      "wall_s": 0.017829013988375664,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -435,22 +435,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-dependent-access.o",
+        "/tmp/pa30-199/controls-zero/199-dependent-access.o",
         "-o",
-        "/tmp/pa30-199/controls/199-dependent-access"
+        "/tmp/pa30-199/controls-zero/199-dependent-access"
       ],
       "status": 0,
-      "wall_s": 0.04874601773917675,
+      "wall_s": 0.15599794127047062,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-dependent-access"
+        "/tmp/pa30-199/controls-zero/199-dependent-access"
       ],
       "status": 0,
-      "wall_s": 0.0016488414257764816,
+      "wall_s": 0.004177778959274292,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -463,22 +463,22 @@
         "--validate-lowir",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/dependent-access.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-dependent-access.lowir"
+        "/tmp/pa30-199/controls-zero/199-dependent-access.lowir"
       ],
       "status": 0,
-      "wall_s": 0.005591098219156265,
+      "wall_s": 0.01708037033677101,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/ir-object",
-        "/tmp/pa30-199/controls/199-dependent-access.lowir",
-        "/tmp/pa30-199/controls/199-dependent-access.roundtrip.o"
+        "/tmp/pa30-199/controls-zero/ir-object",
+        "/tmp/pa30-199/controls-zero/199-dependent-access.lowir",
+        "/tmp/pa30-199/controls-zero/199-dependent-access.roundtrip.o"
       ],
       "status": 0,
-      "wall_s": 0.00351712666451931,
+      "wall_s": 0.010082080960273743,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -486,22 +486,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-dependent-access.roundtrip.o",
+        "/tmp/pa30-199/controls-zero/199-dependent-access.roundtrip.o",
         "-o",
-        "/tmp/pa30-199/controls/199-dependent-access.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-dependent-access.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.048558562994003296,
+      "wall_s": 0.15849823504686356,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-dependent-access.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-dependent-access.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.0014443863183259964,
+      "wall_s": 0.0030786097049713135,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -513,10 +513,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/dependent-access.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-dependent-access.reject.o"
+        "/tmp/pa30-199/controls-zero/199-dependent-access.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.005156941711902618,
+      "wall_s": 0.014974178746342659,
       "stdout": "",
       "stderr": "ERROR: inaccessible class member: value declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/dependent-access.reject.cpp:1\n",
       "expected_rejection": true
@@ -528,10 +528,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/friend-absent.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-friend-absent.reject.o"
+        "/tmp/pa30-199/controls-zero/199-friend-absent.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.004807943478226662,
+      "wall_s": 0.016439829021692276,
       "stdout": "",
       "stderr": "ERROR: inaccessible class member: value declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/friend-absent.reject.cpp:2\n",
       "expected_rejection": true
@@ -543,10 +543,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/friend-current.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-friend-current.o"
+        "/tmp/pa30-199/controls-zero/199-friend-current.o"
       ],
       "status": 0,
-      "wall_s": 0.0059766266494989395,
+      "wall_s": 0.018246576189994812,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -554,22 +554,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-friend-current.o",
+        "/tmp/pa30-199/controls-zero/199-friend-current.o",
         "-o",
-        "/tmp/pa30-199/controls/199-friend-current"
+        "/tmp/pa30-199/controls-zero/199-friend-current"
       ],
       "status": 0,
-      "wall_s": 0.04812236689031124,
+      "wall_s": 0.13585120253264904,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-friend-current"
+        "/tmp/pa30-199/controls-zero/199-friend-current"
       ],
       "status": 0,
-      "wall_s": 0.0017418060451745987,
+      "wall_s": 0.004568867385387421,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -582,22 +582,22 @@
         "--validate-lowir",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/friend-current.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-friend-current.lowir"
+        "/tmp/pa30-199/controls-zero/199-friend-current.lowir"
       ],
       "status": 0,
-      "wall_s": 0.006051912903785706,
+      "wall_s": 0.020829925313591957,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/ir-object",
-        "/tmp/pa30-199/controls/199-friend-current.lowir",
-        "/tmp/pa30-199/controls/199-friend-current.roundtrip.o"
+        "/tmp/pa30-199/controls-zero/ir-object",
+        "/tmp/pa30-199/controls-zero/199-friend-current.lowir",
+        "/tmp/pa30-199/controls-zero/199-friend-current.roundtrip.o"
       ],
       "status": 0,
-      "wall_s": 0.003301655873656273,
+      "wall_s": 0.00959126465022564,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -605,22 +605,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-friend-current.roundtrip.o",
+        "/tmp/pa30-199/controls-zero/199-friend-current.roundtrip.o",
         "-o",
-        "/tmp/pa30-199/controls/199-friend-current.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-friend-current.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.049329355359077454,
+      "wall_s": 0.11126356944441795,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-friend-current.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-friend-current.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.0015316028147935867,
+      "wall_s": 0.0036066044121980667,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -632,10 +632,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/friend-other.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-friend-other.reject.o"
+        "/tmp/pa30-199/controls-zero/199-friend-other.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.005103662610054016,
+      "wall_s": 0.015288228169083595,
       "stdout": "",
       "stderr": "ERROR: inaccessible class member: value declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/friend-other.reject.cpp:5\n",
       "expected_rejection": true
@@ -647,10 +647,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/inherited-signature-mismatch.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-inherited-signature-mismatch.reject.o"
+        "/tmp/pa30-199/controls-zero/199-inherited-signature-mismatch.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.004885103553533554,
+      "wall_s": 0.01847616210579872,
       "stdout": "",
       "stderr": "ERROR: template definition does not match a declared member\n",
       "expected_rejection": true
@@ -662,10 +662,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/inherited-signature.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-inherited-signature.o"
+        "/tmp/pa30-199/controls-zero/199-inherited-signature.o"
       ],
       "status": 0,
-      "wall_s": 0.005548490211367607,
+      "wall_s": 0.022299114614725113,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -673,22 +673,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-inherited-signature.o",
+        "/tmp/pa30-199/controls-zero/199-inherited-signature.o",
         "-o",
-        "/tmp/pa30-199/controls/199-inherited-signature"
+        "/tmp/pa30-199/controls-zero/199-inherited-signature"
       ],
       "status": 0,
-      "wall_s": 0.04831886850297451,
+      "wall_s": 0.17451290413737297,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-inherited-signature"
+        "/tmp/pa30-199/controls-zero/199-inherited-signature"
       ],
       "status": 0,
-      "wall_s": 0.001629423350095749,
+      "wall_s": 0.0057186558842659,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -701,22 +701,22 @@
         "--validate-lowir",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/inherited-signature.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-inherited-signature.lowir"
+        "/tmp/pa30-199/controls-zero/199-inherited-signature.lowir"
       ],
       "status": 0,
-      "wall_s": 0.005840227007865906,
+      "wall_s": 0.013985512778162956,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/ir-object",
-        "/tmp/pa30-199/controls/199-inherited-signature.lowir",
-        "/tmp/pa30-199/controls/199-inherited-signature.roundtrip.o"
+        "/tmp/pa30-199/controls-zero/ir-object",
+        "/tmp/pa30-199/controls-zero/199-inherited-signature.lowir",
+        "/tmp/pa30-199/controls-zero/199-inherited-signature.roundtrip.o"
       ],
       "status": 0,
-      "wall_s": 0.003175569698214531,
+      "wall_s": 0.00755816325545311,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -724,22 +724,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-inherited-signature.roundtrip.o",
+        "/tmp/pa30-199/controls-zero/199-inherited-signature.roundtrip.o",
         "-o",
-        "/tmp/pa30-199/controls/199-inherited-signature.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-inherited-signature.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.049889905378222466,
+      "wall_s": 0.121194152161479,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-inherited-signature.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-inherited-signature.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.001580268144607544,
+      "wall_s": 0.002715587615966797,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -751,10 +751,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/new-array.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-new-array.o"
+        "/tmp/pa30-199/controls-zero/199-new-array.o"
       ],
       "status": 0,
-      "wall_s": 0.006214126944541931,
+      "wall_s": 0.01455414853990078,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -762,22 +762,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-new-array.o",
+        "/tmp/pa30-199/controls-zero/199-new-array.o",
         "-o",
-        "/tmp/pa30-199/controls/199-new-array"
+        "/tmp/pa30-199/controls-zero/199-new-array"
       ],
       "status": 0,
-      "wall_s": 0.09658943302929401,
+      "wall_s": 0.304635277017951,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-new-array"
+        "/tmp/pa30-199/controls-zero/199-new-array"
       ],
       "status": 0,
-      "wall_s": 0.0028171055018901825,
+      "wall_s": 0.0052407849580049515,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -790,22 +790,22 @@
         "--validate-lowir",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/new-array.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-new-array.lowir"
+        "/tmp/pa30-199/controls-zero/199-new-array.lowir"
       ],
       "status": 0,
-      "wall_s": 0.005865409970283508,
+      "wall_s": 0.010171888396143913,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/ir-object",
-        "/tmp/pa30-199/controls/199-new-array.lowir",
-        "/tmp/pa30-199/controls/199-new-array.roundtrip.o"
+        "/tmp/pa30-199/controls-zero/ir-object",
+        "/tmp/pa30-199/controls-zero/199-new-array.lowir",
+        "/tmp/pa30-199/controls-zero/199-new-array.roundtrip.o"
       ],
       "status": 0,
-      "wall_s": 0.0033828169107437134,
+      "wall_s": 0.005891289561986923,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -813,22 +813,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-new-array.roundtrip.o",
+        "/tmp/pa30-199/controls-zero/199-new-array.roundtrip.o",
         "-o",
-        "/tmp/pa30-199/controls/199-new-array.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-new-array.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.09495050832629204,
+      "wall_s": 0.15950497426092625,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-new-array.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-new-array.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.0027552228420972824,
+      "wall_s": 0.0048342011868953705,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -840,10 +840,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/new-bound-negative.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-new-bound-negative.reject.o"
+        "/tmp/pa30-199/controls-zero/199-new-bound-negative.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.005007399246096611,
+      "wall_s": 0.007595561444759369,
       "stdout": "",
       "stderr": "ERROR: negative array allocation bound\n",
       "expected_rejection": true
@@ -855,10 +855,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/new-bound-type.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-new-bound-type.reject.o"
+        "/tmp/pa30-199/controls-zero/199-new-bound-type.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.004641739651560783,
+      "wall_s": 0.008689355105161667,
       "stdout": "",
       "stderr": "ERROR: array allocation bound must be integral\n",
       "expected_rejection": true
@@ -870,10 +870,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/new-inner-runtime.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-new-inner-runtime.reject.o"
+        "/tmp/pa30-199/controls-zero/199-new-inner-runtime.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.004552289843559265,
+      "wall_s": 0.009348750114440918,
       "stdout": "",
       "stderr": "ERROR: array bound must be a nonnegative integral constant\n",
       "expected_rejection": true
@@ -885,10 +885,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/new-placement.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-new-placement.o"
+        "/tmp/pa30-199/controls-zero/199-new-placement.o"
       ],
       "status": 0,
-      "wall_s": 0.005232555791735649,
+      "wall_s": 0.008350083604454994,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -896,22 +896,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-new-placement.o",
+        "/tmp/pa30-199/controls-zero/199-new-placement.o",
         "-o",
-        "/tmp/pa30-199/controls/199-new-placement"
+        "/tmp/pa30-199/controls-zero/199-new-placement"
       ],
       "status": 0,
-      "wall_s": 0.048731300979852676,
+      "wall_s": 0.0838608369231224,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-new-placement"
+        "/tmp/pa30-199/controls-zero/199-new-placement"
       ],
       "status": 0,
-      "wall_s": 0.001422705128788948,
+      "wall_s": 0.0025763846933841705,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -924,22 +924,22 @@
         "--validate-lowir",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/new-placement.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-new-placement.lowir"
+        "/tmp/pa30-199/controls-zero/199-new-placement.lowir"
       ],
       "status": 0,
-      "wall_s": 0.00548296794295311,
+      "wall_s": 0.013037530705332756,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/ir-object",
-        "/tmp/pa30-199/controls/199-new-placement.lowir",
-        "/tmp/pa30-199/controls/199-new-placement.roundtrip.o"
+        "/tmp/pa30-199/controls-zero/ir-object",
+        "/tmp/pa30-199/controls-zero/199-new-placement.lowir",
+        "/tmp/pa30-199/controls-zero/199-new-placement.roundtrip.o"
       ],
       "status": 0,
-      "wall_s": 0.00340333953499794,
+      "wall_s": 0.006184352561831474,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -947,22 +947,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-new-placement.roundtrip.o",
+        "/tmp/pa30-199/controls-zero/199-new-placement.roundtrip.o",
         "-o",
-        "/tmp/pa30-199/controls/199-new-placement.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-new-placement.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.047556327655911446,
+      "wall_s": 0.09286299347877502,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-new-placement.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-new-placement.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.001454787328839302,
+      "wall_s": 0.0020586568862199783,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -974,10 +974,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/new-query-negative.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-new-query-negative.reject.o"
+        "/tmp/pa30-199/controls-zero/199-new-query-negative.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.004581805318593979,
+      "wall_s": 0.008436555042862892,
       "stdout": "",
       "stderr": "ERROR: negative array allocation bound\n",
       "expected_rejection": true
@@ -989,10 +989,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/new-query-type.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-new-query-type.reject.o"
+        "/tmp/pa30-199/controls-zero/199-new-query-type.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.004646193236112595,
+      "wall_s": 0.007643567398190498,
       "stdout": "",
       "stderr": "ERROR: array allocation bound must be integral\n",
       "expected_rejection": true
@@ -1004,10 +1004,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/template-return-boundary.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-template-return-boundary.o"
+        "/tmp/pa30-199/controls-zero/199-template-return-boundary.o"
       ],
       "status": 0,
-      "wall_s": 0.005678754299879074,
+      "wall_s": 0.010634643957018852,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -1015,22 +1015,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-template-return-boundary.o",
+        "/tmp/pa30-199/controls-zero/199-template-return-boundary.o",
         "-o",
-        "/tmp/pa30-199/controls/199-template-return-boundary"
+        "/tmp/pa30-199/controls-zero/199-template-return-boundary"
       ],
       "status": 0,
-      "wall_s": 0.048322971910238266,
+      "wall_s": 0.09404256381094456,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-template-return-boundary"
+        "/tmp/pa30-199/controls-zero/199-template-return-boundary"
       ],
       "status": 0,
-      "wall_s": 0.0015836898237466812,
+      "wall_s": 0.0017550643533468246,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -1043,22 +1043,22 @@
         "--validate-lowir",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/template-return-boundary.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-template-return-boundary.lowir"
+        "/tmp/pa30-199/controls-zero/199-template-return-boundary.lowir"
       ],
       "status": 0,
-      "wall_s": 0.00610148161649704,
+      "wall_s": 0.013266075402498245,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/ir-object",
-        "/tmp/pa30-199/controls/199-template-return-boundary.lowir",
-        "/tmp/pa30-199/controls/199-template-return-boundary.roundtrip.o"
+        "/tmp/pa30-199/controls-zero/ir-object",
+        "/tmp/pa30-199/controls-zero/199-template-return-boundary.lowir",
+        "/tmp/pa30-199/controls-zero/199-template-return-boundary.roundtrip.o"
       ],
       "status": 0,
-      "wall_s": 0.003502069041132927,
+      "wall_s": 0.007221730425953865,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -1066,22 +1066,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-template-return-boundary.roundtrip.o",
+        "/tmp/pa30-199/controls-zero/199-template-return-boundary.roundtrip.o",
         "-o",
-        "/tmp/pa30-199/controls/199-template-return-boundary.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-template-return-boundary.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.049197642132639885,
+      "wall_s": 0.09980211593210697,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-template-return-boundary.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-template-return-boundary.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.0016369055956602097,
+      "wall_s": 0.002382572740316391,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -1093,10 +1093,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-arity.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-arity.reject.o"
+        "/tmp/pa30-199/controls-zero/199-vector-arity.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.004765817895531654,
+      "wall_s": 0.008353164419531822,
       "stdout": "",
       "stderr": "ERROR: no viable function\n",
       "expected_rejection": true
@@ -1108,10 +1108,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-builtins.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-builtins.o"
+        "/tmp/pa30-199/controls-zero/199-vector-builtins.o"
       ],
       "status": 0,
-      "wall_s": 0.0065200310200452805,
+      "wall_s": 0.011456042528152466,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -1119,22 +1119,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-vector-builtins.o",
+        "/tmp/pa30-199/controls-zero/199-vector-builtins.o",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-builtins"
+        "/tmp/pa30-199/controls-zero/199-vector-builtins"
       ],
       "status": 0,
-      "wall_s": 0.049266792833805084,
+      "wall_s": 0.0896727405488491,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-vector-builtins"
+        "/tmp/pa30-199/controls-zero/199-vector-builtins"
       ],
       "status": 0,
-      "wall_s": 0.0017009731382131577,
+      "wall_s": 0.003134423866868019,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -1147,22 +1147,22 @@
         "--validate-lowir",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-builtins.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-builtins.lowir"
+        "/tmp/pa30-199/controls-zero/199-vector-builtins.lowir"
       ],
       "status": 0,
-      "wall_s": 0.006361495703458786,
+      "wall_s": 0.011747969314455986,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/ir-object",
-        "/tmp/pa30-199/controls/199-vector-builtins.lowir",
-        "/tmp/pa30-199/controls/199-vector-builtins.roundtrip.o"
+        "/tmp/pa30-199/controls-zero/ir-object",
+        "/tmp/pa30-199/controls-zero/199-vector-builtins.lowir",
+        "/tmp/pa30-199/controls-zero/199-vector-builtins.roundtrip.o"
       ],
       "status": 0,
-      "wall_s": 0.004151361063122749,
+      "wall_s": 0.00684812106192112,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -1170,22 +1170,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-vector-builtins.roundtrip.o",
+        "/tmp/pa30-199/controls-zero/199-vector-builtins.roundtrip.o",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-builtins.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-vector-builtins.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.04930347204208374,
+      "wall_s": 0.08969025500118732,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-vector-builtins.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-vector-builtins.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.0016721151769161224,
+      "wall_s": 0.00255717895925045,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -1197,10 +1197,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-cast-size.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-cast-size.reject.o"
+        "/tmp/pa30-199/controls-zero/199-vector-cast-size.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.00498274527490139,
+      "wall_s": 0.010558174923062325,
       "stdout": "",
       "stderr": "ERROR: invalid explicit cast\n",
       "expected_rejection": true
@@ -1212,10 +1212,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-cast-static.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-cast-static.reject.o"
+        "/tmp/pa30-199/controls-zero/199-vector-cast-static.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.004862966015934944,
+      "wall_s": 0.011405279859900475,
       "stdout": "",
       "stderr": "ERROR: invalid explicit cast\n",
       "expected_rejection": true
@@ -1227,10 +1227,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-fixed-index.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-fixed-index.reject.o"
+        "/tmp/pa30-199/controls-zero/199-vector-fixed-index.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.004923831671476364,
+      "wall_s": 0.011951891705393791,
       "stdout": "",
       "stderr": "ERROR: invalid type-query expression: __builtin_ia32_vec_ext_v2si in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-fixed-index.reject.cpp:2\n",
       "expected_rejection": true
@@ -1242,10 +1242,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-index.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-index.reject.o"
+        "/tmp/pa30-199/controls-zero/199-vector-index.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.004756242036819458,
+      "wall_s": 0.012106219306588173,
       "stdout": "",
       "stderr": "ERROR: vector extraction requires a constant lane in range\n",
       "expected_rejection": true
@@ -1257,10 +1257,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-query-index.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-query-index.reject.o"
+        "/tmp/pa30-199/controls-zero/199-vector-query-index.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.004787333309650421,
+      "wall_s": 0.012844471260905266,
       "stdout": "",
       "stderr": "ERROR: vector extraction requires a constant lane in range\n",
       "expected_rejection": true
@@ -1272,10 +1272,10 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-representation.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-representation.o"
+        "/tmp/pa30-199/controls-zero/199-vector-representation.o"
       ],
       "status": 0,
-      "wall_s": 0.0055678971111774445,
+      "wall_s": 0.012511560693383217,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -1283,22 +1283,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-vector-representation.o",
+        "/tmp/pa30-199/controls-zero/199-vector-representation.o",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-representation"
+        "/tmp/pa30-199/controls-zero/199-vector-representation"
       ],
       "status": 0,
-      "wall_s": 0.04888790845870972,
+      "wall_s": 0.11361821554601192,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-vector-representation"
+        "/tmp/pa30-199/controls-zero/199-vector-representation"
       ],
       "status": 0,
-      "wall_s": 0.0016189739108085632,
+      "wall_s": 0.0020910706371068954,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -1311,22 +1311,22 @@
         "--validate-lowir",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-representation.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-representation.lowir"
+        "/tmp/pa30-199/controls-zero/199-vector-representation.lowir"
       ],
       "status": 0,
-      "wall_s": 0.005532748997211456,
+      "wall_s": 0.013242704793810844,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/ir-object",
-        "/tmp/pa30-199/controls/199-vector-representation.lowir",
-        "/tmp/pa30-199/controls/199-vector-representation.roundtrip.o"
+        "/tmp/pa30-199/controls-zero/ir-object",
+        "/tmp/pa30-199/controls-zero/199-vector-representation.lowir",
+        "/tmp/pa30-199/controls-zero/199-vector-representation.roundtrip.o"
       ],
       "status": 0,
-      "wall_s": 0.003580816090106964,
+      "wall_s": 0.006671460345387459,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -1334,22 +1334,22 @@
     {
       "args": [
         "g++",
-        "/tmp/pa30-199/controls/199-vector-representation.roundtrip.o",
+        "/tmp/pa30-199/controls-zero/199-vector-representation.roundtrip.o",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-representation.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-vector-representation.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.049261823296546936,
+      "wall_s": 0.11502415500581264,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
     },
     {
       "args": [
-        "/tmp/pa30-199/controls/199-vector-representation.roundtrip"
+        "/tmp/pa30-199/controls-zero/199-vector-representation.roundtrip"
       ],
       "status": 0,
-      "wall_s": 0.0017102770507335663,
+      "wall_s": 0.0027970261871814728,
       "stdout": "",
       "stderr": "",
       "expected_rejection": false
@@ -1361,13 +1361,191 @@
         "-c",
         "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-runtime-index.reject.cpp",
         "-o",
-        "/tmp/pa30-199/controls/199-vector-runtime-index.reject.o"
+        "/tmp/pa30-199/controls-zero/199-vector-runtime-index.reject.o"
       ],
       "status": 1,
-      "wall_s": 0.0050094593316316605,
+      "wall_s": 0.012128079310059547,
       "stdout": "",
       "stderr": "ERROR: vector extraction requires a constant lane in range\n",
       "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-volatile.cpp",
+        "-o",
+        "/tmp/pa30-199/controls-zero/199-vector-volatile.o"
+      ],
+      "status": 0,
+      "wall_s": 0.014178087934851646,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-199/controls-zero/199-vector-volatile.o",
+        "-o",
+        "/tmp/pa30-199/controls-zero/199-vector-volatile"
+      ],
+      "status": 0,
+      "wall_s": 0.12402774952352047,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-199/controls-zero/199-vector-volatile"
+      ],
+      "status": 0,
+      "wall_s": 0.003380242735147476,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-volatile.cpp",
+        "-o",
+        "/tmp/pa30-199/controls-zero/199-vector-volatile.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.013251176103949547,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-199/controls-zero/ir-object",
+        "/tmp/pa30-199/controls-zero/199-vector-volatile.lowir",
+        "/tmp/pa30-199/controls-zero/199-vector-volatile.roundtrip.o"
+      ],
+      "status": 0,
+      "wall_s": 0.006727442145347595,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-199/controls-zero/199-vector-volatile.roundtrip.o",
+        "-o",
+        "/tmp/pa30-199/controls-zero/199-vector-volatile.roundtrip"
+      ],
+      "status": 0,
+      "wall_s": 0.1267110724002123,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-199/controls-zero/199-vector-volatile.roundtrip"
+      ],
+      "status": 0,
+      "wall_s": 0.003699013963341713,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-zero.cpp",
+        "-o",
+        "/tmp/pa30-199/controls-zero/199-vector-zero.o"
+      ],
+      "status": 0,
+      "wall_s": 0.013322694227099419,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-199/controls-zero/199-vector-zero.o",
+        "-o",
+        "/tmp/pa30-199/controls-zero/199-vector-zero"
+      ],
+      "status": 0,
+      "wall_s": 0.11487135663628578,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-199/controls-zero/199-vector-zero"
+      ],
+      "status": 0,
+      "wall_s": 0.003924816846847534,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source199/vector-zero.cpp",
+        "-o",
+        "/tmp/pa30-199/controls-zero/199-vector-zero.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.014547865837812424,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-199/controls-zero/ir-object",
+        "/tmp/pa30-199/controls-zero/199-vector-zero.lowir",
+        "/tmp/pa30-199/controls-zero/199-vector-zero.roundtrip.o"
+      ],
+      "status": 0,
+      "wall_s": 0.007919827476143837,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-199/controls-zero/199-vector-zero.roundtrip.o",
+        "-o",
+        "/tmp/pa30-199/controls-zero/199-vector-zero.roundtrip"
+      ],
+      "status": 0,
+      "wall_s": 0.13070468604564667,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-199/controls-zero/199-vector-zero.roundtrip"
+      ],
+      "status": 0,
+      "wall_s": 0.002745639532804489,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
     }
   ]
 }

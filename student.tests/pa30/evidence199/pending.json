@@ -1,0 +1,10 @@
+{
+  "entry": {
+    "status": 1,
+    "stderr": "ERROR: invalid subscript\n"
+  },
+  "current": {
+    "status": 1,
+    "stderr": "ERROR: invalid subscript\n"
+  }
+}
