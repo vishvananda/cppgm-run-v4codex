@@ -6,6 +6,7 @@ Operand normalize_integer(Operand, Type);
 bool same_scalar(Operand, Operand);
 bool fold_integer(const Instruction&, const Operand*, Operand&);
 bool discardable(const Instruction&);
+void propagate_call_constants(Program&, std::uint64_t& work);
 void eliminate_local_expressions(Program&, const std::vector<bool>& call_cycles, std::uint64_t& work,
     bool edges = false, const std::vector<bool>* selected = nullptr);
 void forward_local_slots(Program&, std::uint64_t& work);

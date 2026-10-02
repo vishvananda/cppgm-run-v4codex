@@ -1,4 +1,5 @@
 #include "lowir/folding.h"
+#include "lowir/call_effects.h"
 #include "support/id_index.h"
 namespace lowir_model {
 namespace {
@@ -167,7 +168,13 @@ class Scalars {
         for (unsigned n = 0; n < body.size(); ++n) {
             auto& i = p.instructions[body[n]];
             if (i.opcode == Opcode::Nop) continue;
-            if (!i.destination || !discardable(i) || facts[locals.get(i.destination.index)].definitions != 1) mark(n);
+            bool pure_call = false;
+            if (i.opcode == Opcode::Call) {
+                auto b = call_boundary(p,i);
+                pure_call = b.effects != CFXM_DEFAULT && b.unwind == CUM_NO && b.returns != CRM_NORETURN;
+            }
+            if ((!i.destination && !pure_call) || (!discardable(i) && !pure_call) ||
+                (i.destination && facts[locals.get(i.destination.index)].definitions != 1)) mark(n);
         }
         while (!pending.empty()) {
             unsigned n = pending.back(); pending.pop_back(); ++work;

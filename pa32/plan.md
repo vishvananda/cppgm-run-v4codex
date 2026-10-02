@@ -3,6 +3,25 @@
 Stage base commit: e82bf4152fe8d6d68b9cd966655db0d8142cf81b
 Last reviewed commit: e82bf4152fe8d6d68b9cd966655db0d8142cf81b
 
+## Active implementation (209)
+
+Entry HEAD `d2e412d65f3fca9c8e225c575721c6b017651204`; previous turn
+classified as progress (validated dataflow implementation). No live build at
+entry. Baseline remains 127/219, 92 failures; course coverage is unchanged.
+Preserve the stage/review markers above.
+
+Work next: typed direct-call summaries, bounded expansion using the existing
+attribute expander, then reachable-support pruning and exceptional-region
+cleanup. Owner: LowIR optimizer; facts flow from symbol/signature/body IDs
+through legality and profitability admission into the shared typed clone path.
+Summaries/roots use indexed edges, once per immutable input; cloning consumes
+per-caller and unit-linear budgets and retains valid calls on exhaustion.
+Validate scalar/branching/object boundaries, mutation, recursion, EH/debug,
+name collisions and direct/replayed objects. Freeze same-level binaries and
+ABBA runtime/compiler/RSS/text observations before making performance claims.
+Aggregate memory and finite-loop proofs remain separate unfinished owners;
+whole-stage independent review is still owed.
+
 ## Design/spec alignment and completed ownership
 
 Source -> typed LowIR Program -> shared optimizer -> writer or native/ELF.

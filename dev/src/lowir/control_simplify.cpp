@@ -20,7 +20,18 @@ void fold_terminal(Program& p, Instruction& i) {
 void simplify_control(Program& p, std::uint64_t& work)
 {
     std::vector<bool> live(p.blocks.size()+1), permitted(p.functions.size());
-    std::vector<unsigned> pending;
+    std::vector<unsigned> pending, address_block(p.values.size()+1);
+    // LowIR permits a slot/global address definition in an ordinarily dead
+    // block to be rematerialized by a landing pad. Retain that definition's
+    // block (and its edges), rather than erasing an exceptional dependency.
+    for (auto id : p.block_order) {
+        auto r = p.blocks[id.index-1].instructions;
+        for (unsigned n = r.begin; n < r.end(); ++n) {
+            const auto& i = p.instructions[n];
+            if (i.destination && (i.opcode == Opcode::Addr || i.opcode == Opcode::Index || i.opcode == Opcode::Copy))
+                address_block[i.destination.index] = id.index;
+        }
+    }
     for (unsigned fn = 0; fn < p.functions.size(); ++fn) {
         const auto& f = p.functions[fn]; if (f.declaration) continue;
         bool handlers = false;
@@ -31,18 +42,22 @@ void simplify_control(Program& p, std::uint64_t& work)
                 handlers |= op == Opcode::EhTry || op == Opcode::EhCleanup;
             }
         }
-        // Handler state and rematerialized addresses have a separate owner.
-        // Keep their CFG until explicit exceptional-edge analysis is available.
-        if (handlers) {
-            for (unsigned n = f.blocks.begin; n < f.blocks.end(); ++n) live[p.block_order[n].index] = true;
-            continue;
-        }
-        permitted[fn] = true;
+        permitted[fn] = !handlers;
         auto enqueue = [&](unsigned id) { if (!live[id]) { live[id] = true; pending.push_back(id); } };
         enqueue(p.block_order[f.blocks.begin].index);
         while (!pending.empty()) {
             unsigned id = pending.back(); pending.pop_back(); ++work;
-            auto& t = p.instructions[p.blocks[id-1].instructions.end()-1];
+            auto r = p.blocks[id-1].instructions;
+            for (unsigned n = r.begin; n < r.end(); ++n) {
+                const auto& i = p.instructions[n]; ++work;
+                if (handlers) for (unsigned k = i.operands.begin; k < i.operands.end(); ++k) {
+                    auto a = p.operands[k]; ++work;
+                    if (a.kind == Operand::Temporary && address_block[a.ref]) enqueue(address_block[a.ref]);
+                }
+                if ((i.opcode == Opcode::EhTry || i.opcode == Opcode::EhCleanup) && i.operands.count)
+                    enqueue(p.operands[i.operands.begin].ref);
+            }
+            auto& t = p.instructions[r.end()-1];
             fold_terminal(p,t);
             for (unsigned n = t.operands.begin; n < t.operands.end(); ++n)
                 if (p.operands[n].kind == Operand::Label) enqueue(p.operands[n].ref);

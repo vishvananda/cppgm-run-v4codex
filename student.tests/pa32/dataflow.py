@@ -225,7 +225,8 @@ function @empty_cycle() -> void {
     run(ROOT/'dev/lowiropt','-O1','-o',tmp/'stress.lowir',source)
     run(ROOT/'dev/lowir','-o',tmp/'validated.lowir',tmp/'stress.lowir')
     run(ROOT/'dev/lowir2native','-o',tmp/'stress',tmp/'stress.lowir'); run(tmp/'stress')
-    policy = ['function @id(%x : i64) -> i64 { block ^entry: return i64 %x }']
+    # Keep the call present: PA32 optional inlining now removes ordinary id().
+    policy = ['function @id(%x : i64) -> i64 [no_inline=yes] { block ^entry: return i64 %x }']
     for name,in_loop in [('before_loop',False),('in_loop',True)]:
         policy.append(f'''function @{name}(%n : i64) -> i64 {{
  slot $i : i64

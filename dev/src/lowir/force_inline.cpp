@@ -1,4 +1,4 @@
-#include "lowir/model.h"
+#include "lowir/inline_policy.h"
 #include "support/id_index.h"
 #include <algorithm>
 namespace lowir_model {
@@ -9,6 +9,14 @@ namespace {
 // Eligibility never relaxes the existing call boundary. No fixed-point scan or semantic reconstruction is involved.
 class Expander {
     Program& p;
+    const InlinePolicy* policy;
+    NameIndex names;
+    unsigned serial = 0;
+    std::uint64_t unit_limit, function_limit;
+    Name fresh(const char* prefix) {
+        for (;;) { auto name = p.intern(std::string(prefix)+std::to_string(++serial));
+            if (names.insert(name,1)) return name; }
+    }
     Pool<Instruction> instructions;
     Pool<Operand> operands;
     Pool<Block> blocks;
@@ -20,7 +28,7 @@ class Expander {
     cppgm::IdIndex return_depths;
     FunctionId owner;
     BlockId current;
-    unsigned work = 0;
+    unsigned work = 0, growth = 0;
     std::uint64_t total = 0;
     struct Context {
         cppgm::IdIndex values, slots, entries, exits;
@@ -36,14 +44,14 @@ class Expander {
         p.stats.inline_work += amount;
     }
     BlockId block() {
-        Block b; b.owner = owner; p.blocks.push_back(b); return BlockId(p.blocks.size());
+        Block b; b.owner = owner; if (policy) b.name = fresh("^inline"); p.blocks.push_back(b); return BlockId(p.blocks.size());
     }
     SlotId slot(Type type) {
-        charge(1); Slot s; s.type = type; s.owner = owner; p.slots.push_back(s);
+        charge(1); Slot s; s.type = type; s.owner = owner; if (policy) s.name = fresh("$inline"); p.slots.push_back(s);
         SlotId id(p.slots.size()); p.slot_order.push_back(id); return id;
     }
     ValueId value(Type type) {
-        Value v; v.type = type; v.owner = owner;
+        Value v; v.type = type; v.owner = owner; if (policy) v.name = fresh("%inline");
         p.values.push_back(v); return ValueId(p.values.size());
     }
     void start(BlockId id) {
@@ -76,7 +84,8 @@ class Expander {
         auto callee = operands[i.operands.begin];
         if (callee.kind != Operand::Symbol) return 0;
         const auto& symbol = p.symbols[callee.ref-1];
-        return symbol.kind == Symbol::FunctionSymbol && symbol.metadata.force_inline && !symbol.metadata.no_inline &&
+        return symbol.kind == Symbol::FunctionSymbol &&
+            (policy ? policy->eligible[symbol.entity] : symbol.metadata.force_inline) && !symbol.metadata.no_inline &&
             !functions[symbol.entity-1].declaration ? symbol.entity : 0;
     }
     std::uint64_t return_regions(unsigned f) {
@@ -147,7 +156,12 @@ class Expander {
             if (regions) cost += return_regions(f);
             costs[f] = cost <= 262144 ? unsigned(cost) : ~0u;
         }
-        if (costs[f] > 262144-work || costs[f] > 4194304-total) return false;
+        if (costs[f] > function_limit-work || costs[f] > unit_limit-total) return false;
+        if (policy) {
+            unsigned added = policy->growth[f];
+            if (added > 1 && added+growth > (policy->single[f] ? 2048u : 1536u)) return false;
+            if (added > 1) growth += added;
+        }
         work += costs[f]; total += costs[f]; return true;
     }
     void body(unsigned f, Context& c, unsigned depth, const Operand* actuals = nullptr, unsigned actual_count = 0) {
@@ -161,6 +175,7 @@ class Expander {
         }
         for (unsigned b = source.blocks.begin; b < source.blocks.end(); ++b) {
             auto old = order[b]; c.entries.put(old.index,c.straight ? current.index : block().index);
+            if (policy && !c.clone) p.blocks[c.entries.get(old.index)-1].name = blocks[old.index-1].name;
             if (c.clone) {
                 auto range = blocks[old.index-1].instructions;
                 for (unsigned n = range.begin; n < range.end(); ++n) {
@@ -189,8 +204,10 @@ class Expander {
                 if (param.type.scalar()) {
                     Instruction copy(Opcode::Copy,param.type); copy.destination = id; emit(copy,{a});
                 } else {
-                    auto home = slot(param.type); emit(Instruction(Opcode::Store,param.type),{a,Operand::slot(home)});
-                    Instruction load(Opcode::Load,param.type); load.destination = id; emit(load,{Operand::slot(home)});
+                    auto home = slot(param.type);
+                    Instruction copy(Opcode::CopyObject); copy.bytes = param.type.bytes(); copy.alignment = param.type.alignment();
+                    emit(copy,{a,Operand::slot(home)});
+                    Instruction address(Opcode::Addr); address.destination = id; emit(address,{Operand::slot(home)});
                 }
                 c.values.put(param.value.index,id.index);
             }
@@ -219,7 +236,7 @@ class Expander {
                     }
                     body(callee,nested,depth+1,args.data()+1,args.size()-1);
                     if (!nested.straight) start(nested.continuation);
-                    if (!nested.straight && i.destination) { Instruction load(Opcode::Load,i.type); load.destination = i.destination; load.debug = i.debug;
+                    if (!nested.straight && i.destination) { Instruction load(i.type.scalar() ? Opcode::Load : Opcode::Addr,i.type.scalar() ? i.type : Type()); load.destination = i.destination; load.debug = i.debug;
                         emit(load,{Operand::slot(nested.result)}); }
                 } else if (c.clone && i.opcode == Opcode::Return) {
                     auto depth = return_depths.get(n+1);
@@ -228,7 +245,11 @@ class Expander {
                         if (c.straight_result) { Instruction copy(Opcode::Copy,i.type); copy.destination = c.straight_result; copy.debug = i.debug; emit(copy,args); }
                         continue;
                     }
-                    if (c.result) { Instruction store(Opcode::Store,i.type); store.debug = i.debug; emit(store,{args[0],Operand::slot(c.result)}); }
+                    if (c.result) {
+                        Instruction store(i.type.scalar() ? Opcode::Store : Opcode::CopyObject,i.type.scalar() ? i.type : Type());
+                        store.bytes = i.type.bytes(); store.alignment = i.type.alignment();
+                        store.debug = i.debug; emit(store,{args[0],Operand::slot(c.result)});
+                    }
                     Instruction jump(Opcode::Jump); jump.debug = i.debug; emit(jump,{Operand::label(c.continuation)});
                 } else {
                     if (i.opcode == Opcode::Phi) for (unsigned k = 0; k < i.operands.count; k += 2)
@@ -242,13 +263,20 @@ class Expander {
         active[f] = false;
     }
 public:
-    explicit Expander(Program& program) : p(program), functions(p.functions.begin(),p.functions.end()), active(p.functions.size()+1), costs(p.functions.size()+1) {
+    explicit Expander(Program& program, const InlinePolicy* admission = nullptr) : p(program), policy(admission), functions(p.functions.begin(),p.functions.end()), active(p.functions.size()+1), costs(p.functions.size()+1) {
+        unit_limit = policy ? policy->unit_work : 4194304;
+        function_limit = policy ? policy->function_work : 262144;
+        if (policy) {
+            for (auto v : p.values) if (v.name) names.insert(v.name,1);
+            for (auto s : p.slots) if (s.name) names.insert(s.name,1);
+            for (auto b : p.blocks) if (b.name) names.insert(b.name,1);
+        }
         instructions.swap(p.instructions); operands.swap(p.operands); blocks.swap(p.blocks);
         order.swap(p.block_order); slots.swap(p.slot_order);
         // Canonical IDs remain semantic identities; local names are only an
         // adapter view. Regenerate them to avoid collisions with cloned names.
-        for (auto& v : p.values) { v.name = 0; v.defined = false; v.definition = 0; }
-        for (auto& s : p.slots) s.name = 0;
+        for (auto& v : p.values) { if (!policy) v.name = 0; v.defined = false; v.definition = 0; }
+        if (!policy) for (auto& s : p.slots) s.name = 0;
         for (const auto& f : functions) {
             auto sig = p.signatures[f.signature.index-1];
             for (unsigned n = sig.parameters.begin; n < sig.parameters.end(); ++n)
@@ -257,18 +285,19 @@ public:
     }
     void run() {
         for (unsigned f = 1; f <= functions.size(); ++f) if (!functions[f-1].declaration) {
-            owner = FunctionId(f); work = 0; Context c;
+            owner = FunctionId(f); work = 0; growth = 0; Context c;
             auto block_begin = p.block_order.size(), slot_begin = p.slot_order.size();
             body(f,c,0);
             p.functions[f-1].blocks.begin = block_begin; p.functions[f-1].blocks.count = p.block_order.size()-block_begin;
             p.functions[f-1].slots.begin = slot_begin; p.functions[f-1].slots.count = p.slot_order.size()-slot_begin;
             p.stats.inline_max_function_work = std::max<std::uint64_t>(p.stats.inline_max_function_work,work);
         }
-        p.stats.inline_budget_work = total;
-        require(p.stats.inline_work <= total,"inline work exceeded its admission proof");
+        p.stats.inline_budget_work += total;
+        require(p.stats.inline_work <= p.stats.inline_budget_work,"inline work exceeded its admission proof");
     }
 };
 }
+void expand_optional_calls(Program& p, const InlinePolicy& policy) { Expander(p,&policy).run(); }
 void expand_forced_calls(Program& p)
 {
     if (p.forced_calls_expanded) return;

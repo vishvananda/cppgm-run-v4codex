@@ -1,6 +1,8 @@
 #include "lowir/optimizer.h"
 #include "lowir/folding.h"
 #include "lowir/ordinary_flow.h"
+#include "lowir/inline_policy.h"
+#include "lowir/call_effects.h"
 #include <chrono>
 #include <iostream>
 #include <sys/resource.h>
@@ -11,6 +13,15 @@ void optimize(Program& p, unsigned level, bool telemetry)
     if (!level) return;
     auto start = std::chrono::steady_clock::now();
     std::uint64_t work = 0;
+    prune_support_functions(p,work);
+    simplify_control(p,work);
+    if (level >= 2) propagate_call_constants(p,work);
+    simplify_scalars(p,work);
+    simplify_call_regions(p,work);
+    simplify_control(p,work);
+    inline_small_calls(p,level,work);
+    simplify_call_regions(p,work);
+    simplify_control(p,work);
     // Immutable admission summary for this pipeline. Its transforms add no
     // calls or cycles, so a declined function remains a safe conservative
     // choice even when later simplification removes a cycle.
@@ -35,6 +46,8 @@ void optimize(Program& p, unsigned level, bool telemetry)
     simplify_scalars(p,work,&dataflow);
     // Phi repair above can expose constant terminators. This last structural
     // sweep closes those edges; it does not restart the optimization pipeline.
+    simplify_control(p,work);
+    prune_support_functions(p,work);
     simplify_control(p,work);
     if (telemetry) {
         rusage usage; getrusage(RUSAGE_SELF,&usage);
