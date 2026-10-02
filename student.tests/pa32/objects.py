@@ -154,6 +154,28 @@ with tempfile.TemporaryDirectory(prefix='pa32-objects-') as directory:
             text = opt.read_text()
             assert 'call void @mutate' in text and 'store volatile' in text
             assert 'copyobj 8x8' in text # conservative floating bulk copy
+    # Complete-copy components propagate layouts once even for long chains.
+    # Growth refusal is transactional for a wide, repeatedly copied object.
+    for length in [100, 500, 1000]:
+        chain = ['function @main() -> i64 [role=entry] {']
+        chain += [f'slot $s{n} : obj<8x8>' for n in range(length+1)]
+        chain += ['block ^entry:', '%a0 = addr $s0', 'store i64 61, %a0']
+        for n in range(length):
+            chain += [f'%a{n+1} = addr $s{n+1}', f'copyobj 8x8 %a{n}, %a{n+1}']
+        chain += [f'%v = load i64 %a{length}', '%bad = cmp ne i64 %v, 61', 'return i64 %bad', '}']
+        source.write_text('\n'.join(chain))
+        run(ROOT/'dev/lowiropt','-O1','-o',tmp/'chain.lowir',source)
+        assert 'copyobj' not in (tmp/'chain.lowir').read_text()
+        run(ROOT/'dev/cppgm++','-O0','-o',tmp/'chain',tmp/'chain.lowir'); run(tmp/'chain')
+    guard = ['function @main() -> i64 [role=entry] { slot $a : obj<64x8> block ^entry: %a = addr $a']
+    for n in range(16):
+        guard += [f'%p{n} = index i8 [projection=field] %a, {4*n}', f'store i32 {n}, %p{n}']
+    guard += ['copyobj 64x8 %a, %a']*100
+    guard += ['%v = load i32 %p15','%bad = cmp ne i32 %v, 15','return i64 %bad','}']
+    source.write_text('\n'.join(guard))
+    run(ROOT/'dev/lowiropt','-O1','-o',tmp/'guard.lowir',source)
+    assert 'copyobj 64x8' in (tmp/'guard.lowir').read_text()
+    run(ROOT/'dev/cppgm++','-O0','-o',tmp/'guard',tmp/'guard.lowir'); run(tmp/'guard')
     # Source exception/lifetime paths and serialized debug/object boundaries.
     cpp = tmp/'lifetime.cpp'
     cpp.write_text('''struct Pair { long a,b; };

@@ -1,0 +1,180 @@
+[
+  {
+    "name": "prior",
+    "command": [
+      "make",
+      "test-report-through-pa31"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/prior.log",
+    "sha256": "d8b53a7035bee74dc54d1684f7104ab174bc5561c59df411606e7182046b10e1"
+  },
+  {
+    "name": "stage",
+    "command": [
+      "make",
+      "test-pa32"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 2,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/stage.log",
+    "sha256": "e2f357228491e858a338ae9a1ed3b27e40b0ee3a24baca214f7b0669c091af4e"
+  },
+  {
+    "name": "through",
+    "command": [
+      "make",
+      "test-report-through-pa32"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 2,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/through.log",
+    "sha256": "730a82ba336ebac98e3ca15367a2abc6389a15b3a8ec2b552d0621c4d588fa91"
+  },
+  {
+    "name": "file",
+    "command": [
+      "perl",
+      "scripts/cppgm_file_audit.pl",
+      "--stage",
+      "pa32",
+      "--paths",
+      "dev/src"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/file.log",
+    "sha256": "c1c41fb8158cd70b78b668cc11cfc64826a81c0b2340e4e4255e395415e08ab3"
+  },
+  {
+    "name": "debug",
+    "command": [
+      "make",
+      "test-debuginfo",
+      "DEBUGINFO_TEST_PAS=pa32"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 2,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/debug.log",
+    "sha256": "15900adc285f84ca05a8c5310fc4f6920b2c6193da6f3cd3fec215c9c74a0ea0"
+  },
+  {
+    "name": "debug-driver-o1",
+    "command": [
+      "make",
+      "check",
+      "TEST=tests/debuginfo/driver/o1"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout/pa32",
+    "exit_code": 2,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/debug-driver-o1.log",
+    "sha256": "a91ff91d55faacbc4811e9a76246d4f5a4757557067b2203881b92a5c206e0ab"
+  },
+  {
+    "name": "debug-driver-o2",
+    "command": [
+      "make",
+      "check",
+      "TEST=tests/debuginfo/driver/o2"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout/pa32",
+    "exit_code": 2,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/debug-driver-o2.log",
+    "sha256": "6245bbae265b874d1fabe21c71337dd9b2743cac05f987a43bac3a4f5c47bd55"
+  },
+  {
+    "name": "debug-driver-o3",
+    "command": [
+      "make",
+      "check",
+      "TEST=tests/debuginfo/driver/o3"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout/pa32",
+    "exit_code": 2,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/debug-driver-o3.log",
+    "sha256": "d9ac23a6f176354abdcb5d41c182492f90f9de75ae91043e58b1a432f2180385"
+  },
+  {
+    "name": "debug-objects",
+    "command": [
+      "scripts/run_object_lowir_roundtrip_tests.pl",
+      "--debuginfo",
+      "--app",
+      "../dev/cppgm++",
+      "--test-root",
+      "tests/object-roundtrip"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout/pa32",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/debug-objects.log",
+    "sha256": "fb728d70ed473ea7eb4e0e0051165a71e7d774187d3daf7990233dfec7ef2cdb"
+  },
+  {
+    "name": "objects",
+    "command": [
+      "python3",
+      "student.tests/pa32/objects.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/objects.log",
+    "sha256": "c957fb0251f5167e4ca9acebb1a56d310fffb1c4bce3c2889cd3642c139cfa82"
+  },
+  {
+    "name": "local",
+    "command": [
+      "python3",
+      "student.tests/pa32/local.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/local.log",
+    "sha256": "6bd48fafdf1bb4282b908e30eef28d416b08efafbf1a8c6b64c6f270275208e7"
+  },
+  {
+    "name": "dataflow",
+    "command": [
+      "python3",
+      "student.tests/pa32/dataflow.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/dataflow.log",
+    "sha256": "30bb872cbb6348818d3c4459ebc034f319031116e7a7637008ea6e521c5079cc"
+  },
+  {
+    "name": "calls",
+    "command": [
+      "python3",
+      "student.tests/pa32/calls.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/calls.log",
+    "sha256": "18a45dadaadf69f0ecd78bfad62f1c28ce6f2bed736b7ce8e8b60a7518a8c46d"
+  },
+  {
+    "name": "audit",
+    "command": [
+      "python3",
+      "student.tests/pa32/audit.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/audit.log",
+    "sha256": "b7dc578d2a0be23e52bcd466690bd7189b6e39a5b1cb6f94d2a788f137d8c680"
+  },
+  {
+    "name": "trace",
+    "command": [
+      "python3",
+      "student.tests/pa32/audit_trace.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/trace"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/checks/trace.log",
+    "sha256": "c984ab8cb18d83bf5536d08ba158ef3b329a4147307fdc681303fe5c9279e01e"
+  }
+]

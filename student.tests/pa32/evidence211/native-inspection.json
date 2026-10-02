@@ -1,0 +1,50 @@
+[
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/before-lowiropt",
+      "-O1",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/A.lowir",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/inspect.lowir"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "dev/lowir2native",
+      "--dump-machine-ir",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/A.mir",
+      "--stats",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/A.lowir"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "native_stats read_validate_ms=0.143876 extended_work=0 extended_added=0 extended_helpers=0 preparation_ms=0.004906 prepared_instructions=23 prepared_operands=43 inline_calls=0 inline_work=0 inline_declined=0 inline_budget_work=0 inline_max_function_work=0 selection_ms=0.08355 encoding_ms=0.010623 peak_rss_kib=14548 functions=1 instructions=31 frame_bytes=80 text_bytes=160 value_visits=25 scratch_carried_reloads=0 parameter_flow_visits=0 carry_window_visits=0 xmm_reuses=0 input_pool_growths=36 input_pool_bytes=5776\n"
+  },
+  {
+    "command": [
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/after-lowiropt",
+      "-O1",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/B.lowir",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/inspect.lowir"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "dev/lowir2native",
+      "--dump-machine-ir",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/B.mir",
+      "--stats",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-211/B.lowir"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "native_stats read_validate_ms=0.11857 extended_work=0 extended_added=0 extended_helpers=0 preparation_ms=0.004459 prepared_instructions=12 prepared_operands=26 inline_calls=0 inline_work=0 inline_declined=0 inline_budget_work=0 inline_max_function_work=0 selection_ms=0.043517 encoding_ms=0.008669 peak_rss_kib=14548 functions=1 instructions=25 frame_bytes=32 text_bytes=120 value_visits=13 scratch_carried_reloads=0 parameter_flow_visits=0 carry_window_visits=0 xmm_reuses=0 input_pool_growths=27 input_pool_bytes=2976\n"
+  }
+]
