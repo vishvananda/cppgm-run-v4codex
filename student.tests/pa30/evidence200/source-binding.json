@@ -1,0 +1,15 @@
+{
+  "entry_commit": "377d92a00e728199f86381f88f239a88904b829d",
+  "implementation_commit": "37b6729d85e6e8b72f6f72ec53470f2a4fac4cf5",
+  "dev_tree": "04e48a522019df6560d3565c498be308df0f56d7",
+  "entry_compiler_sha256": "f341518e1eec26528c2ecca6aace5fcc73510b612108316e2ba9b927a79a0fcd",
+  "compiler_sha256": "1ac3242bb796822f7faf9b72290681a97d9471258a62c893dc1669e48c2ccf79",
+  "files": {
+    "dev/src/semantic/builtin_template_types.cpp": "6549f2f6be886c0053c0cad40da11767b835eb824ee8b02f08fef748016d0eb0",
+    "dev/src/semantic/class_enum.cpp": "0dd6f251e62fb91cf95f0fc43dd2c98493cff69cac2a7ef53ccab4cb9ec1a3fd",
+    "dev/src/semantic/initializers.cpp": "e5a00731fee184d970625a90246a62b27a2645dd6834ec11bbfa8bb89f3bb832",
+    "dev/src/semantic/template_binding_declarations.cpp": "34190d4bc93abb7eeebb1466637db680b3211cba8755fddde89de84e60a5ee94",
+    "dev/src/semantic/type_query.cpp": "6e4ad5e766a2aab53865fb6b287b5ab96fb192aae89c623cee192aa3c4ae4eb0",
+    "dev/src/semantic/value_initialization.cpp": "e26d632dea121634683fe3b7f093ae28983e488b6af53cfdf7e5fd9e299d611e"
+  }
+}

@@ -1,0 +1,689 @@
+{
+  "compiler_sha256": "1ac3242bb796822f7faf9b72290681a97d9471258a62c893dc1669e48c2ccf79",
+  "commands": [
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/aggregate-declared-destructor.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/aggregate-declared-destructor.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005931934341788292,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-200/controls/aggregate-declared-destructor.o",
+        "-o",
+        "/tmp/pa30-200/controls/aggregate-declared-destructor"
+      ],
+      "status": 0,
+      "wall_s": 0.051399076357483864,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-200/controls/aggregate-declared-destructor"
+      ],
+      "status": 0,
+      "wall_s": 0.0015520360320806503,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/aggregate-declared-destructor.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/aggregate-declared-destructor.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005486899986863136,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/aggregate-private-destructor.reject.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/aggregate-private-destructor.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.0048928577452898026,
+      "stdout": "",
+      "stderr": "ERROR: inaccessible class member: ~Item declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/aggregate-private-destructor.reject.cpp:1\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/aggregate-union-cleanup.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/aggregate-union-cleanup.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005713550373911858,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-200/controls/aggregate-union-cleanup.o",
+        "-o",
+        "/tmp/pa30-200/controls/aggregate-union-cleanup"
+      ],
+      "status": 0,
+      "wall_s": 0.09047187119722366,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-200/controls/aggregate-union-cleanup"
+      ],
+      "status": 0,
+      "wall_s": 0.0028654057532548904,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/aggregate-union-cleanup.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/aggregate-union-cleanup.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005952747538685799,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/aggregate-union-unwind.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/aggregate-union-unwind.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005944972857832909,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-200/controls/aggregate-union-unwind.o",
+        "-o",
+        "/tmp/pa30-200/controls/aggregate-union-unwind"
+      ],
+      "status": 0,
+      "wall_s": 0.09427232295274734,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-200/controls/aggregate-union-unwind"
+      ],
+      "status": 0,
+      "wall_s": 0.0028847288340330124,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/aggregate-union-unwind.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/aggregate-union-unwind.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0059992168098688126,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/aggregate-union-value.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/aggregate-union-value.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005654733628034592,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-200/controls/aggregate-union-value.o",
+        "-o",
+        "/tmp/pa30-200/controls/aggregate-union-value"
+      ],
+      "status": 0,
+      "wall_s": 0.052693115547299385,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-200/controls/aggregate-union-value"
+      ],
+      "status": 0,
+      "wall_s": 0.0017352588474750519,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/aggregate-union-value.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/aggregate-union-value.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005680803209543228,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/enclosing-completion.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/enclosing-completion.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005638506263494492,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-200/controls/enclosing-completion.o",
+        "-o",
+        "/tmp/pa30-200/controls/enclosing-completion"
+      ],
+      "status": 0,
+      "wall_s": 0.05038385093212128,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-200/controls/enclosing-completion"
+      ],
+      "status": 0,
+      "wall_s": 0.0014853253960609436,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/enclosing-completion.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/enclosing-completion.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005497336387634277,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/enclosing-deleted.reject.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/enclosing-deleted.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.004651360213756561,
+      "stdout": "",
+      "stderr": "ERROR: deleted default constructor\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/inactive-union-destructor.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/inactive-union-destructor.o"
+      ],
+      "status": 0,
+      "wall_s": 0.004883119836449623,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-200/controls/inactive-union-destructor.o",
+        "-o",
+        "/tmp/pa30-200/controls/inactive-union-destructor"
+      ],
+      "status": 0,
+      "wall_s": 0.04870210401713848,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-200/controls/inactive-union-destructor"
+      ],
+      "status": 0,
+      "wall_s": 0.001717815175652504,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/inactive-union-destructor.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/inactive-union-destructor.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005272580310702324,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/member-class-sequence.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/member-class-sequence.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005830090492963791,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-200/controls/member-class-sequence.o",
+        "-o",
+        "/tmp/pa30-200/controls/member-class-sequence"
+      ],
+      "status": 0,
+      "wall_s": 0.0482750590890646,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-200/controls/member-class-sequence"
+      ],
+      "status": 0,
+      "wall_s": 0.0014430265873670578,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/member-class-sequence.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/member-class-sequence.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.006160520017147064,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/member-integer-sequence.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/member-integer-sequence.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005892863497138023,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-200/controls/member-integer-sequence.o",
+        "-o",
+        "/tmp/pa30-200/controls/member-integer-sequence"
+      ],
+      "status": 0,
+      "wall_s": 0.04876498132944107,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-200/controls/member-integer-sequence"
+      ],
+      "status": 0,
+      "wall_s": 0.0014427807182073593,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/member-integer-sequence.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/member-integer-sequence.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005869131535291672,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/member-sequence-budget.reject.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/member-sequence-budget.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.005008844658732414,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __make_integer_seq\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/member-sequence-deduction.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/member-sequence-deduction.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005919713526964188,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-200/controls/member-sequence-deduction.o",
+        "-o",
+        "/tmp/pa30-200/controls/member-sequence-deduction"
+      ],
+      "status": 0,
+      "wall_s": 0.048038238659501076,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-200/controls/member-sequence-deduction"
+      ],
+      "status": 0,
+      "wall_s": 0.0016727913171052933,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/member-sequence-deduction.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/member-sequence-deduction.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.006083127111196518,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/member-sequence-invalid.reject.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/member-sequence-invalid.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.005168491974473,
+      "stdout": "",
+      "stderr": "ERROR: invalid type-query expression: __make_integer_seq\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/nested-template-completion.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/nested-template-completion.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005662441253662109,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-200/controls/nested-template-completion.o",
+        "-o",
+        "/tmp/pa30-200/controls/nested-template-completion"
+      ],
+      "status": 0,
+      "wall_s": 0.048775989562273026,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-200/controls/nested-template-completion"
+      ],
+      "status": 0,
+      "wall_s": 0.0015690363943576813,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/nested-template-completion.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/nested-template-completion.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005998840555548668,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/new-array-inaccessible-destructor.reject.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/new-array-inaccessible-destructor.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.005062874406576157,
+      "stdout": "",
+      "stderr": "ERROR: inaccessible class member: ~Hidden declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/new-array-inaccessible-destructor.reject.cpp:1\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/new-inaccessible-destructor.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/new-inaccessible-destructor.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005566855892539024,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/tmp/pa30-200/controls/new-inaccessible-destructor.o",
+        "-o",
+        "/tmp/pa30-200/controls/new-inaccessible-destructor"
+      ],
+      "status": 0,
+      "wall_s": 0.09933661296963692,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/tmp/pa30-200/controls/new-inaccessible-destructor"
+      ],
+      "status": 0,
+      "wall_s": 0.002854684367775917,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/new-inaccessible-destructor.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/new-inaccessible-destructor.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005437392741441727,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/new-member-inaccessible-destructor.reject.cpp",
+        "-o",
+        "/tmp/pa30-200/controls/new-member-inaccessible-destructor.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.004943391308188438,
+      "stdout": "",
+      "stderr": "ERROR: inaccessible class member: ~Hidden declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa30/source200/new-member-inaccessible-destructor.reject.cpp:1\n",
+      "expected_rejection": true
+    }
+  ]
+}

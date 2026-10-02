@@ -1,0 +1,30 @@
+{
+  "priorThroughTests": {
+    "command": "n=30; if [ \"$n\" -le 1 ]; then echo '===== ALL TESTS PASSED SUCCESSFULLY! (0/0) ====='; else make test-report-through-pa$((n - 1)); fi",
+    "status": 0,
+    "wall_s": 13.64203031733632,
+    "sha256": "8d65bd13a11f77f77dc5465a706496b95639324c1ec7407cb52bb40676e468c2",
+    "output": "  LINK    posttoken\n  LINK    ppexpr\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== pa21 =====\n===== pa22 =====\n===== pa23 =====\n===== pa24 =====\nPA24 native contract properties: PASS (14/14)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\n===== pa25 =====\n===== pa26 =====\n===== pa27 =====\nPA27 global-section properties: PASS (3/3)\n===== pa28 =====\n===== pa29 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (4941 / 4941) =====\n"
+  },
+  "fileAudit": {
+    "command": "perl scripts/cppgm_file_audit.pl --stage pa30 --paths dev/src",
+    "status": 0,
+    "wall_s": 4.8583494164049625,
+    "sha256": "b56a753559ed637a1ec940f6c1bce77f183ee8b9cdff918bd24aec75cc99ba01",
+    "output": "File audit passed for pa30 with 4 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n"
+  },
+  "stageTests": {
+    "command": "make test-pa30",
+    "status": 2,
+    "wall_s": 6.5639442428946495,
+    "sha256": "250081ed4949689c19c640d09cb41640c907431dd842bf510d43801cf98fd24b",
+    "output": "  LINK    posttoken\n  LINK    ppexpr\n===== pa30 =====\npa30/tests/compile/200-local-callable-cross-function-reference-negative.t: ERROR: tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)\npa30/tests/compile/400-reachable-missing-return-bad.t: ERROR: tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)\npa30/tests/compile/600-random-to-address-qualified-call.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa30/tests/compile/700-hosted-random-mersenne-rshift-compile.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa30/tests/compile/700-hosted-replaceable-operator-new-dynamic-exception-spec.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\n===== TEST SUMMARY: 148 / 153 TESTS PASSED =====\nmake[1]: *** [Makefile:292: test-report-nobuild] Error 1\nmake: *** [Makefile:483: test-pa30] Error 2\n"
+  },
+  "through30": {
+    "command": "make test-report-through-pa30",
+    "status": 2,
+    "wall_s": 26.882435912266374,
+    "sha256": "4679b95453bdbda8062ccba59ef394c0a8e56786195f9432e5a45b60e6469d2a",
+    "output": "  LINK    posttoken\n  LINK    ppexpr\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== pa21 =====\n===== pa22 =====\n===== pa23 =====\n===== pa24 =====\nPA24 native contract properties: PASS (14/14)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\n===== pa25 =====\n===== pa26 =====\n===== pa27 =====\nPA27 global-section properties: PASS (3/3)\n===== pa28 =====\n===== pa29 =====\n===== pa30 =====\npa30/tests/compile/200-local-callable-cross-function-reference-negative.t: ERROR: tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)\npa30/tests/compile/400-reachable-missing-return-bad.t: ERROR: tool exit status mismatch (expected EXIT_FAILURE, got EXIT_SUCCESS)\npa30/tests/compile/600-random-to-address-qualified-call.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa30/tests/compile/700-hosted-random-mersenne-rshift-compile.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\npa30/tests/compile/700-hosted-replaceable-operator-new-dynamic-exception-spec.t: ERROR: tool exit status mismatch (expected EXIT_SUCCESS, got EXIT_FAILURE)\n===== TEST SUMMARY: 5089 / 5094 TESTS PASSED =====\nmake[1]: *** [Makefile:292: test-report-nobuild] Error 1\nmake: *** [Makefile:276: test-report-through-pa30] Error 2\n"
+  }
+}

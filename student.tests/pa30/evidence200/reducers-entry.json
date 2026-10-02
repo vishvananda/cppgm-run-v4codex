@@ -1,0 +1,87 @@
+[
+  {
+    "path": "student.tests/pa30/source200/aggregate-declared-destructor.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "path": "student.tests/pa30/source200/aggregate-private-destructor.reject.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "path": "student.tests/pa30/source200/aggregate-union-cleanup.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "path": "student.tests/pa30/source200/aggregate-union-unwind.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "path": "student.tests/pa30/source200/aggregate-union-value.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "path": "student.tests/pa30/source200/enclosing-completion.cpp",
+    "status": 1,
+    "stderr": "ERROR: semantic prerequisite unavailable\n"
+  },
+  {
+    "path": "student.tests/pa30/source200/enclosing-deleted.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: semantic prerequisite unavailable\n"
+  },
+  {
+    "path": "student.tests/pa30/source200/inactive-union-destructor.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "path": "student.tests/pa30/source200/member-class-sequence.cpp",
+    "status": 1,
+    "stderr": "ERROR: dependent query demanded as a concrete value\n"
+  },
+  {
+    "path": "student.tests/pa30/source200/member-integer-sequence.cpp",
+    "status": 1,
+    "stderr": "ERROR: dependent query demanded as a concrete value\n"
+  },
+  {
+    "path": "student.tests/pa30/source200/member-sequence-budget.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: dependent query demanded as a concrete value\n"
+  },
+  {
+    "path": "student.tests/pa30/source200/member-sequence-deduction.cpp",
+    "status": 1,
+    "stderr": "ERROR: no viable constructor\n"
+  },
+  {
+    "path": "student.tests/pa30/source200/member-sequence-invalid.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: unsupported lowering type\n"
+  },
+  {
+    "path": "student.tests/pa30/source200/nested-template-completion.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "path": "student.tests/pa30/source200/new-array-inaccessible-destructor.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: inaccessible class member: ~Hidden declared in student.tests/pa30/source200/new-array-inaccessible-destructor.reject.cpp:1\n"
+  },
+  {
+    "path": "student.tests/pa30/source200/new-inaccessible-destructor.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "path": "student.tests/pa30/source200/new-member-inaccessible-destructor.reject.cpp",
+    "status": 0,
+    "stderr": ""
+  }
+]
