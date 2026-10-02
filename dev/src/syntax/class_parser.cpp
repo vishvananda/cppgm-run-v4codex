@@ -28,6 +28,15 @@ NodeId Parser::class_specifier(bool friend_declaration)
     ScopeId saved_scope = scope;
     ScopeId owner = n ? qualified_owner(n) : scope;
     if (owner == unknown_scope) owner = scope;
+    // An elaborated type used by a declarator refers to a visible class. It
+    // must not install a local type binding that hides an ordinary function
+    // of the same name. A standalone forward declaration still introduces a
+    // class in its own scope [dcl.type.elab]. Qualifier lookup ignores values.
+    if (n && !in.is(";") && !in.is("{") && !in.is(":") && !in.is("final") &&
+        names.qualifier(owner,final_name(n),ast[n].op == OP_COLON2 || ast[n].first != ast[n].last).target) {
+        ast[result].kind = Kind::ClassForward;
+        return result;
+    }
     Binding previous = names.local(owner, final_name(n));
     // An elaborated template-id can name a template from an enclosing scope
     // (notably in a friend declaration). Retain its category and target.
