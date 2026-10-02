@@ -16,6 +16,8 @@ assert 'Stage base commit: '+b['stage_base'] in plan
 assert 'Last reviewed commit: '+b['last_reviewed'] in plan
 checks=json.loads((e/'checks.json').read_text());by={r['name']:r for r in checks}
 expected_failures={'stage','through','debug','debug-driver-o1','debug-driver-o2','debug-driver-o3'}
+expected_passes={'prior','file','normal-objects','debug-objects','control_closure','range_fills','pointer_loops','memory','memory_native','loops','loop_trip_properties','objects','local','dataflow','calls','audit','memory-bounds','loop-bounds','trace','loop-trace','memory-trace','range-trace','audit214','range-bounds','range-native'}
+assert set(by)==expected_passes|expected_failures and len(by)==len(checks)
 for r in checks:
  assert sha(r['log'])==r['sha256'],r['name']
  assert (r['exit_code']!=0)==(r['name'] in expected_failures),r['name']
@@ -37,6 +39,7 @@ for name in runtime['inputs']:
    assert runtime['images'][name][label][key]==compile['images'][name][label][key],(name,label,key)
 for name in ['affected-runtime','affected-compile','common-o0','common-o1','common-o3','selfhost']:
  r=json.loads((e/(name+'.json')).read_text())
+ if name!='affected-runtime':assert r['binaries']['B']['sha256']==compile['binaries']['B']['sha256'],name
  groups={}
  for sample in r['runs']:
   assert sample['status']==0

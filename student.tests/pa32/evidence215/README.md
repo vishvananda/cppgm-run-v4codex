@@ -1,6 +1,6 @@
 # Implementation 215 evidence
 
-Code owner boundary: `7dd38d40`; entry `f4f075b8`, whose frozen compiler matches
+Code owner boundary: `1aa04ae6`; entry `f4f075b8`, whose frozen compiler matches
 Audit 214's final binary. This is an incomplete implementation handoff, not an
 independent stage audit. No course fixture, reference or comparison rule changed.
 
@@ -38,20 +38,24 @@ most double, and repeated copying spends the shared work budget. Partial slot
 facts share promotion's `16*(I+O+B)` budget and monotonic worklist. Storage and
 analysis release at their function/invocation boundaries.
 
-The one optional per-unit runtime entity is serialized as
+The optional private runtime entity is serialized as
 `object=cppgm_opt_fill_bytes`, with boundary `(ptr, i32, i64) -> void`, nounwind.
 It writes the low byte of its second argument to exactly the unsigned byte count
 in its third; zero performs no memory access. The text reader decodes this ABI
 identity once; optimization/native emission use typed IDs. Our backend emits
 four MIR instructions and nine text bytes: moves to RAX/RCX, `rep stosb`, return.
 The helper has no frame and uses only caller-clobbered registers. No host fill
-implementation is used. Direct/replayed ELF, debug MIR, live GP/FP inputs and a
-malformed helper boundary were checked.
+implementation is used. A lazy, once-per-invocation O(F) typed census reuses a
+compatible existing declaration, including after LowIR replay; it creates at
+most one new helper per unit. The key includes the full private ABI and runtime
+role. Stronger parameter promises, TLS roles and incompatible signatures cannot
+be attached to new calls. Direct/replayed ELF, debug MIR, live GP/FP inputs,
+declaration reuse, incompatible metadata and a malformed boundary were checked.
 
 `affected-runtime.json` preserves frozen A/D A/A plus six ABBA blocks for seven
 workloads, both compilation and execution. D precedes the final exit-phi edge
-repair. `affected-compile.json` remeasures A/E compiler latency/RSS and verifies
-**identical objects and executables** for all seven A/D and final A/E workloads
+repair. `affected-compile.json` remeasures baseline/final compiler latency/RSS and verifies
+**identical objects and executables** for all seven A/D and final workloads
 before reusing their runtime observations. All inputs, flags, hashes, samples,
 paired medians and spreads are retained. These and O0/O1/O3 common controls plus
 the compiler-component control total 1,288 bound observations; 1,092 directly
@@ -61,27 +65,34 @@ The initial policy's empty-range slowdown (1.453x) is preserved in
 `diagnostic-initial.json`. Caller guards resolve it: current empty ranges are
 0.949x, short ranges 0.798x, large reference fills 0.009x, zero fills 0.043x,
 finite pointer walks 0.039x and truth materialization 0.891x runtime. Current
-compiler ratios are 0.766–0.963x for these workloads, with text reductions.
+compiler ratios are 0.773–0.953x for these workloads, with text reductions.
 
 Partial promotion is mandated by the course's `none(store)` outcome. Its
-compiler ratio is 1.079x, runtime 0.999x, and text size unchanged. Native
+compiler ratio is 1.080x, runtime 0.999x, and text size unchanged. Native
 inspection shows the same 80-byte body with a 32-byte rather than 16-byte frame:
 this allocator does not coalesce the dead original home with the phi home.
 The small bounded representation cost is disclosed; no standalone runtime gain
 is claimed. Machine allocation is PA33 work and adds no PA32 exit gate.
 All twelve common objects and the compiler-component object are byte-identical;
-common compiler medians are 0.987–1.015x and the component is 0.987x. Raw spreads
+common compiler medians are 0.994–1.006x and the component is 1.001x. Raw spreads
 include scheduling outliers; none were discarded. Historical evidence and
 self-selected diagnostic ratio targets remain preserved, with no added gate.
 
 Required checks are in `checks.json`, with full logs in the bound artifact
 root. An earlier attempt pinned 32 test workers to one CPU and produced three
-reported timeouts and one implementation-status mismatch; its records remain under `checks/`. The completed
-`checks-final/` run used CPUs 4–15 and passes all 5,178 earlier tests. Performance
+reported timeouts and one implementation-status mismatch; its records remain
+under `checks/`. The final `checks-complete/` run used CPUs 4–15 and passes all
+5,178 earlier tests. Performance
 runs used CPU 2. The current course suite is 208/219 and the through report is
 5386/5397; the exact 11 remaining failures are bound in the manifest. All personal
 reducers, work/growth guards and 25 normal plus 25 debug object replays pass.
 Direct debug is 5/5; source debug remains 0/3, explicitly unfinished.
+
+The earlier E/F compiler measurements and intermediate complete check runs are
+also retained in the artifact manifest. Current compiler acceptance and every
+final check are bound to `1aa04ae6`, including compatible helper reuse and
+rejection of conflicting runtime roles. Range work for 100/500/1,000 fill/walk
+pairs is 189,609/948,031/1,896,083 counted operations, with one shared helper.
 
 The concrete boundary is the independent-argument, even-stride pointer loop:
 its modulo-eight residue is invariant, yet neither argument carries a matching

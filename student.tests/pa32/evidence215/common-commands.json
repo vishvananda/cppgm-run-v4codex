@@ -2,10 +2,22 @@
   {
     "command": [
       "python3",
-      "student.tests/pa32/common_levels.py",
-      "/tmp/pa32-215/common-o0",
+      "student.tests/pa32/range_remeasure.py",
+      "/tmp/pa32-215/perf-final",
+      "/tmp/pa32-215/accepted-complete",
       "/tmp/pa32-215/cppgm-A",
-      "/tmp/pa32-215/cppgm-E"
+      "/tmp/pa32-215/cppgm-final"
+    ],
+    "environment": {},
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "python3",
+      "student.tests/pa32/common_levels.py",
+      "/tmp/pa32-215/common-complete-o0",
+      "/tmp/pa32-215/cppgm-A",
+      "/tmp/pa32-215/cppgm-final"
     ],
     "environment": {
       "PERF_CPU": "2",
@@ -18,9 +30,9 @@
     "command": [
       "python3",
       "student.tests/pa32/common_levels.py",
-      "/tmp/pa32-215/common-o1",
+      "/tmp/pa32-215/common-complete-o1",
       "/tmp/pa32-215/cppgm-A",
-      "/tmp/pa32-215/cppgm-E"
+      "/tmp/pa32-215/cppgm-final"
     ],
     "environment": {
       "PERF_CPU": "2",
@@ -33,9 +45,9 @@
     "command": [
       "python3",
       "student.tests/pa32/common_levels.py",
-      "/tmp/pa32-215/common-o3",
+      "/tmp/pa32-215/common-complete-o3",
       "/tmp/pa32-215/cppgm-A",
-      "/tmp/pa32-215/cppgm-E"
+      "/tmp/pa32-215/cppgm-final"
     ],
     "environment": {
       "PERF_CPU": "2",
@@ -48,13 +60,13 @@
     "command": [
       "python3",
       "student.tests/pa32/selfhost_performance.py",
-      "/tmp/pa32-215/selfhost",
+      "/tmp/pa32-215/selfhost-complete",
       "/tmp/pa32-215/cppgm-A",
-      "/tmp/pa32-215/cppgm-E"
+      "/tmp/pa32-215/cppgm-final"
     ],
-    "exit_code": 0,
     "environment": {
       "PERF_CPU": "2"
-    }
+    },
+    "exit_code": 0
   }
 ]

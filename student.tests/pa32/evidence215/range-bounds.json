@@ -3,8 +3,8 @@
     "case": "scale",
     "count": 100,
     "stats": {
-      "optimize_ms": 5.90417,
-      "optimize_work": 189409,
+      "optimize_ms": 6.00638,
+      "optimize_work": 189609,
       "optimize_instructions": 600,
       "split_objects": 0,
       "split_fields": 0,
@@ -23,15 +23,15 @@
       "memory_declined": 0,
       "memory_snapshots": 0,
       "memory_peak_snapshots": 0,
-      "optimize_peak_rss_kib": 14376
+      "optimize_peak_rss_kib": 14644
     }
   },
   {
     "case": "scale",
     "count": 500,
     "stats": {
-      "optimize_ms": 30.5374,
-      "optimize_work": 947031,
+      "optimize_ms": 30.7922,
+      "optimize_work": 948031,
       "optimize_instructions": 3000,
       "split_objects": 0,
       "split_fields": 0,
@@ -50,15 +50,15 @@
       "memory_declined": 0,
       "memory_snapshots": 0,
       "memory_peak_snapshots": 0,
-      "optimize_peak_rss_kib": 15400
+      "optimize_peak_rss_kib": 15668
     }
   },
   {
     "case": "scale",
     "count": 1000,
     "stats": {
-      "optimize_ms": 63.1626,
-      "optimize_work": 1894083,
+      "optimize_ms": 61.9524,
+      "optimize_work": 1896083,
       "optimize_instructions": 6000,
       "split_objects": 0,
       "split_fields": 0,
@@ -77,15 +77,21 @@
       "memory_declined": 0,
       "memory_snapshots": 0,
       "memory_peak_snapshots": 0,
-      "optimize_peak_rss_kib": 16700
+      "optimize_peak_rss_kib": 16788
     }
+  },
+  {
+    "case": "helper-identity",
+    "compatible_reused": true,
+    "stronger_promise_declined": true,
+    "distinct_runtime_declined": true
   },
   {
     "case": "exit-phis",
     "level": 1,
     "stats": {
-      "optimize_ms": 1.20862,
-      "optimize_work": 39790,
+      "optimize_ms": 1.1889,
+      "optimize_work": 39792,
       "optimize_instructions": 269,
       "split_objects": 0,
       "split_fields": 0,
@@ -104,15 +110,15 @@
       "memory_declined": 0,
       "memory_snapshots": 0,
       "memory_peak_snapshots": 0,
-      "optimize_peak_rss_kib": 16700
+      "optimize_peak_rss_kib": 16788
     }
   },
   {
     "case": "exit-phis",
     "level": 2,
     "stats": {
-      "optimize_ms": 1.15776,
-      "optimize_work": 40744,
+      "optimize_ms": 1.18019,
+      "optimize_work": 40746,
       "optimize_instructions": 269,
       "split_objects": 0,
       "split_fields": 0,
@@ -131,15 +137,15 @@
       "memory_declined": 0,
       "memory_snapshots": 0,
       "memory_peak_snapshots": 0,
-      "optimize_peak_rss_kib": 16700
+      "optimize_peak_rss_kib": 16788
     }
   },
   {
     "case": "exit-phis",
     "level": 3,
     "stats": {
-      "optimize_ms": 1.19085,
-      "optimize_work": 40744,
+      "optimize_ms": 1.18131,
+      "optimize_work": 40746,
       "optimize_instructions": 269,
       "split_objects": 0,
       "split_fields": 0,
@@ -158,7 +164,7 @@
       "memory_declined": 0,
       "memory_snapshots": 0,
       "memory_peak_snapshots": 0,
-      "optimize_peak_rss_kib": 16700
+      "optimize_peak_rss_kib": 16788
     }
   },
   {

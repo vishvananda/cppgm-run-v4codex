@@ -2,7 +2,7 @@
   {
     "case": "scale-100",
     "stats": {
-      "optimize_ms": 1.23527,
+      "optimize_ms": 0.984198,
       "optimize_work": 29800,
       "optimize_instructions": 300,
       "split_objects": 0,
@@ -22,7 +22,7 @@
       "memory_declined": 0,
       "memory_snapshots": 100,
       "memory_peak_snapshots": 1,
-      "optimize_peak_rss_kib": 14352
+      "optimize_peak_rss_kib": 14416
     },
     "input_bytes": 14090,
     "output_bytes": 14890
@@ -30,7 +30,7 @@
   {
     "case": "scale-500",
     "stats": {
-      "optimize_ms": 4.84428,
+      "optimize_ms": 4.84025,
       "optimize_work": 149000,
       "optimize_instructions": 1500,
       "split_objects": 0,
@@ -50,7 +50,7 @@
       "memory_declined": 0,
       "memory_snapshots": 500,
       "memory_peak_snapshots": 1,
-      "optimize_peak_rss_kib": 14608
+      "optimize_peak_rss_kib": 14672
     },
     "input_bytes": 70890,
     "output_bytes": 74890
@@ -58,7 +58,7 @@
   {
     "case": "scale-1000",
     "stats": {
-      "optimize_ms": 10.6911,
+      "optimize_ms": 10.6015,
       "optimize_work": 298000,
       "optimize_instructions": 3000,
       "split_objects": 0,
@@ -78,7 +78,7 @@
       "memory_declined": 0,
       "memory_snapshots": 1000,
       "memory_peak_snapshots": 1,
-      "optimize_peak_rss_kib": 15120
+      "optimize_peak_rss_kib": 15184
     },
     "input_bytes": 141890,
     "output_bytes": 149890
@@ -86,7 +86,7 @@
   {
     "case": "dense-fallback",
     "stats": {
-      "optimize_ms": 50.7417,
+      "optimize_ms": 49.1151,
       "optimize_work": 6410026,
       "optimize_instructions": 426,
       "split_objects": 0,
@@ -106,7 +106,7 @@
       "memory_declined": 1,
       "memory_snapshots": 9984,
       "memory_peak_snapshots": 9984,
-      "optimize_peak_rss_kib": 15120
+      "optimize_peak_rss_kib": 15184
     },
     "input_bytes": 176008,
     "output_bytes": 160597
@@ -114,7 +114,7 @@
   {
     "case": "guard-facts",
     "stats": {
-      "optimize_ms": 0.170321,
+      "optimize_ms": 0.183184,
       "optimize_work": 1327,
       "optimize_instructions": 20,
       "split_objects": 0,
@@ -134,7 +134,7 @@
       "memory_declined": 0,
       "memory_snapshots": 6,
       "memory_peak_snapshots": 3,
-      "optimize_peak_rss_kib": 15376
+      "optimize_peak_rss_kib": 15440
     },
     "input_bytes": 830,
     "output_bytes": 911

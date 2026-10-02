@@ -4,7 +4,7 @@
     "level": 1,
     "telemetry": [
       {
-        "optimize_ms": 6.36923,
+        "optimize_ms": 3.65695,
         "optimize_work": 117908,
         "optimize_instructions": 1000,
         "split_objects": 0,
@@ -24,7 +24,7 @@
         "memory_declined": 0,
         "memory_snapshots": 0,
         "memory_peak_snapshots": 0,
-        "optimize_peak_rss_kib": 14420
+        "optimize_peak_rss_kib": 14360
       }
     ]
   },
@@ -33,7 +33,7 @@
     "level": 3,
     "telemetry": [
       {
-        "optimize_ms": 8.81332,
+        "optimize_ms": 5.21605,
         "optimize_work": 153275,
         "optimize_instructions": 917,
         "split_objects": 0,
@@ -53,7 +53,7 @@
         "memory_declined": 0,
         "memory_snapshots": 0,
         "memory_peak_snapshots": 0,
-        "optimize_peak_rss_kib": 14420
+        "optimize_peak_rss_kib": 14616
       }
     ]
   },
@@ -62,7 +62,7 @@
     "level": 1,
     "telemetry": [
       {
-        "optimize_ms": 21.1558,
+        "optimize_ms": 20.4229,
         "optimize_work": 589536,
         "optimize_instructions": 5000,
         "split_objects": 0,
@@ -82,7 +82,7 @@
         "memory_declined": 0,
         "memory_snapshots": 0,
         "memory_peak_snapshots": 0,
-        "optimize_peak_rss_kib": 15444
+        "optimize_peak_rss_kib": 15384
       }
     ]
   },
@@ -91,7 +91,7 @@
     "level": 3,
     "telemetry": [
       {
-        "optimize_ms": 23.0521,
+        "optimize_ms": 22.9943,
         "optimize_work": 705366,
         "optimize_instructions": 4830,
         "split_objects": 0,
@@ -111,7 +111,7 @@
         "memory_declined": 0,
         "memory_snapshots": 0,
         "memory_peak_snapshots": 0,
-        "optimize_peak_rss_kib": 15444
+        "optimize_peak_rss_kib": 15384
       }
     ]
   },
@@ -120,7 +120,7 @@
     "level": 1,
     "telemetry": [
       {
-        "optimize_ms": 41.9256,
+        "optimize_ms": 43.1282,
         "optimize_work": 1179068,
         "optimize_instructions": 10000,
         "split_objects": 0,
@@ -140,7 +140,7 @@
         "memory_declined": 0,
         "memory_snapshots": 0,
         "memory_peak_snapshots": 0,
-        "optimize_peak_rss_kib": 16132
+        "optimize_peak_rss_kib": 16092
       }
     ]
   },
@@ -149,7 +149,7 @@
     "level": 3,
     "telemetry": [
       {
-        "optimize_ms": 47.5235,
+        "optimize_ms": 49.4909,
         "optimize_work": 1368398,
         "optimize_instructions": 9830,
         "split_objects": 0,
@@ -169,14 +169,14 @@
         "memory_declined": 0,
         "memory_snapshots": 0,
         "memory_peak_snapshots": 0,
-        "optimize_peak_rss_kib": 16132
+        "optimize_peak_rss_kib": 16092
       }
     ]
   },
   {
     "case": "one-function-budget",
     "telemetry": {
-      "optimize_ms": 0.743547,
+      "optimize_ms": 0.755067,
       "optimize_work": 19453,
       "optimize_instructions": 86,
       "split_objects": 0,
@@ -196,13 +196,13 @@
       "memory_declined": 0,
       "memory_snapshots": 0,
       "memory_peak_snapshots": 0,
-      "optimize_peak_rss_kib": 16232
+      "optimize_peak_rss_kib": 16196
     }
   },
   {
     "case": "body-budget",
     "telemetry": {
-      "optimize_ms": 0.152423,
+      "optimize_ms": 0.172156,
       "optimize_work": 2677,
       "optimize_instructions": 27,
       "split_objects": 0,
@@ -222,7 +222,7 @@
       "memory_declined": 0,
       "memory_snapshots": 0,
       "memory_peak_snapshots": 0,
-      "optimize_peak_rss_kib": 16232
+      "optimize_peak_rss_kib": 16196
     }
   }
 ]
