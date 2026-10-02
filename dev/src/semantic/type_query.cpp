@@ -556,7 +556,7 @@ TypeQueryFact Analyzer::query_fact(QueryId id)
                 !value_argument(argument) && types[argument].kind == TypeKind::Named &&
                 template_entity(types[argument].entity)) {
                 auto entity = entities[types[argument].entity];
-                r.dependent |= entity.template_parameter || entity.template_member;
+                r.dependent |= entity.template_parameter || (entity.template_member && entity.template_pattern);
             } else r.dependent |= dependent_argument(argument);
         }
     }

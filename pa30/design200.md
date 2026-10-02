@@ -13,3 +13,14 @@ Focused hosted result after these repairs: 6/6. Earlier PAs: 4941/4941.
 Current-stage full report, final performance protocol and handoff ledger follow
 further related investigation. Independent review remains outstanding; this
 file does not certify the whole stage.
+
+The constructor investigation extends the same template-fact group:
+`builtin_template_types.cpp` and `type_query.cpp` now distinguish member
+provenance from unresolved source-member identity. A concrete alias template
+keeps `template_member` for definition ownership; only the source pattern still
+requires substitution. Integer-sequence generation consumes that identity plus
+canonical element/count arguments and its existing 1,048,576-element cap.
+No extra lookup, retry or allocation policy is added. Member alias environment,
+empty packs, template-template parameters, constructor pack deduction and an
+invalid negative count are explicit controls. All four remaining call/constructor
+fixtures (map, piecewise pair, bind and regex) now pass their focused checks.

@@ -90,7 +90,11 @@ TypeQueryFact Analyzer::query_template_type_trait(const TypeQuery& query)
     auto entity = types[target].kind == TypeKind::Named ? template_entity(types[target].entity) : 0;
     if (!entity && !dependent_type(target)) return invalid;
     if (!dependent_type(type) && (types[type].kind != TypeKind::Fundamental || !integral(type))) return invalid;
-    if (!entity || entities[entity].template_parameter || entities[entity].template_member ||
+    // A materialized member template retains its member provenance, but its
+    // enclosing bindings are already fixed. Only the source member identity
+    // (or a template-template parameter) still needs substitution.
+    if (!entity || entities[entity].template_parameter ||
+        (entities[entity].template_member && entities[entity].template_pattern) ||
         dependent_type(type) || dependent_argument(count)) { result.dependent = true; return result; }
     auto converted = convert_argument(count,type);
     if (!converted) return invalid;
