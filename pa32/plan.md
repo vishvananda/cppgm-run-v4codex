@@ -10,8 +10,8 @@ inspection found no running job. Both review markers remain unchanged.
 
 This handoff closes partial slot/diamond cleanup, finite odd-stride pointer
 walks and guarded contiguous fills, including aliasing, zero trips, exported
-values, exit phis, ABI/debug transport and measured profitability. Code is in
-`0f370e3f` and `7dd38d40`; bound validation/evidence is in `3592a12f`.
+values, exit phis, ABI/debug transport and measured profitability. Code spans
+`0f370e3f` through `1aa04ae6`; final bound validation/evidence is in `104846c6`.
 
 ## Architecture and operative limits
 
@@ -28,7 +28,7 @@ O2/O3 add closed-world constant propagation; O3 allows bounded full unrolling.
 | Calls/regions | Direct graph/escape census, recursive and typed-home guards; contextual effects and no-unwind facts | Depth <=64; work <=32768/caller, <=32*(I+O+P+S+F+1)/unit; growth <=1536/caller (2048 single-use). Forced expansion remains <=4194304/unit, <=262144/caller; region retirement <=32*(I+O+B+1) |
 | Private objects | Single-definition origins, complete byte partitions and snapshots; escape/volatile/unknown overlays retain homes | <=64 bytes/home, <=16 fields; two fixed invocations, O((I+O+S) alpha(S)); reserve added IR <=8*(I+1), homes <=16S |
 | Integer loops | Closed linear loops; exact widened trip/endpoints including final update; unknown/EH/mutable carriers decline | One invocation; candidate work <=16*(I+O+E+1); O3 <=4 trips, <=64 body clones/loop; unsimplified reservations <=256/function and min(4096,2*(I+1))/unit |
-| Pointer ranges (215) | Immutable twin inductions; odd byte strides prove finite address cycles; exact contiguous counts permit byte/repeated-byte fills; zero guard precedes reference loads; phi edges retain snapshots | Same loop invocation/work budget; no instruction/block growth; exit-phi operands <=2x original, charged copies; one four-instruction native fill helper/unit |
+| Pointer ranges (215) | Immutable twin inductions; odd byte strides prove finite address cycles; exact contiguous counts permit byte/repeated-byte fills; zero guard precedes reference loads; phi edges retain snapshots; complete typed private ABI/role key for helper reuse | Same loop invocation/work budget; no instruction/block growth; exit-phi operands <=2x original, charged copies; lazy O(F) helper census once/invocation, at most one new four-instruction native helper/unit |
 | Memory values | Exact address/byte identities, immutable snapshots, ordinary predecessor intersections and effect epochs; backedges/handlers/unknown writes reset | One invocation; <=32 cells/state; shared <=128*(I+O+E+1) plus linear census/bounded dominance; <=16 recent diamonds, <=64 comparisons/proof; <=16 copy pieces/128 bytes; no IR/operand growth |
 | Roots/native transport | Complete root/escape census; durable debug/section/extent/ABI facts; actual copy clobbers | Linear root census; one function-local MIR through immediate encoding; direct ELF |
 
@@ -79,8 +79,8 @@ The concrete handoff boundary is the completed scalar/phi and finite-byte-range
 owner. Further related deletion lacks the needed congruence fact. The other
 failures require contextual EH and source semantic/ABI producers, which cannot
 be repaired by more range rewrites. The scope was extended through zero-trip
-profitability, arbitrary exit phis, native clobbers and source/template replay
-before this boundary.
+profitability, arbitrary exit phis, native clobbers, source/template replay and
+durable helper reuse with complete ABI/role guards before this boundary.
 
 ## Validation and stage-scoped performance acceptance
 
@@ -92,25 +92,28 @@ before this boundary.
 - All inherited personal reducers and bounds checks pass. New tests cover 19
   control cases, 41 pointer cases and 440 fill assertions at four levels through
   direct, replay and native execution, plus 64 live exit phis, GP/FP clobbers,
-  malformed helper ABI, source/template debug replay and work scaling.
+  malformed/incompatible helper ABI, declaration reuse, source/template debug
+  replay and work scaling: 100/500/1,000 fill/walk pairs consume
+  189,609/948,031/1,896,083 counted operations, with one shared helper.
 
 [Evidence 215](../student.tests/pa32/evidence215/README.md) binds source, commands,
 binaries, inputs and all observations. A/A calibration plus six ABBA blocks,
 CPU 2, separately measure compilation and execution. There are **1,288 bound
 observations**, of which **1,092 support current acceptance**. Final compiler
-measurements use A/E; runtime A/D observations are reused only after checking
-byte-identical final A/E objects and executables for every affected workload.
+measurements use frozen baseline/final binaries; runtime A/D observations are
+reused only after checking byte-identical final objects and executables for
+every affected workload. Intermediate measurements remain retained.
 Paired final/baseline medians at O1:
 
-| Workload | Compiler | Peak RSS KiB A/E | Runtime | Object text bytes A/E |
+| Workload | Compiler | Peak RSS KiB baseline/final | Runtime | Object text bytes baseline/final |
 | --- | ---: | ---: | ---: | ---: |
-| Reference fill, 1024 bytes | 0.962x | 36236/32464 | 0.009x | 440000/420009 |
-| Reference fill, 8 bytes | 0.963x | 36340/32472 | 0.798x | 440000/420009 |
-| Empty reference range | 0.958x | 36308/32344 | 0.949x | 440000/420009 |
-| Zero fill, 1024 bytes | 0.914x | 34440/31160 | 0.043x | 405000/355009 |
-| Finite pointer walks | 0.766x | 29616/26748 | 0.039x | 360000/70000 |
-| Boolean diamonds | 0.849x | 34660/34984 | 0.891x | 465000/260000 |
-| Partial slot facts | 1.079x | 31760/31648 | 0.999x | 400000/400000 |
+| Reference fill, 1024 bytes | 0.953x | 35752/31312 | 0.009x | 440000/420009 |
+| Reference fill, 8 bytes | 0.951x | 35744/31408 | 0.798x | 440000/420009 |
+| Empty reference range | 0.951x | 35712/31308 | 0.949x | 440000/420009 |
+| Zero fill, 1024 bytes | 0.921x | 34608/33124 | 0.043x | 405000/355009 |
+| Finite pointer walks | 0.773x | 29612/26864 | 0.039x | 360000/70000 |
+| Boolean diamonds | 0.848x | 34652/34840 | 0.891x | 465000/260000 |
+| Partial slot facts | 1.080x | 31860/31676 | 0.999x | 400000/400000 |
 
 The rejected policy's 1.453x empty-range slowdown remains recorded; caller
 zero guards resolve it. Partial promotion is a mandated IR outcome with no
@@ -119,11 +122,11 @@ uses a 32-byte instead of 16-byte frame for separate original/phi homes. Its
 bounded 8% compiler cost and later allocator constraint are disclosed.
 
 All twelve common template-heavy memory/floating/EH/pruning objects remain
-byte-identical at O0/O1/O3; compiler medians are 0.987–1.015x. The O0 compiler
-component is 0.987x, 77476/77508 KiB, identical 34275-byte text; runtime is
+byte-identical at O0/O1/O3; compiler medians are 0.994–1.006x. The O0 compiler
+component is 1.001x, 77492/77520 KiB, identical 34275-byte text; runtime is
 inapplicable because it has no executable entry. All spreads and scheduling
 outliers remain recorded. The first contended validation attempt also remains
-recorded; the completed unchanged-code run passes all earlier tests.
+recorded; all final checks and compiler measurements bind to `1aa04ae6`.
 
 [Audit 214 evidence](../student.tests/pa32/evidence214/binding.json) preserves
 1,260 audit observations and 4,536 verified historical observations. Inherited
@@ -141,7 +144,7 @@ and later self-hosting requirements add no PA32 gate.
 | Implementation 212, `a58a3a97` | Integer loops, unit budgets and snapshots | Then 23 failures |
 | Implementation 213, `5b5512b4` | Bounded memory, actual clobbers and profitable admission | Then 17 failures |
 | Audit 214, `40151904` | Accumulated architecture/performance review and comparison correction | Same 17 failures; source/debug/EH closure |
-| Implementation 215, `7dd38d40`; evidence `3592a12f` | Scalar/phi and finite pointer-range group; six failures removed; zero-trip cost corrected; ABI/debug/performance closure | 11 course failures and source-debug/EH work above; independent audit still due |
+| Implementation 215, `1aa04ae6`; evidence `104846c6` | Scalar/phi and finite pointer-range group; six failures removed; zero-trip cost corrected; complete helper identity and ABI/debug/performance closure | 11 course failures and source-debug/EH work above; independent audit still due |
 
 Run `python3 student.tests/pa32/ranges_verify.py` at this records-only boundary.
 Historical verifiers remain bound to their own handoffs. This returns a validated
