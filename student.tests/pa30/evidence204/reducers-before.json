@@ -1,0 +1,95 @@
+{
+  "adapter": "/tmp/pa30-203/trace-final/adapter",
+  "adapter_sha256": "1be0c7e44bf3d862cd2547a44691018d56ba13889ac5461bb865942cd147544d",
+  "code_commit": "247c383a",
+  "commands": [
+    {
+      "args": [
+        "/tmp/pa30-203/trace-final/adapter",
+        "student.tests/pa30/source204/negative-id.reject.lowir",
+        "/tmp/pa30-audit204-probe.o"
+      ],
+      "source": "student.tests/pa30/source204/negative-id.reject.lowir",
+      "source_sha256": "2601778bf2ffad961d0b471aa14971aa32a16d2a8291b24aca5053884083f73e",
+      "entry_status": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/trace-final/adapter",
+        "student.tests/pa30/source204/negative-predicate.reject.lowir",
+        "/tmp/pa30-audit204-probe.o"
+      ],
+      "source": "student.tests/pa30/source204/negative-predicate.reject.lowir",
+      "source_sha256": "e1fcc2c1959d03b41a80cf6f5f373a57fefbae2cdced945cff451c92b585b2c3",
+      "entry_status": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/trace-final/adapter",
+        "student.tests/pa30/source204/valid-sentinel.lowir",
+        "/tmp/pa30-audit204-probe.o"
+      ],
+      "source": "student.tests/pa30/source204/valid-sentinel.lowir",
+      "source_sha256": "23c64b0c3dc029239000ae483c9fb1bb7c546c0e254fdf1b1491250fcd851228",
+      "entry_status": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/trace-final/adapter",
+        "student.tests/pa30/source204/valid-unsigned-sentinel.lowir",
+        "/tmp/pa30-audit204-probe.o"
+      ],
+      "source": "student.tests/pa30/source204/valid-unsigned-sentinel.lowir",
+      "source_sha256": "1c1467e30ed35adf265af70681430b7c4b03e9dd994d7ab56dd30b646e524637",
+      "entry_status": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/trace-final/adapter",
+        "student.tests/pa30/source204/wide-id.reject.lowir",
+        "/tmp/pa30-audit204-probe.o"
+      ],
+      "source": "student.tests/pa30/source204/wide-id.reject.lowir",
+      "source_sha256": "7c9cf95460e32c4cac56f64cc722454c6342582e732ccde800f872743f081967",
+      "entry_status": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/trace-final/adapter",
+        "student.tests/pa30/source204/wide-negative-id.reject.lowir",
+        "/tmp/pa30-audit204-probe.o"
+      ],
+      "source": "student.tests/pa30/source204/wide-negative-id.reject.lowir",
+      "source_sha256": "f2821b16688980e66240d1d6214f4b95f3087ccfaca1dab4b8f9c59b5f5b2fc1",
+      "entry_status": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/trace-final/adapter",
+        "student.tests/pa30/source204/wide-predicate.reject.lowir",
+        "/tmp/pa30-audit204-probe.o"
+      ],
+      "source": "student.tests/pa30/source204/wide-predicate.reject.lowir",
+      "source_sha256": "60887df7e5f8ea27ac1d5227c4cfbb20da1ec709fa45d5d7e2620a60353a6b68",
+      "entry_status": 0,
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/tmp/pa30-203/trace-final/adapter",
+        "student.tests/pa30/source204/wide-sentinel.reject.lowir",
+        "/tmp/pa30-audit204-probe.o"
+      ],
+      "source": "student.tests/pa30/source204/wide-sentinel.reject.lowir",
+      "source_sha256": "d78b9499b07263c9662fc19f7b709d1b977bb8b28c47436e2b064d34226c05e7",
+      "entry_status": 0,
+      "stderr": ""
+    }
+  ]
+}

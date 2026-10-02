@@ -1,0 +1,40 @@
+{
+  "binaries": {
+    "cppgm++": "2f91ab5c876290d0072f70645d48d6831b445773d22c6359166877112914627f",
+    "lowir": "211a57370c18ceecd1134674ce77fa35131c6ec7c600d3c1d0cfdff2de8f6754",
+    "lowir2native": "3a05c8e690e376159c0620451756b30947f0e5c30f63ae029caf88b3445a3b6c"
+  },
+  "commands": [
+    {
+      "args": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa30",
+        "--paths",
+        "dev/src"
+      ],
+      "status": 0,
+      "output": "File audit passed for pa30 with 4 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n",
+      "wall_s": 8.860508242622018
+    },
+    {
+      "args": [
+        "make",
+        "test-pa30"
+      ],
+      "status": 0,
+      "output": "  LINK    posttoken\n  LINK    ppexpr\n===== pa30 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (153 / 153) =====\n",
+      "wall_s": 22.397585932165384
+    },
+    {
+      "args": [
+        "make",
+        "test-report-through-pa30"
+      ],
+      "status": 0,
+      "output": "  LINK    posttoken\n  LINK    ppexpr\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== pa21 =====\n===== pa22 =====\n===== pa23 =====\n===== pa24 =====\nPA24 native contract properties: PASS (14/14)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\n===== pa25 =====\n===== pa26 =====\n===== pa27 =====\nPA27 global-section properties: PASS (3/3)\n===== pa28 =====\n===== pa29 =====\n===== pa30 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (5094 / 5094) =====\n",
+      "wall_s": 35.97994113154709
+    }
+  ]
+}

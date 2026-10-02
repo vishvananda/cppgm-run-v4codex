@@ -1,174 +1,196 @@
-# PA30 accumulated checkpoint audit202
+# PA30 final whole-stage audit204
 
 Stage base commit: `27029f978e65b78331233123922d342033d5d1f7`.
-Last reviewed commit: `378d1bd83df4dd3f7a9c1693c18afa7e7c7bd61f`.
+Last reviewed commit: `4a1e92b82ad62dce9aad0cf54c3dc0db1982fce8`.
+Entry: `547b2678`. Target: **PA30 full-stage**. Disposition: **complete**.
 
-The complete accumulated range is `4a081cb0..56ecc31c`, extended through
-`378d1bd8` for the validated audit repairs. Both entry markers agreed with
-history; the previous audit's code tip is the boundary, not the latest handoff.
-All 14 intervening commits and their combined source changes were reviewed.
-This completes checkpointAudit; PA30 remains incomplete at **151/153**, with
-the same two required failures as entry. No stage advancement is authorized.
-The previous goal turn was progress (committed implementation and verified
-evidence); no inherited compiler/test process was live at audit entry.
+This independently reviews the complete stage, including implementation203's
+previously unaudited vector/packed target boundary. The 29 entry stage commits,
+the cumulative changes in 84 implementation files, and their surrounding shared
+owners were inspected. Checkpoint conclusions located evidence; they did not
+replace reconstruction of the production path. The prior goal turn was progress:
+committed implementation and test/performance evidence. No inherited job was
+live at entry. Earlier audit records remain in history at `d9a62584` and
+`404e468e`; the implementation203 handoff remains at `547b2678`.
 
-## Complete range and dispositions
+## Findings and repairs
 
-| Commit | Reviewed content and disposition |
+**Oversized LowIR target descriptors were silently truncated.** The new `x86`
+validator inspected only the low 64 bits of an integer literal. For example,
+`x86 18446744073709551799, %p, 18446744073709551615` selected descriptor 183
+(`pause`) after accepting an identity outside the finite target vocabulary.
+Negative wrapping identities, wide predicates and wide no-predicate sentinels
+had the same problem. The shared validator now rejects wide/negative IDs and
+wide or improperly negative predicates before selection. Ordinary `-1` and
+unsigned 64-bit all-ones retain their documented no-predicate meaning.
+
+[Eight minimal inputs](../student.tests/pa30/source204/) establish this boundary:
+six malformed cases plus two valid sentinel controls. The frozen entry adapter
+accepts all six malformed inputs; final `lowir` and `lowir2native` reject all six.
+Both valid controls also execute. [Before evidence](../student.tests/pa30/evidence204/reducers-before.json)
+binds the exact inputs and entry adapter. The proof is the operation's finite ID
+and predicate contract in [design203](design203.md), not agreement with another
+compiler. This fixes the owning external-input validator; production descriptors
+are already canonical typed facts, so no frontend workaround or encoding change
+is needed. The repair is `4a1e92b8`.
+
+**The records were stale.** The prior plan still requested independent audit,
+and audit202 still reported two unimplemented cases. The supplied 5,258-test
+summary also disagrees with its primary log. That log, the fresh entry run and
+the final run all report **5,094/5,094**, including **153/153 PA30 cases** and
+**30/30 stages**. Fixture inventory is unchanged; this is count reconciliation,
+not removed coverage. The plan now records the final design and acceptance.
+
+Two inspection-script attempts used the wrong runtime boundary: standalone
+LowIR allocation names were sent to a host linker, then a hosted exception
+program was sent to standalone executable linking. Their outputs are preserved
+in `inspection-adapter-mode.json` and `inspection-standalone-mode.json`.
+The final explicit adapter uses hosted LowIR, `compile_object(..., true)`, and
+the actual hosted `compile_image` MIR view. No compiler fallback, contract change
+or unresolved runtime defect is hidden by those script corrections.
+
+## Independent Spec Alignment
+
+| Requirement | Reconstructed ownership and disposition |
 |---|---|
-| `d9a62584` | Prior audit records and performance198, preserving the code boundary. Historical audit198 remains available at this revision. |
-| `a7a6e3a8` | Runtime first array extents separated from canonical element types; dependent protected access and current-instantiation friendship; inherited aliases; fixed vector declarations and representation conversions. Bound conversion gap repaired below. |
-| `6b5645c0` | Complete-class lookahead preserves member-template function boundaries. Removes a nonexistent byte-extraction builtin; byte construction is still checked through a byte copy, without reducing course coverage. |
-| `c8526635` | Volatile vector operands snapshot every lane before extraction or representation transfer. |
-| `d6408429` | Static/omitted vector zero initialization emits typed aggregate byte extents. |
-| `377d92a0` | Implementation199 handoff: 138/153, source/binary bindings, runtime/text and compile/scaling evidence. |
-| `6dcff26a` | Aggregate child destruction demand and enclosing complete-class body scheduling. |
-| `e171a838` | Concrete member-template identity distinguished from dependent provenance in integer-sequence queries. |
-| `37b6729d` | Destructor access/demand belongs to selected aggregate children; scalar-new root destruction remains separate. |
-| `b0790726` | Implementation200 handoff: 148/153, demand/access controls and performance evidence. |
-| `acffe94c` | Automatic object use/capture cannot cross an ordinary function boundary. |
-| `3d02099c` | One replacement-new reference status correction, with reduced sources, preprocessing and standard proof. Confirmed below. |
-| `fc8ea8d6` | Typed noreturn attributes, default-lambda contexts and function-local non-void CFG checking. Constant conditional joins required the repair below. |
-| `56ecc31c` | Implementation201 handoff: 151/153, full validation, controls and performance. Entry verifier passes 1,283 checks. |
-| `378d1bd8` | Audit repair: contextual array-bound conversion and sparse constant-join reachability, with explicit controls and registered implementation source. This is the reviewed code tip. |
+| §1 source, preprocessing, parse once | TU-owned immutable source buffers feed `Preprocessor`, `PostTokenCursor` and the bounded-lifetime ring `syntax::Cursor`. Tokens carry interned IDs/locations. `Parser::translation_unit(&sem)` publishes declarations into the shared graph. `predeclare_class` and angle probes inspect cached delimiter/category boundaries; they do not parse bodies again. Split `>>` state and member-template suffix boundaries live on pending tokens. |
+| §2 canonical identity | `semantic::Types`, argument packs, entity/scope IDs and open-addressed `IdIndex` own identity. Lookup merges typedefs by canonical designated type, not display spelling. `FactStore` publishes into 1,024-record slabs. `NodePool` stores source nodes once and compact `(source, context)` occurrences. Fixed template type/conversion facts are reused by `reuse_fixed_expression`; concrete object/lifetime identities stay per occurrence. |
+| §3 lookup and candidates | Scope/name indexes and explicit using/base/friend/ADL edges restrict lookup to relevant relationships. `select_call` retains compact candidate/conversion slices; deduction checks template shape/arity, ordinary viability checks arity and member/static category before conversions. All required viable candidates are compared, and the selected entity/conversions are published. Expected substitution failures use compact failure/state records; exceptions at final diagnostics are not candidate control flow. |
+| §4 demand and templates | `specialize_class` uses `(canonical pattern, interned argument pack)`; a nested pattern already identifies its enclosing specialization/environment. The selected definition has one parent-linked substitution frame. Declaration, body, layout, default, cleanup and emission states remain separate. `Ast::instantiate` projects retained source regions without grammar replay; dormant bodies/defaults/nested classes stay deferred. Class completion does not instantiate unrelated member bodies. Integer-sequence requests retain the 1,048,576 bound. |
+| §5 scheduling and validity | `Analyzer::finish` drains cursor-based, deduplicated queues for functions, storage, friends, vtables, defaults and exception facts. Completed/in-progress/failure states prevent duplicate work. `query_dependencies` records class/query reverse edges; class completion invalidates only published dependent consumers and their values, with query-local revisions. No global cache epoch/retry sweep was introduced. Shuffle signatures cache immutable canonical function types; capture keys are `(closure, object)`. All caches are TU-owned. |
+| §6 direct lowering | `toolchain::build_source` → `lowering::build_program` → `Procedural` builds a typed `Program`; `compile_object` passes it directly to native preparation/selection. Selected conversions, aggregate cleanup actions, layouts, ABI and noreturn facts are consumed by identity. Text readers/writers are explicit adapters only. Each declaration/ABI entry uses its emission identity. Production does not revalidate the whole unchanged program at every boundary. |
+| §7 optimization/native | The inherited forced-inline pass admits only eligible fixed-boundary callees, rejects recursion/unsupported frames, reserves work before mutation, and preserves a call on refusal. Depth ≤64, caller work ≤262,144 and program work ≤4,194,304 remain unchanged. Required vector lowering expands at most eight ordinary lanes before using a loop; packed recipes expand ≤16 lanes; target records occupy 64 bytes and dynamic comparison fallback has ≤32 alternatives. Selection/allocation/encoding have bounded function-local passes; XMM14/15 and R10/R11 are reserved scratch, and masked stores restore RDI. |
+| §8 lifetimes and allocation | TU source/identifier, syntax/occurrence and semantic slabs have one lexical owner in `build_program` and die after lowering. Candidate/substitution/query scratch has narrower owners. LowIR pools retain typed bodies for bounded forced expansion and emission; growth is linear in original IR plus reserved expansion work. `Selector::run` placement/liveness/frame state dies after each function is encoded. `HostElf` moves native byte buffers into sections; it does not retain a second encoded image. No owning hot-node shared pointers or process-global accumulating caches were found. The unused legacy `mir_model.h` is not the production MIR. |
+| §9 performance/work | Sparse fallthrough facts move Pending → Constant → Varying at most once per transition; indexed users/edges drive a dirty queue, with one conservative cycle seeding step and no IR growth. Unknown/escaped/volatile/noninteger storage remains unknown. Current and inherited measurements, work bounds, runtime and text costs are reviewed below. PA30 applies O0 and the mandated 45-second hosted compile limit. |
+| §10 self-containment | The actual path contains no reference/host compiler or assembler delegation, fixture recognition, cached answers or hosted-only lowering route. Build-time host macro/include probing supplies the permitted environment; `host_config` consumes that immutable configuration. Host linking is used only by the explicit object-execution controls. |
 
-Historical bindings are checked at their own handoff/code revisions, including
-tracked wrapper symlinks. They are not incorrectly compared with newer source.
-[Bindings](../student.tests/pa30/evidence202/source-binding.json) enumerate the
-entire range and bind 81 current sources, the dev tree and all frozen binaries.
-The final records commit changes only Markdown and JSON evidence after this tip.
+The review also followed all accumulated semantic interactions: current
+instantiation queries use their source scope; dependent protected access is
+rechecked after substitution; friendship grants do not escape their specialization;
+first new[] extents remain distinct from canonical element types and consume the
+selected class-to-integral conversion; only selected aggregate children demand
+destructors; automatic objects cannot cross an ordinary function boundary;
+default lambdas own their context; noreturn normal exits and exception edges are
+separate. Their positive/negative controls were rerun together, not assumed from
+checkpoint pass counts.
 
-## Findings and fixes
+## Representative source-to-ELF traces
 
-1. **First new[] extents rejected valid class conversions.** The new query
-   separated runtime extents correctly but copied the existing integral-only
-   test. C++11 [expr.new]/6 permits a class with a unique non-explicit conversion
-   to an integral or unscoped-enumeration type. `array_bound_conversion` now owns
-   that rule for both ordinary allocation and type queries. Queries validate
-   access/deletion without demanding the conversion body; evaluated uses record
-   the selected conversion once. Lowering consumes its actual signedness.
-   A constant class object is not mistaken for the integer returned by its
-   conversion. [N3337 §5.3.4/6](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf)
-   supplies the rule; compiler agreement is not the proof.
-2. **The new fallthrough check rejected constant conditional loops.**
-   `int f(){while(1 ? 2 : 0){}}` and nested arithmetic/conditional forms were
-   accepted before implementation201, then rejected because a join slot hid the
-   condition from its single-definition integer proof. The repaired owner tracks
-   executable edges, integer temporaries and eligible whole scalar slots through
-   a deduplicated instruction worklist. Facts move Pending → Constant → Varying;
-   unresolved cycles are seeded conservatively once. Volatile, escaped, partial,
-   noninteger and unknown storage cannot prove an edge dead. Noreturn normal
-   exits and throwing/resume edges remain separate. The proof never rewrites IR.
-   An initial branch-lowering approach changed a valid PA14 structural fixture;
-   it was removed, and the complete earlier report was rerun successfully.
-   [Intermediate report](../student.tests/pa30/evidence202/validation-intermediate.json)
-   preserves that failed check; no reference/comparator was relaxed.
+[interactions.cpp](../student.tests/pa30/source204/interactions.cpp) combines these
+owners with `Pipeline<int>::run`: inherited same-type aliases, a dormant invalid
+member, integer-sequence alias expansion, protected dependent bases and friend
+access, class-completion deferral, converted allocation, nested captures,
+exception cleanup, volatile vector storage, signed packing and scalar SSE.
+The scalar `n` from the demanded template becomes a typed lane, saturation to
+[-128,127] is implemented by widened scalar comparisons/selects, and `addss`
+retains its descriptor and preserved upper lanes through LowIR and hosted MIR
+to the encoded SSE instruction. A copied volatile vector retains its value when
+the original lane is subsequently overwritten. Both runtime input variants check
+all results and destructor effects.
 
-[Entry reducers](../student.tests/pa30/evidence202/reducers-before.json) retain
-source text/hashes and the frozen entry outcomes. The **35 new control commands**
-cover nested/templated constant joins, actual reachable fallthrough, slot mutation,
-escape and volatility, conversion effects and temporary lifetimes, integral and
-reference-returning bounds, inheritance, invalid/private/deleted/ambiguous/explicit
-conversions, and a query whose dormant conversion body must remain undemanded.
-No known defect in these repaired groups is deferred to a later audit.
+The trace has **935 tokens**, maximum pending cursor **194**, **19 semantic
+specializations**, **2 function-template body transitions**, **691 original /
+696 prepared LowIR instructions**, **789 native instructions** and **4,146 text
+bytes**. `dormant<U>` is not demanded. The aggregate's selected `Guard` cleanup
+runs once when `Later` throws; the converted allocation's selected conversion
+feeds the same array-new ownership path. The fallthrough proof visits 87
+instructions and 43 operand/edge units without rewriting code.
 
-## Architecture and interaction trace
+A separate inherited `combine<int>::apply` trace follows the fixed forced-inline
+callee fact through eligibility and reservation: one expansion costs **17 actual
+units / 33 reserved**, while the noinline call and volatile effects survive.
+Hosted MIR exposes the real O0 frame/loop traffic: `main`/`apply` have
+48/32-byte frames in the inline trace, and `Pipeline<int>::run` has a
+352-byte frame including 48 bytes of floating scratch in the combined trace.
+The loop still performs its scalar loads/stores and real noinline call. This is attribute-required
+expansion; fewer instructions are not claimed as runtime profit. Analyses used
+for admission refer to immutable original bodies; new placement and frame facts
+are computed after expansion, so stale liveness is never reused.
 
-[interactions.cpp](../student.tests/pa30/source202/interactions.cpp) combines the
-three handoffs: concrete member alias generation and constructor packs, deferred
-nested class bodies, protected dependent bases and friendship, selected union
-subobject cleanup, converted array allocation, volatile vector extraction,
-default/nested captures and a noreturn boundary. It executes successfully both
-from a direct object and from serialized LowIR rebuilt by the compiler's native
-backend. The serialized path is an explicit test adapter, not production transport.
+[Inspection](../student.tests/pa30/evidence204/inspection.json) records 344 commands,
+actual LowIR, hosted MIR, disassembly, symbols, CFI, runtime results and counters.
+[ELF comparison](../student.tests/pa30/evidence204/elf-equivalence.json) proves equal
+text, named relocations, symbol facts and CFI between direct and reconstructed
+hosted objects. Only incidental symbol-table ordering differs for the combined
+trace. Telemetry on/off objects match. Both explicit LowIR and production objects
+carry the facts needed by the native backend.
 
-| Spec surface | Ownership and reviewed evidence |
+## Performance acceptance
+
+[Performance204](performance204.md) records current frozen whole-stage A/B
+compilation and checked execution, separate hosted A/B runs, A/A calibration,
+six ABBA blocks, all observations/spreads, RSS and text sizes. A whole-stage
+comparison uses the original stage-base binary, not merely the last checkpoint.
+The heavier hosted comparison uses the correct implementation203 baseline.
+No build or correctness suite overlaps timing. CPU affinity is fixed; the host
+is shared, and outliers are retained.
+
+All four common workload A/B objects and executables are byte-identical.
+Compiler paired medians are near unity; runtime variation cannot demonstrate a
+generated-code change for identical images. These fixed programs cover 2,400
+demanded templates, loops, calls, memory, floating point, exceptions and emission
+pruning. Additional final images bind the vector/packed scaling and heavy-header
+evidence from [performance203](performance203.md) to this validator-only repair.
+The new malformed-input check is outside ordinary production compilation.
+
+Inherited vector snapshots cost **24N text bytes** and approximately **1–2%**
+runtime on their equivalent workload; this is disclosed required value-capture
+work, not an optional optimizer or a claimed speedup. Removing it would violate
+captured-value and volatile semantics. The measured linear counter relations,
+fixed lane/record/inline limits and conservative fallbacks remain intact.
+Newly accepted workloads have final-only cost evidence when the earlier binary
+rejects them; rejection timings are never used as performance baselines.
+
+Historical blanket 15% latency and zero-growth targets remain diagnostics under
+spec §9. Their observations are preserved; they do not override stage-scoped
+acceptance. The 45-second limit, correctness, comparison rules and coverage stay
+mandatory. PA31 hosted-library runtime closure, PA32/33 optimizer-level goals and
+PA34 inception remain their own stages. Those boundaries do not defer a known
+PA30 defect or excuse avoidable regressions.
+
+## References and final validation
+
+No reference, fixture, harness, discovery rule or timeout changes in audit204.
+The complete stage has exactly three documented reference corrections:
+[namespace typedefs](reference-correction197.md),
+[base typedefs](reference-correction198.md), and
+[replacement new](reference-correction201.md). The reduced sources, C++11
+[dcl.typedef], [namespace.udir], [class.member.lookup] and [except.spec] proofs,
+and pinned bundle revision/hash were independently checked. The 197 provisional
+base-lookup rejection is explicitly superseded by proof198. Only the six recorded
+output/status sidecars differ from stage base; all test sources and comparisons
+are preserved. Compiler agreement is not their proof.
+
+[Final validation](../student.tests/pa30/evidence204/validation.json):
+
+- `perl scripts/cppgm_file_audit.pl --stage pa30 --paths dev/src`: **pass**, with
+  four inherited substantial-header organization warnings and no audit errors.
+- `make test-pa30`: **153/153**, exit 0.
+- `make test-report-through-pa30`: **5,094/5,094; 30/30 stages**, exit 0.
+- **439** accumulated personal control commands pass on the final compiler.
+- All **286** hardware differential cases passed at entry with two inputs each;
+  freshly rebuilt final objects are byte-identical, proving reuse of those
+  executions after the validator repair. All six new malformed IR cases reject
+  through both external consumers; both valid sentinel controls execute.
+- Final source/binary/fixture bindings, performance ordering/recomputed summaries,
+  ELF equivalence, check statuses and review markers are mechanically verified
+  by [verify204.py](../student.tests/pa30/verify204.py): **2,662 checks pass**.
+
+## Consolidated ledger
+
+| Boundary / code tip | Whole-stage disposition |
 |---|---|
-| Source/parser (§1) | Immutable TU buffers → streaming `PostTokenCursor`/ring cursor → interned identifiers and retained source nodes. Parser and Analyzer cooperate through `translation_unit(&sem)`. `predeclare_class` does bounded category/delimiter lookahead; the new suffix boundary does not parse bodies again. |
-| Canonical facts (§2) | Types, template arguments, declaration/scope IDs and queries are compact keys. Source/context occurrences project the retained graph, not cloned syntax trees. `no_return`, builtin intrinsic IDs, selected conversions and vector storage extents are typed facts, never reconstructed through names in lowering. |
-| Lookup/access (§3) | Indexed lexical/base/friend edges restrict lookup. Inherited signature aliases use actual member lookup. Dependent protected privilege remains a source-context obligation and is rechecked after substitution; fixed current-instantiation friendship cannot grant other specializations access. New bound-query rejection is a compact conversion/fact result. |
-| Demand (§4) | Class specialization uses `(pattern, interned arguments)` and a retained environment; completion observes monotonic states. Nested template bodies remain in the enclosing completion interval. Materialized member aliases retain provenance without staying spuriously dependent. Selected aggregate children demand destructors; inactive alternatives and scalar-new root destruction stay distinct. The existing integer-sequence cap remains 1,048,576. |
-| Scheduling/caches (§5) | Existing declaration/body/default queues and explicit query reverse dependencies own demand. Completion invalidates only consumers of the changed class/query. No global retries, epoch-wide cache clearing, grammar replay or new process-global state were added. Capture identity is `(closure, object)`; default boundaries remain explicit. |
-| Typed lowering (§6) | `build_program` passes its in-memory `Program` directly through native preparation and `compile_object` to `HostElf`. Construction, cleanup, conversions and call boundary modes are consumed from selected facts. The vector cast uses typed equal-size byte transfer; zero storage uses an aggregate byte span. Text readers/writers remain inspection adapters. |
-| Work and lifetime (§5,8,9) | TU source/semantic slabs and flat ID indexes die after TU lowering. Candidate buffers and the new flow arrays/worklist have local owners. The proof uses only this function's instruction/value/slot/block ranges; at most two fact transitions notify each indexed use. It is O(instructions + operands + slots + CFG edges), with no IR growth, full-program scan or per-node owning allocation. Native MIR/selection scratch is released per function. |
+| 195 / `32727741` | Friend/elaborated declarations, split angles and class member boundaries; fixed parser ownership/scaling evidence retained. |
+| 196 / `2f1595b2` | Current-instantiation identity and qualifier source scope; dependent queries and body demand reviewed. |
+| 197 / `94faedf1` | Semantic alias shape and namespace identity; namespace reference proof reviewed. |
+| Audit198 / `4a081cb0` | Base alias identity and singleton LowIR role presentation; corrected reference proof and full-range performance retained. |
+| 199 / `d6408429` | Runtime array extents, dependent access/friendship, fixed vector values and zero/volatile storage. |
+| 200 / `37b6729d` | Selected aggregate-child destruction demand and enclosing template body scheduling; concrete integer-sequence alias identity. |
+| 201 / `fc8ea8d6` | Capture boundaries, default contexts, typed noreturn/exception CFG; replacement-new proof. |
+| Audit202 / `378d1bd8` | Contextual new[] bound conversion and sparse constant joins repaired; historical open SIMD/vector group now closed by 203. |
+| 203 / `247c383a` | Previously unaudited packed/vector completion and serialized target record reviewed end to end; inherited code/runtime costs accepted with their stated scope. |
+| Final204 / `4a1e92b8` | External descriptor-width defect repaired; entire stage reconstructed, accumulated controls rerun, final architecture/performance/reference/exit evidence consolidated. |
 
-The combined trace records **700 tokens**, maximum cursor lookahead **71**, and
-**308 LowIR instructions**. Its one fallthrough proof visits 87 instructions
-and 43 edges/operands. These counters corroborate the source ownership review;
-they are not substitutes for it. [51 trace commands](../student.tests/pa30/evidence202/trace.json)
-retain LowIR validation/roundtrips, direct and rebuilt objects, successful linked
-execution, symbols, disassembly and unwind frames. Telemetry on/off objects match.
-
-## Optimization, emitted code and performance
-
-The [20-command inspection](../student.tests/pa30/evidence202/optimization-trace.json)
-traces the dependent type in `combine<int>::apply` into its selected forced-inline
-callee, legality/admission, prepared IR, consumed MIR and ELF. Eligibility rejects
-unsupported frame semantics and recursion; budget refusal retains a valid call.
-Limits remain depth 64, 262144 reserved work per caller and 4194304 per program.
-The trace performs one expansion (17 actual units, 33 reserved), produces 64
-prepared instructions and 420 standalone text bytes, and preserves the volatile
-operations, real noinline call and CFI. Ordinary O0 loop storage/spill costs are
-visible. The constant-flow proof changes no code and needs no runtime-profit
-hypothesis; no optional optimization was introduced.
-
-[Performance202](performance202.md) applies the spec's stage-scoped protocol:
-576 raw observations, 32 launchers, frozen images/inputs/flags, A/A calibration,
-six ABBA blocks, separate checked runtime and compiler latency/RSS, and text size.
-The full-range common and conditional-owner A/B images are byte-identical.
-Owner counters are exactly N functions, 119N instruction visits and 58N
-edge/operand visits. Corrected bounds have measured final-only cost, because
-entry rejects the valid inputs. Supplemental equivalent heavy-header A/B ratios
-are 0.986 (fstream) and 1.011 (regex), with all outliers retained.
-Final hosted measurements remain at most **5.390 s / 177028 KiB**.
-
-All 27 independently rebuilt objects traced by implementations199–201 also match
-their historical bytes, including vector, cleanup, template and exception cases.
-[Image bindings](../student.tests/pa30/evidence202/historical-images.json) support
-reuse of those applicable runtime/text observations. Unsupported historical 15%
-latency and zero-growth targets remain diagnostics, not extra gates. The mandated
-45-second compile limit, correctness, coverage and inherited expansion budgets
-are unchanged. PA31–34 obligations are not invented PA30 exit gates.
-
-## References, acceptance and remaining work
-
-The only protected-contract change across the review range is the previously
-committed replacement-new `.ref.exit_status`. [Proof201](reference-correction201.md)
-provides both renamed/header-faithful reducers, the actual preprocessed unrestricted
-declaration, C++11 [except.spec]/3–4 and the pinned bundle revision/hash. A later
-restricted declaration is incompatible with that earlier declaration; the library's
-allocation-failure behavior does not exempt redeclarations. The positive matching
-replacement-new and throwing/catching controls still pass. No further reference
-change was needed by this audit. All fixture sources, discovery, required behavior,
-timeouts and comparison rules remain unchanged.
-
-[Final validation](../student.tests/pa30/evidence202/validation.json) retains exact
-commands, output, status and hashes. The required prior-through command passes
-**4941/4941**; file audit passes with its four inherited substantial-header
-warnings. `make test-pa30` returns 2 with **151/153**, and through30 reports
-**5092/5094**. The same two random fixture identities fail at
-`__builtin_ia32_packsswb`; no new failure, removed case or compensating pass is
-used. Entry's supplied 154-case summary is preserved and reconciled to the
-primary log and actual 153-case inventory.
-
-All **356 inherited** and **35 new** explicit control commands pass, along with
-51 source/adapter traces and 20 LowIR/MIR/ELF inspections. The final
-[verifier](../student.tests/pa30/verify202.py) passes **1506 checks**, including
-historical and current bindings, all case identities, reference protection,
-raw observations and both review markers.
-
-Remaining implementation is grouped in [the compact plan](plan.md): complete
-typed packed SIMD and vector lvalue/storage behavior, then finish the full-stage
-report. The two random cases and the inherited valid vector-subscript reducer
-remain required work. The three handoffs grouped useful semantic owners, but
-separated array-bound legality, control-flow joins and their downstream checks
-from the initial fixes. That avoidable fragmentation left these two owner defects
-for audit. Future vector work should close lane, conversion, volatility and
-storage interactions together before recording a handoff.
-
-## Audit ledger
-
-| Audit | Reviewed range / code tip | Findings and disposition | Checks / remaining |
-|---|---|---|---|
-| 198 | `27029f9..c0b26910`, through `4a081cb0` | Base typedef identity and LowIR role presentation repaired; reference proof and stage-scoped performance reviewed. | Prior 4941/4941; file audit pass; PA30 132/153 with unchanged 21 failures. Historical record at `d9a62584`. |
-| 202 | `4a081cb0..56ecc31c`, through `378d1bd8` | Converted array bounds and constant-join flow proof repaired; full accumulated ownership, reference proof and performance reviewed. | Prior 4941/4941; file audit pass; PA30 151/153, identical two failures/153 cases; 391 controls, 71 trace/inspection commands; SIMD/vector completion remains required. |
+No unaudited handoff or known required PA30 implementation work remains. The
+reviewed code tip is fixed above; the following record commit changes only audit
+scripts, plan and evidence. Advancement beyond PA30 was not performed here.

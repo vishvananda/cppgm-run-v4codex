@@ -1,0 +1,15 @@
+{
+  "supplied_summary_count": 5258,
+  "primary_log_path": "/home/vishvananda/work/.ralph/v4codex-gpt-6-astra-xhigh/last-test.log",
+  "primary_log_sha256": "6ac9e9b4aeea03e1833cee70bf5e6adfe660d66069bd2d5907f01235ad8c2deb",
+  "primary_log": "LINK    posttoken\n  LINK    ppexpr\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== pa21 =====\n===== pa22 =====\n===== pa23 =====\n===== pa24 =====\nPA24 native contract properties: PASS (14/14)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\n===== pa25 =====\n===== pa26 =====\n===== pa27 =====\nPA27 global-section properties: PASS (3/3)\n===== pa28 =====\n===== pa29 =====\n===== pa30 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (5094 / 5094) =====",
+  "fresh_entry_command": [
+    "make",
+    "test-report-through-pa30"
+  ],
+  "fresh_entry_status": 0,
+  "fresh_entry_output": "  LINK    posttoken\n  LINK    ppexpr\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== pa21 =====\n===== pa22 =====\n===== pa23 =====\n===== pa24 =====\nPA24 native contract properties: PASS (14/14)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\n===== pa25 =====\n===== pa26 =====\n===== pa27 =====\nPA27 global-section properties: PASS (3/3)\n===== pa28 =====\n===== pa29 =====\n===== pa30 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (5094 / 5094) =====\n",
+  "actual_count": 5094,
+  "stages": 30,
+  "pa30_cases": 153
+}
