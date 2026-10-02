@@ -52,6 +52,7 @@ void forward(Program& p, const Function& f, const std::vector<unsigned>& definit
                 s.value = literal && i.type.integer() ? normalize_integer(v,i.type) : v;
             } else if (s.block == id) {
                 i.opcode = Opcode::Copy; p.operands[i.operands.begin] = s.value;
+                i.debug = DebugLocation();
             } else s.loaded = true;
         }
     }

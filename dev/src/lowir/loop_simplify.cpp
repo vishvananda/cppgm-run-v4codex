@@ -267,7 +267,8 @@ class Loops {
     }
     void assign(Pool<Instruction>& out, const Instruction& original, Operand value) {
         Instruction i(value.literal() ? Opcode::Const : Opcode::Copy,original.result_type());
-        i.destination = original.destination; i.debug = original.debug;
+        i.destination = original.destination;
+        if (i.opcode != Opcode::Copy) i.debug = original.debug;
         emit(out,i,{value});
     }
     bool erase(const Loop& l) {
@@ -436,7 +437,8 @@ class Loops {
         auto snapshot = [&](unsigned n, Operand source) {
             const auto& phi = p.instructions[n];
             Instruction i(source.literal() ? Opcode::Const : Opcode::Copy,phi.type);
-            i.destination = fresh(phi); i.debug = phi.debug;
+            i.destination = fresh(phi);
+            if (i.opcode != Opcode::Copy) i.debug = phi.debug;
             emit(planned,i,{source});
             values[map.get(phi.destination.index)] = Operand::value(i.destination);
         };

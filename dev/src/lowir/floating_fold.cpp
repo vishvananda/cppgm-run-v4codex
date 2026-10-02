@@ -35,6 +35,7 @@ bool ordinary(ExtendedFloat x, Type t) {
 }
 bool fold_floating(const Program& p, const Instruction& i, const Operand* a, Operand& out)
 {
+    if (i.debug_value()) return false;
     if (!i.type.floating() || !i.operands.count) return false;
     ExtendedFloat x;
     if (i.opcode == Opcode::Convert) {

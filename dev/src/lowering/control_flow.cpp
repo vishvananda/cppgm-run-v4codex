@@ -420,7 +420,10 @@ void Procedural::statement(NodeId n)
         BlockId cond = block(), body = block(), step = k == Kind::For ? block() : cond, end = block();
         BlockId exit_cleanup = lifetime.exit != lifetime.entry ? block() : end;
         BlockId old_break = break_target, old_continue = continue_target;
-        if (k == Kind::For) statement(child(n, Kind::ForInit));
+        if (k == Kind::For) {
+            DebugScope binding(binding_debug,current_debug);
+            statement(child(n, Kind::ForInit));
+        }
         if (k != Kind::Do) {
             jump(cond); start(cond); condition(child(n, Kind::Condition), body, exit_cleanup);
         } else jump(body);

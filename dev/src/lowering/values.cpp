@@ -45,10 +45,16 @@ Value Procedural::emit_raw(Instruction i, const Operand* args, std::size_t count
     // Its remaining consumers have no reachable instruction stream.
     if (ended) return Value(Operand::integer(0),i.result_type());
     if (full_expression.open && !emitting_cleanup && lowir_model::terminator(i.opcode)) close_expression_region();
-    if (!i.debug.file) i.debug = current_debug;
+    // Line-table anchors belong to source value computations and transfers.
+    // Mechanical loads, stores, addresses and CFG edges do not inherit a
+    // guessed location from the containing expression. An explicitly supplied
+    // location always survives, including source-value snapshots below.
+    if (!i.debug.file && (i.opcode == Opcode::Binary || i.opcode == Opcode::Unary ||
+        i.opcode == Opcode::Convert || i.opcode == Opcode::Copy || i.opcode == Opcode::Call ||
+        i.opcode == Opcode::Return || i.opcode == Opcode::Throw || i.opcode == Opcode::Resume)) i.debug = current_debug;
     i.operands.begin = p.operands.size(); i.operands.count = count;
     for (std::size_t j = 0; j < count; ++j) p.operands.push_back(args[j]);
-    if (i.result_type() != IRType()) i.destination = builder->value(0);
+    if (i.result_type() != IRType() && !i.destination) i.destination = builder->value(0);
     builder->append(i);
     if (lowir_model::terminator(i.opcode)) ended = true;
     Value result(Operand::value(i.destination), i.result_type());
@@ -143,6 +149,16 @@ Value Procedural::store(Value v, Value location)
         emit(copy,{v.operand,address(location).operand}); return v;
     }
     Instruction i(Opcode::Store, type(location.type)); i.is_volatile = sem.types[location.type].cv & 2;
+    if (linkage.debug && !i.is_volatile && location.operand.kind == Operand::Slot && v.ir == i.type) {
+        if (auto source = debug_slots.get(location.operand.ref)) {
+            Instruction snapshot(Opcode::Copy,i.type);
+            snapshot.debug = debug_slot_locations[source-1];
+            auto slot = p.name(p.slots[location.operand.ref-1].name);
+            snapshot.destination = builder->value(p.intern("%dbg_"+slot.substr(1)+"__"+std::to_string(p.values.size()+1)));
+            auto saved_type = v.type;
+            v = emit(snapshot,{v.operand}); v.type = saved_type;
+        }
+    }
     emit(i, {v.operand, location.operand});
     return v;
 }

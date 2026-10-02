@@ -288,6 +288,7 @@ class Memory {
                 auto found = find(cells,all,a,i.type);
                 if (found && available(cells[found-1].value,i)) {
                     i.opcode = Opcode::Copy; p.operands[i.operands.begin] = cells[found-1].value;
+                    i.debug = DebugLocation();
                     changed = true; ++stats.reused;
                 } else {
                     conditional(i,b,clean);
@@ -317,7 +318,7 @@ class Memory {
             const auto& ai = p.instructions[av.producer-1]; const auto& bi = p.instructions[bv.producer-1];
             if (ai.destination.index != a.ref || bi.destination.index != b.ref) return false;
             auto copy = [&](const Instruction& i) {
-                if (i.opcode != Opcode::Copy) return false;
+                if (i.opcode != Opcode::Copy || i.debug_value()) return false;
                 auto input = p.operands[i.operands.begin];
                 return input.kind == Operand::Temporary && stable(input) && p.values[input.ref-1].type == i.type;
             };
@@ -379,6 +380,7 @@ class Memory {
                 std::vector<unsigned> redundant;
                 if (!equivalent(old.condition,d.condition,redundant) || !equivalent(old.yes,d.yes,redundant) || !equivalent(old.no,d.no,redundant)) continue;
                 phi.opcode = Opcode::Copy; phi.operands.count = 1;
+                phi.debug = DebugLocation();
                 p.operands[phi.operands.begin] = Operand::value(previous.destination);
                 p.operands[branch.operands.begin] = old.condition;
                 for (unsigned n : redundant) {

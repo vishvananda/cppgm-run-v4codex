@@ -90,6 +90,7 @@ bool preserves_operand_type(const Program& p, const Instruction& i, unsigned arg
 }
 bool fold_integer(const Instruction& i, const Operand* a, Operand& out)
 {
+    if (i.debug_value()) return false;
     if (!i.type.integer() || !i.operands.count || a[0].kind != Operand::Integer) return false;
     Bits x = bits(a[0])&mask(i.type.width()), result = 0;
     if (i.opcode == Opcode::Const || i.opcode == Opcode::Copy) result = x;
@@ -113,6 +114,7 @@ bool fold_integer(const Instruction& i, const Operand* a, Operand& out)
 }
 bool discardable(const Instruction& i)
 {
+    if (i.debug_value()) return false;
     switch (i.opcode) {
     case Opcode::Const: case Opcode::Copy: case Opcode::Phi: case Opcode::Addr: case Opcode::Index: return true;
     case Opcode::Unary: case Opcode::Compare: return i.type.integer();

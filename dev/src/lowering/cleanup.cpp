@@ -15,6 +15,7 @@ void Procedural::reset_lifetime(EntityId e)
     release_actions.clear(); release_operands.clear();
     list_backing_addresses = semantic::Index(); list_element_addresses.clear();
     full_expression = FullExpression();
+    debug_slots = semantic::Index(); debug_slot_locations.clear();
     lifetime_overlays.resize(1); lifetime_overlay = 0; mapped_lifetimes = semantic::Index();
     initialization_guards = semantic::Index();
     constructor_block_boundary = 0;
@@ -66,7 +67,12 @@ SlotId Procedural::source_slot(EntityId e)
     auto name = p.intern("$" + spelling(sem.entities[e].name));
     if (slot_names.get(name)) name = p.intern("$" + spelling(sem.entities[e].name) + "__" + std::to_string(e));
     slot_names.put(name, 1);
-    return builder->add_slot(name,storage);
+    auto slot = builder->add_slot(name,storage);
+    if (linkage.debug && storage.scalar() && !reference(sem.entities[e].type)) {
+        debug_slot_locations.push_back(binding_debug.file ? binding_debug : current_debug);
+        debug_slots.put(slot.index,debug_slot_locations.size());
+    }
+    return slot;
 }
 void Procedural::clean_inline(std::uint32_t state, std::uint32_t stop)
 {

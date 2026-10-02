@@ -68,6 +68,7 @@ void simplify_diamond_values(Program& p, std::uint64_t& work)
             if (!replace && cmp && available(no) && equal_when(p.instructions[cmp-1],p,true,yes,no,phi.type)) { replacement = no; replace = true; }
             if (replace) {
                 phi.opcode = replacement.literal() ? Opcode::Const : Opcode::Copy;
+                if (phi.opcode == Opcode::Copy) phi.debug = DebugLocation();
                 p.operands[phi.operands.begin] = replacement; phi.operands.count = 1;
             } else if (phi.type == Type::I64 && yes.kind == Operand::Integer && no.kind == Operand::Integer &&
                 ((yes.data.integer == 1 && no.data.integer == 0) || (yes.data.integer == 0 && no.data.integer == 1)) &&

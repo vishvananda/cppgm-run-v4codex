@@ -123,11 +123,12 @@ NodeId Parser::iteration()
 
 NodeId Parser::for_statement()
 {
-    in.require("for");
+    auto keyword = in.require("for");
     in.require("(");
     ScopeId saved = scope;
     scope = names.enter(scope);
     NodeId result = make(Kind::For);
+    ast[result].location = keyword.location;
     NodeId init = make(Kind::ForInit);
     if (declaration_start() && declaration_ahead()) ast.append(init, simple_declaration(false));
     else if (!in.is(";")) ast.append(init, expression());
@@ -238,7 +239,9 @@ NodeId Parser::statement()
         return node;
     }
     auto token = in.take();
-    NodeId node = jump == Kind::CoroutineReturn ? ast.make(jump,token) : make(jump);
+    NodeId node = make(jump);
+    ast[node].location = token.location;
+    if (jump == Kind::CoroutineReturn) { ast[node].text = token.text; ast[node].op = token.op; }
     if (jump == Kind::Goto) ast[node].text = in.take().text;
     else if ((jump == Kind::Return || jump == Kind::CoroutineReturn) && !in.is(";"))
         ast.append(node, expression());

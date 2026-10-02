@@ -24,8 +24,7 @@ void optimize(Program& p, unsigned level, bool telemetry)
     // Split original aggregate homes before call admission, so compact bodies
     // are costed once. A second bounded split handles homes introduced by
     // cloning; neither step restarts interprocedural expansion.
-    bool objects_split = split_local_objects(p,work);
-    if (objects_split) {
+    if (split_local_objects(p,work)) {
         forward_local_slots(p,work);
         simplify_scalars(p,work);
     }
@@ -50,7 +49,6 @@ void optimize(Program& p, unsigned level, bool telemetry)
     forward_local_slots(p,work);
     simplify_scalars(p,work);
     if (split_local_objects(p,work)) {
-        objects_split = true;
         forward_local_slots(p,work);
         simplify_scalars(p,work);
     }
@@ -85,8 +83,8 @@ void optimize(Program& p, unsigned level, bool telemetry)
     simplify_control(p,work);
     prune_support_functions(p,work);
     simplify_control(p,work);
-    if (retire_private_writes(p,work)) { objects_split = true; simplify_scalars(p,work); }
-    if (objects_split) retire_unused_slots(p,work);
+    if (retire_private_writes(p,work)) simplify_scalars(p,work);
+    retire_unused_slots(p,work);
     if (telemetry) {
         rusage usage; getrusage(RUSAGE_SELF,&usage);
         std::cerr << "{\"optimize_ms\":" << std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count()

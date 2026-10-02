@@ -337,7 +337,7 @@ class Expander {
                     auto depth = return_depths.get(n+1);
                     for (unsigned k = 1; k < depth; ++k) { Instruction end(Opcode::EhEnd); end.debug = i.debug; emit(end,{}); }
                     if (c.straight) {
-                        if (c.straight_result) { Instruction copy(Opcode::Copy,i.type); copy.destination = c.straight_result; copy.debug = i.debug; emit(copy,args); }
+                        if (c.straight_result) { Instruction copy(Opcode::Copy,i.type); copy.destination = c.straight_result; emit(copy,args); }
                         continue;
                     }
                     if (c.result) {

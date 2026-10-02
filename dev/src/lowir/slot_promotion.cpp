@@ -130,6 +130,12 @@ class Promotion {
                 inputs.push_back(pred); inputs.push_back(d);
             }
             definitions[n].inputs.begin = start; definitions[n].inputs.count = inputs.size()-start;
+            // The adjacency lists are prepended. Publish phi inputs in the
+            // stable source order of their predecessor blocks.
+            for (unsigned a = start, b = inputs.size(); a+2 < b; a += 2) {
+                if (!charge(2)) return;
+                b -= 2; std::swap(inputs[a],inputs[b]); std::swap(inputs[a+1],inputs[b+1]);
+            }
         }
     }
     void partial_facts() {
@@ -208,6 +214,7 @@ public:
             auto& d = definitions[n]; if (!facts[d.slot].eligible) continue;
             auto& i = p.instructions[d.store-1];
             i.opcode = Opcode::Copy; i.destination = d.value; i.operands.count = 1;
+            auto location = i.debug; i.debug = DebugLocation();
             auto input = p.operands[i.operands.begin];
             Type actual = input.kind == Operand::Temporary ? p.values[input.ref-1].type :
                 input.kind == Operand::Slot ? p.slots[input.ref-1].type : i.type;
@@ -215,12 +222,14 @@ public:
             // the same format. Preserve the store's rounding at this snapshot.
             if (i.type.floating() && actual != i.type) {
                 i.opcode = Opcode::Convert; i.source_type = actual;
+                i.debug = location;
                 i.operation = actual.width() < i.type.width() ? Operation::Fpext : Operation::Fptrunc;
             }
         }
         for (auto load : loads) {
             auto& d = definitions[load.second]; if (!facts[d.slot].eligible || d.unknown) continue;
             auto& i = p.instructions[load.first]; i.opcode = Opcode::Copy;
+            i.debug = DebugLocation();
             p.operands[i.operands.begin] = operand(load.second);
         }
         for (unsigned b = 1; b < phi_heads.size(); ++b) {

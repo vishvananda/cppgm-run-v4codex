@@ -67,7 +67,10 @@ struct Linkage {
 class Procedural {
     semantic::SourceInvocation source_invocation;
     lowir_model::DebugLocation current_debug;
+    lowir_model::DebugLocation binding_debug;
     lowir_model::DebugLocation debug_location(NodeId);
+    semantic::Index debug_slots;
+    std::vector<lowir_model::DebugLocation> debug_slot_locations;
     semantic::Index source_string_symbols;
     struct SourceString { IdentifierId text; SymbolId symbol; };
     std::vector<SourceString> source_strings;

@@ -160,6 +160,9 @@ struct Instruction {
     bool is_volatile = false, copy_elision = false;
     ir_model::CatchBinding catch_binding = ir_model::CatchBinding::Value;
     DebugLocation debug;
+    // Located copies explicitly transport source-value snapshots. This fact
+    // is represented entirely in LowIR, including after a text roundtrip.
+    bool debug_value() const { return opcode == Opcode::Copy && debug.file; }
     explicit Instruction(Opcode op = Opcode::Const, Type t = Type()) : opcode(op), type(t) {}
     Type result_type() const;
 };

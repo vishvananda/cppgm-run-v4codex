@@ -86,6 +86,7 @@ void expressions(Program& p, BlockId block, const std::vector<unsigned>& definit
             if (equal(p,i,previous) && p.values[previous.destination.index-1].definition < p.values[i.destination.index-1].definition) {
                 p.operands[i.operands.begin] = Operand::value(previous.destination);
                 i.type = i.result_type(); i.opcode = Opcode::Copy; i.source_type = Type();
+                i.debug = DebugLocation();
                 i.operation = Operation::None; i.operands.count = 1; break;
             }
             bucket = (bucket+1)&(table.size()-1);

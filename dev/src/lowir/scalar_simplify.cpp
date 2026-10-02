@@ -70,6 +70,7 @@ class Scalars {
         p.operands[i.operands.begin] = root; p.operands[i.operands.begin+1] = combined;
     }
     bool evaluate(Instruction& i, Operand& out) {
+        if (i.debug_value()) return false;
         reassociate(i);
         if (fold_integer(i,args.data(),out)) return true;
         if (fold_floating(p,i,args.data(),out)) return true;
@@ -167,6 +168,7 @@ class Scalars {
             if (!fact.known || fact.definitions != 1) continue;
             auto replacement = resolve(fact.replacement);
             i.type = i.result_type(); i.opcode = replacement.literal() ? Opcode::Const : Opcode::Copy;
+            if (i.opcode == Opcode::Copy) i.debug = DebugLocation();
             i.operation = Operation::None; i.source_type = Type();
             p.operands[i.operands.begin] = replacement; i.operands.count = 1;
         }
@@ -182,7 +184,7 @@ class Scalars {
                 auto b = call_boundary(p,i);
                 pure_call = b.effects != CFXM_DEFAULT && b.unwind == CUM_NO && b.returns != CRM_NORETURN;
             }
-            if ((!i.destination && !pure_call) || (!discardable(i) && !pure_call) ||
+            if (i.debug_value() || (!i.destination && !pure_call) || (!discardable(i) && !pure_call) ||
                 (i.destination && facts[locals.get(i.destination.index)].definitions != 1)) mark(n);
         }
         while (!pending.empty()) {
