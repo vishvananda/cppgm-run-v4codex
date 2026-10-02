@@ -34,7 +34,7 @@ void Cursor::fill()
     location.begin = post.source.begin;
     location.end = post.source.end;
     location.presumed_file = post.source.presumed_file;
-    location.line = post.source.line;
+    location.line = post.source.line; location.column = post.source.column;
     token.location = ast_.locations.size();
     if (ast_.telemetry && ast_.locations.size() == ast_.locations.capacity()) ++ast_.location_growths;
     ast_.locations.push_back(location);
@@ -146,6 +146,7 @@ void Cursor::close_angle()
         ++second.begin;
         token.location = ast_.locations.size();
         if (ast_.telemetry && ast_.locations.size() == ast_.locations.capacity()) ++ast_.location_growths;
+        ++second.column;
         ast_.locations.push_back(second);
         return;
     }

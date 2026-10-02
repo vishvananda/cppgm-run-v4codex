@@ -197,7 +197,13 @@ DebugLocation Reader::debug()
     DebugLocation d;
     if (!accept("!dbg")) return d;
     expect("(");
-    d.file = name();
+    // File names are one unquoted metadata token; '-' and '+' inside a
+    // path are not arithmetic/addend punctuation at this grammar position.
+    const char* begin = token_.data;
+    require(token_.size && !std::strchr(",()",*begin),"missing debug file");
+    while (pos_ < source_.size() && !std::strchr(" \t\r\n,()",source_[pos_])) ++pos_;
+    d.file = p_.names.intern(cppgm::TextView(begin,source_.data()+pos_-begin));
+    advance();
     expect(",");
     auto line = natural();
     expect(",");

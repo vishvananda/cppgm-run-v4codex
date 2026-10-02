@@ -1,4 +1,5 @@
 #include "lowering/procedural.h"
+#include "lowering/debug_location.h"
 #include "support/type_traits.h"
 #include <stdexcept>
 namespace cppgm { namespace lowering {
@@ -527,11 +528,13 @@ void Procedural::run()
 }
 void Procedural::function_body(EntityId e, bool base)
 {
+    DebugScope debug(current_debug,debug_location(sem.entities[e].source));
     auto closure = sem.closure_adapter(e);
     if (closure.conversion == e) { closure_adapter(e); return; }
     auto body_owner = closure.function ? closure.function : e;
     if (sem.entities[body_owner].body) sem.require_body_facts(body_owner);
     function = FunctionId(p.symbols[(base ? base_symbols[e] : symbols[e]).index-1].entity);
+    p.functions[function.index-1].debug = current_debug;
     builder.reset(new FunctionBuilder(p, function));
     // The pointer-call entry consumes the same checked body and parameter
     // identities, with its own ABI signature and no implicit closure receiver.

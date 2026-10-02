@@ -266,3 +266,5 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/slot_forwarding
 
 FRONTEND_OBJ_BASENAMES_lowiropt += lowir/local_cse
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/local_cse
+
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/debug_location

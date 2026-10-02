@@ -1,4 +1,5 @@
 #include "lowering/procedural.h"
+#include "lowering/debug_location.h"
 #include "support/type_traits.h"
 #include <cstring>
 #include <stdexcept>
@@ -6,6 +7,7 @@ namespace cppgm { namespace lowering {
 using syntax::Kind;
 Value Procedural::expression(NodeId n, bool location)
 {
+    DebugScope debug(current_debug,debug_location(n));
     SourceInvocationScope invocation(source_invocation,sem.source_site(n));
     if (!n) throw std::logic_error("missing expression node");
     guard_expression(n);

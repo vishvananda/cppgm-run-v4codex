@@ -47,6 +47,7 @@ for ty, width in [('i8',8),('u8',8),('i16',16),('u16',16),('i32',32),('u32',32),
 case(' %a = copy i8 255\n %result = copy i64 %a','i64',-1)
 case(' %a = convert zext i128 i64 -1\n %b = binary add i128 %a, 2\n %result = binary ushr i128 %b, 64','i128',1)
 case(' %x = const i64 3\n %y = copy i64 %x\n %x = const i64 4\n %result = binary add i64 %x, %y','i64',7)
+case(' %x = const i128 1\n %saved = copy i128 %x\n %x = const i128 18446744073709551616\n %result = binary sub i128 %x, %saved','i128',18446744073709551615)
 functions.append('''function @phi_test() -> i64 {
  block ^entry:
   jump ^loop
@@ -63,6 +64,36 @@ functions.append('''function @phi_test() -> i64 {
   %bad = cmp ne i64 %result, 21
   return i64 %bad
 }
+function @mutable_arg(%x : i64) -> i64 {
+ block ^entry:
+  %x = binary add i64 %x, 1
+  %saved = copy i64 %x
+  %x = const i64 12
+  %result = binary sub i64 %x, %saved
+  return i64 %result
+}
+function @mutable_argument_test() -> i64 {
+ block ^entry:
+  %result = call i64 @mutable_arg(5)
+  %bad = cmp ne i64 %result, 6
+  return i64 %bad
+}
+function @mutable_phi() -> i64 {
+ block ^entry:
+  jump ^loop
+ block ^loop:
+  %x = phi i64 [^entry: 1, ^body: %x]
+  %i = phi i64 [^entry: 0, ^body: %next]
+  %more = cmp lt i64 %i, 3
+  branch %more, ^body, ^exit
+ block ^body:
+  %x = binary add i64 %x, 1
+  %next = binary add i64 %i, 1
+  jump ^loop
+ block ^exit:
+  %bad = cmp ne i64 %x, 4
+  return i64 %bad
+}
 function @prune_test() -> i64 {
  block ^entry:
   branch 1, ^yes, ^no
@@ -77,7 +108,7 @@ function @prune_test() -> i64 {
 }
 ''')
 main = ['function @main() -> i64 [role=entry] {',' block ^entry:', ' %sum0 = const i64 0']
-names = ['case'+str(i) for i in range(len(functions)-1)]+['phi_test','prune_test']
+names = ['case'+str(i) for i in range(len(functions)-1)]+['phi_test','mutable_argument_test','mutable_phi','prune_test']
 for i,name in enumerate(names):
     main += [f' %r{i} = call i64 @{name}()', f' %sum{i+1} = binary or i64 %sum{i}, %r{i}']
 main += [f' return i64 %sum{len(names)}','}']
@@ -97,4 +128,14 @@ with tempfile.TemporaryDirectory(prefix='pa32-local-') as tmp:
     for args in [[],['-O1'],['-o',str(tmp/'bad'),str(source)],['-O1','-O2','-o',str(tmp/'bad'),str(source)],['-O1','-o',str(tmp/'bad'),str(tmp/'absent')]]:
         assert run(OPT,*args,ok=False).returncode
     run(OPT,'--help')
+    a,b=tmp/'a.cpp',tmp/'b.cpp'
+    a.write_text('int f(int x){return x+1;}')
+    b.write_text('int f(int);int main(){return f(2)==3?0:1;}')
+    for flag in ['-g0','-gline-tables-only']:
+        merged=tmp/'merged.lowir'
+        run(DRIVER,'--emit-lowir',flag,'-O1','--validate-lowir','-o',merged,a,b)
+        run(ROOT/'dev/lowir','-o',tmp/'merged-checked.lowir',merged)
+        if flag != '-g0': assert '!dbg(' in merged.read_text()
+        run(DRIVER,'-O0','-o',tmp/'merged',merged)
+        run(tmp/'merged')
 print(f'PA32 local legality: PASS ({len(names)} execution cases at O0/O1/O2/O3; trap and CLI checks)')

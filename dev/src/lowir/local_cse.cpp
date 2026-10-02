@@ -24,7 +24,11 @@ bool equal(const Program& p, const Instruction& a, const Instruction& b) {
         if (!same_scalar(p.operands[a.operands.begin+n],p.operands[b.operands.begin+n])) return false;
     return true;
 }
-bool less(Operand a, Operand b) {
+bool less(const Program& p, Operand a, Operand b) {
+    if (a.literal() != b.literal()) return !a.literal();
+    if (a.kind == Operand::Temporary && b.kind == Operand::Temporary &&
+        p.values[a.ref-1].definition != p.values[b.ref-1].definition)
+        return p.values[a.ref-1].definition < p.values[b.ref-1].definition;
     if (a.kind != b.kind) return a.kind < b.kind;
     if (a.kind != Operand::Integer) return a.ref < b.ref;
     return a.integer_high() != b.integer_high() ? a.integer_high() < b.integer_high() : a.data.integer < b.data.integer;
@@ -39,7 +43,7 @@ void canonicalize(Program& p, Instruction& i) {
     if (i.operation == Operation::Ugt) { i.operation = Operation::Ult; swap = true; }
     if (i.operation == Operation::Uge) { i.operation = Operation::Ule; swap = true; }
     auto& a = p.operands[i.operands.begin]; auto& b = p.operands[i.operands.begin+1];
-    if (swap || (commute && less(b,a))) std::swap(a,b);
+    if (swap || (commute && less(p,b,a))) std::swap(a,b);
 }
 }
 void eliminate_local_expressions(Program& p, std::uint64_t& work)

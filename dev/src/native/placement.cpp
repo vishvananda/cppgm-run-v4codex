@@ -129,21 +129,29 @@ void Selector::analyze()
             workspace.predecessor_count[s.other_block] == 1;
         if ((i.opcode == Opcode::Compare || (i.opcode == Opcode::Unary && i.operation == Operation::Not)) && s.uses == 1 && s.last == s.definition+1)
             s.compare_branch = p.instructions[s.last-1].opcode == Opcode::Branch;
-        if (i.opcode != Opcode::Phi) continue;
-        require(i.type.scalar() || i.type.kind() == Type::Object, "invalid native phi class");
-        s.location = home(p.values[v-1].name, i.type, true);
-        for (unsigned k = 0; k < i.operands.count; k += 2) {
-            EdgeMove move;
-            move.pred = arg(i,k).ref; move.target = s.block;
-            move.destination = v; move.source = arg(i,k+1);
-            if (move.source.kind == lowir_model::Operand::Temporary) {
-                unsigned input = root(move.source.ref);
-                auto& origin = state(input);
-                if (origin.block == move.target && origin.definition &&
-                    p.instructions[origin.definition-1].opcode == Opcode::Phi && input != v)
-                    move.staging = home(0,i.type,true);
+    }
+    // Phi transfers belong to instruction/edge identities, including when a
+    // legal non-SSA value is assigned again later in the function.
+    for (unsigned b = source.blocks.begin; b < source.blocks.end(); ++b) {
+        unsigned target = p.block_order[b].index;
+        auto range = p.blocks[target-1].instructions;
+        for (unsigned n = range.begin; n < range.end(); ++n) {
+            const auto& i = p.instructions[n]; if (i.opcode != Opcode::Phi) continue;
+            unsigned v = i.destination.index; auto& s = state(v);
+            require(i.type.scalar() || i.type.kind() == Type::Object, "invalid native phi class");
+            if (s.location.kind == Operand::None) s.location = home(p.values[v-1].name,i.type,true);
+            for (unsigned k = 0; k < i.operands.count; k += 2) {
+                EdgeMove move;
+                move.pred = arg(i,k).ref; move.target = target;
+                move.destination = v; move.source = arg(i,k+1);
+                if (move.source.kind == lowir_model::Operand::Temporary) {
+                    unsigned input = root(move.source.ref); const auto& origin = state(input);
+                    if (input != v && (origin.writes > 1 || (origin.block == target && origin.definition &&
+                        p.instructions[origin.definition-1].opcode == Opcode::Phi)))
+                        move.staging = home(0,i.type,true);
+                }
+                edge_moves.push_back(move);
             }
-            edge_moves.push_back(move);
         }
     }
     std::sort(edge_moves.begin(), edge_moves.end(), [](const EdgeMove& a, const EdgeMove& b) {

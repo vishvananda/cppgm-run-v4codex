@@ -32,7 +32,7 @@ std::string argument(const std::vector<std::string>& args, unsigned& i, const ch
 struct Options {
     bool compile = false, preprocess = false, stats = false, host = false;
     bool standard_includes = true, cxx_includes = true, lowir = false, audit = false;
-    unsigned level = 0;
+    unsigned level = 0; bool debug = false;
     std::string output, format;
     std::vector<std::string> inputs, includes, libraries, paths, macros, system_includes;
 };
@@ -45,7 +45,8 @@ Options options(const std::vector<std::string>& args)
         else if (a == "-E") o.preprocess = true;
         else if (a == "--emit-lowir") o.lowir = true;
         else if (a.size() == 3 && a[0] == '-' && a[1] == 'O' && a[2] >= '0' && a[2] <= '3') o.level = a[2]-'0';
-        else if (a == "-gline-tables-only") continue;
+        else if (a == "-gline-tables-only") o.debug = true;
+        else if (a == "-g0") o.debug = false;
         else if (a == "--validate-lowir") o.audit = true;
         else if (a == "-nostdinc") o.standard_includes = false;
         else if (a == "-nostdinc++") o.cxx_includes = false;
@@ -95,7 +96,7 @@ Options options(const std::vector<std::string>& args)
         else o.inputs.push_back(a);
     }
     if (o.lowir) o.compile = true;
-    if (o.inputs.empty() || ((o.compile || o.preprocess) && !o.output.empty() && o.inputs.size() != 1)) throw std::runtime_error("invalid compile/link inputs");
+    if (o.inputs.empty() || ((o.preprocess || (o.compile && !o.lowir)) && !o.output.empty() && o.inputs.size() != 1)) throw std::runtime_error("invalid compile/link inputs");
     if (o.output.empty() && !o.preprocess && !o.compile) o.output = "a.out";
     o.includes.insert(o.includes.end(),o.system_includes.begin(),o.system_includes.end());
     o.host = o.format != "private";
@@ -106,7 +107,7 @@ Options options(const std::vector<std::string>& args)
 void build_source(lowir_model::Program& program, const std::string& path, const Options& o) {
     auto dot = path.rfind('.');
     if (dot != std::string::npos && path.substr(dot) == ".lowir") program = lowir_model::parse_lowir_program_files({path});
-    else lowering::build_program(program,{path},o.stats,o.includes,o.macros,false,o.host);
+    else lowering::build_program(program,{path},o.stats,o.includes,o.macros,false,o.host,o.debug);
     lowir_model::optimize(program,o.level,o.stats);
 }
 Object source(const std::string& path, const Options& o, native::Statistics& stats) {
@@ -118,6 +119,21 @@ int run(const std::vector<std::string>& args)
 {
     auto start = std::chrono::steady_clock::now(); auto o = options(args);
     if (o.preprocess) return preprocess_output(o.inputs,o.output,o.includes,o.macros,o.stats);
+    if (o.lowir) {
+        if (o.output.empty()) throw std::runtime_error("LowIR output requires -o");
+        lowir_model::Program program;
+        if (o.inputs.size() == 1) build_source(program,o.inputs[0],o);
+        else {
+            lowering::build_program(program,o.inputs,o.stats,o.includes,o.macros,false,o.host,o.debug);
+            lowir_model::optimize(program,o.level,o.stats);
+        }
+        if (o.audit) lowir_model::validate(program);
+        std::ofstream out(o.output);
+        if (!out) throw std::runtime_error("cannot create LowIR output");
+        lowir_model::write_program(program,out); out.close();
+        if (!out) throw std::runtime_error("cannot write LowIR output");
+        return 0;
+    }
     native::Statistics stats, runtime_stats; std::size_t text = 0, link_definitions = 0, link_relocations = 0;
     if (o.compile) {
         for (const auto& input : o.inputs) {
@@ -126,15 +142,6 @@ int run(const std::vector<std::string>& args)
             if (output.empty()) {
                 auto slash = input.rfind('/'); auto name = input.substr(slash == std::string::npos ? 0 : slash+1);
                 output = name.substr(0,name.rfind('.')) + (o.lowir ? ".lowir" : ".o");
-            }
-            if (o.lowir) {
-                lowir_model::Program program; build_source(program,input,o);
-                if (o.audit) lowir_model::validate(program);
-                std::ofstream out(output);
-                if (!out) throw std::runtime_error("cannot create LowIR output");
-                lowir_model::write_program(program,out); out.close();
-                if (!out) throw std::runtime_error("cannot write LowIR output");
-                continue;
             }
             auto obj = source(input,o,stats); text += obj.image.code.size();
             if (o.host) write_host_object(std::move(obj),output); else write_object(obj,output);

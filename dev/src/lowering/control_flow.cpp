@@ -1,4 +1,5 @@
 #include "lowering/procedural.h"
+#include "lowering/debug_location.h"
 #include <stdexcept>
 namespace cppgm { namespace lowering {
 using syntax::Kind;
@@ -329,6 +330,7 @@ void Procedural::switch_statement(NodeId n)
 }
 void Procedural::statement(NodeId n)
 {
+    DebugScope debug(current_debug,debug_location(n));
     if (!n) return;
     Kind k = ast[n].kind;
     auto lifetime = lifetime_use(n); live = lifetime.entry;

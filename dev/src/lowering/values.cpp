@@ -45,6 +45,7 @@ Value Procedural::emit_raw(Instruction i, const Operand* args, std::size_t count
     // Its remaining consumers have no reachable instruction stream.
     if (ended) return Value(Operand::integer(0),i.result_type());
     if (full_expression.open && !emitting_cleanup && lowir_model::terminator(i.opcode)) close_expression_region();
+    if (!i.debug.file) i.debug = current_debug;
     i.operands.begin = p.operands.size(); i.operands.count = count;
     for (std::size_t j = 0; j < count; ++j) p.operands.push_back(args[j]);
     if (i.result_type() != IRType()) i.destination = builder->value(0);

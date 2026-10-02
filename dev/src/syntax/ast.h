@@ -161,7 +161,7 @@ enum class Kind : unsigned char {
 struct Location {
     std::uint32_t file = 0, begin = 0, end = 0;
     IdentifierId presumed_file = 0;
-    std::uint32_t line = 0;
+    std::uint32_t line = 0, column = 0;
 };
 
 struct Token {
