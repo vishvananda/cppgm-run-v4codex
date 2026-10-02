@@ -70,6 +70,7 @@ class Scalars {
     bool evaluate(Instruction& i, Operand& out) {
         reassociate(i);
         if (fold_integer(i,args.data(),out)) return true;
+        if (fold_floating(p,i,args.data(),out)) return true;
         auto a = args.empty() ? Operand() : args[0];
         if ((i.opcode == Opcode::Copy || (i.opcode == Opcode::Convert && i.type == i.source_type)) && alias(i,a)) { out = a; return true; }
         if (i.opcode == Opcode::Index && args[1].kind == Operand::Integer && !args[1].data.integer &&

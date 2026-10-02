@@ -8,6 +8,7 @@ bool same_scalar(Operand, Operand);
 // instruction. Replacements at those uses must retain that typed carrier.
 bool preserves_operand_type(const Program&, const Instruction&, unsigned argument, Operand);
 bool fold_integer(const Instruction&, const Operand*, Operand&);
+bool fold_floating(const Program&, const Instruction&, const Operand*, Operand&);
 bool discardable(const Instruction&);
 void propagate_call_constants(Program&, std::uint64_t& work);
 void eliminate_local_expressions(Program&, const std::vector<bool>& call_cycles, std::uint64_t& work,

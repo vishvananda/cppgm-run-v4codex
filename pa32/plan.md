@@ -3,6 +3,23 @@
 Stage base commit: e82bf4152fe8d6d68b9cd966655db0d8142cf81b
 Last reviewed commit: 401519044a2c28130d4085b3bc7c3d0411b5dc8f
 
+Implementation 216 entry: `335618379eb20ac285cc1df5fb498f498afccccf`, clean;
+authoritative course baseline **208/219**, eleven failures (Ralph reports
+208/425). Prior turn was progress; no live compiler/test process on entry.
+The stage/review markers above are inherited and preserved. Frozen entry
+binaries and failure log are in `/tmp/pa32-216/`.
+
+Active group: contextual call admission and exception-region cleanup. The
+inliner owns immutable callee bodies and bounded per-site substitutions;
+typed constants/readonly-object facts feed ordinary reachability and the
+no-unwind proof before optional cloning. Admission, clone growth and cleanup
+remain separately bounded, with conservative calls on unknown facts. Related
+accessor/parent admission and scalar builtin constants will be investigated
+while tracing this data flow. Validate direct/replayed execution, exceptional
+paths, mutable carriers, debug locations, growth/work limits and all course
+checks. Freeze final binaries for A/A and ABBA compilation/RSS/runtime/text
+measurements; preserve independent review and unfinished source/ABI owners.
+
 Target: **PA32 full-stage**, still incomplete: **208/219**, **11 failures**.
 Implementation 215 entered clean at `f4f075b8` with 202/219 and 17 failures.
 The previous goal turn completed [Audit 214](audit.md) (progress); process
