@@ -48,7 +48,7 @@ void simplify_diamond_values(Program& p, std::uint64_t& work)
             if (lr.count != 1 || rr.count != 1 || p.instructions[lr.begin].opcode != Opcode::Jump || p.instructions[rr.begin].opcode != Opcode::Jump) continue;
             unsigned from = flow.edges[le].from;
             auto fr = p.blocks[flow.blocks[from].index-1].instructions;
-            const auto& branch = p.instructions[fr.end()-1];
+            auto& branch = p.instructions[fr.end()-1];
             if (branch.opcode != Opcode::Branch || from == merge || left == right) continue;
             auto condition = p.operands[branch.operands.begin];
             if (condition.kind != Operand::Temporary || definitions[condition.ref] != 1) continue;
@@ -77,6 +77,15 @@ void simplify_diamond_values(Program& p, std::uint64_t& work)
                 phi.opcode = Opcode::Compare; phi.type = p.values[condition.ref-1].type;
                 phi.operation = yes.data.integer ? Operation::Ne : Operation::Eq;
                 p.operands[phi.operands.begin] = condition; p.operands[phi.operands.begin+1] = Operand::integer(0); phi.operands.count = 2;
+                p.values[phi.destination.index-1].truth = true;
+            }
+            if (phi.opcode != Opcode::Phi) {
+                // Both arms are empty and their only value choice is now an
+                // ordinary instruction. Retire this diamond locally; an
+                // unrelated downstream phi conflict must not keep its edges.
+                branch.opcode = Opcode::Jump; branch.type = Type();
+                p.operands[branch.operands.begin] = Operand::label(flow.blocks[merge]);
+                branch.operands.count = 1;
             }
         }
     }

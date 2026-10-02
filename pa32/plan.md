@@ -9,6 +9,16 @@ and their interactions. Entry was clean at `86d08255`, with **202/219** course
 cases and **17 failures**; the audited code preserves that exact failure set.
 Previous implementation turn: progress; no live process remained on entry.
 
+Implementation 215 entered clean at `f4f075b8`, with the same 202/219 course
+cases. The previous turn completed audit evidence (progress); process inspection
+found no running build/test. Review markers above remain unchanged. Initial
+owner group: ordinary control/dataflow and pointer ranges. Typed CFG edges,
+single-definition values and slot demand records feed legality proofs; bounded
+function-local work and existing growth reservations remain mandatory. Validate
+dynamic/zero-trip/alias/export cases, phi snapshots and partial slot facts across
+all levels, text replay, native execution and debug; freeze A/B and collect
+compiler wall/RSS plus checked runtime/text evidence before acceptance.
+
 ## Architecture and operative limits
 
 Source -> canonical typed semantic facts -> shared typed LowIR -> bounded

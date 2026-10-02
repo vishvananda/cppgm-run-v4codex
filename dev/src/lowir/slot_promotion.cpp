@@ -11,6 +11,7 @@ struct Definition {
     unsigned slot, block, store;
     Range inputs;
     ValueId value;
+    bool unknown = false, reaches_store = false;
     Definition(unsigned s, unsigned b, unsigned i) : slot(s), block(b), store(i) {}
 };
 struct Edge { unsigned block, next; };
@@ -120,7 +121,7 @@ class Promotion {
                 } else fact.eligible = false;
                 continue;
             }
-            if (!predecessors[b] || b == 1) { facts[s].eligible = false; continue; }
+            if (!predecessors[b] || b == 1) { definitions[n].unknown = true; continue; }
             unsigned start = inputs.size();
             for (unsigned e = predecessors[b]; e && !exhausted; e = edges[e].next) {
                 if (!charge(2)) break;
@@ -129,6 +130,40 @@ class Promotion {
                 inputs.push_back(pred); inputs.push_back(d);
             }
             definitions[n].inputs.begin = start; definitions[n].inputs.count = inputs.size()-start;
+        }
+    }
+    void partial_facts() {
+        // Missing entry facts invalidate their consumers, not every later
+        // definition of the same home. Keep an unresolved load in memory. If
+        // such a load may also observe a store, retain the whole home rather
+        // than remove a store that still feeds a memory read.
+        std::vector<unsigned> heads(definitions.size()), pending;
+        std::vector<Edge> users(1);
+        for (unsigned n = 1; n < definitions.size(); ++n) {
+            auto& d = definitions[n];
+            if (!facts[d.slot].eligible) continue;
+            d.reaches_store = d.store != 0;
+            if (d.unknown || d.reaches_store) pending.push_back(n);
+            unsigned stride = handlers[d.block] ? 1 : 2;
+            for (unsigned k = d.inputs.begin; k < d.inputs.end(); k += stride) {
+                if (!charge()) return;
+                unsigned input = inputs[k+stride-1];
+                users.push_back({n,heads[input]}); heads[input] = users.size()-1;
+            }
+        }
+        while (!pending.empty()) {
+            unsigned n = pending.back(); pending.pop_back();
+            for (unsigned e = heads[n]; e; e = users[e].next) {
+                if (!charge()) return;
+                auto& to = definitions[users[e].block]; const auto& from = definitions[n];
+                bool changed = (from.unknown && !to.unknown) || (from.reaches_store && !to.reaches_store);
+                to.unknown |= from.unknown; to.reaches_store |= from.reaches_store;
+                if (changed) pending.push_back(users[e].block);
+            }
+        }
+        for (auto load : loads) {
+            const auto& d = definitions[load.second];
+            if (d.unknown && d.reaches_store) facts[d.slot].eligible = false;
         }
     }
     Operand operand(unsigned d) const {
@@ -150,8 +185,9 @@ public:
     }
     bool run(std::vector<unsigned>& additions, NameIndex& names, unsigned& serial) {
         census(); scan(); resolve(); if (exhausted) return false;
+        partial_facts(); if (exhausted) return false;
         std::uint64_t phis = 0, phi_operands = 0;
-        for (const auto& d : definitions) if (d.slot && facts[d.slot].eligible && !d.store && !handlers[d.block]) {
+        for (const auto& d : definitions) if (d.slot && facts[d.slot].eligible && !d.unknown && !d.store && !handlers[d.block]) {
             ++phis; phi_operands += d.inputs.count;
         }
         // Admission limits representation growth independently of analysis
@@ -160,7 +196,7 @@ public:
         bool changed = false;
         next_phi.resize(definitions.size());
         for (unsigned n = 1; n < definitions.size(); ++n) {
-            auto& d = definitions[n]; if (!facts[d.slot].eligible || (!d.store && handlers[d.block])) continue;
+            auto& d = definitions[n]; if (!facts[d.slot].eligible || d.unknown || (!d.store && handlers[d.block])) continue;
             changed = true;
             Value v; v.owner = p.slots[p.slot_order[f.slots.begin+d.slot-1].index-1].owner;
             v.type = p.slots[p.slot_order[f.slots.begin+d.slot-1].index-1].type;
@@ -183,7 +219,7 @@ public:
             }
         }
         for (auto load : loads) {
-            auto& d = definitions[load.second]; if (!facts[d.slot].eligible) continue;
+            auto& d = definitions[load.second]; if (!facts[d.slot].eligible || d.unknown) continue;
             auto& i = p.instructions[load.first]; i.opcode = Opcode::Copy;
             p.operands[i.operands.begin] = operand(load.second);
         }
