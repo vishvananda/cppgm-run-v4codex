@@ -160,7 +160,10 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
         test = truth_operand(test);
     }
     if (test.ir.floating()) test = emit(Opcode::Compare,test.ir,{test.operand,Operand::floating(0)},Operation::Ne);
-    SlotId selector = cleanup_selector(test,!terminal && (cleanup_expression(b,object) || cleanup_expression(c,object)));
+    auto first_conversion = branches ? branches : fact.conversions+1;
+    SlotId selector = cleanup_selector(test,!terminal &&
+        (cleanup_expression(b,object && construction_omits_result(b,sem.conversion_fact(first_conversion))) ||
+         cleanup_expression(c,object && construction_omits_result(c,sem.conversion_fact(first_conversion+1)))));
     auto common = live;
     emit(Opcode::Branch, IRType(), {test.operand, Operand::label(yes), Operand::label(no)});
     start(yes);

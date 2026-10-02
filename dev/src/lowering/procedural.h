@@ -202,6 +202,7 @@ class Procedural {
     void exception_fallback();
     std::vector<unsigned char> cleanup_expressions;
     bool cleanup_expression(NodeId n, bool omit_result = false, bool effects_only = false);
+    bool construction_omits_result(NodeId n, const semantic::Conversion& conversion) const;
     const semantic::Expression* conversion_call(const semantic::Conversion& conversion) const;
     std::vector<unsigned char> unwind_expressions;
     std::vector<unsigned char> proven_unwind_expressions;

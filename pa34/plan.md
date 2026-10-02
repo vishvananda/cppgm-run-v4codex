@@ -44,6 +44,12 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
   under [expr.type.conv], [expr.cast] and [dcl.name]; functional-pointer.cpp
   passes AST and O0/O3 execution including pointer/reference cast controls.
   The original lowering/cleanup.cpp source probe now compiles.
+- Fixed PA12 conditional semantics and lowering: preserve cv-qualified class
+  prvalues in directional matches ([expr.cond]/3,6, [conv.lval]); use recorded
+  construction/elision facts when predicting nested-arm result cleanup
+  ([class.temporary]/3). The two native driver/dump source probes pass; PA12
+  check_conditional.py covers cv overload selection and balanced nested
+  lifetimes at O0/O3 with four runtime branches.
 - Continue each newly exposed self-build/test/object divergence at its earliest
   owner. Trace seed/self differences to object and source; probes are diagnostic.
 - Required order: file audit; `make test-report-through-pa33`; canonical
@@ -54,9 +60,9 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
 - Commit cohesive fixes and evidence, keep this ledger current, finish clean.
 
 Current evidence (`$RALPH_ARTIFACT_DIR/pa34-221`): file audit passes (four
-inherited warnings); host through PA33 5454/5454 and native debug 11/11 after
-the helper schedule fix. Canonical self PA1–PA4 pass (54/26/20/105 tests).
-PA5 build passed cleanup.cpp, then exposed the now-corrected ID narrowing in
-two compiler sources. Fresh host regression and canonical ladder follow. Inception remains
+inherited warnings); host through PA33 5454/5454 after the ID source correction;
+native debug 11/11 after the helper schedule fix. Canonical self PA1–PA4 pass
+(54/26/20/105 tests). PA5 build next exposed the now-fixed native driver/dump
+conditional bugs. Fresh host regression and canonical ladder follow. Inception remains
 unverified. Historical generated IR was gzip-compressed to reclaim 840 MiB;
 its contents and measurement records are preserved.

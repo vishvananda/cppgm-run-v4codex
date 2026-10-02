@@ -253,9 +253,10 @@ Expression Analyzer::conditional_value(Expression b, Expression c, std::vector<C
                 ((types[from.type].cv & ~types[to.type].cv) ||
                  (types.unqualified(from.type) != types.unqualified(to.type) && !derived_from(from.type,to.type))))
                 return Conversion();
-            auto target = class_value(from.type) && class_value(to.type) &&
-                (types.unqualified(from.type) == types.unqualified(to.type) || derived_from(from.type,to.type)) ?
-                to.type : decay(to.type);
+            // [conv.lval] preserves cv on class prvalues. The directional
+            // [expr.cond]/3 match must not decay const T to T when converting
+            // the other operand through a constructor.
+            auto target = class_value(to.type) ? to.type : decay(to.type);
             return conversion_value(from,target);
         };
         matched[0] = match(b,c); matched[1] = match(c,b);
@@ -290,7 +291,8 @@ Expression Analyzer::conditional_value(Expression b, Expression c, std::vector<C
         selected.assign(candidates[best].arguments,candidates[best].arguments+2);
         return result;
     } else {
-        auto left = decay(b.type), right = decay(c.type);
+        auto left = class_value(b.type) ? b.type : decay(b.type);
+        auto right = class_value(c.type) ? c.type : decay(c.type);
         if (left == right) result.type = left;
         else if ((address_value(left) && address_value(right)) || (types[left].kind == TypeKind::MemberPointer && types[right].kind == TypeKind::MemberPointer))
             result.type = composite_pointer(left,right);

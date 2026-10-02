@@ -1,6 +1,16 @@
 #include "lowering/procedural.h"
 #include <stdexcept>
 namespace cppgm { namespace lowering {
+bool Procedural::construction_omits_result(NodeId n, const semantic::Conversion& conversion) const
+{
+    // Match construct_value's recorded destination forwarding. A class arm
+    // may still materialize a source object for its selected copy/move.
+    if (conversion.kind == semantic::Conversion::Kind::Construction) {
+        const auto& object = sem.conversion_objects[conversion.materialization];
+        return object.elided || object.branches;
+    }
+    return conversion.empty_copy && sem.expression_fact(n).category == semantic::ValueCategory::Prvalue;
+}
 const semantic::Expression* Procedural::conversion_call(const semantic::Conversion& conversion) const
 {
     auto c = &conversion;
@@ -44,6 +54,15 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result, bool effects_onl
             needed |= cleanup(sem.user_conversions[c.materialization].source_temporary);
     }
     auto expression = sem.expression_fact(n);
+    auto omit_child = [&](NodeId child) {
+        if (!omit_result) return false;
+        if (ast[n].kind == syntax::Kind::Parenthesized || ast[n].kind == syntax::Kind::Initializer) return true;
+        if (ast[n].kind != syntax::Kind::Conditional || child == ast[n].first) return false;
+        auto yes = ast[ast[n].first].next;
+        if (child != yes && child != ast[yes].next) return false;
+        auto ordinal = child == yes ? 1u : 2u;
+        return construction_omits_result(child,sem.conversion_fact(expression.conversions+ordinal));
+    };
     auto incoming = expression.incoming;
     auto backing_cleanup = [&](const semantic::Conversion& c) {
         if (c.kind != semantic::Conversion::Kind::List) return false;
@@ -65,9 +84,7 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result, bool effects_onl
     auto arguments = [&](const semantic::Expression& call) {
         for (unsigned i = 0; i < call.argument_count; ++i) {
             auto a = sem.call_argument(call,i);
-            bool omit = omit_result && (ast[n].kind == syntax::Kind::Parenthesized || ast[n].kind == syntax::Kind::Initializer ||
-                (ast[n].kind == syntax::Kind::Conditional && a != ast[n].first));
-            if (a && a != n) needed |= cleanup_expression(a,omit,effects_only);
+            if (a && a != n) needed |= cleanup_expression(a,omit_child(a),effects_only);
         }
     };
     arguments(expression);
@@ -111,9 +128,7 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result, bool effects_onl
         }
     } else if (ast[n].kind != syntax::Kind::Lambda && ast[n].kind != syntax::Kind::Sizeof && ast[n].kind != syntax::Kind::TypeTrait)
     for (NodeId child = ast[n].first; child; child = ast[child].next) {
-        bool omit = omit_result && (ast[n].kind == syntax::Kind::Parenthesized || ast[n].kind == syntax::Kind::Initializer ||
-            (ast[n].kind == syntax::Kind::Conditional && child != ast[n].first));
-        needed |= cleanup_expression(child,omit,effects_only);
+        needed |= cleanup_expression(child,omit_child(child),effects_only);
     }
     cleanup_expressions[key] |= (needed ? 2 : 1) << shift;
     return needed;
