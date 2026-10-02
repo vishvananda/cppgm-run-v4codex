@@ -79,6 +79,17 @@ Value Procedural::load(Value v)
         auto raw = atomic_representation(v.type);
         return atomic_value(emit(Opcode::AtomicLoad,raw,{address(v).operand,Operand::integer(5)}),sem.types.non_atomic(sem.types.unqualified(v.type)));
     }
+    if (semantic::vector_kind(sem.types[v.type].kind) && (sem.types[v.type].cv & 2)) {
+        // A vector value reads the whole volatile operand once, even when
+        // its consumer extracts only one lane or reinterprets its bytes.
+        auto target = sem.types.unqualified(v.type);
+        Value snapshot(Operand::slot(builder->add_slot(0,type(target))),type(target),target,true);
+        zero_object(target,address(snapshot));
+        auto t = sem.types[target];
+        auto count = t.kind == TypeKind::ExtVector ? t.bound : t.bound/sem.object_size(t.child);
+        vector_each(count,[&](Value lane) { vector_write(snapshot,lane,vector_read(v,lane)); });
+        snapshot.address = false; return snapshot;
+    }
     if (sem.class_value(v.type) || semantic::vector_kind(sem.types[v.type].kind)) { v.address = false; v.ir = type(v.type); return v; }
     if (sem.types[v.type].kind == TypeKind::Array || sem.types[v.type].kind == TypeKind::Function) return address(v);
     if (v.cached && !(sem.types[v.type].cv & 2)) return Value(v.stored, type(v.type), v.type);
@@ -231,7 +242,7 @@ Value Procedural::converted_value(Value v, const semantic::Conversion& c)
             auto value = load(v);
             Value stored(Operand::slot(builder->add_slot(0,type(v.type))),type(v.type),v.type,true);
             store(value,stored); v = stored;
-        } else v.address = true;
+        } else { v = load(v); v.address = true; }
         Value result(Operand::slot(builder->add_slot(0,type(c.target))),type(c.target),c.target,true);
         Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(c.target); copy.alignment = 1;
         emit(copy,{address(v).operand,address(result).operand}); return load(result);
