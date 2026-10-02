@@ -9,6 +9,18 @@ retains the accumulated review inventory. Implementation 212 entered at
 Previous turn: progress (private-storage handoff); entry inspection found no
 live build. Neither review marker advances during implementation.
 
+Implementation 213 entered at `cec5b40ae0de687d217cc787e1cca342591a7c56`,
+clean, with 196/219 course cases (23 failures). Previous turn: progress
+(validated integer-loop handoff); no live process on entry. Initial group:
+external memory facts, conditional addresses and adjacent noalias copies.
+Owner: function-local canonical address/byte-range and available-value records;
+data flow: typed LowIR identities and effects -> conservative alias proofs ->
+bounded ordinary-edge intersections -> load reuse/conditional value phis/copies.
+Use a linear work allowance and conservative reset on cycles, EH boundaries,
+unknown effects and exhaustion; no global cache or IR serialization. Validate
+alias overlap, mutable snapshots, volatile/atomic and EH barriers, object replay,
+existing failures and checked A/A + ABBA compiler/RSS/runtime/text evidence.
+
 ## Design/spec alignment
 
 Source -> canonical semantic facts -> shared typed LowIR -> optimization ->

@@ -4,6 +4,7 @@
 #include "lowir/inline_policy.h"
 #include "lowir/call_effects.h"
 #include "lowir/loop_simplify.h"
+#include "lowir/memory_values.h"
 #include <chrono>
 #include <iostream>
 #include <sys/resource.h>
@@ -49,6 +50,15 @@ void optimize(Program& p, unsigned level, bool telemetry)
         simplify_scalars(p,work);
     }
     if (promote_scalar_slots(p,call_cycles,work)) simplify_scalars(p,work,&dataflow);
+    MemoryStats memory;
+    auto memory_start = work;
+    bool memory_changed = simplify_memory_values(p,work,memory);
+    auto memory_work = work-memory_start;
+    if (memory_changed) {
+        simplify_scalars(p,work);
+        forward_local_slots(p,work);
+        simplify_scalars(p,work);
+    }
     eliminate_local_expressions(p,call_cycles,work);
     simplify_control(p,work);
     forward_local_slots(p,work);
@@ -83,6 +93,14 @@ void optimize(Program& p, unsigned level, bool telemetry)
             << ",\"loops_unrolled\":" << loops.unrolled
             << ",\"loop_clone_reserved\":" << loops.cloned
             << ",\"loops_declined\":" << loops.declined
+            << ",\"memory_reused\":" << memory.reused
+            << ",\"memory_work\":" << memory_work
+            << ",\"memory_conditional\":" << memory.conditional
+            << ",\"memory_copies\":" << memory.copies
+            << ",\"memory_diamonds\":" << memory.diamonds
+            << ",\"memory_declined\":" << memory.declined
+            << ",\"memory_snapshots\":" << memory.snapshots
+            << ",\"memory_peak_snapshots\":" << memory.peak_snapshots
             << ",\"optimize_peak_rss_kib\":" << usage.ru_maxrss << "}\n";
     }
 }

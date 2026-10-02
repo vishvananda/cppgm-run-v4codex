@@ -289,3 +289,5 @@ FRONTEND_OBJ_BASENAMES_lowiropt += lowir/object_splitting
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/object_splitting
 FRONTEND_OBJ_BASENAMES_lowiropt += lowir/loop_simplify lowir/loop_trip
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/loop_simplify lowir/loop_trip
+FRONTEND_OBJ_BASENAMES_lowiropt += lowir/memory_values
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/memory_values

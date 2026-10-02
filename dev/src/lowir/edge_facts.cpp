@@ -93,6 +93,29 @@ void propagate_edge_facts(Program& p, const OrdinaryFlow& flow, const std::vecto
             if (i.destination && fold_integer(i,p.operands.data()+i.operands.begin,folded)) {
                 exact(Operand::value(i.destination),folded,i.result_type());
             }
+            if (i.opcode == Opcode::Compare && i.type.integer() &&
+                (i.operation == Operation::Ult || i.operation == Operation::Ule ||
+                 i.operation == Operation::Ugt || i.operation == Operation::Uge)) {
+                // In the same unsigned domain, decrement wraps past x exactly
+                // when x is zero. A scoped nonzero fact suffices; a reload
+                // killed by a store/call must have its own value identity.
+                for (unsigned side = 0; side != 2; ++side) {
+                    auto dec = p.operands[i.operands.begin+side], x = p.operands[i.operands.begin+1-side];
+                    if (dec.kind != Operand::Temporary || definitions[dec.ref] != 1) continue;
+                    unsigned producer = producers[local.get(dec.ref)]; if (!producer) continue;
+                    const auto& sub = p.instructions[producer-1];
+                    if (sub.opcode != Opcode::Binary || sub.operation != Operation::Sub || sub.type != i.type ||
+                        !same_scalar(p.operands[sub.operands.begin],x) || !full_width(x,i.type)) continue;
+                    auto one = p.operands[sub.operands.begin+1]; unsigned truth = known(x);
+                    if (!truth || one.kind != Operand::Integer || one.data.integer != 1 || one.integer_high()) continue;
+                    bool result = side == 0 ? (i.operation == Operation::Ult || i.operation == Operation::Ule) :
+                        (i.operation == Operation::Ugt || i.operation == Operation::Uge);
+                    if (truth == 1) result = !result;
+                    i.type = i.result_type(); i.opcode = Opcode::Const; i.operation = Operation::None;
+                    i.operands.count = 1; p.operands[i.operands.begin] = Operand::integer(result);
+                    set(Operand::value(i.destination),result ? 2 : 1); break;
+                }
+            }
             if (i.opcode == Opcode::Compare && i.type.integer() && (i.operation == Operation::Eq || i.operation == Operation::Ne)) {
                 auto a = p.operands[i.operands.begin], other = p.operands[i.operands.begin+1];
                 unsigned fact = zero(other) && full_width(a,i.type) ? known(a) :
