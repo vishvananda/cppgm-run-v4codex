@@ -191,6 +191,13 @@ Value Procedural::expression(NodeId n, bool location)
     case Kind::Conditional: return conditional(n, location);
     case Kind::Call: return call(n);
     case Kind::Subscript: {
+        if (semantic::vector_kind(sem.types[sem.expression_fact(a).type].kind)) {
+            auto base = expression(a,true);
+            auto index = converted(ast[a].next,sem.conversion_fact(fact.conversions+1));
+            auto lane = vector_lane(base,coerce(index,IRType::I64,sem.unsigned_type(index.type)));
+            lane.type = fact.type;
+            return fact.category == semantic::ValueCategory::Prvalue ? load(lane) : lane;
+        }
         Value left = converted(a, sem.conversion_fact(fact.conversions));
         Value right = converted(ast[a].next, sem.conversion_fact(fact.conversions+1));
         if (left.ir != IRType::Ptr) std::swap(left, right);
@@ -274,6 +281,7 @@ Value Procedural::unary(NodeId n)
         dest.cached = true; dest.stored = value.operand; return dest;
     }
     Value v = op == OP_LNOT && sem.conversion_fact(fact.conversions).kind != semantic::Conversion::Kind::User ? load(expression(a)) : converted(a, sem.conversion_fact(fact.conversions));
+    if (semantic::vector_kind(sem.types[v.type].kind)) return vector_operation(op,v,Value(),fact.type);
     if (sem.complex_type(v.type)) {
         if (op != OP_LNOT) return complex_operation(op,v,Value(),fact.type);
         v = convert(v,fact.type);

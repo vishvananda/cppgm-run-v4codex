@@ -248,6 +248,9 @@ void Selector::select(const lowir_model::Instruction& i)
     case Opcode::VaStart: case Opcode::VaArg: variadic(i); break;
     case Opcode::CopyObject: case Opcode::ZeroInit: bulk(i); break;
     case Opcode::Nop: emit(Op::Nop,Type(),{}); break;
+    case Opcode::X86:
+        move(Operand::r(XR_R10),value(arg(i,1),Type::Ptr),Type::Ptr);
+        emit(Op::X86,Type(),{Operand::r(XR_R10),Operand::imm(arg(i,0).data.integer),Operand::imm(arg(i,2).data.integer)}); break;
     case Opcode::Pause: emit(Op::Pause,Type(),{}); break;
     case Opcode::AtomicLoad: case Opcode::AtomicStore: case Opcode::AtomicAddFetch:
     case Opcode::AtomicExchange: case Opcode::AtomicCompareExchange:

@@ -368,6 +368,10 @@ class Procedural {
     Value atomic_update(Value location, Value rhs, ETokenType op, TypeId computation, bool postfix);
     Value atomic_call(NodeId n, Value destination = Value());
     Value intrinsic_call(NodeId n, semantic::Intrinsic intrinsic);
+    Value packed_call(NodeId n);
+    Value x86_call(NodeId n);
+    Value vector_shuffle(NodeId n);
+    Value x86_lane_call(NodeId n, const X86Builtin& operation);
     Value complex_construct(TypeId type, Value real, Value imag);
     Value complex_component(Value value, unsigned part);
     Value vector_lane(Value value, Value lane);

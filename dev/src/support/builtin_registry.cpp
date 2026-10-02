@@ -2,10 +2,12 @@
 #include "support/type_traits.h"
 #include "support/atomic_builtins.h"
 #include <cstring>
+#include "support/packed_builtins.h"
+#include "support/x86_builtins.h"
 namespace cppgm {
 bool hosted_builtin(TextView name)
 {
-    return value_builtin(name) != ValueBuiltin::None || atomic_builtin(name).op != AtomicOp::None || builtin_trait(name) != BuiltinTrait::None || function_builtin(name) != FunctionBuiltin::None ||
+    return name.equals("__builtin_shuffle") || x86_builtin(name) || packed_builtin(name) || value_builtin(name) != ValueBuiltin::None || atomic_builtin(name).op != AtomicOp::None || builtin_trait(name) != BuiltinTrait::None || function_builtin(name) != FunctionBuiltin::None ||
         integer_builtin(name).operation != IntegerBuiltin::None || fixed_vector_builtin(name).lane_bytes || libm_builtin(name).shape != LibmShape::None || floating_builtin_kind(name) != FloatingBuiltin::None || name.equals("__builtin_va_arg") || integer_pack_builtin(name) || invoke_builtin_name(name);
 }
 FixedVectorBuiltin fixed_vector_builtin(TextView name)

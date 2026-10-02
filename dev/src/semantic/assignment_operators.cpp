@@ -38,13 +38,17 @@ void Analyzer::builtin_assignment_values(ETokenType op, const std::vector<Expres
         // Builtin assignment does not convert a class lhs. Its own member
         // assignment candidates were considered by the operator owner.
         auto t = args[0].type;
-        if (arithmetic(t) || pointer(t) || types[t].kind == TypeKind::MemberPointer || scoped_enum(t) || fundamental(t,FT_NULLPTR_T)) add(t,t,0);
+        if (vector_kind(types[t].kind) || arithmetic(t) || pointer(t) || types[t].kind == TypeKind::MemberPointer || scoped_enum(t) || fundamental(t,FT_NULLPTR_T)) add(t,t,0);
         return;
     }
     auto left = builtin_operand_types_value(args[0],true), right = builtin_operand_types_value(args[1]);
     for (auto a : left) for (auto b : right) {
         auto target = class_value(args[0].type) ? a : args[0].type;
         if (types[a].kind == TypeKind::Named) continue;
+        if (vector_kind(types[a].kind)) {
+            if (auto computation = vector_binary_type(binary,a,b)) add(target,b,computation);
+            continue;
+        }
         bool shift = binary == OP_LSHIFT || binary == OP_RSHIFT;
         bool integer = shift || binary == OP_MOD || binary == OP_AMP || binary == OP_BOR || binary == OP_XOR;
         if (arithmetic(a) && arithmetic(b) && (!integer || (integral(a) && integral(b))))

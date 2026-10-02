@@ -1,5 +1,7 @@
 #pragma once
 #include "support/atomic_builtins.h"
+#include "support/packed_builtins.h"
+#include "support/x86_builtins.h"
 #include "semantic/type_query.h"
 #include "semantic/expression_store.h"
 #include "semantic/fact_store.h"
@@ -303,6 +305,9 @@ public:
     const ScalarConsumption& scalar_consumption(EntityId object) const;
     bool empty_class(TypeId t) const;
     ExpressionForm intrinsic_expression(EntityId e) const;
+    unsigned x86_intrinsic(EntityId e) const { return x86_builtins.get(e); }
+    const PackedBuiltin& packed_intrinsic(EntityId e) const { return packed_builtin(packed_builtins.get(e)); }
+    bool direct_intrinsic(EntityId e) const;
     Intrinsic intrinsic_function(EntityId e) const { return Intrinsic(intrinsic_functions.get(e)); }
     IdentifierId predefined_string(EntityId e) const { return predefined_strings.get(e); }
     TypeId variadic_type() const { return variadic_list_type; }
@@ -801,6 +806,7 @@ private:
     Constant floating_constant(TypeId type, ExtendedFloat value, bool special = false, bool signaling = false);
     TypeId variadic_list_type = 0;
     Index atomic_kinds;
+    Index packed_builtins, x86_builtins, shuffle_signatures;
     Index intrinsic_functions, predefined_strings, atomic_signatures, integer_signatures, overflow_signatures;
     EntityId predefined_function_name(NodeId n, ScopeId s);
     EntityId function_name_string(ScopeId, IdentifierId, NodeId = 0);
@@ -817,6 +823,7 @@ private:
     EntityId builtin_function(IdentifierId name);
     Constant floating_builtin_constant(const Expression& call, ScopeId scope);
     EntityId runtime_builtin(IdentifierId name);
+    EntityId shuffle_signature(EntityId family, const std::vector<Expression>& values, const std::vector<NodeId>* nodes);
     EntityId overflow_signature(EntityId family, const std::vector<Expression>& values, const std::vector<NodeId>* nodes);
     EntityId hint_builtin(IdentifierId name);
     EntityId integer_builtin_function(IdentifierId name);
@@ -825,6 +832,8 @@ private:
     bool atomic_operand(TypeId type);
     EntityId atomic_signature(EntityId family, TypeId operand);
     Constant atomic_constant(NodeId n, ScopeId scope);
+    unsigned intrinsic_immediate_index(EntityId entity);
+    bool valid_intrinsic_immediate(EntityId entity, Constant value);
     void validate_intrinsic(EntityId selected, const std::vector<NodeId>& args, ScopeId s);
     Expression va_arg_expression(NodeId n, ScopeId s);
     TypeId builtin_value_type(unsigned operation, TypeId target, TypeId source);

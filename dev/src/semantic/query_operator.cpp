@@ -10,10 +10,19 @@ TypeQueryFact Analyzer::query_operator(const TypeQuery& q, const std::vector<Typ
         named |= types[c.expression.type].kind == TypeKind::Named;
         class_operand |= class_value(c.expression.type) || pattern_class_type(c.expression.type);
     }
+    if (q.op == OP_LSQUARE && args.size() == 2 && vector_kind(types[args[0].type].kind)) {
+        auto source = types[args[0].type];
+        if (!integral(args[1].type) || scoped_enum(args[1].type) || fundamental(source.child,FT_BOOL))
+            return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+        TypeQueryFact r; r.expression.type = types.qualify(source.child,source.cv);
+        r.expression.category = args[0].category; return r;
+    }
     if ((q.op == KW_REAL || q.op == KW_IMAG) && args.size() == 1) {
         TypeQueryFact r; r.expression = complex_projection(args[0],q.op);
         return r.expression.type ? r : TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
     }
+    if (q.op == OP_AMP && args.size() == 1 && direct_intrinsic(args[0].entity))
+        return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
     if (q.op == OP_AMP && args.size() == 1 && args[0].form == ExpressionForm::Overload) {
         // An address initializer may supply the target function type later.
         // Do not form pointer-to-unknown from an unqualified overload family.

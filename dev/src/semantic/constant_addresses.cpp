@@ -52,7 +52,7 @@ std::uint64_t Analyzer::constant_offset(std::uint32_t id)
     if (!a.parent || a.located) return a.offset;
     auto parent = constant_addresses[a.parent];
     auto offset = constant_offset(a.parent);
-    if (types[parent.type].kind == TypeKind::Array || complex_type(parent.type)) offset += a.selector * size(a.type);
+    if (types[parent.type].kind == TypeKind::Array || vector_kind(types[parent.type].kind) || complex_type(parent.type)) offset += a.selector * size(a.type);
     else if (a.selector == ~std::uint64_t(0)) offset += size(a.type);
     else if (a.selector & 0x80000000U) offset += base_offset(parent.type,a.type);
     else { size(parent.type); offset += entities[a.selector].member_offset; }
@@ -137,7 +137,7 @@ Constant Analyzer::constant_base_read(std::uint32_t id)
     if (types[constant_addresses[a.parent].type].kind == TypeKind::Array && storage.literal && !constant_addresses[a.parent].parent)
         return literal_element(ast[storage.literal].literal,Constant(types.fundamental(FT_UNSIGNED_LONG_INT),a.selector));
     if (complex_type(constant_addresses[a.parent].type)) return evaluated_part(constant_base_read(a.parent),a.selector);
-    if (!storage.frame && !(a.selector & 0x80000000U) && types[constant_addresses[a.parent].type].kind != TypeKind::Array && entities[a.selector].mutable_field)
+    if (!storage.frame && !(a.selector & 0x80000000U) && types[constant_addresses[a.parent].type].kind != TypeKind::Array && !vector_kind(types[constant_addresses[a.parent].type].kind) && entities[a.selector].mutable_field)
         return Constant();
     auto v = evaluated_part(constant_base_read(a.parent),a.selector);
     if (v.valid && pointer(v.type) && v.bits && !constant_storage[constant_addresses[v.bits].storage].live) return Constant();
@@ -258,6 +258,11 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
     }
     if (ast[n].kind == Kind::Subscript) {
         auto base = first, index = ast[first].next;
+        if (vector_kind(types[expressions[base].type].kind)) {
+            auto i = evaluate(index,s);
+            if (!i.valid || negative_constant(i) || integer_value(i) >= vector_elements(expressions[base].type)) return 0;
+            return constant_subobject(constant_address(base,s),x.type,std::uint64_t(integer_value(i)));
+        }
         if (!pointer(decay(expressions[base].type))) std::swap(base,index);
         Conversion c; c.target = decay(expressions[base].type);
         auto p = constant_node_conversion(base,c,s), i = evaluate(index,s);

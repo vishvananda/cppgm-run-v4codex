@@ -14,6 +14,11 @@ CallSelection Analyzer::select_call(EntityId family, const std::vector<Expressio
     for (auto e : declarations) {
         ++candidate_work;
         auto intrinsic = intrinsic_function(e);
+        if (intrinsic == Intrinsic::VectorShuffle) {
+            if (explicit_arguments || (count != 2 && count != 3)) continue;
+            e = shuffle_signature(e,values,nodes);
+            if (!e) continue;
+        }
         if (intrinsic == Intrinsic::Complex) {
             if (explicit_arguments || count != 2) continue;
             e = complex_signature(e,nodes ? expressions[(*nodes)[0]].type : values[0].type,

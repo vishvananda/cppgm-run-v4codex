@@ -47,7 +47,10 @@ Expression Analyzer::callable_expression(NodeId n, ScopeId s, NodeId callee,
         std::vector<Conversion> chosen;
         auto choice = select_call(fn.entity,{},&args,object_type,object_category,
             object_uses[fn.object_use].naming_scope,0,chosen);
-        if (choice.failure == CallFailure::NoViable) throw std::runtime_error("no viable function");
+        if (choice.failure == CallFailure::NoViable) {
+            auto name = ids.spelling(entities[fn.entity].name);
+            throw std::runtime_error("no viable function: " + std::string(name.data,name.size));
+        }
         if (choice.failure == CallFailure::Ambiguous) throw std::runtime_error("ambiguous overload");
         EntityId selected = choice.entity;
         if (object_type) chosen.erase(chosen.begin());

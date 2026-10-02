@@ -55,6 +55,12 @@ std::uint32_t Analyzer::constant_query_object(QueryId id)
     }
     if (!fact.selected && q.kind == QueryKind::Binary && q.op == OP_LSQUARE) {
         auto left = query_edges[q.offset], right = query_edges[q.offset+1];
+        auto type = query_fact(left).expression.type;
+        if (vector_kind(types[type].kind)) {
+            auto index = constants[query_value(right)];
+            if (!index.valid || negative_constant(index) || integer_value(index) >= vector_elements(type)) return 0;
+            return constant_subobject(constant_query_object(left),fact.expression.type,std::uint64_t(integer_value(index)));
+        }
         auto begin = fact.expression.conversions;
         auto a = constant_query_conversion(left,conversions[begin]);
         auto b = constant_query_conversion(right,conversions[begin+1]);

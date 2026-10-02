@@ -193,7 +193,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
         std::vector<EntityId> matching;
         for (EntityId e : candidates(x.entity)) {
             ++candidate_work;
-            if (intrinsic_function(e) == Intrinsic::Complex) continue;
+            if (direct_intrinsic(e)) continue;
             if (definitions && entities[e].template_info) e = deduce_target(e,ft);
             if (e) require_deduced_return(e);
             if (!e || entities[e].type != ft) continue;
@@ -212,7 +212,7 @@ Conversion Analyzer::standard_conversion(Expression x, TypeId to, NodeId n)
     }
     TypeId from = x.type;
     if (!from) return c;
-    if (types[from].kind == TypeKind::Function && (intrinsic_function(x.entity) == Intrinsic::IsConstantEvaluated || intrinsic_function(x.entity) == Intrinsic::Complex)) return c;
+    if (types[from].kind == TypeKind::Function && direct_intrinsic(x.entity)) return c;
     // A function-to-pointer/reference conversion selects the declaration even
     // without an overload set. This owns demand for static member addresses.
     if (types[from].kind == TypeKind::Function && x.entity && entities[x.entity].kind == EntityKind::Function &&
@@ -336,9 +336,7 @@ void Analyzer::select_function(NodeId n, EntityId e, bool direct)
 }
 void Analyzer::use_selected_function(EntityId e, bool direct)
 {
-    auto intrinsic = intrinsic_function(e);
-    if ((intrinsic == Intrinsic::Atomic || intrinsic == Intrinsic::Complex || intrinsic == Intrinsic::IsConstantEvaluated ||
-        (intrinsic >= Intrinsic::SourceFile && intrinsic <= Intrinsic::SourceColumn)) && !direct)
+    if (direct_intrinsic(e) && !direct)
         throw std::runtime_error("compiler intrinsic requires a direct call");
     if (discarded_statement()) return;
     if (destructor_member(e)) members[entities[e].member_info].retained_root = true;

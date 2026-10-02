@@ -64,6 +64,7 @@ class Encoder {
     void multiply(const Instruction& i);
     void bulk(const Instruction& i);
     void floating(const Instruction& i);
+    void x86_builtin(const Instruction& i);
     void fmove(Operand to, Operand from, Type type);
     void sse(unsigned opcode, Type type, int reg, Operand rm);
     Operand scratch(unsigned offset = 0) const;

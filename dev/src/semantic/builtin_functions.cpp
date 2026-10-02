@@ -2,6 +2,13 @@
 #include "support/builtin_registry.h"
 #include <stdexcept>
 namespace cppgm { namespace semantic {
+bool Analyzer::direct_intrinsic(EntityId e) const
+{
+    auto kind = intrinsic_function(e);
+    return kind == Intrinsic::Atomic || kind == Intrinsic::Complex || kind == Intrinsic::IsConstantEvaluated ||
+        (kind >= Intrinsic::SourceFile && kind <= Intrinsic::SourceColumn) ||
+        (kind >= Intrinsic::VectorInit && kind <= Intrinsic::VectorShuffle);
+}
 ExpressionForm Analyzer::intrinsic_expression(EntityId e) const
 {
     switch (intrinsic_function(e)) {
@@ -14,6 +21,46 @@ ExpressionForm Analyzer::intrinsic_expression(EntityId e) const
 EntityId Analyzer::builtin_function(IdentifierId name)
 {
     auto text = ids.spelling(name);
+    if (text.equals("__builtin_shuffle")) {
+        auto e = declare_function(global,name,0,types.function(types.fundamental(FT_VOID),{},false));
+        entities[e].exception_spec = 129; intrinsic_functions.put(e,unsigned(Intrinsic::VectorShuffle)); return e;
+    }
+    if (auto id = x86_builtin(text)) {
+        auto d = x86_builtin(id);
+        auto type = [&](X86Type t) {
+            using T = X86Type;
+            auto lane = types.fundamental(t == T::Void || t == T::ConstVoidPtr ? FT_VOID : t == T::U32 ? FT_UNSIGNED_INT : t == T::U64 || t == T::ULongPtr ? FT_UNSIGNED_LONG_LONG_INT : t == T::I16 ? FT_SHORT_INT :
+                t == T::I64 || t == T::Long2 || t == T::Long1 || t == T::Long2Ptr || t == T::LongPtr ? FT_LONG_LONG_INT :
+                t == T::Float4 || t == T::FloatPtr || t == T::Float2Ptr || t == T::ConstFloat2Ptr ? FT_FLOAT :
+                t == T::Double2 || t == T::DoublePtr ? FT_DOUBLE : t == T::Byte8 || t == T::Byte16 || t == T::ConstCharPtr ? FT_CHAR :
+                t == T::Short4 || t == T::Short8 ? FT_SHORT_INT : FT_INT);
+            if ((t >= T::Float4 && t <= T::ConstFloat2Ptr) || t == T::Long2Ptr || t == T::Int2Ptr)
+                lane = types.compound(TypeKind::Vector,lane,t == T::Int2 || t == T::Long1 || t == T::Byte8 || t == T::Short4 ||
+                    t == T::Float2Ptr || t == T::ConstFloat2Ptr || t == T::Int2Ptr ? 8 : 16);
+            if (t >= T::Float2Ptr) {
+                if (t == T::ConstFloat2Ptr || t == T::ConstVoidPtr || t == T::ConstCharPtr) lane = types.qualify(lane,1);
+                lane = types.compound(TypeKind::Pointer,lane);
+            }
+            return lane;
+        };
+        std::vector<TypeId> args;
+        if (d.first != X86Type::Void) args.push_back(type(d.first));
+        if (d.second != X86Type::Void) args.push_back(type(d.second));
+        if (d.form == X86Form::Shuffle || d.form == X86Form::Insert || d.form == X86Form::DynamicCompare) args.push_back(types.fundamental(FT_INT));
+        if (d.form == X86Form::MaskStore) args.push_back(types.compound(TypeKind::Pointer,types.fundamental(FT_CHAR)));
+        auto e = declare_function(global,name,0,types.function(type(d.result),args,false));
+        entities[e].exception_spec = 129; intrinsic_functions.put(e,unsigned(Intrinsic::X86));
+        x86_builtins.put(e,id); return e;
+    }
+    if (auto id = packed_builtin(text)) {
+        auto d = packed_builtin(id);
+        auto lane = [&](unsigned bytes) { return types.fundamental(bytes == 1 ? FT_CHAR : bytes == 2 ? FT_SHORT_INT : bytes == 4 ? FT_INT : FT_LONG_LONG_INT); };
+        auto input = types.compound(TypeKind::Vector,lane(d.lane),d.bytes);
+        auto output = types.compound(TypeKind::Vector,lane(d.result_lane),d.bytes);
+        auto e = declare_function(global,name,0,types.function(output,{input,d.immediate ? types.fundamental(FT_INT) : input},false));
+        entities[e].exception_spec = 129; intrinsic_functions.put(e,unsigned(Intrinsic::Packed));
+        packed_builtins.put(e,id); return e;
+    }
     auto vector = fixed_vector_builtin(text);
     if (vector.lane_bytes) {
         auto lane = types.fundamental(vector.lane_bytes == 1 ? FT_SIGNED_CHAR :
@@ -116,15 +163,31 @@ EntityId Analyzer::builtin_function(IdentifierId name)
     else assembler_names.put(e,ids.intern(bounded ? TextView("vsnprintf",9) : TextView("vsprintf",8)));
     return e;
 }
+unsigned Analyzer::intrinsic_immediate_index(EntityId e)
+{
+    auto kind = intrinsic_function(e);
+    if (kind == Intrinsic::VectorExtract) return 1;
+    if (kind != Intrinsic::X86) return 0;
+    auto form = x86_builtin(x86_intrinsic(e)).form;
+    return form == X86Form::Extract || form == X86Form::Insert || form == X86Form::Shuffle ||
+        form == X86Form::ShuffleOne || form == X86Form::DynamicCompare || form == X86Form::ByteShift ? types[entities[e].type].count-1 : 0;
+}
+bool Analyzer::valid_intrinsic_immediate(EntityId e, Constant value)
+{
+    if (!value.valid || !integral(value.type) || negative_constant(value)) return false;
+    auto kind = intrinsic_function(e);
+    auto form = kind == Intrinsic::X86 ? x86_builtin(x86_intrinsic(e)).form : X86Form::Extract;
+    auto vector = types.parameters[types[entities[e].type].offset];
+    auto limit = form == X86Form::Extract || form == X86Form::Insert ? vector_elements(vector)-1 :
+        form == X86Form::DynamicCompare ? 31 : form == X86Form::ByteShift ? 2040 : 255;
+    return integer_value(value) <= limit && (form != X86Form::ByteShift || !(integer_value(value)&7));
+}
 void Analyzer::validate_intrinsic(EntityId e, const std::vector<NodeId>& args, ScopeId s)
 {
     auto kind = intrinsic_function(e);
-    if (kind == Intrinsic::VectorExtract) {
-        auto lane = evaluate(args[1],s);
-        auto vector = types.parameters[types[entities[e].type].offset];
-        if (!lane.valid || !integral(lane.type) || negative_constant(lane) || integer_value(lane) >= vector_elements(vector))
-            throw std::runtime_error("vector extraction requires a constant lane in range");
-    }
+    if (auto index = intrinsic_immediate_index(e))
+        if (!valid_intrinsic_immediate(e,evaluate(args[index],s)))
+            throw std::runtime_error("invalid intrinsic immediate operand");
     if (kind == Intrinsic::Prefetch) {
         for (unsigned j = 1; j < args.size(); ++j) {
             auto value = evaluate(args[j],s);

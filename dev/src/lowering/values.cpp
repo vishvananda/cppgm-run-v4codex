@@ -79,18 +79,22 @@ Value Procedural::load(Value v)
         auto raw = atomic_representation(v.type);
         return atomic_value(emit(Opcode::AtomicLoad,raw,{address(v).operand,Operand::integer(5)}),sem.types.non_atomic(sem.types.unqualified(v.type)));
     }
-    if (semantic::vector_kind(sem.types[v.type].kind) && (sem.types[v.type].cv & 2)) {
-        // A vector value reads the whole volatile operand once, even when
-        // its consumer extracts only one lane or reinterprets its bytes.
+    if (semantic::vector_kind(sem.types[v.type].kind)) {
+        // A value captures the whole operand before later operand effects.
+        // Volatile inputs use explicit lane reads; ordinary values use a
+        // single typed byte copy into expression-local storage.
         auto target = sem.types.unqualified(v.type);
         Value snapshot(Operand::slot(builder->add_slot(0,type(target))),type(target),target,true);
-        zero_object(target,address(snapshot));
-        auto t = sem.types[target];
-        auto count = t.kind == TypeKind::ExtVector ? t.bound : t.bound/sem.object_size(t.child);
-        vector_each(count,[&](Value lane) { vector_write(snapshot,lane,vector_read(v,lane)); });
+        if (sem.types[v.type].cv & 2) {
+            zero_object(target,address(snapshot));
+            vector_each((sem.types[target].kind == TypeKind::ExtVector ? sem.types[target].bound : sem.types[target].bound/sem.object_size(sem.types[target].child)),[&](Value lane) { vector_write(snapshot,lane,vector_read(v,lane)); });
+        } else {
+            Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(target); copy.alignment = sem.object_alignment(target);
+            emit(copy,{address(v).operand,address(snapshot).operand});
+        }
         snapshot.address = false; return snapshot;
     }
-    if (sem.class_value(v.type) || semantic::vector_kind(sem.types[v.type].kind)) { v.address = false; v.ir = type(v.type); return v; }
+    if (sem.class_value(v.type)) { v.address = false; v.ir = type(v.type); return v; }
     if (sem.types[v.type].kind == TypeKind::Array || sem.types[v.type].kind == TypeKind::Function) return address(v);
     if (v.cached && !(sem.types[v.type].cv & 2)) return Value(v.stored, type(v.type), v.type);
     Instruction i(Opcode::Load, type(v.type)); i.is_volatile = sem.types[v.type].cv & 2;
@@ -119,6 +123,17 @@ Value Procedural::store(Value v, Value location)
     if (sem.complex_type(location.type)) {
         auto real = load(complex_component(v,0)); auto imag = load(complex_component(v,1));
         store(real,complex_component(location,0)); store(imag,complex_component(location,1)); return v;
+    }
+    if (semantic::vector_kind(sem.types[location.type].kind)) {
+        v = load(v);
+        if (sem.types[location.type].cv & 2) {
+            vector_each((sem.types[location.type].kind == TypeKind::ExtVector ? sem.types[location.type].bound : sem.types[location.type].bound/sem.object_size(sem.types[location.type].child)),[&](Value lane) { vector_write(location,lane,vector_read(v,lane)); });
+        } else {
+            auto source = v; source.address = true;
+            Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(location.type); copy.alignment = sem.object_alignment(location.type);
+            emit(copy,{address(source).operand,address(location).operand});
+        }
+        return v;
     }
     if (type(location.type).kind() == IRType::Object) {
         Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(location.type); copy.alignment = sem.object_alignment(location.type);

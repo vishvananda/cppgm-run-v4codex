@@ -45,8 +45,10 @@ Value Procedural::vector_operation(ETokenType op, Value a, Value b, TypeId resul
     auto lane_type = sem.types[result].child;
     bool compare = op == OP_EQ || op == OP_NE || op == OP_LT || op == OP_GT || op == OP_LE || op == OP_GE;
     vector_each(count,[&](Value lane) {
-        auto x = vector_read(a,lane), y = vector_read(b,lane);
-        auto v = operation(op,x,y,compare ? sem.types.fundamental(FT_BOOL) : lane_type);
+        auto x = vector_read(a,lane);
+        auto v = b.type ? operation(op,x,vector_read(b,lane),compare ? sem.types.fundamental(FT_BOOL) : lane_type) :
+            op == OP_PLUS ? x : emit(Opcode::Unary,type(lane_type),{x.operand},op == OP_MINUS ? Operation::Neg : Operation::Bitnot);
+        if (!b.type) v.type = lane_type;
         if (compare) { v = convert(v,lane_type); v = emit(Opcode::Unary,type(lane_type),{v.operand},Operation::Neg); v.type = lane_type; }
         vector_write(value,lane,v);
     });
@@ -65,7 +67,10 @@ Value Procedural::builtin_value(NodeId n)
             auto t = sem.types.unqualified(source.type);
             Value stored(Operand::slot(builder->add_slot(0,type(t))),type(t),t,true);
             store(value,stored); source = stored;
-        } else source.address = true;
+        } else {
+            if (semantic::vector_kind(sem.types[source.type].kind)) source = load(source);
+            source.address = true;
+        }
         Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(fact.type); copy.alignment = 1;
         emit(copy,{address(source).operand,address(object).operand}); return load(object);
     }

@@ -23,6 +23,7 @@ void validate_instruction_shape(const Instruction& i)
     case Opcode::AtomicLoad: arity = 2; scalar = true; break;
     case Opcode::AtomicStore: case Opcode::AtomicAddFetch: case Opcode::AtomicExchange: arity = 3; scalar = true; break;
     case Opcode::AtomicCompareExchange: arity = 5; scalar = true; break;
+    case Opcode::X86: require(i.type == Type(), "typed x86 record operation"); arity = 3; break;
     case Opcode::CopyObject: arity = 2; break;
     case Opcode::Branch: arity = 3; break;
     case Opcode::Switch:

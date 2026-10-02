@@ -1,4 +1,5 @@
 #include "lowir/validator.h"
+#include "support/x86_builtins.h"
 namespace lowir_model {
 void Validator::instruction(const Instruction& i) const
 {
@@ -19,6 +20,13 @@ void Validator::instruction(const Instruction& i) const
         require(b.defined && b.owner == function_, "undefined or foreign block");
     };
     switch (i.opcode) {
+    case Opcode::X86:
+        count(3); require(arg(0).kind == Operand::Integer && arg(0).data.integer <= 0xffffffffu &&
+            cppgm::valid_x86_builtin(unsigned(arg(0).data.integer)), "invalid x86 operation identity");
+        value(arg(1),Type::Ptr);
+        require(arg(2).kind == Operand::Integer && (arg(2).data.integer == ~std::uint64_t(0) ||
+            (arg(2).data.integer < 32 && cppgm::x86_builtin(unsigned(arg(0).data.integer)).form == cppgm::X86Form::DynamicCompare)), "invalid x86 immediate fact");
+        break;
     case Opcode::Const: count(1); validate_literal(arg(0), i.type); break;
     case Opcode::Copy:
         count(1); scalar();

@@ -1,0 +1,9 @@
+extern "C" int printf(const char*,...);
+unsigned long long hash=1469598103934665603ULL;
+template<class T> void consume(T value) {
+ unsigned char data[sizeof(T)];__builtin_memcpy(data,&value,sizeof(T));
+ for(unsigned i=0;i<sizeof(T);++i) {hash^=data[i];hash*=1099511628211ULL;}
+}
+typedef double A __attribute__((vector_size(16)));
+typedef double B __attribute__((vector_size(16)));
+int main(int argc,char**){ A a={};for(unsigned i=0;i<sizeof(a)/sizeof(a[0]);++i)a[i]=(i%2 ? -1.25 : 2.5)+(argc-1);B b={};for(unsigned i=0;i<sizeof(b)/sizeof(b[0]);++i)b[i]=(double)((i%2 ? -3 : 5)+argc);consume(__builtin_ia32_cmppd(a,b,0));consume(__builtin_ia32_cmppd(a,b,1));consume(__builtin_ia32_cmppd(a,b,2));consume(__builtin_ia32_cmppd(a,b,3));consume(__builtin_ia32_cmppd(a,b,4));consume(__builtin_ia32_cmppd(a,b,5));consume(__builtin_ia32_cmppd(a,b,6));consume(__builtin_ia32_cmppd(a,b,7));consume(__builtin_ia32_cmppd(a,b,8));consume(__builtin_ia32_cmppd(a,b,9));consume(__builtin_ia32_cmppd(a,b,10));consume(__builtin_ia32_cmppd(a,b,11));consume(__builtin_ia32_cmppd(a,b,12));consume(__builtin_ia32_cmppd(a,b,13));consume(__builtin_ia32_cmppd(a,b,14));consume(__builtin_ia32_cmppd(a,b,15));consume(__builtin_ia32_cmppd(a,b,16));consume(__builtin_ia32_cmppd(a,b,17));consume(__builtin_ia32_cmppd(a,b,18));consume(__builtin_ia32_cmppd(a,b,19));consume(__builtin_ia32_cmppd(a,b,20));consume(__builtin_ia32_cmppd(a,b,21));consume(__builtin_ia32_cmppd(a,b,22));consume(__builtin_ia32_cmppd(a,b,23));consume(__builtin_ia32_cmppd(a,b,24));consume(__builtin_ia32_cmppd(a,b,25));consume(__builtin_ia32_cmppd(a,b,26));consume(__builtin_ia32_cmppd(a,b,27));consume(__builtin_ia32_cmppd(a,b,28));consume(__builtin_ia32_cmppd(a,b,29));consume(__builtin_ia32_cmppd(a,b,30));consume(__builtin_ia32_cmppd(a,b,31));printf("%llu\n",hash);return 0;}

@@ -156,7 +156,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         if (placeholder_objects.get(e)) throw std::runtime_error("use before auto type deduction");
         r.entity = e; facts.edit(n).entity = e;
         auto intrinsic = intrinsic_function(e);
-        bool atomic_family = intrinsic == Intrinsic::Atomic || intrinsic == Intrinsic::Complex;
+        bool atomic_family = intrinsic == Intrinsic::Atomic || intrinsic == Intrinsic::VectorShuffle || intrinsic == Intrinsic::Complex;
         if (entities[e].kind == EntityKind::Overload || (definitions && entities[e].template_info) || atomic_family || (intrinsic >= Intrinsic::AddOverflow && intrinsic <= Intrinsic::MulOverflow) || (intrinsic >= Intrinsic::Clzg && intrinsic <= Intrinsic::Popcountg)) {
             r.form = ExpressionForm::Overload; r.category = ValueCategory::Lvalue;
             ScopeId naming = naming_class(name_owner(ast[n].detail, s));
@@ -249,6 +249,16 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         TypeId a = decay(expression(first, s).type), b = decay(expression(second, s).type);
         if ((types[a].kind == TypeKind::Named || types[b].kind == TypeKind::Named) &&
             operator_expression(n, s, OP_LSQUARE, {first, second}, r)) return r;
+        if (vector_kind(types[a].kind)) {
+            auto source = expressions[first];
+            if (!integral(b) || scoped_enum(b) || fundamental(types[a].child,FT_BOOL))
+                throw std::runtime_error("invalid vector subscript");
+            Conversion base; base.target = source.type; base.rank = 0;
+            record_conversion(r,first,base);
+            record_conversion(r,second,conversion(second,promote(b)));
+            r.type = types.qualify(types[a].child,types[source.type].cv);
+            r.category = source.category; return r;
+        }
         TypeId left = a, right = b;
         if (!pointer(a)) std::swap(a, b);
         if (!object_pointer(a) || !integral(b) || scoped_enum(b)) throw std::runtime_error("invalid subscript");

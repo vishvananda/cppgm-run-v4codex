@@ -252,9 +252,8 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         conversions.insert(conversions.end(),chosen.begin(),chosen.end());
     }
     if (intrinsic_function(r.selected) != Intrinsic::None) r.expression.form = intrinsic_expression(r.selected);
-    if (intrinsic_function(r.selected) == Intrinsic::VectorExtract && !children[2].dependent) {
-        auto lane = constants[query_value(query_edges[q.offset+2])];
-        if (!lane.valid || !integral(lane.type) || negative_constant(lane) || integer_value(lane) >= vector_elements(args[0].type))
+    if (auto index = intrinsic_immediate_index(r.selected)) {
+        if (!children[index+1].dependent && !valid_intrinsic_immediate(r.selected,constants[query_value(query_edges[q.offset+index+1])]))
             return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
     }
     auto returned = types[function_type].child;

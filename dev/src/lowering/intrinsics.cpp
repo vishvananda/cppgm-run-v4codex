@@ -8,6 +8,9 @@ Value Procedural::intrinsic_call(NodeId n, semantic::Intrinsic intrinsic)
         return integer_builtin(n,intrinsic);
     if (intrinsic >= semantic::Intrinsic::AddOverflow && intrinsic <= semantic::Intrinsic::MulOverflow)
         return overflow_builtin(n,intrinsic);
+    if (intrinsic == semantic::Intrinsic::VectorShuffle) return vector_shuffle(n);
+    if (intrinsic == semantic::Intrinsic::X86) return x86_call(n);
+    if (intrinsic == semantic::Intrinsic::Packed) return packed_call(n);
     if (intrinsic == semantic::Intrinsic::Atomic) return atomic_call(n);
     auto fact = sem.expression_fact(n);
     auto argument = [&](unsigned i) {

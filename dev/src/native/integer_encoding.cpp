@@ -101,6 +101,7 @@ void Encoder::instruction(const Instruction& i)
         mov(Operand::r(XR_RAX),Operand::imm(60)); byte(0x0f); byte(0x05); break;
     case Op::Trap: byte(0x0f); byte(0x0b); break;
     case Op::Nop: byte(0x90); break;
+    case Op::X86: x86_builtin(i); break;
     case Op::Pause: byte(0xf3); byte(0x90); break;
     case Op::Fence: byte(0x0f); byte(0xae); byte(0xf0); break;
     case Op::Xadd: case Op::Cmpxchg:

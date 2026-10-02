@@ -1,8 +1,8 @@
-# PA30 compact implementation plan — audit202
+# PA30 compact implementation plan — implementation203
 
 Stage base commit: `27029f978e65b78331233123922d342033d5d1f7`.
 Last reviewed commit: `378d1bd83df4dd3f7a9c1693c18afa7e7c7bd61f`.
-Target: **PA30 full-stage**. Phase: **checkpointAudit complete; stage incomplete**.
+Target: **PA30 full-stage**. Phase: **implement; stage incomplete**.
 Reviewed range: `4a081cb0..56ecc31c`, extended through audit fix `378d1bd8`.
 All implementations199–201 and their interactions are covered by [audit202](audit.md).
 
@@ -58,3 +58,22 @@ interactions from their initial owner fixes, leaving avoidable follow-up work
 for audit. Finish the remaining vector operations, conversions, volatility and
 storage interactions as one broad group before the next handoff. This checkpoint
 audit does not certify PA30 completion.
+
+## Implementation203 active ledger
+
+Entry HEAD: `404e468e829c6b76642678b991a09067306c1efb`. Previous turn:
+progress (audit repairs, committed evidence); no inherited worker is live.
+Entry required inventory: 151/153, two random-header failures (the external
+154 summary is inconsistent with its own primary log).
+
+| Owner / group | Data flow and work bounds | Validation / status |
+|---|---|---|
+| Packed SIMD vocabulary and lane lowering | Immutable builtin descriptions → canonical signatures and typed intrinsic facts → scalar typed LowIR lanes → ordinary native/ELF. Fixed-width work is bounded per builtin; no library-name dispatch or dummy results. | Implemented typed packed lanes and a bounded architectural LowIR operation for SSE/MXCSR. Focused boundary/state tests pass; frozen serialized and hardware controls running. |
+| Vector expressions and storage | Shared operator/type-query facts → lane addresses, snapshots and stores. One operand evaluation; cv and categories preserved. O(lanes), generated loops for wide vectors. | Closed subscripting, snapshots, volatile conversion/storage and dependent assignment/query interactions. All 44 new positive/negative commands pass. |
+| Closure and evidence | Freeze entry/final compilers, A/A and ABBA equivalent controls plus final-only new behavior. | Required prior/PA30/through30 and file audit; explicit inherited controls; latency/RSS and executable runtime/text. |
+
+Independent review remains separate from these unfinished implementations; no
+known vector defect is assigned to audit. Preserve both review markers above.
+
+Implementation203 code checkpoint: shared vector/packed owners implemented; final
+required reports and frozen performance evidence are running. See [design203](design203.md).

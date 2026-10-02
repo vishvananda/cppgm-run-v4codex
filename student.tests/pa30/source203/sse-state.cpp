@@ -1,0 +1,36 @@
+typedef float F __attribute__((vector_size(16)));
+typedef double D __attribute__((vector_size(16)));
+typedef int I __attribute__((vector_size(16)));
+typedef int Pair __attribute__((vector_size(8)));
+typedef unsigned U __attribute__((vector_size(16)));
+int main(int argc,char**) {
+    F a={(float)argc,4.0f,9.0f,16.0f}, b={2.0f,3.0f,4.0f,5.0f};
+    F s=__builtin_ia32_addss(a,b);
+    if(s[0]!=3.0f||s[1]!=4.0f||s[3]!=16.0f)return 1;
+    s=__builtin_ia32_sqrtps(a);
+    if(s[0]!=1.0f||s[1]!=2.0f||s[2]!=3.0f||s[3]!=4.0f)return 2;
+    s=__builtin_ia32_shufps(a,b,27);
+    if(s[0]!=16.0f||s[1]!=9.0f||s[2]!=3.0f||s[3]!=2.0f)return 3;
+    unsigned old=__builtin_ia32_stmxcsr();
+    __builtin_ia32_ldmxcsr((old&~0x6000u)|0x4000u);
+    int rounded=__builtin_ia32_cvtss2si(F{1.25f,0,0,0});
+    int truncated=__builtin_ia32_cvttss2si(F{1.75f,0,0,0});
+    __builtin_ia32_ldmxcsr(old);
+    if(rounded!=2||truncated!=1)return 4;
+    F input={1.0f,2.0f,__builtin_nanf(""),__builtin_inff()};
+    __builtin_ia32_ldmxcsr(old&~0x3fu);
+    Pair p=__builtin_ia32_cvtps2pi(input);
+    unsigned flags=__builtin_ia32_stmxcsr();__builtin_ia32_ldmxcsr(old);
+    if(p[0]!=1||p[1]!=2||(flags&1))return 5;
+    F converted=__builtin_ia32_cvtpi2ps(a,Pair{31,-7});
+    if(converted[0]!=31||converted[1]!=-7||converted[2]!=9||converted[3]!=16)return 6;
+    U mask=(U)__builtin_ia32_cmpltps(a,b);
+    if(mask[0]!=~0u||mask[1]!=0||mask[3]!=0)return 7;
+    float nan=__builtin_nanf("");
+    F minimum=__builtin_ia32_minps(F{nan,0.0f,5,7},F{2,-0.0f,nan,3});
+    U repr=(U)minimum;
+    if(minimum[0]!=2||repr[1]!=0x80000000u||!__builtin_isnan(minimum[2])||minimum[3]!=3)return 8;
+    D d=__builtin_ia32_cvtps2pd(a);
+    if(d[0]!=1||d[1]!=4)return 9;
+    return __builtin_ia32_movmskps((F)U{0x80000000u,0,0x80000000u,0})!=5;
+}

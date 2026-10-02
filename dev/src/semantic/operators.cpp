@@ -31,9 +31,7 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         if (operator_expression(n, s, op, args, r)) return r;
     }
     if (op == OP_AMP) {
-        if (intrinsic_function(a.entity) >= Intrinsic::SourceFile && intrinsic_function(a.entity) <= Intrinsic::SourceColumn)
-            throw std::runtime_error("source intrinsic requires a direct call");
-        if (intrinsic_function(a.entity) == Intrinsic::IsConstantEvaluated)
+        if (direct_intrinsic(a.entity))
             throw std::runtime_error("compiler intrinsic requires a direct call");
         observe_scalar(operand);
         if (field_fact(a.entity).bit_field) throw std::runtime_error("address of bit-field");
@@ -79,6 +77,11 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         Conversion store; store.target = a.type; store.rank = 0;
         record_conversion(r, 0, store);
         return r;
+    }
+    if (vector_kind(types[t].kind) && (op == OP_PLUS || op == OP_MINUS || op == OP_COMPL)) {
+        if ((op == OP_COMPL && !integral(types[t].child)) || fundamental(types[t].child,FT_BOOL))
+            throw std::runtime_error("invalid vector unary operand");
+        r.type = types.unqualified(t); record_conversion(r,operand,conversion(operand,r.type)); return r;
     }
     if (op == OP_LNOT) { record_conversion(r, operand, boolean_conversion(operand)); r.type = types.fundamental(FT_BOOL); return r; }
     if (!(op == OP_PLUS && pointer(t)) && (!arithmetic(t) || (op == OP_COMPL && !integral(t) && !complex_type(t))))

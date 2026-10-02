@@ -35,6 +35,7 @@ void Reader::instruction(FunctionBuilder& b)
 void Reader::instruction_body(Instruction& i, FunctionBuilder& b)
 {
     switch (i.opcode) {
+    case Opcode::X86: add_operand(b); comma_operand(b); comma_operand(b); break;
     case Opcode::Const:
         i.type = type(); p_.operands.push_back(literal()); break;
     case Opcode::Copy: case Opcode::VaArg: case Opcode::Throw:

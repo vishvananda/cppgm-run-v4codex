@@ -240,3 +240,13 @@ FRONTEND_OBJ_BASENAMES_lowir2native += lowir/force_inline
 # Exact binary16/binary128 literal and constant representations.
 $(foreach tool,posttoken ppexpr preproc cppgm++ lowir lowiropt lowir2native,$(eval FRONTEND_OBJ_BASENAMES_$(tool) += support/extended_float))
 $(foreach tool,cppgm++ lowir2native,$(eval FRONTEND_OBJ_BASENAMES_$(tool) += native/extended_float))
+
+FRONTEND_OBJ_BASENAMES_preproc += support/packed_builtins
+FRONTEND_OBJ_BASENAMES_cppgm++ += support/packed_builtins lowering/packed_builtins
+
+FRONTEND_OBJ_BASENAMES_preproc += support/x86_builtins
+FRONTEND_OBJ_BASENAMES_cppgm++ += support/x86_builtins lowering/x86_builtins native/x86_builtins
+FRONTEND_OBJ_BASENAMES_lowir += support/x86_builtins
+FRONTEND_OBJ_BASENAMES_lowir2native += support/x86_builtins native/x86_builtins
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/x86_lanes
+FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/vector_shuffle lowering/vector_shuffle
