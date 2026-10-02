@@ -13,6 +13,8 @@ void propagate_call_constants(Program&, std::uint64_t& work);
 void eliminate_local_expressions(Program&, const std::vector<bool>& call_cycles, std::uint64_t& work,
     bool edges = false, const std::vector<bool>* selected = nullptr);
 void forward_local_slots(Program&, std::uint64_t& work);
+bool split_local_objects(Program&, std::uint64_t& work);
+void retire_unused_slots(Program&, std::uint64_t& work);
 bool promote_scalar_slots(Program&, const std::vector<bool>& call_cycles, std::uint64_t& work);
 void simplify_control(Program&, std::uint64_t& work);
 void bypass_empty_jumps(Program&, std::uint64_t& work);

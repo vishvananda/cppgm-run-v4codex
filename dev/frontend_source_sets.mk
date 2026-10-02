@@ -285,3 +285,5 @@ FRONTEND_OBJ_BASENAMES_lowiropt += lowir/call_effects
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/call_effects
 FRONTEND_OBJ_BASENAMES_lowiropt += lowir/call_constants
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/call_constants
+FRONTEND_OBJ_BASENAMES_lowiropt += lowir/object_splitting
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/object_splitting

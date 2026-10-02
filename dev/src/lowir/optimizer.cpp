@@ -19,6 +19,14 @@ void optimize(Program& p, unsigned level, bool telemetry)
     simplify_scalars(p,work);
     simplify_call_regions(p,work);
     simplify_control(p,work);
+    // Split original aggregate homes before call admission, so compact bodies
+    // are costed once. A second bounded split handles homes introduced by
+    // cloning; neither step restarts interprocedural expansion.
+    bool objects_split = split_local_objects(p,work);
+    if (objects_split) {
+        forward_local_slots(p,work);
+        simplify_scalars(p,work);
+    }
     if (inline_small_calls(p,level,work)) {
         simplify_call_regions(p,work);
         simplify_control(p,work);
@@ -34,6 +42,11 @@ void optimize(Program& p, unsigned level, bool telemetry)
         dataflow[fn] = p.functions[fn].blocks.count > 1 && !call_cycles[fn];
     forward_local_slots(p,work);
     simplify_scalars(p,work);
+    if (split_local_objects(p,work)) {
+        objects_split = true;
+        forward_local_slots(p,work);
+        simplify_scalars(p,work);
+    }
     if (promote_scalar_slots(p,call_cycles,work)) simplify_scalars(p,work,&dataflow);
     eliminate_local_expressions(p,call_cycles,work);
     simplify_control(p,work);
@@ -50,11 +63,15 @@ void optimize(Program& p, unsigned level, bool telemetry)
     simplify_control(p,work);
     prune_support_functions(p,work);
     simplify_control(p,work);
+    if (objects_split) retire_unused_slots(p,work);
     if (telemetry) {
         rusage usage; getrusage(RUSAGE_SELF,&usage);
         std::cerr << "{\"optimize_ms\":" << std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count()
             << ",\"optimize_work\":" << work
             << ",\"optimize_instructions\":" << p.instructions.size()
+            << ",\"split_objects\":" << p.stats.split_objects
+            << ",\"split_fields\":" << p.stats.split_fields
+            << ",\"split_growth_reserved\":" << p.stats.split_growth_reserved
             << ",\"optimize_peak_rss_kib\":" << usage.ru_maxrss << "}\n";
     }
 }

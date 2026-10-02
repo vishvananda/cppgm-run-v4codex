@@ -9,6 +9,18 @@ checkpoints and the audit fixes, not just the last handoff. See
 [audit.md](audit.md) for the commit inventory, architecture traces, findings,
 performance tables and single audit ledger row.
 
+Implementation 211 in progress (entry `2e1238dca394284e1b3b4cb434cfbd8a175beff9`,
+178/219 course cases). Owner: function-local aggregate storage. Data flow:
+typed address origins and complete-copy components -> compatible field
+partitions -> scalar homes -> existing snapshot/SSA propagation -> ordinary
+call admission. Legality excludes escapes, volatile accesses, conflicting
+overlays and unknown offsets. Bounded small-object partitions and preflight
+growth admission retain conservative input when proof/budget is unavailable.
+Validate bulk/padding bytes, mutable snapshots, aliases, branches, exceptions,
+direct/replayed objects and runtime, then measure frozen A/B compiler wall/RSS
+and checked executable runtime/text with A/A and ABBA. Related memory GVN and
+loop owners remain separate unfinished implementation, not audit questions.
+
 ## Completed owners and bounds
 
 Source -> shared typed LowIR -> optimizer -> text view or native MIR/direct ELF.
