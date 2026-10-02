@@ -513,7 +513,8 @@ EntityId Analyzer::deduce_function_values(EntityId pattern, const Arguments& arg
             auto element = types.alias_target(types[p].bound);
             std::vector<TypeId> actual;
             for (unsigned j = i; j < args.size(); ++j) {
-                auto type = args[j].type, param = types[element];
+                auto type = args[j].type;
+                auto param = types[element];
                 auto referred = types[types.alias_target(param.child)];
                 if (param.kind == TypeKind::RRef && referred.kind == TypeKind::Named &&
                     entities[referred.entity].template_parameter && !referred.cv && args[j].category == ValueCategory::Lvalue)
