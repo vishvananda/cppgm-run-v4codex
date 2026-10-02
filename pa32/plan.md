@@ -5,155 +5,151 @@ Last reviewed commit: e82bf4152fe8d6d68b9cd966655db0d8142cf81b
 
 ## Design/spec alignment and completed ownership
 
-Source -> typed LowIR Program -> shared optimizer -> writer or direct native/ELF.
-External LowIR uses the same optimizer after parsing/validation. No textual
-roundtrip inside compilation, reference delegation or fixture recognition.
+Source -> typed LowIR Program -> shared optimizer -> writer or native/ELF.
+External LowIR uses the same optimizer after validation. No textual production
+roundtrip, private semantic side channel, reference delegation or fixture keys.
+O0 returns before any optimizer analysis. O1/O2/O3 share the current bounded
+pipeline; distinct higher-level quality objectives remain unfinished.
 
-- Entry/transport owner: `lowiropt` handles CLI and external validation; the
-  toolchain driver handles levels, `__OPTIMIZE__`, source/LowIR dispatch and
-  multi-source emission. Preserve ABI, section, debug and object-extent facts.
-  Debug filenames survive punctuation; source tokens now carry columns and
-  lowering records locations. Source binding/start-span work remains below.
-- Scalar owner: function-local dense definitions/users, dirty worklists, typed
-  integer folding/identities/reassociation, copy propagation and live marking.
-  No unsafe floating identities or discarded observable/trapping operations.
-  Reassociation requires a single-use intermediate and stable root; mutable
-  reads cannot move past updates. Facts are discarded after each invocation.
-- Local memory/CSE owner: explicit unescaped scalar slots and block-local
-  expression tables. Respect volatile, width and SSA stability; unknown memory
-  and effects stay conservative. Tables expire at block/function boundaries.
-- CFG owner: one edge/reachability census, constant branches/switches, phi
-  repair and adjacent single-predecessor merging. Functions with EH registration
-  retain their CFG until exceptional edges have an owning analysis. Compaction
-  remaps instructions/operands and rebuilds definition positions in block order.
-- Native transport owner: deterministic function order and final ELF symbol
-  order make source and replay equivalent. Mutable LowIR temporaries use stable
-  homes, including parameters and staged parallel phi copies; saved values
-  cannot alias later writes. This fixes inherited backend correctness defects.
+| Owner | Data flow and legality | Work/growth and validation |
+| --- | --- | --- |
+| Entry/transport (207) | CLI, levels, source/LowIR dispatch; ABI/sections/object extents and debug locations survive serialization | Deterministic native/ELF order; both 25-case object replay lanes pass |
+| Scalar/local memory (207) | Typed constants/identities, stable-value CSE, unescaped slots; mutable reads retain snapshots, traps/volatile/effects stay observable | Dirty def/use worklists; 16*(I+uses+1) each for propagation/rewrite; 506 explicit executable controls at four levels |
+| Sparse slot promotion (208) | Load-demanded (block ID, slot ID) entries; typed store snapshots become copies, joins become phis. Unknown initialization, escape, volatile or incompatible access declines. Exceptional entry accepts only one entry store before every registration; handler-defined values can join on ordinary edges | Each demand published once; no recursion; 16*(I+O+B) admission work. Added phis <= I and phi operands <= 2O, otherwise transaction discarded. Loop/merge/EH/width and stress controls |
+| Ordinary CFG/dataflow (208) | Dirty dominators scope expression/equality/zero-nonzero facts. Mutable values cannot become facts. Phi inputs use predecessor environments. RPO requires a def/use dominance proof. Boolean and integer-equality/extreme choices preserve noncanonical truth and widths | Dominance <=32*(I+O+E+B); CSE probes <=16*(I+O+B). Shared completed dominance feeds edge facts; EH/exhaustion uses conservative local CSE. No instruction growth |
+| CFG cleanup (208) | Constant edges, reachability/phi repair, adjacent merging and empty-jump bypass. Conflicting phi choices or uncertain exceptional flow remain intact | Memoized chain traversal; <=16*(I+O+B) phi expansion work and <=2x incoming phi operands; transactional failure. No added blocks; identity/edge/diamond reducers |
+| Admission (208) | One iterative SCC census identifies calls inside ordinary cycles. Those functions keep local optimization until a measured call/loop cost policy exists; a call outside a loop does not block promotion | O(I+O+B), cached for this invocation. Transforms add no calls/cycles, so this conservative decision remains valid. Explicit before-loop/in-loop controls |
 
-O0 runs no optimizer. O1/O2/O3 currently share two scalar worklists, two slot
-sweeps, one CSE pass and one CFG sweep; higher-level objectives remain unfinished.
-Each scalar propagation/rewrite and CSE table has a 16*(instructions+uses+1)
-work allowance with operand/alias/probe charging and conservative exhaustion.
-Other sweeps/compaction are linear; final ELF ordering is O(S log S). No IR
-instruction growth or whole-program fixed-point retry. Scratch is function-owned
-for scalar/CSE and unit-owned for one-shot compaction, released before emission;
-a conservative bound is 512*(I+O+V+B+S+P) bytes beyond Program pools.
+I/O/B/E are instruction/operand/block/edge counts at the owning pass. This is
+function-local state, released after each function; unit compaction pools and
+ID arrays die at the pass boundary. Generated names use a monotonic collision
+cursor, never semantic identity. No process-global cache or per-node ownership.
 
-## Remaining implementation groups and boundary
+The schedule has at most five scalar worklists (one only after actual promotion),
+two CSE sweeps, two local-slot sweeps, one promotion/diamond/bypass invocation and
+three structural sweeps. Additional scalar/CSE sweeps visit only admitted
+functions with an original multi-block CFG; unchanged straight-line functions
+keep the original two scalar worklists. The final structural sweep consumes edges exposed by
+phi repair; it does not restart the pipeline. There is no global fixed point.
+Promotion bounds output by 2I instructions/3O operands; bypass adds no
+instructions and at most doubles phi operands. Subsequent passes only shrink.
+Together these give input-linear whole-pipeline work and memory, including
+conservative exhaustion. A loose accounting envelope is 32768*(I+O+B+V+S+1)
+charged work units and transient bytes over input pools (V/S: values/slots).
+Actual charged work, phase wall/RSS and IR counts are retained in measurements;
+this envelope is a bound, not a claim about typical memory consumption.
 
-Loop 208 in progress (entry HEAD `399faac3130eee32004cfddbd7fc07df866693da`,
-110/219 passing, 109 existing failures). First owner: function-local sparse
-slot definitions and ordinary CFG edges, feeding typed copies/phis into scalar
-and control simplification. Demand only block/slot pairs needed by loads; cap
-work and phi operands linearly in input size, retain original slots on missing
-initialization, exceptional uncertainty or budget exhaustion. Preserve mutable
-value snapshots, store conversions, volatile/escaped storage, handler roots and
-debug locations. Extend through related CFG propagation/cleanup while those
-same facts support it. Validate direct O1/O2 slot/edge fixtures, execution
-reducers, serialized object/debug lanes, and frozen baseline/current wall/RSS/
-runtime/text measurements. Interprocedural and aggregate alias facts remain
-separate owners. This entry records implementation intent, not completion.
+## Remaining implementation and concrete handoff boundary
 
-208 increment: sparse typed slot snapshots/phis, conservative exceptional roots,
-transactional phi-aware empty-jump bypass, bounded dirty dominance facts and
-dominator-scoped CSE/zero-nonzero branch facts are implemented. Two scheduled
-CSE sweeps consume newly exposed CFG facts; no whole-pipeline fixed point.
-Current check: **125/219**, 94 failures (15 pre-existing failures removed).
-Explicit `dataflow.py`: 101 cases at four levels through both native paths,
-EH direct/replay and conservative guards; inherited `local.py`: 506 cases at
-four levels. File audit passes with the same four inherited warnings. Frozen
-baseline/current performance experiment is running; profitability is unproven.
+1. Memory/aggregate ownership: typed projections, alias/effect/lifetime facts,
+   scalar replacement, load/copy forwarding and exceptional-region state. The
+   current scalar-slot proof cannot justify arbitrary memory elimination.
+2. Interprocedural ownership: call/effect/no-unwind summaries, bounded inlining,
+   support pruning, cleanup and lifecycle convergence. These own most remaining
+   direct/source call predicates; adding local scalar passes cannot satisfy them.
+3. Loop ownership: finite-loop proofs, motion/fill/deletion, O3 specialization
+   and unrolling, with measured growth/profit policies. Calls inside cycles
+   deliberately retain the measured local policy; no call-summary or allocation
+   benefit is presumed. PA33 allocation quality is not an additional PA32 gate.
+4. Source/debug ownership: binding copies, start spans and emitted declaration
+   identities. Source-debug lanes remain 0/3; O3 direct debug still needs unroll.
 
-208 closure increment: edge-qualified constants, boolean/equality/unsigned
-extreme diamond identities, a final constant-edge sweep, independent phi-growth
-caps, and monotonic generated-name collision handling. **127/219** pass (17
-entry failures removed, no new failures). The common memory benchmark exposed
-a reproducible regression in the combined promotion/reuse policy for loops
-with calls. Frozen diagnostic variants are retained under `pa32-208/diagnostic`.
-A once-computed iterative SCC admission summary retains local optimization for
-functions containing calls inside cycles; calls outside cycles remain eligible.
-The memory object now equals the baseline byte for byte. Final performance and
-handoff validation are in progress; this is an implementation finding resolved
-in the current policy, not a PA33 allocator gate or an audit waiver.
+The completed group extended from slot merges through ordinary dominance,
+branch facts, phi-safe bypass and scalar diamonds, plus the performance policy
+needed to retain it. Remaining predicates require memory, call, exceptional,
+loop-trip or source-binding facts absent from these owners. Further related work
+would require those new analyses and separate runtime workloads, rather than
+more iterations of the completed passes. These are unfinished implementations,
+not review questions, waivers, or a claim that PA32 is complete.
 
-1. CFG/dataflow: dominance, cross-block slot/phi promotion and memory/alias/
-   lifetime facts, including exceptional edges. Validate with remaining direct
-   O1/O2 branch, slot, alias, aggregate and EH predicates plus execution controls.
-2. Interprocedural: typed call/effect/no-unwind summaries, bounded inlining and
-   support pruning; preserve linkage, ABI, exceptions and source locations.
-   Validate direct/source call, cleanup and lifecycle fixtures together.
-3. Loops: bounded O2 loop/memory analysis; O3 specialization/unroll policies,
-   explicit growth/profit budgets and source/debug sidecars.
-4. Source/debug contract: declaration binding copies, expression/statement
-   start spans and emitted identity expectations in source driver fixtures.
-   Validate all source debug lanes and preserve both object replay lanes.
+## Performance evidence and stage-scoped acceptance
 
-The local group was extended through scalar identities/reassociation, snapshots,
-phi transport, debug parsing and multiple sources. Remaining predicates require
-facts across control joins, calls, exceptional regions, aggregate aliases or
-loop iterations, or new source binding records. Extending local tables cannot
-supply those legality proofs. These are unfinished implementations, not waived
-requirements or questions delegated to audit.
+Frozen binaries, inputs, flags, A/A calibration and six ABBA blocks, checked
+outputs, wall/RSS/text, raw observations and source/log hashes are in
+[evidence208](../student.tests/pa32/evidence208/binding.json). Durable artifacts:
+`/home/vishvananda/work/private/v4codex/artifacts/pa32-208`.
+Scripts: `dataflow_performance.py`, `runtime_pairs.py`, `common_levels.py`,
+`performance.py`, `selfhost_performance.py`; all run explicitly.
 
-## Performance evidence and acceptance
+Final frozen baseline/current comparison at O1 (1,200 functions per affected workload):
 
-Frozen binaries/inputs/flags, A/A and six ABBA blocks, checked executable results,
-wall/RSS/text and all raw observations are in
-[`evidence207`](../student.tests/pa32/evidence207/binding.json); durable binaries,
-inputs and logs: `/home/vishvananda/work/private/v4codex/artifacts/pa32-207`.
-Scripts: `performance.py`, `common_levels.py`, `selfhost_performance.py`, and
-inherited `pa27/performance147_common.py`, explicitly run under student.tests.
+| Workload | Compiler ratio (range) | Compile ms A/B | RSS KiB A/B | Runtime ratio (range) | Runtime ms A/B | Text bytes A/B |
+| --- | --- | --- | --- | --- | --- | --- |
+| slots | 1.495 (1.483–1.511) | 113.02/168.76 | 14512/15480 | 0.849 (0.845–0.855) | 94.45/80.34 | 149200/144400 |
+| dominance | 1.271 (1.240–1.357) | 92.48/117.01 | 16772/17212 | 0.810 (0.806–0.814) | 116.28/94.21 | 220000/148000 |
 
-Affected 600-function/21,000-instruction workload: O1/O0 compilation paired median
-1.418 (range 1.398–1.543), wall medians 49.65/70.48 ms, peak RSS 10,208/14,596 KiB.
-Runtime paired median 0.869 (0.866–0.871), wall medians 72.94/63.38 ms; executable
-text 170,800/110,200 bytes. Every pair improves; inputs/checksum prevent dead work.
-Retain budgets <=2x compiler wall, <=1.75x RSS and no text growth. The initial
->=10% runtime target is a diagnostic, not a spec/handout gate: identical affected
-objects previously measured 14.7% and 9.5% median gains; all pairs improved and
-all observations are retained. Current gain is 13.1%; this reclassification
-changes no mandated bounds, correctness or coverage requirements.
+Every affected runtime pair improves. Acceptance budgets: paired-median compiler
+wall <=2x, maximum observed compiler RSS <=1.75x and no text growth on fixed
+affected workloads. These are explicit policy budgets, not course IR envelopes.
+All required IR predicates and semantic tests retain their own acceptance.
 
-Fixed template-heavy common inputs, final O1/O0 paired medians:
+Fixed template-heavy common inputs at O1:
 
-| Workload | Compile ratio | Runtime ratio | Compiler RSS KiB O0/O1 | Executable text bytes O0/O1 |
-| --- | ---: | ---: | ---: | ---: |
-| Memory/calls | 1.048 | 0.931 | 30072/30064 | 151633/125199 |
-| Floating | 1.034 | 0.990 | 30640/30712 | 151474/125053 |
-| Exceptions | 1.069 | 0.986 | 30260/30064 | 151781/125339 |
-| Pruning | 1.055 | 0.933 | 36252/36244 | 151633/125199 |
+| Workload | Compile ratio | Runtime ratio | RSS KiB A/B | Text bytes A/B |
+| --- | --- | --- | --- | --- |
+| memory | 1.009 | 1.004 | 30364/30656 | 125199/125199 |
+| floating | 0.992 | 1.010 | 30532/30648 | 125053/125053 |
+| exceptions | 1.022 | 0.999 | 30220/30676 | 125339/125337 |
+| pruning | 1.012 | 1.006 | 36064/36220 | 125199/125199 |
 
-Memory/pruning improve in every pair; FP/EH ranges cross 1, so no repeatable
-runtime benefit claimed there. Historical misses/outliers are preserved,
-including the initial O1 floating ratio 1.048, not reproduced in the final run.
-Common O0 baseline/current compile medians range 0.996–1.013 (small metadata/
-native correctness costs and noise), with byte-identical text in all four cases.
-Compiler-owned `folding.cpp` at O0: paired median 1.013 (0.966–1.049), wall medians
-1.145/1.161 s, RSS 75000/75380 KiB, byte-identical 31889-byte text. It has no main,
-so standalone runtime is inapplicable; this is not a claim of full self-hosting.
-Raw spreads/A/A are in the linked JSON. PA33 allocation quality is not an extra
-PA32 gate. Runtime profitability must be remeasured for later passes.
+Memory/floating/pruning O1 objects are byte-identical; EH text shrinks by two
+bytes. No common runtime benefit is claimed; spreads/noise are retained in JSON.
+Common O0 objects are all byte-identical; compile medians range 0.981–1.002.
+The inherited scalar O1/O0 check: compiler 1.896, RSS 10180/14576 KiB, runtime
+0.868 (all pairs improve), text 170800/110200 bytes. The full spread
+includes compiler pairs above 2x; the specified budget uses the paired median.
+Compiler-owned `folding.cpp` at O0: 0.998 (0.975–1.009), wall medians
+1.154/1.154s, RSS 75484/75840 KiB, identical 31889-byte text.
+It has no executable entry, so standalone runtime is inapplicable; this is not
+a full self-hosting claim. Removing extra scalar work for unchanged single-block
+functions reduced common O1 compiler overhead from roughly 6–8% to 0–2%.
 
-## Handoff ledger
+Before acceptance, the combined promotion/reuse policy regressed the fixed
+memory workload: initial median +6.7%, repeated pinned runtime +8.1%. Diagnostic
+variants and every observation are preserved. Disabling either promotion or
+cross-block CSE alone did not resolve it; refusing cheap address CSE across calls
+made it worse and was removed. The SCC admission policy restores the baseline
+memory object byte for byte, preserving gains on affected call-free workloads.
+This is a resolved optional-transform regression, not a later-stage exemption.
 
-Implementation commits: `8c01abc9` shared optimizer/local/native group;
-`5f8be172` debug/transport closure; `0e0d29f4` scalar closure and snapshot reducer.
-Current `make test-pa32`: **110/219** (109 failures), versus **0/219** at entry;
-Ralph's entry census **0/425** is retained as a different accounting basis.
-No course tests, harnesses, references or comparison rules changed.
-`make test-report-through-pa31`: **5178/5178**. File audit: exit 0, four inherited
-large-header warnings. Personal `local.py`: **506** execution cases at each of
-O0/O1/O2/O3 plus trap/CLI and multi-source debug/transport controls.
-PA32 debug: direct **4/5**, source **0/3**, debug object replay **25/25**;
-nodebug replay **25/25** is included in the primary report. PA24 has no separate
-`test-debuginfo` target; its primary debug metadata controls pass in the through
-report. Run root reports sequentially because they share output artifacts.
+Earlier evidence is preserved in [evidence207](../student.tests/pa32/evidence207/binding.json):
+scalar O1/O0 compiler 1.418, runtime 0.869, text 170800/110200 bytes, common and
+compiler-component observations included. Its historical >=10% runtime target
+was already reclassified as diagnostic with measurements; repeatable benefit and
+explicit compiler/RSS/text budgets remain. No mandated limit or coverage changed.
+
+## Handoff ledger and independent review
+
+Entry HEAD: `399faac3130eee32004cfddbd7fc07df866693da`; prior goal turn was progress
+(the committed local/transport group and its evidence), with no live job at entry.
+207 commits: `8c01abc9`, `5f8be172`, `0e0d29f4` (110/219 from 0/219).
+208 commits: `1aecbd03` sparse slots/ordinary CFG; `f36657ff` scalar choice closure,
+SCC admission and independent growth budgets; `a1bbf8e7` selects only affected
+functions for extra scalar work. The final evidence/ledger commit records this
+handoff boundary.
+
+Current required `make test-pa32`: **127/219**, **92 failures**, versus entry
+**110/219**, **109 failures**: **17 original failures removed**, no new failures.
+Ralph's supplied **110/425** census uses a different denominator and is retained
+as context, not substituted for the root harness's unchanged 219 fixtures.
+No course tests, references, harnesses or comparison rules changed.
+`make test-report-through-pa31`: **5178/5178**. File audit exits 0 with four
+inherited large-header warnings. Explicit `dataflow.py`: **134** cases x four
+levels x two native paths, plus EH direct/replay, floating snapshots/signed zero,
+uninitialized/volatile/escape/width/cycle guards, sparse-budget stress and
+call-cycle admission controls.
+Inherited `local.py`: **506** executable cases x four levels plus trap/CLI checks.
+Debug required target: direct **4/5**, source **0/3**, separately completed debug
+object replay **25/25**; nodebug replay **25/25** is in the primary suite. The
+whole debug target still fails; its failures remain implementation work above.
 
 Independent audit still owed: whole-stage source/template-to-ELF and useful-fact
-traces, pipeline-wide bound/fallback accounting, exceptional/native liveness and
-metadata preservation, and benchmark scope/profitability. This handoff does not
-claim that review; review markers stay at stage base. Explicit
-`python3 student.tests/pa32/verify_handoff.py` passes: source/binary/log hashes,
-1596 performance observations, budgets, text equality and unchanged progress
-denominator checked. This is an implementation handoff; PA32 remains incomplete.
+traces; pipeline-wide bound/fallback accounting, EH/native liveness and metadata;
+benchmark scope and profitability. Neither those questions nor remaining
+implementation is waived. Stage/review markers remain at stage base. This is an
+implementation handoff for Ralph's next implementation/audit, not advancement.
+
+Explicit `python3 student.tests/pa32/verify_handoff.py` passes: 515 source
+bindings, frozen binary/log hashes, 2044 raw observations and their recomputed
+paired summaries, current budgets, object equality, 17 removed failures and
+unchanged contract contents checked. This verifier does not certify the stage.

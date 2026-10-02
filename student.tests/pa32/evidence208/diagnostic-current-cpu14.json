@@ -1,0 +1,176 @@
+{
+  "binaries": {
+    "A": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa32-208/common-o1/memoryA",
+      "sha256": "d93874a190cb14e74cdda0bfdf27e8440964e30ca2fa14ddd9569b8421d5fbe6"
+    },
+    "B": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa32-208/diagnostic/current",
+      "sha256": "1e42f848b51fa778231c5e6c2444eb9f7b36467cf2b1e175992b6c84e02f099d"
+    }
+  },
+  "cpu": "14",
+  "args": [],
+  "repetitions": 8,
+  "runs": [
+    {
+      "block": 0,
+      "label": "A",
+      "wall_s": 0.37584447115659714
+    },
+    {
+      "block": 0,
+      "label": "A",
+      "wall_s": 0.37997623533010483
+    },
+    {
+      "block": 0,
+      "label": "A",
+      "wall_s": 0.37827844358980656
+    },
+    {
+      "block": 0,
+      "label": "A",
+      "wall_s": 0.37440275587141514
+    },
+    {
+      "block": 1,
+      "label": "A",
+      "wall_s": 0.38165581971406937
+    },
+    {
+      "block": 1,
+      "label": "B",
+      "wall_s": 0.4093954674899578
+    },
+    {
+      "block": 1,
+      "label": "B",
+      "wall_s": 0.4080383740365505
+    },
+    {
+      "block": 1,
+      "label": "A",
+      "wall_s": 0.38834367506206036
+    },
+    {
+      "block": 2,
+      "label": "A",
+      "wall_s": 0.38706859573721886
+    },
+    {
+      "block": 2,
+      "label": "B",
+      "wall_s": 0.4167551305145025
+    },
+    {
+      "block": 2,
+      "label": "B",
+      "wall_s": 0.4072072822600603
+    },
+    {
+      "block": 2,
+      "label": "A",
+      "wall_s": 0.3749712370336056
+    },
+    {
+      "block": 3,
+      "label": "A",
+      "wall_s": 0.3811034485697746
+    },
+    {
+      "block": 3,
+      "label": "B",
+      "wall_s": 0.40834848769009113
+    },
+    {
+      "block": 3,
+      "label": "B",
+      "wall_s": 0.41459727473556995
+    },
+    {
+      "block": 3,
+      "label": "A",
+      "wall_s": 0.3786731157451868
+    },
+    {
+      "block": 4,
+      "label": "A",
+      "wall_s": 0.3811818826943636
+    },
+    {
+      "block": 4,
+      "label": "B",
+      "wall_s": 0.4195930641144514
+    },
+    {
+      "block": 4,
+      "label": "B",
+      "wall_s": 0.4161498546600342
+    },
+    {
+      "block": 4,
+      "label": "A",
+      "wall_s": 0.3875491674989462
+    },
+    {
+      "block": 5,
+      "label": "A",
+      "wall_s": 0.38577862456440926
+    },
+    {
+      "block": 5,
+      "label": "B",
+      "wall_s": 0.4172358401119709
+    },
+    {
+      "block": 5,
+      "label": "B",
+      "wall_s": 0.41769699938595295
+    },
+    {
+      "block": 5,
+      "label": "A",
+      "wall_s": 0.38623453490436077
+    },
+    {
+      "block": 6,
+      "label": "A",
+      "wall_s": 0.3881305642426014
+    },
+    {
+      "block": 6,
+      "label": "B",
+      "wall_s": 0.41646809689700603
+    },
+    {
+      "block": 6,
+      "label": "B",
+      "wall_s": 0.41895923390984535
+    },
+    {
+      "block": 6,
+      "label": "A",
+      "wall_s": 0.38704271614551544
+    }
+  ],
+  "summary": {
+    "AA_range_s": [
+      0.37440275587141514,
+      0.37997623533010483
+    ],
+    "paired_ratios": [
+      1.0616030881477003,
+      1.0812589806212414,
+      1.0831418091549783,
+      1.0871720591542706,
+      1.0815007869457167,
+      1.0777297824153154
+    ],
+    "paired_ratio_median": 1.081379883783479,
+    "paired_ratio_range": [
+      1.0616030881477003,
+      1.0871720591542706
+    ]
+  }
+}

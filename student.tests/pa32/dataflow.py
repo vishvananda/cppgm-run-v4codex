@@ -134,6 +134,31 @@ block ^right: jump ^join
 block ^join:
  %v = phi i64 [^left: 8, ^right: 9]
  return i64 %v''',9)
+for ty in ['f32','f64']:
+    for cond in [0,1]:
+        expected='1.25' if cond else '-2.5'
+        case(f'''block ^entry:
+ branch %c, ^left, ^right
+block ^left:
+ store {ty} %a, $value
+ %a = copy {ty} 9.0
+ jump ^join
+block ^right:
+ store {ty} %b, $value
+ %b = copy {ty} 10.0
+ jump ^join
+block ^join:
+ %v = load {ty} $value
+ %equal = cmp eq {ty} %v, {expected}
+ return i64 %equal''',1,f'{cond}, 1.25, -2.5',f'%c : i64, %a : {ty}, %b : {ty}',f'slot $value : {ty}')
+    case(f'''block ^entry:
+ store {ty} -0.0, $value
+ jump ^next
+block ^next:
+ %v = load {ty} $value
+ %inverse = binary div {ty} 1.0, %v
+ %negative = cmp lt {ty} %inverse, 0.0
+ return i64 %negative''',1,slots=f'slot $value : {ty}')
 main = ['function @main() -> i64 [role=entry] { block ^entry:', ' %total0 = const i64 0']
 for n,(name,args,expected) in enumerate(calls):
     main += [f' %v{n} = call i64 @{name}({args})',f' %bad{n} = cmp ne i64 %v{n}, {expected}',f' %total{n+1} = binary or i64 %total{n}, %bad{n}']
