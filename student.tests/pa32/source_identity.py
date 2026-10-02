@@ -7,6 +7,15 @@ def run(*args):
     assert p.returncode == 0, (args,p.returncode,p.stdout,p.stderr)
     return p
 sources = {
+'linkage': r'''
+extern "C" { struct C {
+ int n; C(int x):n(x){} ~C(){}
+ int f(int x){return n+x;} int f(long x){return n+x+1;}
+}; }
+template<int N> struct T {int n;T(int x):n(x){} ~T(){n+=N;} int f(){return n+N;}};
+extern "C" int entry(int n){T<3> a(n);T<5> b(n);return a.f()+b.f();}
+int main(){C c(4);return entry(7)!=22 || c.f(2)!=6 || c.f(2L)!=7;}
+''',
 'layouts': r'''
 struct V { int value; V(int n):value(n){} ~V(){} };
 struct L: virtual V { L(int n):V(n){} ~L(){} };
@@ -114,4 +123,4 @@ function @main() -> i32 [role=entry] { block ^e:
         run(root/'dev/lowir','-o',d/'validated',ir)
         run(root/'dev/cppgm++','-O0',ir,'-o',d/'aliases')
         run(d/'aliases')
-print('source identities: PASS (four source groups x four levels, normal/debug replay, aliases and roots)')
+print('source identities: PASS (five source groups x four levels, normal/debug replay, aliases and roots)')

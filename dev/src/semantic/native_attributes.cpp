@@ -74,7 +74,9 @@ void Analyzer::native_attributes(EntityId e, NodeId n)
 void Analyzer::declaration_attributes(EntityId e, NodeId specs, NodeId source, NodeId declarator)
 {
     for (auto n : {source,specs,declarator}) native_attributes(e,n);
-    entities[e].c_linkage |= c_linkage;
+    // [dcl.link]/4: class member names and member-function types retain C++
+    // linkage, including when a specialization is demanded by a C function.
+    entities[e].c_linkage |= c_linkage && scopes[entities[e].owner].kind != ScopeKind::Class;
     for (auto n : {source,specs,declarator}) if (n) {
         entities[e].no_inline |= ast[n].flags & 64;
         entities[e].force_inline |= ast[n].flags & 128;
