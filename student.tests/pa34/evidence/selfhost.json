@@ -1,0 +1,297 @@
+{
+  "binaries": {
+    "A": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa34-221/final-5cd7d549/seed",
+      "sha256": "79924a927e66c52cd40eed7bb0217b9fbdc7833da9ca171b9ba56aa82db6b6df"
+    },
+    "B": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa34-221/final-5cd7d549/self",
+      "sha256": "8f8a194eac0f8ea2ac5fcee010d1b540d7671228789d88e1e4e3cb9110e3f646"
+    }
+  },
+  "flags": [
+    "-O0",
+    "-c",
+    "-I/home/vishvananda/work/private/v4codex/checkout/dev/src"
+  ],
+  "affinity": [
+    "taskset",
+    "-c",
+    "2"
+  ],
+  "inputs": {
+    "/home/vishvananda/work/private/v4codex/checkout/dev/src/lowir/folding.cpp": "8e0c7aa63742c4f32320743e0d3b33190e962ef267ae1864af49e7a80596e7f5"
+  },
+  "runs": [
+    {
+      "block": 0,
+      "label": "A",
+      "wall_s": 3.528089601546526,
+      "peak_rss_kib": 77808,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 0,
+      "label": "A",
+      "wall_s": 4.189875744283199,
+      "peak_rss_kib": 77740,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 0,
+      "label": "A",
+      "wall_s": 3.66470056027174,
+      "peak_rss_kib": 77672,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 0,
+      "label": "A",
+      "wall_s": 3.717008203268051,
+      "peak_rss_kib": 77620,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 1,
+      "label": "A",
+      "wall_s": 3.5001732762902975,
+      "peak_rss_kib": 77808,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 1,
+      "label": "B",
+      "wall_s": 5.631099097430706,
+      "peak_rss_kib": 87264,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 1,
+      "label": "B",
+      "wall_s": 4.9772566966712475,
+      "peak_rss_kib": 87828,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 1,
+      "label": "A",
+      "wall_s": 3.359853459522128,
+      "peak_rss_kib": 77484,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 2,
+      "label": "A",
+      "wall_s": 4.231652708724141,
+      "peak_rss_kib": 77804,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 2,
+      "label": "B",
+      "wall_s": 7.339307326823473,
+      "peak_rss_kib": 87240,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 2,
+      "label": "B",
+      "wall_s": 8.15126233175397,
+      "peak_rss_kib": 86772,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 2,
+      "label": "A",
+      "wall_s": 4.209268635138869,
+      "peak_rss_kib": 77664,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 3,
+      "label": "A",
+      "wall_s": 3.9326600600034,
+      "peak_rss_kib": 77776,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 3,
+      "label": "B",
+      "wall_s": 7.549359725788236,
+      "peak_rss_kib": 87456,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 3,
+      "label": "B",
+      "wall_s": 5.483332300558686,
+      "peak_rss_kib": 87612,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 3,
+      "label": "A",
+      "wall_s": 3.361377105116844,
+      "peak_rss_kib": 77680,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 4,
+      "label": "A",
+      "wall_s": 2.4347913321107626,
+      "peak_rss_kib": 77804,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 4,
+      "label": "B",
+      "wall_s": 4.297193417325616,
+      "peak_rss_kib": 87460,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 4,
+      "label": "B",
+      "wall_s": 2.4657694343477488,
+      "peak_rss_kib": 87644,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 4,
+      "label": "A",
+      "wall_s": 1.2198327332735062,
+      "peak_rss_kib": 77548,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 5,
+      "label": "A",
+      "wall_s": 1.3281610663980246,
+      "peak_rss_kib": 77800,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 5,
+      "label": "B",
+      "wall_s": 3.2619412634521723,
+      "peak_rss_kib": 87684,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 5,
+      "label": "B",
+      "wall_s": 2.7613857816904783,
+      "peak_rss_kib": 87820,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 5,
+      "label": "A",
+      "wall_s": 1.6672803312540054,
+      "peak_rss_kib": 77864,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 6,
+      "label": "A",
+      "wall_s": 1.747400065883994,
+      "peak_rss_kib": 77712,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 6,
+      "label": "B",
+      "wall_s": 2.6091859973967075,
+      "peak_rss_kib": 87776,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 6,
+      "label": "B",
+      "wall_s": 3.6247992049902678,
+      "peak_rss_kib": 87916,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    },
+    {
+      "block": 6,
+      "label": "A",
+      "wall_s": 1.9125284887850285,
+      "peak_rss_kib": 77520,
+      "status": 0,
+      "object_sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e"
+    }
+  ],
+  "images": {
+    "A": {
+      "sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e",
+      "text_bytes": 34466
+    },
+    "B": {
+      "sha256": "2206c742ea6a1af370ba0b2358631329bfb605d788d6e081d391d0d5d690551e",
+      "text_bytes": 34466
+    }
+  },
+  "summary": {
+    "AA_range_s": [
+      3.528089601546526,
+      4.189875744283199
+    ],
+    "paired_ratios": [
+      1.5464015232945907,
+      1.8351752169613442,
+      1.7867597506451798,
+      1.850522168813625,
+      2.010831208336782,
+      1.7033078950227574
+    ],
+    "paired_ratio_median": 1.8109674838032621,
+    "paired_ratio_range": [
+      1.5464015232945907,
+      2.010831208336782
+    ],
+    "A": {
+      "median_s": 2.8973223958164454,
+      "range_s": [
+        1.2198327332735062,
+        4.231652708724141
+      ],
+      "peak_rss_kib": 77864
+    },
+    "B": {
+      "median_s": 4.637225056998432,
+      "range_s": [
+        2.4657694343477488,
+        8.15126233175397
+      ],
+      "peak_rss_kib": 87916
+    }
+  },
+  "runtime": "not applicable: compiler component object, no executable entry"
+}

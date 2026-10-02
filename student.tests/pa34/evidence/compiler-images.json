@@ -1,0 +1,40 @@
+{
+  "seed": {
+    "path": "dev/cppgm++",
+    "sha256": "79924a927e66c52cd40eed7bb0217b9fbdc7833da9ca171b9ba56aa82db6b6df",
+    "bytes": 5108720,
+    "text_bytes": 4224070,
+    "needed": [
+      "libstdc++.so.6",
+      "libm.so.6",
+      "libgcc_s.so.1",
+      "libc.so.6"
+    ]
+  },
+  "self": {
+    "path": "pa34/cppgm++-self",
+    "sha256": "8f8a194eac0f8ea2ac5fcee010d1b540d7671228789d88e1e4e3cb9110e3f646",
+    "bytes": 12674288,
+    "text_bytes": 8562501,
+    "needed": [
+      "libjemalloc.so.2",
+      "libstdc++.so.6",
+      "libm.so.6",
+      "libgcc_s.so.1",
+      "libc.so.6"
+    ]
+  },
+  "inception": {
+    "path": "pa34/cppgm++-inception",
+    "sha256": "8f8a194eac0f8ea2ac5fcee010d1b540d7671228789d88e1e4e3cb9110e3f646",
+    "bytes": 12674288,
+    "text_bytes": 8562501,
+    "needed": [
+      "libjemalloc.so.2",
+      "libstdc++.so.6",
+      "libm.so.6",
+      "libgcc_s.so.1",
+      "libc.so.6"
+    ]
+  }
+}

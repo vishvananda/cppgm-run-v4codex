@@ -8,7 +8,8 @@ frames. It was not a fault in the stream-output implementation itself.
 The frozen seed/self binaries and stack trace are retained in
 `$RALPH_ARTIFACT_DIR/pa34-221/{stack-baseline,output-divergence}`. A diagnostic
 64 MiB stack lets both binaries finish with identical objects and nontiming
-work counters. The original-source object's text is 46,365 bytes. A/A followed
+work counters. The original-source object's `.text` is 39,499 bytes (46,365
+including other read-only sections in `size`'s aggregate column). A/A followed
 by six ABBA blocks, pinned to CPU 2, records seed/self medians 3.069/6.093 s,
 peak RSS 262,976/279,476 KiB, paired B/A median 1.972 and range 1.424–2.005.
 All observations, including the broad A/A noise range, are preserved. The
@@ -37,7 +38,8 @@ PA34 builds, never the diagnostic mixed-object compiler or larger stack.
 Frozen before/after dispatcher measurements (`stack-dispatch-measure`) retain
 all 28 observations. Paired latency B/A is 1.006 [0.881–1.317], with overlapping
 spread; peak RSS falls from 279,320 to 275,052 KiB. Generated object text and
-work are identical. The diagnostic compiler's text grows 1,592 bytes (0.017%).
+work are identical. The diagnostic compiler's `.text` grows 704 bytes (0.008%);
+`size`'s aggregate text/read-only column grows 1,592 bytes (0.017%).
 The change fixes stack exhaustion without a measured general speedup or a new
 optimization pass. Final common workloads and canonical inception remain the
 acceptance checks; none uses the diagnostic stack increase.
