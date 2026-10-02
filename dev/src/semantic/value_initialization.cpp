@@ -7,7 +7,6 @@ void Analyzer::prepare_value_initialization(TypeId t, ScopeId s)
     if (class_value(t)) complete_class(types[t].entity);
     // Access is contextual; the immutable action shape is shared by type.
     if (access_override) s = access_override;
-    default_destructor(t,s);
     auto context = key(t, s);
     if (value_contexts.get(context) == 2) {
         if (!base_initialization) {
@@ -24,6 +23,7 @@ void Analyzer::prepare_value_initialization(TypeId t, ScopeId s)
     InitAction action; action.type = t; action.kind = InitKind::Value;
     std::vector<InitAction> children;
     auto add = [&](TypeId child, EntityId field, std::uint64_t count) {
+        default_destructor(child,s);
         prepare_value_initialization(child, s);
         InitAction item = initializers[initializer_plan(0, child)];
         action.helper_safe &= item.helper_safe;

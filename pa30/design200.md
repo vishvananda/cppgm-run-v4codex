@@ -24,3 +24,10 @@ No extra lookup, retry or allocation policy is added. Member alias environment,
 empty packs, template-template parameters, constructor pack deduction and an
 invalid negative count are explicit controls. All four remaining call/constructor
 fixtures (map, piecewise pair, bind and regex) now pass their focused checks.
+
+Review refinement: destructor demand attaches to each selected aggregate child,
+not the root initialization type. Root storage owns its own destruction rules;
+scalar `new T` may construct a type with an inaccessible destructor. Array-new
+and aggregate members still require accessible destructors. Controls cover
+all three, and partial aggregate construction through an active union variant
+executes exactly one cleanup when its second constructor throws.
