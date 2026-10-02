@@ -68,6 +68,11 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
   traces to semantic/constant_integer.o; replacing only that object yields the
   seed's identical LowIR. PA24 indexed-wide reducer fails before and passes
   after at O0/O3 (three strides, loads/stores, incoming/spilled addresses).
+- PA29 lowering/complex: full inception first differed in semantic/complex.o.
+  Two IR-emitting call arguments ran in different permitted C++11 orders.
+  Explicit full-expression sequencing retains the seed's order; this fixes
+  reproducibility, not language evaluation order. The PA29 complex-order reducer
+  and [intro.execution]/14–15, [expr.call]/8 proof document the distinction.
 - Continue each newly exposed self-build/test/object divergence at its earliest
   owner. Trace seed/self differences to object and source; probes are diagnostic.
 - Required order: file audit; `make test-report-through-pa33`; canonical
@@ -77,11 +82,11 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
   ownership, performance evidence and reproducibility before completion.
 - Commit cohesive fixes and evidence, keep this ledger current, finish clean.
 
-Current evidence (`$RALPH_ARTIFACT_DIR/pa34-221`): host through PA33 5454/5454
-after the complex fixes; canonical self through PA5/PA8 passes. Self through
-PA33 passed PA1–PA24, then exposed the PA25 i128 crash above. Fresh file audit,
-host regression/debug checks and canonical rebuild follow that fix. Inception
-remains unverified. Frozen first-complete seed/self binaries, original stack,
-object disassembly, failing reducer MIR and corrected single-object diagnostic
-are retained. Historical generated IR was gzip-compressed to reclaim 840 MiB;
-its contents and measurement records are preserved.
+Current evidence (`$RALPH_ARTIFACT_DIR/pa34-221`): audit, host 5454/5454 and
+canonical self through PA5/PA8/PA33 pass after the wide-load fix. Seed/self native
+debug 11/11 and self native driver 18/18 pass. Pptoken inception matches; full
+inception exposed the complex emission-order defect above. Fresh canonical
+validation follows that fix. Frozen binaries, stack/disassembly, original object
+and LowIR differences, reducers and corrected single-object diagnostics remain.
+Historical generated IR was gzip-compressed to reclaim 840 MiB without losing
+contents or measurement records. Performance and final inception remain pending.

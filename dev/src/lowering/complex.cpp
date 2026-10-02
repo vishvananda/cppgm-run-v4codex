@@ -64,8 +64,12 @@ Value Procedural::complex_operation(ETokenType op, Value a, Value b, TypeId resu
         auto v = emit(Opcode::Binary,real.ir,{real.operand,imag.operand},op == OP_EQ ? Operation::And : Operation::Or);
         v.type = result; return v;
     }
-    if (op == OP_PLUS || op == OP_MINUS)
-        return complex_construct(result,operation(op,ar,br,ar.type),operation(op,ai,bi,ai.type));
+    if (op == OP_PLUS || op == OP_MINUS) {
+        // IR identity must not depend on the host's argument evaluation order.
+        auto imag = operation(op,ai,bi,ai.type);
+        auto real = operation(op,ar,br,ar.type);
+        return complex_construct(result,real,imag);
+    }
     // libgcc's complex multiply/divide implement scaling and exceptional-value
     // recovery. Ordinary scalar formulas lose infinities and overflow division.
     // Runtime calls are explicit typed LowIR, shared by every backend adapter.
