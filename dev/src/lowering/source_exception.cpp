@@ -261,10 +261,10 @@ void Procedural::try_statement(NodeId n)
     if (catches_all && (!parent || (!exception_contexts[parent].handler && !exception_contexts[parent].cleanup_dispatch))) {
         // The catch-all selector exhausts this dispatch. Its syntactic miss
         // edge cannot carry an exception or live cleanup state. Keep the O0
-        // dispatch skeleton. A catch-only parent entry already defines its
-        // retired region; cleanup-bearing joins still require balanced exits,
-        // even on this impossible edge. Real misses retain full live state.
-        if (parent) jump(exception_contexts[parent].entry);
+        // dispatch skeleton. The parent's source catch entry is outside its
+        // registration, so even this impossible edge must pop before joining
+        // the real dispatch path. Real misses retain full live state.
+        if (parent) { emit(Opcode::EhEnd,IRType(),{}); jump(exception_contexts[parent].entry); }
         else emit(Opcode::Resume,IRType(),{});
     } else resume_exception(initial,parent,false);
     start(end); live = initial;

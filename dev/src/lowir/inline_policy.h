@@ -4,7 +4,7 @@ namespace lowir_model {
 // Immutable admission over the input bodies. IDs, never spellings, identify
 // callees. The cloner owns actual growth reservations and recursion checks.
 struct InlinePolicy {
-    std::vector<bool> eligible, single, costly, costly_callers;
+    std::vector<bool> eligible, single, costly, costly_callers, contextual;
     std::vector<unsigned> growth;
     std::uint64_t unit_work = 0, function_work = 32768;
 };

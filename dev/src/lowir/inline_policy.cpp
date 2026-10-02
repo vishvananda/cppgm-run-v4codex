@@ -6,6 +6,7 @@ bool inline_small_calls(Program& p, unsigned level, std::uint64_t& work)
 {
     (void)level;
     InlinePolicy policy; policy.eligible.resize(p.functions.size()+1);
+    policy.contextual.resize(p.functions.size()+1);
     policy.costly.resize(p.functions.size()+1); policy.costly_callers.resize(p.functions.size()+1);
     policy.single.resize(p.functions.size()+1); policy.growth.resize(p.functions.size()+1);
     struct Edge { unsigned caller, next; };
@@ -56,7 +57,9 @@ bool inline_small_calls(Program& p, unsigned level, std::uint64_t& work)
         if (s.kind == Symbol::FunctionSymbol) addressed[s.entity] = true;
     }
     bool any = false;
-    for (unsigned fn = 1; fn <= p.functions.size(); ++fn) {
+    // Bottom-up admission can see that a small parent loses all calls when
+    // its already-admitted leaf accessors expand. Bodies remain immutable.
+    for (unsigned fn : ready) {
         const auto& f = p.functions[fn-1]; const auto& m = p.symbols[f.symbol.index-1].metadata;
         if (f.declaration || !calls[fn] || m.no_inline || !acyclic[fn]) continue;
         const auto& sig = p.signatures[f.signature.index-1];
@@ -68,10 +71,19 @@ bool inline_small_calls(Program& p, unsigned level, std::uint64_t& work)
             for (unsigned n = r.begin; n < r.end(); ++n) {
                 const auto& i = p.instructions[n]; ++work; ++size;
                 cold |= i.opcode == Opcode::Call && call_boundary(p,i).returns == CRM_NORETURN;
-                legal &= i.opcode != Opcode::StackAlloc && i.opcode != Opcode::VaStart && i.opcode != Opcode::VaArg &&
-                    i.opcode != Opcode::Throw && i.opcode != Opcode::Resume &&
-                    i.opcode != Opcode::EhTry && i.opcode != Opcode::EhCleanup;
-                call_count += i.opcode == Opcode::Call;
+                legal &= i.opcode != Opcode::StackAlloc && i.opcode != Opcode::VaStart && i.opcode != Opcode::VaArg;
+                policy.contextual[fn] = policy.contextual[fn] || i.opcode == Opcode::Throw || i.opcode == Opcode::Resume ||
+                    i.opcode == Opcode::EhTry || i.opcode == Opcode::EhCleanup;
+                if (i.opcode == Opcode::Call) {
+                    auto a = p.operands[i.operands.begin];
+                    bool expanded_leaf = false;
+                    if (a.kind == Operand::Symbol && p.symbols[a.ref-1].kind == Symbol::FunctionSymbol) {
+                        unsigned to = p.symbols[a.ref-1].entity;
+                        expanded_leaf = policy.eligible[to] && !policy.contextual[to] &&
+                            p.functions[to-1].blocks.count == 1 && policy.growth[to] <= 6;
+                    }
+                    call_count += !expanded_leaf;
+                }
             }
             hot_size += cold && r.count > 4 ? 4 : r.count;
         }

@@ -37,10 +37,13 @@ with tempfile.TemporaryDirectory(prefix='pa32-floating-') as d:
  %x = convert sitofp f32 i64 16777217 return f32 %x }
 function @signaling() -> i64 [linkage=c, no_inline=yes] { block ^entry:
  %x = cmp eq f64 snan, 0.0 return i64 %x }
+function @write_round(%x : f80) -> void [linkage=c, no_inline=yes] {
+ slot $home : obj<16x8>
+ block ^entry: store f32 %x, $home return void }
 ''')
  host=t/'host.cpp';host.write_text('''extern "C" int fesetround(int);extern "C" int feclearexcept(int);extern "C" int fetestexcept(int);
-extern "C" float rounded();extern "C" long signaling();
-int main(){fesetround(0x800);float x=rounded();fesetround(0);feclearexcept(0x3f);long s=signaling();int flags=fetestexcept(1);return x!=16777218.0f||s||!flags;}
+extern "C" float rounded();extern "C" long signaling();extern "C" void write_round(long double);
+int main(){fesetround(0x800);float x=rounded();fesetround(0);feclearexcept(0x3f);long s=signaling();int flags=fetestexcept(1);feclearexcept(0x3f);write_round(1.1L);int inexact=fetestexcept(32);return x!=16777218.0f||s||!flags||!inexact;}
 ''')
  run(root/'dev/cppgm++','-O0','-c',host,'-o',t/'host.o')
  for level in range(4):

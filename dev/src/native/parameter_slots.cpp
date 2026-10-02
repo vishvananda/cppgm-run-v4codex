@@ -43,6 +43,12 @@ void Selector::promote_parameters()
                 if (a.kind != lowir_model::Operand::Slot) continue;
                 auto& fact = workspace.slot_facts[a.ref];
                 if (i.opcode != Opcode::Store || k != 1 || i.is_volatile) fact.observed = true;
+                if (i.opcode == Opcode::Store && k == 1 &&
+                    ((i.type.floating() && value_type(arg(i,0),i.type) != i.type) || i.type == Type::F80)) {
+                    // An unread memory result does not make its floating
+                    // conversion or x87 load/store exceptions unobservable.
+                    fact.observed = true; fact.escape = true; continue;
+                }
                 if (i.is_volatile || i.type != p.slots[a.ref-1].type) { fact.escape = true; continue; }
                 if (i.opcode == Opcode::Load && k == 0) { if (!fact.stored) fact.escape = true; continue; }
                 if (i.opcode == Opcode::Store && k == 1 && b == source.blocks.begin && !fact.stored) {

@@ -1,5 +1,6 @@
 #include "lowir/folding.h"
 #include "lowir/call_effects.h"
+#include "lowir/constant_objects.h"
 #include "support/id_index.h"
 namespace lowir_model {
 namespace {
@@ -12,6 +13,7 @@ struct Use { unsigned instruction, next; };
 class Scalars {
     Program& p;
     const Function& f;
+    const ConstantObjects& objects;
     std::vector<bool>& removed;
     std::uint64_t& work;
     std::uint64_t budget;
@@ -71,7 +73,10 @@ class Scalars {
         reassociate(i);
         if (fold_integer(i,args.data(),out)) return true;
         if (fold_floating(p,i,args.data(),out)) return true;
+        if (objects.fold(i,args.data(),out)) return true;
         auto a = args.empty() ? Operand() : args[0];
+        if (i.opcode == Opcode::Addr && a.kind == Operand::Symbol &&
+            p.symbols[a.ref-1].kind == Symbol::GlobalSymbol) { out = a; return true; }
         if ((i.opcode == Opcode::Copy || (i.opcode == Opcode::Convert && i.type == i.source_type)) && alias(i,a)) { out = a; return true; }
         if (i.opcode == Opcode::Index && args[1].kind == Operand::Integer && !args[1].data.integer &&
             !args[1].integer_high() && alias(i,a)) { out = a; return true; }
@@ -191,17 +196,18 @@ class Scalars {
         for (unsigned n = 0; n < body.size(); ++n) removed[body[n]] = !live[n];
     }
 public:
-    Scalars(Program& p, const Function& f, std::vector<bool>& removed, std::uint64_t& work)
-        : p(p), f(f), removed(removed), work(work), budget(0) {}
+    Scalars(Program& p, const Function& f, const ConstantObjects& objects, std::vector<bool>& removed, std::uint64_t& work)
+        : p(p), f(f), objects(objects), removed(removed), work(work), budget(0) {}
     void run() { index(); propagate(); dead_code(); }
 };
 }
 void simplify_scalars(Program& p, std::uint64_t& work, const std::vector<bool>* selected)
 {
     std::vector<bool> removed(p.instructions.size());
+    ConstantObjects objects(p,work);
     for (unsigned fn = 0; fn < p.functions.size(); ++fn) {
         const auto& f = p.functions[fn];
-        if (!f.declaration && (!selected || (*selected)[fn])) Scalars(p,f,removed,work).run();
+        if (!f.declaration && (!selected || (*selected)[fn])) Scalars(p,f,objects,removed,work).run();
     }
     Pool<Instruction> instructions; Pool<Operand> operands;
     instructions.reserve(p.instructions.size()); operands.reserve(p.operands.size());

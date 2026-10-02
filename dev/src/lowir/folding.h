@@ -16,6 +16,8 @@ void eliminate_local_expressions(Program&, const std::vector<bool>& call_cycles,
 void forward_local_slots(Program&, std::uint64_t& work);
 bool split_local_objects(Program&, std::uint64_t& work);
 void retire_unused_slots(Program&, std::uint64_t& work);
+bool retire_private_writes(Program&, std::uint64_t& work);
+bool merge_forward_blocks(Program&, std::uint64_t& work);
 bool promote_scalar_slots(Program&, const std::vector<bool>& call_cycles, std::uint64_t& work);
 void simplify_control(Program&, std::uint64_t& work);
 void bypass_empty_jumps(Program&, std::uint64_t& work);

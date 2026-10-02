@@ -30,6 +30,11 @@ void optimize(Program& p, unsigned level, bool telemetry)
         simplify_scalars(p,work);
     }
     if (inline_small_calls(p,level,work)) {
+        // Call-site proofs admit exception-bearing bodies only when their
+        // ordinary paths cannot unwind. Materialize those same constant facts
+        // and retire dead ordinary paths before removing the registrations.
+        simplify_scalars(p,work);
+        simplify_control(p,work);
         simplify_call_regions(p,work);
         simplify_control(p,work);
     }
@@ -72,6 +77,7 @@ void optimize(Program& p, unsigned level, bool telemetry)
     }
     simplify_diamond_values(p,work);
     bypass_empty_jumps(p,work);
+    merge_forward_blocks(p,work);
     simplify_control(p,work);
     simplify_scalars(p,work,&dataflow);
     // Phi repair above can expose constant terminators. This last structural
@@ -79,12 +85,15 @@ void optimize(Program& p, unsigned level, bool telemetry)
     simplify_control(p,work);
     prune_support_functions(p,work);
     simplify_control(p,work);
+    if (retire_private_writes(p,work)) { objects_split = true; simplify_scalars(p,work); }
     if (objects_split) retire_unused_slots(p,work);
     if (telemetry) {
         rusage usage; getrusage(RUSAGE_SELF,&usage);
         std::cerr << "{\"optimize_ms\":" << std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count()
             << ",\"optimize_work\":" << work
             << ",\"optimize_instructions\":" << p.instructions.size()
+            << ",\"inline_context_work\":" << p.stats.inline_context_work
+            << ",\"inline_context_sites\":" << p.stats.inline_context_sites
             << ",\"split_objects\":" << p.stats.split_objects
             << ",\"split_fields\":" << p.stats.split_fields
             << ",\"split_growth_reserved\":" << p.stats.split_growth_reserved

@@ -1,4 +1,6 @@
 #include "lowir/inline_policy.h"
+#include "lowir/folding.h"
+#include "lowir/constant_objects.h"
 #include "support/id_index.h"
 #include <algorithm>
 namespace lowir_model {
@@ -30,6 +32,9 @@ class Expander {
     BlockId current;
     unsigned work = 0, growth = 0;
     std::uint64_t total = 0;
+    std::uint64_t object_work = 0, proof_left = 0;
+    ConstantObjects objects;
+    std::vector<unsigned> definitions;
     struct Context {
         cppgm::IdIndex values, slots, entries, exits;
         std::vector<std::pair<unsigned,unsigned>> phi_edges;
@@ -50,9 +55,9 @@ class Expander {
         charge(1); Slot s; s.type = type; s.owner = owner; if (policy) s.name = fresh("$inline"); p.slots.push_back(s);
         SlotId id(p.slots.size()); p.slot_order.push_back(id); return id;
     }
-    ValueId value(Type type) {
+    ValueId value(Type type, unsigned count = 1) {
         Value v; v.type = type; v.owner = owner; if (policy) v.name = fresh("%inline");
-        p.values.push_back(v); return ValueId(p.values.size());
+        p.values.push_back(v); definitions.push_back(count); return ValueId(p.values.size());
     }
     void start(BlockId id) {
         current = id; auto& b = p.blocks[id.index-1];
@@ -89,6 +94,88 @@ class Expander {
             (policy ? policy->eligible[symbol.entity] : symbol.metadata.force_inline) && !symbol.metadata.no_inline &&
             !functions[symbol.entity-1].declaration ? symbol.entity : 0;
     }
+    bool proof_charge(unsigned n = 1) {
+        if (n > proof_left || n > function_limit-work || n > unit_limit-total) return false;
+        proof_left -= n; work += n; total += n; p.stats.inline_context_work += n; return true;
+    }
+    Operand actual_constant(Operand a, unsigned depth = 0) {
+        if (a.kind != Operand::Temporary || depth == 16 || !proof_charge()) return a;
+        if (definitions[a.ref] != 1 || !p.values[a.ref-1].definition) return a;
+        const auto& i = p.instructions[p.values[a.ref-1].definition-1];
+        if (i.operands.count > 2 || !proof_charge(i.operands.count)) return a;
+        Operand args[2];
+        for (unsigned n = 0; n < i.operands.count; ++n)
+            args[n] = actual_constant(p.operands[i.operands.begin+n],depth+1);
+        Operand result;
+        if (fold_integer(i,args,result) || fold_floating(p,i,args,result) || objects.fold(i,args,result)) return result;
+        if ((i.opcode == Opcode::Addr || (i.opcode == Opcode::Copy && i.type == Type::Ptr)) &&
+            args[0].kind == Operand::Symbol) return args[0];
+        return a;
+    }
+    bool context_safe(unsigned fn, const Operand* actuals, unsigned count) {
+        ++p.stats.inline_context_sites; proof_left = 4096;
+        const auto& f = functions[fn-1]; const auto& sig = p.signatures[f.signature.index-1];
+        if (count != sig.parameters.count) return false;
+        cppgm::IdIndex known, visited;
+        std::vector<Operand> facts(1), args;
+        auto publish = [&](unsigned id, Operand a) {
+            if (definitions[id] == 1 && (a.literal() || a.kind == Operand::Symbol)) {
+                facts.push_back(a); known.put(id,facts.size()-1);
+            }
+        };
+        for (unsigned n = 0; n < count; ++n) {
+            if (!proof_charge()) return false;
+            const auto& param = p.parameters[sig.parameters.begin+n];
+            auto a = actual_constant(actuals[n]);
+            // Parameter copies execute the declared boundary conversion.
+            Instruction copy(Opcode::Copy,param.type); copy.operands.count = 1; Operand converted;
+            if (param.passing != PPM_DIRECT) continue;
+            if (fold_integer(copy,&a,converted) || fold_floating(p,copy,&a,converted)) publish(param.value.index,converted);
+            else if (param.type == Type::Ptr && a.kind == Operand::Symbol) publish(param.value.index,a);
+        }
+        std::vector<unsigned> pending;
+        auto edge = [&](unsigned b) { if (!visited.get(b)) { visited.put(b,1); pending.push_back(b); } };
+        edge(order[f.blocks.begin].index);
+        for (unsigned next = 0; next < pending.size(); ++next) {
+            auto r = blocks[pending[next]-1].instructions;
+            for (unsigned n = r.begin; n < r.end(); ++n) {
+                const auto& i = instructions[n];
+                if (!proof_charge(1+i.operands.count)) return false;
+                args.clear();
+                for (unsigned k = i.operands.begin; k < i.operands.end(); ++k) {
+                    auto a = operands[k];
+                    if (a.kind == Operand::Temporary) if (auto fact = known.get(a.ref)) a = facts[fact];
+                    args.push_back(a);
+                }
+                if (i.opcode == Opcode::Throw || i.opcode == Opcode::Resume) return false;
+                if (i.opcode == Opcode::Call) {
+                    FunctionBoundaryMetadata boundary;
+                    if (i.signature) boundary = p.signatures[i.signature.index-1].boundary;
+                    else if (args[0].kind == Operand::Symbol) {
+                        const auto& s = p.symbols[args[0].ref-1];
+                        if (s.kind == Symbol::FunctionSymbol) boundary = p.signatures[functions[s.entity-1].signature.index-1].boundary;
+                    }
+                    if (boundary.unwind != CUM_NO) return false;
+                }
+                if (i.destination) {
+                    Operand result;
+                    if (fold_integer(i,args.data(),result) || fold_floating(p,i,args.data(),result) ||
+                        objects.fold(i,args.data(),result)) publish(i.destination.index,result);
+                    else if ((i.opcode == Opcode::Addr || (i.opcode == Opcode::Copy && i.type == Type::Ptr)) &&
+                        args[0].kind == Operand::Symbol) publish(i.destination.index,args[0]);
+                }
+                if (i.opcode == Opcode::Branch && args[0].kind == Operand::Integer) {
+                    edge(args[args[0].data.integer || args[0].integer_high() ? 1 : 2].ref);
+                } else if (i.opcode == Opcode::Switch && args[0].kind == Operand::Integer) {
+                    auto to = args[1];
+                    for (unsigned k = 2; k < args.size(); k += 2)
+                        if (same_scalar(args[0],args[k])) { to = args[k+1]; break; }
+                    edge(to.ref);
+                } else if (terminator(i.opcode)) for (auto a : args) if (a.kind == Operand::Label) edge(a.ref);
+            }
+        }
+        return proof_left != 0;
+    }
     std::uint64_t return_regions(unsigned f) {
         // A return retires all registrations belonging to the callee's frame.
         // A cloned return must perform those pops before joining its caller.
@@ -97,6 +184,7 @@ class Expander {
         std::vector<unsigned> pending;
         auto body = functions[f-1].blocks;
         std::uint64_t retirement = 0;
+        bool valid = true;
         for (unsigned b = body.begin; b < body.end(); ++b) {
             auto id = order[b].index; auto range = blocks[id-1].instructions;
             for (unsigned n = range.begin; n < range.end(); ++n) {
@@ -109,10 +197,10 @@ class Expander {
         auto edge = [&](unsigned id, unsigned depth) {
             auto old = incoming.get(id);
             if (!old) { incoming.put(id,depth+1); pending.push_back(id); }
-            else require(old == depth+1,"inconsistent force-inline exception regions");
+            else if (old != depth+1) valid = false;
         };
         edge(order[body.begin].index,0);
-        for (unsigned next = 0; next < pending.size(); ++next) {
+        for (unsigned next = 0; next < pending.size() && valid; ++next) {
             auto id = pending[next], depth = incoming.get(id)-1;
             auto range = blocks[id-1].instructions;
             for (unsigned n = range.begin; n < range.end(); ++n) {
@@ -121,14 +209,14 @@ class Expander {
                     auto handler = operands[i.operands.begin].ref;
                     edge(handler,depth+(i.opcode == Opcode::EhCleanup || cleanup.get(handler))); ++depth;
                 } else if (i.opcode == Opcode::EhEnd) {
-                    require(depth,"unbalanced force-inline exception region"); --depth;
+                    if (!depth) { valid = false; break; } --depth;
                 } else if (i.opcode == Opcode::Jump || i.opcode == Opcode::Branch || i.opcode == Opcode::Switch) {
                     for (unsigned k = i.operands.begin; k < i.operands.end(); ++k)
                         if (operands[k].kind == Operand::Label) edge(operands[k].ref,depth);
                 } else if (i.opcode == Opcode::Return) { return_depths.put(n+1,depth+1); retirement += depth+1; }
             }
         }
-        return retirement;
+        return valid ? retirement : ~std::uint64_t(0);
     }
     bool check(unsigned f, unsigned depth) {
         if (depth > 64 || active[f] || functions[f-1].declaration) return false;
@@ -154,7 +242,11 @@ class Expander {
                     if (i.opcode == Opcode::Return) cost += 5;
                 }
             }
-            if (regions) cost += return_regions(f);
+            if (regions) {
+                auto retirement = return_regions(f);
+                if (retirement == ~std::uint64_t(0)) { costs[f] = ~0u; return false; }
+                cost += retirement;
+            }
             costs[f] = cost <= 262144 ? unsigned(cost) : ~0u;
         }
         if (costs[f] > function_limit-work || costs[f] > unit_limit-total) return false;
@@ -181,7 +273,7 @@ class Expander {
                 auto range = blocks[old.index-1].instructions;
                 for (unsigned n = range.begin; n < range.end(); ++n) {
                     auto dest = instructions[n].destination;
-                    if (dest && !c.values.get(dest.index)) c.values.put(dest.index,value(p.values[dest.index-1].type).index);
+                    if (dest && !c.values.get(dest.index)) c.values.put(dest.index,value(p.values[dest.index-1].type,definitions[dest.index]).index);
                 }
             }
         }
@@ -201,7 +293,7 @@ class Expander {
                 }
                 // Scalar copies preserve boundary rounding/truncation without
                 // manufacturing a stack home. Object values use typed storage.
-                auto id = value(param.type);
+                auto id = value(param.type,definitions[param.value.index]);
                 if (param.type.scalar()) {
                     Instruction copy(Opcode::Copy,param.type); copy.destination = id; emit(copy,{a});
                 } else {
@@ -223,6 +315,8 @@ class Expander {
                 for (unsigned k = i.operands.begin; k < i.operands.end(); ++k) args.push_back(mapped(operands[k],c));
                 if (i.destination && c.clone) i.destination = ValueId(c.values.get(i.destination.index));
                 auto callee = target(i);
+                if (callee && policy && policy->contextual[callee] &&
+                    !context_safe(callee,args.data()+1,args.size()-1)) { ++p.stats.inline_declined; callee = 0; }
                 if (callee && !check(callee,depth+1)) { ++p.stats.inline_declined; callee = 0; }
                 if (callee) {
                     ++p.stats.inline_calls;
@@ -264,9 +358,11 @@ class Expander {
         active[f] = false;
     }
 public:
-    explicit Expander(Program& program, const InlinePolicy* admission = nullptr) : p(program), policy(admission), functions(p.functions.begin(),p.functions.end()), active(p.functions.size()+1), costs(p.functions.size()+1) {
+    explicit Expander(Program& program, const InlinePolicy* admission = nullptr) : p(program), policy(admission), functions(p.functions.begin(),p.functions.end()), active(p.functions.size()+1), costs(p.functions.size()+1), objects(p,object_work), definitions(p.values.size()+1) {
         unit_limit = policy ? policy->unit_work : 4194304;
         function_limit = policy ? policy->function_work : 262144;
+        for (const auto& a : p.parameters) ++definitions[a.value.index];
+        for (const auto& i : p.instructions) if (i.destination) ++definitions[i.destination.index];
         if (policy) {
             for (auto v : p.values) if (v.name) names.insert(v.name,1);
             for (auto s : p.slots) if (s.name) names.insert(s.name,1);
@@ -294,6 +390,7 @@ public:
             p.stats.inline_max_function_work = std::max<std::uint64_t>(p.stats.inline_max_function_work,work);
         }
         p.stats.inline_budget_work += total;
+        p.stats.inline_context_work += object_work;
         require(p.stats.inline_work <= p.stats.inline_budget_work,"inline work exceeded its admission proof");
     }
 };

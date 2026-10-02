@@ -22,6 +22,14 @@ void forward(Program& p, const Function& f, const std::vector<unsigned>& definit
                 auto& s = slots[index.get(a.ref)];
                 bool memory = (i.opcode == Opcode::Load && j == 0) || (i.opcode == Opcode::Store && j == 1);
                 s.escape |= !memory || i.is_volatile || i.type != p.slots[a.ref-1].type || !i.type.scalar();
+                if (i.opcode == Opcode::Store && i.type.floating()) {
+                    auto value = p.operands[i.operands.begin];
+                    Type actual = value.kind == Operand::Temporary ? p.values[value.ref-1].type :
+                        value.kind == Operand::Slot ? p.slots[value.ref-1].type : i.type;
+                    // Dropping an unread home must still execute its format
+                    // conversion (rounding mode and FP exception flags).
+                    s.escape |= actual != i.type || i.type == Type::F80;
+                }
             }
         }
     }

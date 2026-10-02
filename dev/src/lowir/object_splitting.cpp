@@ -221,6 +221,35 @@ class Objects {
 public:
     Objects(Program& p, Function& f, std::uint64_t& work, NameIndex& names, bool& ready, unsigned& serial)
         : p(p), f(f), work(work), names(names), names_ready(ready), serial(serial) {}
+    bool retire_writes() {
+        index(); if (homes.size() == 1) return false;
+        std::vector<unsigned> writes;
+        for (auto n : body) {
+            const auto& i = p.instructions[n]; ++work;
+            for (unsigned j = 0; j < i.operands.count; ++j) {
+                auto o = origin(p.operands[i.operands.begin+j]); ++work;
+                if (!o.slot) continue;
+                bool address = j == 0 && (i.opcode == Opcode::Addr || i.opcode == Opcode::Copy || i.opcode == Opcode::Index);
+                if (address && i.destination && addresses[value_ids.get(i.destination.index)].origin.slot) continue;
+                // Only ordinary, in-bounds integer/pointer stores can vanish.
+                // Floating stores can have rounding/exception effects. Reads,
+                // copies, atomic/volatile operations and unknown uses retain
+                // the entire private home, including every overlapping write.
+                if (i.opcode == Opcode::Store && j == 1 && !i.is_volatile &&
+                    (i.type.integer() || i.type == Type::Ptr) && i.type.bytes() <= homes[o.slot].bytes &&
+                    o.offset <= homes[o.slot].bytes-i.type.bytes()) writes.push_back(n);
+                else homes[o.slot].escape = true;
+            }
+        }
+        bool changed = false;
+        for (auto n : writes) {
+            auto& i = p.instructions[n]; auto o = origin(p.operands[i.operands.begin+1]);
+            if (!homes[o.slot].escape) {
+                i.opcode = Opcode::Nop; i.operands.count = 0; i.type = Type(); changed = true;
+            }
+        }
+        return changed;
+    }
     bool run(Pool<Instruction>& out, Pool<SlotId>& slots) {
         index(); if (homes.size() == 1) return false;
         census();
@@ -312,5 +341,12 @@ void retire_unused_slots(Program& p, std::uint64_t& work)
         f.slots.count = slots.size()-f.slots.begin;
     }
     p.slot_order.swap(slots);
+}
+bool retire_private_writes(Program& p, std::uint64_t& work)
+{
+    NameIndex names; bool ready = false, changed = false; unsigned serial = 0;
+    for (auto& f : p.functions) if (!f.declaration && f.slots.count)
+        changed |= Objects(p,f,work,names,ready,serial).retire_writes();
+    return changed;
 }
 }
