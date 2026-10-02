@@ -36,6 +36,9 @@ bool Analyzer::arithmetic(TypeId t) const
 }
 TypeId Analyzer::promote(TypeId t)
 {
+    // Scoped enumerations never undergo integral promotion [conv.prom]. In
+    // particular, a narrow underlying type does not promote a switch value.
+    if (scoped_enum(t)) return types.non_atomic(types.unqualified(t));
     if (types[t].kind == TypeKind::Named && integral(t) && !scoped_enum(t)) t = entities[types[t].entity].underlying;
     if (types[t].kind == TypeKind::Fundamental && bit_integer_kind(types[t].fundamental)) return types.non_atomic(types.unqualified(t));
     if (fundamental(t, FT_WCHAR_T)) return types.fundamental(FT_INT);

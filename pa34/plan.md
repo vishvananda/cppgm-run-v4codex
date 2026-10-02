@@ -17,7 +17,16 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
   in retained queries for the hosted array header. It shares the typed abort
   operation permitted by the GNU contract; `student.tests/pa29/trap.md` records
   the proof. Probe/noexcept/arity and ordinary/template termination at O0/O3
-  pass; the original PA2 source probe compiles. Host regression is rerunning.
+  pass; the original PA2 number source probe compiles. The one stale probe
+  reference token is corrected with contract proof and bundle revision there.
+- Fixed PA7 promotion: narrow scoped enums were promoted to int in switches.
+  Preserve their enum type ([conv.prom], [stmt.switch]); signed/unsigned runtime
+  and invalid bool/integer-case/unary-plus controls pass at O0/O3.
+- Fixed PA11 semantic scheduling: FactStore's local static requested synthetic
+  constructor actions before completion. Queue each declaration's constant
+  relocation demand until selected member actions finish; new demands rejoin
+  the existing worklist. O0/O3 default-member, once-only effect and zero-init
+  reducers pass; the compiler entry source probe now compiles.
 - Continue each newly exposed self-build/test/object divergence at its earliest
   owner. Trace seed/self differences to object and source; probes are diagnostic.
 - Required order: file audit; `make test-report-through-pa33`; canonical
@@ -28,8 +37,8 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
 - Commit cohesive fixes and evidence, keep this ledger current, finish clean.
 
 Current evidence (`$RALPH_ARTIFACT_DIR/pa34-221`): file audit passes (four
-inherited warnings); host through PA33 5454/5454 after the parser fix. Canonical
-self PA1 passes 54/54; PA2 stopped at the now-fixed trap query. A fresh host
-regression followed by the canonical self ladder is running. Inception remains
+inherited warnings); host through PA33 5454/5454 after parser/trap fixes. Canonical
+self PA1 passes 54/54; PA2 stopped at the now-fixed narrow-enum conversion. A
+fresh host regression followed by the canonical self ladder is running. Inception remains
 unverified. Historical generated IR was gzip-compressed to reclaim 840 MiB;
 its contents and measurement records are preserved.
