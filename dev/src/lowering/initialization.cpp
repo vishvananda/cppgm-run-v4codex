@@ -71,7 +71,7 @@ void Procedural::global_data(NodeId n, TypeId t)
     if (array.kind == TypeKind::MemberPointer && sem.types[array.child].kind == TypeKind::Function) {
         member_pointer_data(sem.static_value(n,t)); return;
     }
-    if ((array.kind == TypeKind::Named && sem.entities[array.entity].class_info) || array.kind == TypeKind::Array) {
+    if ((array.kind == TypeKind::Named && sem.entities[array.entity].class_info) || array.kind == TypeKind::Array || semantic::vector_kind(array.kind)) {
         if (n) throw std::logic_error("missing static aggregate initializer plan");
         DataItem zero; zero.zero_bytes = sem.object_size(t); p.data.push_back(zero);
     } else {

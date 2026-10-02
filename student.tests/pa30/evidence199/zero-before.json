@@ -1,0 +1,34 @@
+[
+  {
+    "source": "typedef int Ints __attribute__((vector_size(8)));\nInts plain;\nvolatile Ints observed;\nInts explicit_zero{};\nInts rows[3] = {{5,6}};\nstruct Object { Ints lanes; int tail; } object{};\nint local() { static Ints value; return __builtin_ia32_vec_ext_v2si(value,0); }\nint main() {\n    if (__builtin_ia32_vec_ext_v2si(plain,0) || __builtin_ia32_vec_ext_v2si(plain,1) ||\n        __builtin_ia32_vec_ext_v2si(observed,0) || __builtin_ia32_vec_ext_v2si(observed,1) ||\n        __builtin_ia32_vec_ext_v2si(explicit_zero,1) || local()) return 1;\n    if (__builtin_ia32_vec_ext_v2si(rows[0],1)!=6 || __builtin_ia32_vec_ext_v2si(rows[2],1) ||\n        __builtin_ia32_vec_ext_v2si(object.lanes,1) || object.tail) return 2;\n    observed=__builtin_ia32_vec_init_v2si(17,29);\n    return __builtin_ia32_vec_ext_v2si(observed,1)!=29;\n}\n",
+    "source_path": "student.tests/pa30/source199/vector-zero.cpp",
+    "binary": "entry",
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: unknown expression name: __builtin_ia32_vec_ext_v2si\n"
+  },
+  {
+    "source": "typedef int Ints __attribute__((vector_size(8)));\nInts plain;\nvolatile Ints observed;\nInts explicit_zero{};\nInts rows[3] = {{5,6}};\nstruct Object { Ints lanes; int tail; } object{};\nint local() { static Ints value; return __builtin_ia32_vec_ext_v2si(value,0); }\nint main() {\n    if (__builtin_ia32_vec_ext_v2si(plain,0) || __builtin_ia32_vec_ext_v2si(plain,1) ||\n        __builtin_ia32_vec_ext_v2si(observed,0) || __builtin_ia32_vec_ext_v2si(observed,1) ||\n        __builtin_ia32_vec_ext_v2si(explicit_zero,1) || local()) return 1;\n    if (__builtin_ia32_vec_ext_v2si(rows[0],1)!=6 || __builtin_ia32_vec_ext_v2si(rows[2],1) ||\n        __builtin_ia32_vec_ext_v2si(object.lanes,1) || object.tail) return 2;\n    observed=__builtin_ia32_vec_init_v2si(17,29);\n    return __builtin_ia32_vec_ext_v2si(observed,1)!=29;\n}\n",
+    "source_path": "student.tests/pa30/source199/vector-zero.cpp",
+    "binary": "pre_zero",
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: native initializer type invalid\n"
+  },
+  {
+    "source": "typedef int V __attribute__((vector_size(8)));\nvolatile V observed;\nint step(int x,int i) {\n V a=__builtin_ia32_vec_init_v2si(x*17,i&127);\n unsigned long long bits=(unsigned long long)a;\n observed=(V)bits;\n return (__builtin_ia32_vec_ext_v2si(observed,0)+__builtin_ia32_vec_ext_v2si(observed,1))%1009;\n}\nint main(int argc,char** argv) {if(argc!=2)return 3;\nint x=argv[1][0]-48,total=0;\nfor(int i=0;i<3000000;++i){x=step(x,i);total=(total+x)%65521;}\nreturn x==764 && total==8922?0:1;}\n",
+    "source_path": "/tmp/pa30-199/vector-final/vectors.cpp",
+    "binary": "entry",
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: unknown expression name: __builtin_ia32_vec_init_v2si\n"
+  },
+  {
+    "source": "typedef int V __attribute__((vector_size(8)));\nvolatile V observed;\nint step(int x,int i) {\n V a=__builtin_ia32_vec_init_v2si(x*17,i&127);\n unsigned long long bits=(unsigned long long)a;\n observed=(V)bits;\n return (__builtin_ia32_vec_ext_v2si(observed,0)+__builtin_ia32_vec_ext_v2si(observed,1))%1009;\n}\nint main(int argc,char** argv) {if(argc!=2)return 3;\nint x=argv[1][0]-48,total=0;\nfor(int i=0;i<3000000;++i){x=step(x,i);total=(total+x)%65521;}\nreturn x==764 && total==8922?0:1;}\n",
+    "source_path": "/tmp/pa30-199/vector-final/vectors.cpp",
+    "binary": "pre_zero",
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: native initializer type invalid\n"
+  }
+]

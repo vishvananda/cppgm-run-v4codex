@@ -15,7 +15,7 @@ def run(args):
 objects=[p for p in sorted((root/'obj/dev').rglob('*.o')) if 'entry' not in p.parts and not p.name.startswith('test_runner')]
 adapter=out/'adapter'
 run(['g++','-std=c++11','-O2','-I'+str(root/'dev/src'),root/'student.tests/pa29/ir-object161.cpp',*objects,'-o',adapter])
-for name in ['new-array','friend-current','dependent-access','vector-builtins','vector-representation','vector-volatile','template-return-boundary','inherited-signature']:
+for name in ['new-array','friend-current','dependent-access','vector-builtins','vector-representation','vector-volatile','vector-zero','template-return-boundary','inherited-signature']:
  src=root/f'student.tests/pa30/source199/{name}.cpp';obj=out/(name+'.o');ir=out/(name+'.lowir');exe=out/name
  run([cc,'-O0','-c',src,'-o',obj]);plain=sha(obj)
  run([cc,'-O0','-c','--stats',src,'-o',obj]); assert plain==sha(obj)

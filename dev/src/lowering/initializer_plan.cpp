@@ -47,6 +47,9 @@ void Procedural::global_plan(std::uint32_t plan)
         p.data.push_back(item); return;
     }
     if (action.kind == InitKind::Value) {
+        if (semantic::vector_kind(target.kind)) {
+            DataItem zero; zero.zero_bytes = sem.object_size(action.type); p.data.push_back(zero); return;
+        }
         auto item = constant_data(0, action.type);
         if (item.type == IRType::Ptr) { item.kind = DataItem::Zero; item.zero_bytes = 8; }
         p.data.push_back(item); return;
