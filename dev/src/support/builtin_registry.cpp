@@ -87,6 +87,15 @@ LibmBuiltin libm_builtin(TextView name)
         {"lround",S::LongResult},
         {"llrint",S::LongLongResult},
         {"llround",S::LongLongResult},
+        {"cabs",S::ComplexReal}, {"carg",S::ComplexReal},
+        {"creal",S::ComplexReal}, {"cimag",S::ComplexReal},
+        {"conj",S::ComplexUnary}, {"cproj",S::ComplexUnary},
+        {"csqrt",S::ComplexUnary}, {"cexp",S::ComplexUnary}, {"clog",S::ComplexUnary},
+        {"csin",S::ComplexUnary}, {"ccos",S::ComplexUnary}, {"ctan",S::ComplexUnary},
+        {"casin",S::ComplexUnary}, {"cacos",S::ComplexUnary}, {"catan",S::ComplexUnary},
+        {"csinh",S::ComplexUnary}, {"ccosh",S::ComplexUnary}, {"ctanh",S::ComplexUnary},
+        {"casinh",S::ComplexUnary}, {"cacosh",S::ComplexUnary}, {"catanh",S::ComplexUnary},
+        {"cpow",S::ComplexBinary},
     };
     LibmBuiltin result;
     if (name.size < 11 || std::memcmp(name.data,"__builtin_",10)) return result;

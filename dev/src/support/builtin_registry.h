@@ -41,7 +41,7 @@ inline FunctionBuiltin function_builtin(TextView name)
         if (name.equals(names[i])) return FunctionBuiltin(i);
     return FunctionBuiltin::None;
 }
-enum class LibmShape : unsigned char { None, Unary, Binary, Ternary, IntOut, IntIn, LongIn, FloatOut, Quotient, Toward, IntResult, LongResult, LongLongResult };
+enum class LibmShape : unsigned char { None, Unary, Binary, Ternary, IntOut, IntIn, LongIn, FloatOut, Quotient, Toward, IntResult, LongResult, LongLongResult, ComplexUnary, ComplexBinary, ComplexReal };
 struct LibmBuiltin { LibmShape shape = LibmShape::None; unsigned suffix = 0; };
 bool hosted_builtin(TextView name);
 struct FixedVectorBuiltin { unsigned lane_bytes = 0; bool extract = false; };

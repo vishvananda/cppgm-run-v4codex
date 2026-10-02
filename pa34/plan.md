@@ -55,6 +55,11 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
   a stale preprocessor owner/name, so toolchain/host_config.cpp lacked its input.
   The generated contents match the seed configuration; host probes remain the
   PA25/PA29 build-time boundary, never compilation delegation (spec §10).
+- Fixed PA29 complex libm registry/signatures: the selected `<complex>` header
+  exposed missing library builtins. All 66 probes/signatures, wrong arities and
+  O0/O3 three-precision runtime identities pass. The original semantic/complex.cpp
+  probe now reaches a second PA29 gap: two-component GNU complex brace
+  initialization. Fix its typed list plans/constant evaluation, then rerun gates.
 - Continue each newly exposed self-build/test/object divergence at its earliest
   owner. Trace seed/self differences to object and source; probes are diagnostic.
 - Required order: file audit; `make test-report-through-pa33`; canonical

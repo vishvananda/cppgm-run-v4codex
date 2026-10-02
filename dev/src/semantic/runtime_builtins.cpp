@@ -17,6 +17,14 @@ EntityId Analyzer::runtime_builtin(IdentifierId name)
         auto fp = types.fundamental(libm.suffix == 1 ? FT_FLOAT : libm.suffix == 2 ? FT_LONG_DOUBLE : FT_DOUBLE);
         result = fp; args.push_back(fp);
         switch (libm.shape) {
+        case S::ComplexUnary: case S::ComplexBinary: case S::ComplexReal: {
+            auto complex = types.fundamental(libm.suffix == 1 ? FT_COMPLEX_FLOAT :
+                libm.suffix == 2 ? FT_COMPLEX_LONG_DOUBLE : FT_COMPLEX_DOUBLE);
+            args[0] = complex;
+            if (libm.shape != S::ComplexReal) result = complex;
+            if (libm.shape == S::ComplexBinary) args.push_back(complex);
+            break;
+        }
         case S::Binary: args.push_back(fp); break;
         case S::Ternary: args.push_back(fp); args.push_back(fp); break;
         case S::IntOut: args.push_back(types.compound(TypeKind::Pointer,i)); break;
