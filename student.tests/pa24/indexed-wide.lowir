@@ -1,0 +1,30 @@
+# The low word must not overwrite the address index for the high word.
+global @data = {
+  i128 18446744073709551619
+  zero 16
+  i128 36893488147419103237
+  zero 16
+}
+function @read(%base : ptr, %index : i64) -> i128 {
+  block ^entry:
+    %address = index obj<32x16> %base, %index
+    %value = load i128 %address
+    return i128 %value
+}
+function @write(%base : ptr, %index : i64, %value : i128) -> void {
+  block ^entry:
+    %address = index obj<32x16> %base, %index
+    store i128 %value, %address
+    return void
+}
+function @main() -> i64 [role=entry] {
+  block ^entry:
+    %base = addr @data
+    %a = call i128 @read(%base, 1)
+    %bad1 = cmp ne i128 %a, 36893488147419103237
+    call void @write(%base, 0, %a)
+    %b = call i128 @read(%base, 0)
+    %bad2 = cmp ne i128 %b, 36893488147419103237
+    %bad = binary or i64 %bad1, %bad2
+    return i64 %bad
+}

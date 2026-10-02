@@ -95,9 +95,11 @@ void Selector::move(Operand to, Operand from, Type t)
     }
     if (to.kind == Operand::Memory || (to.kind == Operand::Symbol && !to.address)) {
         if (from.kind != Operand::Reg && from.kind != Operand::Immediate) {
-            // A folded indexed destination may still consume the reserved r10
-            // address carrier. Loading its value must not overwrite that index.
-            int scratch = to.reg == XR_R10 || to.index == XR_R10 ? XR_RAX : XR_R10;
+            // Both addresses remain live across the chunks of a wide move.
+            // Do not consume a folded source index while loading its low word.
+            // RAX is reserved here; ordinary address placement excludes it.
+            int scratch = to.reg == XR_R10 || to.index == XR_R10 ||
+                from.reg == XR_R10 || from.index == XR_R10 ? XR_RAX : XR_R10;
             from = in_register(from,t,scratch);
         }
         emit(Op::Store,t,{to,from});
