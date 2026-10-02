@@ -12,6 +12,9 @@ with tempfile.TemporaryDirectory(prefix='pa32-context-') as directory:
  src.write_text('''declare function @length(%p : ptr) -> i64 [unwind=no, effects=readonly, object=cppgm_builtin_strlen]
 function @throwing() -> void { block ^entry: throw i64 13 }
 global @text [binding=internal, storage=readonly] = { i8 65 i8 66 i8 67 i8 0 }
+global @padded [binding=internal, storage=readonly] = { i8 65 i32 1111638594 i8 0 }
+global @packed : obj<6x1> [binding=internal, storage=readonly] = { i8 65 i32 1111638594 i8 0 }
+global @zero : i32 [binding=internal, storage=readonly] = zero
 global @writable [binding=internal] = { i8 65 i8 0 }
 global @weak [binding=weak, storage=readonly] = { i8 65 i8 0 }
 global @unnulled [binding=internal, storage=readonly] = { i8 65 }
@@ -58,7 +61,9 @@ function @main() -> i64 [role=entry] {
  block ^entry: %a = index i64 $array, 2 store i64 71, %a
  %ptr = addr $array %v = call i64 @known(%ptr) %s = call i64 @string_known()
  %b = cmp ne i64 %v, 71 %c = cmp ne i64 %s, 3
- %r = binary or i64 %b, %c return i64 %r
+ %pad = call i64 @length(@padded) %pac = call i64 @length(@packed) %zero = call i64 @length(@zero)
+ %pbad = cmp ne i64 %pad, 1 %cbad = cmp ne i64 %pac, 5 %zbad = cmp ne i64 %zero, 0
+ %r = binary or i64 %b, %c %r1 = binary or i64 %r, %pbad %r2 = binary or i64 %r1, %cbad %r3 = binary or i64 %r2, %zbad return i64 %r3
 }
 ''')
  for level in range(4):

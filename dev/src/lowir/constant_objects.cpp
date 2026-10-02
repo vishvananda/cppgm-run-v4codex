@@ -11,8 +11,13 @@ ConstantObjects::ConstantObjects(const Program& program, std::uint64_t& work)
         std::uint64_t offset = 0;
         for (unsigned n = g.data.begin; n < g.data.end(); ++n) {
             const auto& d = p.data[n]; ++work;
+            // Implicit structured layout aligns typed items and zero-fills
+            // the intervening bytes. Explicit obj<NxA> layouts pack their
+            // items exactly; their padding appears as actual zero items.
+            if (d.kind != DataItem::Zero && !(g.structured && g.type.kind() == Type::Object) &&
+                offset % d.type.alignment()) { lengths[g.symbol.index] = offset; break; }
             if (d.kind == DataItem::Zero) {
-                if (d.zero_bytes) { lengths[g.symbol.index] = offset; break; }
+                if (g.structured ? d.zero_bytes : g.type.bytes()) { lengths[g.symbol.index] = offset; break; }
             } else if (d.kind == DataItem::Scalar && d.type.integer() && d.value.kind == Operand::Integer) {
                 bool found = false;
                 for (unsigned b = 0; b < d.type.bytes(); ++b) {
