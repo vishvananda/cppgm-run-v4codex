@@ -1,0 +1,74 @@
+[
+  {
+    "name": "debug-driver-o1-final",
+    "command": [
+      "scripts/run_all_tests.pl",
+      "../dev/cppgm++",
+      "my",
+      "tests/debuginfo/driver/o1"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "debug-driver-o1-final",
+    "command": [
+      "scripts/compare_results.pl",
+      "ref",
+      "my",
+      "tests/debuginfo/driver/o1"
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "debug-driver-o2-final",
+    "command": [
+      "scripts/run_all_tests.pl",
+      "../dev/cppgm++",
+      "my",
+      "tests/debuginfo/driver/o2"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "debug-driver-o2-final",
+    "command": [
+      "scripts/compare_results.pl",
+      "ref",
+      "my",
+      "tests/debuginfo/driver/o2"
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "debug-driver-o3-final",
+    "command": [
+      "scripts/run_all_tests.pl",
+      "../dev/cppgm++",
+      "my",
+      "tests/debuginfo/driver/o3"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "debug-driver-o3-final",
+    "command": [
+      "scripts/compare_results.pl",
+      "ref",
+      "my",
+      "tests/debuginfo/driver/o3"
+    ],
+    "exit_code": 1
+  },
+  {
+    "name": "debug-replay",
+    "command": [
+      "pa32/scripts/run_object_lowir_roundtrip_tests.pl",
+      "--app",
+      "dev/cppgm++",
+      "--test-root",
+      "pa32/tests/object-roundtrip",
+      "--debuginfo"
+    ],
+    "exit_code": 0
+  }
+]

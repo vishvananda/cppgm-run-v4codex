@@ -1,0 +1,42 @@
+[
+  {
+    "name": "prior",
+    "command": "make test-report-through-pa31",
+    "exit_code": 0
+  },
+  {
+    "name": "stage",
+    "command": "make test-pa32",
+    "exit_code": 2
+  },
+  {
+    "name": "file",
+    "command": "perl scripts/cppgm_file_audit.pl --stage pa32 --paths dev/src",
+    "exit_code": 0
+  },
+  {
+    "name": "debug",
+    "command": "make -C pa32 test-debuginfo",
+    "exit_code": 2
+  },
+  {
+    "name": "local",
+    "command": "python3 student.tests/pa32/local.py",
+    "exit_code": 0
+  },
+  {
+    "name": "dataflow",
+    "command": "python3 student.tests/pa32/dataflow.py",
+    "exit_code": 0
+  },
+  {
+    "name": "calls",
+    "command": "python3 student.tests/pa32/calls.py",
+    "exit_code": 0
+  },
+  {
+    "name": "trace",
+    "command": "python3 student.tests/pa32/audit_trace.py /home/vishvananda/work/private/v4codex/artifacts/pa32-210/trace-final",
+    "exit_code": 0
+  }
+]

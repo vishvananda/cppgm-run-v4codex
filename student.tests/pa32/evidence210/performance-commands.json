@@ -1,0 +1,121 @@
+[
+  {
+    "name": "scalar-final",
+    "command": [
+      "python3",
+      "student.tests/pa32/performance.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/scalar-final",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/reviewed-cppgm"
+    ],
+    "environment": {
+      "PERF_CPU": "14"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "dataflow-final",
+    "command": [
+      "python3",
+      "student.tests/pa32/dataflow_performance.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/dataflow-final",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/cppgm-handoff",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/reviewed-cppgm"
+    ],
+    "environment": {
+      "PERF_CPU": "14"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "calls-final",
+    "command": [
+      "python3",
+      "student.tests/pa32/calls_performance.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/calls-final",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-209/baseline-cppgm",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/reviewed-cppgm"
+    ],
+    "environment": {
+      "PERF_CPU": "14"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "constants-final",
+    "command": [
+      "python3",
+      "student.tests/pa32/calls_performance.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/constants-final",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-209/baseline-cppgm",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/reviewed-cppgm"
+    ],
+    "environment": {
+      "PERF_CPU": "14",
+      "PA32_WORKLOADS": "constants",
+      "PA32_LEVEL": "2"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "common-audit-o1",
+    "command": [
+      "python3",
+      "student.tests/pa32/common_levels.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/common-audit-o1",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/entry-cppgm",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/reviewed-cppgm"
+    ],
+    "environment": {
+      "PERF_CPU": "14",
+      "PA32_BASE_LEVEL": "1",
+      "PA32_FINAL_LEVEL": "1"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "common-cumulative",
+    "command": [
+      "python3",
+      "student.tests/pa32/common_levels.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/common-cumulative",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/cppgm-base",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/reviewed-cppgm"
+    ],
+    "environment": {
+      "PERF_CPU": "14",
+      "PA32_BASE_LEVEL": "0",
+      "PA32_FINAL_LEVEL": "1"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "common-audit-o0",
+    "command": [
+      "python3",
+      "student.tests/pa32/common_levels.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/common-audit-o0",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/entry-cppgm",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/reviewed-cppgm"
+    ],
+    "environment": {
+      "PERF_CPU": "14",
+      "PA32_BASE_LEVEL": "0",
+      "PA32_FINAL_LEVEL": "0"
+    },
+    "exit_code": 0
+  },
+  {
+    "name": "selfhost-final",
+    "command": [
+      "python3",
+      "student.tests/pa32/selfhost_performance.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/selfhost-final",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/entry-cppgm",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa32-210/reviewed-cppgm"
+    ],
+    "environment": {
+      "PERF_CPU": "14"
+    },
+    "exit_code": 0
+  }
+]

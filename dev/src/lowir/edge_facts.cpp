@@ -51,6 +51,9 @@ void propagate_edge_facts(Program& p, const OrdinaryFlow& flow, const std::vecto
         return a.kind == Operand::Temporary && definitions[a.ref] == 1 ? facts[local.get(a.ref)].truth : 0;
     };
     auto zero = [](Operand a) { return a.kind == Operand::Integer && !a.data.integer && !a.integer_high(); };
+    auto full_width = [&](Operand a, Type type) {
+        return a.kind != Operand::Temporary || p.values[a.ref-1].type.width() <= type.width();
+    };
     auto visit = [&](unsigned b) {
         unsigned edge = flow.incoming[b];
         if (b != 1 && edge && !flow.edges[edge].next_in) {
@@ -66,7 +69,11 @@ void propagate_edge_facts(Program& p, const OrdinaryFlow& flow, const std::vecto
                         const auto& i = p.instructions[producer-1];
                         if (i.opcode == Opcode::Compare && i.type.integer() && (i.operation == Operation::Eq || i.operation == Operation::Ne)) {
                             auto x = p.operands[i.operands.begin], y = p.operands[i.operands.begin+1];
-                            if (zero(x) || zero(y)) set(zero(x) ? y : x,i.operation == Operation::Ne ? truth : 3-truth);
+                            auto value = zero(x) ? y : x;
+                            // A truncated zero does not prove the original
+                            // wider value is zero (for example 256 in i8).
+                            if ((zero(x) || zero(y)) && full_width(value,i.type))
+                                set(value,i.operation == Operation::Ne ? truth : 3-truth);
                             bool equality = (i.operation == Operation::Eq) == (truth == 2);
                             if (equality) { exact(x,y,i.type); exact(y,x,i.type); }
                         }
@@ -77,14 +84,19 @@ void propagate_edge_facts(Program& p, const OrdinaryFlow& flow, const std::vecto
         auto r = p.blocks[flow.blocks[b].index-1].instructions;
         for (unsigned n = r.begin; n < r.end(); ++n) {
             auto& i = p.instructions[n]; ++work;
-            if (i.opcode != Opcode::Phi) for (unsigned k = i.operands.begin; k < i.operands.end(); ++k) { resolve(p.operands[k]); ++work; }
+            if (i.opcode != Opcode::Phi) for (unsigned k = i.operands.begin; k < i.operands.end(); ++k) {
+                auto replacement = p.operands[k]; resolve(replacement);
+                if (preserves_operand_type(p,i,k-i.operands.begin,replacement)) p.operands[k] = replacement;
+                ++work;
+            }
             Operand folded;
             if (i.destination && fold_integer(i,p.operands.data()+i.operands.begin,folded)) {
                 exact(Operand::value(i.destination),folded,i.result_type());
             }
             if (i.opcode == Opcode::Compare && i.type.integer() && (i.operation == Operation::Eq || i.operation == Operation::Ne)) {
                 auto a = p.operands[i.operands.begin], other = p.operands[i.operands.begin+1];
-                unsigned fact = zero(other) ? known(a) : zero(a) ? known(other) : 0;
+                unsigned fact = zero(other) && full_width(a,i.type) ? known(a) :
+                    zero(a) && full_width(other,i.type) ? known(other) : 0;
                 if (fact) {
                     bool result = (fact == 1) == (i.operation == Operation::Eq);
                     i.type = i.result_type(); i.opcode = Opcode::Const; i.operation = Operation::None;

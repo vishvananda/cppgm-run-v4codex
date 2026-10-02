@@ -4,6 +4,9 @@ namespace lowir_model {
 // Integer literal normalization and folding use target-width unsigned bits.
 Operand normalize_integer(Operand, Type);
 bool same_scalar(Operand, Operand);
+// Some uses derive their width/ABI class from the operand rather than the
+// instruction. Replacements at those uses must retain that typed carrier.
+bool preserves_operand_type(const Program&, const Instruction&, unsigned argument, Operand);
 bool fold_integer(const Instruction&, const Operand*, Operand&);
 bool discardable(const Instruction&);
 void propagate_call_constants(Program&, std::uint64_t& work);

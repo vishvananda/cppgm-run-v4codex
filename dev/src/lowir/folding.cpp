@@ -63,6 +63,31 @@ bool same_scalar(Operand a, Operand b) {
     if (a.kind == Operand::Floating) return false;
     return a.ref == b.ref;
 }
+bool preserves_operand_type(const Program& p, const Instruction& i, unsigned argument, Operand replacement)
+{
+    if (i.opcode != Opcode::Switch && i.opcode != Opcode::Call) return true;
+    auto original = p.operands[i.operands.begin+argument];
+    if (original.kind != Operand::Temporary) return true;
+    if (replacement.kind == Operand::Temporary && original.ref == replacement.ref) return true;
+    Type fallback = Type::I64;
+    bool implicit = i.opcode == Opcode::Switch && !argument;
+    if (i.opcode == Opcode::Call && argument) {
+        const Signature* sig = i.signature ? &p.signatures[i.signature.index-1] : nullptr;
+        auto callee = p.operands[i.operands.begin];
+        if (callee.kind == Operand::Symbol && p.symbols[callee.ref-1].kind == Symbol::FunctionSymbol)
+            sig = &p.signatures[p.functions[p.symbols[callee.ref-1].entity-1].signature.index-1];
+        if (!sig) return false;
+        implicit = argument > sig->parameters.count;
+        if (!implicit) {
+            const auto& param = p.parameters[sig->parameters.begin+argument-1];
+            implicit = param.passing != PPM_DIRECT;
+            fallback = param.type;
+        }
+    }
+    if (!implicit) return true;
+    Type next = replacement.kind == Operand::Temporary ? p.values[replacement.ref-1].type : fallback;
+    return next == p.values[original.ref-1].type;
+}
 bool fold_integer(const Instruction& i, const Operand* a, Operand& out)
 {
     if (!i.type.integer() || !i.operands.count || a[0].kind != Operand::Integer) return false;

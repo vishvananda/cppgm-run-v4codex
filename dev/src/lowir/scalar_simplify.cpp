@@ -152,7 +152,10 @@ class Scalars {
         budget = 16*(body.size()+uses.size()+1);
         for (unsigned n : body) {
             auto& i = p.instructions[n];
-            for (unsigned j = i.operands.begin; j < i.operands.end(); ++j) p.operands[j] = resolve(p.operands[j]);
+            for (unsigned j = i.operands.begin; j < i.operands.end(); ++j) {
+                auto replacement = resolve(p.operands[j]);
+                if (preserves_operand_type(p,i,j-i.operands.begin,replacement)) p.operands[j] = replacement;
+            }
             if (!i.destination) continue;
             const auto& fact = facts[locals.get(i.destination.index)];
             if (!fact.known || fact.definitions != 1) continue;

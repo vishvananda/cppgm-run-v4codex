@@ -148,6 +148,9 @@ void prune_support_functions(Program& p, std::uint64_t& work)
     // support bodies become declarations; scalar/CFG compaction releases IR.
     for (auto& f : p.functions) if (!live[f.symbol.index]) {
         f.declaration = true; f.blocks.count = 0; f.slots.count = 0;
+        // A declaration has no executable source position. Cloned live
+        // instructions retain their own locations when this body is retired.
+        f.debug = DebugLocation();
     }
 }
 }

@@ -172,6 +172,15 @@ public:
             auto& d = definitions[n]; if (!facts[d.slot].eligible) continue;
             auto& i = p.instructions[d.store-1];
             i.opcode = Opcode::Copy; i.destination = d.value; i.operands.count = 1;
+            auto input = p.operands[i.operands.begin];
+            Type actual = input.kind == Operand::Temporary ? p.values[input.ref-1].type :
+                input.kind == Operand::Slot ? p.slots[input.ref-1].type : i.type;
+            // Stores perform floating format conversion; Copy only accepts
+            // the same format. Preserve the store's rounding at this snapshot.
+            if (i.type.floating() && actual != i.type) {
+                i.opcode = Opcode::Convert; i.source_type = actual;
+                i.operation = actual.width() < i.type.width() ? Operation::Fpext : Operation::Fptrunc;
+            }
         }
         for (auto load : loads) {
             auto& d = definitions[load.second]; if (!facts[d.slot].eligible) continue;

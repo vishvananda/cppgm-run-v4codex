@@ -48,7 +48,8 @@ void propagate_call_constants(Program& p, std::uint64_t& work)
                 const auto& i = p.instructions[n];
                 for (unsigned k = i.operands.begin; k < i.operands.end(); ++k) {
                     auto& a = p.operands[k]; ++work;
-                    if (a.kind == Operand::Temporary && facts[a.ref].state == 1) a = facts[a.ref].value;
+                    if (a.kind == Operand::Temporary && facts[a.ref].state == 1 &&
+                        preserves_operand_type(p,i,k-i.operands.begin,facts[a.ref].value)) a = facts[a.ref].value;
                 }
             }
         }

@@ -2,9 +2,10 @@
 #include "lowir/ordinary_flow.h"
 namespace lowir_model {
 namespace {
-bool equal_when(const Instruction& comparison, const Program& p, bool taken, Operand x, Operand y)
+bool equal_when(const Instruction& comparison, const Program& p, bool taken, Operand x, Operand y, Type type)
 {
-    if (comparison.opcode != Opcode::Compare || !comparison.type.integer()) return false;
+    // Equality after a conversion proves equality only in that same domain.
+    if (comparison.opcode != Opcode::Compare || !comparison.type.integer() || comparison.type != type) return false;
     auto a = p.operands[comparison.operands.begin], b = p.operands[comparison.operands.begin+1];
     auto normalize = [&](Operand v) { return v.kind == Operand::Integer ? normalize_integer(v,comparison.type) : v; };
     a = normalize(a); b = normalize(b); x = normalize(x); y = normalize(y);
@@ -63,8 +64,8 @@ void simplify_diamond_values(Program& p, std::uint64_t& work)
             Operand replacement; bool replace = false;
             if (same_scalar(yes,no) && available(yes)) { replacement = yes; replace = true; }
             unsigned cmp = producer[condition.ref];
-            if (!replace && cmp && available(yes) && equal_when(p.instructions[cmp-1],p,false,yes,no)) { replacement = yes; replace = true; }
-            if (!replace && cmp && available(no) && equal_when(p.instructions[cmp-1],p,true,yes,no)) { replacement = no; replace = true; }
+            if (!replace && cmp && available(yes) && equal_when(p.instructions[cmp-1],p,false,yes,no,phi.type)) { replacement = yes; replace = true; }
+            if (!replace && cmp && available(no) && equal_when(p.instructions[cmp-1],p,true,yes,no,phi.type)) { replacement = no; replace = true; }
             if (replace) {
                 phi.opcode = replacement.literal() ? Opcode::Const : Opcode::Copy;
                 p.operands[phi.operands.begin] = replacement; phi.operands.count = 1;
