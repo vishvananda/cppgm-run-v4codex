@@ -340,7 +340,7 @@ class Loops {
             for (unsigned k = old.begin; k < old.end(); ++k) p.operands.push_back(p.operands[k]);
             p.operands.push_back(Operand::label(flow.blocks[l.blocks[1]])); p.operands.push_back(value);
         }
-        auto runtime = fill_runtime(p,fill_bytes);
+        auto runtime = fill_runtime(p,fill_bytes,work);
         unsigned start = planned.size();
         for (auto n : l.exports) assign(planned,p.instructions[n],n == l.compare ? Operand::integer(!l.body_true) : l.final);
         // Keep the zero-trip guard in the caller. Besides preserving a null

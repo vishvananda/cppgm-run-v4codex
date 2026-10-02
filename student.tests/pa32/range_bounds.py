@@ -21,6 +21,19 @@ with tempfile.TemporaryDirectory(prefix='pa32-range-bounds-') as temp:
   rows.append(dict(case='scale',count=n,stats=stats))
  print([(r['count'],r['stats']['optimize_work']) for r in rows],flush=True)
  assert rows[2]['stats']['optimize_work'] <= 11*rows[0]['stats']['optimize_work']
+ # Reuse the full compatible private ABI identity on explicit IR input.
+ declaration='declare function @existing(%p : ptr, %v : i32, %n : i64) -> void [unwind=no, binding=internal, object=cppgm_opt_fill_bytes]\n'
+ src.write_text(declaration+fill)
+ run(root/'dev/lowiropt','-O1','-o',ir,src)
+ assert ir.read_text().count('object=cppgm_opt_fill_bytes')==1
+ assert 'call void @existing' in ir.read_text()
+ run(root/'dev/cppgm++','-c','-O0','-o',d/'reuse.o',ir)
+ # A stronger extent promise is not part of the new calls' fact key.
+ src.write_text(declaration.replace('%p : ptr,','%p : ptr [object_bytes=1],')+fill)
+ run(root/'dev/lowiropt','-O1','-o',ir,src)
+ assert 'call void @existing' not in ir.read_text()
+ assert 'call void @opt_fill_' in ir.read_text()
+ rows.append(dict(case='helper-identity',compatible_reused=True,stronger_promise_declined=True))
  # Every exit phi needs the new body edge, with the same final pointer value.
  count=64
  s=['function @join(%first : ptr, %n : i64, %take : i64) -> i64 [no_inline=yes] {block ^entry:']

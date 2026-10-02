@@ -1,9 +1,29 @@
 #include "lowir/loop_simplify.h"
 namespace lowir_model {
-SymbolId fill_runtime(Program& p, SymbolId& cached)
+SymbolId fill_runtime(Program& p, SymbolId& cached, std::uint64_t& work)
 {
     if (cached) return cached;
     using Builtin = SymbolMetadata::Builtin;
+    // Once per invocation, recover a compatible already-published runtime
+    // entity (for example after a text roundtrip). Extra parameter promises
+    // are part of the semantic key: do not attach them to new calls.
+    for (const auto& f : p.functions) {
+        ++work;
+        const auto& symbol = p.symbols[f.symbol.index-1];
+        if (!f.declaration || symbol.metadata.builtin != Builtin::FillBytes ||
+            symbol.metadata.binding != SBM_INTERNAL || symbol.metadata.role != SR_NONE || symbol.metadata.force_inline) continue;
+        const auto& sig = p.signatures[f.signature.index-1];
+        if (sig.result != Type::Void || sig.parameters.count != 3 ||
+            sig.boundary.arity != CAM_FIXED || sig.boundary.effects != CFXM_DEFAULT ||
+            sig.boundary.returns != CRM_DEFAULT || sig.boundary.query != CQM_DEFAULT) continue;
+        bool compatible = true;
+        for (unsigned n = 0; n < 3; ++n) {
+            const auto& a = p.parameters[sig.parameters.begin+n];
+            compatible &= a.type == (n == 0 ? Type::Ptr : n == 1 ? Type::I32 : Type::I64) &&
+                a.passing == PPM_DIRECT && a.alias == PALM_DEFAULT && !a.object_bytes;
+        }
+        if (compatible) { cached = f.symbol; return cached; }
+    }
     // The invocation owns this single-entry cache. Runtime identity is typed;
     // names are chosen only at the explicit symbol/ABI boundary.
     unsigned serial = p.symbols.size(); Name name;

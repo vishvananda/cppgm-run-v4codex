@@ -8,5 +8,5 @@ struct LoopStats {
 bool constant_trip(Type, Operation, Operand start, Operand limit, Operand step,
     bool subtract, std::uint64_t& trips, Operand& final);
 bool simplify_loops(Program&, unsigned level, std::uint64_t& work, LoopStats&);
-SymbolId fill_runtime(Program&, SymbolId& cached);
+SymbolId fill_runtime(Program&, SymbolId& cached, std::uint64_t& work);
 }
