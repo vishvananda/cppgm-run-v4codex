@@ -1,0 +1,433 @@
+[
+  {
+    "name": "prior",
+    "command": [
+      "make",
+      "test-report-through-pa31"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/prior.log",
+    "sha256": "562562da2015aa7084a3403614e2594c80aa791bbcfa1c8aed57cc575520ceff"
+  },
+  {
+    "name": "stage",
+    "command": [
+      "make",
+      "test-pa32"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/stage.log",
+    "sha256": "a39bc3097adbd56bece7567a1724be8b9cd78142fb9be2662663e2aad3f5d373"
+  },
+  {
+    "name": "through",
+    "command": [
+      "make",
+      "test-report-through-pa32"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/through.log",
+    "sha256": "71b009e4c7b4d25f544d1609799d9539666d4a9ed8cdb12ec3034cfa54856564"
+  },
+  {
+    "name": "file",
+    "command": [
+      "perl",
+      "scripts/cppgm_file_audit.pl",
+      "--stage",
+      "pa32",
+      "--paths",
+      "dev/src"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/file.log",
+    "sha256": "c1c41fb8158cd70b78b668cc11cfc64826a81c0b2340e4e4255e395415e08ab3"
+  },
+  {
+    "name": "debug",
+    "command": [
+      "make",
+      "test-debuginfo",
+      "DEBUGINFO_TEST_PAS=pa32"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 2,
+    "log": "/tmp/pa32-217/final-checks/debug.log",
+    "sha256": "05639e3a18349de50155e2c65a11f1f8f57701c5e49b40b17352498a111c954e"
+  },
+  {
+    "name": "debug-driver-o1",
+    "command": [
+      "make",
+      "check",
+      "TEST=tests/debuginfo/driver/o1"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout/pa32",
+    "exit_code": 2,
+    "log": "/tmp/pa32-217/final-checks/debug-driver-o1.log",
+    "sha256": "a91ff91d55faacbc4811e9a76246d4f5a4757557067b2203881b92a5c206e0ab"
+  },
+  {
+    "name": "debug-driver-o2",
+    "command": [
+      "make",
+      "check",
+      "TEST=tests/debuginfo/driver/o2"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout/pa32",
+    "exit_code": 2,
+    "log": "/tmp/pa32-217/final-checks/debug-driver-o2.log",
+    "sha256": "6245bbae265b874d1fabe21c71337dd9b2743cac05f987a43bac3a4f5c47bd55"
+  },
+  {
+    "name": "debug-driver-o3",
+    "command": [
+      "make",
+      "check",
+      "TEST=tests/debuginfo/driver/o3"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout/pa32",
+    "exit_code": 2,
+    "log": "/tmp/pa32-217/final-checks/debug-driver-o3.log",
+    "sha256": "d9ac23a6f176354abdcb5d41c182492f90f9de75ae91043e58b1a432f2180385"
+  },
+  {
+    "name": "normal-objects",
+    "command": [
+      "scripts/run_object_lowir_roundtrip_tests.pl",
+      "--app",
+      "../dev/cppgm++",
+      "--test-root",
+      "tests/object-roundtrip"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout/pa32",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/normal-objects.log",
+    "sha256": "d6a024e0f3623a29fda291953f4bce3de6de32126a8f91979915b7c863c93735"
+  },
+  {
+    "name": "debug-objects",
+    "command": [
+      "scripts/run_object_lowir_roundtrip_tests.pl",
+      "--debuginfo",
+      "--app",
+      "../dev/cppgm++",
+      "--test-root",
+      "tests/object-roundtrip"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout/pa32",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/debug-objects.log",
+    "sha256": "fb728d70ed473ea7eb4e0e0051165a71e7d774187d3daf7990233dfec7ef2cdb"
+  },
+  {
+    "name": "source_identity",
+    "command": [
+      "python3",
+      "student.tests/pa32/source_identity.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/source_identity.log",
+    "sha256": "8051de8b4e1755790917a9d64cedc3579d30733a5522a4ae2ffed43a61403053"
+  },
+  {
+    "name": "pointer_congruence",
+    "command": [
+      "python3",
+      "student.tests/pa32/pointer_congruence.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/pointer_congruence.log",
+    "sha256": "c64a0ec3c2c0ecbe10ae7b7ed9ce7f59524d9ead349c3b2c8498200e1e484f05"
+  },
+  {
+    "name": "floating_facts",
+    "command": [
+      "python3",
+      "student.tests/pa32/floating_facts.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/floating_facts.log",
+    "sha256": "bdf743cc043f0b965a1b57c3690862535878773848b5a0d5f2c98c54b8e4cb99"
+  },
+  {
+    "name": "context_guards",
+    "command": [
+      "python3",
+      "student.tests/pa32/context_guards.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/context_guards.log",
+    "sha256": "27529749d0609678fcaffac574387df33af5d08e15664d87a7a959253df13de1"
+  },
+  {
+    "name": "contextual_calls",
+    "command": [
+      "python3",
+      "student.tests/pa32/contextual_calls.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/contextual_calls.log",
+    "sha256": "ed1756c31405a04c8896adb56078f6bf403153b8a3f68d1e989384d4cca99a33"
+  },
+  {
+    "name": "calls",
+    "command": [
+      "python3",
+      "student.tests/pa32/calls.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/calls.log",
+    "sha256": "18a45dadaadf69f0ecd78bfad62f1c28ce6f2bed736b7ce8e8b60a7518a8c46d"
+  },
+  {
+    "name": "control_closure",
+    "command": [
+      "python3",
+      "student.tests/pa32/control_closure.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/control_closure.log",
+    "sha256": "2dd3f5ca4d7b98d35a0dbd2f342a3d2cbb601af01acbfbab6a2c2377a58d83bb"
+  },
+  {
+    "name": "range_fills",
+    "command": [
+      "python3",
+      "student.tests/pa32/range_fills.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/range_fills.log",
+    "sha256": "79cce35a96239a6afaabb83383142132e8b202f8a74d262806ff212057f7f6f9"
+  },
+  {
+    "name": "pointer_loops",
+    "command": [
+      "python3",
+      "student.tests/pa32/pointer_loops.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/pointer_loops.log",
+    "sha256": "8d26a7056efb7df2a25a934d37da9cfd4ee9fe6f4a0cbd3cb5e2eb49ad16f095"
+  },
+  {
+    "name": "memory",
+    "command": [
+      "python3",
+      "student.tests/pa32/memory.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/memory.log",
+    "sha256": "49546354b678dea0e2b80c7fa9d0c48aee37d9114e4c717df358ef6722bd583a"
+  },
+  {
+    "name": "memory_native",
+    "command": [
+      "python3",
+      "student.tests/pa32/memory_native.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/memory_native.log",
+    "sha256": "69f27a4d92bcc687f7f42905e820e3e6ba98a0381782a9125123fdcceddfd0af"
+  },
+  {
+    "name": "loops",
+    "command": [
+      "python3",
+      "student.tests/pa32/loops.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/loops.log",
+    "sha256": "473ebe05daef6ca2dce9c965712968cec3f6db05d1a0780d2e5554fa08ced34d"
+  },
+  {
+    "name": "loop_trip_properties",
+    "command": [
+      "python3",
+      "student.tests/pa32/loop_trip_properties.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/loop_trip_properties.log",
+    "sha256": "17a033a9b467ece60ba8784a9f2fd1ac95286639b326fcad20db06a2a2fa0aa2"
+  },
+  {
+    "name": "objects",
+    "command": [
+      "python3",
+      "student.tests/pa32/objects.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/objects.log",
+    "sha256": "c957fb0251f5167e4ca9acebb1a56d310fffb1c4bce3c2889cd3642c139cfa82"
+  },
+  {
+    "name": "local",
+    "command": [
+      "python3",
+      "student.tests/pa32/local.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/local.log",
+    "sha256": "6bd48fafdf1bb4282b908e30eef28d416b08efafbf1a8c6b64c6f270275208e7"
+  },
+  {
+    "name": "dataflow",
+    "command": [
+      "python3",
+      "student.tests/pa32/dataflow.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/dataflow.log",
+    "sha256": "30bb872cbb6348818d3c4459ebc034f319031116e7a7637008ea6e521c5079cc"
+  },
+  {
+    "name": "audit",
+    "command": [
+      "python3",
+      "student.tests/pa32/audit.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/audit.log",
+    "sha256": "b7dc578d2a0be23e52bcd466690bd7189b6e39a5b1cb6f94d2a788f137d8c680"
+  },
+  {
+    "name": "context-bounds",
+    "command": [
+      "python3",
+      "student.tests/pa32/context_bounds.py",
+      "/tmp/pa32-217/final-checks/bounds.json"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/context-bounds.log",
+    "sha256": "192e40bee327451e1e0bc210349eeced0a6991649f957ca7394e15d3f08fd19d"
+  },
+  {
+    "name": "memory-bounds",
+    "command": [
+      "python3",
+      "student.tests/pa32/memory_bounds.py",
+      "/tmp/pa32-217/final-checks/memory-bounds.json"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/memory-bounds.log",
+    "sha256": "514c5802c533113b443ef0fffe4cd0cbf5df5c18e1c3f0a1b432b79922c5d462"
+  },
+  {
+    "name": "loop-bounds",
+    "command": [
+      "python3",
+      "student.tests/pa32/loops_bounds.py",
+      "/tmp/pa32-217/final-checks/loop-bounds"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/loop-bounds.log",
+    "sha256": "c2054a8b1a5d9be17a4ff6e09510ca570cec78a299ea5affe2ec2bbd59cfac68"
+  },
+  {
+    "name": "trace",
+    "command": [
+      "python3",
+      "student.tests/pa32/audit_trace.py",
+      "/tmp/pa32-217/final-checks/trace"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/trace.log",
+    "sha256": "c984ab8cb18d83bf5536d08ba158ef3b329a4147307fdc681303fe5c9279e01e"
+  },
+  {
+    "name": "loop-trace",
+    "command": [
+      "python3",
+      "student.tests/pa32/loops_trace.py",
+      "/tmp/pa32-217/final-checks/loop-trace"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/loop-trace.log",
+    "sha256": "74d6adc3b33f89da55af6c9bd878554cbbbd229459a2eb41dc746b3e22bcdbe4"
+  },
+  {
+    "name": "memory-trace",
+    "command": [
+      "python3",
+      "student.tests/pa32/memory_trace.py",
+      "/tmp/pa32-217/final-checks/memory-trace"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/memory-trace.log",
+    "sha256": "92c5f887c76ae6b140bdb7d818010d312c6f5d08d7b1f8387a10691d899142af"
+  },
+  {
+    "name": "range-trace",
+    "command": [
+      "python3",
+      "student.tests/pa32/range_trace.py",
+      "/tmp/pa32-217/final-checks/range-trace"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/range-trace.log",
+    "sha256": "8c1d8eb6d8974293daae142d713ab29dc17c67153b009352dbb8bd3e729f03d4"
+  },
+  {
+    "name": "audit214",
+    "command": [
+      "python3",
+      "student.tests/pa32/audit214.py",
+      "/tmp/pa32-217/final-checks/audit214"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/audit214.log",
+    "sha256": "c6372c19d1838afd6fd440273fc56e1b5a7bd8a3b76b2626667ef00369835a04"
+  },
+  {
+    "name": "range-bounds",
+    "command": [
+      "python3",
+      "student.tests/pa32/range_bounds.py",
+      "/tmp/pa32-217/final-checks/range-bounds.json"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/range-bounds.log",
+    "sha256": "ea8dcbc171da69c3d51b12356b23bd477ecf6f09bf588d1ea46a1c8f769266cf"
+  },
+  {
+    "name": "range-native",
+    "command": [
+      "python3",
+      "student.tests/pa32/range_native.py"
+    ],
+    "cwd": "/home/vishvananda/work/private/v4codex/checkout",
+    "exit_code": 0,
+    "log": "/tmp/pa32-217/final-checks/range-native.log",
+    "sha256": "d6524ba9048074e41f6cf7192aa7dc2b3bf724188b9c3cc09ff4c9f122bf576a"
+  }
+]

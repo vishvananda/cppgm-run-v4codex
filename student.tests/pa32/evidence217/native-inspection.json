@@ -1,0 +1,107 @@
+{
+  "layout": {
+    "A": [
+      "push   %rbp",
+      "mov    %rsp,%rbp",
+      "sub    $0x10,%rsp",
+      "mov    %rdi,-0x8(%rbp)",
+      "mov    0x0(%rip),%r10",
+      "lea    0x18(%r10),%r10",
+      "mov    %r10,-0x10(%rbp)",
+      "mov    0x0(%rip),%r11",
+      "mov    (%r11),%r8",
+      "lea    -0x10(%rbp),%r11",
+      "mov    (%r11,%r8,1),%rax",
+      "jmp    <target>",
+      "leave",
+      "ret"
+    ],
+    "B": [
+      "push   %rbp",
+      "mov    %rsp,%rbp",
+      "mov    %rdi,%rax",
+      "jmp    <target>",
+      "leave",
+      "ret"
+    ],
+    "identical": false
+  },
+  "move": {
+    "A": [
+      "push   %rbp",
+      "mov    %rsp,%rbp",
+      "sub    $0x40,%rsp",
+      "mov    %rdi,-0x20(%rbp)",
+      "movq   $0x3,-0x18(%rbp)",
+      "movq   $0x5,-0x10(%rbp)",
+      "movq   $0x7,-0x8(%rbp)",
+      "lea    -0x40(%rbp),%rdi",
+      "lea    -0x20(%rbp),%rsi",
+      "call   <target>",
+      "mov    -0x40(%rbp),%r8",
+      "add    -0x38(%rbp),%r8",
+      "add    -0x30(%rbp),%r8",
+      "add    -0x28(%rbp),%r8",
+      "sub    $0xf,%r8",
+      "mov    %r8,%rax",
+      "jmp    <target>",
+      "leave",
+      "ret"
+    ],
+    "B": [
+      "push   %rbp",
+      "mov    %rsp,%rbp",
+      "sub    $0x40,%rsp",
+      "mov    %rdi,-0x20(%rbp)",
+      "movq   $0x3,-0x18(%rbp)",
+      "movq   $0x5,-0x10(%rbp)",
+      "movq   $0x7,-0x8(%rbp)",
+      "lea    -0x40(%rbp),%rdi",
+      "lea    -0x20(%rbp),%rsi",
+      "call   <target>",
+      "mov    -0x40(%rbp),%r8",
+      "add    -0x38(%rbp),%r8",
+      "add    -0x30(%rbp),%r8",
+      "add    -0x28(%rbp),%r8",
+      "sub    $0xf,%r8",
+      "mov    %r8,%rax",
+      "jmp    <target>",
+      "leave",
+      "ret"
+    ],
+    "identical": true
+  },
+  "landing": {
+    "A": [
+      "push   %rbp",
+      "mov    %rsp,%rbp",
+      "sub    $0x10,%rsp",
+      "mov    %rbx,-0x10(%rbp)",
+      "mov    %rdi,%rbx",
+      "mov    %rbx,-0x8(%rbp)",
+      "lea    -0x8(%rbp),%rdi",
+      "call   <target>",
+      "mov    %rbx,%rax",
+      "jmp    <target>",
+      "mov    -0x10(%rbp),%rbx",
+      "leave",
+      "ret"
+    ],
+    "B": [
+      "push   %rbp",
+      "mov    %rsp,%rbp",
+      "sub    $0x10,%rsp",
+      "mov    %rbx,-0x10(%rbp)",
+      "mov    %rdi,%rbx",
+      "mov    %rbx,-0x8(%rbp)",
+      "lea    -0x8(%rbp),%rdi",
+      "call   <target>",
+      "mov    %rbx,%rax",
+      "jmp    <target>",
+      "mov    -0x10(%rbp),%rbx",
+      "leave",
+      "ret"
+    ],
+    "identical": true
+  }
+}
