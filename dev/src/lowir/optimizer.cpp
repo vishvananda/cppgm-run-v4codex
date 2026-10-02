@@ -90,6 +90,7 @@ void optimize(Program& p, unsigned level, bool telemetry)
             << ",\"split_growth_reserved\":" << p.stats.split_growth_reserved
             << ",\"loop_candidates\":" << loops.candidates
             << ",\"loops_removed\":" << loops.removed
+            << ",\"loops_filled\":" << loops.fills
             << ",\"loops_unrolled\":" << loops.unrolled
             << ",\"loop_clone_reserved\":" << loops.cloned
             << ",\"loops_declined\":" << loops.declined

@@ -96,7 +96,7 @@ struct Operand {
 std::string integer_text(const Operand& value);
 struct DebugLocation { Name file = 0; std::uint32_t line = 0, column = 0; };
 struct SymbolMetadata {
-    enum class Builtin : unsigned char { None, Strlen };
+    enum class Builtin : unsigned char { None, Strlen, FillBytes };
     SymbolRole role = SR_NONE;
     LanguageLinkageMode linkage = LLM_DEFAULT;
     SymbolBindingMode binding = SBM_DEFAULT;

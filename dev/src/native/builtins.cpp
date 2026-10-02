@@ -29,3 +29,32 @@ Function builtin_strlen(const lowir_model::Program& p, const lowir_model::Functi
     return f;
 }
 } // namespace native
+
+namespace native {
+Function builtin_fill(const lowir_model::Program& p, const lowir_model::Function& source)
+{
+    const auto& sig = p.signatures[source.signature.index-1];
+    lowir_model::require(sig.parameters.count == 3 && sig.result == Type::Void &&
+        p.parameters[sig.parameters.begin].type == Type::Ptr &&
+        p.parameters[sig.parameters.begin+1].type == Type::I32 &&
+        p.parameters[sig.parameters.begin+2].type == Type::I64,"invalid fill boundary");
+    Function f; f.symbol = source.symbol; f.result = Type::Void;
+    f.frame_pointer = false; f.shared_epilogue = false;
+    int regs[] = {XR_RDI,XR_RSI,XR_RDX};
+    for (unsigned n = 0; n < 3; ++n) {
+        auto a = p.parameters[sig.parameters.begin+n];
+        f.params.push_back({p.values[a.value.index-1].name,a.type,Operand::r(regs[n])});
+    }
+    auto block = [&](unsigned id) { Block b; b.id = id; b.name = 0; b.instructions.begin = f.instructions.size(); f.blocks.push_back(b); };
+    auto emit = [&](Op op, Type type, std::initializer_list<Operand> args) -> Instruction& {
+        Instruction i(op,type); i.count = args.size(); std::copy(args.begin(),args.end(),i.args.begin());
+        f.instructions.push_back(i); ++f.blocks.back().instructions.count; return f.instructions.back();
+    };
+    block(p.blocks.size()+1);
+    emit(Op::Mov,Type::I64,{Operand::r(XR_RAX),Operand::r(XR_RSI)});
+    emit(Op::Mov,Type::I64,{Operand::r(XR_RCX),Operand::r(XR_RDX)});
+    emit(Op::FillBytes,Type(),{Operand::r(XR_RDI),Operand::r(XR_RAX),Operand::r(XR_RCX)});
+    emit(Op::Return,Type(),{});
+    return f;
+}
+}

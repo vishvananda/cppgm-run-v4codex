@@ -34,6 +34,7 @@ O2/O3 add closed-world constant propagation; O3 allows bounded full unrolling.
 | Calls/regions | Direct graph/escape census, recursive and typed-home guards; contextual effects and no-unwind facts | Depth <=64; work <=32768/caller, <=32*(I+O+P+S+F+1)/unit; growth <=1536/caller (2048 single-use). Forced expansion remains <=4194304/unit, <=262144/caller; region retirement <=32*(I+O+B+1) |
 | Private objects | Single-definition origins, complete byte partitions and snapshots; escape/volatile/unknown overlays retain homes | <=64 bytes/home, <=16 fields; two fixed invocations, O((I+O+S) alpha(S)); reserve added IR <=8*(I+1), homes <=16S |
 | Integer loops | Closed linear loops; exact widened trip/endpoints including final update; unknown/EH/mutable carriers decline | One invocation; candidate work <=16*(I+O+E+1); O3 <=4 trips, <=64 body clones/loop; unsimplified reservations <=256/function and min(4096,2*(I+1))/unit |
+| Pointer ranges (215) | Immutable twin inductions; odd byte strides prove finite address cycles; exact contiguous counts permit byte/repeated-byte fills; zero guard precedes reference loads; phi edges retain snapshots | Same loop invocation/work budget; no instruction/block growth; exit-phi operands <=2x original, charged copies; one four-instruction native fill helper/unit |
 | Memory values | Exact address/byte identities, immutable snapshots, ordinary predecessor intersections and effect epochs; backedges/handlers/unknown writes reset | One invocation; <=32 cells/state; shared <=128*(I+O+E+1) plus linear census/bounded dominance; <=16 recent diamonds, <=64 comparisons/proof; <=16 copy pieces/128 bytes; no IR/operand growth |
 | Roots/native transport | Complete root/escape census; durable debug/section/extent/ABI facts; actual copy clobbers | Linear root census; one function-local MIR through immediate encoding; direct ELF |
 
@@ -63,11 +64,12 @@ Both are canonical `i64` values. No new analysis or growth allowance was needed.
 
 ## Remaining implementation: three broad owner groups
 
-1. **Control/dataflow closure (7 course failures):** six pointer-loop/range/fill
-   cases, including backward ranges, twin phis and published final pointers;
-   one conditional-phi/partial cross-slot-promotion case. Dynamic termination,
-   range/alias proofs and dynamic fill lowering are still required. Plain
-   pointer arithmetic and existing integer trip proofs do not supply them.
+1. **Pointer congruence (one course failure after 215):** the twin backward
+   eight-byte induction has independent pointer arguments and no congruence
+   fact. Odd-stride address cycles and contiguous writes do not prove this
+   loop terminates. The requirement remains open; no fixture or budget is
+   weakened. All other original control/dataflow failures now pass targeted
+   checks, including alias-safe guarded fills and partial slot facts.
 2. **Contextual calls and EH (5):** exception-bearing candidates, builtin facts,
    landing cleanup and parent admission after initializer-list accessor cleanup.
 3. **Source/ABI/debug identity (5):** lifecycle and declaration names,

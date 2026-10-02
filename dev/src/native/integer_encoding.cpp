@@ -108,6 +108,12 @@ void Encoder::instruction(const Instruction& i)
         form(i.op == Op::Xadd ? (width == 8 ? 0x0fc0 : 0x0fc1) : (width == 8 ? 0x0fb0 : 0x0fb1),width,b.reg,a,0,0,0xf0); break;
     case Op::Exchange: form(width == 8 ? 0x86 : 0x87,width,b.reg,a); break;
     case Op::CopyBytes: case Op::ZeroBytes: bulk(i); break;
+    case Op::FillBytes:
+        // The target runtime builder supplies the exact REP operands. This
+        // instruction clobbers rdi/rcx and reads al; no hidden allocator state.
+        lowir_model::require(a.kind == Operand::Reg && a.reg == XR_RDI && b.kind == Operand::Reg && b.reg == XR_RAX &&
+            i.args[2].kind == Operand::Reg && i.args[2].reg == XR_RCX,"invalid fill registers");
+        byte(0xf3); byte(0xaa); break;
     default: throw lowir_model::ParseError("unencoded native instruction");
     }
 }

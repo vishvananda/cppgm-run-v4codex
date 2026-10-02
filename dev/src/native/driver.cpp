@@ -5,6 +5,7 @@
 namespace native {
 Function builtin_tls(const lowir_model::Program&,const lowir_model::Function&);
 Function builtin_strlen(const lowir_model::Program&,const lowir_model::Function&);
+Function builtin_fill(const lowir_model::Program&,const lowir_model::Function&);
 std::vector<bool> object_demand(const lowir_model::Program&);
 using Clock = std::chrono::steady_clock;
 static double ms(Clock::time_point begin) { return std::chrono::duration<double,std::milli>(Clock::now()-begin).count(); }
@@ -53,10 +54,12 @@ void compile_image(lowir_model::Program& p, Image& image, const std::vector<Inst
     for (const auto& fix : image.tls_fixups) demanded[fix.symbol] = true;
     for (const auto& source : p.functions) if (source.declaration && demanded[source.symbol.index]) {
         const auto& metadata = p.symbols[source.symbol.index-1].metadata;
-        if (image.host && metadata.builtin != lowir_model::SymbolMetadata::Builtin::None) continue;
-        if (!metadata.tls_for && metadata.builtin != lowir_model::SymbolMetadata::Builtin::Strlen) continue;
+        using Builtin = lowir_model::SymbolMetadata::Builtin;
+        if (image.host && metadata.builtin == Builtin::Strlen) continue;
+        if (!metadata.tls_for && metadata.builtin == Builtin::None) continue;
         time = Clock::now();
-        Function f = metadata.tls_for ? builtin_tls(p,source) : builtin_strlen(p,source);
+        Function f = metadata.tls_for ? builtin_tls(p,source) : metadata.builtin == Builtin::Strlen ?
+            builtin_strlen(p,source) : builtin_fill(p,source);
         stats.selection_ms += ms(time);
         if (mir) dump_function(p,f,*mir);
         time = Clock::now(); encoder.encode(f); stats.encoding_ms += ms(time); ++stats.functions; stats.instructions += f.instructions.size();
