@@ -107,6 +107,10 @@ bool Analyzer::designated_storage(EntityId field, IdentifierId name) const
 }
 std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s, bool elide)
 {
+    // Every selected aggregate subobject has a potentially invoked destructor,
+    // including the active variant of a union whose own destructor has no
+    // member actions. Check access and schedule that precise declaration here.
+    default_destructor(t,s);
     std::uint32_t id = initializers.size(); initializers.push_back(InitAction());
     initializers[id].type = t; initializers[id].source = cursor;
     if (!cursor) {

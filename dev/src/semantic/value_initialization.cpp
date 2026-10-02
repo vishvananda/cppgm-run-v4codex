@@ -7,6 +7,7 @@ void Analyzer::prepare_value_initialization(TypeId t, ScopeId s)
     if (class_value(t)) complete_class(types[t].entity);
     // Access is contextual; the immutable action shape is shared by type.
     if (access_override) s = access_override;
+    default_destructor(t,s);
     auto context = key(t, s);
     if (value_contexts.get(context) == 2) {
         if (!base_initialization) {

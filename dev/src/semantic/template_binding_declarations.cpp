@@ -65,6 +65,11 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
         add_edge(cs,target(base));
     }
     std::vector<Body> bodies;
+    // A member template's body is a complete-class context for all enclosing
+    // classes, including an ordinary class still under construction. Preserve
+    // the owning completion interval rather than checking the body early.
+    auto pending = deferred ? deferred : template_source_deferred ? template_source_deferred :
+        class_depth ? &this->bodies : &bodies;
     {
         struct ClassBinding {
             ScopeId& active; ScopeId prior;
@@ -72,14 +77,14 @@ ScopeId Analyzer::bind_template_class(NodeId n, ScopeId parent, EntityId entity,
             ClassBinding(ScopeId& a, ScopeId current, std::vector<Body>*& d, std::vector<Body>* value)
                 : active(a), prior(a), deferred(d), previous(d) { active = current; deferred = value; }
             ~ClassBinding() { active = prior; deferred = previous; }
-        } binding(active_template_class,cs,template_source_deferred,deferred ? deferred : &bodies);
+        } binding(active_template_class,cs,template_source_deferred,pending);
         bool aggregate = !child(n,Kind::Bases);
         auto access = entities[entity].key == KW_CLASS ? Access::Private : Access::Public;
         for (auto c = ast[n].first; c; c = ast[c].next) {
             if (ast[c].kind == Kind::Access) access = ast[c].op == KW_PUBLIC ? Access::Public :
                 ast[c].op == KW_PRIVATE ? Access::Private : Access::Protected;
             auto last = scopes[cs].last_decl;
-            bind_template_declaration(c,cs,deferred ? deferred : &bodies);
+            bind_template_declaration(c,cs,pending);
             if (spec_has(ast[c].first,KW_VIRTUAL) || spec_has(child(c,Kind::MemberSpecifiers),KW_VIRTUAL)) aggregate = false;
             auto constructor_source = c;
             while (ast[constructor_source].kind == Kind::Template) constructor_source = ast[ast[constructor_source].first].next;
