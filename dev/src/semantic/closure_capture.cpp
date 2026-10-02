@@ -69,13 +69,15 @@ void Analyzer::prepare_template_captures(unsigned id, ScopeId scope)
 unsigned Analyzer::capture_object(EntityId object)
 {
     auto id = closure_functions.get(current_function);
-    if (!current_function || unevaluated_depth != body_evaluation_depth) return 0;
+    bool default_use = active_default_fact && unevaluated_depth == 1;
+    if (!default_use && (!current_function || unevaluated_depth != body_evaluation_depth)) return 0;
     if (object) {
         auto e = entities[object];
         if ((e.kind != EntityKind::Variable && e.kind != EntityKind::Parameter) ||
             e.is_static || e.external_decl || e.thread_local_storage ||
-            scopes[e.owner].kind == ScopeKind::Namespace || scopes[e.owner].kind == ScopeKind::Class ||
-            encloses(entities[current_function].scope,e.owner)) return 0;
+            scopes[e.owner].kind == ScopeKind::Namespace || scopes[e.owner].kind == ScopeKind::Class) return 0;
+        if (default_use) throw std::runtime_error("automatic object used in default argument");
+        if (encloses(entities[current_function].scope,e.owner)) return 0;
         if (!id) throw std::runtime_error("automatic object used across function boundary");
     }
     if (!id) return 0;
@@ -86,6 +88,8 @@ unsigned Analyzer::require_capture(unsigned id, EntityId object)
     auto identity = key(id,object);
     if (auto known = closure_capture_index.get(identity)) return known;
     auto closure = closures[id];
+    if (object && closure.default_argument)
+        throw std::runtime_error("default argument cannot capture an automatic object");
     // A capture chain may traverse enclosing lambdas, but an ordinary local
     // class member is a function boundary, not an implicit capture edge.
     if (object && !closure.parent &&

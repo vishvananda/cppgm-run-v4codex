@@ -78,7 +78,8 @@ void Analyzer::bind_lambda_body(NodeId n, ScopeId s)
 }
 Expression Analyzer::lambda_expression(NodeId n, ScopeId s)
 {
-    if (unevaluated_depth != body_evaluation_depth) throw std::runtime_error("lambda in unevaluated operand");
+    if (unevaluated_depth != body_evaluation_depth && !(active_default_fact && unevaluated_depth == 1))
+        throw std::runtime_error("lambda in unevaluated operand");
     if (auto known = closure_occurrences.get(n)) {
         Expression result; result.type = entities[closures[known].entity].type; return result;
     }
@@ -153,6 +154,7 @@ Expression Analyzer::lambda_expression(NodeId n, ScopeId s)
     auto m = entities[fn].member_info;
     members[m].body = body; members[m].source = body; members[m].declarator = d; members[m].in_class_body = true;
     Closure closure; closure.entity = cls; closure.function = fn; closure.source = n;
+    closure.default_argument = active_default_fact && unevaluated_depth == 1;
     closure.signature = types.function(types.fundamental(FT_VOID),params,variadic);
     closure.signature_group = intern_arguments({unsigned(bool(head)),head ?
         template_declaration_shape(closure.signature,head_scope) : closure.signature});

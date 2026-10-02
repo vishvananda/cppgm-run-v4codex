@@ -273,6 +273,7 @@ class Procedural {
     SlotId source_slot(EntityId e);
     Value guarded_call(Instruction i, const Operand* args, std::size_t count);
     void return_statement(NodeId n);
+    bool reachable_fallthrough(BlockId target);
     void destructor_prologue(EntityId e);
     void destructor_finish(EntityId e, bool returning = true);
     void destroy_subobjects(EntityId e);
@@ -486,6 +487,7 @@ public:
     std::size_t constant_data_work = 0, constant_data_hits = 0;
     std::size_t aggregate_array_work = 0, aggregate_array_hits = 0;
     std::size_t control_work = 0, discard_work = 0;
+    std::size_t fallthrough_functions = 0, fallthrough_work = 0, fallthrough_edges = 0;
     std::size_t full_expression_work = 0, full_expression_regions = 0;
     std::size_t statement_regions = 0, lifetime_mapping_work = 0, lifetime_mapping_hits = 0;
     std::size_t rtti_work = 0, rtti_hits = 0;

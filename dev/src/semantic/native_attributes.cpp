@@ -29,6 +29,7 @@ syntax::FunctionEffects Analyzer::function_effects(EntityId e) const
 void Analyzer::inherit_native_attributes(EntityId e, EntityId pattern)
 {
     entities[e].effects = std::max(entities[e].effects,entities[pattern].effects);
+    entities[e].no_return |= entities[pattern].no_return;
     entities[e].exclude_instantiation |= entities[pattern].exclude_instantiation;
     for (auto t = effective_abi_tag_head(pattern); t; t = abi_tags[t].next) {
         auto tag = abi_tags[t].name; auto k = key(e,tag);
@@ -47,6 +48,10 @@ void Analyzer::native_attributes(EntityId e, NodeId n)
     auto a = ast.native_attribute_owners.get(ast.nodes.occurrences[n].source);
     if (!a) return;
     auto value = ast.native_attributes[a];
+    if (value.no_return) {
+        if (entities[e].kind != EntityKind::Function) throw std::runtime_error("noreturn requires a function");
+        entities[e].no_return = true;
+    }
     for (auto t = value.tags; t; t = ast.abi_tags[t].next) {
         auto tag = ast.abi_tags[t].name; auto k = key(e,tag);
         if (abi_tag_members.get(k)) continue;

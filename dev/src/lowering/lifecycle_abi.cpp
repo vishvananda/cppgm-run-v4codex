@@ -5,6 +5,7 @@ using namespace lowir_model;
 SignatureId Procedural::function_signature(EntityId e, FunctionId owner, bool base)
 {
     auto result = signature(sem.call_type(e),owner);
+    if (sem.entities[e].no_return) p.signatures[result.index-1].boundary.returns = CRM_NORETURN;
     auto effects = sem.function_effects(e);
     p.signatures[result.index-1].boundary.effects = effects == syntax::FunctionEffects::ReadNone ?
         CFXM_READNONE : effects == syntax::FunctionEffects::ReadOnly ? CFXM_READONLY : CFXM_DEFAULT;

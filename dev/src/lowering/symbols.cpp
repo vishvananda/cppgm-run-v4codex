@@ -595,16 +595,22 @@ void Procedural::function_body(EntityId e, bool base)
     constructor_block_boundary = p.block_order.size();
     statement(sem.entities[e].body);
     if (!function_try && destructor_handler) destructor_finish(e);
+    BlockId fallthrough;
     if (!ended) {
         clean_inline(live,0);
         if (!function_try) finish_constructor_handlers();
         // Continuations can be unreachable after all handlers returned. Keep
         // their terminator valid for every typed result, including complex
         // storage, using the same owner as exception continuations.
+        fallthrough = p.block_order.back();
         exception_fallback();
     }
     emit_cleanups();
     finish_exception_boundary();
+    if (fallthrough && type(returned) != IRType::Void &&
+        !(sem.entities[e].owner == sem.global && identifiers.spelling(sem.entities[e].name).equals("main")) &&
+        reachable_fallthrough(fallthrough))
+        throw std::runtime_error("reachable non-void function fallthrough");
     builder.reset();
 }
 } }

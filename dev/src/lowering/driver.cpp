@@ -16,6 +16,7 @@ void build_program(lowir_model::Program& program, const std::vector<std::string>
     double frontend_ms = 0, lowering_ms = 0;
     std::size_t nodes = 0, static_requests = 0, static_hits = 0;
     std::size_t control_work = 0, discard_work = 0;
+    std::size_t fallthrough_functions = 0, fallthrough_work = 0, fallthrough_edges = 0;
     std::size_t full_expression_work = 0, full_expression_regions = 0;
     for (const std::string& input : inputs) {
         auto start = Clock::now();
@@ -34,6 +35,8 @@ void build_program(lowir_model::Program& program, const std::vector<std::string>
         nodes += ast.nodes.size();
         static_requests += sem.static_requests; static_hits += sem.static_hits;
         control_work += lower.control_work; discard_work += lower.discard_work;
+        fallthrough_functions += lower.fallthrough_functions;
+        fallthrough_work += lower.fallthrough_work; fallthrough_edges += lower.fallthrough_edges;
         full_expression_work += lower.full_expression_work; full_expression_regions += lower.full_expression_regions;
         if (stats) {
             std::cerr << "{\"tokens\":" << cursor.produced << ",\"max_pending\":" << cursor.max_pending
@@ -70,6 +73,8 @@ void build_program(lowir_model::Program& program, const std::vector<std::string>
             << ",\"peak_rss_kib\":" << usage.ru_maxrss << ",\"nodes\":" << nodes
             << ",\"static_requests\":" << static_requests << ",\"static_hits\":" << static_hits
             << ",\"control_work\":" << control_work << ",\"discard_work\":" << discard_work
+            << ",\"fallthrough_functions\":" << fallthrough_functions
+            << ",\"fallthrough_work\":" << fallthrough_work << ",\"fallthrough_edges\":" << fallthrough_edges
             << ",\"full_expression_work\":" << full_expression_work << ",\"full_expression_regions\":" << full_expression_regions
             << ",\"linkage_requests\":" << linkage.requests << ",\"linkage_hits\":" << linkage.hits
             << ",\"value_base_argument_facts\":" << linkage.value_base_arguments.size()

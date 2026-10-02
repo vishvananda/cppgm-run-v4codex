@@ -12,7 +12,7 @@ void Parser::native_attributes(NodeId owner, NativeAttributes value)
         auto next = ast[a].next; ast[a].next = 0; ast.append(type_owner,a); a = next;
     }
     value.vector_attributes = 0;
-    if (!value.section && !value.weak && !value.tags && !value.no_unique_address && !value.exclude_instantiation && value.effects == FunctionEffects::Unknown) return;
+    if (!value.section && !value.weak && !value.tags && !value.no_unique_address && !value.exclude_instantiation && !value.no_return && value.effects == FunctionEffects::Unknown) return;
     owner = ast.nodes.occurrences[owner].source;
     auto prior = ast.native_attribute_owners.get(owner);
     if (prior) {
@@ -22,6 +22,7 @@ void Parser::native_attributes(NodeId owner, NativeAttributes value)
         old.weak |= value.weak;
         old.no_unique_address |= value.no_unique_address;
         old.exclude_instantiation |= value.exclude_instantiation;
+        old.no_return |= value.no_return;
         old.effects = std::max(old.effects,value.effects);
         // Attributes are published only after this declaration's parse. Link
         // its fresh list to the prior immutable prefix without copying nodes.
@@ -116,6 +117,10 @@ unsigned Parser::balanced(const char* open, const char* close, NativeAttributes*
         else if (in.is("[")) result |= balanced("[", "]",native,alignment);
         else if (in.is("{")) result |= balanced("{", "}");
         else {
+            if (in.is("noreturn") || in.is("__noreturn__")) {
+                if (in.is("(",1)) throw std::runtime_error("noreturn takes no arguments");
+                if (native) native->no_return = true;
+            }
             if (unscoped && (in.is("no_unique_address") || in.is("__no_unique_address__"))) {
                 if (in.is("(",1)) throw std::runtime_error("no_unique_address takes no arguments");
                 if (native) native->no_unique_address = true;

@@ -12,6 +12,7 @@ void Procedural::declare_function(EntityId e)
     auto& existing = p.symbols[f.symbol.index-1];
     if (existing.kind == Symbol::FunctionSymbol) {
         auto& prior = p.functions[existing.entity-1];
+        if (entity.no_return) p.signatures[prior.signature.index-1].boundary.returns = CRM_NORETURN;
         auto old_effects = p.signatures[prior.signature.index-1].boundary.effects;
         auto effects = sem.function_effects(e);
         auto merged = effects == syntax::FunctionEffects::ReadNone || old_effects == CFXM_READNONE ? CFXM_READNONE :

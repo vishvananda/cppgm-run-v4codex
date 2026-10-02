@@ -364,7 +364,7 @@ public:
         unsigned first_capture = 0, last_capture = 0, parent = 0;
         TypeId this_type = 0;
         unsigned char capture_default = 0;
-        bool has_introducer = false;
+        bool has_introducer = false, default_argument = false;
     };
     struct ClosureCapture {
         EntityId object = 0, field = 0;
