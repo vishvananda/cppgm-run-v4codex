@@ -299,3 +299,10 @@ FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/constant_objects
 FRONTEND_OBJ_BASENAMES_lowir2native += lowir/folding lowir/floating_fold lowir/constant_objects
 FRONTEND_OBJ_BASENAMES_lowiropt += lowir/merge_blocks
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/merge_blocks
+
+FRONTEND_OBJ_BASENAMES_lowir2native += native/global_placement
+FRONTEND_OBJ_BASENAMES_cppgm++ += native/global_placement
+FRONTEND_OBJ_BASENAMES_lowir2native += native/prefix_call
+FRONTEND_OBJ_BASENAMES_cppgm++ += native/prefix_call
+FRONTEND_OBJ_BASENAMES_lowir2native += native/call_policy
+FRONTEND_OBJ_BASENAMES_cppgm++ += native/call_policy

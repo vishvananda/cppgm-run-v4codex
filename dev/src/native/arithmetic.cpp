@@ -99,7 +99,7 @@ void Selector::compare(const lowir_model::Instruction& i, bool branch)
     bool converted_return = placement.converted_boolean && placement.uses == 1 &&
         placement.last == position+2 && p.instructions[placement.last-1].opcode == Opcode::Return &&
         !f.frame_bytes && !f.preserved;
-    if (converted_return) {
+    if (converted_return && !level) {
         // The general converted-Boolean path uses fixed compare carriers and
         // the conversion scratch frame; the redundant 0/1 conversion is gone.
         f.scratch_bytes = 48;

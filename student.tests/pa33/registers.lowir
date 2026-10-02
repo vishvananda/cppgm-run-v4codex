@@ -1,0 +1,27 @@
+function @identity(%value : i64) -> i64 [unwind=no, binding=strong, linkage=c, no_inline=yes] {
+ block ^entry:
+  return i64 %value
+}
+function @cycle(%n : i64, %a : i64, %b : i64, %c : i64, %d : i64, %e : i64) -> i64 [binding=strong, linkage=c] {
+ block ^entry:
+  jump ^head
+ block ^head:
+  %i = phi i64 [^entry: 0, ^body: %next]
+  %x = phi i64 [^entry: %a, ^body: %y]
+  %y = phi i64 [^entry: %b, ^body: %z]
+  %z = phi i64 [^entry: %c, ^body: %x]
+  %more = cmp lt i64 %i, %n
+  branch %more, ^body, ^done
+ block ^body:
+  %seen = call i64 @identity(%i)
+  %next = binary add i64 %seen, 1
+  jump ^head
+ block ^done:
+  %xs = binary mul i64 %x, 100
+  %ys = binary mul i64 %y, 10
+  %xy = binary add i64 %xs, %ys
+  %xyz = binary add i64 %xy, %z
+  %sd = binary add i64 %xyz, %d
+  %se = binary add i64 %sd, %e
+  return i64 %se
+}

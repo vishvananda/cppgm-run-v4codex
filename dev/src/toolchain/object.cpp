@@ -10,7 +10,7 @@ std::string Object::name(unsigned id) const {
     auto view = names.spelling(symbols[id].name);
     return std::string(view.data,view.size);
 }
-Object compile_object(lowir_model::Program& p, native::Statistics& stats, bool host)
+Object compile_object(lowir_model::Program& p, native::Statistics& stats, bool host, unsigned level)
 {
     native::legalize_extended_floats(p,stats);
     Object obj(p.symbols.size()); obj.image.host = host;
@@ -19,7 +19,7 @@ Object compile_object(lowir_model::Program& p, native::Statistics& stats, bool h
         require(g.type.alignment() <= 4096,"unsupported native object alignment");
         obj.alignment = std::max(obj.alignment,g.type.alignment());
     }
-    native::compile_image(p,obj.image,{},nullptr,stats);
+    native::compile_image(p,obj.image,{},nullptr,stats,level);
     for (unsigned i = 1; i < obj.symbols.size(); ++i)
         if (obj.image.defined[i]) { obj.symbols[i].definition = i; obj.symbols[i].size = obj.image.symbol_sizes[i]; }
     for (unsigned i = 1; i <= p.symbols.size(); ++i) {

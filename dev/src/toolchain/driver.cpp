@@ -112,7 +112,7 @@ void build_source(lowir_model::Program& program, const std::string& path, const 
 }
 Object source(const std::string& path, const Options& o, native::Statistics& stats) {
     lowir_model::Program program; build_source(program,path,o);
-    return compile_object(program,stats,o.host);
+    return compile_object(program,stats,o.host,o.level);
 }
 }
 int run(const std::vector<std::string>& args)
@@ -180,6 +180,9 @@ int run(const std::vector<std::string>& args)
             << ",\"link_definition_work\":" << link_definitions << ",\"link_relocation_work\":" << link_relocations
             << ",\"runtime_functions\":" << runtime_stats.functions << ",\"runtime_instructions\":" << runtime_stats.instructions
             << ",\"runtime_text_bytes\":" << runtime_stats.text_bytes
+            << ",\"global_candidates\":" << stats.global_candidates << ",\"global_retained\":" << stats.global_retained
+            << ",\"control_removed\":" << stats.control_removed << ",\"prefix_calls\":" << stats.prefix_calls
+            << ",\"dynamic_copies\":" << stats.dynamic_copies
             << ",\"selection_ms\":" << stats.selection_ms << ",\"encoding_ms\":" << stats.encoding_ms << "}\n";
     }
     return 0;

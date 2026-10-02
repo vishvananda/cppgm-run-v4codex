@@ -65,7 +65,7 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
         "adc","sbb","mul","shld","shrd","lock_cmpxchg16b",
         "fmov","fadd","fsub","fmul","fdiv","fneg","fcmp","fset",
         "sitofp","uitofp","fptosi","fptoui","fpext","fptrunc","fld","fret","fstp",
-        "eh_push","eh_pop","eh_dispatch","throw","resume","stack_alloc","tls_addr","syscall","nop","pause","x86","fill_bytes"};
+        "eh_push","eh_pop","eh_dispatch","throw","resume","stack_alloc","tls_addr","syscall","nop","pause","x86","fill_bytes","copy_bytes_dynamic"};
     // The scalar Boolean materialization has the canonical byte-to-register
     // spelling. Its typed ExtendUnsigned fact is also consumed by encoding.
     bool boolean_extend = i.op == Op::ExtendUnsigned && i.type == Type::U8;
@@ -93,6 +93,7 @@ static void instruction(const lowir_model::Program& p, const Instruction& i, std
         }
         out << ')';
         if (i.bytes) out << ", stack=" << i.bytes;
+        if (i.strlen_prefix) out << ", strlen_prefix=" << unsigned(i.strlen_prefix);
         if (i.boundary.arity == ir_model::CAM_VARIADIC) out << ", variadic";
         if (i.boundary.unwind == ir_model::CUM_NO) out << ", unwind=no";
         if (i.boundary.returns == ir_model::CRM_NORETURN) out << ", returns=noreturn";

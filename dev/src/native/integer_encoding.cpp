@@ -92,7 +92,7 @@ void Encoder::instruction(const Instruction& i)
     case Op::Div: case Op::Udiv: form(0xf7,64,i.op == Op::Div ? 7 : 6,a); break;
     case Op::Jump: branch(a.id); break;
     case Op::Jcc: branch(a.id,i.condition); break;
-    case Op::Call: call(a); break;
+    case Op::Call: if (i.strlen_prefix) prefix_call(i); else call(a); break;
     case Op::Return:
         if (i.count) mov(Operand::r(XR_RAX),a);
         if (function->shared_epilogue) branch(epilogue); else epilogue_code();
@@ -108,6 +108,9 @@ void Encoder::instruction(const Instruction& i)
         form(i.op == Op::Xadd ? (width == 8 ? 0x0fc0 : 0x0fc1) : (width == 8 ? 0x0fb0 : 0x0fb1),width,b.reg,a,0,0,0xf0); break;
     case Op::Exchange: form(width == 8 ? 0x86 : 0x87,width,b.reg,a); break;
     case Op::CopyBytes: case Op::ZeroBytes: bulk(i); break;
+    case Op::CopyBytesDynamic:
+        // Implicit REP operands: read/update rdi, rsi, rcx; DF is clear in SysV.
+        byte(0xf3); byte(0xa4); break;
     case Op::FillBytes:
         // The target runtime builder supplies the exact REP operands. This
         // instruction clobbers rdi/rcx and reads al; no hidden allocator state.

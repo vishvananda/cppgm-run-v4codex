@@ -13,6 +13,7 @@ struct ValueState {
 // whole-unit scan per function and no string-keyed placement decisions.
 struct SlotState { unsigned stored = 0, position = 0; bool escape = false, observed = false; };
 struct Workspace {
+    unsigned strlen_prefix_budget = 128;
     std::vector<unsigned> value_indices, tls_wrappers, exception_handlers;
     std::vector<Operand> slots;
     std::vector<SlotState> slot_facts;
@@ -30,6 +31,10 @@ class Selector {
     Workspace& workspace;
     Statistics& stats;
     Function f;
+    unsigned level;
+    unsigned strlen_prefix_sites = 0;
+    void retain_global_values(bool handlers);
+    void cleanup_control();
     bool mixed_conversion_abi = false;
     std::uint64_t parameter_bytes = 0;
     Operand vararg_save, indirect_result, atomic_scratch;
@@ -94,6 +99,7 @@ class Selector {
     void convert_to(Operand to, Operand from, Type source, Type target, bool unsigned_input = false, bool unsigned_output = false);
     void index(const lowir_model::Instruction& i);
     void call(const lowir_model::Instruction& i);
+    bool dynamic_copy(const lowir_model::Instruction&, lowir_model::SignatureId) const;
     void atomic(const lowir_model::Instruction& i);
     void bulk(const lowir_model::Instruction& i);
     void control(const lowir_model::Instruction& i);
@@ -105,8 +111,8 @@ class Selector {
     ValueState& state(unsigned v) { return values[workspace.value_indices[v]]; }
     const ValueState& state(unsigned v) const { return values[workspace.value_indices[v]]; }
 public:
-    Selector(const lowir_model::Program& p, const lowir_model::Function& source, Workspace& workspace, Statistics& stats, bool host = false)
-        : p(p), source(source), workspace(workspace), stats(stats) { f.host = host; }
+    Selector(const lowir_model::Program& p, const lowir_model::Function& source, Workspace& workspace, Statistics& stats, bool host = false, unsigned level = 0)
+        : p(p), source(source), workspace(workspace), stats(stats), level(level) { f.host = host; }
     Function run();
 };
 } // namespace native

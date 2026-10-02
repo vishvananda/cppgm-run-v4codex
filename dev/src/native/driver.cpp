@@ -9,7 +9,7 @@ Function builtin_fill(const lowir_model::Program&,const lowir_model::Function&);
 std::vector<bool> object_demand(const lowir_model::Program&);
 using Clock = std::chrono::steady_clock;
 static double ms(Clock::time_point begin) { return std::chrono::duration<double,std::milli>(Clock::now()-begin).count(); }
-void compile_image(lowir_model::Program& p, Image& image, const std::vector<Instruction>& start, std::ostream* mir, Statistics& stats)
+void compile_image(lowir_model::Program& p, Image& image, const std::vector<Instruction>& start, std::ostream* mir, Statistics& stats, unsigned level)
 {
     // Both source and explicit LowIR enter object preparation here. The source
     // view retains original bodies/attributes, so a text adapter cannot spend
@@ -42,7 +42,7 @@ void compile_image(lowir_model::Program& p, Image& image, const std::vector<Inst
         if (source.declaration) continue;
         if (image.host && !live[source.symbol.index]) continue;
         time = Clock::now();
-        Function f = Selector(p,source,workspace,stats,image.host).run();
+        Function f = Selector(p,source,workspace,stats,image.host,level).run();
         stats.selection_ms += ms(time);
         if (mir) dump_function(p,f,*mir);
         time = Clock::now(); encoder.encode(f); stats.encoding_ms += ms(time);
@@ -56,7 +56,7 @@ void compile_image(lowir_model::Program& p, Image& image, const std::vector<Inst
         const auto& metadata = p.symbols[source.symbol.index-1].metadata;
         using Builtin = lowir_model::SymbolMetadata::Builtin;
         if (image.host && metadata.builtin == Builtin::Strlen) continue;
-        if (!metadata.tls_for && metadata.builtin == Builtin::None) continue;
+        if (!metadata.tls_for && metadata.builtin != Builtin::Strlen && metadata.builtin != Builtin::FillBytes) continue;
         time = Clock::now();
         Function f = metadata.tls_for ? builtin_tls(p,source) : metadata.builtin == Builtin::Strlen ?
             builtin_strlen(p,source) : builtin_fill(p,source);
@@ -66,13 +66,13 @@ void compile_image(lowir_model::Program& p, Image& image, const std::vector<Inst
     }
     stats.text_bytes = image.code.size();
 }
-void compile(lowir_model::Program& p, const std::string& output, std::ostream* mir, Statistics& stats)
+void compile(lowir_model::Program& p, const std::string& output, std::ostream* mir, Statistics& stats, unsigned level)
 {
     native::legalize_extended_floats(p,stats);
     auto start = startup(p);
     lowir_model::require(output.empty() || !start.empty(), "executable requires an entry function");
     Image image(p.symbols.size());
-    compile_image(p,image,start,mir,stats);
+    compile_image(p,image,start,mir,stats,level);
     if (!output.empty()) {
         auto time = Clock::now(); write_executable(image,output); stats.encoding_ms += ms(time);
     }

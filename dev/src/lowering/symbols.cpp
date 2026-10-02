@@ -253,6 +253,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     if ((e.builtin == semantic::Entity::Malloc || e.builtin == semantic::Entity::Free) && !e.definition) {
         metadata.role = e.builtin == semantic::Entity::Malloc ? SR_MALLOC : SR_FREE_MEMORY;
     } else if (e.builtin != semantic::Entity::NoBuiltin && e.builtin != semantic::Entity::Malloc && e.builtin != semantic::Entity::Free) {
+        if (e.builtin == semantic::Entity::Memcpy) metadata.builtin = lowir_model::SymbolMetadata::Builtin::Memcpy;
         if (e.builtin == semantic::Entity::Strlen) metadata.builtin = lowir_model::SymbolMetadata::Builtin::Strlen;
         metadata.object = p.intern(linkage.host ?
             (e.builtin == semantic::Entity::Memcpy ? "memcpy" : e.builtin == semantic::Entity::Strlen ? "strlen" : "memmove") :

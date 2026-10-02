@@ -130,6 +130,7 @@ void Selector::analyze()
         if ((i.opcode == Opcode::Compare || (i.opcode == Opcode::Unary && i.operation == Operation::Not)) && s.uses == 1 && s.last == s.definition+1)
             s.compare_branch = p.instructions[s.last-1].opcode == Opcode::Branch;
     }
+    if (level) retain_global_values(handlers);
     // Phi transfers belong to instruction/edge identities, including when a
     // legal non-SSA value is assigned again later in the function.
     for (unsigned b = source.blocks.begin; b < source.blocks.end(); ++b) {

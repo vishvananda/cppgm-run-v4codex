@@ -69,6 +69,7 @@ SymbolMetadata Reader::metadata(bool function, FunctionBoundaryMetadata* boundar
     }
     // The explicit LowIR adapter decodes the legacy runtime spelling once.
     // Source lowering records this typed fact directly from its builtin entity.
+    if (function && p_.name(m.object) == "cppgm_builtin_memcpy") m.builtin = SymbolMetadata::Builtin::Memcpy;
     if (function && p_.name(m.object) == "cppgm_builtin_strlen") m.builtin = SymbolMetadata::Builtin::Strlen;
     if (function && p_.name(m.object) == "cppgm_opt_fill_bytes") m.builtin = SymbolMetadata::Builtin::FillBytes;
     return m;

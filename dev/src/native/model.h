@@ -33,7 +33,7 @@ enum class Op {
     Adc, Sbb, MulWide, Shld, Shrd, CmpxchgWide,
     Fmov, Fadd, Fsub, Fmul, Fdiv, Fneg, Fcompare, Fset,
     Sitofp, Uitofp, Fptosi, Fptoui, Fpext, Fptrunc, Fpush, Freturn, Fpop,
-    EhPush, EhPop, EhDispatch, Throw, Resume, StackAlloc, TlsAddr, Syscall, Nop, Pause, X86, FillBytes
+    EhPush, EhPop, EhDispatch, Throw, Resume, StackAlloc, TlsAddr, Syscall, Nop, Pause, X86, FillBytes, CopyBytesDynamic
 };
 // Image-owned runtime entities have identities after the external symbol range.
 // They are not semantic declarations, nor are their spellings lookup keys.
@@ -50,6 +50,7 @@ struct Instruction {
     unsigned count = 0;
     X86Condition condition = XC_E;
     unsigned arg_registers = 0;
+    unsigned char strlen_prefix = 0;
     std::uint64_t bytes = 0;
     unsigned alignment = 1;
     unsigned host_handler = 0;
@@ -92,6 +93,7 @@ struct Function {
 struct Statistics {
     std::uint64_t extended_work = 0, extended_added = 0, extended_helpers = 0;
     std::uint64_t functions = 0, instructions = 0, frame_bytes = 0, text_bytes = 0;
+    std::uint64_t global_candidates = 0, global_retained = 0, control_removed = 0, prefix_calls = 0, dynamic_copies = 0;
     std::uint64_t value_visits = 0, scratch_carried_reloads = 0;
     std::uint64_t parameter_flow_visits = 0, carry_window_visits = 0, xmm_reuses = 0;
     std::uint64_t inline_calls = 0, inline_work = 0, inline_declined = 0, inline_budget_work = 0, inline_max_function_work = 0;

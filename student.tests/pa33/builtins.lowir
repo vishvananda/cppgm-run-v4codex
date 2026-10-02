@@ -1,0 +1,17 @@
+declare function @measure(%data : ptr) -> i64 [object=cppgm_builtin_strlen, effects=readonly, unwind=no]
+function @prefix(%data : ptr) -> i64 [binding=strong, linkage=c] {
+ block ^entry:
+  %value = call i64 @measure(%data)
+  return i64 %value
+}
+declare function @copy(%dst : ptr [alias=noalias], %src : ptr [alias=noalias], %n : i64) -> ptr [object=cppgm_builtin_memcpy, unwind=no]
+function @copy_unused(%src : ptr, %dst : ptr, %n : i64) -> void [binding=strong, linkage=c] {
+ block ^entry:
+  %unused = call ptr @copy(%dst, %src, %n)
+  return void
+}
+function @copy_used(%src : ptr, %dst : ptr, %n : i64) -> ptr [binding=strong, linkage=c] {
+ block ^entry:
+  %used = call ptr @copy(%dst, %src, %n)
+  return ptr %used
+}

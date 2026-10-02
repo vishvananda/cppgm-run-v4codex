@@ -4,6 +4,10 @@ namespace native {
 void Encoder::bulk(const Instruction& i)
 {
     Operand dst = i.args[0], src = i.args[1];
+    // A register bulk operand denotes the address itself; a memory operand
+    // denotes a structured base/index/displacement address, not a pointer load.
+    if (dst.kind == Operand::Reg) dst = Operand::mem(dst.reg);
+    if (src.kind == Operand::Reg) src = Operand::mem(src.reg);
     // Vector scratch xmm15 is permanently reserved, outside ordinary placement.
     // Direct forms never alter GPR address carriers or condition flags.
     bool direct = direct_copy_bytes(i.bytes,i.alignment);

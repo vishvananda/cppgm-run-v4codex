@@ -310,6 +310,7 @@ Function Selector::run()
         emit(Op::Jump,Type(),{Operand::label(edge.target)});
     }
     carry_reloads();
+    if (level) cleanup_control();
     finish_frame();
     if (f.host) prepare_host_eh(f);
     ++stats.functions; stats.instructions += f.instructions.size();

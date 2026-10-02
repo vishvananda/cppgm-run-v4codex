@@ -30,7 +30,7 @@ struct Object {
     std::string name(unsigned id) const;
     lowir_model::Name intern(const std::string& text);
 };
-Object compile_object(lowir_model::Program&, native::Statistics&, bool host = false);
+Object compile_object(lowir_model::Program&, native::Statistics&, bool host = false, unsigned level = 0);
 void write_host_object(Object&&, const std::string&);
 void write_object(const Object&, const std::string&);
 Object read_object(const std::string&);

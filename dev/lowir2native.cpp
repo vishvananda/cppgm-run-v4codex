@@ -11,6 +11,7 @@ struct Invocation {
     std::vector<std::string> inputs;
     std::string output, dump;
     bool stats = false;
+    unsigned level = 0;
 };
 Invocation invocation(int argc, char** argv)
 {
@@ -18,7 +19,7 @@ Invocation invocation(int argc, char** argv)
     for (int k = 1; k < argc; ++k) {
         std::string a = argv[k];
         if (a == "--stats") i.stats = true;
-        else if (a == "-O0" || a == "-O1" || a == "-O2" || a == "-O3") {}
+        else if (a == "-O0" || a == "-O1" || a == "-O2" || a == "-O3") i.level = a[2]-'0';
         else if (a == "-o" || a == "--dump-machine-ir" || a == "--dump-native-plan" || a == "--target") {
             lowir_model::require(++k < argc,"missing option value");
             std::string value = argv[k];
@@ -47,7 +48,7 @@ int main(int argc, char** argv)
         std::ofstream mir;
         if (!i.dump.empty()) { mir.open(i.dump); lowir_model::require(bool(mir),"cannot create MIR dump"); }
         native::Statistics stats;
-        native::compile(p,i.output,i.dump.empty() ? nullptr : &mir,stats);
+        native::compile(p,i.output,i.dump.empty() ? nullptr : &mir,stats,i.level);
         if (!i.dump.empty()) { mir.close(); lowir_model::require(bool(mir),"cannot write MIR dump"); }
         if (i.stats) {
             rusage usage; getrusage(RUSAGE_SELF,&usage);
@@ -65,6 +66,9 @@ int main(int argc, char** argv)
                 << " scratch_carried_reloads=" << stats.scratch_carried_reloads
                 << " parameter_flow_visits=" << stats.parameter_flow_visits
                 << " carry_window_visits=" << stats.carry_window_visits
+                << " global_candidates=" << stats.global_candidates << " global_retained=" << stats.global_retained
+                << " control_removed=" << stats.control_removed << " prefix_calls=" << stats.prefix_calls
+                << " dynamic_copies=" << stats.dynamic_copies
                 << " xmm_reuses=" << stats.xmm_reuses
                 << " input_pool_growths=" << p.pool_allocations()
                 << " input_pool_bytes=" << p.pool_storage_bytes() << "\n";

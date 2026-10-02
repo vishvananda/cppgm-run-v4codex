@@ -181,8 +181,30 @@ void Selector::call(const lowir_model::Instruction& i)
     if (signature.boundary.arity == CAM_VARIADIC)
         emit(Op::Mov,Type::I64,{Operand::r(XR_RAX),Operand::imm(abi.fp)});
     if (target_home.kind != Operand::None) move(target,target_home,Type::Ptr);
+    if (dynamic_copy(i,signature_id)) {
+        move(Operand::r(XR_RCX),Operand::r(XR_RDX),Type::I64);
+        emit(Op::CopyBytesDynamic,Type(),{}); ++stats.dynamic_copies; return;
+    }
     auto& site = emit(Op::Call,i.type,{target});
     site.bytes = stack; site.boundary = signature.boundary;
+    // The runtime identity, complete ABI and effect contract admit a bounded
+    // page-safe probe. A mismatched explicit call signature remains ordinary.
+    if (level && strlen_prefix_sites < 8 && workspace.strlen_prefix_budget &&
+        target_input.kind == lowir_model::Operand::Symbol && target.kind == Operand::Symbol &&
+        count == 1 && i.type == Type::I64 && signature.result == Type::I64 &&
+        signature.parameters.count == 1 && signature.boundary.arity == CAM_FIXED &&
+        signature.boundary.effects == CFXM_READONLY && signature.boundary.unwind == CUM_NO &&
+        signature.boundary.returns == CRM_DEFAULT && signature.boundary.query == CQM_DEFAULT) {
+        const auto& symbol = p.symbols[target.id-1];
+        const auto& param = p.parameters[signature.parameters.begin];
+        if (symbol.kind == lowir_model::Symbol::FunctionSymbol &&
+            symbol.metadata.builtin == SymbolMetadata::Builtin::Strlen &&
+            symbol.metadata.role == SR_NONE && !symbol.metadata.tls_for &&
+            p.functions[symbol.entity-1].signature == signature_id &&
+            param.type == Type::Ptr && param.passing == PPM_DIRECT) {
+            site.strlen_prefix = 16; ++stats.prefix_calls; ++strlen_prefix_sites; --workspace.strlen_prefix_budget;
+        }
+    }
     for (const auto& m : moves) site.arg_registers |= 1u << m.to.reg;
     if (saved_stack.kind != Operand::None) move(Operand::r(XR_RSP),saved_stack,Type::Ptr);
     else if (stack) emit(Op::Add,Type::I64,{Operand::r(XR_RSP),Operand::imm(stack)});
@@ -221,9 +243,14 @@ void Selector::call(const lowir_model::Instruction& i)
 }
 void Selector::bulk(const lowir_model::Instruction& i)
 {
-    auto dst = memory(arg(i,i.opcode == Opcode::CopyObject ? 1 : 0),XR_R10);
+    auto address_operand = [&](Operand a) {
+        if (level && a.kind == Operand::Memory && a.index < 0 && !a.displacement && !a.id)
+            return Operand::r(a.reg);
+        return a;
+    };
+    auto dst = address_operand(memory(arg(i,i.opcode == Opcode::CopyObject ? 1 : 0),XR_R10));
     if (i.opcode == Opcode::CopyObject) {
-        auto src = memory(arg(i,0),XR_R11);
+        auto src = address_operand(memory(arg(i,0),XR_R11));
         auto& instruction = emit(Op::CopyBytes,Type(),{dst,src});
         instruction.bytes = i.bytes; instruction.alignment = i.alignment;
     } else {
