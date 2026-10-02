@@ -353,6 +353,7 @@ class Procedural {
     Value user_conversion(NodeId n, const semantic::Conversion& conversion, Value destination = Value(), bool truth = false);
     Value incoming(NodeId n);
     Value expression(NodeId n, bool location = false);
+    Value expression_value(NodeId n, bool location);
     Value statement_expression(NodeId n, Value destination = Value());
     struct LifetimeOverlay { NodeId region; std::uint32_t anchor, replacement, parent; };
     std::vector<LifetimeOverlay> lifetime_overlays = std::vector<LifetimeOverlay>(1);

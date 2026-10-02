@@ -1,16 +1,11 @@
 #include "lowering/procedural.h"
-#include "lowering/debug_location.h"
 #include "support/type_traits.h"
 #include <cstring>
 #include <stdexcept>
 namespace cppgm { namespace lowering {
 using syntax::Kind;
-Value Procedural::expression(NodeId n, bool location)
+Value Procedural::expression_value(NodeId n, bool location)
 {
-    DebugScope debug(current_debug,debug_location(n));
-    SourceInvocationScope invocation(source_invocation,sem.source_site(n));
-    if (!n) throw std::logic_error("missing expression node");
-    guard_expression(n);
     auto node = ast[n];
     auto fact = sem.expression_fact(n);
     if (node.kind == Kind::StatementExpression) return statement_expression(n);
@@ -61,9 +56,7 @@ Value Procedural::expression(NodeId n, bool location)
         list_conversion(c,pointer); activate_temporary(e);
         pointer.type = fact.type; pointer.address = true; return pointer;
     }
-    if (fact.form == semantic::ExpressionForm::OperatorCall) return call(n);
     if (fact.form >= semantic::ExpressionForm::FloatFinite && fact.form <= semantic::ExpressionForm::FloatClassify) return floating_builtin(n);
-    if (fact.form == semantic::ExpressionForm::LiteralCall) return call(n);
     if (fact.form == semantic::ExpressionForm::Construction) {
         EntityId e = sem.object_fact(n).temporary;
         Value pointer = class_address(e,fact.type);
