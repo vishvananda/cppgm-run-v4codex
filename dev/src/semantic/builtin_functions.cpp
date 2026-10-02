@@ -127,7 +127,9 @@ EntityId Analyzer::builtin_function(IdentifierId name)
         (builtin == FunctionBuiltin::VaCopy) ? Intrinsic::VaCopy :
         (builtin == FunctionBuiltin::Alloca) ? Intrinsic::StackAlloc :
         (builtin == FunctionBuiltin::Expect) ? Intrinsic::Expect :
-        (builtin == FunctionBuiltin::Abort) ? Intrinsic::Abort :
+        // GNU trap permits abnormal termination through abort. Reuse its
+        // typed no-unwind/no-return call, including retained template queries.
+        (builtin == FunctionBuiltin::Abort || builtin == FunctionBuiltin::Trap) ? Intrinsic::Abort :
         (builtin == FunctionBuiltin::Unreachable) ? Intrinsic::Unreachable : Intrinsic::None;
     bool bounded = (builtin == FunctionBuiltin::Vsnprintf), print = (builtin == FunctionBuiltin::Vsprintf);
     auto absolute = (builtin == FunctionBuiltin::Fabs) ? FT_DOUBLE : (builtin == FunctionBuiltin::Fabsf) ? FT_FLOAT :

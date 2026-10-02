@@ -1,4 +1,4 @@
 preproc 1
 sof tests/preproc/300-has-builtin.t
-identifier builtin_off
+identifier bad
 eof
