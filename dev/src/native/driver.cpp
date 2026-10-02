@@ -55,7 +55,13 @@ void compile_image(lowir_model::Program& p, Image& image, const std::vector<Inst
     for (const auto& source : p.functions) if (source.declaration && demanded[source.symbol.index]) {
         const auto& metadata = p.symbols[source.symbol.index-1].metadata;
         using Builtin = lowir_model::SymbolMetadata::Builtin;
-        if (image.host && metadata.builtin == Builtin::Strlen) continue;
+        if (metadata.builtin == Builtin::Strlen) {
+            const auto& sig = p.signatures[source.signature.index-1];
+            if (image.host || sig.result != Type::I64 || sig.parameters.count != 1 ||
+                sig.boundary.arity != ir_model::CAM_FIXED ||
+                p.parameters[sig.parameters.begin].type != Type::Ptr ||
+                p.parameters[sig.parameters.begin].passing != ir_model::PPM_DIRECT) continue;
+        }
         if (!metadata.tls_for && metadata.builtin != Builtin::Strlen && metadata.builtin != Builtin::FillBytes) continue;
         time = Clock::now();
         Function f = metadata.tls_for ? builtin_tls(p,source) : metadata.builtin == Builtin::Strlen ?

@@ -18,7 +18,7 @@ SymbolMetadata Reader::metadata(bool function, FunctionBoundaryMetadata* boundar
     // Key identity is adapter-local, with bounded fields; never retained as a
     // semantic key. The bitset detects duplicates across bracket groups.
     static const char* const keys[] = {"role","linkage","binding","object","tls_for","keep_alias","prefer_local",
-        "object_root","force_inline","inline_hint","no_inline","storage","section","arity","effects","unwind","return","query"};
+        "object_root","force_inline","inline_hint","no_inline","storage","section","arity","effects","unwind","return","query","builtin"};
     std::uint32_t seen = 0;
     while (accept("[")) {
         do {
@@ -30,7 +30,11 @@ SymbolMetadata Reader::metadata(bool function, FunctionBoundaryMetadata* boundar
             require(key < sizeof(keys)/sizeof(*keys), "unknown metadata key");
             require(!(seen & (1u << key)), "duplicate metadata key");
             seen |= 1u << key;
-            if (key >= 13) {
+            if (k == "builtin") {
+                require(function && (v == "strlen" || v == "memcpy" || v == "fill_bytes"), "invalid builtin identity");
+                m.builtin = v == "strlen" ? SymbolMetadata::Builtin::Strlen :
+                    v == "memcpy" ? SymbolMetadata::Builtin::Memcpy : SymbolMetadata::Builtin::FillBytes;
+            } else if (key >= 13) {
                 require(function && boundary, "call boundary on global");
                 boundary_field(*boundary, k, v);
             } else if (k == "role") {
@@ -69,9 +73,14 @@ SymbolMetadata Reader::metadata(bool function, FunctionBoundaryMetadata* boundar
     }
     // The explicit LowIR adapter decodes the legacy runtime spelling once.
     // Source lowering records this typed fact directly from its builtin entity.
-    if (function && p_.name(m.object) == "cppgm_builtin_memcpy") m.builtin = SymbolMetadata::Builtin::Memcpy;
-    if (function && p_.name(m.object) == "cppgm_builtin_strlen") m.builtin = SymbolMetadata::Builtin::Strlen;
-    if (function && p_.name(m.object) == "cppgm_opt_fill_bytes") m.builtin = SymbolMetadata::Builtin::FillBytes;
+    SymbolMetadata::Builtin legacy = SymbolMetadata::Builtin::None;
+    if (function && p_.name(m.object) == "cppgm_builtin_memcpy") legacy = SymbolMetadata::Builtin::Memcpy;
+    if (function && p_.name(m.object) == "cppgm_builtin_strlen") legacy = SymbolMetadata::Builtin::Strlen;
+    if (function && p_.name(m.object) == "cppgm_opt_fill_bytes") legacy = SymbolMetadata::Builtin::FillBytes;
+    if (legacy != SymbolMetadata::Builtin::None) {
+        require(m.builtin == SymbolMetadata::Builtin::None || m.builtin == legacy,"conflicting builtin identity");
+        m.builtin = legacy;
+    }
     return m;
 }
 void Reader::parameter_metadata(Parameter& p)

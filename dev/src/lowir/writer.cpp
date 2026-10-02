@@ -80,6 +80,14 @@ void Writer::metadata(const SymbolMetadata* m, const FunctionBoundaryMetadata* b
         if (m->binding != SBM_DEFAULT) field("binding", m->binding == SBM_INTERNAL ? "internal" : m->binding == SBM_STRONG ? "strong" : "weak");
         if (m->storage != GSM_DEFAULT) field("storage", m->storage == GSM_READONLY ? "readonly" : "thread_local");
         if (m->object) field("object", p_.name(m->object));
+        // Hosted linkage spellings are independent of semantic runtime identity.
+        // Legacy private object markers already serialize that identity.
+        using Builtin = SymbolMetadata::Builtin;
+        const char* builtin = m->builtin == Builtin::Strlen ? "strlen" :
+            m->builtin == Builtin::Memcpy ? "memcpy" : m->builtin == Builtin::FillBytes ? "fill_bytes" : nullptr;
+        const char* legacy = m->builtin == Builtin::Strlen ? "cppgm_builtin_strlen" :
+            m->builtin == Builtin::Memcpy ? "cppgm_builtin_memcpy" : "cppgm_opt_fill_bytes";
+        if (builtin && p_.name(m->object) != legacy) field("builtin",builtin);
         if (m->section) field("section", p_.name(m->section));
         if (m->tls_for) field("tls_for", p_.name(p_.symbols.at(m->tls_for.index-1).name));
         if (m->keep_alias) field("keep_alias", "yes");
