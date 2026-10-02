@@ -85,6 +85,7 @@ class Expander {
         if (callee.kind != Operand::Symbol) return 0;
         const auto& symbol = p.symbols[callee.ref-1];
         return symbol.kind == Symbol::FunctionSymbol &&
+            !(policy && policy->costly_callers[owner.index] && policy->costly[symbol.entity]) &&
             (policy ? policy->eligible[symbol.entity] : symbol.metadata.force_inline) && !symbol.metadata.no_inline &&
             !functions[symbol.entity-1].declaration ? symbol.entity : 0;
     }

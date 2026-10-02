@@ -6,6 +6,7 @@ bool inline_small_calls(Program& p, unsigned level, std::uint64_t& work)
 {
     (void)level;
     InlinePolicy policy; policy.eligible.resize(p.functions.size()+1);
+    policy.costly.resize(p.functions.size()+1); policy.costly_callers.resize(p.functions.size()+1);
     policy.single.resize(p.functions.size()+1); policy.growth.resize(p.functions.size()+1);
     struct Edge { unsigned caller, next; };
     std::vector<Edge> edges(1);
@@ -13,10 +14,16 @@ bool inline_small_calls(Program& p, unsigned level, std::uint64_t& work)
     std::vector<bool> acyclic(p.functions.size()+1);
     for (unsigned fn = 1; fn <= p.functions.size(); ++fn) {
         const auto& f = p.functions[fn-1];
+        if (!f.declaration) policy.costly_callers[fn] = has_call_cycle(p,f,work);
+        unsigned caller_size = 0;
         for (unsigned b = f.blocks.begin; b < f.blocks.end(); ++b) {
             auto r = p.blocks[p.block_order[b].index-1].instructions;
+            caller_size += r.count;
             for (unsigned n = r.begin; n < r.end(); ++n) {
                 const auto& i = p.instructions[n]; ++work;
+                policy.costly[fn] = policy.costly[fn] || (i.opcode == Opcode::Binary &&
+                    (i.operation == Operation::Div || i.operation == Operation::Udiv ||
+                     i.operation == Operation::Mod || i.operation == Operation::Umod));
                 if (i.opcode != Opcode::Call) continue;
                 auto a = p.operands[i.operands.begin]; if (a.kind != Operand::Symbol) continue;
                 const auto& sym = p.symbols[a.ref-1]; if (sym.kind != Symbol::FunctionSymbol) continue;
@@ -24,12 +31,15 @@ bool inline_small_calls(Program& p, unsigned level, std::uint64_t& work)
                 edges.push_back({fn,reverse[to]}); reverse[to] = edges.size()-1;
             }
         }
+        policy.costly_callers[fn] = policy.costly_callers[fn] || caller_size > 128;
     }
     for (unsigned fn = 1; fn <= p.functions.size(); ++fn) if (!outstanding[fn]) ready.push_back(fn);
     for (unsigned next = 0; next < ready.size(); ++next) {
         auto fn = ready[next]; acyclic[fn] = true;
         for (auto e = reverse[fn]; e; e = edges[e].next) {
-            ++work; auto caller = edges[e].caller; if (!--outstanding[caller]) ready.push_back(caller);
+            ++work; auto caller = edges[e].caller;
+            policy.costly[caller] = policy.costly[caller] || policy.costly[fn];
+            if (!--outstanding[caller]) ready.push_back(caller);
         }
     }
     std::vector<unsigned> calls(p.functions.size()+1);
@@ -87,8 +97,23 @@ bool inline_small_calls(Program& p, unsigned level, std::uint64_t& work)
     // Admission bounds the whole cloned pool, including nested expansion;
     // no callee growth can make another caller's budget silently grow.
     policy.unit_work = 32ull*(p.instructions.size()+p.operands.size()+p.parameters.size()+p.slots.size()+p.functions.size()+1);
-    if (any) expand_optional_calls(p,policy);
-    return any;
+    bool site = false;
+    if (any) for (unsigned fn = 1; fn <= p.functions.size() && !site; ++fn) {
+        const auto& f = p.functions[fn-1];
+        for (unsigned b = f.blocks.begin; b < f.blocks.end() && !site; ++b) {
+            auto r = p.blocks[p.block_order[b].index-1].instructions;
+            for (unsigned n = r.begin; n < r.end(); ++n) {
+                const auto& i = p.instructions[n]; ++work;
+                if (i.opcode != Opcode::Call) continue;
+                auto a = p.operands[i.operands.begin]; if (a.kind != Operand::Symbol) continue;
+                const auto& target = p.symbols[a.ref-1];
+                if (target.kind == Symbol::FunctionSymbol && policy.eligible[target.entity] &&
+                    !(policy.costly_callers[fn] && policy.costly[target.entity])) { site = true; break; }
+            }
+        }
+    }
+    if (site) expand_optional_calls(p,policy);
+    return site;
 }
 void prune_support_functions(Program& p, std::uint64_t& work)
 {

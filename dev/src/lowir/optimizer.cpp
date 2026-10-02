@@ -19,9 +19,10 @@ void optimize(Program& p, unsigned level, bool telemetry)
     simplify_scalars(p,work);
     simplify_call_regions(p,work);
     simplify_control(p,work);
-    inline_small_calls(p,level,work);
-    simplify_call_regions(p,work);
-    simplify_control(p,work);
+    if (inline_small_calls(p,level,work)) {
+        simplify_call_regions(p,work);
+        simplify_control(p,work);
+    }
     // Immutable admission summary for this pipeline. Its transforms add no
     // calls or cycles, so a declined function remains a safe conservative
     // choice even when later simplification removes a cycle.
