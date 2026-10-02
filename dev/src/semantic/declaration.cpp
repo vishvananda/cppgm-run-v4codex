@@ -31,6 +31,7 @@ void Analyzer::finish()
     Clock::time_point started;
     if (ast.telemetry) started = Clock::now();
     EntityId boundary_cursor = 1;
+    std::size_t local_static_cursor = 0;
     for (;;) {
         if (deferred_function_use_cursor < deferred_function_use_queue.size()) {
             auto id = deferred_function_use_queue[deferred_function_use_cursor++];
@@ -52,6 +53,16 @@ void Analyzer::finish()
             instantiate_friend_body(friend_definition_demand[friend_definition_cursor++]); continue;
         }
         if (demand_cursor == demand_queue.size()) {
+            // Local-static classification consumes the selected constructor's
+            // completed actions. Process each declaration once after those
+            // demands; function-address relocations may enqueue further bodies.
+            if (local_static_cursor < local_static_relocations.size()) {
+                auto use = local_static_relocations[local_static_cursor++];
+                auto object = entities[use.entity];
+                if (static_initialization(use.entity))
+                    demand_constant_relocations(constant_initialize(object.initializer,object.type,use.scope,object_constructor(use.entity)));
+                continue;
+            }
             // Finish evaluated bodies before exception queries reuse their
             // initializer facts. Any new demand rejoins these same queues.
             if (function_exception_cursor < function_exception_demand.size()) {

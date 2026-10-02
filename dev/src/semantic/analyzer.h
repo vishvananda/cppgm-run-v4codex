@@ -193,6 +193,8 @@ public:
     bool constant_initializer(NodeId n, TypeId target, bool local = false);
     bool constant_plan(std::uint32_t plan, bool local = false);
     bool static_initialization(EntityId e);
+    struct LocalStaticRelocations { EntityId entity; ScopeId scope; };
+    std::vector<LocalStaticRelocations> local_static_relocations;
     std::size_t static_requests = 0, static_hits = 0;
     ExtendedFloat floating_value(Constant value) const;
     EFundamentalType floating_kind(TypeId t) const { return types[t].kind==TypeKind::Fundamental?floating_representation(types[t].fundamental):FT_VOID; }

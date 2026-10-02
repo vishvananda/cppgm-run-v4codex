@@ -61,7 +61,7 @@ void Analyzer::finish_object_initializer(EntityId e, NodeId init, NodeId d, Node
     if (calls && !function && !alias && !member_initializer && (scopes[s].kind != ScopeKind::Class || entities[e].inline_variable) && !external) register_destruction(e);
     if (definitions && !function && !alias && entities[e].definition && scopes[s].kind == ScopeKind::Namespace)
         demand_class_constant_storage(t);
-    if (definitions && !unevaluated_depth && local_static(e) && static_initialization(e))
-        demand_constant_relocations(constant_initialize(init,t,definition_scope,object_constructor(e)));
+    if (definitions && !unevaluated_depth && local_static(e))
+        local_static_relocations.push_back({e,definition_scope});
 }
 } }
