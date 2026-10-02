@@ -33,5 +33,95 @@
     "path": "student.tests/pa30/source199/new-bound-type.reject.cpp",
     "status": 1,
     "stderr": "ERROR: array allocation bound must be integral\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/dependent-access-specialization.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: inaccessible class member: value declared in student.tests/pa30/source199/dependent-access-specialization.reject.cpp:1\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/dependent-access.cpp",
+    "status": 1,
+    "stderr": "ERROR: inaccessible class member: value declared in student.tests/pa30/source199/dependent-access.cpp:1\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/dependent-access.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: inaccessible class member: value declared in student.tests/pa30/source199/dependent-access.reject.cpp:1\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/inherited-signature-mismatch.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: template definition does not match a declared member\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/inherited-signature.cpp",
+    "status": 1,
+    "stderr": "ERROR: template definition does not match a declared member\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/new-placement.cpp",
+    "status": 0,
+    "stderr": ""
+  },
+  {
+    "path": "student.tests/pa30/source199/new-query-negative.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: negative array allocation bound\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/new-query-type.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: array allocation bound must be integral\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/template-return-boundary.cpp",
+    "status": 1,
+    "stderr": "ERROR: expected type specifier in student.tests/pa30/source199/template-return-boundary.cpp:4 near 'Result'\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/vector-arity.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: unknown expression name: __builtin_ia32_vec_init_v8qi\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/vector-builtins.cpp",
+    "status": 1,
+    "stderr": "ERROR: invalid type-query expression: __builtin_ia32_vec_ext_v2si in student.tests/pa30/source199/vector-builtins.cpp:6\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/vector-cast-size.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: invalid explicit cast\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/vector-cast-static.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: invalid explicit cast\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/vector-fixed-index.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: invalid type-query expression: __builtin_ia32_vec_ext_v2si in student.tests/pa30/source199/vector-fixed-index.reject.cpp:2\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/vector-index.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: unknown expression name: __builtin_ia32_vec_ext_v2si\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/vector-query-index.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: unknown expression name: __builtin_ia32_vec_ext_v2si\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/vector-representation.cpp",
+    "status": 1,
+    "stderr": "ERROR: invalid explicit cast\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/vector-runtime-index.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: unknown expression name: __builtin_ia32_vec_ext_v4hi\n"
   }
 ]

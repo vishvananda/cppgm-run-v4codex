@@ -336,8 +336,15 @@ void Parser::predeclare_class()
             guide = in.is("->",after);
         }
         if (!indexed_value && !guide && templated && identifier(i) && in.is("(", i + 1) && in.peek(i).text != current_class &&
-            (!i || (!in.is("operator",i-1) && !in.is("::",i-1))))
+            (!i || (!in.is("operator",i-1) && !in.is("::",i-1)))) {
             names.bind(scope, in.peek(i).text, Category::TemplateValue);
+            // The return type can be a parameter from the skipped template
+            // head. Its function suffix still establishes this declaration's
+            // boundary; a trailing cv-qualifier must not become a new type
+            // prefix whose declarator spills into the following member.
+            value_declaration = function_declaration = indexed_value = true;
+            next_value = false;
+        }
         if (!indexed_value && !guide && !templated && !friend_declaration && i && identifier(i) && in.is("(", i + 1) &&
             in.peek(i).text != current_class && (type_start(i-1) || in.is("*",i-1) || in.is("&",i-1))) {
             names.bind(scope,in.peek(i).text,Category::Value);

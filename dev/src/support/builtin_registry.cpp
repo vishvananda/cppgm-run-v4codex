@@ -15,7 +15,6 @@ FixedVectorBuiltin fixed_vector_builtin(TextView name)
         {"__builtin_ia32_vec_init_v8qi",1,false},
         {"__builtin_ia32_vec_init_v4hi",2,false},
         {"__builtin_ia32_vec_init_v2si",4,false},
-        {"__builtin_ia32_vec_ext_v8qi",1,true},
         {"__builtin_ia32_vec_ext_v4hi",2,true},
         {"__builtin_ia32_vec_ext_v2si",4,true},
     };
