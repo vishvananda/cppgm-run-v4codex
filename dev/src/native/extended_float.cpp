@@ -38,6 +38,7 @@ class Legalizer {
             if (p.symbols[symbol.index-1].kind==Symbol::Unknown) {
                 lowir_model::Function fn; fn.symbol=symbol; fn.declaration=true;
                 p.functions.push_back(fn); auto id=p.functions.size();
+                if (!p.function_order.empty()) p.function_order.push_back(FunctionId(id));
                 lowir_model::Signature sig; sig.result=result; sig.boundary.unwind=CUM_NO;
                 sig.parameters.begin=p.parameters.size(); sig.parameters.count=binary?2:1;
                 for (unsigned n=0;n<sig.parameters.count;++n) { lowir_model::Parameter parameter; parameter.type=input; p.parameters.push_back(parameter); }

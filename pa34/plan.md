@@ -27,6 +27,14 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
   relocation demand until selected member actions finish; new demands rejoin
   the existing worklist. O0/O3 default-member, once-only effect and zero-init
   reducers pass; the compiler entry source probe now compiles.
+- PA34 source correction: split the ill-formed multi-auto declaration in
+  semantic/template_call.cpp (TypeId versus Type). The PA14 rejection reducer
+  and [dcl.spec.auto]/7 proof document GCC's acceptance gap; no language rule
+  or valid compiler construct was weakened.
+- Fixed PA29 extended-float native legalization: appended helper declarations
+  now extend an existing function emission order. The seed's native crash was
+  an out-of-bounds schedule read, exposed by constant.cpp/resolved_output.cpp.
+  The typed order/validator control and direct/replay O0/O3 runtime checks pass.
 - Continue each newly exposed self-build/test/object divergence at its earliest
   owner. Trace seed/self differences to object and source; probes are diagnostic.
 - Required order: file audit; `make test-report-through-pa33`; canonical
@@ -37,8 +45,9 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
 - Commit cohesive fixes and evidence, keep this ledger current, finish clean.
 
 Current evidence (`$RALPH_ARTIFACT_DIR/pa34-221`): file audit passes (four
-inherited warnings); host through PA33 5454/5454 after parser/trap fixes. Canonical
-self PA1 passes 54/54; PA2 stopped at the now-fixed narrow-enum conversion. A
-fresh host regression followed by the canonical self ladder is running. Inception remains
+inherited warnings); host through PA33 5454/5454 after parser/trap/static/enum
+fixes. Canonical self PA1–PA4 pass (54/26/20/105 tests). PA5 build exposed the
+now-fixed mixed-auto source and helper schedule bugs. Native debug checks,
+fresh host regression and the canonical self ladder are running. Inception remains
 unverified. Historical generated IR was gzip-compressed to reclaim 840 MiB;
 its contents and measurement records are preserved.
