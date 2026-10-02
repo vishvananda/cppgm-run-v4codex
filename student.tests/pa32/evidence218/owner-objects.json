@@ -1,0 +1,62 @@
+{
+  "objects": {
+    "prior": "evidence214/objects.json",
+    "sha256": "e70b0bee785d42b93080d3e9bddd787c1a6e37f537ccc28657d35f89913e027f",
+    "identical_objects": {
+      "copies": true,
+      "export": true
+    }
+  },
+  "loops": {
+    "prior": "evidence214/loops.json",
+    "sha256": "02d9f2906473163586589c87fc705cb61af7d487efabd4c67a33ac87882a84e3",
+    "identical_objects": {
+      "finite": true,
+      "unroll": true
+    }
+  },
+  "memory": {
+    "prior": "evidence214/memory.json",
+    "sha256": "41f3da5c59473d2be3a741261fad86408ad8fd7a82d00dc8969520d236059271",
+    "identical_objects": {
+      "loads": true,
+      "conditional": true,
+      "private": true,
+      "private-loads": true,
+      "copies": true,
+      "diamonds": true
+    }
+  },
+  "ranges": {
+    "prior": "evidence215/affected-runtime.json",
+    "sha256": "1cf278b674dbe5a04c673754c3604a14e141d6e50aa384fcb8b68439f47297f2",
+    "identical_objects": {
+      "reference-large": true,
+      "reference-small": true,
+      "reference-empty": true,
+      "zero-large": true,
+      "pointer": true,
+      "truth": true,
+      "partial": true
+    }
+  },
+  "context": {
+    "prior": "evidence216/affected.json",
+    "sha256": "bf599c4b7a4d44d454fe809b1764f8d978dec78fead19df0a637165615c8e29d",
+    "identical_objects": {
+      "checked": true,
+      "floating": true,
+      "parent": true,
+      "landing": true
+    }
+  },
+  "source": {
+    "prior": "evidence217/affected.json",
+    "sha256": "bcf737c2ae9adca201cb02d047458132127e56a722e6c19af97cc08d27a9822b",
+    "identical_objects": {
+      "layout": true,
+      "move": true,
+      "landing": true
+    }
+  }
+}

@@ -1,0 +1,60 @@
+[
+  {
+    "handoff": 215,
+    "commit": "335618379eb20ac285cc1df5fb498f498afccccf",
+    "sources": 586,
+    "artifacts": 990,
+    "observations": 1568,
+    "lanes": [
+      "affected-compile.json",
+      "affected-runtime.json",
+      "common-o0.json",
+      "common-o1.json",
+      "common-o3.json",
+      "diagnostic-initial.json",
+      "selfhost.json"
+    ],
+    "frozen_rebindings": {
+      "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++": "/home/vishvananda/work/private/v4codex/artifacts/pa32-215/cppgm-final",
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowiropt": "/home/vishvananda/work/private/v4codex/artifacts/pa32-215/lowiropt-complete",
+      "/home/vishvananda/work/private/v4codex/checkout/dev/lowir2native": "/home/vishvananda/work/private/v4codex/artifacts/pa32-215/native-final"
+    }
+  },
+  {
+    "handoff": 216,
+    "commit": "7e04081b611b89cd46e5b294a963aba891c36073",
+    "sources": 29,
+    "artifacts": 571,
+    "observations": 1848,
+    "lanes": [
+      "affected.json",
+      "common-o0.json",
+      "common-o1.json",
+      "common-o3.json",
+      "initial-affected.json",
+      "initial-common-o0.json",
+      "initial-common-o1.json",
+      "initial-common-o3.json",
+      "initial-selfhost.json",
+      "selfhost.json"
+    ],
+    "frozen_rebindings": {}
+  },
+  {
+    "handoff": 217,
+    "commit": "5a767f2053b83c830c287263a58c732a05965b5c",
+    "sources": 27,
+    "artifacts": 486,
+    "observations": 1148,
+    "lanes": [
+      "affected.json",
+      "common-o0.json",
+      "common-o1.json",
+      "common-o3.json",
+      "historical-concurrent.json",
+      "historical-initial.json",
+      "selfhost.json"
+    ],
+    "frozen_rebindings": {}
+  }
+]
