@@ -104,6 +104,36 @@ block ^right:
 block ^join:
  %v = phi i64 [^hop: 37, ^right: 37]
  return i64 %v''',37,str(cond),'%c : i64')
+for cond in [0,1,2,-1,127]:
+    case('''block ^entry:
+ branch %c, ^left, ^right
+block ^left: jump ^join
+block ^right: jump ^join
+block ^join:
+ %v = phi i64 [^left: 1, ^right: 0]
+ return i64 %v''',int(bool(cond)),str(cond),'%c : i64')
+for n in [0,1,7,-1,-2,9223372036854775807,-9223372036854775808]:
+    for cmp,constant in [('ult',-1),('ule',0),('eq',7)]:
+        yes,no = ('%n',str(constant)) if cmp == 'ult' else (str(constant),'%n')
+        expected = n  # all three choices are identities
+        case(f'''block ^entry:
+ %c = cmp {cmp} i64 %n, {constant}
+ branch %c, ^left, ^right
+block ^left: jump ^join
+block ^right: jump ^join
+block ^join:
+ %v = phi i64 [^left: {yes}, ^right: {no}]
+ return i64 %v''',expected,str(n),'%n : i64')
+# A 64-bit all-ones value is not the unsigned maximum of i128.
+case('''block ^entry:
+ %n = copy i128 18446744073709551616
+ %c = cmp ult i128 %n, 18446744073709551615
+ branch %c, ^left, ^right
+block ^left: jump ^join
+block ^right: jump ^join
+block ^join:
+ %v = phi i64 [^left: 8, ^right: 9]
+ return i64 %v''',9)
 main = ['function @main() -> i64 [role=entry] { block ^entry:', ' %total0 = const i64 0']
 for n,(name,args,expected) in enumerate(calls):
     main += [f' %v{n} = call i64 @{name}({args})',f' %bad{n} = cmp ne i64 %v{n}, {expected}',f' %total{n+1} = binary or i64 %total{n}, %bad{n}']
@@ -156,4 +186,51 @@ function @empty_cycle() -> void {
     run(ROOT/'dev/lowiropt','-O1','-o',tmp/'guards.lowir',source)
     run(ROOT/'dev/lowir','-o',tmp/'validated.lowir',tmp/'guards.lowir')
     assert (tmp/'guards.lowir').read_text().count('load i64 $x') == 2
+    # Sparse demand would otherwise visit a block/slot Cartesian product.
+    # Admission exhausts its linear allowance transactionally. A later linear
+    # CFG cleanup may still improve the untouched, semantically valid input.
+    stress = ['function @main() -> i64 [role=entry] {']
+    stress += [f'slot $s{i} : i64' for i in range(200)]
+    stress += ['block ^entry:']+[f'store i64 {i}, $s{i}' for i in range(200)]+['jump ^b0']
+    for b in range(600): stress += [f'block ^b{b}:',f'jump ^b{b+1}' if b<599 else 'jump ^exit']
+    stress += ['block ^exit:','%sum0 = const i64 0']
+    for i in range(200): stress += [f'%v{i} = load i64 $s{i}',f'%sum{i+1} = binary add i64 %sum{i}, %v{i}']
+    stress += ['%bad = cmp ne i64 %sum200, 19900','return i64 %bad','}']
+    source.write_text('\n'.join(stress))
+    run(ROOT/'dev/lowiropt','-O1','-o',tmp/'stress.lowir',source)
+    run(ROOT/'dev/lowir','-o',tmp/'validated.lowir',tmp/'stress.lowir')
+    run(ROOT/'dev/lowir2native','-o',tmp/'stress',tmp/'stress.lowir'); run(tmp/'stress')
+    policy = ['function @id(%x : i64) -> i64 { block ^entry: return i64 %x }']
+    for name,in_loop in [('before_loop',False),('in_loop',True)]:
+        policy.append(f'''function @{name}(%n : i64) -> i64 {{
+ slot $i : i64
+ block ^entry:
+  %limit = call i64 @id(%n)
+  store i64 0, $i
+  jump ^head
+ block ^head:
+  %i = load i64 $i
+  %more = cmp lt i64 %i, %limit
+  branch %more, ^body, ^exit
+ block ^body:
+  {'call i64 @id(%i)' if in_loop else 'nop'}
+  %next = binary add i64 %i, 1
+  store i64 %next, $i
+  jump ^head
+ block ^exit:
+  return i64 %i
+}}''')
+    policy.append('''function @main() -> i64 [role=entry] { block ^entry:
+ %a = call i64 @before_loop(5)
+ %b = call i64 @in_loop(5)
+ %sum = binary add i64 %a, %b
+ %bad = cmp ne i64 %sum, 10
+ return i64 %bad }''')
+    source.write_text('\n'.join(policy))
+    run(ROOT/'dev/lowiropt','-O1','-o',tmp/'policy.lowir',source)
+    text=(tmp/'policy.lowir').read_text()
+    assert 'load i64 $i' not in text.split('function @before_loop')[1].split('function @in_loop')[0]
+    assert 'load i64 $i' in text.split('function @in_loop')[1]
+    run(ROOT/'dev/lowir','-o',tmp/'validated.lowir',tmp/'policy.lowir')
+    run(ROOT/'dev/lowir2native','-o',tmp/'policy',tmp/'policy.lowir'); run(tmp/'policy')
 print(f'PA32 dataflow: PASS ({len(calls)} execution cases x 4 levels x 2 backends; EH direct/replay; conservative guards)')

@@ -277,3 +277,5 @@ FRONTEND_OBJ_BASENAMES_lowiropt += lowir/ordinary_flow
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/ordinary_flow
 FRONTEND_OBJ_BASENAMES_lowiropt += lowir/edge_facts
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/edge_facts
+FRONTEND_OBJ_BASENAMES_lowiropt += lowir/diamond_values
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/diamond_values

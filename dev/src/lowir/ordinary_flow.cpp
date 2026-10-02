@@ -1,6 +1,57 @@
 #include "lowir/ordinary_flow.h"
 #include <algorithm>
 namespace lowir_model {
+bool has_call_cycle(const Program& p, const Function& f, std::uint64_t& work)
+{
+    if (f.blocks.count == 1) {
+        auto r = p.blocks[p.block_order[f.blocks.begin].index-1].instructions;
+        const auto& t = p.instructions[r.end()-1];
+        if (t.opcode != Opcode::Jump && t.opcode != Opcode::Branch && t.opcode != Opcode::Switch) return false;
+    }
+    bool any = false;
+    for (unsigned n = f.blocks.begin; n < f.blocks.end(); ++n) {
+        auto r = p.blocks[p.block_order[n].index-1].instructions;
+        for (unsigned k = r.begin; k < r.end(); ++k) { ++work; any |= p.instructions[k].opcode == Opcode::Call; }
+    }
+    if (!any) return false;
+    OrdinaryFlow flow(p,f,work);
+    std::vector<bool> calls(flow.blocks.size()), active(flow.blocks.size());
+    for (unsigned b = 1; b < flow.blocks.size(); ++b) {
+        auto r = p.blocks[flow.blocks[b].index-1].instructions;
+        for (unsigned n = r.begin; n < r.end(); ++n) calls[b] = calls[b] || p.instructions[n].opcode == Opcode::Call;
+    }
+    // Iterative Tarjan: a call outside a cycle does not make its caller's
+    // loops expensive. Each block and ordinary edge is visited once.
+    std::vector<unsigned> number(flow.blocks.size()), low(flow.blocks.size()), members;
+    struct Visit { unsigned block, edge; };
+    std::vector<Visit> stack; unsigned serial = 0;
+    auto discover = [&](unsigned b) {
+        number[b] = low[b] = ++serial; active[b] = true;
+        members.push_back(b); stack.push_back({b,flow.outgoing[b]});
+    };
+    for (unsigned root = 1; root < flow.blocks.size(); ++root) if (!number[root]) {
+        discover(root);
+        while (!stack.empty()) {
+            ++work;
+            unsigned b = stack.back().block, edge = stack.back().edge;
+            if (edge) {
+                unsigned to = flow.edges[edge].to; stack.back().edge = flow.edges[edge].next_out;
+                if (!number[to]) { discover(to); continue; }
+                if (active[to]) low[b] = std::min(low[b],number[to]);
+                continue;
+            }
+            if (low[b] == number[b]) {
+                unsigned count = 0, member; bool call = false, self = false;
+                for (unsigned e = flow.outgoing[b]; e; e = flow.edges[e].next_out) self |= flow.edges[e].to == b;
+                do { member = members.back(); members.pop_back(); active[member] = false; ++count; call |= calls[member]; } while (member != b);
+                if (call && (count > 1 || self)) return true;
+            }
+            stack.pop_back();
+            if (!stack.empty()) { auto parent = stack.back().block; low[parent] = std::min(low[parent],low[b]); }
+        }
+    }
+    return false;
+}
 OrdinaryFlow::OrdinaryFlow(const Program& p, const Function& f, std::uint64_t& work)
     : blocks(1), edges(1), incoming(f.blocks.count+1), outgoing(f.blocks.count+1),
       rank(f.blocks.count+1), parent(f.blocks.count+1), first_child(f.blocks.count+1),

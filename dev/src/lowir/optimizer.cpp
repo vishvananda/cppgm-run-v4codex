@@ -1,5 +1,6 @@
 #include "lowir/optimizer.h"
 #include "lowir/folding.h"
+#include "lowir/ordinary_flow.h"
 #include <chrono>
 #include <iostream>
 #include <sys/resource.h>
@@ -10,20 +11,28 @@ void optimize(Program& p, unsigned level, bool telemetry)
     if (!level) return;
     auto start = std::chrono::steady_clock::now();
     std::uint64_t work = 0;
+    // Immutable admission summary for this pipeline. Its transforms add no
+    // calls or cycles, so a declined function remains a safe conservative
+    // choice even when later simplification removes a cycle.
+    std::vector<bool> call_cycles(p.functions.size());
+    for (unsigned fn = 0; fn < p.functions.size(); ++fn)
+        if (!p.functions[fn].declaration) call_cycles[fn] = has_call_cycle(p,p.functions[fn],work);
     forward_local_slots(p,work);
     simplify_scalars(p,work);
-    promote_scalar_slots(p,work);
-    simplify_scalars(p,work);
-    eliminate_local_expressions(p,work);
+    if (promote_scalar_slots(p,call_cycles,work)) simplify_scalars(p,work);
+    eliminate_local_expressions(p,call_cycles,work);
     simplify_control(p,work);
     forward_local_slots(p,work);
     simplify_scalars(p,work);
-    eliminate_local_expressions(p,work);
-    propagate_edge_facts(p,work);
+    eliminate_local_expressions(p,call_cycles,work,true);
     simplify_scalars(p,work);
+    simplify_diamond_values(p,work);
     bypass_empty_jumps(p,work);
     simplify_control(p,work);
     simplify_scalars(p,work);
+    // Phi repair above can expose constant terminators. This last structural
+    // sweep closes those edges; it does not restart the optimization pipeline.
+    simplify_control(p,work);
     if (telemetry) {
         rusage usage; getrusage(RUSAGE_SELF,&usage);
         std::cerr << "{\"optimize_ms\":" << std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count()

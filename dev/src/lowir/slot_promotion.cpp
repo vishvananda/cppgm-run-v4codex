@@ -31,6 +31,7 @@ class Promotion {
     std::vector<std::pair<unsigned,unsigned>> loads;
     std::vector<unsigned> store_nodes;
     unsigned entry_end = 0, first_registration = 0;
+    std::uint64_t input_instructions = 0, input_operands = 0;
     bool exhausted = false;
     std::uint64_t key(unsigned block, unsigned slot) const { return (std::uint64_t(block)<<32)|slot; }
     bool charge(unsigned n = 1) {
@@ -141,18 +142,28 @@ public:
           predecessors(f.blocks.count+1), handlers(f.blocks.count+1), phi_heads(f.blocks.count+1) {
         for (unsigned n = f.blocks.begin; n < f.blocks.end(); ++n) {
             auto r = p.blocks[p.block_order[n].index-1].instructions;
+            input_instructions += r.count;
             budget += 16*(std::uint64_t(r.count)+1);
-            for (unsigned k = r.begin; k < r.end(); ++k) budget += 16*p.instructions[k].operands.count;
+            for (unsigned k = r.begin; k < r.end(); ++k) input_operands += p.instructions[k].operands.count;
         }
+        budget += 16*input_operands;
     }
-    void run(std::vector<unsigned>& additions, NameIndex& names) {
-        census(); scan(); resolve(); if (exhausted) return;
+    bool run(std::vector<unsigned>& additions, NameIndex& names, unsigned& serial) {
+        census(); scan(); resolve(); if (exhausted) return false;
+        std::uint64_t phis = 0, phi_operands = 0;
+        for (const auto& d : definitions) if (d.slot && facts[d.slot].eligible && !d.store && !handlers[d.block]) {
+            ++phis; phi_operands += d.inputs.count;
+        }
+        // Admission limits representation growth independently of analysis
+        // work. Stores become copies; only phis can add instructions.
+        if (phis > input_instructions || phi_operands > 2*input_operands) return false;
+        bool changed = false;
         next_phi.resize(definitions.size());
         for (unsigned n = 1; n < definitions.size(); ++n) {
             auto& d = definitions[n]; if (!facts[d.slot].eligible || (!d.store && handlers[d.block])) continue;
+            changed = true;
             Value v; v.owner = p.slots[p.slot_order[f.slots.begin+d.slot-1].index-1].owner;
             v.type = p.slots[p.slot_order[f.slots.begin+d.slot-1].index-1].type;
-            unsigned serial = p.values.size()+1;
             do { v.name = p.intern("%opt_slot_"+std::to_string(serial++)); } while (!names.insert(v.name,1));
             p.values.push_back(v); d.value = ValueId(p.values.size());
             if (!d.store) { next_phi[n] = phi_heads[d.block]; phi_heads[d.block] = n; }
@@ -181,16 +192,24 @@ public:
                 additions.push_back(id.index); p.instructions.push_back(i);
             }
         }
+        return changed;
     }
 };
 }
-void promote_scalar_slots(Program& p, std::uint64_t& work)
+bool promote_scalar_slots(Program& p, const std::vector<bool>& call_cycles, std::uint64_t& work)
 {
+    if (p.slots.empty()) return false;
     auto original_size = p.instructions.size();
     NameIndex names;
     for (const auto& v : p.values) if (v.name) names.insert(v.name,1);
     std::vector<unsigned> additions;
-    for (const auto& f : p.functions) if (!f.declaration && f.slots.count) Promotion(p,f,work).run(additions,names);
+    bool changed = false;
+    unsigned serial = p.values.size()+1;
+    for (unsigned fn = 0; fn < p.functions.size(); ++fn) {
+        const auto& f = p.functions[fn];
+        if (!f.declaration && f.slots.count && !call_cycles[fn]) changed |= Promotion(p,f,work).run(additions,names,serial);
+    }
+    if (!changed) return false;
     // Rebuild block slices once, preserving block identity/source order. All
     // transient demand records have already died at their function boundary.
     std::vector<unsigned> heads(p.blocks.size()+1), next(additions.size());
@@ -210,5 +229,6 @@ void promote_scalar_slots(Program& p, std::uint64_t& work)
         if (!v.defined) v.definition = n+1;
         v.defined = true;
     }
+    return true;
 }
 }

@@ -65,6 +65,18 @@ EH direct/replay and conservative guards; inherited `local.py`: 506 cases at
 four levels. File audit passes with the same four inherited warnings. Frozen
 baseline/current performance experiment is running; profitability is unproven.
 
+208 closure increment: edge-qualified constants, boolean/equality/unsigned
+extreme diamond identities, a final constant-edge sweep, independent phi-growth
+caps, and monotonic generated-name collision handling. **127/219** pass (17
+entry failures removed, no new failures). The common memory benchmark exposed
+a reproducible regression in the combined promotion/reuse policy for loops
+with calls. Frozen diagnostic variants are retained under `pa32-208/diagnostic`.
+A once-computed iterative SCC admission summary retains local optimization for
+functions containing calls inside cycles; calls outside cycles remain eligible.
+The memory object now equals the baseline byte for byte. Final performance and
+handoff validation are in progress; this is an implementation finding resolved
+in the current policy, not a PA33 allocator gate or an audit waiver.
+
 1. CFG/dataflow: dominance, cross-block slot/phi promotion and memory/alias/
    lifetime facts, including exceptional edges. Validate with remaining direct
    O1/O2 branch, slot, alias, aggregate and EH predicates plus execution controls.

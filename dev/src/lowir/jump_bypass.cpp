@@ -11,12 +11,14 @@ void bypass(Program& p, const Function& f, std::uint64_t& work)
     std::vector<unsigned> target(count+1), mapped(count+1), visiting(count+1), pred(count+1), path;
     std::vector<BackEdge> edges(1);
     std::uint64_t budget = 0;
+    std::uint64_t phi_operands = 0;
     for (unsigned n = 1; n <= count; ++n) local.put(p.block_order[f.blocks.begin+n-1].index,n);
     cppgm::IdIndex distinct;
     for (unsigned b = 1; b <= count; ++b) {
         auto r = p.blocks[p.block_order[f.blocks.begin+b-1].index-1].instructions;
         for (unsigned n = r.begin; n < r.end(); ++n) {
             const auto& i = p.instructions[n]; ++work; budget += 16*(1+std::uint64_t(i.operands.count));
+            if (i.opcode == Opcode::Phi) phi_operands += i.operands.count;
             if ((i.opcode == Opcode::EhTry || i.opcode == Opcode::EhCleanup) && i.operands.count) return;
         }
         const auto& i = p.instructions[r.end()-1];
@@ -65,6 +67,7 @@ void bypass(Program& p, const Function& f, std::uint64_t& work)
                     } else {
                         args.push_back(Operand::label(p.block_order[f.blocks.begin+from-1]));
                         args.push_back(value); values.put(from,args.size());
+                        if (args.size() > 2*phi_operands) return;
                     }
                 }
             }
@@ -89,6 +92,6 @@ void bypass(Program& p, const Function& f, std::uint64_t& work)
 }
 void bypass_empty_jumps(Program& p, std::uint64_t& work)
 {
-    for (const auto& f : p.functions) if (!f.declaration) bypass(p,f,work);
+    for (const auto& f : p.functions) if (!f.declaration && f.blocks.count > 1) bypass(p,f,work);
 }
 }

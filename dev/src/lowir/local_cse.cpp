@@ -118,14 +118,24 @@ void order_definitions(Program& p, Function& f, const OrdinaryFlow& flow,
     }
 }
 }
-void eliminate_local_expressions(Program& p, std::uint64_t& work)
+void eliminate_local_expressions(Program& p, const std::vector<bool>& call_cycles, std::uint64_t& work, bool edges)
 {
     std::vector<unsigned> definitions(p.values.size()+1);
     for (const auto& a : p.parameters) ++definitions[a.value.index];
     for (const auto& i : p.instructions) if (i.destination) ++definitions[i.destination.index];
-    for (auto& f : p.functions) if (!f.declaration) {
+    for (unsigned fn = 0; fn < p.functions.size(); ++fn) {
+        auto& f = p.functions[fn]; if (f.declaration) continue;
+        bool call_cycle = call_cycles[fn];
+        if (edges && call_cycle) continue;
+        if (f.blocks.count == 1) {
+            auto b = p.block_order[f.blocks.begin]; auto r = p.blocks[b.index-1].instructions;
+            unsigned size = 8; while (size < 2*r.count) size *= 2;
+            std::vector<unsigned> table(size); std::vector<SavedBucket> undo;
+            std::uint64_t budget = 16*(std::uint64_t(r.count)+1);
+            expressions(p,b,definitions,table,undo,budget,work); continue;
+        }
         OrdinaryFlow flow(p,f,work);
-        if (flow.dominance(work)) {
+        if (!call_cycle && flow.dominance(work)) {
             order_definitions(p,f,flow,definitions,work);
             unsigned size = 8; while (size < 2*flow.size) size *= 2;
             std::vector<unsigned> table(size); std::vector<SavedBucket> undo;
@@ -146,6 +156,7 @@ void eliminate_local_expressions(Program& p, std::uint64_t& work)
                     scopes.pop_back();
                 }
             }
+            if (edges) propagate_edge_facts(p,flow,definitions,work);
         } else {
             for (unsigned n = f.blocks.begin; n < f.blocks.end(); ++n) {
                 auto b = p.block_order[n]; auto r = p.blocks[b.index-1].instructions;

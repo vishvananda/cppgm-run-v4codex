@@ -17,4 +17,9 @@ struct OrdinaryFlow {
     bool dominance(std::uint64_t& work);
     bool dominates(unsigned a, unsigned b) const { return enter[a] && enter[a] <= enter[b] && leave[b] <= leave[a]; }
 };
+// Conservative profitability admission: without call/loop cost summaries,
+// cyclic functions containing calls retain local optimization. This is not a
+// legality restriction and can be relaxed by a later measured policy.
+bool has_call_cycle(const Program&, const Function&, std::uint64_t& work);
+void propagate_edge_facts(Program&, const OrdinaryFlow&, const std::vector<unsigned>& definitions, std::uint64_t& work);
 }

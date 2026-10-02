@@ -44,7 +44,8 @@ p = out/'pruning.cpp'
 p.write_text(''.join('static int unused%d(int x){return x+%d;}\n'%(n,n) for n in range(1200))+prefix+bodies['memory'])
 sources['pruning'] = p
 result = dict(affinity=affinity,binaries={k:dict(path=str(v),sha256=sha(v)) for k,v in binaries.items()},
-              flags={'A':['-O0','-c','--stats'],'B':['-O1','-c','--stats']}, inputs={k:sha(v) for k,v in sources.items()},
+              flags={'A':['-O'+os.environ.get('PA32_BASE_LEVEL','0'),'-c','--stats'],
+                     'B':['-O'+os.environ.get('PA32_FINAL_LEVEL','1'),'-c','--stats']}, inputs={k:sha(v) for k,v in sources.items()},
               host_linker=run(['g++','--version']).stdout.decode(),runs=[],images={},summary={})
 def save(): (out/'performance.json').write_text(json.dumps(result,indent=2)+'\n')
 for name,source in sources.items():
