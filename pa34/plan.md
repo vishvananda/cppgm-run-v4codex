@@ -50,6 +50,11 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
   ([class.temporary]/3). The two native driver/dump source probes pass; PA12
   check_conditional.py covers cv overload selection and balanced nested
   lifetimes at O0/O3 with four runtime branches.
+- Fixed build metadata: seed/self/inception now share the generated host-header
+  filename and owning source from frontend_source_sets.mk. The PA34 rules used
+  a stale preprocessor owner/name, so toolchain/host_config.cpp lacked its input.
+  The generated contents match the seed configuration; host probes remain the
+  PA25/PA29 build-time boundary, never compilation delegation (spec §10).
 - Continue each newly exposed self-build/test/object divergence at its earliest
   owner. Trace seed/self differences to object and source; probes are diagnostic.
 - Required order: file audit; `make test-report-through-pa33`; canonical
@@ -60,9 +65,9 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
 - Commit cohesive fixes and evidence, keep this ledger current, finish clean.
 
 Current evidence (`$RALPH_ARTIFACT_DIR/pa34-221`): file audit passes (four
-inherited warnings); host through PA33 5454/5454 after the ID source correction;
+inherited warnings); host through PA33 5454/5454 after the conditional fixes;
 native debug 11/11 after the helper schedule fix. Canonical self PA1–PA4 pass
-(54/26/20/105 tests). PA5 build next exposed the now-fixed native driver/dump
-conditional bugs. Fresh host regression and canonical ladder follow. Inception remains
+(54/26/20/105 tests). PA5 build next exposed stale generated-header metadata;
+the canonical build continues with that corrected. Inception remains
 unverified. Historical generated IR was gzip-compressed to reclaim 840 MiB;
 its contents and measurement records are preserved.

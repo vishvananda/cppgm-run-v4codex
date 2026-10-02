@@ -41,7 +41,7 @@ OBJ ?= ../obj
 OBJDIR = $(OBJ)/dev
 DEPDIR = $(OBJDIR)/.d
 INC = -I$(SRC)
-HOST_CONFIG = $(OBJDIR)/generated/builtin_host_config.h
+HOST_CONFIG = $(OBJDIR)/generated/$(FRONTEND_BUILTIN_CONFIG_HEADER)
 
 include frontend_source_sets.mk
 $(foreach target,$(TARGETS),$(if $(filter undefined,$(origin FRONTEND_OBJ_BASENAMES_$(target))),$(error missing FRONTEND_OBJ_BASENAMES_$(target) in frontend_source_sets.mk),))
@@ -104,8 +104,8 @@ $(HOST_CONFIG): gen_builtin_host_config.pl $(COMPILE_CONFIG_STAMP)
 	$(Q)CPPGM_BUILD_HOST_CXX='$(CXX)' CPPGM_STDLIB_FLAGS='$(CPPGM_STDLIB_FLAGS)' perl $< > $@.tmp
 	@if ! cmp -s $@.tmp $@ 2>/dev/null; then mv -f $@.tmp $@; else rm -f $@.tmp; fi
 
-$(OBJDIR)/toolchain/host_config.o: $(HOST_CONFIG)
-$(OBJDIR)/toolchain/host_config.o: INC += -I$(OBJDIR)/generated
+$(OBJDIR)/$(FRONTEND_BUILTIN_CONFIG_SOURCE_ID).o: $(HOST_CONFIG)
+$(OBJDIR)/$(FRONTEND_BUILTIN_CONFIG_SOURCE_ID).o: INC += -I$(OBJDIR)/generated
 
 clean:
 	-rm -f $(TARGETS)

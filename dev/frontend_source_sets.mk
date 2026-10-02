@@ -5,6 +5,8 @@
 
 FRONTEND_SOURCE_SET_TARGETS := abimangle pptoken posttoken ppexpr preproc cppgm++ lowiropt lowir lowir2native
 FRONTEND_TEST_RUNNER_SOURCE_ID := support/testing/test_runner
+FRONTEND_BUILTIN_CONFIG_SOURCE_ID := toolchain/host_config
+FRONTEND_BUILTIN_CONFIG_HEADER := builtin_host_config.h
 
 FRONTEND_OBJ_BASENAMES_abimangle := preprocess/source preprocess/identifier_table abi/itanium/graph abi/itanium/graph_validation abi/itanium/vocabulary abi/itanium/encoder abi/itanium/function_encoder abi/itanium/expression_encoder abi/itanium/fact_reader abi/itanium/type_reader abi/itanium/function_reader abi/itanium/argument_reader abi/itanium/fact_writer
 FRONTEND_OBJ_BASENAMES_pptoken := preprocess/source preprocess/identifier_table preprocess/token_cursor preprocess/token_output
