@@ -51,6 +51,7 @@ class Loops {
     std::vector<Range> replacements;
     Pool<Instruction> planned;
     NameIndex names;
+    bool names_ready = false;
     unsigned serial = 0;
     unsigned local(unsigned id) {
         if (auto n = ids.get(id)) return n;
@@ -215,9 +216,22 @@ class Loops {
         ++stats.removed; return true;
     }
     ValueId fresh(const Instruction& i) {
+        if (!names_ready) {
+            for (unsigned n = 1; n < facts.size(); ++n) if (facts[n].instruction) {
+                auto name = p.values[p.instructions[facts[n].instruction-1].destination.index-1].name;
+                if (name) names.insert(name,1);
+            }
+            auto params = p.signatures[f.signature.index-1].parameters;
+            for (unsigned n = params.begin; n < params.end(); ++n) {
+                auto name = p.values[p.parameters[n].value.index-1].name;
+                if (name) names.insert(name,1);
+            }
+            work += facts.size()+params.count; names_ready = true;
+        }
         Name name;
         do { name = p.intern("%opt_loop_"+std::to_string(serial++)); } while (!names.insert(name,1));
         Value v; v.name = name; v.type = i.result_type(); v.owner = p.values[i.destination.index-1].owner;
+        v.truth = p.values[i.destination.index-1].truth;
         p.values.push_back(v); return ValueId(p.values.size());
     }
     bool unroll(const Loop& l) {
@@ -250,9 +264,10 @@ class Loops {
             values[map.get(phi.destination.index)] = Operand::value(i.destination);
         };
         for (auto n : l.phis) snapshot(n,incoming(p.instructions[n],l.entry));
+        std::vector<Operand> args;
         for (std::uint64_t trip = 0; trip < l.trips; ++trip) {
             for (auto n : l.body) {
-                auto i = p.instructions[n]; std::vector<Operand> args;
+                auto i = p.instructions[n]; args.clear();
                 for (unsigned k = i.operands.begin; k < i.operands.end(); ++k) args.push_back(resolve(p.operands[k]));
                 if (i.destination) {
                     auto original = i.destination; i.destination = fresh(i);
@@ -278,19 +293,11 @@ public:
     bool run(Pool<Instruction>& out) {
         if (!flow.dominance(work)) return false;
         index();
-        for (unsigned n = 1; n < facts.size(); ++n) if (facts[n].instruction) {
-            auto name = p.values[p.instructions[facts[n].instruction-1].destination.index-1].name;
-            if (name) names.insert(name,1);
-        }
-        auto params = p.signatures[f.signature.index-1].parameters;
-        for (unsigned n = params.begin; n < params.end(); ++n) {
-            auto name = p.values[p.parameters[n].value.index-1].name;
-            if (name) names.insert(name,1);
-        }
         bool changed = false;
+        Loop l;
         for (unsigned b = 1; b < flow.blocks.size() && budget; ++b) {
             if (committed[b] || p.instructions[range(b).begin].opcode != Opcode::Phi) continue;
-            Loop l; l.header = b; ++stats.candidates;
+            l.header = b; l.blocks.clear(); l.phis.clear(); l.body.clear(); l.exports.clear(); ++stats.candidates;
             bool accepted = analyze(l);
             unsigned start = planned.size();
             if (accepted) accepted = erase(l) || unroll(l);
