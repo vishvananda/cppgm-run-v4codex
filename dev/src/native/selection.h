@@ -38,6 +38,10 @@ class Selector {
     bool mixed_conversion_abi = false;
     std::uint64_t parameter_bytes = 0;
     Operand vararg_save, indirect_result, atomic_scratch;
+    struct Assignment { Operand to, from; Type type; Operand address_home; bool done = false; };
+    // Call setup reuses function-owned scratch. Capacity tracks the largest
+    // argument list and is released with this selector, never per call node.
+    std::vector<Assignment> call_register_moves, call_stack_moves;
     unsigned vararg_gp = 0, vararg_fp = 0, vararg_stack = 16;
     std::vector<ValueState> values;
     void index_exception_clauses();

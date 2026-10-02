@@ -44,9 +44,10 @@ void Selector::call(const lowir_model::Instruction& i)
         move(Operand::r(XR_R11),target,Type::Ptr); target = Operand::r(XR_R11);
     }
     unsigned count = i.operands.count-1;
-    struct Assignment { Operand to, from; Type type; Operand address_home; bool done = false; };
-    std::vector<Assignment> moves;
-    std::vector<Assignment> stack_moves;
+    auto& moves = call_register_moves;
+    auto& stack_moves = call_stack_moves;
+    moves.clear(); stack_moves.clear();
+    if (!moves.capacity()) moves.reserve(14);
     AbiCursor abi;
     Operand result_home;
     if (aggregate(i.type)) {
@@ -152,7 +153,12 @@ void Selector::call(const lowir_model::Instruction& i)
     if (!late_stack) for (const auto& m : stack_moves) stack_transfer(m);
     // Canonical setup orders independent GPR assignments before XMM ones.
     // This is bounded by the fourteen ABI carriers, not the argument count.
-    std::stable_partition(moves.begin(),moves.end(),[](const Assignment& m) { return m.to.reg < 16; });
+    // Stable insertion uses no allocation (stable_partition may allocate a
+    // temporary buffer for every call). At most 6 GPR + 8 XMM moves exist.
+    require(moves.size() <= 14,"too many register argument assignments");
+    for (unsigned n = 0, gp = 0; n < moves.size(); ++n) if (moves[n].to.reg < 16) {
+        std::rotate(moves.begin()+gp,moves.begin()+n,moves.begin()+n+1); ++gp;
+    }
     // At most fourteen scalar carriers: bounded parallel move scheduling, with one
     // reserved scratch to break cycles. Stack arguments are captured first.
     unsigned pending = moves.size();
