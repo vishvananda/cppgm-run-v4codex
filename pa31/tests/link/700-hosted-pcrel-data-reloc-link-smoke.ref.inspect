@@ -1,2 +1,2 @@
-relocation_class_canonical 1 data_pcrel _Z1g 1
-absent_relocation_class_canonical 1 branch_call _Z1g 0
+relocation_class_canonical 1 data_pcrel g 1
+absent_relocation_class_canonical 1 branch_call g 0

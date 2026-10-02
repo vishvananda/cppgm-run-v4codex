@@ -33,7 +33,17 @@ void Analyzer::check_template_parameters(NodeId n, ScopeId s)
         if (node.kind == Kind::Class || node.kind == Kind::ClassForward || node.kind == Kind::Enum) name = node.detail;
         if (name && ast[name].first == ast[name].last && ast[name].op != OP_COLON2) declared = terminal(name);
         if (node.kind == Kind::Alias || node.kind == Kind::Enumerator) declared = node.text;
-        if (node.kind == Kind::UsingDeclaration) declared = terminal(ast[node.first].detail);
+        if (node.kind == Kind::UsingDeclaration) {
+            auto using_name = ast[node.first].detail;
+            auto previous = ast[using_name].first;
+            while (ast[previous].next && ast[previous].next != ast[using_name].last)
+                previous = ast[previous].next;
+            // In using T::T, the repeated dependent qualifier denotes an
+            // inherited constructor, not a declaration of a new name T.
+            bool constructor = !(node.flags & 1) && previous != ast[using_name].last &&
+                ast[previous].text == terminal(using_name);
+            if (!constructor) declared = terminal(using_name);
+        }
         if (declared && parameters.get(declared)) throw std::runtime_error("declaration redeclares template parameter");
         if (node.kind == Kind::IdExpression && !item.callee && ast[node.detail].first == ast[node.detail].last &&
             parameters.get(terminal(node.detail)) == 1) throw std::runtime_error("type template parameter used as a value");

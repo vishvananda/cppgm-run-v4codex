@@ -53,8 +53,16 @@ bool Analyzer::list_nonthrowing(std::uint32_t id)
     bool result = !plan.constructor || function_nonthrowing(plan.constructor);
     if (!plan.direct_binding && !plan.allocated) result &= type_destructor_nonthrowing(value_type(plan.target));
     for (unsigned i = 0; i < plan.call.argument_count; ++i) {
-        result &= plan.call.inputs == CallInputs::Query ? query_nonthrowing(query_edges[plan.call.arguments+i]) :
-            expression_nonthrowing(call_argument(plan.call,i));
+        if (plan.call.inputs == CallInputs::Query) result &= query_nonthrowing(query_edges[plan.call.arguments+i]);
+        else {
+            auto source = call_argument(plan.call,i);
+            // An initializer-list constructor consumes the same braced source
+            // through its backing-array conversion. Re-entering that source
+            // follows its incoming conversion back to this plan. The nested
+            // conversion below owns all element evaluations and lifetimes.
+            if (source != plan.source || ast[source].kind != Kind::BracedInit)
+                result &= expression_nonthrowing(source);
+        }
         result &= conversion_nonthrowing(conversions[plan.call.conversions+i]);
     }
     list_exception_facts.put(id,result ? 2 : 1); return result;

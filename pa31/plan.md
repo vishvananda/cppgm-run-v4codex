@@ -37,3 +37,15 @@ reproduction and ownership diagnosis. Independent review: whole-stage spec and
 architecture audit remains with Ralph; neither review marker is advanced by
 implementation. Required exit: PA31 failure reduction without coverage loss,
 through30 pass, file audit pass, recorded boundary and clean committed changes.
+
+Implementation205 checkpoint: the six entry cases now pass (PA31 84/84).
+Owners confirmed: hosted allocation-role adapters and invalid C1/C2 aliases in
+`lowering/symbols.cpp`; self-reentry of a braced source's incoming list conversion
+in `semantic/exception_expression.cpp`; excluded zero-argument inherited
+constructors and `using T::T` source-name validation. The latter two reuse typed
+inherited-forwarding and specialization facts. Relocation selection was already
+correct; [the ABI proof](reference-correction205.md) corrects only `g` spelling.
+42 explicit control commands pass. Extra inherited-constructor trait controls
+expose a missing deletion check for additional subobjects; that related semantic
+owner is still implementation work. Through31 is running; performance and final
+handoff validation remain pending. Review markers stay at the stage base.

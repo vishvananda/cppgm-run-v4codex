@@ -259,9 +259,13 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
         metadata.linkage = LLM_C;
     }
     SymbolId allocation_runtime; unsigned allocation_role = 2;
-    if (e.allocation_runtime && !e.definition) {
+    // Standalone LowIR shares singleton allocation roles through adapters.
+    // Hosted allocation functions have distinct externally owned ABI entries;
+    // defining an adapter would replace the host's array allocation function
+    // (and introduce duplicate strong definitions across translation units).
+    if (e.allocation_runtime && !e.definition && !linkage.host) {
         const char* runtime[] = {"", "cppgm_builtin_operator_new", "cppgm_builtin_operator_new_array", "cppgm_builtin_operator_delete", "cppgm_builtin_operator_delete_array"};
-        if (!linkage.host) metadata.object = p.intern(runtime[e.allocation_runtime]);
+        metadata.object = p.intern(runtime[e.allocation_runtime]);
         allocation_role = e.key == KW_NEW ? 0 : 1;
         allocation_runtime = linkage.allocation_roles[allocation_role];
         if (!allocation_runtime) {
@@ -289,7 +293,11 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     if (metadata.object && p.name(metadata.object) == p.name(p.symbols[sid.index-1].name).substr(1)) metadata.object = 0;
     if (key) linkage.external.put(key, sid.index);
     p.symbols[sid.index-1].metadata = metadata;
-    if (!external && !separate && !base_only && (sem.constructor_member(id) || sem.destructor_member(id)) && (e.body || sem.synthetic_member(id))) {
+    // C1/D1 initialize/destroy virtual bases and cannot alias C2/D2 even when
+    // this TU only demanded the complete entry. A later TU can demand C2/D2
+    // with its distinct VTT argument and body.
+    if (!external && !separate && !base_only && (sem.constructor_member(id) || sem.destructor_member(id)) &&
+        !sem.virtual_base_count(sem.scopes[e.owner].entity) && (e.body || sem.synthetic_member(id))) {
         target.function.terminal = sem.destructor_member(id) ? abi_mangle::ABI_TERMINAL_DESTRUCTOR_BASE : abi_mangle::ABI_TERMINAL_CONSTRUCTOR_BASE;
         if (!internal && linkage.merge) {
             auto base_key = (std::uint64_t(1) << 32) | abi_mangle::function_entity(abi,target.function);

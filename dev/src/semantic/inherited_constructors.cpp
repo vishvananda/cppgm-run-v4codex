@@ -35,7 +35,12 @@ void Analyzer::inherited_constructors(EntityId cls)
             default_arguments[entities[target].defaults+minimum-1]) --minimum;
         for (unsigned count = f.count;; --count) {
             bool variadic = count == f.count && f.variadic;
-            if ((!count && !variadic && !head) || (!head && count == 1 && transfer_member(target))) {
+            // A locally declared constructor suppresses the implicit default
+            // constructor, but not a default constructor introduced by using.
+            // Otherwise the implicit derived default owns this signature.
+            // Copy/move constructors of the base never become derived copies.
+            if ((!count && !variadic && !head && !class_facts[info].user_constructor) ||
+                (!head && count == 1 && transfer_member(target))) {
                 if (count == minimum) break;
                 continue;
             }
