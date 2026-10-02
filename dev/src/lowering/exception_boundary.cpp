@@ -76,7 +76,7 @@ void Procedural::finish_exception_boundary()
         exception_fallback(); return;
     }
     if (!linkage.terminate_adapter) {
-        Function f; f.symbol = fresh_symbol("@__terminate_exception");
+        Function f; f.symbol = fresh_symbol("@cppgm_call_terminate");
         auto ptr = sem.types.compound(TypeKind::Pointer,sem.types.fundamental(FT_VOID));
         auto sig = sem.types.function(sem.types.fundamental(FT_VOID),{ptr},false);
         FunctionId owner(p.functions.size()+1); f.signature = signature(sig,owner);
@@ -85,6 +85,9 @@ void Procedural::finish_exception_boundary()
         p.functions.push_back(f); linkage.terminate_adapter = f.symbol;
         auto& s = p.symbols[f.symbol.index-1]; s.kind = Symbol::FunctionSymbol; s.entity = owner.index;
         s.metadata.binding = SBM_INTERNAL;
+        // Landing pads share this cold, nonreturning action. Cloning its
+        // catch registration and termination call cannot help normal paths.
+        s.metadata.no_inline = true;
         if (linkage.host) s.metadata.object = p.intern("@cppgm_call_terminate");
     }
     emit(Opcode::Call,IRType::Void,{Operand::symbol(linkage.terminate_adapter),exception.operand});

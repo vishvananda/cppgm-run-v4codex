@@ -13,6 +13,7 @@ FRONTEND_OBJ_BASENAMES_ppexpr := preprocess/source preprocess/identifier_table p
 FRONTEND_OBJ_BASENAMES_preproc := preprocess/source preprocess/identifier_table preprocess/token_cursor posttoken/token_types posttoken/number posttoken/literal posttoken/cursor posttoken/output preprocess/expression_value preprocess/expression preprocess/preprocessor preprocess/macro preprocess/directive
 FRONTEND_OBJ_BASENAMES_cppgm++ := $(FRONTEND_OBJ_BASENAMES_preproc) syntax/ast syntax/cursor syntax/names syntax/parser syntax/attributes syntax/prediction syntax/name_parser syntax/declarator syntax/expression syntax/output syntax/statement syntax/declaration syntax/class_parser syntax/template_parser syntax/driver semantic/model semantic/lookup semantic/type_builder semantic/native_attributes semantic/declaration semantic/class_enum semantic/nested_class semantic/constant semantic/constant_integer semantic/output semantic/overload semantic/conversion semantic/expression semantic/operators semantic/statement semantic/resolved_output semantic/member semantic/template_call
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_lexical_frame semantic/template_definition_environment
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/symbol_display
 FRONTEND_OBJ_BASENAMES_cppgm++ += syntax/deduction_guide semantic/deduction_guide
 FRONTEND_OBJ_BASENAMES_cppgm++ += toolchain/preprocess_output
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/template_address_arguments semantic/template_member_arguments

@@ -4,6 +4,21 @@ Stage base commit: e82bf4152fe8d6d68b9cd966655db0d8142cf81b
 Last reviewed commit: 401519044a2c28130d4085b3bc7c3d0411b5dc8f
 
 Target: **PA32 full-stage**, incomplete: **213/219**, **six failures**.
+Implementation 217 enters clean at `7e04081b611b89cd46e5b294a963aba891c36073`.
+The previous goal turn was progress (216's committed implementation and checks);
+no live process remains. Entry binaries and the unchanged failure log are frozen
+under `/tmp/pa32-217`. Review markers above remain unchanged.
+
+217 working group: source declaration presentation, lifecycle emission roots,
+and durable object constants. Lowering owns declaration/ABI identities and their
+display; the optimizer consumes typed symbols, root edges and immutable global
+data, never rendered names. Use one declaration census and bounded per-function
+proofs, with no whole-program retry. Validate source naming/collision reducers,
+copy/move and virtual-base execution, object/debug replay, prior suites and
+frozen A/A + ABBA compiler/runtime/RSS/text measurements. Extend into source
+debug closure while the same source-location and presentation owners are open.
+Pointer congruence remains a separate contract-proof group, not a waived test.
+
 Implementation 216 entered clean at `335618379eb20ac285cc1df5fb498f498afccccf`
 with **208/219**, eleven failures. Ralph's 208/425 uses a different census;
 the unchanged root course report supplies the counts above. The prior goal

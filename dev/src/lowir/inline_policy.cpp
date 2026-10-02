@@ -132,7 +132,13 @@ void prune_support_functions(Program& p, std::uint64_t& work)
     std::vector<bool> live(p.symbols.size()+1); std::vector<unsigned> pending;
     auto demand = [&](unsigned id) { if (id && !live[id]) { live[id] = true; pending.push_back(id); } };
     for (const auto& g : p.globals) if (!g.declaration) demand(g.symbol.index);
-    for (const auto& a : p.aliases) demand(a.target.index);
+    for (const auto& a : p.aliases) {
+        const auto& m = p.symbols[a.target.index-1].metadata;
+        // A coalescable inline body and its ABI entry aliases have one
+        // emission lifetime. An alias is not an additional language root.
+        // Explicit aliases of ordinary/internal definitions remain exports.
+        if (m.binding != SBM_WEAK || !m.inline_hint) demand(a.target.index);
+    }
     for (const auto& f : p.functions) if (!f.declaration) {
         const auto& m = p.symbols[f.symbol.index-1].metadata;
         if (m.object_root || m.keep_alias || m.role != SR_NONE ||
@@ -164,5 +170,8 @@ void prune_support_functions(Program& p, std::uint64_t& work)
         // instructions retain their own locations when this body is retired.
         f.debug = DebugLocation();
     }
+    unsigned out = 0;
+    for (auto a : p.aliases) { ++work; if (live[a.target.index]) p.aliases[out++] = a; }
+    p.aliases.resize(out);
 }
 }

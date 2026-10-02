@@ -296,6 +296,9 @@ public:
     std::vector<LiteralValue> literals;
     // Class nodes use their kind-discriminated auxiliary index for token ranges.
     std::vector<ClassRegion> class_regions;
+    // Lambda nodes retain only declarator token ordinals for display names;
+    // neither deferred tokens nor grammar are retained/replayed for this view.
+    std::vector<ClassRegion> lambda_regions;
     std::vector<char> literal_bytes;
     std::vector<AsmPlan> assemblies = std::vector<AsmPlan>(1);
     std::vector<AsmInstruction> assembly_instructions;

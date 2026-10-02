@@ -415,6 +415,7 @@ NodeId Parser::lambda()
     scope = names.enter(scope);
     bool templated = in.is("<");
     if (templated) { ++retained_template_depth; ast.append(result, template_parameters()); }
+    auto declarator_begin = in.consumed;
     if (in.is("(")) {
         ScopeId parameter_scope;
         NodeId decl = wrap(Kind::LambdaDeclarator, parameters(parameter_scope));
@@ -423,6 +424,8 @@ NodeId Parser::lambda()
         function_suffix(decl);
         ast.append(result, decl);
     }
+    ast[result].literal = ast.lambda_regions.size();
+    ast.lambda_regions.push_back({declarator_begin,in.consumed});
     ast.append(result, compound());
     if (templated) --retained_template_depth;
     scope = saved;

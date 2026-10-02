@@ -106,7 +106,9 @@ Value Procedural::address(Value v)
     if (!v.address) throw std::logic_error("missing addressable semantic value");
     if (v.operand.kind == Operand::Slot || v.operand.kind == Operand::Symbol) {
         auto object = v.parameter_object; auto overlap = v.overlapping;
+        auto cls = v.complete_class; auto offset = v.complete_offset;
         v = emit(Opcode::Addr, IRType(), {v.operand}); v.parameter_object = object; v.overlapping = overlap;
+        v.complete_class = cls; v.complete_offset = offset;
     }
     v.address = false; v.ir = IRType::Ptr; return v;
 }
@@ -293,6 +295,19 @@ Value Procedural::base_projection(Value base, unsigned steps)
         bool nonnull = base.nonnull;
         auto parameter = base.parameter_object;
         const auto& path = sem.base_adjustments[steps];
+        // A named non-reference object has a known most-derived layout.
+        // Preserve its identity/offset through successive base conversions;
+        // references and loaded pointers never acquire this fact.
+        if (base.complete_class && !linkage.presentation) {
+            auto cls = base.complete_class;
+            auto next = path.virtual_row ? sem.virtual_base_offset(cls,sem.base_virtual_anchor(steps))+path.virtual_tail :
+                base.complete_offset+path.total;
+            auto delta = next-base.complete_offset;
+            auto offset = Operand::integer(delta); offset.negative_integer = std::int64_t(delta) < 0;
+            base = emit(Opcode::Index,IRType::I8,{base.operand,offset});
+            base.complete_class = cls; base.complete_offset = next;
+            base.nonnull = nonnull; base.parameter_object = parameter; return base;
+        }
         if (path.virtual_row) {
             if (parameter && parameter == active_function) {
                 base = lifecycle_address(sem.base_virtual_anchor(steps));
@@ -337,6 +352,7 @@ Value Procedural::field(Value base, EntityId e, unsigned steps, TypeId object)
     v.type = sem.entities[e].type;
     if (sem.field_fact(e).bit_field) v.bit_field = e;
     if (reference(v.type)) { v = load(Value(v.operand, IRType::Ptr, v.type, true)); v.type = sem.types[sem.entities[e].type].child; }
+    else if (sem.class_value(v.type)) v.complete_class = sem.types[v.type].entity;
     v.address = true; return v;
 }
 Value Procedural::binding(EntityId e)
@@ -357,6 +373,7 @@ Value Procedural::binding(EntityId e)
     if (object_addresses[e]) {
         Value value(Operand::value(object_addresses[e]),type(t),t,true);
         if (entity.kind == semantic::EntityKind::Parameter && sem.class_value(t)) value.parameter_object = e;
+        if (sem.class_value(t)) value.complete_class = sem.types[t].entity;
         return value;
     }
     if (sem.nonstatic_field(e)) {
@@ -390,6 +407,7 @@ Value Procedural::binding(EntityId e)
     IRType ir = sem.types[t].kind == TypeKind::Array ? IRType(IRType::Ptr) : type(t);
     Value result(location, ir, t, true);
     if (entity.kind == semantic::EntityKind::Parameter && sem.class_value(t)) result.parameter_object = e;
+    if (sem.class_value(t)) result.complete_class = sem.types[t].entity;
     result.member_zero_adjustment = sem.member_pointer_zero_adjustment(e); return result;
 }
 BlockId Procedural::block() { return builder->block(0); }

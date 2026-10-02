@@ -275,8 +275,7 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     }
     // Use source spellings for both declaration kinds. SymbolId and the
     // collision allocator still own identity; native ABI names remain separate.
-    std::string display = "@" + name;
-    for (char& c : display) if (c != '@' && c != '_' && !(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z') && !(c >= '0' && c <= '9')) c = '_';
+    std::string display = display_symbol(id,base || base_only);
     // These spellings imply singleton roles in the explicit LowIR adapter.
     // A namespace/member function named main still has no entry role. Keep
     // its presentation unambiguous without changing its typed identity or ABI.
@@ -415,6 +414,18 @@ Procedural::Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& i
       symbols(s.entities.size()), strings(a.nodes.size()), base_symbols(s.entities.size()), objects(s.entities.size()), object_addresses(s.entities.size()), labels(a.nodes.size()), control_entries(a.nodes.size()) {
     virtual_signatures.resize(s.member_count()); vtables.resize(s.virtual_class_count());
     deleting_symbols.resize(s.member_count());
+    // One presentation census over canonical declarations. Redeclarations
+    // already share EntityId; neither demand order nor ABI-entry cloning can
+    // renumber an overload. This table is never used for semantic lookup.
+    display_ordinals.resize(s.entities.size());
+    semantic::Index counts;
+    for (EntityId e = 1; e < s.entities.size(); ++e) {
+        const auto& entity = s.entities[e];
+        if (entity.kind != semantic::EntityKind::Function) continue;
+        auto key = (std::uint64_t(entity.owner) << 32) | entity.name;
+        auto ordinal = counts.get(key)+1; counts.put(key,ordinal);
+        display_ordinals[e] = ordinal;
+    }
 }
 void Procedural::run()
 {
@@ -600,7 +611,10 @@ void Procedural::function_body(EntityId e, bool base)
     else if (!function_try && sem.constructor_member(e)) constructor_body(e,active_base_entry);
     if (!function_try && sem.destructor_member(e)) {
         destructor_prologue(e);
-        vpointer_store(sem.scopes[sem.entities[e].owner].entity);
+        // The semantic destructor-effect fact includes body, subobjects and
+        // virtual dispatch. An empty nonvirtual destruction cannot observe
+        // an intermediate vptr; its required ABI body still gets emitted.
+        if (linkage.presentation || sem.destructor_needed(e)) vpointer_store(sem.scopes[sem.entities[e].owner].entity);
     }
     mark_control_entries(sem.entities[e].body);
     constructor_block_boundary = p.block_order.size();

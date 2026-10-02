@@ -25,6 +25,8 @@ struct Value {
     IRType ir;
     TypeId type = 0, normalized_integer = 0;
     EntityId bit_field = 0, parameter_object = 0;
+    EntityId complete_class = 0;
+    std::uint64_t complete_offset = 0;
     std::uint64_t init_offset = 0;
     bool address = false, cached = false, nonnull = false, member_zero_adjustment = false;
     bool initializing = false, overlapping = false;
@@ -81,6 +83,9 @@ class Procedural {
     semantic::Index abi_support_symbols;
     std::vector<unsigned char> internal_scopes, internal_entities, local_abi_scopes, local_abi_types;
     std::vector<SymbolId> symbols, strings, base_symbols;
+    std::vector<unsigned> display_ordinals;
+    std::string display_scope(semantic::ScopeId);
+    std::string display_symbol(EntityId, bool base);
     std::vector<SlotId> objects;
     std::vector<lowir_model::ValueId> object_addresses;
     semantic::Index string_index;
