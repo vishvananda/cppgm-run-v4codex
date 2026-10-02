@@ -3,6 +3,7 @@
 #include "lowir/ordinary_flow.h"
 #include "lowir/inline_policy.h"
 #include "lowir/call_effects.h"
+#include "lowir/loop_simplify.h"
 #include <chrono>
 #include <iostream>
 #include <sys/resource.h>
@@ -54,6 +55,11 @@ void optimize(Program& p, unsigned level, bool telemetry)
     simplify_scalars(p,work);
     eliminate_local_expressions(p,call_cycles,work,true,&dataflow);
     simplify_scalars(p,work,&dataflow);
+    LoopStats loops;
+    if (simplify_loops(p,level,work,loops)) {
+        simplify_control(p,work);
+        simplify_scalars(p,work);
+    }
     simplify_diamond_values(p,work);
     bypass_empty_jumps(p,work);
     simplify_control(p,work);
@@ -72,6 +78,11 @@ void optimize(Program& p, unsigned level, bool telemetry)
             << ",\"split_objects\":" << p.stats.split_objects
             << ",\"split_fields\":" << p.stats.split_fields
             << ",\"split_growth_reserved\":" << p.stats.split_growth_reserved
+            << ",\"loop_candidates\":" << loops.candidates
+            << ",\"loops_removed\":" << loops.removed
+            << ",\"loops_unrolled\":" << loops.unrolled
+            << ",\"loop_clone_reserved\":" << loops.cloned
+            << ",\"loops_declined\":" << loops.declined
             << ",\"optimize_peak_rss_kib\":" << usage.ru_maxrss << "}\n";
     }
 }

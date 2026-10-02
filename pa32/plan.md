@@ -9,6 +9,20 @@ that inventory, findings and evidence. Implementation 211 entered at
 `2e1238dc`, with 178/219 course cases. The preceding turn was progress (completed
 checkpoint audit); entry process inspection found no live build to resume.
 
+Implementation 212 entered at `a7fe2af07e6d1a80942a10df46750830af021a2d`,
+190/219 required course cases (29 failures), clean tree and no live build.
+Previous turn: progress, the committed private-storage handoff. The stage-base
+and last-reviewed markers above remain unchanged. Current work groups the
+remaining finite-loop deletion, pointer fill and bounded unroll fixtures under
+one function-local loop owner: typed CFG/def-use -> entry/latch/exit and
+induction proof -> effect/profitability check -> transactional rewrite -> shared
+scalar/CFG cleanup. Work and growth reservations precede mutation; unknown
+termination, mutable values and EH retain conservative input. Validation will
+include executed zero/one/many-trip, overflow, volatile/alias and parallel-phi
+reducers, unchanged course/debug/replay checks, and frozen A/A + ABBA
+compiler wall/RSS and executable runtime/text measurements. External-memory
+numbering and source/debug identity remain separate unfinished owners.
+
 ## Design/spec alignment and completed owners
 
 Source -> shared typed LowIR -> optimizer -> text view or native MIR/direct ELF.
