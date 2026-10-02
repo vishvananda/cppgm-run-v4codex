@@ -11,7 +11,7 @@ bool Analyzer::check_default_constructor(EntityId e)
 bool Analyzer::default_constructor_valid(EntityId e)
 {
     auto m = entities[e].member_info;
-    if (!m || !members[m].constructor || transfer_member(e) || members[m].inherited_constructor || !members[m].synthetic)
+    if (!m || !members[m].constructor || transfer_member(e) || !members[m].synthetic)
         return true;
     auto state = members[m].default_properties;
     if (state == BooleanFact::True || state == BooleanFact::False) return true;
@@ -26,7 +26,9 @@ bool Analyzer::default_constructor_valid(EntityId e)
         auto scope = entities[cls].scope;
         auto info = entities[cls].class_info;
         bool valid = true;
-        bool trivial = !members[m].defaulted_late && !dynamic_class(cls), const_default = true;
+        auto inherited = members[m].inherited_constructor;
+        bool trivial = !inherited && !members[m].defaulted_late && !dynamic_class(cls), const_default = true;
+        if (inherited) valid = !deleted_transfer(inherited) && default_constructor_valid(inherited);
         auto subobject = [&](TypeId type, bool initialized, bool variant, bool mutable_field) {
             while (types[type].kind == TypeKind::Array) type = types[type].child;
             if (!default_destruction_valid(type,scope)) { valid = false; return; }
@@ -50,8 +52,13 @@ bool Analyzer::default_constructor_valid(EntityId e)
                 !const_child))
                 valid = false;
         };
-        for (auto b = class_facts[info].first_base; b; b = bases[b].next)
-            subobject(entities[bases[b].base].type,false,false,false);
+        for (auto b = class_facts[info].first_base; b; b = bases[b].next) {
+            // The inherited target initializes its own base. Only the other
+            // subobjects require default initialization; check their deletion
+            // and destruction here without demanding constructor bodies.
+            bool initialized = inherited && bases[b].base == scopes[entities[inherited].owner].entity;
+            subobject(entities[bases[b].base].type,initialized,false,false);
+        }
         bool has_variant = false, all_const = true;
         for (auto d = scopes[scope].first_decl; d; d = declarations[d].next) {
             auto field = declarations[d].entity;

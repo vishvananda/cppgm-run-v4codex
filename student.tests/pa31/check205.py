@@ -31,7 +31,8 @@ for name, stems in [('global-defined', ['global-defined']),
                     ('allocation', ['allocation-client','allocation-second','allocation-provider']),
                     ('vbase', ['vbase-complete','vbase-derived']),
                     ('list-exceptions', ['list-exceptions']),
-                    ('inherited-default', ['inherited-default'])]:
+                    ('inherited-default', ['inherited-default']),
+                    ('inherited-traits', ['inherited-traits'])]:
     exe = out / name
     run(['g++', *(objs[s] for s in stems), '-o', exe]); run([exe])
 for stem, kind in [('global-defined','R_X86_64_PC32'), ('global-import','R_X86_64_GOTPCREL')]:
