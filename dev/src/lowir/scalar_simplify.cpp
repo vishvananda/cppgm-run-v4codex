@@ -46,7 +46,28 @@ class Scalars {
         }
         return i.result_type() == Type::Ptr && (a.kind == Operand::Symbol || a.kind == Operand::Null);
     }
-    bool evaluate(const Instruction& i, Operand& out) {
+    void reassociate(Instruction& i) {
+        if (i.opcode != Opcode::Binary || !i.type.integer() || args[0].kind != Operand::Temporary ||
+            args[1].kind != Operand::Integer) return;
+        if (i.operation != Operation::Add && i.operation != Operation::Mul && i.operation != Operation::And &&
+            i.operation != Operation::Or && i.operation != Operation::Xor) return;
+        const auto& v = facts[locals.get(args[0].ref)];
+        if (v.definitions != 1 || !v.instruction || !v.users || uses[v.users].next) return;
+        const auto& inner = p.instructions[body[v.instruction-1]];
+        if (inner.opcode != i.opcode || inner.operation != i.operation || inner.type != i.type) return;
+        auto root = resolve(p.operands[inner.operands.begin]);
+        auto constant = resolve(p.operands[inner.operands.begin+1]);
+        if (constant.kind != Operand::Integer) return;
+        // Moving a read to the outer expression requires a stable value;
+        // a mutable input may have changed since the inner expression ran.
+        if (root.kind == Operand::Temporary && !alias(i,root)) return;
+        Operand inputs[] = {constant,args[1]}, combined;
+        if (!fold_integer(i,inputs,combined)) return;
+        args[0] = root; args[1] = combined;
+        p.operands[i.operands.begin] = root; p.operands[i.operands.begin+1] = combined;
+    }
+    bool evaluate(Instruction& i, Operand& out) {
+        reassociate(i);
         if (fold_integer(i,args.data(),out)) return true;
         auto a = args.empty() ? Operand() : args[0];
         if ((i.opcode == Opcode::Copy || (i.opcode == Opcode::Convert && i.type == i.source_type)) && alias(i,a)) { out = a; return true; }
@@ -64,6 +85,18 @@ class Scalars {
             if (alias(i,a)) { out = a; return true; }
         }
         if (i.opcode == Opcode::Compare && i.type.integer()) {
+            auto zero = [&](Operand v) { return v.kind == Operand::Integer &&
+                !normalize_integer(v,i.type).data.integer && !normalize_integer(v,i.type).integer_high(); };
+            if ((zero(args[1]) && (i.operation == Operation::Ult || i.operation == Operation::Uge)) ||
+                (zero(a) && (i.operation == Operation::Ugt || i.operation == Operation::Ule))) {
+                out = Operand::integer(i.operation == Operation::Uge || i.operation == Operation::Ule); return true;
+            }
+            if (a.kind == Operand::Temporary && p.values[a.ref-1].truth && args[1].kind == Operand::Integer) {
+                auto b = normalize_integer(args[1],i.type);
+                bool identity = (i.operation == Operation::Ne && !b.data.integer && !b.integer_high()) ||
+                    (i.operation == Operation::Eq && b.data.integer == 1 && !b.integer_high());
+                if (identity && alias(i,a)) { out = a; return true; }
+            }
             if (same_scalar(a,args[1])) {
                 bool yes = i.operation == Operation::Eq || i.operation == Operation::Le || i.operation == Operation::Ge ||
                     i.operation == Operation::Ule || i.operation == Operation::Uge;

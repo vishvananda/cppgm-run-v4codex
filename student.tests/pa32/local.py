@@ -48,7 +48,15 @@ case(' %a = copy i8 255\n %result = copy i64 %a','i64',-1)
 case(' %a = convert zext i128 i64 -1\n %b = binary add i128 %a, 2\n %result = binary ushr i128 %b, 64','i128',1)
 case(' %x = const i64 3\n %y = copy i64 %x\n %x = const i64 4\n %result = binary add i64 %x, %y','i64',7)
 case(' %x = const i128 1\n %saved = copy i128 %x\n %x = const i128 18446744073709551616\n %result = binary sub i128 %x, %saved','i128',18446744073709551615)
-functions.append('''function @phi_test() -> i64 {
+case(' %result = call u8 @reassociate(200)','u8',64)
+case(' %x = const i64 1\n %a = binary add i64 %x, 10\n %x = const i64 2\n %result = binary add i64 %a, 20','i64',31)
+functions.append('''function @reassociate(%x : u8) -> u8 {
+ block ^entry:
+  %a = binary add u8 %x, 100
+  %b = binary add u8 %a, 20
+  return u8 %b
+}
+function @phi_test() -> i64 {
  block ^entry:
   jump ^loop
  block ^loop:
