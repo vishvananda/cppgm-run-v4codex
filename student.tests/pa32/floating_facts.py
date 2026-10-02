@@ -31,6 +31,18 @@ with tempfile.TemporaryDirectory(prefix='pa32-floating-') as d:
   run(root/'dev/cppgm++','-O0','-o',t/'replay',out);run(t/'replay')
   if level:
    text=out.read_text();assert 'return i64 1' in text
+ # Extended formats use the host object path for their runtime support.
+ extended=t/'extended.lowir';extended.write_text("""function @main() -> i64 [role=entry] { block ^entry:
+ %h = const f16 2049.0 %hc = cmp ne f16 %h, 2048.0
+ %q = const f128 1.0000000000000000000000000000000002
+ %qc = cmp eq f128 %q, 1.0
+ %i = convert sitofp f128 i64 17 %ic = cmp ne f128 %i, 17.0
+ %b = binary or i64 %hc, %qc %r = binary or i64 %b, %ic return i64 %r }
+""")
+ for level in range(4):
+  run(root/'dev/cppgm++',f'-O{level}','-o',t/'extended',extended);run(t/'extended')
+  run(root/'dev/lowiropt',f'-O{level}','-o',t/'extended-opt.lowir',extended)
+  run(root/'dev/cppgm++','-O0','-o',t/'extended',t/'extended-opt.lowir');run(t/'extended')
  # Observable rounding and exception flags remain runtime operations when
  # their fold would require an assumption about the dynamic environment.
  ir=t/'environment.lowir';ir.write_text('''function @rounded() -> f32 [linkage=c, no_inline=yes] { block ^entry:
