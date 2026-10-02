@@ -1,0 +1,25 @@
+{
+  "pa30/tests/compile/600-random-to-address-qualified-call.t": {
+    "source_sha256": "5961616750a03aec317d0a9f1d23bc0be54d8c2b51c1f7ab32408f0812f51cc6",
+    "actual": "EXIT_FAILURE\n",
+    "diagnostic": "ERROR: unknown expression name: __builtin_ia32_packsswb\n"
+  },
+  "pa30/tests/compile/700-hosted-random-mersenne-rshift-compile.t": {
+    "source_sha256": "f60ba77c046deaa6148b5671b58c72f498c195ddb832004a7b735de0705a195a",
+    "actual": "EXIT_FAILURE\n",
+    "diagnostic": "ERROR: unknown expression name: __builtin_ia32_packsswb\n"
+  },
+  "student.tests/pa30/pending199/vector-subscript.cpp": {
+    "args": [
+      "dev/cppgm++",
+      "-c",
+      "student.tests/pa30/pending199/vector-subscript.cpp",
+      "-o",
+      "/tmp/pa30-201/pending.o"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "ERROR: invalid subscript\n",
+    "source_sha256": "2506e9ee4aad6cec040722969f2c2a398eba4e5aece3e4852888ddf9ae7db318"
+  }
+}

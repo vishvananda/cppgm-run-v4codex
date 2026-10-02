@@ -1,0 +1,1 @@
+void f(){struct A{int x; int g(int y=[this]{return x;}()){return y;}};A a; a.g();}
