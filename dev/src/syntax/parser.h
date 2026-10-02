@@ -55,6 +55,7 @@ private:
     NameProbe probe_name(std::size_t ahead = 0);
     std::size_t probe_angles(std::size_t ahead);
     std::size_t probe_type(std::size_t ahead, bool* split_end = 0);
+    bool abstract_pointer_ahead(std::size_t ahead);
     bool type_operand(bool function_type = false);
     bool special_ahead();
     bool deduction_guide_ahead();

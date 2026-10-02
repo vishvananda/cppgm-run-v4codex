@@ -35,6 +35,11 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
   now extend an existing function emission order. The seed's native crash was
   an out-of-bounds schedule read, exposed by constant.cpp/resolved_output.cpp.
   The typed order/validator control and direct/replay O0/O3 runtime checks pass.
+- Fixed PA5 expression/type-id prediction: `word(*p)` is functional construction,
+  not an abstract pointer declarator. A declarator-id disambiguates the operand
+  under [expr.type.conv], [expr.cast] and [dcl.name]; functional-pointer.cpp
+  passes AST and O0/O3 execution including pointer/reference cast controls.
+  The original lowering/cleanup.cpp source probe now compiles.
 - Continue each newly exposed self-build/test/object divergence at its earliest
   owner. Trace seed/self differences to object and source; probes are diagnostic.
 - Required order: file audit; `make test-report-through-pa33`; canonical
@@ -45,9 +50,9 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
 - Commit cohesive fixes and evidence, keep this ledger current, finish clean.
 
 Current evidence (`$RALPH_ARTIFACT_DIR/pa34-221`): file audit passes (four
-inherited warnings); host through PA33 5454/5454 after parser/trap/static/enum
-fixes. Canonical self PA1–PA4 pass (54/26/20/105 tests). PA5 build exposed the
-now-fixed mixed-auto source and helper schedule bugs. Native debug checks,
-fresh host regression and the canonical self ladder are running. Inception remains
+inherited warnings); host through PA33 5454/5454 and native debug 11/11 after
+the helper schedule fix. Canonical self PA1–PA4 pass (54/26/20/105 tests).
+PA5 build next exposed the now-fixed cleanup.cpp parser ambiguity. Fresh host
+regression and canonical self ladder follow that fix. Inception remains
 unverified. Historical generated IR was gzip-compressed to reclaim 840 MiB;
 its contents and measurement records are preserved.

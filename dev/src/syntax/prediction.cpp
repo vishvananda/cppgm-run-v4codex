@@ -161,13 +161,32 @@ std::size_t Parser::probe_type(std::size_t ahead, bool* split_end)
     }
 }
 
+bool Parser::abstract_pointer_ahead(std::size_t ahead)
+{
+    if (!in.is("(",ahead)) return false;
+    ++ahead;
+    bool pointer = false;
+    for (;;) {
+        if (in.is("(",ahead) || in.is("const",ahead) || in.is("volatile",ahead)) ++ahead;
+        else if (in.is("*",ahead) || in.is("^",ahead) || in.is("&",ahead) || in.is("&&",ahead)) {
+            pointer = true; ++ahead;
+        } else if (identifier(ahead) && in.is("::",probe_name(ahead).end) && in.is("*",probe_name(ahead).end+1)) {
+            pointer = true; ahead = probe_name(ahead).end+2;
+        } else if (in.is("__attribute__",ahead) || in.is("__attribute",ahead)) ahead = in.matching(ahead+1)+1;
+        else break;
+    }
+    // A type-id has no declarator-id. T(*value) is functional construction,
+    // whereas T(*)(int) and T(&)[3] contain abstract pointer declarators.
+    return pointer && (in.is(")",ahead) || in.is("[",ahead));
+}
+
 bool Parser::type_operand(bool function_type)
 {
     if (!type_start()) return false;
     std::size_t end = probe_type(0);
     if (in.is("{",end)) return false;
     // Function-style construction is an expression in unary/trait contexts.
-    if (in.is("(", end) && !in.is("*", end + 1) && !in.is("^", end + 1) && !in.is("&", end + 1)) {
+    if (in.is("(", end) && !abstract_pointer_ahead(end)) {
         if (!function_type || !parameter_clause_ahead(end)) return false;
         auto after = in.matching(end)+1;
         while (in.is("const",after) || in.is("volatile",after) || in.is("&",after) || in.is("&&",after)) ++after;

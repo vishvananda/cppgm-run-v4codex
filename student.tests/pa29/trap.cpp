@@ -2,6 +2,9 @@
 #if !__has_builtin(__builtin_trap)
 #error implemented builtin must be advertised
 #endif
+#if __has_builtin(__builtin_not_implemented_here)
+#error unknown builtin must not be advertised
+#endif
 static_assert(noexcept(__builtin_trap()), "trap cannot unwind");
 template<class T> struct box {
     struct empty {
