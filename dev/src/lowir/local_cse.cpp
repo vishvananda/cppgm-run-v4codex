@@ -1,4 +1,5 @@
 #include "lowir/folding.h"
+#include "lowir/ordinary_flow.h"
 #include <algorithm>
 namespace lowir_model {
 namespace {
@@ -46,37 +47,113 @@ void canonicalize(Program& p, Instruction& i) {
     if (swap || (commute && less(p,b,a))) std::swap(a,b);
 }
 }
+namespace {
+struct SavedBucket { unsigned bucket, value; };
+void expressions(Program& p, BlockId block, const std::vector<unsigned>& definitions,
+    std::vector<unsigned>& table, std::vector<SavedBucket>& undo, std::uint64_t& budget, std::uint64_t& work)
+{
+    auto r = p.blocks[block.index-1].instructions;
+    for (unsigned n = r.begin; n < r.end() && budget; ++n) {
+        auto& i = p.instructions[n]; ++work; --budget;
+        bool eligible = i.opcode == Opcode::Addr || i.opcode == Opcode::Index ||
+            ((i.opcode == Opcode::Binary || i.opcode == Opcode::Unary || i.opcode == Opcode::Compare || i.opcode == Opcode::Convert) && discardable(i));
+        if (!eligible || definitions[i.destination.index] != 1) continue;
+        for (unsigned j = i.operands.begin; j < i.operands.end(); ++j) {
+            auto a = p.operands[j];
+            eligible &= a.kind != Operand::Floating && (a.kind != Operand::Temporary || definitions[a.ref] == 1);
+        }
+        if (!eligible) continue;
+        canonicalize(p,i); unsigned bucket = key(p,i)&(table.size()-1);
+        while (table[bucket] && budget) {
+            --budget; ++work;
+            const auto& previous = p.instructions[table[bucket]-1];
+            if (equal(p,i,previous) && p.values[previous.destination.index-1].definition < p.values[i.destination.index-1].definition) {
+                p.operands[i.operands.begin] = Operand::value(previous.destination);
+                i.type = i.result_type(); i.opcode = Opcode::Copy; i.source_type = Type();
+                i.operation = Operation::None; i.operands.count = 1; break;
+            }
+            bucket = (bucket+1)&(table.size()-1);
+        }
+        if (!table[bucket]) { undo.push_back({bucket,0}); table[bucket] = n+1; }
+    }
+}
+void order_definitions(Program& p, Function& f, const OrdinaryFlow& flow,
+    const std::vector<unsigned>& definitions, std::uint64_t& work)
+{
+    // RPO serializes each dominating definition before its ordinary uses.
+    // LowIR permits mutable and merely source-ordered temporaries too: keep
+    // their original schedule unless this SSA dominance proof succeeds.
+    cppgm::IdIndex owners;
+    for (unsigned b = 1; b < flow.blocks.size(); ++b) {
+        auto r = p.blocks[flow.blocks[b].index-1].instructions;
+        for (unsigned n = r.begin; n < r.end(); ++n) {
+            auto v = p.instructions[n].destination; ++work;
+            if (!v) continue;
+            if (definitions[v.index] != 1) return;
+            owners.put(v.index,b);
+        }
+    }
+    for (unsigned b : flow.rpo) {
+        auto r = p.blocks[flow.blocks[b].index-1].instructions;
+        for (unsigned n = r.begin; n < r.end(); ++n) {
+            const auto& i = p.instructions[n]; if (i.opcode == Opcode::Phi) continue;
+            for (unsigned k = i.operands.begin; k < i.operands.end(); ++k) {
+                auto a = p.operands[k]; ++work;
+                if (a.kind != Operand::Temporary) continue;
+                unsigned owner = owners.get(a.ref);
+                if (definitions[a.ref] != 1 || (owner && !flow.dominates(owner,b))) return;
+            }
+        }
+    }
+    unsigned next = f.blocks.begin;
+    for (unsigned b : flow.rpo) p.block_order[next++] = flow.blocks[b];
+    for (unsigned b = 1; b < flow.blocks.size(); ++b) if (!flow.enter[b]) p.block_order[next++] = flow.blocks[b];
+    unsigned ordinal = 0;
+    for (unsigned n = f.blocks.begin; n < f.blocks.end(); ++n) {
+        auto r = p.blocks[p.block_order[n].index-1].instructions;
+        for (unsigned k = r.begin; k < r.end(); ++k) {
+            auto v = p.instructions[k].destination; ++ordinal;
+            if (v) p.values[v.index-1].definition = ordinal;
+        }
+    }
+}
+}
 void eliminate_local_expressions(Program& p, std::uint64_t& work)
 {
     std::vector<unsigned> definitions(p.values.size()+1);
     for (const auto& a : p.parameters) ++definitions[a.value.index];
     for (const auto& i : p.instructions) if (i.destination) ++definitions[i.destination.index];
-    for (auto bid : p.block_order) {
-        auto r = p.blocks[bid.index-1].instructions;
-        unsigned size = 8; while (size < 2*r.count) size *= 2;
-        std::vector<unsigned> table(size); std::uint64_t budget = 16*(std::uint64_t(r.count)+1);
-        for (unsigned n = r.begin; n < r.end() && budget; ++n) {
-            auto& i = p.instructions[n]; ++work; --budget;
-            bool eligible = i.opcode == Opcode::Addr || i.opcode == Opcode::Index ||
-                ((i.opcode == Opcode::Binary || i.opcode == Opcode::Unary || i.opcode == Opcode::Compare || i.opcode == Opcode::Convert) && discardable(i));
-            if (!eligible || definitions[i.destination.index] != 1) continue;
-            for (unsigned j = i.operands.begin; j < i.operands.end(); ++j) {
-                auto a = p.operands[j];
-                eligible &= a.kind != Operand::Floating && (a.kind != Operand::Temporary || definitions[a.ref] == 1);
-            }
-            if (!eligible) continue;
-            canonicalize(p,i); unsigned bucket = key(p,i)&(size-1);
-            while (table[bucket] && budget) {
-                --budget; ++work;
-                const auto& previous = p.instructions[table[bucket]-1];
-                if (equal(p,i,previous)) {
-                    p.operands[i.operands.begin] = Operand::value(previous.destination);
-                    i.type = i.result_type(); i.opcode = Opcode::Copy; i.source_type = Type();
-                    i.operation = Operation::None; i.operands.count = 1; break;
+    for (auto& f : p.functions) if (!f.declaration) {
+        OrdinaryFlow flow(p,f,work);
+        if (flow.dominance(work)) {
+            order_definitions(p,f,flow,definitions,work);
+            unsigned size = 8; while (size < 2*flow.size) size *= 2;
+            std::vector<unsigned> table(size); std::vector<SavedBucket> undo;
+            std::uint64_t budget = 16*(flow.size+1);
+            struct Scope { unsigned child, mark; };
+            std::vector<Scope> scopes;
+            expressions(p,flow.blocks[1],definitions,table,undo,budget,work);
+            scopes.push_back({flow.first_child[1],0});
+            while (!scopes.empty()) {
+                auto& scope = scopes.back();
+                if (scope.child) {
+                    unsigned child = scope.child; scope.child = flow.next_child[child];
+                    unsigned mark = undo.size();
+                    expressions(p,flow.blocks[child],definitions,table,undo,budget,work);
+                    scopes.push_back({flow.first_child[child],mark});
+                } else {
+                    while (undo.size() > scope.mark) { auto saved = undo.back(); undo.pop_back(); table[saved.bucket] = saved.value; }
+                    scopes.pop_back();
                 }
-                bucket = (bucket+1)&(size-1);
             }
-            if (!table[bucket]) table[bucket] = n+1;
+        } else {
+            for (unsigned n = f.blocks.begin; n < f.blocks.end(); ++n) {
+                auto b = p.block_order[n]; auto r = p.blocks[b.index-1].instructions;
+                unsigned size = 8; while (size < 2*r.count) size *= 2;
+                std::vector<unsigned> table(size); std::vector<SavedBucket> undo;
+                std::uint64_t budget = 16*(std::uint64_t(r.count)+1);
+                expressions(p,b,definitions,table,undo,budget,work);
+            }
         }
     }
 }

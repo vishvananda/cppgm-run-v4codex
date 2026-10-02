@@ -12,9 +12,17 @@ void optimize(Program& p, unsigned level, bool telemetry)
     std::uint64_t work = 0;
     forward_local_slots(p,work);
     simplify_scalars(p,work);
+    promote_scalar_slots(p,work);
+    simplify_scalars(p,work);
     eliminate_local_expressions(p,work);
     simplify_control(p,work);
     forward_local_slots(p,work);
+    simplify_scalars(p,work);
+    eliminate_local_expressions(p,work);
+    propagate_edge_facts(p,work);
+    simplify_scalars(p,work);
+    bypass_empty_jumps(p,work);
+    simplify_control(p,work);
     simplify_scalars(p,work);
     if (telemetry) {
         rusage usage; getrusage(RUSAGE_SELF,&usage);

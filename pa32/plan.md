@@ -42,6 +42,29 @@ a conservative bound is 512*(I+O+V+B+S+P) bytes beyond Program pools.
 
 ## Remaining implementation groups and boundary
 
+Loop 208 in progress (entry HEAD `399faac3130eee32004cfddbd7fc07df866693da`,
+110/219 passing, 109 existing failures). First owner: function-local sparse
+slot definitions and ordinary CFG edges, feeding typed copies/phis into scalar
+and control simplification. Demand only block/slot pairs needed by loads; cap
+work and phi operands linearly in input size, retain original slots on missing
+initialization, exceptional uncertainty or budget exhaustion. Preserve mutable
+value snapshots, store conversions, volatile/escaped storage, handler roots and
+debug locations. Extend through related CFG propagation/cleanup while those
+same facts support it. Validate direct O1/O2 slot/edge fixtures, execution
+reducers, serialized object/debug lanes, and frozen baseline/current wall/RSS/
+runtime/text measurements. Interprocedural and aggregate alias facts remain
+separate owners. This entry records implementation intent, not completion.
+
+208 increment: sparse typed slot snapshots/phis, conservative exceptional roots,
+transactional phi-aware empty-jump bypass, bounded dirty dominance facts and
+dominator-scoped CSE/zero-nonzero branch facts are implemented. Two scheduled
+CSE sweeps consume newly exposed CFG facts; no whole-pipeline fixed point.
+Current check: **125/219**, 94 failures (15 pre-existing failures removed).
+Explicit `dataflow.py`: 101 cases at four levels through both native paths,
+EH direct/replay and conservative guards; inherited `local.py`: 506 cases at
+four levels. File audit passes with the same four inherited warnings. Frozen
+baseline/current performance experiment is running; profitability is unproven.
+
 1. CFG/dataflow: dominance, cross-block slot/phi promotion and memory/alias/
    lifetime facts, including exceptional edges. Validate with remaining direct
    O1/O2 branch, slot, alias, aggregate and EH predicates plus execution controls.

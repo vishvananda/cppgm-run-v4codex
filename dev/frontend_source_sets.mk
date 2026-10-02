@@ -268,3 +268,12 @@ FRONTEND_OBJ_BASENAMES_lowiropt += lowir/local_cse
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/local_cse
 
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/debug_location
+
+FRONTEND_OBJ_BASENAMES_lowiropt += lowir/slot_promotion
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/slot_promotion
+FRONTEND_OBJ_BASENAMES_lowiropt += lowir/jump_bypass
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/jump_bypass
+FRONTEND_OBJ_BASENAMES_lowiropt += lowir/ordinary_flow
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/ordinary_flow
+FRONTEND_OBJ_BASENAMES_lowiropt += lowir/edge_facts
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/edge_facts
