@@ -1,157 +1,33 @@
-// Student-facing scaffold for the PA32 `lowiropt` binary.
-
-#include "support/not_implemented.h"
+// PA32 text adapter. Production paths share the typed optimizer directly.
+#include "lowir/optimizer.h"
 #include "support/tool_help_text.h"
-
+#include <fstream>
 #include <iostream>
-#include <stdexcept>
-#include <string>
-#include <vector>
-
-using namespace std;
-
-namespace {
-
-struct LowIROptInvocation
+int main(int argc, char** argv)
 {
-  bool has_optimization_level = false;
-  int optimization_level = 0;
-  string outfile;
-  vector<string> inputs;
-};
-
-vector<string> collect_args(int argc, char ** argv)
-{
-  vector<string> args;
-  for(int i = 1; i < argc; ++i) {
-    args.push_back(argv[i]);
-  }
-  return args;
-}
-
-bool has_help_arg(const vector<string> & args)
-{
-  for(size_t i = 0; i < args.size(); ++i) {
-    if(args[i] == "--help" || args[i] == "-h") {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool has_batch_stdin_arg(const vector<string> & args)
-{
-  for(size_t i = 0; i < args.size(); ++i) {
-    if(args[i] == "--batch-stdin") {
-      return true;
-    }
-  }
-  return false;
-}
-
-int run_not_implemented_batch_mode()
-{
-  string line;
-  while(getline(cin, line)) {
-    (void)line;
-    cout << "EXIT_NOT_IMPLEMENTED" << endl;
-  }
-  return EXIT_SUCCESS;
-}
-
-bool is_optimization_level(const string & arg, int & level)
-{
-  if(arg == "-O0") {
-    level = 0;
-    return true;
-  }
-  if(arg == "-O1") {
-    level = 1;
-    return true;
-  }
-  if(arg == "-O2") {
-    level = 2;
-    return true;
-  }
-  return false;
-}
-
-bool starts_with_dash(const string & arg)
-{
-  return !arg.empty() && arg[0] == '-';
-}
-
-LowIROptInvocation parse_lowiropt_invocation(const vector<string> & args)
-{
-  LowIROptInvocation invocation;
-
-  for(size_t i = 0; i < args.size(); ++i) {
-    int optimization_level = 0;
-    if(is_optimization_level(args[i], optimization_level)) {
-      if(invocation.has_optimization_level) {
-        throw logic_error("multiple optimization levels provided");
-      }
-      invocation.has_optimization_level = true;
-      invocation.optimization_level = optimization_level;
-      continue;
-    }
-    if(args[i] == "-o") {
-      if(i + 1 >= args.size()) {
-        throw logic_error("missing output file after -o");
-      }
-      if(!invocation.outfile.empty()) {
-        throw logic_error("multiple output files provided");
-      }
-      invocation.outfile = args[++i];
-      continue;
-    }
-    if(starts_with_dash(args[i])) {
-      throw logic_error("unknown option: " + args[i]);
-    }
-    invocation.inputs.push_back(args[i]);
-  }
-
-  if(!invocation.has_optimization_level ||
-     invocation.outfile.empty() ||
-     invocation.inputs.empty()) {
-    throw logic_error("invalid usage");
-  }
-
-  return invocation;
-}
-
-int run_lowiropt_mode(const vector<string> & args)
-{
-  if(has_batch_stdin_arg(args)) {
-    return run_not_implemented_batch_mode();
-  }
-
-  if(has_help_arg(args)) {
-    cout << lowiropt_help_text();
-    return EXIT_SUCCESS;
-  }
-
-  const LowIROptInvocation invocation = parse_lowiropt_invocation(args);
-  (void)invocation;
-  throw NotImplementedException();
-}
-
-}  // namespace
-
-int main(int argc, char ** argv)
-{
-  try
-  {
-    return run_lowiropt_mode(collect_args(argc, argv));
-  }
-  catch(const NotImplementedException & e)
-  {
-    cerr << "ERROR: " << e.what() << endl;
-    return CPPGM_EXIT_NOT_IMPLEMENTED;
-  }
-  catch(const exception & e)
-  {
-    cerr << "ERROR: " << e.what() << endl;
-    return EXIT_FAILURE;
-  }
+    try {
+        for (int n = 1; n < argc; ++n) if (std::string(argv[n]) == "--help" || std::string(argv[n]) == "-h") {
+            std::cout << lowiropt_help_text(); return 0;
+        }
+        int level = -1; bool stats = false;
+        std::string output; std::vector<std::string> inputs;
+        for (int n = 1; n < argc; ++n) {
+            std::string a = argv[n];
+            if (a.size() == 3 && a[0] == '-' && a[1] == 'O' && a[2] >= '0' && a[2] <= '3') {
+                lowir_model::require(level == -1,"multiple optimization levels"); level = a[2]-'0';
+            } else if (a == "-o") {
+                lowir_model::require(output.empty() && ++n < argc,"expected one output path"); output = argv[n];
+            } else if (a == "--stats") stats = true;
+            else if (!a.empty() && a[0] == '-') throw lowir_model::ParseError("unknown option: "+a);
+            else inputs.push_back(a);
+        }
+        lowir_model::require(level >= 0 && !output.empty() && !inputs.empty(),"expected level, -o and input files");
+        auto program = lowir_model::parse_lowir_program_files(inputs);
+        lowir_model::optimize(program,level,stats);
+        std::ofstream out(output,std::ios::binary);
+        lowir_model::require(bool(out),"cannot open output");
+        lowir_model::write_program(program,out); out.close();
+        lowir_model::require(bool(out),"cannot write output");
+        return 0;
+    } catch (const std::exception& e) { std::cerr << "ERROR: " << e.what() << '\n'; return 1; }
 }

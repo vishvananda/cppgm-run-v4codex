@@ -47,7 +47,7 @@ void Selector::promote_parameters()
                 if (i.opcode == Opcode::Load && k == 0) { if (!fact.stored) fact.escape = true; continue; }
                 if (i.opcode == Opcode::Store && k == 1 && b == source.blocks.begin && !fact.stored) {
                     auto from = arg(i,0);
-                    if (from.kind == lowir_model::Operand::Temporary && !p.values[from.ref-1].definition && p.values[from.ref-1].type == i.type) {
+                    if (from.kind == lowir_model::Operand::Temporary && state(from.ref).writes == 1 && !p.values[from.ref-1].definition && p.values[from.ref-1].type == i.type) {
                         fact.stored = from.ref; fact.position = n+1; continue;
                     }
                 }
@@ -60,6 +60,7 @@ void Selector::aliases()
 {
     for (unsigned id : definitions) {
         auto& v = state(id);
+        if (v.writes > 1) continue;
         const auto& i = p.instructions[v.definition-1];
         if (i.opcode == Opcode::Load && arg(i,0).kind == lowir_model::Operand::Slot) {
             const auto& slot = workspace.slot_facts[arg(i,0).ref];
@@ -72,14 +73,14 @@ void Selector::aliases()
             arg(i,0).kind == lowir_model::Operand::Temporary) {
             unsigned input = root(arg(i,0).ref);
             auto& origin = state(input);
-            if (origin.definition && p.instructions[origin.definition-1].opcode == Opcode::Compare) {
+            if (origin.writes == 1 && origin.definition && p.instructions[origin.definition-1].opcode == Opcode::Compare) {
                 v.alias = input; origin.converted_boolean = true;
             }
         }
         if (i.opcode != Opcode::Copy || arg(i,0).kind != lowir_model::Operand::Temporary) continue;
         Type from = value_type(arg(i,0),i.type);
         bool same = from == i.type || (from.width() == 64 && i.type.width() == 64 && scalar_integer(from) && scalar_integer(i.type));
-        if (same) v.alias = root(arg(i,0).ref);
+        if (same && state(root(arg(i,0).ref)).writes == 1) v.alias = root(arg(i,0).ref);
     }
 }
 void Selector::folds()
@@ -89,7 +90,7 @@ void Selector::folds()
     // Carrier intervals are extended through that consumer before placement.
     for (auto at = definitions.rbegin(); at != definitions.rend(); ++at) {
         auto& v = state(*at);
-        if (v.alias || !v.uses) continue;
+        if (v.alias || !v.uses || v.writes > 1) continue;
         const auto& definition = p.instructions[v.definition-1];
         if (definition.opcode == Opcode::Index && arg(definition,1).literal() && v.address_only) {
             v.folded_index = true;

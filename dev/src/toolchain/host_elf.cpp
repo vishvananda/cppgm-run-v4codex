@@ -66,7 +66,16 @@ HostElf::HostElf(Object&& obj) : ElfModule(Count,Strtab), mapping(obj.symbols.si
     for (const auto& u : obj.image.unwind) sizes[u.symbol] = obj.symbols[u.symbol].size = u.end-u.begin;
     place(obj);
     IdIndex exports;
-    for (unsigned i = 1; i < obj.symbols.size(); ++i) {
+    // Output order cannot depend on the source/reader's symbol insertion order.
+    // Compare interned spelling views only at this final emission boundary.
+    std::vector<unsigned> symbol_order;
+    for (unsigned i = 1; i < obj.symbols.size(); ++i) if (used[i] || obj.image.defined[i]) symbol_order.push_back(i);
+    std::stable_sort(symbol_order.begin(),symbol_order.end(),[&](unsigned a, unsigned b) {
+        auto x = obj.symbols[a].name ? obj.names.spelling(obj.symbols[a].name) : TextView("",0);
+        auto y = obj.symbols[b].name ? obj.names.spelling(obj.symbols[b].name) : TextView("",0);
+        return std::lexicographical_compare(x.data,x.data+x.size,y.data,y.data+y.size);
+    });
+    for (unsigned i : symbol_order) {
         if (!used[i] && !obj.image.defined[i]) continue;
         const auto& s = obj.symbols[i];
         auto binding = s.binding == ir_model::SBM_INTERNAL ? STB_LOCAL : s.binding == ir_model::SBM_WEAK ? STB_WEAK : STB_GLOBAL;

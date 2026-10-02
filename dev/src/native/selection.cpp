@@ -176,7 +176,8 @@ void Selector::select(const lowir_model::Instruction& i)
     }
     switch (i.opcode) {
     case Opcode::Const:
-        if (i.type.floating() || i.type == Type::I128) state(i.destination.index).location = value(arg(i,0),i.type);
+        if (state(i.destination.index).writes > 1) move(allocate(i.destination.index,i.type),value(arg(i,0),i.type),i.type);
+        else if (i.type.floating() || i.type == Type::I128) state(i.destination.index).location = value(arg(i,0),i.type);
         else require(scalar_integer(i.type), "native wide constant not implemented");
         break;
     case Opcode::Phi: break;
@@ -189,7 +190,8 @@ void Selector::select(const lowir_model::Instruction& i)
         Operand address = memory(arg(i,0)); address.address = true;
         // A constant symbol address never needs a spill home. When a control-
         // flow interval has no retained register, materialize at its consumers.
-        if (address.kind == Operand::Symbol && !state(i.destination.index).address_only && state(i.destination.index).uses &&
+        if (state(i.destination.index).writes > 1) move(allocate(i.destination.index,Type::Ptr),address,Type::Ptr);
+        else if (address.kind == Operand::Symbol && !state(i.destination.index).address_only && state(i.destination.index).uses &&
             (!state(i.destination.index).crosses_block || state(i.destination.index).single_edge)) {
             auto dest = allocate(i.destination.index,Type::Ptr);
             move(dest,address,Type::Ptr);
@@ -202,7 +204,8 @@ void Selector::select(const lowir_model::Instruction& i)
         if (i.type.floating() || value_type(arg(i,0),i.type).floating()) {
             convert_to(allocate(i.destination.index,i.type),src,value_type(arg(i,0),i.type),i.type); break;
         }
-        if (src.kind == Operand::Immediate) state(i.destination.index).location = Operand::imm(normalize(src.bits,i.type));
+        if (state(i.destination.index).writes > 1) move(allocate(i.destination.index,i.type),src,i.type);
+        else if (src.kind == Operand::Immediate) state(i.destination.index).location = Operand::imm(normalize(src.bits,i.type));
         else if (src.address) state(i.destination.index).location = src;
         else {
             auto dest = allocate(i.destination.index,i.type);

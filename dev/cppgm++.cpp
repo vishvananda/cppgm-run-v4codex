@@ -425,7 +425,8 @@ int run_emit_semantics_mode(const vector<string> & args)
 
 int run_emit_lowir_mode(const vector<string> & args)
 {
-  if (has_arg(args,"-c")) {
+  if (has_arg(args,"-c") || has_arg(args,"-g0") || has_arg(args,"-gline-tables-only") ||
+      has_arg(args,"-O1") || has_arg(args,"-O2") || has_arg(args,"-O3")) {
     auto hosted = args; hosted.push_back("--emit-lowir");
     return cppgm::toolchain::run(hosted);
   }

@@ -36,7 +36,9 @@ void compile_image(lowir_model::Program& p, Image& image, const std::vector<Inst
     auto time = Clock::now(); encode_data(p,image); encoder.startup(start); stats.encoding_ms += ms(time);
     auto live = image.host ? object_demand(p) : std::vector<bool>();
     if (mir) dump_header(p,start,*mir,image.defined[image.runtime_begin]);
-    for (const auto& source : p.functions) if (!source.declaration) {
+    for (unsigned ordinal = 0; ordinal < p.functions.size(); ++ordinal) {
+        const auto& source = p.functions[p.function_order.empty() ? ordinal : p.function_order[ordinal].index-1];
+        if (source.declaration) continue;
         if (image.host && !live[source.symbol.index]) continue;
         time = Clock::now();
         Function f = Selector(p,source,workspace,stats,image.host).run();

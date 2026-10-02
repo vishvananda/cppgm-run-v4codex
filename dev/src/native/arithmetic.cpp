@@ -146,7 +146,7 @@ void Selector::index(const lowir_model::Instruction& i)
     std::uint64_t scale = i.type.bytes();
     if (offset.kind == Operand::Immediate && base.address) {
         base.displacement += offset.bits*scale;
-        if (state(i.destination.index).address_only || base.kind == Operand::Symbol || base.reg == XR_RBP)
+        if (state(i.destination.index).writes == 1 && (state(i.destination.index).address_only || base.kind == Operand::Symbol || base.reg == XR_RBP))
             state(i.destination.index).location = base;
         else move(allocate(i.destination.index,Type::Ptr),base,Type::Ptr);
         return;

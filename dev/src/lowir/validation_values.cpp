@@ -72,8 +72,8 @@ void Validator::conversion(const Instruction& i, const Operand& o) const
     value(o, a);
     bool legal = false;
     switch (i.operation) {
-    case Operation::Sext: case Operation::Zext: legal = a.integer() && b.integer() && a.width() < b.width(); break;
-    case Operation::Trunc: legal = a.integer() && b.integer() && a.width() > b.width(); break;
+    case Operation::Sext: case Operation::Zext: legal = a.integer() && b.integer() && (a.width() < b.width() || a == b); break;
+    case Operation::Trunc: legal = a.integer() && b.integer() && (a.width() > b.width() || a == b); break;
     case Operation::Sitofp: case Operation::Uitofp: legal = a.integer() && b.floating(); break;
     case Operation::Fptosi: case Operation::Fptoui: legal = a.floating() && b.integer(); break;
     case Operation::Fpext: legal = a.floating() && b.floating() && a.width() < b.width(); break;

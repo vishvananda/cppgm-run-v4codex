@@ -5,6 +5,7 @@
 #include "toolchain/preprocess_output.h"
 #include "lowir/writer.h"
 #include "lowir/validator.h"
+#include "lowir/optimizer.h"
 #include <chrono>
 #include <iostream>
 #include <fstream>
@@ -31,6 +32,7 @@ std::string argument(const std::vector<std::string>& args, unsigned& i, const ch
 struct Options {
     bool compile = false, preprocess = false, stats = false, host = false;
     bool standard_includes = true, cxx_includes = true, lowir = false, audit = false;
+    unsigned level = 0;
     std::string output, format;
     std::vector<std::string> inputs, includes, libraries, paths, macros, system_includes;
 };
@@ -42,6 +44,8 @@ Options options(const std::vector<std::string>& args)
         if (a == "-c") o.compile = true;
         else if (a == "-E") o.preprocess = true;
         else if (a == "--emit-lowir") o.lowir = true;
+        else if (a.size() == 3 && a[0] == '-' && a[1] == 'O' && a[2] >= '0' && a[2] <= '3') o.level = a[2]-'0';
+        else if (a == "-gline-tables-only") continue;
         else if (a == "--validate-lowir") o.audit = true;
         else if (a == "-nostdinc") o.standard_includes = false;
         else if (a == "-nostdinc++") o.cxx_includes = false;
@@ -90,16 +94,20 @@ Options options(const std::vector<std::string>& args)
         else if (!a.empty() && a[0] == '-') throw std::runtime_error("unsupported driver option: " + a);
         else o.inputs.push_back(a);
     }
-    if (o.lowir && !o.compile) throw std::runtime_error("hosted LowIR inspection requires -c");
+    if (o.lowir) o.compile = true;
     if (o.inputs.empty() || ((o.compile || o.preprocess) && !o.output.empty() && o.inputs.size() != 1)) throw std::runtime_error("invalid compile/link inputs");
     if (o.output.empty() && !o.preprocess && !o.compile) o.output = "a.out";
     o.includes.insert(o.includes.end(),o.system_includes.begin(),o.system_includes.end());
     o.host = o.format != "private";
+    if (o.level) o.macros.insert(o.macros.begin(),"-D__OPTIMIZE__=1");
     if (o.host) host_environment(o.includes,o.macros,o.standard_includes,o.cxx_includes);
     return o;
 }
 void build_source(lowir_model::Program& program, const std::string& path, const Options& o) {
-    lowering::build_program(program,{path},o.stats,o.includes,o.macros,false,o.host);
+    auto dot = path.rfind('.');
+    if (dot != std::string::npos && path.substr(dot) == ".lowir") program = lowir_model::parse_lowir_program_files({path});
+    else lowering::build_program(program,{path},o.stats,o.includes,o.macros,false,o.host);
+    lowir_model::optimize(program,o.level,o.stats);
 }
 Object source(const std::string& path, const Options& o, native::Statistics& stats) {
     lowir_model::Program program; build_source(program,path,o);

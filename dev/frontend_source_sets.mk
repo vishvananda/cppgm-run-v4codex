@@ -250,3 +250,19 @@ FRONTEND_OBJ_BASENAMES_lowir += support/x86_builtins
 FRONTEND_OBJ_BASENAMES_lowir2native += support/x86_builtins native/x86_builtins
 FRONTEND_OBJ_BASENAMES_cppgm++ += lowering/x86_lanes
 FRONTEND_OBJ_BASENAMES_cppgm++ += semantic/vector_shuffle lowering/vector_shuffle
+
+# PA32 shared typed optimizer and explicit LowIR object input.
+FRONTEND_OBJ_BASENAMES_lowiropt := $(filter-out lowir/exercises,$(FRONTEND_OBJ_BASENAMES_lowir)) lowir/optimizer
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/reader lowir/metadata lowir/top_level lowir/instruction_reader lowir/optimizer
+
+FRONTEND_OBJ_BASENAMES_lowiropt += support/id_index lowir/folding lowir/scalar_simplify
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/folding lowir/scalar_simplify
+
+FRONTEND_OBJ_BASENAMES_lowiropt += lowir/control_simplify
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/control_simplify
+
+FRONTEND_OBJ_BASENAMES_lowiropt += lowir/slot_forwarding
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/slot_forwarding
+
+FRONTEND_OBJ_BASENAMES_lowiropt += lowir/local_cse
+FRONTEND_OBJ_BASENAMES_cppgm++ += lowir/local_cse

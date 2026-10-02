@@ -3,6 +3,7 @@
 namespace native {
 struct ValueState {
     Operand location;
+    unsigned writes = 1;
     unsigned definition = 0, last = 0, uses = 0, block = 0, call_epoch = 0, alias = 0, other_block = 0;
     bool folded_load = false, folded_index = false, address_only = true, single_edge = false;
     bool crosses_block = false, crosses_call = false, compare_branch = false;

@@ -9,6 +9,7 @@ void Selector::initialize_values()
     // and live locations belong to this function and die after its emission.
     values.push_back(ValueState());
     auto insert = [&](unsigned id) {
+        if (workspace.value_indices[id]) { ++state(id).writes; return; }
         f.frame_alignment = std::max(f.frame_alignment,p.values[id-1].type.alignment());
         workspace.value_indices[id] = values.size(); values.push_back(ValueState());
     };
@@ -85,7 +86,7 @@ void Selector::analyze()
             auto& v = state(i.destination.index);
             v.definition = n+1; v.block = block_id; v.call_epoch = epoch;
             definitions.push_back(i.destination.index);
-            if (i.opcode == Opcode::Const && scalar_integer(i.type))
+            if (i.opcode == Opcode::Const && scalar_integer(i.type) && v.writes == 1)
                 v.location = Operand::imm(normalize(arg(i,0).data.integer, i.type));
         }
     }
@@ -121,6 +122,7 @@ void Selector::analyze()
     folds();
     for (unsigned v : definitions) {
         auto& s = state(v);
+        if (s.writes > 1) continue;
         const auto& i = p.instructions[s.definition-1];
         s.single_edge = s.other_block && s.other_block != ~0u &&
             workspace.successor[s.block] == s.other_block && workspace.next_block[s.block] == s.other_block &&
@@ -181,6 +183,14 @@ void Selector::parameters()
         Operand incoming = placement.parts[0];
         f.params.push_back({p.values[param.value.index-1].name,param.type,incoming,placement.count == 2 ? placement.parts[1] : Operand()});
         auto& v = state(param.value.index);
+        if (v.writes > 1) {
+            v.location = home(p.values[param.value.index-1].name,param.type,true);
+            if (aggregate(param.type) && !placement.memory) {
+                for (unsigned part = 0; part < placement.count; ++part)
+                    move(fragment(v.location,part*8),placement.parts[part],abi_chunk_type(param.type,part));
+            } else move(v.location,incoming,param.type);
+            continue;
+        }
         v.location = incoming;
         if (!v.uses) continue;
         if (param.type.scalar()) parameter_bytes += (param.type.bytes()+7)&~std::uint64_t(7);
@@ -238,7 +248,7 @@ Operand Selector::allocate(unsigned id, Type t)
 {
     auto& v = state(id);
     if (v.location.kind != Operand::None) return v.location;
-    if (aggregate(t)) return v.location = home(p.values[id-1].name,t,true);
+    if (v.writes > 1 || aggregate(t)) return v.location = home(p.values[id-1].name,t,true);
     if (t.floating()) {
         f.scratch_bytes = 48;
         if (t != Type::F80 && !v.crosses_call && (!v.crosses_block || v.single_edge)) {

@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+"""Explicit PA32 legality/transport tests; no course fixtures are changed."""
+import pathlib, random, subprocess, tempfile
+ROOT = pathlib.Path(__file__).resolve().parents[2]
+OPT = ROOT / 'dev/lowiropt'
+NATIVE = ROOT / 'dev/lowir2native'
+DRIVER = ROOT / 'dev/cppgm++'
+def run(*args, ok=True):
+    r = subprocess.run([str(x) for x in args], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if ok and r.returncode:
+        raise AssertionError((args, r.returncode, r.stderr.decode()[-2000:]))
+    return r
+rng = random.Random(207)
+functions = []
+def case(instructions, ty, value):
+    name = 'case' + str(len(functions))
+    functions.append(f'function @{name}() -> i64 {{\n block ^entry:\n{instructions}\n %bad = cmp ne {ty} %result, {value}\n return i64 %bad\n}}\n')
+for ty, width in [('i8',8),('u8',8),('i16',16),('u16',16),('i32',32),('u32',32),('i64',64),('i128',128)]:
+    mask = (1 << width)-1
+    def signed(n): return n-(1 << width) if n & (1 << (width-1)) else n
+    for op in ['add','sub','mul','and','or','xor','udiv','umod','div','mod','shl','shr','ushr']:
+        for k in range(4):
+            a, b = rng.getrandbits(width), rng.getrandbits(width) or 1
+            if op in ('shl','shr','ushr'): b %= width
+            x, y = signed(a), signed(b)
+            if op == 'add': value = a+b
+            elif op == 'sub': value = a-b
+            elif op == 'mul': value = a*b
+            elif op == 'and': value = a&b
+            elif op == 'or': value = a|b
+            elif op == 'xor': value = a^b
+            elif op == 'udiv': value = a//b
+            elif op == 'umod': value = a%b
+            elif op in ('div','mod'):
+                q = abs(x)//abs(y) * (-1 if (x<0) != (y<0) else 1)
+                value = q if op == 'div' else x-q*y
+            elif op == 'shl': value = a << b
+            elif op == 'shr': value = x >> b
+            else: value = a >> b
+            case(f' %a = const {ty} {a}\n %b = copy {ty} {b}\n %result = binary {op} {ty} %a, %b',ty,value&mask)
+    for op in ['eq','ne','lt','le','gt','ge','ult','ule','ugt','uge']:
+        a,b = rng.getrandbits(width), rng.getrandbits(width)
+        x,y = (a,b) if op.startswith('u') or op in ('eq','ne') else (signed(a),signed(b))
+        pred = op.removeprefix('u')
+        value = {'eq':x==y,'ne':x!=y,'lt':x<y,'le':x<=y,'gt':x>y,'ge':x>=y}[pred]
+        case(f' %result = cmp {op} {ty} {a}, {b}','i64',int(value))
+case(' %a = copy i8 255\n %result = copy i64 %a','i64',-1)
+case(' %a = convert zext i128 i64 -1\n %b = binary add i128 %a, 2\n %result = binary ushr i128 %b, 64','i128',1)
+case(' %x = const i64 3\n %y = copy i64 %x\n %x = const i64 4\n %result = binary add i64 %x, %y','i64',7)
+functions.append('''function @phi_test() -> i64 {
+ block ^entry:
+  jump ^loop
+ block ^loop:
+  %a = phi i64 [^entry: 1, ^loop: %b]
+  %b = phi i64 [^entry: 2, ^loop: %a]
+  %i = phi i64 [^entry: 0, ^loop: %next]
+  %next = binary add i64 %i, 1
+  %again = cmp lt i64 %next, 4
+  branch %again, ^loop, ^exit
+ block ^exit:
+  %ten = binary mul i64 %a, 10
+  %result = binary add i64 %ten, %b
+  %bad = cmp ne i64 %result, 21
+  return i64 %bad
+}
+function @prune_test() -> i64 {
+ block ^entry:
+  branch 1, ^yes, ^no
+ block ^yes:
+  jump ^join
+ block ^no:
+  jump ^join
+ block ^join:
+  %a = phi i64 [^yes: 4, ^no: 9]
+  %bad = cmp ne i64 %a, 4
+  return i64 %bad
+}
+''')
+main = ['function @main() -> i64 [role=entry] {',' block ^entry:', ' %sum0 = const i64 0']
+names = ['case'+str(i) for i in range(len(functions)-1)]+['phi_test','prune_test']
+for i,name in enumerate(names):
+    main += [f' %r{i} = call i64 @{name}()', f' %sum{i+1} = binary or i64 %sum{i}, %r{i}']
+main += [f' return i64 %sum{len(names)}','}']
+with tempfile.TemporaryDirectory(prefix='pa32-local-') as tmp:
+    tmp = pathlib.Path(tmp); source = tmp/'test.lowir'
+    source.write_text(''.join(functions)+'\n'.join(main)+'\n')
+    for level in range(4):
+        opt = tmp/f'o{level}.lowir'; exe = tmp/f'o{level}'
+        run(OPT,f'-O{level}','-o',opt,source)
+        run(ROOT/'dev/lowir','-o',tmp/'validated.lowir',opt)
+        run(NATIVE,'-o',exe,opt)
+        run(exe)
+    trap = tmp/'trap.lowir'
+    trap.write_text('function @trap() -> i64 { block ^entry: %unused = binary div i64 1, 0 return i64 0 }')
+    run(OPT,'-O1','-o',tmp/'trap-out.lowir',trap)
+    assert 'binary div' in (tmp/'trap-out.lowir').read_text()
+    for args in [[],['-O1'],['-o',str(tmp/'bad'),str(source)],['-O1','-O2','-o',str(tmp/'bad'),str(source)],['-O1','-o',str(tmp/'bad'),str(tmp/'absent')]]:
+        assert run(OPT,*args,ok=False).returncode
+    run(OPT,'--help')
+print(f'PA32 local legality: PASS ({len(names)} execution cases at O0/O1/O2/O3; trap and CLI checks)')

@@ -34,7 +34,17 @@ an extra gate. No optimization performance claims before measurement.
 
 ## Handoff ledger
 
-Implementation in progress; no behavior group complete yet. Whole-stage audit
+First implementation checkpoint: shared CLI/level/hosted LowIR routes, deterministic
+ELF symbol order and function schedule, bounded scalar/CFG simplification and
+block-local slot forwarding/CSE are implemented. Primary report: 106/219
+(113 failures), versus 0/219 at entry; Ralph's entry census was 0/425 and is
+kept as a separate accounting basis. All 25 no-debug object replays pass.
+Explicit personal integer/phi/mutable-value test: 501 cases at four levels pass.
+An inherited native mutable-temporary alias defect was fixed with stable homes.
+Prior through report before that fix: 5178/5178; final revalidation pending.
+Do not run root reports concurrently: they share report artifacts.
+Debug direct O1: 3/3; cross-block slot promotion/debug and source locations remain
+implementation work. Performance measurement and final checks are pending. Whole-stage audit
 is pending independently: trace metadata transport, pass legality/budgets,
 source-to-ELF ownership and performance evidence. Review markers above remain
 unchanged until independent review. No requirements waived.
