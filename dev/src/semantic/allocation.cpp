@@ -3,6 +3,27 @@
 #include <stdexcept>
 namespace cppgm { namespace semantic {
 using syntax::Kind;
+Conversion Analyzer::array_bound_conversion(Expression value)
+{
+    TypeId target = value.type;
+    if (class_value(target)) {
+        complete_class(types[target].entity);
+        EntityId selected = 0;
+        for (auto e : conversion_candidates(target)) {
+            auto result = value_type(types[entities[e].type].child);
+            if (members[entities[e].member_info].explicit_constructor || !integral(result) || scoped_enum(result) ||
+                !object_conversion(e,value.type,value.category).valid()) continue;
+            // C++11 [expr.new]/6 requires a single non-explicit integral
+            // conversion. Do not let a preferred size_t overload hide a
+            // second conversion to a different integral type.
+            if (selected) return Conversion();
+            selected = e; target = result;
+        }
+        if (!selected) return Conversion();
+    }
+    if (!integral(target) || scoped_enum(target)) return Conversion();
+    return conversion_value(value,types.unqualified(target));
+}
 void Analyzer::finish_allocations()
 {
     Index leaf_bodies;

@@ -32,15 +32,16 @@ Value Procedural::array_new(NodeId n, const semantic::PlacementNew& use)
     SlotId extent, zero_stride_count;
     if (dynamic) {
         Value count = incoming(use.bound);
-        if (!use.narrow_extent) count = coerce(count,IRType::I64,sem.unsigned_type(sem.expression_fact(use.bound).type),true);
+        auto unsigned_count = sem.unsigned_type(count.type);
+        if (!use.narrow_extent) count = coerce(count,IRType::I64,unsigned_count,true);
         if (!use.stride) {
             zero_stride_count = builder->add_slot(0,IRType::I64);
-            auto wide = coerce(count,IRType::I64,sem.unsigned_type(sem.expression_fact(use.bound).type),true);
+            auto wide = coerce(count,IRType::I64,unsigned_count,true);
             emit(Opcode::Store,IRType::I64,{wide.operand,Operand::slot(zero_stride_count)});
         }
         if (use.stride != 1) count = emit(Opcode::Binary,count.ir,{count.operand,Operand::integer(use.stride)},Operation::Mul);
         if (use.cookie) count = emit(Opcode::Binary,count.ir,{count.operand,Operand::integer(use.cookie)},Operation::Add);
-        count = coerce(count,IRType::I64,sem.unsigned_type(sem.expression_fact(use.bound).type),true);
+        count = coerce(count,IRType::I64,unsigned_count,true);
         bytes = count.operand;
         extent = builder->add_slot(0,IRType::I64);
         emit(Opcode::Store,IRType::I64,{bytes,Operand::slot(extent)});

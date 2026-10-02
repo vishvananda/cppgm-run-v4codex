@@ -426,6 +426,7 @@ private:
     void finish_allocations();
     EntityId select_deallocation(TypeId t, bool array, bool global, ScopeId s, bool demand = true, bool required = true);
     TypeId delete_operand_type(Expression operand);
+    Conversion array_bound_conversion(Expression operand);
     EntityId new_deallocation(const PlacementNew& use, bool global, ScopeId scope);
     TypeQueryFact query_delete(const TypeQuery& q, const std::vector<TypeQueryFact>& children);
     Index delete_index;

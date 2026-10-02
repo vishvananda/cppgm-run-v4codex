@@ -64,7 +64,8 @@ TypeQueryFact Analyzer::query_new(const TypeQuery& q, const std::vector<TypeQuer
     unsigned placement_begin = 1;
     if (q.value & 2) {
         auto bound = children[placement_begin++].expression;
-        if (!integral(bound.type) || scoped_enum(bound.type))
+        auto conversion = array_bound_conversion(bound);
+        if (!valid_fixed_conversion(bound,0,conversion,q.context))
             return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
         EvaluationScope mode(*this,false);
         auto value = constants[query_value(query_edges[q.offset+1])];

@@ -292,10 +292,18 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                 if (c == dynamic_array) {
                     EvaluationScope checking(*this,true);
                     auto x = expression(ast[c].first,s);
-                    if (!integral(x.type) || scoped_enum(x.type)) throw std::runtime_error("array allocation bound must be integral");
+                    auto converted = array_bound_conversion(x);
+                    if (!converted.valid()) throw std::runtime_error("array allocation bound must convert uniquely to integral");
+                    if (converted.kind == Conversion::Kind::User) {
+                        apply_conversion(ast[c].first,converted);
+                        expressions.incoming(ast[c].first,conversions.size()); conversions.push_back(converted);
+                    }
                 }
                 EvaluationScope mode(*this,c != dynamic_array);
-                Constant v = evaluate(ast[c].first, s);
+                // A constant class object is not the value returned by its
+                // conversion. Preserve that call and its effects at runtime.
+                Constant v = c == dynamic_array && class_value(expressions[ast[c].first].type) ?
+                    Constant() : evaluate(ast[c].first, s);
                 if (c == dynamic_array) {
                     if (v.valid && negative_constant(v)) throw std::runtime_error("negative array allocation bound");
                 } else if (!v.valid || !integral(v.type) || scoped_enum(v.type) || (!v.bits && !host_abi) ||
