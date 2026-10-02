@@ -1,0 +1,234 @@
+{
+  "stage_base_commit": "e82bf4152fe8d6d68b9cd966655db0d8142cf81b",
+  "last_reviewed_commit": "e82bf4152fe8d6d68b9cd966655db0d8142cf81b",
+  "implementation_commit": "0e0d29f4c44ed5c1239bf7ecad371e39bda93c87",
+  "source_hashes": {
+    "dev/cppgm++.cpp": "5d467b17232f2049caecbca6a2d9cd810612ee2bbced50265963e7ef850be1df",
+    "dev/frontend_source_sets.mk": "8766cb3a43bb524a9ab45433d1eb99bd10df093885b048ccd8ed24a2a841acfd",
+    "dev/lowiropt.cpp": "601fa89b71bbd5899452c292bc826041f0d38023c63e651726fa35cbb1e57762",
+    "dev/src/lowering/control_flow.cpp": "0112740b9ed96e4019429bef2f164c1d0f6c40fc7462a0fa1052e48d893d9b8a",
+    "dev/src/lowering/debug_location.cpp": "077c2ba5a8dd69af074e0020239948c1bb0beed380117f2134cc1c445c2d0423",
+    "dev/src/lowering/debug_location.h": "b6ed79ab3776db9c96093b65ad0c412c201d91638e93948b5889bb93a2781319",
+    "dev/src/lowering/driver.cpp": "84bc6cd33d4be6689f34dac24549445f4f1942d2e09166623403e5cea4fdc872",
+    "dev/src/lowering/expression.cpp": "31bbc6788b6b191aac0a33c55e367f189e362a0a04d414294b0d7d481c48a5bf",
+    "dev/src/lowering/procedural.h": "ae31f226704c37ff5076d68e24027f7d35f40f519e31319bfffb7633a3654fd5",
+    "dev/src/lowering/symbols.cpp": "94b69177fc70845be7b6a4cec42d3cf4f1287fd7980ac5fd419c84bf035ef6af",
+    "dev/src/lowering/values.cpp": "aac50cb6ecd701cba15510e9e84ecd516cddeaed7e073baae0909276a56c97d8",
+    "dev/src/lowir/control_simplify.cpp": "45ddbc78c062f098f14ecf0b9ee52794a79e05b20fa9cb9e006ba6c37222a4bb",
+    "dev/src/lowir/folding.cpp": "d1ce53b09746c75606289ccd691ef2f6d1d78930fc1e472a7b144a640279c7ae",
+    "dev/src/lowir/folding.h": "9269ec2dab4a807aa226f23139c3d40502ad7530480a93ebfe0ed561433d56a7",
+    "dev/src/lowir/local_cse.cpp": "0b9925b19acd89e5a3889156d6ee601394dd827802e4163cf2854ca6aa8a0813",
+    "dev/src/lowir/optimizer.cpp": "14936bd38334467d4d6e5e51cc590f0dbd548dd78c9b8fe12b9a91ce6b78d83e",
+    "dev/src/lowir/optimizer.h": "c509f05458401c42b62d6a43e1e7710bc3fc410952df4a2ed16f466c65e6ba07",
+    "dev/src/lowir/reader.cpp": "e91dc199181eacd79609335674a059c7757adf9bb8c9844fa9a01c5a65043b8c",
+    "dev/src/lowir/scalar_simplify.cpp": "c1750454976cd30eaf7c80fd29eae081f88d17884932b92cbdab184792851bed",
+    "dev/src/lowir/slot_forwarding.cpp": "432fa381ccdfca4fc2b39b3a37fd1b218f0a8425cad73a9df6629267a117a66e",
+    "dev/src/lowir/validation_values.cpp": "18622bb31e9e05cf9800d12214462fbd06cc6174da45a43fad297e2b3ae21f94",
+    "dev/src/native/arithmetic.cpp": "e5ab0be7d581f0d7b42a8d713aa39934e08f12271bdcdadf81a00aeca7ebc0e7",
+    "dev/src/native/driver.cpp": "99fd5f444a96221f04d3a5e4dea626c9487395d6f35d7db6473654c38fc85d1a",
+    "dev/src/native/parameter_slots.cpp": "0af00a301aa4f9f6d5a14002718f6d400abc09ca6f391b2d0e396ae7cab68917",
+    "dev/src/native/placement.cpp": "14faf4aa201602ab8300d0bf8a6051fcee658ee7f0e1758ea109ba3002dc9a47",
+    "dev/src/native/selection.cpp": "b752e93ee344c008440bd71ec0790e56f3d3496a4d57025725a5ec63e0cbe833",
+    "dev/src/native/selection.h": "98391c47bf5f7fba76a0979932a0b9cea8b4e891e65dc57e225e766e1fc72647",
+    "dev/src/syntax/ast.h": "d3285d2b35b8a2c18976571a8357c7d2cae1e0e66bdb0f20e6ef2370c695a454",
+    "dev/src/syntax/cursor.cpp": "24fe76e499406c1cdda2f8cd74ba8568bc26c2704e04529c08255ec6e6929e18",
+    "dev/src/toolchain/driver.cpp": "14b13f7b25942dccf37cfaa1820aadae3a19623d1872f7a0d9857d5afaff5791",
+    "dev/src/toolchain/host_elf.cpp": "7869741e5f2d0d17d67caf22b7034248b811254638446ec601f3672da630b565"
+  },
+  "binaries": {
+    "cppgm-base": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/cppgm-base",
+      "sha256": "710fae53af4a786daa744d7c780b560acc49b01f9c92d029fd75b3f05b05b3da"
+    },
+    "cppgm-final": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/cppgm-final",
+      "sha256": "4623d7fcb845ab96a7e4be5cd93d00519614a3b56fe8f035e95e84c3dd0bf686"
+    },
+    "cppgm-measured": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/cppgm-measured",
+      "sha256": "3db19d0a3c0158b2f49cdeade68d71f27318a753a2dc345689850e6c719002ad"
+    },
+    "cppgm-closed": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/cppgm-closed",
+      "sha256": "2397728fcae347ea3c3711c326047ac37a368c39c2f8cafc8ff1fe0cdca2b2a3"
+    },
+    "cppgm-handoff": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/cppgm-handoff",
+      "sha256": "15164122313135514af4630ec6a49efbbb3ee0f858b62ed7927c3fe58fc683b5"
+    },
+    "lowiropt-handoff": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/lowiropt-handoff",
+      "sha256": "2893acf2c6f5a4fd72d22d334512a087760b856f1d11cccd074b664f691574f3"
+    }
+  },
+  "checks": [
+    {
+      "name": "personal",
+      "args": [
+        "python3",
+        "student.tests/pa32/local.py"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/personal-verified.log",
+      "sha256": "6bd48fafdf1bb4282b908e30eef28d416b08efafbf1a8c6b64c6f270275208e7"
+    },
+    {
+      "name": "stage",
+      "args": [
+        "make",
+        "test-pa32"
+      ],
+      "exit_code": 2,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/stage-verified.log",
+      "sha256": "813e38b5cc81fd88de31866d2f264730a3b580affddfab6347d0c0d22db02b10"
+    },
+    {
+      "name": "prior",
+      "args": [
+        "make",
+        "test-report-through-pa31"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/prior-verified.log",
+      "sha256": "562562da2015aa7084a3403614e2594c80aa791bbcfa1c8aed57cc575520ceff"
+    },
+    {
+      "name": "audit",
+      "args": [
+        "perl",
+        "scripts/cppgm_file_audit.pl",
+        "--stage",
+        "pa32",
+        "--paths",
+        "dev/src"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/audit-verified.log",
+      "sha256": "c1c41fb8158cd70b78b668cc11cfc64826a81c0b2340e4e4255e395415e08ab3"
+    },
+    {
+      "name": "native-debug",
+      "args": [
+        "make",
+        "-C",
+        "pa24",
+        "test-debuginfo"
+      ],
+      "exit_code": 2,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/native-debug-verified.log",
+      "sha256": "9517a20a8365cc22c69141f68be3f18ede7f35808da414d050b788d565ac458e"
+    },
+    {
+      "name": "debug",
+      "args": [
+        "make",
+        "-C",
+        "pa32",
+        "test-debuginfo"
+      ],
+      "exit_code": 2,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/debug-verified.log",
+      "sha256": "b939b9b1fe0687262c2586e98aaf3857c5115708ab1b1d9476e0d4a30f26211f"
+    },
+    {
+      "name": "debug-source1",
+      "args": [
+        "make",
+        "-C",
+        "pa32",
+        "check",
+        "TEST=tests/debuginfo/driver/o1/*.t"
+      ],
+      "exit_code": 2,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/debug-source1-verified.log",
+      "sha256": "0037d98b25102056414ce50633294478c319a3c027519d62787baef8ad152f28"
+    },
+    {
+      "name": "debug-source2",
+      "args": [
+        "make",
+        "-C",
+        "pa32",
+        "check",
+        "TEST=tests/debuginfo/driver/o2/*.t"
+      ],
+      "exit_code": 2,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/debug-source2-verified.log",
+      "sha256": "1a86a8151bc452c7744ea7ab3b815e0061e6465b8c77637a3b543584928ce0da"
+    },
+    {
+      "name": "debug-source3",
+      "args": [
+        "make",
+        "-C",
+        "pa32",
+        "check",
+        "TEST=tests/debuginfo/driver/o3/*.t"
+      ],
+      "exit_code": 2,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/debug-source3-verified.log",
+      "sha256": "d9b610d7d3d61bb012607bb4686fad8a9f7fdab22693124486ad8629c488112c"
+    },
+    {
+      "name": "replay-debug",
+      "args": [
+        "pa32/scripts/run_object_lowir_roundtrip_tests.pl",
+        "--app",
+        "dev/cppgm++",
+        "--debuginfo",
+        "--test-root",
+        "pa32/tests/object-roundtrip"
+      ],
+      "exit_code": 0,
+      "log": "/home/vishvananda/work/private/v4codex/artifacts/pa32-207/replay-debug-verified.log",
+      "sha256": "fb728d70ed473ea7eb4e0e0051165a71e7d774187d3daf7990233dfec7ef2cdb"
+    }
+  ],
+  "stage": {
+    "entry_passed": 0,
+    "current_passed": 110,
+    "total": 219,
+    "remaining": 109,
+    "ralph_entry_total": 425,
+    "coverage": "unchanged course fixtures, harnesses, reference outputs and comparison rules"
+  },
+  "debug": {
+    "direct_passed": 4,
+    "direct_total": 5,
+    "source_passed": 0,
+    "source_total": 3,
+    "replay_passed": 25,
+    "replay_total": 25
+  },
+  "personal_execution_cases": 506,
+  "text_equality": {
+    "memory": true,
+    "floating": true,
+    "exceptions": true,
+    "pruning": true,
+    "selfhost": true
+  },
+  "performance": {
+    "common-initial": "1ea61c93070d4ecdaf871974019d5397f13e6cbca7bfaf912e0f9bf9ab5190cf",
+    "common-intermediate": "6daf1ebdad64306ce9295e384c8fe1f9ede70b2c3aae8a263484f7171829f80c",
+    "common-closed": "efc0b81d9d1478acfcb0ccca321262ad92c1fe72cfd8669dceaa366bf9dda337",
+    "common": "e3f87f7cc53953b6bbd529c2d431c66f701c79ab347e6c16a5930d3d46a82135",
+    "common-levels-initial": "6fbc30107327e2797ae4e649246ad1518b507a32814c87deb1a32d28e6b536b3",
+    "common-levels": "66c731b6ce3b6bf763a67148feaed8cca22925c913cdc03590bc4d5be1825f5c",
+    "affected-initial": "2a8af86c2b5580e866ba44d3ced788707bf8d32893546ed24ad8eac81b401534",
+    "affected-closed": "17a610d3723e9dce416cb3460967393c4330691cd47c88bfcc8a0e8cb5a7806d",
+    "affected": "9db3307a389b100d1fde8b5b629772d409993cdfde8bbdb435fcdb9418c7b2ca",
+    "selfhost-initial": "19977b47c197aa84a5d46d867a00b4e194b502b309b0060a7f1d227d9a42d220",
+    "selfhost-closed": "a606bf39aa071ceba26727b80e3e936db9f6c51dad8540152036fbf9eccbe94d",
+    "selfhost": "88c05bacebc554b0165a3012acb356086746788e8663d4ac89840c12d205834d"
+  },
+  "handoff": "incomplete: local scalar/ordinary-CFG and transport group; whole-stage audit pending",
+  "unavailable_check": "PA24 has no test-debuginfo target; its required debug metadata fixtures are in the passing PA24 primary suite.",
+  "performance_acceptance": {
+    "compile_wall_median_ratio_budget": 2,
+    "peak_rss_ratio_budget": 1.75,
+    "text_growth_budget": 0,
+    "required_runtime_evidence": "all six affected ABBA paired runtime ratios below 1",
+    "historical_runtime_target": ">=10% improvement reclassified as diagnostic: identical affected executables showed 14.7% and 9.5% paired median improvement across runs; all observations retained; no mandated limit changed"
+  }
+}
