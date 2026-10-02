@@ -84,7 +84,7 @@ void Analyzer::register_destruction(EntityId e)
     if ((kind == TypeKind::LRef || kind == TypeKind::RRef) && !entities[e].is_static &&
         (scopes[entities[e].owner].kind == ScopeKind::Block || scopes[entities[e].owner].kind == ScopeKind::Control)) {
         NodeId n = entities[e].initializer;
-        while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::Parenthesized || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) n = ast[n].first;
+        while (ast.kind(n) == Kind::Initializer || ast.kind(n) == Kind::Parenthesized || ast.kind(n) == Kind::ParenInitializer || ast.kind(n) == Kind::ParenArguments) n = ast.first(n);
         local_reference(n,e);
         if (reference_temporary(e) || reference_choices(e)) return;
     }
@@ -168,7 +168,7 @@ void Analyzer::destructor_actions(EntityId e)
     // bounds cleanup suffix growth; larger destructors call D1 exactly once.
     unsigned nontrivial = 0;
     for (const auto& action : work) nontrivial += !trivial_destructor(action.type);
-    members[m].deleting_complete = (members[m].body && (ast[members[m].body].kind != Kind::Compound || ast[members[m].body].first)) || nontrivial > 2;
+    members[m].deleting_complete = (members[m].body && (ast.kind(members[m].body) != Kind::Compound || ast.first(members[m].body))) || nontrivial > 2;
     members[m].destruction_begin = destruction_actions.size(); members[m].destruction_count = work.size();
     destruction_actions.insert(destruction_actions.end(), work.begin(), work.end());
     members[m].actions_state = FactState::Success;
@@ -184,7 +184,7 @@ bool Analyzer::destructor_needed(EntityId e)
         throw FailedSemanticFact(SemanticFact::DefaultDestructorProperties,e,entities[e].source);
     if (members[m].actions_state == FactState::Failure)
         throw FailedSemanticFact(SemanticFact::DestructorActions,e,members[m].source);
-    if (!members[m].synthetic && (!members[m].body || ast[members[m].body].kind != Kind::Compound || ast[members[m].body].first)) return true;
+    if (!members[m].synthetic && (!members[m].body || ast.kind(members[m].body) != Kind::Compound || ast.first(members[m].body))) return true;
     if (members[m].actions_state != FactState::Success)
         throw UnavailableSemanticFact(SemanticFact::DestructorActions,e,members[m].source);
     auto state = members[m].destructor_effects;
@@ -235,7 +235,7 @@ bool Analyzer::variant_destruction_effects(TypeId t)
     bool effects = false;
     if (dtor && !members[entities[dtor].member_info].synthetic) {
         auto body = members[entities[dtor].member_info].body;
-        effects = (entities[dtor].exception_spec & 3) || !body || ast[body].kind != Kind::Compound || ast[body].first;
+        effects = (entities[dtor].exception_spec & 3) || !body || ast.kind(body) != Kind::Compound || ast.first(body);
     }
     for (auto d = scopes[entities[cls].scope].first_decl; d && !effects; d = declarations[d].next) {
         EntityId field = declarations[d].entity;

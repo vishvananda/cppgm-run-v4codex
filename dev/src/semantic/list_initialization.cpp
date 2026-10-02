@@ -5,19 +5,19 @@ using syntax::Kind;
 Conversion Analyzer::list_element(NodeId& cursor, TypeId to, ScopeId s)
 {
     if (!cursor) return list_initialization(0,to,s);
-    if (ast[cursor].kind == Kind::DesignatedInit) return Conversion();
+    if (ast.kind(cursor) == Kind::DesignatedInit) return Conversion();
     NodeId source = cursor;
     expression(source,s);
     Conversion c = conversion(source,to);
     if (string_initialization(source,to)) {
         ListPlan plan; plan.source = source; plan.target = to; plan.scope = s;
-        plan.aggregate = true; plan.literal = ast[source].literal; plan.state = FactState::Success;
+        plan.aggregate = true; plan.literal = ast.literal(source); plan.state = FactState::Success;
         if (types[to].bound && ast.literals[plan.literal].elements <= types[to].bound) plan.rank = 0;
         c.target = to; c.kind = Conversion::Kind::ListPlan; c.rank = plan.rank;
         c.materialization = list_plans.size(); list_plans.push_back(plan);
     }
-    if (c.valid()) { cursor = ast[source].next; return c; }
-    if (ast[source].kind != Kind::BracedInit && aggregate_type(to)) {
+    if (c.valid()) { cursor = ast.next(source); return c; }
+    if (ast.kind(source) != Kind::BracedInit && aggregate_type(to)) {
         auto id = list_aggregate(cursor,to,s);
         c.target = to; c.kind = Conversion::Kind::ListPlan; c.materialization = id;
         c.rank = list_plans[id].rank;
@@ -35,13 +35,13 @@ std::uint32_t Analyzer::list_aggregate(NodeId& cursor, TypeId to, ScopeId s)
     auto add = [&](TypeId t, EntityId field, std::uint64_t index, std::uint64_t count) {
         NodeId source = cursor;
         Conversion c;
-        if (ast[cursor].kind == Kind::DesignatedInit && designated_storage(field,ast[cursor].text)) {
+        if (ast.kind(cursor) == Kind::DesignatedInit && designated_storage(field,ast.text(cursor))) {
             c.kind = Conversion::Kind::ListPlan; c.target = t;
             c.materialization = list_aggregate(cursor,t,s); c.rank = list_plans[c.materialization].rank;
-        } else if (designated_operand && cursor && ast[cursor].kind != Kind::BracedInit &&
+        } else if (designated_operand && cursor && ast.kind(cursor) != Kind::BracedInit &&
                    aggregate_type(t) && !string_initialization(cursor,t)) {
             expression(cursor,s); c = conversion(cursor,t);
-            if (c.valid()) cursor = ast[cursor].next;
+            if (c.valid()) cursor = ast.next(cursor);
         } else c = list_element(cursor,t,s);
         if (!c.valid()) return false;
         if (source || c.kind != Conversion::Kind::ListPlan) plan.zero = false;
@@ -75,18 +75,18 @@ std::uint32_t Analyzer::list_aggregate(NodeId& cursor, TypeId to, ScopeId s)
         for (auto d = scopes[entities[target.entity].scope].first_decl; valid && d; d = declarations[d].next) {
             EntityId field = declarations[d].entity;
             if (!nonstatic_field(field)) continue;
-            auto designation = ast[cursor].kind == Kind::DesignatedInit ? cursor : 0;
-            if (designation && designated_storage(field,ast[designation].text)) designation = 0;
+            auto designation = ast.kind(cursor) == Kind::DesignatedInit ? cursor : 0;
+            if (designation && designated_storage(field,ast.text(designation))) designation = 0;
             if (designation) {
-                bool match = ast[designation].text == entities[field].name;
+                bool match = ast.text(designation) == entities[field].name;
                 if (!match && entities[target.entity].key == KW_UNION) continue;
-                cursor = match ? ast[designation].first : 0;
+                cursor = match ? ast.first(designation) : 0;
             }
             designated_operand = designation && cursor;
             valid = add(initialized_field_type(to,field),field,0,1);
             if (designation) {
                 valid &= !cursor;
-                cursor = ast[designation].text == entities[field].name ? ast[designation].next : designation;
+                cursor = ast.text(designation) == entities[field].name ? ast.next(designation) : designation;
             }
             if (entities[target.entity].key == KW_UNION) break;
         }
@@ -110,8 +110,8 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
         Type target = types[to];
         bool ref = target.kind == TypeKind::LRef || target.kind == TypeKind::RRef;
         TypeId t = value_type(to);
-        NodeId first = n ? ast[n].first : 0;
-        if (first && first == ast[n].last && ref && ast[first].kind != Kind::BracedInit && ast[first].kind != Kind::DesignatedInit) {
+        NodeId first = n ? ast.first(n) : 0;
+        if (first && first == ast.last(n) && ref && ast.kind(first) != Kind::BracedInit && ast.kind(first) != Kind::DesignatedInit) {
             expression(first,s);
             Conversion c = standard_conversion(expressions[first],to,first);
             if (c.valid() && c.reference && !c.temporary) {
@@ -129,12 +129,12 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
                     throw UnavailableSemanticFact(SemanticFact::ClassDefinition,types[t].entity,n);
             }
             bool designated = false;
-            for (auto a = first; a; a = ast[a].next) designated |= ast[a].kind == Kind::DesignatedInit;
+            for (auto a = first; a; a = ast.next(a)) designated |= ast.kind(a) == Kind::DesignatedInit;
             if (designated && !aggregate_type(t)) {
                 // In overload formation this is an invalid candidate, not an
                 // expression error that can prevent another aggregate match.
-            } else if (first && first == ast[n].last && string_initialization(first,t)) {
-                plan.source = first; plan.literal = ast[first].literal; plan.aggregate = true;
+            } else if (first && first == ast.last(n) && string_initialization(first,t)) {
+                plan.source = first; plan.literal = ast.literal(first); plan.aggregate = true;
                 if (!ref && types[t].unknown_bound) t = to = types.compound(TypeKind::Array,types[t].child,ast.literals[plan.literal].elements);
                 plan.target = to;
                 if (types[t].bound && ast.literals[plan.literal].elements <= types[t].bound) plan.rank = 0;
@@ -142,13 +142,13 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
                 auto info = initializer_list_type(t); plan.backing_begin = info.begin; plan.backing_size = info.size;
                 plan.backing_element = types.qualify(element,1); plan.rank = 0;
                 std::vector<NodeId> args; std::vector<Conversion> selected;
-                for (auto a = first; a; a = ast[a].next) {
+                for (auto a = first; a; a = ast.next(a)) {
                     expression(a,s); auto c = conversion(a,plan.backing_element);
                     if (c.rank > plan.rank) plan.rank = c.rank;
                     args.push_back(a); selected.push_back(c);
                 }
                 store_call(plan.call,args,selected); plan.explicit_count = args.size();
-            } else if (aggregate_type(t) || vector_kind(types[t].kind) || (complex_type(t) && first != ast[n].last)) {
+            } else if (aggregate_type(t) || vector_kind(types[t].kind) || (complex_type(t) && first != ast.last(n))) {
                 NodeId cursor = first;
                 auto group = list_aggregate(cursor,t,s);
                 if (!ref) t = to = list_plans[group].target;
@@ -156,7 +156,7 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
                 if (cursor) plan.rank = 255;
             } else if (class_value(t)) {
                 std::vector<NodeId> args;
-                for (NodeId a = first; a; a = ast[a].next) { expression(a,s); args.push_back(a); }
+                for (NodeId a = first; a; a = ast.next(a)) { expression(a,s); args.push_back(a); }
                 if (args.empty()) plan.constructor = choose_constructor(types.unqualified(t),{},&plan.call,s,true,true);
                 if (!plan.constructor && plan.call.form != ExpressionForm::Overload)
                     plan.constructor = choose_constructor(types.unqualified(t),{n},&plan.call,s,true,true,0,false,true);
@@ -170,7 +170,7 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
                 }
             } else if (!fundamental(t,FT_VOID) && types[t].kind != TypeKind::Function) {
                 if (!first) plan.rank = 0;
-                else if (first == ast[n].last) {
+                else if (first == ast.last(n)) {
                     expression(first,s);
                     Conversion c = conversion(first,t);
                     plan.rank = c.rank; store_call(plan.call,{first},{c});
@@ -232,9 +232,9 @@ void Analyzer::validate_list_plan(std::uint32_t id)
         for (unsigned i = 0; i < plan.call.argument_count; ++i) {
             auto n = call_argument(plan.call,i);
             auto c = conversions[plan.call.conversions+i];
-            if (n && ast[n].kind != Kind::BracedInit && i < plan.explicit_count)
+            if (n && ast.kind(n) != Kind::BracedInit && i < plan.explicit_count)
                 list_conversion_from(n,expressions[n].type,value_type(c.target),&c);
-            if (!i && !plan.aggregate && !plan.constructor && n && ast[n].kind != Kind::BracedInit)
+            if (!i && !plan.aggregate && !plan.constructor && n && ast.kind(n) != Kind::BracedInit)
                 list_conversion_from(n,expressions[n].type,value_type(plan.target),&c);
             // Selected constructor defaults were checked in their own
             // declaration environment, not this list's calling scope.
@@ -276,7 +276,7 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
             auto projected = ast.projected(a,ast.nodes.occurrences[n].context);
             if (projected) a = projected;
         }
-        if (a && ast[a].kind != Kind::DesignatedInit) expression(a,n ? facts[n].scope : plan.scope);
+        if (a && ast.kind(a) != Kind::DesignatedInit) expression(a,n ? facts[n].scope : plan.scope);
         args.push_back(a);
     }
     std::vector<Conversion> selected;

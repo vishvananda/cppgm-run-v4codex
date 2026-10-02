@@ -59,9 +59,9 @@ TypeId Analyzer::typeinfo_result_type()
 }
 Expression Analyzer::typeid_expression(NodeId n, ScopeId s)
 {
-    auto first = ast[n].first;
+    auto first = ast.first(n);
     RttiExpression use;
-    if (ast[first].kind == Kind::TypeId) use.type = value_type(type_id(first,s));
+    if (ast.kind(first) == Kind::TypeId) use.type = value_type(type_id(first,s));
     else {
         // Formation queries check the operand without materialization or body
         // demand. Only a polymorphic glvalue promotes it to evaluated work.

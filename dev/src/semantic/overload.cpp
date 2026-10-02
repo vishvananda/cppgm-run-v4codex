@@ -206,18 +206,18 @@ TypeId Analyzer::fundamental_cast_type(ETokenType op)
 }
 Expression Analyzer::call_expression(NodeId n, ScopeId s)
 {
-    NodeId callee = ast[n].first, args_node = ast[callee].next;
+    NodeId callee = ast.first(n), args_node = ast.next(callee);
     expand_expression_list(args_node,s);
     std::vector<NodeId> args;
-    for (NodeId a = ast[args_node].first; a; a = ast[a].next) { expression(a, s); args.push_back(a); }
+    for (NodeId a = ast.first(args_node); a; a = ast.next(a)) { expression(a, s); args.push_back(a); }
     Expression result;
-    if (ast[callee].kind == Kind::IdExpression) {
-        IdentifierId name = terminal(ast[callee].detail);
-        NodeId detail = ast[callee].detail;
+    if (ast.kind(callee) == Kind::IdExpression) {
+        IdentifierId name = terminal(ast.detail(callee));
+        NodeId detail = ast.detail(callee);
         if (operator_token(detail) == KW_NEW || operator_token(detail) == KW_DELETE)
             global_allocation(operator_token(detail),array_operator(detail));
-        EntityId e = detail && ast[detail].kind == Kind::Name && !ast[ast[detail].first].detail ? resolve(detail, s) : 0;
-        bool builtin_name = ast[detail].kind == Kind::Name && ast[detail].first == ast[detail].last;
+        EntityId e = detail && ast.kind(detail) == Kind::Name && !ast.detail(ast.first(detail)) ? resolve(detail, s) : 0;
+        bool builtin_name = ast.kind(detail) == Kind::Name && ast.first(detail) == ast.last(detail);
         if (!e && builtin_name && name == invoke_builtin) {
             if (args.empty()) throw std::runtime_error("invoke requires a callable");
             auto callable = args.front(); args.erase(args.begin());
@@ -259,16 +259,16 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             e = builtin_function(name);
         }
         TypeId cast_type = 0;
-        if (ast[detail].kind == Kind::TypeId) cast_type = type_id(detail, s);
-        else if (detail && ast[ast[detail].first].detail && ast[ast[ast[detail].first].detail].kind == Kind::Decltype)
-            cast_type = expression_type(ast[ast[ast[detail].first].detail].first, s, true);
+        if (ast.kind(detail) == Kind::TypeId) cast_type = type_id(detail, s);
+        else if (detail && ast.detail(ast.first(detail)) && ast.kind(ast.detail(ast.first(detail))) == Kind::Decltype)
+            cast_type = expression_type(ast.first(ast.detail(ast.first(detail))), s, true);
         if (e && (entities[e].kind == EntityKind::Alias || entities[e].kind == EntityKind::Type)) {
             bool applied_alias = entities[e].kind == EntityKind::Alias && entities[e].template_info &&
-                child(ast[detail].last,Kind::TemplateArguments);
-            cast_type = applied_alias ? facts[ast[detail].last].type : entities[e].type;
+                child(ast.last(detail),Kind::TemplateArguments);
+            cast_type = applied_alias ? facts[ast.last(detail)].type : entities[e].type;
             if (!cast_type) throw std::logic_error("alias call has no applied type");
         }
-        if (auto fundamental = fundamental_cast_type(ast[callee].op)) cast_type = fundamental;
+        if (auto fundamental = fundamental_cast_type(ast.op(callee))) cast_type = fundamental;
         if (cast_type) {
             if (class_value(cast_type)) complete_class(types[cast_type].entity);
             auto list_value = [&]() {
@@ -280,7 +280,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
                 object_uses[result.object_use].temporary = list_objects[conversions[result.conversions].materialization].temporary;
                 return result;
             };
-            if ((ast[args_node].kind == Kind::BracedInit && class_value(cast_type)) ||
+            if ((ast.kind(args_node) == Kind::BracedInit && class_value(cast_type)) ||
                 types[cast_type].kind == TypeKind::Array || vector_kind(types[cast_type].kind)) return list_value();
             if (types[cast_type].kind == TypeKind::Named && entities[types[cast_type].entity].class_info) {
                 EntityId ctor = choose_constructor(cast_type,args,&result,s,true,false,0,aggregate_type(cast_type));
@@ -303,7 +303,7 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             }
             if (args.size() > 1) throw std::runtime_error("scalar cast arity");
             result = cast_expression(n, s, cast_type, args.empty() ? 0 : args[0]);
-            if (ast[args_node].kind == Kind::BracedInit && !args.empty()) {
+            if (ast.kind(args_node) == Kind::BracedInit && !args.empty()) {
                 auto c = conversions[result.conversions];
                 list_conversion_from(args[0],expressions[args[0]].type,value_type(cast_type),&c);
             }
@@ -311,10 +311,10 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
         }
     }
     Expression fn;
-    bool unqualified = ast[callee].kind == Kind::IdExpression && ast[ast[callee].detail].kind == Kind::Name &&
-        ast[ast[callee].detail].first == ast[ast[callee].detail].last && ast[ast[callee].detail].op != OP_COLON2;
+    bool unqualified = ast.kind(callee) == Kind::IdExpression && ast.kind(ast.detail(callee)) == Kind::Name &&
+        ast.first(ast.detail(callee)) == ast.last(ast.detail(callee)) && ast.op(ast.detail(callee)) != OP_COLON2;
     bool adl = unqualified;
-    EntityId ordinary = unqualified ? resolve(ast[callee].detail, s) : 0;
+    EntityId ordinary = unqualified ? resolve(ast.detail(callee), s) : 0;
     if (ordinary) {
         if (!function_binding(ordinary)) adl = false;
         else for (EntityId candidate : candidates(ordinary)) {
@@ -322,10 +322,10 @@ Expression Analyzer::call_expression(NodeId n, ScopeId s)
             if (owner == ScopeKind::Class || owner == ScopeKind::Block || owner == ScopeKind::Function) adl = false;
         }
     }
-    EntityId associated = adl ? associated_lookup(terminal(ast[callee].detail), args) : 0;
+    EntityId associated = adl ? associated_lookup(terminal(ast.detail(callee)), args) : 0;
     if (associated) {
         EntityId selected = merge_lookup(ordinary, associated);
-        if (definitions) selected = explicit_template(ast[callee].detail,selected,s);
+        if (definitions) selected = explicit_template(ast.detail(callee),selected,s);
         fn.entity = selected; fn.form = ExpressionForm::Overload; fn.category = ValueCategory::Lvalue;
         expressions.set(callee,fn); expressions.ready(callee,true); expressions.evaluated(callee,!unevaluated_depth);
         { auto& published = facts.edit(callee); published.entity = selected; published.scope = s; }

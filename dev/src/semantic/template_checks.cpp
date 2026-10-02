@@ -9,7 +9,7 @@ void Analyzer::check_template_parameters(NodeId n, ScopeId s)
     // own check after their complete head is declared, including retained
     // out-of-class heads; projected declarations reuse that source check.
     if (ast.nodes.occurrences[n].context) { ++template_parameter_check_reuses; return; }
-    if (ast[n].kind == Kind::Template) return;
+    if (ast.kind(n) == Kind::Template) return;
     Index parameters;
     for (auto scope = s; scope; scope = scopes[scope].parent) {
         if (scopes[scope].kind != ScopeKind::Template) continue;
@@ -31,24 +31,24 @@ void Analyzer::check_template_parameters(NodeId n, ScopeId s)
         NodeId name = 0;
         if (node.kind == Kind::Declarator) name = decl_name(item.node);
         if (node.kind == Kind::Class || node.kind == Kind::ClassForward || node.kind == Kind::Enum) name = node.detail;
-        if (name && ast[name].first == ast[name].last && ast[name].op != OP_COLON2) declared = terminal(name);
+        if (name && ast.first(name) == ast.last(name) && ast.op(name) != OP_COLON2) declared = terminal(name);
         if (node.kind == Kind::Alias || node.kind == Kind::Enumerator) declared = node.text;
         if (node.kind == Kind::UsingDeclaration) {
-            auto using_name = ast[node.first].detail;
-            auto previous = ast[using_name].first;
-            while (ast[previous].next && ast[previous].next != ast[using_name].last)
-                previous = ast[previous].next;
+            auto using_name = ast.detail(node.first);
+            auto previous = ast.first(using_name);
+            while (ast.next(previous) && ast.next(previous) != ast.last(using_name))
+                previous = ast.next(previous);
             // In using T::T, the repeated dependent qualifier denotes an
             // inherited constructor, not a declaration of a new name T.
-            bool constructor = !(node.flags & 1) && previous != ast[using_name].last &&
-                ast[previous].text == terminal(using_name);
+            bool constructor = !(node.flags & 1) && previous != ast.last(using_name) &&
+                ast.text(previous) == terminal(using_name);
             if (!constructor) declared = terminal(using_name);
         }
         if (declared && parameters.get(declared)) throw std::runtime_error("declaration redeclares template parameter");
-        if (node.kind == Kind::IdExpression && !item.callee && ast[node.detail].first == ast[node.detail].last &&
+        if (node.kind == Kind::IdExpression && !item.callee && ast.first(node.detail) == ast.last(node.detail) &&
             parameters.get(terminal(node.detail)) == 1) throw std::runtime_error("type template parameter used as a value");
         if (node.detail) work.push_back({node.detail,false});
-        for (auto child = node.first; child; child = ast[child].next)
+        for (auto child = node.first; child; child = ast.next(child))
             work.push_back({child,node.kind == Kind::Call && child == node.first});
     }
 }
@@ -58,8 +58,8 @@ void Analyzer::index_template_members(NodeId n, std::uint32_t path, ScopeId s)
         if (!d) return;
         if (template_prototype_sources.get(ast.nodes.occurrences[d].source)) return;
         auto name = decl_name(d), member = terminal(name);
-        if (ast[ast[name].last].op == OP_COMPL) {
-            auto text = ids.spelling(ast[ast[ast[name].last].first].text);
+        if (ast.op(ast.last(name)) == OP_COMPL) {
+            auto text = ids.spelling(ast.text(ast.first(ast.last(name))));
             std::string spelling = "~" + std::string(text.data,text.size);
             member = ids.intern(TextView(spelling.data(),spelling.size()));
         }
@@ -68,47 +68,47 @@ void Analyzer::index_template_members(NodeId n, std::uint32_t path, ScopeId s)
         template_prototype_sources.put(ast.nodes.occurrences[d].source,template_prototypes.size());
         template_prototype_index.put(k,template_prototypes.size()); template_prototypes.push_back(prototype);
     };
-    for (auto entry = ast[n].first; entry; entry = ast[entry].next) {
+    for (auto entry = ast.first(n); entry; entry = ast.next(entry)) {
         auto c = entry;
-        while (ast[c].kind == Kind::Template) c = ast[ast[c].first].next;
-        if (ast[c].kind == Kind::DeductionGuide) continue;
-        if (spec_has(ast[c].first,KW_FRIEND)) continue;
-        if (ast[c].kind == Kind::Class) {
-            index_template_members(c,definition_path(path,terminal(ast[c].detail)),s); continue;
+        while (ast.kind(c) == Kind::Template) c = ast.next(ast.first(c));
+        if (ast.kind(c) == Kind::DeductionGuide) continue;
+        if (spec_has(ast.first(c),KW_FRIEND)) continue;
+        if (ast.kind(c) == Kind::Class) {
+            index_template_members(c,definition_path(path,terminal(ast.detail(c))),s); continue;
         }
-        if (ast[c].kind == Kind::SimpleDeclaration) {
-            auto first = ast[child(c,Kind::InitDeclarators)].first;
-            for (auto spec = ast[ast[c].first].first; spec; spec = ast[spec].next)
-                if (ast[spec].kind == Kind::Class) {
-                    auto name = ast[spec].detail ? terminal(ast[spec].detail) : terminal(decl_name(ast[first].first));
+        if (ast.kind(c) == Kind::SimpleDeclaration) {
+            auto first = ast.first(child(c,Kind::InitDeclarators));
+            for (auto spec = ast.first(ast.first(c)); spec; spec = ast.next(spec))
+                if (ast.kind(spec) == Kind::Class) {
+                    auto name = ast.detail(spec) ? terminal(ast.detail(spec)) : terminal(decl_name(ast.first(first)));
                     if (name) index_template_members(spec,definition_path(path,name),s);
                 }
-            for (auto item = first; item; item = ast[item].next) {
-                auto d = ast[item].first;
-                add(d,child(ast[d].next,Kind::SpecialInitializer));
+            for (auto item = first; item; item = ast.next(item)) {
+                auto d = ast.first(item);
+                add(d,child(ast.next(d),Kind::SpecialInitializer));
             }
-        } else add(ast[c].kind == Kind::Function ? ast[ast[c].first].next : child(c,Kind::Declarator),
-            ast[c].kind == Kind::Function || ast[c].kind == Kind::SpecialDefinition || child(child(c,Kind::Initializer),Kind::SpecialInitializer));
+        } else add(ast.kind(c) == Kind::Function ? ast.next(ast.first(c)) : child(c,Kind::Declarator),
+            ast.kind(c) == Kind::Function || ast.kind(c) == Kind::SpecialDefinition || child(child(c,Kind::Initializer),Kind::SpecialInitializer));
     }
 }
 int Analyzer::template_exception(NodeId d, ScopeId s)
 {
-    for (auto c = ast[d].first; c; c = ast[c].next) {
-        if (ast[c].kind != Kind::FunctionQualifier || ast[c].op != KW_NOEXCEPT) continue;
-        if (!ast[c].first) return 1;
+    for (auto c = ast.first(d); c; c = ast.next(c)) {
+        if (ast.kind(c) != Kind::FunctionQualifier || ast.op(c) != KW_NOEXCEPT) continue;
+        if (!ast.first(c)) return 1;
         // Names in this fact may need class declaration facts or substitution.
         // Keep that dependency instead of evaluating in the wrong environment.
-        std::vector<NodeId> work(1,ast[c].first);
+        std::vector<NodeId> work(1,ast.first(c));
         for (std::size_t j = 0; j < work.size(); ++j) {
             auto n = ast[work[j]];
             if (n.kind == Kind::IdExpression || n.kind == Kind::TypeId) return -1;
-            for (auto child = n.first; child; child = ast[child].next) work.push_back(child);
+            for (auto child = n.first; child; child = ast.next(child)) work.push_back(child);
         }
-        auto value = evaluate(ast[c].first,s);
+        auto value = evaluate(ast.first(c),s);
         if (!value.valid) throw std::runtime_error("nonconstant template exception specification");
         return constant_truth(value);
     }
-    return ast[ast[decl_name(d)].last].op == OP_COMPL ? -1 : 0;
+    return ast.op(ast.last(decl_name(d))) == OP_COMPL ? -1 : 0;
 }
 ScopeId Analyzer::template_signature_owner(TypeId type, EntityId primary)
 {

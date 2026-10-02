@@ -22,10 +22,10 @@ TypeQueryFact Analyzer::query_delete(const TypeQuery& q, const std::vector<TypeQ
 QueryId Analyzer::allocation_query(NodeId n, ScopeId s)
 {
     TypeQuery q; std::vector<QueryId> children;
-    if (ast[n].kind == Kind::Delete) {
+    if (ast.kind(n) == Kind::Delete) {
         q.kind = QueryKind::Delete; q.context = s;
         q.value = bool(child(n,Kind::ArrayDelete)) | (bool(child(n,Kind::Global)) << 1);
-        auto operand = expression_query(ast[n].last,s);
+        auto operand = expression_query(ast.last(n),s);
         if (!operand && template_type_probe) return 0;
         return intern_query(q,{operand});
     }
@@ -33,9 +33,9 @@ QueryId Analyzer::allocation_query(NodeId n, ScopeId s)
     while (!template_object_context_index.get(q.context) &&
         (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
         q.context = scopes[q.context].parent;
-    auto type_node = child(n,Kind::TypeId), specs = ast[type_node].first, d = ast[specs].next;
+    auto type_node = child(n,Kind::TypeId), specs = ast.first(type_node), d = ast.next(specs);
     auto extent = child(d,Kind::Array);
-    if (extent && !ast[extent].first) throw std::runtime_error("missing array allocation extent");
+    if (extent && !ast.first(extent)) throw std::runtime_error("missing array allocation extent");
     q.type = declarator(d,specifiers(specs,s),s,extent,false,0,true);
     q.value = (child(n,Kind::Global) != 0) | (extent ? 2 : 0);
     TypeQuery type; type.kind = QueryKind::TypeValue; type.type = q.type;
@@ -43,16 +43,16 @@ QueryId Analyzer::allocation_query(NodeId n, ScopeId s)
         type.type = types[type.type].child;
     std::vector<QueryId> args(1,intern_query(type,{}));
     auto init = child(n,Kind::Initializer);
-    auto list = ast[init].first;
-    q.op = init ? (ast[list].kind == Kind::BracedInit ? OP_LBRACE : OP_LPAREN) : TOK_INVALID;
+    auto list = ast.first(init);
+    q.op = init ? (ast.kind(list) == Kind::BracedInit ? OP_LBRACE : OP_LPAREN) : TOK_INVALID;
     TypeQuery call; call.kind = QueryKind::Call; call.context = q.context; call.value = 1;
-    if (ast[list].kind == Kind::BracedInit) {
+    if (ast.kind(list) == Kind::BracedInit) {
         call.op = OP_LBRACE; args.push_back(expression_query(list,s));
-    } else for (auto a = ast[list].first; a; a = ast[a].next) args.push_back(expression_query(a,s));
+    } else for (auto a = ast.first(list); a; a = ast.next(a)) args.push_back(expression_query(a,s));
     children.push_back(intern_query(call,args));
-    if (extent) children.push_back(expression_query(ast[extent].first,s));
-    auto placement = ast[child(n,Kind::Placement)].first;
-    for (auto a = ast[placement].first; a; a = ast[a].next) children.push_back(expression_query(a,s));
+    if (extent) children.push_back(expression_query(ast.first(extent),s));
+    auto placement = ast.first(child(n,Kind::Placement));
+    for (auto a = ast.first(placement); a; a = ast.next(a)) children.push_back(expression_query(a,s));
     if (template_type_probe) for (auto child : children) if (!child) return 0;
     return intern_query(q,children);
 }

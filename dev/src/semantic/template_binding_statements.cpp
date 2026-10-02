@@ -18,13 +18,13 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
         if (node.first) bind_template_expression(node.first,s);
         return;
     case Kind::Try: case Kind::FunctionTry:
-        for (auto c = child(n,Kind::Compound); c; c = ast[c].next) bind_template_statement(c,s);
+        for (auto c = child(n,Kind::Compound); c; c = ast.next(c)) bind_template_statement(c,s);
         return;
     case Kind::Handler: resolve_handler(n,s,true); return;
     case Kind::RangeFor: bind_template_range(n,s); return;
     case Kind::Compound: {
         auto block = make_scope(ScopeKind::Block,s,0,0,false); template_pattern_scopes.put(block,1); facts.edit(n).scope = block;
-        for (auto c = node.first; c; c = ast[c].next) bind_template_statement(c,block);
+        for (auto c = node.first; c; c = ast.next(c)) bind_template_statement(c,block);
         return;
     }
     case Kind::If: case Kind::Switch: case Kind::While: case Kind::Do: case Kind::For: {
@@ -33,13 +33,13 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
         if (loop) ++loop_depth;
         if (sw) { ++switch_depth; switches.emplace_back(); }
         auto control = make_scope(ScopeKind::Control,s,0,0,false); template_pattern_scopes.put(control,1); facts.edit(n).scope = control;
-        for (auto c = node.first; c; c = ast[c].next) {
-            bool header = ast[c].kind == Kind::Condition || ast[c].kind == Kind::SelectionInit || ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration;
+        for (auto c = node.first; c; c = ast.next(c)) {
+            bool header = ast.kind(c) == Kind::Condition || ast.kind(c) == Kind::SelectionInit || ast.kind(c) == Kind::ForInit || ast.kind(c) == Kind::Iteration;
             if (header && loop) --loop_depth;
             if (header && sw) --switch_depth;
-            if (ast[c].kind == Kind::Condition) bind_template_condition(c,control,sw);
-            else if (ast[c].kind == Kind::SelectionInit || ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration ||
-                ast[c].kind == Kind::Then || ast[c].kind == Kind::Else || ast[c].kind == Kind::Compound)
+            if (ast.kind(c) == Kind::Condition) bind_template_condition(c,control,sw);
+            else if (ast.kind(c) == Kind::SelectionInit || ast.kind(c) == Kind::ForInit || ast.kind(c) == Kind::Iteration ||
+                ast.kind(c) == Kind::Then || ast.kind(c) == Kind::Else || ast.kind(c) == Kind::Compound)
                 bind_template_statement(c,control);
             else bind_template_statement(c,make_scope(ScopeKind::Block,control,0,0,false));
             if (header && loop) ++loop_depth;
@@ -50,7 +50,7 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
         return;
     }
     case Kind::Then: case Kind::Else: {
-        auto block = ast[node.first].kind == Kind::Compound ? s : make_scope(ScopeKind::Block,s,0,0,false);
+        auto block = ast.kind(node.first) == Kind::Compound ? s : make_scope(ScopeKind::Block,s,0,0,false);
         bind_template_statement(node.first,block); return;
     }
     case Kind::SimpleDeclaration: case Kind::Alias: case Kind::UsingDirective: case Kind::UsingDeclaration:
@@ -65,7 +65,7 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
         if (!loop_depth) throw std::runtime_error("continue outside loop");
         return;
     case Kind::ExpressionStatement: case Kind::Iteration:
-        for (auto c = node.first; c; c = ast[c].next) {
+        for (auto c = node.first; c; c = ast.next(c)) {
             bind_template_expression(c,s); bind_template_discarded(c,s);
         }
         return;
@@ -82,7 +82,7 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
                 switches.back().labels.put(converted.bits,n);
             }
         }
-        bind_template_statement(ast[node.first].next,s); return;
+        bind_template_statement(ast.next(node.first),s); return;
     }
     case Kind::Default:
         if (!switch_depth) throw std::runtime_error("default outside switch");
@@ -90,27 +90,27 @@ void Analyzer::bind_template_statement(NodeId n, ScopeId s)
         switches.back().has_default = true;
         bind_template_statement(node.first,s); return;
     case Kind::SelectionInit:
-        for (auto c = node.first; c; c = ast[c].next) bind_template_statement(c,s);
+        for (auto c = node.first; c; c = ast.next(c)) bind_template_statement(c,s);
         return;
     case Kind::ForInit:
-        for (auto c = node.first; c; c = ast[c].next) {
-            if (ast[c].kind == Kind::SimpleDeclaration) bind_template_statement(c,s);
+        for (auto c = node.first; c; c = ast.next(c)) {
+            if (ast.kind(c) == Kind::SimpleDeclaration) bind_template_statement(c,s);
             else { bind_template_expression(c,s); bind_template_discarded(c,s); }
         }
         return;
     case Kind::Label: case Kind::Condition:
-        for (auto c = node.first; c; c = ast[c].next) {
-            if (node.kind == Kind::Condition && ast[c].kind != Kind::ConditionDeclaration) bind_template_expression(c,s);
+        for (auto c = node.first; c; c = ast.next(c)) {
+            if (node.kind == Kind::Condition && ast.kind(c) != Kind::ConditionDeclaration) bind_template_expression(c,s);
             else {
                 bind_template_statement(c,s);
-                if (node.kind == Kind::Condition && ast[c].kind == Kind::ConditionDeclaration) {
-                    auto d = ast[ast[c].first].next; facts.edit(n).entity = facts[d].entity;
+                if (node.kind == Kind::Condition && ast.kind(c) == Kind::ConditionDeclaration) {
+                    auto d = ast.next(ast.first(c)); facts.edit(n).entity = facts[d].entity;
                 }
             }
         }
         return;
     default:
-        for (auto c = node.first; c; c = ast[c].next) bind_template_expression(c,s);
+        for (auto c = node.first; c; c = ast.next(c)) bind_template_expression(c,s);
         return;
     }
 }

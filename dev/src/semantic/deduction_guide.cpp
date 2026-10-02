@@ -8,7 +8,7 @@ void Analyzer::deduction_guide(NodeId n, ScopeId s)
         throw std::runtime_error("deduction guide cannot be specialized");
     bool templated = s == active_template_scope;
     auto owner = templated ? scopes[s].parent : s;
-    auto primary = lookup(s,ast[n].text,Lookup::Qualifier);
+    auto primary = lookup(s,ast.text(n),Lookup::Qualifier);
     if (!primary || entities[primary].kind != EntityKind::Type || !entities[primary].class_info ||
         !entities[primary].template_info || entities[primary].owner != owner ||
         (scopes[owner].kind != ScopeKind::Namespace && scopes[owner].kind != ScopeKind::Class))
@@ -40,13 +40,13 @@ void Analyzer::deduction_guide(NodeId n, ScopeId s)
         throw std::runtime_error("guide result is not its class template specialization");
     bool seen_default = false;
     auto params = child(d,Kind::Parameters);
-    for (auto p = ast[params].first; p; p = ast[p].next) {
-        if (ast[p].kind != Kind::Parameter) continue;
+    for (auto p = ast.first(params); p; p = ast.next(p)) {
+        if (ast.kind(p) != Kind::Parameter) continue;
         ++deduction_guide_parameters;
-        auto decl = ast[ast[p].first].next, type = facts[p].type;
+        auto decl = ast.next(ast.first(p)), type = facts[p].type;
         bool pack = declarator_pack(decl) != 0;
         auto argument = child(p,Kind::DefaultArgument);
-        if (fundamental(type,FT_VOID) && (decl_name(decl) || p != ast[params].first || ast[p].next || argument || pack))
+        if (fundamental(type,FT_VOID) && (decl_name(decl) || p != ast.first(params) || ast.next(p) || argument || pack))
             throw std::runtime_error("invalid void guide parameter");
         if (placeholder_type(type)) throw std::runtime_error("placeholder guide parameter");
         if (argument && pack) throw std::runtime_error("guide parameter pack has a default");
@@ -57,20 +57,20 @@ void Analyzer::deduction_guide(NodeId n, ScopeId s)
     auto spec = child(n,Kind::Specifier);
     if (spec) {
         guide.explicit_guide = true;
-        if (ast[spec].first) {
-            bind_template_expression(ast[spec].first,s);
-            guide.explicit_condition = expression_query(ast[spec].first,s);
+        if (ast.first(spec)) {
+            bind_template_expression(ast.first(spec),s);
+            guide.explicit_condition = expression_query(ast.first(spec),s);
             if (!query_fact(guide.explicit_condition).dependent)
                 guide.explicit_guide = explicit_condition_value(guide.explicit_condition,s);
         }
     }
-    for (auto q = ast[params].next; q; q = ast[q].next) {
-        if (ast[q].kind != Kind::FunctionQualifier) continue;
+    for (auto q = ast.next(params); q; q = ast.next(q)) {
+        if (ast.kind(q) != Kind::FunctionQualifier) continue;
         guide.nonthrowing = true;
-        if (ast[q].first) {
-            auto scope = facts[ast[child(d,Kind::TrailingReturn)].first].scope;
-            bind_template_expression(ast[q].first,scope);
-            guide.exception_condition = expression_query(ast[q].first,scope);
+        if (ast.first(q)) {
+            auto scope = facts[ast.first(child(d,Kind::TrailingReturn))].scope;
+            bind_template_expression(ast.first(q),scope);
+            guide.exception_condition = expression_query(ast.first(q),scope);
             if (!query_fact(guide.exception_condition).dependent)
                 guide.nonthrowing = explicit_condition_value(guide.exception_condition,scope);
         }

@@ -7,11 +7,6 @@
 
 namespace cppgm {
 
-bool TextView::equals(const char* text) const
-{
-    return std::strlen(text) == size && std::memcmp(data, text, size) == 0;
-}
-
 int hex_value(int c)
 {
     if (c >= '0' && c <= '9') return c - '0';
@@ -192,16 +187,26 @@ SourceCharacter CharacterCursor::translate(Position& p)
     return c;
 }
 
-const SourceCharacter& CharacterCursor::peek(std::size_t ahead)
+void CharacterCursor::fill(std::size_t ahead)
 {
-    assert(ahead < 18);
     while (count_ <= ahead) {
         Pending& slot = pending_[(head_ + count_) % 18];
-        slot.character = translate(scanned_);
+        int c = scanned_.offset < source_.bytes.size() ?
+            static_cast<unsigned char>(source_.bytes[scanned_.offset]) : -1;
+        // Ordinary ASCII cannot trigger decoding, UCNs, trigraphs or splicing.
+        // Keep the physical position facts while bypassing those slow paths.
+        if (c >= 0 && c < 128 && c != '\\' && c != '?') {
+            SourceCharacter character = {c,scanned_.offset,scanned_.offset+1,scanned_.line,scanned_.column,true};
+            slot.character = character;
+            ++scanned_.offset;
+            if (c == '\n') { ++scanned_.line; scanned_.column = 1; }
+            else ++scanned_.column;
+            scanned_.last = c; scanned_.spliced_tail = false;
+            if (stats_) { ++stats_->decoded_units; ++stats_->translated_units; }
+        } else slot.character = translate(scanned_);
         slot.after = scanned_;
         ++count_;
     }
-    return pending_[(head_ + ahead) % 18].character;
 }
 
 SourceCharacter CharacterCursor::take()
@@ -211,6 +216,31 @@ SourceCharacter CharacterCursor::take()
     head_ = (head_ + 1) % 18;
     --count_;
     return result;
+}
+
+TextView CharacterCursor::take_ascii(AsciiRun kind)
+{
+    auto begin = consumed_.offset;
+    if (count_) return TextView(source_.bytes.data()+begin,0);
+    auto end = begin;
+    while (end < source_.bytes.size()) {
+        unsigned c = static_cast<unsigned char>(source_.bytes[end]);
+        bool matches = kind == AsciiRun::Identifier ? ((c|32)-'a' < 26 || c-'0' < 10 || c == '_') :
+            kind == AsciiRun::Whitespace ? (c == ' ' || c == '\t' || c == '\v' || c == '\f' || c == '\r') :
+            (c < 128 && c != '\n' && c != '\\' && c != '?' && c != '*');
+        if (!matches) break;
+        ++end;
+    }
+    auto length = end-begin;
+    if (length) {
+        consumed_.offset = end;
+        consumed_.column += length;
+        consumed_.last = static_cast<unsigned char>(source_.bytes[end-1]);
+        consumed_.spliced_tail = false;
+        scanned_ = consumed_;
+        if (stats_) { stats_->decoded_units += length; stats_->translated_units += length; }
+    }
+    return TextView(source_.bytes.data()+begin,length);
 }
 
 void CharacterCursor::raw_mode(bool enabled)

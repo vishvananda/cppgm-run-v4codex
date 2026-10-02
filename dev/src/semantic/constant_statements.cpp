@@ -83,9 +83,9 @@ bool Analyzer::constant_local(EntityId e, ScopeId s)
 }
 Constant Analyzer::execute_constant_condition(NodeId n, ScopeId s)
 {
-    auto first = ast[n].first;
+    auto first = ast.first(n);
     if (!first) return Constant(types.fundamental(FT_BOOL),1);
-    if (ast[first].kind == Kind::ConditionDeclaration) {
+    if (ast.kind(first) == Kind::ConditionDeclaration) {
         auto e = facts[n].entity;
         Constant value;
         if (active_constant && constant_frame) {
@@ -110,10 +110,10 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
     if (!n) return next;
     if (!constant_step()) return failure;
     if (facts[n].scope) s = facts[n].scope;
-    auto first = ast[n].first;
+    auto first = ast.first(n);
     // Control-header declarations have the lifetime of their selection/loop,
     // including when execution returns early from a selected substatement.
-    auto kind = ast[n].kind;
+    auto kind = ast.kind(n);
     bool scoped = kind == Kind::Compound || kind == Kind::Then || kind == Kind::Else ||
         kind == Kind::If || kind == Kind::Switch || kind == Kind::For || kind == Kind::While || kind == Kind::Do;
     struct Scope {
@@ -132,9 +132,9 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
             frame.locals.resize(begin);
         }
     } scope(*this,scoped);
-    switch (ast[n].kind) {
+    switch (ast.kind(n)) {
     case Kind::Compound: case Kind::Then: case Kind::Else: {
-        for (auto c = first; c; c = ast[c].next) {
+        for (auto c = first; c; c = ast.next(c)) {
             auto result = execute_constant_statement(c,s);
             if (result.flow != ConstantFlow::Next) return result;
         }
@@ -142,9 +142,9 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
     }
     case Kind::SimpleDeclaration: {
         if (spec_has(first,KW_TYPEDEF)) return next;
-        auto list = ast[first].next;
-        for (auto c = ast[list].first; c; c = ast[c].next)
-            if (!constant_local(facts[ast[c].first].entity,s)) return failure;
+        auto list = ast.next(first);
+        for (auto c = ast.first(list); c; c = ast.next(c))
+            if (!constant_local(facts[ast.first(c)].entity,s)) return failure;
         return next;
     }
     case Kind::Return: {
@@ -157,7 +157,7 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
         }
         auto c = conversions[expressions[first].incoming];
         auto value = c.target ? constant_node_conversion(first,c,s) :
-            ast[first].kind == Kind::BracedInit && !ast[first].first ? evaluate(first,s) : Constant();
+            ast.kind(first) == Kind::BracedInit && !ast.first(first) ? evaluate(first,s) : Constant();
         return {value.valid ? ConstantFlow::Return : ConstantFlow::Failure,value};
     }
     case Kind::If: {
@@ -166,18 +166,18 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
         auto test = child(n,Kind::Condition);
         auto condition = execute_constant_condition(test,s);
         if (!condition.valid) return failure;
-        auto yes = ast[test].next;
-        return execute_constant_statement(condition.bits ? yes : ast[yes].next,s);
+        auto yes = ast.next(test);
+        return execute_constant_statement(condition.bits ? yes : ast.next(yes),s);
     }
     case Kind::For: case Kind::While: case Kind::Do: {
-        auto condition = first, body = ast[first].next;
+        auto condition = first, body = ast.next(first);
         NodeId iteration = 0;
-        if (ast[n].kind == Kind::For) {
+        if (ast.kind(n) == Kind::For) {
             auto init = execute_constant_statement(first,s);
             if (init.flow != ConstantFlow::Next) return init;
-            condition = ast[first].next; iteration = ast[condition].next; body = ast[iteration].next;
-        } else if (ast[n].kind == Kind::Do) { body = first; condition = ast[body].next; }
-        bool initial = ast[n].kind == Kind::Do;
+            condition = ast.next(first); iteration = ast.next(condition); body = ast.next(iteration);
+        } else if (ast.kind(n) == Kind::Do) { body = first; condition = ast.next(body); }
+        bool initial = ast.kind(n) == Kind::Do;
         for (;;) {
             if (!constant_step()) return failure;
             if (!initial) {
@@ -194,14 +194,14 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
         }
     }
     case Kind::SelectionInit:
-        for (auto c = first; c; c = ast[c].next) {
+        for (auto c = first; c; c = ast.next(c)) {
             auto result = execute_constant_statement(c,s);
             if (result.flow != ConstantFlow::Next) return result;
         }
         return next;
     case Kind::ExpressionStatement: case Kind::ForInit: case Kind::Iteration:
-        for (auto c = first; c; c = ast[c].next) {
-            if (ast[c].kind == Kind::SimpleDeclaration) {
+        for (auto c = first; c; c = ast.next(c)) {
+            if (ast.kind(c) == Kind::SimpleDeclaration) {
                 auto result = execute_constant_statement(c,s);
                 if (result.flow != ConstantFlow::Next) return result;
             } else if (!evaluate(c,s).valid) return failure;
@@ -218,8 +218,8 @@ Analyzer::ConstantStatement Analyzer::execute_constant_statement(NodeId n, Scope
 Constant Analyzer::constant_mutation(NodeId n, ScopeId s)
 {
     if (!active_constant || !constant_frame) return Constant();
-    auto target = ast[n].first;
-    auto source = ast[target].next;
+    auto target = ast.first(n);
+    auto source = ast.next(target);
     auto address = constant_address(target,s);
     if (!address) return Constant();
     auto destination = constant_addresses[address];
@@ -228,7 +228,7 @@ Constant Analyzer::constant_mutation(NodeId n, ScopeId s)
     for (auto p = address; p; p = constant_addresses[p].parent)
         if (types[constant_addresses[p].type].cv & 7) return Constant();
     auto stored_type = destination.type;
-    auto op = ast[n].op;
+    auto op = ast.op(n);
     auto old = constant_read(address);
     if (!old.valid) return old;
     auto x = expressions[n];
@@ -258,6 +258,6 @@ Constant Analyzer::constant_mutation(NodeId n, ScopeId s)
     if (destination.parent && types[constant_addresses[destination.parent].type].kind != TypeKind::Array &&
         !(destination.selector & 0x80000000U)) value = constant_field_value(destination.selector,value);
     constant_write(address,value);
-    return ast[n].kind == Kind::Postfix ? old : value;
+    return ast.kind(n) == Kind::Postfix ? old : value;
 }
 } }

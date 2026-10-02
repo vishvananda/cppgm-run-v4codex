@@ -66,17 +66,17 @@ void Analyzer::instantiate_parameters(NodeId d, std::uint32_t context, std::uint
     while (d) {
         if (auto p = child(d,syntax::Kind::Parameters)) parameters = p;
         auto nested = child(d,syntax::Kind::NestedDeclarator);
-        d = nested ? ast[nested].first : 0;
+        d = nested ? ast.first(nested) : 0;
     }
     std::vector<NodeId> expanded;
     bool has_pack = false;
-    for (auto p = ast[parameters].first; p; p = ast[p].next) {
-        if (ast[p].kind != syntax::Kind::Parameter) continue;
+    for (auto p = ast.first(parameters); p; p = ast.next(p)) {
+        if (ast.kind(p) != syntax::Kind::Parameter) continue;
         auto occurrence = ast.projected(p,context);
         if (!occurrence) throw std::logic_error("signature parameter has no occurrence identity");
         auto type = facts[p].type;
         check_substituted_type_access(p,frame);
-        auto params = declarator_pack(ast[ast[p].first].next) ? expansion_parameters(type) : 0;
+        auto params = declarator_pack(ast.next(ast.first(p))) ? expansion_parameters(type) : 0;
         // The signature distinguishes an actual pack from the comma-optional
         // C ellipsis after an unnamed ordinary parameter. Preserve that rule
         // when publishing its body/declaration occurrences as well.
@@ -84,8 +84,8 @@ void Analyzer::instantiate_parameters(NodeId d, std::uint32_t context, std::uint
             if (!has_pack) {
                 // Ordinary parameter lists retain their projected source edges;
                 // allocate an override only when a pack changes the topology.
-                for (auto q = ast[parameters].first; q != p; q = ast[q].next)
-                    if (ast[q].kind == syntax::Kind::Parameter) expanded.push_back(ast.projected(q,context));
+                for (auto q = ast.first(parameters); q != p; q = ast.next(q))
+                    if (ast.kind(q) == syntax::Kind::Parameter) expanded.push_back(ast.projected(q,context));
                 has_pack = true;
             }
             auto count = expansion_count(params,bindings,frame);

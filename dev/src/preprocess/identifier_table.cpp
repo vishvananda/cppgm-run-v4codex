@@ -81,13 +81,6 @@ IdentifierId IdentifierTable::find(TextView text) const
     return 0;
 }
 
-TextView IdentifierTable::spelling(IdentifierId id) const
-{
-    assert(id && id <= entries_.size());
-    const Entry& entry = entries_[id - 1];
-    return TextView(bytes_.data() + entry.offset, entry.length);
-}
-
 std::size_t IdentifierTable::storage_bytes() const
 {
     return entries_.capacity() * sizeof(Entry) + bytes_.capacity() +

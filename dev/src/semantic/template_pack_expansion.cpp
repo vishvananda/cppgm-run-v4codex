@@ -39,7 +39,7 @@ std::uint32_t Analyzer::source_expansion_parameters(NodeId root)
             }
         }
         if (node.detail) work.push_back(node.detail);
-        for (auto c = node.first; c; c = ast[c].next) work.push_back(c);
+        for (auto c = node.first; c; c = ast.next(c)) work.push_back(c);
     }
     auto id = intern_arguments(params); source_expansion_index.put(source,id); return id;
 }
@@ -70,13 +70,13 @@ void Analyzer::expand_expression_list(NodeId list, ScopeId scope)
     auto context = ast.nodes.occurrences[list].context;
     if (!context || expanded_expression_lists.get(list)) return;
     bool expansion = false;
-    for (auto a = ast[list].first; a; a = ast[a].next) expansion |= ast[a].kind == Kind::PackExpression || child(a,Kind::PackExpansion);
+    for (auto a = ast.first(list); a; a = ast.next(a)) expansion |= ast.kind(a) == Kind::PackExpression || child(a,Kind::PackExpansion);
     if (!expansion) return;
     std::vector<NodeId> result; Index bindings;
     auto frame = template_type_contexts.get(context);
-    for (auto a = ast[list].first; a; a = ast[a].next) {
-        if (ast[a].kind != Kind::PackExpression && !child(a,Kind::PackExpansion)) { result.push_back(a); continue; }
-        auto pattern = ast[a].kind == Kind::PackExpression ? ast[a].first : a;
+    for (auto a = ast.first(list); a; a = ast.next(a)) {
+        if (ast.kind(a) != Kind::PackExpression && !child(a,Kind::PackExpansion)) { result.push_back(a); continue; }
+        auto pattern = ast.kind(a) == Kind::PackExpression ? ast.first(a) : a;
         auto params = source_expansion_parameters(pattern);
         auto count = expansion_count(params,bindings,frame);
         if (count < 0) throw std::runtime_error("expression expansion requires an unexpanded pack");

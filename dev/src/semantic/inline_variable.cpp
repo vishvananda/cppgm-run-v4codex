@@ -53,7 +53,7 @@ void Analyzer::initialize_inline_variable(EntityId e)
         auto init = entities[e].initializer;
         if (init) {
             auto source = init;
-            while (ast[source].kind == Kind::Initializer) source = ast[source].first;
+            while (ast.kind(source) == Kind::Initializer) source = ast.first(source);
             expand_expression_list(source,def.scope);
         }
         auto type = entities[e].type;

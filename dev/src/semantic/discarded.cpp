@@ -8,19 +8,19 @@ void Analyzer::record_discard_form(NodeId n, Expression& result) const
     // are already complete, so each node does O(1) work, including conditional
     // and comma wrappers. Fixed template uses retain the same immutable bit.
     if (result.form == ExpressionForm::Ordinary) {
-        auto kind = ast[n].kind;
+        auto kind = ast.kind(n);
         // The retained reduction has the source form of its final operation
         // (or its sole operand). Do not erase that fact at the fold wrapper.
         if (kind == Kind::Fold) return;
-        if (kind == Kind::Parenthesized) result.discarded_form = expressions[ast[n].first].discarded_form;
+        if (kind == Kind::Parenthesized) result.discarded_form = expressions[ast.first(n)].discarded_form;
         else if (kind == Kind::Conditional) {
-            auto second = ast[ast[n].first].next;
-            result.discarded_form = expressions[second].discarded_form && expressions[ast[second].next].discarded_form;
-        } else if (kind == Kind::Binary && ast[n].op == OP_COMMA)
-            result.discarded_form = expressions[ast[ast[n].first].next].discarded_form;
+            auto second = ast.next(ast.first(n));
+            result.discarded_form = expressions[second].discarded_form && expressions[ast.next(second)].discarded_form;
+        } else if (kind == Kind::Binary && ast.op(n) == OP_COMMA)
+            result.discarded_form = expressions[ast.next(ast.first(n))].discarded_form;
         else result.discarded_form = kind == Kind::IdExpression || kind == Kind::Member || kind == Kind::Subscript ||
-            (kind == Kind::Unary && ast[n].op == OP_STAR) ||
-            (kind == Kind::Binary && (ast[n].op == OP_DOTSTAR || ast[n].op == OP_ARROWSTAR));
+            (kind == Kind::Unary && ast.op(n) == OP_STAR) ||
+            (kind == Kind::Binary && (ast.op(n) == OP_DOTSTAR || ast.op(n) == OP_ARROWSTAR));
     }
 }
 void Analyzer::bind_template_discarded(NodeId n, ScopeId s)
@@ -35,11 +35,11 @@ void Analyzer::bind_template_discarded(NodeId n, ScopeId s)
 void Analyzer::prepare_expression_discard(NodeId n)
 {
     auto x = expressions[n];
-    if (x.form == ExpressionForm::Ordinary && ast[n].kind == Kind::Binary && ast[n].op == OP_COMMA)
-        prepare_discarded(ast[n].first);
+    if (x.form == ExpressionForm::Ordinary && ast.kind(n) == Kind::Binary && ast.op(n) == OP_COMMA)
+        prepare_discarded(ast.first(n));
     else if (x.form == ExpressionForm::Cast && x.count && conversions[x.conversions].kind == Conversion::Kind::Discarded) {
-        auto first = ast[n].first;
-        prepare_discarded(ast[n].kind == Kind::Cast ? ast[first].next : ast[ast[first].next].first);
+        auto first = ast.first(n);
+        prepare_discarded(ast.kind(n) == Kind::Cast ? ast.next(first) : ast.first(ast.next(first)));
     }
 }
 bool Analyzer::valid_discarded(Expression x, NodeId n, ScopeId s, Conversion& c)

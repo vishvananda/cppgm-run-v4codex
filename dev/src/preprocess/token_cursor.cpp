@@ -67,11 +67,18 @@ void PPTokenCursor::whitespace()
 {
     token_.kind = PPTokenKind::whitespace;
     for (;;) {
-        if (horizontal_space(peek())) take(false);
+        if (horizontal_space(peek())) {
+            take(false);
+            auto span = characters_.take_ascii(CharacterCursor::AsciiRun::Whitespace);
+            token_.end += span.size;
+        }
         else if (peek() == '/' && peek(1) == '/') {
             characters_.comment_mode(hosted_);
             take(false); take(false);
-            while (peek() != '\n' && peek() != -1) take(false);
+            while (peek() != '\n' && peek() != -1) {
+                take(false);
+                token_.end += characters_.take_ascii(CharacterCursor::AsciiRun::Comment).size;
+            }
             characters_.comment_mode(false);
         } else if (peek() == '/' && peek(1) == '*') {
             characters_.comment_mode(hosted_);
@@ -79,6 +86,7 @@ void PPTokenCursor::whitespace()
             while (!(peek() == '*' && peek(1) == '/')) {
                 if (peek() == -1) throw std::runtime_error("unterminated block comment");
                 take(false);
+                token_.end += characters_.take_ascii(CharacterCursor::AsciiRun::Comment).size;
             }
             take(false); take(false);
             characters_.comment_mode(false);
@@ -89,7 +97,13 @@ void PPTokenCursor::whitespace()
 void PPTokenCursor::identifier()
 {
     take();
-    while (identifier_continue(peek())) take();
+    for (;;) {
+        auto span = characters_.take_ascii(CharacterCursor::AsciiRun::Identifier);
+        if (copied_) translated_.append(span.data,span.size);
+        token_.end += span.size;
+        if (!identifier_continue(peek())) break;
+        take();
+    }
     TextView prefix = spelling();
     if (peek() == '"') {
         if (prefix.equals("R") || prefix.equals("u8R") || prefix.equals("uR") ||

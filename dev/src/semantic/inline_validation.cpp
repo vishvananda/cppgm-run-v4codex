@@ -13,20 +13,20 @@ bool Analyzer::defer_reserved_statement(NodeId n, ScopeId s)
 {
     using syntax::Kind;
     if (!deferred_inline_function(current_function)) return false;
-    while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
-    if (ast[n].kind != Kind::Call) return false;
-    auto callee = ast[n].first, name = ast[callee].detail;
-    if (ast[callee].kind != Kind::IdExpression || ast[name].kind != Kind::Name ||
-        ast[name].first != ast[name].last) return false;
+    while (ast.kind(n) == Kind::Parenthesized) n = ast.first(n);
+    if (ast.kind(n) != Kind::Call) return false;
+    auto callee = ast.first(n), name = ast.detail(callee);
+    if (ast.kind(callee) != Kind::IdExpression || ast.kind(name) != Kind::Name ||
+        ast.first(name) != ast.last(name)) return false;
     auto spelling = ids.spelling(terminal(name));
     if (spelling.size <= 10 || !TextView(spelling.data,10).equals("__builtin_") ||
         hosted_builtin(spelling) || resolve(name,s)) return false;
     // Only a discarded direct call can be deferred without inventing a result
     // type. Its operands and every surrounding statement still require normal
     // semantic validation. A value-dependent use remains an explicit error.
-    auto args = ast[callee].next;
+    auto args = ast.next(callee);
     expand_expression_list(args,s);
-    for (auto a = ast[args].first; a; a = ast[a].next) expression(a,s);
+    for (auto a = ast.first(args); a; a = ast.next(a)) expression(a,s);
     deferred_builtin_bodies.put(current_function,n);
     return true;
 }

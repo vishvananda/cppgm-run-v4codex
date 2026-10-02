@@ -78,10 +78,10 @@ void Analyzer::declaration_attributes(EntityId e, NodeId specs, NodeId source, N
     // linkage, including when a specialization is demanded by a C function.
     entities[e].c_linkage |= c_linkage && scopes[entities[e].owner].kind != ScopeKind::Class;
     for (auto n : {source,specs,declarator}) if (n) {
-        entities[e].no_inline |= ast[n].flags & 64;
-        entities[e].force_inline |= ast[n].flags & 128;
+        entities[e].no_inline |= ast.flags(n) & 64;
+        entities[e].force_inline |= ast.flags(n) & 128;
     }
-    if (calls && (ast[source].flags & 16)) {
+    if (calls && (ast.flags(source) & 16)) {
         Type f = types[entities[e].type];
         if (f.kind != TypeKind::Function || f.variadic || !f.count || !(arithmetic(f.child) || integral(f.child) || pointer(f.child)) ||
             !integral(types.parameters[f.offset+f.count-1])) throw std::runtime_error("invalid stable-prefix query signature");

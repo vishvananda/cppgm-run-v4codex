@@ -9,8 +9,8 @@ bool Analyzer::inert_conversion_receiver(NodeId source)
     while (source && budget--) {
         ++conversion_receiver_work;
         auto x = expressions[source];
-        if (x.form == ExpressionForm::Ordinary && ast[source].kind == syntax::Kind::Parenthesized) {
-            source = ast[source].first; continue;
+        if (x.form == ExpressionForm::Ordinary && ast.kind(source) == syntax::Kind::Parenthesized) {
+            source = ast.first(source); continue;
         }
         if (x.form != ExpressionForm::Construction || x.category != ValueCategory::Prvalue ||
             x.argument_count || (types[x.type].cv & 2) || !empty_class(x.type)) return false;
@@ -35,17 +35,17 @@ void Analyzer::prepare_conversion_result(EntityId e)
     // syntax inspected. More elaborate bodies keep their ordinary call.
     ++conversion_result_work;
     NodeId body = entity.body;
-    if (ast[body].kind != syntax::Kind::Compound) return;
-    NodeId statement = ast[body].first;
-    if (!statement || ast[statement].next || ast[statement].kind != syntax::Kind::Return) return;
-    NodeId source = ast[statement].first;
+    if (ast.kind(body) != syntax::Kind::Compound) return;
+    NodeId statement = ast.first(body);
+    if (!statement || ast.next(statement) || ast.kind(statement) != syntax::Kind::Return) return;
+    NodeId source = ast.first(statement);
     auto conversion = conversions[expressions[source].incoming];
     if (conversion.kind != Conversion::Kind::Standard || conversion.reference || conversion.function) return;
     unsigned budget = 8;
-    while (ast[source].kind == syntax::Kind::Parenthesized && budget) {
-        --budget; ++conversion_result_work; source = ast[source].first;
+    while (ast.kind(source) == syntax::Kind::Parenthesized && budget) {
+        --budget; ++conversion_result_work; source = ast.first(source);
     }
-    if (ast[source].kind != syntax::Kind::IdExpression ||
+    if (ast.kind(source) != syntax::Kind::IdExpression ||
         expressions[source].form != ExpressionForm::Ordinary || (types[expressions[source].type].cv & 2)) return;
     EntityId named = expressions[source].entity;
     if (!named || (entities[named].kind != EntityKind::Enumerator &&

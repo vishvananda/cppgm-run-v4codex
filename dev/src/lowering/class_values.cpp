@@ -28,16 +28,16 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
     atomic_padding(reference(c.target) ? sem.types[c.target].child : c.target,destination);
     if (c.kind == semantic::Conversion::Kind::List) { list_conversion(c,destination); return; }
     if (c.kind == semantic::Conversion::Kind::User) { user_conversion(n,c,destination); return; }
-    while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
-    if (ast[n].kind == Kind::Throw) { throw_expression(n); return; }
+    while (ast.kind(n) == Kind::Parenthesized) n = ast.first(n);
+    if (ast.kind(n) == Kind::Throw) { throw_expression(n); return; }
     auto fact = sem.expression_fact(n);
     bool construction = c.kind == semantic::Conversion::Kind::Construction;
     auto materialized = construction ? sem.conversion_objects[c.materialization] : semantic::ConversionObject();
     bool elided = construction ? materialized.elided : c.empty_copy && fact.category == ValueCategory::Prvalue;
-    if (elided && ast[n].kind == Kind::StatementExpression) { statement_expression(n,destination); return; }
-    if (elided && ast[n].kind == Kind::Lambda) { initialize_closure(n,destination); return; }
+    if (elided && ast.kind(n) == Kind::StatementExpression) { statement_expression(n,destination); return; }
+    if (elided && ast.kind(n) == Kind::Lambda) { initialize_closure(n,destination); return; }
     if (construction && materialized.branches) { conditional(n,false,destination,materialized.branches,terminal); return; }
-    if (elided && ast[n].kind == Kind::Conditional) { conditional(n,false,destination,0,terminal); return; }
+    if (elided && ast.kind(n) == Kind::Conditional) { conditional(n,false,destination,0,terminal); return; }
     if (elided && fact.form == semantic::ExpressionForm::ListValue) {
         list_conversion(sem.conversion_fact(fact.conversions),destination); return;
     }
@@ -46,11 +46,11 @@ void Procedural::construct_value(NodeId n, const semantic::Conversion& c, Value 
         construct(sem.facts[n].entity,n,destination,base); return;
     }
     if (elided && fact.form == semantic::ExpressionForm::Cast) {
-        NodeId first = ast[n].first;
-        NodeId operand = ast[n].kind == Kind::Cast ? ast[first].next : ast[ast[first].next].first;
+        NodeId first = ast.first(n);
+        NodeId operand = ast.kind(n) == Kind::Cast ? ast.next(first) : ast.first(ast.next(first));
         construct_value(operand,sem.conversion_fact(fact.conversions),destination,terminal,base); return;
     }
-    if (elided && (ast[n].kind == Kind::Call || fact.form == semantic::ExpressionForm::OperatorCall)) {
+    if (elided && (ast.kind(n) == Kind::Call || fact.form == semantic::ExpressionForm::OperatorCall)) {
         call(n,destination); return;
     }
     TypeId target = reference(c.target) ? sem.types[c.target].child : c.target;

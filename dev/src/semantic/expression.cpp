@@ -36,7 +36,7 @@ void Analyzer::demand_function_expression(const Expression& value)
 Expression Analyzer::expression(NodeId n, ScopeId s)
 {
     if (expressions[n].ready) {
-        if (source_builtins_present && ast[n].kind == Kind::Call) remember_source_site(n,s);
+        if (source_builtins_present && ast.kind(n) == Kind::Call) remember_source_site(n,s);
         if (!unevaluated_depth) expressions.evaluated(n,true);
         if ((!unevaluated_depth || active_default_fact || active_inline_initializer) && definitions) demand_template_storage(expressions[n].entity);
         demand_function_expression(expressions[n]);
@@ -49,18 +49,18 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     }
     facts.edit(n).scope = s;
     Expression result = resolve_expression(n, s);
-    if (source_builtins_present && (ast[n].kind == Kind::Call || ast[n].kind == Kind::New || result.form == ExpressionForm::Construction ||
+    if (source_builtins_present && (ast.kind(n) == Kind::Call || ast.kind(n) == Kind::New || result.form == ExpressionForm::Construction ||
         result.form == ExpressionForm::OperatorCall || result.form == ExpressionForm::ListValue)) remember_source_site(n,s);
     storage_expression(n,result);
     // Reused fixed template facts share type/conversions, but capture storage
     // belongs to this checked occurrence and enclosing closure specialization.
     unsigned capture = 0;
-    if (ast[n].kind == Kind::KeywordLiteral && ast[n].op == KW_THIS) capture = capture_object(0);
-    if (ast[n].kind == Kind::IdExpression && result.entity) {
+    if (ast.kind(n) == Kind::KeywordLiteral && ast.op(n) == KW_THIS) capture = capture_object(0);
+    if (ast.kind(n) == Kind::IdExpression && result.entity) {
         if (nonstatic_field(result.entity)) capture = capture_object(0);
         else if (!entities[result.entity].constant.valid) capture = capture_object(result.entity);
     }
-    if (ast[n].kind == Kind::Call && result.object_use) {
+    if (ast.kind(n) == Kind::Call && result.object_use) {
         auto use = object_uses[result.object_use];
         if (use.type && !use.node) capture = capture_object(0);
     }
@@ -77,7 +77,7 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     // reads retain the value already published at that source use, before its
     // storage demand can attach an out-of-class initializer. Both paths record
     // the decision here; lowering never consults a later declaration value.
-    if ((ast[n].kind == Kind::IdExpression || ast[n].kind == Kind::Member) && result.entity && ((entities[result.entity].is_static && scopes[entities[result.entity].owner].kind == ScopeKind::Class) ||
+    if ((ast.kind(n) == Kind::IdExpression || ast.kind(n) == Kind::Member) && result.entity && ((entities[result.entity].is_static && scopes[entities[result.entity].owner].kind == ScopeKind::Class) ||
         (entities[result.entity].kind == EntityKind::Variable && entities[result.entity].specialization)) &&
         entities[result.entity].constant.valid) {
         facts.edit(n).value = constants.size(); constants.push_back(entities[result.entity].constant);
@@ -88,7 +88,7 @@ Expression Analyzer::expression(NodeId n, ScopeId s)
     result.ready = true; result.evaluated = !unevaluated_depth;
     expressions.set(n,result);
     if (!facts[n].type) facts.edit(n).type = result.type;
-    if (ast[n].kind == Kind::Call && atomic_kind(facts[n].entity).form == AtomicForm::Always) {
+    if (ast.kind(n) == Kind::Call && atomic_kind(facts[n].entity).form == AtomicForm::Always) {
         auto value = atomic_constant(n,s);
         if (!value.valid) throw std::runtime_error("always_lock_free requires a constant size");
         facts.edit(n).value = constants.size(); constants.push_back(value);
@@ -102,8 +102,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     Expression r;
     if (ast.nodes.occurrences[n].context && reuse_fixed_expression(n,s,r)) return r;
     ++expression_work;
-    NodeId first = ast[n].first;
-    switch (ast[n].kind) {
+    NodeId first = ast.first(n);
+    switch (ast.kind(n)) {
     case Kind::Fold: return fold_expression(n,s);
     case Kind::FunctionName:
         r.entity = predefined_function_name(n,s); facts.edit(n).entity = r.entity;
@@ -124,7 +124,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
     case Kind::New: return placement_new(n, s);
     case Kind::Delete: return delete_expression(n,s);
     case Kind::Literal: {
-        const syntax::LiteralValue& lit = ast.literals[ast[n].literal];
+        const syntax::LiteralValue& lit = ast.literals[ast.literal(n)];
         if (lit.suffix) return literal_call(n, s);
         r.type = types.fundamental(lit.type);
         if (lit.kind == LiteralKind::string) {
@@ -134,32 +134,32 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         return r;
     }
     case Kind::KeywordLiteral:
-        if (ast[n].op == KW_THIS) {
+        if (ast.op(n) == KW_THIS) {
             r.type = implicit_object_type(s);
             if (!r.type) throw std::runtime_error("this outside nonstatic member");
             return r;
         }
-        r.type = types.fundamental(ast[n].op == KW_NULLPTR ? FT_NULLPTR_T : FT_BOOL); return r;
+        r.type = types.fundamental(ast.op(n) == KW_NULLPTR ? FT_NULLPTR_T : FT_BOOL); return r;
     case Kind::IdExpression: {
-        auto op = operator_token(ast[n].detail);
-        if (op == KW_NEW || op == KW_DELETE) global_allocation(op,array_operator(ast[n].detail));
-        EntityId e = resolve(ast[n].detail,s);
-        if (!e && ast[ast[n].detail].first == ast[ast[n].detail].last)
-            e = builtin_function(terminal(ast[n].detail));
+        auto op = operator_token(ast.detail(n));
+        if (op == KW_NEW || op == KW_DELETE) global_allocation(op,array_operator(ast.detail(n)));
+        EntityId e = resolve(ast.detail(n),s);
+        if (!e && ast.first(ast.detail(n)) == ast.last(ast.detail(n)))
+            e = builtin_function(terminal(ast.detail(n)));
         if (!e) {
-            auto name = terminal(ast[n].detail);
+            auto name = terminal(ast.detail(n));
             if (!name) throw std::runtime_error("expression requires a value name");
             auto text = ids.spelling(name);
             throw std::runtime_error("unknown expression name: " + std::string(text.data,text.size));
         }
-        if (function_binding(e)) e = explicit_template(ast[n].detail, e, s);
+        if (function_binding(e)) e = explicit_template(ast.detail(n), e, s);
         if (placeholder_objects.get(e)) throw std::runtime_error("use before auto type deduction");
         r.entity = e; facts.edit(n).entity = e;
         auto intrinsic = intrinsic_function(e);
         bool atomic_family = intrinsic == Intrinsic::Atomic || intrinsic == Intrinsic::VectorShuffle || intrinsic == Intrinsic::Complex;
         if (entities[e].kind == EntityKind::Overload || (definitions && entities[e].template_info) || atomic_family || (intrinsic >= Intrinsic::AddOverflow && intrinsic <= Intrinsic::MulOverflow) || (intrinsic >= Intrinsic::Clzg && intrinsic <= Intrinsic::Popcountg)) {
             r.form = ExpressionForm::Overload; r.category = ValueCategory::Lvalue;
-            ScopeId naming = naming_class(name_owner(ast[n].detail, s));
+            ScopeId naming = naming_class(name_owner(ast.detail(n), s));
             if (naming) { record_object(r, 0, 0, 0); object_uses[r.object_use].naming_scope = naming; }
             return r;
         }
@@ -183,8 +183,8 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
                 derived_from(types[object].child,owner));
             if (related_object) {
                 size(types[object].child);
-                auto naming = name_owner(ast[n].detail,s);
-                bool qualified = ast[ast[n].detail].first != ast[ast[n].detail].last;
+                auto naming = name_owner(ast.detail(n),s);
+                bool qualified = ast.first(ast.detail(n)) != ast.last(ast.detail(n));
                 if (qualified && base_adjustments[base_path(types[object].child,scopes[entities[e].owner].entity)].ambiguous)
                     record_member_receiver(r,0,types[object].child,e,naming,true,s);
                 else record_object(r, 0, object, base_steps(types[object].child, scopes[entities[e].owner].entity));
@@ -196,39 +196,39 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             r.type = entities[e].constant.type;
         if (function_binding(e) && scopes[entities[e].owner].kind == ScopeKind::Class) {
             if (!r.object_use) record_object(r, 0, 0, 0);
-            object_uses[r.object_use].naming_scope = naming_class(name_owner(ast[n].detail, s));
+            object_uses[r.object_use].naming_scope = naming_class(name_owner(ast.detail(n), s));
         }
         if (entities[e].member_info) facts.edit(n).type = members[entities[e].member_info].call_type;
         if (entities[e].kind != EntityKind::Enumerator || types[entities[e].type].kind == TypeKind::LRef) r.category = ValueCategory::Lvalue;
         return r;
     }
     case Kind::BracedInit:
-        for (NodeId c = first; c; c = ast[c].next)
-            expression(ast[c].kind == Kind::DesignatedInit ? ast[c].first : c,s);
+        for (NodeId c = first; c; c = ast.next(c))
+            expression(ast.kind(c) == Kind::DesignatedInit ? ast.first(c) : c,s);
         r.form = ExpressionForm::InitializerList; r.arguments = n; return r;
     case Kind::Parenthesized: return value_fact(expression(first, s));
     case Kind::Call: return call_expression(n, s);
     case Kind::Unary: case Kind::Postfix: return unary_expression(n, s);
     case Kind::Binary: case Kind::Assignment: case Kind::Conditional: return binary_expression(n, s);
-    case Kind::Cast: return cast_expression(n, s, type_id(first, s), ast[first].next);
+    case Kind::Cast: return cast_expression(n, s, type_id(first, s), ast.next(first));
     case Kind::TypeTrait: case Kind::Sizeof: {
-        if (ast[n].kind == Kind::TypeTrait && ast[n].flags) {
+        if (ast.kind(n) == Kind::TypeTrait && ast.flags(n)) {
             auto query = expression_query(n,s);
             if (query_fact(query).state == FactState::Failure) throw std::runtime_error("invalid type operation");
             r = query_fact(query).expression;
             if (type_queries[query].kind == QueryKind::Offsetof)
-                for (auto step = ast[first].next; step; step = ast[step].next)
-                    if (ast[step].kind == Kind::Subscript) expression(ast[step].first,s);
+                for (auto step = ast.next(first); step; step = ast.next(step))
+                    if (ast.kind(step) == Kind::Subscript) expression(ast.first(step),s);
             auto value = query_value(query);
             r.form = type_queries[query].kind == QueryKind::Offsetof && !constants[value].valid ?
                 ExpressionForm::Ordinary : ExpressionForm::ConstantQuery;
             facts.edit(n).value = value; return r;
         }
-        if (ast[n].op == KW_TYPEID) return typeid_expression(n,s);
+        if (ast.op(n) == KW_TYPEID) return typeid_expression(n,s);
         ++unevaluated_depth;
-        TypeId t = ast[first].kind == Kind::TypeId ? type_id(first, s) : expression(first, s).type;
+        TypeId t = ast.kind(first) == Kind::TypeId ? type_id(first, s) : expression(first, s).type;
         --unevaluated_depth;
-        if (ast[n].op == KW_NOEXCEPT) {
+        if (ast.op(n) == KW_NOEXCEPT) {
             r.type = types.fundamental(FT_BOOL);
             Constant value(r.type,expression_nonthrowing(first));
             facts.edit(n).value = constants.size(); constants.push_back(value);
@@ -239,13 +239,13 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         // Layout can instantiate a class whose bounds/enumerators publish
         // other constants. Reserve this query's identity only after that
         // dependency completes, so it cannot point at a nested query's value.
-        auto bytes = ast[n].op == KW_ALIGNOF && ast[first].kind != Kind::TypeId ? expression_alignment(expressions[first]) : size(t,ast[n].op == KW_ALIGNOF);
+        auto bytes = ast.op(n) == KW_ALIGNOF && ast.kind(first) != Kind::TypeId ? expression_alignment(expressions[first]) : size(t,ast.op(n) == KW_ALIGNOF);
         Constant value(r.type,bytes);
         facts.edit(n).value = constants.size(); constants.push_back(value);
         return r;
     }
     case Kind::Subscript: {
-        NodeId second = ast[first].next;
+        NodeId second = ast.next(first);
         TypeId a = decay(expression(first, s).type), b = decay(expression(second, s).type);
         if ((types[a].kind == TypeKind::Named || types[b].kind == TypeKind::Named) &&
             operator_expression(n, s, OP_LSQUARE, {first, second}, r)) return r;
@@ -271,16 +271,16 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         Expression object = expression(first, s);
         TypeId t = object.type;
         std::uint32_t arrow = 0;
-        if (ast[n].op == OP_ARROW) {
+        if (ast.op(n) == OP_ARROW) {
             arrow = prepare_arrow(first,s);
             if (arrow) t = arrow_chains[arrow].type;
             t = decay(t);
             if (!pointer(t)) throw std::runtime_error("arrow requires pointer");
             t = types[t].child;
         }
-        NodeId name = ast[ast[first].next].detail;
-        NodeId part = ast[name].last;
-        bool destructor = ast[part].op == OP_COMPL;
+        NodeId name = ast.detail(ast.next(first));
+        NodeId part = ast.last(name);
+        bool destructor = ast.op(part) == OP_COMPL;
         bool class_type = types[t].kind == TypeKind::Named && entities[types[t].entity].class_info;
         TypeId destructor_type = t;
         if (destructor) {
@@ -288,9 +288,9 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
             if (!named || (types.unqualified(named) != types.unqualified(t) && !derived_from(t,named)))
                 throw std::runtime_error("destructor name does not match object type");
             destructor_type = named;
-            if (ast[name].first != part) {
-                auto prefix = ast[name].first;
-                while (ast[prefix].next != part) prefix = ast[prefix].next;
+            if (ast.first(name) != part) {
+                auto prefix = ast.first(name);
+                while (ast.next(prefix) != part) prefix = ast.next(prefix);
                 auto qualifier = type_name(name,s,prefix);
                 if (types.unqualified(qualifier) != types.unqualified(named))
                     throw std::runtime_error("destructor qualifier does not match target");
@@ -306,16 +306,16 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
         size(t); // Establish layout once at the semantic owner before recording field use.
         if (operator_token(name) == OP_ASS) ensure_transfers(t, true);
         EntityId e = destructor ? default_destructor(destructor_type, s) : lookup(name_owner(name, entities[types[t].entity].scope), terminal(name), Lookup::Ordinary, true);
-        if (ast[part].op == KW_OPERATOR && ast[part].detail)
-            e = conversion_lookup(name_owner(name,entities[types[t].entity].scope),type_id(ast[part].detail,s));
+        if (ast.op(part) == KW_OPERATOR && ast.detail(part))
+            e = conversion_lookup(name_owner(name,entities[types[t].entity].scope),type_id(ast.detail(part),s));
         if (!e) throw std::runtime_error("unknown member");
         if (definitions && !destructor && function_binding(e)) e = explicit_template(name,e,s);
-        r = member_value(e,types[t].cv,ast[n].op == OP_ARROW ? ValueCategory::Lvalue : object.category);
+        r = member_value(e,types[t].cv,ast.op(n) == OP_ARROW ? ValueCategory::Lvalue : object.category);
         facts.edit(n).entity = e;
         ScopeId naming = name_owner(name, entities[types[t].entity].scope);
         if (!function_binding(e)) check_access(e, s, naming, t);
         if (nonstatic_field(e)) {
-            bool qualified = ast[name].first != ast[name].last;
+            bool qualified = ast.first(name) != ast.last(name);
             if (qualified && base_adjustments[base_path(t,scopes[entities[e].owner].entity)].ambiguous)
                 record_member_receiver(r,first,t,e,naming,true,s);
             else record_object(r, first, t, base_steps(t, scopes[entities[e].owner].entity));
@@ -331,7 +331,7 @@ Expression Analyzer::resolve_expression(NodeId n, ScopeId s)
 Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId operand, bool recipe)
 {
     auto storage = to; to = types.signature(to);
-    if (ast[n].op == KW_DYNAMIC_CAST) {
+    if (ast.op(n) == KW_DYNAMIC_CAST) {
         auto result = dynamic_cast_expression(n,s,to,operand);
         if (storage != to) result.storage_type = value_type(storage);
         return result;
@@ -340,7 +340,7 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
     r.type = value_type(to); r.form = ExpressionForm::Cast;
     if (storage != to) r.storage_type = value_type(storage);
     facts.edit(n).type = to;
-    if (ast[n].kind == Kind::Cast && ast[n].op == OP_LPAREN && ast[operand].kind == Kind::BracedInit) {
+    if (ast.kind(n) == Kind::Cast && ast.op(n) == OP_LPAREN && ast.kind(operand) == Kind::BracedInit) {
         if (types[to].kind == TypeKind::LRef || types[to].kind == TypeKind::RRef)
             throw std::runtime_error("compound literal requires an object type");
         expression(operand,s);
@@ -370,8 +370,8 @@ Expression Analyzer::cast_expression(NodeId n, ScopeId s, TypeId to, NodeId oper
         store_call(r,{operand},{c}); r.inputs = CallInputs::Source;
     };
     Type target = types[to];
-    ETokenType op = ast[n].op;
-    bool cstyle = op == OP_LPAREN || ast[n].kind == Kind::Call;
+    ETokenType op = ast.op(n);
+    bool cstyle = op == OP_LPAREN || ast.kind(n) == Kind::Call;
     bool cv_cast = op == KW_CONST_CAST;
     if (!cv_cast && op != KW_REINTERPET_CAST && class_value(to)) {
         if (recipe) throw std::logic_error("class cast needs a constructor recipe");

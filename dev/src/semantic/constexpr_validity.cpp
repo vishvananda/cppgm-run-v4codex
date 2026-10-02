@@ -9,8 +9,8 @@ TypeId Analyzer::constexpr_member_type(TypeId t, NodeId specs, NodeId source, No
         spec_has(specs,KW_STATIC) || spec_has(child(source,Kind::MemberSpecifiers),KW_STATIC) ||
         !(spec_has(specs,KW_CONSTEXPR) || spec_has(child(source,Kind::MemberSpecifiers),KW_CONSTEXPR))) return t;
     auto name = decl_name(d);
-    if (terminal(name) == scopes[owner].name || ast[ast[name].last].op == OP_COMPL) return t;
-    if (ast[name].first != ast[name].last)
+    if (terminal(name) == scopes[owner].name || ast.op(ast.last(name)) == OP_COMPL) return t;
+    if (ast.first(name) != ast.last(name))
         for (auto e : candidates(local(owner,terminal(name))))
             if (entities[e].is_static && entities[e].type == types.signature(t)) return t;
     auto f = types[t];
@@ -160,7 +160,7 @@ void Analyzer::check_constexpr_constructor(EntityId e)
         return;
     }
     if (member.actions_state != FactState::Success) return; // A declaration alone needs no definition.
-    if (ast[entities[e].body].kind == Kind::FunctionTry) throw std::runtime_error("constexpr constructor function try block");
+    if (ast.kind(entities[e].body) == Kind::FunctionTry) throw std::runtime_error("constexpr constructor function try block");
     if (member.delegated_constructor) {
         if (!constexpr_constructor(member.delegated_constructor)) throw std::runtime_error("nonconstexpr delegation");
         return;

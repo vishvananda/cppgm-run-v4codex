@@ -12,9 +12,13 @@ std::uint64_t mix(std::uint64_t x) {
 Types::Types() { records.push_back(Type()); hashes.push_back(0); }
 TypeId Types::intern(Type t, const std::vector<TypeId>& params)
 {
-    std::uint64_t hash = mix(unsigned(t.kind) | (t.cv << 8) | (unsigned(t.fundamental) << 16) |
-                             (unsigned(t.variadic) << 24) | (unsigned(t.ref) << 25) | (unsigned(t.unknown_bound) << 27));
-    hash ^= mix(std::uint64_t(t.alignment_queries) << 32) ^ mix(t.alignment) ^ mix(t.child) ^ mix(std::uint64_t(t.entity) << 32) ^ mix(t.bound);
+    auto flags = unsigned(t.kind) | (t.cv << 8) | (unsigned(t.fundamental) << 16) |
+        (unsigned(t.variadic) << 24) | (unsigned(t.ref) << 25) | (unsigned(t.unknown_bound) << 27);
+    // Pack disjoint 32-bit fields before mixing instead of hashing every small
+    // field separately. The full canonical type comparison still resolves collisions.
+    std::uint64_t hash = mix((std::uint64_t(flags) << 32) | t.child) ^
+        mix((std::uint64_t(t.entity) << 32) | t.alignment_queries) ^
+        mix(t.bound ^ (std::uint64_t(t.alignment)*0x9e3779b97f4a7c15ULL));
     for (TypeId p : params) hash = mix(hash ^ p);
     if (slots.empty() || records.size() * 2 >= slots.size()) {
         slots.assign(slots.empty() ? 64 : slots.size() * 2, 0);
@@ -41,7 +45,11 @@ TypeId Types::intern(Type t, const std::vector<TypeId>& params)
     records.push_back(t); hashes.push_back(hash);
     return slots[p];
 }
-TypeId Types::fundamental(EFundamentalType f) { Type t; t.fundamental = f; return intern(t, {}); }
+TypeId Types::make_fundamental(EFundamentalType f)
+{
+    Type t; t.fundamental = f;
+    return fundamentals[f] = intern(t, {});
+}
 TypeId Types::bit_integer(unsigned width, bool unsign)
 {
     Type t; t.fundamental = unsign ? FT_UBITINT : FT_BITINT; t.bound = width;
@@ -104,6 +112,7 @@ TypeId Types::qualify(TypeId id, unsigned cv)
 {
     Type t = records[id];
     if (!cv || t.kind == TypeKind::LRef || t.kind == TypeKind::RRef || t.kind == TypeKind::Function) return id;
+    if ((t.cv & cv) == cv) return id;
     if (t.kind == TypeKind::Array || t.kind == TypeKind::DependentArray) return aligned(compound(t.kind, qualify(t.child, cv), t.bound,t.unknown_bound),t.alignment ? std::uint64_t(1) << (t.alignment-1) : 0,t.alignment_queries);
     t.cv |= cv;
     if (t.kind == TypeKind::DependentName)

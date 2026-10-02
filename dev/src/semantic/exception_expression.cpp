@@ -60,7 +60,7 @@ bool Analyzer::list_nonthrowing(std::uint32_t id)
             // through its backing-array conversion. Re-entering that source
             // follows its incoming conversion back to this plan. The nested
             // conversion below owns all element evaluations and lifetimes.
-            if (source != plan.source || ast[source].kind != Kind::BracedInit)
+            if (source != plan.source || ast.kind(source) != Kind::BracedInit)
                 result &= expression_nonthrowing(source);
         }
         result &= conversion_nonthrowing(conversions[plan.call.conversions+i]);
@@ -135,14 +135,14 @@ bool Analyzer::expression_nonthrowing(NodeId n)
     auto node = ast[n]; auto x = expressions[n];
     if (node.kind == Kind::TypeTrait && BuiltinTrait(node.flags) == BuiltinTrait::Offsetof) {
         bool result = true;
-        for (auto step = ast[node.first].next; step; step = ast[step].next)
-            if (ast[step].kind == Kind::Subscript) result &= expression_nonthrowing(ast[step].first);
+        for (auto step = ast.next(node.first); step; step = ast.next(step))
+            if (ast.kind(step) == Kind::Subscript) result &= expression_nonthrowing(ast.first(step));
         expression_exception_facts.put(n,result ? 2 : 1); return result;
     }
     if (x.form == ExpressionForm::ConstantQuery || x.form == ExpressionForm::Abort || x.form == ExpressionForm::Unreachable) return true;
     if (x.form == ExpressionForm::Typeid) return !rtti_expression(n).dynamic;
     if (x.form == ExpressionForm::DynamicCast)
-        return !rtti_expression(n).reference && expression_nonthrowing(ast[node.first].next);
+        return !rtti_expression(n).reference && expression_nonthrowing(ast.next(node.first));
     // These operands are unevaluated, including nested noexcept. Their type
     // and validity have already been checked by semantic construction.
     if (node.kind == Kind::Lambda) {
@@ -155,8 +155,8 @@ bool Analyzer::expression_nonthrowing(NodeId n)
     bool result = node.kind != Kind::Throw;
     if (node.kind == Kind::SimpleDeclaration) {
         auto list = child(n,Kind::InitDeclarators);
-        for (auto item = ast[list].first; item; item = ast[item].next) {
-            auto e = facts[ast[item].first].entity;
+        for (auto item = ast.first(list); item; item = ast.next(item)) {
+            auto e = facts[ast.first(item)].entity;
             if (!e || entities[e].kind != EntityKind::Variable || entities[e].external_decl) continue;
             auto init = entities[e].initializer, type = entities[e].type;
             if (!init) result &= default_construction_nonthrowing(object_constructor(e));
@@ -213,7 +213,7 @@ bool Analyzer::expression_nonthrowing(NodeId n)
         auto arg = call_argument(x,i);
         if (arg && arg != n) result &= expression_nonthrowing(arg);
     }
-    for (auto child = node.first; child; child = ast[child].next) result &= expression_nonthrowing(child);
+    for (auto child = node.first; child; child = ast.next(child)) result &= expression_nonthrowing(child);
     expression_exception_facts.put(n,result ? 2 : 1); return result;
 }
 bool Analyzer::query_nonthrowing(QueryId id, bool temporary)

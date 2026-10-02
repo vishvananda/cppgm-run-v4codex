@@ -130,7 +130,7 @@ void Procedural::return_statement(NodeId n)
     auto class_return = sem.class_return(n);
     auto conversion = sem.conversion_fact(class_return.conversion);
     bool omit = class_return.source && conversion.kind == semantic::Conversion::Kind::Construction && sem.conversion_objects[conversion.materialization].elided;
-    begin_full_expression(ast[n].first,omit);
+    begin_full_expression(ast.first(n),omit);
     if (class_return.source) {
         full_expression.terminal_value = 0;
         Value destination = return_destination;
@@ -143,13 +143,13 @@ void Procedural::return_statement(NodeId n)
         if (!class_return.local || class_return.local != sem.return_object(active_function))
             construct_value(class_return.source,sem.conversion_fact(class_return.conversion),destination,true);
     } else if (has_value) {
-        NodeId operand = ast[n].first;
+        NodeId operand = ast.first(n);
         if (!operand) value = Value(Operand::integer(0), type(returned));
         else if (auto conversion = sem.expression_fact(operand).incoming)
             value = converted(operand, sem.conversion_fact(conversion));
         else value = convert(expression(operand, reference(returned)), returned);
     }
-    else if (ast[n].first) expression(ast[n].first);
+    else if (ast.first(n)) expression(ast.first(n));
     if (ended) { full_expression = FullExpression(); return; }
     finish_full_expression(life.entry);
     auto saved_returning = returning_object;

@@ -500,8 +500,8 @@ void Procedural::run()
     // Reserve source/native identities before allocating generated string or
     // TLS names. Native adapters may also publish the ordinary LowIR spelling.
     for (NodeId n = 1; n < ast.nodes.size(); ++n) {
-        if (ast[n].kind != syntax::Kind::Literal || !sem.expression_fact(n).evaluated) continue;
-        if (ast.literals[ast[n].literal].kind == LiteralKind::string) string_literal(n);
+        if (ast.kind(n) != syntax::Kind::Literal || !sem.expression_fact(n).evaluated) continue;
+        if (ast.literals[ast.nodes[n].literal].kind == LiteralKind::string) string_literal(n);
         else if (sem.literal_call_kind(n) == semantic::LiteralCallKind::Raw) numeric_string_literal(n);
     }
     // All relocation identities exist before any temporary data is emitted.
@@ -607,7 +607,7 @@ void Procedural::function_body(EntityId e, bool base)
             if (sem.entities[parameter].kind == semantic::EntityKind::Parameter && sem.class_value(sem.entities[parameter].type))
                 activate_temporary(parameter);
         }
-    bool function_try = ast[sem.entities[e].body].kind == syntax::Kind::FunctionTry;
+    bool function_try = ast.kind(sem.entities[e].body) == syntax::Kind::FunctionTry;
     if (sem.transfer_member(e) && sem.synthetic_member(e)) transfer_body(e);
     else if (!function_try && sem.constructor_member(e)) constructor_body(e,active_base_entry);
     if (!function_try && sem.destructor_member(e)) {

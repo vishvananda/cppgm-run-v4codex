@@ -6,20 +6,20 @@ TypeId Analyzer::binding_object_type(NodeId specs, NodeId d, Expression value)
 {
     bool automatic = false;
     unsigned cv = 0;
-    for (auto c = ast[specs].first; c; c = ast[c].next) {
-        if (ast[c].op == KW_AUTO) automatic = true;
-        else if (ast[c].op == KW_CONST) cv |= 1;
-        else if (ast[c].op == KW_VOLATILE) cv |= 2;
+    for (auto c = ast.first(specs); c; c = ast.next(c)) {
+        if (ast.op(c) == KW_AUTO) automatic = true;
+        else if (ast.op(c) == KW_CONST) cv |= 1;
+        else if (ast.op(c) == KW_VOLATILE) cv |= 2;
         else throw std::runtime_error("invalid structured binding specifier");
     }
     if (!automatic) throw std::runtime_error("structured binding requires auto");
     ETokenType ref = TOK_INVALID;
-    for (auto c = ast[d].first; c; c = ast[c].next) {
-        if (ast[c].kind == Kind::BindingNames) continue;
-        if (ast[c].kind != Kind::Pointer || ref != TOK_INVALID ||
-            (ast[c].op != OP_AMP && ast[c].op != OP_LAND))
+    for (auto c = ast.first(d); c; c = ast.next(c)) {
+        if (ast.kind(c) == Kind::BindingNames) continue;
+        if (ast.kind(c) != Kind::Pointer || ref != TOK_INVALID ||
+            (ast.op(c) != OP_AMP && ast.op(c) != OP_LAND))
             throw std::runtime_error("invalid structured binding declarator");
-        ref = ast[c].op;
+        ref = ast.op(c);
     }
     if (!value.type || dependent_type(value.type) || pattern_class_type(value.type)) return 0;
     if (ref == TOK_INVALID) {
@@ -76,7 +76,7 @@ void Analyzer::declare_bindings(NodeId d, ScopeId s, EntityId object, bool patte
     }
     unsigned index = 0;
     auto names = child(d,Kind::BindingNames);
-    for (auto n = ast[names].first; n; n = ast[n].next,++index) {
+    for (auto n = ast.first(names); n; n = ast.next(n),++index) {
         if (fixed && index >= shape.count) throw std::runtime_error("too many structured binding names");
         BindingProjection projection; projection.object = object; projection.element = index;
         TypeId type = 0;
@@ -93,10 +93,10 @@ void Analyzer::declare_bindings(NodeId d, ScopeId s, EntityId object, bool patte
         }
         auto e = facts[n].entity;
         if (!e) {
-            if (local(s,ast[n].text)) throw std::runtime_error("duplicate structured binding name");
-            e = pattern ? pattern_declaration(EntityKind::Variable,s,ast[n].text,n,!fixed) :
-                make_entity(EntityKind::Variable,s,ast[n].text,n);
-            if (!pattern) { bind(s,ast[n].text,e); record(s,e,n,type,EntityKind::Variable); }
+            if (local(s,ast.text(n))) throw std::runtime_error("duplicate structured binding name");
+            e = pattern ? pattern_declaration(EntityKind::Variable,s,ast.text(n),n,!fixed) :
+                make_entity(EntityKind::Variable,s,ast.text(n),n);
+            if (!pattern) { bind(s,ast.text(n),e); record(s,e,n,type,EntityKind::Variable); }
         }
         entities[e].type = type; facts.edit(n).entity = e; facts.edit(n).type = type;
         if (pattern) template_pattern_entities.put(e,fixed ? 1 : 2);
@@ -113,12 +113,12 @@ void Analyzer::resolve_bindings(NodeId specs, NodeId d, ScopeId s, bool pattern)
 {
     if (scopes[s].kind != ScopeKind::Block && scopes[s].kind != ScopeKind::Control)
         throw std::runtime_error("structured binding requires block scope");
-    auto init = ast[d].next, source = init;
-    auto list = ast[init].kind == Kind::Initializer ? ast[init].first : init;
-    bool copy_list = ast[init].kind == Kind::Initializer && (ast[init].flags & 1) && ast[list].kind == Kind::BracedInit;
-    while (ast[source].kind == Kind::Initializer || ast[source].kind == Kind::ParenInitializer || ast[source].kind == Kind::BracedInit) {
-        auto first = ast[source].first;
-        if (!first || ast[first].next) throw std::runtime_error("structured binding requires one initializer");
+    auto init = ast.next(d), source = init;
+    auto list = ast.kind(init) == Kind::Initializer ? ast.first(init) : init;
+    bool copy_list = ast.kind(init) == Kind::Initializer && (ast.flags(init) & 1) && ast.kind(list) == Kind::BracedInit;
+    while (ast.kind(source) == Kind::Initializer || ast.kind(source) == Kind::ParenInitializer || ast.kind(source) == Kind::BracedInit) {
+        auto first = ast.first(source);
+        if (!first || ast.next(first)) throw std::runtime_error("structured binding requires one initializer");
         source = first;
     }
     if (!source) throw std::runtime_error("structured binding requires initializer");
@@ -135,10 +135,10 @@ void Analyzer::resolve_bindings(NodeId specs, NodeId d, ScopeId s, bool pattern)
     entities[object].type = t; facts.edit(d).type = t;
     if (t && types[t].kind == TypeKind::Array) {
         auto plan_source = init;
-        while (ast[plan_source].kind == Kind::Initializer) plan_source = ast[plan_source].first;
+        while (ast.kind(plan_source) == Kind::Initializer) plan_source = ast.first(plan_source);
         auto occurrence = ast.nodes.occurrences[plan_source];
         auto recipe = occurrence.context ? initializer_plan(occurrence.source,t) : 0;
-        auto mode = ast[init].kind == Kind::Initializer && (ast[init].flags & 1) ? InitializationMode::Copy : InitializationMode::Direct;
+        auto mode = ast.kind(init) == Kind::Initializer && (ast.flags(init) & 1) ? InitializationMode::Copy : InitializationMode::Direct;
         auto plan = binding_array_plan(source,t,value,s,pattern,recipe,mode);
         initializer_index.put(key(plan_source,t),plan);
         if (!pattern) {

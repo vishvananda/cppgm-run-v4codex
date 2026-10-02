@@ -7,7 +7,7 @@ std::string Procedural::display_scope(semantic::ScopeId id)
     if (s.kind == semantic::ScopeKind::Class) {
         const auto& closure = sem.closure(s.entity);
         if (closure.function) {
-            const auto& range = static_cast<const syntax::Ast&>(ast).lambda_regions[ast[closure.source].literal];
+            const auto& range = static_cast<const syntax::Ast&>(ast).lambda_regions[ast.literal(closure.source)];
             auto enclosing = closure.enclosing ? spelling(sem.entities[closure.enclosing].name) : "global";
             return "__lambda_"+enclosing+"_t"+std::to_string(range.begin)+"_"+std::to_string(range.end);
         }

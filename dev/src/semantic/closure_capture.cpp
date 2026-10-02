@@ -15,10 +15,10 @@ void Analyzer::bind_template_captures(NodeId source, ScopeId scope, EntityId fun
         }
         if (!seen.get(e)) { seen.put(e,1); candidates.push_back(e); }
     };
-    for (auto c = ast[child(source,Kind::LambdaIntroducer)].first; c; c = ast[c].next) {
-        if (ast[c].op == KW_THIS) add(0);
+    for (auto c = ast.first(child(source,Kind::LambdaIntroducer)); c; c = ast.next(c)) {
+        if (ast.op(c) == KW_THIS) add(0);
         else {
-            auto name = ast[c].op == OP_AMP ? ast[ast[c].detail].text : ast[c].text;
+            auto name = ast.op(c) == OP_AMP ? ast.text(ast.detail(c)) : ast.text(c);
             if (name) if (auto e = lookup(scope,name,Lookup::Ordinary)) add(e);
         }
     }
@@ -42,7 +42,7 @@ void Analyzer::bind_template_captures(NodeId source, ScopeId scope, EntityId fun
         }
         if (node.kind == Kind::KeywordLiteral && node.op == KW_THIS) { add(0); continue; }
         if (node.detail) work.push_back(node.detail);
-        for (auto c = node.first; c; c = ast[c].next) work.push_back(c);
+        for (auto c = node.first; c; c = ast.next(c)) work.push_back(c);
     }
     ClosureCapturePattern recipe; recipe.begin = closure_capture_candidates.size(); recipe.count = candidates.size();
     closure_capture_candidates.insert(closure_capture_candidates.end(),candidates.begin(),candidates.end());
@@ -159,20 +159,20 @@ void Analyzer::prepare_capture_initializers(unsigned id, ScopeId scope)
 void Analyzer::prepare_captures(unsigned id, ScopeId scope)
 {
     using syntax::Kind;
-    auto first = ast[child(closures[id].source,Kind::LambdaIntroducer)].first;
+    auto first = ast.first(child(closures[id].source,Kind::LambdaIntroducer));
     closures[id].has_introducer = first != 0;
     if (!first) return;
     if (!closures[id].enclosing) throw std::runtime_error("capture requires block scope");
     Index explicit_names, parameters;
     auto d = child(closures[id].source,Kind::LambdaDeclarator);
-    for (auto p = ast[child(d,Kind::Parameters)].first; p; p = ast[p].next)
-        if (ast[p].kind == Kind::Parameter) {
-            auto name = terminal(decl_name(ast[ast[p].first].next));
+    for (auto p = ast.first(child(d,Kind::Parameters)); p; p = ast.next(p))
+        if (ast.kind(p) == Kind::Parameter) {
+            auto name = terminal(decl_name(ast.next(ast.first(p))));
             if (name) parameters.put(name,1);
         }
-    for (auto n = first; n; n = ast[n].next) {
-        auto op = ast[n].op;
-        if ((op == OP_AMP && !ast[n].detail) || op == OP_ASS) {
+    for (auto n = first; n; n = ast.next(n)) {
+        auto op = ast.op(n);
+        if ((op == OP_AMP && !ast.detail(n)) || op == OP_ASS) {
             if (n != first) throw std::runtime_error("capture default must be first");
             closures[id].capture_default = op == OP_AMP ? 1 : 2; continue;
         }
@@ -180,7 +180,7 @@ void Analyzer::prepare_captures(unsigned id, ScopeId scope)
         if (op == KW_THIS && closures[id].capture_default == 2)
             throw std::runtime_error("explicit this with value default is not C++11");
         if (op != KW_THIS) {
-            auto name = op == OP_AMP ? ast[ast[n].detail].text : ast[n].text;
+            auto name = op == OP_AMP ? ast.text(ast.detail(n)) : ast.text(n);
             if (!name) throw std::runtime_error("invalid capture");
             if (parameters.get(name)) throw std::runtime_error("capture conflicts with lambda parameter");
             if ((op == OP_AMP && closures[id].capture_default == 1) ||

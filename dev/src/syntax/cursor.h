@@ -9,9 +9,14 @@ namespace cppgm { namespace syntax {
 class Cursor {
 public:
     Cursor(PostTokenCursor& input, IdentifierTable& ids, Ast& ast);
-    Token peek(std::size_t ahead = 0);
+    Token peek(std::size_t ahead = 0) {
+        while (count_ <= ahead) fill();
+        return pending_[(head_+ahead)&(pending_.size()-1)];
+    }
     Token take();
-    bool is(const char* spelling, std::size_t ahead = 0);
+    bool is(const char* spelling, std::size_t ahead = 0) {
+        return ids_.spelling(peek(ahead).text).equals(spelling);
+    }
     bool eat(const char* spelling);
     Token require(const char* spelling);
     std::string position();

@@ -220,20 +220,30 @@ struct LiteralValue {
 class NodePool {
 public:
     struct Occurrence { NodeId source; std::uint32_t context; };
-    explicit NodePool(std::size_t count = 0) : source_nodes(count), occurrences(count, {0,0}) {}
+    explicit NodePool(std::size_t count = 0) : source_nodes(count), occurrences(count, {0,0}), recent(count) {}
     Node& operator[](NodeId id) { return source_nodes[occurrences[id].source]; }
     const Node& operator[](NodeId id) const { return source_nodes[occurrences[id].source]; }
     void push_back(const Node& n) {
         occurrences.push_back({static_cast<NodeId>(source_nodes.size()),0}); source_nodes.push_back(n);
+        recent.push_back(0);
     }
-    NodeId occurrence(NodeId source, std::uint32_t context) {
-        NodeId id = occurrences.size(); occurrences.push_back({occurrences[source].source,context}); return id;
-    }
+    NodeId occurrence(NodeId source, std::uint32_t context);
+    void reserve_occurrences(std::uint32_t context, std::size_t additional);
+    NodeId projected(NodeId source, std::uint32_t context) const;
+    std::size_t index_bytes() const;
     std::size_t size() const { return occurrences.size(); }
     std::size_t capacity() const { return occurrences.capacity(); }
     std::size_t parsed_size() const { return source_nodes.size(); }
     std::vector<Node> source_nodes;
     std::vector<Occurrence> occurrences;
+private:
+    // A context visits a small part of the source graph. Keep its index local;
+    // keys already live in occurrences, so slots only retain their stable IDs.
+    struct ContextIndex { std::vector<NodeId> slots; std::size_t used = 0; };
+    std::vector<ContextIndex> indexes;
+    // Positive identity lookups remain valid as additional regions are demanded.
+    // One entry per source node bounds this cache independently of instantiations.
+    mutable std::vector<NodeId> recent;
 };
 
 class Ast {
@@ -249,27 +259,40 @@ public:
         if (!nodes.occurrences[id].context && paren_roles.empty()) return nodes[id];
         return project_view(id);
     }
+    Kind kind(NodeId id) const {
+        auto k = nodes[id].kind;
+        if ((k == Kind::Parameters || k == Kind::Parameter || k == Kind::DeclSpecifiers) && !paren_roles.empty())
+            return source_view(id).kind;
+        return k;
+    }
     Node source_view(NodeId id) const;
     void resolve_paren_initializer(NodeId item, NodeId declarator, NodeId parameters, NodeId before);
     // A source ambiguity has one monotonic interpretation before semantic
     // publication. Retain the parsed name/delimiters, with no cloned subtree.
     struct ParenResolution { NodeId parameters, before, name; };
     std::vector<ParenResolution> paren_resolutions = std::vector<ParenResolution>(1);
-    IdIndex paren_roles;
+    std::vector<std::uint32_t> paren_roles;
+    std::uint32_t paren_role(NodeId source) const {
+        return source < paren_roles.size() ? paren_roles[source] : 0;
+    }
     // Grammar interpretation finishes before source-region publication. A bit
     // per published source node guards that boundary without a lookup on every
     // subsequent AST read or a duplicate graph of resolved wrappers.
     std::vector<std::uint64_t> published_source;
     void resolve_source_node(NodeId id, Node node);
     Node project_view(NodeId id) const;
+    NodeId edge(NodeId id, unsigned which) const;
     void expanded_children(NodeId parent, const std::vector<NodeId>& children);
     IdIndex expanded_first, expanded_last, expanded_next;
+    std::vector<std::uint64_t> expanded_nodes;
+    bool has_expansion(NodeId id) const {
+        return id/64 < expanded_nodes.size() && (expanded_nodes[id/64] & (std::uint64_t(1) << (id%64)));
+    }
     NodeId instantiate(NodeId root, std::uint32_t context);
     NodeId projected(NodeId source, std::uint32_t context) const;
     bool pending_region(NodeId root) const { return deferred_occurrences.get(root) > 1; }
     std::uint32_t new_context() { return ++contexts; }
     std::uint32_t contexts = 0;
-    IdIndex occurrence_index;
     // Zero is absent, one is projected, otherwise the original source ID + 1.
     IdIndex deferred_occurrences;
     std::size_t deferred_regions = 0, demanded_regions = 0;
@@ -312,6 +335,16 @@ public:
         alignment_owners(a.alignment_owners), class_packing(a.class_packing), alignments(a.alignments),
         native_attribute_owners(a.native_attribute_owners), abi_tags(a.abi_tags), native_attributes(a.native_attributes) {}
     Node operator[](NodeId id) const { return tree.view(id); }
+    Kind kind(NodeId id) const { return tree.kind(id); }
+    ETokenType op(NodeId id) const { return nodes[id].op; }
+    IdentifierId text(NodeId id) const { return nodes[id].text; }
+    unsigned char flags(NodeId id) const { return nodes[id].flags; }
+    std::uint32_t literal(NodeId id) const { return nodes[id].literal; }
+    std::uint32_t location(NodeId id) const { return nodes[id].location; }
+    NodeId first(NodeId id) const { return tree.edge(id,0); }
+    NodeId last(NodeId id) const { return tree.edge(id,1); }
+    NodeId next(NodeId id) const { return tree.edge(id,2); }
+    NodeId detail(NodeId id) const { return tree.edge(id,3); }
     operator const Ast&() const { return tree; }
     std::vector<AsmPlan>& assemblies;
     std::vector<AsmInstruction>& assembly_instructions;

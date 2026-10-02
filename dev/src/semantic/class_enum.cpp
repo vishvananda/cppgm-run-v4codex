@@ -8,13 +8,13 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
 {
     if (facts[n].type) return facts[n].type;
     if (n == explicit_specialization_source) facts.edit(n).entity = declare_class_specialization(n,s);
-    if (definitions && active_template_scope == s && (ast[n].kind == Kind::Class || (ast[n].flags & 2)))
+    if (definitions && active_template_scope == s && (ast.kind(n) == Kind::Class || (ast.flags(n) & 2)))
         return declare_class_template(n,s);
-    NodeId name = ast[n].detail;
+    NodeId name = ast.detail(n);
     IdentifierId id = name ? terminal(name) : anonymous_name;
-    ETokenType key_op = ast[ast[n].first].op;
-    bool definition = ast[n].kind == Kind::Class;
-    if (definitions && !definition && name && child(ast[name].last,Kind::TemplateArguments) && n != explicit_specialization_source) {
+    ETokenType key_op = ast.op(ast.first(n));
+    bool definition = ast.kind(n) == Kind::Class;
+    if (definitions && !definition && name && child(ast.last(name),Kind::TemplateArguments) && n != explicit_specialization_source) {
         auto e = resolve(name,s,Lookup::Qualifier);
         if (!e || !entities[e].class_info || !entities[e].specialization ||
             ((entities[e].key == KW_UNION) != (key_op == KW_UNION)))
@@ -23,7 +23,7 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         return entities[e].type;
     }
     bool anonymous_union = !id && key_op == KW_UNION;
-    bool injected_class = anonymous_union || (!id && (ast[n].flags & 2) && scopes[s].kind == ScopeKind::Class);
+    bool injected_class = anonymous_union || (!id && (ast.flags(n) & 2) && scopes[s].kind == ScopeKind::Class);
     if (calls && !name && !injected_class) {
         std::string generated = "__local_type" + std::to_string(++anonymous_classes);
         id = ids.intern(TextView(generated.data(), generated.size()));
@@ -31,8 +31,8 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
     if (anonymous_union && scopes[s].kind == ScopeKind::Namespace && !static_union)
         throw std::runtime_error("namespace anonymous union requires static");
     if (!id) {
-        const syntax::ClassRegion& region = ast.class_regions[ast[n].literal];
-        std::string generated = "__anonymous_union_type__" + std::to_string(region.begin) + "_" + std::to_string(region.end + (calls && (ast[n].flags & 2) ? 1 : 0));
+        const syntax::ClassRegion& region = ast.class_regions[ast.literal(n)];
+        std::string generated = "__anonymous_union_type__" + std::to_string(region.begin) + "_" + std::to_string(region.end + (calls && (ast.flags(n) & 2) ? 1 : 0));
         id = ids.intern(TextView(generated.data(), generated.size()));
     }
     EntityId instance = facts[n].entity;
@@ -44,8 +44,8 @@ TypeId Analyzer::class_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bo
         // [basic.scope.pdecl]/6: an elaborated type use introduces an unknown
         // unqualified tag in the nearest namespace/block, including templates.
         // It is not a dependent member declaration requiring substitution.
-        if (!definition && !(ast[n].flags & 2) && name) {
-            if (ast[name].op == OP_COLON2 || ast[name].first != ast[name].last)
+        if (!definition && !(ast.flags(n) & 2) && name) {
+            if (ast.op(name) == OP_COLON2 || ast.first(name) != ast.last(name))
                 throw std::runtime_error("unknown qualified elaborated type");
             while (scopes[owner].kind != ScopeKind::Namespace && scopes[owner].kind != ScopeKind::Block &&
                 scopes[owner].kind != ScopeKind::Function) owner = scopes[owner].parent;
@@ -117,8 +117,8 @@ void Analyzer::class_attributes(NodeId n, ScopeId s, EntityId e, bool definition
             if ((strict || f.strict_alignment) && f.requested_alignment && alignment != f.requested_alignment) throw std::runtime_error("inconsistent class alignment");
             f.requested_alignment = std::max(f.requested_alignment,alignment); f.strict_alignment |= strict;
         }
-        if (definition) f.final_class = ast[n].flags & 4;
-        if (definition) f.packing = (ast[n].flags & 32) ? 1 : ast.class_packing.get(n);
+        if (definition) f.final_class = ast.flags(n) & 4;
+        if (definition) f.packing = (ast.flags(n) & 32) ? 1 : ast.class_packing.get(n);
     }
 }
 void Analyzer::define_class(NodeId n, ScopeId s, EntityId e, ScopeId owner, bool injected_class, bool static_union)
@@ -144,8 +144,8 @@ void Analyzer::define_class(NodeId n, ScopeId s, EntityId e, ScopeId owner, bool
         NodeId list = child(n, Kind::Bases);
         expand_expression_list(list,owner);
         std::uint32_t tail = 0;
-        for (NodeId b = ast[list].first; b; b = ast[b].next) {
-            EntityId base = resolve(ast[child(b, Kind::BaseName)].detail, expanded_scope(b,owner), Lookup::Qualifier);
+        for (NodeId b = ast.first(list); b; b = ast.next(b)) {
+            EntityId base = resolve(ast.detail(child(b, Kind::BaseName)), expanded_scope(b,owner), Lookup::Qualifier);
             if (base && entities[base].kind == EntityKind::Alias) base = types[entities[base].type].entity;
             if (definitions && base && entities[base].class_info) complete_class(base);
             if (!base || !entities[base].class_info) throw std::runtime_error("base is not a class");
@@ -154,7 +154,7 @@ void Analyzer::define_class(NodeId n, ScopeId s, EntityId e, ScopeId owner, bool
             std::uint32_t info = entities[e].class_info;
             class_facts[info].aggregate = false;
             NodeId access = child(b, Kind::Access);
-            Access level = access ? (ast[access].op == KW_PRIVATE ? Access::Private : ast[access].op == KW_PROTECTED ? Access::Protected : Access::Public) : key_op == KW_CLASS ? Access::Private : Access::Public;
+            Access level = access ? (ast.op(access) == KW_PRIVATE ? Access::Private : ast.op(access) == KW_PROTECTED ? Access::Protected : Access::Public) : key_op == KW_CLASS ? Access::Private : Access::Public;
             bases.push_back({base,0,level,child(b,Kind::Virtual)!=0});
             auto relation = bases.size()-1;
             if (tail) bases[tail].next = relation; else class_facts[info].first_base = relation;
@@ -162,7 +162,7 @@ void Analyzer::define_class(NodeId n, ScopeId s, EntityId e, ScopeId owner, bool
             add_edge(cs, entities[base].scope);
         }
     }
-    for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, cs);
+    for (NodeId c = ast.first(n); c; c = ast.next(c)) declaration(c, cs);
     if (calls) { inherited_constructors(e); complete_virtuals(e); }
     entities[e].complete = true;
     // Covariant slot selection needs the completed result-class layout before
@@ -203,8 +203,8 @@ void Analyzer::define_class(NodeId n, ScopeId s, EntityId e, ScopeId owner, bool
     if (injected_class) {
         if (scopes[s].kind == ScopeKind::Class) inject_class(s,cs);
         if (calls) {
-            const syntax::ClassRegion& region = ast.class_regions[ast[n].literal];
-            std::string label = "__anonymous_union_storage__" + std::to_string(region.begin) + "_" + std::to_string(region.end + (calls && (ast[n].flags & 2) ? 1 : 0));
+            const syntax::ClassRegion& region = ast.class_regions[ast.literal(n)];
+            std::string label = "__anonymous_union_storage__" + std::to_string(region.begin) + "_" + std::to_string(region.end + (calls && (ast.flags(n) & 2) ? 1 : 0));
             EntityId storage = make_entity(EntityKind::Variable, s, ids.intern(TextView(label.data(), label.size())), n);
             entities[storage].type = t;
             entities[storage].definition = n;
@@ -239,14 +239,14 @@ void Analyzer::define_class(NodeId n, ScopeId s, EntityId e, ScopeId owner, bool
 TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, bool emit)
 {
     if (facts[n].type) return facts[n].type;
-    NodeId name = ast[n].detail;
-    IdentifierId id = name ? terminal(name) : ast[n].text ? ast[n].text : anonymous_name;
+    NodeId name = ast.detail(n);
+    IdentifierId id = name ? terminal(name) : ast.text(n) ? ast.text(n) : anonymous_name;
     bool scoped = child(n, Kind::EnumKey);
-    if (calls && !name && !ast[n].text) {
+    if (calls && !name && !ast.text(n)) {
         std::string label = "__anonymous_enum" + std::to_string(++anonymous_enums);
         id = ids.intern(TextView(label.data(), label.size()));
     }
-    bool definition = ast[n].flags & 1;
+    bool definition = ast.flags(n) & 1;
     NodeId underlying_node = child(n, Kind::TypeId);
     ScopeId owner = name_owner(name, s);
     if (definition && !encloses(s, owner)) throw std::runtime_error("enum definition outside enclosing scope");
@@ -267,7 +267,7 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
         }
         entities[e].type = types.named(e); entities[e].underlying = underlying;
         entities[e].scope = make_scope(ScopeKind::Enum, owner, id, e, scoped);
-        if (name || ast[n].text) bind(owner, id, e);
+        if (name || ast.text(n)) bind(owner, id, e);
         emit = true;
     } else if (entities[e].key != KW_ENUM || (underlying_node && entities[e].underlying != underlying))
         throw std::runtime_error("incompatible enum declaration");
@@ -276,7 +276,7 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
     if (definitions) publish_template_binding(n,e);
     ScopeId es = entities[e].scope;
     ScopeId output_owner = owner;
-    bool qualified_definition = definition && name && ast[name].first != ast[name].last;
+    bool qualified_definition = definition && name && ast.first(name) != ast.last(name);
     if (qualified_definition) {
         // Source-faithful qualified enum definitions have their own scope view;
         // both declarations still identify the same canonical enum entity.
@@ -303,13 +303,13 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
             }
             throw std::runtime_error("enumerators have no representable underlying type");
         };
-        for (NodeId c = ast[n].first; c; c = ast[c].next) {
-            if (ast[c].kind != Kind::Enumerator) continue;
-            if (!ast[c].first && next_overflow) throw std::runtime_error("enumerator increment overflows");
+        for (NodeId c = ast.first(n); c; c = ast.next(c)) {
+            if (ast.kind(c) != Kind::Enumerator) continue;
+            if (!ast.first(c) && next_overflow) throw std::runtime_error("enumerator increment overflows");
             auto next_type = storage(next_negative ? 0 : next,next_negative ? 0-next : 0);
-            Constant value = ast[c].first ? evaluate(ast[c].first, entities[e].scope) : integer_constant(next_type, next);
+            Constant value = ast.first(c) ? evaluate(ast.first(c), entities[e].scope) : integer_constant(next_type, next);
             if (!value.valid || !integral(value.type)) throw std::runtime_error("invalid enumerator initializer");
-            if (!ast[c].first) {
+            if (!ast.first(c)) {
                 auto preceding = convert(value,previous_type,true);
                 if (same_integer_value(value,preceding)) value = preceding;
             }
@@ -325,10 +325,10 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
                 if (!same_integer_value(value,converted)) throw std::runtime_error("enumerator outside underlying range");
                 value = converted;
             }
-            EntityId v = make_entity(EntityKind::Enumerator, entities[e].scope, ast[c].text, c);
+            EntityId v = make_entity(EntityKind::Enumerator, entities[e].scope, ast.text(c), c);
             entities[v].type = value.type; entities[v].constant = value;
-            bind(entities[e].scope, ast[c].text, v);
-            if (!scoped) bind(owner, ast[c].text, v);
+            bind(entities[e].scope, ast.text(c), v);
+            if (!scoped) bind(owner, ast.text(c), v);
             std::uint32_t d = record(scoped ? es : owner, v, c, t, EntityKind::Enumerator);
             if (qualified_definition) declarations[d].display_name = name;
             next = integer_value(value) + 1;
@@ -336,7 +336,7 @@ TypeId Analyzer::enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name, boo
             next_negative = negative_constant(value) && next;
             next_overflow = !negative_constant(value) && !next;
         }
-        for (NodeId c = ast[n].first; c; c = ast[c].next) if (ast[c].kind == Kind::Enumerator) {
+        for (NodeId c = ast.first(n); c; c = ast.next(c)) if (ast.kind(c) == Kind::Enumerator) {
             auto& enumerator = entities[facts[c].entity];
             // Re-encode before publishing the enum type: bits may be a pool ID.
             enumerator.constant = convert(enumerator.constant,underlying,true);

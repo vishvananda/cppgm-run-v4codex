@@ -40,7 +40,7 @@ void Analyzer::query_parameter_representation(TypeId type)
     auto member = members[entities[copy].member_info];
     Type signature = types[entities[copy].type];
     if (member.transfer != TransferKind::CopyConstructor || member.synthetic || !member.in_class_body ||
-        !member.body || ast[member.body].kind != syntax::Kind::Compound || ast[member.body].first || signature.count != 1) return;
+        !member.body || ast.kind(member.body) != syntax::Kind::Compound || ast.first(member.body) || signature.count != 1) return;
     Type parameter = types[types.parameters[signature.offset]];
     if (parameter.kind != TypeKind::LRef || (types[parameter.child].cv & 2)) return;
     class_facts[info].parameter_state = 2;
@@ -67,10 +67,10 @@ void Analyzer::finish_parameter_representation(TypeId type)
     if (conversion.kind != Conversion::Kind::Standard || !conversion.reference || !conversion.derived ||
         conversion.temporary || conversion.function) return;
     NodeId argument = call_argument(call);
-    while (ast[argument].kind == syntax::Kind::Parenthesized) {
-        ++parameter_query_work; argument = ast[argument].first;
+    while (ast.kind(argument) == syntax::Kind::Parenthesized) {
+        ++parameter_query_work; argument = ast.first(argument);
     }
-    if (ast[argument].kind != syntax::Kind::IdExpression) return;
+    if (ast.kind(argument) != syntax::Kind::IdExpression) return;
     auto source = expressions[argument];
     if (source.form != ExpressionForm::Ordinary || source.category != ValueCategory::Lvalue || !source.entity) return;
     auto parameter = entities[source.entity];

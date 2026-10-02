@@ -80,7 +80,7 @@ QueryId Analyzer::type_operation_query(NodeId n, ScopeId s)
     if (node.kind == syntax::Kind::TypeTrait && node.flags) {
         q.kind = QueryKind::BuiltinTrait; q.value = node.flags; q.name = node.text;
         std::vector<ArgumentId> args;
-        for (auto a = first; a; a = ast[a].next)
+        for (auto a = first; a; a = ast.next(a))
             append_template_argument(a,s,template_argument_node(a,s),args);
         // The builtin alias's index has a size_t parameter type. Retain that
         // converted identity even when its type pack remains dependent, so
@@ -90,7 +90,7 @@ QueryId Analyzer::type_operation_query(NodeId n, ScopeId s)
         q.arguments = intern_arguments(args);
     } else {
         q.kind = node.op == KW_TYPEID ? QueryKind::Typeid : QueryKind::Sizeof; q.op = node.op;
-        if (ast[first].kind == syntax::Kind::TypeId) q.type = type_id(first,s);
+        if (ast.kind(first) == syntax::Kind::TypeId) q.type = type_id(first,s);
         else children.push_back(expression_query(first,s));
         if (template_type_probe && (children.empty() ? !q.type : !children[0])) return 0;
     }

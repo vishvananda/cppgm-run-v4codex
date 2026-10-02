@@ -101,7 +101,7 @@ void Analyzer::check_access(EntityId e, ScopeId context, ScopeId naming, TypeId 
             message += ": " + std::string(name.data,name.size);
         }
         if (entities[e].source) {
-            const auto& location = static_cast<const syntax::Ast&>(ast).locations[ast[entities[e].source].location];
+            const auto& location = static_cast<const syntax::Ast&>(ast).locations[ast.location(entities[e].source)];
             if (location.presumed_file) {
                 auto file = ids.spelling(location.presumed_file);
                 message += " declared in " + std::string(file.data,file.size) + ":" + std::to_string(location.line);

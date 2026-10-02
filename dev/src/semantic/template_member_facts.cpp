@@ -9,9 +9,9 @@ TypeId Analyzer::template_method_shape(NodeId parameters, ScopeId scope)
     auto parameter_scope = prototype_scope_needed(parameters) ? make_scope(ScopeKind::Block,scope,0,0,false) : scope;
     if (parameter_scope != scope) template_pattern_scopes.put(parameter_scope,1);
     bool known = true, variadic = false;
-    for (auto p = ast[parameters].first; p; p = ast[p].next) {
-        if (ast[p].kind == Kind::ParameterPack) { variadic = true; continue; }
-        auto specs = ast[p].first, d = ast[specs].next;
+    for (auto p = ast.first(parameters); p; p = ast.next(p)) {
+        if (ast.kind(p) == Kind::ParameterPack) { variadic = true; continue; }
+        auto specs = ast.first(p), d = ast.next(specs);
         // Dependent signatures and bounds belong to substitution. A missing
         // shape is conservative evidence, never a guessed overload identity.
         if (bind_template_expression(specs,parameter_scope) | bind_template_expression(d,parameter_scope)) { known = false; break; }
@@ -56,7 +56,7 @@ void Analyzer::bind_template_object_context(ScopeId function, NodeId parameters)
                 while (d) {
                     if (auto p = child(d,Kind::Parameters)) parameters = p;
                     auto nested = child(d,Kind::NestedDeclarator);
-                    d = nested ? ast[nested].first : 0;
+                    d = nested ? ast.first(nested) : 0;
                 }
                 return parameters;
             };
@@ -157,7 +157,7 @@ bool Analyzer::reuse_template_field(NodeId n, ScopeId s, Expression& result)
     if (use.type != result.type || result.category != ValueCategory::Lvalue)
         throw std::logic_error("fixed template field value facts changed");
     result.entity = use.entity; result.object_use = use.object;
-    if (ast[n].kind == Kind::Member) expression(ast[n].first,s);
+    if (ast.kind(n) == Kind::Member) expression(ast.first(n),s);
     return true;
 }
 } }

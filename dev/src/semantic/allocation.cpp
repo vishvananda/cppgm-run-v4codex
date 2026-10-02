@@ -37,10 +37,10 @@ void Analyzer::finish_allocations()
         // construction calls intact; unknown/subobject/default recipes retain
         // the deallocation owner. No body demand or call-graph search occurs.
         bool safe = entities[e].body_state == FactState::Success && m.actions_state == FactState::Success &&
-            !m.action_count && !types[entities[e].type].count && body && ast[body].kind == Kind::Compound;
-        for (auto n = ast[body].first; safe && n; n = ast[n].next)
-            safe = (ast[n].kind == Kind::Return && !ast[n].first) ||
-                (ast[n].kind == Kind::ExpressionStatement && expression_nonthrowing(ast[n].first));
+            !m.action_count && !types[entities[e].type].count && body && ast.kind(body) == Kind::Compound;
+        for (auto n = ast.first(body); safe && n; n = ast.next(n))
+            safe = (ast.kind(n) == Kind::Return && !ast.first(n)) ||
+                (ast.kind(n) == Kind::ExpressionStatement && expression_nonthrowing(ast.first(n)));
         leaf_bodies.put(e,safe ? 2 : 1); return safe;
     };
     for (auto& use : placements) {
@@ -55,12 +55,12 @@ void Analyzer::finish_allocations()
             // completed, constant-return bound proof. Otherwise widen before
             // multiplying, so valid size_t extents cannot wrap at 32 bits.
             TypeId t = expression_fact(use.bound).type;
-            EntityId callee = ast[use.bound].kind == Kind::Call ? facts[use.bound].entity : 0;
-            NodeId body = entities[callee].body, ret = ast[body].first;
-            Constant bound = ast[ret].kind == Kind::Return && !ast[ret].next ? runtime_constant_fact(ast[ret].first) : Constant();
-            if (!bound.valid && ast[ret].kind == Kind::Return && !ast[ret].next &&
-                ast[ast[ret].first].kind == Kind::Literal && !ast.literals[ast[ast[ret].first].literal].suffix)
-                bound = evaluate(ast[ret].first,facts[ast[ret].first].scope);
+            EntityId callee = ast.kind(use.bound) == Kind::Call ? facts[use.bound].entity : 0;
+            NodeId body = entities[callee].body, ret = ast.first(body);
+            Constant bound = ast.kind(ret) == Kind::Return && !ast.next(ret) ? runtime_constant_fact(ast.first(ret)) : Constant();
+            if (!bound.valid && ast.kind(ret) == Kind::Return && !ast.next(ret) &&
+                ast.kind(ast.first(ret)) == Kind::Literal && !ast.literals[ast.literal(ast.first(ret))].suffix)
+                bound = evaluate(ast.first(ret),facts[ast.first(ret)].scope);
             if (width(t) == 32 && bound.valid && (is_unsigned(bound.type) || static_cast<std::int64_t>(bound.bits) >= 0)) {
                 std::uint64_t max = is_unsigned(t) ? 4294967295ull : 2147483647ull;
                 use.narrow_extent = use.cookie <= max && (!use.stride || bound.bits <= (max-use.cookie)/use.stride);
@@ -71,7 +71,7 @@ void Analyzer::finish_allocations()
         // An empty no-argument body with no subobject actions has no work per
         // element. Keep this proof on the allocation record, after demand.
         bool empty = !dynamic_class(scopes[entities[e].owner].entity) &&
-            m.body && ast[m.body].kind == Kind::Compound && !ast[m.body].first &&
+            m.body && ast.kind(m.body) == Kind::Compound && !ast.first(m.body) &&
             !m.action_count && !m.inherited_constructor && !types[entities[e].type].count;
         use.construct = constructor_needed(e) && !empty;
         if (use.construct) m.complete_entry = true;
@@ -139,7 +139,7 @@ TypeId Analyzer::delete_operand_type(Expression x)
 }
 Expression Analyzer::delete_expression(NodeId n, ScopeId s)
 {
-    DeleteExpression use; use.array = child(n,Kind::ArrayDelete); use.operand = ast[n].last;
+    DeleteExpression use; use.array = child(n,Kind::ArrayDelete); use.operand = ast.last(n);
     TypeId pointer_type = delete_operand_type(expression(use.operand,s));
     use.type = types[pointer_type].child; size(use.type);
     use.leaf = use.type;

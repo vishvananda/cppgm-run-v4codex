@@ -12,10 +12,10 @@ void Analyzer::modifiable(NodeId n)
 }
 Expression Analyzer::unary_expression(NodeId n, ScopeId s)
 {
-    NodeId operand = ast[n].first;
-    ETokenType op = ast[n].op;
-    bool qualified_address = !ast[n].flags && op == OP_AMP && ast[operand].kind == Kind::IdExpression &&
-        ast[ast[operand].detail].first != ast[ast[operand].detail].last;
+    NodeId operand = ast.first(n);
+    ETokenType op = ast.op(n);
+    bool qualified_address = !ast.flags(n) && op == OP_AMP && ast.kind(operand) == Kind::IdExpression &&
+        ast.first(ast.detail(operand)) != ast.last(ast.detail(operand));
     if (qualified_address) ++unevaluated_depth;
     Expression a = expression(operand, s), r;
     if (qualified_address) {
@@ -25,9 +25,9 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
             if (definitions) demand_template_storage(a.entity);
         }
     }
-    if (!ast[n].flags && types[a.type].kind == TypeKind::Named) {
+    if (!ast.flags(n) && types[a.type].kind == TypeKind::Named) {
         std::vector<NodeId> args(1, operand);
-        if (ast[n].kind == Kind::Postfix) args.push_back(0);
+        if (ast.kind(n) == Kind::Postfix) args.push_back(0);
         if (operator_expression(n, s, op, args, r)) return r;
     }
     if (op == OP_AMP) {
@@ -38,7 +38,7 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         if (a.form == ExpressionForm::Overload) return a;
         if (a.entity && types[a.type].kind == TypeKind::Function) select_function(operand,a.entity,true);
         else if (a.entity) demand_specialization(a.entity);
-        if (ast[n].flags && a.category != ValueCategory::Lvalue) throw std::runtime_error("addressof requires lvalue");
+        if (ast.flags(n) && a.category != ValueCategory::Lvalue) throw std::runtime_error("addressof requires lvalue");
         if (a.category == ValueCategory::Prvalue) throw std::runtime_error("address of rvalue");
         if (a.entity && !entities[a.entity].is_static && (entities[a.entity].member_info || (qualified_address && nonstatic_field(a.entity)))) {
             if (!qualified_address) throw std::runtime_error("member pointer requires a qualified member name");
@@ -46,7 +46,7 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
             if (member_type.kind == TypeKind::LRef || member_type.kind == TypeKind::RRef)
                 throw std::runtime_error("pointer to reference member");
             r.type = types.member_pointer(scopes[entities[a.entity].owner].entity, entities[a.entity].type);
-            auto naming = name_owner(ast[operand].detail,s);
+            auto naming = name_owner(ast.detail(operand),s);
             check_access(a.entity,s,naming,entities[scopes[naming_class(naming)].entity].type);
             size(entities[scopes[entities[a.entity].owner].entity].type);
             demand_member(a.entity);
@@ -69,10 +69,10 @@ Expression Analyzer::unary_expression(NodeId n, ScopeId s)
         if ((!arithmetic(a.type) && !object_pointer(t)) || types[a.type].kind == TypeKind::Named ||
             (op == OP_DEC && fundamental(a.type, FT_BOOL))) throw std::runtime_error("invalid increment operand");
         if (pointer(t)) size(types[t].child);
-        r.type = ast[n].kind == Kind::Postfix ? types.unqualified(a.type) : a.type;
-        r.category = ast[n].kind == Kind::Postfix ? ValueCategory::Prvalue : ValueCategory::Lvalue;
+        r.type = ast.kind(n) == Kind::Postfix ? types.unqualified(a.type) : a.type;
+        r.category = ast.kind(n) == Kind::Postfix ? ValueCategory::Prvalue : ValueCategory::Lvalue;
         TypeId promoted = pointer(t) ? t : promote_expression(operand);
-        if (ast[n].kind != Kind::Postfix) r.entity = a.entity;
+        if (ast.kind(n) != Kind::Postfix) r.entity = a.entity;
         record_conversion(r, operand, conversion(operand, promoted));
         Conversion store; store.target = a.type; store.rank = 0;
         record_conversion(r, 0, store);
@@ -168,20 +168,20 @@ TypeId Analyzer::builtin_binary(ETokenType op, NodeId an, NodeId bn, Expression&
 }
 Expression Analyzer::binary_expression(NodeId n, ScopeId s)
 {
-    NodeId an = ast[n].first, bn = ast[an].next;
+    NodeId an = ast.first(n), bn = ast.next(an);
     Expression a = expression(an, s), b = expression(bn, s), r;
-    ETokenType op = ast[n].op;
+    ETokenType op = ast.op(n);
     if (op == OP_DOTSTAR) return member_pointer_expression(n,s);
-    if (ast[n].kind != Kind::Conditional && (types[a.type].kind == TypeKind::Named || types[b.type].kind == TypeKind::Named) &&
+    if (ast.kind(n) != Kind::Conditional && (types[a.type].kind == TypeKind::Named || types[b.type].kind == TypeKind::Named) &&
         operator_expression(n, s, op, {an, bn}, r)) return r;
     if (op == OP_ARROWSTAR) return member_pointer_expression(n,s);
-    if (ast[n].kind == Kind::Conditional) {
-        NodeId cn = ast[bn].next;
+    if (ast.kind(n) == Kind::Conditional) {
+        NodeId cn = ast.next(bn);
         Expression c = expression(cn, s);
         record_conversion(r, an, boolean_conversion(an));
         auto is_throw = [&](NodeId node) {
-            while (ast[node].kind == Kind::Parenthesized) node = ast[node].first;
-            return ast[node].kind == Kind::Throw;
+            while (ast.kind(node) == Kind::Parenthesized) node = ast.first(node);
+            return ast.kind(node) == Kind::Throw;
         };
         if (is_throw(bn) || is_throw(cn)) {
             auto value = is_throw(bn) ? c : b;
@@ -207,7 +207,7 @@ Expression Analyzer::binary_expression(NodeId n, ScopeId s)
             throw std::runtime_error("unresolved comma operand");
         return value_fact(b);
     }
-    if (ast[n].kind == Kind::Assignment) {
+    if (ast.kind(n) == Kind::Assignment) {
         modifiable(an);
         if (op == OP_ASS) {
             Conversion left; left.target = types.compound(TypeKind::LRef, a.type); left.reference = true; left.rank = 0; left.storage_write = true;

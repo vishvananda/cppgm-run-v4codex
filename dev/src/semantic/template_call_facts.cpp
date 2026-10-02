@@ -4,14 +4,14 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
 {
-    auto callee = ast[n].first;
-    auto first_argument = ast[ast[callee].next].first;
+    auto callee = ast.first(n);
+    auto first_argument = ast.first(ast.next(callee));
     bool invoke = invoke_expression(n,s);
-    if (invoke) { callee = first_argument; first_argument = ast[callee].next; }
+    if (invoke) { callee = first_argument; first_argument = ast.next(callee); }
     if (invoke && callee) {
         auto callable = query_fact(expression_query(callee,s));
         if (!callable.dependent && types[callable.expression.type].kind == TypeKind::MemberPointer) {
-            for (auto a = first_argument; a; a = ast[a].next)
+            for (auto a = first_argument; a; a = ast.next(a))
                 if (!template_fixed_expressions.get(ast.nodes.occurrences[a].source)) return false;
             auto checked = query_fact(expression_query(n,s));
             if (checked.state == FactState::Failure || checked.incomplete)
@@ -29,7 +29,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
             use.node = first_argument; use.member_pointer = use.callee = callee; use.source_owned = true;
             result.object_use = object_uses.size(); object_uses.push_back(use);
             std::vector<NodeId> args; std::vector<Conversion> chosen;
-            for (auto a = ast[first_argument].next; a; a = ast[a].next) {
+            for (auto a = ast.next(first_argument); a; a = ast.next(a)) {
                 chosen.push_back(conversions[result.conversions+args.size()]); args.push_back(a);
             }
             store_call(result,args,chosen); result.ready = true; result.inputs = CallInputs::Source;
@@ -42,18 +42,18 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         }
     }
     auto designator = callee;
-    while (ast[designator].kind == Kind::Parenthesized) designator = ast[designator].first;
-    bool member = ast[designator].kind == Kind::Member;
-    if (!member && ast[designator].kind != Kind::IdExpression) return false;
+    while (ast.kind(designator) == Kind::Parenthesized) designator = ast.first(designator);
+    bool member = ast.kind(designator) == Kind::Member;
+    if (!member && ast.kind(designator) != Kind::IdExpression) return false;
     if (member && !template_fixed_expressions.get(ast.nodes.occurrences[designator].source)) return false;
-    auto name = member ? ast[ast[ast[designator].first].next].detail : ast[designator].detail;
-    if (ast[name].kind != Kind::Name) return false;
+    auto name = member ? ast.detail(ast.next(ast.first(designator))) : ast.detail(designator);
+    if (ast.kind(name) != Kind::Name) return false;
     auto binding = member ? TemplateBinding() : template_bindings[template_binding_index.get(ast.nodes.occurrences[name].source)];
     if (member) binding.entity = expressions[designator].entity;
     if (binding.dependent) return false;
     bool direct = !binding.entity || function_binding(binding.entity);
     if (!direct && class_value(expressions[designator].type)) return false; // Callable-object/operator owner.
-    bool adl = !invoke && direct && !member && callee == designator && ast[name].first == ast[name].last && ast[name].op != OP_COLON2;
+    bool adl = !invoke && direct && !member && callee == designator && ast.first(name) == ast.last(name) && ast.op(name) != OP_COLON2;
     if (!binding.entity && !adl) return false;
     if (direct) {
         for (auto e : candidates(binding.entity)) {
@@ -64,7 +64,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         }
     } else if (!template_fixed_expressions.get(ast.nodes.occurrences[designator].source)) return false;
     std::vector<NodeId> args;
-    for (auto a = first_argument; a; a = ast[a].next) {
+    for (auto a = first_argument; a; a = ast.next(a)) {
         if (!template_fixed_expressions.get(ast.nodes.occurrences[a].source)) return false;
         args.push_back(a);
     }
@@ -79,17 +79,17 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         fn.form = ExpressionForm::Overload; fn.category = ValueCategory::Lvalue; fn.ready = true;
         expressions.set(callee,fn); { auto& published = facts.edit(callee); published.entity = fn.entity; published.scope = s; }
     } else fn = expression(callee,s);
-    NodeId object_node = member ? ast[designator].first : 0;
+    NodeId object_node = member ? ast.first(designator) : 0;
     TypeId object_type = member ? expressions[object_node].type : 0;
     auto category = member ? expressions[object_node].category : ValueCategory::Lvalue;
-    if (member && ast[designator].op == OP_ARROW) { object_type = types[decay(object_type)].child; category = ValueCategory::Lvalue; }
+    if (member && ast.op(designator) == OP_ARROW) { object_type = types[decay(object_type)].child; category = ValueCategory::Lvalue; }
     auto naming = object_uses[expressions[designator].object_use].naming_scope;
     TypeId ft = 0; EntityId selected = 0; std::vector<Conversion> chosen;
     if (direct) {
         auto choice = select_call(fn.entity,{},&args,object_type,category,naming,0,chosen);
         if (choice.failure == CallFailure::NoViable) {
             auto text = ids.spelling(terminal(name));
-            auto location = static_cast<const syntax::Ast&>(ast).locations[ast[n].location];
+            auto location = static_cast<const syntax::Ast&>(ast).locations[ast.location(n)];
             auto path = ids.spelling(location.presumed_file);
             throw std::runtime_error("no viable fixed template call: " + std::string(text.data,text.size) +
                 " at " + std::string(path.data,path.size) + ":" + std::to_string(location.line));
@@ -102,7 +102,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         if (member) {
             bool nonstatic = entities[selected].member_info && !entities[selected].is_static;
             chosen.erase(chosen.begin());
-            if (nonstatic) record_member_receiver(result,object_node,object_type,selected,naming,ast[name].first != ast[name].last,s);
+            if (nonstatic) record_member_receiver(result,object_node,object_type,selected,naming,ast.first(name) != ast.last(name),s);
             else record_object(result,object_node,0,0);
             auto& use = object_uses[result.object_use]; use.source_owned = true;
         }
@@ -111,10 +111,10 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
             Conversion c; auto a = default_argument(selected,i,&c,DefaultReason::Recipe);
             args.push_back(a); chosen.push_back(c);
         }
-        for (auto c = callee;; c = ast[c].first) {
+        for (auto c = callee;; c = ast.first(c)) {
             auto value = expressions[c]; value.entity = selected; value.form = ExpressionForm::Ordinary; value.type = ft;
             expressions.set(c,value); { auto& published = facts.edit(c); published.entity = selected; published.type = call_type(selected); }
-            if (ast[c].kind != Kind::Parenthesized) break;
+            if (ast.kind(c) != Kind::Parenthesized) break;
         }
     } else {
         ft = decay(fn.type);
@@ -166,32 +166,32 @@ void Analyzer::reuse_fixed_call(NodeId n, NodeId source, ScopeId s, Expression& 
     result = expressions[source]; result.incoming = 0;
     auto selected = facts[source].entity;
     auto original_callee = object_uses[result.object_use].callee;
-    auto callee = original_callee ? ast.projected(original_callee,context) : ast[n].first;
+    auto callee = original_callee ? ast.projected(original_callee,context) : ast.first(n);
     if (selected) {
         auto receiver = object_uses[result.object_use];
         if (receiver.source_owned) receiver = project_object_use(receiver,n);
         if (receiver.node) expression(receiver.node,s);
-        auto pattern = original_callee ? original_callee : ast[source].first;
-        for (auto c = callee;; c = ast[c].first, pattern = ast[pattern].first) {
+        auto pattern = original_callee ? original_callee : ast.first(source);
+        for (auto c = callee;; c = ast.first(c), pattern = ast.first(pattern)) {
             expressions.inherit(c,pattern);
             expressions.set(c,expressions[pattern]); expressions.evaluated(c,!unevaluated_depth);
             { auto& published = facts.edit(c); published.type = facts[pattern].type; published.entity = selected; published.scope = s; }
-            if (ast[c].kind != Kind::Parenthesized) break;
+            if (ast.kind(c) != Kind::Parenthesized) break;
         }
         if (result.form != ExpressionForm::TypeinfoEqual && result.form != ExpressionForm::TypeinfoUnequal)
             use_selected_function(selected,!receiver.virtual_slot);
     } else {
         expression(callee,s);
-        auto incoming = expressions[original_callee ? original_callee : ast[source].first].incoming;
+        auto incoming = expressions[original_callee ? original_callee : ast.first(source)].incoming;
         auto conversion = conversions[incoming]; apply_conversion(callee,conversion);
         expressions.incoming(callee,incoming);
     }
     std::vector<NodeId> args; std::vector<Conversion> chosen;
     bool materialize = false;
-    auto explicit_argument = ast[ast[ast[source].first].next].first;
-    if (original_callee) explicit_argument = ast[explicit_argument].next;
+    auto explicit_argument = ast.first(ast.next(ast.first(source)));
+    if (original_callee) explicit_argument = ast.next(explicit_argument);
     for (unsigned i = 0; i < result.argument_count; ++i) {
-        if (explicit_argument) explicit_argument = ast[explicit_argument].next;
+        if (explicit_argument) explicit_argument = ast.next(explicit_argument);
         else if (selected) default_argument(selected,i);
         auto original = call_argument(result,i);
         auto a = ast.projected(original,context); if (!a) a = original; // Declaration-owned default.

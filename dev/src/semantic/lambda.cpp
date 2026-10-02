@@ -11,16 +11,16 @@ struct TemplateScope {
 };
 void check_declarator(const syntax::AstView& ast, NodeId d)
 {
-    for (auto q = ast[d].first; q; q = ast[q].next) {
-        auto k = ast[q].kind;
+    for (auto q = ast.first(d); q; q = ast.next(q)) {
+        auto k = ast.kind(q);
         if (k == Kind::CvQualifier || k == Kind::VirtSpecifier ||
-            (k == Kind::FunctionQualifier && (ast[q].op == OP_AMP || ast[q].op == OP_LAND)))
+            (k == Kind::FunctionQualifier && (ast.op(q) == OP_AMP || ast.op(q) == OP_LAND)))
             throw std::runtime_error("invalid lambda qualifier");
         if (k != Kind::Parameters) continue;
-        for (auto p = ast[q].first; p; p = ast[p].next) {
-            if (ast[p].kind != Kind::Parameter) continue;
-            for (auto c = ast[ast[p].first].first; c; c = ast[c].next)
-                if (ast[c].op == KW_AUTO) throw std::runtime_error("generic lambda is not C++11");
+        for (auto p = ast.first(q); p; p = ast.next(p)) {
+            if (ast.kind(p) != Kind::Parameter) continue;
+            for (auto c = ast.first(ast.first(p)); c; c = ast.next(c))
+                if (ast.op(c) == KW_AUTO) throw std::runtime_error("generic lambda is not C++11");
         }
     }
 }
@@ -34,7 +34,7 @@ void Analyzer::bind_lambda_body(NodeId n, ScopeId s)
     if (state) throw std::runtime_error("recursive or failed lambda body binding");
     auto head = child(n,Kind::TemplateParameters);
     if (head) {
-        if (!ast[ast[head].first].first) throw std::runtime_error("lambda template head cannot be empty");
+        if (!ast.first(ast.first(head))) throw std::runtime_error("lambda template head cannot be empty");
         s = make_scope(ScopeKind::Template,s);
         declare_template_parameters(head,s);
         template_source_heads.put(ast.nodes.occurrences[n].source,retain_template_head(s));
@@ -64,11 +64,11 @@ void Analyzer::bind_lambda_body(NodeId n, ScopeId s)
         exception_specification(fn,d,s);
     }
     unsigned mode = 0;
-    for (auto c = ast[child(n,Kind::LambdaIntroducer)].first; c; c = ast[c].next) {
-        auto op = ast[c].op;
-        if ((op == OP_AMP && !ast[c].detail) || op == OP_ASS) { mode = op == OP_AMP ? 1 : 2; continue; }
+    for (auto c = ast.first(child(n,Kind::LambdaIntroducer)); c; c = ast.next(c)) {
+        auto op = ast.op(c);
+        if ((op == OP_AMP && !ast.detail(c)) || op == OP_ASS) { mode = op == OP_AMP ? 1 : 2; continue; }
         if (op == KW_THIS) continue;
-        auto name = op == OP_AMP ? ast[ast[c].detail].text : ast[c].text;
+        auto name = op == OP_AMP ? ast.text(ast.detail(c)) : ast.text(c);
         if (auto object = lookup(s,name,Lookup::Ordinary)) closure_pattern_captures.put(key(fn,object),op == OP_AMP ? 1 : 2);
     }
     closure_patterns.put(fn,1 | (mode << 1) | (child(d,Kind::LambdaSpecifier) ? 0 : 8));

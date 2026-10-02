@@ -94,23 +94,23 @@ ArgumentId Analyzer::template_argument_node(NodeId n, ScopeId scope)
 }
 ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
 {
-    if (ast[n].kind == Kind::PackExpression) {
-        auto operand = ast[n].first, callee = ast[operand].first;
-        auto name = ast[callee].detail;
-        if (ast[operand].kind == Kind::Call && ast[callee].kind == Kind::IdExpression &&
-            ast[name].first == ast[name].last && integer_pack_builtin(ids.spelling(terminal(name)))) {
-            auto list = ast[callee].next, count = ast[list].first;
-            if (!count || ast[count].next) throw std::runtime_error("integer_pack takes one bound");
+    if (ast.kind(n) == Kind::PackExpression) {
+        auto operand = ast.first(n), callee = ast.first(operand);
+        auto name = ast.detail(callee);
+        if (ast.kind(operand) == Kind::Call && ast.kind(callee) == Kind::IdExpression &&
+            ast.first(name) == ast.last(name) && integer_pack_builtin(ids.spelling(terminal(name)))) {
+            auto list = ast.next(callee), count = ast.first(list);
+            if (!count || ast.next(count)) throw std::runtime_error("integer_pack takes one bound");
             TypeQuery q; q.kind = QueryKind::IntegerPack;
             auto id = intern_query(q,{expression_query(count,scope)});
             return types.compound(TypeKind::PackExpansion,0,value_argument_id(id));
         }
         return types.compound(TypeKind::PackExpansion,0,template_argument_node(operand,scope));
     }
-    if (ast[n].kind == Kind::Call && ast[ast[n].first].kind == Kind::IdExpression) {
-        auto callee = ast[n].first, name = ast[callee].detail;
-        auto list = ast[callee].next;
-        if (ast[name].kind == Kind::Name && ast[list].kind != Kind::BracedInit) {
+    if (ast.kind(n) == Kind::Call && ast.kind(ast.first(n)) == Kind::IdExpression) {
+        auto callee = ast.first(n), name = ast.detail(callee);
+        auto list = ast.next(callee);
+        if (ast.kind(name) == Kind::Name && ast.kind(list) != Kind::BracedInit) {
             auto binding = bind_template_name(name,scope); auto e = binding.entity;
             if (e && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias)) {
                 // T(Args...) in a template argument is a function type when
@@ -118,7 +118,7 @@ ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
                 // shared with functional-cast syntax; semantic construction
                 // resolves this ambiguity once, without replaying grammar.
                 std::vector<TypeId> parameters; bool function = true;
-                for (auto a = ast[list].first; a; a = ast[a].next) {
+                for (auto a = ast.first(list); a; a = ast.next(a)) {
                     auto arg = template_argument_node(a,scope);
                     if (!arg || value_argument(arg)) { function = false; break; }
                     parameters.push_back(arg);
@@ -127,42 +127,42 @@ ArgumentId Analyzer::template_argument_node_impl(NodeId n, ScopeId scope)
             }
         }
     }
-    if (ast[n].kind == Kind::TypeId) {
-        auto specs = ast[n].first, spec = ast[specs].first;
-        if (!ast[spec].next && !ast[specs].next && ast[spec].detail) {
-            auto name = ast[spec].detail;
-            if (!child(ast[name].last,Kind::TemplateArguments)) {
+    if (ast.kind(n) == Kind::TypeId) {
+        auto specs = ast.first(n), spec = ast.first(specs);
+        if (!ast.next(spec) && !ast.next(specs) && ast.detail(spec)) {
+            auto name = ast.detail(spec);
+            if (!child(ast.last(name),Kind::TemplateArguments)) {
                 auto binding = bind_template_name(name,scope);
                 auto e = template_entity(binding.dependent ? binding.entity : resolve(name,scope));
                 if (e) { check_access(e,scope,name_owner(name,scope)); auto injected = injected_template_type(e,scope); return injected ? injected : types.named(e); }
-                if (binding.dependent && (ast[ast[name].last].flags & 1))
+                if (binding.dependent && (ast.flags(ast.last(name)) & 1))
                     return type_name(name,scope,0,false,true);
             }
         }
         auto type = types.signature(type_id(n,scope));
-        auto d = ast[ast[n].first].next;
+        auto d = ast.next(ast.first(n));
         return declarator_pack(d) ? types.compound(TypeKind::PackExpansion,0,type) : type;
     }
     // A dependent class alias may not have been recognizable to the parser.
-    if (ast[n].kind == Kind::IdExpression) {
-        auto name = ast[n].detail;
+    if (ast.kind(n) == Kind::IdExpression) {
+        auto name = ast.detail(n);
         auto binding = bind_template_name(name,scope);
-        if (binding.dependent && (ast[ast[name].last].flags & 1) && !child(ast[name].last,Kind::TemplateArguments))
+        if (binding.dependent && (ast.flags(ast.last(name)) & 1) && !child(ast.last(name),Kind::TemplateArguments))
             return type_name(name,scope,0,false,true);
         auto e = binding.entity;
         if (e && entities[e].template_pattern && entities[e].kind == EntityKind::Variable &&
             (types[entities[e].type].cv & 1) && integral(entities[e].type)) {
             auto init = entities[e].initializer;
-            while (ast[init].kind == Kind::Initializer) init = ast[init].first;
+            while (ast.kind(init) == Kind::Initializer) init = ast.first(init);
             // [temp.dep.type] permits chains initialized by the parameter
             // itself. Expressions containing that parameter remain distinct.
-            if (ast[init].kind == Kind::IdExpression)
+            if (ast.kind(init) == Kind::IdExpression)
                 return convert_argument(template_argument_node(init,entities[e].owner),entities[e].type);
         }
-        if (!child(ast[ast[n].detail].last,Kind::TemplateArguments))
-            if (auto target = template_entity(e)) { check_access(target,scope,name_owner(ast[n].detail,scope)); return types.named(target); }
+        if (!child(ast.last(ast.detail(n)),Kind::TemplateArguments))
+            if (auto target = template_entity(e)) { check_access(target,scope,name_owner(ast.detail(n),scope)); return types.named(target); }
         if (e && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias))
-            return type_name(ast[n].detail,scope);
+            return type_name(ast.detail(n),scope);
     }
     return value_argument_id(expression_query(n,scope));
 }

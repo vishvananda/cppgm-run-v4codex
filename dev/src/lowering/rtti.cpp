@@ -161,7 +161,7 @@ Value Procedural::rtti_expression(NodeId n)
         Value value;
         if (!use.dynamic) value = emit(Opcode::Addr,IRType(),{Operand::symbol(rtti_type(use.type))});
         else {
-            auto object = address(expression(ast[n].first,true));
+            auto object = address(expression(ast.first(n),true));
             auto null = emit(Opcode::Compare,IRType::Ptr,{object.operand,Operand::integer(0)},Operation::Eq);
             auto fail = block(), scan = block();
             emit(Opcode::Branch,IRType(),{null.operand,Operand::label(fail),Operand::label(scan)});
@@ -173,7 +173,7 @@ Value Procedural::rtti_expression(NodeId n)
         }
         value.type = fact.type; value.address = true; return value;
     }
-    auto operand = ast[ast[n].first].next;
+    auto operand = ast.next(ast.first(n));
     auto object = use.reference ? address(expression(operand,true)) : load(expression(operand));
     // A -2 hint excludes a public source-to-target base path, not a
     // crosscast through a more-derived complete object. Let RTTI decide.

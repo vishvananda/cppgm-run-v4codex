@@ -47,21 +47,21 @@ TypeQueryFact Analyzer::member_pointer_value(Expression a, Expression b, ETokenT
 }
 Expression Analyzer::member_pointer_expression(NodeId n, ScopeId s)
 {
-    auto object = ast[n].first, pointer = ast[object].next;
-    auto fact = member_pointer_value(expressions[object],expressions[pointer],ast[n].op,s);
+    auto object = ast.first(n), pointer = ast.next(object);
+    auto fact = member_pointer_value(expressions[object],expressions[pointer],ast.op(n),s);
     if (fact.state == FactState::Failure) throw std::runtime_error("invalid member pointer application");
     auto result = fact.expression;
     auto& use = object_uses[result.object_use]; use.node = object; use.member_pointer = pointer;
     size(use.type);
     auto operand = pointer;
-    while (ast[operand].kind == syntax::Kind::Parenthesized) operand = ast[operand].first;
+    while (ast.kind(operand) == syntax::Kind::Parenthesized) operand = ast.first(operand);
     auto e = expressions[operand].entity;
     if (current_function && result.form == ExpressionForm::BoundMember && nonstatic_field(e) &&
         !member_pointer_flow_requests.get(current_function)) {
         member_pointer_flow_requests.put(current_function,1);
         member_pointer_flow_functions.push_back(current_function);
     }
-    if (result.form == ExpressionForm::BoundMember && ast[operand].kind == syntax::Kind::IdExpression &&
+    if (result.form == ExpressionForm::BoundMember && ast.kind(operand) == syntax::Kind::IdExpression &&
         e && entities[e].kind == EntityKind::Enumerator && entities[e].constant.valid) {
         auto value = static_value(pointer,expressions[pointer].type);
         if (value.kind == StaticValue::MemberFunction && value.entity)

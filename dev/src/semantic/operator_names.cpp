@@ -5,17 +5,17 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 ETokenType Analyzer::operator_token(NodeId name) const
 {
-    if (!name || ast[ast[name].last].op != KW_OPERATOR) return TOK_INVALID;
-    NodeId child = ast[ast[name].last].first;
-    if (ast[child].kind == Kind::Parameters) return OP_LPAREN;
-    if (ast[child].kind == Kind::Array) return OP_LSQUARE;
-    return ast[child].op;
+    if (!name || ast.op(ast.last(name)) != KW_OPERATOR) return TOK_INVALID;
+    NodeId child = ast.first(ast.last(name));
+    if (ast.kind(child) == Kind::Parameters) return OP_LPAREN;
+    if (ast.kind(child) == Kind::Array) return OP_LSQUARE;
+    return ast.op(child);
 }
 bool Analyzer::array_operator(NodeId name) const
 {
-    NodeId part = ast[name].last;
+    NodeId part = ast.last(name);
     ETokenType op = operator_token(name);
-    return (op == KW_NEW || op == KW_DELETE) && ast[ast[part].last].kind == Kind::Array;
+    return (op == KW_NEW || op == KW_DELETE) && ast.kind(ast.last(part)) == Kind::Array;
 }
 IdentifierId Analyzer::operator_name(ETokenType op, bool array)
 {
@@ -70,9 +70,9 @@ IdentifierId Analyzer::operator_name(ETokenType op, bool array)
 }
 void Analyzer::declare_operator(EntityId e, NodeId name)
 {
-    NodeId part = ast[name].last;
-    if (ast[part].op == KW_OPERATOR && ast[ast[part].first].kind == Kind::Literal) {
-        literal_functions.put(e, ast[ast[part].last].text); return;
+    NodeId part = ast.last(name);
+    if (ast.op(part) == KW_OPERATOR && ast.kind(ast.first(part)) == Kind::Literal) {
+        literal_functions.put(e, ast.text(ast.last(part))); return;
     }
     ETokenType op = operator_token(name);
     if (op == TOK_INVALID) return;

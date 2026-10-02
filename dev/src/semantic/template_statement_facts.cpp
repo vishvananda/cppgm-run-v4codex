@@ -24,12 +24,12 @@ Expression Analyzer::template_statement_value(NodeId n, ScopeId s)
 }
 void Analyzer::bind_template_condition(NodeId n, ScopeId s, bool is_switch)
 {
-    auto c = ast[n].first;
+    auto c = ast.first(n);
     if (!c) return;
     Expression value;
-    if (ast[c].kind == Kind::ConditionDeclaration) {
+    if (ast.kind(c) == Kind::ConditionDeclaration) {
         bind_template_declaration(c,s);
-        auto d = ast[ast[c].first].next, entity = facts[d].entity;
+        auto d = ast.next(ast.first(c)), entity = facts[d].entity;
         auto type = entities[entity].type;
         if (types[type].kind == TypeKind::Array || types[type].kind == TypeKind::Function)
             throw std::runtime_error("condition declares an array or function");
@@ -53,17 +53,17 @@ void Analyzer::bind_template_condition(NodeId n, ScopeId s, bool is_switch)
 }
 void Analyzer::bind_template_return(NodeId n, ScopeId s)
 {
-    auto c = ast[n].first;
+    auto c = ast.first(n);
     if (c) bind_template_expression(c,s);
     if (!return_type || dependent_type(return_type)) return;
     if (!c) {
         if (!fundamental(return_type,FT_VOID)) throw std::runtime_error("missing return value");
         return;
     }
-    if (ast[c].kind == Kind::BracedInit && !fixed_initializer_operands(c)) {
+    if (ast.kind(c) == Kind::BracedInit && !fixed_initializer_operands(c)) {
         check_template_initialization(c,return_type,s,InitializationMode::Copy); return;
     }
-    if (ast[c].kind == Kind::BracedInit && fixed_initializer_operands(c)) {
+    if (ast.kind(c) == Kind::BracedInit && fixed_initializer_operands(c)) {
         ++unevaluated_depth;
         try {
             auto conversion = list_initialization(c,return_type,s);
@@ -80,8 +80,8 @@ void Analyzer::bind_template_return(NodeId n, ScopeId s)
         return;
     }
     auto id = c;
-    while (ast[id].kind == Kind::Parenthesized) id = ast[id].first;
-    auto local = ast[id].kind == Kind::IdExpression ? expressions[id].entity : 0;
+    while (ast.kind(id) == Kind::Parenthesized) id = ast.first(id);
+    auto local = ast.kind(id) == Kind::IdExpression ? expressions[id].entity : 0;
     auto function = s;
     while (function && scopes[function].kind != ScopeKind::Function) function = scopes[function].parent;
     bool eligible = class_value(return_type) && local &&

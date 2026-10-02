@@ -33,7 +33,7 @@ IRType Procedural::type(TypeId id)
 bool Procedural::reference(TypeId t) const { return sem.types[t].kind == TypeKind::LRef || sem.types[t].kind == TypeKind::RRef; }
 NodeId Procedural::child(NodeId n, Kind k) const
 {
-    for (NodeId c = ast[n].first; c; c = ast[c].next) if (ast[c].kind == k) return c;
+    for (NodeId c = ast.first(n); c; c = ast.next(c)) if (ast.kind(c) == k) return c;
     return 0;
 }
 Value Procedural::emit_raw(Instruction i, const Operand* args, std::size_t count)

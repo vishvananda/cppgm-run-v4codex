@@ -59,7 +59,7 @@ void Procedural::initialize_reference(EntityId e, Value location)
     EntityId object = sem.reference_scalar(e);
     Value target = binding(object);
     NodeId n = sem.entities[e].initializer;
-    while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) n = ast[n].first;
+    while (ast.kind(n) == Kind::Initializer || ast.kind(n) == Kind::ParenInitializer || ast.kind(n) == Kind::ParenArguments) n = ast.first(n);
     auto c = sem.conversion_fact(sem.expression_fact(n).incoming);
     Value pointer;
     if (c.kind == semantic::Conversion::Kind::User) {

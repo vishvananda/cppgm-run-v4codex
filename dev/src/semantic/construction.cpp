@@ -133,10 +133,10 @@ EntityId Analyzer::default_constructor(TypeId t, ScopeId s, bool demand)
 }
 bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s, InitializationMode mode)
 {
-    NodeId list = ast[n].kind == Kind::Initializer ? ast[n].first : n;
+    NodeId list = ast.kind(n) == Kind::Initializer ? ast.first(n) : n;
     bool copy = mode == InitializationMode::Copy;
     auto info = entities[types[target].entity].class_info;
-    if (ast[list].kind == Kind::BracedInit && (initializer_list_element(target) || !class_facts[info].aggregate)) {
+    if (ast.kind(list) == Kind::BracedInit && (initializer_list_element(target) || !class_facts[info].aggregate)) {
         expression(list,s);
         auto retained = retained_initialization(list,target);
         auto c = retained ? copy_conversion_recipe(conversions[retained]) : list_initialization(list,target,s,!copy);
@@ -154,16 +154,16 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s, Initializati
         }
         return record_class_initialization(n,target,list,&c);
     }
-    if (ast[list].kind == Kind::BracedInit && class_facts[info].aggregate) return false;
-    if (!copy && ast[list].kind == Kind::Call) {
-        NodeId callee = ast[list].first;
-        EntityId named = ast[callee].kind == Kind::IdExpression ? resolve(ast[callee].detail, s) : 0;
+    if (ast.kind(list) == Kind::BracedInit && class_facts[info].aggregate) return false;
+    if (!copy && ast.kind(list) == Kind::Call) {
+        NodeId callee = ast.first(list);
+        EntityId named = ast.kind(callee) == Kind::IdExpression ? resolve(ast.detail(callee), s) : 0;
         if (named && (entities[named].kind == EntityKind::Type || entities[named].kind == EntityKind::Alias) &&
-            types.unqualified(entities[named].type) == types.unqualified(target)) list = ast[callee].next;
+            types.unqualified(entities[named].type) == types.unqualified(target)) list = ast.next(callee);
     }
     std::vector<NodeId> args;
-    bool grouped = ast[list].kind == Kind::Arguments || ast[list].kind == Kind::ParenInitializer || ast[list].kind == Kind::ParenArguments || ast[list].kind == Kind::BracedInit;
-    for (NodeId a = grouped ? ast[list].first : list; a; a = grouped ? ast[a].next : 0) {
+    bool grouped = ast.kind(list) == Kind::Arguments || ast.kind(list) == Kind::ParenInitializer || ast.kind(list) == Kind::ParenArguments || ast.kind(list) == Kind::BracedInit;
+    for (NodeId a = grouped ? ast.first(list) : list; a; a = grouped ? ast.next(a) : 0) {
         Expression value = expression(a, s);
         if (!grouped && copy) return record_class_initialization(n,target,a);
         if (!grouped && value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(target)) {
@@ -177,7 +177,7 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s, Initializati
     EntityId ctor = 0;
     bool reused = reuse_template_constructor(n,target,args,result,s,ctor);
     if (!reused)
-        ctor = choose_constructor(target, args, &result, s, !copy || ast[list].kind == Kind::BracedInit);
+        ctor = choose_constructor(target, args, &result, s, !copy || ast.kind(list) == Kind::BracedInit);
     if (copy && members[entities[ctor].member_info].explicit_constructor)
         throw std::runtime_error("explicit constructor in copy-list initialization");
     if (converting_transfer(ctor,result)) {
@@ -186,7 +186,7 @@ bool Analyzer::class_initialize(NodeId n, TypeId target, ScopeId s, Initializati
         class_initializer_index.put(key(n,target),value_initializations.size()); value_initializations.push_back(init);
         facts.edit(n).type = target; return true;
     }
-    if (!reused && ast[list].kind == Kind::BracedInit) {
+    if (!reused && ast.kind(list) == Kind::BracedInit) {
         Type f = types[entities[ctor].type];
         for (std::size_t j = 0; j < args.size() && j < f.count; ++j)
             list_conversion(args[j], value_type(types.parameters[f.offset+j]));
@@ -264,14 +264,14 @@ void Analyzer::constructor_actions(EntityId e)
     if (!list) list = child(entities[e].body,Kind::CtorInitializer);
     demand_region(list);
     expand_expression_list(list,scope);
-    for (NodeId n = ast[list].first; n; n = ast[n].next) {
+    for (NodeId n = ast.first(list); n; n = ast.next(n)) {
         NodeId id = child(n, Kind::MemInitializerId);
-        EntityId field = resolve(ast[id].detail, expanded_scope(n,entities[e].owner));
+        EntityId field = resolve(ast.detail(id), expanded_scope(n,entities[e].owner));
         if (!field) throw std::runtime_error("unknown constructor initializer");
         if (entities[field].kind == EntityKind::Alias) field = types[entities[field].type].entity;
         if (field == cls) {
-            if (ast[list].first != ast[list].last) throw std::runtime_error("delegation must be the only initializer");
-            NodeId init = ast[id].next;
+            if (ast.first(list) != ast.last(list)) throw std::runtime_error("delegation must be the only initializer");
+            NodeId init = ast.next(id);
             // Delegation forwards the caller's entry kind. Do not invent a
             // complete-object use while checking the common action graph.
             base_initialization = true;
@@ -310,7 +310,7 @@ void Analyzer::constructor_actions(EntityId e)
             direct_base |= bases[b].base == field;
         if (!direct_member && !direct_base && !virtual_base_index.get(key(cls,field)))
             throw std::runtime_error("initializer does not name a member or base");
-        explicit_initializers.put(field, ast[id].next);
+        explicit_initializers.put(field, ast.next(id));
     }
     std::vector<SubobjectAction> work;
     auto add = [&](EntityId field, TypeId type, NodeId initial, unsigned base) {

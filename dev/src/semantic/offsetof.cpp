@@ -3,17 +3,17 @@
 namespace cppgm { namespace semantic {
 QueryId Analyzer::offsetof_query(NodeId n, ScopeId s)
 {
-    auto first = ast[n].first;
+    auto first = ast.first(n);
     TypeQuery root; root.kind = QueryKind::Offsetof; root.type = type_id(first,s);
     auto prior = intern_query(root,{});
     std::vector<QueryId> children; children.reserve(2);
-    for (auto part = ast[first].next; part; part = ast[part].next) {
+    for (auto part = ast.next(first); part; part = ast.next(part)) {
         TypeQuery step; step.kind = QueryKind::Offsetof; step.context = s;
         children.clear(); children.push_back(prior);
-        if (ast[part].kind == syntax::Kind::Identifier) {
-            step.op = OP_DOT; step.name = ast[part].text;
+        if (ast.kind(part) == syntax::Kind::Identifier) {
+            step.op = OP_DOT; step.name = ast.text(part);
         } else {
-            step.op = OP_LSQUARE; children.push_back(expression_query(ast[part].first,s));
+            step.op = OP_LSQUARE; children.push_back(expression_query(ast.first(part),s));
         }
         prior = intern_query(step,children);
         offsetof_path_queries.put(part,prior);

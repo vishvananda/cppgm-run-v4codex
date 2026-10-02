@@ -47,13 +47,13 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
     };
     std::function<void(NodeId)> visit = [&](NodeId n) {
         if (!n) return;
-        Kind k = ast[n].kind;
+        Kind k = ast.kind(n);
         if (k == Kind::Lambda || k == Kind::Sizeof || k == Kind::SizeofPack || k == Kind::TypeTrait) return;
         if (k == Kind::StatementExpression) {
             auto saved = active, prior = region;
             region = n;
             enter_initialization(); // Even an empty body forbids incoming jumps.
-            visit(ast[n].first); active = saved; region = prior; return;
+            visit(ast.first(n)); active = saved; region = prior; return;
         }
         bool recorded = k == Kind::Compound || k == Kind::Then || k == Kind::Else || k == Kind::ForInit || k == Kind::SelectionInit || k == Kind::Iteration ||
             k == Kind::If || k == Kind::For || k == Kind::RangeFor || k == Kind::While || k == Kind::Do || k == Kind::Switch || k == Kind::Condition ||
@@ -61,7 +61,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             k == Kind::Break || k == Kind::Continue || k == Kind::Label || k == Kind::Case || k == Kind::Default ||
             k == Kind::Throw || k == Kind::Try || k == Kind::FunctionTry || k == Kind::Handler;
         if (!recorded) {
-            for (auto c = ast[n].first; c; c = ast[c].next) visit(c);
+            for (auto c = ast.first(n); c; c = ast.next(c)) visit(c);
             return;
         }
         LifetimeUse use; use.entry = use.exit = live; use.context = context;
@@ -73,12 +73,12 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             if (!(use.entry || use.exit || use.target || use.expression_region)) return;
             lifetime_index.put(n, lifetime_uses.size()); lifetime_uses.push_back(use);
         };
-        if (k == Kind::Condition) { visit(ast[n].first); add_object(facts[n].entity); use.exit = live; record_use(); return; }
+        if (k == Kind::Condition) { visit(ast.first(n)); add_object(facts[n].entity); use.exit = live; record_use(); return; }
         if (k == Kind::SimpleDeclaration || k == Kind::Class) {
             add_object(anonymous_object(n));
             NodeId list = child(n, Kind::InitDeclarators);
-            for (NodeId c = ast[list].first; c; c = ast[c].next) {
-                auto e = facts[ast[c].first].entity;
+            for (NodeId c = ast.first(list); c; c = ast.next(c)) {
+                auto e = facts[ast.first(c)].entity;
                 auto prior = live;
                 add_object(e);
                 auto complete = live; live = prior;
@@ -88,12 +88,12 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             use.exit = live; record_use(); return;
         }
         if (k == Kind::Label) {
-            if (names.get(ast[n].text)) throw std::runtime_error("duplicate label");
-            names.put(ast[n].text, labels.size()); labels.push_back({n, active, live, exception, region});
+            if (names.get(ast.text(n))) throw std::runtime_error("duplicate label");
+            names.put(ast.text(n), labels.size()); labels.push_back({n, active, live, exception, region});
         }
         if (k == Kind::Goto) { jumps.push_back({n, active, live}); record_use(); return; }
         if (k == Kind::Return) {
-            visit(ast[n].first);
+            visit(ast.first(n));
             use.context = body;
             auto key_id = key(live, body); if (live && !binding_only) return_counts.put(key_id, return_counts.get(key_id) + 1); record_use(); return;
         }
@@ -105,7 +105,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             record_use(); return;
         }
         if (k == Kind::ExpressionStatement || k == Kind::Iteration || k == Kind::Throw || k == Kind::Assembly) {
-            for (auto c = ast[n].first; c; c = ast[c].next) visit(c);
+            for (auto c = ast.first(n); c; c = ast.next(c)) visit(c);
             record_use(); return;
         }
         if (k == Kind::Case || k == Kind::Default) cases.push_back({active, switch_entry,0});
@@ -120,7 +120,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             auto protected_body = child(n,Kind::Compound);
             enter_initialization(); exception = n; visit(protected_body);
             active = saved; live = saved_live; exception = saved_exception;
-            for (auto h = ast[protected_body].next; h; h = ast[h].next) visit(h);
+            for (auto h = ast.next(protected_body); h; h = ast.next(h)) visit(h);
             record_use(); return;
         }
         if (k == Kind::Handler) { exception = n; enter_initialization(); add_object(facts[n].entity); }
@@ -130,7 +130,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             break_exception = continue_exception = exception;
             if (binding_only) {
                 enter_initialization();
-                visit(ast[n].last);
+                visit(ast.last(n));
             } else {
                 auto index = range_index.get(n);
                 auto plan = ranges[index];
@@ -155,13 +155,13 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         bool scope = k == Kind::Compound || k == Kind::Then || k == Kind::Else || k == Kind::If ||
             k == Kind::Switch || k == Kind::While || k == Kind::For || k == Kind::Do || k == Kind::Try || k == Kind::Handler;
         if (k == Kind::Switch) switch_entry = active;
-        for (NodeId c = ast[n].first; c; c = ast[c].next) {
-            bool discarded = !binding_only && k == Kind::If && (ast[n].flags & 1) &&
-                ast[c].kind != Kind::SelectionInit && ast[c].kind != Kind::Condition && ast[c].kind !=
+        for (NodeId c = ast.first(n); c; c = ast.next(c)) {
+            bool discarded = !binding_only && k == Kind::If && (ast.flags(n) & 1) &&
+                ast.kind(c) != Kind::SelectionInit && ast.kind(c) != Kind::Condition && ast.kind(c) !=
                 (constant_truth(constants[facts[n].value]) ? Kind::Then : Kind::Else);
             if (discarded && ast.nodes.occurrences[n].context) continue;
             bool header = (loop || k == Kind::Switch) &&
-                (ast[c].kind == Kind::Condition || ast[c].kind == Kind::SelectionInit || ast[c].kind == Kind::ForInit || ast[c].kind == Kind::Iteration);
+                (ast.kind(c) == Kind::Condition || ast.kind(c) == Kind::SelectionInit || ast.kind(c) == Kind::ForInit || ast.kind(c) == Kind::Iteration);
             auto loop_break = break_live, loop_continue = continue_live;
             auto loop_break_exception = break_exception, loop_continue_exception = continue_exception;
             auto loop_break_region = break_region, loop_continue_region = continue_region;
@@ -173,8 +173,8 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
             // A constexpr-if substatement is control-flow-limited even when
             // it declares no objects. Its incoming jump/case edges must stay
             // within the same substatement, including definition-time checks.
-            bool limited = k == Kind::If && (ast[n].flags & 1) &&
-                (ast[c].kind == Kind::Then || ast[c].kind == Kind::Else);
+            bool limited = k == Kind::If && (ast.flags(n) & 1) &&
+                (ast.kind(c) == Kind::Then || ast.kind(c) == Kind::Else);
             auto before = active;
             if (limited) enter_initialization();
             auto prior_binding = binding_only;
@@ -187,8 +187,8 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
                 break_exception = loop_break_exception; continue_exception = loop_continue_exception;
                 break_region = loop_break_region; continue_region = loop_continue_region;
             }
-            if (k == Kind::Switch && ast[c].kind == Kind::Condition) switch_entry = active;
-            if (k == Kind::For && ast[c].kind == Kind::ForInit) continue_live = live;
+            if (k == Kind::Switch && ast.kind(c) == Kind::Condition) switch_entry = active;
+            if (k == Kind::For && ast.kind(c) == Kind::ForInit) continue_live = live;
         }
         use.exit = live; record_use();
         if (scope) { active = saved; live = saved_live; }
@@ -215,7 +215,7 @@ void Analyzer::check_jumps(NodeId body, bool binding_only)
         return frames[target].enter <= frames[source].enter && frames[source].enter < frames[target].leave;
     };
     for (const Jump& j : jumps) {
-        auto label = names.get(ast[j.node].text);
+        auto label = names.get(ast.text(j.node));
         if (!label) throw std::runtime_error("undefined goto label");
         if (!ancestor(labels[label].frame, j.frame)) throw std::runtime_error("goto bypasses initialization");
         if (!binding_only) {

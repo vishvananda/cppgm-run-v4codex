@@ -10,10 +10,10 @@ bool Analyzer::template_aggregate_type(TypeId target) const
 bool Analyzer::fixed_initializer_operands(NodeId n) const
 {
     if (!n) return true;
-    auto kind = ast[n].kind;
+    auto kind = ast.kind(n);
     if (kind == Kind::Initializer || kind == Kind::BracedInit || kind == Kind::ParenInitializer ||
         kind == Kind::ParenArguments || kind == Kind::Arguments || kind == Kind::DesignatedInit) {
-        for (auto c = ast[n].first; c; c = ast[c].next)
+        for (auto c = ast.first(n); c; c = ast.next(c))
             if (!fixed_initializer_operands(c)) return false;
         return true;
     }
@@ -40,17 +40,17 @@ std::uint32_t Analyzer::retained_initialization(NodeId n, TypeId target)
 bool Analyzer::check_template_constructor(NodeId n, TypeId target, ScopeId s, InitializationMode mode,
     const std::vector<NodeId>* operands)
 {
-    auto list = ast[n].kind == Kind::Initializer ? ast[n].first : n;
+    auto list = ast.kind(n) == Kind::Initializer ? ast.first(n) : n;
     bool copy = mode == InitializationMode::Copy;
-    bool grouped = operands || ast[list].kind == Kind::Arguments || ast[list].kind == Kind::ParenInitializer ||
-        ast[list].kind == Kind::ParenArguments || ast[list].kind == Kind::BracedInit;
+    bool grouped = operands || ast.kind(list) == Kind::Arguments || ast.kind(list) == Kind::ParenInitializer ||
+        ast.kind(list) == Kind::ParenArguments || ast.kind(list) == Kind::BracedInit;
     std::vector<NodeId> args;
     std::vector<Expression> values;
     std::vector<NodeId> source_operands;
     if (operands) source_operands = *operands;
-    else for (auto a = grouped ? ast[list].first : list; a; a = grouped ? ast[a].next : 0) source_operands.push_back(a);
+    else for (auto a = grouped ? ast.first(list) : list; a; a = grouped ? ast.next(a) : 0) source_operands.push_back(a);
     for (auto a : source_operands) {
-        if (ast[a].kind == Kind::BracedInit && fixed_initializer_operands(a)) expression(a,s);
+        if (ast.kind(a) == Kind::BracedInit && fixed_initializer_operands(a)) expression(a,s);
         auto value = template_statement_value(a,s);
         if (!value.type && value.form != ExpressionForm::InitializerList && value.form != ExpressionForm::Overload) return false;
         if (!grouped && copy) {
@@ -67,7 +67,7 @@ bool Analyzer::check_template_constructor(NodeId n, TypeId target, ScopeId s, In
         args.push_back(a); values.push_back(value);
     }
     Expression result;
-    auto ctor = choose_constructor(target,args,&result,s,!copy || ast[list].kind == Kind::BracedInit,true,&values);
+    auto ctor = choose_constructor(target,args,&result,s,!copy || ast.kind(list) == Kind::BracedInit,true,&values);
     if (!ctor || deleted_transfer(ctor)) throw std::runtime_error("invalid fixed initializer constructor");
     check_default_constructor(ctor);
     auto access = ctor;
@@ -83,7 +83,7 @@ bool Analyzer::check_template_constructor(NodeId n, TypeId target, ScopeId s, In
     for (unsigned i = 0; i < supplied; ++i) {
         auto c = conversions[result.conversions+i];
         check_fixed_conversion(values[i],expressions[args[i]].ready ? args[i] : 0,c,s);
-        if (ast[list].kind == Kind::BracedInit && i < f.count)
+        if (ast.kind(list) == Kind::BracedInit && i < f.count)
             list_conversion_from(args[i],values[i].type,value_type(types.parameters[f.offset+i]),&c);
         selected.push_back(c);
     }
@@ -122,24 +122,24 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
     if (dependent_type(target) && types[target].kind != TypeKind::Array &&
         !(types[target].kind == TypeKind::Named && template_pattern_aggregates.get(types[target].entity) == 2)) {
         if (!cursor) return true;
-        if (ast[cursor].kind != Kind::BracedInit) return false;
-        cursor = ast[cursor].next; return true;
+        if (ast.kind(cursor) != Kind::BracedInit) return false;
+        cursor = ast.next(cursor); return true;
     }
     if (!cursor) {
         auto c = list_initialization(0,target,s); check_fixed_conversion(Expression(),0,c,s); return true;
     }
     auto source = cursor;
-    bool grouped = ast[source].kind == Kind::BracedInit || ast[source].kind == Kind::ParenArguments ||
-        ast[source].kind == Kind::ParenInitializer;
-    auto inner = grouped ? ast[source].first : source;
+    bool grouped = ast.kind(source) == Kind::BracedInit || ast.kind(source) == Kind::ParenArguments ||
+        ast.kind(source) == Kind::ParenInitializer;
+    auto inner = grouped ? ast.first(source) : source;
     auto string = inner;
-    while (ast[string].kind == Kind::Parenthesized) string = ast[string].first;
+    while (ast.kind(string) == Kind::Parenthesized) string = ast.first(string);
     if (string_initialization(string,target)) {
-        if (grouped && ast[ast[source].first].next) throw std::runtime_error("excess fixed string initializer");
-        if (!types[target].unknown_bound && ast.literals[ast[string].literal].elements > types[target].bound)
+        if (grouped && ast.next(ast.first(source))) throw std::runtime_error("excess fixed string initializer");
+        if (!types[target].unknown_bound && ast.literals[ast.literal(string)].elements > types[target].bound)
             throw std::runtime_error("fixed string initializer exceeds array");
-        if (bound) *bound = ast.literals[ast[string].literal].elements;
-        cursor = ast[source].next; return true;
+        if (bound) *bound = ast.literals[ast.literal(string)].elements;
+        cursor = ast.next(source); return true;
     }
     if (!template_aggregate_type(target)) {
         check_template_initialization(source,target,s,InitializationMode::Copy);
@@ -150,7 +150,7 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
                 template_initializer_narrowing.put(ast.nodes.occurrences[source].source,target);
             }
         }
-        cursor = ast[source].next; return true;
+        cursor = ast.next(source); return true;
     }
     if ((class_value(target) || vector_kind(types[target].kind)) && !grouped) {
         auto value = template_statement_value(source,s);
@@ -158,7 +158,7 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
             auto c = conversion_value(value,target);
             if (c.valid()) {
                 check_fixed_conversion(value,expressions[source].ready ? source : 0,c,s);
-                remember_initialization(source,c); cursor = ast[source].next; return true;
+                remember_initialization(source,c); cursor = ast.next(source); return true;
             }
         }
     }
@@ -168,14 +168,14 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
         std::uint64_t i = 0;
         bool complete = true;
         while (inner && (type.unknown_bound || i < type.bound)) {
-            if (ast[inner].kind == Kind::DesignatedInit) throw std::runtime_error("member designator requires a class aggregate");
-            if (ast[inner].kind == Kind::PackExpression) {
+            if (ast.kind(inner) == Kind::DesignatedInit) throw std::runtime_error("member designator requires a class aggregate");
+            if (ast.kind(inner) == Kind::PackExpression) {
                 // Expansion length is unknown, but scalar element conversions
                 // and following fixed clauses still have definition-time rules.
                 if (dependent_type(type.child) || template_aggregate_type(type.child)) return false;
-                auto pattern = ast[inner].first;
+                auto pattern = ast.first(inner);
                 check_template_initializer_item(pattern,type.child,s);
-                inner = ast[inner].next; complete = false; continue;
+                inner = ast.next(inner); complete = false; continue;
             }
             auto clause = inner;
             if (!check_template_initializer_item(inner,type.child,s)) return false;
@@ -190,67 +190,67 @@ bool Analyzer::check_template_initializer_item(NodeId& cursor, TypeId target, Sc
         for (auto d = scopes[entities[type.entity].scope].first_decl; d; d = declarations[d].next) {
             auto field = declarations[d].entity;
             if (!nonstatic_field(field)) continue;
-            if (ast[inner].kind == Kind::DesignatedInit) {
-                if (designated_storage(field,ast[inner].text)) {
+            if (ast.kind(inner) == Kind::DesignatedInit) {
+                if (designated_storage(field,ast.text(inner))) {
                     if (!check_template_initializer_item(inner,initialized_field_type(target,field),s)) return false;
                     if (entities[type.entity].key == KW_UNION) break;
                     continue;
                 }
-                bool match = ast[inner].text == entities[field].name;
+                bool match = ast.text(inner) == entities[field].name;
                 if (!match && entities[type.entity].key == KW_UNION) continue;
-                auto clause = match ? ast[inner].first : 0;
+                auto clause = match ? ast.first(inner) : 0;
                 check_template_initialization(clause,initialized_field_type(target,field),s,InitializationMode::Copy);
-                if (match) inner = ast[inner].next;
+                if (match) inner = ast.next(inner);
             } else if (!check_template_initializer_item(inner,initialized_field_type(target,field),s)) return false;
             if (entities[type.entity].key == KW_UNION) break;
         }
     }
     if (grouped && inner) throw std::runtime_error("excess fixed aggregate initializer");
-    cursor = grouped ? ast[source].next : inner;
+    cursor = grouped ? ast.next(source) : inner;
     return true;
 }
 void Analyzer::check_template_initialization(NodeId n, TypeId target, ScopeId s, InitializationMode mode)
 {
     if (!target || ast.nodes.occurrences[n].context) return;
     check_array_initializer(n,target);
-    if (ast[n].kind == Kind::Initializer && (ast[n].flags & 1)) mode = InitializationMode::Copy;
+    if (ast.kind(n) == Kind::Initializer && (ast.flags(n) & 1)) mode = InitializationMode::Copy;
     if (types[target].kind == TypeKind::Named && template_pattern_aggregates.get(types[target].entity) == 3)
         throw std::runtime_error("initializer needs complete local class");
     if (dependent_type(target) && types[target].kind != TypeKind::Array &&
         !(types[target].kind == TypeKind::Named && template_pattern_aggregates.get(types[target].entity) == 2)) return;
     struct Unevaluated { unsigned& depth; Unevaluated(unsigned& d) : depth(d) { ++depth; } ~Unevaluated() { --depth; } } guard(unevaluated_depth);
-    auto list = ast[n].kind == Kind::Initializer ? ast[n].first : n;
+    auto list = ast.kind(n) == Kind::Initializer ? ast.first(n) : n;
     if (class_value(target)) {
         complete_class(types[target].entity); reject_abstract(target);
-        if (ast[list].kind == Kind::BracedInit && (initializer_list_element(target) || !aggregate_type(target))) {
+        if (ast.kind(list) == Kind::BracedInit && (initializer_list_element(target) || !aggregate_type(target))) {
             if (!fixed_initializer_operands(list)) return;
             expression(list,s);
             auto c = list_initialization(list,target,s,mode != InitializationMode::Copy);
             check_fixed_conversion(Expression(),list,c,s); remember_initialization(list,c); return;
         }
-        if (!aggregate_type(target) || ast[list].kind != Kind::BracedInit) {
+        if (!aggregate_type(target) || ast.kind(list) != Kind::BracedInit) {
             check_template_constructor(n,target,s,mode); return;
         }
     }
-    if (ast[n].kind == Kind::Initializer) { check_template_initialization(list,target,s,mode); return; }
+    if (ast.kind(n) == Kind::Initializer) { check_template_initialization(list,target,s,mode); return; }
     if (template_aggregate_type(target)) {
         NodeId cursor = n; check_template_initializer_item(cursor,target,s); return;
     }
-    if (ast[n].kind == Kind::BracedInit &&
+    if (ast.kind(n) == Kind::BracedInit &&
         (types[target].kind == TypeKind::LRef || types[target].kind == TypeKind::RRef ||
-         (complex_type(target) && ast[n].first != ast[n].last))) {
+         (complex_type(target) && ast.first(n) != ast.last(n)))) {
         if (!fixed_initializer_operands(n)) return;
         auto c = list_initialization(n,target,s);
         check_fixed_conversion(Expression(),n,c,s); remember_initialization(n,c); return;
     }
-    bool braced = ast[n].kind == Kind::BracedInit;
-    if (braced || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) {
-        auto child = ast[n].first;
+    bool braced = ast.kind(n) == Kind::BracedInit;
+    if (braced || ast.kind(n) == Kind::ParenInitializer || ast.kind(n) == Kind::ParenArguments) {
+        auto child = ast.first(n);
         if (!child) {
             auto c = list_initialization(0,target,s); check_fixed_conversion(Expression(),0,c,s); return;
         }
-        if (child != ast[n].last) throw std::runtime_error("excess fixed scalar initializer");
-        if (braced || ast[child].kind == Kind::BracedInit) {
+        if (child != ast.last(n)) throw std::runtime_error("excess fixed scalar initializer");
+        if (braced || ast.kind(child) == Kind::BracedInit) {
             check_template_initialization(child,target,s,mode);
             if (braced) {
                 auto value = template_statement_value(child,s);

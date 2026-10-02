@@ -1,0 +1,239 @@
+function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
+  slot $a : obj<4x4>
+  slot $b : obj<8x8>
+  slot $x : i32
+  slot $y : i32
+  slot $z : i32
+  slot $lor__1 : i64
+  slot $lor__2 : i64
+  slot $lor__3 : i64
+  slot $lor__4 : i64
+  slot $lor__5 : i64
+
+  block ^entry:
+    %t1 = addr $a
+    %t2 = addr $a
+    %t3 = index i8 [projection=field] %t2, 0
+    store i32 5, %t3
+    %t4 = addr $b
+    %t5 = addr $b
+    %t6 = index i8 [projection=field] %t5, 0
+    store i64 9, %t6
+    %t7 = addr $a
+    %t8 = call i32 @Box_int___count(%t7, 1, 2)
+    store i32 %t8, $x
+    %t9 = addr $b
+    %t10 = call i32 @Box_long_int___count(%t9)
+    store i32 %t10, $y
+    %t11 = addr $a
+    %t12 = call i32 @Box_int___count__ov2(%t11, 4)
+    store i32 %t12, $z
+    %t13 = load i32 $x
+    %t14 = cmp ne i32 %t13, 7
+    branch %t14, ^lor_short_14, ^lor_rhs_13
+
+  block ^lor_rhs_13:
+    %t15 = load i32 $y
+    %t16 = cmp ne i32 %t15, 9
+    %t17 = cmp ne i64 %t16, 0
+    store i64 %t17, $lor__5
+    jump ^lor_end_15
+
+  block ^lor_short_14:
+    store i64 1, $lor__5
+    jump ^lor_end_15
+
+  block ^lor_end_15:
+    %t18 = load i64 $lor__5
+    branch %t18, ^lor_short_11, ^lor_rhs_10
+
+  block ^lor_rhs_10:
+    %t19 = load i32 $z
+    %t20 = cmp ne i32 %t19, 6
+    %t21 = cmp ne i64 %t20, 0
+    store i64 %t21, $lor__4
+    jump ^lor_end_12
+
+  block ^lor_short_11:
+    store i64 1, $lor__4
+    jump ^lor_end_12
+
+  block ^lor_end_12:
+    %t22 = load i64 $lor__4
+    branch %t22, ^lor_short_8, ^lor_rhs_7
+
+  block ^lor_rhs_7:
+    %t23 = addr $b
+    %t24 = call i64 @Box_long_int___add(%t23, 3)
+    %t25 = call i64 @Box_long_int___Nested__twice(%t24)
+    %t26 = cmp ne i64 %t25, 24
+    %t27 = cmp ne i64 %t26, 0
+    store i64 %t27, $lor__3
+    jump ^lor_end_9
+
+  block ^lor_short_8:
+    store i64 1, $lor__3
+    jump ^lor_end_9
+
+  block ^lor_end_9:
+    %t28 = load i64 $lor__3
+    branch %t28, ^lor_short_5, ^lor_rhs_4
+
+  block ^lor_rhs_4:
+    %t29 = addr $a
+    %t30 = call i32 @Box_int___add(%t29, 3)
+    %t31 = call i32 @Box_int___Nested__twice(%t30)
+    %t32 = cmp ne i32 %t31, 16
+    %t33 = cmp ne i64 %t32, 0
+    store i64 %t33, $lor__2
+    jump ^lor_end_6
+
+  block ^lor_short_5:
+    store i64 1, $lor__2
+    jump ^lor_end_6
+
+  block ^lor_end_6:
+    %t34 = load i64 $lor__2
+    branch %t34, ^lor_short_2, ^lor_rhs_1
+
+  block ^lor_rhs_1:
+    %t35 = addr $b
+    %t36 = call i64 @Box_long_int___add(%t35, 2)
+    %t37 = cmp ne i64 %t36, 11
+    %t38 = cmp ne i64 %t37, 0
+    store i64 %t38, $lor__1
+    jump ^lor_end_3
+
+  block ^lor_short_2:
+    store i64 1, $lor__1
+    jump ^lor_end_3
+
+  block ^lor_end_3:
+    %t39 = load i64 $lor__1
+    %t40 = convert trunc i32 i64 %t39
+    return i32 %t40
+}
+function @Box_int___count(%this : ptr [object_bytes=4], %values : i32, %values__pack2 : i32) -> i32 [binding=weak, object=_ZNK3BoxIiE5countIJiiEEEiDpT_, inline_hint=yes] {
+  slot $this : ptr
+  slot $values : i32
+  slot $values__pack2 : i32
+  slot $items : obj<12x4>
+
+  block ^entry:
+    store ptr %this, $this
+    store i32 %values, $values
+    store i32 %values__pack2, $values__pack2
+    %t1 = addr $items
+    %t2 = load ptr $this
+    %t3 = index i8 [projection=field] %t2, 0
+    %t4 = load i32 %t3
+    store i32 %t4, %t1
+    %t5 = index i8 %t1, 4
+    %t6 = load i32 $values
+    store i32 %t6, %t5
+    %t7 = index i8 %t1, 8
+    %t8 = load i32 $values__pack2
+    store i32 %t8, %t7
+    %t9 = addr $items
+    %t10 = index i32 [projection=array_element] %t9, 0
+    %t11 = load i32 %t10
+    %t12 = const i64 2
+    %t13 = convert sext i64 i32 %t11
+    %t14 = binary add i64 %t13, %t12
+    %t15 = convert trunc i32 i64 %t14
+    return i32 %t15
+}
+function @Box_long_int___count(%this : ptr [object_bytes=8]) -> i32 [binding=weak, object=_ZNK3BoxIlE5countIJEEEiDpT_, inline_hint=yes] {
+  slot $this : ptr
+  slot $items : obj<4x4>
+
+  block ^entry:
+    store ptr %this, $this
+    %t1 = addr $items
+    %t2 = load ptr $this
+    %t3 = index i8 [projection=field] %t2, 0
+    %t4 = load i64 %t3
+    %t5 = convert trunc i32 i64 %t4
+    store i32 %t5, %t1
+    %t6 = addr $items
+    %t7 = index i32 [projection=array_element] %t6, 0
+    %t8 = load i32 %t7
+    %t9 = const i64 0
+    %t10 = convert sext i64 i32 %t8
+    %t11 = binary add i64 %t10, %t9
+    %t12 = convert trunc i32 i64 %t11
+    return i32 %t12
+}
+function @Box_int___count__ov2(%this : ptr [object_bytes=4], %values : i32) -> i32 [binding=weak, object=_ZNK3BoxIiE5countIJiEEEiDpT_, inline_hint=yes] {
+  slot $this : ptr
+  slot $values : i32
+  slot $items : obj<8x4>
+
+  block ^entry:
+    store ptr %this, $this
+    store i32 %values, $values
+    %t1 = addr $items
+    %t2 = load ptr $this
+    %t3 = index i8 [projection=field] %t2, 0
+    %t4 = load i32 %t3
+    store i32 %t4, %t1
+    %t5 = index i8 %t1, 4
+    %t6 = load i32 $values
+    store i32 %t6, %t5
+    %t7 = addr $items
+    %t8 = index i32 [projection=array_element] %t7, 0
+    %t9 = load i32 %t8
+    %t10 = const i64 1
+    %t11 = convert sext i64 i32 %t9
+    %t12 = binary add i64 %t11, %t10
+    %t13 = convert trunc i32 i64 %t12
+    return i32 %t13
+}
+function @Box_long_int___add(%this : ptr [object_bytes=8], %amount : i64) -> i64 [binding=weak, object=_ZNK3BoxIlE3addEl, inline_hint=yes] {
+  slot $this : ptr
+  slot $amount : i64
+
+  block ^entry:
+    store ptr %this, $this
+    store i64 %amount, $amount
+    %t1 = load ptr $this
+    %t2 = index i8 [projection=field] %t1, 0
+    %t3 = load i64 %t2
+    %t4 = load i64 $amount
+    %t5 = binary add i64 %t3, %t4
+    return i64 %t5
+}
+function @Box_long_int___Nested__twice(%v : i64) -> i64 [binding=weak, object=_ZN3BoxIlE6Nested5twiceEl, inline_hint=yes] {
+  slot $v : i64
+
+  block ^entry:
+    store i64 %v, $v
+    %t1 = load i64 $v
+    %t2 = load i64 $v
+    %t3 = binary add i64 %t1, %t2
+    return i64 %t3
+}
+function @Box_int___add(%this : ptr [object_bytes=4], %amount : i32) -> i32 [binding=weak, object=_ZNK3BoxIiE3addEi, inline_hint=yes] {
+  slot $this : ptr
+  slot $amount : i32
+
+  block ^entry:
+    store ptr %this, $this
+    store i32 %amount, $amount
+    %t1 = load ptr $this
+    %t2 = index i8 [projection=field] %t1, 0
+    %t3 = load i32 %t2
+    %t4 = load i32 $amount
+    %t5 = binary add i32 %t3, %t4
+    return i32 %t5
+}
+function @Box_int___Nested__twice(%v : i32) -> i32 [binding=weak, object=_ZN3BoxIiE6Nested5twiceEi, inline_hint=yes] {
+  slot $v : i32
+
+  block ^entry:
+    store i32 %v, $v
+    %t1 = load i32 $v
+    %t2 = load i32 $v
+    %t3 = binary add i32 %t1, %t2
+    return i32 %t3
+}

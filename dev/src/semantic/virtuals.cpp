@@ -7,8 +7,8 @@ void Analyzer::virtual_declaration(EntityId e, NodeId d, NodeId init, NodeId spe
 {
     bool virt = spec_has(specs, KW_VIRTUAL) || spec_has(child(source, Kind::MemberSpecifiers), KW_VIRTUAL);
     bool over = false, final = false;
-    for (NodeId n = ast[d].first; n; n = ast[n].next) if (ast[n].kind == Kind::VirtSpecifier) {
-        auto text = ids.spelling(ast[n].text);
+    for (NodeId n = ast.first(d); n; n = ast.next(n)) if (ast.kind(n) == Kind::VirtSpecifier) {
+        auto text = ids.spelling(ast.text(n));
         over |= (text.size == 8 && !std::memcmp(text.data,"override",8)); final |= (text.size == 5 && !std::memcmp(text.data,"final",5));
     }
     bool member = entities[e].member_info;
@@ -21,7 +21,7 @@ void Analyzer::virtual_declaration(EntityId e, NodeId d, NodeId init, NodeId spe
     members[m].override_member |= over; members[m].final_member |= final;
     if (!init) init = child(source, Kind::Initializer);
     if (init && !child(init, Kind::SpecialInitializer)) {
-        auto value = evaluate(ast[init].first, s);
+        auto value = evaluate(ast.first(init), s);
         if (!value.valid || value.bits) throw std::runtime_error("invalid pure specifier");
         members[m].pure = true;
     }

@@ -5,10 +5,10 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 bool Analyzer::invoke_expression(NodeId n, ScopeId s)
 {
-    auto callee = ast[n].first;
-    if (ast[callee].kind != Kind::IdExpression) return false;
-    auto name = ast[callee].detail;
-    return ast[name].kind == Kind::Name && ast[name].first == ast[name].last &&
+    auto callee = ast.first(n);
+    if (ast.kind(callee) != Kind::IdExpression) return false;
+    auto name = ast.detail(callee);
+    return ast.kind(name) == Kind::Name && ast.first(name) == ast.last(name) &&
         invoke_builtin_name(ids.spelling(terminal(name))) && !resolve(name,s);
 }
 Expression Analyzer::callable_expression(NodeId n, ScopeId s, NodeId callee,
@@ -25,16 +25,16 @@ Expression Analyzer::callable_expression(NodeId n, ScopeId s, NodeId callee,
     }
     TypeId ft = 0;
     NodeId designator = callee;
-    while (ast[designator].kind == Kind::Parenthesized) designator = ast[designator].first;
-    bool direct_name = ast[designator].kind == Kind::IdExpression || ast[designator].kind == Kind::Member;
+    while (ast.kind(designator) == Kind::Parenthesized) designator = ast.first(designator);
+    bool direct_name = ast.kind(designator) == Kind::IdExpression || ast.kind(designator) == Kind::Member;
     TypeId object_type = 0;
     NodeId object_node = 0;
     ValueCategory object_category = ValueCategory::Lvalue;
-    if (ast[designator].kind == Kind::Member) {
-        object_node = ast[designator].first;
+    if (ast.kind(designator) == Kind::Member) {
+        object_node = ast.first(designator);
         object_type = expressions[object_node].type;
-        if (ast[designator].op != OP_ARROW) object_category = expressions[object_node].category;
-        if (ast[designator].op == OP_ARROW) {
+        if (ast.op(designator) != OP_ARROW) object_category = expressions[object_node].category;
+        if (ast.op(designator) == OP_ARROW) {
             auto arrow = object_uses[fn.object_use].arrow;
             object_type = types[arrow ? arrow_chains[arrow].type : object_type].child;
         }
@@ -60,10 +60,10 @@ Expression Analyzer::callable_expression(NodeId n, ScopeId s, NodeId callee,
         if (entities[selected].member_info && !entities[selected].is_static)
         {
             NodeId direct = callee;
-            while (ast[direct].kind == Kind::Parenthesized) direct = ast[direct].first;
-            NodeId name = ast[direct].kind == Kind::Member ? ast[ast[ast[direct].first].next].detail : ast[direct].detail;
+            while (ast.kind(direct) == Kind::Parenthesized) direct = ast.first(direct);
+            NodeId name = ast.kind(direct) == Kind::Member ? ast.detail(ast.next(ast.first(direct))) : ast.detail(direct);
             record_member_receiver(result,object_node,object_type,selected,object_uses[fn.object_use].naming_scope,
-                name && ast[name].first != ast[name].last,s);
+                name && ast.first(name) != ast.last(name),s);
         }
         ft = entities[selected].type;
         if (object_node && !result.object_use) record_object(result, object_node, 0, 0);

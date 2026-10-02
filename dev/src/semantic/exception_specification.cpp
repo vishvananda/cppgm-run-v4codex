@@ -21,16 +21,16 @@ void Analyzer::check_exception_redeclaration(EntityId e, unsigned old, unsigned 
 void Analyzer::exception_specification(EntityId e, NodeId d, ScopeId s)
 {
     ExceptionSpecificationFact fact; fact.declarator = d; fact.scope = s;
-    fact.destructor = ast[ast[decl_name(d)].last].op == OP_COMPL;
-    for (auto c = ast[d].first; c; c = ast[c].next) {
-        if (ast[c].kind == Kind::FunctionQualifier && ast[c].op == KW_THROW) {
-            fact.dynamic_types = ast[c].detail;
-            fact.specification = ast[ast[c].detail].first ? 2 : 1;
+    fact.destructor = ast.op(ast.last(decl_name(d))) == OP_COMPL;
+    for (auto c = ast.first(d); c; c = ast.next(c)) {
+        if (ast.kind(c) == Kind::FunctionQualifier && ast.op(c) == KW_THROW) {
+            fact.dynamic_types = ast.detail(c);
+            fact.specification = ast.first(ast.detail(c)) ? 2 : 1;
             continue;
         }
-        if ((ast[c].kind != Kind::FunctionQualifier && ast[c].kind != Kind::Noexcept) || ast[c].op != KW_NOEXCEPT) continue;
-        if (!ast[c].first) fact.specification = 1;
-        else fact.expression = ast[c].first;
+        if ((ast.kind(c) != Kind::FunctionQualifier && ast.kind(c) != Kind::Noexcept) || ast.op(c) != KW_NOEXCEPT) continue;
+        if (!ast.first(c)) fact.specification = 1;
+        else fact.expression = ast.first(c);
     }
     fact.previous = exception_specification_index.get(e);
     fact.prior_specification = entities[e].exception_spec;
@@ -91,7 +91,7 @@ unsigned Analyzer::evaluate_exception_specification(EntityId e, std::uint32_t id
             // A checked body already owns raw parameter types and pack
             // bindings. Do not shadow them with adjusted signature types.
             bool body_scope = scope == entities[e].scope && scopes[scope].kind == ScopeKind::Function;
-            if ((ast[parameters].first || entities[e].member_info) && !body_scope) {
+            if ((ast.first(parameters) || entities[e].member_info) && !body_scope) {
                 auto parent = scope; scope = make_scope(ScopeKind::Block,parent);
                 if (entities[e].member_info) {
                     TemplateObjectContext object; object.owner = scopes[entities[e].owner].entity;
@@ -99,9 +99,9 @@ unsigned Analyzer::evaluate_exception_specification(EntityId e, std::uint32_t id
                     template_object_context_index.put(scope,template_object_contexts.size());
                     template_object_contexts.push_back(object);
                 }
-                for (auto p = ast[parameters].first; p; p = ast[p].next) {
-                    if (ast[p].kind != Kind::Parameter) continue;
-                    auto name = terminal(decl_name(ast[ast[p].first].next));
+                for (auto p = ast.first(parameters); p; p = ast.next(p)) {
+                    if (ast.kind(p) != Kind::Parameter) continue;
+                    auto name = terminal(decl_name(ast.next(ast.first(p))));
                     auto parameter = make_entity(EntityKind::Parameter,scope,name,p);
                     auto type = facts[p].type;
                     if (!type) throw std::logic_error("exception parameter lacks its declared type");

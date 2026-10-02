@@ -11,8 +11,8 @@ QueryId Analyzer::cast_query(NodeId n, ScopeId scope)
     }
     TypeQuery query; query.kind = QueryKind::Cast; query.op = node.op;
     query.type = type_id(first,scope); query.context = scope;
-    auto operand = ast[first].next; auto child = expression_query(operand,scope);
-    if (node.op == OP_LPAREN && ast[operand].kind == syntax::Kind::BracedInit)
+    auto operand = ast.next(first); auto child = expression_query(operand,scope);
+    if (node.op == OP_LPAREN && ast.kind(operand) == syntax::Kind::BracedInit)
         query.value = 1; // Source compound literal, distinct from semantic list formation.
     if (template_type_probe) {
         if (!child) return 0;

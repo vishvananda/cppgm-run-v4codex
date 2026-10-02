@@ -7,11 +7,11 @@ TypeId Analyzer::declare_class_partial(NodeId n, ScopeId s, EntityId primary)
 {
     if (!primary || !entities[primary].class_info || !entities[primary].template_info)
         throw std::runtime_error("class partial specialization requires a primary template");
-    if ((entities[primary].key == KW_UNION) != (ast[ast[n].first].op == KW_UNION))
+    if ((entities[primary].key == KW_UNION) != (ast.op(ast.first(n)) == KW_UNION))
         throw std::runtime_error("incompatible partial specialization class key");
-    auto name = ast[n].detail, list = child(ast[name].last,Kind::TemplateArguments);
+    auto name = ast.detail(n), list = child(ast.last(name),Kind::TemplateArguments);
     std::vector<ArgumentId> args;
-    for (auto a = ast[list].first; a; a = ast[a].next)
+    for (auto a = ast.first(list); a; a = ast.next(a))
         append_template_argument(a,s,template_argument_node(a,s),args);
     if (!template_defaults(primary,args)) throw std::runtime_error("invalid class partial arguments");
     bool dependent = false;
@@ -22,11 +22,11 @@ TypeId Analyzer::declare_class_partial(NodeId n, ScopeId s, EntityId primary)
             throw std::runtime_error("default argument in partial specialization head");
     auto identity = key(primary,template_owner_shape(s,args));
     auto e = class_partial_signatures.get(identity);
-    if (e && ast[n].kind == Kind::Class && templates[entities[e].template_info].body)
+    if (e && ast.kind(n) == Kind::Class && templates[entities[e].template_info].body)
         throw std::runtime_error("class partial specialization redefinition");
     if (!e) {
         e = make_entity(EntityKind::Type,entities[primary].owner,entities[primary].name,n);
-        entities[e].key = ast[ast[n].first].op; entities[e].type = types.named(e);
+        entities[e].key = ast.op(ast.first(n)); entities[e].type = types.named(e);
         entities[e].class_info = class_facts.size(); class_facts.push_back(ClassFacts());
         entities[e].scope = make_scope(ScopeKind::Class,s,entities[e].name,e,false);
         class_partial_signatures.put(identity,e);
@@ -36,11 +36,11 @@ TypeId Analyzer::declare_class_partial(NodeId n, ScopeId s, EntityId primary)
         template_facts(e,s);
         auto& head = templates[entities[e].template_info];
         head.primary = primary; head.explicit_arguments = intern_arguments(args);
-        head.source = n; head.body = ast[n].kind == Kind::Class ? n : 0;
+        head.source = n; head.body = ast.kind(n) == Kind::Class ? n : 0;
     }
     validate_partial_pattern(e);
     bind(s,entities[e].name,e); record(s,e,n,entities[e].type,EntityKind::Type);
-    if (ast[n].kind == Kind::Class) {
+    if (ast.kind(n) == Kind::Class) {
         index_template_members(n,definition_root(e),s);
         bind_template_class(n,s,e);
     }
@@ -83,7 +83,7 @@ bool Analyzer::match_partial_pattern(EntityId pattern, std::uint32_t arguments, 
     // Call deduction permits conversions/base matches. A class pattern must
     // reproduce the exact canonical argument tuple, including cv and values.
     auto parent = head.parent_frame ? head.parent_frame : template_lexical_frame(scopes[head.environment].parent);
-    auto argument_source = child(ast[ast[head.source].detail].last,Kind::TemplateArguments);
+    auto argument_source = child(ast.last(ast.detail(head.source)),Kind::TemplateArguments);
     auto access = type_access_subtree(argument_source);
     auto frame = packs || parent || access ? substitution_frame(0,head.offset,head.count,parent,intern_arguments(deduced)) : 0;
     struct Probe {

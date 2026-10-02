@@ -37,7 +37,7 @@ std::uint32_t Analyzer::constant_body(EntityId e)
         constant_parameters.push_back(parameter);
     }
     result.statement = entities[e].body;
-    result.valid &= synthetic_member(e) || ast[result.statement].kind == Kind::Compound;
+    result.valid &= synthetic_member(e) || ast.kind(result.statement) == Kind::Compound;
     auto id = constant_bodies.size(); constant_bodies.push_back(result); constant_body_index.put(e,id);
     return id;
 }
@@ -231,7 +231,7 @@ Constant Analyzer::constant_call(NodeId n, ScopeId s)
         member_value = value; e = member_constant_value(value).member;
     }
     if (!e || entities[e].kind != EntityKind::Function) {
-        auto callee = use.callee ? use.callee : ast[n].first;
+        auto callee = use.callee ? use.callee : ast.first(n);
         auto v = use.callee_conversion ? constant_node_conversion(callee,conversions[use.callee_conversion],s) : constant_node_conversion(callee,conversions[expressions[callee].incoming],s);
         if (!v.valid || !v.bits || !pointer(v.type)) return Constant();
         e = constant_storage[constant_addresses[v.bits].storage].entity;
@@ -313,7 +313,7 @@ Constant Analyzer::constant_node_conversion(NodeId n, Conversion c, ScopeId s)
         auto value = evaluate(n,s);
         return value.valid ? Constant(types.fundamental(FT_VOID),0) : Constant();
     }
-    if (!c.reference && ast[n].kind == Kind::BracedInit && !ast[n].first && (integral(c.target) || floating_type(c.target) || types[c.target].kind == TypeKind::MemberPointer))
+    if (!c.reference && ast.kind(n) == Kind::BracedInit && !ast.first(n) && (integral(c.target) || floating_type(c.target) || types[c.target].kind == TypeKind::MemberPointer))
         return convert(Constant(types.fundamental(FT_INT),0),c.target,true);
     if (c.kind == Conversion::Kind::User) {
         auto object = constant_node_object(n);
@@ -403,7 +403,7 @@ Constant Analyzer::constant_call_result(NodeId n, ScopeId s)
     // destination initializer here would recursively re-enter its copy.
     if (x.form == ExpressionForm::Construction) return constant_initialize(n,x.type,s,facts[n].entity);
     if (x.form == ExpressionForm::ListValue) {
-        auto args = ast[ast[n].first].next;
+        auto args = ast.next(ast.first(n));
         return constant_node_conversion(args,conversions[x.conversions],s);
     }
     return constant_call(n,s);

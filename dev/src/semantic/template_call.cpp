@@ -350,8 +350,8 @@ EntityId Analyzer::specialize(EntityId pattern, const std::vector<TypeId>& input
             type = substitute_type(entities[pattern].type,bindings,cache,frame);
             NodeId parameters = child(t.declarator,syntax::Kind::Parameters);
             unsigned ordinal = 0;
-            for (auto p = ast[parameters].first; type && p && ordinal < proxy.count; p = ast[p].next) {
-                if (ast[p].kind != syntax::Kind::Parameter) continue;
+            for (auto p = ast.first(parameters); type && p && ordinal < proxy.count; p = ast.next(p)) {
+                if (ast.kind(p) != syntax::Kind::Parameter) continue;
                 ++ordinal;
                 if (!substituted_type_access(p,frame)) type = 0;
             }
@@ -640,10 +640,10 @@ EntityId Analyzer::deduce_target(EntityId pattern, TypeId target)
 }
 EntityId Analyzer::explicit_template(NodeId name, EntityId binding, ScopeId s)
 {
-    NodeId list = child(ast[name].last, Kind::TemplateArguments);
+    NodeId list = child(ast.last(name), Kind::TemplateArguments);
     if (!list) return binding;
     std::vector<TypeId> args;
-    for (NodeId a = ast[list].first; a; a = ast[a].next) {
+    for (NodeId a = ast.first(list); a; a = ast.next(a)) {
         append_template_argument(a,s,template_argument_node(a,s),args);
     }
     EntityId result = 0;

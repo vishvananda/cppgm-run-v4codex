@@ -10,7 +10,7 @@ Expression Analyzer::fold_expression(NodeId n, ScopeId s)
     bool left = original.value;
     auto frame = template_type_contexts.get(occurrence.context);
     Index bindings; std::vector<NodeId> operands;
-    for (auto child = ast[n].first; child; child = ast[child].next) {
+    for (auto child = ast.first(n); child; child = ast.next(child)) {
         auto params = source_expansion_parameters(child);
         if (!argument_packs[params].count) { operands.push_back(child); continue; }
         auto count = expansion_count(params,bindings,frame);
@@ -38,7 +38,7 @@ Expression Analyzer::fold_expression(NodeId n, ScopeId s)
     for (auto source : operands) {
         expression(source,s);
         FoldStep step; step.source = source; step.operation.result = expressions[source];
-        if (!unevaluated_depth) observe_scalar(source,syntax::expression_precedence(ast[n].op) == 2);
+        if (!unevaluated_depth) observe_scalar(source,syntax::expression_precedence(ast.op(n)) == 2);
         leaves.push_back(fold_steps.size()); fold_steps.push_back(step);
     }
     auto root = left ? leaves.front() : leaves.back();
@@ -46,7 +46,7 @@ Expression Analyzer::fold_expression(NodeId n, ScopeId s)
         auto other = leaves[left ? i : leaves.size()-1-i];
         auto id = operations[operations.size()-i]; auto selected = query_fact(id);
         FoldStep step; step.left = left ? root : other; step.right = left ? other : root;
-        auto& op = step.operation; op.op = ast[n].op; op.function = selected.selected; op.result = selected.expression;
+        auto& op = step.operation; op.op = ast.op(n); op.function = selected.selected; op.result = selected.expression;
         std::vector<Expression> args{fold_steps[step.left].operation.result,fold_steps[step.right].operation.result};
         // Builtin comma retains the right value without operand conversions.
         if (!op.function && (op.op == OP_DOTSTAR || op.op == OP_ARROWSTAR)) {

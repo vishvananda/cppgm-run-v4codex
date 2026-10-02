@@ -73,18 +73,18 @@ void Analyzer::materialize_conversion(NodeId n, Conversion& conversion, bool def
         destination_destructor(types.unqualified(t),facts[n].scope);
     }
     NodeId source = n;
-    while (ast[source].kind == syntax::Kind::Parenthesized) source = ast[source].first;
+    while (ast.kind(source) == syntax::Kind::Parenthesized) source = ast.first(source);
     auto value = expressions[source];
     materialized.elided = !conversion.reference && value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(t) &&
-        (ast[source].kind == syntax::Kind::StatementExpression || ast[source].kind == syntax::Kind::Call || ast[source].kind == syntax::Kind::Lambda || value.form == ExpressionForm::Construction || value.form == ExpressionForm::OperatorCall || value.form == ExpressionForm::Cast);
-    if (!conversion.reference && ast[source].kind == syntax::Kind::Conditional) {
+        (ast.kind(source) == syntax::Kind::StatementExpression || ast.kind(source) == syntax::Kind::Call || ast.kind(source) == syntax::Kind::Lambda || value.form == ExpressionForm::Construction || value.form == ExpressionForm::OperatorCall || value.form == ExpressionForm::Cast);
+    if (!conversion.reference && ast.kind(source) == syntax::Kind::Conditional) {
         materialized.elision_permission = value.category == ValueCategory::Prvalue && types.unqualified(value.type) == types.unqualified(t);
         if (defer || (materialized.elision_permission && trivial_transfer(ctor) && copy_storage_type(t))) {
             // A prvalue conditional already owns these exact branch transfers.
             // Reuse its slice so nested destinations do not rebuild subtrees.
             if (materialized.elision_permission) materialized.branches = value.conversions+1;
             else {
-                NodeId b = ast[ast[source].first].next, c = ast[b].next;
+                NodeId b = ast.next(ast.first(source)), c = ast.next(b);
                 std::vector<NodeId> operands{b,c};
                 std::vector<Conversion> selected{this->conversion(b,t),this->conversion(c,t)};
                 for (auto& branch : selected) if (!branch.valid()) throw std::runtime_error("invalid conditional class transfer");

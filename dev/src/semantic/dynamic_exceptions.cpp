@@ -15,7 +15,7 @@ void Analyzer::evaluate_dynamic_exceptions(EntityId e, std::uint32_t id)
     }
     Index bindings, cache;
     std::vector<TypeId> allowed;
-    for (auto n = ast[fact.dynamic_types].first; n; n = ast[n].next) {
+    for (auto n = ast.first(fact.dynamic_types); n; n = ast.next(n)) {
         auto type = type_id(n,fact.scope);
         if (frame) type = substitute_type(type,bindings,cache,frame);
         if (!type || dependent_type(type)) throw std::runtime_error("unresolved exception specification type");

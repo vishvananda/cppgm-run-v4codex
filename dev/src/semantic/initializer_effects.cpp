@@ -13,17 +13,17 @@ bool Analyzer::independent_constructor(EntityId ctor, bool local_objects)
     ++initializer_independence_work;
     using syntax::Kind;
     bool safe = m.constructor && !m.inherited_constructor && !m.delegated_constructor &&
-        ast[entities[ctor].body].kind == Kind::Compound && !ast[entities[ctor].body].first;
+        ast.kind(entities[ctor].body) == Kind::Compound && !ast.first(entities[ctor].body);
     for (unsigned i = 0; safe && i < m.action_count; ++i) {
         auto action = subobject_actions[m.action_begin+i];
         auto t = types[action.type];
         safe = action.field && !action.constructor && !(t.cv & 2) &&
             t.kind != TypeKind::Array && t.kind != TypeKind::LRef && t.kind != TypeKind::RRef && !class_value(action.type);
         auto source = action.initializer;
-        while (ast[source].kind == Kind::Initializer || ast[source].kind == Kind::ParenInitializer ||
-            ast[source].kind == Kind::ParenArguments || ast[source].kind == Kind::BracedInit)
+        while (ast.kind(source) == Kind::Initializer || ast.kind(source) == Kind::ParenInitializer ||
+            ast.kind(source) == Kind::ParenArguments || ast.kind(source) == Kind::BracedInit)
             if (conversions[expressions[source].incoming].kind == Conversion::Kind::List) break;
-            else source = ast[source].first;
+            else source = ast.first(source);
         safe &= independent_initializer(source) || (local_objects && constructor_local_operand(source,ctor));
     }
     independent_initializers.put(identity,safe ? 2 : 1);
@@ -36,27 +36,27 @@ bool Analyzer::constructor_local_operand(NodeId n, EntityId ctor, bool object)
     if (!x.ready || x.form != ExpressionForm::Ordinary || (types[x.type].cv & 2)) return false;
     auto c = conversions[x.incoming];
     if (c.function || (c.kind != Conversion::Kind::Standard && c.kind != Conversion::Kind::Explicit)) return false;
-    switch (ast[n].kind) {
+    switch (ast.kind(n)) {
     case Kind::IdExpression:
         return (entities[x.entity].kind == EntityKind::Parameter && entities[x.entity].owner == entities[ctor].scope &&
             (object || !class_value(x.type))) ||
             (nonstatic_field(x.entity) && entities[x.entity].owner == entities[ctor].owner);
-    case Kind::KeywordLiteral: return object && ast[n].op == KW_THIS;
+    case Kind::KeywordLiteral: return object && ast.op(n) == KW_THIS;
     case Kind::Member:
         // A direct member of the fresh source object, or of this destination,
         // is private construction state. Following an arbitrary pointer is not.
-        if (ast[n].op == OP_ARROW && ast[ast[n].first].op != KW_THIS) return false;
-        return nonstatic_field(x.entity) && constructor_local_operand(ast[n].first,ctor,true);
+        if (ast.op(n) == OP_ARROW && ast.op(ast.first(n)) != KW_THIS) return false;
+        return nonstatic_field(x.entity) && constructor_local_operand(ast.first(n),ctor,true);
     case Kind::Unary:
-        if (ast[n].op == OP_AMP) return constructor_local_operand(ast[n].first,ctor,true);
-        if (ast[n].op != OP_PLUS && ast[n].op != OP_MINUS && ast[n].op != OP_COMPL && ast[n].op != OP_LNOT) return false;
+        if (ast.op(n) == OP_AMP) return constructor_local_operand(ast.first(n),ctor,true);
+        if (ast.op(n) != OP_PLUS && ast.op(n) != OP_MINUS && ast.op(n) != OP_COMPL && ast.op(n) != OP_LNOT) return false;
         // fall through
     case Kind::Parenthesized: case Kind::Binary: case Kind::Conditional:
         for (unsigned i = 0; i < x.count; ++i) {
             auto c = conversions[x.conversions+i];
             if (c.function || c.kind != Conversion::Kind::Standard) return false;
         }
-        for (auto child = ast[n].first; child; child = ast[child].next)
+        for (auto child = ast.first(n); child; child = ast.next(child))
             if (!independent_initializer(child) && !constructor_local_operand(child,ctor,object)) return false;
         return true;
     default: return false;
@@ -89,7 +89,7 @@ bool Analyzer::independent_initializer(NodeId n)
         incoming.kind == Conversion::Kind::Standard && !incoming.function &&
         !(types[value.type].cv & 2);
     using syntax::Kind;
-    switch (ast[n].kind) {
+    switch (ast.kind(n)) {
     case Kind::Call: {
         // A source temporary built by a checked empty constructor with only
         // independent scalar member initializers cannot observe the enclosing
@@ -106,14 +106,14 @@ bool Analyzer::independent_initializer(NodeId n)
     }
     case Kind::Literal: break;
     case Kind::KeywordLiteral:
-        safe &= ast[n].op != KW_THIS; break;
+        safe &= ast.op(n) != KW_THIS; break;
     case Kind::Sizeof: case Kind::SizeofPack: case Kind::TypeTrait:
         // A polymorphic typeid evaluates its operand. It may observe earlier
         // aggregate members, so it cannot be hoisted into helper arguments.
-        safe = ast[n].op != KW_TYPEID || !rtti_expression(n).dynamic;
-        if (ast[n].kind == Kind::TypeTrait && BuiltinTrait(ast[n].flags) == BuiltinTrait::Offsetof)
-            for (auto step = ast[ast[n].first].next; step; step = ast[step].next)
-                if (ast[step].kind == Kind::Subscript) safe &= independent_initializer(ast[step].first);
+        safe = ast.op(n) != KW_TYPEID || !rtti_expression(n).dynamic;
+        if (ast.kind(n) == Kind::TypeTrait && BuiltinTrait(ast.flags(n)) == BuiltinTrait::Offsetof)
+            for (auto step = ast.next(ast.first(n)); step; step = ast.next(step))
+                if (ast.kind(step) == Kind::Subscript) safe &= independent_initializer(ast.first(step));
         break;
     case Kind::IdExpression: {
         auto kind = types[entities[value.entity].type].kind;
@@ -122,14 +122,14 @@ bool Analyzer::independent_initializer(NodeId n)
         break;
     }
     case Kind::Unary:
-        safe &= ast[n].op == OP_PLUS || ast[n].op == OP_MINUS || ast[n].op == OP_COMPL || ast[n].op == OP_LNOT;
+        safe &= ast.op(n) == OP_PLUS || ast.op(n) == OP_MINUS || ast.op(n) == OP_COMPL || ast.op(n) == OP_LNOT;
         // fall through
     case Kind::Binary: case Kind::Conditional: case Kind::Parenthesized:
         for (unsigned i = 0; safe && i < value.count; ++i) {
             auto c = conversions[value.conversions+i];
             safe &= c.kind == Conversion::Kind::Standard && !c.function;
         }
-        for (auto child = ast[n].first; safe && child; child = ast[child].next)
+        for (auto child = ast.first(n); safe && child; child = ast.next(child))
             safe &= independent_initializer(child);
         break;
     default: safe = false; break;

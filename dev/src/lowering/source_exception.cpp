@@ -72,7 +72,7 @@ bool Procedural::exception_clauses(std::uint32_t context, bool cleanup)
         if (c.handler) { crossed_handler = true; continue; }
         if (!first && (crossed_handler || prior_live != c.live)) { emit(Opcode::EhCleanup,IRType(),{}); has_cleanup = true; }
         bool all = false;
-        for (auto h = ast[child(c.node,Kind::Compound)].next; h; h = ast[h].next) {
+        for (auto h = ast.next(child(c.node,Kind::Compound)); h; h = ast.next(h)) {
             auto t = sem.facts[h].type;
             auto selector = exception_selector(h);
             if (t) {
@@ -156,12 +156,12 @@ void Procedural::try_statement(NodeId n)
 {
     auto parent = exception_context, initial = live;
     auto protected_body = child(n,Kind::Compound);
-    bool function_try = ast[n].kind == Kind::FunctionTry;
+    bool function_try = ast.kind(n) == Kind::FunctionTry;
     bool lifecycle = function_try && (sem.constructor_member(active_function) || sem.destructor_member(active_function));
     auto dispatch = block(), entry = block(), end = block();
     ExceptionContext c; c.parent = parent; c.live = initial; c.node = n; c.entry = entry; c.has_catches = true;
     bool catches_all = false;
-    for (auto h = ast[protected_body].next; h; h = ast[h].next) catches_all |= !sem.facts[h].type;
+    for (auto h = ast.next(protected_body); h; h = ast.next(h)) catches_all |= !sem.facts[h].type;
     // Summarize the same parent-linked clauses emitted by exception_clauses.
     // A catch-all ends the search; otherwise a changed live prefix or an
     // active handler needs cleanup before forwarding to the parent's clauses.
@@ -191,7 +191,7 @@ void Procedural::try_statement(NodeId n)
     start(entry);
     auto object = emit(Opcode::Exception,IRType::Ptr,{});
     auto selector = emit(Opcode::ExceptionSelector,IRType::I32,{});
-    for (auto h = ast[protected_body].next; h; h = ast[h].next) {
+    for (auto h = ast.next(protected_body); h; h = ast.next(h)) {
         auto body = block(), next = block(), cleanup = block();
         auto match = emit(Opcode::Compare,IRType::I32,{selector.operand,Operand::integer(exception_selector(h))},Operation::Eq);
         emit(Opcode::Branch,IRType(),{match.operand,Operand::label(body),Operand::label(next)});
@@ -238,7 +238,7 @@ void Procedural::try_statement(NodeId n)
         c.parent = parent; c.handler = true; c.node = h; c.live = initial;
         c.has_catches = parent && exception_contexts[parent].has_catches;
         exception_context = exception_contexts.size(); exception_contexts.push_back(c);
-        statement(ast[ast[h].first].next);
+        statement(ast.next(ast.first(h)));
         if (lifecycle && !ended) {
             clean_inline(live,initial);
             emit(Opcode::Call,IRType::Void,{Operand::symbol(exception_function(3))});

@@ -4,11 +4,11 @@ namespace cppgm { namespace semantic {
 void Analyzer::explicit_specifier(EntityId e, NodeId source, ScopeId scope)
 {
     auto specs = child(source,syntax::Kind::MemberSpecifiers);
-    for (auto spec = ast[specs].first; spec; spec = ast[spec].next) {
-        if (ast[spec].op != KW_EXPLICIT) continue;
+    for (auto spec = ast.first(specs); spec; spec = ast.next(spec)) {
+        if (ast.op(spec) != KW_EXPLICIT) continue;
         auto member = entities[e].member_info;
-        if (!ast[spec].first) { members[member].explicit_constructor = true; continue; }
-        auto operand = ast[spec].first;
+        if (!ast.first(spec)) { members[member].explicit_constructor = true; continue; }
+        auto operand = ast.first(spec);
         if (definitions && !ast.nodes.occurrences[operand].context)
             bind_template_expression(operand,scope);
         auto query = expression_query(operand,scope);

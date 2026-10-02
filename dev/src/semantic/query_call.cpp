@@ -5,7 +5,7 @@ using syntax::Kind;
 QueryId Analyzer::call_query(NodeId n, ScopeId s)
 {
     TypeQuery q; q.kind = QueryKind::Call; q.context = s;
-    std::vector<QueryId> children; auto first = ast[n].first;
+    std::vector<QueryId> children; auto first = ast.first(n);
     while (!template_object_context_index.get(q.context) &&
         (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
         q.context = scopes[q.context].parent;
@@ -15,11 +15,11 @@ QueryId Analyzer::call_query(NodeId n, ScopeId s)
         if (function_binding(ordinary)) q.entity = ordinary;
     }
     else children.push_back(expression_query(first,s,true));
-    auto list = ast[first].next;
-    if (ast[list].kind == Kind::BracedInit) {
+    auto list = ast.next(first);
+    if (ast.kind(list) == Kind::BracedInit) {
         q.op = OP_LBRACE;
         children.push_back(expression_query(list,s));
-    } else for (auto a = ast[list].first; a; a = ast[a].next) children.push_back(expression_query(a,s));
+    } else for (auto a = ast.first(list); a; a = ast.next(a)) children.push_back(expression_query(a,s));
     if (!children.empty()) {
         auto callee = type_queries[children[0]];
         while (callee.kind == QueryKind::Parenthesized) callee = type_queries[query_edges[callee.offset]];

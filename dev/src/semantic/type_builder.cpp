@@ -55,7 +55,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
     bool unsign = false, sign = false, short_int = false, complex = false;
     NodeId bit_width = 0;
     EFundamentalType fundamental = FT_INT;
-    for (NodeId c = ast[n].first; c; c = ast[c].next) {
+    for (NodeId c = ast.first(n); c; c = ast.next(c)) {
         const syntax::Node node = ast[c];
         if (template_type_probe && (node.kind == Kind::Class || node.kind == Kind::ClassForward || node.kind == Kind::Enum) && !facts[c].type) return 0;
         if (node.kind == Kind::Class || node.kind == Kind::ClassForward) {
@@ -75,7 +75,7 @@ TypeId Analyzer::specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name)
         if (node.kind == Kind::Enum) { result = enum_type(c, s, anonymous_name, node.flags & 1); continue; }
         if (node.op == KW_DECLTYPE) {
             if (node.flags & 2) {
-                if (ast[node.first].kind == Kind::TypeId) result = type_id(node.first,s);
+                if (ast.kind(node.first) == Kind::TypeId) result = type_id(node.first,s);
                 else {
                     TypeQuery query; query.kind = QueryKind::Typeof;
                     result = query_decltype(intern_query(query,{expression_query(node.first,s)}),false);
@@ -174,15 +174,15 @@ bool Analyzer::prototype_scope_needed(NodeId parameters)
     // This syntax walk cannot reenter semantic analysis. Retain one scratch
     // buffer up to the largest parameter list, without per-declaration churn.
     auto& work = prototype_scope_work; work.clear();
-    for (auto p = ast[parameters].first; p; p = ast[p].next) {
-        if (ast[p].kind != Kind::Parameter) continue;
-        auto specs = ast[p].first; work.push_back(specs); work.push_back(ast[specs].next);
+    for (auto p = ast.first(parameters); p; p = ast.next(p)) {
+        if (ast.kind(p) != Kind::Parameter) continue;
+        auto specs = ast.first(p); work.push_back(specs); work.push_back(ast.next(specs));
     }
     for (std::size_t j = 0; j < work.size() && !needed; ++j) {
         auto node = ast[work[j]];
         if (node.kind == Kind::IdExpression || node.op == KW_DECLTYPE) { needed = true; break; }
         if (node.detail) work.push_back(node.detail);
-        for (auto child = node.first; child; child = ast[child].next) work.push_back(child);
+        for (auto child = node.first; child; child = ast.next(child)) work.push_back(child);
     }
     prototype_scope_requirements[slot] |= (needed ? 2 : 1) << shift;
     return needed;
@@ -190,11 +190,11 @@ bool Analyzer::prototype_scope_needed(NodeId parameters)
 FunctionQualifiers Analyzer::function_qualifiers(NodeId parameters)
 {
     FunctionQualifiers result;
-    for (auto q = ast[parameters].next; q; q = ast[q].next) {
-        if (ast[q].kind == Kind::CvQualifier) result.cv |= ast[q].op == KW_CONST ? 1 : 2;
-        if (ast[q].kind == Kind::FunctionQualifier && (ast[q].op == OP_AMP || ast[q].op == OP_LAND)) {
+    for (auto q = ast.next(parameters); q; q = ast.next(q)) {
+        if (ast.kind(q) == Kind::CvQualifier) result.cv |= ast.op(q) == KW_CONST ? 1 : 2;
+        if (ast.kind(q) == Kind::FunctionQualifier && (ast.op(q) == OP_AMP || ast.op(q) == OP_LAND)) {
             if (result.ref != RefQualifier::None) throw std::runtime_error("duplicate ref qualifier");
-            result.ref = ast[q].op == OP_AMP ? RefQualifier::Lvalue : RefQualifier::Rvalue;
+            result.ref = ast.op(q) == OP_AMP ? RefQualifier::Lvalue : RefQualifier::Rvalue;
         }
     }
     return result;
@@ -203,17 +203,17 @@ TypeId Analyzer::type_id(NodeId n, ScopeId s)
 {
     if (facts[n].type) return facts[n].type;
     if (definitions) if (auto type = reuse_template_type(n,s)) return type;
-    NodeId specs = ast[n].first;
-    TypeId t = declarator(ast[specs].next, specifiers(specs, s), s);
+    NodeId specs = ast.first(n);
+    TypeId t = declarator(ast.next(specs), specifiers(specs, s), s);
     { auto& published = facts.edit(n); published.type = t; published.scope = s; }
     return t;
 }
 TypeId Analyzer::parameter(NodeId n, ScopeId s)
 {
     if (facts[n].type) return facts[n].type;
-    NodeId specs = ast[n].first;
+    NodeId specs = ast.first(n);
     if (calls && spec_has(specs,KW_CONSTEXPR)) throw std::runtime_error("constexpr parameter declaration");
-    NodeId d = ast[specs].next;
+    NodeId d = ast.next(specs);
     TypeId t = declarator(d, specifiers(specs, s), s);
     { auto& published = facts.edit(n); published.type = t; published.scope = s; }
     return t;
@@ -235,11 +235,11 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
     NodeId nested = 0;
     std::vector<NodeId> suffixes;
     bool after_direct = false;
-    for (NodeId c = ast[n].first; c; c = ast[c].next) {
-        switch (ast[c].kind) {
+    for (NodeId c = ast.first(n); c; c = ast.next(c)) {
+        switch (ast.kind(c)) {
         case Kind::Pointer:
-            if (ast[c].detail) {
-                auto owner = definitions ? type_name(ast[c].detail,s) : source_type(resolve(ast[c].detail,s,Lookup::Qualifier));
+            if (ast.detail(c)) {
+                auto owner = definitions ? type_name(ast.detail(c),s) : source_type(resolve(ast.detail(c),s,Lookup::Qualifier));
                 base = form_member_pointer(owner,base);
                 if (!base) {
                     if (template_type_probe) return 0;
@@ -247,19 +247,19 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                 }
                 break;
             }
-            if (ast[c].op == OP_XOR) {
+            if (ast.op(c) == OP_XOR) {
                 base = form_block_pointer(base);
                 if (!base) {
                     if (template_type_probe) return 0;
                     throw std::runtime_error("block pointer requires an unqualified function type");
                 }
-            } else base = types.compound(ast[c].op == OP_AMP ? TypeKind::LRef :
-                ast[c].op == OP_LAND ? TypeKind::RRef : TypeKind::Pointer, base);
+            } else base = types.compound(ast.op(c) == OP_AMP ? TypeKind::LRef :
+                ast.op(c) == OP_LAND ? TypeKind::RRef : TypeKind::Pointer, base);
             break;
         case Kind::CvQualifier:
-            if (!after_direct) base = types.qualify(base, ast[c].op == KW_CONST ? 1 : 2);
+            if (!after_direct) base = types.qualify(base, ast.op(c) == KW_CONST ? 1 : 2);
             break;
-        case Kind::NestedDeclarator: nested = ast[c].first; after_direct = true; break;
+        case Kind::NestedDeclarator: nested = ast.first(c); after_direct = true; break;
         case Kind::Identifier: after_direct = true; break;
         case Kind::Array: case Kind::Parameters: suffixes.push_back(c); after_direct = true; break;
         default: break;
@@ -267,7 +267,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
     }
     for (std::size_t i = suffixes.size(); i; --i) {
         NodeId c = suffixes[i - 1];
-        if (ast[c].kind == Kind::Array) {
+        if (ast.kind(c) == Kind::Array) {
             if (calls && types.storage_alignment(base) && !dependent_type(base) && size(base)%size(base,true))
                 throw std::runtime_error("array element size is not a multiple of its alignment");
             std::uint64_t bound = 0;
@@ -278,10 +278,10 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                 base = types.compound(TypeKind::Array,base,0);
                 continue;
             }
-            if (ast[c].first) {
+            if (ast.first(c)) {
                 if (definitions && !ast.nodes.occurrences[c].context && (template_type_probe || active_template_scope) &&
-                    bind_template_expression(ast[c].first,s)) {
-                    auto query = expression_query(ast[c].first,s);
+                    bind_template_expression(ast.first(c),s)) {
+                    auto query = expression_query(ast.first(c),s);
                     if (!query && template_type_probe) return 0;
                     query_fact(query);
                     base = types.compound(TypeKind::DependentArray,base,query);
@@ -291,19 +291,19 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                 // expression. Other array dimensions require constant values.
                 if (c == dynamic_array) {
                     EvaluationScope checking(*this,true);
-                    auto x = expression(ast[c].first,s);
+                    auto x = expression(ast.first(c),s);
                     auto converted = array_bound_conversion(x);
                     if (!converted.valid()) throw std::runtime_error("array allocation bound must convert uniquely to integral");
                     if (converted.kind == Conversion::Kind::User) {
-                        apply_conversion(ast[c].first,converted);
-                        expressions.incoming(ast[c].first,conversions.size()); conversions.push_back(converted);
+                        apply_conversion(ast.first(c),converted);
+                        expressions.incoming(ast.first(c),conversions.size()); conversions.push_back(converted);
                     }
                 }
                 EvaluationScope mode(*this,c != dynamic_array);
                 // A constant class object is not the value returned by its
                 // conversion. Preserve that call and its effects at runtime.
-                Constant v = c == dynamic_array && class_value(expressions[ast[c].first].type) ?
-                    Constant() : evaluate(ast[c].first, s);
+                Constant v = c == dynamic_array && class_value(expressions[ast.first(c)].type) ?
+                    Constant() : evaluate(ast.first(c), s);
                 if (c == dynamic_array) {
                     if (v.valid && negative_constant(v)) throw std::runtime_error("negative array allocation bound");
                 } else if (!v.valid || !integral(v.type) || scoped_enum(v.type) || (!v.bits && !host_abi) ||
@@ -311,7 +311,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                     throw std::runtime_error("array bound must be a nonnegative integral constant");
                 bound = v.valid ? std::uint64_t(integer_value(v)) : 0;
             }
-            base = types.compound(TypeKind::Array, base, bound,!ast[c].first);
+            base = types.compound(TypeKind::Array, base, bound,!ast.first(c));
         } else {
             std::vector<TypeId> params;
             bool variadic = false;
@@ -319,11 +319,11 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
             ScopeId parameter_scope = s;
             if (definitions && (active_template_scope || scopes[s].kind == ScopeKind::Template || trailing || prototype_scope_needed(c)))
                 parameter_scope = make_scope(ScopeKind::Block,s);
-            for (NodeId p = ast[c].first; p; p = ast[p].next) {
-                if (ast[p].kind == Kind::ParameterPack) { variadic = true; continue; }
+            for (NodeId p = ast.first(c); p; p = ast.next(p)) {
+                if (ast.kind(p) == Kind::ParameterPack) { variadic = true; continue; }
                 params.push_back(parameter(p, parameter_scope));
                 if (template_type_probe && !params.back()) return 0;
-                NodeId d = ast[ast[p].first].next;
+                NodeId d = ast.next(ast.first(p));
                 if (definitions && declarator_pack(d)) {
                     // An unnamed nondependent parameter followed by ... is
                     // the comma-optional C varargs form, not a pack expansion.
@@ -360,7 +360,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
                     template_object_context_index.put(parameter_scope,template_object_contexts.size());
                     template_object_contexts.push_back(object);
                 }
-                base = type_id(ast[trailing].first, parameter_scope);
+                base = type_id(ast.first(trailing), parameter_scope);
                 if (template_type_probe && !base) return 0;
             }
             auto qualifiers = function_qualifiers(c);
@@ -396,7 +396,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     bool external = spec_has(specs,KW_EXTERN) || linkage_extern_declarations.get(source);
     NodeId name = decl_name(d);
     IdentifierId id = terminal(name);
-    bool destructor = ast[ast[name].last].op == OP_COMPL;
+    bool destructor = ast.op(ast.last(name)) == OP_COMPL;
     ScopeId owner = object_declaration_owner(name,s);
     ScopeId definition_scope = member_definition_environment == s ? s : owner;
     if (destructor && scopes[owner].kind == ScopeKind::Class)
@@ -429,16 +429,16 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         spec_has(specs,KW_STATIC) && spec_has(specs,KW_INLINE) && ast.nodes.occurrences[source].context;
     if (calls && init && !defer_inline) {
         auto source = init;
-        while (ast[source].kind == Kind::Initializer) source = ast[source].first;
+        while (ast.kind(source) == Kind::Initializer) source = ast.first(source);
         expand_expression_list(source,s);
     }
     if (calls && function) t = constexpr_member_type(t,specs,source,d,owner);
     TypeId canonical = types.signature(t);
     if (definitions && !function && active_template_scope == s)
         return declare_variable_template(d,init,canonical,s,source);
-    bool constructor = (ast[source].kind == Kind::SpecialMember || ast[source].kind == Kind::SpecialDefinition) &&
-        scopes[owner].kind == ScopeKind::Class && scopes[owner].name == id && ast[ast[name].last].op != OP_COMPL;
-    TypeId conversion_target = calls && ast[ast[name].last].op == KW_OPERATOR && ast[ast[name].last].detail ? types[canonical].child : 0;
+    bool constructor = (ast.kind(source) == Kind::SpecialMember || ast.kind(source) == Kind::SpecialDefinition) &&
+        scopes[owner].kind == ScopeKind::Class && scopes[owner].name == id && ast.op(ast.last(name)) != OP_COMPL;
+    TypeId conversion_target = calls && ast.op(ast.last(name)) == KW_OPERATOR && ast.detail(ast.last(name)) ? types[canonical].child : 0;
     if (conversion_target && (scopes[owner].kind != ScopeKind::Class || spec_has(specs,KW_STATIC) ||
         spec_has(child(source,Kind::MemberSpecifiers),KW_STATIC) || types[canonical].count || types[canonical].variadic))
         throw std::runtime_error("conversion function must be a nonstatic nullary member");
@@ -468,7 +468,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     }
     if (source == explicit_specialization_source && !function && scopes[owner].kind != ScopeKind::Class) {
         if (!e || !entities[e].template_info) throw std::runtime_error("variable specialization requires a primary");
-        e = variable_template_name(ast[name].last,e,s,false);
+        e = variable_template_name(ast.last(name),e,s,false);
         if (entities[e].type != canonical) throw std::runtime_error("specialized variable type mismatch");
     } else if (source == explicit_specialization_source && !active_template_scope && function && (scopes[owner].kind != ScopeKind::Class || specialized_template)) {
         e = declare_function_specialization(name,s,canonical);
@@ -512,9 +512,9 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     entities[e].mutable_field |= spec_has(specs, KW_MUTABLE);
     if (calls && function) declare_operator(e, name);
     declaration_attributes(e,specs,source,d);
-    for (auto label = ast[d].first; label; label = ast[label].next) {
-        if (ast[label].kind != Kind::Specifier || ast[label].op != KW_ASM) continue;
-        const auto& literal = ast.literals[ast[ast[label].first].literal];
+    for (auto label = ast.first(d); label; label = ast.next(label)) {
+        if (ast.kind(label) != Kind::Specifier || ast.op(label) != KW_ASM) continue;
+        const auto& literal = ast.literals[ast.literal(ast.first(label))];
         if (literal.kind != LiteralKind::string || literal.type != FT_CHAR || literal.bytes < 2)
             throw std::runtime_error("asm label requires a nonempty narrow string");
         auto data = ast.literal_bytes.data()+literal.offset;
@@ -542,10 +542,10 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
     if (calls && function) { function_defaults(e, d, definition_scope, source); exception_specification(e, d, definition_scope); }
     auto special = child(init, Kind::SpecialInitializer);
     if (!special) special = child(child(source, Kind::Initializer), Kind::SpecialInitializer);
-    if (function && special && ast[special].op == KW_DELETE) {
+    if (function && special && ast.op(special) == KW_DELETE) {
         if (entities[e].source != source || entities[e].deleted_function) throw std::runtime_error("deleted definition must be the first declaration");
         entities[e].deleted_function = entities[e].inline_function = true;
-    } else if (function && entities[e].deleted_function && ast[source].kind == Kind::Function)
+    } else if (function && entities[e].deleted_function && ast.kind(source) == Kind::Function)
         throw std::runtime_error("definition of deleted function");
     if (calls && function && scopes[owner].kind == ScopeKind::Class) {
         member_facts(e);
@@ -571,7 +571,7 @@ EntityId Analyzer::declare_object(NodeId d, NodeId init, TypeId t, NodeId specs,
         members[m].destructor = destructor;
         if (destructor) class_facts[entities[scopes[owner].entity].class_info].destructor = e;
         explicit_specifier(e,source,s);
-        members[m].deleted = special && ast[special].op == KW_DELETE;
+        members[m].deleted = special && ast.op(special) == KW_DELETE;
         classify_transfer(e, special, s);
         if (constructor && !special && !source_constructor) class_facts[entities[cls].class_info].aggregate = false;
     }

@@ -148,10 +148,10 @@ TypeId Analyzer::composite_pointer(TypeId a, TypeId b)
 }
 bool Analyzer::null_constant(NodeId n)
 {
-    while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
+    while (ast.kind(n) == Kind::Parenthesized) n = ast.first(n);
     if (fundamental(expressions[n].type, FT_NULLPTR_T)) return true;
-    if (ast[n].kind != Kind::Literal || !integral(expressions[n].type)) return false;
-    const syntax::LiteralValue& lit = ast.literals[ast[n].literal];
+    if (ast.kind(n) != Kind::Literal || !integral(expressions[n].type)) return false;
+    const syntax::LiteralValue& lit = ast.literals[ast.literal(n)];
     if (lit.kind == LiteralKind::string || lit.kind == LiteralKind::character) return false;
     Constant v = evaluate(n, facts[n].scope);
     return v.valid && !v.bits;
@@ -316,9 +316,9 @@ void Analyzer::select_function(NodeId n, EntityId e, bool direct)
         throw std::runtime_error("selected deleted member function");
     ScopeId naming = object_uses[expressions[n].object_use].naming_scope;
     TypeId object = 0;
-    if (ast[n].kind == Kind::Member) {
-        object = expressions[ast[n].first].type;
-        if (ast[n].op == OP_ARROW) object = types[object].child;
+    if (ast.kind(n) == Kind::Member) {
+        object = expressions[ast.first(n)].type;
+        if (ast.op(n) == OP_ARROW) object = types[object].child;
     } else if (TypeId implicit = implicit_object_type(facts[n].scope)) object = types[implicit].child;
     check_access(e, facts[n].scope, naming, object);
     auto value = expressions[n];
@@ -327,9 +327,9 @@ void Analyzer::select_function(NodeId n, EntityId e, bool direct)
     { auto& published = facts.edit(n); published.type = entities[e].member_info ? members[entities[e].member_info].call_type : entities[e].type;
     published.entity = e; }
     use_selected_function(e,direct);
-    if (ast[n].kind == Kind::Parenthesized || (ast[n].kind == Kind::Unary && ast[n].op == OP_AMP)) {
-        select_function(ast[n].first, e, direct);
-        if (ast[n].kind == Kind::Unary) {
+    if (ast.kind(n) == Kind::Parenthesized || (ast.kind(n) == Kind::Unary && ast.op(n) == OP_AMP)) {
+        select_function(ast.first(n), e, direct);
+        if (ast.kind(n) == Kind::Unary) {
             value = expressions[n]; value.type = entities[e].member_info && !entities[e].is_static ?
                 types.member_pointer(scopes[entities[e].owner].entity, entities[e].type) : types.compound(TypeKind::Pointer, entities[e].type);
             value.category = ValueCategory::Prvalue; expressions.set(n,value);
@@ -375,7 +375,7 @@ void Analyzer::apply_conversion(NodeId n, Conversion& c)
     if (c.function) select_function(n, c.function);
     if (expressions[n].entity) demand_specialization(expressions[n].entity);
     TypeId target = types.unqualified(c.target);
-    if (ast[n].kind == Kind::Literal && (pointer(target) || fundamental(target, FT_NULLPTR_T)) && null_constant(n)) facts.edit(n).type = target;
+    if (ast.kind(n) == Kind::Literal && (pointer(target) || fundamental(target, FT_NULLPTR_T)) && null_constant(n)) facts.edit(n).type = target;
 }
 void Analyzer::require_conversion(NodeId n, TypeId target, bool direct)
 {
@@ -460,34 +460,34 @@ void Analyzer::initialize(NodeId n, TypeId target, ScopeId s, InitializationMode
     s = expanded_scope(n,s);
     if (source_builtins_present) remember_source_site(n,s);
     auto source = n;
-    while (ast[source].kind == Kind::Initializer) source = ast[source].first;
+    while (ast.kind(source) == Kind::Initializer) source = ast.first(source);
     expand_expression_list(source,s);
-    if (ast[n].kind == Kind::Initializer && (ast[n].flags & 1)) mode = InitializationMode::Copy;
+    if (ast.kind(n) == Kind::Initializer && (ast.flags(n) & 1)) mode = InitializationMode::Copy;
     if (class_value(target)) {
         complete_class(types[target].entity);
         if (class_initialize(n, target, s, mode)) return;
     }
-    if (ast[n].kind == Kind::Initializer) { initialize(ast[n].first, target, s, mode); return; }
-    if (ast[n].kind == Kind::BracedInit && (types[target].kind == TypeKind::LRef || types[target].kind == TypeKind::RRef)) {
+    if (ast.kind(n) == Kind::Initializer) { initialize(ast.first(n), target, s, mode); return; }
+    if (ast.kind(n) == Kind::BracedInit && (types[target].kind == TypeKind::LRef || types[target].kind == TypeKind::RRef)) {
         expression(n,s); require_conversion(n,target); return;
     }
-    if (ast[n].kind == Kind::BracedInit && complex_type(target) && ast[n].first != ast[n].last) {
+    if (ast.kind(n) == Kind::BracedInit && complex_type(target) && ast.first(n) != ast.last(n)) {
         expression(n,s); require_conversion(n,target); return;
     }
-    if ((aggregate_type(target) || vector_kind(types[target].kind)) && (types[target].kind == TypeKind::Array || ast[n].kind == Kind::BracedInit ||
-        ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::ParenInitializer)) {
+    if ((aggregate_type(target) || vector_kind(types[target].kind)) && (types[target].kind == TypeKind::Array || ast.kind(n) == Kind::BracedInit ||
+        ast.kind(n) == Kind::ParenArguments || ast.kind(n) == Kind::ParenInitializer)) {
         aggregate_initialization(n, target, s); return;
     }
-    if (ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) {
-        if (!ast[n].first) {
+    if (ast.kind(n) == Kind::ParenInitializer || ast.kind(n) == Kind::ParenArguments || ast.kind(n) == Kind::BracedInit) {
+        if (!ast.first(n)) {
             facts.edit(n).type = target; auto value = expressions[n]; value.type = target; value.ready = true;
             expressions.set(n,value); return;
         }
-        if (ast[n].first != ast[n].last) throw std::runtime_error("too many scalar initializers");
-        if (ast[n].kind != Kind::BracedInit && ast[ast[n].first].kind != Kind::BracedInit && class_value(expression(ast[n].first,s).type) && !class_value(value_type(target)))
-            require_conversion(ast[n].first,target,true);
-        else initialize(ast[n].first, target, s, mode);
-        if (ast[n].kind == Kind::BracedInit) list_conversion(ast[n].first, target);
+        if (ast.first(n) != ast.last(n)) throw std::runtime_error("too many scalar initializers");
+        if (ast.kind(n) != Kind::BracedInit && ast.kind(ast.first(n)) != Kind::BracedInit && class_value(expression(ast.first(n),s).type) && !class_value(value_type(target)))
+            require_conversion(ast.first(n),target,true);
+        else initialize(ast.first(n), target, s, mode);
+        if (ast.kind(n) == Kind::BracedInit) list_conversion(ast.first(n), target);
         facts.edit(n).type = target;
         return;
     }

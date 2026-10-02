@@ -6,7 +6,7 @@ using syntax::Kind;
 Expression Analyzer::throw_expression(NodeId n, ScopeId scope)
 {
     Expression result; result.type = types.fundamental(FT_VOID);
-    auto source = ast[n].first;
+    auto source = ast.first(n);
     if (!source) return result;
     auto value = expression(source,scope);
     ThrowUse use; use.source = source; use.type = types.unqualified(decay(value.type));
@@ -16,8 +16,8 @@ Expression Analyzer::throw_expression(NodeId n, ScopeId scope)
         reject_abstract(use.type);
         use.destructor = destination_destructor(use.type,scope);
         auto id = source;
-        while (ast[id].kind == Kind::Parenthesized) id = ast[id].first;
-        auto local = ast[id].kind == Kind::IdExpression ? expressions[id].entity : 0;
+        while (ast.kind(id) == Kind::Parenthesized) id = ast.first(id);
+        auto local = ast.kind(id) == Kind::IdExpression ? expressions[id].entity : 0;
         // C++11 [class.copy]: only a nonvolatile automatic object whose
         // scope ends within the innermost try can be implicitly moved here.
         // Parameters (including exception declarations) are excluded.
@@ -25,7 +25,7 @@ Expression Analyzer::throw_expression(NodeId n, ScopeId scope)
         while (boundary && !try_scopes.get(boundary) && scopes[boundary].kind != ScopeKind::Function)
             boundary = scopes[boundary].parent;
         bool eligible = local && entities[local].kind == EntityKind::Variable &&
-            ast[entities[local].source].kind != Kind::ExceptionDeclaration &&
+            ast.kind(entities[local].source) != Kind::ExceptionDeclaration &&
             !entities[local].is_static && !entities[local].external_decl &&
             !(types[entities[local].type].cv & 2) && class_value(entities[local].type) &&
             boundary && encloses(boundary,entities[local].owner);
@@ -50,9 +50,9 @@ void Analyzer::resolve_handler(NodeId n, ScopeId parent, bool pattern, bool func
     if (pattern) template_pattern_scopes.put(scope,1);
     facts.edit(n).scope = scope;
     if (function_try && constructor_member(current_function)) constructor_handler_scopes.put(scope,1);
-    auto parameter = ast[n].first, specs = ast[parameter].first;
-    if (ast[specs].kind != Kind::Ellipsis) {
-        auto decl = ast[specs].next;
+    auto parameter = ast.first(n), specs = ast.first(parameter);
+    if (ast.kind(specs) != Kind::Ellipsis) {
+        auto decl = ast.next(specs);
         auto t = declarator(decl,specifiers(specs,scope),scope);
         if (types[t].kind == TypeKind::RRef) throw std::runtime_error("rvalue reference catch parameter");
         if (types[t].kind != TypeKind::LRef) t = decay(t);
@@ -88,7 +88,7 @@ void Analyzer::resolve_handler(NodeId n, ScopeId parent, bool pattern, bool func
             }
         }
     }
-    auto body = ast[parameter].next;
+    auto body = ast.next(parameter);
     if (pattern) bind_template_statement(body,scope);
     else resolve_statement(body,scope);
 }

@@ -8,7 +8,7 @@ bool Analyzer::scalar_transfer_node(NodeId n)
     if (scalar_transfer_nodes[n]) return scalar_transfer_nodes[n] == 2;
     ++scalar_transfer_work;
     bool safe = false;
-    switch (ast[n].kind) {
+    switch (ast.kind(n)) {
     case Kind::Initializer: case Kind::ParenInitializer: case Kind::ParenArguments:
     case Kind::Identifier: case Kind::IdExpression: case Kind::Literal: case Kind::KeywordLiteral:
     case Kind::Binary: case Kind::Assignment: case Kind::Conditional: case Kind::Unary: case Kind::Postfix:
@@ -28,7 +28,7 @@ bool Analyzer::scalar_transfer_node(NodeId n)
     };
     safe &= scalar_conversion(x.incoming);
     for (unsigned j = 0; safe && j < x.count; ++j) safe &= scalar_conversion(x.conversions+j);
-    for (NodeId child = ast[n].first; safe && child; child = ast[child].next) safe &= scalar_transfer_node(child);
+    for (NodeId child = ast.first(n); safe && child; child = ast.next(child)) safe &= scalar_transfer_node(child);
     scalar_transfer_nodes[n] = safe ? 2 : 1; return safe;
 }
 void Analyzer::prepare_scalar_transfer(EntityId e)

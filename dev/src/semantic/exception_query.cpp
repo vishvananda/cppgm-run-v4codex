@@ -31,12 +31,12 @@ QueryId Analyzer::template_exception_query(EntityId function, std::uint32_t id)
     while (d) {
         if (auto p = child(d,syntax::Kind::Parameters)) parameters = p;
         auto nested = child(d,syntax::Kind::NestedDeclarator);
-        d = nested ? ast[nested].first : 0;
+        d = nested ? ast.first(nested) : 0;
     }
     unsigned ordinal = 0;
-    for (auto p = ast[parameters].first; p; p = ast[p].next) {
-        if (ast[p].kind != syntax::Kind::Parameter) continue;
-        auto decl = ast[ast[p].first].next;
+    for (auto p = ast.first(parameters); p; p = ast.next(p)) {
+        if (ast.kind(p) != syntax::Kind::Parameter) continue;
+        auto decl = ast.next(ast.first(p));
         auto name = terminal(decl_name(decl));
         auto type = facts[p].type;
         if (!type) throw std::logic_error("exception parameter lacks its declared type");

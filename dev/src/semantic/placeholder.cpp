@@ -52,9 +52,9 @@ TypeId Analyzer::deduce_placeholder(TypeId pattern, Expression value, TypeId& de
 TypeId Analyzer::deduced_object_type(NodeId specs, NodeId d, NodeId init, ScopeId s, TypeId& deduced)
 {
     auto source = init;
-    while (source && (ast[source].kind == Kind::Initializer || ast[source].kind == Kind::ParenInitializer || ast[source].kind == Kind::ParenArguments)) {
-        auto first = ast[source].first;
-        if (ast[first].next) throw std::runtime_error("auto requires a single initializer");
+    while (source && (ast.kind(source) == Kind::Initializer || ast.kind(source) == Kind::ParenInitializer || ast.kind(source) == Kind::ParenArguments)) {
+        auto first = ast.first(source);
+        if (ast.next(first)) throw std::runtime_error("auto requires a single initializer");
         source = first;
     }
     if (!source) throw std::runtime_error("auto requires an initializer");
@@ -67,7 +67,7 @@ TypeId Analyzer::deduced_object_type(NodeId specs, NodeId d, NodeId init, ScopeI
     auto object = make_entity(EntityKind::Variable,owner,id,d);
     placeholder_objects.put(object,d); bind(owner,id,object);
     Expression value;
-    if (ast[source].kind == Kind::BracedInit) value.type = deduce_initializer_list(source,s);
+    if (ast.kind(source) == Kind::BracedInit) value.type = deduce_initializer_list(source,s);
     else value = expression(source,s);
     placeholder_type();
     unsigned cv = (spec_has(specs,KW_CONST) ? 1 : 0) | (spec_has(specs,KW_VOLATILE) ? 2 : 0);

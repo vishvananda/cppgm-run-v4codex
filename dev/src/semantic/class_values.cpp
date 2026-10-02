@@ -59,7 +59,7 @@ void Analyzer::prepare_function_boundaries()
 void Analyzer::class_result(NodeId n, Expression& result, ScopeId s)
 {
     if (result.category != ValueCategory::Prvalue || !class_value(result.type)) return;
-    if (ast[n].kind != Kind::StatementExpression && ast[n].kind != Kind::Lambda && ast[n].kind != Kind::Call && ast[n].kind != Kind::Conditional && result.form != ExpressionForm::Construction && result.form != ExpressionForm::OperatorCall && result.form != ExpressionForm::LiteralCall && result.form != ExpressionForm::Cast) return;
+    if (ast.kind(n) != Kind::StatementExpression && ast.kind(n) != Kind::Lambda && ast.kind(n) != Kind::Call && ast.kind(n) != Kind::Conditional && result.form != ExpressionForm::Construction && result.form != ExpressionForm::OperatorCall && result.form != ExpressionForm::LiteralCall && result.form != ExpressionForm::Cast) return;
     if (!result.object_use) record_object(result,0,0,0);
     else if (object_uses[result.object_use].source_owned) {
         auto use = project_object_use(object_uses[result.object_use],n);
@@ -112,12 +112,12 @@ bool Analyzer::record_class_initialization(NodeId n, TypeId target, NodeId sourc
 }
 void Analyzer::record_class_return(NodeId n, ScopeId s)
 {
-    NodeId source = ast[n].first;
+    NodeId source = ast.first(n);
     if (!source) throw std::runtime_error("missing class return value");
     Expression x = expression(source,s);
     NodeId id = source;
-    while (ast[id].kind == Kind::Parenthesized) id = ast[id].first;
-    EntityId local = ast[id].kind == Kind::IdExpression ? expressions[id].entity : 0;
+    while (ast.kind(id) == Kind::Parenthesized) id = ast.first(id);
+    EntityId local = ast.kind(id) == Kind::IdExpression ? expressions[id].entity : 0;
     bool eligible = local && (entities[local].kind == EntityKind::Variable || entities[local].kind == EntityKind::Parameter) &&
         !entities[local].is_static && !entities[local].external_decl && !(types[entities[local].type].cv & 2) && class_value(entities[local].type) &&
         encloses(entities[current_function].scope,entities[local].owner);

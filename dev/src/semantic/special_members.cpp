@@ -47,7 +47,7 @@ void Analyzer::classify_transfer(EntityId e, NodeId special, ScopeId context)
             class_facts[info].declared_transfers |= unsigned(members[m].transfer);
         }
     }
-    if (!special || ast[special].op != KW_DEFAULT) return;
+    if (!special || ast.op(special) != KW_DEFAULT) return;
     if (!ctor && !members[m].destructor && !transfer_member(e)) throw std::runtime_error("only special members may be defaulted");
     if (ctor && f.count && !transfer_member(e)) throw std::runtime_error("only special constructors may be defaulted");
     for (unsigned j = 0; entities[e].defaults && j < f.count; ++j)

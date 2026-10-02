@@ -79,14 +79,14 @@ FieldFacts& Analyzer::field_metadata(EntityId e)
 void Analyzer::bit_field_declaration(NodeId n, ScopeId s)
 {
     if (scopes[s].kind != ScopeKind::Class) throw std::runtime_error("bit-field outside class");
-    NodeId specs = ast[n].first;
+    NodeId specs = ast.first(n);
     if (ast.alignment_owners.get(n) || ast.alignment_owners.get(specs)) throw std::runtime_error("aligned bit-field");
     TypeId base = specifiers(specs, s);
     if (spec_has(specs, KW_STATIC)) throw std::runtime_error("static bit-field");
-    for (NodeId field = ast[specs].next; field; field = ast[field].next) {
-        NodeId first = ast[field].first;
-        NodeId d = ast[first].kind == Kind::Declarator ? first : 0;
-        NodeId bound = d ? ast[d].next : first;
+    for (NodeId field = ast.next(specs); field; field = ast.next(field)) {
+        NodeId first = ast.first(field);
+        NodeId d = ast.kind(first) == Kind::Declarator ? first : 0;
+        NodeId bound = d ? ast.next(d) : first;
         TypeId t = declarator(d, base, s);
         if (!integral(t)) throw std::runtime_error("nonintegral bit-field");
         Constant count = evaluate(bound, s);

@@ -1,6 +1,88 @@
 #include "syntax/ast.h"
 #include <stdexcept>
 namespace cppgm { namespace syntax {
+namespace {
+std::size_t occurrence_hash(NodeId source)
+{
+    std::uint32_t x = source;
+    x ^= x >> 16; x *= 0x7feb352dU;
+    x ^= x >> 15; x *= 0x846ca68bU;
+    return x ^ (x >> 16);
+}
+}
+std::size_t NodePool::index_bytes() const
+{
+    auto bytes = indexes.capacity()*sizeof(ContextIndex) + recent.capacity()*sizeof(NodeId);
+    for (const auto& index : indexes) bytes += index.slots.capacity()*sizeof(NodeId);
+    return bytes;
+}
+NodeId NodePool::projected(NodeId source, std::uint32_t context) const
+{
+    source = occurrences[source].source;
+    auto known = recent[source];
+    if (known && occurrences[known].context == context) return known;
+    if (context >= indexes.size()) return 0;
+    const auto& index = indexes[context].slots;
+    if (index.empty()) return 0;
+    auto mask = index.size()-1;
+    auto slot = occurrence_hash(source)&mask;
+    while (auto id = index[slot]) {
+        const auto& entry = occurrences[id];
+        if (entry.source == source) {
+            recent[source] = id; return id;
+        }
+        slot = (slot+1)&mask;
+    }
+    return 0;
+}
+void NodePool::reserve_occurrences(std::uint32_t context, std::size_t additional)
+{
+    if (indexes.size() <= context) indexes.resize(context+1);
+    auto& map = indexes[context];
+    auto& index = map.slots;
+    auto capacity = index.empty() ? 8 : index.size();
+    while ((map.used+additional)*2 >= capacity) capacity *= 2;
+    if (capacity == index.size()) return;
+    std::vector<NodeId> old;
+    old.swap(index); index.resize(capacity);
+    auto mask = capacity-1;
+    for (auto id : old) if (id) {
+        auto slot = occurrence_hash(occurrences[id].source)&mask;
+        while (index[slot]) slot = (slot+1)&mask;
+        index[slot] = id;
+    }
+}
+NodeId NodePool::occurrence(NodeId source, std::uint32_t context)
+{
+    source = occurrences[source].source;
+    auto known = recent[source];
+    if (known && occurrences[known].context == context) return known;
+    if (indexes.size() <= context) indexes.resize(context+1);
+    auto& map = indexes[context];
+    auto& index = map.slots;
+    auto hash = occurrence_hash(source);
+    auto slot = index.empty() ? 0 : hash & (index.size()-1);
+    while (!index.empty() && index[slot]) {
+        auto id = index[slot];
+        const auto& entry = occurrences[id];
+        if (entry.source == source) {
+            recent[source] = id; return id;
+        }
+        slot = (slot+1)&(index.size()-1);
+    }
+    if (index.empty() || (map.used+1)*2 >= index.size()) {
+        reserve_occurrences(context,1);
+        auto mask = index.size()-1;
+        slot = hash & mask;
+        while (index[slot]) slot = (slot+1)&mask;
+    }
+    NodeId id = occurrences.size();
+    occurrences.push_back({source,context});
+    index[slot] = id;
+    ++map.used;
+    recent[source] = id;
+    return id;
+}
 void Ast::resolve_source_node(NodeId id, Node node)
 {
     if (nodes.occurrences[id].context)
@@ -12,18 +94,22 @@ void Ast::resolve_source_node(NodeId id, Node node)
 }
 void Ast::resolve_paren_initializer(NodeId item, NodeId d, NodeId params, NodeId before)
 {
-    if (nodes.occurrences[d].context || paren_roles.get(nodes.occurrences[d].source))
+    if (nodes.occurrences[d].context || paren_role(nodes.occurrences[d].source))
         throw std::logic_error("declaration ambiguity resolved after publication");
     auto p = nodes[params].first, specs = nodes[p].first;
     auto name = nodes[nodes[specs].first].detail;
     auto index = paren_resolutions.size(); paren_resolutions.push_back({params,before,name});
     NodeId roles[] = {item,d,before,params,p,specs};
-    for (unsigned j = 0; j < 6; ++j) paren_roles.put(nodes.occurrences[roles[j]].source,index*8+j);
+    for (unsigned j = 0; j < 6; ++j) {
+        auto source = nodes.occurrences[roles[j]].source;
+        if (paren_roles.size() <= source) paren_roles.resize(source+1);
+        paren_roles[source] = index*8+j;
+    }
 }
 Node Ast::source_view(NodeId id) const
 {
     Node result = nodes[id];
-    if (auto role = paren_roles.get(nodes.occurrences[id].source)) {
+    if (auto role = paren_role(nodes.occurrences[id].source)) {
         auto r = paren_resolutions[role/8];
         switch (role%8) {
         case 0: result.last = r.parameters; break;
@@ -39,8 +125,7 @@ Node Ast::source_view(NodeId id) const
 NodeId Ast::projected(NodeId source, std::uint32_t context) const
 {
     if (!source || !context) return source;
-    NodeId result = occurrence_index.get((std::uint64_t(context) << 32) | nodes.occurrences[source].source);
-    return result; // An edge outside this demanded source region is absent.
+    return nodes.projected(source,context); // An edge outside this demanded source region is absent.
 }
 Node Ast::project_view(NodeId id) const
 {
@@ -50,19 +135,37 @@ Node Ast::project_view(NodeId id) const
         result.first = projected(result.first,context); result.last = projected(result.last,context);
         result.next = projected(result.next,context); result.detail = projected(result.detail,context);
     }
-    if (!expanded_first.empty()) {
+    if (has_expansion(id)) {
         if (auto first = expanded_first.get(id)) result.first = first-1;
         if (auto last = expanded_last.get(id)) result.last = last-1;
         if (auto next = expanded_next.get(id)) result.next = next-1;
     }
     return result;
 }
+NodeId Ast::edge(NodeId id, unsigned which) const
+{
+    // Traversals needing one edge do not project the other three.
+    if (which != 3 && has_expansion(id)) {
+        auto expanded = which == 0 ? expanded_first.get(id) : which == 1 ? expanded_last.get(id) : expanded_next.get(id);
+        if (expanded) return expanded-1;
+    }
+    auto node = paren_roles.empty() ? nodes[id] : source_view(id);
+    auto source = which == 0 ? node.first : which == 1 ? node.last : which == 2 ? node.next : node.detail;
+    return projected(source,nodes.occurrences[id].context);
+}
 void Ast::expanded_children(NodeId parent, const std::vector<NodeId>& children)
 {
+    auto mark = [&](NodeId id) {
+        if (expanded_nodes.size() <= id/64) expanded_nodes.resize(id/64+1);
+        expanded_nodes[id/64] |= std::uint64_t(1) << (id%64);
+    };
+    mark(parent);
     expanded_first.put(parent,children.empty() ? 1 : children.front()+1);
     expanded_last.put(parent,children.empty() ? 1 : children.back()+1);
-    for (unsigned j = 0; j < children.size(); ++j)
+    for (unsigned j = 0; j < children.size(); ++j) {
+        mark(children[j]);
         expanded_next.put(children[j],j+1 == children.size() ? 1 : children[j+1]+1);
+    }
 }
 std::uint32_t Ast::source_region(NodeId root)
 {
@@ -124,11 +227,12 @@ NodeId Ast::instantiate(NodeId root, std::uint32_t context)
     if (existing && pending <= 1) return existing;
     auto source = pending > 1 ? pending-1 : root;
     auto region = source_regions[source_region(source)];
+    // One demanded region arrives as a batch. Avoid repeatedly growing and
+    // rehashing this context's index while publishing its known source IDs.
+    nodes.reserve_occurrences(context,std::size_t(region.count)+region.roots_count);
     for (std::uint32_t j = 0; j < region.count; ++j) {
         auto n = region_nodes[region.begin+j];
-        if (projected(n,context)) continue;
-        auto id = nodes.occurrence(n,context);
-        occurrence_index.put((std::uint64_t(context) << 32) | nodes.occurrences[n].source,id);
+        nodes.occurrence(n,context);
     }
     for (std::uint32_t j = 0; j < region.roots_count; ++j) {
         auto n = region_roots[region.roots_begin+j];
@@ -136,7 +240,6 @@ NodeId Ast::instantiate(NodeId root, std::uint32_t context)
         if (id && deferred_occurrences.get(id)) continue;
         if (!id) {
             id = nodes.occurrence(n,context);
-            occurrence_index.put((std::uint64_t(context) << 32) | nodes.occurrences[n].source,id);
         }
         // Parsed source IDs exclude the reserved zero and maximum IDs.
         deferred_occurrences.put(id,n+1); ++deferred_regions;

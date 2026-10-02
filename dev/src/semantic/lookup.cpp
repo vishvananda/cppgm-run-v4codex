@@ -330,23 +330,23 @@ ScopeId Analyzer::target(EntityId e) const
 }
 IdentifierId Analyzer::terminal(NodeId n)
 {
-    NodeId part = ast[n].last;
-    if (calls && ast[part].op == KW_OPERATOR && ast[ast[part].first].kind == Kind::Literal)
-        return literal_name(ast[ast[part].last].text);
+    NodeId part = ast.last(n);
+    if (calls && ast.op(part) == KW_OPERATOR && ast.kind(ast.first(part)) == Kind::Literal)
+        return literal_name(ast.text(ast.last(part)));
     ETokenType op = operator_token(n);
-    return calls && op != TOK_INVALID ? operator_name(op,array_operator(n)) : n ? ast[ast[n].last].text : 0;
+    return calls && op != TOK_INVALID ? operator_name(op,array_operator(n)) : n ? ast.text(ast.last(n)) : 0;
 }
 NodeId Analyzer::decl_name(NodeId d) const
 {
-    for (NodeId c = ast[d].first; c; c = ast[c].next) {
-        if (ast[c].kind == Kind::Identifier) return ast[c].detail;
-        if (ast[c].kind == Kind::NestedDeclarator) return decl_name(ast[c].first);
+    for (NodeId c = ast.first(d); c; c = ast.next(c)) {
+        if (ast.kind(c) == Kind::Identifier) return ast.detail(c);
+        if (ast.kind(c) == Kind::NestedDeclarator) return decl_name(ast.first(c));
     }
     return 0;
 }
 NodeId Analyzer::child(NodeId n, Kind k) const
 {
-    for (NodeId c = ast[n].first; c; c = ast[c].next) if (ast[c].kind == k) return c;
+    for (NodeId c = ast.first(n); c; c = ast.next(c)) if (ast.kind(c) == k) return c;
     return 0;
 }
 NodeId Analyzer::declarator_pack(NodeId n) const
@@ -357,13 +357,13 @@ NodeId Analyzer::declarator_pack(NodeId n) const
     while (n) {
         if (auto pack = child(n,Kind::ParameterPack)) return pack;
         auto nested = child(n,Kind::NestedDeclarator);
-        n = ast[nested].first;
+        n = ast.first(nested);
     }
     return 0;
 }
 bool Analyzer::spec_has(NodeId n, ETokenType op) const
 {
-    for (NodeId c = ast[n].first; c; c = ast[c].next) if (ast[c].op == op) return true;
+    for (NodeId c = ast.first(n); c; c = ast.next(c)) if (ast.op(c) == op) return true;
     return false;
 }
 bool Analyzer::encloses(ScopeId outer, ScopeId inner) const
@@ -375,15 +375,15 @@ ScopeId Analyzer::name_owner(NodeId n, ScopeId s, bool declaration)
 {
     if (!n) return s;
     ScopeId context = s;
-    bool qualified = ast[n].op == OP_COLON2;
+    bool qualified = ast.op(n) == OP_COLON2;
     if (qualified) s = global;
-    for (NodeId p = ast[n].first; p && p != ast[n].last; p = ast[p].next) {
-        if (ast[ast[p].detail].kind == Kind::Decltype) {
-            TypeId t = expression_type(ast[ast[p].detail].first, context, true);
+    for (NodeId p = ast.first(n); p && p != ast.last(n); p = ast.next(p)) {
+        if (ast.kind(ast.detail(p)) == Kind::Decltype) {
+            TypeId t = expression_type(ast.first(ast.detail(p)), context, true);
             if (types[t].kind != TypeKind::Named) throw std::runtime_error("decltype qualifier is not a class");
             s = entities[types[t].entity].scope; qualified = true; continue;
         }
-        EntityId e = lookup(s, ast[p].text, child(p,Kind::TemplateArguments) ? Lookup::Template : Lookup::Qualifier, qualified);
+        EntityId e = lookup(s, ast.text(p), child(p,Kind::TemplateArguments) ? Lookup::Template : Lookup::Qualifier, qualified);
         if (definitions) e = class_template_name(p,e,context);
         if (definitions && e) {
             auto type = entities[e].kind == EntityKind::Alias ? source_type(e) : entities[e].type;
@@ -400,12 +400,12 @@ ScopeId Analyzer::name_owner(NodeId n, ScopeId s, bool declaration)
 EntityId Analyzer::resolve(NodeId n, ScopeId s, Lookup mode)
 {
     if (!n) return 0;
-    if (mode == Lookup::Ordinary && ast[ast[n].last].op == KW_OPERATOR && ast[ast[n].last].detail)
+    if (mode == Lookup::Ordinary && ast.op(ast.last(n)) == KW_OPERATOR && ast.detail(ast.last(n)))
         return resolve_conversion_name(n,s);
     // A decltype-specifier can be the complete class-or-decltype in a base,
     // not just an intermediate nested-name qualifier. Its query owns the
     // selected type; there is no terminal identifier to look up.
-    if (ast[ast[ast[n].last].detail].kind == Kind::Decltype) {
+    if (ast.kind(ast.detail(ast.last(n))) == Kind::Decltype) {
         auto type = type_name(n,s);
         return types[type].kind == TypeKind::Named ? types[type].entity : 0;
     }
@@ -413,18 +413,18 @@ EntityId Analyzer::resolve(NodeId n, ScopeId s, Lookup mode)
         auto id = template_binding_index.get(ast.nodes.occurrences[n].source);
         if (id) {
             auto binding = template_bindings[id]; auto e = binding.entity;
-            if (e && entities[e].template_info && entities[e].class_info && child(ast[n].last,syntax::Kind::TemplateArguments))
-                return class_template_name(ast[n].last,e,s);
+            if (e && entities[e].template_info && entities[e].class_info && child(ast.last(n),syntax::Kind::TemplateArguments))
+                return class_template_name(ast.last(n),e,s);
             if (e && !binding.dependent && !entities[e].template_pattern && !entities[e].template_parameter) return e;
         }
     }
     // Namespace-only lookup applies to the leading qualifier too.
     if (mode == Lookup::Namespace) {
-        bool qualified = ast[n].op == OP_COLON2;
+        bool qualified = ast.op(n) == OP_COLON2;
         if (qualified) s = global;
-        for (NodeId p = ast[n].first; p; p = ast[p].next) {
-            EntityId e = lookup(s, ast[p].text, mode, qualified);
-            if (p == ast[n].last) return e;
+        for (NodeId p = ast.first(n); p; p = ast.next(p)) {
+            EntityId e = lookup(s, ast.text(p), mode, qualified);
+            if (p == ast.last(n)) return e;
             s = target(e);
             if (!s) return 0;
             qualified = true;
@@ -435,9 +435,9 @@ EntityId Analyzer::resolve(NodeId n, ScopeId s, Lookup mode)
         ScopeId cls = naming_class(owner);
         if (cls) ensure_transfers(entities[scopes[cls].entity].type, true);
     }
-    EntityId result = lookup(owner, terminal(n), child(ast[n].last,Kind::TemplateArguments) ? Lookup::Template : mode, ast[n].first != ast[n].last || ast[n].op == OP_COLON2);
-    if (definitions) result = class_template_name(ast[n].last,result,s);
-    if (definitions) result = variable_template_name(ast[n].last,result,s);
+    EntityId result = lookup(owner, terminal(n), child(ast.last(n),Kind::TemplateArguments) ? Lookup::Template : mode, ast.first(n) != ast.last(n) || ast.op(n) == OP_COLON2);
+    if (definitions) result = class_template_name(ast.last(n),result,s);
+    if (definitions) result = variable_template_name(ast.last(n),result,s);
     if (calls && result && !function_binding(result)) check_access(result, s, owner);
     return result;
 }

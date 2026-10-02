@@ -7,7 +7,7 @@ using semantic::InitKind;
 using lowir_model::DataItem;
 Value Procedural::string_element(NodeId n, TypeId t, std::uint64_t index)
 {
-    auto literal = ast.literals[ast[n].literal];
+    auto literal = ast.literals[ast.literal(n)];
     std::uint64_t bits = 0;
     if (index < literal.elements) {
         auto width = fundamental_width(literal.type);
@@ -55,7 +55,7 @@ void Procedural::global_plan(std::uint32_t plan)
         p.data.push_back(item); return;
     }
     if (action.kind == InitKind::String) {
-        std::uint64_t length = ast.literals[ast[action.source].literal].elements;
+        std::uint64_t length = ast.literals[ast.literal(action.source)].elements;
         auto limit = target.bound-length > 8 ? length : target.bound;
         for (std::uint64_t j = 0; j < limit; ++j) {
             DataItem item; item.kind = DataItem::Scalar; item.type = type(target.child);
@@ -126,7 +126,7 @@ void Procedural::initialize_plan(std::uint32_t plan, Value location)
     }
     Value base = address(location);
     if (action.kind == InitKind::String) {
-        std::uint64_t length = ast.literals[ast[action.source].literal].elements;
+        std::uint64_t length = ast.literals[ast.literal(action.source)].elements;
         auto limit = target.bound-length > 8 ? length : target.bound;
         for (std::uint64_t j = 0; j < limit; ++j) {
             Value at = j ? emit(Opcode::Index, IRType::I8, {base.operand, Operand::integer(j*sem.object_size(target.child))}) : base;
@@ -194,7 +194,7 @@ void Procedural::aggregate_plan(std::uint32_t plan, Value root, bool indirect, s
         Value at = initialization_address(root, indirect, path); at.type = action.type; store(value, at); return;
     }
     if (action.kind == InitKind::String) {
-        std::uint64_t length = ast.literals[ast[action.source].literal].elements;
+        std::uint64_t length = ast.literals[ast.literal(action.source)].elements;
         auto limit = target.bound-length > 8 ? length : target.bound;
         for (std::uint64_t j = 0; j < limit; ++j) {
             InitProjection step(j, false); step.element = target.child; path.push_back(step);

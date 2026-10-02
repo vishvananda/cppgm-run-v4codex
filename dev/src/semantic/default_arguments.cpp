@@ -40,10 +40,10 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
     NodeId parameters = 0;
     for (auto node = d; node;) {
         if (auto p = child(node,Kind::Parameters)) parameters = p;
-        auto nested = child(node,Kind::NestedDeclarator); node = nested ? ast[nested].first : 0;
+        auto nested = child(node,Kind::NestedDeclarator); node = nested ? ast.first(nested) : 0;
     }
     bool needed = false;
-    for (auto p = ast[parameters].first; p; p = ast[p].next) needed |= child(p,Kind::DefaultArgument) != 0;
+    for (auto p = ast.first(parameters); p; p = ast.next(p)) needed |= child(p,Kind::DefaultArgument) != 0;
     if (!needed) { template_default_bindings.put(source,unsigned(SourceBindingState::Complete)); return; }
     if (!allowed) {
         template_default_bindings.put(source,unsigned(SourceBindingState::Failed));
@@ -68,9 +68,9 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
     }
     unsigned ordinal = 0;
     std::vector<std::pair<NodeId,bool>> default_uses;
-    for (auto p = ast[parameters].first; p; p = ast[p].next) {
-        if (ast[p].kind != Kind::Parameter) continue;
-        auto specs = ast[p].first, decl = ast[specs].next;
+    for (auto p = ast.first(parameters); p; p = ast.next(p)) {
+        if (ast.kind(p) != Kind::Parameter) continue;
+        auto specs = ast.first(p), decl = ast.next(specs);
         auto type = facts[p].type;
         if (!type) type = bind_template_type(specs,decl,scope);
         auto name = terminal(decl_name(decl));
@@ -102,7 +102,7 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
             if (node.kind == Kind::TypeId) {
                 // Keep the source type/query recipe for decltype(parameter)
                 // and other types used inside a default's casts/inquiries.
-                bind_template_type(node.first,ast[node.first].next,scope);
+                bind_template_type(node.first,ast.next(node.first),scope);
                 continue;
             }
             if (node.kind == Kind::Decltype) {
@@ -112,7 +112,7 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
             if (node.kind == Kind::Noexcept) continue;
             if (node.kind == Kind::TypeTrait) {
                 if (node.op != KW_TYPEID) continue;
-                if (ast[node.first].kind == Kind::TypeId) {
+                if (ast.kind(node.first) == Kind::TypeId) {
                     default_uses.emplace_back(node.first,false); continue;
                 }
                 auto query = expression_query(node.first,scope);
@@ -133,13 +133,13 @@ void Analyzer::bind_template_defaults(NodeId d, ScopeId s, ScopeId head, bool al
                 if (parameter && entities[parameter].kind == EntityKind::Parameter && entities[parameter].owner == scope)
                     throw std::runtime_error("parameter used in evaluated default argument");
             }
-            if (node.detail && (ast[node.detail].kind == Kind::TypeId ||
-                ast[node.detail].kind == Kind::Decltype || ast[node.detail].kind == Kind::Name))
+            if (node.detail && (ast.kind(node.detail) == Kind::TypeId ||
+                ast.kind(node.detail) == Kind::Decltype || ast.kind(node.detail) == Kind::Name))
                 default_uses.emplace_back(node.detail,false);
-            for (auto c = node.first; c; c = ast[c].next) default_uses.emplace_back(c,evaluated);
+            for (auto c = node.first; c; c = ast.next(c)) default_uses.emplace_back(c,evaluated);
         }
         if (argument && !dependent && type && !dependent_type(type))
-            check_template_initialization(ast[argument].first,types.adjusted(type),scope,InitializationMode::Copy);
+            check_template_initialization(ast.first(argument),types.adjusted(type),scope,InitializationMode::Copy);
     }
     template_default_bindings.put(source,unsigned(SourceBindingState::Complete));
     } catch (...) {
@@ -200,13 +200,13 @@ void Analyzer::function_defaults(EntityId e, NodeId d, ScopeId s, NodeId source)
         NodeId candidate = child(d, Kind::Parameters);
         if (candidate) params = candidate;
         NodeId nested = child(d, Kind::NestedDeclarator);
-        d = nested ? ast[nested].first : 0;
+        d = nested ? ast.first(nested) : 0;
     }
     unsigned i = 0;
     bool seen = false;
-    for (NodeId p = ast[params].first; p && i < f.count; p = ast[p].next, ++i) {
+    for (NodeId p = ast.first(params); p && i < f.count; p = ast.next(p), ++i) {
         NodeId a = child(p, Kind::DefaultArgument);
-        bool pack = declarator_pack(ast[ast[p].first].next) != 0;
+        bool pack = declarator_pack(ast.next(ast.first(p))) != 0;
         unsigned index = entities[e].defaults + i;
         if (a) {
             if (pack) throw std::runtime_error("function parameter pack cannot have a default argument");
@@ -271,9 +271,9 @@ NodeId Analyzer::default_argument(EntityId e, unsigned parameter, Conversion* co
             auto root = definitions && entities[e].specialization ? instantiate_default(e,source) : source;
             demand_region(root);
             auto scope = facts[root].scope;
-            auto value = ast[root].first;
-            while (ast[value].kind == Kind::Initializer || ast[value].kind == Kind::ParenInitializer)
-                value = ast[value].first;
+            auto value = ast.first(root);
+            while (ast.kind(value) == Kind::Initializer || ast.kind(value) == Kind::ParenInitializer)
+                value = ast.first(value);
             expression(value,scope);
             auto type = types[entities[e].type];
             auto c = conversion(value,types.parameters[type.offset+parameter]);

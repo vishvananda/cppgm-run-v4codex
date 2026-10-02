@@ -24,10 +24,10 @@ std::uint32_t Analyzer::constant_array_child(std::uint32_t plan, Constant index)
 std::uint32_t Analyzer::constant_array_projection(NodeId n, ScopeId s)
 {
     using syntax::Kind;
-    if (ast[n].kind == Kind::Parenthesized) return constant_array_projection(ast[n].first,s);
-    if (ast[n].kind == Kind::IdExpression) return constant_arrays.get(expressions[n].entity);
-    if (ast[n].kind != Kind::Subscript) return 0;
-    auto base = ast[n].first, index = ast[base].next;
+    if (ast.kind(n) == Kind::Parenthesized) return constant_array_projection(ast.first(n),s);
+    if (ast.kind(n) == Kind::IdExpression) return constant_arrays.get(expressions[n].entity);
+    if (ast.kind(n) != Kind::Subscript) return 0;
+    auto base = ast.first(n), index = ast.next(base);
     if (types[expressions[base].type].kind != TypeKind::Array) std::swap(base,index);
     return constant_array_child(constant_array_projection(base,s),evaluate(index,s));
 }
@@ -36,7 +36,7 @@ Constant Analyzer::constant_array_element(std::uint32_t plan, Constant index)
     if (!plan || !index.valid || !integral(index.type) || integer_value(index) >= types[initializers[plan].type].bound) return Constant();
     auto action = initializers[plan];
     if (action.kind == InitKind::String) {
-        auto literal = ast[action.source].literal;
+        auto literal = ast.literal(action.source);
         if (integer_value(index) < ast.literals[literal].elements) return literal_element(literal,index);
         return convert(Constant(types.fundamental(FT_INT),0),types[action.type].child);
     }

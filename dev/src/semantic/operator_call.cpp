@@ -168,10 +168,10 @@ bool Analyzer::operator_expression(NodeId n, ScopeId s, ETokenType op, std::vect
     check_access(selected.entity, s, naming, object);
     require_deduced_return(selected.entity);
     NodeId receiver = args[0];
-    while (ast[receiver].kind == syntax::Kind::Parenthesized) receiver = ast[receiver].first;
+    while (ast.kind(receiver) == syntax::Kind::Parenthesized) receiver = ast.first(receiver);
     auto closure = this->closure(types[object].entity);
     EntityId entry = op == OP_LPAREN && closure.thunk && selected.entity == closure.function &&
-        ast[receiver].kind == syntax::Kind::Lambda ? closure.thunk : 0;
+        ast.kind(receiver) == syntax::Kind::Lambda ? closure.thunk : 0;
     bool rtti_compare = typeinfo_comparison(selected.entity,op);
     if (!recipe && !rtti_compare) { demand_member(entry ? entry : selected.entity); demand_specialization(selected.entity); }
     if (selected.member) {

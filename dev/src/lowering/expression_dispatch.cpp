@@ -14,7 +14,7 @@ Value Procedural::expression(NodeId n, bool location)
     using Form = semantic::ExpressionForm;
     auto form = sem.expression_fact(n).form;
     if (form == Form::OperatorCall || form == Form::LiteralCall ||
-        (ast[n].kind == syntax::Kind::Call &&
+        (ast.kind(n) == syntax::Kind::Call &&
          (form == Form::Ordinary || form == Form::Abort || form == Form::Unreachable ||
           form == Form::PseudoDestructor || form == Form::Expect || form == Form::InvokeMemberData)))
         return call(n);

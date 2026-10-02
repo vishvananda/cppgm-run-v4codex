@@ -55,7 +55,7 @@ struct Analyzer::MemberPointerFlow {
         switch (node.kind) {
         case Kind::Compound:
             barrier();
-            for (auto c = node.first; c && remaining; c = sem.ast[c].next) {
+            for (auto c = node.first; c && remaining; c = sem.ast.next(c)) {
                 cleanup = false; visit(c);
                 if (cleanup) barrier();
                 cleanup = false;
@@ -98,7 +98,7 @@ struct Analyzer::MemberPointerFlow {
         }
         case Kind::Assignment: {
             // Consume the same recorded RHS-before-destination order as lowering.
-            auto right = visit(sem.ast[node.first].next);
+            auto right = visit(sem.ast.next(node.first));
             auto left = visit(node.first);
             if (node.op != OP_ASS || !left.location || sem.class_value(x.type)) { barrier(); break; }
             definitions.put(left.location,right.zero ? boundary : 0);
@@ -126,13 +126,13 @@ struct Analyzer::MemberPointerFlow {
         }
         case Kind::Binary:
             if (node.op == OP_LAND || node.op == OP_LOR) { barrier(); cleanup = true; break; }
-            visit(node.first); visit(sem.ast[node.first].next); break;
+            visit(node.first); visit(sem.ast.next(node.first)); break;
         case Kind::Then: case Kind::Else:
             barrier(); visit(node.first); barrier(); break;
         case Kind::If: case Kind::While: case Kind::Do: case Kind::For:
             // No merge/fixed point: each region starts and ends unknown. A loop
             // body may establish facts only after a store in that iteration.
-            for (auto c = node.first; c && remaining; c = sem.ast[c].next) {
+            for (auto c = node.first; c && remaining; c = sem.ast.next(c)) {
                 barrier(); visit(c); barrier();
             }
             break;

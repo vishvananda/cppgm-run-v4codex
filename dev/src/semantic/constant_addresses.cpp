@@ -135,7 +135,7 @@ Constant Analyzer::constant_base_read(std::uint32_t id)
     if (!a.parent) return storage.value;
     if (a.selector == ~std::uint64_t(0)) return Constant();
     if (types[constant_addresses[a.parent].type].kind == TypeKind::Array && storage.literal && !constant_addresses[a.parent].parent)
-        return literal_element(ast[storage.literal].literal,Constant(types.fundamental(FT_UNSIGNED_LONG_INT),a.selector));
+        return literal_element(ast.literal(storage.literal),Constant(types.fundamental(FT_UNSIGNED_LONG_INT),a.selector));
     if (complex_type(constant_addresses[a.parent].type)) return evaluated_part(constant_base_read(a.parent),a.selector);
     if (!storage.frame && !(a.selector & 0x80000000U) && types[constant_addresses[a.parent].type].kind != TypeKind::Array && !vector_kind(types[constant_addresses[a.parent].type].kind) && entities[a.selector].mutable_field)
         return Constant();
@@ -182,11 +182,11 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         auto value = constant_fold(n,s);
         return value.valid && (types[value.type].kind == TypeKind::LRef || types[value.type].kind == TypeKind::RRef) ? value.bits : 0;
     }
-    auto x = expressions[n]; auto first = ast[n].first;
-    if (ast[n].kind == Kind::Parenthesized) return constant_address(first,s);
-    if (ast[n].kind == Kind::Binary && ast[n].op == OP_COMMA && x.form != ExpressionForm::OperatorCall) {
+    auto x = expressions[n]; auto first = ast.first(n);
+    if (ast.kind(n) == Kind::Parenthesized) return constant_address(first,s);
+    if (ast.kind(n) == Kind::Binary && ast.op(n) == OP_COMMA && x.form != ExpressionForm::OperatorCall) {
         if (!evaluate(first,s).valid) return 0;
-        return constant_address(ast[first].next,s);
+        return constant_address(ast.next(first),s);
     }
     if (x.category == ValueCategory::Prvalue && class_value(x.type)) {
         auto temporary = object_fact(n).temporary;
@@ -195,7 +195,7 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         auto address = constant_temporary_address(x.type,Constant(),temporary);
         auto saved = constant_destination; constant_destination = address;
         Constant value;
-        try { value = (ast[n].kind == Kind::Call || x.form == ExpressionForm::OperatorCall) ? constant_call_result(n,s) : evaluate(n,s); }
+        try { value = (ast.kind(n) == Kind::Call || x.form == ExpressionForm::OperatorCall) ? constant_call_result(n,s) : evaluate(n,s); }
         catch (...) { constant_destination = saved; throw; }
         constant_destination = saved;
         auto storage = constant_addresses[address].storage;
@@ -208,12 +208,12 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         if (!value.valid) return 0;
         return types[value.type].kind == TypeKind::LRef || types[value.type].kind == TypeKind::RRef ? value.bits : constant_storage_address(value.type,value);
     }
-    if (ast[n].kind == Kind::Literal && ast.literals[ast[n].literal].kind == LiteralKind::string) {
-        if (auto known = constant_literal_storage.get(ast[n].literal)) return known;
+    if (ast.kind(n) == Kind::Literal && ast.literals[ast.literal(n)].kind == LiteralKind::string) {
+        if (auto known = constant_literal_storage.get(ast.literal(n))) return known;
         auto id = constant_storage_address(x.type,Constant(),0,n,true);
-        constant_literal_storage.put(ast[n].literal,id); return id;
+        constant_literal_storage.put(ast.literal(n),id); return id;
     }
-    if ((ast[n].kind == Kind::FunctionName || ast[n].kind == Kind::IdExpression) && !nonstatic_field(x.entity)) {
+    if ((ast.kind(n) == Kind::FunctionName || ast.kind(n) == Kind::IdExpression) && !nonstatic_field(x.entity)) {
         // Enumerators and substituted value parameters name values, not
         // storage. A reference use materializes that value in a temporary.
         if (x.category == ValueCategory::Prvalue) {
@@ -222,7 +222,7 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         }
         return constant_entity_address(x.entity);
     }
-    if ((ast[n].kind == Kind::IdExpression || ast[n].kind == Kind::Member) && nonstatic_field(x.entity)) {
+    if ((ast.kind(n) == Kind::IdExpression || ast.kind(n) == Kind::Member) && nonstatic_field(x.entity)) {
         auto use = object_fact(n);
         auto base = use.node ? constant_arrow(use.node,use.arrow) : active_constant ? constant_activations[active_constant].object : 0;
         if (!base) return 0;
@@ -232,19 +232,19 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         if (kind == TypeKind::LRef || kind == TypeKind::RRef) { auto v = constant_read(result); return v.valid ? v.bits : 0; }
         return result;
     }
-    if (ast[n].kind == Kind::Member && x.entity && entities[x.entity].is_static) {
+    if (ast.kind(n) == Kind::Member && x.entity && entities[x.entity].is_static) {
         if (!constant_arrow(first,object_uses[x.object_use].arrow)) return 0;
         return constant_entity_address(x.entity);
     }
-    if (ast[n].kind == Kind::Unary && (ast[n].op == KW_REAL || ast[n].op == KW_IMAG)) {
+    if (ast.kind(n) == Kind::Unary && (ast.op(n) == KW_REAL || ast.op(n) == KW_IMAG)) {
         auto parent = constant_address(first,s);
-        if (complex_type(expressions[first].type)) return constant_subobject(parent,x.type,ast[n].op == KW_IMAG);
-        return ast[n].op == KW_REAL ? parent : 0;
+        if (complex_type(expressions[first].type)) return constant_subobject(parent,x.type,ast.op(n) == KW_IMAG);
+        return ast.op(n) == KW_REAL ? parent : 0;
     }
-    if (ast[n].kind == Kind::Unary && ast[n].op == OP_STAR) {
+    if (ast.kind(n) == Kind::Unary && ast.op(n) == OP_STAR) {
         auto v = constant_indirect(evaluate(first,s)); return v.valid && pointer(v.type) ? v.bits : 0;
     }
-    if ((ast[n].kind == Kind::Binary && (ast[n].op == OP_DOTSTAR || ast[n].op == OP_ARROWSTAR)) ||
+    if ((ast.kind(n) == Kind::Binary && (ast.op(n) == OP_DOTSTAR || ast.op(n) == OP_ARROWSTAR)) ||
         x.form == ExpressionForm::InvokeMemberData) {
         auto use = object_fact(n);
         auto member = evaluate(use.member_pointer,s);
@@ -256,8 +256,8 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         base = constant_member_receiver(base,member);
         return constant_subobject(base,entities[entity].type,entity);
     }
-    if (ast[n].kind == Kind::Subscript) {
-        auto base = first, index = ast[first].next;
+    if (ast.kind(n) == Kind::Subscript) {
+        auto base = first, index = ast.next(first);
         if (vector_kind(types[expressions[base].type].kind)) {
             auto i = evaluate(index,s);
             if (!i.valid || negative_constant(i) || integer_value(i) >= vector_elements(expressions[base].type)) return 0;
@@ -269,13 +269,13 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         auto v = constant_pointer_binary(OP_PLUS,p,i);
         return v.valid ? v.bits : 0;
     }
-    if (ast[n].kind == Kind::Conditional) {
+    if (ast.kind(n) == Kind::Conditional) {
         auto c = conversions[expressions[n].conversions];
         auto cond = c.target ? constant_node_conversion(first,c,s) : evaluate(first,s);
         if (!cond.valid) return 0;
-        auto yes = ast[first].next;
+        auto yes = ast.next(first);
         bool selected = constant_truth(cond);
-        auto branch = selected ? yes : ast[yes].next;
+        auto branch = selected ? yes : ast.next(yes);
         if (x.count == 3) {
             auto value = constant_node_conversion(branch,conversions[x.conversions+(selected ? 1 : 2)],s);
             if (!value.valid) return 0;
@@ -284,12 +284,12 @@ std::uint32_t Analyzer::constant_address(NodeId n, ScopeId s)
         }
         return constant_address(branch,s);
     }
-    if (ast[n].kind == Kind::Cast) {
-        auto v = constant_node_conversion(ast[first].next,conversions[x.conversions],s);
+    if (ast.kind(n) == Kind::Cast) {
+        auto v = constant_node_conversion(ast.next(first),conversions[x.conversions],s);
         if (v.valid && (types[v.type].kind == TypeKind::LRef || types[v.type].kind == TypeKind::RRef)) return v.bits;
         return v.valid ? constant_storage_address(x.type,v) : 0;
     }
-    auto value = (ast[n].kind == Kind::Call || x.form == ExpressionForm::OperatorCall) ? constant_call_result(n,s) : evaluate(n,s);
+    auto value = (ast.kind(n) == Kind::Call || x.form == ExpressionForm::OperatorCall) ? constant_call_result(n,s) : evaluate(n,s);
     if (!value.valid) return 0;
     if (types[value.type].kind == TypeKind::LRef || types[value.type].kind == TypeKind::RRef) return value.bits;
     return constant_storage_address(x.type,value);

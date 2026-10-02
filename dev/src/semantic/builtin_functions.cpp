@@ -205,9 +205,9 @@ void Analyzer::validate_intrinsic(EntityId e, const std::vector<NodeId>& args, S
     if (!fn || !types[entities[fn].type].variadic)
         throw std::runtime_error("va_start requires a variadic function");
     auto last = args[1];
-    while (ast[last].kind == syntax::Kind::Parenthesized) last = ast[last].first;
+    while (ast.kind(last) == syntax::Kind::Parenthesized) last = ast.first(last);
     auto parameter = expressions[last].entity;
-    if (ast[last].kind != syntax::Kind::IdExpression || entities[parameter].kind != EntityKind::Parameter)
+    if (ast.kind(last) != syntax::Kind::IdExpression || entities[parameter].kind != EntityKind::Parameter)
         throw std::runtime_error("va_start requires a named parameter");
     auto owner = entities[parameter].owner;
     if (scopes[owner].kind != ScopeKind::Function || scopes[owner].entity != fn)
@@ -241,15 +241,15 @@ TypeQueryFact Analyzer::query_builtin_operand(const TypeQuery& q, const std::vec
 }
 EntityId Analyzer::predefined_function_name(NodeId n, ScopeId s)
 {
-    return function_name_string(function_context(s),ast[n].text,n);
+    return function_name_string(function_context(s),ast.text(n),n);
 }
 Expression Analyzer::va_arg_expression(NodeId n, ScopeId s)
 {
-    auto arg = ast[n].first;
+    auto arg = ast.first(n);
     expression(arg,s);
     auto c = conversion(arg,types.adjusted(variadic_list_type));
     if (!c.valid()) throw std::runtime_error("va_arg requires va_list");
-    Expression result; result.type = type_id(ast[arg].next,s);
+    Expression result; result.type = type_id(ast.next(arg),s);
     auto type = types[result.type];
     if (class_value(result.type) || type.kind == TypeKind::Array || type.kind == TypeKind::Function ||
         type.kind == TypeKind::LRef || type.kind == TypeKind::RRef || fundamental(result.type,FT_VOID))

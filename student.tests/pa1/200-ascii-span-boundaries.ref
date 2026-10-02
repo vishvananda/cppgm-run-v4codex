@@ -1,0 +1,35 @@
+whitespace-sequence 0 
+new-line 0 
+identifier 23 ordinary_identifier_123
+whitespace-sequence 0 
+identifier 12 after_spaces
+new-line 0 
+identifier 12 prefixsuffix
+whitespace-sequence 0 
+identifier 11 asciiπtail
+whitespace-sequence 0 
+identifier 7 πafter
+whitespace-sequence 0 
+identifier 8 πending
+new-line 0 
+identifier 16 joinedidentifier
+whitespace-sequence 0 
+identifier 13 after_comment
+new-line 0 
+whitespace-sequence 0 
+identifier 19 after_block_comment
+new-line 0 
+whitespace-sequence 0 
+new-line 0 
+identifier 18 after_line_comment
+new-line 0 
+user-defined-string-literal 62 R"abcdefghijklmnop(raw\
+text??/\u03C0)abcdefghijklmnop"_suffix
+new-line 0 
+string-literal 16 "escaped\\u03C0"
+whitespace-sequence 0 
+identifier 13 after_literal
+new-line 0 
+identifier 15 last_identifier
+new-line 0 
+eof

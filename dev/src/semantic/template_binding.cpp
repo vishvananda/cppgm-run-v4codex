@@ -19,30 +19,30 @@ EntityId Analyzer::pattern_declaration(EntityKind kind, ScopeId s, IdentifierId 
 TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
 {
     if (!n) return TemplateBinding();
-    bool full = !last || last == ast[n].last;
-    if (!last) last = ast[n].last;
+    bool full = !last || last == ast.last(n);
+    if (!last) last = ast.last(n);
     auto source = ast.nodes.occurrences[n].source;
     bool pattern = full && !ast.nodes.occurrences[n].context;
     if (pattern) if (auto id = template_binding_index.get(source)) return template_bindings[id];
     ++template_binding_work;
     TemplateBinding r; r.scope = s;
-    auto owner = ast[n].op == OP_COLON2 ? global : s;
-    bool qualified = ast[n].op == OP_COLON2;
-    for (auto p = ast[n].first; p; p = ast[p].next) {
-        if (full && p == last && ast[p].op == KW_OPERATOR && ast[p].detail) {
+    auto owner = ast.op(n) == OP_COLON2 ? global : s;
+    bool qualified = ast.op(n) == OP_COLON2;
+    for (auto p = ast.first(n); p; p = ast.next(p)) {
+        if (full && p == last && ast.op(p) == KW_OPERATOR && ast.detail(p)) {
             r.entity = resolve_conversion_name(n,s);
-            auto target = facts[ast[p].detail].type;
+            auto target = facts[ast.detail(p)].type;
             r.dependent |= dependent_type(target) || (r.entity && entities[r.entity].template_pattern);
             break;
         }
-        if (ast[p].detail && ast[ast[p].detail].kind == Kind::Decltype) {
-            r.dependent |= bind_template_expression(ast[ast[p].detail].first,s);
+        if (ast.detail(p) && ast.kind(ast.detail(p)) == Kind::Decltype) {
+            r.dependent |= bind_template_expression(ast.first(ast.detail(p)),s);
             if (r.dependent) break;
-            auto t = expression_type(ast[ast[p].detail].first,s,true);
+            auto t = expression_type(ast.first(ast.detail(p)),s,true);
             owner = types[t].kind == TypeKind::Named ? entities[types[t].entity].scope : 0;
             qualified = true; continue;
         }
-        auto e = lookup(owner,full && p == last ? terminal(n) : ast[p].text,child(p,Kind::TemplateArguments) ? Lookup::Template : p == last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
+        auto e = lookup(owner,full && p == last ? terminal(n) : ast.text(p),child(p,Kind::TemplateArguments) ? Lookup::Template : p == last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
         if (!e) { r.entity = 0; break; }
         r.entity = e;
         if (p != last && entities[e].parameter_pack) r.qualifier_pack = e;
@@ -54,23 +54,23 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
              (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias)) ||
             (entities[e].type && dependent_type(entities[e].type));
         if (args) {
-            for (auto a = ast[args].first; a; a = ast[a].next) {
+            for (auto a = ast.first(args); a; a = ast.next(a)) {
                 // An argument expansion can expand types as well as values.
                 // Its typed argument owner resolves that distinction; an
                 // expression-only walk would reject a type pack's identifier.
-                if (ast[a].kind == Kind::PackExpression) {
+                if (ast.kind(a) == Kind::PackExpression) {
                     r.dependent |= dependent_argument(template_argument_node(a,s)); continue;
                 }
                 // The parser retains unresolved template arguments as value
                 // syntax when the owning class's aliases are not yet visible.
-                if (ast[a].kind == Kind::IdExpression) {
-                    auto argument = bind_template_name(ast[a].detail,s);
+                if (ast.kind(a) == Kind::IdExpression) {
+                    auto argument = bind_template_name(ast.detail(a),s);
                     if (argument.dependent || (argument.entity && (entities[argument.entity].kind == EntityKind::Type || entities[argument.entity].kind == EntityKind::Alias))) {
                         r.dependent |= argument.dependent; continue;
                     }
                 }
-                if (ast[a].kind == Kind::Call && ast[ast[a].first].kind == Kind::IdExpression) {
-                    auto target = bind_template_name(ast[ast[a].first].detail,s).entity;
+                if (ast.kind(a) == Kind::Call && ast.kind(ast.first(a)) == Kind::IdExpression) {
+                    auto target = bind_template_name(ast.detail(ast.first(a)),s).entity;
                     if (target && (entities[target].kind == EntityKind::Type || entities[target].kind == EntityKind::Alias)) {
                         auto argument = template_argument_node(a,s);
                         if (argument && !value_argument(argument)) {
@@ -81,7 +81,7 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
                 r.dependent |= bind_template_expression(a,s);
             }
             if (r.dependent && entities[e].template_info)
-                for (auto a = ast[args].first; a; a = ast[a].next) template_argument_node(a,s);
+                for (auto a = ast.first(args); a; a = ast.next(a)) template_argument_node(a,s);
             if (!r.dependent && !entities[e].template_pattern) {
                 r.entity = e = class_template_name(p,e,s);
                 r.entity = e = variable_template_name(p,e,s);
@@ -92,8 +92,8 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
         if (r.dependent) {
             if (!ast.nodes.occurrences[n].context) {
                 NodeId previous = p, prefix_part = 0, missing = 0;
-                for (auto next = ast[p].next; next; previous = next, next = ast[next].next) {
-                    if (child(next,Kind::TemplateArguments) && !(ast[next].flags & 1)) {
+                for (auto next = ast.next(p); next; previous = next, next = ast.next(next)) {
+                    if (child(next,Kind::TemplateArguments) && !(ast.flags(next) & 1)) {
                         prefix_part = previous; missing = next;
                     }
                     if (next == last) break;
@@ -104,7 +104,7 @@ TemplateBinding Analyzer::bind_template_name(NodeId n, ScopeId s, NodeId last)
                     auto type = type_name(n,s,prefix_part);
                     if (dependent_type(type)) {
                         auto current = current_instantiation_scope(type,s);
-                        auto member = current ? lookup(current,ast[missing].text,Lookup::Ordinary,true) : 0;
+                        auto member = current ? lookup(current,ast.text(missing),Lookup::Ordinary,true) : 0;
                         bool known = false;
                         for (auto candidate : candidates(member)) known |= entities[candidate].template_info != 0;
                         if (!known) throw std::runtime_error("dependent qualified template requires template");
@@ -130,22 +130,22 @@ bool Analyzer::bind_template_expression(NodeId n, ScopeId s, bool callee)
         bool& active; bool prior;
         Context(bool& a, bool excluded) : active(a), prior(a) { if (excluded) active = false; }
         ~Context() { active = prior; }
-    } context(template_coroutine_context,n && (ast[n].kind == Kind::DefaultArgument ||
-        ast[n].kind == Kind::Decltype || ast[n].kind == Kind::Sizeof ||
-        ast[n].kind == Kind::TypeTrait || ast[n].kind == Kind::Noexcept));
+    } context(template_coroutine_context,n && (ast.kind(n) == Kind::DefaultArgument ||
+        ast.kind(n) == Kind::Decltype || ast.kind(n) == Kind::Sizeof ||
+        ast.kind(n) == Kind::TypeTrait || ast.kind(n) == Kind::Noexcept));
     bool dependent = bind_template_expression_impl(n,s,callee);
     if (n && !ast.nodes.occurrences[n].context) {
-        auto kind = ast[n].kind;
+        auto kind = ast.kind(n);
         if (dependent && template_body_values) {
             template_value_dependence.put(ast.nodes.occurrences[n].source,1);
-            if (kind == Kind::Sizeof || kind == Kind::SizeofPack || (kind == Kind::TypeTrait && BuiltinTrait(ast[n].flags) != BuiltinTrait::Offsetof)) bind_template_size(n,s);
+            if (kind == Kind::Sizeof || kind == Kind::SizeofPack || (kind == Kind::TypeTrait && BuiltinTrait(ast.flags(n)) != BuiltinTrait::Offsetof)) bind_template_size(n,s);
         }
         // Value dependence alone does not change scalar operand types or the
         // selected built-in conversions. Each checker still requires complete
         // fixed operand facts before publishing its source semantic decision.
         bool scalar = kind == Kind::IdExpression || kind == Kind::Binary || kind == Kind::Assignment || kind == Kind::Conditional ||
             kind == Kind::Unary || kind == Kind::Postfix || kind == Kind::Parenthesized || kind == Kind::Subscript ||
-            kind == Kind::Call || kind == Kind::Member || kind == Kind::Cast || ast[n].op == KW_TYPEID;
+            kind == Kind::Call || kind == Kind::Member || kind == Kind::Cast || ast.op(n) == KW_TYPEID;
         if (!dependent || (template_body_values && scalar)) check_fixed_expression(n,s);
     }
     return dependent;
@@ -166,13 +166,13 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
     auto node = ast[n];
     if (node.kind == Kind::Await || node.kind == Kind::Yield) {
         check_coroutine_context(s);
-        for (auto c = node.first; c; c = ast[c].next) bind_template_expression(c,s);
+        for (auto c = node.first; c; c = ast.next(c)) bind_template_expression(c,s);
         // The promise/awaiter protocol is an obligation of the demanded
         // coroutine, even when an operand itself has a nondependent type.
         return true;
     }
     if (node.kind == Kind::Fold) {
-        for (auto c = node.first; c; c = ast[c].next) bind_template_expression(c,s);
+        for (auto c = node.first; c; c = ast.next(c)) bind_template_expression(c,s);
         fold_query(n,s); return true;
     }
     if (node.kind == Kind::FunctionName) return true;
@@ -193,7 +193,7 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
     if (node.kind == Kind::IdExpression) {
         auto name = node.detail;
         if (callee && fundamental_cast_type(node.op)) return false;
-        if (callee && ast[name].kind == Kind::TypeId) return bind_template_expression(name,s);
+        if (callee && ast.kind(name) == Kind::TypeId) return bind_template_expression(name,s);
         auto binding = bind_template_name(name,s);
         auto e = binding.entity;
         if (!binding.dependent && check_template_field(n,s,e)) return false;
@@ -212,13 +212,13 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
     if (node.kind == Kind::Call) {
         bool dependent = false;
         auto fn = node.first;
-        for (auto a = ast[ast[fn].next].first; a; a = ast[a].next) dependent |= bind_template_expression(a,s);
+        for (auto a = ast.first(ast.next(fn)); a; a = ast.next(a)) dependent |= bind_template_expression(a,s);
         dependent |= bind_template_expression(fn,s,true);
-        if (ast[fn].kind == Kind::IdExpression && !fundamental_cast_type(ast[fn].op) && ast[ast[fn].detail].kind != Kind::TypeId) {
-            auto name = ast[fn].detail; auto binding = bind_template_name(name,s);
+        if (ast.kind(fn) == Kind::IdExpression && !fundamental_cast_type(ast.op(fn)) && ast.kind(ast.detail(fn)) != Kind::TypeId) {
+            auto name = ast.detail(fn); auto binding = bind_template_name(name,s);
             auto id = terminal(name);
             if (!binding.entity && !binding.dependent &&
-                (!dependent || ast[name].first != ast[name].last || ast[name].op == OP_COLON2) &&
+                (!dependent || ast.first(name) != ast.last(name) || ast.op(name) == OP_COLON2) &&
                 id != constant_builtin && id != abort_builtin && id != expect_builtin)
                 query_fact(expression_query(n,s));
         }
@@ -226,27 +226,27 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
     }
     if (node.kind == Kind::Member) {
         bool dependent = bind_template_expression(node.first,s);
-        auto name = ast[ast[node.first].next].detail;
-        for (auto p = ast[name].first; p; p = ast[p].next)
+        auto name = ast.detail(ast.next(node.first));
+        for (auto p = ast.first(name); p; p = ast.next(p))
             if (auto args = child(p,Kind::TemplateArguments))
-                for (auto a = ast[args].first; a; a = ast[a].next)
+                for (auto a = ast.first(args); a; a = ast.next(a))
                     dependent |= dependent_argument(template_argument_node(a,s));
         auto receiver = node.first;
-        while (ast[receiver].kind == Kind::Parenthesized) receiver = ast[receiver].first;
-        bool current = node.op == OP_ARROW && ast[receiver].kind == Kind::KeywordLiteral && ast[receiver].op == KW_THIS;
-        if (node.op == OP_DOT && ast[receiver].kind == Kind::Unary && ast[receiver].op == OP_STAR) {
-            receiver = ast[receiver].first;
-            while (ast[receiver].kind == Kind::Parenthesized) receiver = ast[receiver].first;
-            current = ast[receiver].kind == Kind::KeywordLiteral && ast[receiver].op == KW_THIS;
+        while (ast.kind(receiver) == Kind::Parenthesized) receiver = ast.first(receiver);
+        bool current = node.op == OP_ARROW && ast.kind(receiver) == Kind::KeywordLiteral && ast.op(receiver) == KW_THIS;
+        if (node.op == OP_DOT && ast.kind(receiver) == Kind::Unary && ast.op(receiver) == OP_STAR) {
+            receiver = ast.first(receiver);
+            while (ast.kind(receiver) == Kind::Parenthesized) receiver = ast.first(receiver);
+            current = ast.kind(receiver) == Kind::KeywordLiteral && ast.op(receiver) == KW_THIS;
         }
         auto object = template_object_context(s);
         if (dependent && !ast.nodes.occurrences[n].context) {
-            auto part = ast[name].last;
-            if (child(part,Kind::TemplateArguments) && ast[part].op != OP_COMPL && !(ast[part].flags & 1)) {
+            auto part = ast.last(name);
+            if (child(part,Kind::TemplateArguments) && ast.op(part) != OP_COMPL && !(ast.flags(part) & 1)) {
                 TypeId type = 0;
-                if (part != ast[name].first) {
-                    auto previous = ast[name].first;
-                    while (ast[previous].next != part) previous = ast[previous].next;
+                if (part != ast.first(name)) {
+                    auto previous = ast.first(name);
+                    while (ast.next(previous) != part) previous = ast.next(previous);
                     auto qualifier = bind_template_name(name,s,previous);
                     if (qualifier.entity || qualifier.dependent) type = type_name(name,s,previous);
                     else throw std::runtime_error("unknown dependent qualifier requires template");
@@ -258,14 +258,14 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
                 }
                 if (dependent_type(type)) {
                     auto owner = current_instantiation_scope(type,s);
-                    auto member = owner ? lookup(owner,ast[part].text,Lookup::Ordinary,true) : 0;
+                    auto member = owner ? lookup(owner,ast.text(part),Lookup::Ordinary,true) : 0;
                     bool known = false;
                     for (auto candidate : candidates(member)) known |= entities[candidate].template_info != 0;
                     if (!known) throw std::runtime_error("dependent member template requires template");
                 }
             }
         }
-        if (current && object.owner && ast[name].first == ast[name].last && !child(ast[name].last,Kind::TemplateArguments)) {
+        if (current && object.owner && ast.first(name) == ast.last(name) && !child(ast.last(name),Kind::TemplateArguments)) {
             auto field = lookup(entities[object.owner].scope,terminal(name),Lookup::Ordinary,true);
             if (check_template_field(n,s,field,true)) return false;
         }
@@ -281,19 +281,19 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
     if (node.kind == Kind::Identifier) return false; // A declaration's own name.
     if (node.kind == Kind::TypeTrait && BuiltinTrait(node.flags) == BuiltinTrait::Offsetof) {
         bool dependent = dependent_type(type_id(node.first,s));
-        for (auto c = ast[node.first].next; c; c = ast[c].next)
-            if (ast[c].kind == Kind::Subscript) dependent |= bind_template_expression(ast[c].first,s);
+        for (auto c = ast.next(node.first); c; c = ast.next(c))
+            if (ast.kind(c) == Kind::Subscript) dependent |= bind_template_expression(ast.first(c),s);
         return dependent;
     }
     if (node.kind == Kind::TypeTrait && node.flags) {
         bool dependent = false;
-        for (auto c = node.first; c; c = ast[c].next)
+        for (auto c = node.first; c; c = ast.next(c))
             dependent |= dependent_argument(template_argument_node(c,s));
         return dependent;
     }
     if (node.kind == Kind::Sizeof || node.kind == Kind::TypeTrait) {
         ++unevaluated_depth; bool dependent = false;
-        try { for (auto c = node.first; c; c = ast[c].next) dependent |= bind_template_expression(c,s); }
+        try { for (auto c = node.first; c; c = ast.next(c)) dependent |= bind_template_expression(c,s); }
         catch (...) { --unevaluated_depth; throw; }
         --unevaluated_depth; return dependent;
     }
@@ -303,7 +303,7 @@ bool Analyzer::bind_template_expression_impl(NodeId n, ScopeId s, bool callee)
     }
     bool dependent = node.kind == Kind::KeywordLiteral && node.op == KW_THIS;
     if (node.detail) dependent |= bind_template_expression(node.detail,s);
-    for (auto c = node.first; c; c = ast[c].next) dependent |= bind_template_expression(c,s);
+    for (auto c = node.first; c; c = ast.next(c)) dependent |= bind_template_expression(c,s);
     return dependent;
 }
 void Analyzer::bind_template_body(const Body& body)
@@ -336,13 +336,13 @@ void Analyzer::bind_template_body(const Body& body)
     auto d = body.declarator; NodeId params = 0;
     while (d) {
         if (auto p = child(d,Kind::Parameters)) params = p;
-        auto nested = child(d,Kind::NestedDeclarator); d = nested ? ast[nested].first : 0;
+        auto nested = child(d,Kind::NestedDeclarator); d = nested ? ast.first(nested) : 0;
     }
     bind_template_object_context(fs,params);
     unsigned ordinal = 0;
-    for (auto p = ast[params].first; p; p = ast[p].next) {
-        if (ast[p].kind != Kind::Parameter) continue;
-        auto specs = ast[p].first, decl = ast[specs].next;
+    for (auto p = ast.first(params); p; p = ast.next(p)) {
+        if (ast.kind(p) != Kind::Parameter) continue;
+        auto specs = ast.first(p), decl = ast.next(specs);
         bool dependent = bind_template_expression(specs,fs) | bind_template_expression(decl,fs);
         auto declared_type = facts[p].type;
         if (!declared_type) declared_type = bind_template_type(specs,decl,fs);
@@ -365,16 +365,16 @@ void Analyzer::bind_template_body(const Body& body)
     } value_binding(template_body_values,template_coroutine_context);
     // A lambda's declarator sees its parameter names. Retain fixed lookup
     // here, before later declarations can affect an enclosing instantiation.
-    if (ast[body.declarator].kind == Kind::LambdaDeclarator)
-        for (auto q = ast[body.declarator].first; q; q = ast[q].next)
-            if ((ast[q].kind == Kind::FunctionQualifier || ast[q].kind == Kind::Noexcept) && ast[q].op == KW_NOEXCEPT && ast[q].first)
-                bind_template_expression(ast[q].first,fs);
+    if (ast.kind(body.declarator) == Kind::LambdaDeclarator)
+        for (auto q = ast.first(body.declarator); q; q = ast.next(q))
+            if ((ast.kind(q) == Kind::FunctionQualifier || ast.kind(q) == Kind::Noexcept) && ast.op(q) == KW_NOEXCEPT && ast.first(q))
+                bind_template_expression(ast.first(q),fs);
     auto ctor_initializers = child(body.source,Kind::CtorInitializer);
     if (!ctor_initializers) ctor_initializers = child(body.node,Kind::CtorInitializer);
-    for (auto item = ast[ctor_initializers].first; item; item = ast[item].next) {
+    for (auto item = ast.first(ctor_initializers); item; item = ast.next(item)) {
         auto id = child(item,Kind::MemInitializerId);
-        bind_template_expression(ast[id].detail,fs);
-        bind_template_expression(ast[id].next,fs);
+        bind_template_expression(ast.detail(id),fs);
+        bind_template_expression(ast.next(id),fs);
     }
     bind_template_statement(body.node,fs);
     check_jumps(body.node,true);

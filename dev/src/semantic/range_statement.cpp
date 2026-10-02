@@ -4,12 +4,12 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 Expression Analyzer::range_initializer(NodeId source, ScopeId s, bool pattern)
 {
-    if (ast[source].kind != Kind::BracedInit)
+    if (ast.kind(source) != Kind::BracedInit)
         return pattern ? template_statement_value(source,s) : expression(source,s);
     TypeId element = 0; std::uint64_t count = 0;
     if (!pattern) expand_expression_list(source,s);
-    for (auto c = ast[source].first; c; c = ast[c].next) {
-        if (pattern && ast[c].kind == Kind::PackExpression) return Expression();
+    for (auto c = ast.first(source); c; c = ast.next(c)) {
+        if (pattern && ast.kind(c) == Kind::PackExpression) return Expression();
         auto value = pattern ? template_statement_value(c,s) : expression(c,s);
         if (!value.type || dependent_type(value.type)) return Expression();
         auto t = types.unqualified(decay(value.type));
@@ -67,13 +67,13 @@ RangePlan Analyzer::range_shape(Expression range, ScopeId s)
 void Analyzer::resolve_range(NodeId n, ScopeId s)
 {
     auto control = make_scope(ScopeKind::Control,s); facts.edit(n).scope = control;
-    auto declaration = ast[n].first, specs = ast[declaration].first, d = ast[specs].next;
-    RangePlan plan; plan.source = ast[ast[declaration].next].first; plan.body = ast[n].last;
+    auto declaration = ast.first(n), specs = ast.first(declaration), d = ast.next(specs);
+    RangePlan plan; plan.source = ast.first(ast.next(declaration)); plan.body = ast.last(n);
     Expression range;
     range = range_initializer(plan.source,control);
     auto direct = plan.source;
-    while (ast[direct].kind == Kind::Parenthesized) direct = ast[direct].first;
-    bool direct_object = ast[direct].kind == Kind::IdExpression && range.entity &&
+    while (ast.kind(direct) == Kind::Parenthesized) direct = ast.first(direct);
+    bool direct_object = ast.kind(direct) == Kind::IdExpression && range.entity &&
         !nonstatic_field(range.entity) && range.category == ValueCategory::Lvalue;
     if (direct_object) observe_scalar(direct); // Iteration uses the object's storage, even when const.
     // A captured declaration keeps its original entity identity, but its
@@ -85,7 +85,7 @@ void Analyzer::resolve_range(NodeId n, ScopeId s)
         // A class/array prvalue is constructed directly in its lifetime-extended
         // storage. Other glvalues bind a hidden reference, evaluated only once.
         auto t = range.category == ValueCategory::Prvalue &&
-            (types[range.type].kind != TypeKind::Array || ast[plan.source].kind == Kind::BracedInit) ? range.type :
+            (types[range.type].kind != TypeKind::Array || ast.kind(plan.source) == Kind::BracedInit) ? range.type :
             types.compound(range.category == ValueCategory::Lvalue ? TypeKind::LRef : TypeKind::RRef,range.type);
         plan.range = make_entity(EntityKind::Variable,control,0,plan.source);
         entities[plan.range].type = t; entities[plan.range].initializer = plan.source;
@@ -157,15 +157,15 @@ void Analyzer::resolve_range(NodeId n, ScopeId s)
     }
     auto index = ranges.size(); ranges.push_back(plan); range_index.put(n,index);
     ++loop_depth;
-    resolve_statement(plan.body,ast[plan.body].kind == Kind::Compound ? control : make_scope(ScopeKind::Block,control));
+    resolve_statement(plan.body,ast.kind(plan.body) == Kind::Compound ? control : make_scope(ScopeKind::Block,control));
     --loop_depth;
 }
 void Analyzer::bind_template_range(NodeId n, ScopeId s)
 {
     auto control = make_scope(ScopeKind::Control,s,0,0,false);
     template_pattern_scopes.put(control,1); facts.edit(n).scope = control;
-    auto declaration = ast[n].first, specs = ast[declaration].first, d = ast[specs].next;
-    auto source = ast[ast[declaration].next].first;
+    auto declaration = ast.first(n), specs = ast.first(declaration), d = ast.next(specs);
+    auto source = ast.first(ast.next(declaration));
     bind_template_expression(source,control);
     auto value = range_initializer(source,control,true);
     RangePlan shape; bool fixed = value.type && !dependent_type(value.type) && !pattern_class_type(value.type);
@@ -203,7 +203,7 @@ void Analyzer::bind_template_range(NodeId n, ScopeId s)
     entities[e].type = t; facts.edit(d).type = t; facts.edit(d).entity = e;
     if (decomposition) declare_bindings(d,control,e,true);
     ++loop_depth;
-    bind_template_statement(ast[n].last,control);
+    bind_template_statement(ast.last(n),control);
     --loop_depth;
 }
 } }

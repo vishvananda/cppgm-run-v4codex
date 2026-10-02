@@ -86,7 +86,7 @@ std::uint32_t Analyzer::constant_constructor(EntityId ctor)
     // Early static initialization is permitted only when the demanded body
     // has no effects and every action initializes this object's scalar fields.
     // Other bodies retain their ordinary dynamic initialization path.
-    if (member.transfer != TransferKind::None || member.inherited_constructor || ast[body].kind != syntax::Kind::Compound || ast[body].first) return index;
+    if (member.transfer != TransferKind::None || member.inherited_constructor || ast.kind(body) != syntax::Kind::Compound || ast.first(body)) return index;
     Index parameters;
     unsigned number = 0;
     for (auto d = scopes[entities[ctor].scope].first_decl; d; d = declarations[d].next) {
@@ -104,11 +104,11 @@ std::uint32_t Analyzer::constant_constructor(EntityId ctor)
             constructor_constant_actions.resize(summary.first); return index;
         }
         NodeId source = action.initializer;
-        while (ast[source].kind == syntax::Kind::Initializer || ast[source].kind == syntax::Kind::ParenArguments ||
-            ast[source].kind == syntax::Kind::ParenInitializer || ast[source].kind == syntax::Kind::BracedInit || ast[source].kind == syntax::Kind::Parenthesized)
+        while (ast.kind(source) == syntax::Kind::Initializer || ast.kind(source) == syntax::Kind::ParenArguments ||
+            ast.kind(source) == syntax::Kind::ParenInitializer || ast.kind(source) == syntax::Kind::BracedInit || ast.kind(source) == syntax::Kind::Parenthesized)
             if (conversions[expressions[source].incoming].kind == Conversion::Kind::List) break;
-            else source = ast[source].first;
-        unsigned parameter = ast[source].kind == syntax::Kind::IdExpression ? parameters.get(expressions[source].entity) : 0;
+            else source = ast.first(source);
+        unsigned parameter = ast.kind(source) == syntax::Kind::IdExpression ? parameters.get(expressions[source].entity) : 0;
         if (!parameter && static_value(source, action.type).kind == StaticValue::Invalid) {
             constructor_constant_actions.resize(summary.first); return index;
         }

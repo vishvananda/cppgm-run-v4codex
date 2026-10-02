@@ -3,7 +3,7 @@
 namespace cppgm { namespace semantic {
 Expression Analyzer::numeric_literal_call(NodeId n, ScopeId s)
 {
-    auto lit = ast.literals[ast[n].literal];
+    auto lit = ast.literals[ast.literal(n)];
     auto cooked = lit.kind == LiteralKind::integer ? types.fundamental(FT_UNSIGNED_LONG_LONG_INT) :
         lit.kind == LiteralKind::floating ? types.fundamental(FT_LONG_DOUBLE) : types.fundamental(lit.type);
     auto raw_type = types.compound(TypeKind::Pointer,types.qualify(types.fundamental(FT_CHAR),1));

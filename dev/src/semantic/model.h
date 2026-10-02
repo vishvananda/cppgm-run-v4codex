@@ -79,13 +79,15 @@ class Types {
     std::vector<TypeId> slots;
     std::vector<std::uint64_t> hashes;
     std::vector<TypeId> signatures, adjustments, alias_targets;
+    TypeId fundamentals[FT_STDFLOAT128+1] = {};
+    TypeId make_fundamental(EFundamentalType f);
     TypeId intern(Type type, const std::vector<TypeId>& params);
 public:
     Types();
     std::vector<Type> records;
     std::vector<TypeId> parameters;
     std::size_t probes = 0, signature_work = 0;
-    TypeId fundamental(EFundamentalType f);
+    TypeId fundamental(EFundamentalType f) { return fundamentals[f] ? fundamentals[f] : make_fundamental(f); }
     TypeId bit_integer(unsigned width, bool unsign);
     TypeId named(EntityId e);
     TypeId alias_application(EntityId alias, TypeId result, std::uint32_t arguments);

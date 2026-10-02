@@ -19,21 +19,21 @@ void Procedural::discard(NodeId n, bool access)
         construct_value(n,discarded,destination);
         activate_temporary(temporary); return;
     }
-    while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
+    while (ast.kind(n) == Kind::Parenthesized) n = ast.first(n);
     if (sem.expression_fact(n).form == semantic::ExpressionForm::OperatorCall) { expression(n); return; }
     // A discarded address still evaluates its source, but a plain name or
     // dot projection has no value access of its own.
     if (!access && sem.expression_fact(n).form == semantic::ExpressionForm::Ordinary) {
-        if (ast[n].kind == Kind::IdExpression) return;
-        if (ast[n].kind == Kind::Member && ast[n].op != OP_ARROW) { discard(ast[n].first, false); return; }
+        if (ast.kind(n) == Kind::IdExpression) return;
+        if (ast.kind(n) == Kind::Member && ast.op(n) != OP_ARROW) { discard(ast.first(n), false); return; }
     }
-    if (ast[n].kind == Kind::Conditional) {
+    if (ast.kind(n) == Kind::Conditional) {
         // Prvalue arms undergo their normal conversions even if discarded.
         // A discarded volatile glvalue is read only for the forms in
         // [expr]/11; a conditional requires both arms to qualify.
         if (sem.expression_fact(n).category == ValueCategory::Prvalue) { expression(n); return; }
         access = access && discarded_access(n);
-        NodeId a = ast[n].first, b = ast[a].next, c = ast[b].next;
+        NodeId a = ast.first(n), b = ast.next(a), c = ast.next(b);
         auto conversion = sem.conversion_fact(sem.expression_fact(n).conversions);
         Value test = conversion.kind == semantic::Conversion::Kind::User ? user_conversion(a,conversion,Value(),true) : load(expression(a));
         test = truth_operand(test);
@@ -46,16 +46,16 @@ void Procedural::discard(NodeId n, bool access)
         start(no); live = common; discard(c, access); auto no_live = live; jump(end);
         start(end); merge_temporaries(common,yes_live,no_live,selector); return;
     }
-    if (ast[n].kind == Kind::Binary && ast[n].op == OP_COMMA) {
-        discard(ast[n].first); discard(ast[ast[n].first].next, access); return;
+    if (ast.kind(n) == Kind::Binary && ast.op(n) == OP_COMMA) {
+        discard(ast.first(n)); discard(ast.next(ast.first(n)), access); return;
     }
     Value value = expression(n);
     if (access && value.address && (sem.types[value.type].cv & 2) && discarded_access(n)) load(value);
 }
 void Procedural::condition(NodeId n, BlockId yes, BlockId no)
 {
-    if (ast[n].kind == Kind::Condition) {
-        if (!ast[n].first) { jump(yes); return; }
+    if (ast.kind(n) == Kind::Condition) {
+        if (!ast.first(n)) { jump(yes); return; }
         if (sem.facts[n].entity) {
             object(sem.facts[n].entity);
             auto c = sem.conversion_fact(sem.expression_fact(n).conversions);
@@ -69,25 +69,25 @@ void Procedural::condition(NodeId n, BlockId yes, BlockId no)
             finish_full_expression(initial);
             emit(Opcode::Branch, IRType(), {v.operand, Operand::label(yes), Operand::label(no)}); return;
         }
-        n = ast[n].first;
+        n = ast.first(n);
     }
-    while (ast[n].kind == Kind::Parenthesized &&
-        sem.conversion_fact(sem.expression_fact(n).incoming).kind != semantic::Conversion::Kind::User) n = ast[n].first;
-    if (ast[n].kind == Kind::KeywordLiteral && (ast[n].op == KW_TRUE || ast[n].op == KW_FALSE)) {
-        jump(ast[n].op == KW_TRUE ? yes : no); return;
+    while (ast.kind(n) == Kind::Parenthesized &&
+        sem.conversion_fact(sem.expression_fact(n).incoming).kind != semantic::Conversion::Kind::User) n = ast.first(n);
+    if (ast.kind(n) == Kind::KeywordLiteral && (ast.op(n) == KW_TRUE || ast.op(n) == KW_FALSE)) {
+        jump(ast.op(n) == KW_TRUE ? yes : no); return;
     }
     // Semantic constant names carry the same boolean fact as a literal.
     // Consume that fact directly; this does not evaluate or rescan expressions.
-    if (ast[n].kind == Kind::IdExpression && sem.facts[n].value &&
+    if (ast.kind(n) == Kind::IdExpression && sem.facts[n].value &&
         type(sem.expression_fact(n).type).integer() &&
         !(sem.types[sem.expression_fact(n).type].cv & 2)) {
         auto value = sem.constant_fact(n);
         if (value.valid) { jump(value.bits ? yes : no); return; }
     }
-    if (!cleanup_expression(n) && sem.expression_fact(n).form != semantic::ExpressionForm::OperatorCall && ast[n].kind == Kind::Binary && (ast[n].op == OP_LAND || ast[n].op == OP_LOR)) {
-        BlockId rhs = block(); bool land = ast[n].op == OP_LAND;
-        condition(ast[n].first, land ? rhs : yes, land ? no : rhs);
-        start(rhs); condition(ast[ast[n].first].next, yes, no); return;
+    if (!cleanup_expression(n) && sem.expression_fact(n).form != semantic::ExpressionForm::OperatorCall && ast.kind(n) == Kind::Binary && (ast.op(n) == OP_LAND || ast.op(n) == OP_LOR)) {
+        BlockId rhs = block(); bool land = ast.op(n) == OP_LAND;
+        condition(ast.first(n), land ? rhs : yes, land ? no : rhs);
+        start(rhs); condition(ast.next(ast.first(n)), yes, no); return;
     }
     auto initial = live;
     begin_full_expression(n);
@@ -118,7 +118,7 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
     location |= sem.types[target].kind == TypeKind::Array || sem.types[target].kind == TypeKind::Function;
     IRType ir = location ? IRType(IRType::Ptr) : type(consumed_type);
     bool has_result = ir != IRType::Void;
-    NodeId a = ast[n].first, b = ast[a].next, c = ast[b].next;
+    NodeId a = ast.first(n), b = ast.next(a), c = ast.next(b);
     auto test_conversion = sem.conversion_fact(fact.conversions);
     bool summarized = test_conversion.kind == semantic::Conversion::Kind::User &&
         sem.conversion_result(test_conversion.function).valid;
@@ -219,11 +219,11 @@ Value Procedural::conditional(NodeId n, bool location, Value destination, std::u
 }
 Value Procedural::logical(NodeId n)
 {
-    bool land = ast[n].op == OP_LAND;
+    bool land = ast.op(n) == OP_LAND;
     // Only a terminal logical result may retire its RHS before the join.
     // Nested operands keep their lifetimes until the enclosing consumer ends.
     bool terminal = n == full_expression.terminal_value;
-    NodeId a = ast[n].first, b = ast[a].next;
+    NodeId a = ast.first(n), b = ast.next(a);
     // Value context materializes a canonical truth slot. Condition context is
     // handled independently by condition(), without introducing that storage.
     auto fact = sem.expression_fact(n);
@@ -264,17 +264,17 @@ Value Procedural::logical(NodeId n)
 }
 void Procedural::collect_cases(NodeId n, std::vector<NodeId>& cases, NodeId& fallback)
 {
-    if (!n || ast[n].kind == Kind::Switch) return;
-    if (ast[n].kind == Kind::Case) { labels[n] = block(); cases.push_back(n); }
-    if (ast[n].kind == Kind::Default) { labels[n] = block(); fallback = n; }
-    for (NodeId c = ast[n].first; c; c = ast[c].next) collect_cases(c, cases, fallback);
+    if (!n || ast.kind(n) == Kind::Switch) return;
+    if (ast.kind(n) == Kind::Case) { labels[n] = block(); cases.push_back(n); }
+    if (ast.kind(n) == Kind::Default) { labels[n] = block(); fallback = n; }
+    for (NodeId c = ast.first(n); c; c = ast.next(c)) collect_cases(c, cases, fallback);
 }
 bool Procedural::mark_control_entries(NodeId n)
 {
     if (!n) return false;
     ++control_work;
-    Kind k = ast[n].kind;
-    if (k == Kind::If && (ast[n].flags & 1) && sem.facts[n].value) {
+    Kind k = ast.kind(n);
+    if (k == Kind::If && (ast.flags(n) & 1) && sem.facts[n].value) {
         auto initial = mark_control_entries(child(n,Kind::SelectionInit));
         auto selected = mark_control_entries(child(n,sem.constant_fact(n).bits ? Kind::Then : Kind::Else));
         return control_entries[n] = initial || selected;
@@ -285,7 +285,7 @@ bool Procedural::mark_control_entries(NodeId n)
     case Kind::Case: case Kind::Default: case Kind::If: case Kind::Switch:
     case Kind::While: case Kind::Do: case Kind::For: case Kind::RangeFor:
     case Kind::Try: case Kind::Handler:
-        for (NodeId c = ast[n].first; c; c = ast[c].next)
+        for (NodeId c = ast.first(n); c; c = ast.next(c))
             entry |= mark_control_entries(c);
         break;
     default: break;
@@ -296,7 +296,7 @@ void Procedural::switch_statement(NodeId n)
 {
     auto lifetime = lifetime_use(n);
     statement(child(n,Kind::SelectionInit));
-    NodeId cond = child(n, Kind::Condition), body = ast[cond].next;
+    NodeId cond = child(n, Kind::Condition), body = ast.next(cond);
     Value value;
     if (sem.facts[cond].entity) {
         object(sem.facts[cond].entity);
@@ -309,8 +309,8 @@ void Procedural::switch_statement(NodeId n)
         finish_full_expression(initial);
     }
     else {
-        auto initial = live; begin_full_expression(ast[cond].first);
-        value = incoming(ast[cond].first); finish_full_expression(initial);
+        auto initial = live; begin_full_expression(ast.first(cond));
+        value = incoming(ast.first(cond)); finish_full_expression(initial);
     }
     BlockId dispatch = block(), end = block(), saved = break_target;
     BlockId cleanup = lifetime.exit != lifetime.entry ? block() : end;
@@ -320,7 +320,7 @@ void Procedural::switch_statement(NodeId n)
     jump(dispatch); start(dispatch);
     std::vector<Operand> operands{value.operand, Operand::label(fallback ? labels[fallback] : cleanup)};
     for (NodeId c : cases) {
-        auto constant = sem.constant_fact(ast[c].first);
+        auto constant = sem.constant_fact(ast.first(c));
         if (!constant.valid) throw std::logic_error("missing semantic case value");
         operands.push_back(integer_operand(constant)); operands.push_back(Operand::label(labels[c]));
     }
@@ -335,20 +335,20 @@ void Procedural::statement(NodeId n)
 {
     DebugScope debug(current_debug,debug_location(n));
     if (!n) return;
-    Kind k = ast[n].kind;
+    Kind k = ast.kind(n);
     auto lifetime = lifetime_use(n); live = lifetime.entry;
     if (k == Kind::Compound || k == Kind::Then || k == Kind::Else) {
-        for (NodeId c = ast[n].first; c; c = ast[c].next) statement(c);
+        for (NodeId c = ast.first(n); c; c = ast.next(c)) statement(c);
         if (!ended) clean_inline(lifetime.exit, lifetime.entry);
         live = lifetime.entry; return;
     }
     if (k == Kind::Label) {
         if (!labels[n] || p.blocks[labels[n].index-1].owner.index != function.index) labels[n] = block();
-        jump(labels[n]); start(labels[n]); statement(ast[n].first); return;
+        jump(labels[n]); start(labels[n]); statement(ast.first(n)); return;
     }
     if (k == Kind::Case || k == Kind::Default) {
         jump(labels[n]); start(labels[n]);
-        statement(k == Kind::Case ? ast[ast[n].first].next : ast[n].first); return;
+        statement(k == Kind::Case ? ast.next(ast.first(n)) : ast.first(n)); return;
     }
     if (ended) {
         if (!control_entries[n]) return;
@@ -369,18 +369,18 @@ void Procedural::statement(NodeId n)
     case Kind::SimpleDeclaration: {
         if (auto e = sem.anonymous_object(n)) object(e);
         NodeId list = child(n, Kind::InitDeclarators);
-        for (NodeId item = ast[list].first; item; item = ast[item].next) {
-            EntityId e = sem.facts[ast[item].first].entity;
+        for (NodeId item = ast.first(list); item; item = ast.next(item)) {
+            EntityId e = sem.facts[ast.first(item)].entity;
             if (e && sem.entities[e].kind == semantic::EntityKind::Variable) object(e);
         }
         return;
     }
     case Kind::SelectionInit:
-        for (NodeId c = ast[n].first; c; c = ast[c].next) statement(c);
+        for (NodeId c = ast.first(n); c; c = ast.next(c)) statement(c);
         return;
     case Kind::ExpressionStatement: case Kind::Iteration: case Kind::ForInit:
-        for (NodeId c = ast[n].first; c; c = ast[c].next) {
-            if (ast[c].kind == Kind::SimpleDeclaration) statement(c);
+        for (NodeId c = ast.first(n); c; c = ast.next(c)) {
+            if (ast.kind(c) == Kind::SimpleDeclaration) statement(c);
             else { begin_full_expression(c); discard(c); finish_full_expression(lifetime.entry); }
         }
         return;
@@ -402,7 +402,7 @@ void Procedural::statement(NodeId n)
     case Kind::Continue: exit_exception_contexts(sem.jump_exception_targets.get(n),lifetime.target); jump(continue_target); return;
     case Kind::If: {
         statement(child(n,Kind::SelectionInit));
-        if (ast[n].flags & 1) {
+        if (ast.flags(n) & 1) {
             if (!sem.facts[n].value) throw std::logic_error("constexpr if lacks selection fact");
             if (auto entity = sem.facts[child(n,Kind::Condition)].entity) object(entity);
             auto selected = sem.constant_fact(n).bits ? Kind::Then : Kind::Else;
@@ -431,7 +431,7 @@ void Procedural::statement(NodeId n)
             jump(cond); start(cond); condition(child(n, Kind::Condition), body, exit_cleanup);
         } else jump(body);
         start(body); break_target = end; continue_target = step;
-        NodeId body_node = k == Kind::Do ? ast[n].first : ast[n].last;
+        NodeId body_node = k == Kind::Do ? ast.first(n) : ast.last(n);
         statement(body_node);
         if (!ended) clean_inline(live, lifetime_use(body_node).entry);
         jump(step); break_target = old_break; continue_target = old_continue;

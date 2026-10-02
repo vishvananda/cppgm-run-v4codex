@@ -17,8 +17,8 @@ bool Analyzer::aggregate_type(TypeId t) const
 }
 bool Analyzer::string_initialization(NodeId n, TypeId t) const
 {
-    if (types[t].kind != TypeKind::Array || ast[n].kind != Kind::Literal) return false;
-    auto literal = ast.literals[ast[n].literal];
+    if (types[t].kind != TypeKind::Array || ast.kind(n) != Kind::Literal) return false;
+    auto literal = ast.literals[ast.literal(n)];
     if (literal.kind != LiteralKind::string || literal.suffix) return false;
     return string_array_type(literal.type,t);
 }
@@ -33,7 +33,7 @@ bool Analyzer::string_array_type(EFundamentalType from, TypeId t) const
 }
 std::uint32_t Analyzer::initializer_plan(NodeId n, TypeId t) const
 {
-    while (ast[n].kind == Kind::Initializer) n = ast[n].first;
+    while (ast.kind(n) == Kind::Initializer) n = ast.first(n);
     return initializer_index.get(key(n, t));
 }
 void Analyzer::list_conversion(NodeId n, TypeId target)
@@ -125,29 +125,29 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s, bo
     NodeId source = cursor;
     expand_expression_list(source,s);
     bool aggregate = aggregate_type(t) || vector_kind(types[t].kind);
-    bool braced = ast[source].kind == Kind::BracedInit || ast[source].kind == Kind::ParenArguments || ast[source].kind == Kind::ParenInitializer;
-    NodeId inner = braced ? ast[source].first : source;
-    if (aggregate && class_value(t) && !braced && ast[source].kind != Kind::DesignatedInit) {
+    bool braced = ast.kind(source) == Kind::BracedInit || ast.kind(source) == Kind::ParenArguments || ast.kind(source) == Kind::ParenInitializer;
+    NodeId inner = braced ? ast.first(source) : source;
+    if (aggregate && class_value(t) && !braced && ast.kind(source) != Kind::DesignatedInit) {
         expression(source,s);
         Conversion c = conversion(source,t);
         if (c.valid()) {
             record_class_initialization(source,t,source,&c);
             initializers[id].kind = InitKind::Constructor;
             initializers[id].helper_safe = false;
-            cursor = ast[source].next; return id;
+            cursor = ast.next(source); return id;
         }
         if (!elide) throw std::runtime_error("invalid designated aggregate conversion");
     }
     auto string = inner;
-    while (ast[string].kind == Kind::Parenthesized) string = ast[string].first;
+    while (ast.kind(string) == Kind::Parenthesized) string = ast.first(string);
     if (string_initialization(string, t)) {
-        if (braced && ast[ast[source].first].next) throw std::runtime_error("excess string initializer");
-        auto lit = ast.literals[ast[string].literal];
+        if (braced && ast.next(ast.first(source))) throw std::runtime_error("excess string initializer");
+        auto lit = ast.literals[ast.literal(string)];
         if (!types[t].unknown_bound && lit.elements > types[t].bound) throw std::runtime_error("string exceeds array bound");
         expression(string, s);
         expressions.evaluated(string,false); // Direct character initialization has no backing-array address use.
         initializers[id].source = string; initializers[id].kind = InitKind::String;
-        cursor = ast[source].next; return id;
+        cursor = ast.next(source); return id;
     }
     if (aggregate && !braced && !elide) throw std::runtime_error("designated aggregate requires braces or a matching value");
     if (!aggregate) {
@@ -157,15 +157,15 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s, bo
         } else {
             initialize(source, t, s, InitializationMode::Copy);
             NodeId scalar = source;
-            while (ast[scalar].kind == Kind::BracedInit || ast[scalar].kind == Kind::ParenArguments || ast[scalar].kind == Kind::ParenInitializer) {
+            while (ast.kind(scalar) == Kind::BracedInit || ast.kind(scalar) == Kind::ParenArguments || ast.kind(scalar) == Kind::ParenInitializer) {
                 if (conversions[expressions[scalar].incoming].kind == Conversion::Kind::List) break;
-                scalar = ast[scalar].first;
+                scalar = ast.first(scalar);
             }
             if (scalar && conversions[expressions[scalar].incoming].kind != Conversion::Kind::List) list_conversion(scalar, t);
             initializers[id].source = scalar;
             initializers[id].helper_safe = independent_initializer(scalar);
         }
-        cursor = ast[source].next; return id;
+        cursor = ast.next(source); return id;
     }
     initializers[id].kind = InitKind::Group;
     std::uint32_t tail = 0;
@@ -183,7 +183,7 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s, bo
     if (target.kind == TypeKind::Array || vector_kind(target.kind)) {
         std::uint64_t index = 0;
         while (inner && (target.unknown_bound || index < target.bound)) {
-            if (ast[inner].kind == Kind::DesignatedInit) throw std::runtime_error("member designator requires a class aggregate");
+            if (ast.kind(inner) == Kind::DesignatedInit) throw std::runtime_error("member designator requires a class aggregate");
             auto clause = inner;
             auto item = initializer_item(inner, target.child, s);
             if (inner == clause) throw std::runtime_error("array element consumed no initializer");
@@ -199,27 +199,27 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s, bo
         for (auto d = scopes[entities[target.entity].scope].first_decl; d; d = declarations[d].next) {
             EntityId field = declarations[d].entity;
             if (!nonstatic_field(field)) continue;
-            bool designated = ast[inner].kind == Kind::DesignatedInit;
-            if (designated && designated_storage(field,ast[inner].text)) {
+            bool designated = ast.kind(inner) == Kind::DesignatedInit;
+            if (designated && designated_storage(field,ast.text(inner))) {
                 auto item = initializer_item(inner,initialized_field_type(t,field),s);
                 initializers[item].field = field; append(item);
                 if (entities[target.entity].key == KW_UNION) break;
                 continue;
             }
-            auto clause = designated && ast[inner].text == entities[field].name ? ast[inner].first : designated ? 0 : inner;
+            auto clause = designated && ast.text(inner) == entities[field].name ? ast.first(inner) : designated ? 0 : inner;
             if (designated && !clause && entities[target.entity].key == KW_UNION) continue;
             auto item = initializer_item(clause, initialized_field_type(t, field), s, !designated);
             if (!designated) inner = clause;
-            else if (ast[inner].text == entities[field].name) {
+            else if (ast.text(inner) == entities[field].name) {
                 if (clause) throw std::runtime_error("excess designated member initializer");
-                inner = ast[inner].next;
+                inner = ast.next(inner);
             }
             initializers[item].field = field; append(item);
             if (entities[target.entity].key == KW_UNION) break;
         }
     }
     if (braced && inner) throw std::runtime_error("excess aggregate initializer");
-    cursor = braced ? ast[source].next : inner;
+    cursor = braced ? ast.next(source) : inner;
     return id;
 }
 bool Analyzer::zero_value(TypeId t)
@@ -256,21 +256,21 @@ bool Analyzer::initializer_work(std::uint32_t plan)
 void Analyzer::check_array_initializer(NodeId n, TypeId t) const
 {
     if (types[t].kind != TypeKind::Array) return;
-    while (ast[n].kind == Kind::Initializer) n = ast[n].first;
-    if (ast[n].kind == Kind::BracedInit) return;
-    if (ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) {
-        n = ast[n].first;
+    while (ast.kind(n) == Kind::Initializer) n = ast.first(n);
+    if (ast.kind(n) == Kind::BracedInit) return;
+    if (ast.kind(n) == Kind::ParenInitializer || ast.kind(n) == Kind::ParenArguments) {
+        n = ast.first(n);
         if (!n) return; // Value initialization, with a separately required bound.
-        if (ast[n].next) throw std::runtime_error("multiple parenthesized array initializers");
+        if (ast.next(n)) throw std::runtime_error("multiple parenthesized array initializers");
     }
-    while (ast[n].kind == Kind::Parenthesized) n = ast[n].first;
+    while (ast.kind(n) == Kind::Parenthesized) n = ast.first(n);
     if (!string_initialization(n,t)) throw std::runtime_error("array initializer requires braces or a string literal");
 }
 TypeId Analyzer::complete_array_initializer(NodeId n, TypeId t, ScopeId s, bool pattern)
 {
     check_array_initializer(n,t);
     if (!types[t].unknown_bound) return t; // A prior declaration may supply the bound.
-    while (ast[n].kind == Kind::Initializer) n = ast[n].first;
+    while (ast.kind(n) == Kind::Initializer) n = ast.first(n);
     if (pattern) {
         // Source checking records a fixed bound without demanding runtime
         // construction. An expansion or dependent brace-elision shape waits
@@ -286,7 +286,7 @@ TypeId Analyzer::complete_array_initializer(NodeId n, TypeId t, ScopeId s, bool 
     auto action = initializers[plan];
     std::uint64_t count = 0;
     if (action.kind == InitKind::String)
-        count = ast.literals[ast[action.source].literal].elements;
+        count = ast.literals[ast.literal(action.source)].elements;
     else for (auto c = action.first; c; c = initializers[c].next)
         count = initializers[c].index+initializers[c].count;
     if (!count) throw std::runtime_error("empty initializer for unknown-bound array");
@@ -303,7 +303,7 @@ void Analyzer::aggregate_initialization(NodeId n, TypeId t, ScopeId s)
     if (initializer_plan(n, t)) return;
     NodeId cursor = n;
     auto plan = initializer_item(cursor, t, s);
-    if (cursor && cursor != ast[n].next) throw std::runtime_error("excess initializer at object boundary");
+    if (cursor && cursor != ast.next(n)) throw std::runtime_error("excess initializer at object boundary");
     initializer_index.put(key(n, t), plan);
     { auto& published = facts.edit(n); published.type = t; published.scope = s; }
     auto value = expressions[n]; value.type = t; value.category = ValueCategory::Lvalue;

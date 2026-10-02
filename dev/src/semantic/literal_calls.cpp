@@ -11,7 +11,7 @@ IdentifierId Analyzer::literal_name(IdentifierId suffix)
 }
 Expression Analyzer::literal_call(NodeId n, ScopeId s)
 {
-    auto lit = ast.literals[ast[n].literal];
+    auto lit = ast.literals[ast.literal(n)];
     if (lit.kind != LiteralKind::string) return numeric_literal_call(n,s);
     TypeId pointer_type = types.compound(TypeKind::Pointer, types.qualify(types.fundamental(lit.type), 1));
     EntityId selected = 0;

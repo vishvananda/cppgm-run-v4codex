@@ -44,9 +44,9 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
     case Kind::Cast: {
         auto target = type_id(first,s);
         if (dependent_type(target)) return;
-        first = ast[first].next;
+        first = ast.next(first);
         if (!first) return;
-        if (node.op == OP_LPAREN && ast[first].kind == Kind::BracedInit) {
+        if (node.op == OP_LPAREN && ast.kind(first) == Kind::BracedInit) {
             if (check_fixed_cast(n,s,target,first)) {
                 template_fixed_expressions.put(source,n); ++template_fixed_work;
             }
@@ -80,7 +80,7 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
             if (query_fact(expression_query(n,s)).dependent) return;
             break;
         }
-        if (ast[first].kind == Kind::TypeId) {
+        if (ast.kind(first) == Kind::TypeId) {
             auto type = type_id(first,s);
             if (node.op == KW_TYPEID ? dependent_type(type) : types[type].kind != TypeKind::Fundamental) return;
         } else if (!fixed(first)) return;
@@ -93,7 +93,7 @@ void Analyzer::check_fixed_expression(NodeId n, ScopeId s)
         if (check_fixed_operator(n,s)) {
             template_fixed_expressions.put(source,n); ++template_fixed_work; return;
         }
-        for (auto c = first; c; c = ast[c].next)
+        for (auto c = first; c; c = ast.next(c))
             if (!fixed(c) || (class_value(expressions[fixed(c)].type) && node.op != OP_COMMA)) return;
         break;
     default: return;
@@ -130,7 +130,7 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
         // The retained recipe owns formation, RTTI types and cast reachability.
         // Only evaluated operands acquire this occurrence's object/body demands.
         auto use = rtti_expression(source);
-        if (use.dynamic) expression(result.form == ExpressionForm::Typeid ? node.first : ast[node.first].next,s);
+        if (use.dynamic) expression(result.form == ExpressionForm::Typeid ? node.first : ast.next(node.first),s);
         demand_rtti(use);
         facts.edit(n).type = facts[source].type;
         return true;
@@ -149,13 +149,13 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
         return true;
     }
     bool unevaluated = node.kind == Kind::Sizeof || node.kind == Kind::TypeTrait;
-    if (node.kind == Kind::Cast || (unevaluated && ast[first].kind == Kind::TypeId)) {
-        facts.edit(first).type = facts[ast[source].first].type;
-        first = ast[first].next;
+    if (node.kind == Kind::Cast || (unevaluated && ast.kind(first) == Kind::TypeId)) {
+        facts.edit(first).type = facts[ast.first(source)].type;
+        first = ast.next(first);
     }
     if (unevaluated) ++unevaluated_depth;
     try {
-    for (auto c = first; c; c = ast[c].next) {
+    for (auto c = first; c; c = ast.next(c)) {
         expression(c,s);
         auto incoming = expressions[template_fixed_expressions.get(ast.nodes.occurrences[c].source)].incoming;
         if (incoming >= result.conversions && incoming-result.conversions < result.count) {
@@ -178,7 +178,7 @@ bool Analyzer::reuse_fixed_expression(NodeId n, ScopeId s, Expression& result)
     }
     if (node.kind == Kind::Assignment || node.op == OP_INC || node.op == OP_DEC ||
         (node.kind == Kind::Unary && node.op == OP_AMP)) observe_scalar(first,node.kind == Kind::Assignment);
-    if (node.kind == Kind::Assignment && node.op == OP_ASS) record_member_pointer_write(first,ast[first].next);
+    if (node.kind == Kind::Assignment && node.op == OP_ASS) record_member_pointer_write(first,ast.next(first));
     auto& published = facts.edit(n);
     published.type = facts[source].type;
     if (!template_value_dependence.get(occurrence.source)) published.value = facts[source].value;

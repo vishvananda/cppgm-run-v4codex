@@ -45,7 +45,7 @@ QueryId Analyzer::fold_query(NodeId n, ScopeId s)
         if (function_binding(ordinary)) q.entity = ordinary;
     }
     std::vector<QueryId> operands; unsigned packs = 0;
-    for (auto c = node.first; c; c = ast[c].next) {
+    for (auto c = node.first; c; c = ast.next(c)) {
         auto operand = expression_query(c,s);
         if (!operand) return 0;
         auto params = expansion_parameters(0x80000000U | operand);

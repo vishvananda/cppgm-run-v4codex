@@ -24,9 +24,9 @@ void Analyzer::declare_template_parameters(NodeId params, ScopeId ts, std::uint3
         }
         ++ordinal;
     };
-    for (NodeId p = ast[ast[params].first].first; p; p = ast[p].next) {
-        if (definitions && ast[p].kind == Kind::NonTypeParameter) {
-            auto specs = ast[p].first;
+    for (NodeId p = ast.first(ast.first(params)); p; p = ast.next(p)) {
+        if (definitions && ast.kind(p) == Kind::NonTypeParameter) {
+            auto specs = ast.first(p);
             auto d = child(p,Kind::Declarator);
             TypeId type = 0;
             if (source_head && frame) {
@@ -44,7 +44,7 @@ void Analyzer::declare_template_parameters(NodeId params, ScopeId ts, std::uint3
             auto e = make_entity(EntityKind::Parameter,ts,terminal(decl_name(d)),p);
             entities[e].template_parameter = true;
             bool pack = child(p,Kind::ParameterPack) != 0;
-            for (auto decl = d; decl; decl = ast[child(decl,Kind::NestedDeclarator)].first)
+            for (auto decl = d; decl; decl = ast.first(child(decl,Kind::NestedDeclarator)))
                 pack |= declarator_pack(decl) != 0;
             entities[e].parameter_pack = pack;
             entities[e].type = types.unqualified(type);
@@ -53,10 +53,10 @@ void Analyzer::declare_template_parameters(NodeId params, ScopeId ts, std::uint3
             bind_parameter(e);
             continue;
         }
-        if (ast[p].kind != Kind::TypeParameter) continue;
+        if (ast.kind(p) != Kind::TypeParameter) continue;
         NodeId identifier = child(p, Kind::Identifier);
         if (!identifier && !definitions) continue;
-        IdentifierId name = ast[identifier].text;
+        IdentifierId name = ast.text(identifier);
         EntityId e = make_entity(EntityKind::Type, ts, name, p);
         entities[e].key = child(p, Kind::TemplateTemplate) ? KW_TEMPLATE : KW_TYPENAME;
         entities[e].template_parameter = true;

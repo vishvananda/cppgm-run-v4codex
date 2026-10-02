@@ -11,7 +11,7 @@ bool Analyzer::constant_initializer(NodeId n, TypeId t, bool local)
     }
     if (auto plan = initializer_plan(n, t)) return constant_plan(plan,local);
     if (n && constructor_member(facts[n].entity)) return entities[facts[n].entity].constexpr_function && constant_construction(n,t).valid;
-    while (ast[n].kind == Kind::Initializer) n = ast[n].first;
+    while (ast.kind(n) == Kind::Initializer) n = ast.first(n);
     auto target = types[t];
     if (!n && value_constructor(t)) return false;
     if ((target.kind == TypeKind::Named && entities[target.entity].class_info) || target.kind == TypeKind::Array) {

@@ -9,12 +9,12 @@ bool Procedural::unwind_expression(NodeId n, bool body_proof)
     if (cache.empty()) cache.resize(ast.nodes.size());
     if (cache[n]) return cache[n] == 2;
     ++full_expression_work;
-    bool result = ast[n].kind == Kind::Throw;
-    if (ast[n].kind == Kind::SimpleDeclaration) result |= !sem.expression_nonthrowing(n);
+    bool result = ast.kind(n) == Kind::Throw;
+    if (ast.kind(n) == Kind::SimpleDeclaration) result |= !sem.expression_nonthrowing(n);
     auto x = sem.expression_fact(n);
     if (x.form == semantic::ExpressionForm::ConstantQuery || x.form == semantic::ExpressionForm::Unreachable) return false;
     EntityId callee = sem.facts[n].entity;
-    bool call = (ast[n].kind == Kind::Call && x.form != semantic::ExpressionForm::Cast &&
+    bool call = (ast.kind(n) == Kind::Call && x.form != semantic::ExpressionForm::Cast &&
         x.form != semantic::ExpressionForm::ListValue && x.form != semantic::ExpressionForm::PseudoDestructor && x.form != semantic::ExpressionForm::InvokeMemberData) ||
         x.form == semantic::ExpressionForm::OperatorCall || (callee && sem.constructor_member(callee));
     bool inline_intrinsic = x.form >= semantic::ExpressionForm::FloatFinite && x.form <= semantic::ExpressionForm::FloatClassify;
@@ -47,16 +47,16 @@ bool Procedural::unwind_expression(NodeId n, bool body_proof)
     if (discarded.valid()) conversion(discarded);
     if (x.incoming) conversion(sem.conversion_fact(x.incoming));
     for (unsigned j = 0; j < x.count; ++j) conversion(sem.conversion_fact(x.conversions+j));
-    if (ast[n].kind == Kind::Lambda)
+    if (ast.kind(n) == Kind::Lambda)
         for (auto i = sem.closure(sem.types[x.type].entity).first_capture; i; i = sem.closure_captures[i].next)
             if (sem.closure_captures[i].conversion) conversion(sem.conversion_fact(sem.closure_captures[i].conversion));
     if (x.form == semantic::ExpressionForm::Typeid && sem.rtti_expression(n).dynamic)
-        result |= unwind_expression(ast[n].first,body_proof);
-    if (ast[n].kind != Kind::Lambda && ast[n].kind != Kind::Sizeof && ast[n].kind != Kind::TypeTrait)
-        for (NodeId child = ast[n].first; child; child = ast[child].next) result |= unwind_expression(child,body_proof);
+        result |= unwind_expression(ast.first(n),body_proof);
+    if (ast.kind(n) != Kind::Lambda && ast.kind(n) != Kind::Sizeof && ast.kind(n) != Kind::TypeTrait)
+        for (NodeId child = ast.first(n); child; child = ast.next(child)) result |= unwind_expression(child,body_proof);
     // These operations own additional allocation/initialization recipes. The
     // O0 scalar proof does not inspect or demand those recipes.
-    if (body_proof && (ast[n].kind == Kind::New || ast[n].kind == Kind::Delete ||
+    if (body_proof && (ast.kind(n) == Kind::New || ast.kind(n) == Kind::Delete ||
         sem.class_initialization(n,sem.facts[n].type).source)) result = true;
     cache[n] = result ? 2 : 1; return result;
 }
@@ -67,14 +67,14 @@ void Procedural::begin_full_expression(NodeId n, bool omit_result)
     if (full_expression.enabled) full_expression.proven_nonthrowing = !unwind_expression(n,true) && !cleanup_expression(n,omit_result);
     if (full_expression.enabled && !omit_result) {
         auto result = n;
-        while (ast[result].kind == Kind::Parenthesized || ast[result].kind == Kind::Initializer || ast[result].kind == Kind::ParenInitializer)
-            result = ast[result].first;
+        while (ast.kind(result) == Kind::Parenthesized || ast.kind(result) == Kind::Initializer || ast.kind(result) == Kind::ParenInitializer)
+            result = ast.first(result);
         auto incoming = sem.expression_fact(result).incoming;
         if (!incoming || sem.conversion_fact(incoming).kind == semantic::Conversion::Kind::Discarded)
             full_expression.result_temporary = sem.object_fact(result).temporary;
     }
     auto root = n;
-    while (root && (ast[root].kind == Kind::Parenthesized || ast[root].kind == Kind::Initializer || ast[root].kind == Kind::ParenInitializer)) root = ast[root].first;
+    while (root && (ast.kind(root) == Kind::Parenthesized || ast.kind(root) == Kind::Initializer || ast.kind(root) == Kind::ParenInitializer)) root = ast.first(root);
     full_expression.root = full_expression.terminal_value = root;
     // A selected constructor/conversion can observe argument temporaries after
     // the logical result is computed. That result is not the terminal consumer.
@@ -87,15 +87,15 @@ void Procedural::begin_full_expression(NodeId n, bool omit_result)
 void Procedural::guard_expression(NodeId n, bool storage_ready)
 {
     if (!full_expression.enabled || full_expression.open || emitting_cleanup || full_expression.suppress_guard) return;
-    if (ast[n].kind == Kind::Lambda && !unwind_expression(n) && !cleanup_expression(n)) return;
-    while (ast[n].kind == Kind::Parenthesized || ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer)
-        n = ast[n].first;
+    if (ast.kind(n) == Kind::Lambda && !unwind_expression(n) && !cleanup_expression(n)) return;
+    while (ast.kind(n) == Kind::Parenthesized || ast.kind(n) == Kind::Initializer || ast.kind(n) == Kind::ParenInitializer)
+        n = ast.first(n);
     // Guarded initialization establishes temporary storage on its run edge.
     // Storage cannot throw; argument construction/calls establish the region.
     if (full_expression.storage_boundary && (!storage_ready || n == full_expression.root)) return;
-    if (ast[n].kind == Kind::Conditional || (ast[n].kind == Kind::Binary && (ast[n].op == OP_LAND || ast[n].op == OP_LOR))) return;
+    if (ast.kind(n) == Kind::Conditional || (ast.kind(n) == Kind::Binary && (ast.op(n) == OP_LAND || ast.op(n) == OP_LOR))) return;
     if (full_expression.terminal_branch && !storage_ready &&
-        (ast[n].kind == Kind::Member || sem.expression_fact(n).form == semantic::ExpressionForm::Construction)) return;
+        (ast.kind(n) == Kind::Member || sem.expression_fact(n).form == semantic::ExpressionForm::Construction)) return;
     // Without a live prefix or published handler, scalar consumption waits
     // for the first resource-owning expression to establish the region.
     if (full_expression.scalar_terminal && !live && !resume_terminal &&

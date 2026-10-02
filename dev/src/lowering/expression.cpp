@@ -64,7 +64,7 @@ Value Procedural::expression_value(NodeId n, bool location)
         pointer.type = fact.type; pointer.address = true; return pointer;
     }
     if (fact.form == semantic::ExpressionForm::Cast) {
-        NodeId operand = node.kind == Kind::Cast ? ast[a].next : ast[ast[a].next].first;
+        NodeId operand = node.kind == Kind::Cast ? ast.next(a) : ast.first(ast.next(a));
         if (!operand) return initialization_value(0,fact.type);
         TypeId target = sem.facts[n].type;
         if (reference(target)) {
@@ -85,9 +85,9 @@ Value Procedural::expression_value(NodeId n, bool location)
         }
         if (sem.conversion_fact(fact.conversions).kind == semantic::Conversion::Kind::Discarded) {
             NodeId direct = operand;
-            while (ast[direct].kind == Kind::Parenthesized) direct = ast[direct].first;
+            while (ast.kind(direct) == Kind::Parenthesized) direct = ast.first(direct);
             auto discarded = sem.expression_fact(direct);
-            if (ast[direct].kind == Kind::IdExpression && discarded.category != ValueCategory::Prvalue &&
+            if (ast.kind(direct) == Kind::IdExpression && discarded.category != ValueCategory::Prvalue &&
                 !(sem.types[discarded.type].cv & 2) &&
                 (sem.entities[discarded.entity].kind == semantic::EntityKind::Parameter ||
                  sem.entities[discarded.entity].kind == semantic::EntityKind::Variable ||
@@ -188,13 +188,13 @@ Value Procedural::expression_value(NodeId n, bool location)
     case Kind::Subscript: {
         if (semantic::vector_kind(sem.types[sem.expression_fact(a).type].kind)) {
             auto base = expression(a,true);
-            auto index = converted(ast[a].next,sem.conversion_fact(fact.conversions+1));
+            auto index = converted(ast.next(a),sem.conversion_fact(fact.conversions+1));
             auto lane = vector_lane(base,coerce(index,IRType::I64,sem.unsigned_type(index.type)));
             lane.type = fact.type;
             return fact.category == semantic::ValueCategory::Prvalue ? load(lane) : lane;
         }
         Value left = converted(a, sem.conversion_fact(fact.conversions));
-        Value right = converted(ast[a].next, sem.conversion_fact(fact.conversions+1));
+        Value right = converted(ast.next(a), sem.conversion_fact(fact.conversions+1));
         if (left.ir != IRType::Ptr) std::swap(left, right);
         IRType element = type(fact.type);
         if (element.kind() == IRType::Object) {
@@ -260,12 +260,12 @@ Value Procedural::unary(NodeId n)
             value = Value(Operand::integer(1), IRType::U8, dest.type);
         else value = operation(op == OP_INC ? OP_PLUS : OP_MINUS, convert(old, promoted),
             Value(Operand::integer(1), IRType::I32, sem.types.fundamental(FT_INT)), promoted);
-        if (dest.bit_field && node.kind != Kind::Postfix && ast[a].kind == Kind::Member && ast[a].op == OP_DOT) {
-            NodeId object = ast[a].first;
+        if (dest.bit_field && node.kind != Kind::Postfix && ast.kind(a) == Kind::Member && ast.op(a) == OP_DOT) {
+            NodeId object = ast.first(a);
             EntityId root = sem.expression_fact(object).entity;
             // Reacquire a prefix result's stable named storage using recorded
             // identities. Calls, pointers and reference objects are never replayed.
-            if (ast[object].kind == Kind::IdExpression && root && !sem.nonstatic_field(root) && !reference(sem.entities[root].type)) {
+            if (ast.kind(object) == Kind::IdExpression && root && !sem.nonstatic_field(root) && !reference(sem.entities[root].type)) {
                 dest = field(address(binding(root)), dest.bit_field, sem.object_fact(a).adjustment);
                 dest.type = sem.expression_fact(a).type;
             }
@@ -289,7 +289,7 @@ Value Procedural::unary(NodeId n)
 Value Procedural::binary(NodeId n, bool location)
 {
     auto node = ast[n];
-    NodeId a = node.first, b = ast[a].next;
+    NodeId a = node.first, b = ast.next(a);
     auto fact = sem.expression_fact(n);
     ETokenType op = node.op;
     if (op == OP_DOTSTAR || op == OP_ARROWSTAR) {
@@ -305,9 +305,9 @@ Value Procedural::binary(NodeId n, bool location)
         } else if (op == OP_ASS) { rhs = converted(b, sem.conversion_fact(fact.conversions+1)); dest = expression(a, true); }
         else {
             NodeId target = a;
-            while (ast[target].kind == Kind::Parenthesized || ast[target].kind == Kind::Member) target = ast[target].first;
+            while (ast.kind(target) == Kind::Parenthesized || ast.kind(target) == Kind::Member) target = ast.first(target);
             EntityId object = sem.expression_fact(target).entity;
-            bool direct = ast[target].op == KW_THIS || (ast[target].kind == Kind::IdExpression && object && !(sem.types[sem.entities[object].type].cv & 2));
+            bool direct = ast.op(target) == KW_THIS || (ast.kind(target) == Kind::IdExpression && object && !(sem.types[sem.entities[object].type].cv & 2));
             // A direct object needs no address evaluation; its read follows
             // the binary-operand convention. Indirection/calls must evaluate
             // the RHS before computing the LHS address, exactly once.
@@ -419,9 +419,9 @@ Value Procedural::call(NodeId n, Value destination)
     auto fact = sem.expression_fact(n);
     if (fact.form == semantic::ExpressionForm::PseudoDestructor) {
         NodeId member = node.first;
-        while (ast[member].kind == Kind::Parenthesized) member = ast[member].first;
-        if (ast[member].op == OP_ARROW) arrow_object(ast[member].first,sem.object_fact(member).arrow);
-        else expression(ast[member].first);
+        while (ast.kind(member) == Kind::Parenthesized) member = ast.first(member);
+        if (ast.op(member) == OP_ARROW) arrow_object(ast.first(member),sem.object_fact(member).arrow);
+        else expression(ast.first(member));
         return Value(Operand(), IRType::Void, fact.type);
     }
     if (fact.form == semantic::ExpressionForm::InvokeMemberData) {
@@ -452,7 +452,7 @@ Value Procedural::call(NodeId n, Value destination)
     for (unsigned j = 0; j < fact.argument_count; ++j) {
         auto arg = sem.call_argument(fact,j), target = sem.conversion_fact(fact.conversions+j).target;
         if (reference(target)) target = sem.types[target].child;
-        storage_only &= ast[arg].kind == Kind::Lambda && !sem.closure(sem.types[sem.expression_fact(arg).type].entity).first_capture && sem.types.unqualified(target) == sem.types.unqualified(sem.expression_fact(arg).type);
+        storage_only &= ast.kind(arg) == Kind::Lambda && !sem.closure(sem.types[sem.expression_fact(arg).type].entity).first_capture && sem.types.unqualified(target) == sem.types.unqualified(sem.expression_fact(arg).type);
     }
     // Captureless arguments only require addressable storage. Finish receiver
     // activation before allocating those slots; the actual call opens its

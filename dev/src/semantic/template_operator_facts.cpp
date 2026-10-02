@@ -13,9 +13,9 @@ bool Analyzer::decltype_call_result(NodeId n) const
 {
     for (auto node = template_decltype_operand; node;) {
         if (node == n) return true;
-        auto kind = ast[node].kind;
-        if (kind == Kind::Parenthesized) node = ast[node].first;
-        else if (kind == Kind::Binary && ast[node].op == OP_COMMA) node = ast[ast[node].first].next;
+        auto kind = ast.kind(node);
+        if (kind == Kind::Parenthesized) node = ast.first(node);
+        else if (kind == Kind::Binary && ast.op(node) == OP_COMMA) node = ast.next(ast.first(node));
         else break;
     }
     return false;
@@ -26,14 +26,14 @@ bool Analyzer::check_fixed_operator(NodeId n, ScopeId s)
     std::vector<NodeId> args;
     auto op = node.op;
     if (node.kind == Kind::Call) {
-        auto callee = node.first, first = ast[ast[callee].next].first;
-        if (invoke_expression(n,s)) { callee = first; first = ast[first].next; }
+        auto callee = node.first, first = ast.first(ast.next(callee));
+        if (invoke_expression(n,s)) { callee = first; first = ast.next(first); }
         if (!expressions[callee].ready || !class_value(expressions[callee].type)) return false;
         args.push_back(callee); op = OP_LPAREN;
-        for (auto a = first; a; a = ast[a].next) args.push_back(a);
+        for (auto a = first; a; a = ast.next(a)) args.push_back(a);
     } else {
         if (node.kind == Kind::Subscript) op = OP_LSQUARE;
-        for (auto a = node.first; a; a = ast[a].next) args.push_back(a);
+        for (auto a = node.first; a; a = ast.next(a)) args.push_back(a);
     }
     bool named = false;
     for (auto a : args) {
@@ -96,9 +96,9 @@ void Analyzer::reuse_fixed_operator(NodeId n, NodeId source, ScopeId s, Expressi
         use_selected_function(receiver.callable_entry ? receiver.callable_entry : selected,!receiver.virtual_slot);
     std::vector<NodeId> args; std::vector<Conversion> chosen;
     unsigned supplied = result.argument_count;
-    if (ast[source].kind == Kind::Call) {
+    if (ast.kind(source) == Kind::Call) {
         supplied = 0;
-        for (auto a = ast[ast[ast[source].first].next].first; a; a = ast[a].next) ++supplied;
+        for (auto a = ast.first(ast.next(ast.first(source))); a; a = ast.next(a)) ++supplied;
         if (object_uses[expressions[source].object_use].callee) --supplied;
     }
     for (unsigned i = 0; i < result.argument_count; ++i) {
@@ -121,22 +121,22 @@ void Analyzer::reuse_fixed_operator(NodeId n, NodeId source, ScopeId s, Expressi
 }
 bool Analyzer::check_fixed_construction(NodeId n, ScopeId s)
 {
-    auto callee = ast[n].first;
-    if (ast[callee].kind != Kind::IdExpression) return false;
-    TypeId type = fundamental_cast_type(ast[callee].op);
-    auto name = ast[callee].detail;
+    auto callee = ast.first(n);
+    if (ast.kind(callee) != Kind::IdExpression) return false;
+    TypeId type = fundamental_cast_type(ast.op(callee));
+    auto name = ast.detail(callee);
     if (!type) {
-        if (ast[name].kind != Kind::Name) return false;
+        if (ast.kind(name) != Kind::Name) return false;
         auto binding = template_bindings[template_binding_index.get(ast.nodes.occurrences[name].source)];
         auto e = binding.entity;
         if (!e || binding.dependent || (entities[e].kind != EntityKind::Type && entities[e].kind != EntityKind::Alias)) return false;
         type = entities[e].type;
     }
     if (!type || dependent_type(type)) return false;
-    auto list = ast[callee].next;
+    auto list = ast.next(callee);
     // A braced class or array value shares the ordinary list-plan owner;
     // the concrete use owns the plan's one materialized temporary.
-    if (ast[list].kind == Kind::BracedInit && (class_value(type) || types[type].kind == TypeKind::Array || vector_kind(types[type].kind))) {
+    if (ast.kind(list) == Kind::BracedInit && (class_value(type) || types[type].kind == TypeKind::Array || vector_kind(types[type].kind))) {
         if (!fixed_initializer_operands(list)) return false;
         RecipeScope guard(unevaluated_depth);
         expression(list,s);
@@ -147,14 +147,14 @@ bool Analyzer::check_fixed_construction(NodeId n, ScopeId s)
         record_discard_form(n,result); expressions.set(n,result); facts.edit(n).type = type; facts.edit(n).scope = s;
         template_operator_expressions.put(ast.nodes.occurrences[n].source,n); ++template_fixed_call_work; return true;
     }
-    for (auto a = ast[list].first; a; a = ast[a].next)
+    for (auto a = ast.first(list); a; a = ast.next(a))
         if (!template_fixed_expressions.get(ast.nodes.occurrences[a].source)) return false;
     if (!class_value(type)) {
-        if (ast[list].first != ast[list].last) throw std::runtime_error("fixed scalar cast arity");
-        if (!check_fixed_cast(n,s,type,ast[list].first)) return false;
-        if (ast[list].kind == Kind::BracedInit && ast[list].first) {
+        if (ast.first(list) != ast.last(list)) throw std::runtime_error("fixed scalar cast arity");
+        if (!check_fixed_cast(n,s,type,ast.first(list))) return false;
+        if (ast.kind(list) == Kind::BracedInit && ast.first(list)) {
             auto c = conversions[expressions[n].conversions];
-            list_conversion_from(ast[list].first,expressions[ast[list].first].type,value_type(type),&c);
+            list_conversion_from(ast.first(list),expressions[ast.first(list)].type,value_type(type),&c);
         }
         return true;
     }
@@ -169,7 +169,7 @@ bool Analyzer::check_fixed_construction(NodeId n, ScopeId s)
 bool Analyzer::check_fixed_cast(NodeId n, ScopeId s, TypeId type, NodeId operand)
 {
     if (dependent_type(type)) return false;
-    if (ast[n].op == OP_LPAREN && ast[operand].kind == Kind::BracedInit) {
+    if (ast.op(n) == OP_LPAREN && ast.kind(operand) == Kind::BracedInit) {
         if (!fixed_initializer_operands(operand)) return false;
         RecipeScope guard(unevaluated_depth);
         auto result = cast_expression(n,s,type,operand,true);
@@ -179,7 +179,7 @@ bool Analyzer::check_fixed_cast(NodeId n, ScopeId s, TypeId type, NodeId operand
     if (operand && !template_fixed_expressions.get(ast.nodes.occurrences[operand].source)) return false;
     RecipeScope guard(unevaluated_depth);
     if (class_value(type)) {
-        if (ast[n].op != KW_STATIC_CAST && ast[n].op != OP_LPAREN) return false;
+        if (ast.op(n) != KW_STATIC_CAST && ast.op(n) != OP_LPAREN) return false;
         complete_class(types[type].entity); reject_abstract(type);
         std::vector<NodeId> args(1,operand);
         if (!check_template_constructor(n,type,s,InitializationMode::Direct,&args)) return false;
@@ -192,10 +192,10 @@ bool Analyzer::check_fixed_cast(NodeId n, ScopeId s, TypeId type, NodeId operand
 }
 void Analyzer::reuse_fixed_construction(NodeId n, NodeId source, ScopeId s, Expression& result)
 {
-    auto list = ast[ast[n].first].next;
+    auto list = ast.next(ast.first(n));
     std::vector<NodeId> args;
-    if (ast[n].kind == Kind::Cast) { args.push_back(list); expression(list,s); list = n; }
-    else for (auto a = ast[list].first; a; a = ast[a].next) { expression(a,s); args.push_back(a); }
+    if (ast.kind(n) == Kind::Cast) { args.push_back(list); expression(list,s); list = n; }
+    else for (auto a = ast.first(list); a; a = ast.next(a)) { expression(a,s); args.push_back(a); }
     auto type = expressions[source].type;
     EntityId ctor = 0;
     if (!reuse_template_constructor(list,type,args,result,s,ctor)) throw std::logic_error("missing fixed construction recipe");

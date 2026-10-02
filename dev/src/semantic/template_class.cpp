@@ -15,25 +15,25 @@ bool Analyzer::dependent_template_syntax(NodeId root, ScopeId s)
             // The name after . or -> belongs to the object's class. It is
             // never an unqualified reference to a surrounding type parameter.
             work.push_back(node.first);
-            auto name = ast[ast[node.first].next].detail;
-            for (auto part = ast[name].first; part; part = ast[part].next)
+            auto name = ast.detail(ast.next(node.first));
+            for (auto part = ast.first(name); part; part = ast.next(part))
                 if (auto args = child(part,Kind::TemplateArguments)) work.push_back(args);
             continue;
         }
         if (node.kind == Kind::SizeofPack) return true;
         if (node.kind == Kind::Name && node.first) {
-            auto e = lookup(node.op == OP_COLON2 ? global : s,ast[node.first].text);
+            auto e = lookup(node.op == OP_COLON2 ? global : s,ast.text(node.first));
             if (e && (entities[e].template_parameter ||
                 ((entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias) && dependent_type(entities[e].type)))) return true;
         }
         if (node.detail) work.push_back(node.detail);
-        for (auto child = node.first; child; child = ast[child].next) work.push_back(child);
+        for (auto child = node.first; child; child = ast.next(child)) work.push_back(child);
     }
     return false;
 }
 TypeId Analyzer::declare_class_template(NodeId n, ScopeId s, ScopeId friend_owner)
 {
-    NodeId name = ast[n].detail;
+    NodeId name = ast.detail(n);
     ScopeId owner = friend_owner ? friend_owner : name_owner(name,s);
     if (owner == s) owner = scopes[s].parent;
     bool retained_member = member_definition_environment && encloses(member_definition_environment,s) &&
@@ -42,11 +42,11 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s, ScopeId friend_owne
     s = member_template_environment(s,owner);
     auto id = terminal(name);
     EntityId e = local(owner,id,Lookup::Tag);
-    if (child(ast[name].last,Kind::TemplateArguments)) return declare_class_partial(n,s,e);
+    if (child(ast.last(name),Kind::TemplateArguments)) return declare_class_partial(n,s,e);
     if (e && !entities[e].template_info) throw std::runtime_error("conflicting class template declaration");
     if (!e) {
         e = make_entity(EntityKind::Type,owner,id,n);
-        entities[e].key = ast[ast[n].first].op;
+        entities[e].key = ast.op(ast.first(n));
         entities[e].type = types.named(e);
         entities[e].class_info = class_facts.size(); class_facts.push_back(ClassFacts());
         entities[e].scope = make_scope(ScopeKind::Class,s,id,e,false);
@@ -56,7 +56,7 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s, ScopeId friend_owne
     auto previous_index = entities[e].template_info;
     native_attributes(e,n);
     auto previous = previous_index ? templates[previous_index] : TemplateFunction();
-    if (ast[n].kind == Kind::Class && previous.body) throw std::runtime_error("class template redefinition");
+    if (ast.kind(n) == Kind::Class && previous.body) throw std::runtime_error("class template redefinition");
     template_facts(e,s);
     auto index = entities[e].template_info;
     if (previous.environment && previous.count != templates[index].count) throw std::runtime_error("different template parameter count");
@@ -105,22 +105,22 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s, ScopeId friend_owne
         auto init = entities[parameter].initializer;
         auto old = previous.environment ? template_default_types.get(template_parameters[previous.offset+j]) : 0;
         if (old && init) throw std::runtime_error("duplicate template default argument");
-        TypeId value = init ? translate(template_argument_node(ast[init].first,s),current,current_bindings,current_cache,current_ready) :
+        TypeId value = init ? translate(template_argument_node(ast.first(init),s),current,current_bindings,current_cache,current_ready) :
             old ? translate(old,previous,old_bindings,old_cache,old_ready) : 0;
         if (value) template_default_types.put(template_parameters[selected.offset+j],value);
     }
     if (!previous.body) {
         templates[index].source = n;
-        templates[index].body = ast[n].kind == Kind::Class ? n : previous.body;
+        templates[index].body = ast.kind(n) == Kind::Class ? n : previous.body;
     }
-    if (ast[n].kind == Kind::Class) index_template_members(n,definition_root(e),s);
+    if (ast.kind(n) == Kind::Class) index_template_members(n,definition_root(e),s);
     bind(s,id,e); record(s,e,n,entities[e].type,EntityKind::Type);
     // Fixed bases are definition-time demands, independent of whether a
     // specialization of this derived template will ever be requested.
     auto bases_node = child(n,Kind::Bases);
-    for (auto b = ast[bases_node].first; b; b = ast[b].next) {
-        if (dependent_template_syntax(ast[child(b,Kind::BaseName)].detail,s)) continue;
-        auto base = resolve(ast[child(b,Kind::BaseName)].detail,entities[e].scope,Lookup::Qualifier);
+    for (auto b = ast.first(bases_node); b; b = ast.next(b)) {
+        if (dependent_template_syntax(ast.detail(child(b,Kind::BaseName)),s)) continue;
+        auto base = resolve(ast.detail(child(b,Kind::BaseName)),entities[e].scope,Lookup::Qualifier);
         if (base && entities[base].kind == EntityKind::Alias) base = types[entities[base].type].entity;
         if (base && dependent_type(entities[base].type)) continue;
         if (base && entities[base].class_info) complete_class(base);
@@ -128,7 +128,7 @@ TypeId Analyzer::declare_class_template(NodeId n, ScopeId s, ScopeId friend_owne
             class_facts[entities[base].class_info].final_class)
             throw std::runtime_error("invalid nondependent template base");
     }
-    if (ast[n].kind == Kind::Class) bind_template_class(n,s,e);
+    if (ast.kind(n) == Kind::Class) bind_template_class(n,s,e);
     return entities[e].type;
 }
 bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bool partial)
@@ -194,7 +194,7 @@ bool Analyzer::template_defaults(EntityId pattern, std::vector<TypeId>& args, bo
             if (!value) {
                 NodeId d = entities[p].initializer;
                 if (!d) return partial;
-                value = template_argument_node(ast[d].first,t.environment);
+                value = template_argument_node(ast.first(d),t.environment);
             }
             value = substitute_argument(value,bindings,cache,frame);
             if (!value) return false;
@@ -282,7 +282,7 @@ EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
     if (!list || !e) return e;
     if (entities[e].template_info && entities[e].kind == EntityKind::Alias) {
         std::vector<ArgumentId> args;
-        for (auto a = ast[list].first; a; a = ast[a].next)
+        for (auto a = ast.first(list); a; a = ast.next(a))
             append_template_argument(a,s,template_argument_node(a,s),args);
         auto type = specialize_alias(e,args);
         // A scalar/reference alias application has no distinct declaration
@@ -296,7 +296,7 @@ EntityId Analyzer::class_template_name(NodeId part, EntityId e, ScopeId s)
     if (pattern && templates[entities[pattern].template_info].primary) pattern = templates[entities[pattern].template_info].primary;
     if (!pattern) throw std::runtime_error("template-id names a nontemplate class");
     std::vector<TypeId> args;
-    for (NodeId a = ast[list].first; a; a = ast[a].next) {
+    for (NodeId a = ast.first(list); a; a = ast.next(a)) {
         auto type = template_argument_node(a,s);
         // template_argument_node already applies this occurrence's frame.
         // A dependent result can contain the newly declared inner head;

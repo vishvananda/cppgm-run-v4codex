@@ -44,7 +44,7 @@ Value Procedural::statement_expression(NodeId n, Value destination)
 {
     ++statement_regions;
     auto fact = sem.expression_fact(n);
-    auto body = ast[n].first, result = sem.facts[n].target;
+    auto body = ast.first(n), result = sem.facts[n].target;
     bool supplied = destination.ir != IRType::Void;
     bool object = sem.class_value(fact.type);
     close_expression_region();
@@ -56,8 +56,8 @@ Value Procedural::statement_expression(NodeId n, Value destination)
     full_expression = FullExpression();
     if (object && !supplied) destination = class_address(sem.object_fact(n).temporary,fact.type);
     Value value(Operand::integer(0),type(fact.type),fact.type);
-    for (auto c = ast[body].first; c; c = ast[c].next) {
-        if (result && c == ast[body].last) {
+    for (auto c = ast.first(body); c; c = ast.next(c)) {
+        if (result && c == ast.last(body)) {
             if (ended) break;
             auto prefix = live;
             auto conversion = sem.conversion_fact(fact.conversions);

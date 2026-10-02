@@ -50,23 +50,23 @@ TemplateDefinitionOwner Analyzer::definition_owner(EntityId cls)
 bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_head, NodeId member_template)
 {
     if (ast.nodes.occurrences[n].context) return false;
-    if (ast[n].kind == Kind::Template) {
-        auto params = ast[n].first;
+    if (ast.kind(n) == Kind::Template) {
+        auto params = ast.first(n);
         auto inner = make_scope(ScopeKind::Template,s);
         declare_template_parameters(params,inner);
-        return retain_template_definition(ast[params].next,inner,owner_head ? owner_head : s,
+        return retain_template_definition(ast.next(params),inner,owner_head ? owner_head : s,
             member_template ? member_template : n);
     }
     if (owner_head) check_template_parameters(n,s);
     else owner_head = s;
     NodeId d = child(n,Kind::Declarator), item = 0;
-    if (ast[n].kind == Kind::Function) d = ast[ast[n].first].next;
-    if (ast[n].kind == Kind::SimpleDeclaration) { item = ast[child(n,Kind::InitDeclarators)].first; d = ast[item].first; }
-    if (item && ast[item].next) throw std::runtime_error("template declaration has multiple declarators");
-    NodeId name = d ? decl_name(d) : ast[n].detail;
-    if (!name || ast[name].first == ast[name].last) return false;
-    ScopeId owner = ast[name].op == OP_COLON2 ? global : scopes[s].parent;
-    bool qualified = ast[name].op == OP_COLON2;
+    if (ast.kind(n) == Kind::Function) d = ast.next(ast.first(n));
+    if (ast.kind(n) == Kind::SimpleDeclaration) { item = ast.first(child(n,Kind::InitDeclarators)); d = ast.first(item); }
+    if (item && ast.next(item)) throw std::runtime_error("template declaration has multiple declarators");
+    NodeId name = d ? decl_name(d) : ast.detail(n);
+    if (!name || ast.first(name) == ast.last(name)) return false;
+    ScopeId owner = ast.op(name) == OP_COLON2 ? global : scopes[s].parent;
+    bool qualified = ast.op(name) == OP_COLON2;
     EntityId primary = 0;
     std::vector<ScopeId> source_heads;
     for (auto scope = s;; scope = scopes[scope].parent) {
@@ -77,10 +77,10 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
     ScopeId binding_owner = 0;
     std::uint32_t path = 0;
     IdentifierId previous = 0;
-    for (auto p = ast[name].first; p && p != ast[name].last; p = ast[p].next) {
+    for (auto p = ast.first(name); p && p != ast.last(name); p = ast.next(p)) {
         if (primary) {
-            if (ast[p].text == previous) continue;
-            auto nested = lookup(binding_owner,ast[p].text,Lookup::Qualifier,true);
+            if (ast.text(p) == previous) continue;
+            auto nested = lookup(binding_owner,ast.text(p),Lookup::Qualifier,true);
             if (!nested) throw std::runtime_error("unknown nested definition owner");
             if (entities[nested].template_info && child(p,Kind::TemplateArguments)) {
                 if (head_patterns.size() == source_heads.size()) throw std::runtime_error("missing enclosing template head");
@@ -89,15 +89,15 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
             }
             binding_owner = target(nested);
             if (!binding_owner) throw std::runtime_error("unknown nested definition owner");
-            path = definition_path(path,ast[p].text);
-            previous = ast[p].text; continue;
+            path = definition_path(path,ast.text(p));
+            previous = ast.text(p); continue;
         }
-        auto e = lookup(owner,ast[p].text,Lookup::Qualifier,qualified);
+        auto e = lookup(owner,ast.text(p),Lookup::Qualifier,qualified);
         if (e && entities[e].class_info && entities[e].template_info && child(p,Kind::TemplateArguments)) {
             if (!dependent_template_syntax(child(p,Kind::TemplateArguments),s)) return false;
             primary = template_definition_pattern(e,p,owner_head);
             head_patterns.push_back(primary); binding_owner = entities[primary].scope;
-            path = definition_root(primary); previous = ast[p].text;
+            path = definition_root(primary); previous = ast.text(p);
         } else {
             owner = target(e); qualified = true;
             if (!owner) return false;
@@ -115,7 +115,7 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
     // The leading return/object type precedes the qualified declarator and
     // therefore does not inherit its class scope. Its retained type fact is
     // reused when the declarator and body bind in their member environment.
-    if (ast[n].kind == Kind::Function || ast[n].kind == Kind::SimpleDeclaration) {
+    if (ast.kind(n) == Kind::Function || ast.kind(n) == Kind::SimpleDeclaration) {
         // Member access applies to the whole definition, independently of
         // the point where its qualified declarator changes type-name lookup.
         struct Access {
@@ -123,14 +123,14 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
             Access(ScopeId& v, ScopeId owner) : value(v), prior(v) { value = owner; }
             ~Access() { value = prior; }
         } access(access_override,binding_owner);
-        bind_template_type(ast[n].first,0,s);
+        bind_template_type(ast.first(n),0,s);
     }
     if (!encloses(scopes[owner_head].parent,entities[primary].owner)) throw std::runtime_error("template member outside enclosing namespace");
     if (source_heads.size() < head_patterns.size() || source_heads.size() > head_patterns.size()+1)
         throw std::runtime_error("template definition has unmatched heads");
     if (source_heads.size() == head_patterns.size()) member_template = 0;
     else for (unsigned j = 1; j < head_patterns.size(); ++j)
-        member_template = ast[ast[member_template].first].next;
+        member_template = ast.next(ast.first(member_template));
     TemplateDefinition def; def.source = n; def.member_template = member_template;
     def.heads = template_definition_heads.size(); def.head_count = head_patterns.size();
     for (unsigned j = 0; j < def.head_count; ++j) retain_definition_head(source_heads[j],head_patterns[j],j);
@@ -139,22 +139,22 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
     std::uint64_t definition_bucket = 0;
     std::uint32_t retained = 0; IdentifierId definition_name = 0;
     do {
-        def.declarator = d; def.initializer = item ? ast[d].next : 0;
+        def.declarator = d; def.initializer = item ? ast.next(d) : 0;
         auto member = terminal(name);
-        if (ast[ast[name].last].op == OP_COMPL) {
-            auto text = ids.spelling(ast[ast[ast[name].last].first].text);
+        if (ast.op(ast.last(name)) == OP_COMPL) {
+            auto text = ids.spelling(ast.text(ast.first(ast.last(name))));
             std::string spelling = "~" + std::string(text.data,text.size);
             member = ids.intern(TextView(spelling.data(),spelling.size()));
         }
         auto k = key(path,member);
         definition_bucket = k; definition_name = member;
         if (d && !template_prototype_index.get(k)) throw std::runtime_error("out-of-class member was not declared");
-        if (!d && ast[n].kind == Kind::Class) index_template_members(n,definition_path(path,member),s);
+        if (!d && ast.kind(n) == Kind::Class) index_template_members(n,definition_path(path,member),s);
         def.next = definition_index.get(k);
         retained = template_definitions.size();
         definition_index.put(k,retained); template_definitions.push_back(def);
-        item = ast[item].next;
-        if (item) { d = ast[item].first; name = decl_name(d); }
+        item = ast.next(item);
+        if (item) { d = ast.first(item); name = decl_name(d); }
     } while (item);
     // Each source head is a distinct immutable overlay over the selected
     // lexical class owner. Inner and enclosing ordinals never share identity.
@@ -181,9 +181,9 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
         environment = inner;
     }
     std::uint32_t prototype = 0;
-    if (ast[n].kind == Kind::Class) {
+    if (ast.kind(n) == Kind::Class) {
         auto nested = local(binding_owner,terminal(name),Lookup::Qualifier);
-        const bool partial = member_template && child(ast[name].last,Kind::TemplateArguments);
+        const bool partial = member_template && child(ast.last(name),Kind::TemplateArguments);
         if (partial) {
             auto type = declare_class_partial(n,environment,nested);
             nested = types[type].entity;
@@ -217,9 +217,9 @@ bool Analyzer::retain_template_definition(NodeId n, ScopeId s, ScopeId owner_hea
     if (prototype) {
         auto special = child(def.initializer ? def.initializer : child(n,Kind::Initializer),Kind::SpecialInitializer);
         bool storage = d && facts[d].type && types[facts[d].type].kind != TypeKind::Function;
-        if (!storage && ast[n].kind != Kind::Function && ast[n].kind != Kind::SpecialDefinition && !special)
+        if (!storage && ast.kind(n) != Kind::Function && ast.kind(n) != Kind::SpecialDefinition && !special)
             throw std::runtime_error("out-of-class member must be a definition");
-        if (special && ast[special].op == KW_DELETE)
+        if (special && ast.op(special) == KW_DELETE)
             throw std::runtime_error("deleted definition must be the first declaration");
         if (template_prototypes[prototype].definitions)
             throw std::runtime_error("duplicate out-of-class template member definition");
@@ -299,9 +299,9 @@ bool Analyzer::instantiate_member_definition(EntityId e)
                 // exception owners without reconstructing its declaration.
                 auto d = ast.projected(def.declarator,context);
                 instantiate_parameters(def.declarator,context,frame,environment);
-                auto kind = ast[source].kind;
+                auto kind = ast.kind(source);
                 bool special_member = kind == Kind::SpecialDefinition || kind == Kind::SpecialMember;
-                auto specs = special_member ? 0 : ast[source].first;
+                auto specs = special_member ? 0 : ast.first(source);
                 auto init = ast.projected(def.initializer,context);
                 if (!init) init = child(source,Kind::Initializer);
                 declaration_attributes(e,specs,source,d);
@@ -309,16 +309,16 @@ bool Analyzer::instantiate_member_definition(EntityId e)
                 exception_specification(e,d,environment);
                 auto special = child(init,Kind::SpecialInitializer);
                 if (special) {
-                    members[entities[e].member_info].deleted = ast[special].op == KW_DELETE;
+                    members[entities[e].member_info].deleted = ast.op(special) == KW_DELETE;
                     classify_transfer(e,special,environment);
                 }
                 virtual_declaration(e,d,init,specs,source,environment);
                 record(entities[e].owner,e,d,entities[e].type,EntityKind::Function);
-                auto body = kind == Kind::Function ? ast[d].next : child(source,Kind::Compound);
+                auto body = kind == Kind::Function ? ast.next(d) : child(source,Kind::Compound);
                 if (!body) body = child(source,Kind::FunctionTry);
                 if (body) schedule_body({body,d,entities[e].owner,e,source});
-            } else if (ast[source].kind == Kind::SimpleDeclaration) {
-                auto specs = ast[source].first, d = ast.projected(def.declarator,context);
+            } else if (ast.kind(source) == Kind::SimpleDeclaration) {
+                auto specs = ast.first(source), d = ast.projected(def.declarator,context);
                 auto type = declarator(d,specifiers(specs,environment),environment);
                 declare_object(d,ast.projected(def.initializer,context),type,specs,environment,source);
             } else declaration(source,environment);

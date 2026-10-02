@@ -4,7 +4,7 @@ namespace cppgm { namespace lowering {
 void Procedural::literal_arguments(NodeId n)
 {
     auto kind = sem.literal_call_kind(n);
-    auto lit = ast.literals[ast[n].literal];
+    auto lit = ast.literals[ast.literal(n)];
     if (kind == semantic::LiteralCallKind::Pack) return;
     if (kind == semantic::LiteralCallKind::Scalar) {
         if (lit.kind == LiteralKind::floating) {

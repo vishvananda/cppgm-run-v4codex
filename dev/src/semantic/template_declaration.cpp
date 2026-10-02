@@ -5,8 +5,8 @@ TypeId Analyzer::first_template_signature(EntityId e, NodeId source, ScopeId env
 {
     using syntax::Kind;
     auto declarator = [&](NodeId n) {
-        if (ast[n].kind == Kind::Function) return ast[ast[n].first].next;
-        if (ast[n].kind == Kind::SimpleDeclaration) return ast[ast[child(n,Kind::InitDeclarators)].first].first;
+        if (ast.kind(n) == Kind::Function) return ast.next(ast.first(n));
+        if (ast.kind(n) == Kind::SimpleDeclaration) return ast.first(ast.first(child(n,Kind::InitDeclarators)));
         return child(n,Kind::Declarator);
     };
     auto id = template_first_signature_index.get(e);
@@ -60,13 +60,13 @@ bool Analyzer::apply_template_signature(NodeId original, NodeId current, TypeId 
         NodeId result = 0;
         while (d) {
             if (auto p = child(d,Kind::Parameters)) result = p;
-            d = ast[child(d,Kind::NestedDeclarator)].first;
+            d = ast.first(child(d,Kind::NestedDeclarator));
         }
         // A sole unnamed void parameter denotes an empty parameter list.
         // The raw source recipe may use (void) where the first declaration
         // uses (), even when dependent return types need reconciliation.
-        auto first = ast[result].first;
-        if (first && !ast[first].next && ast[first].kind == Kind::Parameter &&
+        auto first = ast.first(result);
+        if (first && !ast.next(first) && ast.kind(first) == Kind::Parameter &&
             fundamental(facts[first].type,FT_VOID)) return NodeId(0);
         return result;
     };
@@ -77,10 +77,10 @@ bool Analyzer::apply_template_signature(NodeId original, NodeId current, TypeId 
     auto defining = occurrence.context ? template_signature_sources.get(occurrence.source) : current;
     auto frame = occurrence.context ? template_type_contexts.get(occurrence.context) : 0;
     if (!defining) throw std::logic_error("missing redeclaration parameter recipe");
-    auto p = ast[parameters(original)].first, q = ast[parameters(current)].first;
-    auto r = ast[parameters(defining)].first;
-    for (; p && q && r; p = ast[p].next, q = ast[q].next, r = ast[r].next) {
-        if (ast[p].kind != Kind::Parameter) continue;
+    auto p = ast.first(parameters(original)), q = ast.first(parameters(current));
+    auto r = ast.first(parameters(defining));
+    for (; p && q && r; p = ast.next(p), q = ast.next(q), r = ast.next(r)) {
+        if (ast.kind(p) != Kind::Parameter) continue;
         auto raw = facts[p].type;
         if (original_frame) { Index empty; raw = substitute_type(raw,empty,cache,original_frame); }
         raw = substitute_type(raw,bindings,cache);
@@ -214,7 +214,7 @@ void Analyzer::merge_template_defaults(EntityId e, ScopeId incoming, ScopeId pre
     auto value = [&](EntityId p, ScopeId scope) {
         auto known = template_default_types.get(p);
         if (!known && entities[p].initializer) {
-            known = template_argument_node(ast[entities[p].initializer].first,scope);
+            known = template_argument_node(ast.first(entities[p].initializer),scope);
             template_default_types.put(p,known);
         }
         return known;
@@ -240,14 +240,14 @@ EntityId Analyzer::declare_template_function(ScopeId owner, IdentifierId name, N
     auto e = family ? template_signatures.get(key(family,signature)) : 0;
     if (e) {
         auto previous = templates[entities[e].template_info];
-        bool definition = ast[source].kind == syntax::Kind::Function || ast[source].kind == syntax::Kind::SpecialDefinition;
+        bool definition = ast.kind(source) == syntax::Kind::Function || ast.kind(source) == syntax::Kind::SpecialDefinition;
         if (source == explicit_specialization_source && scopes[scope].kind == ScopeKind::Class &&
             entities[scopes[scope].entity].specialization && !entities[scopes[scope].entity].explicit_specialization &&
             !entities[e].explicit_specialization) {
             select_explicit_specialization(e,source);
             previous.body = 0;
         }
-        if (definition && previous.body && spec_has(ast[source].first,KW_FRIEND) &&
+        if (definition && previous.body && spec_has(ast.first(source),KW_FRIEND) &&
             ast.nodes.occurrences[source].context && !ast.nodes.occurrences[previous.source].context &&
             ast.nodes.occurrences[source].source == ast.nodes.occurrences[previous.source].source &&
             pattern_scope(previous.environment)) {

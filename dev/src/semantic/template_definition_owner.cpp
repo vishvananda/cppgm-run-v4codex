@@ -40,7 +40,7 @@ EntityId Analyzer::template_definition_pattern(EntityId primary, NodeId part, Sc
 {
     std::vector<ArgumentId> arguments, generic;
     auto list = child(part,syntax::Kind::TemplateArguments);
-    for (auto a = ast[list].first; a; a = ast[a].next)
+    for (auto a = ast.first(list); a; a = ast.next(a))
         append_template_argument(a,scope,template_argument_node(a,scope),arguments);
     auto shape = template_owner_shape(scope,arguments);
     auto components = argument_packs[shape];
@@ -75,7 +75,7 @@ EntityId Analyzer::template_definition_pattern(EntityId primary, NodeId part, Sc
         } else if (j == arguments.size()) {
             auto value = template_default_types.get(parameter);
             if (!value && entities[parameter].initializer)
-                value = template_argument_node(ast[entities[parameter].initializer].first,head.environment);
+                value = template_argument_node(ast.first(entities[parameter].initializer),head.environment);
             if (!value) throw std::runtime_error("missing definition owner argument");
             arguments.push_back(substitute_argument(value,bindings,cache));
         }

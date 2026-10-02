@@ -105,19 +105,19 @@ ScopeId Analyzer::current_instantiation_scope(TypeId type, ScopeId use)
 void Analyzer::resolve_parenthesized_declaration(NodeId declaration, ScopeId scope)
 {
     if (ast.nodes.occurrences[declaration].context) return;
-    auto kind = ast[declaration].kind;
-    if ((kind != Kind::SimpleDeclaration && kind != Kind::Function) || !(ast[declaration].flags & 1)) return;
+    auto kind = ast.kind(declaration);
+    if ((kind != Kind::SimpleDeclaration && kind != Kind::Function) || !(ast.flags(declaration) & 1)) return;
     auto items = child(declaration,Kind::InitDeclarators);
-    auto item = ast[items].first;
+    auto item = ast.first(items);
     do {
-        auto d = kind == Kind::Function ? ast[ast[declaration].first].next : ast[item].first;
-        auto params = child(d,Kind::Parameters), p = ast[params].first;
-        auto specs = ast[p].first, spec = ast[specs].first, name = ast[spec].detail;
-        if (p && !ast[p].next && ast[p].kind == Kind::Parameter && !ast[specs].next &&
-            spec && ast[spec].kind == Kind::DeclSpecifier && !ast[spec].next && !(ast[spec].flags & 1) && name &&
-            ast[name].first != ast[name].last) {
-            auto previous = ast[name].first;
-            while (ast[previous].next != ast[name].last) previous = ast[previous].next;
+        auto d = kind == Kind::Function ? ast.next(ast.first(declaration)) : ast.first(item);
+        auto params = child(d,Kind::Parameters), p = ast.first(params);
+        auto specs = ast.first(p), spec = ast.first(specs), name = ast.detail(spec);
+        if (p && !ast.next(p) && ast.kind(p) == Kind::Parameter && !ast.next(specs) &&
+            spec && ast.kind(spec) == Kind::DeclSpecifier && !ast.next(spec) && !(ast.flags(spec) & 1) && name &&
+            ast.first(name) != ast.last(name)) {
+            auto previous = ast.first(name);
+            while (ast.next(previous) != ast.last(name)) previous = ast.next(previous);
             auto binding = bind_template_name(name,scope,previous);
             if (binding.dependent) {
                 auto type = type_name(name,scope,previous);
@@ -125,64 +125,64 @@ void Analyzer::resolve_parenthesized_declaration(NodeId declaration, ScopeId sco
                 auto member = current ? lookup(current,terminal(name),Lookup::Ordinary,true) : 0;
                 bool known_type = member && (entities[member].kind == EntityKind::Type || entities[member].kind == EntityKind::Alias);
                 if (dependent_type(type) && !known_type) {
-                    if (kind == Kind::Function || ast[d].next || ast[params].next || spec_has(ast[declaration].first,KW_TYPEDEF))
+                    if (kind == Kind::Function || ast.next(d) || ast.next(params) || spec_has(ast.first(declaration),KW_TYPEDEF))
                         throw std::runtime_error("dependent name does not declare a parameter type");
                     // Resolve this single parsed ambiguity before publishing
                     // semantic facts. Reuse its name and delimiter wrappers;
                     // neither grammar nor a specialization is parsed again.
-                    auto before = ast[d].first;
-                    while (before && ast[before].next != params) before = ast[before].next;
+                    auto before = ast.first(d);
+                    while (before && ast.next(before) != params) before = ast.next(before);
                     if (!before) throw std::logic_error("parenthesized declaration has no declarator-id");
-                    if (ast[before].kind != Kind::Identifier)
+                    if (ast.kind(before) != Kind::Identifier)
                         throw std::runtime_error("dependent name does not declare a pointed-to function parameter type");
                     ast.resolve_paren_initializer(item,d,params,before);
                 }
             }
         }
-        item = ast[item].next;
+        item = ast.next(item);
     } while (item);
 }
 TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typename, bool template_name)
 {
-    if (!last) last = ast[n].last;
-    ScopeId owner = ast[n].op == OP_COLON2 ? global : s;
-    bool qualified = ast[n].op == OP_COLON2;
+    if (!last) last = ast.last(n);
+    ScopeId owner = ast.op(n) == OP_COLON2 ? global : s;
+    bool qualified = ast.op(n) == OP_COLON2;
     TypeId prefix = 0;
-    for (auto p = ast[n].first; p; p = ast[p].next) {
+    for (auto p = ast.first(n); p; p = ast.next(p)) {
         auto list = child(p,Kind::TemplateArguments);
         if (prefix && dependent_type(prefix)) {
             auto current = current_instantiation_scope(prefix,s);
             // Known members of the current instantiation are looked up at the
             // definition. Other dependent qualifiers retain a substitution path.
-            if (current && (lookup(current,ast[p].text,Lookup::Ordinary,true) ||
+            if (current && (lookup(current,ast.text(p),Lookup::Ordinary,true) ||
                 !template_pattern_open_bases.get(scopes[current].entity))) {
                 // A known nondependent base member is looked up again in the
                 // instantiation context when a dependent base can add a
                 // conflicting name ([temp.dep.type]/7).
-                if (template_pattern_open_bases.get(scopes[current].entity)) retain_type_access(p,prefix,s,ast[p].text);
+                if (template_pattern_open_bases.get(scopes[current].entity)) retain_type_access(p,prefix,s,ast.text(p));
                 owner = current; qualified = true; prefix = 0;
             }
         }
         if (prefix && dependent_type(prefix)) {
             if (!ast.nodes.occurrences[n].context) {
-                if (list && !(ast[p].flags & 1)) throw std::runtime_error("dependent member template requires template");
+                if (list && !(ast.flags(p) & 1)) throw std::runtime_error("dependent member template requires template");
                 if (p == last && require_typename) throw std::runtime_error("dependent qualified type requires typename");
             }
-            retain_type_access(p,prefix,s,ast[p].text);
+            retain_type_access(p,prefix,s,ast.text(p));
             std::vector<TypeId> args;
-            for (auto a = ast[list].first; a; a = ast[a].next) {
+            for (auto a = ast.first(list); a; a = ast.next(a)) {
                 auto type = template_argument_node(a,s);
                 if (template_type_probe && !type) return 0;
                 args.push_back(value_argument(type) ? type : types.signature(type));
             }
             auto kind = list ? DependentNameKind::Application :
                 template_name && p == last ? DependentNameKind::Template : DependentNameKind::Type;
-            prefix = types.dependent_name(prefix,ast[p].text,args,kind);
+            prefix = types.dependent_name(prefix,ast.text(p),args,kind);
             if (p == last) return prefix;
             continue;
         }
-        if (ast[ast[p].detail].kind == Kind::Decltype) {
-            prefix = expression_type(ast[ast[p].detail].first,s,true);
+        if (ast.kind(ast.detail(p)) == Kind::Decltype) {
+            prefix = expression_type(ast.first(ast.detail(p)),s,true);
             if (template_type_probe && !prefix) return 0;
             if (p == last) return prefix;
             if (dependent_type(prefix)) continue;
@@ -190,12 +190,12 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typena
             complete_class(types[prefix].entity);
             owner = entities[types[prefix].entity].scope; qualified = true; continue;
         }
-        auto e = lookup(owner,ast[p].text,list ? Lookup::Template : p == last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
+        auto e = lookup(owner,ast.text(p),list ? Lookup::Template : p == last ? Lookup::Ordinary : Lookup::Qualifier,qualified);
         auto template_target = template_entity(e);
         if (list && template_target && entities[template_target].kind == EntityKind::Alias) {
             check_access(template_target,s,owner);
             std::vector<ArgumentId> args;
-            for (auto a = ast[list].first; a; a = ast[a].next)
+            for (auto a = ast.first(list); a; a = ast.next(a))
                 append_template_argument(a,s,template_argument_node(a,s),args);
             prefix = specialize_alias(template_target,args);
             if (p == last) return prefix;
@@ -207,7 +207,7 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typena
         if (template_type_probe && e && !instance) return 0;
         e = instance;
         if (!e) {
-            auto text = ids.spelling(ast[p].text);
+            auto text = ids.spelling(ast.text(p));
             throw std::runtime_error("type name '" + std::string(text.data,text.size) + "' is not visible");
         }
         check_access(e,s,owner);
@@ -222,7 +222,7 @@ TypeId Analyzer::type_name(NodeId n, ScopeId s, NodeId last, bool require_typena
         else if (template_type_probe && !prefix && p == last) prefix = injected_template_type(e,s);
         if (p == last) {
             if (!type) throw std::runtime_error("type name denotes a value");
-            if (last == ast[n].last) facts.edit(n).entity = e;
+            if (last == ast.last(n)) facts.edit(n).entity = e;
             return prefix;
         }
         if (prefix && dependent_type(prefix)) continue;

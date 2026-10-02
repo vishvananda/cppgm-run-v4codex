@@ -5,6 +5,8 @@
 #include <cstdint>
 #include <string>
 #include <utility>
+#include <cassert>
+#include <cstring>
 
 namespace cppgm {
 
@@ -12,7 +14,9 @@ struct TextView {
     const char* data;
     std::size_t size;
     TextView(const char* data = "", std::size_t size = 0) : data(data), size(size) {}
-    bool equals(const char* text) const;
+    bool equals(const char* text) const {
+        return std::strlen(text) == size && std::memcmp(data,text,size) == 0;
+    }
 };
 
 // A translation unit owns its sources and identifier table until all consumers
@@ -51,8 +55,16 @@ struct SourceCharacter {
 class CharacterCursor {
 public:
     explicit CharacterCursor(const SourceBuffer& source, LexStats* stats = 0);
-    const SourceCharacter& peek(std::size_t ahead = 0);
+    const SourceCharacter& peek(std::size_t ahead = 0) {
+        assert(ahead < 18);
+        if (count_ <= ahead) fill(ahead);
+        return pending_[(head_+ahead)%18].character;
+    }
     SourceCharacter take();
+    enum class AsciiRun { Identifier, Whitespace, Comment };
+    // Consume an untranslated ASCII identifier tail, whitespace or comment span.
+    // Special characters and any pending lookahead retain the normal pipeline.
+    TextView take_ascii(AsciiRun kind);
     void raw_mode(bool enabled);
     // An escaped backslash is literal syntax, not the start of a UCN.
     void ucn_mode(bool enabled);
@@ -80,6 +92,7 @@ private:
     SourceCharacter decode(Position& position);
     SourceCharacter phase_one(Position& position);
     SourceCharacter translate(Position& position);
+    void fill(std::size_t ahead);
 };
 
 } // namespace cppgm

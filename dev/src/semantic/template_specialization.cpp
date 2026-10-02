@@ -40,9 +40,9 @@ void Analyzer::select_explicit_specialization(EntityId e, NodeId source)
 }
 EntityId Analyzer::declare_class_specialization(NodeId n, ScopeId s)
 {
-    auto name = ast[n].detail;
+    auto name = ast.detail(n);
     auto owner = name_owner(name,s);
-    auto list = child(ast[name].last,Kind::TemplateArguments);
+    auto list = child(ast.last(name),Kind::TemplateArguments);
     auto primary = local(owner,terminal(name),Lookup::Tag);
     if (!list && primary && entities[primary].class_info && !entities[primary].template_info &&
         (entities[primary].template_member || entities[primary].explicit_specialization) && encloses(s,owner)) {
@@ -54,7 +54,7 @@ EntityId Analyzer::declare_class_specialization(NodeId n, ScopeId s)
     if (!list || !primary || !entities[primary].template_info || !entities[primary].class_info || !encloses(s,owner))
         throw std::runtime_error("explicit class specialization requires an enclosing primary");
     std::vector<TypeId> args;
-    for (auto a = ast[list].first; a; a = ast[a].next) {
+    for (auto a = ast.first(list); a; a = ast.next(a)) {
         auto arg = template_argument_node(a,s);
         if (dependent_argument(arg)) throw std::runtime_error("dependent explicit specialization");
         args.push_back(arg);
@@ -73,9 +73,9 @@ EntityId Analyzer::declare_class_specialization(NodeId n, ScopeId s)
 EntityId Analyzer::declare_function_specialization(NodeId name, ScopeId s, TypeId type, ScopeId declared_owner)
 {
     auto owner = declared_owner ? declared_owner : name_owner(name,s);
-    auto list = child(ast[name].last,Kind::TemplateArguments);
+    auto list = child(ast.last(name),Kind::TemplateArguments);
     std::vector<TypeId> supplied;
-    for (auto a = ast[list].first; a; a = ast[a].next) supplied.push_back(template_argument_node(a,s));
+    for (auto a = ast.first(list); a; a = ast.next(a)) supplied.push_back(template_argument_node(a,s));
     EntityId selected = 0; std::vector<EntityId> matching;
     for (auto primary : candidates(local(owner,terminal(name)))) {
         if (!entities[primary].template_info || entities[primary].specialization) continue;

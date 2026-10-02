@@ -148,7 +148,7 @@ void Analyzer::bind_pattern_member(EntityId e, NodeId declaration, NodeId declar
     auto scope = entities[e].owner, cls = scopes[scope].entity;
     if (scopes[scope].kind != ScopeKind::Class || !entities[cls].type || entities[cls].class_info) return;
     auto name = decl_name(declarator);
-    bool destructor = ast[ast[name].last].op == OP_COMPL;
+    bool destructor = ast.op(ast.last(name)) == OP_COMPL;
     bool constructor = !destructor && terminal(name) == entities[cls].name;
     member_facts(e);
     auto m = entities[e].member_info;
@@ -157,8 +157,8 @@ void Analyzer::bind_pattern_member(EntityId e, NodeId declaration, NodeId declar
     auto init = entities[e].initializer;
     if (!init) init = child(declaration,Kind::Initializer);
     auto special = child(init,Kind::SpecialInitializer);
-    members[m].deleted = special && ast[special].op == KW_DELETE;
-    members[m].synthetic = special && ast[special].op == KW_DEFAULT;
+    members[m].deleted = special && ast.op(special) == KW_DELETE;
+    members[m].synthetic = special && ast.op(special) == KW_DEFAULT;
     if (init && !special) template_pattern_members.put(key(cls,unsigned(PatternMemberKind::PureVirtual)),e); // An explicitly pure member makes this source class abstract.
     function_defaults(e,declarator,scope,declaration);
     if (constructor || destructor) {

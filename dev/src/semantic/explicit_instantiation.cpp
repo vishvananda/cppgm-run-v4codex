@@ -35,8 +35,8 @@ bool Analyzer::instantiation_suppressed(EntityId e) const
 void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
 {
     using syntax::Kind;
-    auto source = ast[n].first;
-    bool declaration_only = ast[n].flags & 1;
+    auto source = ast.first(n);
+    bool declaration_only = ast.flags(n) & 1;
     struct Naming {
         bool& flag; bool saved;
         Naming(bool& f) : flag(f), saved(f) { flag = true; }
@@ -46,7 +46,7 @@ void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
     auto check_namespace = [&](ScopeId owner, NodeId name) {
         if (scopes[s].kind != ScopeKind::Namespace || !encloses(s,owner))
             throw std::runtime_error("explicit instantiation outside enclosing namespace");
-        if (ast[name].first != ast[name].last || ast[name].op == OP_COLON2) return;
+        if (ast.first(name) != ast.last(name) || ast.op(name) == OP_COLON2) return;
         for (auto current = owner; current != s; current = scopes[current].parent) {
             auto parent = scopes[current].parent;
             bool inline_namespace = false;
@@ -63,23 +63,23 @@ void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
         if (declaration_only) entities[e].instantiation_declaration = true;
         else entities[e].instantiation_definition = true;
     };
-    if (ast[source].kind != Kind::ClassForward) {
-        bool special = ast[source].kind == Kind::SpecialMember;
-        if (ast[source].kind != Kind::SimpleDeclaration && !special) throw std::runtime_error("invalid explicit instantiation");
-        auto item = ast[child(source,Kind::InitDeclarators)].first;
-        if (!special && (!item || ast[item].next)) throw std::runtime_error("explicit instantiation requires one declarator");
-        auto d = special ? child(source,Kind::Declarator) : ast[item].first, name = decl_name(d);
+    if (ast.kind(source) != Kind::ClassForward) {
+        bool special = ast.kind(source) == Kind::SpecialMember;
+        if (ast.kind(source) != Kind::SimpleDeclaration && !special) throw std::runtime_error("invalid explicit instantiation");
+        auto item = ast.first(child(source,Kind::InitDeclarators));
+        if (!special && (!item || ast.next(item))) throw std::runtime_error("explicit instantiation requires one declarator");
+        auto d = special ? child(source,Kind::Declarator) : ast.first(item), name = decl_name(d);
         auto owner = name_owner(name,s,true);
-        auto type = types.signature(declarator(d,special ? types.fundamental(FT_VOID) : specifiers(ast[source].first,s),s));
+        auto type = types.signature(declarator(d,special ? types.fundamental(FT_VOID) : specifiers(ast.first(source),s),s));
         EntityId selected = 0;
         if (types[type].kind == TypeKind::Function) {
-            auto list = child(ast[name].last,Kind::TemplateArguments);
+            auto list = child(ast.last(name),Kind::TemplateArguments);
             std::vector<ArgumentId> args;
-            for (auto a = ast[list].first; a; a = ast[a].next) args.push_back(template_argument_node(a,s));
+            for (auto a = ast.first(list); a; a = ast.next(a)) args.push_back(template_argument_node(a,s));
             auto binding = lookup(owner,terminal(name),Lookup::Ordinary,true);
             if (special && scopes[owner].kind == ScopeKind::Class) {
                 auto cls = entities[scopes[owner].entity].class_info;
-                binding = ast[ast[name].last].op == OP_COMPL ? class_facts[cls].destructor : class_facts[cls].constructor;
+                binding = ast.op(ast.last(name)) == OP_COMPL ? class_facts[cls].destructor : class_facts[cls].constructor;
             }
             std::vector<EntityId> matching;
             for (auto candidate : candidates(binding)) {
@@ -122,14 +122,14 @@ void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
         } else demand_template_storage(selected);
         return;
     }
-    auto e = resolve(ast[source].detail,s,Lookup::Qualifier);
+    auto e = resolve(ast.detail(source),s,Lookup::Qualifier);
     if (!e || !entities[e].class_info || (!entities[e].specialization &&
         ((!entities[e].template_member && !entities[e].explicit_specialization) || entities[e].template_info)))
         throw std::runtime_error("explicit instantiation requires a class specialization or member class");
     auto owner = entities[e].specialization ? entities[specialization_pattern(e)].owner : entities[e].owner;
-    auto name = ast[source].detail;
+    auto name = ast.detail(source);
     check_namespace(owner,name);
-    if ((ast[ast[source].first].op == KW_UNION) != (entities[e].key == KW_UNION))
+    if ((ast.op(ast.first(source)) == KW_UNION) != (entities[e].key == KW_UNION))
         throw std::runtime_error("explicit instantiation class key mismatch");
     if (entities[e].explicit_specialization) return;
     publish(e);

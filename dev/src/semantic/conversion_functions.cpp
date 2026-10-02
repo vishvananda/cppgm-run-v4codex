@@ -95,15 +95,15 @@ EntityId Analyzer::conversion_lookup(ScopeId owner, TypeId target, bool deduce)
 }
 EntityId Analyzer::resolve_conversion_name(NodeId name, ScopeId use)
 {
-    auto type = ast[ast[name].last].detail;
-    bool qualified = ast[name].first != ast[name].last || ast[name].op == OP_COLON2;
+    auto type = ast.detail(ast.last(name));
+    bool qualified = ast.first(name) != ast.last(name) || ast.op(name) == OP_COLON2;
     auto owner = qualified ? name_owner(name,use) : naming_class(use);
     TypeId target;
     if (qualified) {
         // [expr.prim.general]/12 constrains qualified conversion-function-ids.
         // Use the same owner for ordinary expressions and unevaluated queries.
-        auto specs = ast[type].first;
-        auto at_use = declarator(ast[specs].next,specifiers(specs,use),use);
+        auto specs = ast.first(type);
+        auto at_use = declarator(ast.next(specs),specifiers(specs,use),use);
         target = type_id(type,owner);
         if (types.signature(at_use) != types.signature(target))
             throw std::runtime_error("qualified conversion type differs in class and use scopes");
@@ -199,7 +199,7 @@ Conversion Analyzer::conversion_function_value(Expression source, TypeId to, boo
 }
 Conversion Analyzer::conversion(NodeId n, TypeId to, bool user)
 {
-    if (ast[n].kind == syntax::Kind::BracedInit) return list_initialization(n,to);
+    if (ast.kind(n) == syntax::Kind::BracedInit) return list_initialization(n,to);
     return conversion_value(expressions[n],to,user,n);
 }
 Conversion Analyzer::conversion_value(Expression source, TypeId to, bool user, NodeId n)

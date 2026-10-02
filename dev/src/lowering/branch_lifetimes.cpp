@@ -56,10 +56,10 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result, bool effects_onl
     auto expression = sem.expression_fact(n);
     auto omit_child = [&](NodeId child) {
         if (!omit_result) return false;
-        if (ast[n].kind == syntax::Kind::Parenthesized || ast[n].kind == syntax::Kind::Initializer) return true;
-        if (ast[n].kind != syntax::Kind::Conditional || child == ast[n].first) return false;
-        auto yes = ast[ast[n].first].next;
-        if (child != yes && child != ast[yes].next) return false;
+        if (ast.kind(n) == syntax::Kind::Parenthesized || ast.kind(n) == syntax::Kind::Initializer) return true;
+        if (ast.kind(n) != syntax::Kind::Conditional || child == ast.first(n)) return false;
+        auto yes = ast.next(ast.first(n));
+        if (child != yes && child != ast.next(yes)) return false;
         auto ordinal = child == yes ? 1u : 2u;
         return construction_omits_result(child,sem.conversion_fact(expression.conversions+ordinal));
     };
@@ -102,11 +102,11 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result, bool effects_onl
         if (c.ellipsis_object) needed |= cleanup(sem.converted_temporary(c));
         if (auto call = conversion_call(c)) arguments(*call);
     }
-    if (ast[n].kind == syntax::Kind::Lambda)
+    if (ast.kind(n) == syntax::Kind::Lambda)
         for (auto i = sem.closure(sem.types[expression.type].entity).first_capture; i; i = sem.closure_captures[i].next)
             if (auto call = conversion_call(sem.conversion_fact(sem.closure_captures[i].conversion))) arguments(*call);
     if (expression.form == semantic::ExpressionForm::Typeid && sem.rtti_expression(n).dynamic)
-        needed |= cleanup_expression(ast[n].first,false,effects_only);
+        needed |= cleanup_expression(ast.first(n),false,effects_only);
     if (auto root = sem.fold_root(n)) {
         std::vector<unsigned> work{root};
         while (!work.empty()) {
@@ -126,8 +126,8 @@ bool Procedural::cleanup_expression(NodeId n, bool omit_result, bool effects_onl
             }
             work.push_back(step.left); work.push_back(step.right);
         }
-    } else if (ast[n].kind != syntax::Kind::Lambda && ast[n].kind != syntax::Kind::Sizeof && ast[n].kind != syntax::Kind::TypeTrait)
-    for (NodeId child = ast[n].first; child; child = ast[child].next) {
+    } else if (ast.kind(n) != syntax::Kind::Lambda && ast.kind(n) != syntax::Kind::Sizeof && ast.kind(n) != syntax::Kind::TypeTrait)
+    for (NodeId child = ast.first(n); child; child = ast.next(child)) {
         needed |= cleanup_expression(child,omit_child(child),effects_only);
     }
     cleanup_expressions[key] |= (needed ? 2 : 1) << shift;

@@ -5,7 +5,7 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 bool Analyzer::bind_template_size(NodeId node, ScopeId scope)
 {
-    if (ast[node].op == KW_TYPEID) return false;
+    if (ast.op(node) == KW_TYPEID) return false;
     auto source = ast.nodes.occurrences[node].source;
     if (template_value_queries.get(source)) return true;
     struct Probe {
@@ -16,8 +16,8 @@ bool Analyzer::bind_template_size(NodeId node, ScopeId scope)
     auto query = expression_query(node,scope);
     if (!query) return false; // Local identity or another expression owner is not yet typed.
     template_value_queries.put(source,query); ++template_value_work;
-    bool boolean = ast[node].op == KW_NOEXCEPT || (ast[node].kind == Kind::TypeTrait &&
-        ast[node].flags && BuiltinTrait(ast[node].flags) != BuiltinTrait::Offsetof && BuiltinTrait(ast[node].flags) != BuiltinTrait::ArrayRank);
+    bool boolean = ast.op(node) == KW_NOEXCEPT || (ast.kind(node) == Kind::TypeTrait &&
+        ast.flags(node) && BuiltinTrait(ast.flags(node)) != BuiltinTrait::Offsetof && BuiltinTrait(ast.flags(node)) != BuiltinTrait::ArrayRank);
     Expression result; result.type = types.fundamental(boolean ? FT_BOOL : FT_UNSIGNED_LONG_INT); result.ready = true;
     expressions.set(node,result); { auto& published = facts.edit(node); published.type = result.type; published.scope = scope; }
     template_fixed_expressions.put(source,node); ++template_fixed_work;
@@ -201,7 +201,7 @@ bool Analyzer::reuse_template_value(NodeId node, ScopeId scope, Expression& resu
     if (type_queries[query].kind == QueryKind::BuiltinTrait || type_queries[query].kind == QueryKind::Offsetof) { result.form = ExpressionForm::ConstantQuery; return true; }
     auto operand = type_queries[query].type;
     if (!operand) operand = query_fact(query_edges[type_queries[query].offset]).expression.type;
-    facts.edit(ast[node].first).type = operand;
+    facts.edit(ast.first(node)).type = operand;
     return true;
 }
 bool Analyzer::fixed_layout_operand(NodeId node) const
@@ -215,18 +215,18 @@ bool Analyzer::fixed_layout_operand(NodeId node) const
     if (query.kind == QueryKind::Sizeof && types[query.type].kind == TypeKind::Named &&
         entities[types[query.type].entity].template_parameter) return false;
     if (expressions[node].form == ExpressionForm::ConstantQuery) return true;
-    if (ast[node].kind != Kind::Sizeof) return false;
-    auto operand = facts[ast[node].first].type;
+    if (ast.kind(node) != Kind::Sizeof) return false;
+    auto operand = facts[ast.first(node)].type;
     return types[operand].kind != TypeKind::Named || !entities[types[operand].entity].specialization;
 }
 void Analyzer::reuse_value_conversions(NodeId node, NodeId source, Expression& result)
 {
-    auto op = ast[node].op;
+    auto op = ast.op(node);
     if ((op != OP_PLUS && op != OP_MINUS && op != OP_PLUSASS && op != OP_MINUSASS) || result.count < 2 ||
         !template_value_dependence.get(ast.nodes.occurrences[node].source)) return;
     auto original = result.conversions;
     if (pointer(conversions[original].target) || pointer(conversions[original+1].target)) return;
-    auto first = ast[node].first, second = ast[first].next;
+    auto first = ast.first(node), second = ast.next(first);
     unsigned flags = unsigned(fixed_layout_operand(second)) | (unsigned(fixed_layout_operand(first)) << 1);
     auto previous = unsigned(conversions[original].fold_widen) | (unsigned(conversions[original+1].fold_widen) << 1);
     if (flags == previous) return;
@@ -247,7 +247,7 @@ void Analyzer::reuse_value_conversions(NodeId node, NodeId source, Expression& r
     }
     result.conversions = begin;
     expressions.inherit_conversions(node,source,begin);
-    for (auto child = first; child; child = ast[child].next) {
+    for (auto child = first; child; child = ast.next(child)) {
         auto incoming = expressions[child].incoming;
         if (incoming >= original && incoming-original < result.count)
             expressions.incoming(child,begin+incoming-original);

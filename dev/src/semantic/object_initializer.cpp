@@ -56,8 +56,8 @@ void Analyzer::finish_object_initializer(EntityId e, NodeId init, NodeId d, Node
         check_constant_object(e);
     if (calls && !entities[e].initializer && !function && (integral(t) || floating_type(value_type(t))) && spec_has(specs, KW_CONSTEXPR))
         throw std::runtime_error("constexpr object requires initializer");
-    if (calls && init && spec_has(specs, KW_CONSTEXPR) && integral(t) && ast[ast[init].first].kind == Kind::Literal)
-        facts.edit(ast[init].first).type = t;
+    if (calls && init && spec_has(specs, KW_CONSTEXPR) && integral(t) && ast.kind(ast.first(init)) == Kind::Literal)
+        facts.edit(ast.first(init)).type = t;
     if (calls && !function && !alias && !member_initializer && (scopes[s].kind != ScopeKind::Class || entities[e].inline_variable) && !external) register_destruction(e);
     if (definitions && !function && !alias && entities[e].definition && scopes[s].kind == ScopeKind::Namespace)
         demand_class_constant_storage(t);

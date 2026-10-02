@@ -99,7 +99,7 @@ Constant Analyzer::constant_init_plan(std::uint32_t id, ScopeId s)
     if (a.kind == InitKind::Scalar) return constant_initialize(a.source,a.type,s);
     std::vector<EvaluatedPart> parts;
     if (a.kind == InitKind::String) {
-        auto literal = ast[a.source].literal;
+        auto literal = ast.literal(a.source);
         for (std::uint64_t i = 0; i < ast.literals[literal].elements; ++i) {
             EvaluatedPart p; p.selector = i; p.value = literal_element(literal,Constant(types.fundamental(FT_UNSIGNED_LONG_INT),i)); parts.push_back(p);
         }
@@ -140,13 +140,13 @@ Constant Analyzer::constant_initialize(NodeId n, TypeId t, ScopeId s, EntityId c
         }
         return constant_construct(ctor,args,object_uses[x.object_use].value_initialize);
     }
-    while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer ||
-        ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) {
+    while (ast.kind(n) == Kind::Initializer || ast.kind(n) == Kind::ParenInitializer ||
+        ast.kind(n) == Kind::ParenArguments || ast.kind(n) == Kind::BracedInit) {
         auto conversion = conversions[expressions[n].incoming];
         if (conversion.target == t && conversion.kind == Conversion::Kind::List)
             return constant_node_conversion(n,conversion,s);
-        if (!ast[n].first) return constant_zero(t);
-        n = ast[n].first;
+        if (!ast.first(n)) return constant_zero(t);
+        n = ast.first(n);
     }
     if (!n) return Constant();
     auto c = conversions[expressions[n].incoming];
@@ -190,8 +190,8 @@ Constant Analyzer::constant_entity_value(EntityId e)
     }
     Constant value; auto mode_uses = evaluation_mode_uses;
     auto source = entity.initializer;
-    while (ast[source].kind == Kind::Initializer || ast[source].kind == Kind::Parenthesized ||
-        ast[source].kind == Kind::ParenInitializer || ast[source].kind == Kind::ParenArguments) source = ast[source].first;
+    while (ast.kind(source) == Kind::Initializer || ast.kind(source) == Kind::Parenthesized ||
+        ast.kind(source) == Kind::ParenInitializer || ast.kind(source) == Kind::ParenArguments) source = ast.first(source);
     bool static_scalar_temporary = reference && !class_value(types[t].child) &&
         (entity.is_static || scopes[entity.owner].kind == ScopeKind::Namespace) &&
         expressions[source].category == ValueCategory::Prvalue;

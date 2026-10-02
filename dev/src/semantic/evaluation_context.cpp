@@ -26,8 +26,8 @@ void Analyzer::prepare_context_reference(EntityId e)
     auto scalar = constant_indirect(value);
     if (!scalar.valid || !constant_persistent(scalar)) return;
     auto n = entity.initializer;
-    while (ast[n].kind == syntax::Kind::Initializer || ast[n].kind == syntax::Kind::ParenInitializer ||
-        ast[n].kind == syntax::Kind::ParenArguments) n = ast[n].first;
+    while (ast.kind(n) == syntax::Kind::Initializer || ast.kind(n) == syntax::Kind::ParenInitializer ||
+        ast.kind(n) == syntax::Kind::ParenArguments) n = ast.first(n);
     auto conversion = conversions[expressions[n].incoming];
     auto temporary = converted_temporary(conversion);
     if (!temporary) temporary = object_fact(n).temporary;

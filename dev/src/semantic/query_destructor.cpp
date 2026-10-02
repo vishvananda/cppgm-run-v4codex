@@ -3,12 +3,12 @@
 namespace cppgm { namespace semantic {
 TypeId Analyzer::destructor_target(NodeId name, TypeId object, ScopeId scope)
 {
-    auto part = ast[name].last, id = ast[part].first;
-    if (ast[id].kind == syntax::Kind::TypeId) return type_id(id,scope);
+    auto part = ast.last(name), id = ast.first(part);
+    if (ast.kind(id) == syntax::Kind::TypeId) return type_id(id,scope);
     EntityId found = 0;
     if (class_value(object) || pattern_class_type(object))
-        found = lookup(entities[types[object].entity].scope,ast[id].text,Lookup::Ordinary,true);
-    if (!found) found = lookup(scope,ast[id].text);
+        found = lookup(entities[types[object].entity].scope,ast.text(id),Lookup::Ordinary,true);
+    if (!found) found = lookup(scope,ast.text(id));
     if (!found || (entities[found].kind != EntityKind::Type && entities[found].kind != EntityKind::Alias)) return 0;
     if (child(part,syntax::Kind::TemplateArguments)) found = class_template_name(part,found,scope);
     return found ? entities[found].type : 0;

@@ -7,12 +7,12 @@ using namespace lowir_model;
 void Procedural::string_literal(NodeId n)
 {
     if (strings[n]) return;
-    const auto lit = ast.literals[ast[n].literal];
+    const auto lit = ast.literals[ast.literal(n)];
     std::uint64_t hash = 1469598103934665603ULL ^ unsigned(lit.type);
     for (std::uint32_t j = 0; j < lit.bytes; ++j) hash = (hash ^ static_cast<unsigned char>(ast.literal_bytes[lit.offset+j])) * 1099511628211ULL;
     auto head = string_index.get(hash);
     for (auto i = head; i; i = string_records[i].next) {
-        auto other = ast.literals[ast[string_records[i].node].literal];
+        auto other = ast.literals[ast.literal(string_records[i].node)];
         if (other.type == lit.type && other.bytes == lit.bytes &&
             !std::memcmp(ast.literal_bytes.data()+other.offset, ast.literal_bytes.data()+lit.offset, lit.bytes)) {
             strings[n] = strings[string_records[i].node]; return;
@@ -28,7 +28,7 @@ void Procedural::emit_string_literals()
     // after other globals so it cannot split a structured initializer's slice.
     for (unsigned i = 1; i < string_records.size(); ++i) {
         auto n = string_records[i].node;
-        const auto lit = ast.literals[ast[n].literal];
+        const auto lit = ast.literals[ast.literal(n)];
         Global g; g.structured = true;
         g.symbol = strings[n];
         g.data.begin = p.data.size(); g.data.count = lit.elements;
@@ -66,7 +66,7 @@ void Procedural::global_data(NodeId n, TypeId t)
         if (value.kind != semantic::StaticValue::Complex) throw std::logic_error("missing complex constant");
         complex_data(t,semantic::Constant(t,value.bits)); return;
     }
-    while (ast[n].kind == Kind::Initializer) n = ast[n].first;
+    while (ast.kind(n) == Kind::Initializer) n = ast.first(n);
     auto array = sem.types[t];
     if (array.kind == TypeKind::MemberPointer && sem.types[array.child].kind == TypeKind::Function) {
         member_pointer_data(sem.static_value(n,t)); return;
@@ -150,7 +150,7 @@ void Procedural::global(EntityId e)
                 if (!ctor) {
                     auto source = sem.class_initialization(entity.initializer,t).source;
                     if (!source) source = entity.initializer;
-                    while (ast[source].kind == Kind::Initializer || ast[source].kind == Kind::Parenthesized) source = ast[source].first;
+                    while (ast.kind(source) == Kind::Initializer || ast.kind(source) == Kind::Parenthesized) source = ast.first(source);
                     ctor = sem.facts[source].entity;
                 }
                 if (sem.constructor_member(ctor) && sem.synthetic_member(ctor) && !sem.transfer_member(ctor) && !sem.constructor_needed(ctor)) {
@@ -265,11 +265,11 @@ void Procedural::initialize(NodeId n, TypeId t, Value location)
     if (n && sem.facts[n].entity && sem.constructor_member(sem.facts[n].entity)) {
         construct(sem.facts[n].entity, n, address(location)); return;
     }
-    while (ast[n].kind == Kind::Initializer) n = ast[n].first;
+    while (ast.kind(n) == Kind::Initializer) n = ast.first(n);
     auto target = sem.types[t];
     if ((target.kind == TypeKind::Named && sem.entities[target.entity].class_info) || target.kind == TypeKind::Array)
         throw std::logic_error("missing aggregate initializer plan");
-    if ((ast[n].kind == Kind::BracedInit && !sem.expression_fact(n).incoming) || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) n = ast[n].first;
+    if ((ast.kind(n) == Kind::BracedInit && !sem.expression_fact(n).incoming) || ast.kind(n) == Kind::ParenInitializer || ast.kind(n) == Kind::ParenArguments) n = ast.first(n);
     Value value = n ? (location.bit_field ? load(expression(n)) : sem.expression_fact(n).incoming ? converted(n, sem.conversion_fact(sem.expression_fact(n).incoming)) : convert(expression(n, reference(t)), t)) : initialization_value(0,t);
     store(value, location);
 }
@@ -278,7 +278,7 @@ void Procedural::initialize(NodeId n, TypeId t, Value location)
 namespace cppgm { namespace lowering {
 void Procedural::numeric_string_literal(NodeId n)
 {
-    auto prefix = ast.literals[ast[n].literal].prefix;
+    auto prefix = ast.literals[ast.literal(n)].prefix;
     if (auto old = numeric_strings.get(prefix)) { strings[n] = lowir_model::SymbolId(old); return; }
     auto text = identifiers.spelling(prefix);
     lowir_model::Global g; g.structured = true;

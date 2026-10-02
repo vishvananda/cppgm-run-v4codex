@@ -84,9 +84,9 @@ void Procedural::constructor_body(EntityId e, bool base)
         Value value;
         if (scalar && action.initializer) {
             NodeId n = action.initializer;
-            while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) {
+            while (ast.kind(n) == Kind::Initializer || ast.kind(n) == Kind::ParenArguments || ast.kind(n) == Kind::BracedInit) {
                 if (sem.conversion_fact(sem.expression_fact(n).incoming).kind == semantic::Conversion::Kind::List) break;
-                n = ast[n].first;
+                n = ast.first(n);
             }
             value = initialization_value(n, action.type);
         }
@@ -158,13 +158,13 @@ void Procedural::aggregate_initialize(NodeId n, TypeId t, Value root, bool indir
         Value at = initialization_address(root, indirect, path); at.address = false;
         construct(ctor, n, at); return;
     }
-    while (ast[n].kind == Kind::Initializer) n = ast[n].first;
+    while (ast.kind(n) == Kind::Initializer) n = ast.first(n);
     auto target = sem.types[t];
     if ((target.kind == TypeKind::Named && sem.entities[target.entity].class_info) || target.kind == TypeKind::Array)
         throw std::logic_error("missing aggregate initializer plan");
-    while (ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::BracedInit) {
+    while (ast.kind(n) == Kind::ParenInitializer || ast.kind(n) == Kind::ParenArguments || ast.kind(n) == Kind::BracedInit) {
         if (sem.conversion_fact(sem.expression_fact(n).incoming).kind == semantic::Conversion::Kind::List) break;
-        n = ast[n].first;
+        n = ast.first(n);
     }
     Value value = path.empty() || path.back().field ? initialization_value(n, t) :
         n ? incoming(n) : initialization_value(0,t);

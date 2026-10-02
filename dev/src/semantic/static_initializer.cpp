@@ -47,8 +47,8 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
             return constant_static_value(constant_zero(target));
         r.kind = StaticValue::Integer; return r;
     }
-    NodeId first = ast[n].first;
-    auto kind = ast[n].kind;
+    NodeId first = ast.first(n);
+    auto kind = ast.kind(n);
     auto list = conversions[expressions[n].incoming];
     if (list.kind == Conversion::Kind::List && list.target == target)
         return constant_static_value(constant_node_conversion(n,list,facts[n].scope));
@@ -68,7 +68,7 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     if (reference_target && x.category == ValueCategory::Prvalue && !class_value(x.type) &&
         (incoming.kind == Conversion::Kind::Standard || incoming.kind == Conversion::Kind::Explicit))
         return constant_static_value(convert(evaluate(n,facts[n].scope),types[target].child,true));
-    if ((reference_target || address_value(target)) && !(x.form == ExpressionForm::Cast && ast[n].op == KW_REINTERPET_CAST)) {
+    if ((reference_target || address_value(target)) && !(x.form == ExpressionForm::Cast && ast.op(n) == KW_REINTERPET_CAST)) {
         Conversion c; c.target = target; c.reference = reference_target;
         if (incoming.target == target) c = incoming;
         return constant_static_value(constant_node_conversion(n,c,facts[n].scope));
@@ -80,7 +80,7 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     }
     if (incoming.kind == Conversion::Kind::User) return constant_static_value(constant_node_conversion(n,incoming,facts[n].scope));
     if (incoming.kind == Conversion::Kind::Construction) return r;
-    if (kind == Kind::Literal && ast.literals[ast[n].literal].suffix) return r;
+    if (kind == Kind::Literal && ast.literals[ast.literal(n)].suffix) return r;
     if (!reference_target && (complex_type(target) || complex_type(x.type)))
         return constant_static_value(convert(evaluate(n,facts[n].scope),target,true));
     if (!reference_target && (integral(target) || floating_type(target)) &&
@@ -91,7 +91,7 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
         else { r.kind = StaticValue::Integer; r.bits = value.bits; }
         return r;
     }
-    if (kind == Kind::Literal && ast.literals[ast[n].literal].kind == LiteralKind::string) {
+    if (kind == Kind::Literal && ast.literals[ast.literal(n)].kind == LiteralKind::string) {
         r.kind = StaticValue::String; r.string = n; return r;
     }
     if (kind == Kind::IdExpression) {
@@ -110,48 +110,48 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
             }
         }
     }
-    if (kind == Kind::Unary && ast[n].op == OP_AMP) return static_value(first, types.compound(TypeKind::LRef, expressions[first].type));
-    if (kind == Kind::Unary && ast[n].op == OP_STAR)
+    if (kind == Kind::Unary && ast.op(n) == OP_AMP) return static_value(first, types.compound(TypeKind::LRef, expressions[first].type));
+    if (kind == Kind::Unary && ast.op(n) == OP_STAR)
         return static_value(first, expressions[first].type);
-    if (kind == Kind::Unary && (ast[n].op == OP_PLUS || ast[n].op == OP_MINUS) &&
+    if (kind == Kind::Unary && (ast.op(n) == OP_PLUS || ast.op(n) == OP_MINUS) &&
         floating_type(x.type)) {
         r = static_value(first, x.type);
-        if (r.kind == StaticValue::Floating && ast[n].op == OP_MINUS) r.floating = -r.floating;
+        if (r.kind == StaticValue::Floating && ast.op(n) == OP_MINUS) r.floating = -r.floating;
         return r;
     }
     if (kind == Kind::Subscript) {
         NodeId base = first;
-        NodeId index = ast[first].next;
+        NodeId index = ast.next(first);
         if (!pointer(decay(expressions[base].type))) std::swap(base, index);
         r = static_value(base, types.compound(TypeKind::Pointer, x.type));
         Constant c = evaluate(index, facts[index].scope);
         if (!c.valid || r.kind != StaticValue::Address) return StaticValue();
         r.addend += static_cast<std::int64_t>(integer_value(c)) * size(x.type); return r;
     }
-    if (kind == Kind::Binary && (ast[n].op == OP_PLUS || ast[n].op == OP_MINUS)) {
-        NodeId right = ast[first].next;
-        if (ast[n].op == OP_PLUS && pointer(decay(expressions[right].type))) std::swap(first, right);
+    if (kind == Kind::Binary && (ast.op(n) == OP_PLUS || ast.op(n) == OP_MINUS)) {
+        NodeId right = ast.next(first);
+        if (ast.op(n) == OP_PLUS && pointer(decay(expressions[right].type))) std::swap(first, right);
         TypeId left = decay(expressions[first].type);
         if (pointer(left)) {
             r = static_value(first, left);
             Constant c = evaluate(right, facts[right].scope);
             if (!c.valid || r.kind != StaticValue::Address) return StaticValue();
             std::int64_t delta = static_cast<std::int64_t>(integer_value(c)) * size(types[left].child);
-            r.addend += ast[n].op == OP_PLUS ? delta : -delta; return r;
+            r.addend += ast.op(n) == OP_PLUS ? delta : -delta; return r;
         }
     }
     if (kind == Kind::Conditional) {
         Constant c = evaluate(first, facts[first].scope);
         if (!c.valid) return r;
-        NodeId yes = ast[first].next;
-        return static_value(constant_truth(c) ? yes : ast[yes].next, target);
+        NodeId yes = ast.next(first);
+        return static_value(constant_truth(c) ? yes : ast.next(yes), target);
     }
     if (x.form == ExpressionForm::Cast) {
-        NodeId operand = kind == Kind::Cast ? ast[first].next : ast[ast[first].next].first;
+        NodeId operand = kind == Kind::Cast ? ast.next(first) : ast.first(ast.next(first));
         r = static_value(operand, facts[n].type);
-    } else if (kind == Kind::KeywordLiteral && ast[n].op == KW_NULLPTR) r.kind = StaticValue::Integer;
-    else if (kind == Kind::Literal && ast.literals[ast[n].literal].type >= FT_FLOAT) {
-        auto literal = ast.literals[ast[n].literal]; r.kind = StaticValue::Floating;
+    } else if (kind == Kind::KeywordLiteral && ast.op(n) == KW_NULLPTR) r.kind = StaticValue::Integer;
+    else if (kind == Kind::Literal && ast.literals[ast.literal(n)].type >= FT_FLOAT) {
+        auto literal = ast.literals[ast.literal(n)]; r.kind = StaticValue::Floating;
         if (floating_representation(literal.type) == FT_FLOAT) { float f; std::memcpy(&f, literal.scalar.data(), sizeof f); r.floating = f; }
         else if (floating_representation(literal.type) == FT_DOUBLE) { double f; std::memcpy(&f, literal.scalar.data(), sizeof f); r.floating = f; }
         else if (floating_representation(literal.type) == FT_FLOAT128) std::memcpy(&r.floating,literal.scalar.data(),16);

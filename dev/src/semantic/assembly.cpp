@@ -5,13 +5,13 @@ void Analyzer::resolve_assembly(NodeId n, ScopeId s, bool pattern)
 {
     using namespace syntax;
     std::vector<Expression> operands; std::vector<NodeId> nodes;
-    for (auto c = ast[n].first; c; c = ast[c].next) {
-        auto source = ast[c].first; Expression x;
+    for (auto c = ast.first(n); c; c = ast.next(c)) {
+        auto source = ast.first(c); Expression x;
         if (pattern) {
             bool dependent = bind_template_expression(source,s);
             if (!dependent) x = template_statement_value(source,s);
         } else x = expression(source,s);
-        auto flags = ast[c].flags;
+        auto flags = ast.flags(c);
         if (x.type && !dependent_type(x.type)) {
             if (!integral(x.type) || fundamental(x.type,FT_BOOL) || size(x.type) > 8)
                 throw std::runtime_error("asm operand requires an integer machine word");
@@ -28,12 +28,12 @@ void Analyzer::resolve_assembly(NodeId n, ScopeId s, bool pattern)
         } else x.type = 0;
         nodes.push_back(c); operands.push_back(x);
     }
-    for (unsigned i = 0; i < nodes.size(); ++i) if (ast[nodes[i]].literal) {
-        auto match = ast[nodes[i]].literal-1;
+    for (unsigned i = 0; i < nodes.size(); ++i) if (ast.literal(nodes[i])) {
+        auto match = ast.literal(nodes[i])-1;
         if (operands[i].type && operands[match].type && size(operands[i].type) != size(operands[match].type))
             throw std::runtime_error("asm matching operands have different widths");
     }
-    const auto& plan = ast.assemblies[ast[n].literal];
+    const auto& plan = ast.assemblies[ast.literal(n)];
     for (unsigned i = 0; i < plan.count; ++i) {
         auto instruction = ast.assembly_instructions[plan.begin+i];
         if (instruction.op <= AsmOp::Fence) continue;
@@ -44,7 +44,7 @@ void Analyzer::resolve_assembly(NodeId n, ScopeId s, bool pattern)
         if (instruction.op == AsmOp::Bswap && bytes != 4 && bytes != 8) throw std::runtime_error("bswap requires 32 or 64 bits");
         bool binary = (instruction.op >= AsmOp::Move && instruction.op <= AsmOp::Xor) || instruction.op >= AsmOp::Exchange;
         if (binary && !instruction.immediate && operands[instruction.source].type && size(operands[instruction.source].type) != bytes &&
-            !(ast[nodes[instruction.source]].flags & AsmImmediate)) throw std::runtime_error("asm source and destination widths differ");
+            !(ast.flags(nodes[instruction.source]) & AsmImmediate)) throw std::runtime_error("asm source and destination widths differ");
     }
 }
 } }

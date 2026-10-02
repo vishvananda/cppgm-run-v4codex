@@ -47,12 +47,6 @@ void Cursor::fill()
     max_pending = std::max(max_pending, count_);
 }
 
-Token Cursor::peek(std::size_t ahead)
-{
-    while (count_ <= ahead) fill();
-    return pending_[(head_ + ahead) % pending_.size()];
-}
-
 Token Cursor::take()
 {
     Token result = peek();
@@ -60,11 +54,6 @@ Token Cursor::take()
     --count_;
     ++consumed;
     return result;
-}
-
-bool Cursor::is(const char* spelling, std::size_t ahead)
-{
-    return ids_.spelling(peek(ahead).text).equals(spelling);
 }
 
 bool Cursor::eat(const char* spelling)

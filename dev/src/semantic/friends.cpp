@@ -4,7 +4,7 @@ namespace cppgm { namespace semantic {
 using syntax::Kind;
 bool Analyzer::friend_declaration(NodeId n, ScopeId s)
 {
-    NodeId specs = ast[n].first;
+    NodeId specs = ast.first(n);
     if (!spec_has(specs, KW_FRIEND)) return false;
     ScopeId ns = s;
     while (scopes[ns].kind != ScopeKind::Namespace) ns = scopes[ns].parent;
@@ -12,11 +12,11 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
     EntityId cls = scopes[templated ? scopes[s].parent : s].entity;
     NodeId friend_type = child(specs, Kind::ClassForward);
     if (friend_type) {
-        NodeId name = ast[friend_type].detail;
+        NodeId name = ast.detail(friend_type);
         if (templated) {
-            bool qualified = ast[name].first != ast[name].last || ast[name].op == OP_COLON2;
+            bool qualified = ast.first(name) != ast.last(name) || ast.op(name) == OP_COLON2;
             auto owner = qualified ? name_owner(name,s) : ns;
-            if (child(ast[name].last,Kind::TemplateArguments))
+            if (child(ast.last(name),Kind::TemplateArguments))
                 throw std::runtime_error("friend declaration cannot declare a partial specialization");
             if (qualified && !local(owner,terminal(name),Lookup::Tag))
                 throw std::runtime_error("qualified friend class template was not declared");
@@ -39,7 +39,7 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
         }
         EntityId target = resolve(name, s, Lookup::Tag);
         if (!target) {
-            if (ast[name].first != ast[name].last) throw std::runtime_error("undeclared qualified friend class");
+            if (ast.first(name) != ast.last(name)) throw std::runtime_error("undeclared qualified friend class");
             TypeId type = class_type(friend_type, ns);
             target = types[type].entity;
         }
@@ -48,7 +48,7 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
     }
     TypeId base = specifiers(specs, s);
     NodeId list = child(n, Kind::InitDeclarators);
-    if (ast[n].kind != Kind::Function && !ast[list].first) {
+    if (ast.kind(n) != Kind::Function && !ast.first(list)) {
         // [class.friend]: a simple-type-specifier or typename-specifier grants
         // friendship to the resulting class; other types are ignored.
         if (!dependent_type(base) && types[base].kind == TypeKind::Named && entities[types[base].entity].class_info)
@@ -64,10 +64,10 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
         TypeId type = types.signature(source_pattern ? bind_template_type(specs,d,s) : declarator(d, base, s));
         if (types[type].kind != TypeKind::Function) throw std::runtime_error("friend declaration is not a function");
         NodeId name = decl_name(d);
-        bool qualified = ast[name].first != ast[name].last || ast[name].op == OP_COLON2;
+        bool qualified = ast.first(name) != ast.last(name) || ast.op(name) == OP_COLON2;
         ScopeId owner = qualified ? name_owner(name, s) : ns;
         EntityId function = 0;
-        bool fixed_reference = (qualified || child(ast[name].last,Kind::TemplateArguments)) &&
+        bool fixed_reference = (qualified || child(ast.last(name),Kind::TemplateArguments)) &&
             !dependent_type(type) && !dependent_template_syntax(name,s);
         if (source_pattern && !templated && !fixed_reference) {
             // A non-template friend of a class template is a source pattern
@@ -88,7 +88,7 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
             }
             return;
         }
-        if (!templated && child(ast[name].last,Kind::TemplateArguments)) {
+        if (!templated && child(ast.last(name),Kind::TemplateArguments)) {
             function = declare_function_specialization(name,s,type,owner);
         } else if (qualified) {
             if (templated) {
@@ -122,8 +122,8 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
             } else schedule_body(retained);
         }
     };
-    if (ast[n].kind == Kind::Function) { NodeId d = ast[specs].next; add(d, ast[d].next); }
-    else for (NodeId item = ast[list].first; item; item = ast[item].next) add(ast[item].first, 0);
+    if (ast.kind(n) == Kind::Function) { NodeId d = ast.next(specs); add(d, ast.next(d)); }
+    else for (NodeId item = ast.first(list); item; item = ast.next(item)) add(ast.first(item), 0);
     return true;
 }
 void Analyzer::demand_friend_body(EntityId e)

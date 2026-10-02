@@ -54,10 +54,10 @@ void Analyzer::spelling(std::ostream& out, IdentifierId n) const
 }
 void Analyzer::write_name(std::ostream& out, NodeId n) const
 {
-    if (ast[n].op == OP_COLON2) out << "::";
-    for (NodeId p = ast[n].first; p; p = ast[p].next) {
-        if (p != ast[n].first) out << "::";
-        spelling(out, ast[p].text);
+    if (ast.op(n) == OP_COLON2) out << "::";
+    for (NodeId p = ast.first(n); p; p = ast.next(p)) {
+        if (p != ast.first(n)) out << "::";
+        spelling(out, ast.text(p));
     }
 }
 void Analyzer::write_type(std::ostream& out, TypeId id, NodeId display_name, ETokenType key_op, TypeId completed) const
@@ -272,6 +272,7 @@ void Analyzer::telemetry(std::ostream& out) const
         << ",\"semantic_template_member_uses\":" << template_member_uses.size()-1
         << ",\"parsed_nodes\":" << ast.nodes.parsed_size()
         << ",\"template_occurrences\":" << ast.nodes.size() - ast.nodes.parsed_size()
+        << ",\"template_occurrence_index_bytes\":" << ast.nodes.index_bytes()
         << ",\"template_deferred_regions\":" << static_cast<const syntax::Ast&>(ast).deferred_regions
         << ",\"template_demanded_regions\":" << static_cast<const syntax::Ast&>(ast).demanded_regions
         << ",\"template_source_regions\":" << static_cast<const syntax::Ast&>(ast).source_regions.size()

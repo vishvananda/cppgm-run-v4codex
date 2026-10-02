@@ -8,16 +8,16 @@ void Procedural::assembly_statement(NodeId n)
     // A memory operand instead observes its location at each instruction.
     struct OperandUse { Value location, value; unsigned flags, match; };
     std::vector<OperandUse> operands;
-    for (auto c = ast[n].first; c; c = ast[c].next) {
-        OperandUse use; use.flags = ast[c].flags; use.match = ast[c].literal;
-        auto value = expression(ast[c].first);
+    for (auto c = ast.first(n); c; c = ast.next(c)) {
+        OperandUse use; use.flags = ast.flags(c); use.match = ast.literal(c);
+        auto value = expression(ast.first(c));
         if (ended) return;
         if (use.flags & (AsmOutput|AsmMemory)) use.location = value;
         if ((use.flags & AsmRead) && !(use.flags & AsmMemory)) use.value = load(value);
         operands.push_back(use);
     }
     for (const auto& use : operands) if (use.match) operands[use.match-1].value = use.value;
-    const auto& plan = ast.assemblies[ast[n].literal];
+    const auto& plan = ast.assemblies[ast.literal(n)];
     // Conservatively retain every assembly statement and a compiler barrier.
     // This is stronger than a nonvolatile recipe but avoids invented effects.
     emit(Opcode::AtomicSignalFence,IRType(),{Operand::integer(5)});

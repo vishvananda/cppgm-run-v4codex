@@ -48,17 +48,17 @@ void Analyzer::storage_expression(NodeId n, Expression& result)
 {
     using syntax::Kind;
     storage_value(result);
-    if (ast[n].kind == Kind::Call && result.form == ExpressionForm::Ordinary) {
+    if (ast.kind(n) == Kind::Call && result.form == ExpressionForm::Ordinary) {
         auto callee = facts[n].entity;
-        Expression function = expressions[ast[n].first];
+        Expression function = expressions[ast.first(n)];
         if (callee) { function.type = entities[callee].type; function.storage_type = declared_storage_types.get(callee); }
         storage_operation(result,OP_LPAREN,function);
     }
     if (result.form == ExpressionForm::Ordinary && !facts[n].entity) {
-        auto first = ast[n].first;
-        auto kind = ast[n].kind;
+        auto first = ast.first(n);
+        auto kind = ast.kind(n);
         if (kind == Kind::Unary || kind == Kind::Postfix || kind == Kind::Binary || kind == Kind::Assignment || kind == Kind::Subscript)
-            storage_operation(result,kind == Kind::Subscript ? OP_LSQUARE : ast[n].op,expressions[first],expressions[ast[first].next]);
+            storage_operation(result,kind == Kind::Subscript ? OP_LSQUARE : ast.op(n),expressions[first],expressions[ast.next(first)]);
     }
 }
 void Analyzer::storage_query(const TypeQuery& q, const std::vector<TypeQueryFact>& children, TypeQueryFact& r)

@@ -24,9 +24,9 @@ bool Analyzer::floating_builtin(NodeId n, ScopeId scope, IdentifierId name,
         std::uint64_t payload = 0;
         if (nan) {
             auto arg = args[0];
-            while (ast[arg].kind == syntax::Kind::Parenthesized) arg = ast[arg].first;
-            const auto lit = ast.literals[ast[arg].literal];
-            if (ast[arg].kind != syntax::Kind::Literal || lit.kind != LiteralKind::string || lit.type != FT_CHAR)
+            while (ast.kind(arg) == syntax::Kind::Parenthesized) arg = ast.first(arg);
+            const auto lit = ast.literals[ast.literal(arg)];
+            if (ast.kind(arg) != syntax::Kind::Literal || lit.kind != LiteralKind::string || lit.type != FT_CHAR)
                 throw std::runtime_error("NaN payload requires a narrow string literal");
             auto bytes = ast.literal_bytes.data()+lit.offset;
             unsigned base = 10, at = 0;

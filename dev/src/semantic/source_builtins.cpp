@@ -16,7 +16,7 @@ unsigned Analyzer::remember_source_site(NodeId n, ScopeId s)
 {
     if (!n) return 0;
     if (auto old = source_site_index.get(n)) return old;
-    auto location = static_cast<const syntax::Ast&>(ast).locations[ast[n].location];
+    auto location = static_cast<const syntax::Ast&>(ast).locations[ast.location(n)];
     SourceSite site; site.line = location.line; site.source = n;
     site.file = location.presumed_file ? location.presumed_file : ids.intern(TextView("",0));
     std::vector<ScopeId> missing;

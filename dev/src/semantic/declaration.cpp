@@ -142,7 +142,7 @@ void Analyzer::finish()
 }
 void Analyzer::namespace_declaration(NodeId n, ScopeId s)
 {
-    IdentifierId name = ast[n].text;
+    IdentifierId name = ast.text(n);
     EntityId e = local(s, name);
     if (e && entities[e].kind != EntityKind::Namespace) throw std::runtime_error("namespace cannot reopen binding/alias");
     if (!e) {
@@ -153,17 +153,17 @@ void Analyzer::namespace_declaration(NodeId n, ScopeId s)
     ScopeId ns = entities[e].scope;
     { auto& published = facts.edit(n); published.entity = e; published.scope = ns; }
     if (!name || child(n, Kind::Inline)) add_edge(s, ns, true);
-    for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, ns);
+    for (NodeId c = ast.first(n); c; c = ast.next(c)) declaration(c, ns);
 }
 void Analyzer::template_declaration(NodeId n, ScopeId s)
 {
-    NodeId params = ast[n].first;
-    if (definitions && !ast[ast[params].first].first) {
+    NodeId params = ast.first(n);
+    if (definitions && !ast.first(ast.first(params))) {
         auto saved = explicit_specialization_source;
         auto saved_template = active_template_scope;
-        explicit_specialization_source = ast[params].next;
+        explicit_specialization_source = ast.next(params);
         active_template_scope = 0;
-        declaration(ast[params].next,s);
+        declaration(ast.next(params),s);
         explicit_specialization_source = saved;
         active_template_scope = saved_template;
         return;
@@ -184,7 +184,7 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
         }
         auto frame = substitution_frame(0,source.offset,source.count,enclosing_frame,intern_arguments(arguments));
         auto context = ast.new_context();
-        n = ast.instantiate(n,context); params = ast[n].first;
+        n = ast.instantiate(n,context); params = ast.first(n);
         attach_template_context(context,frame);
         facts.resize(ast.nodes.size()); expressions.resize(ast.nodes.size());
         // Defaults belong to this inner head occurrence. Keeping an initializer
@@ -198,10 +198,10 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
     }
     ScopeId saved = active_template_scope; active_template_scope = ts;
     auto saved_explicit = explicit_specialization_source;
-    if (explicit_specialization_source == n) explicit_specialization_source = ast[params].next;
-    if (definitions) check_template_parameters(ast[params].next,ts);
-    if (ast[ast[params].next].kind == Kind::DeductionGuide) {
-        deduction_guide(ast[params].next,ts);
+    if (explicit_specialization_source == n) explicit_specialization_source = ast.next(params);
+    if (definitions) check_template_parameters(ast.next(params),ts);
+    if (ast.kind(ast.next(params)) == Kind::DeductionGuide) {
+        deduction_guide(ast.next(params),ts);
         if (!ast.nodes.occurrences[n].context)
             template_source_heads.put(ast.nodes.occurrences[n].source,deduction_guides.back().head);
         active_template_scope = saved;
@@ -209,13 +209,13 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
         return;
     }
     bool friend_template = calls && scopes[s].kind == ScopeKind::Class &&
-        friend_declaration(ast[params].next,ts);
-    if (!friend_template && (!definitions || !retain_template_definition(ast[params].next,ts))) declaration(ast[params].next, ts);
+        friend_declaration(ast.next(params),ts);
+    if (!friend_template && (!definitions || !retain_template_definition(ast.next(params),ts))) declaration(ast.next(params), ts);
     active_template_scope = saved;
     explicit_specialization_source = saved_explicit;
-    auto decl = ast[params].next;
-    auto declarator = ast[decl].kind == Kind::Function ? ast[ast[decl].first].next :
-        ast[decl].kind == Kind::SimpleDeclaration ? ast[ast[child(decl,Kind::InitDeclarators)].first].first : child(decl,Kind::Declarator);
+    auto decl = ast.next(params);
+    auto declarator = ast.kind(decl) == Kind::Function ? ast.next(ast.first(decl)) :
+        ast.kind(decl) == Kind::SimpleDeclaration ? ast.first(ast.first(child(decl,Kind::InitDeclarators))) : child(decl,Kind::Declarator);
     auto declared = facts[declarator ? declarator : decl].entity;
     if (friend_template) {
         // A friend head is an independent lexical declaration even when it
@@ -278,50 +278,50 @@ void Analyzer::template_declaration(NodeId n, ScopeId s)
 void Analyzer::simple(NodeId n, ScopeId s)
 {
     if (definitions) resolve_parenthesized_declaration(n,s);
-    NodeId specs = ast[n].first;
+    NodeId specs = ast.first(n);
     NodeId list = child(n, Kind::InitDeclarators);
-    if (list && child(ast[ast[list].first].first,Kind::BindingNames)) {
-        if (ast[ast[list].first].next) throw std::runtime_error("structured binding requires one declaration");
-        resolve_bindings(specs,ast[ast[list].first].first,s); return;
+    if (list && child(ast.first(ast.first(list)),Kind::BindingNames)) {
+        if (ast.next(ast.first(list))) throw std::runtime_error("structured binding requires one declaration");
+        resolve_bindings(specs,ast.first(ast.first(list)),s); return;
     }
-    IdentifierId anonymous_name = list ? terminal(decl_name(ast[ast[list].first].first)) : 0;
+    IdentifierId anonymous_name = list ? terminal(decl_name(ast.first(ast.first(list)))) : 0;
     ScopeId saved_access = access_override;
-    NodeId named = ast[n].kind == Kind::Function ? ast[specs].next : ast[ast[list].first].first;
+    NodeId named = ast.kind(n) == Kind::Function ? ast.next(specs) : ast.first(ast.first(list));
     ScopeId owner = name_owner(decl_name(named), s, true);
     if (calls && scopes[owner].kind == ScopeKind::Class) access_override = owner;
     TypeId base = specifiers(specs, s, anonymous_name);
-    if (calls) for (NodeId c = ast[specs].first; c; c = ast[c].next)
+    if (calls) for (NodeId c = ast.first(specs); c; c = ast.next(c))
         if (auto object = anonymous_object(c)) anonymous_objects.put(n, object);
-    if (ast[n].kind == Kind::Function) {
+    if (ast.kind(n) == Kind::Function) {
         if (calls && (ast.alignment_owners.get(n) || ast.alignment_owners.get(specs)))
             throw std::runtime_error("alignment on function declaration");
-        NodeId d = ast[specs].next;
+        NodeId d = ast.next(specs);
         TypeId t = declarator(d, base, s,0,false,specs);
         EntityId e = declare_object(d, 0, t, specs, s, n);
         access_override = saved_access;
-        schedule_body({ast[d].next, d, entities[e].owner, e, n});
+        schedule_body({ast.next(d), d, entities[e].owner, e, n});
         return;
     }
     TypeId shared_deduction = 0;
-    for (NodeId item = ast[list].first; item; item = ast[item].next) {
-        NodeId d = ast[item].first;
+    for (NodeId item = ast.first(list); item; item = ast.next(item)) {
+        NodeId d = ast.first(item);
         TypeId deduction = 0;
         TypeId t = calls && spec_has(specs,KW_AUTO) && !child(d,Kind::Parameters) ?
-            deduced_object_type(specs,d,ast[d].next,s,deduction) : declarator(d, base, s,0,false,specs);
+            deduced_object_type(specs,d,ast.next(d),s,deduction) : declarator(d, base, s,0,false,specs);
         if (deduction) {
             if (shared_deduction && deduction != shared_deduction) throw std::runtime_error("inconsistent auto declaration types");
             shared_deduction = deduction;
         }
         if (calls && spec_has(specs,KW_TYPEDEF)) t = aligned_typedef(t,n,specs,d,s);
-        EntityId e = declare_object(d, ast[d].next, t, specs, s, n);
+        EntityId e = declare_object(d, ast.next(d), t, specs, s, n);
         // [dcl.typedef]: the first typedef-name denoting the unnamed class or
         // enum defined in this declaration supplies its name for linkage.
         // Preserve the source entity identity and lookup name independently.
         if (calls && entities[e].kind == EntityKind::Alias && types.signature(t) == types.signature(base) && types[base].kind == TypeKind::Named) {
             auto type_entity = types[base].entity;
-            for (NodeId c = ast[specs].first; c; c = ast[c].next)
-                if ((ast[c].kind == Kind::Class || ast[c].kind == Kind::Enum) &&
-                    !ast[c].detail && facts[c].entity == type_entity && !type_linkage_names.get(type_entity))
+            for (NodeId c = ast.first(specs); c; c = ast.next(c))
+                if ((ast.kind(c) == Kind::Class || ast.kind(c) == Kind::Enum) &&
+                    !ast.detail(c) && facts[c].entity == type_entity && !type_linkage_names.get(type_entity))
                     type_linkage_names.put(type_entity,entities[e].name);
         }
         if (calls && (ast.alignment_owners.get(n) || ast.alignment_owners.get(specs) || ast.alignment_owners.get(d))) {
@@ -344,40 +344,40 @@ void Analyzer::declaration(NodeId n, ScopeId s)
 {
     ++analyzed;
     if (calls && scopes[s].kind == ScopeKind::Class && friend_declaration(n, s)) return;
-    switch (ast[n].kind) {
+    switch (ast.kind(n)) {
     case Kind::DeductionGuide: deduction_guide(n,s); break;
     case Kind::Access:
         if (calls && scopes[s].kind == ScopeKind::Class)
-            class_facts[entities[scopes[s].entity].class_info].current_access = ast[n].op == KW_PRIVATE ? Access::Private : ast[n].op == KW_PROTECTED ? Access::Protected : Access::Public;
+            class_facts[entities[scopes[s].entity].class_info].current_access = ast.op(n) == KW_PRIVATE ? Access::Private : ast.op(n) == KW_PROTECTED ? Access::Protected : Access::Public;
         break;
     case Kind::Namespace: namespace_declaration(n, s); break;
     case Kind::NamespaceAlias: {
-        EntityId e = resolve(ast[ast[n].first].detail, s, Lookup::Namespace);
+        EntityId e = resolve(ast.detail(ast.first(n)), s, Lookup::Namespace);
         if (!e) throw std::runtime_error("namespace alias target is not a namespace");
-        EntityId old = local(s, ast[n].text);
+        EntityId old = local(s, ast.text(n));
         if (old && (entities[old].kind != EntityKind::NamespaceAlias || target(old) != target(e)))
             throw std::runtime_error("conflicting namespace alias");
         if (!old) {
-            EntityId a = make_entity(EntityKind::NamespaceAlias, s, ast[n].text, n);
-            entities[a].scope = target(e); bind(s, ast[n].text, a);
+            EntityId a = make_entity(EntityKind::NamespaceAlias, s, ast.text(n), n);
+            entities[a].scope = target(e); bind(s, ast.text(n), a);
         }
         break;
     }
     case Kind::UsingDirective: {
-        EntityId e = resolve(ast[ast[n].first].detail, s, Lookup::Namespace);
+        EntityId e = resolve(ast.detail(ast.first(n)), s, Lookup::Namespace);
         if (!e) throw std::runtime_error("using directive target is not a namespace");
         add_edge(s, target(e)); break;
     }
     case Kind::UsingDeclaration: {
-        NodeId name = ast[ast[n].first].detail;
+        NodeId name = ast.detail(ast.first(n));
         if (calls && scopes[s].kind == ScopeKind::Class && inherit_using(name, s)) break;
-        for (NodeId p = ast[name].first; p; p = ast[p].next)
-            if (p == ast[name].last && child(p,Kind::TemplateArguments)) throw std::runtime_error("using declaration names template-id");
-        auto part = ast[name].last;
-        bool conversion = calls && ast[part].op == KW_OPERATOR && ast[part].detail;
+        for (NodeId p = ast.first(name); p; p = ast.next(p))
+            if (p == ast.last(name) && child(p,Kind::TemplateArguments)) throw std::runtime_error("using declaration names template-id");
+        auto part = ast.last(name);
+        bool conversion = calls && ast.op(part) == KW_OPERATOR && ast.detail(part);
         auto owner = conversion ? name_owner(name,s) : 0;
-        EntityId e = conversion ? conversion_lookup(owner,type_id(ast[part].detail,s),false) : resolve(name,s);
-        if (!e && (ast[n].flags & UsingIfExists)) break;
+        EntityId e = conversion ? conversion_lookup(owner,type_id(ast.detail(part),s),false) : resolve(name,s);
+        if (!e && (ast.flags(n) & UsingIfExists)) break;
         if (!e) throw std::runtime_error("unknown using target");
         if (calls && scopes[s].kind == ScopeKind::Class) {
             for (EntityId member : candidates(e)) {
@@ -391,9 +391,9 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         break;
     }
     case Kind::Alias: {
-        TypeId t = type_id(ast[n].first, s);
+        TypeId t = type_id(ast.first(n), s);
         if (calls) t = aligned_typedef(t,n,0,0,s);
-        EntityId e = declare_alias(s, ast[n].text, n, t);
+        EntityId e = declare_alias(s, ast.text(n), n, t);
         record(s, e, n, t, EntityKind::Alias);
         if (definitions && s == active_template_scope) {
             auto previous = entities[e].template_info ? templates[entities[e].template_info].environment : 0;
@@ -411,7 +411,7 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         if (calls && expressions[n].ready) break;
         struct Unevaluated { unsigned& depth; Unevaluated(unsigned& d):depth(d){++depth;} ~Unevaluated(){--depth;} } guard(unevaluated_depth);
         EvaluationScope evaluation(*this,true);
-        auto operand = ast[n].first;
+        auto operand = ast.first(n);
         Constant v;
         if (calls) {
             expression(operand,s);
@@ -427,12 +427,12 @@ void Analyzer::declaration(NodeId n, ScopeId s)
             assertion.ready = true; expressions.set(n,assertion);
         } else v = evaluate(operand,s);
         if (!v.valid || scoped_enum(v.type) || !constant_truth(v)) {
-            const auto& loc = static_cast<const syntax::Ast&>(ast).locations[ast[n].location];
+            const auto& loc = static_cast<const syntax::Ast&>(ast).locations[ast.location(n)];
             auto file = ids.spelling(loc.presumed_file);
             std::string diagnostic = "static assertion is not a true constant boolean in " +
                 std::string(file.data,file.size) + ":" + std::to_string(loc.line);
-            if (auto message = ast[operand].next) {
-                auto literal = ast.literals[ast[message].literal];
+            if (auto message = ast.next(operand)) {
+                auto literal = ast.literals[ast.literal(message)];
                 auto width = fundamental_width(literal.type);
                 diagnostic += ": ";
                 // Only failure renders the retained literal. Preserve basic
@@ -451,18 +451,18 @@ void Analyzer::declaration(NodeId n, ScopeId s)
     }
     case Kind::SpecialMember: case Kind::SpecialDefinition: {
         NodeId d = child(n, Kind::Declarator);
-        NodeId name = decl_name(d), part = ast[name].last;
-        auto conversion_scope = calls && ast[part].op == KW_OPERATOR && ast[part].detail ? name_owner(name,s,true) : s;
+        NodeId name = decl_name(d), part = ast.last(name);
+        auto conversion_scope = calls && ast.op(part) == KW_OPERATOR && ast.detail(part) ? name_owner(name,s,true) : s;
         if (definitions && s == active_template_scope)
             conversion_scope = member_template_environment(s,conversion_scope);
-        TypeId result = calls && ast[part].op == KW_OPERATOR && ast[part].detail ?
-            type_id(ast[part].detail,conversion_scope) : types.fundamental(FT_VOID);
+        TypeId result = calls && ast.op(part) == KW_OPERATOR && ast.detail(part) ?
+            type_id(ast.detail(part),conversion_scope) : types.fundamental(FT_VOID);
         TypeId t = declarator(d, result, s);
         EntityId e = declare_object(d, 0, t, 0, s, n);
         if (calls && child(child(n, Kind::Initializer), Kind::SpecialInitializer)) {
             { auto& published = facts.edit(n); published.entity = e; published.type = entities[e].type; }
         }
-        if (ast[n].kind == Kind::SpecialDefinition) {
+        if (ast.kind(n) == Kind::SpecialDefinition) {
             NodeId b = child(n, Kind::Compound);
             if (!b) b = child(n, Kind::FunctionTry);
             schedule_body({b, d, entities[e].owner, e, n});
@@ -473,15 +473,15 @@ void Analyzer::declaration(NodeId n, ScopeId s)
         bool saved = c_linkage;
         // The unbraced form implies extern for the directly contained
         // declaration ([dcl.link]/7); a braced language-linkage block does not.
-        if (ast[n].flags & 1) linkage_extern_declarations.put(ast[n].first,1);
-        const auto literal = ast.literals[ast[n].literal];
+        if (ast.flags(n) & 1) linkage_extern_declarations.put(ast.first(n),1);
+        const auto literal = ast.literals[ast.literal(n)];
         c_linkage = literal.type == FT_CHAR && literal.bytes == 2 && ast.literal_bytes[literal.offset] == 'C';
-        for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, s);
+        for (NodeId c = ast.first(n); c; c = ast.next(c)) declaration(c, s);
         c_linkage = saved; break;
     }
     case Kind::ExplicitInstantiation:
         if (definitions) explicit_instantiation(n,s);
-        else for (NodeId c = ast[n].first; c; c = ast[c].next) declaration(c, s);
+        else for (NodeId c = ast.first(n); c; c = ast.next(c)) declaration(c, s);
         break;
     default: break;
     }
@@ -578,19 +578,19 @@ void Analyzer::function_body(const Body& body)
         NodeId candidate = child(d, Kind::Parameters);
         if (candidate) params = candidate;
         NodeId nested = child(d, Kind::NestedDeclarator);
-        d = nested ? ast[nested].first : 0;
+        d = nested ? ast.first(nested) : 0;
     }
     // Signature substitution already records whether the list was expanded,
     // including an empty pack. Scalar lists need no pack-binding scans.
     bool expanded_parameters = ast.children_expanded(params);
-    for (NodeId p = ast[params].first; p; p = ast[p].next) {
-        if (ast[p].kind != Kind::Parameter) continue;
+    for (NodeId p = ast.first(params); p; p = ast.next(p)) {
+        if (ast.kind(p) != Kind::Parameter) continue;
         TypeId t = facts[p].type;
         if (types[t].kind == TypeKind::Fundamental && types[t].fundamental == FT_VOID) continue;
-        IdentifierId name = terminal(decl_name(ast[ast[p].first].next));
+        IdentifierId name = terminal(decl_name(ast.next(ast.first(p))));
         EntityId e = make_entity(EntityKind::Parameter, fs, name, p);
         entities[e].type = parameter_body_type(t);
-        if (!expanded_parameters || !declarator_pack(ast[ast[p].first].next)) bind(fs,name,e);
+        if (!expanded_parameters || !declarator_pack(ast.next(ast.first(p)))) bind(fs,name,e);
         record(fs, e, p, t, EntityKind::Parameter);
         if (calls && class_value(entities[e].type)) register_destruction(e);
     }
@@ -627,11 +627,11 @@ void Analyzer::finish_body(EntityId e)
         // or inspection of unrelated declarations. Unknown bodies stay unknown.
         auto body = entities[e].body;
         auto result = types[entities[e].type].child;
-        auto statement = ast[body].first;
-        if (ast[body].kind == Kind::Compound && statement && !ast[statement].next &&
-            ast[statement].kind == Kind::Return && !class_value(result) &&
+        auto statement = ast.first(body);
+        if (ast.kind(body) == Kind::Compound && statement && !ast.next(statement) &&
+            ast.kind(statement) == Kind::Return && !class_value(result) &&
             !constructor_member(e) && !destructor_member(e) &&
-            !lifetime_use(body).entry && expression_nonthrowing(ast[statement].first))
+            !lifetime_use(body).entry && expression_nonthrowing(ast.first(statement)))
             scalar_body_exception_facts.put(e,1);
         entities[e].lifetime_state = FactState::Success;
     } catch (...) {
@@ -654,42 +654,42 @@ void Analyzer::statements(NodeId n, ScopeId s)
 {
     if (!n) return;
     if (calls) { resolve_statement(n, s); return; }
-    switch (ast[n].kind) {
+    switch (ast.kind(n)) {
     case Kind::If: case Kind::Switch: case Kind::For: case Kind::RangeFor:
     case Kind::While: case Kind::Do: {
         ScopeId control = make_scope(ScopeKind::Block, s);
         facts.edit(n).scope = control;
-        NodeId body = ast[n].kind == Kind::Do ? ast[n].first : ast[n].last;
-        for (NodeId c = ast[n].first; c; c = ast[c].next) {
-            bool unbraced = ast[n].kind != Kind::If && c == body && ast[c].kind != Kind::Compound;
+        NodeId body = ast.kind(n) == Kind::Do ? ast.first(n) : ast.last(n);
+        for (NodeId c = ast.first(n); c; c = ast.next(c)) {
+            bool unbraced = ast.kind(n) != Kind::If && c == body && ast.kind(c) != Kind::Compound;
             statements(c, unbraced ? make_scope(ScopeKind::Block, control) : control);
         }
         break;
     }
     case Kind::Then: case Kind::Else: {
-        NodeId body = ast[n].first;
-        statements(body, ast[body].kind == Kind::Compound ? s : make_scope(ScopeKind::Block, s));
+        NodeId body = ast.first(n);
+        statements(body, ast.kind(body) == Kind::Compound ? s : make_scope(ScopeKind::Block, s));
         break;
     }
     case Kind::ConditionDeclaration: {
-        NodeId specs = ast[n].first, d = ast[specs].next;
+        NodeId specs = ast.first(n), d = ast.next(specs);
         TypeId t = declarator(d, specifiers(specs, s), s);
-        declare_object(d, ast[d].next, t, specs, s, n);
+        declare_object(d, ast.next(d), t, specs, s, n);
         break;
     }
     case Kind::Compound: {
         ScopeId bs = make_scope(ScopeKind::Block, s);
         facts.edit(n).scope = bs;
-        for (NodeId c = ast[n].first; c; c = ast[c].next) statements(c, bs);
+        for (NodeId c = ast.first(n); c; c = ast.next(c)) statements(c, bs);
         break;
     }
     case Kind::SimpleDeclaration: case Kind::Alias: case Kind::UsingDeclaration:
     case Kind::UsingDirective: case Kind::StaticAssert: case Kind::Class: case Kind::ClassForward:
     case Kind::Enum: declaration(n, s); break;
     case Kind::Call: {
-        NodeId callee = ast[n].first;
-        if (ast[callee].kind == Kind::IdExpression && ast[callee].detail) {
-            EntityId e = resolve(ast[callee].detail, s);
+        NodeId callee = ast.first(n);
+        if (ast.kind(callee) == Kind::IdExpression && ast.detail(callee)) {
+            EntityId e = resolve(ast.detail(callee), s);
             if (e && (entities[e].kind == EntityKind::Type || entities[e].kind == EntityKind::Alias)) {
                 TypeId t = entities[e].type;
                 if (types[t].kind == TypeKind::Named && entities[types[t].entity].class_info) {
@@ -701,12 +701,12 @@ void Analyzer::statements(NodeId n, ScopeId s)
                 }
             }
         }
-        for (NodeId c = ast[n].first; c; c = ast[c].next) statements(c, s);
+        for (NodeId c = ast.first(n); c; c = ast.next(c)) statements(c, s);
         break;
     }
     // PA6 inspects declaration-bearing statement wrappers, not expression types.
     default:
-        for (NodeId c = ast[n].first; c; c = ast[c].next) statements(c, s);
+        for (NodeId c = ast.first(n); c; c = ast.next(c)) statements(c, s);
         break;
     }
 }

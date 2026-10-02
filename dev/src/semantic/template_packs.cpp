@@ -8,18 +8,18 @@ void Analyzer::bind_function_packs(NodeId parameters, ScopeId scope)
     auto frame = template_type_contexts.get(context);
     Index lists;
     std::vector<std::vector<ArgumentId>> groups;
-    for (auto p = ast[parameters].first; p; p = ast[p].next) {
-        if (!declarator_pack(ast[ast[p].first].next)) continue;
+    for (auto p = ast.first(parameters); p; p = ast.next(p)) {
+        if (!declarator_pack(ast.next(ast.first(p)))) continue;
         auto source = ast.nodes.occurrences[p].source;
         auto index = lists.get(source);
         if (!index) { groups.emplace_back(); index = groups.size(); lists.put(source,index); }
         groups[index-1].push_back(facts[p].entity);
     }
     for (auto p = ast.nodes[parameters].first; p; p = ast.nodes[p].next) {
-        if (!declarator_pack(ast[ast[p].first].next)) continue;
+        if (!declarator_pack(ast.next(ast.first(p)))) continue;
         auto source = ast.nodes.occurrences[p].source;
         auto pattern = template_declaration_sources.get(source);
-        auto name = terminal(decl_name(ast[ast[p].first].next));
+        auto name = terminal(decl_name(ast.next(ast.first(p))));
         auto aggregate = make_entity(EntityKind::Parameter,scope,name,p);
         entities[aggregate].parameter_pack = true;
         auto group = lists.get(source);

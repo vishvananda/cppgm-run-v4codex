@@ -9,12 +9,12 @@ Expression Analyzer::placement_new(NodeId n, ScopeId s)
     using syntax::Kind;
     NodeId placement = child(n, Kind::Placement);
     PlacementNew use;
-    NodeId type_node = child(n,Kind::TypeId), specs = ast[type_node].first, d = ast[specs].next;
+    NodeId type_node = child(n,Kind::TypeId), specs = ast.first(type_node), d = ast.next(specs);
     NodeId suffix = child(d,Kind::Array);
     use.type = declarator(d,specifiers(specs,s),s,suffix);
     { auto& published = facts.edit(type_node); published.type = use.type; published.scope = s; }
     if (types[use.type].kind == TypeKind::Array) {
-        use.array = true; use.bound = suffix ? ast[suffix].first : 0;
+        use.array = true; use.bound = suffix ? ast.first(suffix) : 0;
         use.dynamic_extent = use.bound && (class_value(expressions[use.bound].type) || !runtime_constant_fact(use.bound).valid);
         use.fixed_count = types[use.type].bound; use.type = types[use.type].child;
         if (suffix && !use.bound) throw std::runtime_error("missing array allocation extent");
@@ -34,7 +34,7 @@ Expression Analyzer::placement_new(NodeId n, ScopeId s)
         throw std::runtime_error("array allocation size exceeds size_t");
     use.initializer = child(n, Kind::Initializer);
     std::vector<NodeId> args;
-    for (NodeId a = ast[ast[placement].first].first; a; a = ast[a].next) { expression(a, s); args.push_back(a); }
+    for (NodeId a = ast.first(ast.first(placement)); a; a = ast.next(a)) { expression(a, s); args.push_back(a); }
     EntityId family = 0;
     IdentifierId name = operator_name(KW_NEW,use.array);
     if (!child(n, Kind::Global) && class_value(use.leaf))
@@ -68,8 +68,8 @@ Expression Analyzer::placement_new(NodeId n, ScopeId s)
     std::vector<Conversion> selected(conversions_work.begin()+viable[best].begin, conversions_work.begin()+viable[best].begin+args.size());
     record_call(use.call, args, selected);
     if (use.array) {
-        NodeId list = use.initializer ? ast[use.initializer].first : 0;
-        if (list && ast[list].first) throw std::runtime_error("array allocation initializer list is not yet represented");
+        NodeId list = use.initializer ? ast.first(use.initializer) : 0;
+        if (list && ast.first(list)) throw std::runtime_error("array allocation initializer list is not yet represented");
         use.zero = use.initializer != 0;
         use.constructor = default_constructor(use.leaf,s);
         use.destructor = default_destructor(use.leaf,s);

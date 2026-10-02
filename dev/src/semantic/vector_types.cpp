@@ -32,12 +32,12 @@ std::uint64_t Analyzer::vector_elements(TypeId id)
 }
 TypeId Analyzer::vector_attributes(TypeId type, NodeId owner, ScopeId scope)
 {
-    for (auto a = ast[owner].first; a; a = ast[a].next) {
-        if (ast[a].kind != syntax::Kind::VectorAttribute) continue;
-        auto operand = ast[a].first;
+    for (auto a = ast.first(owner); a; a = ast.next(a)) {
+        if (ast.kind(a) != syntax::Kind::VectorAttribute) continue;
+        auto operand = ast.first(a);
         if (pattern_scope(scope)) bind_template_expression(operand,scope);
         auto query = expression_query(operand,scope);
-        type = vector_type(type,query,ast[a].flags & 1);
+        type = vector_type(type,query,ast.flags(a) & 1);
         if (!type) {
             if (template_type_probe && !pattern_scope(scope)) return 0;
             throw std::runtime_error("invalid vector lane or width");

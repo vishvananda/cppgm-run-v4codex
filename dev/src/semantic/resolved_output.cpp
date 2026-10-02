@@ -36,7 +36,7 @@ void Analyzer::write_expression(std::ostream& out, NodeId n, unsigned depth, Typ
     }
     TypeId display = override_type ? override_type : facts[n].type;
     if (e.form == ExpressionForm::Cast && types[display].kind == TypeKind::MemberPointer) {
-        write_expression(out, ast[first].next, depth); return;
+        write_expression(out, ast.next(first), depth); return;
     }
     if (node.kind == Kind::IdExpression && e.entity && scopes[entities[e.entity].owner].kind == ScopeKind::Class) {
         EntityId cls = scopes[entities[e.entity].owner].entity;
@@ -49,13 +49,13 @@ void Analyzer::write_expression(std::ostream& out, NodeId n, unsigned depth, Typ
         }
     }
     if (e.form == ExpressionForm::Cast && (types[display].kind == TypeKind::LRef || types[display].kind == TypeKind::RRef)) {
-        write_expression(out, ast[first].next, depth, display, e.category); return;
+        write_expression(out, ast.next(first), depth, display, e.category); return;
     }
     Kind kind = node.kind;
     if (kind == Kind::KeywordLiteral || e.form == ExpressionForm::ConstantQuery ||
         (kind == Kind::IdExpression && e.entity && entities[e.entity].kind == EntityKind::Enumerator)) kind = Kind::Literal;
     if (e.form == ExpressionForm::Cast) kind = Kind::Cast;
-    bool zero_cast = kind == Kind::Cast && node.kind == Kind::Call && !ast[ast[first].next].first;
+    bool zero_cast = kind == Kind::Cast && node.kind == Kind::Call && !ast.first(ast.next(first));
     if (zero_cast) kind = Kind::Literal;
     indent(out, depth);
     out << syntax::kind_name(kind) << ' ' << category(override_type ? override_category : e.category) << ' ';
@@ -94,18 +94,18 @@ void Analyzer::write_expression(std::ostream& out, NodeId n, unsigned depth, Typ
             else { write_entity_name(out, selected); out << ' '; write_type(out, entities[selected].type); }
             out << '\n';
         } else write_expression(out, first, depth + 1);
-        for (NodeId a = ast[ast[first].next].first; a; a = ast[a].next) write_expression(out, a, depth + 1);
+        for (NodeId a = ast.first(ast.next(first)); a; a = ast.next(a)) write_expression(out, a, depth + 1);
         return;
     }
     if (kind == Kind::Cast) {
-        NodeId operand = node.kind == Kind::Cast ? ast[first].next : ast[ast[first].next].first;
+        NodeId operand = node.kind == Kind::Cast ? ast.next(first) : ast.first(ast.next(first));
         write_expression(out, operand, depth + 1); return;
     }
     if (kind == Kind::Member) { write_expression(out, first, depth + 1); return; }
     if (kind == Kind::Subscript && types[expressions[first].type].kind != TypeKind::Array && types[expressions[first].type].kind != TypeKind::Pointer) {
-        write_expression(out, ast[first].next, depth + 1); write_expression(out, first, depth + 1); return;
+        write_expression(out, ast.next(first), depth + 1); write_expression(out, first, depth + 1); return;
     }
-    for (NodeId c = first; c; c = ast[c].next) write_expression(out, c, depth + 1);
+    for (NodeId c = first; c; c = ast.next(c)) write_expression(out, c, depth + 1);
 }
 void Analyzer::write_variable(std::ostream& out, NodeId d, NodeId init, unsigned depth) const
 {
@@ -119,23 +119,23 @@ void Analyzer::write_resolved(std::ostream& out, NodeId n, unsigned depth) const
     const syntax::Node& node = ast[n];
     switch (node.kind) {
     case Kind::Linkage:
-        for (NodeId c = node.first; c; c = ast[c].next) write_resolved(out, c, depth);
+        for (NodeId c = node.first; c; c = ast.next(c)) write_resolved(out, c, depth);
         return;
     case Kind::TranslationUnit:
         out << "translation-unit\n";
-        for (NodeId c = node.first; c; c = ast[c].next) write_resolved(out, c, 1);
+        for (NodeId c = node.first; c; c = ast.next(c)) write_resolved(out, c, 1);
         return;
     case Kind::Namespace:
         indent(out, depth); out << "namespace-definition ";
         if (node.text) spelling(out, node.text); else out << "<unnamed>";
         out << '\n';
-        for (NodeId c = node.first; c; c = ast[c].next) write_resolved(out, c, depth + 1);
+        for (NodeId c = node.first; c; c = ast.next(c)) write_resolved(out, c, depth + 1);
         return;
     case Kind::Alias:
         indent(out, depth); out << "type-alias "; spelling(out, node.text); out << ' ';
         write_type(out, facts[n].type); out << '\n'; return;
     case Kind::Function: {
-        write_function(out, facts[n].entity, ast[ast[node.first].next].next, facts[n].scope, depth);
+        write_function(out, facts[n].entity, ast.next(ast.next(node.first)), facts[n].scope, depth);
         return;
     }
     case Kind::SimpleDeclaration: {
@@ -144,21 +144,21 @@ void Analyzer::write_resolved(std::ostream& out, NodeId n, unsigned depth) const
         if (local) { indent(out, depth); out << "simple-declaration\n"; ++depth; }
         NodeId list = child(n, Kind::InitDeclarators);
         if (!list) {
-            for (NodeId c = ast[node.first].first; c; c = ast[c].next) {
-                if (ast[c].kind != Kind::Class) continue;
+            for (NodeId c = ast.first(node.first); c; c = ast.next(c)) {
+                if (ast.kind(c) != Kind::Class) continue;
                 EntityId cls = facts[c].entity, storage = class_facts[entities[cls].class_info].storage;
                 if (storage) write_object(out, storage, 0, depth);
             }
         }
-        for (NodeId c = ast[list].first; c; c = ast[c].next) {
-            NodeId d = ast[c].first; write_variable(out, d, ast[d].next, depth);
+        for (NodeId c = ast.first(list); c; c = ast.next(c)) {
+            NodeId d = ast.first(c); write_variable(out, d, ast.next(d), depth);
         }
         return;
     }
     case Kind::ConditionDeclaration: {
         indent(out, depth); out << "condition-declaration\n";
-        NodeId d = ast[node.first].next;
-        write_variable(out, d, ast[d].next, depth + 1); return;
+        NodeId d = ast.next(node.first);
+        write_variable(out, d, ast.next(d), depth + 1); return;
     }
     case Kind::SpecialMember: case Kind::SpecialDefinition:
         if (child(child(n, Kind::Initializer), Kind::SpecialInitializer) || node.kind == Kind::SpecialDefinition)
@@ -184,7 +184,7 @@ void Analyzer::write_resolved(std::ostream& out, NodeId n, unsigned depth) const
     case Kind::While: case Kind::Do: case Kind::For: case Kind::ForInit: case Kind::SelectionInit: case Kind::Iteration: case Kind::Switch:
     case Kind::Case: case Kind::Default: case Kind::Break: case Kind::Continue: case Kind::Condition:
         indent(out, depth); out << syntax::kind_name(node.kind) << '\n';
-        for (NodeId c = node.first; c; c = ast[c].next) write_resolved(out, c, depth + 1);
+        for (NodeId c = node.first; c; c = ast.next(c)) write_resolved(out, c, depth + 1);
         return;
     default: write_expression(out, n, depth); return;
     }

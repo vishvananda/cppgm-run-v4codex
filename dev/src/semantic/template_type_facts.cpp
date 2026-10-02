@@ -163,9 +163,9 @@ TypeId Analyzer::bind_template_special_type(NodeId d, ScopeId scope)
         Probe(bool& m, unsigned& d) : mode(m), depth(d), saved(m) { mode = true; ++depth; }
         ~Probe() { mode = saved; --depth; }
     } probe(template_type_probe,unevaluated_depth);
-    auto name = ast[decl_name(d)].last;
-    auto result = ast[name].op == KW_OPERATOR && ast[name].detail ?
-        type_id(ast[name].detail,scope) : types.fundamental(FT_VOID);
+    auto name = ast.last(decl_name(d));
+    auto result = ast.op(name) == KW_OPERATOR && ast.detail(name) ?
+        type_id(ast.detail(name),scope) : types.fundamental(FT_VOID);
     auto type = result ? declarator(d,result,scope,0,true) : 0;
     auto occurrence = ast.nodes.occurrences[d];
     if (type && !occurrence.context) {
@@ -191,8 +191,8 @@ TypeId Analyzer::reuse_template_type(NodeId node, ScopeId scope)
         if (!type) throw std::runtime_error("invalid substituted declaration type");
     }
     if (types[known-1].kind == TypeKind::Function &&
-        (ast[node].kind == syntax::Kind::Declarator || ast[node].kind == syntax::Kind::AbstractDeclarator ||
-         ast[node].kind == syntax::Kind::LambdaDeclarator)) {
+        (ast.kind(node) == syntax::Kind::Declarator || ast.kind(node) == syntax::Kind::AbstractDeclarator ||
+         ast.kind(node) == syntax::Kind::LambdaDeclarator)) {
         // The callable type alone is insufficient: a body consumes the raw
         // parameter cv/array/function forms retained by the source signature.
         // Prototype queries already own ordinal/type identities, so applying

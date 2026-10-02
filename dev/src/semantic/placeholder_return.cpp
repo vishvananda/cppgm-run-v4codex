@@ -4,8 +4,8 @@ namespace cppgm { namespace semantic {
 void Analyzer::deduce_return(NodeId n, ScopeId s)
 {
     auto e = current_function, pattern = placeholder_returns.get(e);
-    auto source = ast[n].first;
-    if (ast[source].kind == syntax::Kind::BracedInit)
+    auto source = ast.first(n);
+    if (ast.kind(source) == syntax::Kind::BracedInit)
         throw std::runtime_error("cannot deduce return type from braced list");
     Expression value;
     if (source) value = expression(source,s);

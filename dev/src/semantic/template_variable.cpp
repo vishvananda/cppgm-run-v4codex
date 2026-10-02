@@ -10,25 +10,25 @@ EntityId Analyzer::declare_variable_template(NodeId d, NodeId init, TypeId type,
     auto owner = scopes[s].parent;
     bool member = scopes[owner].kind == ScopeKind::Class;
     if ((scopes[owner].kind != ScopeKind::Namespace && !member) ||
-        (member && !spec_has(ast[source].first,KW_STATIC)) || !init || !(types[type].cv & 1) ||
+        (member && !spec_has(ast.first(source),KW_STATIC)) || !init || !(types[type].cv & 1) ||
         (!dependent_type(type) && !integral(type) && !class_value(type))) throw std::runtime_error("constant variable template required");
-    auto list = child(ast[name].last,Kind::TemplateArguments);
+    auto list = child(ast.last(name),Kind::TemplateArguments);
     auto primary = local(owner,id);
     if (primary && (!list || !entities[primary].template_info || entities[primary].kind != EntityKind::Variable))
         throw std::runtime_error("conflicting variable template");
     if (list && !primary) throw std::runtime_error("variable partial specialization without primary");
     auto e = make_entity(EntityKind::Variable,owner,id,source);
     entities[e].is_static = member;
-    declaration_attributes(e,ast[source].first,source,d);
+    declaration_attributes(e,ast.first(source),source,d);
     entities[e].type = type; template_facts(e,s);
     auto head = templates[entities[e].template_info];
     for (unsigned j = 0; j < head.count; ++j) {
         auto p = template_parameters[head.offset+j];
-        if (auto value = entities[p].initializer) template_default_types.put(p,template_argument_node(ast[value].first,s));
+        if (auto value = entities[p].initializer) template_default_types.put(p,template_argument_node(ast.first(value),s));
     }
     if (list) {
         std::vector<TypeId> args;
-        for (auto a = ast[list].first; a; a = ast[a].next)
+        for (auto a = ast.first(list); a; a = ast.next(a))
             append_template_argument(a,s,template_argument_node(a,s),args);
         if (!template_defaults(primary,args)) throw std::runtime_error("invalid variable partial arguments");
         auto& selected = templates[entities[e].template_info];
@@ -39,8 +39,8 @@ EntityId Analyzer::declare_variable_template(NodeId d, NodeId init, TypeId type,
         class_partial_signatures.put(identity,e);
         variable_partial_next.put(e,variable_partial_heads.get(primary)); variable_partial_heads.put(primary,e);
     } else { bind(s,id,e); bind(owner,id,e); }
-    auto operand = ast[init].first;
-    if (ast[operand].kind == Kind::ParenInitializer) operand = ast[operand].first;
+    auto operand = ast.first(init);
+    if (ast.kind(operand) == Kind::ParenInitializer) operand = ast.first(operand);
     auto occurrence = ast.nodes.occurrences[d];
     QueryId query = 0;
     if (occurrence.context) {
@@ -62,7 +62,7 @@ EntityId Analyzer::variable_template_name(NodeId part, EntityId e, ScopeId s, bo
     auto list = child(part,Kind::TemplateArguments);
     if (!list) throw std::runtime_error("variable template requires arguments");
     std::vector<TypeId> args; bool dependent = false;
-    for (auto a = ast[list].first; a; a = ast[a].next) {
+    for (auto a = ast.first(list); a; a = ast.next(a)) {
         auto arg = template_argument_node(a,s);
         append_template_argument(a,s,arg,args);
     }

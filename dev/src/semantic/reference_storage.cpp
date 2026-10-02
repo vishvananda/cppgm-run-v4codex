@@ -43,7 +43,7 @@ void Analyzer::retain_initializer_references(EntityId e)
         auto type = types[action.type];
         if (type.kind != TypeKind::LRef && type.kind != TypeKind::RRef) continue;
         auto n = action.source;
-        while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) n = ast[n].first;
+        while (ast.kind(n) == Kind::Initializer || ast.kind(n) == Kind::ParenInitializer || ast.kind(n) == Kind::ParenArguments) n = ast.first(n);
         if (!n) continue;
         auto c = conversions[expressions[n].incoming];
         if (class_value(type.child)) {
@@ -74,26 +74,26 @@ NodeId Analyzer::reference_operand(NodeId n) const
     // A scalar conversion/bit-field binding creates its own temporary; a
     // conversion function returning a reference does not extend its receiver.
     if (c.reference && (c.temporary || c.kind == Conversion::Kind::User)) return 0;
-    Kind kind = ast[n].kind;
+    Kind kind = ast.kind(n);
     if (kind == Kind::Parenthesized || kind == Kind::Initializer || kind == Kind::ParenInitializer || kind == Kind::ParenArguments)
-        return ast[n].first;
+        return ast.first(n);
     auto x = expressions[n];
     if (x.form == ExpressionForm::Cast && x.category != ValueCategory::Prvalue) {
         auto conversion = conversions[x.conversions];
         if (conversion.kind == Conversion::Kind::Standard || conversion.kind == Conversion::Kind::Explicit)
-            return kind == Kind::Cast ? ast[ast[n].first].next : ast[ast[ast[n].first].next].first;
+            return kind == Kind::Cast ? ast.next(ast.first(n)) : ast.first(ast.next(ast.first(n)));
     }
     if (x.form != ExpressionForm::Ordinary) return 0;
-    if (kind == Kind::Member && ast[n].op == OP_DOT && nonstatic_field(x.entity)) {
+    if (kind == Kind::Member && ast.op(n) == OP_DOT && nonstatic_field(x.entity)) {
         auto type = types[entities[x.entity].type].kind;
-        if (type != TypeKind::LRef && type != TypeKind::RRef) return ast[n].first;
+        if (type != TypeKind::LRef && type != TypeKind::RRef) return ast.first(n);
     }
     if (kind == Kind::Subscript) {
-        for (NodeId operand = ast[n].first; operand; operand = ast[operand].next)
+        for (NodeId operand = ast.first(n); operand; operand = ast.next(operand))
             if (types[expressions[operand].type].kind == TypeKind::Array) return operand;
     }
-    if (kind == Kind::Binary && ast[n].op == OP_DOTSTAR) return ast[n].first;
-    if (kind == Kind::Binary && ast[n].op == OP_COMMA) return ast[ast[n].first].next;
+    if (kind == Kind::Binary && ast.op(n) == OP_DOTSTAR) return ast.first(n);
+    if (kind == Kind::Binary && ast.op(n) == OP_COMMA) return ast.next(ast.first(n));
     return 0;
 }
 void Analyzer::local_reference(NodeId n, EntityId reference, bool conditional)
@@ -116,15 +116,15 @@ void Analyzer::local_reference(NodeId n, EntityId reference, bool conditional)
         return;
     }
     if (auto operand = reference_operand(n)) local_reference(operand,reference,conditional);
-    else if (ast[n].kind == Kind::Conditional && expressions[n].category != ValueCategory::Prvalue) {
-        NodeId b = ast[ast[n].first].next;
-        local_reference(b,reference,true); local_reference(ast[b].next,reference,true);
+    else if (ast.kind(n) == Kind::Conditional && expressions[n].category != ValueCategory::Prvalue) {
+        NodeId b = ast.next(ast.first(n));
+        local_reference(b,reference,true); local_reference(ast.next(b),reference,true);
     }
 }
 void Analyzer::static_reference(EntityId e)
 {
     NodeId n = entities[e].initializer;
-    while (ast[n].kind == Kind::Initializer || ast[n].kind == Kind::ParenInitializer || ast[n].kind == Kind::ParenArguments) n = ast[n].first;
+    while (ast.kind(n) == Kind::Initializer || ast.kind(n) == Kind::ParenInitializer || ast.kind(n) == Kind::ParenArguments) n = ast.first(n);
     if (!n) return;
     // Constant backing storage already belongs to the static initializer plan.
     if (static_value(n,entities[e].type).kind != StaticValue::Invalid) return;
@@ -159,11 +159,11 @@ void Analyzer::retain_reference_object(NodeId n, EntityId reference, bool condit
         static_temporaries.put(temporary,reference_storage.size()); reference_storage.push_back(storage);
         return;
     }
-    Kind kind = ast[n].kind;
+    Kind kind = ast.kind(n);
     if (auto operand = reference_operand(n)) retain_reference_object(operand,reference,conditional);
     else if (kind == Kind::Conditional && expressions[n].category != ValueCategory::Prvalue) {
-        NodeId b = ast[ast[n].first].next;
-        retain_reference_object(b,reference,true); retain_reference_object(ast[b].next,reference,true);
+        NodeId b = ast.next(ast.first(n));
+        retain_reference_object(b,reference,true); retain_reference_object(ast.next(b),reference,true);
     }
 }
 } }

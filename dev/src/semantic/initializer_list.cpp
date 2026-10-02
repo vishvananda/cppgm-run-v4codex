@@ -63,7 +63,7 @@ std::vector<Expression> Analyzer::list_elements(Expression list)
     if (list.inputs == CallInputs::Query) {
         auto q = type_queries[list.arguments];
         for (unsigned i = 0; i < q.count; ++i) result.push_back(query_fact(query_edges[q.offset+i]).expression);
-    } else for (auto n = ast[list.arguments].first; n; n = ast[n].next) result.push_back(expressions[n]);
+    } else for (auto n = ast.first(list.arguments); n; n = ast.next(n)) result.push_back(expressions[n]);
     return result;
 }
 TypeId Analyzer::deduce_initializer_list(NodeId source, ScopeId scope)
@@ -71,7 +71,7 @@ TypeId Analyzer::deduce_initializer_list(NodeId source, ScopeId scope)
     if (!initializer_list_template) throw std::runtime_error("list deduction requires std::initializer_list");
     expand_expression_list(source,scope);
     TypeId element = 0;
-    for (auto n = ast[source].first; n; n = ast[n].next) {
+    for (auto n = ast.first(source); n; n = ast.next(n)) {
         auto value = expression(n,scope);
         auto type = types.unqualified(decay(value.type));
         if (!type || (element && element != type)) throw std::runtime_error("conflicting list element deduction");
@@ -88,7 +88,7 @@ void Analyzer::retain_list_backing(EntityId e)
     auto init = class_initialization(n,entities[e].type);
     auto c = conversions[init.conversion];
     if (init.source) n = init.source;
-    while (ast[n].kind == syntax::Kind::Initializer || ast[n].kind == syntax::Kind::Parenthesized) n = ast[n].first;
+    while (ast.kind(n) == syntax::Kind::Initializer || ast.kind(n) == syntax::Kind::Parenthesized) n = ast.first(n);
     if (!init.source) c = conversions[expressions[n].incoming];
     if (c.kind != Conversion::Kind::List && expressions[n].form == ExpressionForm::ListValue)
         c = conversions[expressions[n].conversions];
