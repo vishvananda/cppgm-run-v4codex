@@ -1,0 +1,14 @@
+{
+  "args": [
+    "g++",
+    "-std=c++11",
+    "-c",
+    "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source206/inherited-defaults.cpp",
+    "-o",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa31-206/host-probe.o"
+  ],
+  "exit_code": 1,
+  "stderr": "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source206/inherited-defaults.cpp:10:15: error: static assertion failed: throwing inherited default argument\n   10 | static_assert(!__is_nothrow_constructible(Derived), \"throwing inherited default argument\");\n      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n",
+  "source_sha256": "f03cb77b075e88a2064008f0d4a7f53f6bdba61dc697e045b0c6dbc0e51fc2dc",
+  "note": "Informational host disagreement; C++11 noexcept rules and inherited initialization DR define the control. No course reference changes."
+}

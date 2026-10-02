@@ -1,0 +1,135 @@
+{
+  "trace": {
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/pa31-206/trace/trace.json",
+    "sha256": "acb087556c94b9d3ded0325c20870c2be62dfcb832663c28ad265038f8a13883",
+    "commands": 104,
+    "passed": true,
+    "compiler_sha256": "710fae53af4a786daa744d7c780b560acc49b01f9c92d029fd75b3f05b05b3da",
+    "images": {
+      "allocation-client": {
+        "source_sha256": "5239abb9f886e0d2b11c446f5ae820ddf7c9862d3fe6a37d54f36e9c3d60cdc3",
+        "direct_object_sha256": "6e5e841fc4ee81656ee906f214f3d5528eb194a696469ee7ee1e769e3e6fdef8",
+        "rebuilt_object_sha256": "f72537fec5dd474e6733c1c6ae5bfc22e5fedf2028de9176811f78baaf876fb3",
+        "lowir_sha256": "b8126b7ae0f392ebf9b9d37e95b96a0e97d42585e8d990a9e157df160e276895",
+        "mir_sha256": "cbfa567de8c8147217c2a3c0cf6f67e1bb06d7d634aeac0930b95657edc34356",
+        "text_identical": true,
+        "function_cfi_identical": true,
+        "named_relocations_identical": true,
+        "telemetry_identical": true
+      },
+      "vbase-complete": {
+        "source_sha256": "459e9c1e10e8086081c7cfa7a638575b9b298a60b7251ba110ec446e17c47dc4",
+        "direct_object_sha256": "808289889624e215c32452b8ee1d90e11f8fb82489e07b72026841e9637a5a10",
+        "rebuilt_object_sha256": "61b3574d92862b25a2b2a6553220b0d726b0116a73d175f8d2c76f12a74cdbfd",
+        "lowir_sha256": "cb3b23a69793353216842fee2514589c59216beda3ed1b7c76756af1e2da0830",
+        "mir_sha256": "59c0b286b3470d041e8ce6eade4d48c49b86899d5097dd06eb960a2492d1d153",
+        "text_identical": true,
+        "function_cfi_identical": true,
+        "named_relocations_identical": true,
+        "telemetry_identical": true
+      },
+      "inherited-default": {
+        "source_sha256": "ba792eee1829e977313945311915882cf9ff2fd7459441f218678a19dcebd57a",
+        "direct_object_sha256": "c886a48970f97fa1e73dcefcdd72cc9698afec217776e9ddea9bc5c9fd427b7b",
+        "rebuilt_object_sha256": "0d89e745a7e349e6072250910e2c0259f28347eb8b2bc9f69b6d33a66361296c",
+        "lowir_sha256": "460008dca0441cc60a8c5b3387be5299863ef3f54bbf5ab28630a4026e4f1963",
+        "mir_sha256": "59604248d16ccaded0963b7906dd76ee6386b2a28c5fd8d6daf6cfa9293f0511",
+        "text_identical": true,
+        "function_cfi_identical": true,
+        "named_relocations_identical": true,
+        "telemetry_identical": true
+      },
+      "list-exceptions": {
+        "source_sha256": "d0d66411412c0eb349cdf81dde547bdac78a0d05c04354df584db3a6dd00dcb9",
+        "direct_object_sha256": "1a62b19d7108a346ea1c5b5ef20302c7b00662609c347f29d2ba13fc5695c68e",
+        "rebuilt_object_sha256": "1e9964d0c0205646d54570ec305c681b1ec6bdc14aa01dfd75770fe1c029ffab",
+        "lowir_sha256": "4ec2a96e1a8963b5e80f914eaccfa23c2419f7120cce1ae60ece60bcc5b0fe0a",
+        "mir_sha256": "8b2b1c7c837e34a2306b1e17b5407436de0c44e35c9c66678dcda1e00dc87dcc",
+        "text_identical": true,
+        "function_cfi_identical": true,
+        "named_relocations_identical": true,
+        "telemetry_identical": true
+      },
+      "self-element-map-unique-ptr-runtime": {
+        "source_sha256": "7b8b878ff76f9ec6f989a9435ca36aec34b2a2e544ca37ef7fe60564d621e11f",
+        "direct_object_sha256": "9b8c12fbcaf7713d1c9a7c2b1643eafe21c986dc5d4a259bf5c472961fa1c695",
+        "rebuilt_object_sha256": "61dfa1f77fea5106e857699ecfccadb12d5ed8806c6b8e40f11f1959aa28234e",
+        "lowir_sha256": "20d4695ac81b449e8a3d0dc24448b8fd9a5ef5457a0948091b71026ab299e2dc",
+        "mir_sha256": "43eabc005e2468e451686d644a6fa87dcc641cbfa7b30cc43f5aeff029a5dda2",
+        "text_identical": true,
+        "function_cfi_identical": true,
+        "named_relocations_identical": true,
+        "telemetry_identical": true
+      },
+      "vector-braced-temporary-dtor-link-smoke": {
+        "source_sha256": "70c009a43f96fa9500a1e3a435641f47200ce6bf1a1405ae7f45c3e75cc3536c",
+        "direct_object_sha256": "a6035f39e4d705ed0c8b77fb0e14be891cdb5020f9546efb3b6934fdefa5a7cf",
+        "rebuilt_object_sha256": "0767f78a28483f55addea6d471fa21fcd4b61d099a9cefaa208710bc74bf1c88",
+        "lowir_sha256": "3e1fdd7ec63a660424fa161aad4d9eea1db4ab6232a25035e2476429fbb15c48",
+        "mir_sha256": "c6594febc416c74b2fcc696541d381d1130f3a3a7f89e93d3540d34561e6a667",
+        "text_identical": true,
+        "function_cfi_identical": true,
+        "named_relocations_identical": true,
+        "telemetry_identical": true
+      },
+      "inherited-defaults": {
+        "source_sha256": "f03cb77b075e88a2064008f0d4a7f53f6bdba61dc697e045b0c6dbc0e51fc2dc",
+        "direct_object_sha256": "6561836f968222c2107728f7d4ee1c528d5d37583b0d73ce9968be6880eea67f",
+        "rebuilt_object_sha256": "e436a2372d5a45f4536bc36dc3248599783a2623f8b9d59fe4d087ef8850ad44",
+        "lowir_sha256": "0a84af3f6a050ebdd060563d31ff112a237d82495f176953f3480f1884a291a1",
+        "mir_sha256": "f4ac17800884522ec449727e1dd5fceb923b03e55e330908eacf7c82c2398057",
+        "text_identical": true,
+        "function_cfi_identical": true,
+        "named_relocations_identical": true,
+        "telemetry_identical": true
+      },
+      "interactions": {
+        "source_sha256": "6ee58048f14f3c777d7f301c57f2682128e6f7d66d5f5a7aa7b3cc670fa286b0",
+        "direct_object_sha256": "4b46fdd1d6d6ab40e4e7946e58059e89a7d3225f2b526c410eea58f3feecbb9c",
+        "rebuilt_object_sha256": "dfdb351ea23e0066442320d9b7338d8fae28e90e0bedf8c4e884f1324a52cbb8",
+        "lowir_sha256": "f4b84a6502e518ff3ac08b4e3c67d4d69ed0cb3e9d1e9f867e790a2b764bea8b",
+        "mir_sha256": "4e571c0cc130d79f25fff8783f84f07886bba05c6235a7734de3925df01e3df5",
+        "text_identical": true,
+        "function_cfi_identical": true,
+        "named_relocations_identical": true,
+        "telemetry_identical": true
+      },
+      "nested-lists": {
+        "source_sha256": "0b49fbc59e2c629212a2f593b7257e111ff1367a082504481193e6c8c3544b84",
+        "direct_object_sha256": "ccbbad0a2a9ed49a2671f2fae9f4ec7a76d354b7d23a5d381bb8c316ab71898c",
+        "rebuilt_object_sha256": "fb0de08fb30883449ed5e1209512eba4b7ff0594130088b30ff695e8ffb1ad1d",
+        "lowir_sha256": "962178fe4228d5d880230e5a7dd052aafc405f90610a586a20369216aef0c82d",
+        "mir_sha256": "7ee885af8e149addff0cc9df2cb4ad915a45aa509727119b213c80dd3c9a8513",
+        "text_identical": true,
+        "function_cfi_identical": true,
+        "named_relocations_identical": true,
+        "telemetry_identical": true
+      }
+    }
+  },
+  "controls": {
+    "path": "/home/vishvananda/work/private/v4codex/artifacts/pa31-206/controls/controls.json",
+    "sha256": "438a1ea4d062bac4e9aa0c3818c88d9585a5a3d4a3b70250029bd0626019e0ec",
+    "commands": 46,
+    "passed": true,
+    "compiler_sha256": "710fae53af4a786daa744d7c780b560acc49b01f9c92d029fd75b3f05b05b3da",
+    "sources": {
+      "allocation-provider.cpp": "7eb2934eb3d7cdd27b8b44d43d724a0bc2e3fb2098bbee261e5f3c65551c45de",
+      "inherited-default-member.reject.cpp": "728726f2fd70f90b787bf9f27a1015c08e42b28c839b38ea6f48c9874c78283b",
+      "vbase-derived.cpp": "a0e205e2cfb76a293284cb7f29376eef26b1b5c3680029e396c9b036f63fcf6a",
+      "using-template-shadow.reject.cpp": "6e3de7f943b8c71837c5d63a97f9860359ad81049afe6a36d5ae7b9aedd59a91",
+      "global-defined.cpp": "6a6a9da73908c150130acd00a1d55f011d69cdc4c2d5fa4d6b93ddec874a2c8f",
+      "list-exceptions.cpp": "d0d66411412c0eb349cdf81dde547bdac78a0d05c04354df584db3a6dd00dcb9",
+      "inherited-traits.cpp": "9ee3ac549868c38d7fd970f70e45d841f23ff6cabfb1637a88faa1ac36fd66d3",
+      "vbase-complete.cpp": "459e9c1e10e8086081c7cfa7a638575b9b298a60b7251ba110ec446e17c47dc4",
+      "global-provider.cpp": "580dbf819070b5391b577d4c87b406a7cd24ed6f03d7c22731fd41ea00bf40e3",
+      "global-import.cpp": "0c4556719752f26aa9d1eeeff896275529439dd4f1a73443d9908713ba2f2a57",
+      "inherited-default-deleted.reject.cpp": "9e63b6a1fb8c4d53c402945d818d3f1f67e2316c18454e12db5c9b82cb9c031f",
+      "inherited-default-private.reject.cpp": "e0c04c08e96ae47b5dcb4f34768484687420bff7712debf84e8ee7aa38469afb",
+      "inherited-default.cpp": "ba792eee1829e977313945311915882cf9ff2fd7459441f218678a19dcebd57a",
+      "allocation-client.cpp": "5239abb9f886e0d2b11c446f5ae820ddf7c9862d3fe6a37d54f36e9c3d60cdc3",
+      "allocation-second.cpp": "f02677e73230d6ed39a8b1867d2d3a352f47f9457c69254d8831972d8f304325",
+      "vbase.h": "ebea44e4bb79a9e34bfc0aee4d959e90a43ee07d538269f1909eb7ede5e38a36"
+    }
+  }
+}
