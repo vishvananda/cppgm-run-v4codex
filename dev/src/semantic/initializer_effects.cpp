@@ -22,7 +22,8 @@ bool Analyzer::independent_constructor(EntityId ctor, bool local_objects)
         auto source = action.initializer;
         while (ast[source].kind == Kind::Initializer || ast[source].kind == Kind::ParenInitializer ||
             ast[source].kind == Kind::ParenArguments || ast[source].kind == Kind::BracedInit)
-            source = ast[source].first;
+            if (conversions[expressions[source].incoming].kind == Conversion::Kind::List) break;
+            else source = ast[source].first;
         safe &= independent_initializer(source) || (local_objects && constructor_local_operand(source,ctor));
     }
     independent_initializers.put(identity,safe ? 2 : 1);

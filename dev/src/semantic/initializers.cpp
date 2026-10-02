@@ -45,6 +45,8 @@ void Analyzer::list_conversion(NodeId n, TypeId target)
 bool Analyzer::narrowing_needs_value(TypeId from, TypeId target)
 {
     from = value_type(from); target = value_type(target);
+    if (complex_type(from)) from = complex_component(from);
+    if (complex_type(target)) target = complex_component(target);
     if (!arithmetic(from) || !arithmetic(target)) return false;
     bool a = integral(from), b = integral(target);
     if (!a && b) return false;
@@ -62,6 +64,12 @@ bool Analyzer::narrowing_needs_value(TypeId from, TypeId target)
 bool Analyzer::narrowing_conversion(TypeId from, TypeId target, Constant value)
 {
     from = value_type(from); target = value_type(target);
+    if (complex_type(from)) {
+        auto component = complex_type(target) ? complex_component(target) : target;
+        return narrowing_conversion(complex_component(from),component,complex_part(value,0)) ||
+            (complex_type(target) && narrowing_conversion(complex_component(from),component,complex_part(value,1)));
+    }
+    if (complex_type(target)) target = complex_component(target);
     if (!arithmetic(from) || !arithmetic(target)) return false;
     bool a = integral(from), b = integral(target);
     if (!a && b) return true;
@@ -149,8 +157,11 @@ std::uint32_t Analyzer::initializer_item(NodeId& cursor, TypeId t, ScopeId s, bo
         } else {
             initialize(source, t, s, InitializationMode::Copy);
             NodeId scalar = source;
-            while (ast[scalar].kind == Kind::BracedInit || ast[scalar].kind == Kind::ParenArguments || ast[scalar].kind == Kind::ParenInitializer) scalar = ast[scalar].first;
-            if (scalar) list_conversion(scalar, t);
+            while (ast[scalar].kind == Kind::BracedInit || ast[scalar].kind == Kind::ParenArguments || ast[scalar].kind == Kind::ParenInitializer) {
+                if (conversions[expressions[scalar].incoming].kind == Conversion::Kind::List) break;
+                scalar = ast[scalar].first;
+            }
+            if (scalar && conversions[expressions[scalar].incoming].kind != Conversion::Kind::List) list_conversion(scalar, t);
             initializers[id].source = scalar;
             initializers[id].helper_safe = independent_initializer(scalar);
         }

@@ -57,7 +57,8 @@ std::uint32_t Analyzer::list_aggregate(NodeId& cursor, TypeId to, ScopeId s)
     bool valid = true; Type target = types[to];
     unsigned rank = class_value(to) ? 5 : 0;
     if (vector_kind(target.kind)) target.bound = vector_elements(to);
-    if (target.kind == TypeKind::Array || vector_kind(target.kind)) {
+    if (complex_type(to)) { target.child = complex_component(to); target.bound = 2; }
+    if (target.kind == TypeKind::Array || vector_kind(target.kind) || complex_type(to)) {
         std::uint64_t index = 0;
         while (valid && cursor && (target.unknown_bound || index < target.bound)) {
             auto before = cursor;
@@ -147,7 +148,7 @@ Conversion Analyzer::list_initialization(NodeId n, TypeId to, ScopeId s, bool di
                     args.push_back(a); selected.push_back(c);
                 }
                 store_call(plan.call,args,selected); plan.explicit_count = args.size();
-            } else if (aggregate_type(t) || vector_kind(types[t].kind)) {
+            } else if (aggregate_type(t) || vector_kind(types[t].kind) || (complex_type(t) && first != ast[n].last)) {
                 NodeId cursor = first;
                 auto group = list_aggregate(cursor,t,s);
                 if (!ref) t = to = list_plans[group].target;
@@ -262,7 +263,7 @@ void Analyzer::prepare_list(NodeId n, Conversion& c)
         entities[object.backing].type = types.compound(TypeKind::Array,plan.backing_element,plan.call.argument_count);
         register_destruction(object.backing);
     }
-    if (!plan.direct_binding && (c.reference || class_value(t) || types[t].kind == TypeKind::Array || vector_kind(types[t].kind))) {
+    if (!plan.direct_binding && (c.reference || class_value(t) || types[t].kind == TypeKind::Array || vector_kind(types[t].kind) || (complex_type(t) && plan.aggregate))) {
         object.temporary = make_entity(EntityKind::Variable,make_scope(ScopeKind::Block,n ? facts[n].scope : plan.scope),0,n);
         entities[object.temporary].type = t; register_destruction(object.temporary);
     }

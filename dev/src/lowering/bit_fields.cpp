@@ -23,7 +23,8 @@ Value Procedural::initialization_value(NodeId n, TypeId t)
         return Value(type(t).floating() ? Operand::floating(0) : Operand::integer(0), type(t), t);
     }
     auto input = sem.expression_fact(n).incoming;
-    if (reference(t) || (input && sem.conversion_fact(input).derived))
+    if (reference(t) || (input && (sem.conversion_fact(input).derived ||
+        sem.conversion_fact(input).kind == semantic::Conversion::Kind::List)))
         return input ? converted(n, sem.conversion_fact(input)) : convert(expression(n, reference(t)), t);
     Value value = load(expression(n));
     IRType target = type(t);

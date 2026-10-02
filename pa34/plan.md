@@ -57,9 +57,11 @@ self latency/RSS with frozen A/B, A/A and ABBA evidence before optimization.
   PA25/PA29 build-time boundary, never compilation delegation (spec §10).
 - Fixed PA29 complex libm registry/signatures: the selected `<complex>` header
   exposed missing library builtins. All 66 probes/signatures, wrong arities and
-  O0/O3 three-precision runtime identities pass. The original semantic/complex.cpp
-  probe now reaches a second PA29 gap: two-component GNU complex brace
-  initialization. Fix its typed list plans/constant evaluation, then rerun gates.
+  O0/O3 three-precision runtime identities pass. The second PA29 gap, GNU complex
+  brace initialization, now uses typed component list plans and packed constants;
+  scalar/member lowering preserves the list conversion and checks narrowing per
+  component. check_complex_braces.py covers constants, templates, references,
+  arguments, arrays, effects and invalid lists. The original source probe passes.
 - Continue each newly exposed self-build/test/object divergence at its earliest
   owner. Trace seed/self differences to object and source; probes are diagnostic.
 - Required order: file audit; `make test-report-through-pa33`; canonical
@@ -73,6 +75,7 @@ Current evidence (`$RALPH_ARTIFACT_DIR/pa34-221`): file audit passes (four
 inherited warnings); host through PA33 5454/5454 after the conditional fixes;
 native debug 11/11 after the helper schedule fix. Canonical self PA1–PA4 pass
 (54/26/20/105 tests). PA5 build next exposed stale generated-header metadata;
-the canonical build continues with that corrected. Inception remains
+that is corrected, as are the subsequent complex builtin/list gaps. Fresh host
+regression and canonical self build follow the complex fixes. Inception remains
 unverified. Historical generated IR was gzip-compressed to reclaim 840 MiB;
 its contents and measurement records are preserved.

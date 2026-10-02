@@ -65,7 +65,8 @@ std::uint32_t Analyzer::query_list_aggregate(const std::vector<QueryId>& args, u
     };
     bool valid = true; auto target = types[to]; unsigned rank = class_value(to) ? 5 : 0;
     if (vector_kind(target.kind)) target.bound = vector_elements(to);
-    if (target.kind == TypeKind::Array || vector_kind(target.kind)) {
+    if (complex_type(to)) { target.child = complex_component(to); target.bound = 2; }
+    if (target.kind == TypeKind::Array || vector_kind(target.kind) || complex_type(to)) {
         std::uint64_t index = 0;
         while (valid && cursor < args.size() && (target.unknown_bound || index < target.bound)) valid = add(target.child,0,index++,1);
         if (target.unknown_bound) {
@@ -139,7 +140,7 @@ TypeQueryFact Analyzer::query_list_initialization(QueryId id)
                 chosen.push_back(c);
             }
             store_query_arguments(plan.call,args,chosen); plan.explicit_count = args.size();
-        } else if (aggregate_type(t) || vector_kind(types[t].kind)) {
+        } else if (aggregate_type(t) || vector_kind(types[t].kind) || (complex_type(t) && args.size() > 1)) {
             unsigned cursor = 0; plan = list_plans[query_list_aggregate(args,cursor,t,q.context)];
             if (!ref) t = q.type = plan.target;
             plan.target = q.type; plan.direct = q.value & 1;

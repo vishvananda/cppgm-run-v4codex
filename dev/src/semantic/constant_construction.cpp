@@ -106,7 +106,8 @@ std::uint32_t Analyzer::constant_constructor(EntityId ctor)
         NodeId source = action.initializer;
         while (ast[source].kind == syntax::Kind::Initializer || ast[source].kind == syntax::Kind::ParenArguments ||
             ast[source].kind == syntax::Kind::ParenInitializer || ast[source].kind == syntax::Kind::BracedInit || ast[source].kind == syntax::Kind::Parenthesized)
-            source = ast[source].first;
+            if (conversions[expressions[source].incoming].kind == Conversion::Kind::List) break;
+            else source = ast[source].first;
         unsigned parameter = ast[source].kind == syntax::Kind::IdExpression ? parameters.get(expressions[source].entity) : 0;
         if (!parameter && static_value(source, action.type).kind == StaticValue::Invalid) {
             constructor_constant_actions.resize(summary.first); return index;

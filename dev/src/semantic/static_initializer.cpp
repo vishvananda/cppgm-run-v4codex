@@ -49,6 +49,9 @@ StaticValue Analyzer::static_value_impl(NodeId n, TypeId target)
     }
     NodeId first = ast[n].first;
     auto kind = ast[n].kind;
+    auto list = conversions[expressions[n].incoming];
+    if (list.kind == Conversion::Kind::List && list.target == target)
+        return constant_static_value(constant_node_conversion(n,list,facts[n].scope));
     if (kind == Kind::Initializer || kind == Kind::Parenthesized || kind == Kind::ParenInitializer || kind == Kind::BracedInit)
         return static_value(first, target);
     Expression x = expressions[n];

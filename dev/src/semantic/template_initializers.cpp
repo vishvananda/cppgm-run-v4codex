@@ -237,7 +237,8 @@ void Analyzer::check_template_initialization(NodeId n, TypeId target, ScopeId s,
         NodeId cursor = n; check_template_initializer_item(cursor,target,s); return;
     }
     if (ast[n].kind == Kind::BracedInit &&
-        (types[target].kind == TypeKind::LRef || types[target].kind == TypeKind::RRef)) {
+        (types[target].kind == TypeKind::LRef || types[target].kind == TypeKind::RRef ||
+         (complex_type(target) && ast[n].first != ast[n].last))) {
         if (!fixed_initializer_operands(n)) return;
         auto c = list_initialization(n,target,s);
         check_fixed_conversion(Expression(),n,c,s); remember_initialization(n,c); return;

@@ -10,6 +10,14 @@ std::uint64_t mix(std::uint64_t h, std::uint64_t x) { return (h ^ x) * 109951162
 Constant Analyzer::evaluated_object(TypeId t, const std::vector<EvaluatedPart>& parts)
 {
     t = types.unqualified(t);
+    if (complex_type(t)) {
+        Constant values[2] = {constant_zero(complex_component(t)),constant_zero(complex_component(t))};
+        for (auto part : parts) {
+            if (part.selector >= 2 || part.count != 1) return Constant();
+            values[part.selector] = part.value;
+        }
+        return complex_constant(t,values[0],values[1]);
+    }
     std::uint64_t h = t;
     for (auto p : parts) {
         if (!p.value.valid) return Constant();

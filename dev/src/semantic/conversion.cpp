@@ -471,6 +471,9 @@ void Analyzer::initialize(NodeId n, TypeId target, ScopeId s, InitializationMode
     if (ast[n].kind == Kind::BracedInit && (types[target].kind == TypeKind::LRef || types[target].kind == TypeKind::RRef)) {
         expression(n,s); require_conversion(n,target); return;
     }
+    if (ast[n].kind == Kind::BracedInit && complex_type(target) && ast[n].first != ast[n].last) {
+        expression(n,s); require_conversion(n,target); return;
+    }
     if ((aggregate_type(target) || vector_kind(types[target].kind)) && (types[target].kind == TypeKind::Array || ast[n].kind == Kind::BracedInit ||
         ast[n].kind == Kind::ParenArguments || ast[n].kind == Kind::ParenInitializer)) {
         aggregate_initialization(n, target, s); return;
