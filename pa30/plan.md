@@ -1,9 +1,9 @@
-# PA30 compact implementation plan — implementation200
+# PA30 compact implementation plan — implementation201
 
 Stage base commit: `27029f978e65b78331233123922d342033d5d1f7`.
 Last reviewed commit: `4a081cb05b25638be7a759882f67d4d8ae97eb6a`.
-Target: **PA30 full-stage**. Phase: **implementation handoff; stage incomplete**.
-Implementation entry HEAD: `377d92a00e728199f86381f88f239a88904b829d`.
+Target: **PA30 full-stage**. Phase: **implementation in progress**.
+Implementation entry HEAD: `b0790726de6c67722826833b395b76853e051e2d`.
 Code tip: `37b6729d`. Both review markers are preserved.
 
 ## Design/spec alignment
@@ -65,3 +65,14 @@ Do not advance until the full root through30 report passes.
 | Independent review | Implementation199/200 deltas await Ralph's audit schedule. This is separate from the explicitly unfinished implementation above; neither is waived. |
 
 This handoff returns implementation control; it does not certify the whole stage.
+
+## Implementation201 active work
+
+Entry inventory: 148/153; five failures (Ralph cached summary 148/154, six).
+Preserve both review markers. Prior turn is verified progress, no live job.
+Owners: semantic object-use/capture facts, lowered CFG reachability, exception
+redeclaration sets, and typed vector builtins. Inspect each shared group and
+extend fixes through adjacent controls; retain independent review separately.
+Freeze entry binary before edits; collect equivalent A/B compiler latency/RSS
+and runtime/text evidence with A/A calibration and ABBA blocks. The course
+45-second cap is mandatory; inherited diagnostic percentages are not gates.

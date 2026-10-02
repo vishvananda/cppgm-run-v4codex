@@ -69,14 +69,16 @@ void Analyzer::prepare_template_captures(unsigned id, ScopeId scope)
 unsigned Analyzer::capture_object(EntityId object)
 {
     auto id = closure_functions.get(current_function);
-    if (!id || unevaluated_depth != body_evaluation_depth) return 0;
+    if (!current_function || unevaluated_depth != body_evaluation_depth) return 0;
     if (object) {
         auto e = entities[object];
         if ((e.kind != EntityKind::Variable && e.kind != EntityKind::Parameter) ||
             e.is_static || e.external_decl || e.thread_local_storage ||
             scopes[e.owner].kind == ScopeKind::Namespace || scopes[e.owner].kind == ScopeKind::Class ||
             encloses(entities[current_function].scope,e.owner)) return 0;
+        if (!id) throw std::runtime_error("automatic object used across function boundary");
     }
+    if (!id) return 0;
     return require_capture(id,object);
 }
 unsigned Analyzer::require_capture(unsigned id, EntityId object)
@@ -84,6 +86,11 @@ unsigned Analyzer::require_capture(unsigned id, EntityId object)
     auto identity = key(id,object);
     if (auto known = closure_capture_index.get(identity)) return known;
     auto closure = closures[id];
+    // A capture chain may traverse enclosing lambdas, but an ordinary local
+    // class member is a function boundary, not an implicit capture edge.
+    if (object && !closure.parent &&
+        !encloses(entities[closure.enclosing].scope,entities[object].owner))
+        throw std::runtime_error("capture crosses an ordinary function boundary");
     if (class_facts[entities[closure.entity].class_info].layout_state != FactState::NotStarted)
         throw std::logic_error("capture added after closure layout");
     if (!closure.capture_default)
