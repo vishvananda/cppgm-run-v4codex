@@ -5,5 +5,5 @@ struct MemoryStats {
     std::uint64_t reused = 0, conditional = 0, copies = 0, diamonds = 0, declined = 0;
     std::uint64_t snapshots = 0, peak_snapshots = 0;
 };
-bool simplify_memory_values(Program&, std::uint64_t& work, MemoryStats&);
+bool simplify_memory_values(Program&, const std::vector<bool>& call_cycles, std::uint64_t& work, MemoryStats&);
 }

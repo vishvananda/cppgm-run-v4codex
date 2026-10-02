@@ -422,9 +422,14 @@ public:
     }
 };
 }
-bool simplify_memory_values(Program& p, std::uint64_t& work, MemoryStats& stats) {
+bool simplify_memory_values(Program& p, const std::vector<bool>& call_cycles, std::uint64_t& work, MemoryStats& stats) {
     bool changed = false;
-    for (const auto& f : p.functions) if (!f.declaration) {
+    for (unsigned fn = 0; fn < p.functions.size(); ++fn) {
+        const auto& f = p.functions[fn]; if (f.declaration) continue;
+        // Reuse the pipeline's immutable call-cycle admission. Even local
+        // reuse can prolong values into a hot call boundary; ordinary private
+        // slot forwarding remains available in these declined functions.
+        if (call_cycles[fn]) continue;
         bool loads = false;
         for (unsigned b = f.blocks.begin; b < f.blocks.end() && !loads; ++b) {
             auto r = p.blocks[p.block_order[b].index-1].instructions;

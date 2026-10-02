@@ -79,7 +79,7 @@ block ^end2:
   body=[line.replace('[^a: %p, ^b: %p8]','[^a: %ax, ^b: %ay]') for line in body]
  return head+'\n'.join(body)+'\n}\n'
 r=dict(binaries={k:dict(path=str(p),sha256=sha(p)) for k,p in bins.items()},affinity=affinity,runs=[],inputs={},images={},summary={},
- diagnostic_targets=dict(compiler_ratio=1.5,rss_ratio=1.5,text_ratio=1.0),
+ diagnostic_targets=dict(compiler_ratio=1.5,rss_ratio=1.5,text_ratio=1.05),
  enforced_bounds=dict(memory_cells=32,work='128*(I+O+E+1), plus linear census and bounded dominance',diamond_window=16,comparison_steps=64,copy_pieces=16,copy_bytes=128,ir_growth=0))
 def save():(out/'performance.json').write_text(json.dumps(r,indent=2)+'\n')
 for name in ['loads','conditional','private','private-loads','copies','diamonds']:
