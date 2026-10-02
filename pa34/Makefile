@@ -593,6 +593,7 @@ test-$(1)-nobuild:
 			CPPGM_STDLIB_FLAGS="$(CPPGM_STDLIB_FLAGS)" \
 			CPPGM_TEST_RUNNER="$(CPPGM_TEST_RUNNER)" \
 			LOWIR2NATIVE_APP="$(call inception_stage_binary,$(1))" \
+			CPPGM_DRIVER_APP="$(call inception_binary_path,cppgm++)" \
 			test; \
 	else \
 		$(call inception_stage_test_env,$(1)) $(MAKE) -C ../$(1) \
@@ -642,7 +643,7 @@ $(foreach src,$(INCEPTION_ALL_SHARED_SOURCES),$(eval $(call INCEPTION_SOURCE_RUL
 $(foreach pa,$(PA_STAGE_NAMES),$(eval $(call INCEPTION_STAGE_RULES,$(pa))))
 $(foreach checkpoint,$(CHECKPOINTS),$(eval $(call INCEPTION_INCEPTION_RULES,$(checkpoint))))
 
-test-pa32: cppgm++-self
+test-pa32 test-pa33: cppgm++-self
 
 clean:
 	-rm -f $(TARGETS) $(INCEPTION_TARGETS)

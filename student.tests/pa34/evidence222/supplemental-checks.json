@@ -1,0 +1,264 @@
+[
+  {
+    "name": "selfThrough33",
+    "command": [
+      "make",
+      "-C",
+      "pa34",
+      "test-through-pa33",
+      "CXX=../dev/cppgm++",
+      "CPPGM_HOST_CXX=g++"
+    ],
+    "status": 0,
+    "seconds": 234.0352110862732
+  },
+  {
+    "name": "debugSeed",
+    "command": [
+      "make",
+      "-C",
+      "pa33",
+      "test-debuginfo"
+    ],
+    "status": 0,
+    "seconds": 0.7684094905853271
+  },
+  {
+    "name": "debugSelf",
+    "command": [
+      "make",
+      "-C",
+      "pa33",
+      "test-debuginfo",
+      "CPPGM_SKIP_DEV_REBUILD=1",
+      "TEST_DEPS=",
+      "LOWIR2NATIVE_APP=../pa34/lowir2native-self"
+    ],
+    "status": 0,
+    "seconds": 0.720522403717041
+  },
+  {
+    "name": "seed-pa5-check_elaborated",
+    "command": [
+      "python3",
+      "student.tests/pa5/check_elaborated.py",
+      "dev/cppgm++"
+    ],
+    "status": 0,
+    "seconds": 0.1396799087524414
+  },
+  {
+    "name": "seed-pa5-check_functional_pointer",
+    "command": [
+      "python3",
+      "student.tests/pa5/check_functional_pointer.py",
+      "dev/cppgm++"
+    ],
+    "status": 0,
+    "seconds": 0.17858242988586426
+  },
+  {
+    "name": "seed-pa7-check_narrow_enum",
+    "command": [
+      "python3",
+      "student.tests/pa7/check_narrow_enum.py",
+      "dev/cppgm++"
+    ],
+    "status": 0,
+    "seconds": 0.18953561782836914
+  },
+  {
+    "name": "seed-pa11-check_local_static_actions",
+    "command": [
+      "python3",
+      "student.tests/pa11/check_local_static_actions.py",
+      "dev/cppgm++"
+    ],
+    "status": 0,
+    "seconds": 0.17432665824890137
+  },
+  {
+    "name": "seed-pa12-check_conditional",
+    "command": [
+      "python3",
+      "student.tests/pa12/check_conditional.py",
+      "dev/cppgm++"
+    ],
+    "status": 0,
+    "seconds": 0.3559436798095703
+  },
+  {
+    "name": "seed-pa29-check_trap",
+    "command": [
+      "python3",
+      "student.tests/pa29/check_trap.py",
+      "dev/cppgm++"
+    ],
+    "status": 0,
+    "seconds": 0.9768471717834473
+  },
+  {
+    "name": "seed-pa29-check_complex_libm",
+    "command": [
+      "python3",
+      "student.tests/pa29/check_complex_libm.py",
+      "dev/cppgm++"
+    ],
+    "status": 0,
+    "seconds": 0.22304010391235352
+  },
+  {
+    "name": "seed-pa29-check_complex_braces",
+    "command": [
+      "python3",
+      "student.tests/pa29/check_complex_braces.py",
+      "dev/cppgm++"
+    ],
+    "status": 0,
+    "seconds": 0.20117950439453125
+  },
+  {
+    "name": "self-pa5-check_elaborated",
+    "command": [
+      "python3",
+      "student.tests/pa5/check_elaborated.py",
+      "pa34/cppgm++-self"
+    ],
+    "status": 0,
+    "seconds": 0.1519300937652588
+  },
+  {
+    "name": "self-pa5-check_functional_pointer",
+    "command": [
+      "python3",
+      "student.tests/pa5/check_functional_pointer.py",
+      "pa34/cppgm++-self"
+    ],
+    "status": 0,
+    "seconds": 0.18618512153625488
+  },
+  {
+    "name": "self-pa7-check_narrow_enum",
+    "command": [
+      "python3",
+      "student.tests/pa7/check_narrow_enum.py",
+      "pa34/cppgm++-self"
+    ],
+    "status": 0,
+    "seconds": 0.2045140266418457
+  },
+  {
+    "name": "self-pa11-check_local_static_actions",
+    "command": [
+      "python3",
+      "student.tests/pa11/check_local_static_actions.py",
+      "pa34/cppgm++-self"
+    ],
+    "status": 0,
+    "seconds": 0.18218636512756348
+  },
+  {
+    "name": "self-pa12-check_conditional",
+    "command": [
+      "python3",
+      "student.tests/pa12/check_conditional.py",
+      "pa34/cppgm++-self"
+    ],
+    "status": 0,
+    "seconds": 0.3779716491699219
+  },
+  {
+    "name": "self-pa29-check_trap",
+    "command": [
+      "python3",
+      "student.tests/pa29/check_trap.py",
+      "pa34/cppgm++-self"
+    ],
+    "status": 0,
+    "seconds": 0.9996457099914551
+  },
+  {
+    "name": "self-pa29-check_complex_libm",
+    "command": [
+      "python3",
+      "student.tests/pa29/check_complex_libm.py",
+      "pa34/cppgm++-self"
+    ],
+    "status": 0,
+    "seconds": 0.2570383548736572
+  },
+  {
+    "name": "self-pa29-check_complex_braces",
+    "command": [
+      "python3",
+      "student.tests/pa29/check_complex_braces.py",
+      "pa34/cppgm++-self"
+    ],
+    "status": 0,
+    "seconds": 0.22175812721252441
+  },
+  {
+    "name": "wideSeed",
+    "command": [
+      "python3",
+      "student.tests/pa24/check_indexed_wide.py"
+    ],
+    "status": 0,
+    "seconds": 0.18889331817626953
+  },
+  {
+    "name": "wideSelf",
+    "command": [
+      "python3",
+      "student.tests/pa24/check_indexed_wide.py",
+      "pa34/lowir2native-self",
+      "pa34/lowiropt-self"
+    ],
+    "status": 0,
+    "seconds": 0.2270946502685547
+  },
+  {
+    "name": "floatOrder",
+    "command": [
+      "python3",
+      "student.tests/pa29/check_float_order.py"
+    ],
+    "status": 0,
+    "seconds": 3.5834438800811768
+  },
+  {
+    "name": "complexOrder",
+    "command": [
+      "python3",
+      "student.tests/pa29/check_complex_order.py",
+      "dev/cppgm++",
+      "pa34/cppgm++-self"
+    ],
+    "status": 0,
+    "seconds": 0.36563873291015625
+  },
+  {
+    "name": "deepCalls",
+    "command": [
+      "python3",
+      "student.tests/pa10/check_deep_calls.py",
+      "dev/cppgm++",
+      "pa34/cppgm++-self",
+      "pa34/cppgm++-inception"
+    ],
+    "status": 0,
+    "seconds": 0.7476651668548584
+  },
+  {
+    "name": "trace",
+    "command": [
+      "python3",
+      "student.tests/pa34/trace.py",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa34-222/trace",
+      "dev/cppgm++",
+      "pa34/cppgm++-self"
+    ],
+    "status": 0,
+    "seconds": 1.4259963035583496
+  }
+]

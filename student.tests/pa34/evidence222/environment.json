@@ -1,0 +1,30 @@
+{
+  "started": 1790966648.5939336,
+  "stack_limit": [
+    8388608,
+    -1
+  ],
+  "cpu": 2,
+  "host": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "uname": [
+    "Linux",
+    "instance-20260513-022623",
+    "7.0.0-1005-gcp",
+    "#5-Ubuntu SMP PREEMPT Tue May 26 15:11:20 UTC 2026",
+    "x86_64"
+  ],
+  "flags_overrides": {},
+  "images": {
+    "/home/vishvananda/work/private/v4codex/artifacts/pa34-222/frozen/seed": "79924a927e66c52cd40eed7bb0217b9fbdc7833da9ca171b9ba56aa82db6b6df",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa34-222/frozen/self": "8f8a194eac0f8ea2ac5fcee010d1b540d7671228789d88e1e4e3cb9110e3f646"
+  },
+  "command": [
+    "python3",
+    "student.tests/pa34/measure.py",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa34-222/performance",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa34-222/frozen/seed",
+    "/home/vishvananda/work/private/v4codex/artifacts/pa34-222/frozen/self"
+  ],
+  "status": 0,
+  "seconds": 239.57246613502502
+}

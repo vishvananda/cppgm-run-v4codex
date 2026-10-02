@@ -64,9 +64,15 @@ for name,source in sources.items():
                 args = [binaries[label],*result['flags'][label],source,'-o',out/'measure.o'] if mode=='compile' else [executables[label]]
                 started=time.perf_counter()
                 proc=run(['/usr/bin/time','-f','%M','-o',out/'rss',*affinity,*args]); elapsed=time.perf_counter()-started
-                result['runs'].append(dict(workload=name,mode=mode,block=block,label=label,wall_s=elapsed,
+                row = dict(workload=name,mode=mode,block=block,label=label,wall_s=elapsed,
                     peak_rss_kib=int((out/'rss').read_text()),status=proc.returncode,
-                    phase_counters=[json.loads(s) for s in proc.stderr.decode().splitlines() if s.startswith('{')]))
+                    phase_counters=[json.loads(s) for s in proc.stderr.decode().splitlines() if s.startswith('{')])
+                # Check every timed output after stopping the clock, not only
+                # the untimed A/B images used to prepare the executables.
+                if mode == 'compile':
+                    row['object_sha256'] = sha(out/'measure.o')
+                    assert row['object_sha256'] == images[label]['object_sha256'], (name,label,block)
+                result['runs'].append(row)
                 save()
         rows=[r for r in result['runs'] if r['workload']==name and r['mode']==mode]
         ratios=[statistics.mean(r['wall_s'] for r in rows if r['block']==b and r['label']=='B')/

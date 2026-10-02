@@ -19,6 +19,13 @@ the unchanged fixture's true branch is `identifier bad` (the identifier is just
 the fixture author's label). Correct that one output token; preserve the input,
 success status, coverage and exact comparison. `trap.cpp` is the reduced proof
 that probing and actual calls must agree, independently of compiler agreement.
+The language step is C++11 [cpp.cond]/3,6 (N3485 §16.1): a nonzero controlling
+expression selects its first group and skips `#else`. PA29 defines the vendor
+probe's value from the implemented registry; C++11 defines which group follows.
+Thus the unchanged reducer `#if __has_builtin(__builtin_trap)` must produce
+`bad` once the documented GNU trap contract is implemented. C++11 alone does
+not specify either vendor builtin; the proof uses the required PA29 extension
+contract as well as conditional-inclusion rules, not host-compiler agreement.
 The observed reference bundle remains pinned to source revision
 `c2f713cd70d06170632bfde3e75dd6fe1aa44d98`, bundle SHA-256
 `c532a109ae800825da24f60ae28ea894aa4896f56efb6ebb14728cdccf25a7d7`;

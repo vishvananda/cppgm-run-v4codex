@@ -33,6 +33,9 @@ for level in range(4):
         obj = out/f'{name}{level}.o'
         run([compiler, *flags, '--emit-lowir', '--validate-lowir', source, '-o', ir])
         metrics[name] = counters(run([compiler, *flags, '-c', source, '-o', obj]))
+        quiet = out/f'{name}{level}-quiet.o'
+        run([compiler, f'-O{level}', '-gline-tables-only', '-c', source, '-o', quiet])
+        assert obj.read_bytes() == quiet.read_bytes(), (name, level, 'telemetry changes output')
         replay = out/f'{name}{level}-replay.o'
         run([compiler, f'-O{level}', '-c', out/f'{name}0.lowir', '-o', replay])
         assert obj.read_bytes() == replay.read_bytes(), (name, level, 'replay')

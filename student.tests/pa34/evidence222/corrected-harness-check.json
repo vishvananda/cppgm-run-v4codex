@@ -1,0 +1,11 @@
+{
+  "command": [
+    "make",
+    "-C",
+    "pa34",
+    "test-pa33",
+    "CXX=../dev/cppgm++",
+    "CPPGM_HOST_CXX=g++"
+  ],
+  "status": 0
+}

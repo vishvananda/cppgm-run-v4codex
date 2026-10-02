@@ -1,0 +1,74 @@
+[
+  {
+    "name": "fileAudit",
+    "command": [
+      "perl",
+      "scripts/cppgm_file_audit.pl",
+      "--stage",
+      "pa34",
+      "--paths",
+      "dev/src"
+    ],
+    "status": 0,
+    "seconds": 5.449203729629517
+  },
+  {
+    "name": "pa34HostThrough33",
+    "command": [
+      "make",
+      "test-report-through-pa33"
+    ],
+    "status": 0,
+    "seconds": 42.05311918258667
+  },
+  {
+    "name": "pa34SelfThroughPa5",
+    "command": [
+      "make",
+      "-C",
+      "pa34",
+      "test-through-pa5",
+      "CXX=../dev/cppgm++",
+      "CPPGM_HOST_CXX=g++"
+    ],
+    "status": 0,
+    "seconds": 19.664843320846558
+  },
+  {
+    "name": "pa34PptokenInception",
+    "command": [
+      "make",
+      "-C",
+      "pa34",
+      "compare-pptoken-inception",
+      "CXX=../dev/cppgm++",
+      "CPPGM_HOST_CXX=g++"
+    ],
+    "status": 0,
+    "seconds": 3.222930669784546
+  },
+  {
+    "name": "pa34Inception",
+    "command": [
+      "make",
+      "inception",
+      "CXX=g++",
+      "CPPGM_HOST_CXX=g++"
+    ],
+    "status": 0,
+    "seconds": 9.399200916290283
+  },
+  {
+    "name": "selfThrough33",
+    "command": [
+      "make",
+      "-C",
+      "pa34",
+      "test-through-pa33",
+      "CXX=../dev/cppgm++",
+      "CPPGM_HOST_CXX=g++"
+    ],
+    "status": 0,
+    "seconds": 374.5518033504486
+  }
+]

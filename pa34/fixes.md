@@ -28,7 +28,7 @@ language features. Personal reducers are run explicitly.
   the existing worklist. O0/O3 default-member, once-only effect and zero-init
   reducers pass; the compiler entry source probe now compiles.
 - PA34 source correction: split the ill-formed multi-auto declaration in
-  semantic/template_call.cpp (TypeId versus Type). The PA14 rejection reducer
+  semantic/template_call.cpp (TypeId versus Type). The PA20 rejection reducer
   and [dcl.spec.auto]/7 proof document GCC's acceptance gap; no language rule
   or valid compiler construct was weakened.
 - PA34 source correction: explicit TypeId/ArgumentId recovery from the wide

@@ -1,0 +1,68 @@
+[
+  {
+    "command": [
+      "dev/cppgm++",
+      "-c",
+      "student.tests/pa20/mixed-auto.reject.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa34-222/rejected.o"
+    ],
+    "status": 1,
+    "diagnostic": "ERROR: inconsistent auto declaration types\n"
+  },
+  {
+    "command": [
+      "dev/cppgm++",
+      "-c",
+      "student.tests/pa11/id-narrowing.reject.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa34-222/rejected.o"
+    ],
+    "status": 1,
+    "diagnostic": "ERROR: narrowing list initialization\n"
+  },
+  {
+    "command": [
+      "pa34/cppgm++-self",
+      "-c",
+      "student.tests/pa20/mixed-auto.reject.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa34-222/rejected.o"
+    ],
+    "status": 1,
+    "diagnostic": "ERROR: inconsistent auto declaration types\n"
+  },
+  {
+    "command": [
+      "pa34/cppgm++-self",
+      "-c",
+      "student.tests/pa11/id-narrowing.reject.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa34-222/rejected.o"
+    ],
+    "status": 1,
+    "diagnostic": "ERROR: narrowing list initialization\n"
+  },
+  {
+    "command": [
+      "pa34/cppgm++-inception",
+      "-c",
+      "student.tests/pa20/mixed-auto.reject.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa34-222/rejected.o"
+    ],
+    "status": 1,
+    "diagnostic": "ERROR: inconsistent auto declaration types\n"
+  },
+  {
+    "command": [
+      "pa34/cppgm++-inception",
+      "-c",
+      "student.tests/pa11/id-narrowing.reject.cpp",
+      "-o",
+      "/home/vishvananda/work/private/v4codex/artifacts/pa34-222/rejected.o"
+    ],
+    "status": 1,
+    "diagnostic": "ERROR: narrowing list initialization\n"
+  }
+]
