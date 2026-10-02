@@ -14,6 +14,18 @@ ExpressionForm Analyzer::intrinsic_expression(EntityId e) const
 EntityId Analyzer::builtin_function(IdentifierId name)
 {
     auto text = ids.spelling(name);
+    auto vector = fixed_vector_builtin(text);
+    if (vector.lane_bytes) {
+        auto lane = types.fundamental(vector.lane_bytes == 1 ? FT_SIGNED_CHAR :
+            vector.lane_bytes == 2 ? FT_SHORT_INT : FT_INT);
+        auto packed = types.compound(TypeKind::Vector,lane,8);
+        std::vector<TypeId> args(8/vector.lane_bytes,lane);
+        if (vector.extract) args = {packed,types.fundamental(FT_INT)};
+        auto e = declare_function(global,name,0,types.function(vector.extract ? lane : packed,args,false));
+        entities[e].exception_spec = 129;
+        intrinsic_functions.put(e,unsigned(vector.extract ? Intrinsic::VectorExtract : Intrinsic::VectorInit));
+        return e;
+    }
     auto builtin = function_builtin(text);
     if (builtin == FunctionBuiltin::OperatorNew || builtin == FunctionBuiltin::OperatorDelete) {
         auto e = global_allocation(builtin == FunctionBuiltin::OperatorNew ? KW_NEW : KW_DELETE,false);
@@ -107,6 +119,12 @@ EntityId Analyzer::builtin_function(IdentifierId name)
 void Analyzer::validate_intrinsic(EntityId e, const std::vector<NodeId>& args, ScopeId s)
 {
     auto kind = intrinsic_function(e);
+    if (kind == Intrinsic::VectorExtract) {
+        auto lane = evaluate(args[1],s);
+        auto vector = types.parameters[types[entities[e].type].offset];
+        if (!lane.valid || !integral(lane.type) || negative_constant(lane) || integer_value(lane) >= vector_elements(vector))
+            throw std::runtime_error("vector extraction requires a constant lane in range");
+    }
     if (kind == Intrinsic::Prefetch) {
         for (unsigned j = 1; j < args.size(); ++j) {
             auto value = evaluate(args[j],s);

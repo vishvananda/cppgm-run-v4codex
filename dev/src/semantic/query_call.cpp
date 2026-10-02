@@ -203,7 +203,10 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         auto selected = choice.entity;
         if (deleted_transfer(selected))
             return TypeQueryFact::failed(TypeQueryFact::Failure::Deleted);
-        if (!accessible(selected,q.context,naming,object)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+        if (!accessible(selected,q.context,naming,object)) {
+            if (!dependent_access(selected,q.context)) return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+            r.dependent = true;
+        }
         function_type = entities[selected].type; r.selected = selected;
         if (object && entities[selected].member_info && !entities[selected].is_static) {
             bool qualified = callee.kind == QueryKind::Destructor ? callee.count > 1 :
@@ -249,6 +252,11 @@ TypeQueryFact Analyzer::query_call(const TypeQuery& q, const std::vector<TypeQue
         conversions.insert(conversions.end(),chosen.begin(),chosen.end());
     }
     if (intrinsic_function(r.selected) != Intrinsic::None) r.expression.form = intrinsic_expression(r.selected);
+    if (intrinsic_function(r.selected) == Intrinsic::VectorExtract && !children[2].dependent) {
+        auto lane = constants[query_value(query_edges[q.offset+2])];
+        if (!lane.valid || !integral(lane.type) || negative_constant(lane) || integer_value(lane) >= vector_elements(args[0].type))
+            return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+    }
     auto returned = types[function_type].child;
     r.expression.type = value_type(returned);
     if (types[returned].kind == TypeKind::LRef) r.expression.category = ValueCategory::Lvalue;

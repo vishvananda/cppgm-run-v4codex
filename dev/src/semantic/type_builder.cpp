@@ -218,7 +218,7 @@ TypeId Analyzer::parameter(NodeId n, ScopeId s)
     { auto& published = facts.edit(n); published.type = t; published.scope = s; }
     return t;
 }
-TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array, bool name_resolved, NodeId specs)
+TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array, bool name_resolved, NodeId specs, bool query_array)
 {
     if (template_type_probe && !base) return 0;
     if (!n) return base;
@@ -271,6 +271,13 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
             if (calls && types.storage_alignment(base) && !dependent_type(base) && size(base)%size(base,true))
                 throw std::runtime_error("array element size is not a multiple of its alignment");
             std::uint64_t bound = 0;
+            // A new-expression query owns the runtime first extent as a
+            // separate child. It is not a constant bound in the allocated
+            // element type; inner dimensions still follow the ordinary rules.
+            if (query_array && c == dynamic_array) {
+                base = types.compound(TypeKind::Array,base,0);
+                continue;
+            }
             if (ast[c].first) {
                 if (definitions && !ast.nodes.occurrences[c].context && (template_type_probe || active_template_scope) &&
                     bind_template_expression(ast[c].first,s)) {
@@ -353,7 +360,7 @@ TypeId Analyzer::declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_arr
             facts.edit(c).type = base;
         }
     }
-    if (nested) base = declarator(nested, base, s,dynamic_array,name_resolved);
+    if (nested) base = declarator(nested, base, s,dynamic_array,name_resolved,0,query_array);
     { auto& published = facts.edit(n); published.type = base; published.scope = s; }
     return base;
 }

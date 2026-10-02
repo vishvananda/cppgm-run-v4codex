@@ -50,6 +50,16 @@ Conversion Analyzer::explicit_builtin_conversion(Expression x, TypeId to, EToken
     // direct-initialization sequence, including conversion functions and
     // reference-bound scalar temporaries ([expr.static.cast]/4).
     bool ref = target.kind == TypeKind::LRef || target.kind == TypeKind::RRef;
+    if (reinterpret && !ref && !fundamental(to,FT_VOID) && (vector_kind(types[x.type].kind) || vector_kind(target.kind))) {
+        auto representation_type = [&](TypeId type) {
+            return vector_kind(types[type].kind) || (types[type].kind == TypeKind::Fundamental && integral(type));
+        };
+        if (representation_type(x.type) && representation_type(to) && size(x.type) == size(to)) {
+            c.kind = Conversion::Kind::Representation; c.constant_forbidden = true;
+            return c;
+        }
+        return invalid();
+    }
     bool bit_field = field_fact(x.entity).bit_field;
     if (ref && bit_field && (cv_cast || op == KW_REINTERPET_CAST)) return invalid();
     // [expr.cast]/4 selects const_cast before static_cast/reinterpret_cast.

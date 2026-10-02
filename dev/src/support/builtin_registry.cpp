@@ -6,7 +6,24 @@ namespace cppgm {
 bool hosted_builtin(TextView name)
 {
     return value_builtin(name) != ValueBuiltin::None || atomic_builtin(name).op != AtomicOp::None || builtin_trait(name) != BuiltinTrait::None || function_builtin(name) != FunctionBuiltin::None ||
-        integer_builtin(name).operation != IntegerBuiltin::None || libm_builtin(name).shape != LibmShape::None || floating_builtin_kind(name) != FloatingBuiltin::None || name.equals("__builtin_va_arg") || integer_pack_builtin(name) || invoke_builtin_name(name);
+        integer_builtin(name).operation != IntegerBuiltin::None || fixed_vector_builtin(name).lane_bytes || libm_builtin(name).shape != LibmShape::None || floating_builtin_kind(name) != FloatingBuiltin::None || name.equals("__builtin_va_arg") || integer_pack_builtin(name) || invoke_builtin_name(name);
+}
+FixedVectorBuiltin fixed_vector_builtin(TextView name)
+{
+    struct Entry { const char* name; unsigned bytes; bool extract; };
+    static const Entry entries[] = {
+        {"__builtin_ia32_vec_init_v8qi",1,false},
+        {"__builtin_ia32_vec_init_v4hi",2,false},
+        {"__builtin_ia32_vec_init_v2si",4,false},
+        {"__builtin_ia32_vec_ext_v8qi",1,true},
+        {"__builtin_ia32_vec_ext_v4hi",2,true},
+        {"__builtin_ia32_vec_ext_v2si",4,true},
+    };
+    FixedVectorBuiltin result;
+    for (const auto& entry : entries) if (name.equals(entry.name)) {
+        result.lane_bytes = entry.bytes; result.extract = entry.extract; break;
+    }
+    return result;
 }
 
 LibmBuiltin libm_builtin(TextView name)

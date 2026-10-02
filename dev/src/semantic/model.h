@@ -418,7 +418,7 @@ struct Edge { ScopeId target = 0; std::uint32_t next = 0, inline_next = 0; bool 
 enum class ValueCategory : unsigned char { Prvalue, Lvalue, Xvalue };
 enum class Intrinsic : unsigned char {
     None, VaStart, VaEnd, VaCopy, StackAlloc, Expect, Abort, Unreachable, Atomic,
-    Clz, Ctz, Popcount, Parity, Ffs, Bswap, Clzg, Ctzg, Popcountg, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, IsConstantEvaluated, SourceFile, SourceLine, SourceFunction, SourceColumn, Complex
+    Clz, Ctz, Popcount, Parity, Ffs, Bswap, Clzg, Ctzg, Popcountg, Prefetch, AssumeAligned, FltRounds, AddOverflow, SubOverflow, MulOverflow, IsConstantEvaluated, SourceFile, SourceLine, SourceFunction, SourceColumn, Complex, VectorInit, VectorExtract
 };
 enum class ExpressionForm : unsigned char { Ordinary, Overload, Cast, ConstantQuery, Abort, Unreachable, PseudoDestructor, Construction, OperatorCall, LiteralCall, FloatFinite, FloatNaN, FloatInfinite, FloatNormal, FloatSignbit, FloatGreater, FloatGreaterEqual, FloatLess, FloatLessEqual, FloatLessGreater, FloatUnordered, FloatClassify, InitializerList, ListValue, BoundMember, Expect, Typeid, DynamicCast, TypeinfoEqual, TypeinfoUnequal, InvokeMemberData };
 struct RttiExpression {
@@ -489,7 +489,7 @@ struct Conversion {
     Conversion() : reference(false), temporary(false), derived(false), empty_copy(false), fold_widen(false),
         implicit_move(false), storage_write(false), default_argument(false), preserve_widen(false), ambiguous(false), constant_forbidden(false), ellipsis_object(false), ellipsis_unavailable(false) {}
     unsigned char preference = 0;
-    enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction, User, ListPlan, List, QueryList };
+    enum class Kind : unsigned char { Standard, Explicit, Contextual, Discarded, Construction, User, ListPlan, List, QueryList, Representation };
     Kind kind = Kind::Standard;
     bool valid() const { return rank != 255; }
 };

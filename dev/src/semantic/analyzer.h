@@ -760,6 +760,7 @@ private:
     ScopeId access_override = 0;
     Access declaration_access(ScopeId s) const;
     bool privileged(ScopeId context, EntityId cls) const;
+    bool dependent_access(EntityId member, ScopeId context) const;
     bool class_derives(EntityId derived, EntityId base) const;
     bool access_derives(EntityId derived, EntityId base);
     bool privileged_base_path(ScopeId context, EntityId object, EntityId base);
@@ -1550,7 +1551,7 @@ private:
     TypeId enum_type(NodeId n, ScopeId s, IdentifierId anonymous_name = 0, bool emit = true);
     TypeId specifiers(NodeId n, ScopeId s, IdentifierId anonymous_name = 0);
     TypeId type_id(NodeId n, ScopeId s);
-    TypeId declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array = 0, bool name_resolved = false, NodeId specs = 0);
+    TypeId declarator(NodeId n, TypeId base, ScopeId s, NodeId dynamic_array = 0, bool name_resolved = false, NodeId specs = 0, bool query_array = false);
     TypeId parameter(NodeId n, ScopeId s);
     ScopeId object_declaration_owner(NodeId name, ScopeId scope);
     EntityId declare_object(NodeId d, NodeId init, TypeId t, NodeId specs, ScopeId s, NodeId source);

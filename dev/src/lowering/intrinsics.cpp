@@ -13,6 +13,18 @@ Value Procedural::intrinsic_call(NodeId n, semantic::Intrinsic intrinsic)
     auto argument = [&](unsigned i) {
         return converted(sem.call_argument(fact,i),sem.conversion_fact(fact.conversions+i));
     };
+    if (intrinsic == semantic::Intrinsic::VectorInit) {
+        Value result(Operand::slot(builder->add_slot(0,type(fact.type))),type(fact.type),fact.type,true);
+        // The fixed vocabulary has at most eight lanes. Each operand is
+        // evaluated once and every byte of the result is initialized.
+        for (unsigned i = 0; i < fact.argument_count; ++i)
+            vector_write(result,Value(Operand::integer(i),IRType::I64,sem.types.fundamental(FT_UNSIGNED_LONG_INT)),argument(i));
+        result.address = false; return result;
+    }
+    if (intrinsic == semantic::Intrinsic::VectorExtract) {
+        auto vector = argument(0), lane = argument(1);
+        return vector_read(vector,coerce(lane,IRType::I64));
+    }
     if (intrinsic == semantic::Intrinsic::Complex) {
         auto real = argument(0); auto imag = argument(1);
         return complex_construct(fact.type,real,imag);

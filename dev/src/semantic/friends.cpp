@@ -27,7 +27,15 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
             return true;
         }
         if (pattern_scope(s) && dependent_template_syntax(name,s)) {
-            bind_template_name(name,s); return true;
+            bind_template_name(name,s);
+            // A dependent friend can still name an enclosing current
+            // instantiation. Record that source-class edge now so fixed
+            // member expressions in its body have the same privilege as
+            // their later concrete instantiations. Other dependent friends
+            // acquire their grants only when the declaration is substituted.
+            auto current = current_instantiation_scope(type_name(name,s),s);
+            if (current) friendships.put(key(cls,scopes[current].entity),1);
+            return true;
         }
         EntityId target = resolve(name, s, Lookup::Tag);
         if (!target) {
@@ -45,6 +53,10 @@ bool Analyzer::friend_declaration(NodeId n, ScopeId s)
         // friendship to the resulting class; other types are ignored.
         if (!dependent_type(base) && types[base].kind == TypeKind::Named && entities[types[base].entity].class_info)
             friendships.put(key(cls,types[base].entity),1);
+        else if (pattern_scope(s)) {
+            auto current = current_instantiation_scope(base,s);
+            if (current) friendships.put(key(cls,scopes[current].entity),1);
+        }
         return true;
     }
     auto add = [&](NodeId d, NodeId body) {

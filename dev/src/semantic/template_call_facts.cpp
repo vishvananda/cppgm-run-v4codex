@@ -58,6 +58,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
     if (direct) {
         for (auto e : candidates(binding.entity)) {
             if (entities[e].template_pattern || (!member && entities[e].member_info && !entities[e].is_static)) return false;
+            if (dependent_access(e,s)) return false; // Access belongs to the substituted query.
             auto owner = scopes[entities[e].owner].kind;
             if (owner == ScopeKind::Class || owner == ScopeKind::Block || owner == ScopeKind::Function) adl = false;
         }
@@ -95,6 +96,7 @@ bool Analyzer::check_fixed_call(NodeId n, ScopeId s)
         }
         if (choice.failure == CallFailure::Ambiguous) throw std::runtime_error("ambiguous fixed template call");
         selected = choice.entity; ft = entities[selected].type;
+        if (intrinsic_function(selected) == Intrinsic::VectorExtract) validate_intrinsic(selected,args,s);
         if (deleted_transfer(selected)) throw std::runtime_error("deleted fixed template callee");
         check_access(selected,s,naming,object_type);
         if (member) {

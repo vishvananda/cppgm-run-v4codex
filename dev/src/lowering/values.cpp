@@ -224,6 +224,18 @@ Value Procedural::converted(NodeId n, const semantic::Conversion& c)
 }
 Value Procedural::converted_value(Value v, const semantic::Conversion& c)
 {
+    if (c.kind == semantic::Conversion::Kind::Representation) {
+        // Legality and equal size were established by semantics. Transfer
+        // bytes directly through typed object storage, without numeric casts.
+        if (type(v.type).scalar()) {
+            auto value = load(v);
+            Value stored(Operand::slot(builder->add_slot(0,type(v.type))),type(v.type),v.type,true);
+            store(value,stored); v = stored;
+        } else v.address = true;
+        Value result(Operand::slot(builder->add_slot(0,type(c.target))),type(c.target),c.target,true);
+        Instruction copy(Opcode::CopyObject); copy.bytes = sem.object_size(c.target); copy.alignment = 1;
+        emit(copy,{address(v).operand,address(result).operand}); return load(result);
+    }
     if (c.derived) {
         if (sem.types[c.target].kind == TypeKind::MemberPointer) return member_pointer_conversion(load(v),c);
         v = c.reference && !c.temporary ? base_projection(address(v),c.adjustment) : pointer_projection(load(v),c.adjustment);

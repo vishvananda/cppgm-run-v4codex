@@ -2,7 +2,23 @@
 
 Stage base commit: `27029f978e65b78331233123922d342033d5d1f7`.
 Last reviewed commit: `4a081cb05b25638be7a759882f67d4d8ae97eb6a`.
-Target: **PA30 full-stage**. Phase: **checkpoint audit complete; stage incomplete**.
+Target: **PA30 full-stage**. Phase: **implementation199 in progress**.
+Implementation entry HEAD: `d9a625844ca9a182f74152abfb08e2e67b0057b9`.
+Stage base and last reviewed markers above remain unchanged.
+Previous goal turn: progress (audit198 completed); no live compiler/test job at entry.
+Entry evidence: 132/153 (21 failures); Ralph cached 132/154 (22 failures).
+
+Implementation199 begins with the eight dependent constant/access failures.
+Owners: type-builder array bounds consume semantic constant facts; member access
+consumes declaration ownership and lexical privilege. Trace those facts through
+substitution, declaration completion and typed lowering; fix their shared owners.
+Work must track demanded expressions and lexical/base edges, with no whole-program
+retry or rendered semantic keys. Validate reduced positive/negative controls,
+all affected hosted cases, explicit LowIR/object execution, scaling, equivalent
+A/A+ABBA compile/runtime/RSS/text measurements, and course through reports.
+Then extend related fixes while this understanding applies. Remaining callable
+and emitted-code groups below remain implementation work, not waived audit items.
+Independent review: implementation199 changes require review after handoff.
 Reviewed all three accumulated checkpoints, `27029f9..c0b26910`, and the audit
 repairs through the code tip above. This record adds no implementation changes.
 Previous goal turn: progress (committed implementation197); no live job at entry.
@@ -70,3 +86,15 @@ Historical performance195–197 and their evidence remain unchanged. The audit's
 source/binary bindings and reproducible verification (**1,218 checks pass**) are
 in `evidence198/` and `student.tests/pa30/verify198.py`; the single audit ledger
 row is in `audit.md`.
+
+Implementation199 ledger (in progress): runtime new[] query extents are separate
+from canonical element types; current-instantiation friendship is an indexed
+source edge; fixed-base alias signatures use indexed member lookup; protected
+call access through dependent bases remains a substituted query obligation.
+Fixed MMX vector construction/extraction and equal-size representation casts use
+recorded intrinsic/conversion facts and typed LowIR storage. No optional optimizer
+was added. First full stage report: 137/153, no new PA30 failures. 67 explicit
+object/LowIR controls pass. Prior report found one vector-to-void regression;
+the corrected case passes, full earlier report will be repeated. Current regex
+failure is parser class lookahead; random now reaches missing packed SIMD
+arithmetic. These are unfinished implementation, not independent review waivers.

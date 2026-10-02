@@ -1,0 +1,37 @@
+[
+  {
+    "path": "student.tests/pa30/source199/new-array.cpp",
+    "status": 1,
+    "stderr": "ERROR: array bound must be a nonnegative integral constant\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/friend-other.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: inaccessible class member: value declared in student.tests/pa30/source199/friend-other.reject.cpp:5\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/friend-current.cpp",
+    "status": 1,
+    "stderr": "ERROR: inaccessible class member: value declared in student.tests/pa30/source199/friend-current.cpp:5\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/new-inner-runtime.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: array bound must be a nonnegative integral constant\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/new-bound-negative.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: array bound must be a nonnegative integral constant\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/friend-absent.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: inaccessible class member: value declared in student.tests/pa30/source199/friend-absent.reject.cpp:2\n"
+  },
+  {
+    "path": "student.tests/pa30/source199/new-bound-type.reject.cpp",
+    "status": 1,
+    "stderr": "ERROR: array allocation bound must be integral\n"
+  }
+]

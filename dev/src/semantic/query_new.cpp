@@ -33,9 +33,14 @@ QueryId Analyzer::allocation_query(NodeId n, ScopeId s)
     while (!template_object_context_index.get(q.context) &&
         (scopes[q.context].kind == ScopeKind::Template || scopes[q.context].kind == ScopeKind::Block))
         q.context = scopes[q.context].parent;
-    q.type = type_id(child(n,Kind::TypeId),s); q.value = child(n,Kind::Global) != 0;
+    auto type_node = child(n,Kind::TypeId), specs = ast[type_node].first, d = ast[specs].next;
+    auto extent = child(d,Kind::Array);
+    if (extent && !ast[extent].first) throw std::runtime_error("missing array allocation extent");
+    q.type = declarator(d,specifiers(specs,s),s,extent,false,0,true);
+    q.value = (child(n,Kind::Global) != 0) | (extent ? 2 : 0);
     TypeQuery type; type.kind = QueryKind::TypeValue; type.type = q.type;
-    while (types[type.type].kind == TypeKind::Array) type.type = types[type.type].child;
+    while (types[type.type].kind == TypeKind::Array || types[type.type].kind == TypeKind::DependentArray)
+        type.type = types[type.type].child;
     std::vector<QueryId> args(1,intern_query(type,{}));
     auto init = child(n,Kind::Initializer);
     auto list = ast[init].first;
@@ -45,6 +50,7 @@ QueryId Analyzer::allocation_query(NodeId n, ScopeId s)
         call.op = OP_LBRACE; args.push_back(expression_query(list,s));
     } else for (auto a = ast[list].first; a; a = ast[a].next) args.push_back(expression_query(a,s));
     children.push_back(intern_query(call,args));
+    if (extent) children.push_back(expression_query(ast[extent].first,s));
     auto placement = ast[child(n,Kind::Placement)].first;
     for (auto a = ast[placement].first; a; a = ast[a].next) children.push_back(expression_query(a,s));
     if (template_type_probe) for (auto child : children) if (!child) return 0;
@@ -55,6 +61,16 @@ TypeQueryFact Analyzer::query_new(const TypeQuery& q, const std::vector<TypeQuer
     // This unevaluated owner checks allocation and construction declarations;
     // it creates no runtime object, initializer occurrence or body demand.
     auto allocated = q.type;
+    unsigned placement_begin = 1;
+    if (q.value & 2) {
+        auto bound = children[placement_begin++].expression;
+        if (!integral(bound.type) || scoped_enum(bound.type))
+            return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+        EvaluationScope mode(*this,false);
+        auto value = constants[query_value(query_edges[q.offset+1])];
+        if (value.valid && negative_constant(value))
+            return TypeQueryFact::failed(TypeQueryFact::Failure::InvalidOperands);
+    }
     if (!complete_object_type(allocated) || types[allocated].kind == TypeKind::LRef || types[allocated].kind == TypeKind::RRef)
         return incomplete_query(allocated);
     bool array = types[allocated].kind == TypeKind::Array;
@@ -62,15 +78,15 @@ TypeQueryFact Analyzer::query_new(const TypeQuery& q, const std::vector<TypeQuer
     while (types[leaf].kind == TypeKind::Array) leaf = types[leaf].child;
     auto name = operator_name(KW_NEW,array);
     EntityId family = 0;
-    if (!q.value && class_value(leaf))
+    if (!(q.value & 1) && class_value(leaf))
         family = imported(entities[types[leaf].entity].scope,name,Lookup::Ordinary,++walk);
     if (family == ~EntityId(0)) return TypeQueryFact::failed(TypeQueryFact::Failure::Ambiguous);
     if (!family) {
-        if (children.size() == 1) global_allocation(KW_NEW,array);
+        if (children.size() == placement_begin) global_allocation(KW_NEW,array);
         family = lookup(global,name);
     }
     std::vector<Expression> args(1); args[0].type = types.fundamental(FT_UNSIGNED_LONG_INT);
-    for (unsigned j = 1; j < children.size(); ++j) args.push_back(children[j].expression);
+    for (unsigned j = placement_begin; j < children.size(); ++j) args.push_back(children[j].expression);
     std::vector<Conversion> conversions;
     auto choice = select_call(family,args,0,0,ValueCategory::Prvalue,0,0,conversions);
     if (choice.failure != CallFailure::None || deleted_transfer(choice.entity))

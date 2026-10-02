@@ -192,7 +192,11 @@ TypeId Analyzer::template_member_aliases(TypeId type, EntityId primary, Index& c
         result = types.qualify(types.decltype_type(template_signature_query(t.entity,primary,cache),t.bound),t.cv);
     } else if (t.kind == TypeKind::DependentName) {
         auto owner = template_signature_owner(child,primary);
-        auto alias = owner && !t.bound ? local(owner,t.entity,Lookup::Qualifier) : 0;
+        // Fixed bases participate in member lookup just as direct members
+        // do. The source graph already owns those edges; no specialization
+        // completion is needed to compare an inherited alias or enum.
+        auto alias = owner && !t.bound ? imported(owner,t.entity,Lookup::Ordinary,++walk) : 0;
+        if (alias == ~EntityId(0)) return 0;
         if (alias && entities[alias].type && (entities[alias].kind == EntityKind::Alias ||
             (entities[alias].kind == EntityKind::Type && (entities[alias].key == KW_ENUM || entities[alias].template_pattern)))) {
             // Canonical aliases and enum declarations of this current

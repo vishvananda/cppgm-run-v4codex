@@ -28,6 +28,18 @@ bool Analyzer::class_derives(EntityId derived, EntityId base) const
     }
     return false;
 }
+bool Analyzer::dependent_access(EntityId member, ScopeId context) const
+{
+    if (!member || entities[member].access != Access::Protected) return false;
+    if (access_override) context = access_override;
+    // A protected declaration is fixed, but the privilege supplied by a
+    // dependent base is not. The query retains this context and must recheck
+    // it after substitution; this predicate never grants concrete access.
+    for (; context; context = scopes[context].parent)
+        if (scopes[context].kind == ScopeKind::Class &&
+            template_pattern_open_bases.get(scopes[context].entity)) return true;
+    return false;
+}
 bool Analyzer::privileged(ScopeId context, EntityId cls) const
 {
     for (; context; context = scopes[context].parent) {
