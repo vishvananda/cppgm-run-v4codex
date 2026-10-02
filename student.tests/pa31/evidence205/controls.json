@@ -1,0 +1,673 @@
+{
+  "compiler_sha256": "710fae53af4a786daa744d7c780b560acc49b01f9c92d029fd75b3f05b05b3da",
+  "sources": {
+    "allocation-provider.cpp": "7eb2934eb3d7cdd27b8b44d43d724a0bc2e3fb2098bbee261e5f3c65551c45de",
+    "inherited-default-member.reject.cpp": "728726f2fd70f90b787bf9f27a1015c08e42b28c839b38ea6f48c9874c78283b",
+    "vbase-derived.cpp": "a0e205e2cfb76a293284cb7f29376eef26b1b5c3680029e396c9b036f63fcf6a",
+    "using-template-shadow.reject.cpp": "6e3de7f943b8c71837c5d63a97f9860359ad81049afe6a36d5ae7b9aedd59a91",
+    "global-defined.cpp": "6a6a9da73908c150130acd00a1d55f011d69cdc4c2d5fa4d6b93ddec874a2c8f",
+    "list-exceptions.cpp": "d0d66411412c0eb349cdf81dde547bdac78a0d05c04354df584db3a6dd00dcb9",
+    "inherited-traits.cpp": "9ee3ac549868c38d7fd970f70e45d841f23ff6cabfb1637a88faa1ac36fd66d3",
+    "vbase-complete.cpp": "459e9c1e10e8086081c7cfa7a638575b9b298a60b7251ba110ec446e17c47dc4",
+    "global-provider.cpp": "580dbf819070b5391b577d4c87b406a7cd24ed6f03d7c22731fd41ea00bf40e3",
+    "global-import.cpp": "0c4556719752f26aa9d1eeeff896275529439dd4f1a73443d9908713ba2f2a57",
+    "inherited-default-deleted.reject.cpp": "9e63b6a1fb8c4d53c402945d818d3f1f67e2316c18454e12db5c9b82cb9c031f",
+    "inherited-default-private.reject.cpp": "e0c04c08e96ae47b5dcb4f34768484687420bff7712debf84e8ee7aa38469afb",
+    "inherited-default.cpp": "ba792eee1829e977313945311915882cf9ff2fd7459441f218678a19dcebd57a",
+    "allocation-client.cpp": "5239abb9f886e0d2b11c446f5ae820ddf7c9862d3fe6a37d54f36e9c3d60cdc3",
+    "allocation-second.cpp": "f02677e73230d6ed39a8b1867d2d3a352f47f9457c69254d8831972d8f304325",
+    "vbase.h": "ebea44e4bb79a9e34bfc0aee4d959e90a43ee07d538269f1909eb7ede5e38a36"
+  },
+  "commands": [
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/allocation-client.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/allocation-client.o"
+      ],
+      "status": 0,
+      "wall_s": 0.03320913389325142,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/allocation-client.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/allocation-client.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.03272000141441822,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/allocation-provider.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/allocation-provider.o"
+      ],
+      "status": 0,
+      "wall_s": 0.05855310708284378,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/allocation-second.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/allocation-second.o"
+      ],
+      "status": 0,
+      "wall_s": 0.051053499802947044,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/allocation-second.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/allocation-second.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.050484079867601395,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/global-defined.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-defined.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005916198715567589,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/global-defined.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-defined.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005736479535698891,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/global-import.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-import.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005812793970108032,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/global-import.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-import.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0055989231914281845,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/global-provider.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-provider.o"
+      ],
+      "status": 0,
+      "wall_s": 0.005525160580873489,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/global-provider.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-provider.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005333155393600464,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/inherited-default-deleted.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/inherited-default-deleted.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.005419090390205383,
+      "stdout": "",
+      "stderr": "ERROR: deleted default constructor\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/inherited-default-member.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/inherited-default-member.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.005938958376646042,
+      "stdout": "",
+      "stderr": "ERROR: previously failed semantic fact\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/inherited-default-private.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/inherited-default-private.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.0052450839430093765,
+      "stdout": "",
+      "stderr": "ERROR: inaccessible class member: B declared in /home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/inherited-default-private.reject.cpp:1\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/inherited-default.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/inherited-default.o"
+      ],
+      "status": 0,
+      "wall_s": 0.006971640512347221,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/inherited-default.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/inherited-default.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.0068557169288396835,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/inherited-traits.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/inherited-traits.o"
+      ],
+      "status": 0,
+      "wall_s": 0.00714290514588356,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/inherited-traits.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/inherited-traits.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.006332116201519966,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/list-exceptions.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/list-exceptions.o"
+      ],
+      "status": 0,
+      "wall_s": 0.019187595695257187,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/list-exceptions.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/list-exceptions.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.01858285441994667,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/using-template-shadow.reject.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/using-template-shadow.reject.o"
+      ],
+      "status": 1,
+      "wall_s": 0.004967695102095604,
+      "stdout": "",
+      "stderr": "ERROR: declaration redeclares template parameter\n",
+      "expected_rejection": true
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/vbase-complete.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/vbase-complete.o"
+      ],
+      "status": 0,
+      "wall_s": 0.006134679540991783,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/vbase-complete.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/vbase-complete.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.005927566438913345,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-std=c++11",
+        "-O0",
+        "-c",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/vbase-derived.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/vbase-derived.o"
+      ],
+      "status": 0,
+      "wall_s": 0.006824661046266556,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/checkout/dev/cppgm++",
+        "-c",
+        "--emit-lowir",
+        "--validate-lowir",
+        "/home/vishvananda/work/private/v4codex/checkout/student.tests/pa31/source205/vbase-derived.cpp",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/vbase-derived.lowir"
+      ],
+      "status": 0,
+      "wall_s": 0.006517952308058739,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-defined.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-defined"
+      ],
+      "status": 0,
+      "wall_s": 0.04977873153984547,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-defined"
+      ],
+      "status": 0,
+      "wall_s": 0.001624666154384613,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-import.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-provider.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-import"
+      ],
+      "status": 0,
+      "wall_s": 0.051945362240076065,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-import"
+      ],
+      "status": 0,
+      "wall_s": 0.0016369204968214035,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/allocation-client.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/allocation-second.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/allocation-provider.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/allocation"
+      ],
+      "status": 0,
+      "wall_s": 0.11529631167650223,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/allocation"
+      ],
+      "status": 0,
+      "wall_s": 0.0029942039400339127,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/vbase-complete.o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/vbase-derived.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/vbase"
+      ],
+      "status": 0,
+      "wall_s": 0.10849849320948124,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/vbase"
+      ],
+      "status": 0,
+      "wall_s": 0.0028939321637153625,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/list-exceptions.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/list-exceptions"
+      ],
+      "status": 0,
+      "wall_s": 0.1020661685615778,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/list-exceptions"
+      ],
+      "status": 0,
+      "wall_s": 0.002763301134109497,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/inherited-default.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/inherited-default"
+      ],
+      "status": 0,
+      "wall_s": 0.11773970536887646,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/inherited-default"
+      ],
+      "status": 0,
+      "wall_s": 0.002951517701148987,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "g++",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/inherited-traits.o",
+        "-o",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/inherited-traits"
+      ],
+      "status": 0,
+      "wall_s": 0.05703765153884888,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/inherited-traits"
+      ],
+      "status": 0,
+      "wall_s": 0.0018878728151321411,
+      "stdout": "",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "readelf",
+        "-rW",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-defined.o"
+      ],
+      "status": 0,
+      "wall_s": 0.002992682158946991,
+      "stdout": "\nRelocation section '.rela.text' at offset 0x160 contains 4 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000007  0000000900000002 R_X86_64_PC32          0000000000000000 g - 4\n0000000000000015  0000000900000002 R_X86_64_PC32          0000000000000000 g - 4\n000000000000002f  0000000a00000004 R_X86_64_PLT32         0000000000000000 _Z6read_gv - 4\n0000000000000047  0000000900000002 R_X86_64_PC32          0000000000000000 g - 4\n\nRelocation section '.rela.eh_frame' at offset 0x1c0 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000020  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 0\n0000000000000048  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 23\n",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "readelf",
+        "-rW",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/global-import.o"
+      ],
+      "status": 0,
+      "wall_s": 0.0030803922563791275,
+      "stdout": "\nRelocation section '.rela.text' at offset 0x158 contains 4 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000007  0000000900000009 R_X86_64_GOTPCREL      0000000000000000 g - 4\n0000000000000018  0000000900000009 R_X86_64_GOTPCREL      0000000000000000 g - 4\n0000000000000035  0000000a00000004 R_X86_64_PLT32         0000000000000000 _Z6read_gv - 4\n000000000000004d  0000000900000009 R_X86_64_GOTPCREL      0000000000000000 g - 4\n\nRelocation section '.rela.eh_frame' at offset 0x1b8 contains 2 entries:\n    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend\n0000000000000020  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 0\n0000000000000048  0000000100000002 R_X86_64_PC32          0000000000000000 .text + 29\n",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "nm",
+        "--defined-only",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/allocation-client.o"
+      ],
+      "status": 0,
+      "wall_s": 0.06248159147799015,
+      "stdout": "0000000000000000 W _ZNSt9bad_allocC2Ev\n0000000000000000 W _ZNSt9exceptionC2Ev\n0000000000000000 T main\n",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "nm",
+        "--defined-only",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/allocation-second.o"
+      ],
+      "status": 0,
+      "wall_s": 0.05260304734110832,
+      "stdout": "0000000000000000 T _Z6secondv\n0000000000000000 W _ZNSt9bad_allocC2Ev\n0000000000000000 W _ZNSt9exceptionC2Ev\n",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "nm",
+        "--defined-only",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/vbase-complete.o"
+      ],
+      "status": 0,
+      "wall_s": 0.05264134891331196,
+      "stdout": "0000000000000000 T _Z8completev\n0000000000000000 W _ZN1BC1Ev\n0000000000000000 W _ZN1BD0Ev\n0000000000000000 W _ZN1BD1Ev\n0000000000000000 W _ZN1BD2Ev\n0000000000000000 W _ZN1VC2Ev\n0000000000000000 W _ZN1VD0Ev\n0000000000000000 W _ZN1VD1Ev\n0000000000000000 W _ZN1VD2Ev\n0000000000000000 W _ZNK1B4readEv\n0000000000000000 V _ZTI1B\n0000000000000000 V _ZTI1V\n0000000000000000 V _ZTS1B\n0000000000000000 V _ZTS1V\n0000000000000000 V _ZTT1B\n0000000000000000 V _ZTV1B\n0000000000000000 V _ZTV1V\n0000000000000000 W _ZThn8_N1BD0Ev\n0000000000000000 W _ZThn8_N1BD1Ev\n",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "readelf",
+        "-Ws",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/vbase-complete.o"
+      ],
+      "status": 0,
+      "wall_s": 0.002915719524025917,
+      "stdout": "\nSymbol table '.symtab' contains 51 entries:\n   Num:    Value          Size Type    Bind   Vis      Ndx Name\n     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND \n     1: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 .text\n     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    2 .data\n     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    3 .eh_frame\n     4: 0000000000000000     0 SECTION LOCAL  DEFAULT    4 .gcc_except_table\n     5: 0000000000000000     0 SECTION LOCAL  DEFAULT    5 .data.rel.local\n     6: 0000000000000000     0 SECTION LOCAL  DEFAULT    6 .init_array\n     7: 0000000000000000     0 SECTION LOCAL  DEFAULT    7 .fini_array\n     8: 0000000000000000     0 SECTION LOCAL  DEFAULT    8 .tdata\n     9: 0000000000000000     0 SECTION LOCAL  DEFAULT   21 .text._ZN1VD1Ev\n    10: 0000000000000000     0 SECTION LOCAL  DEFAULT   23 .text._ZN1BC1Ev\n    11: 0000000000000000     0 SECTION LOCAL  DEFAULT   25 .text._ZN1BD1Ev\n    12: 0000000000000000     0 SECTION LOCAL  DEFAULT   27 .text._ZNK1B4readEv\n    13: 0000000000000000     0 SECTION LOCAL  DEFAULT   29 .text._ZN1VC2Ev\n    14: 0000000000000000     0 SECTION LOCAL  DEFAULT   31 .text._ZN1VD2Ev\n    15: 0000000000000000     0 SECTION LOCAL  DEFAULT   33 .text._ZN1BD2Ev\n    16: 0000000000000000     0 SECTION LOCAL  DEFAULT   35 .text._ZN1VD0Ev\n    17: 0000000000000000     0 SECTION LOCAL  DEFAULT   37 .text._ZN1BD0Ev\n    18: 0000000000000000     0 SECTION LOCAL  DEFAULT   39 .text._ZThn8_N1BD1Ev\n    19: 0000000000000000     0 SECTION LOCAL  DEFAULT   41 .text._ZThn8_N1BD0Ev\n    20: 0000000000000000     0 SECTION LOCAL  DEFAULT   43 .data._ZTS1V\n    21: 0000000000000000     0 SECTION LOCAL  DEFAULT   45 .data._ZTI1V\n    22: 0000000000000000     0 SECTION LOCAL  DEFAULT   47 .data._ZTV1V\n    23: 0000000000000000     0 SECTION LOCAL  DEFAULT   49 .data._ZTS1B\n    24: 0000000000000000     0 SECTION LOCAL  DEFAULT   51 .data._ZTI1B\n    25: 0000000000000000     0 SECTION LOCAL  DEFAULT   53 .data._ZTV1B\n    26: 0000000000000000     0 SECTION LOCAL  DEFAULT   55 .data._ZTT1B\n    27: 0000000000000000    32 FUNC    WEAK   DEFAULT   21 _ZN1VD1Ev\n    28: 0000000000000000   128 FUNC    WEAK   DEFAULT   23 _ZN1BC1Ev\n    29: 0000000000000000   133 FUNC    WEAK   DEFAULT   25 _ZN1BD1Ev\n    30: 0000000000000000    26 FUNC    WEAK   DEFAULT   27 _ZNK1B4readEv\n    31: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _ZdlPv\n    32: 0000000000000000   108 FUNC    GLOBAL DEFAULT    1 _Z8completev\n    33: 0000000000000000    39 FUNC    WEAK   DEFAULT   29 _ZN1VC2Ev\n    34: 0000000000000000    32 FUNC    WEAK   DEFAULT   31 _ZN1VD2Ev\n    35: 0000000000000000    31 FUNC    WEAK   DEFAULT   33 _ZN1BD2Ev\n    36: 0000000000000000    32 OBJECT  WEAK   DEFAULT   47 _ZTV1V\n    37: 0000000000000000    16 OBJECT  WEAK   DEFAULT   45 _ZTI1V\n    38: 0000000000000000     3 OBJECT  WEAK   DEFAULT   43 _ZTS1V\n    39: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _ZTVN10__cxxabiv117__class_type_infoE\n    40: 0000000000000000   100 FUNC    WEAK   DEFAULT   35 _ZN1VD0Ev\n    41: 0000000000000000    80 OBJECT  WEAK   DEFAULT   53 _ZTV1B\n    42: 0000000000000000    40 OBJECT  WEAK   DEFAULT   51 _ZTI1B\n    43: 0000000000000000     3 OBJECT  WEAK   DEFAULT   49 _ZTS1B\n    44: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _ZTVN10__cxxabiv121__vmi_class_type_infoE\n    45: 0000000000000000   187 FUNC    WEAK   DEFAULT   37 _ZN1BD0Ev\n    46: 0000000000000000    30 FUNC    WEAK   DEFAULT   39 _ZThn8_N1BD1Ev\n    47: 0000000000000000    30 FUNC    WEAK   DEFAULT   41 _ZThn8_N1BD0Ev\n    48: 0000000000000000    16 OBJECT  WEAK   DEFAULT   55 _ZTT1B\n    49: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND _Unwind_Resume\n    50: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __gxx_personality_v0\n",
+      "stderr": "",
+      "expected_rejection": false
+    },
+    {
+      "args": [
+        "nm",
+        "--defined-only",
+        "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/controls-traits/vbase-derived.o"
+      ],
+      "status": 0,
+      "wall_s": 0.054015809670090675,
+      "stdout": "0000000000000000 W _ZN1BC2Ev\n0000000000000000 W _ZN1BD0Ev\n0000000000000000 W _ZN1BD1Ev\n0000000000000000 W _ZN1BD2Ev\n0000000000000000 W _ZN1DC1Ev\n0000000000000000 W _ZN1DD0Ev\n0000000000000000 W _ZN1DD1Ev\n0000000000000000 W _ZN1DD2Ev\n0000000000000000 W _ZN1VC2Ev\n0000000000000000 W _ZN1VD0Ev\n0000000000000000 W _ZN1VD1Ev\n0000000000000000 W _ZN1VD2Ev\n0000000000000000 W _ZNK1B4readEv\n0000000000000000 V _ZTI1B\n0000000000000000 V _ZTI1D\n0000000000000000 V _ZTI1V\n0000000000000000 V _ZTI7Padding\n0000000000000000 V _ZTS1B\n0000000000000000 V _ZTS1D\n0000000000000000 V _ZTS1V\n0000000000000000 V _ZTS7Padding\n0000000000000000 V _ZTT1B\n0000000000000000 V _ZTT1D\n0000000000000000 V _ZTV1B\n0000000000000000 V _ZTV1D\n0000000000000000 V _ZTV1V\n0000000000000000 W _ZThn48_N1BD0Ev\n0000000000000000 W _ZThn48_N1BD1Ev\n0000000000000000 W _ZThn48_N1DD0Ev\n0000000000000000 W _ZThn48_N1DD1Ev\n0000000000000000 W _ZThn8_N1BD0Ev\n0000000000000000 W _ZThn8_N1BD1Ev\n0000000000000018 d __cppgm_construction_vtable_38\n0000000000000040 d __cppgm_construction_vtable_39\n0000000000000000 T main\n",
+      "stderr": "",
+      "expected_rejection": false
+    }
+  ],
+  "passed": true
+}

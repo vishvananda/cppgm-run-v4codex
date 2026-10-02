@@ -1,0 +1,106 @@
+{
+  "stage_base": "c0566ded7ed123e1eb0696f0ae93b28ceb492fdf",
+  "last_reviewed_commit": "c0566ded7ed123e1eb0696f0ae93b28ceb492fdf",
+  "implementation_commit": "d5bd5aeeaf4abd103453a8c28fb5c3e6e69d45e7",
+  "artifact_root": "/home/vishvananda/work/private/v4codex/artifacts/pa31-205",
+  "validation": {
+    "priorThroughTests": {
+      "command": "make test-report-through-pa30",
+      "exit_code": 0,
+      "passed": 5094,
+      "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/prior-final.log",
+      "log_sha256": "f59c195585b2ac6f7d5e5d4e5e6bdf006e53989939c3a8552bdac74c63ed68c1",
+      "output": "  LINK    posttoken\n  LINK    ppexpr\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== pa21 =====\n===== pa22 =====\n===== pa23 =====\n===== pa24 =====\nPA24 native contract properties: PASS (14/14)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\n===== pa25 =====\n===== pa26 =====\n===== pa27 =====\nPA27 global-section properties: PASS (3/3)\n===== pa28 =====\n===== pa29 =====\n===== pa30 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (5094 / 5094) =====\n"
+    },
+    "stageTests": {
+      "command": "make test-pa31",
+      "exit_code": 0,
+      "passed": 84,
+      "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/stage-final.log",
+      "log_sha256": "993676dc0fab7b0696eb54de64291b733b53023159c586a338473c83920ebc6e",
+      "output": "  LINK    posttoken\n  LINK    ppexpr\n===== pa31 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (84 / 84) =====\n"
+    },
+    "through31": {
+      "command": "make test-report-through-pa31",
+      "exit_code": 0,
+      "passed": 5178,
+      "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/through31-final.log",
+      "log_sha256": "562562da2015aa7084a3403614e2594c80aa791bbcfa1c8aed57cc575520ceff",
+      "output": "  LINK    posttoken\n  LINK    ppexpr\n===== pa1 =====\n===== pa2 =====\n===== pa3 =====\n===== pa4 =====\n===== pa5 =====\n===== pa6 =====\n===== pa7 =====\n===== pa8 =====\n===== pa9 =====\n===== pa10 =====\nPA10 focused LowIR controls: PASS (5/5)\n===== pa11 =====\nPA11 string-literal storage properties: PASS (1/1)\nPA11 lifecycle policy properties: PASS (1/1)\nPA11 goto lifetime properties: PASS (1/1)\nPA11 unreachable lowering properties: PASS (1/1)\n===== pa12 =====\nPA12 survivor properties: PASS (13/13)\n===== pa13 =====\n===== pa14 =====\n===== pa15 =====\n===== pa16 =====\n===== pa17 =====\n===== pa18 =====\n===== pa19 =====\n===== pa20 =====\n===== pa21 =====\n===== pa22 =====\n===== pa23 =====\n===== pa24 =====\nPA24 native contract properties: PASS (14/14)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\nPA24 native contract properties: PASS (1/1)\n===== pa25 =====\n===== pa26 =====\n===== pa27 =====\nPA27 global-section properties: PASS (3/3)\n===== pa28 =====\n===== pa29 =====\n===== pa30 =====\n===== pa31 =====\n===== ALL TESTS PASSED SUCCESSFULLY! (5178 / 5178) =====\n"
+    },
+    "fileAudit": {
+      "command": "perl scripts/cppgm_file_audit.pl --stage pa31 --paths dev/src",
+      "exit_code": 0,
+      "passed": null,
+      "log_path": "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/file-audit-final.log",
+      "log_sha256": "5cf290f615751f90cff011c46312179ec3ee3d0129f62e800ab4043e66bd3bb4",
+      "output": "File audit passed for pa31 with 4 warning(s).\n  [warning][bad-division] dev/src/lowering/procedural.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/lowir/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/analyzer.h:1: header contains substantial implementation body; prefer .cpp ownership\n  [warning][bad-division] dev/src/semantic/model.h:1: header contains substantial implementation body; prefer .cpp ownership\n"
+    },
+    "stageProgress": {
+      "passed": true,
+      "entry_failures": 6,
+      "final_failures": 0,
+      "unchanged_test_count": 84,
+      "justified_oracle_corrections": 4
+    }
+  },
+  "sources": {
+    "AGENTS.md": "8dc0f0122f53d3c22081d4af32f00d958a19af90b0841880354e21f059c66767",
+    "TESTING_AND_REFERENCES.md": "50f1cc0a2674efeee4736438960b17812763508ab686ff345b80b43d715c5dd6",
+    "dev/frontend_source_sets.mk": "d80d30de366dd9d7cfffe2980420a1fc01bc029cdb951213b214fc278db92bb5",
+    "dev/src/lowering/symbols.cpp": "e2e9fc4fdcd7d308e018fafa2e0c5064dd3531ae41f741c8c2db7fdbc354196b",
+    "dev/src/semantic/default_initialization_facts.cpp": "d4ca38d0761cca87fd2ee942782078d7ac49f0252f48c8be3cdbf47ca56ec678",
+    "dev/src/semantic/exception_expression.cpp": "b5e2ffe7b69fd0b3a29f1b8eec3b28c62d9c585d369f5f8382696d885d90337c",
+    "dev/src/semantic/inherited_constructors.cpp": "845757f4bbc16a311aafa67cb28385957281946415ca517dbb3331e18d66bd1e",
+    "dev/src/semantic/template_checks.cpp": "2dc504a54ef430040a6bb271ca112fc653bbfbfc2d5bdb3ec38102faefabe1db",
+    "pa31/README.md": "cc7357e46148220b2fce7d547340423bd23605ca3f2985f9bde8aa9aea2256ce",
+    "pa31/design205.md": "31bc76c2ddc0d9d07af83a844e0a55afe8cb833f23a31b6f13d6d9c411694693",
+    "pa31/performance205.md": "c978550735d62f40c4d24ec492ad6b426c066ff80f2e57d712b7772ec6562105",
+    "pa31/plan.md": "251126e4b9f328a8f5529b2d581c606bce598cffe2f0f42bcc80c678ac49ed1f",
+    "pa31/reference-correction205.md": "9e6051838d0eb839322cb418a97e550cf81dca60ac1243d4834672718dd28bb4",
+    "spec.md": "d8eefee01a6102f63602b1989c19987d51bdf8f2e1ded0d60e52d7b68a76d3c3",
+    "student.tests/pa27/performance147_common.py": "03a9ffb20f9c476f7b102a1ee77db03e278620a46778da05159c0dba978aeff3",
+    "student.tests/pa30/ir-object204.cpp": "e7207264a8ae517eed3bdd82708f332af0665bd41023e477bd33eea9adac8717",
+    "student.tests/pa31/check205.py": "4591ebf544ac2741ff40a4fedc7d3af062e5b06e6a0072866c49c3e9f4d98583",
+    "student.tests/pa31/performance205.py": "b7f279f44614d6b4bc018173d912d23e4ee17d61353343b64d0dade315479239",
+    "student.tests/pa31/source205/allocation-client.cpp": "5239abb9f886e0d2b11c446f5ae820ddf7c9862d3fe6a37d54f36e9c3d60cdc3",
+    "student.tests/pa31/source205/allocation-provider.cpp": "7eb2934eb3d7cdd27b8b44d43d724a0bc2e3fb2098bbee261e5f3c65551c45de",
+    "student.tests/pa31/source205/allocation-second.cpp": "f02677e73230d6ed39a8b1867d2d3a352f47f9457c69254d8831972d8f304325",
+    "student.tests/pa31/source205/global-defined.cpp": "6a6a9da73908c150130acd00a1d55f011d69cdc4c2d5fa4d6b93ddec874a2c8f",
+    "student.tests/pa31/source205/global-import.cpp": "0c4556719752f26aa9d1eeeff896275529439dd4f1a73443d9908713ba2f2a57",
+    "student.tests/pa31/source205/global-provider.cpp": "580dbf819070b5391b577d4c87b406a7cd24ed6f03d7c22731fd41ea00bf40e3",
+    "student.tests/pa31/source205/inherited-default-deleted.reject.cpp": "9e63b6a1fb8c4d53c402945d818d3f1f67e2316c18454e12db5c9b82cb9c031f",
+    "student.tests/pa31/source205/inherited-default-member.reject.cpp": "728726f2fd70f90b787bf9f27a1015c08e42b28c839b38ea6f48c9874c78283b",
+    "student.tests/pa31/source205/inherited-default-private.reject.cpp": "e0c04c08e96ae47b5dcb4f34768484687420bff7712debf84e8ee7aa38469afb",
+    "student.tests/pa31/source205/inherited-default.cpp": "ba792eee1829e977313945311915882cf9ff2fd7459441f218678a19dcebd57a",
+    "student.tests/pa31/source205/inherited-traits.cpp": "9ee3ac549868c38d7fd970f70e45d841f23ff6cabfb1637a88faa1ac36fd66d3",
+    "student.tests/pa31/source205/list-exceptions.cpp": "d0d66411412c0eb349cdf81dde547bdac78a0d05c04354df584db3a6dd00dcb9",
+    "student.tests/pa31/source205/using-template-shadow.reject.cpp": "6e3de7f943b8c71837c5d63a97f9860359ad81049afe6a36d5ae7b9aedd59a91",
+    "student.tests/pa31/source205/vbase-complete.cpp": "459e9c1e10e8086081c7cfa7a638575b9b298a60b7251ba110ec446e17c47dc4",
+    "student.tests/pa31/source205/vbase-derived.cpp": "a0e205e2cfb76a293284cb7f29376eef26b1b5c3680029e396c9b036f63fcf6a",
+    "student.tests/pa31/source205/vbase.h": "ebea44e4bb79a9e34bfc0aee4d959e90a43ee07d538269f1909eb7ede5e38a36",
+    "student.tests/pa31/trace205.py": "d048eb842957c705ac24cd86cb0f7d1283475e4732353d5ae6ff036a0117988e",
+    "student.tests/pa31/verify205.py": "d5ac7081a6bf61672e129ff5e2584907029270577618b35808f3a9fa3eeb7adf"
+  },
+  "binaries": {
+    "A": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/entry-cppgm++",
+      "sha256": "2f91ab5c876290d0072f70645d48d6831b445773d22c6359166877112914627f"
+    },
+    "B": {
+      "path": "/home/vishvananda/work/private/v4codex/artifacts/pa31-205/final-cppgm++",
+      "sha256": "710fae53af4a786daa744d7c780b560acc49b01f9c92d029fd75b3f05b05b3da"
+    }
+  },
+  "records": {
+    "student.tests/pa31/evidence205/common-performance.json": "566a0c5786e5c33b3f94bbc9fecb6c5965d3eb5cb165f9895854c81af50bf0cd",
+    "student.tests/pa31/evidence205/controls.json": "c5cde79ff065f62d8751391f7e0cadcbc75f402cd6ff23def1ac808c0d790cb4",
+    "student.tests/pa31/evidence205/coverage.json": "4a780ae3847993b6b64be96de44e9e8337b86b0c958975f23ce8000c5b1d8c35",
+    "student.tests/pa31/evidence205/hosted-performance.json": "4d8dabed3b097f9f3194190d70702ceb5dcb9a4c1c5e7620ab4cd6dfb60f2ca8",
+    "student.tests/pa31/evidence205/initial-controls.json": "563e5c9bd9575972dbd9eb6f3859728de23b6d06822c10cbb12def0369ad42b8",
+    "student.tests/pa31/evidence205/owner-performance.json": "a353e3d34f5c9ab49c8b34cfcd5567711b51616789501a5cd59a5c92af36ed6f",
+    "student.tests/pa31/evidence205/trace.json": "b73a90d8e6c63e7f828ce701fde82dc68999270bca25720f25e4105d1aa3aa6f"
+  },
+  "host_compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "host_uname": "Linux instance-20260513-022623 7.0.0-1005-gcp #5-Ubuntu SMP PREEMPT Tue May 26 15:11:20 UTC 2026 x86_64 GNU/Linux\n"
+}
