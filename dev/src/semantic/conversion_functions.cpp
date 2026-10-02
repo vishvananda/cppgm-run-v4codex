@@ -40,6 +40,9 @@ std::vector<EntityId> Analyzer::conversion_candidates(TypeId source)
 {
     std::vector<EntityId> result;
     if (!class_value(source)) return result;
+    // A reference can name a specialization without completing it. Looking
+    // for its conversion functions requires the instantiated member list.
+    if (definitions) complete_class(types[source].entity);
     Index hidden, seen;
     struct Visit { EntityId cls; bool leave; };
     std::vector<Visit> work(1,{types[source].entity,false});

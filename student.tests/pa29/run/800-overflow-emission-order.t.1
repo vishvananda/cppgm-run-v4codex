@@ -1,0 +1,23 @@
+template<class T> __attribute__((noinline)) bool add(T a, T b, T* out)
+{ return __builtin_add_overflow(a, b, out); }
+
+template<class T> __attribute__((noinline)) bool subtract(T a, T b, T* out)
+{ return __builtin_sub_overflow(a, b, out); }
+
+template<class T> __attribute__((noinline)) bool multiply(T a, T b, T* out)
+{ return __builtin_mul_overflow(a, b, out); }
+
+template<class T> int check()
+{
+    T half = T(1) << (sizeof(T) * 8 - 2);
+    T maximum = (half - 1) + half, minimum = -maximum - 1, out = 0;
+    if (!add(maximum, T(1), &out) || out != minimum) return 1;
+    if (!subtract(minimum, T(1), &out) || out != maximum) return 2;
+    if (!multiply(minimum, T(-1), &out) || out != minimum) return 3;
+    if (add(T(-7), T(9), &out) || out != 2) return 4;
+    if (subtract(T(-7), T(9), &out) || out != -16) return 5;
+    if (multiply(T(-7), T(9), &out) || out != -63) return 6;
+    return 0;
+}
+
+int main() { return check<int>() || check<__int128>(); }

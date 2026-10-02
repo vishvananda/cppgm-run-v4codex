@@ -1,0 +1,65 @@
+function @present(%handle : ptr [pass=by_address, object_bytes=4]) -> u8 [binding=strong, object=_Z7presentRK6HandleIiE] {
+  slot $handle : ptr
+
+  block ^entry:
+    store ptr %handle, $handle
+    %t1 = load ptr $handle
+    %t2 = call u8 @Handle_int___operatorbool(%t1)
+    branch %t2, ^if_then_1, ^if_else_2
+
+  block ^if_then_1:
+    return u8 1
+
+  block ^if_else_2:
+    jump ^if_end_3
+
+  block ^if_end_3:
+    return u8 0
+}
+function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
+  slot $empty : obj<4x4>
+  slot $full : obj<4x4>
+  slot $lor__1 : i64
+
+  block ^entry:
+    %t1 = addr $empty
+    %t2 = addr $empty
+    %t3 = index i8 [projection=field] %t2, 0
+    store i32 0, %t3
+    %t4 = addr $full
+    %t5 = addr $full
+    %t6 = index i8 [projection=field] %t5, 0
+    store i32 7, %t6
+    %t7 = addr $empty
+    %t8 = call u8 @present(%t7)
+    branch %t8, ^lor_short_2, ^lor_rhs_1
+
+  block ^lor_rhs_1:
+    %t9 = addr $full
+    %t10 = call u8 @present(%t9)
+    %t11 = cmp eq u8 %t10, 0
+    %t12 = cmp ne i64 %t11, 0
+    store i64 %t12, $lor__1
+    jump ^lor_end_3
+
+  block ^lor_short_2:
+    store i64 1, $lor__1
+    jump ^lor_end_3
+
+  block ^lor_end_3:
+    %t13 = load i64 $lor__1
+    %t14 = convert trunc i32 i64 %t13
+    return i32 %t14
+}
+function @Handle_int___operatorbool(%this : ptr [object_bytes=4]) -> u8 [binding=weak, object=_ZNK6HandleIiEcvbEv, inline_hint=yes] {
+  slot $this : ptr
+
+  block ^entry:
+    store ptr %this, $this
+    %t1 = load ptr $this
+    %t2 = index i8 [projection=field] %t1, 0
+    %t3 = load i32 %t2
+    %t4 = cmp ne i32 %t3, 0
+    %t5 = convert trunc u8 i64 %t4
+    return u8 %t5
+}

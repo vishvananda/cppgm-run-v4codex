@@ -20,14 +20,20 @@ Value Procedural::overflow_builtin(NodeId n, semantic::Intrinsic kind)
     auto raw_a = coerce(a,wide,sem.unsigned_type(a.type)), raw_b = coerce(b,wide,sem.unsigned_type(b.type));
     auto high_a = binary(Operation::Sub,zero,sa), high_b = binary(Operation::Sub,zero,sb);
     Value low, high;
+    // IR-producing calls must be sequenced: host compilers can evaluate
+    // sibling function arguments in different orders, changing instruction IDs.
     // A signed 256-bit pair holds every mathematical operation on <=128-bit
     // inputs. Width <=64 multiplication needs only one 128-bit product.
     if (kind == I::AddOverflow) {
         low = binary(Operation::Add,raw_a,raw_b);
-        high = binary(Operation::Add,binary(Operation::Add,high_a,high_b),compare(Operation::Ult,low,raw_a));
+        auto carry = compare(Operation::Ult,low,raw_a);
+        auto upper = binary(Operation::Add,high_a,high_b);
+        high = binary(Operation::Add,upper,carry);
     } else if (kind == I::SubOverflow) {
         low = binary(Operation::Sub,raw_a,raw_b);
-        high = binary(Operation::Sub,binary(Operation::Sub,high_a,high_b),compare(Operation::Ult,raw_a,raw_b));
+        auto borrow = compare(Operation::Ult,raw_a,raw_b);
+        auto upper = binary(Operation::Sub,high_a,high_b);
+        high = binary(Operation::Sub,upper,borrow);
     } else {
         auto magnitude_a = binary(Operation::Add,binary(Operation::Xor,raw_a,high_a),sa);
         auto magnitude_b = binary(Operation::Add,binary(Operation::Xor,raw_b,high_b),sb);
@@ -49,7 +55,9 @@ Value Procedural::overflow_builtin(NodeId n, semantic::Intrinsic kind)
         }
         auto sign = binary(Operation::Xor,sa,sb), mask = binary(Operation::Sub,zero,sign);
         low = binary(Operation::Add,binary(Operation::Xor,low,mask),sign);
-        high = binary(Operation::Add,binary(Operation::Xor,high,mask),binary(Operation::And,sign,compare(Operation::Eq,low,zero)));
+        auto carry = binary(Operation::And,sign,compare(Operation::Eq,low,zero));
+        auto upper = binary(Operation::Xor,high,mask);
+        high = binary(Operation::Add,upper,carry);
     }
     auto stored = coerce(low,type(target)); stored.type = target;
     // Overflow is measured against the destination's language precision,
@@ -59,7 +67,9 @@ Value Procedural::overflow_builtin(NodeId n, semantic::Intrinsic kind)
     emit(write,{stored.operand,destination.operand});
     auto expected = coerce(stored,wide,sem.unsigned_type(target));
     auto expected_high = binary(Operation::Sub,zero,negative(stored));
-    auto mismatch = binary(Operation::Or,compare(Operation::Ne,low,expected),compare(Operation::Ne,high,expected_high));
+    auto high_mismatch = compare(Operation::Ne,high,expected_high);
+    auto low_mismatch = compare(Operation::Ne,low,expected);
+    auto mismatch = binary(Operation::Or,low_mismatch,high_mismatch);
     auto result = coerce(mismatch,type(fact.type)); result.type = fact.type; return result;
 }
 } }
