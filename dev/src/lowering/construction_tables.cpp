@@ -94,7 +94,8 @@ void Procedural::emit_construction_tables(EntityId complete, SymbolId table)
         }
     };
     node(complete,0,0,true);
-    p.symbols[vtt.index-1].metadata.object_root = true;
+    p.symbols[vtt.index-1].metadata.object_root = !linkage.host ||
+        p.symbols[table.index-1].metadata.object_root;
     publish(vtt,entries);
 }
 } }

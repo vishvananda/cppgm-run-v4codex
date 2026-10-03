@@ -91,7 +91,7 @@ public:
 };
 std::vector<Instruction> startup(SymbolId, unsigned, const std::vector<SymbolId>&, const std::vector<SymbolId>&, Type argc_type = Type::I32);
 std::vector<Instruction> startup(const lowir_model::Program& p);
-void encode_data(const lowir_model::Program& p, Image& image);
+void encode_data(const lowir_model::Program& p, Image& image, const std::vector<bool>* live = nullptr);
 void write_executable(Image& image, const std::string& path);
 void compile_image(lowir_model::Program&, Image&, const std::vector<Instruction>&, std::ostream*, Statistics&, unsigned level = 0);
 void compile(lowir_model::Program& p, const std::string& output, std::ostream* mir, Statistics& stats, unsigned level = 0);

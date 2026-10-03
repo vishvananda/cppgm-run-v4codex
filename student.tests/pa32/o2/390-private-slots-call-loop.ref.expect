@@ -1,0 +1,4 @@
+none(load) in @sum
+none(store) in @sum
+count(call) == 1 in @sum
+count(phi) >= 2 in @sum

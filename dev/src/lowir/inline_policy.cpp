@@ -1,4 +1,5 @@
 #include "lowir/inline_policy.h"
+#include "lowir/emission_demand.h"
 #include "lowir/ordinary_flow.h"
 #include "lowir/call_effects.h"
 namespace lowir_model {
@@ -129,38 +130,10 @@ bool inline_small_calls(Program& p, unsigned level, std::uint64_t& work)
 }
 void prune_support_functions(Program& p, std::uint64_t& work)
 {
-    std::vector<bool> live(p.symbols.size()+1); std::vector<unsigned> pending;
-    auto demand = [&](unsigned id) { if (id && !live[id]) { live[id] = true; pending.push_back(id); } };
-    for (const auto& g : p.globals) if (!g.declaration) demand(g.symbol.index);
-    for (const auto& a : p.aliases) {
-        const auto& m = p.symbols[a.target.index-1].metadata;
-        // A coalescable inline body and its ABI entry aliases have one
-        // emission lifetime. An alias is not an additional language root.
-        // Explicit aliases of ordinary/internal definitions remain exports.
-        if (m.binding != SBM_WEAK || !m.inline_hint) demand(a.target.index);
-    }
-    for (const auto& f : p.functions) if (!f.declaration) {
-        const auto& m = p.symbols[f.symbol.index-1].metadata;
-        if (m.object_root || m.keep_alias || m.role != SR_NONE ||
-            (m.binding != SBM_INTERNAL && m.binding != SBM_WEAK)) demand(f.symbol.index);
-    }
-    for (unsigned next = 0; next < pending.size(); ++next) {
-        const auto& s = p.symbols[pending[next]-1]; ++work;
-        demand(s.metadata.tls_for.index);
-        if (s.kind == Symbol::GlobalSymbol) {
-            const auto& g = p.globals[s.entity-1];
-            for (unsigned n = g.data.begin; n < g.data.end(); ++n) {
-                ++work; if (p.data[n].kind == DataItem::Address) demand(p.data[n].symbol.index);
-            }
-        } else if (s.kind == Symbol::FunctionSymbol) {
-            const auto& f = p.functions[s.entity-1];
-            for (unsigned b = f.blocks.begin; b < f.blocks.end(); ++b) {
-                auto r = p.blocks[p.block_order[b].index-1].instructions;
-                for (unsigned n = r.begin; n < r.end(); ++n) for (unsigned k = p.instructions[n].operands.begin; k < p.instructions[n].operands.end(); ++k) {
-                    ++work; if (p.operands[k].kind == Operand::Symbol) demand(p.operands[k].ref);
-                }
-            }
-        }
+    auto live = emission_demand(p);
+    work += p.symbols.size()+p.instructions.size()+p.operands.size()+p.data.size();
+    for (auto& g : p.globals) if (!live[g.symbol.index]) {
+        g.declaration = true; g.data.count = 0;
     }
     // Preserve entity IDs/signatures for any adapter-side inspection. Dead
     // support bodies become declarations; scalar/CFG compaction releases IR.

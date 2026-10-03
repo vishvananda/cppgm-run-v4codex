@@ -139,6 +139,7 @@ void Procedural::emit_aggregate_helpers()
     // vector growth must neither invalidate traversal nor leave bodies pending.
     for (std::size_t cursor = 0; cursor < aggregate_definitions.size(); ++cursor) {
         auto helper = aggregate_definitions[cursor];
+        if (p.functions[helper.function.index-1].blocks.count) continue;
         function = helper.function; reset_lifetime(0); initialized_units = semantic::Index();
         builder.reset(new lowir_model::FunctionBuilder(p, function)); start(block());
         auto signature = p.signatures[p.functions[function.index-1].signature.index-1];

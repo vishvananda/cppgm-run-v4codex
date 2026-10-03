@@ -1,0 +1,4 @@
+# ABI entry variants are not independent roots of unused inline code.
+functions == 1
+absent(@Base__Base)
+absent(@Base___Base)

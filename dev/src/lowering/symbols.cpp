@@ -189,14 +189,26 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     // In particular a root C++ variable's ABI spelling is the bare source name.
     bool entry = name == "main" && e.owner == sem.global && e.kind == semantic::EntityKind::Function;
     SymbolMetadata metadata;
-    metadata.object_root = e.instantiation_definition;
+    metadata.object_root = e.instantiation_definition || (linkage.host && sem.class_instantiation_exports.get(id));
     metadata.binding = internal ? SBM_INTERNAL : !external && (e.inline_function || e.inline_variable || (!e.explicit_specialization && (e.specialization || e.template_member))) ? SBM_WEAK : SBM_STRONG;
-    if (sem.weak_symbols.get(id) && !internal) metadata.binding = SBM_WEAK;
+    if (sem.weak_symbols.get(id) && !internal) {
+        metadata.binding = SBM_WEAK;
+        // An ordinary weak definition remains an external ABI provider.
+        // Coalescable inline/template definitions instead follow their uses.
+        metadata.object_root |= !external && !e.inline_function && !e.inline_variable &&
+            (e.explicit_specialization || (!e.specialization && !e.template_member));
+    }
     if (auto section = sem.section_names.get(id)) metadata.section = p.intern(spelling(section));
     metadata.inline_hint = e.inline_function; metadata.no_inline = e.no_inline; metadata.force_inline = e.force_inline && !e.no_inline;
-    if (e.member_info) metadata.object_root |= base || (!separate && !external && sem.member_fact(id).base_entry);
+    // Standalone LowIR publishes the course's complete source ABI surface.
+    // Hosted emission instead establishes base roots from actual source uses
+    // after all TUs and initialization bodies have been lowered.
+    if (!linkage.host && e.member_info)
+        metadata.object_root |= base || (!separate && !external && sem.member_fact(id).base_entry);
     if (e.member_info) {
-        metadata.object_root |= sem.member_fact(id).retained_root;
+        // Retained members need an available entry even when their effect-free
+        // call is elided. Only explicit exports or live uses root hosted code.
+        metadata.object_root |= !linkage.host && sem.member_fact(id).retained_root;
         if (local_abi_scope(e.owner) || (internal && e.specialization && local_abi_type(e.type))) {
             metadata.object_root = true; metadata.binding = SBM_INTERNAL;
         }
@@ -294,6 +306,9 @@ SymbolId Procedural::symbol(EntityId id, bool base, bool deleting)
     if (metadata.object && p.name(metadata.object) == p.name(p.symbols[sid.index-1].name).substr(1)) metadata.object = 0;
     if (key) linkage.external.put(key, sid.index);
     p.symbols[sid.index-1].metadata = metadata;
+    if (linkage.host && e.member_info && !metadata.object_root &&
+        (base || (!separate && !external && sem.member_fact(id).base_entry)))
+        linkage.conditional_abi_roots.push_back({base && symbols[id] ? symbols[id] : sid,sid});
     // C1/D1 initialize/destroy virtual bases and cannot alias C2/D2 even when
     // this TU only demanded the complete entry. A later TU can demand C2/D2
     // with its distinct VTT argument and body.
@@ -497,6 +512,36 @@ void Procedural::run()
         p.functions.push_back(f);
         auto& sym = p.symbols[f.symbol.index-1]; sym.kind = Symbol::FunctionSymbol; sym.entity = id.index;
     }
+    if (linkage.host) {
+        auto retain = [&](EntityId owner, EntityId target, bool base) {
+            if (!owner || !target || !symbols[owner] || !sem.member_fact(target).retained_root) return;
+            auto entry = base && base_symbols[target] ? base_symbols[target] : symbols[target];
+            if (!entry) return;
+            linkage.conditional_abi_roots.push_back({symbols[owner],entry});
+            if (base_symbols[owner]) linkage.conditional_abi_roots.push_back({base_symbols[owner],entry});
+        };
+        for (EntityId e = 1; e < symbols.size(); ++e) {
+            // Effect-free destruction can disappear before LowIR construction.
+            // Its ABI entry follows the actual source object's owner, not every
+            // checked function in which that destructor was mentioned.
+            if (auto dtor = sem.object_destructor(e)) {
+                auto scope = sem.entities[e].owner;
+                while (scope && sem.scopes[scope].kind != semantic::ScopeKind::Function &&
+                    sem.scopes[scope].kind != semantic::ScopeKind::Namespace &&
+                    sem.scopes[scope].kind != semantic::ScopeKind::Class)
+                    scope = sem.scopes[scope].parent;
+                if (sem.scopes[scope].kind == semantic::ScopeKind::Function)
+                    retain(sem.scopes[scope].entity,dtor,false);
+                else if (symbols[e]) retain(e,dtor,false);
+            }
+            if (!sem.destructor_member(e)) continue;
+            const auto& member = sem.member_fact(e);
+            for (unsigned n = 0; n < member.destruction_count; ++n) {
+                const auto& action = sem.destruction_actions[member.destruction_begin+n];
+                retain(e,action.destructor,action.base != 0);
+            }
+        }
+    }
     // Reserve source/native identities before allocating generated string or
     // TLS names. Native adapters may also publish the ordinary LowIR spelling.
     for (NodeId n = 1; n < ast.nodes.size(); ++n) {
@@ -510,6 +555,9 @@ void Procedural::run()
     for (EntityId e = 1; e < symbols.size(); ++e)
         if (symbols[e] && sem.entities[e].kind == semantic::EntityKind::Variable && !sem.static_temporary(e).object) global(e);
     emit_vtables();
+    if (linkage.host && !linkage.merge) {
+        emit_demanded_functions(deferred_conversions);
+    } else {
     for (EntityId e : definitions) {
         function_body(e);
         if (base_symbols[e] && !p.functions[p.symbols[base_symbols[e].index-1].entity-1].declaration) function_body(e, true);
@@ -533,6 +581,7 @@ void Procedural::run()
     }
     emit_member_thunks();
     emit_terminate_adapter();
+    }
     // The adapter can introduce runtime declarations. Publish the presentation
     // schedule only after every emission queue has finished.
     emit_source_strings();

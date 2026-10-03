@@ -1,6 +1,7 @@
 #pragma once
 #include "semantic/analyzer.h"
 #include "lowir/model.h"
+#include "lowir/emission_demand.h"
 #include "abi/itanium/graph.h"
 #include <memory>
 namespace cppgm { namespace lowering {
@@ -59,6 +60,7 @@ struct Linkage {
     SymbolId terminate_adapter;
     SymbolId abort_runtime;
     std::vector<FunctionId> initializers, finalizers;
+    std::vector<lowir_model::EmissionDependency> conditional_abi_roots;
     void finish_lifecycle(lowir_model::Program& program);
     explicit Linkage(bool merge, bool presentation = false) : merge(merge), presentation(presentation) {}
 };
@@ -272,6 +274,7 @@ class Procedural {
     semantic::Index hidden_base_addresses, parameter_base_addresses;
     void emit_construction_tables(EntityId cls, SymbolId table);
     void declare_function(EntityId e);
+    void emit_demanded_functions(const std::vector<EntityId>& deferred);
     void function_body(EntityId e, bool base = false);
     void reset_lifetime(EntityId e);
     void destroy(EntityId destructor, TypeId t, Value object);
@@ -507,6 +510,7 @@ public:
     std::size_t full_expression_work = 0, full_expression_regions = 0;
     std::size_t statement_regions = 0, lifetime_mapping_work = 0, lifetime_mapping_hits = 0;
     std::size_t rtti_work = 0, rtti_hits = 0;
+    unsigned emission_rounds = 0;
     Procedural(syntax::Ast& a, semantic::Analyzer& s, IdentifierTable& ids, lowir_model::Program& out, Linkage& links);
     void run();
 };

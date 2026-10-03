@@ -1,196 +1,298 @@
-# Backend performance plan
+# Backend performance plan: demand and hot-path optimization
 
-Improve the code generated at `-O3` until the self-built compiler matches or
-beats the GCC-built compiler on the frozen compilation workload. The primary
-target is **`user_time(self) / user_time(gcc-built) <= 1.00`**, confirmed in two
-independent batches of at least three paired ABBA blocks. GCC builds the same
-compiler source at `-O3`; both resulting executables compile the frozen TU at
-`-O0`. This is the backend benchmark defined in `ralph:bench.md`.
+Revised 2026-10-03 after the output-demand audit. This implementation campaign
+started at `00a29292d2bf69678c6eb7013ca4c73ea627fe4d` on `v4opt`.
+Implementation and final validation completed 2026-10-03. Outcome:
+**diminishing returns; GCC parity not reached**. The six-hypothesis stopping
+window and all decisions are recorded in the ledger.
 
-Track executable code size, RSS, emitted object size and optimization cost as
-secondary metrics. Report runtime parity and code-size parity separately. The
-reference compiler can supply observations, but matching its backend ratio
-does not satisfy the GCC target.
+Retained changes to demand, lowering, constant returns, call-loop slot promotion
+and register lifetimes reduce complete-self compile time by **15.2%**. Fresh paired
+self/GCC-built runtime improves **2.919x -> 2.636x**; frontend/reference is
+**0.915x**, with the frontend guards passing. Frozen object size falls **46.2%
+at O0** and **34.7% at O3**. Reference RSS parity remains unmet at **1.350x**.
+Final `make test-report` passes **5454/5454**, and `make inception` passes
+**423 object comparisons and identical executables**. Normal personal fixtures,
+required debug/IR/MIR/link checks and frozen O0–O3 byte comparisons pass.
+See the ledger's final outcome for intervals, allocator/counter controls,
+remaining size/RSS gaps, the export regression repair and untried hypotheses.
 
-The campaign below is complete under its diminishing-returns stopping rule.
-**GCC parity was not reached.** The final retained revision passes fresh
-`make test-report` and `make inception` checks. The original plan and acceptance
-criteria follow the outcome; detailed decisions are in
-[backend-perf-experiments.md](backend-perf-experiments.md).
+B00–B08 are completed historical experiments in
+[backend-perf-experiments.md](backend-perf-experiments.md); use new S-series IDs.
+Their early stop exhausted that experiment sequence, not the structural
+opportunities identified below.
 
-## Campaign outcome — 2026-10-03
+The order is now **correct emission demand, avoid unnecessary lowering, recover
+accessor inlining and subsequent dataflow optimization, then improve register
+lifetimes**. Re-profile between these stages. Small instruction-selection and
+layout changes follow evidence about the remaining gap.
 
-Retained B02: at O1–O3, select shifts and reciprocal multiplication for 64-bit
-constant integer quotients. Preserve signed truncation, negative divisors and
-minimum values; zero and signed -1 retain hardware division. The implementation
-uses existing wide-multiply instructions and division clobbers. Its normal
-C++ fixture is
-[310-constant-quotients.t](student.tests/pa33/driver/310-constant-quotients.t),
-which checks boundary and pseudo-random inputs against runtime divisors. This
-is optimization coverage, not a previously failing correctness regression.
+## Targets and attribution
 
-| Final measurement | Result |
-| --- | ---: |
-| Self/GCC user-time ratio | **2.93358**, 95% interval [2.90377, 2.93592] |
-| Starting self/GCC, freshly paired | 3.00000 |
-| Within-block backend ratio change | 0.97786 [0.95296, 0.98572], a 2.21% improvement |
-| Median self / GCC-built user times | 7.755 s / 2.625 s |
-| Frontend / fixed starting seed, 20 blocks | **0.98600** [0.96995, 1.00461]; non-regression guard passes |
-| Frontend / reference, 13 blocks | **0.97263** [0.95855, 0.99647]; parity retained |
-| Frontend / GCC | 0.44805; no significant regression against the fresh starting lane |
-| Matched-jemalloc self/GCC control | 2.86220 [2.75806, 2.99179] |
-| Self executable text | 8,633,685 bytes; +1.16% versus starting self, 2.031 times GCC |
-| Self runtime peak RSS / starting self | 0.99815; essentially unchanged |
-| Frozen O0 object | 7,552,664 bytes; unchanged |
+The primary backend target remains **GCC parity**:
+`user_time(self-built compiler) / user_time(GCC-built compiler) <= 1.00`.
+Both executables implement the same compiler revision, are built at O3, and
+compile the frozen workload at O0. Confirm parity in two independent batches
+of at least three paired ABBA blocks, extending sampling to resolve uncertainty.
+The reference compiler is a frontend comparison, not the backend target.
 
-Ratios use paired block means, so they differ from ratios of absolute medians.
-B02's initial direct self confirmation showed a 3.34% improvement. The final
-batch's direct self ratio was 0.91498, but the GCC-built seed also moved; the
-paired backend ratio above avoids crediting that entire change to code generation.
-Keep runtime, code size and RSS claims separate: frontend RSS remains about
-1.414 times the reference and its O0 object is 2.565 times the reference size.
-This campaign did not achieve size or memory parity.
+Preserve frontend/reference parity and the frontend/GCC ratio already achieved.
+Track RSS, compiler executable size and emitted object size as separate goals;
+report progress against GCC and the reference without calling runtime parity
+size or memory parity. Demand cleanup should reduce actual compiler work as
+well as output. Do not improve the backend ratio by slowing its denominator.
 
-B03–B08 completed six distinct hypotheses without a retained significant gain.
-B03 and B04 failed confidence/guard requirements, B06 failed full-workload
-acceptance, and B05/B07/B08 failed kernel screens. B07/B08 were repeated after
-correcting a stale build artifact; only clean-parent results determine their
-outcomes. Best source before and after this window is the same B02 revision;
-the direct cumulative check satisfies the less-than-5% rule. Stop reason:
-**diminishing returns; GCC parity not reached**, with N=6, S=3%, C=5% unchanged.
-The remaining ratio would require about 65.9% less self CPU time at a fixed
-GCC runtime. Narrow constant quotients/remainders, register lifetimes and
-context-aware accessor inlining are the strongest follow-ups.
+Separate three effects in every experiment:
 
-Final validation on the retained source:
+1. **Work performed by the compiler:** unnecessary instantiation, lowering,
+   optimization and emission while compiling the frozen source. Removing this
+   can speed up both GCC-built and self-built compilers.
+2. **Cold output retained in the compiler executable:** unnecessary bodies and
+   data can affect size, loading and caches without adding much executed work.
+3. **Instructions executed on hot paths:** missed inlining, redundant memory
+   operations, spills and weak instruction selection drive the backend ratio.
 
-- `make test-report CXX=g++ CPPGM_HOST_CXX=g++`: **5454/5454**.
-- `make inception CXX=g++ CPPGM_HOST_CXX=g++`: **421 matching objects** and
-  byte-identical self/inception executables.
-- PA32/PA33 contracts, roundtrips, MIR bounds and required debug checks pass.
-- The added fixture passes all nine native routes with both seed and self.
-  Prior PA1, PA19, conversion-member and overflow fixtures pass explicitly.
-- Frozen workload objects match at O0–O3; overflow LowIR and objects also match
-  at all four levels. The source and all 51 frozen headers match the manifest.
+A demand fix may improve time/RSS/output while leaving the backend ratio flat
+or changing its workload mix. Evaluate it under the demand criteria below;
+require a backend-ratio improvement for changes claimed as code-generation wins.
+Keep absolute self time, seed time and fixed-source kernel controls visible.
 
-Final seed SHA-256 is
-`85a04525b19e7f02264aa64f3a851a1c72a71018e01d3ba1aabb9caf6c9126ae`;
-self/inception SHA-256 is
-`e56b3c4da2224807190a57f631b461dd59a5becc2337ea67a4358b75e39e5309`.
-Raw commands, samples, counters, source patches and hashes remain under ignored
-`obj/backend-perf/`, with final evidence in `obj/backend-perf/final/`.
+## Evidence and baseline
 
-## Starting point
+The previous retained change, B02, implements 64-bit constant quotients. Its
+final paired self/GCC ratio was **2.93358** [2.90377, 2.93592], with median
+self/seed user times of 7.755/2.625 seconds. Frontend/reference was **0.97263**
+[0.95855, 0.99647]; frontend/GCC was 0.44805. Frontend RSS remained **1.4142x**
+the reference. These are historical measurements, not fixed timing thresholds.
+The retained revision passed `make test-report` (5454/5454), `make inception`
+(421 matching objects and identical executables), required PA32/PA33 checks,
+and frozen O0–O3 seed/self byte comparisons.
 
-The frontend work is committed and pushed on `v4opt` as
-`52456d749880e798d99cafc692725a75d04fb7f8`. Its measurements and correctness
-record are in [frontend-perf.md](frontend-perf.md). Preserve immutable snapshots
-of this revision's binaries and build inputs before starting backend edits.
+### Unnecessary emission survives O3
 
-| Existing three-block measurement | GCC-built compiler | Self-built compiler |
-| --- | ---: | ---: |
-| Median frozen-TU user time | 2.655 s | 8.275 s |
-| Median wall time | 3.050 s | 8.765 s |
-| Median peak RSS | 515.12 MiB | 510.72 MiB |
-| Compiler file bytes | 5,167,408 | 12,808,128 |
-| Executable `.text*` bytes | 4,248,326 | 8,534,693 |
-| GNU `size` text column | 4,770,890 | 9,595,915 |
+The diagnostic input is:
 
-The median paired-block ratios are **3.042 user**, **2.815 wall**, and
-**2.009 executable text size**. Paired ratios differ from ratios of separately
-reported medians. Holding the GCC-built runtime fixed, closing a 3.042 gap
-requires about **67% less self-built CPU time**. Re-measure the denominator
-throughout; these times are not fixed thresholds.
+```cpp
+#include <regex>
+int answer() { return 42; }
+```
 
-The frontend optimizations made the self compiler about 29% faster, but the
-GCC-built compiler improved more. This explains why the backend ratio widened.
-The next campaign must measure generated-code quality as well as absolute
-runtime, and must not improve the ratio by slowing the GCC-built compiler.
+| Optimization | Our distinct function bodies | GCC | Reference | Our object bytes |
+| --- | ---: | ---: | ---: | ---: |
+| O0 | 231 | 1 | 1 | 203,504 |
+| O3 | 60 | 1 | 1 | 69,616 |
 
-Baseline binary SHA-256:
+Distinct bodies are deduplicated by ELF section, address and nonzero size;
+constructor/destructor aliases are not counted as separate code. Some unused
+base-entry constructors/destructors have `object_root=yes`. This proves
+unnecessary emission on this reducer; it does not prove that every extra
+function in the complete workload is dead.
 
-- GCC-built: `049c8cabde7e1ad37cc21fa841cbaa26971e03b336c90296ed36074a3ec9a96b`.
-- Self-built: `d25168c70621201c2e2147985455526355bd9be8c08b904c571845d11ff25d22`.
+| Frozen workload | Our bodies | GCC bodies | Our object `.text*` bytes | GCC object `.text*` bytes |
+| --- | ---: | ---: | ---: | ---: |
+| O0 | 8,922 | 3,862 | 1,227,419 | 602,123 |
+| O1 | 2,765 | 384 | 1,301,230 | 418,966 |
+| O2 | 2,765 | 440 | 1,301,049 | 382,735 |
+| O3 | 2,765 | 403 | 1,301,049 | 377,704 |
 
-Reuse `~/cppgm-extended/benchmarks/self_compile/stable/semantic_overload.cpp`
-and its `include/` closure. Verify all 51 headers against `PERF_EPOCH.json`.
-The epoch is `9764b3835e3c6996b6b80803054f80e1cf50f98e`, source SHA-256 is
-`ab00b2e1c3c7463baf9d8e1e7fc754b9cde2c18749568616062011f31e7daba2`, and header
-closure SHA-256 is
-`7c8a5445f33f04b314de98e6a099de4d75124b4bb032fc97ee5055e56d4827c8`.
+The reference O0 object has 4,065 bodies, 687,749 executable text bytes and
+2,944,688 total bytes; ours has 7,552,664 total bytes. Separate native code,
+data, unwind tables, relocations and symbol/string tables before attributing
+file growth. More inlining can reduce body count while increasing total text.
+Anonymous-namespace/lambda mangling differences also make raw name subtraction
+an unreliable dead-code detector.
 
-### Initial evidence and hypotheses
+### Executed work remains the larger runtime lead
 
-A fresh diagnostic on CPU 4 while preparing this plan collected these
-user-mode counters. Each event ran 100% of the measurement interval; these
-single observations guide investigation and are not acceptance timings.
+A fresh diagnostic, with identical frozen output from all three executables:
 
-| Event | GCC-built | Self-built | Self/GCC-built |
+| Counter or size | GCC-built compiler | Self-built compiler | Self with scratch section GC |
 | --- | ---: | ---: | ---: |
-| Instructions | 12.124 billion | 36.565 billion | 3.016 |
-| Cycles | 8.704 billion | 26.933 billion | 3.094 |
-| Branches | 2.172 billion | 5.346 billion | 2.462 |
-| Branch misses | 50.91 million | 56.64 million | 1.113 |
+| Retired instructions | 12.124 billion | 37.044 billion | 37.042 billion |
+| Cycles | 8.903 billion | 25.977 billion | 25.722 billion |
+| Branch misses | 50.37 million | 56.77 million | 56.36 million |
+| Executable `.text*` bytes | 4,251,910 | 8,633,685 | 8,523,937 |
 
-The instruction excess is a stronger initial lead than branch prediction.
-A separate self profile recorded 1,622 samples with no lost samples. Exclusive
-hotspots included string construction from `istreambuf_iterator` (6.9%),
-`Ast::edge` (4.6%), `Cursor::is` (4.3%), `IdIndex::find` (4.2%), `IdIndex::put`
-(3.0%) and `vector<IdIndex::Slot>::resize` (2.5%). Small spelling and token
-accessors also remain visible. The profile does not yet prove which missed
-optimization causes each cost: compare call sites and disassembly first.
-Artifacts are in `obj/backend-perf-plan/`.
+These single counter observations guide hypotheses; they are not timing
+acceptance evidence. With the current section layout, `--gc-sections` removes
+only 1.27% of self text and barely changes executed instructions. This does not
+bound all removable code: strong/internal bodies can share a section. It does
+show that a linker flag alone is insufficient.
 
-Relevant implementation observations:
+`IdIndex::find` is a concrete hot-path reducer: our 240-byte body has three
+call sites to `vector::operator[]`, saves/reloads the probe index and reconstructs
+a key from smaller loads. GCC's 126-byte body contains no calls and retains
+loop state in registers. The latest profile also identifies string-input
+construction, `Ast::edge`, `IdIndex::put`, token cursors and node projection.
 
-- `dev/src/lowir/inline_policy.cpp` uses bounded bottom-up admission, call and
-  body-size limits, and context-sensitive exception proofs. Its `level` argument
-  currently does not change the admission policy.
-- `dev/src/native/global_placement.cpp` reserves a register for a retained
-  value's entire function, considers at most seven registers, and declines
-  functions with handlers. This is safe but potentially expensive in hot loops.
-- `dev/src/native/carry.cpp` removes some temporary reloads within bounded
-  single-block windows. Cross-block/call liveness has separate conservative
-  handling in `placement.cpp` and `parameter_flow.cpp`.
-- `dev/src/lowir/optimizer.cpp` already runs inlining, scalar promotion, memory
-  simplification, CSE and bounded loop transforms. Diagnose a missed proof or
-  interaction before introducing another pass over the same work.
+Relevant code observations:
 
-## Measurement contract
+- [lowering/symbols.cpp](dev/src/lowering/symbols.cpp) assigns roots to base
+  entries and retained members. Trace why a body is demanded separately from
+  why it has a particular ABI entry.
+- [native/object_demand.cpp](dev/src/native/object_demand.cpp) roots every
+  defined global and non-inline weak body. Optimized support pruning in
+  [lowir/inline_policy.cpp](dev/src/lowir/inline_policy.cpp) uses different
+  function-root rules and also roots all defined globals.
+- [native/driver.cpp](dev/src/native/driver.cpp) constructs its workspace and
+  emits data before object-demand filtering; the filter applies to hosted
+  object emission. Audit the other source/LowIR/native routes explicitly.
+- [lowir/optimizer.cpp](dev/src/lowir/optimizer.cpp) uses an immutable summary
+  of loops containing calls. Such functions lose scalar-slot promotion,
+  memory-value simplification and several cross-block optimizations. A missed
+  accessor inline can therefore prevent several later improvements.
+- [native/global_placement.cpp](dev/src/native/global_placement.cpp) retains
+  values in registers for entire functions and declines functions with EH
+  handlers. This is a concrete source of conservative stack placement.
 
-Use the canonical GCC 15.2.0 release configuration and the same C++ library,
-host macros, target, optimization level, link order and test-runner setting.
-Record every build command and executable hash. The existing canonical seed
-uses glibc allocation while PA34 links jemalloc when available. Retain this
-historical lane and run a matched-allocator control before attributing a gain
-to code generation. Lock the control's configuration at setup; explain any
-material divergence and do not obtain parity merely by switching allocators.
+Audit commands, inventories, reducers and counters are under ignored
+`obj/backend-demand-audit/`. Prior measurements are under `obj/backend-perf/`.
+Recreate missing artifacts from the recorded procedures; commit summaries and
+normal fixtures, not generated data. Preserve the original frontend campaign
+record in [frontend-perf.md](frontend-perf.md).
 
-Pin measurements to an idle physical core and inspect its SMT sibling. CPU 4
-and sibling 48 were used here; select them again only after checking load.
-Run builds, tests and benchmarks serially. Warm each executable once and use
-fresh output prefixes under `obj/backend-perf/`. Keep all samples, including
-outliers and failed experiments. Run A/A calibration at setup and after host
-conditions change. Do not flush caches or time profiler/telemetry runs as
-acceptance results.
+## Measurement contract and setup — S00
 
-For an ABBA block, compute the mean of the two B user times divided by the mean
-of the two A user times; report the median block ratio. Use one block only for
-screening. Confirmation uses at least three blocks, with a second independent
-batch for small gains and final parity. Extend to seven or ten blocks when
-noise obscures the decision. Use block-level uncertainty, not individual runs
-as if all observations were independent. An inconclusive measurement is not
-an accepted improvement.
-Record the interval method and random seed in the ledger; a block bootstrap
-should resample complete ABBA blocks. Use at least six blocks when a small
-gain or the frontend non-regression bound depends on that interval.
+Freeze the starting seed/self binaries and a coherent self object tree, ordered
+link inputs and generated configuration. Record commands, source/header hashes,
+producer/binary hashes, GCC version, host library and allocation configuration.
+Starting seed SHA-256:
+`85a04525b19e7f02264aa64f3a851a1c72a71018e01d3ba1aabb9caf6c9126ae`;
+self SHA-256:
+`e56b3c4da2224807190a57f631b461dd59a5becc2337ea67a4358b75e39e5309`.
+Check these against actual binaries before reusing old measurements.
 
-Example final or complete-self comparison, from the repository root:
+Use `~/cppgm-extended/benchmarks/self_compile/stable/semantic_overload.cpp`
+with its 51-header `include/` closure. Verify `PERF_EPOCH.json`: epoch
+`9764b3835e3c6996b6b80803054f80e1cf50f98e`, source SHA-256
+`ab00b2e1c3c7463baf9d8e1e7fc754b9cde2c18749568616062011f31e7daba2`,
+header closure SHA-256
+`7c8a5445f33f04b314de98e6a099de4d75124b4bb032fc97ee5055e56d4827c8`.
+Keep canonical GCC 15.2.0 build flags, O3, link order, runner configuration and
+host macros fixed. The canonical seed uses glibc and self links jemalloc;
+retain this lane and repeat a matched-jemalloc control before final attribution.
+
+Pin serial measurements to an idle physical core; inspect its SMT sibling
+(CPU 4 / sibling 48 previously). Do not overlap builds, tests or profiling with
+timing. Warm binaries, calibrate A/A at setup and after host conditions change,
+and preserve all samples. No post-hoc outlier removal or cache flushing.
+
+Use the mean B user time divided by mean A user time within each ABBA block,
+then report the median block ratio. Use a 10,000-resample bootstrap of whole
+blocks, seed 340033, for the 95% interval. One block screens; at least three
+confirm; small gains require two independent batches and at least six blocks.
+Extend backend confirmation to at most ten blocks and frontend non-regression
+confirmation to at most twenty, declared before measurement. At persistent
+uncertainty, park the candidate; do not change the bound or label noise a loss.
+Check host load/A/A calibration before spending the extension budget.
+
+Record both old/new self times and freshly paired old/new self/GCC ratios.
+Collect counters separately from timing, alternating baseline/candidate order:
+instructions, cycles, branches and misses first; supported cache/TLB event
+sets separately. Require adequate event running percentages, and report
+absolute counts alongside per-instruction rates. Compare hot-path disassembly
+and call counts before treating a counter change as an explanation.
+
+S00 exits when the immutable baseline, inventory, calibration and scratch-link
+control reproduce. Add diagnostic-only counts for root reasons, reachable
+bodies, materialized/lowered IR, optimization admissions and emitted sections
+only where needed to distinguish hypotheses. Instrumentation runs are not
+acceptance timings. Setup does not count toward early stopping.
+
+## Ordered structural experiments
+
+Each row is a hypothesis family. Give distinct mechanisms suffix IDs and
+predeclare their acceptance criteria before editing; parameter variants remain
+one experiment. Keep required semantic validation separate from runtime emission.
+
+| Family | Work and expected mechanism | Criteria to advance beyond the cheap screen |
+| --- | --- | --- |
+| **S01: correct emission roots** | Trace the unused-header reducer from semantic demand through ABI entries, LowIR roots, globals/aliases and native emission. Remove false roots and edges; reconcile O0/optimized root policies and audit hosted/native routes. | Each change removes its demonstrated false roots at O0–O3 while required exports/uses remain. The family exits when the regex reducer contains only its required function body, explaining any genuinely required initialization. Prove root provenance for remaining unexpected bodies. No weaker diagnostics or required-output loss. |
+| **S02: avoid unnecessary lowering and retained data** | Move the proven runtime-demand boundary early enough to avoid materializing dead function IR, data, vtables and downstream work. Share typed demand facts across direct and LowIR replay paths; retain required semantic/constant evaluation. | Show fewer lowered bodies/instructions or retained bytes on the frozen TU and selected header-heavy TUs, with matching direct/replayed objects and preserved semantics. Retain through the demand acceptance lane below, not merely a smaller final symbol table. |
+| **S03: simplify before accessor admission** | Revisit B04's constant-return/dead-branch folding, then analyze bounded accessor chains and exception proofs. Remove unreachable expensive paths before costing callees; avoid a blanket increase in inline limits. | The reduced accessor case and actual `IdIndex::find` lose the unintended subscript calls; dynamic calls/instructions fall without uncontrolled text growth. Show a kernel or coherent scratch win, then confirm a complete-self win. |
+| **S04: recover dataflow around calls** | Measure functions rejected by the call-in-loop gate after S03. Replace whole-function exclusions with bounded region/local proofs and call-effect/escape information. Recompute admission only when a measured simplification justifies its bounded cost. | A representative loop with a remaining call gains slot promotion or load reuse on proven-safe state. Fewer executed loads/stores and instructions; aliasing, side effects, volatile/atomic accesses, throwing calls and backedges still block unsafe transforms. Complete-self confirmation required. |
+| **S05: improve register lifetimes** | On the new profile, replace whole-function reservations with bounded lifetimes/interference where profitable. Start with non-EH loops and calls; handle EH only in a separate proven extension. | Measured spills/reloads and stack traffic fall on real hot paths. Validate phi transfers, joins, backedges, parameter carriers, call clobbers, preserved registers and unwind/debug behavior. A spare-register count alone is insufficient. |
+| **S06: remaining hot code** | Re-profile after the structural work. Investigate narrow division/remainder, split loads, address calculations, string/iterator loops, instruction selection or layout only when they explain material remaining cycles. | One concrete mechanism per experiment, reduced normal coverage, dynamic evidence and complete-self acceptance. No generic peephole queue without measured coverage. |
+
+S01 and S02 may overlap in implementation; record a combined experiment if their
+contributions cannot be isolated. A late emission-only fix is a useful first
+step, but does not close S02 if the discarded bodies were still fully lowered.
+For S01, record root class and a predecessor chain to each unexpectedly emitted
+body. Do not simply clear all `object_root` flags or discard all weak symbols.
+Required roots include externally visible non-inline definitions, explicit instantiation
+definitions, required aliases/used sections, live address-taking, initialization,
+vtables/RTTI and ABI constructor/destructor entries reachable from real uses.
+Preserve required checking of unused non-template definitions and the language's
+rules for template instantiation; emission liveness is not semantic validity.
+
+Use normal `.t` C++/LowIR fixtures and existing sidecars under
+`student.tests/paN/`, run explicitly. Reduce the hosted-header observation to
+small self-contained cases for future course inclusion; keep the real header
+case as an integration measurement. Pair dead-demand cases with live controls:
+external calls from another TU, function pointers, virtual dispatch/RTTI,
+base/complete/deleting destructor variants, static/TLS initialization, aliases
+and explicit instantiation. Include required rejection cases so deferred
+emission cannot hide diagnostics. Prefer existing object/MIR inspection and
+link harnesses over new Python-only regressions; benchmark scripts are separate.
+
+B04 is promising evidence, not a retained fix: it removed the three accessor
+calls and showed a provisional 5.58% self gain, but frontend confidence remained
+inconclusive. Retest its general mechanism on the new parent with the declared
+sampling budget. Do not report the old result as a proven slowdown, a fresh
+gain or six different hypotheses through repeated parameter changes.
+
+## Fast iteration and coherent builds
+
+Most ideas should be decided without full inception:
+
+1. **Host producer plus reduced cases.** Build `make -C dev cppgm++ CXX=g++`
+   and only the affected tools. Run normal fixtures and inspect O0–O3 output.
+   For S01/S02, source-to-object runs are essential: cached LowIR skips the
+   very work being changed. Measure phase work/RSS separately from timing.
+2. **Cached LowIR, kernels and scratch links.** For backend-only changes,
+   replay selected hot TUs using caches keyed by source/include hashes,
+   effective macros/flags, producer and IR metadata version. Preserve O3's
+   preprocessing configuration even when capturing unoptimized LowIR. Prove
+   direct O3 source and replayed LowIR objects equal before using the cache;
+   regenerate after semantic/lowering/metadata changes. Time runtime-input
+   kernels with checked results, including cold paths and misses.
+3. **One complete self generation for a promising candidate.** Rebuild the
+   seed and `make -C pa34 cppgm++-self CPPGM_HOST_CXX=g++`. Use isolated
+   experiment roots where appropriate. Compare that seed and self on the
+   frozen TU; this is the routine performance/reproducibility workload.
+   Do not build the inception generation for each candidate.
+4. **Full inception only at checkpoints and completion.** The cadence below
+   remains independent of the much shorter frozen compilation loop.
+
+For a backend-only hot-object replacement, reuse the supported scratch path:
+
+```sh
+make -C pa34 probe-self-link CPPGM_HOST_CXX=g++ \
+  SOURCE=../dev/src/support/id_index.cpp \
+  PROBE_CXX=../dev/cppgm++ \
+  PROBE_CANON_OBJ_ROOT=../obj/backend-perf/structural/checkpoint/selfhost \
+  PROBE_OBJ_ROOT_BASE=../obj/backend-perf/structural/S03/probe
+```
+
+Populate that checkpoint from a coherent complete self tree first. Each probe
+replaces one object; replacements do not accumulate. For a justified small
+multi-object probe, preserve an exact ordered link manifest and inspect which
+COMDAT definition wins. Keep source/layout/configuration compatible, and keep
+mixed-producer artifacts outside canonical PA34 roots. They screen mechanisms
+but never establish inception or complete-self acceptance. A broad emission
+policy change needs a coherent complete self rebuild before final conclusions.
+
+After any producer change, respect PA34 invalidation and rebuild affected
+outputs. Hash the actual producer and object inputs. Restore rejected source
+with fresh timestamps or rebuild its objects explicitly; copying an old mtime
+previously left stale machine code in a host object. Never reuse that shortcut.
+
+Routine frozen measurement, using immutable candidate snapshots in real runs:
 
 ```sh
 BACKEND_REF="$HOME/cppgm-extended"
 BACKEND_FROZEN="$BACKEND_REF/benchmarks/self_compile/stable"
-BACKEND_OUT="$PWD/obj/backend-perf"
+BACKEND_OUT="$PWD/obj/backend-perf/structural"
 BACKEND_CPU=4
 mkdir -p "$BACKEND_OUT"
 taskset -c "$BACKEND_CPU" python3 "$BACKEND_REF/scripts/run_ab_compile_benchmark.py" \
@@ -201,331 +303,136 @@ taskset -c "$BACKEND_CPU" python3 "$BACKEND_REF/scripts/run_ab_compile_benchmark
   --include "$BACKEND_FROZEN/include" \
   --compiler-arg=-O0 --compiler-arg=-std=gnu++11 \
   --abba-blocks 3 --output-mode exact --timeout-sec 1800 \
-  --output-prefix "$BACKEND_OUT/E001-complete-self"
+  --output-prefix "$BACKEND_OUT/S03-complete-self"
 ```
 
-Use immutable copies in actual experiments. Also compare each candidate self
-against the last accepted self directly. Track both runtimes if source changes
-alter the GCC-built denominator. Retain a fixed source revision for kernels
-and probe inputs so their algorithm and input data stay constant.
+Same-revision seed/self outputs must be byte-identical. Every retained demand
+or optimizer change also gets frozen O0–O3 equality checks. Legitimate changes
+between revisions use behavior/ABI/debug checks and determinism within each
+revision, not old object bytes as an oracle. GCC/reference object bytes are
+not an equality requirement. Inception does not replace the frozen checks.
 
-Seed/self objects for the same revision must match exactly. An optimization
-may legitimately change objects relative to an older revision; those changes
-require behavior and IR/ABI/debug validation, rather than an old-byte oracle.
-GCC-generated and student-generated program objects need not match each other.
+## Acceptance criteria and experiment records
 
-Use the **frozen compilation as the routine host/self target**. A candidate's
-host-built and self-built executables compile that one TU, then their objects
-are compared and their runtimes paired. This exercises the real compiler
-without compiling the repository again as the timing workload. Once the
-candidate self executable exists, repeat this short command freely; full
-inception is reserved for the checkpoint schedule below. An old self executable
-does not validate a changed producer: refresh the self generation at level 3,
-or explicitly label a level-2 result as a scratch screen.
+Before editing, record the parent revision, mechanism, affected scope, fixtures,
+expected IR/machine/counter changes, screen and confirmation budgets, resource
+limits and acceptance lane in [backend-perf-experiments.md](backend-perf-experiments.md).
 
-## Fast iteration without repeated inception
-
-Use four levels. Most rejected ideas should finish at levels 1 or 2. Record
-build and measurement wall time so setup overhead cannot silently dominate.
-
-### 1. Reduced programs and cached LowIR
-
-Build only the host-built producer and affected tools while editing:
-
-```sh
-make -C dev cppgm++ CXX=g++
-# Add lowiropt or lowir2native to this build when the selected checks use it.
-```
-
-Extract a few representative hot operations from the profiles: accessor chains,
-index probing/growth, iterator loops and values live around calls/backedges.
-Compile unchanged C++ kernels with GCC and the candidate at `-O3`, then time
-execution with runtime inputs and a checked result. Keep calls/memory patterns
-representative; prevent dead-code elimination without making the entire hot
-loop volatile. Include inputs that stress misses, collisions and cold paths.
-Use normal C++/LowIR fixtures for correctness; benchmark automation is separate.
-
-Cache pre-optimization LowIR for selected compiler TUs to replay backend ideas
-without repeating their preprocessing, parsing and semantic work:
-
-- Preserve the effective macros and hosted includes of their direct `-O3`
-  compilations while emitting unoptimized LowIR. In particular, the driver
-  normally adds `__OPTIMIZE__=1` at O3; a plain O0 capture can select different
-  header code. Retain all PA34 definitions, generated headers and entry flags.
-- Before using a cache, prove that direct `-O3 -c source.cpp` and candidate
-  `-O3 -c captured.lowir` produce identical objects for the chosen TU. The PA32
-  source/LowIR object boundary supports this workflow.
-- Key caches by source/header hashes, effective flags, capture producer,
-  LowIR format and metadata version. Regenerate for frontend/lowering or
-  format changes. Validate direct/replayed output again after relevant edits.
-- Bound this cache to selected TUs initially; do not spend the experiment
-  budget serializing the whole compiler before demonstrating a useful saving.
-
-Inspect LowIR, MIR and `objdump -drwC` for both generated objects. Collect
-`perf stat` counters while executing the kernels, not just while compiling them.
-Tiny-program speedups justify a larger trial, never the parity claim.
-
-### 2. Replace a hot object in a scratch compiler
-
-Snapshot the last accepted complete self object tree, its executable, generated
-configuration and ordered link inputs under `obj/backend-perf/checkpoint/`.
-The repository already has a scratch replacement path:
-
-```sh
-make -C pa34 probe-self-link CPPGM_HOST_CXX=g++ \
-  SOURCE=../dev/src/support/id_index.cpp \
-  PROBE_CXX=../dev/cppgm++ \
-  PROBE_CANON_OBJ_ROOT=../obj/backend-perf/checkpoint/selfhost \
-  PROBE_OBJ_ROOT_BASE=../obj/backend-perf/E001/probe
-```
-
-This compiles one source with the candidate producer at the PA34 O3 settings
-and relinks it with the checkpoint's other objects. The example source is an
-initial profiling candidate, not a required special case in compiler logic.
-Compare the scratch executable with the checkpoint on the full frozen workload.
-Use `probe-self-object` alone when only disassembly or a reduced link is needed.
-
-Keep probe sources and included definitions identical to the checkpoint. The
-changed backend is the producer of the replacement object, not a reason to
-mix incompatible compiler data layouts. Skip this level when a header/ABI
-change prevents safe replacement. Verify emitted workload bytes and smoke
-tests before timing.
-
-`probe-self-link` replaces **one** object per invocation; earlier replacements
-do not accumulate. If profiles justify a small multi-object experiment, add a
-manifest-based scratch relink using the exact recorded link order. Record each
-object's producer/source hash and inspect which COMDAT/weak definition wins;
-an untouched object can otherwise supply the supposedly improved function.
-
-These mixed-producer executables are diagnostic artifacts only. Keep them out
-of canonical PA34 directories and never use them as inception evidence.
-Checkpoint objects remain immutable until a complete self build replaces the
-checkpoint. A scratch speedup is provisional because inlining, layout and
-register changes can behave differently across the complete program.
-
-### 3. Complete self build for promising candidates
-
-Only after a cheap screen supports the hypothesis, rebuild the seed and the
-single self generation with the candidate. This measures the actual backend
-ratio without building the next generation:
-
-```sh
-make -C dev cppgm++ CXX=g++
-make -C pa34 cppgm++-self CPPGM_HOST_CXX=g++
-```
-
-Use isolated roots for retained experimental builds and record any embedded
-path/configuration differences. Respect normal producer dependencies: a changed
-producer requires all of its affected output objects to be regenerated. Do not
-preserve stale canonical objects to shorten a self build.
-
-Confirm the candidate against both the accepted self and its own GCC-built
-seed, run focused seed/self byte checks and promote only after the acceptance
-criteria below pass. Refresh the scratch checkpoint from this coherent build.
-If several changes are tested together, record them as a combined experiment;
-do not attribute the combined gain independently to each constituent change.
-Use the frozen TU at O0 for each routine timing/equality screen; add O1–O3
-equality when the experiment affects those optimization levels. This gives a
-fast reproducibility check between full inception milestones.
-
-### 4. Infrequent full validation
-
-Run full inception after **five retained experiments** or **20% cumulative
-self-runtime improvement** since the last inception checkpoint, whichever
-comes first. Run it earlier for a seed/self mismatch or an ABI, EH or liveness
-change whose focused checks leave a concrete correctness concern. Rejected
-kernel/probe experiments do not trigger inception.
-
-Always run inception and the full test report on the final retained source,
-including when taking the early-stopping option. A full inception run is a
-correctness milestone, not the inner timing loop. The starting commit already
-passed it; no unchanged full rebuild is needed just to begin this campaign.
-
-### Frontend and test-report checkpoints
-
-Preserve the frontend gains while improving generated-code performance.
-Track the original frontend metric
-`user_time(GCC-built cppgm++ -O0) / user_time(g++ -O0)` as well as the direct
-frontend/reference ratio used by the previous campaign. Freeze the starting
-GCC-built seed too, so cumulative drift cannot hide in a moving baseline.
-
-| Interval | Required checks |
+| Lane | Retention criteria, in addition to all correctness/frontend guards |
 | --- | --- |
-| Every source experiment | Affected normal fixtures and relevant behavior/IR/MIR checks before timing. |
-| Every candidate advancing to a complete-self measurement | One frozen-TU frontend ABBA screen against the last accepted GCC-built seed, plus a paired GCC frontend screen. If either suggests a regression, confirm with at least three blocks before retaining the change. |
-| Every **three retained experiments or 60 minutes** of implementation, whichever comes first | Fresh `make test-report CXX=g++ CPPGM_HOST_CXX=g++`; three-block frontend comparisons against GCC, the fixed starting seed and the pinned reference. Run affected PA32/PA33 debug checks too. This checkpoint is independent of the less frequent inception schedule. |
-| Final parity or early stop | Full test report, inception, frontend confirmation and final backend measurements on the same retained revision. |
+| Demand/output quality | Close the reduced unnecessary-emission defect, preserve live controls, and reproduce the intended reduction on the frozen or predeclared representative TUs. Require at least a 10% reduction in a predeclared whole-TU work/space metric (lowered IR, emitted text/object bytes or peak RSS), or at least a 1% confirmed compile-time gain. Require self-runtime non-regression (95% upper bound <=1.01). A root-correctness fix with no material full-workload gain can be retained separately as correctness/quality only, with no runtime credit. |
+| Generated-code performance | Require at least 1% median complete-self user-time improvement over the accepted parent, with 95% interval below 1.00, and an improved freshly paired self/GCC ratio. Confirm gains below 3% in a second batch. Counters/disassembly must support the proposed mechanism. Kernel/probe-only gains do not qualify. |
+| Correctness | Necessary semantic/ABI fixes need no speed gain. Add a minimal normal regression and report the performance effects separately. Resolve resulting performance regressions before claiming the campaign's performance gates pass. |
 
-The timer includes time spent on rejected experiments, so a difficult sequence
-cannot defer the report indefinitely. Run checkpoints after the active short
-measurement finishes and before beginning the next experiment; do not overlap
-tests with timings.
+A timing-only cheap screen needs at least a 2% kernel/probe win beyond calibrated
+noise. A deterministic removal of false demand can advance without that timing
+threshold. A smaller timing screen can advance only with a predeclared coverage
+argument for a useful complete-self effect. Avoid mutually masking unrelated
+patches; label coupled transformations as a combined experiment and assess
+individual and combined effects where practical.
 
-Reject a confirmed frontend slowdown over the last accepted or fixed starting
-seed. Treat changes below 1% as practically indistinguishable only when the
-95% upper bound of the candidate/baseline ratio is at most 1.01; larger
-uncertainty calls for more samples, not a larger permitted regression. Also
-retain the achieved
-**frontend/reference ratio <= 1.00** in confirmed checkpoint measurements.
-The frontend/GCC ratio must show no significant regression against its freshly
-paired baseline. Review all three comparisons together to distinguish compiler
-changes from host/GCC timing drift, rather than comparing raw seconds from
-different dates.
+Default limits versus both the accepted parent and campaign start are +3%
+compiler executable `.text*`, +5% runtime peak RSS and +10% producer optimization
+time/RSS on the selected TU set. Record all O0–O3 emitted sections separately.
+Demand fixes should reduce output without unexplained section growth elsewhere.
+A larger tradeoff needs a numerical criterion recorded before confirmation and
+a measured benefit; frontend/runtime correctness gates still apply. Report
+remaining distance to GCC/reference size and memory parity rather than treating
+these growth limits as the targets.
 
-If a checkpoint fails, stop advancing the experiment queue, identify the
-responsible change among the last three retained candidates, and fix or revert
-it. Run the failed checks again and refresh the accepted checkpoint. Track
-unconfirmed candidates separately from the last revision passing the full
-report; a backend speedup cannot override a frontend or correctness regression.
+Each ledger entry records all raw samples and commands, patches/hashes,
+root/body/IR counts, static sections, dynamic counters, absolute seed/self
+runtimes, ratios/intervals, RSS, build/optimization cost and validation results.
+Distinguish diagnostic, kernel, scratch and coherent complete-self evidence.
+Statuses are planned, running, provisional, retained, rejected, inconclusive or
+correctness/quality-only. Keep historical rejected entries. Record both the best
+runtime candidate and the latest candidate passing every required gate.
 
-## Experiment order and acceptance criteria
+## Frontend safeguards and validation cadence
 
-First collect matching GCC/self disassembly and hot-call counts. Reorder the
-following queue when evidence changes; estimated gains are hypotheses.
-All optimizations must apply to general IR/source patterns, not symbol names
-or the frozen workload's answers.
+Preserve `user_time(GCC-built cppgm++ -O0) / user_time(g++ -O0)`, the direct
+frontend/reference ratio and comparison to the fixed campaign-start seed.
+Compare with the accepted parent too; cumulative regressions cannot hide behind
+moving baselines. The frontend non-regression margin is 1%: require the 95%
+upper bound of candidate/baseline user time <=1.01. Frontend/reference must
+remain <=1.00 in confirmed measurements, and freshly paired frontend/GCC ratios
+must show no significant regression. More uncertainty means more bounded
+sampling, not a looser threshold or evidence that a mechanism failed.
 
-| ID | Hypothesis and implementation area | Evidence required to advance |
-| --- | --- | --- |
-| B00 | Establish kernels, cache checks, scratch links and measurement calibration. | Unmodified-producer probe matches the checkpoint's output and timing within noise; direct/replayed LowIR objects match; record fast-loop duration and paired baseline. Infrastructure does not count toward the stall window. |
-| B01 | Small accessor/iterator chains fail to inline or simplify effectively. Inspect `lowir/inline_policy.cpp`, `force_inline.cpp`, scalar cleanup and exception admission. | A reduced call chain loses the intended calls/temporary aggregates, preserves exceptions and address-taken definitions, and reduces executed instructions. Show a kernel/probe win before changing broader budgets; bounded work and code-growth gates still apply. |
-| B02 | Repeated narrow extensions, address calculations, struct/vector access or constants survive selection. Inspect `native/selection.cpp`, `arithmetic.cpp`, integer encoding and LowIR scalar/CSE passes. | Identify redundant sequences against GCC and eliminate them with a general proof. Preserve signedness, overflow, flags and alias effects; measured instructions/cycles fall on at least two applicable inputs. |
-| B03 | Conservative placement spills hot loop/call-crossing values. Inspect `placement.cpp`, `global_placement.cpp`, `parameter_flow.cpp` and `carry.cpp`. | Measured stack loads/stores and frame traffic fall on the identified paths. Progress from bounded live ranges/register reuse before a broad allocator rewrite. Cover joins, backedges, parallel phi copies, call clobbers and preserved registers; retain EH fallback until proven safe. |
-| B04 | Inlining exposes memory/aggregate simplifications that remain unproven or run at the wrong point. Inspect `optimizer.cpp`, `slot_promotion.cpp`, `object_splitting.cpp`, `memory_values.cpp` and `local_cse.cpp`. | A replayed hot TU and normal fixture demonstrate eliminated redundant memory traffic with preserved volatile/atomic/escaped-object semantics. Avoid unbounded fixed-point iteration; show reduced dynamic work, not only smaller IR. |
-| B05 | Iterator/container loops retain avoidable induction, bounds or loop-invariant work. Inspect `loop_simplify.cpp`, `loop_trip.cpp` and surrounding scalar passes. | Runtime kernels include zero/one/many iterations and calls/aliasing that block hoisting. Demonstrate fewer executed instructions on an actual profiled loop, no speculative trapping work and controlled growth. |
-| B06 | Call setup, copies, branch layout or excess emitted code account for the residual gap. Inspect `native/calls.cpp`, `prefix_call.cpp`, `call_policy.cpp`, `control.cpp` and `object_demand.cpp`. | Select one mechanism per experiment from the new profile. Improve measured runtime or cache/branch behavior while preserving ABI, unwind/debug metadata and externally reachable definitions. A static size reduction alone is insufficient for a speed claim. |
-
-For every optimization experiment, specify acceptance criteria **before editing**:
-
-1. Name the hotspot, expected IR/machine change, required normal fixtures and
-   the observable counter expected to fall. Record the producer revision and
-   last accepted comparison point. A parameter sweep is one hypothesis with
-   named variants, not several independent discoveries.
-2. A cheap screen must show the intended mechanism and no correctness failure.
-   Require at least a 2% kernel/probe timing gain beyond calibrated noise to
-   promote on timing alone. A smaller screen may advance if measured coverage
-   predicts a worthwhile complete-self gain; state that prediction first.
-3. Retain a performance change only when the complete-self comparison gives
-   at least **1% median user-time improvement** over the last accepted self,
-   with a block-level 95% interval below 1.00 for the new/old ratio. Confirm
-   gains below 3% in a second independent batch. If sampling up to ten blocks
-   cannot resolve the gain, mark it inconclusive and revert the performance
-   patch. Do not keep accumulating unconfirmed tweaks.
-4. Also require an improvement in the self/GCC-built ratio and compliance with
-   the frontend non-regression checks and checkpoint schedule above. Use
-   fixed-source controls if source changes move both runtimes. Re-profile when
-   a proxy improves but the full workload does not; reject the proxy-only win.
-5. Default resource limits: at most 3% growth in compiler executable `.text*`,
-   5% in runtime peak RSS, and 10% in producer optimization time/peak RSS on
-   the selected TU set. A larger tradeoff needs a revised, explicit numerical
-   criterion recorded before its confirmation run and a demonstrated runtime
-   benefit. Record output sections separately from compiler executable size.
-6. All focused behavior, IR/MIR bounds, object roundtrips and relevant debug
-   checks must pass. Add a reduced normal fixture for an actual discovered
-   correctness defect. Label optimization-boundary coverage separately; do
-   not imply that a new passing fixture demonstrates a pre-existing bug.
-
-Correctness fixes can be retained without a speed gain, but receive no
-performance credit and remain visible in the experiment history.
-
-### Experiment ledger
-
-Maintain `backend-perf-experiments.md` during implementation. Give each
-completed hypothesis an immutable ID and link its source patch/commit and raw
-artifacts under `obj/backend-perf/<ID>/`. Do not commit generated objects/logs.
-Start each entry with the proposed criteria, then append observations and the
-decision; keep rejected experiments in the ledger.
-
-| Field | Required record |
+| When | Checks |
 | --- | --- |
-| Identity | ID, hypothesis, scope, parent accepted revision, patch/commit hash, source/header/producer/binary hashes. |
-| Predeclared test | Expected code change and counters; selected fixtures/kernels; time, space and compile-cost limits. |
-| Reproduction | Exact build/link/run commands, toolchain/library/allocator, CPU/sibling/load, cache key, replaced object manifest, warmups and ABBA counts. |
-| Measurements | All block ratios, medians and interval; absolute self/seed times; self/GCC ratio; counters; executable/section/object sizes; RSS; build/optimizer time. Mark kernel, scratch and complete-self results distinctly. |
-| Validation | Fixture results, O0–O3 seed/self output checks, direct/LowIR replay checks, debug/MIR checks; frontend/GCC and frontend/reference results; most recent full test-report and inception checkpoints. |
-| Decision | Rejected, inconclusive, provisional, retained, or correctness-only; rationale; best ratio after this experiment; stall-window contribution. |
+| Every source experiment | Reduced normal fixtures, live/dead controls and affected assignment behavior/IR/MIR/object checks before timing. |
+| Every candidate entering complete-self evaluation | Frontend ABBA screen against the accepted seed and GCC; confirm any suspected regression before retention. For demand changes, also inventory frozen O0–O3 output and compilation work. |
+| Every three retained experiments or 60 minutes of implementation, whichever is first | `make test-report CXX=g++ CPPGM_HOST_CXX=g++`; frontend comparisons against GCC, fixed seed and pinned reference; relevant PA32/PA33 debug checks. Start with three blocks, then apply the declared confirmation budget if needed. |
+| Every five retained experiments or 20% cumulative self-time improvement since last inception | Full `make inception CXX=g++ CPPGM_HOST_CXX=g++`. Run sooner for a seed/self mismatch or a concrete unresolved ABI/EH/liveness concern. |
+| End of the demand phase, before broad hot-path changes | Fresh full report and frontend guards, coherent self build, O0–O3 frozen equality, symbol/link/live-root controls. Existing inception cadence still applies. |
+| Final parity or early stop | Fresh full report, full inception, all added normal fixtures and required debug/IR/MIR/link checks, final O0–O3 frozen equality and frontend/backend confirmation on one retained revision. |
 
-Keep a compact summary table above the detailed entries with one row per
-experiment. A retained change that later fails full validation loses its
-performance credit until fixed and remeasured.
+The 60-minute timer includes rejected experiments. Finish an active short
+measurement before a due checkpoint, and do not start another experiment until
+it passes. Rejected screens do not themselves require full inception. If a
+checkpoint fails, stop promoting candidates, fix/revert the responsible change,
+rerun failed checks and restore a validated checkpoint.
 
-## Early stopping for diminishing returns
+Read [Testing and references](TESTING_AND_REFERENCES.md) and each owning handout
+before changing implementation. Use required through reports and debug/link
+checks; PA24/PA32 design-specific regression suites are not exit criteria.
+Existing tests/references cannot be weakened to accommodate a change.
 
-Enable this option by default for the implementation campaign. Record these
-parameters at B00; change them only explicitly, not to turn a disappointing
-result into a success:
+## Early stopping with structural coverage
 
-| Parameter | Default |
-| --- | ---: |
-| Rolling window of completed optimization hypotheses, `N` | **6** |
-| Significant individual complete-self CPU-time improvement, `S` | **3%** |
-| Minimum cumulative best-self improvement across the window, `C` | **5%** |
+Keep the user-requested diminishing-returns option: **N=6** completed distinct
+optimization hypotheses, significant individual gain **S=3%**, minimum cumulative
+best-self improvement **C=5%**. Start a new window for this campaign; do not
+carry B03–B08 into it. Subvariants and repeated measurements are one hypothesis.
 
-Stopping before parity becomes eligible when **all** of these hold:
+Before applying the performance stop, complete the S01 demand-defect work and
+record an evidence-based assessment of S02, S03, S04 and S05. Each assessment
+needs a representative test or a concrete reason the mechanism does not apply;
+listing it as future work is insufficient. Where inlining unlocks dataflow,
+include a bounded combined trial rather than rejecting both on isolated screens.
+Infrastructure work and mandatory demand/correctness repairs do not consume the
+six-experiment performance window.
 
-1. The best confirmed self/GCC-built ratio is still above 1.00.
-2. The last `N = 6` completed optimization hypotheses contain no confirmed
-   individual improvement of at least `S = 3%` over the then-best accepted self.
-3. The best retained self at the end of that window is less than `C = 5%` faster
-   than the best retained self immediately before the window. Confirm this
-   cumulative comparison directly with paired timings; do not multiply noisy
-   estimates from separate dates.
+Early stopping becomes eligible when coverage is satisfied, the confirmed
+self/GCC ratio remains above 1.00, none of the last six completed performance
+hypotheses produced a retained >=3% self-time improvement, and the best retained
+self improved <5% across that window. Confirm the cumulative change directly
+with paired timings; do not multiply historical estimates. Rejected valid
+experiments count as zero. Confidence-limited results remain marked inconclusive;
+invalid measurements do not count as evidence of diminishing returns.
 
-Rejected performance ideas and correctness-failing ideas count as zero gain.
-A correctness-only change also contributes zero. Combine variants of the same
-hypothesis into one entry. Setup, repeated measurements and renamed/refactored
-versions of an unchanged idea do not add experiments or reset the window.
-Measurements invalidated by host interference remain incomplete; resolve them
-with bounded retries or report a measurement limitation rather than claiming
-evidence of diminishing returns.
+Review the profile, demand inventory and six decisions once before stopping.
+An unexplained major demand root or an untested structural family means this
+coverage gate has not passed. Do not keep retrying the same variant to manufacture
+six failures. If measurements or correctness block progress, report that actual
+limitation instead of claiming a performance plateau. A valid early stop still
+requires all final correctness and frontend gates on the best retained revision.
 
-This rule allows several smaller wins to continue: six 1–2% gains can exceed
-the 5% cumulative threshold even when none individually reaches 3%.
+## Final delivery
 
-When the trigger fires, do one bounded review of the latest profile and the
-six ledger entries, verify the cumulative comparison, then **stop optimization
-and finish the final validation gates** on the best retained revision. Record
-the stop as **“diminishing returns; GCC parity not reached”**, with the achieved
-ratio, remaining gap, stopping parameters, contributing experiment IDs and
-highest-value untried hypotheses. Do not label this outcome parity or bypass
-correctness because progress stalled. The user can later resume with a revised
-budget, threshold or hypothesis set.
+Run all new personal fixtures explicitly, affected contract/through reports,
+PA32 LowIR/object roundtrips, PA33 behavior/MIR bounds and required debug checks.
+Repeat the branch's conversion-member and overflow-emission regressions,
+including overflow LowIR/object comparisons at O0–O3, and constant-quotient
+coverage. Then require fresh success on the same retained source:
 
-## Final validation and delivery
+```sh
+make test-report CXX=g++ CPPGM_HOST_CXX=g++
+make inception CXX=g++ CPPGM_HOST_CXX=g++
+```
 
-Before committing the final backend implementation, whether at parity or at an
-early stop:
+Use normal producer dependencies and resource controls, excluding scratch
+mixed-producer objects. Compare final seed/self frozen objects at O0–O3.
+After builds/tests finish, rerun backend, direct self/start, frontend/GCC,
+frontend/reference and fixed-seed confirmations plus the matched-allocator
+control. Report remaining false demand, emitted body/text/object counts, compiler
+size, RSS and dynamic instructions alongside runtime ratios.
 
-1. Run all added personal fixtures explicitly and the affected PA24–PA33
-   contracts. PA32 requires LowIR/object roundtrips and debug checks; PA33
-   requires behavior, MIR bounds and debug checks. Read the owning handouts
-   before each implementation change. Preserve fixtures and reference outputs.
-2. Run these root targets on the final retained source with the canonical
-   configuration and normal PA34 dependency/resource tracking:
-
-   ```sh
-   make test-report CXX=g++ CPPGM_HOST_CXX=g++
-   make inception CXX=g++ CPPGM_HOST_CXX=g++
-   ```
-
-   Require a fresh complete test report and matching self/inception objects
-   and executables. Exclude every scratch mixed-producer object from this run.
-   Run PA32/PA33 debug suites and relevant ABI/unwind/link inspections. The
-   five pre-existing PA8 textual debug differences documented in the frontend
-   report are a baseline observation, not permission for new failures.
-3. Compare final seed/self frozen-TU objects at O0/O1/O2/O3. Repeat the normal
-   conversion-member and overflow fixtures, including the overflow LowIR/object
-   reproducibility checks. Inception alone does not cover the frozen workload.
-4. After builds/tests finish, measure final self/GCC-built and new/starting-self
-   ratios, matched-runtime controls, RSS and size breakdowns. Require two
-   independent three-block-or-longer batches at or below 1.00 to declare runtime
-   parity; extend sampling when uncertainty crosses the threshold. An early
-   stop reports the measured ratio honestly instead of applying that success gate.
-   Repeat the frontend/GCC, fixed-seed and reference comparisons and require
-   the frontend non-regression criteria even when stopping early.
-5. Update this plan and the ledger with the achieved result, retained/rejected
-   changes, validation commands/results, remaining tradeoffs and stopping
-   reason. Commit implementation, normal fixtures and documentation; retain
-   raw evidence under ignored `obj/`. Publish the final branch only after
-   these checks pass. If validation fails, fix/revert and revalidate the best
-   retained candidate before delivery.
+Close with either confirmed GCC parity or the explicit outcome
+“diminishing returns; GCC parity not reached,” identifying the contributing
+experiments, remaining gap and untried hypotheses. Update this plan and the
+ledger without rewriting the historical results. Commit implementation, normal
+fixtures and documentation, and push the branch only after final gates pass.
+These implementation gates are complete for the final retained revision; the
+ledger records the fresh evidence and the explicit early-stop decision.

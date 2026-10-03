@@ -1,0 +1,2 @@
+#include "340-key-vtable-demand.helper.h"
+int main() { Exported value; Exported* pointer = &value; return pointer->value() == 11 ? 0 : 1; }

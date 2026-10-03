@@ -97,6 +97,7 @@ void Procedural::emit_local_static_destructors()
 {
     for (auto local : local_statics) {
         if (!local.destructor) continue;
+        if (p.functions[p.symbols[local.destructor.index-1].entity-1].blocks.count) continue;
         reset_lifetime(0); function = FunctionId(p.symbols[local.destructor.index-1].entity);
         builder.reset(new FunctionBuilder(p,function)); this_slot = SlotId(); start(block());
         auto destructor = sem.object_destructor(local.object);

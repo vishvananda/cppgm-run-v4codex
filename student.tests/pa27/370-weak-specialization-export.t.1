@@ -1,0 +1,2 @@
+template<class T> int exported(T);
+template<> __attribute__((weak,noinline)) int exported<int>(int value) { return value + 3; }

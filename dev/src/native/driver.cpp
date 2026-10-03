@@ -34,8 +34,8 @@ void compile_image(lowir_model::Program& p, Image& image, const std::vector<Inst
             image.indirect_addresses[g.symbol.index] = (g.declaration || p.symbols[g.symbol.index-1].metadata.binding == ir_model::SBM_WEAK) &&
                 p.symbols[g.symbol.index-1].metadata.storage != ir_model::GSM_THREAD_LOCAL;
     }
-    auto time = Clock::now(); encode_data(p,image); encoder.startup(start); stats.encoding_ms += ms(time);
     auto live = image.host ? object_demand(p) : std::vector<bool>();
+    auto time = Clock::now(); encode_data(p,image,image.host ? &live : nullptr); encoder.startup(start); stats.encoding_ms += ms(time);
     if (mir) dump_header(p,start,*mir,image.defined[image.runtime_begin]);
     for (unsigned ordinal = 0; ordinal < p.functions.size(); ++ordinal) {
         const auto& source = p.functions[p.function_order.empty() ? ordinal : p.function_order[ordinal].index-1];

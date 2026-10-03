@@ -1,0 +1,19 @@
+declare function @mode() -> i64 [unwind=no, binding=weak, inline_hint=yes]
+declare function @get(%p : ptr, %index : i64, %size : i64) -> i64 [unwind=no, binding=weak, inline_hint=yes]
+function @sum(%p : ptr, %count : i64) -> i64 [unwind=no, binding=strong] {
+  block ^entry:
+    jump ^loop
+  block ^loop:
+    %index = phi i64 [^entry: 0, ^body: %next]
+    %total = phi i64 [^entry: 0, ^body: %added]
+    %more = cmp ult i64 %index, %count
+    branch %more, ^body, ^done
+  block ^body:
+    %inline7 = index i64 %p, %index
+    %inline8 = load i64 %inline7
+    %added = binary add i64 %total, %inline8
+    %next = binary add i64 %index, 1
+    jump ^loop
+  block ^done:
+    return i64 %total
+}

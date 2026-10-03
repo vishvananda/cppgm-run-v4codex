@@ -27,6 +27,7 @@ void Procedural::emit_member_thunks()
 {
     for (auto thunk : member_thunks) {
         function = FunctionId(p.symbols[thunk.symbol.index-1].entity);
+        if (p.functions[function.index-1].blocks.count) continue;
         builder.reset(new FunctionBuilder(p,function)); reset_lifetime(thunk.member);
         returned = sem.types[sem.entities[thunk.member].type].child;
         start(block());

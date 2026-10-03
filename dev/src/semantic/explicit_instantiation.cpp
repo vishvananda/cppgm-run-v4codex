@@ -141,6 +141,7 @@ void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
         if (seen.get(cls)) continue;
         seen.put(cls,1); complete_class(cls);
         if (!entities[cls].complete) throw std::runtime_error("explicit instantiation of incomplete class");
+        if (!entities[cls].explicit_specialization) class_instantiation_exports.put(cls,1);
         for (auto d = scopes[entities[cls].scope].first_decl; d; d = declarations[d].next) {
             auto member = declarations[d].entity;
             if (entities[member].owner != entities[cls].scope || entities[member].template_info || excluded_from_class_instantiation(member)) continue;
@@ -148,13 +149,18 @@ void Analyzer::explicit_instantiation(NodeId n, ScopeId s)
             if (entities[member].member_info) {
                 auto m = entities[member].member_info;
                 if (!members[m].body && !members[m].synthetic) continue;
+                if (!entities[member].explicit_specialization) class_instantiation_exports.put(member,1);
                 members[m].retained_root = true;
                 if (members[m].constructor || members[m].destructor) members[m].complete_entry = true;
                 demand_member(member);
             } else if (entities[member].class_info) {
                 if (entities[member].complete || class_facts[entities[member].class_info].definition_source || defined)
                     work.push_back(member);
-            } else if (entities[member].is_static && (defined || entities[member].inline_variable)) demand_template_storage(member);
+            } else if (entities[member].is_static && (defined || entities[member].inline_variable)) {
+                // This definition is an ABI provider even without a local use.
+                if (!entities[member].explicit_specialization) class_instantiation_exports.put(member,1);
+                demand_template_storage(member);
+            }
         }
     }
 }

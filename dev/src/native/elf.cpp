@@ -25,9 +25,10 @@ static void scalar_data(std::vector<unsigned char>& data, const DataItem& item, 
         if (item.type == Type::I128) append(data,item.value.integer_high(),8);
     }
 }
-void encode_data(const lowir_model::Program& p, Image& image)
+void encode_data(const lowir_model::Program& p, Image& image, const std::vector<bool>* live)
 {
     for (unsigned lane = 0; lane < 2; ++lane) for (const auto& g : p.globals) {
+        if (live && !(*live)[g.symbol.index]) continue;
         bool tls = p.symbols[g.symbol.index-1].metadata.storage == GSM_THREAD_LOCAL;
         if (tls != bool(lane)) continue;
         if (tls) { image.has_tls = true; image.tls_targets[g.symbol.index] = g.symbol.index; }

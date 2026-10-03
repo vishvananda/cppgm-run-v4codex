@@ -1,0 +1,7 @@
+global @touched : i32 [binding=strong, object=_Z7touched] = zero
+
+function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
+  block ^entry:
+    %value = load i32 @touched
+    return i32 %value
+}

@@ -92,6 +92,9 @@ void Procedural::emit_vtables()
             continue;
         }
         p.symbols[table.index-1].metadata.binding = internal_entity(cls) ? SBM_INTERNAL : SBM_WEAK;
+        if (linkage.host && ((model.reasons & unsigned(semantic::VtableReason::KeyDefinition)) ||
+            sem.entities[cls].instantiation_definition || sem.class_instantiation_exports.get(cls)))
+            p.symbols[table.index-1].metadata.object_root = true;
         // Key-owned tables have one cross-TU ABI group. Unkeyed course views
         // retain their private emission identities.
         bool grouped = linkage.host || (model.key_function && !sem.entities[cls].specialization && !sem.virtual_base_count(cls));
@@ -237,7 +240,7 @@ void Procedural::emit_deleting_entries()
     std::sort(deleting_entries.begin(), deleting_entries.end());
     for (EntityId e : deleting_entries) {
         function = FunctionId(p.symbols[deleting_symbols[sem.entities[e].member_info].index-1].entity);
-        if (p.functions[function.index-1].declaration) continue;
+        if (p.functions[function.index-1].declaration || p.functions[function.index-1].blocks.count) continue;
         builder.reset(new FunctionBuilder(p,function)); reset_lifetime(e); returned = sem.types.fundamental(FT_VOID);
         start(block()); this_slot = builder->add_slot(0,IRType::Ptr);
         auto sig = p.signatures[p.functions[function.index-1].signature.index-1];

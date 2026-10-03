@@ -1,0 +1,3 @@
+template<class T> __attribute__((noinline)) T helper(T value) { return value + 1; }
+inline int unused_template_call() { return helper(6); }
+extern "C" __attribute__((weak,noinline)) int exported_weak() { return 17; }

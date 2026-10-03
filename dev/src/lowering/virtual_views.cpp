@@ -79,6 +79,7 @@ void Procedural::emit_adjustor_thunks()
 {
     for (const auto& thunk : adjustor_thunks) {
         function = FunctionId(p.symbols[thunk.symbol.index-1].entity);
+        if (p.functions[function.index-1].blocks.count) continue;
         builder.reset(new FunctionBuilder(p,function)); reset_lifetime(thunk.target);
         returned = sem.types[sem.entities[thunk.target].type].child;
         start(block());

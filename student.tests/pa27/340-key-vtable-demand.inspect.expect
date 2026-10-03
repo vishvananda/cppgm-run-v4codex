@@ -1,0 +1,3 @@
+defined_symbol_canonical 1 _ZTV8Exported
+absent_defined_symbol_canonical 1 _ZTV6Unused
+absent_defined_symbol_canonical 2 _ZTV6Unused

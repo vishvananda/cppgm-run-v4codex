@@ -25,6 +25,9 @@ public:
     const FoldStep& fold_step(std::uint32_t id) const { return fold_steps[id]; }
     std::uint32_t fold_root(NodeId node) const { return fold_roots.get(node); }
     Analyzer(syntax::Ast& ast, IdentifierTable& ids, bool calls = false, bool definitions = false, bool host_abi = false);
+    // Definitions supplied by an explicit class instantiation, including its
+    // defined members and nested classes. Separate from direct instantiation.
+    Index class_instantiation_exports;
     void consume(NodeId declaration) override;
     void finish();
     struct SourceSite { unsigned line = 0; IdentifierId file = 0, function = 0; NodeId source = 0; };

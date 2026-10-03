@@ -1,0 +1,3 @@
+#include "350-explicit-static-demand.helper.h"
+extern template struct Holder<int>;
+int main() { return Holder<int>::value != 19; }

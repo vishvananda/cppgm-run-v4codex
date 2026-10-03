@@ -1,0 +1,2 @@
+extern "C" int exported_weak();
+int main() { return exported_weak() == 17 ? 0 : 1; }

@@ -7,6 +7,7 @@ void Procedural::emit_allocation_adapters()
     // functions keep distinct addresses and delegate to that shared runtime.
     for (auto adapter : allocation_adapters) {
         function = FunctionId(p.symbols[adapter.symbol.index-1].entity);
+        if (p.functions[function.index-1].blocks.count) continue;
         auto& f = p.functions[function.index-1]; f.declaration = false;
         auto sig = p.signatures[f.signature.index-1];
         builder.reset(new lowir_model::FunctionBuilder(p,function)); reset_lifetime(0); start(block());

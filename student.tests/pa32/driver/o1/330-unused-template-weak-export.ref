@@ -1,0 +1,9 @@
+function @exported_weak() -> i32 [binding=weak, object_root=yes, no_inline=yes] {
+  block ^entry:
+    return i32 17
+}
+
+function @main() -> i32 [role=entry, binding=strong, keep_alias=yes] {
+  block ^entry:
+    return i32 0
+}

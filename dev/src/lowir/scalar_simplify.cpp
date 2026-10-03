@@ -69,9 +69,39 @@ class Scalars {
         args[0] = root; args[1] = combined;
         p.operands[i.operands.begin] = root; p.operands[i.operands.begin+1] = combined;
     }
+    bool constant_return(const Instruction& i, Operand& out) {
+        if (i.opcode != Opcode::Call || i.signature || !i.type.integer() || args[0].kind != Operand::Symbol) return false;
+        const auto& symbol = p.symbols[args[0].ref-1];
+        if (symbol.kind != Symbol::FunctionSymbol || symbol.metadata.no_inline ||
+            !(symbol.metadata.inline_hint || symbol.metadata.force_inline || symbol.metadata.binding == SBM_INTERNAL)) return false;
+        const auto& callee = p.functions[symbol.entity-1];
+        if (callee.declaration || callee.blocks.count != 1) return false;
+        const auto& signature = p.signatures[callee.signature.index-1];
+        if (signature.result != i.type || signature.boundary.arity != CAM_FIXED ||
+            signature.boundary.returns == CRM_NORETURN || args.size() != signature.parameters.count+1) return false;
+        auto body = p.blocks[p.block_order[callee.blocks.begin].index-1].instructions;
+        if (body.count != 1 || p.instructions[body.begin].opcode != Opcode::Return) return false;
+        if (signature.parameters.count+2 > budget) return false;
+        budget -= signature.parameters.count+2; work += signature.parameters.count+2;
+        // No observable argument conversion or by-address object copy can be
+        // lost when replacing this call. Argument expressions remain in the IR.
+        for (unsigned n = signature.parameters.begin; n < signature.parameters.end(); ++n) {
+            const auto& parameter = p.parameters[n];
+            if (parameter.passing != PPM_DIRECT ||
+                !(parameter.type.integer() || parameter.type == Type::Ptr)) return false;
+            auto a = args[n-signature.parameters.begin+1];
+            if (a.kind == Operand::Temporary && p.values[a.ref-1].type != parameter.type) return false;
+            if (a.kind == Operand::Slot && p.slots[a.ref-1].type != parameter.type) return false;
+            if (a.kind == Operand::Floating) return false;
+        }
+        auto result = p.operands[p.instructions[body.begin].operands.begin];
+        if (result.kind != Operand::Integer) return false;
+        out = normalize_integer(result,i.type); return true;
+    }
     bool evaluate(Instruction& i, Operand& out) {
         if (i.debug_value()) return false;
         reassociate(i);
+        if (constant_return(i,out)) return true;
         if (fold_integer(i,args.data(),out)) return true;
         if (fold_floating(p,i,args.data(),out)) return true;
         if (objects.fold(i,args.data(),out)) return true;
@@ -170,6 +200,7 @@ class Scalars {
             i.type = i.result_type(); i.opcode = replacement.literal() ? Opcode::Const : Opcode::Copy;
             if (i.opcode == Opcode::Copy) i.debug = DebugLocation();
             i.operation = Operation::None; i.source_type = Type();
+            i.signature = SignatureId();
             p.operands[i.operands.begin] = replacement; i.operands.count = 1;
         }
     }

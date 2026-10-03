@@ -1,0 +1,3 @@
+template<class T> int exported(T);
+template<> int exported<int>(int);
+int main() { return exported(4) == 7 ? 0 : 1; }

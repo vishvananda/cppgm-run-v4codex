@@ -37,6 +37,10 @@ void Procedural::prepare_tls(EntityId e)
         abi_mangle::Target target; target.kind = abi_mangle::TargetKind::TlsWrapper;
         target.type = abi_entity_name(e);
         wrapper.metadata.object = p.intern(abi_mangle::mangle(abi, target)); wrapper.metadata.binding = SBM_WEAK;
+        // A defined exported TLS object also supplies its ABI access wrapper,
+        // even when this TU accesses the object without calling that wrapper.
+        wrapper.metadata.object_root = !external &&
+            (binding != SBM_WEAK || p.symbols[symbols[e].index-1].metadata.object_root);
         if (linkage.host && tls.initializer) {
             target.kind = abi_mangle::TargetKind::TlsInitializer;
             auto& initializer = p.symbols[tls.initializer.index-1].metadata;
@@ -49,6 +53,7 @@ void Procedural::prepare_tls(EntityId e)
 void Procedural::emit_tls_initializers()
 {
     for (auto tls : tls_initializers) {
+        if (p.functions[p.symbols[tls.wrapper.index-1].entity-1].blocks.count) continue;
         reset_lifetime(0); active_tls = tls.object;
         if (tls.guard) {
             function = FunctionId(p.symbols[tls.initializer.index-1].entity);

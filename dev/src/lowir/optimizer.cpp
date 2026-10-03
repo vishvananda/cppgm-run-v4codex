@@ -52,7 +52,7 @@ void optimize(Program& p, unsigned level, bool telemetry)
         forward_local_slots(p,work);
         simplify_scalars(p,work);
     }
-    if (promote_scalar_slots(p,call_cycles,work)) simplify_scalars(p,work,&dataflow);
+    if (promote_scalar_slots(p,work)) simplify_scalars(p,work,&dataflow);
     MemoryStats memory;
     auto memory_start = work;
     bool memory_changed = simplify_memory_values(p,call_cycles,work,memory);

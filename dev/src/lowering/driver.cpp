@@ -1,4 +1,5 @@
 #include "lowering/procedural.h"
+#include "lowir/emission_demand.h"
 #include "preprocess/preprocessor.h"
 #include <chrono>
 #include <ctime>
@@ -54,7 +55,8 @@ void build_program(lowir_model::Program& program, const std::vector<std::string>
                 << ",\"list_plans\":" << sem.list_plans.size()-1
                 << ",\"list_objects\":" << sem.list_objects.size()-1
                 << ",\"initializer_list_types\":" << sem.initializer_list_types.size()-1
-                << ",\"lower_deleting_entries\":" << lower.deleting_entry_count();
+                << ",\"lower_deleting_entries\":" << lower.deleting_entry_count()
+                << ",\"lower_emission_rounds\":" << lower.emission_rounds;
             std::cerr << ",\"lower_local_statics\":" << lower.local_static_count()
                 << ",\"lower_constant_data_records\":" << lower.constant_data_count()
                 << ",\"lower_constant_data_work\":" << lower.constant_data_work
@@ -66,6 +68,15 @@ void build_program(lowir_model::Program& program, const std::vector<std::string>
     }
     auto lifecycle_start = Clock::now();
     linkage.finish_lifecycle(program);
+    if (!linkage.conditional_abi_roots.empty()) {
+        // Preserve ABI entries used by the source before optimization, even
+        // when all of their calls later inline. Checking an unreachable inline
+        // definition alone does not establish that source demand. The completed
+        // program includes cross-TU and initialization consumers at this point.
+        auto live = lowir_model::emission_demand(program,linkage.conditional_abi_roots);
+        for (auto entry : linkage.conditional_abi_roots)
+            if (live[entry.target.index]) program.symbols[entry.target.index-1].metadata.object_root = true;
+    }
     lowering_ms += std::chrono::duration<double, std::milli>(Clock::now()-lifecycle_start).count();
     if (stats) {
         struct rusage usage; getrusage(RUSAGE_SELF, &usage);

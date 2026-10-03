@@ -1,0 +1,5 @@
+# A constant return removes the unreachable costly path before admission.
+none(call @get) in @sum
+none(call @mode)
+none(binary div)
+count(load) == 1 in @sum

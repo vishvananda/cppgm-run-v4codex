@@ -1,0 +1,4 @@
+functions == 2
+has(return) in @exported_weak
+has(return) in @main
+none(call)
