@@ -95,6 +95,7 @@ class Selector {
     Instruction& emit(Op op, Type type, std::initializer_list<Operand> args);
     void select(const lowir_model::Instruction& i);
     void arithmetic(const lowir_model::Instruction& i);
+    bool constant_quotient(const lowir_model::Instruction& i, Operand input, Operand result);
     void compare(const lowir_model::Instruction& i, bool branch);
     void conversion(const lowir_model::Instruction& i);
     void floating_arithmetic(const lowir_model::Instruction& i);

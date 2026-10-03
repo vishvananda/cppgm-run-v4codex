@@ -28,6 +28,9 @@ void Selector::arithmetic(const lowir_model::Instruction& i)
     Operand dest = allocate(i.destination.index,i.type);
     Operand result = dest.kind == Operand::Reg ? dest : Operand::r(XR_R10);
     auto lhs = value(arg(i,0),i.type);
+    if (level && constant_quotient(i,lhs,result)) {
+        move(dest,result,i.type); return;
+    }
     if (i.operation == Operation::Div || i.operation == Operation::Mod ||
         i.operation == Operation::Udiv || i.operation == Operation::Umod) {
         bool sign = i.operation == Operation::Div || i.operation == Operation::Mod;
